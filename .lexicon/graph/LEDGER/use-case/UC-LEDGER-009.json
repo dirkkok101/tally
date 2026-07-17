@@ -1,0 +1,20 @@
+{
+  "id": "01KXRJSSNMJX6N8FQ2FK9QY0QS",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "UC-LEDGER-009",
+  "title": "Void or supersede an erroneous transaction",
+  "preconditions": "The transaction exists; its provenance and current correction state are inspectable; the agent has a reason and idempotency identity for the corrective action.",
+  "postconditions": "Incorrect facts and their retired transfer/refund effects no longer distort active actuals; the original, replacement if any, actor/reason, supersession, and retired relationship history remain inspectable.",
+  "main_flow": "1. The agent retrieves the transaction, provenance, allocations, active transfer/refund relationships, and correction history. 2. The owner explicitly chooses to void it or replace it with corrected canonical facts. 3. Tally records an attributable void/supersession event without editing the original facts and atomically retires every active relationship involving that transaction. 4. For replacement, Tally creates a new Canonical Transaction with its own identity and links it to the superseded transaction; no transfer/refund relationship is silently copied. 5. Default active queries exclude the voided/superseded fact, ignore its retired relationships, and include the valid replacement under ordinary unlinked policy until explicitly related. 6. History queries expose original, replacement, retired links, actor and reason. 7. Tally returns the complete correction outcome.",
+  "alt_flows": [
+    "1a. Transaction does not exist -> return not found",
+    "2a. No correction reason or idempotency identity is supplied -> reject before mutation",
+    "3a. Transaction is already voided or superseded by the same action -> return the existing result",
+    "3b. Transaction is already superseded incompatibly -> return a stable conflict",
+    "3c. Any active relationship cannot be retired atomically -> apply neither the transaction correction nor partial relationship changes",
+    "4a. Replacement validation fails -> create neither the replacement nor a partial supersession",
+    "5a. Query explicitly requests history -> include corrected facts and retired links but never count both outcomes as active actuals"
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The owner discovers that a manually entered or upstream-normalized Canonical Transaction contains incorrect source facts or should not contribute to active ledger actuals.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-17T17:43:15.8936388+00:00"
+}

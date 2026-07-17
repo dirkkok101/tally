@@ -3,8 +3,8 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "G4",
   "text": [
-    "Prevent movements between the user's own accounts from being counted as external spend."
+    "Prevent movements between the owner's accounts from being counted as external spend. Evidence: assumption — transfers are expected across three owned accounts and are governed by A11; workflows UC-LEDGER-004 and UC-LEDGER-011."
   ],
-  "target": "Related transfer legs can be linked and excluded from spend totals while both bank-side transaction facts remain present.",
+  "target": "Only active explicitly confirmed transfer links contribute zero External Spend; both source facts and attributable active/retired link history remain queryable; void, supersession, revocation, or replacement updates active actuals atomically.",
   "created_at": "2026-07-17T13:41:22.0616965+00:00"
 }

@@ -1,0 +1,19 @@
+{
+  "id": "01KXRKC2R2VJDPDP2Q4CMGY06N",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "UC-LEDGER-012",
+  "title": "Upgrade or migrate Ledger storage safely",
+  "preconditions": "The Ledger is readable by one writer; the source version is recognized; a permitted backup location exists; the target migration path is supported.",
+  "postconditions": "The active Ledger is either the fully validated target version or the unchanged source; a verified recovery artifact exists and no partial migration is treated as active.",
+  "main_flow": "1. The agent requests an upgrade/migration preflight. 2. Tally validates source integrity, source/target compatibility, permissions, available space, and required key material. 3. Tally creates and independently verifies a recoverable pre-migration backup. 4. Tally performs the transformation atomically or in an isolated target while the source remains authoritative. 5. Tally validates format integrity, entity counts, exact transaction totals, active relationship rules, and schema version in the candidate. 6. Only after successful validation and explicit authorization does Tally make the candidate active. 7. Tally retains/report the recovery point and returns the completed version transition.",
+  "alt_flows": [
+    "2a. Source is corrupt, target unsupported, permissions unsafe, space insufficient, or key material unavailable -> stop before transformation",
+    "3a. Backup creation or verification fails -> stop and keep the source authoritative",
+    "4a. Transformation is interrupted or fails -> discard/isolate the candidate and keep the source authoritative",
+    "5a. Counts, totals, relationships, integrity, or version validation differs unexpectedly -> reject the candidate",
+    "6a. Activation was not explicitly authorized -> leave the validated candidate inactive",
+    "7a. Post-activation integrity check fails -> use the verified recovery procedure and report a stable migration failure"
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"A compatible Tally upgrade requires a storage format/schema change, or the owner initiates a supported storage-provider migration.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-17T17:53:15.0107289+00:00"
+}

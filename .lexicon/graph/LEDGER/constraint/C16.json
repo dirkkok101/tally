@@ -1,0 +1,11 @@
+{
+  "id": "01KXRJTRMY6A4FM73W5W8SJMA8",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "C16",
+  "title": "Attributable transaction void and supersession",
+  "description": [
+    "Erroneous Canonical Transaction facts are never edited or silently deleted. An explicit reasoned void/supersession preserves the original, creates a separately identified replacement when needed, and ensures default active actuals count only the valid outcome while history queries expose the full chain."
+  ],
+  "type": "business",
+  "created_at": "2026-07-17T17:43:47.6151383+00:00"
+}

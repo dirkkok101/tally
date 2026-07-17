@@ -1,0 +1,10 @@
+{
+  "id": "01KXRJ2P5ZTS04659N3T10WJ2Y",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "term": "Signed Account Amount",
+  "definition": [
+    "The exact base-10 change to an Owned Bank Account under the accepted sign policy; the active assumption is inflow positive and outflow negative for deposit accounts. Avoid: unsigned spend, display debit/credit label, binary floating-point value."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-17T17:30:38.6566633+00:00"
+}

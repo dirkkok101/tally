@@ -1,0 +1,10 @@
+{
+  "id": "01KXRJ6QCA8JK8DSED8AGBRE31",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "metric": "Owned-transfer spend neutrality",
+  "current": "Transfers can be mistaken for external spend during manual consolidation",
+  "target": "100% of confirmed transfer-pair conformance examples contribute exactly zero External Spend while both account legs remain queryable",
+  "by_when": "LEDGER acceptance",
+  "measured": 0,
+  "created_at": "2026-07-17T17:32:50.9556635+00:00"
+}

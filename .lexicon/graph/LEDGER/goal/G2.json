@@ -3,8 +3,8 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "G2",
   "text": [
-    "Record canonical transaction facts without losing financial precision or source provenance."
+    "Record canonical transaction facts without losing financial precision or source provenance. Evidence: direct — the owner requires transaction description, amount and date, and trustworthy cross-account actuals; workflows UC-LEDGER-002 and UC-LEDGER-009."
   ],
-  "target": "Every accepted transaction round-trips its account, original description, exact base-10 amount, currency, effective date, and stable reference with no binary rounding.",
+  "target": "Every accepted transaction round-trips its account, original description, exact base-10 signed amount, currency, required date facts, provenance, idempotency identity, and stable reference; erroneous facts are voided/superseded attributably rather than edited or silently deleted.",
   "created_at": "2026-07-17T13:41:21.6514130+00:00"
 }

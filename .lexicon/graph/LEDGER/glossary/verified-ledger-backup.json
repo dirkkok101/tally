@@ -1,0 +1,10 @@
+{
+  "id": "01KXRJ2Q0P20NW35FJFDN3HMTD",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "term": "Verified Ledger Backup",
+  "definition": [
+    "A point-in-time, version-identifiable, access-restricted Ledger artifact whose integrity and compatibility can be checked without mutating the live Ledger. Avoid: unverified file copy or export report."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-17T17:30:39.5117235+00:00"
+}

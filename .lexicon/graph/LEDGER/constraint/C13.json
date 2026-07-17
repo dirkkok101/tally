@@ -1,0 +1,11 @@
+{
+  "id": "01KXRJ117HSZ0XS7EVHHBHNDF5",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "C13",
+  "title": "No custom cryptography",
+  "description": [
+    "Encryption at rest, if required beyond host storage encryption, must use a maintained storage/cryptography provider and platform-protected key handling. Tally must not implement encryption algorithms or bespoke key derivation; inability to meet this bound triggers the recorded kill criterion."
+  ],
+  "type": "technical",
+  "created_at": "2026-07-17T17:29:44.4341622+00:00"
+}

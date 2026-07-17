@@ -1,0 +1,10 @@
+{
+  "id": "01KXRJ6PHQ4AFTAJ8GXPW0PZ18",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "metric": "Owned-account coverage",
+  "current": "0 accounts represented in Tally",
+  "target": "All 3 owned accounts across both banks have unique stable active records and no stored banking credentials",
+  "by_when": "LEDGER acceptance",
+  "measured": 0,
+  "created_at": "2026-07-17T17:32:50.1041239+00:00"
+}

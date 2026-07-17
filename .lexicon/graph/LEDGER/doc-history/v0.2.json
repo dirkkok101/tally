@@ -1,0 +1,9 @@
+{
+  "id": "01KXRKMJ019MT4904YTBS4AAC8",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.2",
+  "changes": [
+    "Discovery: owner persona, current and desired workflows, financial semantics, assumptions, relationship lifecycle, agent/OS dependencies, local security and recovery, success metrics, feasibility, kill-criteria evaluation, and review remediation recorded."
+  ],
+  "created_at": "2026-07-17T17:57:52.7698594+00:00"
+}

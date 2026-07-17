@@ -1,0 +1,10 @@
+{
+  "id": "01KXRJ2NMB172EK8Q87RA5914V",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "term": "Idempotency Identity",
+  "definition": [
+    "A caller-visible stable identity for one intended write. Identical reuse yields the original result; conflicting reuse fails without mutation. Avoid: fuzzy duplicate key, bank description match, database row ID."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-17T17:30:38.0928808+00:00"
+}

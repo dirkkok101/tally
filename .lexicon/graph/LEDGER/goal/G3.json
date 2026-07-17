@@ -3,8 +3,8 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "G3",
   "text": [
-    "Maintain a shared spend-category catalogue and support explicit category assignment and correction without rewriting original transaction facts."
+    "Maintain a shared spend-category catalogue and support explicit category assignment and correction without rewriting original transaction facts. Evidence: direct — the owner requires categorized spend across all accounts; workflows UC-LEDGER-003 and UC-LEDGER-008."
   ],
-  "target": "Every categorized transaction has explicit category allocation data under the chosen allocation model; allocation corrections are attributable and preserve the original transaction facts.",
+  "target": "Categories have stable create/list/rename/archive behavior; every categorized transaction has explicit allocation data under the accepted policy; corrections are attributable, archived categories preserve history, and original transaction facts remain unchanged.",
   "created_at": "2026-07-17T13:41:21.8697392+00:00"
 }

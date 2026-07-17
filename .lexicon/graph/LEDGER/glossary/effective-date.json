@@ -1,0 +1,10 @@
+{
+  "id": "01KXRJ2NXCN40M68D2AAVRSS1N",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "term": "Effective Date",
+  "definition": [
+    "The explicit calendar date used to include a Canonical Transaction in period queries under the accepted date policy. Avoid: import timestamp, current time, or a fabricated timezone conversion."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-17T17:30:38.3824023+00:00"
+}

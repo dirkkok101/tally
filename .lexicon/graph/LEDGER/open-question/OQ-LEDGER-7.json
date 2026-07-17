@@ -6,6 +6,10 @@
   "context": [
     "Manual entry, statement import, and automatic classification need a common provenance model."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "Source account identity, original description, exact signed amount, currency, supplied bank dates, source reference, and provenance are immutable canonical facts. Category, transfer, refund/reversal, and correction assertions are attributable history; the active assertion can change without rewriting source facts."
+  ],
+  "owner": "LEDGER discovery",
   "created_at": "2026-07-17T13:45:01.4368971+00:00"
 }

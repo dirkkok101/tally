@@ -1,0 +1,17 @@
+{
+  "id": "01KXRHVDNFGN9MVBCW3H5JFVAH",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "UC-LEDGER-001",
+  "title": "Maintain an owned bank account",
+  "preconditions": "A local Ledger is available; the AI Agent Host runs under the owner's OS identity; no online-banking credentials are required.",
+  "postconditions": "The owned account has one stable reference; historical transaction references survive rename or archival; archived accounts cannot receive new transactions by default.",
+  "main_flow": "1. The owner delegates the account action to an AI agent. 2. The agent discovers the account command schema. 3. The agent supplies the account's human label, bank, supported account type, currency, and masked distinguishing identifier. 4. Tally validates identity and scope without accepting credentials. 5. Tally creates or updates the stable account record and returns its canonical reference. 6. List/query commands immediately expose the resulting state.",
+  "alt_flows": [
+    "3a. Required identifying data is absent -> reject with field-level structured errors",
+    "4a. The masked identifier conflicts with another active account -> reject without mutation",
+    "4b. Credential-like data is supplied -> reject the unsupported secret-bearing input",
+    "5a. A referenced account is requested for deletion -> archive it or reject physical deletion"
+  ],
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner wants to register, rename, inspect, or retire one of the three owned bank accounts.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-17T17:26:40.5610139+00:00"
+}

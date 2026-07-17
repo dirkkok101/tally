@@ -1,0 +1,10 @@
+{
+  "id": "01KXRHZ9SC9W4DG7G55S5WN7T9",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "G8",
+  "text": [
+    "Keep the local Ledger recoverable through verified backup, restore, upgrade, and storage-migration outcomes. Evidence: analogous — sensitive long-lived financial history plus C4/RISK-LEDGER-002/007 require recoverable evolution; workflows UC-LEDGER-007 and UC-LEDGER-012."
+  ],
+  "target": "A backup can be created and verified without mutating live data; restore and migration compatibility/integrity are checked before explicit activation/replacement; failed writes, upgrades, or migrations leave the prior authoritative Ledger intact.",
+  "created_at": "2026-07-17T17:28:47.6609707+00:00"
+}

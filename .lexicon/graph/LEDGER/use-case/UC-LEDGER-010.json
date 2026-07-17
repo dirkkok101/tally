@@ -1,0 +1,17 @@
+{
+  "id": "01KXRJSSY6YRTH22NP5KK9JQPR",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "UC-LEDGER-010",
+  "title": "Confirm a refund or reversal",
+  "preconditions": "Both Canonical Transactions exist; the original is an outflow on an owned deposit account; the owner or agent explicitly selected the proposed relationship.",
+  "postconditions": "One active confirmed full or partial refund offsets only its explicitly linked active original spend. Unlinked credits remain ordinary transactions; retired links have no active spend effect; both source facts and all relationship history remain queryable.",
+  "main_flow": "1. The agent retrieves the original outflow, proposed credit, current active category, and existing linked refund amount. 2. The owner or agent requests a refund/reversal link. 3. Tally validates the same account and currency, opposite signs, and that cumulative linked credits do not exceed the original outflow magnitude. 4. Tally records the attributable relationship without changing either source fact. 5. External Spend and the original transaction's active category are reduced by the linked amount; later recategorisation keeps the linked offset with the original. 6. Tally returns the relationship and resulting spend effect.",
+  "alt_flows": [
+    "3a. Account or currency differs, signs do not oppose, or cumulative refund exceeds the original -> reject the link",
+    "3b. The credit is already linked incompatibly -> return a stable conflict",
+    "4a. The relationship write fails -> leave both transactions unlinked",
+    "5a. The original category is later corrected -> move the linked offset with the original active category rather than leaving inconsistent totals"
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"A credit appears to refund or reverse some or all of an earlier spend transaction.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-17T17:43:16.1670834+00:00"
+}

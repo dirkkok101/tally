@@ -1,0 +1,11 @@
+{
+  "id": "01KXRKA7XR9MKCTZ3WT5XRC5VG",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "C17",
+  "title": "Attributable active relationship lifecycle",
+  "description": [
+    "Transfer and refund/reversal links have attributable active/retired history. Only active Canonical Transactions may receive a new active link. Voiding or superseding a linked transaction atomically retires its active links; no relationship is silently moved to a replacement. Revocation/replacement requires an explicit reason, and active actuals immediately use only active transactions and active links."
+  ],
+  "type": "business",
+  "created_at": "2026-07-17T17:52:14.7771400+00:00"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "01KXRJ2PRCZY8WGE3ZYCHNNRE8",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "term": "Archived Ledger Entity",
+  "definition": [
+    "An account or category retained for historical references but unavailable for ordinary new assignments or transactions. Avoid: deleted, erased, inactive history."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-17T17:30:39.2455123+00:00"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "01KXRJ6QN48JQW5ZPM7R08D9Y5",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "metric": "Agent contract discoverability and compatibility",
+  "current": "No Tally commands or skills",
+  "target": "100% of Ledger commands expose versioned machine-readable contracts, structured expected errors and stable exits; incompatible bundled skills perform zero mutations",
+  "by_when": "LEDGER acceptance",
+  "measured": 0,
+  "created_at": "2026-07-17T17:32:51.2368548+00:00"
+}

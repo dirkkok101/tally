@@ -1,0 +1,11 @@
+{
+  "id": "01KXRJ05VF9M95EYJ2T1SQAN8C",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "A1",
+  "title": "First release is ZAR-only",
+  "description": [
+    "Assume all three initial owned accounts and their transactions use South African rand. PRD may proceed with explicit currency fields but no exchange-rate reporting; validate with the owner before hardening OQ-LEDGER-1."
+  ],
+  "status": "active",
+  "created_at": "2026-07-17T17:29:16.4004019+00:00"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "01KXRJ1QYS7X71FZ02P1MG5VND",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "RISK-LEDGER-007",
+  "description": [
+    "No maintained embedded-store, backup, and key-protection combination may satisfy the accepted local encryption and recovery posture without custom cryptography, invalidating the local-first approach."
+  ],
+  "likelihood": "Low",
+  "impact": "High",
+  "mitigation": [
+    "Run the OQ-LEDGER-8 design spike before planning; prefer host full-disk encryption plus restricted permissions or a maintained provider; trigger the security kill criterion if neither is acceptable."
+  ],
+  "created_at": "2026-07-17T17:30:07.7066079+00:00",
+  "links": [
+    {
+      "id": "01KXRKKVR0NT1G8KVRJTWWYF8D",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-8",
+      "rel": "see-also",
+      "created_at": "2026-07-17T17:57:29.9851146+00:00"
+    }
+  ]
+}

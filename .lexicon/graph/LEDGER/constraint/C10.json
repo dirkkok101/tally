@@ -1,0 +1,11 @@
+{
+  "id": "01KXRJ10DW4FV51VM6JC32FQWF",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "C10",
+  "title": "Historical referential integrity",
+  "description": [
+    "Canonical source facts and attributable correction/transfer events are retained. Accounts and categories referenced by history can be renamed or archived but cannot be physically removed in a way that changes prior transaction meaning."
+  ],
+  "type": "business",
+  "created_at": "2026-07-17T17:29:43.6132575+00:00"
+}

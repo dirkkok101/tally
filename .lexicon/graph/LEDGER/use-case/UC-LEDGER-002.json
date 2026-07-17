@@ -1,0 +1,18 @@
+{
+  "id": "01KXRHVDY1PJJCPRK89R626XFH",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "UC-LEDGER-002",
+  "title": "Record a canonical transaction",
+  "preconditions": "The target owned account exists and is active; transaction input follows a discoverable contract; parsing of bank files has already occurred outside LEDGER.",
+  "postconditions": "Exactly one canonical transaction exists for the accepted idempotency identity; no binary rounding or silent fact rewriting occurred.",
+  "main_flow": "1. The agent supplies an idempotency identity plus source/account reference, original description, exact signed amount, currency, required bank-reported date facts, and provenance. 2. Tally validates financial semantics and the target account. 3. Tally checks whether the idempotency identity already represents the same transaction. 4. Tally atomically records the immutable source facts. 5. Tally returns the canonical transaction and contract version. 6. A subsequent query round-trips every accepted fact exactly.",
+  "alt_flows": [
+    "1a. Amount, currency, date, provenance, or idempotency identity is invalid -> reject with structured errors",
+    "2a. Account is absent or archived -> reject without mutation",
+    "3a. The identity already exists with identical facts -> return the existing canonical transaction as an idempotent success",
+    "3b. The identity exists with conflicting facts -> return a stable conflict and preserve the original",
+    "4a. Storage fails or is interrupted -> commit the full transaction or leave no transaction"
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The owner or a delegated AI agent has one manual or upstream-normalized bank transaction to add.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-17T17:26:40.8348568+00:00"
+}

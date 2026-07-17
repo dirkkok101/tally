@@ -1,0 +1,18 @@
+{
+  "id": "01KXRHVEE0R2TAMFKZVPJJQ580",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "UC-LEDGER-004",
+  "title": "Confirm an owned-account transfer",
+  "preconditions": "Both transactions exist on distinct owned accounts; an agent or the owner has selected the proposed pair; automatic matching remains outside LEDGER.",
+  "postconditions": "One active valid transfer pair is inspectable, both active bank-side facts remain present, and the movement contributes zero External Spend. If either transaction is later voided/superseded or the link is revoked, the pair retires and active actuals revert to ordinary unlinked treatment until an explicit replacement link is confirmed.",
+  "main_flow": "1. The agent retrieves both source transactions. 2. The owner or agent explicitly requests a transfer link. 3. Tally validates distinct owned deposit accounts, the same currency, equal and opposite principal amounts, and compatible linkage state; posting dates may differ after explicit owner confirmation. 4. Tally records the attributable relationship without changing either source transaction. 5. Spend queries exclude the confirmed principal transfer while account queries retain both legs. 6. Tally returns the link and its zero-spend effect.",
+  "alt_flows": [
+    "3a. Transactions are on the same account, use different currencies, or principal amounts are not equal and opposite -> reject the link",
+    "3b. Either leg is already linked incompatibly -> reject with a stable conflict",
+    "3c. Only one leg exists -> leave it unconfirmed and counted under the ordinary classification policy",
+    "3d. A transfer fee is embedded in one bank leg rather than represented by a separate Canonical Transaction -> leave the pair unconfirmed in the first release",
+    "4a. The relationship write fails -> neither leg is partially linked"
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"Two canonical transactions appear to be the legs of a transfer between accounts owned by the owner.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-17T17:26:41.3452745+00:00"
+}

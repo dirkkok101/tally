@@ -1,0 +1,10 @@
+{
+  "id": "01KXRHZ9GAZP50EBQK1XABRX5W",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "G7",
+  "text": [
+    "Make agent retries of Ledger writes safe and deterministic. Evidence: analogous — agent processes can lose output after a committed write, and RISK-LEDGER-001/004 require duplicate-safe recovery; workflows UC-LEDGER-002 and UC-LEDGER-006."
+  ],
+  "target": "Reusing an idempotency identity with identical facts returns the existing result without a second mutation; conflicting reuse returns a stable conflict and preserves the original.",
+  "created_at": "2026-07-17T17:28:47.3713247+00:00"
+}

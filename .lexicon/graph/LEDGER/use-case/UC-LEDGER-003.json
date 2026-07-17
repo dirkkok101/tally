@@ -1,0 +1,17 @@
+{
+  "id": "01KXRHVE62YSN7X36CCGJ66W7G",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "UC-LEDGER-003",
+  "title": "Assign or correct a spend category",
+  "preconditions": "The canonical transaction and chosen active spend category exist; any automatic suggestion has been produced by CLASSIFY, not LEDGER.",
+  "postconditions": "The transaction has an explicit active category allocation; correction provenance is inspectable; original bank facts are unchanged.",
+  "main_flow": "1. The agent retrieves the transaction and its current allocation/correction history. 2. The owner or agent explicitly chooses the category allocation under the accepted allocation policy. 3. Tally validates the allocation against active categories and the transaction amount. 4. Tally records the new attributable decision without changing source facts. 5. Tally returns the active allocation and history reference. 6. Later queries use the active allocation while retaining prior decisions for inspection.",
+  "alt_flows": [
+    "1a. Transaction does not exist -> return not found",
+    "2a. Category is absent or archived -> reject without changing the active allocation",
+    "3a. Allocation violates the accepted cardinality or amount policy -> reject with structured errors",
+    "4a. The requested allocation matches the active decision -> return an idempotent no-change success"
+  ],
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner wants an uncategorized transaction classified or an existing category decision corrected.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-17T17:26:41.0912880+00:00"
+}

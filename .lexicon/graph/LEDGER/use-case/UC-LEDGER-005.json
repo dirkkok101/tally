@@ -1,0 +1,18 @@
+{
+  "id": "01KXRHVENV2V4KFJYTBVX3927D",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "UC-LEDGER-005",
+  "title": "Query and reconcile ledger actuals",
+  "preconditions": "The local Ledger is readable; filter semantics and date/sign conventions are discoverable.",
+  "postconditions": "Repeated equivalent queries over unchanged data return the same transaction membership and exact total; all pages for one cursor retain first-page membership; empty results are explicit successful results.",
+  "main_flow": "1. The agent submits explicit filters and output contract version. 2. Tally validates the filter combination. 3. Tally selects canonical transactions using the Effective Date, category-allocation, transfer, refund/reversal, and correction rules. 4. Tally establishes one immutable result snapshot containing transaction membership and exact total, then returns the first page plus a snapshot-bound cursor when needed. 5. Later pages read the same snapshot even if new writes occur; an unavailable snapshot fails explicitly. 6. The agent reconciles the total to that selected set. 7. BUDGET and INSIGHTS consume this public result rather than duplicate financial rules.",
+  "alt_flows": [
+    "2a. Date range, account, category or state filter is invalid -> reject with structured errors",
+    "3a. The store fails integrity validation -> fail rather than report a potentially false total",
+    "4a. Results exceed one response -> return a snapshot-bound deterministic cursor and unchanged total",
+    "5a. The snapshot is expired or unavailable -> fail explicitly; never continue against live membership",
+    "6a. Selected transaction amounts do not equal the reported total -> treat as an integrity failure"
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The owner needs trustworthy transactions or actual totals for a period, account, category, transfer state, or categorization state.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-17T17:26:41.5964425+00:00"
+}

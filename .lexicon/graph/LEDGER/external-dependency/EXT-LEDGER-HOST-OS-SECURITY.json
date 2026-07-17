@@ -1,0 +1,22 @@
+{
+  "id": "01KXRJ5PA5XVWAK3AY9ERRTQ7G",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "EXT-LEDGER-HOST-OS-SECURITY",
+  "name": "Host OS Storage and Key Protection",
+  "description": [
+    "Bidirectional local platform dependency: supplies filesystem permissions, atomic file behavior, optional full-disk or volume encryption, and platform key protection used by the accepted storage posture. It receives no online-banking credentials; behavior must be validated by the OQ-LEDGER-8 spike."
+  ],
+  "type": "service",
+  "owner": "Personal Finance Owner",
+  "metadata": "{\"gate_type\":\"data\",\"validation_basis\":\"source_and_client\",\"validation_status\":\"assumed\"}",
+  "created_at": "2026-07-17T17:32:17.0943177+00:00",
+  "links": [
+    {
+      "id": "01KXRJ5PA6NRNN15R2WQ0SENR2",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-8",
+      "rel": "see-also",
+      "created_at": "2026-07-17T17:32:17.0948426+00:00"
+    }
+  ]
+}

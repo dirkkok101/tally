@@ -1,0 +1,11 @@
+{
+  "id": "01KXRJ11GN3PY48G5STB4PBGQ8",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "C14",
+  "title": "Stable process stream contract",
+  "description": [
+    "Structured command results are emitted on stdout, diagnostics on stderr, and expected failures carry stable module-scoped error codes plus documented non-zero exits. Skills and commands declare compatible contract versions; incompatible skill execution fails before mutation."
+  ],
+  "type": "technical",
+  "created_at": "2026-07-17T17:29:44.7266963+00:00"
+}

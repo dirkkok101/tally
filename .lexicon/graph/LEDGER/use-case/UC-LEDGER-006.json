@@ -1,0 +1,18 @@
+{
+  "id": "01KXRHVEYC171ENABXY4BWGX0C",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "UC-LEDGER-006",
+  "title": "Discover and invoke the agent command contract",
+  "preconditions": "A compatible Tally executable is on PATH; the Agent Host can start local processes under the owner's OS identity.",
+  "postconditions": "The agent completes the delegated task using only public commands and can distinguish success, expected failure, incompatibility, and retry outcomes without parsing prose.",
+  "main_flow": "1. The agent discovers Tally version, available commands, help, and machine-readable schemas. 2. A bundled skill checks its declared compatibility with the CLI contract version. 3. The agent constructs deterministic non-interactive structured input. 4. Tally validates input before mutation. 5. Tally writes the structured result to stdout, diagnostics to stderr, and sets the documented exit code. 6. If output is lost after a write, the agent safely retries using the same idempotency identity.",
+  "alt_flows": [
+    "1a. Command or schema is unknown -> return discoverable help and a stable usage failure",
+    "2a. Skill and CLI contract versions are incompatible -> fail before performing the finance action",
+    "3a. Input is malformed or contains unknown disallowed fields -> reject before mutation",
+    "5a. An expected domain failure occurs -> return a structured module-scoped error and non-zero stable exit",
+    "6a. Retry payload conflicts with the original identity -> return conflict, never overwrite"
+  ],
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner delegates a Ledger task to an AI agent or installs a Tally skill in an AI Agent Host.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-17T17:26:41.8695241+00:00"
+}

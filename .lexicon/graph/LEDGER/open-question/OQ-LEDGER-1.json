@@ -2,10 +2,11 @@
   "id": "01KXR55H94B58EENF5CK7AG9HP",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "OQ-LEDGER-1",
-  "question": "Is the first release strictly South African rand, or must accounts and transactions support multiple currencies and exchange-rate reporting?",
+  "question": "Validate the active ZAR-only first-release assumption against all three owned accounts.",
   "context": [
-    "Currency scope affects amount identity, aggregation validity, transfers, and budget comparability."
+    "PRD may proceed with explicit currency on every fact and no exchange-rate reporting. If any initial account is non-ZAR, invalidate A1 and expand currency requirements before design."
   ],
   "status": "open",
+  "owner": "Personal Finance Owner",
   "created_at": "2026-07-17T13:45:00.4528954+00:00"
 }

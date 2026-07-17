@@ -1,0 +1,17 @@
+{
+  "id": "01KXRJSSCVPRDXDGXR37MBBR8F",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "UC-LEDGER-008",
+  "title": "Maintain the spend-category catalogue",
+  "preconditions": "The local Ledger is available; category maintenance is invoked through the public agent contract; budget amounts and automatic classification remain outside LEDGER.",
+  "postconditions": "The catalogue exposes one stable identity per category; referenced categories remain historically meaningful after rename or archival; no budget amount or automatic rule was created.",
+  "main_flow": "1. The owner delegates a category action to an AI agent. 2. The agent discovers the category command schema and lists current active/archived categories. 3. The agent supplies a category name or stable category reference. 4. Tally validates the flat-catalogue naming and archival rules. 5. Tally creates, renames, or archives the stable category record. 6. Historical assignments retain the same category identity and new assignments select only active categories by default.",
+  "alt_flows": [
+    "3a. Category name is absent or conflicts with an active category under the accepted comparison -> reject without mutation",
+    "4a. Physical deletion is requested for a referenced category -> reject and direct the caller to archive",
+    "5a. An already archived category is archived again -> return an idempotent no-change success",
+    "6a. A new assignment or correction targets an archived category -> reject; the owner must reactivate it or choose an active category"
+  ],
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner needs to create, list, rename, or retire a spend category used across accounts and later budgets.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-17T17:43:15.6128330+00:00"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "01KXRJ6Q3D9JVW8NCRFD8AFAYR",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "metric": "Idempotent write safety",
+  "current": "No agent write contract",
+  "target": "100% of conformance retries with identical identities create zero duplicate mutations; 100% of conflicting retries preserve the original and return stable conflict",
+  "by_when": "LEDGER acceptance",
+  "measured": 0,
+  "created_at": "2026-07-17T17:32:50.6700826+00:00"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "01KXRHREAWE6YZ7VRPEHTRGSAX",
+  "project_id": "01KXR2C3JQBT2WPM9JCSA9JMXD",
+  "code": "P1",
+  "name": "Personal Finance Owner",
+  "role": "Sole owner and decision-maker for household finances",
+  "goals": [
+    "When reviewing or planning personal spending, I want one trustworthy view across all owned bank accounts so I can make budget decisions from complete actuals and delegate ledger maintenance safely to an AI agent."
+  ],
+  "pain_points": [
+    "Transactions are fragmented across three accounts at two banks; descriptions and categories are inconsistent; manual consolidation is delayed and transfer or duplicate errors are hard to detect."
+  ],
+  "workaround": [
+    "Inspect separate bank statements, manually consolidate selected transactions, infer categories, remove transfers or duplicates, and recalculate totals for each reporting period."
+  ],
+  "success": [
+    "The owner can delegate daily ledger maintenance and retrieve totals whose included transactions, category decisions, transfers, and correction history are inspectable and reconcile exactly."
+  ],
+  "tech_level": "high",
+  "frequency": "daily",
+  "created_at": "2026-07-17T17:25:02.9418206+00:00"
+}

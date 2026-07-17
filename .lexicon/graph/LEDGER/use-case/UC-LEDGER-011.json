@@ -1,0 +1,18 @@
+{
+  "id": "01KXRKC2F4G8K3319PA05K9WGH",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "UC-LEDGER-011",
+  "title": "Revoke or replace a transfer or refund relationship",
+  "preconditions": "The relationship and its transactions exist; the agent can retrieve active/retired relationship history; the owner supplies an attributable reason and idempotency identity.",
+  "postconditions": "No dangling or edited-in-place link remains; only active relationships affect External Spend and category totals; every revocation/replacement is attributable.",
+  "main_flow": "1. The agent retrieves the active relationship, both source transactions, and current spend effect. 2. The owner requests revocation or replacement. 3. Tally validates that the relationship is active and that any proposed replacement transactions are active and satisfy the transfer or refund rules. 4. Tally atomically retires the old relationship with actor/reason. 5. For replacement, Tally creates a distinct new active relationship; it never edits the old link in place. 6. Active queries remove the retired effect and apply only the new active relationship if created. 7. History queries expose the complete chain and Tally returns the before/after spend effect.",
+  "alt_flows": [
+    "2a. Reason or idempotency identity is absent -> reject before mutation",
+    "3a. Relationship is already retired by the same action -> return the existing result",
+    "3b. Proposed replacement violates transfer/refund rules or references a voided/superseded transaction -> reject without retiring the current link",
+    "4a. Retirement or replacement cannot complete atomically -> preserve the original active relationship",
+    "6a. Recalculated active totals do not reconcile -> fail closed and retain the prior relationship state"
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The owner discovers that an active transfer or refund/reversal link is wrong or must point to different active transactions.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-17T17:53:14.7257482+00:00"
+}

@@ -1,7 +1,7 @@
 {
   "id": "01KXR50YVB40QZYYEGFB4HJFJ5",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
-  "condition": "At discovery, an existing finance ledger or CLI plus a thin Tally agent adapter satisfies all six LEDGER goals without lossy translation or private-database coupling; stop custom Ledger development and adopt the adapter approach.",
+  "condition": "At discovery, an existing finance ledger or CLI plus a thin Tally agent adapter satisfies every current LEDGER goal (G1-G8), including idempotent agent writes and verified recovery, without lossy translation or private-database coupling; stop custom Ledger development and adopt the adapter approach.",
   "monitored": 1,
   "created_at": "2026-07-17T13:42:30.5080459+00:00"
 }

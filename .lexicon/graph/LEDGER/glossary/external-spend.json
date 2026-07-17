@@ -1,0 +1,10 @@
+{
+  "id": "01KXRJ2PEKZ15J6KB1WBWN8AKH",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "term": "External Spend",
+  "definition": [
+    "Outflow from owned accounts that represents consumption outside the owner's tracked account set after confirmed transfers and accepted refund/reversal rules are applied. Avoid: every negative transaction or owned-account transfer."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-17T17:30:38.9327636+00:00"
+}

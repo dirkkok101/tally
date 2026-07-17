@@ -6,6 +6,10 @@
   "context": [
     "A positive answer triggers the monitored do-less kill criterion and avoids unnecessary custom ledger maintenance."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "hledger is the closest candidate and useful analogous prior art, but does not satisfy G2, G3, and G5 through a thin alias: Tally-specific provenance/correction semantics and a uniform machine-readable command contract require a substantial semantic layer. The custom Ledger kill criterion is not triggered; retain hledger only as a possible interoperability target."
+  ],
+  "owner": "LEDGER discovery",
   "created_at": "2026-07-17T13:45:02.4312586+00:00"
 }

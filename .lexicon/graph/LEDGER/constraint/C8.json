@@ -1,0 +1,11 @@
+{
+  "id": "01KXRJ0ZXFPA4DM71HX3Q4V2NE",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "C8",
+  "title": "Idempotent public writes",
+  "description": [
+    "Every transaction-affecting public write accepts or derives a stable idempotency identity. Identical replay returns the original result without a second mutation; conflicting replay returns a stable conflict and never overwrites the original."
+  ],
+  "type": "technical",
+  "created_at": "2026-07-17T17:29:43.0880944+00:00"
+}

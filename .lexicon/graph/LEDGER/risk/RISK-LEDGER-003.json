@@ -8,7 +8,7 @@
   "likelihood": "Medium",
   "impact": "High",
   "mitigation": [
-    "Make these transaction relationships explicit domain cases, preserve original legs, and test spend inclusion rules before downstream budget logic is accepted."
+    "Require explicit attributable active/retired transfer and refund relationships; only active transactions/links affect totals; void/supersession atomically retires links; revocation/replacement is reasoned and atomic; preserve all source facts; never infer exclusion from description alone; example-map each special-transaction policy in the PRD."
   ],
   "created_at": "2026-07-17T13:44:36.0751119+00:00"
 }

@@ -6,6 +6,10 @@
   "context": [
     "The CLI must remain pleasant for direct use while being deterministic and stable for agents and bundled skills."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "Every structured Ledger write accepts JSON standard input and may offer explicit options for small scalar fields. Every command exposes a versioned machine-readable contract; stdout is structured result data, stderr is diagnostics, and stable non-zero exits accompany structured expected failures."
+  ],
+  "owner": "LEDGER discovery",
   "created_at": "2026-07-17T13:45:01.8272069+00:00"
 }

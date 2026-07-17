@@ -8,7 +8,7 @@
   "likelihood": "Medium",
   "impact": "High",
   "mitigation": [
-    "Version public command schemas and skills together, expose machine-readable schemas, and add compatibility tests for representative agent invocations."
+    "Generate help/schemas from the executable contract, test stdout/stderr/error/exit invariants, bundle version-matched skills, and fail incompatible skills before mutation."
   ],
   "created_at": "2026-07-17T13:44:36.2434410+00:00"
 }

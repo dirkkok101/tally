@@ -1,0 +1,11 @@
+{
+  "id": "01KXRJ06NNKDN0H7KGH1VVH144",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "A4",
+  "title": "Transaction date is the default effective date",
+  "description": [
+    "Assume the bank-reported transaction date drives period queries, posting date is preserved when supplied, and date-only facts do not gain fabricated time or timezone. Validate OQ-LEDGER-3."
+  ],
+  "status": "active",
+  "created_at": "2026-07-17T17:29:17.2388721+00:00"
+}
