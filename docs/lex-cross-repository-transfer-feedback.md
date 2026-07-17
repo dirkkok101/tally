@@ -1,6 +1,6 @@
 # Lex Cross-Repository Transfer Feedback
 
-This document records defects and enhancement opportunities observed while transferring reusable architecture knowledge from the NxGN Actions Lex graph into a new Tally graph.
+This document records defects and enhancement opportunities observed while transferring reusable architecture knowledge from the NxGN Actions Lex graph into a new Tally graph and then using that graph to frame Tally's first module.
 
 ## Environment
 
@@ -25,6 +25,7 @@ The source material was exported with Lex 0.5.3 and imported with the same binar
 | LEX-XFER-004 | Bug | High | Pattern export/import duplicates structure and loses classification metadata |
 | LEX-XFER-005 | Bug | High | Architecture export/import duplicates generated content and loses category metadata |
 | LEX-XFER-006 | Bug | Medium | Writes recommend sync conflict resolution when graph and DB are already in sync |
+| LEX-SKILL-001 | Bug | High | The brainstorm skill emits a constraint type rejected by Lex 0.5.3 |
 | LEX-XFER-E001 | Enhancement | High value | Add a canonical cross-repository graph transfer command |
 | LEX-XFER-E002 | Enhancement | High value | Add dry-run and entity-diff support to every importer |
 | LEX-XFER-E003 | Enhancement | High value | Support dependency-closure transfer for links and diagrams |
@@ -176,6 +177,31 @@ At the same time, `lex sync status --json` reported:
 **Expected:**
 
 Git working-tree status and graph/database drift should be reported separately. An uncommitted but internally synchronized new graph should not recommend an authority-resolution command intended for drift or conflict handling.
+
+### LEX-SKILL-001: The brainstorm skill emits an invalid constraint type
+
+The `lex:brainstorm` skill instructs agents to record the complexity budget with this command shape and repeats it in its worked example:
+
+```sh
+lex constraint create --module LEDGER --title "Single-process complexity budget" \
+  --type complexity --description "One executable, one embedded store, and no daemon"
+```
+
+Lex 0.5.3 rejects the command:
+
+```text
+Error [LEX-006]: Invalid constraint type 'complexity'. Must be one of: technical, business, regulatory, timeline.
+```
+
+The machine-readable command schema confirms that only `technical`, `business`, `regulatory`, and `timeline` are accepted. This breaks the documented brainstorm workflow at the graph-write phase and is especially costly because a batch of otherwise valid constraints can fail on the shared invalid type.
+
+**Expected:**
+
+The distributed skill and the CLI schema must agree. Either add `complexity` to the constraint taxonomy or update the skill to use an accepted type and represent the complexity budget through the title and description. Contract-test all skill command examples against the packaged CLI before release.
+
+**Workaround:**
+
+Use `--type technical` and retain the complexity semantics in the constraint title and description.
 
 ## Enhancement Proposals
 
