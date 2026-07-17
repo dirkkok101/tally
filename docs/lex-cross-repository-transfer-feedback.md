@@ -1,6 +1,6 @@
-# Lex Cross-Repository Transfer Feedback
+# Lex Transfer and Workflow Feedback
 
-This document records defects and enhancement opportunities observed while transferring reusable architecture knowledge from the NxGN Actions Lex graph into a new Tally graph and then using that graph to frame Tally's first module.
+This document records defects and enhancement opportunities observed while transferring reusable architecture knowledge from the NxGN Actions Lex graph into a new Tally graph and then using the packaged Lex skills and CLI to frame and discover Tally's first module.
 
 ## Environment
 
@@ -13,7 +13,7 @@ This document records defects and enhancement opportunities observed while trans
 | Source module | `CORE` (`Platform Core`) |
 | Intended transfer | 29 ADRs, 33 patterns, 16 architecture documents |
 
-The source material was exported with Lex 0.5.3 and imported with the same binary. The problems below are therefore same-version round-trip defects, not compatibility issues between different Lex releases.
+The source material was exported and imported with the same Lex 0.5.3 binary, so the `LEX-XFER-*` findings are same-version round-trip defects rather than cross-version compatibility problems. The later `LEX-SKILL-*`, `LEX-CLI-*`, and `LEX-GRAPH-*` findings were reproduced with the same installed version during brainstorm and discovery.
 
 ## Summary
 
@@ -25,7 +25,11 @@ The source material was exported with Lex 0.5.3 and imported with the same binar
 | LEX-XFER-004 | Bug | High | Pattern export/import duplicates structure and loses classification metadata |
 | LEX-XFER-005 | Bug | High | Architecture export/import duplicates generated content and loses category metadata |
 | LEX-XFER-006 | Bug | Medium | Writes recommend sync conflict resolution when graph and DB are already in sync |
-| LEX-SKILL-001 | Bug | High | The brainstorm skill emits a constraint type rejected by Lex 0.5.3 |
+| LEX-SKILL-001 | Bug | High | Packaged skills emit constraint types rejected by Lex 0.5.3 |
+| LEX-SKILL-002 | Bug | High | Discovery requires a goal description field that the goal CLI does not expose |
+| LEX-CLI-001 | Bug | High | Invalid command arguments can print an error and still exit successfully |
+| LEX-GRAPH-001 | Bug | Medium | Module statistics undercount explicit links |
+| LEX-GRAPH-E001 | Enhancement | High value | Count and project use-case primary actors as first-class persona relationships |
 | LEX-XFER-E001 | Enhancement | High value | Add a canonical cross-repository graph transfer command |
 | LEX-XFER-E002 | Enhancement | High value | Add dry-run and entity-diff support to every importer |
 | LEX-XFER-E003 | Enhancement | High value | Support dependency-closure transfer for links and diagrams |
@@ -178,7 +182,7 @@ At the same time, `lex sync status --json` reported:
 
 Git working-tree status and graph/database drift should be reported separately. An uncommitted but internally synchronized new graph should not recommend an authority-resolution command intended for drift or conflict handling.
 
-### LEX-SKILL-001: The brainstorm skill emits an invalid constraint type
+### LEX-SKILL-001: Packaged skills emit invalid constraint types
 
 The `lex:brainstorm` skill instructs agents to record the complexity budget with this command shape and repeats it in its worked example:
 
@@ -203,7 +207,128 @@ The distributed skill and the CLI schema must agree. Either add `complexity` to 
 
 Use `--type technical` and retain the complexity semantics in the constraint title and description.
 
+The same defect recurs in `lex:discovery`. Its persistence instructions and CLI reference use:
+
+```sh
+lex constraint create --module LEDGER --title "Privacy regulation" \
+  --type compliance --description "..."
+```
+
+Lex 0.5.3 rejects `compliance` because the corresponding accepted taxonomy value is `regulatory`. The workaround is `--type regulatory`. The contract test proposed above should validate command examples in every packaged skill, not only `lex:brainstorm`.
+
+### LEX-SKILL-002: Discovery requires an unavailable goal description field
+
+The `lex:discovery` skill requires:
+
+> Every goal names its evidence class in the description.
+
+It also makes omission of the evidence class a failure criterion. However, the Lex 0.5.3 schemas expose only these goal fields:
+
+```json
+{
+  "goal create": ["module", "text", "target"],
+  "goal update": ["module", "identifier", "text", "target", "clear-target", "code"]
+}
+```
+
+There is no `--description` option and no first-class evidence field. An agent therefore cannot satisfy the skill literally, and a fresh reviewer cannot distinguish structured evidence metadata from prose conventions.
+
+**Expected:**
+
+Either add a goal description/evidence field to create, update, show, list, export, and import, or update the skill to name the supported field where evidence must be encoded. Prefer a constrained `evidence_class` value (`direct`, `analogous`, or `assumption`) plus an evidence note so readiness checks can validate it mechanically.
+
+**Workaround:**
+
+Append `Evidence: <class> — <basis>` to the goal text. For assumption-based goals, create the required assumption entity separately.
+
+### LEX-CLI-001: Invalid command arguments can exit successfully
+
+**Command:**
+
+```sh
+lex link list --module LEDGER --json
+```
+
+**Observed:**
+
+```text
+Argument '--module' is not recognized.
+Usage: link list [options...] [-h|--help] [--version]
+```
+
+The process nevertheless exited with code `0`. A shell fallback guarded by `||` therefore did not run.
+
+**Expected:**
+
+Argument parsing and usage failures must return a stable non-zero exit code, preferably distinct from domain and infrastructure failures. This is essential for Lex's own agent-oriented workflows: automation must never interpret a rejected invocation as success.
+
+**Workaround:**
+
+Do not trust the exit code alone for this command surface; also validate the expected JSON shape. This is fragile and should only be temporary.
+
+### LEX-GRAPH-001: Module statistics undercount explicit links
+
+After discovery, `lex link list --ref-code OQ-LEDGER-8 --json` returned three distinct explicit links involving the open question:
+
+- `EXT-LEDGER-HOST-OS-SECURITY -> OQ-LEDGER-8`
+- `RISK-LEDGER-007 -> OQ-LEDGER-8`
+- `OQ-LEDGER-8 -> UC-LEDGER-007`
+
+All three source entities belong to LEDGER and the link projections are present in graph files. However:
+
+```sh
+lex stats --module LEDGER --json
+```
+
+reported:
+
+```json
+{
+  "link_count": 1
+}
+```
+
+**Expected:**
+
+Define and document whether `link_count` means outgoing, incoming, internal, or incident links, then count that set consistently. For module statistics, the most useful default is unique explicit links whose source belongs to the module, with separate counts for incoming cross-module links if needed.
+
+**Workaround:**
+
+Query links from each relevant entity with `lex link list --ref-code <REF> --json` and deduplicate by link ID. There is currently no module-wide `link list` filter.
+
 ## Enhancement Proposals
+
+### LEX-GRAPH-E001: Model use-case primary actors as persona relationships
+
+Seven LEDGER use cases were created with `--primary-actor P1`. `lex use-case show UC-LEDGER-001 --json` correctly reconstructed:
+
+```json
+{
+  "ref_code": "UC-LEDGER-001",
+  "primary_actor": "P1"
+}
+```
+
+But `lex stats --module LEDGER --json` still reported:
+
+```json
+{
+  "personas_linked": 0,
+  "use_cases": 7
+}
+```
+
+The graph projection stores the actor inside an opaque JSON string:
+
+```json
+{
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",...}"
+}
+```
+
+`lex use-case list --module LEDGER --json` also omits the primary actor. This makes the discovery readiness rule—every persona must be the primary actor in at least one use case—impossible to verify from stats or list output and forces one `show` call per use case.
+
+Promote `primary_actor`, `trigger_event`, `depth_tier`, and status to first-class graph fields, validate the actor against project personas, count that relationship in `personas_linked`, and expose it in list output. Add an integrity check for missing or unknown persona codes.
 
 ### LEX-XFER-E001: Canonical cross-repository graph transfer
 
