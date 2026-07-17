@@ -1,0 +1,23 @@
+{
+  "id": "01KXR31EF6W20NHMYQZ7P18SHH",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "DIAG-CORE-ACTION-NUMBER-GENERATION",
+  "title": "Action Number Generation",
+  "diagram_type": "workflow",
+  "format": "mermaid",
+  "content": [
+    "flowchart TD",
+    "    start([START: Action creation requires unique action number])",
+    "    s1[1. Begin transaction]",
+    "    s2[2. SELECT FOR UPDATE on TenantSequence for current tenant<br/>SELECT current_value FROM actions.tenant_sequences<br/>WHERE tenant_id = tenant_id<br/>FOR UPDATE<br/>Row-level lock prevents concurrent reads until COMMIT]",
+    "    s3[3. Increment sequence counter<br/>current_value = current_value + 1<br/>UPDATE actions.tenant_sequences<br/>SET current_value = new_value<br/>WHERE tenant_id = tenant_id]",
+    "    s4[4. Format action number<br/>ACT-counter padded to 4+ digits<br/>e.g., ACT-0001, ACT-0042, ACT-1337, ACT-10000]",
+    "    s5[5. Commit transaction<br/>Releases row-level lock,<br/>allowing next concurrent request to proceed]",
+    "    s6[6. Return formatted action number]",
+    "    stop([END])",
+    "",
+    "    start --> s1 --> s2 --> s3 --> s4 --> s5 --> s6 --> stop",
+    ""
+  ],
+  "created_at": "2026-07-17T13:07:49.3495684+00:00"
+}

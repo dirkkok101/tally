@@ -1,0 +1,32 @@
+{
+  "id": "01KXR31EF83Y4HS02BG7AMDT53",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "DIAG-CORE-EVIDENCE-UPLOAD",
+  "title": "Evidence Upload (Pre-Signed URL Pattern)",
+  "diagram_type": "sequence",
+  "format": "mermaid",
+  "content": [
+    "sequenceDiagram",
+    "    autonumber",
+    "    participant B as Browser",
+    "    participant BFF",
+    "    participant API as Actions API",
+    "    participant BLOB as Azure Blob Storage",
+    "    participant DB as PostgreSQL",
+    "",
+    "    B->>BFF: POST /api/actions/{id}/evidence<br/>Body {file_name, file_type, file_size, description}<br/>(metadata only — no file content)",
+    "    BFF->>API: POST /api/v1/actions/{id}/evidence",
+    "    API->>API: Validate file metadata<br/>(type whitelist, size ≤ 50MB)",
+    "    API->>BLOB: Generate pre-signed upload URL<br/>container: actions-evidence/{tenant_id}/{action_id}/{evidence_id}<br/>write-only, expires 1h",
+    "    API->>DB: INSERT evidence<br/>status='pending', blob_path (RLS)",
+    "    API-->>B: 200 OK (via BFF)<br/>Body {evidence_id, upload_url, expires_at}",
+    "    B->>BLOB: PUT file bytes to pre-signed URL<br/>(direct upload — file never traverses API)",
+    "    B->>API: POST /api/actions/{id}/evidence/{eid}/confirm (via BFF)",
+    "    API->>API: OWASP-compliant validation<br/>magic-byte match, type whitelist, size ≤ 50MB",
+    "    API->>BLOB: Read blob, compute SHA-256 hash",
+    "    API->>DB: UPDATE evidence<br/>SET status='uploaded', sha256_hash=@hash<br/>WHERE id=@eid AND status='pending'",
+    "    API->>DB: INSERT audit_event<br/>evidence.uploaded<br/>details {evidence_id, file_name, file_type, sha256_hash}",
+    ""
+  ],
+  "created_at": "2026-07-17T13:07:49.3495684+00:00"
+}

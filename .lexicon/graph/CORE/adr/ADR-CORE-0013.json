@@ -1,0 +1,69 @@
+{
+  "id": "01KXR2E3YA9X5KKK7MGTG4TKK5",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0013",
+  "title": "Capstone Translation Pattern for Entity i18n",
+  "slug": "capstone-translation-pattern-for-entity-i18n",
+  "number": 13,
+  "context": [
+    "Actions serves multi-tenant organisations that operate across languages. Workflow definitions, compliance profiles, escalation rules, and workflow states all need translatable Name and Description fields. The i18n solution must support:",
+    "",
+    "- Per-entity, per-language translations with tenant isolation",
+    "- Fallback chain: requested language → tenant default language → first available → placeholder",
+    "- Runtime editability (translations managed in the admin UI, not in resource files)",
+    "- Audit trail on translation changes",
+    "- Consistent pattern across all translated entities"
+  ],
+  "decision": [
+    "Adopt **Capstone's entity translation pattern**: translation child tables per entity with a shared `TranslationService` for resolution and editing.",
+    "",
+    "**Data model:**",
+    "- `ITranslatedEntity<T>` interface on translatable entities (exposes `ICollection<T> Translations`)",
+    "- `EntityTranslation` abstract base class (LanguageId, TenantId, translated fields)",
+    "- Concrete `{Entity}Translation` class per translated entity",
+    "- Composite unique index: `(EntityId, LanguageId, TenantId)`",
+    "",
+    "**Resolution:**",
+    "- `TranslationService.GetEntityTranslation(entity, requestLanguageId, defaultLanguageId)` — returns resolved translation with fallback chain",
+    "- `TranslationService.BuildTranslatedValues(translations, requestLanguageId, selector)` — returns all language values for UI editing",
+    "",
+    "**Parameters:**",
+    "- `requestLanguageId` and `defaultLanguageId` threaded through all DTOMapper and EntityMapper calls",
+    "- Extracted from JWT claims in `TenantEndpoint` base class (see ADR-0014)",
+    "",
+    "**Translated entities in Actions:** WorkflowDefinition, WorkflowState, ComplianceProfile, EscalationRule (4 translation tables)."
+  ],
+  "consequences": [
+    "**Positive:**",
+    "- Proven pattern — battle-tested across dozens of entities in Capstone",
+    "- Strong data integrity via FK to Language table and composite unique indexes",
+    "- Audit trail via standard `TrackedEntity` on translation records",
+    "- Fallback chain ensures users always see something meaningful",
+    "- Runtime editable without redeployment",
+    "",
+    "**Negative:**",
+    "- Every translated entity read requires a JOIN to its translation table (single JOIN via `.Include(e => e.Translations)` — no N+1)",
+    "- `requestLanguageId` / `defaultLanguageId` parameters thread through every mapper call",
+    "- 4 translation tables + 4 entity configurations add schema complexity",
+    "",
+    "**Fallback algorithm:** `GetEntityTranslation` resolves in order: (1) exact match for `requestLanguageId`, (2) exact match for `defaultLanguageId`, (3) first available translation, (4) empty placeholder string. Resolution never returns null — the caller always gets a usable value.",
+    "",
+    "**Alternatives considered:**",
+    "- **JSON column with all translations** — rejected: cannot FK to Language table, no per-translation audit, querying individual languages requires JSON path expressions",
+    "- **Shared polymorphic translation table** — rejected: loses type safety, composite indexes become complex, query joins are less efficient than per-entity tables",
+    "",
+    "**Trade-off accepted:** Multi-language is a confirmed requirement for Actions. The query overhead is a single JOIN per entity load. Parameter threading is mechanical and consistent across all mappers."
+  ],
+  "status": "accepted",
+  "origin": "Capstone production pattern, adopted by Identity (ADR-0013), adopted by Actions for confirmed multilingual requirement.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00",
+  "links": [
+    {
+      "id": "01KXR35F50QV5V96TBNQZM2WKV",
+      "target_type": "adr",
+      "target": "ADR-CORE-0014",
+      "rel": "references",
+      "created_at": "2026-07-17T13:10:01.1221120+00:00"
+    }
+  ]
+}

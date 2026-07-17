@@ -1,0 +1,192 @@
+{
+  "id": "01KXR2EKKVGB648H1NGCTB1HR1",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "PAT-CORE-PATTERNS-OVERVIEW",
+  "title": "Implementation Patterns — NxGN Actions",
+  "slug": "patterns-overview",
+  "purpose": [
+    "**AI Summary**: Pattern reference for the Actions platform. Based on Capstone's vertical slice architecture, adapted for Actions' workflow automation domain with PostgreSQL RLS-based multi-tenancy. Patterns are split into API (backend) and Web (frontend) subdirectories, each with its own architecture overview and feature implementation guide. The full-stack flow document bridges them."
+  ],
+  "category": "overview",
+  "zone": "cross-cutting",
+  "status": "current",
+  "created_at": "2026-07-17T12:57:32.0030626+00:00",
+  "links": [
+    {
+      "id": "01KXR35CZHGNF0Q0BTVFN57G1X",
+      "target_type": "adr",
+      "target": "ADR-CORE-0010",
+      "rel": "implements",
+      "created_at": "2026-07-17T13:09:58.8985975+00:00"
+    },
+    {
+      "id": "01KXR35DJQFAJ3CHTR6FZSR9VB",
+      "target_type": "adr",
+      "target": "ADR-CORE-0011",
+      "rel": "implements",
+      "created_at": "2026-07-17T13:09:59.5124723+00:00"
+    },
+    {
+      "id": "01KXR35E5KXEQMDFJNG7MEQAGQ",
+      "target_type": "adr",
+      "target": "ADR-CORE-0012",
+      "rel": "implements",
+      "created_at": "2026-07-17T13:10:00.1163288+00:00"
+    },
+    {
+      "id": "01KXR35FFEYS3JHX3H21XSGW2P",
+      "target_type": "adr",
+      "target": "ADR-CORE-0013",
+      "rel": "implements",
+      "created_at": "2026-07-17T13:10:01.4558163+00:00"
+    },
+    {
+      "id": "01KXR35MQ8VD4RK05YYDC13RWV",
+      "target_type": "adr",
+      "target": "ADR-CORE-0018",
+      "rel": "implements",
+      "created_at": "2026-07-17T13:10:06.8257918+00:00"
+    },
+    {
+      "id": "01KXR35QAA6S49Z49SX8KFV761",
+      "target_type": "adr",
+      "target": "ADR-CORE-0023",
+      "rel": "implements",
+      "created_at": "2026-07-17T13:10:09.4841047+00:00"
+    }
+  ],
+  "sections": [
+    {
+      "id": "01KXR2S69NGJFTNWBQ81SSRJ48",
+      "title": "Start Here",
+      "content": [
+        "Use these patterns before adding or reviewing a feature:",
+        "",
+        "1. Start with [API Overview](api-overview.md) and [Web Overview](web-overview.md).",
+        "2. For an end-to-end module, read [Full-Stack Flow](full-stack-flow.md).",
+        "3. For backend implementation, use [API Vertical Slice](api-vertical-slice.md), [API Endpoints](api-endpoints.md), and [API Feature Implementation](api-feature-implementation.md).",
+        "4. For Angular implementation, use [Web Feature Implementation](web-feature-implementation.md), [Web List Page](web-list-page.md), [Web Capture Page](web-capture-page.md), and [Web Capture State](web-capture-state.md).",
+        "",
+        "These patterns document the implementation approach used by Workflows, Compliance Profiles, Deadline Types, Escalation Rules, and related client-side aggregate-root screens."
+      ],
+      "section_type": "narrative",
+      "sort_order": 0,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:03:18.8390738+00:00"
+    },
+    {
+      "id": "01KXR2S6GWFDJ5FSMTAY6HVDXW",
+      "title": "Pattern Index",
+      "content": [
+        "## Core",
+        "",
+        "- [API Overview](api-overview.md)",
+        "- [API Vertical Slice](api-vertical-slice.md)",
+        "- [API Endpoints](api-endpoints.md)",
+        "- [API Feature Implementation](api-feature-implementation.md)",
+        "- [API Testing](api-testing.md)",
+        "- [Web Overview](web-overview.md)",
+        "- [Web Shell](web-shell.md)",
+        "- [Web Feature Implementation](web-feature-implementation.md)",
+        "- [Web List Page](web-list-page.md)",
+        "- [Web Capture Page](web-capture-page.md)",
+        "- [Web Capture State](web-capture-state.md)",
+        "- [Full-Stack Flow](full-stack-flow.md)",
+        "- [Auth Route Guard](auth-route-guard.md)",
+        "- [Backend Auth](backend-auth.md)",
+        "",
+        "## Module Use",
+        "",
+        "- Grid/list modules use `POST /api/v1/{entities}/grid-list`.",
+        "- Single-page aggregate editors can keep client-side aggregate state inside the routed component.",
+        "- Multi-route aggregate editors should use capture state as the client-side aggregate root.",
+        "- Feature-owned EF entities/configurations live under the owning feature unless they are truly shared."
+      ],
+      "section_type": "narrative",
+      "sort_order": 1,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:03:19.0702505+00:00"
+    },
+    {
+      "id": "01KXR2S6QJNVRFTB1BR23339GF",
+      "title": "Coding Conventions",
+      "content": [
+        "- **Primary constructors** for all classes (services, endpoints, queries, commands, mappers)",
+        "- **No `_privateField` naming** — use primary constructor parameter names directly (e.g., `dbContext` not `_dbContext`)",
+        "- **Enums over string constants** for all status, kind, and mode fields",
+        "- **DTO suffix is ALL CAPS** — `ActionDTO`, not `ActionDto`",
+        "- **IEntityTypeConfiguration\\<T>** for all EF entity configurations (ADR-0018)",
+        "- **Translations from day one** — all user-facing text fields use the Capstone translation pattern",
+        "",
+        "---"
+      ],
+      "section_type": "narrative",
+      "sort_order": 2,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:03:19.2832960+00:00"
+    },
+    {
+      "id": "01KXR2S70E5472851JXV82BSER",
+      "title": "ADR Index",
+      "content": [
+        "| ADR | Decision | Affected Patterns |",
+        "|-----|----------|-------------------|",
+        "| ADR-0010 | Command result pattern - commands return `CommandResult` variants for expected outcomes | [Commands](api-commands.md), [Endpoints](api-endpoints.md) |",
+        "| ADR-0011 | SaveRequest may inherit DTO, `Guid.Empty` Id for create detection | [Requests](api-requests.md), [Contracts](api-feature-implementation.md) |",
+        "| ADR-0012 | Zoneless Angular change detection | [Web Overview](web-overview.md) |",
+        "| ADR-0013 | Translation pattern for entity i18n | [DTOMapper](api-dto-mapper.md), [EntityMapper](api-entity-mapper.md), [Endpoints](api-endpoints.md) |",
+        "| ADR-0017 | Grid-list endpoints use POST `/grid-list` | [API Endpoints](api-endpoints.md), [Web Feature Implementation](web-feature-implementation.md) |",
+        "| ADR-0018 | `IEntityTypeConfiguration<T>` for EF entity configuration | [EF Configuration](api-ef-configuration.md), [API Feature Implementation](api-feature-implementation.md) |",
+        "| ADR-0023 | `as const` objects for frontend enum constants | [Enums](web-enums.md), [Feature Service](web-feature-service.md) |",
+        "| ADR-0024 | Vertical slice owns feature behavior and feature-owned persistence | [API Vertical Slice](api-vertical-slice.md), [API Feature Implementation](api-feature-implementation.md) |"
+      ],
+      "section_type": "narrative",
+      "sort_order": 3,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:03:19.5674339+00:00"
+    },
+    {
+      "id": "01KXR2S797Z9J7CR0KR0AJ4X60",
+      "title": "Current Implementation Notes",
+      "content": [
+        "#### Established Implementation Approach",
+        "",
+        "| Area | Current approach |",
+        "|------|------------------|",
+        "| Backend feature ownership | Endpoint folders own request-specific behavior; feature `Shared/` owns reusable helpers and feature-owned EF entities/configurations |",
+        "| Public contracts | DTOs and request/response contracts live in `Nxgn.Actions.Contracts`, usually grouped by module file |",
+        "| Grid APIs | Canonical route is `POST /api/v1/{entities}/grid-list`; `/grid` and `/server-grid` are aliases only |",
+        "| Angular standalone list pages | `nxgn-server-grid` binds to server-side grid-list endpoints through `GRID_ENDPOINTS` |",
+        "| Angular embedded child grids | `nxgn-data-grid` is reserved for child collections edited inside capture pages |",
+        "| Angular aggregate editors | Single-route editors keep aggregate state in the component; multi-route editors use capture state |",
+        "| Tests | Integration tests cover aggregate saves and grid behavior; browser E2E should set modules up through the UI for meaningful client validation |",
+        "",
+        "#### Improvement Candidates",
+        "",
+        "| Improvement | Reason |",
+        "|-------------|--------|",
+        "| Add lightweight architecture guard tests | Catch accidental route regressions, missing DbContext configuration registration, misplaced public DTOs, or standalone lists using the wrong grid component |",
+        "| Extract helper services from very large save endpoints when complexity grows | Preserve testability without forcing layers for simple endpoint-specific behavior |",
+        "| Keep browser E2E plans aligned with seeded-client setup flows | Validate the client setup journey rather than only fixture data |",
+        "| Keep lex links current with `lex link suggest --module <CODE> --json` | Avoid docs that mention ref-codes without explicit graph links |",
+        ""
+      ],
+      "section_type": "narrative",
+      "sort_order": 4,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:03:19.8488557+00:00"
+    },
+    {
+      "id": "01KXR2S7J7QMT8HEB7Y227G7F3",
+      "title": "See Also",
+      "content": [
+        "- [PRD Index](../prd/prd-index.md) — Requirements and acceptance criteria",
+        "- [Architecture Overview](../architecture/overview.md) — System architecture"
+      ],
+      "section_type": "see-also",
+      "sort_order": 5,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:03:20.1364852+00:00"
+    }
+  ]
+}

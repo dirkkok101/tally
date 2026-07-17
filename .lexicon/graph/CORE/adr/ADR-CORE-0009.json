@@ -1,0 +1,54 @@
+{
+  "id": "01KXR2E3Y7W68N2C5SPDSYC0TJ",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0009",
+  "title": "Org-Scoped Platform Admin Tenancy",
+  "slug": "org-scoped-platform-admin-tenancy",
+  "number": 9,
+  "context": [
+    "Platform administrators need to manage configuration across multiple organisations. Two models were evaluated:",
+    "",
+    "**Model A (cross-org views):** Platform admins see all organisations simultaneously. Requires bypassing RLS, conditional `if (isPlatformAdmin)` branches in every query, and a separate code path for admin vs regular users.",
+    "",
+    "**Model B (org-scoped):** Platform admins are always scoped to one organisation at a time via JWT `tenant_id`. They switch context via the tenant switcher, which issues a new JWT. Same code path as regular users."
+  ],
+  "decision": [
+    "**Model B — org-scoped platform admin tenancy.** Platform admins switch organisations via token reissuance.",
+    "",
+    "- JWT always contains `tenant_id` — no null-tenant code paths",
+    "- RLS applies identically to platform admins and regular users",
+    "- Tenant switching returns a new JWT (page reload or re-authentication)",
+    "- One code path for all authorization levels — no `if (isPlatformAdmin)` in queries",
+    "",
+    "**`EnablePlatformAdminBypass()`** is available for the narrow set of endpoints that genuinely need cross-org visibility (e.g., organisation list page). New uses require explicit architectural review."
+  ],
+  "consequences": [
+    "**Positive:**",
+    "- One code path — eliminates conditional branching across the entire codebase",
+    "- RLS integrity preserved structurally, not by convention",
+    "- No cross-org data leaks via forgotten `isPlatformAdmin` checks",
+    "- Audit trail is always tenant-scoped — clear accountability",
+    "",
+    "**Negative:**",
+    "- Platform admins cannot compare two organisations side-by-side without switching (UX friction)",
+    "- Tenant switching requires JWT reissuance (latency)",
+    "- New organisation creation must handle platform admin membership provisioning",
+    "",
+    "**Open questions to address during implementation:**",
+    "- Auto-enrollment of platform admins when new organisations are created",
+    "- Multi-tab workflow support (each tab may need its own JWT context)",
+    "- Governance for `EnablePlatformAdminBypass()` — maintain an explicit allow-list"
+  ],
+  "status": "accepted",
+  "origin": "Identity convention (Identity ADR-0021), adopted by Actions for one-code-path simplification.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00",
+  "links": [
+    {
+      "id": "01KXR35BXH28611WG7Y78S20F5",
+      "target_type": "adr",
+      "target": "ADR-CORE-0021",
+      "rel": "references",
+      "created_at": "2026-07-17T13:09:57.8106470+00:00"
+    }
+  ]
+}

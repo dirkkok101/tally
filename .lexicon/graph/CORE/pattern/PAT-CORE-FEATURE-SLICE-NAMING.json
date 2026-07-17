@@ -1,0 +1,177 @@
+{
+  "id": "01KXR2EKK813WFCQ9YBC6ZBXTP",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "PAT-CORE-FEATURE-SLICE-NAMING",
+  "title": "Canonical Feature Slice Naming — NXGN Actions",
+  "slug": "feature-slice-naming",
+  "purpose": [
+    "Define the canonical naming vocabulary for API, BFF-proxy, and frontend feature slices so implementation, plans, and lex entities use the same verbs and nouns across the platform."
+  ],
+  "category": "conventions",
+  "zone": "cross-cutting",
+  "origin": "2026-04-21 ROLE/LANG execute review",
+  "status": "current",
+  "created_at": "2026-07-17T12:57:32.0030626+00:00",
+  "links": [
+    {
+      "id": "01KXR35TSPW3FQFCTSJ6DKF30W",
+      "target_type": "adr",
+      "target": "ADR-CORE-0024",
+      "rel": "motivated-by",
+      "created_at": "2026-07-17T13:10:13.0478175+00:00"
+    }
+  ],
+  "rules": [
+    {
+      "id": "01KXR2R65GQRJW7RBGFH6CY5BH",
+      "rule_text": "Use the canonical backend slice verbs `Get`, `GetGridList`, `GetLookup`/`GetLookupList`, `Save`, `Delete`, `Assign`, and `Unassign` unless the authoritative domain contract clearly dictates a different verb phrase.",
+      "rule_type": "must",
+      "sort_order": 0,
+      "created_at": "2026-07-17T13:02:45.9384530+00:00"
+    },
+    {
+      "id": "01KXR2R6H8XD0F35MNHAKWGHVC",
+      "rule_text": "Keep lex entities, plans, beads, file paths, namespaces, classes, and tests aligned to the same canonical slice names.",
+      "rule_type": "must",
+      "sort_order": 1,
+      "created_at": "2026-07-17T13:02:46.3137976+00:00"
+    },
+    {
+      "id": "01KXR2R6S15M5P7FV6Q92RF6Y5",
+      "rule_text": "When proxying or mirroring Identity, reuse Identity's authoritative noun/verb vocabulary for the server-side slice names and contract-facing routes.",
+      "rule_type": "must",
+      "sort_order": 2,
+      "created_at": "2026-07-17T13:02:46.5626218+00:00"
+    },
+    {
+      "id": "01KXR2R73PXHREYNVFMQDV5KBH",
+      "rule_text": "Frontend service methods may use ergonomic names like `getGridList()` and `getLookup()` while still mapping to canonical backend slice names.",
+      "rule_type": "should",
+      "sort_order": 3,
+      "created_at": "2026-07-17T13:02:46.9040622+00:00"
+    },
+    {
+      "id": "01KXR2R7C7EK10GMHS25HRD74Y",
+      "rule_text": "If naming drift is discovered while a module is still shallow, rename immediately rather than preserving the drift for compatibility.",
+      "rule_type": "should",
+      "sort_order": 4,
+      "created_at": "2026-07-17T13:02:47.1763178+00:00"
+    },
+    {
+      "id": "01KXR2R7K26GF3DFVQ4DYEJ025",
+      "rule_text": "Do not invent local synonyms such as `ListRoles` when the canonical slice is `GetRolesGridList`.",
+      "rule_type": "must_not",
+      "sort_order": 5,
+      "created_at": "2026-07-17T13:02:47.3954734+00:00"
+    },
+    {
+      "id": "01KXR2R7W994QGRWHKKYRFNWB1",
+      "rule_text": "Do not treat a legacy module's drift as precedent for new module implementation.",
+      "rule_type": "must_not",
+      "sort_order": 6,
+      "created_at": "2026-07-17T13:02:47.6899929+00:00"
+    }
+  ],
+  "sections": [
+    {
+      "id": "01KXR2R504FNM5CR6MPS3PZN33",
+      "title": "Scope",
+      "content": [
+        "This pattern applies to all feature slices in NxGN Actions:",
+        "- backend API slices",
+        "- BFF-style proxy slices over Identity",
+        "- Actions-owned backend functionality",
+        "- frontend feature services, page components, and route files",
+        "- lex plans, beads, feature areas, endpoint entities, and design notes",
+        "",
+        "It exists because legacy names from one module must not silently become the convention for the next module."
+      ],
+      "section_type": "narrative",
+      "sort_order": 0,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:02:44.7412711+00:00"
+    },
+    {
+      "id": "01KXR2R57EF2E2HJM7E6QRCCBQ",
+      "title": "Canonical Vocabulary",
+      "content": [
+        "API/backend canonical slice verbs:",
+        "- `Get` for a single entity or projection",
+        "- `GetGridList` for paged grid/list reads",
+        "- `GetLookup` or `GetLookupList` for lookup/dropdown reads, following the authoritative downstream/domain contract",
+        "- `Save` for upsert",
+        "- `Delete` for bulk delete",
+        "- `Assign` / `Unassign` for membership-style mutations when the domain uses those verbs",
+        "- `Get...Members` for membership lists",
+        "- `GetEffectivePermissions` / `GetEffectivePermissionsForUser` for enablement reads",
+        "",
+        "Frontend canonical names:",
+        "- `{entity}.service.ts` with ergonomic methods like `getGridList()`, `getLookup()`, `save()`, `delete()`",
+        "- `{entity}-list.component.ts`, `{entity}-capture.component.ts`, `{entity}-membership.component.ts` for page shells",
+        "- `{feature}.routes.ts` for lazy route definitions",
+        "",
+        "The server-side slice/class names and lex entities should use the canonical backend verbs even when the frontend service methods are shorter."
+      ],
+      "section_type": "narrative",
+      "sort_order": 1,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:02:44.9754556+00:00"
+    },
+    {
+      "id": "01KXR2R5FWNYB4YNWSCEDBYGH3",
+      "title": "Authoritative Source Rule",
+      "content": [
+        "When a feature mirrors or proxies an authoritative downstream domain such as NxGN Identity, Actions must reuse that domain's canonical noun/verb vocabulary for the server-side slice names and lex references.",
+        "",
+        "Examples:",
+        "- Identity-style `GetRolesGridListEndpoint` is authoritative for the roles grid slice; Actions should not invent `ListRolesEndpoint`",
+        "- Identity-style `AssignUserToRole` / `UnassignUsersFromRole` are authoritative for role membership mutations",
+        "- Identity-style `/permissions/lookup` is authoritative for permission catalogue routes; local docs must not drift to `/permissions`",
+        "",
+        "A legacy local name in an older module is technical debt, not precedent."
+      ],
+      "section_type": "narrative",
+      "sort_order": 2,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:02:45.2453104+00:00"
+    },
+    {
+      "id": "01KXR2R5V0CG4FJZT5Q22168V1",
+      "title": "Good and Bad Examples",
+      "content": [
+        "Good examples:",
+        "```text",
+        "Features/Admin/Roles/GetGridList/GetRolesGridListEndpoint.cs",
+        "Features/Admin/Roles/Get/GetRoleEndpoint.cs",
+        "Features/Admin/Roles/ListMembers/GetRoleMembersEndpoint.cs",
+        "Features/Admin/Roles/RemoveMember/UnassignUsersFromRoleEndpoint.cs",
+        "modules/admin/roles/role.service.ts        -> getGridList(), save(), getLookup()",
+        "modules/admin/roles/role-list.component.ts",
+        "modules/admin/roles/role-capture.component.ts",
+        "modules/admin/roles/role-membership.component.ts",
+        "modules/admin/roles/roles.routes.ts",
+        "```",
+        "",
+        "Bad examples:",
+        "```text",
+        "Features/Admin/Roles/ListRoles/ListRolesEndpoint.cs",
+        "```",
+        "when the canonical slice is `GetGridList/GetRolesGridListEndpoint.cs`.",
+        "",
+        "```text",
+        "EP-ROLE-PERMISSION-LOOKUP -> /api/v1/permissions",
+        "```",
+        "when the authoritative contract is `/api/v1/permissions/lookup`.",
+        "",
+        "```text",
+        "Plan/bead says GetRolesGridList, implementation says ListRoles",
+        "```",
+        "This creates traceability drift and makes reviews unreliable."
+      ],
+      "section_type": "comparison",
+      "sort_order": 3,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:02:45.6011802+00:00"
+    }
+  ]
+}

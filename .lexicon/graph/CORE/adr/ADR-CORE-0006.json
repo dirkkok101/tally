@@ -1,0 +1,41 @@
+{
+  "id": "01KXR2E3Y4D44KEHNWJ0WZY1J9",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0006",
+  "title": "Signal-Based State Over BehaviorSubject",
+  "slug": "signal-based-state-over-behaviorsubject",
+  "number": 6,
+  "context": [
+    "Angular 21 provides stable signals (`signal()`, `computed()`, `linkedSignal()`, `effect()`) as first-class reactive primitives. Signals integrate directly with change detection, eliminating subscription management, `async` pipes, and manual `markForCheck()` calls.",
+    "",
+    "BehaviorSubject was the standard before signals existed but requires explicit subscription lifecycle management (unsubscribe on destroy) and does not integrate with Angular's change detection natively."
+  ],
+  "decision": [
+    "**All component state uses Angular signals.** BehaviorSubject is not used for local component state.",
+    "",
+    "- `signal()` for mutable state",
+    "- `computed()` for derived state",
+    "- `linkedSignal()` for dependent state that resets on source change",
+    "- `effect()` sparingly — prefer computed signals for derivations",
+    "- RxJS remains for HTTP calls wrapped in `firstValueFrom()`"
+  ],
+  "consequences": [
+    "**Positive:**",
+    "- No subscription management — signals are synchronous and garbage-collected",
+    "- Direct change detection integration — OnPush \"just works\" with signals",
+    "- Cleaner templates — `mySignal()` instead of `myObservable | async`",
+    "- Fewer memory leaks — no forgotten unsubscriptions",
+    "",
+    "**Negative:**",
+    "- Two reactive paradigms coexist (signals for state, RxJS for HTTP)",
+    "- `effect()` can create debugging surprises if overused (dependency tracking is implicit)",
+    "",
+    "**Guidelines:**",
+    "- Use `effect()` only for side effects that cannot be expressed as computed signals (e.g., logging, external API calls)",
+    "- Never use `effect()` to synchronise two signals — use `computed()` or `linkedSignal()` instead",
+    "- HTTP services return `Promise<T>` via `firstValueFrom()` — callers assign to signals"
+  ],
+  "status": "accepted",
+  "origin": "Identity convention (ADR-0006), adopted by Actions as Angular 21 best practice.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00"
+}

@@ -1,0 +1,62 @@
+{
+  "id": "01KXR2E3YNSXG4RQ3ZW1S6H3R4",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0027",
+  "title": "Use DbContext Factory and Optional Shared Context for Queries and Commands",
+  "slug": "use-dbcontext-factory-and-optional-shared-context-for-queries-and-commands",
+  "number": 27,
+  "context": [
+    "Actions queries and commands need predictable DbContext lifetime, retry-safe transactions, tenant-context propagation, and composition across aggregate operations. The intended standard is that any DbContext-backed query or command can run independently, or can participate in a caller-owned context and transaction when composed with other operations. Earlier documentation over-emphasized write commands: several query examples still injected scoped ActionsDbContext directly or created a factory-owned context without an optional shared context parameter. That let implementation drift by feature and made transaction-spanning behavior depend on each author instead of the platform contract."
+  ],
+  "decision": [
+    "All production queries and commands that touch ActionsDbContext use IDbContextFactory<ActionsDbContext> in public constructors and expose an optional ActionsDbContext? dbContext parameter after CancellationToken on their execution method. For commands this is ExecuteAsync(..., CancellationToken ct = default, ActionsDbContext? dbContext = null). For query-like services the same rule applies to ExecuteAsync, WriteAsync, EvaluateAsync, or the method that performs the database operation. When dbContext is null, the operation owns a short-lived factory-created context; owned commands that open explicit transactions run through EF Core execution strategies. When dbContext is supplied, the operation participates in the caller-owned context and current transaction and never disposes it. Internal test constructors may accept ActionsDbContext directly, but production DI must not."
+  ],
+  "consequences": [
+    "Queries and commands can be composed inside one caller-owned transaction without changing their normal standalone behavior. Retry-enabled providers can safely replay owned command transactions without reusing a failed DbContext. Read queries can share the same tenant-scoped context as surrounding write logic when consistency matters. Transactional audit rows can commit or roll back with the aggregate mutation by passing the shared context to IAuditService.LogAsync(..., dbContext). The cost is a small amount of owned/shared context boilerplate; the platform keeps this contained through DbContextFactoryExtensions and architecture guard tests."
+  ],
+  "alternatives": [
+    "Scoped ActionsDbContext injection was simpler but made transaction composition, context lifetime, and retry behavior inconsistent. Factory-only operations without an optional shared context were rejected because they cannot participate in caller-owned transactions. Ambient transactions were rejected because they hide ownership and interact poorly with EF execution strategies. Separate audit contexts were rejected for business audit entries that must be atomic with the state change. A full unit-of-work wrapper remains deferred because the immediate need is a clear query/command contract backed by PAT-CORE-API-COMMANDS, PAT-CORE-API-QUERIES, and architecture guards."
+  ],
+  "status": "accepted",
+  "date": "2026-05-02",
+  "deciders": "Actions engineering",
+  "origin": "Review follow-up 2026-05-02",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00",
+  "links": [
+    {
+      "id": "01KXR34V4SEJA2772HEZJ3MTYD",
+      "target_type": "adr",
+      "target": "ADR-CORE-0002",
+      "rel": "references",
+      "created_at": "2026-07-17T13:09:40.6345406+00:00"
+    },
+    {
+      "id": "01KXR35PR01H3AR6SE7ZEG0D2V",
+      "target_type": "adr",
+      "target": "ADR-CORE-0021",
+      "rel": "references",
+      "created_at": "2026-07-17T13:10:08.8973333+00:00"
+    },
+    {
+      "id": "01KXR35V2ETAM350TV01ERDPCF",
+      "target_type": "adr",
+      "target": "ADR-CORE-0024",
+      "rel": "references",
+      "created_at": "2026-07-17T13:10:13.3274870+00:00"
+    },
+    {
+      "id": "01KXR2EKKDEKZNCHDAPZVTX48Z",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-COMMANDS",
+      "rel": "implements",
+      "created_at": "2026-07-17T12:57:32.0137120+00:00"
+    },
+    {
+      "id": "01KXR2EKKZK71DXHN48DQSSSTQ",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-QUERIES",
+      "rel": "implements",
+      "created_at": "2026-07-17T12:57:32.0312886+00:00"
+    }
+  ]
+}

@@ -1,0 +1,187 @@
+{
+  "id": "01KXR2EKKE46NFS31R6RB9XDJ1",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "PAT-CORE-CONFIGURATION-OWNERSHIP-E2E-DATA",
+  "title": "Configuration Ownership and E2E Data Pattern",
+  "slug": "configuration-ownership-e2e-data",
+  "purpose": [
+    "Define when lookup/configuration data requires an admin module and how browser E2E data should be created for client setup scenarios."
+  ],
+  "category": "testing",
+  "zone": "cross-cutting",
+  "status": "current",
+  "created_at": "2026-07-17T12:57:32.0030626+00:00",
+  "examples": [
+    {
+      "id": "01KXR2R16DBZQZZE4W5QNJPB78",
+      "name": "Frontend-created client configuration",
+      "description": [
+        "The test creates mutable configuration through the same admin modules a tenant administrator uses, then consumes that data downstream."
+      ],
+      "code": "1. Create a custom deadline type through Escalation Deadline Types.\n2. Create and publish a workflow through Workflow Configuration.\n3. Configure a compliance profile that references the created deadline type and published transition.",
+      "language": "text",
+      "is_counter": 0,
+      "sort_order": 0,
+      "created_at": "2026-07-17T13:02:40.8469540+00:00"
+    },
+    {
+      "id": "01KXR2R1DZYH863JAH3NPTJZ1X",
+      "name": "Seed-only mutable lookup",
+      "description": [
+        "This hides a missing admin surface and does not prove a client can configure the system."
+      ],
+      "code": "Seed an RCA method or action type directly in the database, then have Compliance consume it, while no admin module exists to create or change that value.",
+      "language": "text",
+      "is_counter": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-17T13:02:41.0885784+00:00"
+    }
+  ],
+  "rules": [
+    {
+      "id": "01KXR2R1M3VWDEBQNCBSDJEQK4",
+      "rule_text": "Any lookup/configuration value that a tenant administrator can change must have an owning admin module or an explicit accepted decision stating why it is not user-configurable.",
+      "rule_type": "must",
+      "sort_order": 0,
+      "created_at": "2026-07-17T13:02:41.2842183+00:00"
+    },
+    {
+      "id": "01KXR2R1WTW4D58KQ1YR404TYK",
+      "rule_text": "Browser E2E client setup scenarios must create mutable tenant configuration through frontend admin flows before using that data in dependent modules.",
+      "rule_type": "must",
+      "sort_order": 1,
+      "created_at": "2026-07-17T13:02:41.5632620+00:00"
+    },
+    {
+      "id": "01KXR2R25D82396ZHMGNZQ0CXK",
+      "rule_text": "Seed data must be limited to immutable platform catalogues, Identity/application bootstrap, permissions, fixture personas, and scenarios that explicitly validate default/seed immutability.",
+      "rule_type": "must",
+      "sort_order": 2,
+      "created_at": "2026-07-17T13:02:41.8378973+00:00"
+    },
+    {
+      "id": "01KXR2R2CP3WS83KV6KSC0HSCQ",
+      "rule_text": "Do not hide missing user-configurable admin modules by adding mutable lookup rows only to E2E seed data.",
+      "rule_type": "must_not",
+      "sort_order": 3,
+      "created_at": "2026-07-17T13:02:42.0726995+00:00"
+    },
+    {
+      "id": "01KXR2R2KTBYYXCY2N2KWCBXJJ",
+      "rule_text": "Dependent capture pages should show clear empty states when an owning module has not yet produced the prerequisite data, including which admin module must be configured next.",
+      "rule_type": "should",
+      "sort_order": 4,
+      "created_at": "2026-07-17T13:02:42.2997521+00:00"
+    },
+    {
+      "id": "01KXR2R2VHB3TQ9K4Y1K3PD4PW",
+      "rule_text": "User-configurable lookup owner modules must expose a permissioned admin route, seeded translation keys, server-grid list, routed aggregate capture, and standard GET/SAVE/DELETE/grid-list/lookups endpoints.",
+      "rule_type": "must",
+      "sort_order": 5,
+      "created_at": "2026-07-17T13:02:42.5467279+00:00"
+    },
+    {
+      "id": "01KXR2R3550BHV66RZS3Y6V8RS",
+      "rule_text": "Action Type and RCA Method lookups are tenant configuration when clients can change them; downstream modules must consume the owning module lookup contract after frontend setup.",
+      "rule_type": "must",
+      "sort_order": 6,
+      "created_at": "2026-07-17T13:02:42.8575811+00:00"
+    },
+    {
+      "id": "01KXR2R3DV3BJ6WR04M3G9ZAFR",
+      "rule_text": "Shared lookup endpoints used by another permission-gated admin capture flow must authorize the owning module permission and each consuming module permission required for normal create or edit workflows.",
+      "rule_type": "must",
+      "sort_order": 6,
+      "created_at": "2026-07-17T13:02:43.1327209+00:00"
+    },
+    {
+      "id": "01KXR2R3RY2NPPDGPTD67DQH9F",
+      "rule_text": "Do not let downstream modules create, mutate, or silently seed another module's user-configurable catalogue inside their own save flow.",
+      "rule_type": "must_not",
+      "sort_order": 7,
+      "created_at": "2026-07-17T13:02:43.4899127+00:00"
+    },
+    {
+      "id": "01KXR2R410RPWPHQ9WQ92RZSVC",
+      "rule_text": "Browser E2E commissioning should follow the documented dependency order: roles, Action Types, Workflows, Deadline/Escalation, RCA Methods, Compliance Profiles.",
+      "rule_type": "should",
+      "sort_order": 8,
+      "created_at": "2026-07-17T13:02:43.7452278+00:00"
+    },
+    {
+      "id": "01KXR2R47GA1CTGPNP4PGQCJSB",
+      "rule_text": "Do not convert platform-owned classifications covered by ADR-CORE-0029 into tenant admin modules, mutable seed rows, or local per-module lookup tables unless ADR-CORE-0029 is superseded.",
+      "rule_type": "must_not",
+      "sort_order": 9,
+      "created_at": "2026-07-17T13:02:43.9536308+00:00"
+    }
+  ],
+  "sections": [
+    {
+      "id": "01KXR2QZJQWA0NM4B0VS51KNRQ",
+      "title": "Classification",
+      "content": [
+        "Every lookup used by an admin capture page must have an explicit owner. Immutable platform values may be compiled or seeded. Tenant-owned mutable values must be administered through a visible admin module and exposed to dependent pages through lookup endpoints. Derived lookups must come from the owning aggregate state, such as published workflow transitions from Workflow Configuration."
+      ],
+      "section_type": "narrative",
+      "sort_order": 0,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:02:39.1940150+00:00"
+    },
+    {
+      "id": "01KXR2QZX9GEFESXGD82TGTEHD",
+      "title": "Browser E2E Data",
+      "content": [
+        "Browser E2E client setup scenarios should behave like a clean client onboarding run. They should create mutable tenant data through the frontend in commissioning order, then consume that data in downstream modules. Seed data may support authentication and immutable platform defaults, but successful module tests should not depend on editable client configuration being preloaded unless the scenario specifically validates seed immutability."
+      ],
+      "section_type": "narrative",
+      "sort_order": 0,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:02:39.5304100+00:00"
+    },
+    {
+      "id": "01KXR2R05STJ1209W0P5ZV7N3R",
+      "title": "Gap Handling",
+      "content": [
+        "If a dependent module needs a lookup value that a tenant can reasonably change, and no admin module owns that value, treat it as a product/module gap rather than filling it with test seed data. Either add the missing admin module or record an explicit decision that the value is platform-owned and immutable."
+      ],
+      "section_type": "narrative",
+      "sort_order": 0,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:02:39.8042219+00:00"
+    },
+    {
+      "id": "01KXR2R0EKRARYMDWDJVHDXASW",
+      "title": "Owner Module Commissioning Order",
+      "content": [
+        "Clean-system commissioning must happen through frontend admin modules in dependency order: access and roles, Action Type Management, Workflow Configuration, Deadline Types and Escalation Rules, RCA Method and Schema Management, then Compliance Profiles. Action Type and RCA Method data are tenant configuration when users can change them; their immutable platform templates may be seeded, but tenant-active rows must be created or activated through their owner modules. Downstream modules consume lookup contracts and show prerequisite empty states when owner data is missing."
+      ],
+      "section_type": "narrative",
+      "sort_order": 0,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:02:40.0849977+00:00"
+    },
+    {
+      "id": "01KXR2R0QX12B42SR14YCKQHN5",
+      "title": "Shared Reference Lookups",
+      "content": [
+        "A lookup endpoint can be owned by one admin module and still be required by another module's normal capture flow. In that case, the endpoint remains owned by the source module, but its authorization contract must include every consuming module permission that needs the lookup to complete an ordinary create or edit workflow. Tests must cover each allowed consuming permission so route/menu access and lookup access cannot drift apart."
+      ],
+      "section_type": "narrative",
+      "sort_order": 5,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:02:40.3830631+00:00"
+    },
+    {
+      "id": "01KXR2R0Z80T9CXS92PV0JPVVG",
+      "title": "Platform-Owned Classification Examples",
+      "content": [
+        "ADR-CORE-0029 classifies Priority, RiskLevel, SourceSystem, EvidenceType, and HierarchyOfControls as immutable platform-owned classifications. They may appear in dropdowns and lookup responses, but tenants do not own their value sets. Tenant setup configures behavior around them through owner modules such as Escalation Rules and Compliance Profiles. If custom risk scoring is required later, a Risk Matrix owner module must map tenant-specific rows back to the canonical RiskLevel bands instead of replacing the enum."
+      ],
+      "section_type": "narrative",
+      "sort_order": 6,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:02:40.6177996+00:00"
+    }
+  ]
+}

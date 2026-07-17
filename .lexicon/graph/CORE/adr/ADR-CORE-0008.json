@@ -1,0 +1,53 @@
+{
+  "id": "01KXR2E3Y6Q32F9Z2GEB3KGK39",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0008",
+  "title": "Token Security Posture (Consumer)",
+  "slug": "token-security-posture-consumer",
+  "number": 8,
+  "context": [
+    "Actions is a **resource server** — it validates tokens issued by NxGN Identity but never issues tokens itself. Actions needs a clear posture on how it consumes and validates authentication across its three interface surfaces (Web, CLI, MCP) and M2M service calls."
+  ],
+  "decision": [
+    "**Actions validates JWTs offline via Identity's cached JWKS endpoint.** Zero introspection calls during normal request processing.",
+    "",
+    "**Authentication modes:**",
+    "- **JWT Bearer** — Web (via BFF), CLI, MCP, and user-context M2M forwarding",
+    "- **API Key** — Validated against Identity's `/api/v1/apikeys/validate` endpoint (requires Identity availability)",
+    "- **BFF sessions** — Web UI uses httpOnly cookies via YARP proxy; BFF holds the tokens",
+    "",
+    "**Security controls:**",
+    "- PKCE on all authorization code flows",
+    "- Refresh token rotation with reuse detection",
+    "- `SecurityEpoch` claim in JWT — checked against cached value for near-real-time revocation",
+    "- BFF triple-layer CSRF protection: `__Host-` cookie prefix + `SameSite=Strict` + `X-CSRF: 1` header check",
+    "",
+    "**Degradation behaviour:**",
+    "- Identity unavailable: JWT validation continues via cached JWKS; API key validation fails with 503",
+    "- Redis unavailable: BFF returns 503; API falls back to in-process caches",
+    "",
+    "**Token lifetime expectations:** Controlled by Identity. Actions does not configure lifetimes but expects short-lived access tokens (recommended ≤5 min) with refresh rotation."
+  ],
+  "consequences": [
+    "**Positive:**",
+    "- Offline JWT validation — no Identity dependency in the hot path",
+    "- SecurityEpoch enables near-real-time revocation without token introspection",
+    "- BFF protects browser flows from token exposure",
+    "",
+    "**Negative:**",
+    "- API key validation requires Identity availability (no offline fallback)",
+    "- Token lifetime is outside Actions' control — must trust Identity's configuration"
+  ],
+  "status": "accepted",
+  "origin": "Based on Identity's token security posture (Identity ADR-0009), adapted for Actions' consumer perspective.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00",
+  "links": [
+    {
+      "id": "01KXR35BMEKZYCD5N85WKRBYJ6",
+      "target_type": "adr",
+      "target": "ADR-CORE-0009",
+      "rel": "references",
+      "created_at": "2026-07-17T13:09:57.5194524+00:00"
+    }
+  ]
+}

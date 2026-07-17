@@ -1,0 +1,44 @@
+{
+  "id": "01KXR2E3YB8D9VMX1DJ2EGNJ34",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0014",
+  "title": "TenantEndpoint Session Context Base Class",
+  "slug": "tenantendpoint-session-context-base-class",
+  "number": 14,
+  "context": [
+    "Every management endpoint in Actions needs tenant context (who is making the request, for which tenant, in which language). Extracting JWT claims in every endpoint is error-prone and duplicative.",
+    "",
+    "Identity solved this with an `IdentityEndpoint` base class that extracts `TenantId`, `ActorId`, and `LanguageId`. Actions needs the same pattern but with an additional claim — `DefaultLanguageId` — for the translation fallback chain (see ADR-0013)."
+  ],
+  "decision": [
+    "**Four `TenantEndpoint` base class variants** extract session context from JWT claims before the handler executes:",
+    "",
+    "| Base Class | Use Case |",
+    "|-----------|----------|",
+    "| `TenantEndpoint<TRequest, TResponse>` | Save, GetGridList, Action endpoints |",
+    "| `TenantEndpoint<TRequest>` | Delete, Lifecycle endpoints |",
+    "| `TenantEndpointWithoutRequest<TResponse>` | Get, Lookup endpoints |",
+    "| `TenantEndpointWithoutRequest` | Lifecycle with no body |",
+    "",
+    "**Extracted claims:**",
+    "- `TenantId` (Guid) — from `tenant_id` claim. Required.",
+    "- `UserId` (Guid) — from `sub` claim. Required.",
+    "- `RequestLanguageId` (Guid) — from `language_id` claim. Used for translation resolution.",
+    "- `DefaultLanguageId` (Guid) — from `default_language_id` claim. Fallback for translation chain.",
+    "",
+    "**Behaviour:** Claims are extracted and validated before `HandleAsync` executes. Missing or invalid required claims return 401."
+  ],
+  "consequences": [
+    "**Positive:**",
+    "- Session context available as typed properties in every endpoint — no manual claim parsing",
+    "- Language claims feed directly into mapper calls (DTOMapper and EntityMapper)",
+    "- Consistent 401 behaviour for missing claims across all endpoints",
+    "- Four variants cover all FastEndpoints signature combinations",
+    "",
+    "**Negative:**",
+    "- Base class accumulates concerns (4 properties now). Resist adding more — timezone, theme, etc. belong in per-request services, not the base class."
+  ],
+  "status": "accepted",
+  "origin": "Adapted from Identity's `IdentityEndpoint` (Identity ADR-0014), extended with `DefaultLanguageId` for Actions' translation requirements.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00"
+}

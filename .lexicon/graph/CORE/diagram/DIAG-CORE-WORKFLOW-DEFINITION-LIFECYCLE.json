@@ -1,0 +1,21 @@
+{
+  "id": "01KXR31EF94R5YM9T7HFFQGB74",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "DIAG-CORE-WORKFLOW-DEFINITION-LIFECYCLE",
+  "title": "WorkflowDefinition Lifecycle State Machine",
+  "diagram_type": "workflow",
+  "format": "mermaid",
+  "content": [
+    "stateDiagram-v2",
+    "    [*] --> Draft : Create workflow",
+    "    Draft --> Published : Publish (validate and freeze)",
+    "    Draft --> Draft : Update (edit states/transitions)",
+    "",
+    "    note right of Published",
+    "        Immutable. Used by actions.",
+    "        New version required for changes.",
+    "    end note",
+    ""
+  ],
+  "created_at": "2026-07-17T13:07:49.3495684+00:00"
+}

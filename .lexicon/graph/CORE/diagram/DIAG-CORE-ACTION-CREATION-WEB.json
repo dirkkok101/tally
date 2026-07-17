@@ -1,0 +1,30 @@
+{
+  "id": "01KXR31EF6XHWJPWFCHXGCM2FZ",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "DIAG-CORE-ACTION-CREATION-WEB",
+  "title": "Action Creation via Web UI",
+  "diagram_type": "sequence",
+  "format": "mermaid",
+  "content": [
+    "sequenceDiagram",
+    "    autonumber",
+    "    participant B as Browser",
+    "    participant BFF",
+    "    participant API as Actions API",
+    "    participant DB as PostgreSQL",
+    "",
+    "    B->>BFF: POST /api/actions<br/>Cookie __Host-actions<br/>Body {title, description, action_type, priority, ...}",
+    "    BFF->>BFF: Validate CSRF token<br/>(X-CSRF header + session cookie)",
+    "    BFF->>API: POST /api/v1/actions<br/>Authorization Bearer JWT<br/>Body (forwarded payload)",
+    "    API->>API: Extract JWT claims<br/>TenantId, ActorId, LanguageId",
+    "    API->>API: FluentValidation<br/>required fields, enum ranges, lengths",
+    "    API->>DB: SELECT workflow_definition<br/>WHERE status='published' AND action_type=@type<br/>(RLS tenant-scoped)",
+    "    API->>DB: SELECT compliance_profile<br/>WHERE action_type=@type<br/>(RLS tenant-scoped)",
+    "    API->>DB: SELECT FOR UPDATE tenant_sequence<br/>Generate ACT-{n} (row-level lock)",
+    "    API->>DB: INSERT action + state_history + audit_event + regulatory_deadlines<br/>(single transaction)",
+    "    API-->>BFF: 201 Created<br/>Body ActionDTO<br/>ETag \"{version}\"",
+    "    BFF-->>B: 201 Created<br/>Body ActionDTO",
+    ""
+  ],
+  "created_at": "2026-07-17T13:07:49.3495684+00:00"
+}

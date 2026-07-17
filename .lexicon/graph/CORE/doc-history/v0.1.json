@@ -1,0 +1,9 @@
+{
+  "id": "01KXR37CMEZRRDJY6Y3MNC3P1Y",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "version": "0.1",
+  "changes": [
+    "Imported nxgn.actions Platform Core prior art: 29 ADRs, 33 patterns with structured children, 16 architecture documents, 27 diagrams, and 135 internal links. Excluded the Actions-specific PORTAL navigation architecture document."
+  ],
+  "created_at": "2026-07-17T13:11:04.0796150+00:00"
+}

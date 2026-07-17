@@ -1,0 +1,103 @@
+{
+  "id": "01KXR2E9G3JBWCM7M6Y2BPV696",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ARCH-CORE-CONFIGURATION-COMMISSIONING",
+  "title": "Configuration Ownership and Commissioning Architecture",
+  "slug": "configuration-commissioning",
+  "category": "integration",
+  "content": [
+    "AMPS must be configurable from a clean tenant through the Actions Portal. Configuration ownership is therefore an architecture boundary, not just a testing concern. ADR-CORE-0028 establishes that mutable tenant configuration needs an owning admin module, and PAT-CORE-CONFIGURATION-OWNERSHIP-E2E-DATA describes how browser E2E creates that data through frontend flows.",
+    "",
+    "## Ownership Model",
+    "",
+    "Each user-configurable lookup has one owning module. The owner exposes the management UI, permissions, translation keys, audit trail, and standard API surface. Downstream modules consume lookup contracts and display prerequisite empty states; they do not seed, duplicate, or mutate another module's catalogue.",
+    "",
+    "Immutable platform templates are different from tenant configuration. Templates may be seeded or compiled into the platform, but tenant-active records are created, activated, or customized through the owning admin module. Action Type Management owns tenant action type catalogues. RCA Method and Schema Management owns tenant RCA method/schema catalogues.",
+    "",
+    "## Commissioning Order",
+    "",
+    "A clean AMPS tenant is configured in dependency order through the Portal:",
+    "",
+    "1. Configure access through Identity-backed users, roles, and assignments.",
+    "2. Configure Action Types through Action Type Management.",
+    "3. Create and publish Workflows that consume active action types.",
+    "4. Configure Deadline Types and Escalation Rules.",
+    "5. Configure RCA Methods and Schemas through RCA Method and Schema Management.",
+    "6. Configure Compliance Profiles using the catalogues and workflows created above.",
+    "",
+    "This order is the expected setup path for browser E2E and for client commissioning documentation. If a downstream page cannot load a required lookup because its owner has no active data, it should show a clear prerequisite empty state that names the owner module.",
+    "",
+    "## Standard Owner Module Shape",
+    "",
+    "An owner admin module has a permissioned menu item, seeded translation keys, a server-grid list, a routed capture page, and an aggregate Save flow. Its API exposes GET, SAVE, DELETE, grid-list, and lookups endpoints, plus lifecycle/template/import/export endpoints when required by the module design. API slices use DTO contracts, request validators, commands, queries, pure mappers, audit for mutations, and IDbContextFactory with optional shared ActionsDbContext when database work is involved.",
+    "",
+    "The frontend capture page is the client-side aggregate root. It loads aggregate data and foreign-key lookups in parallel, stitches them into local signal state, validates before Save, and sends one Save request for the whole aggregate. The server Save command owns the authoritative aggregate mapping, validation, child diffing, concurrency, audit, and persistence.",
+    "",
+    "## Test Architecture",
+    "",
+    "Browser E2E for commissioning does not seed mutable tenant rows. It creates mutable configuration through the same frontend modules used by a tenant administrator. Seed data remains valid for Identity fixtures, application bootstrap, permissions, immutable platform templates, and explicit seed immutability scenarios. Empty lookup data is therefore a product or owner-module gap, not a reason to patch seed data.",
+    "",
+    "## References",
+    "",
+    "- ADR-CORE-0028",
+    "- PAT-CORE-CONFIGURATION-OWNERSHIP-E2E-DATA",
+    "- PAT-CORE-API-FEATURE-IMPLEMENTATION",
+    "- PAT-CORE-WEB-FEATURE-IMPLEMENTATION",
+    "- PAT-CORE-WEB-CAPTURE-PAGE",
+    "- PAT-CORE-API-ENDPOINTS",
+    "- PAT-CORE-WEB-UI-COMPONENTS"
+  ],
+  "status": "current",
+  "created_at": "2026-07-17T12:57:21.6624200+00:00",
+  "links": [
+    {
+      "id": "01KXR2E9G3N5AYK1R3YMQNYP13",
+      "target_type": "adr",
+      "target": "ADR-CORE-0028",
+      "rel": "see-also",
+      "created_at": "2026-07-17T12:57:21.6677974+00:00"
+    },
+    {
+      "id": "01KXR2EKKKZMDCYSKT2YKA9FJ8",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-ENDPOINTS",
+      "rel": "see-also",
+      "created_at": "2026-07-17T12:57:32.0199967+00:00"
+    },
+    {
+      "id": "01KXR2EKKSA1069M43SNX4CKQW",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-FEATURE-IMPLEMENTATION",
+      "rel": "see-also",
+      "created_at": "2026-07-17T12:57:32.0255476+00:00"
+    },
+    {
+      "id": "01KXR2EKKF00000ZHJX7G9G4GX",
+      "target_type": "pattern",
+      "target": "PAT-CORE-CONFIGURATION-OWNERSHIP-E2E-DATA",
+      "rel": "see-also",
+      "created_at": "2026-07-17T12:57:32.0150194+00:00"
+    },
+    {
+      "id": "01KXR2EKKBJD1XDQJW2FVRMAAZ",
+      "target_type": "pattern",
+      "target": "PAT-CORE-WEB-CAPTURE-PAGE",
+      "rel": "see-also",
+      "created_at": "2026-07-17T12:57:32.0112968+00:00"
+    },
+    {
+      "id": "01KXR2EKKRHG0AZF11YQ8P6D45",
+      "target_type": "pattern",
+      "target": "PAT-CORE-WEB-FEATURE-IMPLEMENTATION",
+      "rel": "see-also",
+      "created_at": "2026-07-17T12:57:32.0245801+00:00"
+    },
+    {
+      "id": "01KXR2EKM44RFY05E0WJ7ZKT3Q",
+      "target_type": "pattern",
+      "target": "PAT-CORE-WEB-UI-COMPONENTS",
+      "rel": "see-also",
+      "created_at": "2026-07-17T12:57:32.0363124+00:00"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "01KXR31EF8VR16H6R8JQQ9R2FT",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "DIAG-CORE-FORCE-TRANSITION-PROCESS",
+  "title": "Force Transition (Admin) — Process Flow",
+  "diagram_type": "workflow",
+  "format": "mermaid",
+  "content": [
+    "flowchart TD",
+    "    start([START: Admin selects force transition<br/>POST /api/v1/admin/actions/id/force-transition<br/>Body: to_state, reason<br/>reason required, minimum 50 characters])",
+    "    s1[1. Validate caller authorization]",
+    "    d1{User has permission<br/>actions.admin.force_transition?}",
+    "    stop403([END - 403 Forbidden<br/>Insufficient permissions])",
+    "    s2[2. Load action with current state]",
+    "    s3[3. Skip ALL guard evaluations<br/>No evidence check, no RCA check,<br/>no consultation check<br/>Transition is unconditional]",
+    "    s4[4. Update action state to target state<br/>UPDATE actions.actions<br/>SET state=to_state, version=version+1]",
+    "    s5[5. Record ActionStateHistory with force_transition=true<br/>INSERT actions.action_state_history<br/>action_id, from_state, to_state,<br/>changed_by=admin_id,<br/>force_transition=true, reason]",
+    "    s6[6. Record ActionAuditEvent with admin actor and bypass reason<br/>INSERT actions.action_audit_events<br/>action_id, event_type='state.force_transitioned',<br/>actor_id=admin_id,<br/>details from_state, to_state, reason,<br/>guards_bypassed=true]",
+    "    s7[7. Return 200 OK with updated action DTO]",
+    "    stop([END])",
+    "",
+    "    start --> s1 --> d1",
+    "    d1 -->|No| stop403",
+    "    d1 -->|Yes| s2 --> s3 --> s4 --> s5 --> s6 --> s7 --> stop",
+    ""
+  ],
+  "created_at": "2026-07-17T13:07:49.3495684+00:00"
+}

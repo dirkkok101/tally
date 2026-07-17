@@ -1,0 +1,139 @@
+{
+  "id": "01KXR2E3YKCP5BKYH14H09RFQ7",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0024",
+  "title": "Vertical Slice Architecture",
+  "slug": "vertical-slice-architecture",
+  "number": 24,
+  "context": [
+    "Code can be organised horizontally (by technical layer: Controllers/, Services/, Repositories/) or vertically (by feature: Features/Actions/, Features/Workflows/). Horizontal organisation scatters a single feature across many folders. Vertical organisation keeps everything for a feature together — understanding a feature means reading one folder."
+  ],
+  "decision": [
+    "**Vertical slice architecture** - Actions code is organized around feature behavior, not horizontal technical layers. The feature folder is the primary home for endpoint handlers, validation, request-specific orchestration, feature-owned persistence types, and feature-local mapping/query helpers.",
+    "",
+    "The solution keeps three explicit zones:",
+    "",
+    "1. **Feature zone** - `Nxgn.Actions.Api/Features/{Area}/{Feature}/`",
+    "   - Endpoint folders own the HTTP endpoint, request/response binding, validation, and endpoint-specific command or orchestration code.",
+    "   - Reusable feature logic belongs under that feature's `Shared/` folder.",
+    "   - Feature-owned EF entities and EF configurations may live under the feature's `Shared/` folder, for example `Shared/WorkflowEntities.cs` and `Shared/WorkflowEntityConfigurations.cs`.",
+    "   - Extract `Shared/Commands`, `Shared/Queries`, or `Shared/Mappers` only when the artifact is reused, large enough to clarify the endpoint, or required by tests.",
+    "",
+    "2. **Contracts zone** - `Nxgn.Actions.Contracts/`",
+    "   - Public DTOs and API contracts live in the contracts project.",
+    "   - Current modules group related DTOs by module/file, for example `Admin/WorkflowDTOs.cs`, `Admin/ComplianceDtos.cs`, `Admin/EscalationDtos.cs`, and `Deadlines/DeadlineDtos.cs`.",
+    "   - Split to per-type contract files only when file size or ownership makes that clearer.",
+    "",
+    "3. **Data zone** - `Nxgn.Actions.Api/Data/`",
+    "   - The DbContext, migrations, shared database infrastructure, and truly cross-feature/shared platform entities live here.",
+    "   - Feature-owned aggregate entities do not need to be moved here just because they are EF entities.",
+    "",
+    "Feature folders must not call another feature's endpoint command directly. Cross-feature behavior should use shared contracts, shared domain/application services, or explicit query abstractions. Every feature-owned EF entity/configuration must still be registered exactly once in `ActionsDbContext`.",
+    "",
+    "This supersedes the earlier \"all entities under Data/Entities\" interpretation. The implementation pattern used by Workflows, Compliance Profiles, Deadline Types, Escalation Rules, Regulatory Deadlines, and Shell seeding is the canonical pattern."
+  ],
+  "consequences": [
+    "**Positive:**",
+    "- Feature folders remain the authoritative place to understand and change a module's behavior.",
+    "- Aggregate root modules can be reviewed without bouncing between `Features/`, `Data/Entities`, `Data/Configuration`, and `Shared/Commands`.",
+    "- Tests can exercise endpoint behavior through the same request/command surface used in production.",
+    "- The contracts project remains a clear public boundary for API consumers.",
+    "",
+    "**Negative:**",
+    "- Endpoint files can become large when an aggregate save command, validation, and mapping are all endpoint-specific.",
+    "- Reviewers must enforce extraction when command, query, mapper, or validation code becomes reused or hard to test in place.",
+    "- EF configuration discovery depends on explicit DbContext registration, so missing configuration registration is easier to overlook.",
+    "",
+    "**Mitigation:**",
+    "- Keep one aggregate boundary per save command.",
+    "- Extract private helper methods or feature-local services when they reduce complexity, not just to satisfy a layer count.",
+    "- Add or retain integration coverage for aggregate saves and grid-list queries.",
+    "- Treat `Data/` as shared infrastructure; treat feature `Shared/` as feature-owned implementation detail."
+  ],
+  "alternatives": [
+    "**Alternative 1: Horizontal Layers**",
+    "- Structure by Controllers, Services, Repositories, and DTO folders.",
+    "- Rejected because it scatters feature behavior across the solution and conflicts with the existing vertical-slice implementation.",
+    "",
+    "**Alternative 2: All EF Entities in Data/Entities**",
+    "- Keep every EF entity and configuration under `Nxgn.Actions.Api/Data/`.",
+    "- Rejected for feature-owned aggregate entities because the implemented modules already colocate feature persistence with feature behavior. Requiring a separate Data folder for feature-owned entities would make the feature harder to reason about without adding a meaningful boundary.",
+    "- Still valid for shared platform entities, cross-feature infrastructure, and database-wide concerns.",
+    "",
+    "**Alternative 3: Per-Feature Duplicate Entity Models**",
+    "- Each feature owns independent copies of shared database concepts.",
+    "- Rejected because duplicate models increase schema drift and make cross-feature consistency harder.",
+    "",
+    "**Alternative 4: Always Extract Commands and Mappers**",
+    "- Force every command, validator, and mapper into separate files and subfolders.",
+    "- Rejected because endpoint-specific aggregate orchestration is often clearer in the endpoint folder. Extraction remains required when reuse, complexity, or testability justify it."
+  ],
+  "status": "accepted",
+  "origin": "New Actions ADR, codifying the architecture documented in pattern docs.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00",
+  "links": [
+    {
+      "id": "01KXR3581B9MS4F03NME1K1NEG",
+      "target_type": "adr",
+      "target": "ADR-CORE-0007",
+      "rel": "references",
+      "created_at": "2026-07-17T13:09:53.8366842+00:00"
+    },
+    {
+      "id": "01KXR35RX29RSG87FSDAY16F89",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-COMMANDS",
+      "rel": "implements",
+      "created_at": "2026-07-17T13:10:11.1071061+00:00"
+    },
+    {
+      "id": "01KXR35SXN9DMTTEH4H3P2C4J7",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-DATA-CONTEXT",
+      "rel": "implements",
+      "created_at": "2026-07-17T13:10:12.1503172+00:00"
+    },
+    {
+      "id": "01KXR35S93REKA0B5SVRKRDMXQ",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-DTO-MAPPER",
+      "rel": "implements",
+      "created_at": "2026-07-17T13:10:11.4923096+00:00"
+    },
+    {
+      "id": "01KXR35TGCMWV9APDECT4CKWGD",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-EF-CONFIGURATION",
+      "rel": "implements",
+      "created_at": "2026-07-17T13:10:12.7494960+00:00"
+    },
+    {
+      "id": "01KXR35R8JNSTBYXNZ97H3NKAJ",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-ENDPOINTS",
+      "rel": "implements",
+      "created_at": "2026-07-17T13:10:10.4513393+00:00"
+    },
+    {
+      "id": "01KXR35T6CYV42Z37A83RQEFW2",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-ENTITY",
+      "rel": "implements",
+      "created_at": "2026-07-17T13:10:12.4299312+00:00"
+    },
+    {
+      "id": "01KXR35SJVNZAEXGVRF50TPZF2",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-ENTITY-MAPPER",
+      "rel": "implements",
+      "created_at": "2026-07-17T13:10:11.8046137+00:00"
+    },
+    {
+      "id": "01KXR35RJJ9BT25N1EERQGG1NN",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-QUERIES",
+      "rel": "implements",
+      "created_at": "2026-07-17T13:10:10.7721651+00:00"
+    }
+  ]
+}

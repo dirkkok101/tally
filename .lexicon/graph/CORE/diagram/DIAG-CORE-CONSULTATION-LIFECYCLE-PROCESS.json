@@ -1,0 +1,27 @@
+{
+  "id": "01KXR31EF79BBQ6N3YCQMASEWM",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "DIAG-CORE-CONSULTATION-LIFECYCLE-PROCESS",
+  "title": "Consultation Lifecycle — Process Flow",
+  "diagram_type": "workflow",
+  "format": "mermaid",
+  "content": [
+    "flowchart TD",
+    "    start([START: User creates consultation request<br/>POST /api/v1/actions/id/consultations<br/>Body: consulted_user_id, context, question])",
+    "    s1[1. Create consultation<br/>INSERT actions.action_consultations<br/>id, action_id, requested_by,<br/>consulted_user_id, context, question,<br/>status='requested', created_at]",
+    "    s2[2. Status = Requested<br/>Consulted worker is notified]",
+    "    sep1[[--- Consulted worker responds ---]]",
+    "    s3[3. Consulted worker provides input<br/>PUT /api/v1/actions/id/consultations/consultation_id<br/>Body: response_text]",
+    "    s4[4. Status → Responded<br/>UPDATE actions.action_consultations<br/>SET status='responded', response_text,<br/>responded_at=now]",
+    "    sep2[[--- Requestor reviews response ---]]",
+    "    s5[5. Requestor acknowledges response<br/>PUT /api/v1/actions/id/consultations/consultation_id/acknowledge<br/>Body: disposition incorporated or not_incorporated,<br/>acknowledgement_note<br/>not_incorporated requires justification]",
+    "    s6[6. Status → Acknowledged<br/>UPDATE actions.action_consultations<br/>SET status='acknowledged', disposition,<br/>acknowledgement_note, acknowledged_at=now]",
+    "    s7[7. Consultation closed<br/>Status → Closed<br/>UPDATE actions.action_consultations<br/>SET status='closed', closed_at=now]",
+    "    s8[8. Record ActionAuditEvent for each status change<br/>event_type: consultation.created,<br/>consultation.responded,<br/>consultation.acknowledged,<br/>consultation.closed]",
+    "    stop([END])",
+    "",
+    "    start --> s1 --> s2 --> sep1 --> s3 --> s4 --> sep2 --> s5 --> s6 --> s7 --> s8 --> stop",
+    ""
+  ],
+  "created_at": "2026-07-17T13:07:49.3495684+00:00"
+}

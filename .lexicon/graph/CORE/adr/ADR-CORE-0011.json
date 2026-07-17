@@ -1,0 +1,54 @@
+{
+  "id": "01KXR2E3Y8P79V8D6VJ71FG8SA",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0011",
+  "title": "Roundtrip DTO Save Pattern",
+  "slug": "roundtrip-dto-save-pattern",
+  "number": 11,
+  "context": [
+    "CRUD-heavy admin UIs need a clean contract for creating and updating entities. Two approaches were considered:",
+    "",
+    "1. **Separate request/response types** — `CreateRequest`, `UpdateRequest`, `Response` as distinct types. More type-safe (nullable Id for create, required Id for update, `init` setters on responses). Identity originally adopted this (Identity ADR-0011) then superseded it.",
+    "2. **Roundtrip pattern** — SaveRequest inherits from the entity DTO. The frontend receives a DTO via GET and sends it back (possibly modified) via POST. `Guid.Empty` on Id signals create; non-empty signals update. Single Save endpoint handles both."
+  ],
+  "decision": [
+    "**SaveRequest inherits from the entity DTO.** `Guid.Empty` on Id signals create.",
+    "",
+    "- `SaveXyzRequest : XyzDTO` — most SaveRequests are empty classes (all writable fields come from the DTO)",
+    "- DTOs use `{ get; set; }` (not `init`) to support two-way binding",
+    "- EntityMapper ignores server-computed fields (CreatedDate, counts, Version, etc.)",
+    "- Single `POST /api/v1/{entities}` endpoint for both create and update",
+    "- EntityMapper detects `dto.Id == Guid.Empty` for create vs update routing",
+    "",
+    "**Delete uses a separate contract:** `DeleteEntitiesRequest(Guid[] EntityKeys)` — plural, batch-capable."
+  ],
+  "consequences": [
+    "**Positive:**",
+    "- Zero-transformation roundtrip: GET response feeds directly into POST request",
+    "- Single Save endpoint eliminates create/update endpoint duplication",
+    "- Frontend forms bind to the DTO shape — no mapping between \"form model\" and \"request model\"",
+    "- Bulk Excel import reuses the same SaveRequest with `Guid.Empty` for all rows",
+    "",
+    "**Negative:**",
+    "- Server-computed fields (CreatedDate, status counts) appear in the request schema even though they're ignored",
+    "- `Guid.Empty` is a sentinel value — less explicit than nullable `Guid?`. No DTO can ever have `Guid.Empty` as a real ID (should be impossible with Version 7 GUIDs, but the sentinel is invisible to the type system)",
+    "- `{ get; set; }` sacrifices response DTO immutability. Any code can mutate a response after creation. Accepted because Angular two-way binding requires mutable models, and maintaining separate immutable-response + mutable-request types would negate the roundtrip benefit.",
+    "- Most SaveRequests are empty classes — the inheritance adds ceremony for convention consistency",
+    "",
+    "**Trade-off accepted:** The roundtrip simplification and bulk import reuse justify the schema noise. SaveRequest exists as a distinct type even when empty to (a) allow feature-specific save validation attributes and (b) maintain the convention that endpoints always bind to Request types, never directly to DTOs.",
+    "",
+    "**Note:** The filename `0011-separate-request-response-types.md` preserves the Identity ADR-0011 link target used in pattern docs. The decision is the opposite — Actions chose the roundtrip pattern over separate types."
+  ],
+  "status": "accepted",
+  "origin": "Capstone convention, adopted by Identity (ADR-0016, superseding Identity ADR-0011), adopted by Actions for roundtrip and bulk import benefits.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00",
+  "links": [
+    {
+      "id": "01KXR35D98R2XPVQB362ZVK570",
+      "target_type": "adr",
+      "target": "ADR-CORE-0016",
+      "rel": "references",
+      "created_at": "2026-07-17T13:09:59.2098834+00:00"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "id": "01KXR2E3YJAHEJY0NWZJBRNEZQ",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0023",
+  "title": "`as const` Enum Constants on Web",
+  "slug": "as-const-enum-constants-on-web",
+  "number": 23,
+  "context": [
+    "Angular 21 with TypeScript 5.9 uses `--isolatedModules` and `--erasableSyntaxOnly`. These constraints break both TypeScript `enum` (generates non-erasable runtime code) and `const enum` (requires cross-file inlining incompatible with isolated modules).",
+    "",
+    "Frontend code needs named constants for programmatic comparison against `EnumDTO.name` values received from the API (see ADR-0005). Display labels must come from the API only — never duplicated on the frontend."
+  ],
+  "decision": [
+    "Use **`as const` string-valued objects** for frontend enum constants.",
+    "",
+    "```typescript",
+    "export const ActionType = {",
+    "  Corrective: 'Corrective',",
+    "  Preventive: 'Preventive',",
+    "  Improvement: 'Improvement',",
+    "} as const;",
+    "",
+    "export type ActionType = (typeof ActionType)[keyof typeof ActionType];",
+    "```",
+    "",
+    "**Three tiers of enum handling:**",
+    "1. **Display only** — use `EnumDTO.name` directly. No constant needed.",
+    "2. **Dropdown binding** — `EnumDTO[]` loaded from server. No constant needed.",
+    "3. **Programmatic comparison** — `as const` objects. Only create when code compares values.",
+    "",
+    "**Rules:**",
+    "- String values must match C# enum member names exactly (PascalCase)",
+    "- File: `{entity}.enums.ts` colocated in the feature folder",
+    "- Only define constants for enums the frontend compares against — not every enum"
+  ],
+  "consequences": [
+    "**Positive:**",
+    "- Compatible with `--isolatedModules` and `--erasableSyntaxOnly`",
+    "- Type-safe: `ActionType` is both a value and a type",
+    "- Tree-shakeable — unused constants are eliminated",
+    "- Labels come from API (EnumDTO.name) — no sync burden for display",
+    "",
+    "**Negative:**",
+    "- String values must stay in sync with C# enum names (mismatches caught in E2E tests, not at compile time)",
+    "",
+    "**Future improvement:** Code generation from C# enums to TypeScript `as const` objects would eliminate the sync burden."
+  ],
+  "status": "accepted",
+  "origin": "Toolchain-forced decision, documented by Identity (ADR-0023), adopted by Actions.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00",
+  "links": [
+    {
+      "id": "01KXR34ZS0HFQSW802C767DHY7",
+      "target_type": "adr",
+      "target": "ADR-CORE-0005",
+      "rel": "references",
+      "created_at": "2026-07-17T13:09:45.3768608+00:00"
+    }
+  ]
+}

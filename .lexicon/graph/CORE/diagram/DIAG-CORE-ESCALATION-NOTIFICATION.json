@@ -1,0 +1,29 @@
+{
+  "id": "01KXR31EF8SFRW336X55QXVF3V",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "DIAG-CORE-ESCALATION-NOTIFICATION",
+  "title": "Escalation Notification Trigger",
+  "diagram_type": "sequence",
+  "format": "mermaid",
+  "content": [
+    "sequenceDiagram",
+    "    autonumber",
+    "    participant BG as EscalationEvaluatorService (background)",
+    "    participant DB as PostgreSQL",
+    "    participant NS as Notification Service (post-baseline)",
+    "",
+    "    BG->>DB: SELECT overdue actions<br/>role amps_background (RLS bypass for cross-tenant scan)<br/>WHERE due_date < now() AND current_state NOT IN (closed, cancelled)",
+    "",
+    "    loop for each overdue action",
+    "        BG->>DB: SELECT escalation_rule<br/>WHERE action_type=action.type<br/>AND priority=action.priority<br/>AND tenant_id=action.tenant_id",
+    "        BG->>BG: Determine escalation tier<br/>elapsed = now() - due_date<br/>Match against tier thresholds (e.g. 24h=tier1, 72h=tier2)",
+    "        BG->>DB: INSERT audit_event<br/>escalation.triggered<br/>details {action_id, tier, elapsed_hours}",
+    "        alt auto-transition configured for this tier",
+    "            BG->>DB: UPDATE action<br/>SET current_state = escalation target<br/>INSERT state_history (auto_escalation=true)",
+    "        end",
+    "        BG->>NS: (post-baseline) send notification<br/>Phase 1 records audit event only",
+    "    end",
+    ""
+  ],
+  "created_at": "2026-07-17T13:07:49.3495684+00:00"
+}

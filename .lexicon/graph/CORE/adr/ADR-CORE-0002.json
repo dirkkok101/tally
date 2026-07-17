@@ -1,0 +1,53 @@
+{
+  "id": "01KXR2E3Y1Y546JF5F2XTKG84J",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0002",
+  "title": "Actions RLS Boundary",
+  "slug": "actions-rls-boundary",
+  "number": 2,
+  "context": [
+    "PostgreSQL Row-Level Security (RLS) enforces tenant isolation at the database level. Over-applying RLS creates bypass-driven development; under-applying it creates security gaps. The boundary must match the data's tenant ownership model.",
+    "",
+    "Actions has 22 entities across six categories. Not all are tenant-scoped — Language, Translation, TranslationValue, and TenantConfiguration are global/shared data."
+  ],
+  "decision": [
+    "**RLS applies to the 18 tenant-scoped entities. Four global tables are excluded.**",
+    "",
+    "**With RLS (18 tables):** All entities implementing `ITenantEntity` — ActionEntity, ActionEvidence, ActionSourceLink, ActionStateHistory, ActionAuditEvent, ActionConsultation, RegulatoryDeadline, WorkflowDefinition, WorkflowState, WorkflowTransition, WorkflowDefinitionTranslation, WorkflowStateTranslation, ComplianceProfile, ComplianceProfileTranslation, EscalationRule, EscalationRuleTranslation, DeadlineType, TenantSequence.",
+    "",
+    "**Without RLS (8 global tables):** Language, Translation, TranslationValue, TenantConfiguration, User, NavSection, NavItem, UserPreference.",
+    "",
+    "**Four enforcement layers:**",
+    "1. `ITenantEntity` interface — compile-time marker",
+    "2. `TenantEndpoint` base class — extracts TenantId from JWT (see ADR-0014)",
+    "3. `TenantConnectionInterceptor` — injects `set_config('app.current_tenant', tenantId, false)` on connection open (connection-scoped); `TenantTransactionInterceptor` — injects `SET LOCAL app.current_tenant` per transaction (transaction-scoped, rollback-safe)",
+    "4. PostgreSQL RLS policies — fail-closed (no session variable = no rows visible)",
+    "",
+    "**Critical constraint:** Connection interceptor uses `set_config(..., false)` (connection-scoped, re-fires on every pool acquisition). Transaction interceptor uses `SET LOCAL` (transaction-scoped, reverts on rollback). Never use bare `SET` (session-scoped) which leaks across pooled connections.",
+    "",
+    "**Background services** use the `amps_background` database role with unrestricted RLS policy for cross-tenant operations (overdue detection, escalation evaluation, ledger verification)."
+  ],
+  "consequences": [
+    "**Positive:**",
+    "- Defense-in-depth — four independent layers must all fail for a tenant breach",
+    "- Fail-closed — missing session variable = zero rows, not all rows",
+    "- Background services have explicit, auditable bypass via dedicated role",
+    "- Narrow boundary avoids \"bypass-driven development\" on global reference data",
+    "",
+    "**Negative:**",
+    "- Application-level authorization on the 4 global tables must be explicitly reviewed",
+    "- Aspire superuser connections bypass RLS. Mitigation: integration tests run with non-superuser connections to validate RLS enforcement. Local development uses a dedicated `amps_app` role with RLS active."
+  ],
+  "status": "accepted",
+  "origin": "Analogous to Identity's narrow RLS boundary (Identity ADR-0002), but with Actions-specific table classification.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00",
+  "links": [
+    {
+      "id": "01KXR34TA1K02QR96200Q4VB1D",
+      "target_type": "adr",
+      "target": "ADR-CORE-0014",
+      "rel": "references",
+      "created_at": "2026-07-17T13:09:39.7788187+00:00"
+    }
+  ]
+}

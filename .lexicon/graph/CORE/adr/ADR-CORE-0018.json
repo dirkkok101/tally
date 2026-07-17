@@ -1,0 +1,65 @@
+{
+  "id": "01KXR2E3YE3P5DYP6ZWHT6MR3R",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0018",
+  "title": "IEntityTypeConfiguration for EF Core",
+  "slug": "ientitytypeconfiguration-for-ef-core",
+  "number": 18,
+  "context": [
+    "EF Core entity configuration can be done via `OnModelCreating` overrides, static `ModelBuilder` extension methods, or `IEntityTypeConfiguration<T>` classes. As the entity count grows (Actions has 22 entities), a single `OnModelCreating` method becomes unmanageable."
+  ],
+  "decision": [
+    "Use **`IEntityTypeConfiguration<T>` classes** — one per entity — auto-discovered via `ApplyConfigurationsFromAssembly()`.",
+    "",
+    "**Standardised configuration order:**",
+    "1. `ToTable()` — schema and table name",
+    "2. `HasKey()` — primary key",
+    "3. `ConfigureTrackedEntity()` / `ConfigureTenantEntity()` — shared base configuration",
+    "4. Properties — column types, conversions, constraints",
+    "5. Soft delete — `HasDefaultValue(false)` + `HasQueryFilter(e => !e.IsDeleted)` for `ISoftDeletable` entities",
+    "6. Relationships — navigation properties with explicit `OnDelete` behaviour",
+    "7. Indexes — performance and uniqueness constraints",
+    "",
+    "**Rules:**",
+    "- Every FK must have explicit `OnDelete` (CASCADE, Restrict, or SetNull) — see ADR-0020",
+    "- Enum properties use `HasConversion<string>()` with `HasMaxLength()` — see ADR-0004",
+    "- `JsonDocument` columns use `HasColumnType(\"jsonb\")` with custom value comparers",
+    "- Translation tables use composite unique: `(EntityId, LanguageId, TenantId)`"
+  ],
+  "consequences": [
+    "**Positive:**",
+    "- One file per entity — easy to find, review, and maintain",
+    "- Assembly scanning is framework-supported (`ApplyConfigurationsFromAssembly`)",
+    "- Configuration order is standardised across the team",
+    "- Each config class is independently reviewable and diffable",
+    "",
+    "**Negative:**",
+    "- Assembly scanning for EF configs while banning it for DI (ADR-0021) is a minor inconsistency — justified because EF configs implement a known interface with clear semantics"
+  ],
+  "status": "accepted",
+  "origin": "Standard EF Core practice, adopted by Identity (ADR-0018), adopted by Actions on independent merit.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00",
+  "links": [
+    {
+      "id": "01KXR34VSB4WNQQN2AXXRHFXN7",
+      "target_type": "adr",
+      "target": "ADR-CORE-0004",
+      "rel": "references",
+      "created_at": "2026-07-17T13:09:41.2920998+00:00"
+    },
+    {
+      "id": "01KXR35JSPGSHXD06W1QN08D3J",
+      "target_type": "adr",
+      "target": "ADR-CORE-0020",
+      "rel": "references",
+      "created_at": "2026-07-17T13:10:04.8548442+00:00"
+    },
+    {
+      "id": "01KXR35K3MKJGTQS15D25F35T9",
+      "target_type": "adr",
+      "target": "ADR-CORE-0021",
+      "rel": "references",
+      "created_at": "2026-07-17T13:10:05.1749519+00:00"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "01KXR31EF8XKJYB8SB4K5P82Z8",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "DIAG-CORE-LEDGER-VERIFICATION-PROCESS",
+  "title": "Ledger Verification (Background Service)",
+  "diagram_type": "workflow",
+  "format": "mermaid",
+  "content": [
+    "flowchart TD",
+    "    start([START: LedgerVerificationHostedService runs periodically])",
+    "    s1[1. Verify append-only constraints are active<br/>Check that UPDATE/DELETE triggers exist on:<br/>actions.action_state_history<br/>actions.action_audit_events<br/>Query pg_trigger system view]",
+    "    s2[2. Verify row integrity<br/>Check row counts match expectations<br/>Verify no gaps in sequence numbers per action]",
+    "    d1{Constraints verified?}",
+    "",
+    "    subgraph fail [\"Constraint failure path\"]",
+    "        logerr[Log error with details<br/>LogError: Audit trail integrity constraint<br/>missing or inactive<br/>table, constraint_type]",
+    "        cont[Continue checking remaining constraints]",
+    "        logerr --> cont",
+    "    end",
+    "",
+    "    s3[3. All constraints verified]",
+    "    s4[4. Log verification result<br/>LogDebug: Ledger verification passed<br/>tables_checked, rows_sampled]",
+    "    stop([END])",
+    "",
+    "    start --> s1 --> s2 --> d1",
+    "    d1 -->|No| fail --> stop",
+    "    d1 -->|Yes| s3 --> s4 --> stop",
+    ""
+  ],
+  "created_at": "2026-07-17T13:07:49.3495684+00:00"
+}

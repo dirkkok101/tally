@@ -1,0 +1,39 @@
+{
+  "id": "01KXR2E3XZPZ5KZS5QXDTDX2ME",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0001",
+  "title": "Seed First-Party Application Baseline",
+  "slug": "seed-first-party-application-baseline",
+  "number": 1,
+  "context": [
+    "NxGN Identity manages OIDC clients for all platform products. Actions requires four registered clients (`nxgn.actions.web`, `nxgn.actions.cli`, `nxgn.actions.mcp`, `nxgn.actions.service`) to function. Manual client creation during deployment is operationally fragile and error-prone.",
+    "",
+    "Additionally, Actions must register its permission types and role templates with Identity at startup to enable authorization."
+  ],
+  "decision": [
+    "**Known first-party applications are seeded at bootstrap, not created manually.**",
+    "",
+    "Actions' startup sequence (idempotent):",
+    "1. Acquire M2M token via `client_credentials` grant",
+    "2. Register permission types (22 permissions) with Identity",
+    "3. Register role templates (4 defaults) with Identity",
+    "4. Sync tenant list from Identity (orgs with active AMPS entitlements)",
+    "5. Upsert `TenantConfiguration` table",
+    "",
+    "All bootstrap operations are idempotent — safe to run on every startup."
+  ],
+  "consequences": [
+    "**Positive:**",
+    "- Fresh deployments are deterministic — no manual setup steps",
+    "- Permission and role registrations stay in sync with code",
+    "- Tenant configuration automatically tracks Identity's organisation list",
+    "",
+    "**Negative:**",
+    "- Bootstrap requires Identity to be available at startup. Retry with exponential backoff; the application does not serve requests until bootstrap completes.",
+    "- Partial bootstrap failure (e.g., permissions registered but tenant sync fails) leaves the system in an inconsistent state. Mitigation: each step is idempotent and re-attempted on the next startup. Monitoring alerts on bootstrap failure.",
+    "- Four OIDC clients are required (one per interface surface: web BFF, CLI, MCP, plus M2M service-to-service). Adding or removing an interface surface requires updating the seed list."
+  ],
+  "status": "accepted",
+  "origin": "Platform convention from Identity (ADR-0001), adopted by Actions as operational necessity.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00"
+}

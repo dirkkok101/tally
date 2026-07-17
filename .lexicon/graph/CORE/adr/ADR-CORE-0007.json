@@ -1,0 +1,42 @@
+{
+  "id": "01KXR2E3Y5G3FCZKD7KMKP1SC6",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0007",
+  "title": "Feature-Colocated Services on Web",
+  "slug": "feature-colocated-services-on-web",
+  "number": 7,
+  "context": [
+    "Frontend HTTP services can be centralised (`core/services/`) or colocated with their feature (`modules/admin/{feature}/`). Centralised services accumulate into \"god services\" as features grow. Colocated services keep features self-contained — deleting a feature is one folder deletion."
+  ],
+  "decision": [
+    "**Each feature owns its own HTTP service and models file**, colocated in the feature folder.",
+    "",
+    "```",
+    "modules/admin/actions/",
+    "├── actions.service.ts      # HTTP service",
+    "├── actions.models.ts       # TypeScript interfaces",
+    "├── actions.enums.ts        # as const enum objects (if needed)",
+    "├── list/                   # list page component",
+    "├── capture/                # capture page component",
+    "└── ...",
+    "```",
+    "",
+    "- Services are `@Injectable({ providedIn: 'root' })` for singleton lifecycle. Root-provided services are retained for the entire app session — acceptable because feature services are stateless HTTP wrappers with no retained state. If a feature service grows to hold significant state, consider route-level providers.",
+    "- Methods return `Promise<T>` via `firstValueFrom(httpClient.method(...))`",
+    "- Only truly cross-cutting services (auth, error handling, translation) live in `core/services/`"
+  ],
+  "consequences": [
+    "**Positive:**",
+    "- Features are self-contained — no god service accumulation",
+    "- Vertical slice on frontend mirrors backend feature structure",
+    "- Easy to understand what a feature depends on by reading one folder",
+    "",
+    "**Negative:**",
+    "- CRUD boilerplate duplicated across feature services (getById, getList, save, delete)",
+    "",
+    "**Mitigation:** The boilerplate is mechanical and consistent. If duplication becomes painful at scale, a thin `HttpEntityService<T>` base class can DRY it up without centralising feature-specific logic."
+  ],
+  "status": "accepted",
+  "origin": "Identity convention (ADR-0007), adopted by Actions for vertical slice consistency.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00"
+}

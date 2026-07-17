@@ -1,0 +1,32 @@
+{
+  "id": "01KXR2E3YNT05J2CVTP3ZCGNR4",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0026",
+  "title": "Use shell-delivered translation key contracts for UI copy",
+  "slug": "use-shell-delivered-translation-key-contracts-for-ui-copy",
+  "number": 26,
+  "context": [
+    "ADR-CORE-0013 covers translated entity values such as names and descriptions, but it does not govern static Angular UI copy such as page titles, column headers, form labels, validation messages, empty states, confirmation dialogs, and action buttons. Actions owns application translation keys and default values for the Actions product surface. Identity owns languages, translation storage, and language selection. Without a dedicated rule, new modules can satisfy entity i18n while still shipping hardcoded English in the UI."
+  ],
+  "decision": [
+    "All user-facing static UI copy in NxGN Actions must use shell-delivered translation key contracts. The backend ActionsTranslationKeys contract, ApplicationTranslationKeyRegistry, and ApplicationTranslationCatalogue define the canonical keys and default English values. The Angular shell receives the key contract, stores it through TranslationKeyContractService, and components use ngx-translate through TranslatePipe or TranslateService. Grid column definitions, enum labels, confirmation text, validation messages, toast text, and computed option labels must be built from translation keys and must refresh when the active language changes. API-provided translated entity values remain data and should not be retranslated in the client. Raw English is allowed only in tests, seed/default catalogue values, technical identifiers, and data returned by APIs."
+  ],
+  "consequences": [
+    "Every new UI module must include translation contract, registry, catalogue, TypeScript model, test fixture, and component usage work before it is considered complete. Module designs and implementation plans must call out translation-key coverage explicitly. Reviewers can treat hardcoded visible English in Angular templates or component code as a defect. This adds a small amount of ceremony, but it keeps Actions aligned with Identity-owned language support and prevents late-stage localization refactors."
+  ],
+  "alternatives": [
+    "Relying only on entity i18n was rejected because it misses static UI copy. Embedding local translation key strings directly in Angular components was rejected because it bypasses the shell contract and can drift from backend registration. Letting Identity define Actions UI keys was rejected because Actions owns its product vocabulary while Identity owns language capabilities and translation persistence."
+  ],
+  "status": "accepted",
+  "origin": "translation closeout review",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00",
+  "links": [
+    {
+      "id": "01KXR2E3YNR8AFG4MNFVT7CCMS",
+      "target_type": "adr",
+      "target": "ADR-CORE-0013",
+      "rel": "see-also",
+      "created_at": "2026-07-17T12:57:15.9892247+00:00"
+    }
+  ]
+}

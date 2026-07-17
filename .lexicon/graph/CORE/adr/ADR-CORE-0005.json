@@ -1,0 +1,20 @@
+{
+  "id": "01KXR2E3Y4RV29APN8HR253FN9",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0005",
+  "title": "EnumDTO and NamedDTO for UI Binding",
+  "slug": "enumdto-and-nameddto-for-ui-binding",
+  "number": 5,
+  "context": [
+    "Admin UIs have dropdown fields bound to both system enums and foreign-key/catalogue references. Each dropdown needs an identifier and display name, but the identifier semantics differ: true enums use stable system-owned ordinals, while tenant-configurable catalogues use database ids and/or stable codes from the owning admin module."
+  ],
+  "decision": [
+    "DTOs use standard wrapper types for dropdown-bindable fields. EnumDTO { Id: int, Name: string } is only for true system-owned enum fields. NamedDTO { Id: Guid, Name: string, Description?: string } is for FK references. User-configurable catalogues may also expose stable string Code fields where downstream contracts require human-readable integration keys. Entity mappers cast EnumDTO only for true enums; commands validate catalogue ids/codes against active tenant records before persistence."
+  ],
+  "consequences": [
+    "Zero-transformation roundtrip remains the default for dropdowns, but dropdown shape no longer implies enum ownership. Enum member ordering remains part of the wire contract only for true enums. Configurable lookup data gets explicit owner modules, lookup endpoints, and validation instead of local enum aliases or compatibility mappers."
+  ],
+  "status": "accepted",
+  "origin": "Capstone convention, adopted by Identity (ADR-0005), adopted by Actions for roundtrip simplification.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00"
+}

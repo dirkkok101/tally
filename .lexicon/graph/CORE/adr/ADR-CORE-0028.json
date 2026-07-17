@@ -1,0 +1,33 @@
+{
+  "id": "01KXR2E3YPDPP2046KEBQ9WW8Q",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0028",
+  "title": "Require owning admin modules for user-configurable configuration",
+  "slug": "require-owning-admin-modules-for-user-configurable-configuration",
+  "number": 28,
+  "context": [
+    "AMPS browser E2E exposed empty lookup data for Action Type and RCA Method configuration. Those values are tenant-configurable in the PRDs and are consumed by Workflow, Compliance, Action Core, dashboards, filters, and exports. Treating them as mutable seed rows would let tests pass while a clean client still could not configure a working tenant through the Portal. The platform already distinguishes immutable bootstrap data from tenant-owned configuration in PAT-CORE-CONFIGURATION-OWNERSHIP-E2E-DATA, but the decision needed ADR-level force so future modules do not drift."
+  ],
+  "decision": [
+    "Any lookup or configuration value that a tenant administrator can change must have an owning admin module, standard admin API surface, permissioned navigation, seeded translation keys, and browser-testable frontend setup flow. Browser E2E and client commissioning must create mutable tenant configuration through that owner module before downstream modules consume it. Seed data is allowed only for immutable platform templates, Identity/application bootstrap, permissions, fixture personas, and scenarios that explicitly validate seed immutability."
+  ],
+  "consequences": [
+    "Clean-system validation becomes meaningful because tests prove a client can configure AMPS through the Portal. Downstream modules must model prerequisite empty states instead of silently substituting seeded rows. New admin modules have a larger minimum delivery bar: menu wiring, permissions, translation keys, GET/SAVE/DELETE/grid-list/lookups endpoints, client aggregate capture, server aggregate Save, and tests. The system gains clearer ownership boundaries at the cost of building small owner modules for user-configurable lookup catalogues."
+  ],
+  "alternatives": [
+    "Mutable seed rows were rejected because they hide missing admin surfaces and make browser E2E less representative of client setup. Letting downstream modules each manage their own copy of lookup data was rejected because it fragments ownership and breaks stable integration semantics. Treating every lookup as immutable platform data was rejected because Action Type and RCA Method requirements explicitly allow tenant configuration. A one-off exception for tests was rejected because it would preserve the drift that caused the gap."
+  ],
+  "status": "accepted",
+  "date": "2026-05-02",
+  "deciders": "AMPS architecture",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00",
+  "links": [
+    {
+      "id": "01KXR2EKKE4VD4498TWKJPGDZY",
+      "target_type": "pattern",
+      "target": "PAT-CORE-CONFIGURATION-OWNERSHIP-E2E-DATA",
+      "rel": "implements",
+      "created_at": "2026-07-17T12:57:32.0146873+00:00"
+    }
+  ]
+}

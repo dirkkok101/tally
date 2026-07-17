@@ -1,0 +1,26 @@
+{
+  "id": "01KXR31EF5HQK5V6XQXY33C1SZ",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "DIAG-CORE-ACTION-CREATION-M2M",
+  "title": "Action Creation via M2M",
+  "diagram_type": "sequence",
+  "format": "mermaid",
+  "content": [
+    "sequenceDiagram",
+    "    autonumber",
+    "    participant S as Service (Capstone/Guardian/Pulse)",
+    "    participant API as Actions API",
+    "    participant ID as Identity API",
+    "    participant DB as PostgreSQL",
+    "",
+    "    S->>ID: POST /connect/token<br/>grant_type=client_credentials<br/>client_id=capstone-api, scope=actions:write",
+    "    ID-->>S: M2M JWT (sub = client_id)",
+    "    S->>API: POST /api/v1/actions<br/>Authorization Bearer M2M JWT<br/>Body {title, action_type, priority, tenant_id, ...}",
+    "    API->>API: Validate M2M scopes<br/>Require actions:write; else 403",
+    "    API->>API: Derive origin_system<br/>client_id → label (e.g. \"Capstone\")",
+    "    Note over API,DB: Same DB operations as SEQ-1 steps 6-9<br/>(workflow, compliance profile, sequence,<br/>INSERT action + history + audit + deadlines)<br/>origin_system recorded on action record",
+    "    API-->>S: 201 Created<br/>Body ActionDTO, ETag \"{version}\"",
+    ""
+  ],
+  "created_at": "2026-07-17T13:07:49.3495684+00:00"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "01KXR2C3RACFENBCQ800YKK351",
+  "project_id": "01KXR2C3JQBT2WPM9JCSA9JMXD",
+  "name": "Platform Core",
+  "code": "CORE",
+  "scope": "standard",
+  "description": [
+    "Copied unchanged from nxgn.actions Platform Core as prior art for Tally. Source lifecycle statuses are preserved for traceability and must be revalidated against Tally's framing before adoption."
+  ],
+  "created_at": "2026-07-17T12:56:10.2521455+00:00"
+}

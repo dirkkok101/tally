@@ -1,0 +1,11 @@
+# Lexicon operational state
+lexicon.db*
+lexicon.write.lock
+sync-state.json
+export-state.json
+migration-state.json
+review-state.json
+review-runs/
+*.bak
+migrations/
+backups/

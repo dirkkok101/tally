@@ -1,0 +1,231 @@
+{
+  "id": "01KXR2EKM4JA0FDVCQ47EN46V9",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "PAT-CORE-WEB-TRANSLATIONS",
+  "title": "UI Translation Key Pattern",
+  "slug": "web-translations",
+  "purpose": [
+    "Ensure every Actions Angular UI uses the shell-delivered translation key contract instead of hardcoded visible English."
+  ],
+  "category": "web-ui",
+  "zone": "web",
+  "origin": "ADR-CORE-0026",
+  "status": "current",
+  "created_at": "2026-07-17T12:57:32.0030626+00:00",
+  "examples": [
+    {
+      "id": "01KXR2YHCWBAX92BRXBM8MHJVT",
+      "name": "Translated column definitions refresh with language changes",
+      "description": [
+        "List pages compute nxgn.ui column headers from the shell key contract and TranslateService."
+      ],
+      "code": "private readonly i18n = inject(TranslationKeyContractService).keys;\nprivate readonly translate = inject(TranslateService);\nprivate readonly translationRevision = toSignal(\n  merge(\n    this.translate.onLangChange,\n    this.translate.onTranslationChange,\n    this.translate.onDefaultLangChange,\n  ).pipe(startWith(null)),\n  { initialValue: null },\n);\n\nprotected readonly columnDefs = computed<ColDef[]>(() => {\n  this.translationRevision();\n\n  return [\n    {\n      field: \"name\",\n      headerName: this.translate.instant(this.i18n.workflows.list.columns.name),\n    },\n  ];\n});",
+      "language": "typescript",
+      "is_counter": 0,
+      "sort_order": 10,
+      "created_at": "2026-07-17T13:06:14.0451995+00:00"
+    },
+    {
+      "id": "01KXR2YHP0AF4P78A05NNT37AB",
+      "name": "Template copy uses TranslatePipe",
+      "description": [
+        "Templates bind visible copy through the key contract rather than literal English."
+      ],
+      "code": "<nxgn-grid-page-title [title]=\"i18n.workflows.list.title | translate\" />\n\n<label [for]=\"nameControl\">\n  {{ i18n.workflows.capture.fields.name | translate }}\n</label>",
+      "language": "html",
+      "is_counter": 0,
+      "sort_order": 20,
+      "created_at": "2026-07-17T13:06:14.3369833+00:00"
+    },
+    {
+      "id": "01KXR2YHYJ5H3W8X34A1S3D9FK",
+      "name": "Hardcoded UI copy drifts from the shell contract",
+      "description": [
+        "Visible English in component code is not allowed because language changes cannot update it and the backend registry cannot validate it."
+      ],
+      "code": "protected readonly columnDefs = signal<ColDef[]>([\n  { field: \"name\", headerName: \"Name\" },\n]);\n\nprivate showSavedToast(): void {\n  this.toast.success(\"Workflow saved\");\n}",
+      "language": "typescript",
+      "is_counter": 1,
+      "sort_order": 30,
+      "created_at": "2026-07-17T13:06:14.6118521+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KXR35FSSD9F5Y8ZP7DEQM0BM",
+      "target_type": "adr",
+      "target": "ADR-CORE-0013",
+      "rel": "follows",
+      "created_at": "2026-07-17T13:10:01.7874835+00:00"
+    },
+    {
+      "id": "01KXR35VE8E76WQCZ9NJGVH1WP",
+      "target_type": "adr",
+      "target": "ADR-CORE-0026",
+      "rel": "implements",
+      "created_at": "2026-07-17T13:10:13.7054268+00:00"
+    }
+  ],
+  "rules": [
+    {
+      "id": "01KXR2YJ7R6FE537Z99Z01D9K0",
+      "rule_text": "Every new user-facing static UI string must be represented in ActionsTranslationKeys, ApplicationTranslationKeyRegistry, ApplicationTranslationCatalogue, the TypeScript translation-key model, and the Angular test translation fixture before the UI code is complete.",
+      "rule_type": "must",
+      "sort_order": 10,
+      "created_at": "2026-07-17T13:06:14.9049844+00:00"
+    },
+    {
+      "id": "01KXR2YJFRFZT9M2M36KQMN4R4",
+      "rule_text": "Every UI-facing module implementation plan must include explicit file-scoped translation tasks for ActionsTranslationKeys.cs, ApplicationTranslationKeyRegistry.cs, ApplicationTranslationCatalogue.cs, translation-key.models.ts, actions-translation-keys.ts, module test translation values, and translation fixture coverage before UI component tasks consume module copy.",
+      "rule_type": "must",
+      "sort_order": 15,
+      "created_at": "2026-07-17T13:06:15.1618173+00:00"
+    },
+    {
+      "id": "01KXR2YJSJP91QYVSHCK40XF0X",
+      "rule_text": "Angular templates must render static copy through TranslatePipe using keys from TranslationKeyContractService.",
+      "rule_type": "must",
+      "sort_order": 20,
+      "created_at": "2026-07-17T13:06:15.4764032+00:00"
+    },
+    {
+      "id": "01KXR2YK1TM3DJA1911D47CM88",
+      "rule_text": "Component TypeScript must use TranslateService for code-created UI copy such as grid headers, enum labels, validation messages, confirmation dialogs, generated defaults, toast messages, and error fallbacks.",
+      "rule_type": "must",
+      "sort_order": 30,
+      "created_at": "2026-07-17T13:06:15.7395824+00:00"
+    },
+    {
+      "id": "01KXR2YKAZZ4BCS25T9Q6WP6AH",
+      "rule_text": "Cached translated labels, including nxgn.ui grid column definitions and select option lists, must depend on translation change events so they refresh when the active language changes.",
+      "rule_type": "must",
+      "sort_order": 40,
+      "created_at": "2026-07-17T13:06:16.0327399+00:00"
+    },
+    {
+      "id": "01KXR2YKKV0ZPK0R0BFENPD4WP",
+      "rule_text": "Feature keys should be namespaced under nxgn.actions.<feature> and grouped by page area, for example list, capture, fields, columns, statuses, confirmations, and errors.",
+      "rule_type": "should",
+      "sort_order": 50,
+      "created_at": "2026-07-17T13:06:16.3160055+00:00"
+    },
+    {
+      "id": "01KXR2YKXE4JB6D74MWEKNA84K",
+      "rule_text": "Components should display API-provided translated lookup and entity values as data, and only translate client-owned static labels and enum fallbacks.",
+      "rule_type": "should",
+      "sort_order": 60,
+      "created_at": "2026-07-17T13:06:16.6230825+00:00"
+    },
+    {
+      "id": "01KXR2YM5DF202DPMS384KQTBK",
+      "rule_text": "Angular component templates, component TypeScript, and module-specific service stubs must not contain hardcoded visible English UI copy.",
+      "rule_type": "must_not",
+      "sort_order": 70,
+      "created_at": "2026-07-17T13:06:16.8779972+00:00"
+    },
+    {
+      "id": "01KXR2YMFPNQZ7K5HYKRXF3DPS",
+      "rule_text": "Components must not concatenate translated and hardcoded words to generate labels; use parameterized translation keys instead.",
+      "rule_type": "must_not",
+      "sort_order": 80,
+      "created_at": "2026-07-17T13:06:17.2068568+00:00"
+    },
+    {
+      "id": "01KXR2YMSR1XEP4P808Z5GMYG5",
+      "rule_text": "Modules must not bypass the shell-delivered Actions translation key contract with ad-hoc local key strings, local JSON files, or unregistered keys.",
+      "rule_type": "must_not",
+      "sort_order": 90,
+      "created_at": "2026-07-17T13:06:17.5294943+00:00"
+    }
+  ],
+  "sections": [
+    {
+      "id": "01KXR2YF3NQ411CSX3H5EQ9GG4",
+      "title": "Scope and Ownership",
+      "content": [
+        "Actions owns the product vocabulary for the Actions UI: translation key names, default English values, and the contract exposed from the Actions shell. Identity owns language definitions, language selection, translation persistence, and translation delivery. A module may consume translated entity values returned by APIs, but it must not invent local UI translation keys or treat entity i18n as coverage for static UI copy."
+      ],
+      "section_type": "narrative",
+      "sort_order": 10,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:06:11.7022896+00:00"
+    },
+    {
+      "id": "01KXR2YFDX5QJD8PSGAB1D04R0",
+      "title": "Contract Flow",
+      "content": [
+        "New UI copy starts in the shared contract. Add the key shape to Nxgn.Actions.Contracts/Shell/ActionsTranslationKeys.cs, register every key in Nxgn.Actions.Api/Features/Localization/ApplicationTranslationKeyRegistry.cs, seed the default value in Nxgn.Actions.Api/Features/Localization/ApplicationTranslationCatalogue.cs, mirror the shape in Nxgn.Actions.Web.Ui/src/app/core/shell/translation-key.models.ts, and update Nxgn.Actions.Web.Ui/src/app/testing/actions-translation-keys.ts. Components consume keys from TranslationKeyContractService after shell bootstrap."
+      ],
+      "section_type": "narrative",
+      "sort_order": 20,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:06:12.0304205+00:00"
+    },
+    {
+      "id": "01KXR2YFQ0CM3VZFTNVCY9YPXS",
+      "title": "Planning Gate",
+      "content": [
+        "Every new UI-facing module plan must include translation-key work as its own implementation gate before list, capture, route, or browser-test beads consume module copy. The minimum file-scoped task sequence is: ActionsTranslationKeys.cs contract shape, ApplicationTranslationKeyRegistry.cs key paths, ApplicationTranslationCatalogue.cs default English values, translation-key.models.ts Angular mirror, actions-translation-keys.ts test key fixture, module test translation values, and a fixture coverage assertion. If a module PRD or design mentions translated labels, validation messages, empty states, menu items, or admin UI copy, the plan must trace those requirements to this task sequence rather than relying on generic UI implementation beads."
+      ],
+      "section_type": "narrative",
+      "sort_order": 25,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:06:12.3209168+00:00"
+    },
+    {
+      "id": "01KXR2YFZ4DS6569BP3612R89W",
+      "title": "Component Usage",
+      "content": [
+        "Angular components import TranslatePipe for template text and inject both TranslationKeyContractService and TranslateService for TypeScript-created text. Static template copy binds the key through translate. Code-created copy, including validation messages, toast text, confirmation dialogs, generated labels, and option labels, uses TranslateService. Computed strings that are cached in signals must depend on a translation revision signal sourced from onLangChange, onTranslationChange, and onDefaultLangChange so labels refresh when the active language changes."
+      ],
+      "section_type": "narrative",
+      "sort_order": 30,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:06:12.5817370+00:00"
+    },
+    {
+      "id": "01KXR2YG7KK6NTN2K5AR6ARG78",
+      "title": "List and Grid Pages",
+      "content": [
+        "Grid-list pages build nxgn.ui column definitions from translated headers and translated value formatters for static enum or status values. Column definitions must be recomputed when translations change. Server-side search, sort, and paging remain owned by nxgn.ui grid components and the module API contracts; Actions components provide translated page titles, action labels, empty/error text, and static cell labels."
+      ],
+      "section_type": "narrative",
+      "sort_order": 40,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:06:12.8527647+00:00"
+    },
+    {
+      "id": "01KXR2YGHHV7D84KX7QM4T9JGD",
+      "title": "Capture and Edit Pages",
+      "content": [
+        "Capture and edit pages use translation keys for headings, form labels, helper text, button text, validation messages, confirmation dialogs, loading text, and local option labels. API-provided lookup names may be displayed as data when the API contract returns translated values. Client-only enum fallbacks and generated defaults, such as New state 1 or Copy, must use translation keys with parameters instead of string concatenation."
+      ],
+      "section_type": "narrative",
+      "sort_order": 50,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:06:13.1707713+00:00"
+    },
+    {
+      "id": "01KXR2YGT93AZ47N6479PWRP09",
+      "title": "Testing and Seed Data",
+      "content": [
+        "Tests seed the translation key contract and ngx-translate values before creating translated components. Test fixtures may contain English because they are explicit translation values, not UI implementation copy. Backend catalogue seed values are the other allowed place for default English UI copy. Tests should assert rendered translated labels where behavior depends on visible text and should keep key-contract coverage in sync with the C# and TypeScript models."
+      ],
+      "section_type": "narrative",
+      "sort_order": 60,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:06:13.4505839+00:00"
+    },
+    {
+      "id": "01KXR2YH573RVW53CC4HYB7DQF",
+      "title": "Allowed Exceptions",
+      "content": [
+        "The translation rule does not apply to technical identifiers, telemetry names, API route names, enum wire values, log messages intended only for operators, or user/domain data returned by APIs. When a value appears in the product UI as static chrome or explanatory copy, it is not an exception and must use the shell-delivered translation key contract."
+      ],
+      "section_type": "narrative",
+      "sort_order": 70,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:06:13.8002998+00:00"
+    }
+  ]
+}

@@ -1,0 +1,460 @@
+{
+  "id": "01KXR2EKM6AWQ5BP8X42YRSA8J",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "PAT-CORE-API-VERTICAL-SLICE",
+  "title": "Vertical Slice Architecture — NXGN Actions",
+  "slug": "api-vertical-slice",
+  "purpose": [
+    "Document the implemented vertical-slice API structure: endpoint folders own request-specific behavior, feature Shared/ owns reusable feature code and feature-owned EF entities/configurations, Data/ owns shared database infrastructure, and Nxgn.Actions.Contracts owns public API DTOs."
+  ],
+  "category": "architecture",
+  "zone": "api",
+  "status": "current",
+  "created_at": "2026-07-17T12:57:32.0030626+00:00",
+  "examples": [
+    {
+      "id": "01KXR2QR01CV29TX24763TZZ4T",
+      "section_id": "01KXR2QP2YMFJ7K2KMFQRJH87R",
+      "name": "Feature Folder Structure Example 1",
+      "code": "Each feature is a vertical slice under `Nxgn.Actions.Api/Features/{Area}/{Feature}/`. The feature folder owns the behavior and the feature-owned persistence artifacts for that module.\n\nCurrent aggregate-root modules use this shape:\n\n```text\nFeatures/Admin/Workflows/\n  GetWorkflowGridList/\n    GetWorkflowGridListEndpoint.cs        # POST /grid-list, optional aliases\n  GetWorkflowById/\n    GetWorkflowByIdEndpoint.cs\n  SaveWorkflow/\n    SaveWorkflowEndpoint.cs               # endpoint, validator, endpoint-specific command\n  PublishWorkflow/\n    PublishWorkflowEndpoint.cs\n  CloneWorkflow/\n    CloneWorkflowEndpoint.cs\n  DeleteWorkflowDraft/\n    DeleteWorkflowDraftEndpoint.cs\n  Shared/\n    WorkflowEntities.cs                   # feature-owned aggregate entities\n    WorkflowEntityConfigurations.cs       # feature-owned EF configurations\n    WorkflowQueries.cs                    # extracted only when useful\n    Commands/                             # optional reusable commands\n    Mappers/                              # optional reusable mappers\n```\n\nUse endpoint folders for behavior that belongs to one request. Use `Shared/` for feature-owned types that multiple endpoints in the same feature need. Use `Data/` only for DbContext, migrations, shared infrastructure, and truly cross-feature entities/configuration.",
+      "is_counter": 0,
+      "sort_order": 0,
+      "created_at": "2026-07-17T13:02:31.4260744+00:00"
+    },
+    {
+      "id": "01KXR2QR87WKXP1P5MC7R4T6K1",
+      "section_id": "01KXR2QP977A3VECSP4HR2BNTW",
+      "name": "Contract Types (Separate Project) Example 1",
+      "code": "Public API contracts live in `Nxgn.Actions.Contracts`, not in the API feature folders.\n\nThe current convention is module-level grouping:\n\n```text\nNxgn.Actions.Contracts/\n  Admin/\n    WorkflowDTOs.cs\n    ComplianceDtos.cs\n    EscalationDtos.cs\n  Deadlines/\n    DeadlineDtos.cs\n  Shared/\n    PagedResponse.cs\n    GridRequest.cs\n```\n\nKeep related request/response DTOs together while the module is small enough to scan. Split into per-type files only when file size, ownership, or reuse makes the separate file clearer.\n\nFeature implementation may use private/internal request, validator, command, or mapper types inside the API project, but anything serialized across the public API boundary belongs in `Nxgn.Actions.Contracts`.",
+      "is_counter": 0,
+      "sort_order": 1,
+      "created_at": "2026-07-17T13:02:31.6888589+00:00"
+    },
+    {
+      "id": "01KXR2QRFPNK2TAYK303NTZVGH",
+      "section_id": "01KXR2QPGERRNJ43TTHH1H2WY2",
+      "name": "Management API Feature Inventory Example 1",
+      "code": "Features/\n├── Actions/                   # Action management (aggregate root)\n│   ├── Save/, Get/, GetGridList/, Delete/\n│   ├── Evidence/              # Sub-feature: evidence attachments\n│   │   └── Upload/, List/, Delete/\n│   ├── Consultations/         # Sub-feature: consultation records\n│   │   └── Save/, List/, Delete/\n│   ├── Deadlines/             # Sub-feature: deadline tracking\n│   │   └── Save/, List/\n│   └── Shared/ (Commands, Mappers, Queries)\n│\n├── Admin/\n│   ├── Workflows/             # Workflow definition management\n│   │   ├── Save/, Get/, GetGridList/, Delete/, Activate/, Deactivate/\n│   │   └── Shared/ (Commands, Mappers, Queries)\n│   │\n│   ├── ComplianceProfiles/    # Compliance profile configuration\n│   │   ├── Save/, Get/, GetGridList/, Delete/\n│   │   └── Shared/ (Commands, Mappers, Queries)\n│   │\n│   ├── EscalationRules/       # Escalation rule management\n│   │   ├── Save/, Get/, GetGridList/, Delete/\n│   │   └── Shared/ (Commands, Mappers, Queries)\n│   │\n│   └── Languages/             # Language configuration\n│       ├── Save/, Get/, GetGridList/\n│       └── Shared/ (Commands, Mappers, Queries)\n│\n└── Shared/                    # Cross-feature infrastructure\n    ├── TenantEndpoint.cs          # Base classes (TenantId, UserId, RequestLanguageId, DefaultLanguageId)\n    ├── EntityMapperResult.cs      # EntityMapperResult<T> with NewItems/UpdatedItems/DeletedItems\n    └── TranslationService.cs      # Language-aware name/description resolution",
+      "is_counter": 0,
+      "sort_order": 2,
+      "created_at": "2026-07-17T13:02:31.9274243+00:00"
+    },
+    {
+      "id": "01KXR2QRQABXPFW8HWS96G7W7C",
+      "section_id": "01KXR2QPQ1T6CYKZJMP6QKVXG3",
+      "name": "File Placement Decision Tree Example 1",
+      "code": "Use this placement rule when adding or reviewing a module:\n\n| Artifact | Default location | Extract when |\n| --- | --- | --- |\n| Endpoint registration/handler | `{Feature}/{EndpointName}/{EndpointName}Endpoint.cs` | Never outside the owning feature |\n| Endpoint-specific request command | Same endpoint folder/file | It is reused, large enough to obscure the endpoint, or easier to test separately |\n| Reusable feature command/query/mapper | `{Feature}/Shared/Commands`, `Shared/Queries`, or `Shared/Mappers` | It becomes shared across features, then promote to an explicit shared service |\n| Feature-owned EF entity/configuration | `{Feature}/Shared/*Entities.cs`, `{Feature}/Shared/*EntityConfigurations.cs` | It becomes truly cross-feature/shared platform data |\n| Shared EF entity/configuration | `Data/Entities`, `Data/Configuration` | It becomes owned by one feature, then move it back under that feature |\n| Public API DTO | `Nxgn.Actions.Contracts/{AreaOrModule}/*Dtos.cs` | Split per type/file when the grouped file becomes hard to review |\n| Grid-list endpoint | `POST /api/v1/{entities}/grid-list` | Add `/grid` or `/server-grid` only as compatibility aliases |\n\nDo not move feature-owned persistence types into `Data/` just to satisfy a horizontal layer. Do not call another feature's endpoint command directly.",
+      "is_counter": 0,
+      "sort_order": 3,
+      "created_at": "2026-07-17T13:02:32.1722561+00:00"
+    },
+    {
+      "id": "01KXR2QRYM9TRWBH21RH4T4FB2",
+      "section_id": "01KXR2QQ09F4S7WF0S66T7AD48",
+      "name": "Sub-Feature Organization Example 1",
+      "code": "Features/Actions/\n├── Evidence/                   # Sub-feature\n│   └── Upload/                 # Endpoint folder within sub-feature\n│       ├── UploadEvidenceEndpoint.cs\n│       └── UploadEvidenceValidator.cs\n│\n├── Consultations/              # Sub-feature\n│   ├── Save/\n│   ├── List/\n│   └── Delete/\n│\n├── Deadlines/                  # Sub-feature\n│   ├── Save/\n│   └── List/\n│\n└── Shared/                     # Commands/Queries for BOTH parent and sub-features\n    ├── Commands/\n    │   ├── SaveActionCommand.cs\n    │   ├── DeleteActionCommand.cs\n    │   ├── UploadEvidenceCommand.cs         # Sub-feature command\n    │   └── SaveConsultationCommand.cs       # Sub-feature command\n    └── Queries/\n        ├── GetActionQuery.cs\n        ├── GetActionsQuery.cs\n        ├── ActionQueryParameters.cs         # Extends PagedQueryParameters<T>\n        └── GetActionEvidenceQuery.cs        # Sub-feature query",
+      "is_counter": 0,
+      "sort_order": 4,
+      "created_at": "2026-07-17T13:02:32.4059300+00:00"
+    }
+  ],
+  "rules": [
+    {
+      "id": "01KXR2QS6XTTM3E9HA2HHT6PTW",
+      "rule_text": "**One endpoint per folder** — `Save/SaveWorkflowEndpoint.cs`, not mixed with other endpoints",
+      "rule_type": "must",
+      "sort_order": 0,
+      "created_at": "2026-07-17T13:02:32.6705744+00:00"
+    },
+    {
+      "id": "01KXR2QSESXNWJNSB15SRH3AEN",
+      "rule_text": "**Save/ for upserts** — single endpoint handles both create and update; SaveRequest inherits from the DTO, `Guid.Empty` signals create",
+      "rule_type": "must",
+      "sort_order": 1,
+      "created_at": "2026-07-17T13:02:32.9227592+00:00"
+    },
+    {
+      "id": "01KXR2QSPM4AK7J78XN86WYY1M",
+      "rule_text": "Use feature Shared/ for reusable feature code and feature-owned EF entities/configurations; endpoint-specific commands may remain in the endpoint folder/file.",
+      "rule_type": "must",
+      "sort_order": 2,
+      "created_at": "2026-07-17T13:02:33.1774510+00:00"
+    },
+    {
+      "id": "01KXR2QSZMC125M3Z9S2YNKY0S",
+      "rule_text": "**Feature folders are self-contained** — no imports from other `Features/{OtherEntity}/`",
+      "rule_type": "must",
+      "sort_order": 3,
+      "created_at": "2026-07-17T13:02:33.4611602+00:00"
+    },
+    {
+      "id": "01KXR2QT7JTTTQKD5FXC3DPA7D",
+      "rule_text": "**DI for cross-feature needs** — inject commands/queries from other features via constructor",
+      "rule_type": "must",
+      "sort_order": 4,
+      "created_at": "2026-07-17T13:02:33.7154510+00:00"
+    },
+    {
+      "id": "01KXR2QTFJWJ7XMK5G9ZG74P64",
+      "rule_text": "**Management endpoints extend `TenantEndpoint`** — provides `TenantId`, `UserId`, `RequestLanguageId`, `DefaultLanguageId`",
+      "rule_type": "must",
+      "sort_order": 5,
+      "created_at": "2026-07-17T13:02:33.9711230+00:00"
+    },
+    {
+      "id": "01KXR2QTSEBDWV2SSVBRG170GZ",
+      "rule_text": "**DI-registered mapper classes** — `{Entity}EntityMapper` and `{Entity}DTOMapper` as scoped services, not static extension methods",
+      "rule_type": "must",
+      "sort_order": 6,
+      "created_at": "2026-07-17T13:02:34.2894815+00:00"
+    },
+    {
+      "id": "01KXR2QV145HA0VA0ZN3NK8VNE",
+      "rule_text": "**CommandResult<EntityMapperResult<T>> for saves** — save commands wrap `EntityMapperResult<T>` in `CommandResult` for consistent error handling",
+      "rule_type": "must",
+      "sort_order": 7,
+      "created_at": "2026-07-17T13:02:34.5329521+00:00"
+    },
+    {
+      "id": "01KXR2QV9NJ9F9J1Z51Q926999",
+      "rule_text": "**CommandResult for deletes/lifecycle** — delete commands return `CommandResult`, lifecycle returns `CommandResult` or `CommandResult<T>`",
+      "rule_type": "must",
+      "sort_order": 8,
+      "created_at": "2026-07-17T13:02:34.8069678+00:00"
+    },
+    {
+      "id": "01KXR2QVG3TBBWVD4V6P1HTPBN",
+      "rule_text": "**QueryParameters builder classes** — `{Entity}QueryParameters` extending `PagedQueryParameters<T>` with fluent API for grid/count queries",
+      "rule_type": "must",
+      "sort_order": 9,
+      "created_at": "2026-07-17T13:02:35.0130681+00:00"
+    },
+    {
+      "id": "01KXR2QVRC0BEER54NWH98JHD9",
+      "rule_text": "**`IDbContextFactory<ActionsDbContext>`** — always use factory, never inject `ActionsDbContext` directly",
+      "rule_type": "must",
+      "sort_order": 10,
+      "created_at": "2026-07-17T13:02:35.2769628+00:00"
+    },
+    {
+      "id": "01KXR2QW0S1AYDDHK4VHX8NFHB",
+      "rule_text": "POST for grid list: use POST /api/v1/{entities}/grid-list as canonical; /grid and /server-grid are compatibility aliases only; do not add /list.",
+      "rule_type": "must",
+      "sort_order": 11,
+      "created_at": "2026-07-17T13:02:35.5468049+00:00"
+    },
+    {
+      "id": "01KXR2QW89HSN9H7C6PQG4ZFYA",
+      "rule_text": "**POST for delete** — `POST /delete` for batch delete with request body",
+      "rule_type": "must",
+      "sort_order": 12,
+      "created_at": "2026-07-17T13:02:35.7867121+00:00"
+    },
+    {
+      "id": "01KXR2QWGF9VNAGM49P0PKTH2A",
+      "rule_text": "Put public DTOs in Nxgn.Actions.Contracts; module-level DTO files are acceptable while readable; feature-local DTOs must stay private/internal.",
+      "rule_type": "must_not",
+      "sort_order": 13,
+      "created_at": "2026-07-17T13:02:36.0482977+00:00"
+    },
+    {
+      "id": "01KXR2QWQ9FZ6WCNJYN8QHNPP0",
+      "rule_text": "**Import from other feature folders** — use DI, not direct references",
+      "rule_type": "must_not",
+      "sort_order": 14,
+      "created_at": "2026-07-17T13:02:36.2665027+00:00"
+    },
+    {
+      "id": "01KXR2QWXVHMYQ0HQCM2S5R19M",
+      "rule_text": "Put request-specific business orchestration in the endpoint folder; extract commands, mappers, or services when reuse, complexity, or testability justifies it.",
+      "rule_type": "must_not",
+      "sort_order": 15,
+      "created_at": "2026-07-17T13:02:36.4770006+00:00"
+    },
+    {
+      "id": "01KXR2QX79ETTZ215TTCGTZRXF",
+      "rule_text": "**Create separate Create/ and Update/ folders** — use Save/ for the upsert pattern",
+      "rule_type": "must_not",
+      "sort_order": 16,
+      "created_at": "2026-07-17T13:02:36.7792627+00:00"
+    },
+    {
+      "id": "01KXR2QXEZ0AZST4QD31JY79F5",
+      "rule_text": "**Extend `Endpoint<T>` directly for management endpoints** — use `TenantEndpoint` base classes",
+      "rule_type": "must_not",
+      "sort_order": 17,
+      "created_at": "2026-07-17T13:02:37.0242384+00:00"
+    },
+    {
+      "id": "01KXR2QXR6RWTESX5SWY88BRFX",
+      "rule_text": "**Use static extension methods for mappers** — use DI-registered mapper classes (`{Entity}EntityMapper`, `{Entity}DTOMapper`)",
+      "rule_type": "must_not",
+      "sort_order": 18,
+      "created_at": "2026-07-17T13:02:37.3220457+00:00"
+    },
+    {
+      "id": "01KXR2QY098F4BERW1MDDPX0ZB",
+      "rule_text": "**Define SaveRequest as an independent type** — SaveRequest inherits from the DTO",
+      "rule_type": "must_not",
+      "sort_order": 19,
+      "created_at": "2026-07-17T13:02:37.5779233+00:00"
+    },
+    {
+      "id": "01KXR2QY8NJ0VYZQ5MN356NM4H",
+      "rule_text": "**Use `Guid?` with null for create detection** — use `Guid` with `Guid.Empty`",
+      "rule_type": "must_not",
+      "sort_order": 20,
+      "created_at": "2026-07-17T13:02:37.8469087+00:00"
+    },
+    {
+      "id": "01KXR2QYJ86XDNFKMM9REK3XR8",
+      "rule_text": "**Use IQueryable extension methods for filtering** — use `{Entity}QueryParameters` builder classes",
+      "rule_type": "must_not",
+      "sort_order": 21,
+      "created_at": "2026-07-17T13:02:38.1537202+00:00"
+    },
+    {
+      "id": "01KXR2QYT082K07Z11X1FRA4Z0",
+      "rule_text": "**Filter by TenantId in application code** — RLS handles tenant isolation",
+      "rule_type": "must_not",
+      "sort_order": 22,
+      "created_at": "2026-07-17T13:02:38.4015369+00:00"
+    }
+  ],
+  "sections": [
+    {
+      "id": "01KXR2QP2YMFJ7K2KMFQRJH87R",
+      "title": "Feature Folder Structure",
+      "content": [
+        "Each feature is a vertical slice under `Nxgn.Actions.Api/Features/{Area}/{Feature}/`. The feature folder owns the behavior and the feature-owned persistence artifacts for that module.",
+        "",
+        "Current aggregate-root modules use this shape:",
+        "",
+        "```text",
+        "Features/Admin/Workflows/",
+        "  GetWorkflowGridList/",
+        "    GetWorkflowGridListEndpoint.cs        # POST /grid-list, optional aliases",
+        "  GetWorkflowById/",
+        "    GetWorkflowByIdEndpoint.cs",
+        "  SaveWorkflow/",
+        "    SaveWorkflowEndpoint.cs               # endpoint, validator, endpoint-specific command",
+        "  PublishWorkflow/",
+        "    PublishWorkflowEndpoint.cs",
+        "  CloneWorkflow/",
+        "    CloneWorkflowEndpoint.cs",
+        "  DeleteWorkflowDraft/",
+        "    DeleteWorkflowDraftEndpoint.cs",
+        "  Shared/",
+        "    WorkflowEntities.cs                   # feature-owned aggregate entities",
+        "    WorkflowEntityConfigurations.cs       # feature-owned EF configurations",
+        "    WorkflowQueries.cs                    # extracted only when useful",
+        "    Commands/                             # optional reusable commands",
+        "    Mappers/                              # optional reusable mappers",
+        "```",
+        "",
+        "Use endpoint folders for behavior that belongs to one request. Use `Shared/` for feature-owned types that multiple endpoints in the same feature need. Use `Data/` only for DbContext, migrations, shared infrastructure, and truly cross-feature entities/configuration.",
+        ""
+      ],
+      "section_type": "narrative",
+      "sort_order": 0,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:02:29.4710625+00:00"
+    },
+    {
+      "id": "01KXR2QP977A3VECSP4HR2BNTW",
+      "title": "Contract Types (Separate Project)",
+      "content": [
+        "Public API contracts live in `Nxgn.Actions.Contracts`, not in the API feature folders.",
+        "",
+        "The current convention is module-level grouping:",
+        "",
+        "```text",
+        "Nxgn.Actions.Contracts/",
+        "  Admin/",
+        "    WorkflowDTOs.cs",
+        "    ComplianceDtos.cs",
+        "    EscalationDtos.cs",
+        "  Deadlines/",
+        "    DeadlineDtos.cs",
+        "  Shared/",
+        "    PagedResponse.cs",
+        "    GridRequest.cs",
+        "```",
+        "",
+        "Keep related request/response DTOs together while the module is small enough to scan. Split into per-type files only when file size, ownership, or reuse makes the separate file clearer.",
+        "",
+        "Feature implementation may use private/internal request, validator, command, or mapper types inside the API project, but anything serialized across the public API boundary belongs in `Nxgn.Actions.Contracts`.",
+        ""
+      ],
+      "section_type": "narrative",
+      "sort_order": 1,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:02:29.6723099+00:00"
+    },
+    {
+      "id": "01KXR2QPGERRNJ43TTHH1H2WY2",
+      "title": "Management API Feature Inventory",
+      "content": [
+        "```",
+        "Features/",
+        "├── Actions/                   # Action management (aggregate root)",
+        "│   ├── Save/, Get/, GetGridList/, Delete/",
+        "│   ├── Evidence/              # Sub-feature: evidence attachments",
+        "│   │   └── Upload/, List/, Delete/",
+        "│   ├── Consultations/         # Sub-feature: consultation records",
+        "│   │   └── Save/, List/, Delete/",
+        "│   ├── Deadlines/             # Sub-feature: deadline tracking",
+        "│   │   └── Save/, List/",
+        "│   └── Shared/ (Commands, Mappers, Queries)",
+        "│",
+        "├── Admin/",
+        "│   ├── Workflows/             # Workflow definition management",
+        "│   │   ├── Save/, Get/, GetGridList/, Delete/, Activate/, Deactivate/",
+        "│   │   └── Shared/ (Commands, Mappers, Queries)",
+        "│   │",
+        "│   ├── ComplianceProfiles/    # Compliance profile configuration",
+        "│   │   ├── Save/, Get/, GetGridList/, Delete/",
+        "│   │   └── Shared/ (Commands, Mappers, Queries)",
+        "│   │",
+        "│   ├── EscalationRules/       # Escalation rule management",
+        "│   │   ├── Save/, Get/, GetGridList/, Delete/",
+        "│   │   └── Shared/ (Commands, Mappers, Queries)",
+        "│   │",
+        "│   └── Languages/             # Language configuration",
+        "│       ├── Save/, Get/, GetGridList/",
+        "│       └── Shared/ (Commands, Mappers, Queries)",
+        "│",
+        "└── Shared/                    # Cross-feature infrastructure",
+        "    ├── TenantEndpoint.cs          # Base classes (TenantId, UserId, RequestLanguageId, DefaultLanguageId)",
+        "    ├── EntityMapperResult.cs      # EntityMapperResult<T> with NewItems/UpdatedItems/DeletedItems",
+        "    └── TranslationService.cs      # Language-aware name/description resolution",
+        "```"
+      ],
+      "section_type": "narrative",
+      "sort_order": 2,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:02:29.9030319+00:00"
+    },
+    {
+      "id": "01KXR2QPQ1T6CYKZJMP6QKVXG3",
+      "title": "File Placement Decision Tree",
+      "content": [
+        "Use this placement rule when adding or reviewing a module:",
+        "",
+        "| Artifact | Default location | Extract when |",
+        "| --- | --- | --- |",
+        "| Endpoint registration/handler | `{Feature}/{EndpointName}/{EndpointName}Endpoint.cs` | Never outside the owning feature |",
+        "| Endpoint-specific request command | Same endpoint folder/file | It is reused, large enough to obscure the endpoint, or easier to test separately |",
+        "| Reusable feature command/query/mapper | `{Feature}/Shared/Commands`, `Shared/Queries`, or `Shared/Mappers` | It becomes shared across features, then promote to an explicit shared service |",
+        "| Feature-owned EF entity/configuration | `{Feature}/Shared/*Entities.cs`, `{Feature}/Shared/*EntityConfigurations.cs` | It becomes truly cross-feature/shared platform data |",
+        "| Shared EF entity/configuration | `Data/Entities`, `Data/Configuration` | It becomes owned by one feature, then move it back under that feature |",
+        "| Public API DTO | `Nxgn.Actions.Contracts/{AreaOrModule}/*Dtos.cs` | Split per type/file when the grouped file becomes hard to review |",
+        "| Grid-list endpoint | `POST /api/v1/{entities}/grid-list` | Add `/grid` or `/server-grid` only as compatibility aliases |",
+        "",
+        "Do not move feature-owned persistence types into `Data/` just to satisfy a horizontal layer. Do not call another feature's endpoint command directly.",
+        ""
+      ],
+      "section_type": "decision-table",
+      "sort_order": 3,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:02:30.1149590+00:00"
+    },
+    {
+      "id": "01KXR2QQ09F4S7WF0S66T7AD48",
+      "title": "Sub-Feature Organization",
+      "content": [
+        "When an entity has child collections or related operations that are conceptually part of the aggregate but have their own endpoints, organize them as sub-features:",
+        "",
+        "```",
+        "Features/Actions/",
+        "├── Evidence/                   # Sub-feature",
+        "│   └── Upload/                 # Endpoint folder within sub-feature",
+        "│       ├── UploadEvidenceEndpoint.cs",
+        "│       └── UploadEvidenceValidator.cs",
+        "│",
+        "├── Consultations/              # Sub-feature",
+        "│   ├── Save/",
+        "│   ├── List/",
+        "│   └── Delete/",
+        "│",
+        "├── Deadlines/                  # Sub-feature",
+        "│   ├── Save/",
+        "│   └── List/",
+        "│",
+        "└── Shared/                     # Commands/Queries for BOTH parent and sub-features",
+        "    ├── Commands/",
+        "    │   ├── SaveActionCommand.cs",
+        "    │   ├── DeleteActionCommand.cs",
+        "    │   ├── UploadEvidenceCommand.cs         # Sub-feature command",
+        "    │   └── SaveConsultationCommand.cs       # Sub-feature command",
+        "    └── Queries/",
+        "        ├── GetActionQuery.cs",
+        "        ├── GetActionsQuery.cs",
+        "        ├── ActionQueryParameters.cs         # Extends PagedQueryParameters<T>",
+        "        └── GetActionEvidenceQuery.cs        # Sub-feature query",
+        "```",
+        "",
+        "Sub-feature commands and queries live in the **parent's** `Shared/` folder — not in a nested `Evidence/Shared/`. This keeps the DI registration flat and the import paths simple."
+      ],
+      "section_type": "narrative",
+      "sort_order": 4,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:02:30.4107343+00:00"
+    },
+    {
+      "id": "01KXR2QQ7NQYCDSTG7SBF3BP5M",
+      "title": "Rules",
+      "content": [
+        "1. **Feature folder is the unit of ownership** - endpoint handlers, validators, endpoint-specific commands, feature-owned EF entities/configurations, and reusable feature helpers stay under the owning feature.",
+        "2. **Contracts project is the API boundary** - DTOs serialized across HTTP live in `Nxgn.Actions.Contracts`.",
+        "3. **Use `Data/` for shared infrastructure** - DbContext, migrations, cross-feature platform entities, and shared EF configuration live there.",
+        "4. **Use `IDbContextFactory<ActionsDbContext>` for endpoint work** unless a specific existing test host or framework integration requires otherwise.",
+        "5. **Grid-list is canonical** - use `POST /api/v1/{entities}/grid-list`; `/grid` and `/server-grid` are compatibility aliases only.",
+        "6. **Extract for reuse, complexity, or testability** - do not create layers just for symmetry, but do split large endpoint-specific code when it improves review and testing.",
+        "7. **No cross-feature command calls** - communicate through shared contracts, explicit services, or query abstractions.",
+        ""
+      ],
+      "section_type": "narrative",
+      "sort_order": 5,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:02:30.6466869+00:00"
+    },
+    {
+      "id": "01KXR2QQG973EDHA5S0E9669B2",
+      "title": "Departures from Capstone",
+      "content": [
+        "| Aspect | Capstone | Actions | Reason |",
+        "|--------|----------|---------|--------|",
+        "| Endpoint base class | `TenantEndpoint` (resolves full `TenantContext` with DB user lookup) | `TenantEndpoint` (JWT claims only: TenantId, UserId, RequestLanguageId, DefaultLanguageId) | No per-request DB lookup needed |",
+        "| Feature grouping | Domain groups (MasterData/, Security/) | Nested by domain (Actions/, Admin/Workflows/, Admin/ComplianceProfiles/) | Actions features group naturally by admin vs operational |",
+        "| Delete result | `ExecuteDeleteAsync` | `CommandResult` | Typed result object with structured error |",
+        "| Grid list route | GET with query params | POST `/grid-list` | Supports complex filter payloads |",
+        "| Delete route | Varies | POST `/delete` | Batch delete with request body |",
+        "| Grid list response | `PagedResult<T>` | `GridListResponse<T>` | Dedicated response type with items + total count |"
+      ],
+      "section_type": "narrative",
+      "sort_order": 6,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:02:30.9220678+00:00"
+    },
+    {
+      "id": "01KXR2QQQH8RW4QFGKTHPW88JF",
+      "title": "See Also",
+      "content": [
+        "- [Feature Implementation](feature-implementation.md) — Complete implementation guide (layer-by-layer)",
+        "- [Endpoints](api-endpoints.md) — Endpoint type matrix, TenantEndpoint base classes, HTTP status mapping",
+        "- [Commands](api-commands.md) — Save/delete/lifecycle command types, child diffing, TOCTOU protection",
+        "- [Queries](api-queries.md) — Query types, QueryParameters builder classes, context reuse",
+        "- [Entity Mapper](entity-mapper.md) — DI-registered `{Entity}EntityMapper` classes, `EntityMapperResult<T>`",
+        "- [DTO Mapper](dto-mapper.md) — DI-registered `{Entity}DTOMapper` classes, `Map()`/`MapGridItem()`",
+        "- [Requests](api-requests.md) — Contract types, NamedDTO/EnumDTO, SaveRequest inherits DTO",
+        "- [Data Context](data-context.md) — DTOMapperDataContext/DTOMapperDataContextService for complex mappers",
+        "- [Entity](api-entity.md) — Base classes, ITenantEntity, EF configuration conventions"
+      ],
+      "section_type": "see-also",
+      "sort_order": 7,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:02:31.1543567+00:00"
+    }
+  ]
+}

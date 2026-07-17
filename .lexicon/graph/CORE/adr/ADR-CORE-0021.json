@@ -1,0 +1,54 @@
+{
+  "id": "01KXR2E3YHHJX75J3BATYF9GWQ",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0021",
+  "title": "Explicit DI Registration — No Reflection Scanning",
+  "slug": "explicit-di-registration-no-reflection-scanning",
+  "number": 21,
+  "context": [
+    "DI registration can be explicit (`services.AddScoped<T>()`) or convention-based (assembly scanning, e.g., Scrutor's `services.Scan(...)`). Convention-based scanning reduces boilerplate but creates debugging difficulties when registration silently fails or picks up unintended types."
+  ],
+  "decision": [
+    "**Explicit registration via per-feature extension methods.** No reflection scanning.",
+    "",
+    "**Structure:**",
+    "- `Bootstrap/Services.cs` — central orchestrator, chains all feature registrations",
+    "- `Bootstrap/Features/{Feature}Extensions.cs` — one static extension method per feature",
+    "- Called from `Program.cs` via `builder.Services.AddServices()`",
+    "",
+    "**Per-feature method registers:**",
+    "- Commands (Save, Delete, Lifecycle)",
+    "- Queries (Get, GridList, Count, Lookup)",
+    "- Mappers (EntityMapper, DTOMapper, DTOMapperDataContextService)",
+    "",
+    "**Rules:**",
+    "- Always `AddScoped` (matches DbContext lifetime, forces stateless design)",
+    "- Endpoints and Validators are auto-discovered by FastEndpoints (framework-mandated, no opt-out, clear naming conventions — distinct from optional DI scanning)",
+    "- `IEntityTypeConfiguration<T>` classes are auto-discovered by EF Core's `ApplyConfigurationsFromAssembly()` (see ADR-0018 — framework-supported, implements a known interface with clear semantics)"
+  ],
+  "consequences": [
+    "**Positive:**",
+    "- Auditable — search for `AddScoped<MyService>` to find (or confirm absence of) registration",
+    "- Compile-time safe — missing registration produces a clear DI resolution error on first request",
+    "- Debuggable — no magic conventions to understand",
+    "- Feature isolation — each feature's registrations are self-contained",
+    "",
+    "**Negative:**",
+    "- Boilerplate — every new command/query/mapper needs a registration line",
+    "- Forgetting registration is caught at runtime, not compile time",
+    "",
+    "**Trade-off accepted:** The boilerplate is mechanical and discoverable. Forgetting registration fails immediately during development (first request to the endpoint). Integration tests that exercise every endpoint catch missing registrations before deployment. Convention scanning failures are silent and insidious."
+  ],
+  "status": "accepted",
+  "origin": "Capstone convention, adopted by Identity (ADR-0024), adopted by Actions on independent merit.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00",
+  "links": [
+    {
+      "id": "01KXR35PA3C771XDR5KJTRYPSC",
+      "target_type": "adr",
+      "target": "ADR-CORE-0024",
+      "rel": "references",
+      "created_at": "2026-07-17T13:10:08.4528914+00:00"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "id": "01KXR2E3Y3HMG3XPZHM0SNNAEZ",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0004",
+  "title": "Enum Over String Constants for System-Owned Status Fields",
+  "slug": "enum-over-string-constants-for-system-owned-status-fields",
+  "number": 4,
+  "context": [
+    "System-owned status, kind, and mode fields appear throughout the Actions domain, such as ActionStatus, WorkflowStateType, ConsultationStatus, import modes, and lifecycle states. These fields need type safety, exhaustive switch handling, and consistent serialization between C# and PostgreSQL. Tenant-configurable catalogues such as Action Types, RCA Methods, Deadline Types, or other admin-owned lookup data are explicitly outside this ADR and must follow ADR-CORE-0028 instead."
+  ],
+  "decision": [
+    "System-owned finite status, kind, and mode fields use C# enums with HasConversion<string>() in EF Core. Enum values are stored as PascalCase strings in PostgreSQL, EnumDTO is used on API contracts for true enum roundtrip, and new code must not introduce const string sets for fields that are truly system-owned finite states. User-configurable lookup/configuration values must not be modeled as enums merely because they appear in dropdowns; they require an owning admin module or immutable platform-template design."
+  ],
+  "consequences": [
+    "Compile-time safety is retained for system-owned states without freezing tenant-configurable configuration into code. Adding a new enum member still requires coordinated deployment and append-only ordinal discipline when EnumDTO is exposed. Admin-owned catalogues carry a larger implementation surface, but clean-system commissioning remains honest and browser E2E can configure tenant data through the Portal."
+  ],
+  "status": "accepted",
+  "origin": "Capstone convention, adopted by Identity (ADR-0004), adopted by Actions on independent merit.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00",
+  "links": [
+    {
+      "id": "01KXR34VEB9T9X8DTYBE7A4XW2",
+      "target_type": "adr",
+      "target": "ADR-CORE-0005",
+      "rel": "references",
+      "created_at": "2026-07-17T13:09:40.9407445+00:00"
+    },
+    {
+      "id": "01KXR2E3YP4WXZ7TYM5Q57HPWH",
+      "target_type": "adr",
+      "target": "ADR-CORE-0028",
+      "rel": "see-also",
+      "created_at": "2026-07-17T12:57:15.9909334+00:00"
+    }
+  ]
+}

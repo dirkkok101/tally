@@ -1,0 +1,26 @@
+{
+  "id": "01KXR31EF7DC9FHG5FYQHKJK84",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "DIAG-CORE-API-KEY-VALIDATION",
+  "title": "API Key Validation Flow",
+  "diagram_type": "sequence",
+  "format": "mermaid",
+  "content": [
+    "sequenceDiagram",
+    "    autonumber",
+    "    participant C as Client",
+    "    participant API as Actions API",
+    "    participant ID as Identity API",
+    "    participant DB as PostgreSQL",
+    "",
+    "    C->>API: GET /api/v1/actions<br/>X-API-Key nxgn_live_a5c5e56x54c44...",
+    "    API->>API: ApiKeyAuthHandler<br/>Detect X-API-Key header<br/>Compute key_hash = SHA-256(full_key)",
+    "    API->>ID: POST /api/v1/apikeys/validate<br/>Body {key_hash}",
+    "    ID-->>API: 200 OK<br/>Body {user_id, tenant_id, scopes}",
+    "    API->>API: Set tenant context<br/>TenantId=tenant_id, ActorId=user_id<br/>SET app.current_tenant = '{tenant_id}'",
+    "    API->>DB: SELECT actions<br/>(RLS-filtered by tenant_id)",
+    "    API-->>C: 200 OK<br/>Body PagedResult<ActionSummaryDTO>",
+    ""
+  ],
+  "created_at": "2026-07-17T13:07:49.3495684+00:00"
+}

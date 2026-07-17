@@ -1,0 +1,28 @@
+{
+  "id": "01KXR31EF8V3PXGE1RGX5179K1",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "DIAG-CORE-STARTUP-REGISTRATION",
+  "title": "Startup Registration with Identity",
+  "diagram_type": "sequence",
+  "format": "mermaid",
+  "content": [
+    "sequenceDiagram",
+    "    autonumber",
+    "    participant API as Actions API",
+    "    participant ID as Identity",
+    "    participant DB as PostgreSQL",
+    "",
+    "    API->>ID: POST /connect/token<br/>grant_type=client_credentials<br/>client_id=nxgn.actions.service",
+    "    ID-->>API: M2M JWT<br/>sub=client_id, scope=tenants:read<br/>(no tenant_id / sid — service-level token)",
+    "    API->>ID: PUT /api/v1/permissions/batch<br/>Authorization Bearer M2M_TOKEN<br/>Body {applicationId, permissions: [22 permission types]}",
+    "    ID-->>API: 200 OK<br/>(idempotent upsert — existing updated, new created)",
+    "    API->>ID: POST /api/v1/applications/{appId}/role-templates<br/>Authorization Bearer M2M_TOKEN<br/>Body [4 default role templates with permission sets]",
+    "    ID-->>API: 200 OK",
+    "    API->>ID: GET /api/v1/organizations/lookup<br/>Authorization Bearer M2M_TOKEN",
+    "    ID-->>API: Tenant list<br/>(auto-filtered to orgs with active AMPS entitlement)",
+    "    API->>DB: UPSERT tenant_configurations<br/>(preserve AMPS-specific: timezone, date format)",
+    "    Note over API,ID: Failure resilience: Steps 3-6 retry with exponential backoff.<br/>Steps 7-9 failure: startup fails, container restarts.",
+    ""
+  ],
+  "created_at": "2026-07-17T13:07:49.3495684+00:00"
+}

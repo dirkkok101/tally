@@ -1,0 +1,53 @@
+{
+  "id": "01KXR2E3YF2H2B6J58MZR0N2K0",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0019",
+  "title": "QueryParameters Builder Pattern",
+  "slug": "queryparameters-builder-pattern",
+  "number": 19,
+  "context": [
+    "Grid/list queries need composable filtering: search, status, type, date ranges, pagination, tracking mode. Scattered `IQueryable<T>` extension methods work for simple cases but become hard to compose when filters interact (e.g., search + status + date range + pagination applied in a specific order)."
+  ],
+  "decision": [
+    "**Use `PagedQueryParameters<T>` base class** with fluent builder methods per feature.",
+    "",
+    "**Base class provides:**",
+    "- `.WithKeys(Guid[] keys)` — filter by primary key set",
+    "- `.WithPagination(int skip, int take)` — pagination",
+    "- `.WithTracking(bool track)` — change tracking toggle",
+    "- `.ApplyFilters(IQueryable<T> query)` — apply all accumulated filters",
+    "- `.ApplyPagination(IQueryable<T> query)` — apply skip/take",
+    "",
+    "**Feature subclasses** override `ApplyFilters()` and add domain-specific fluent methods:",
+    "- `.WithSearch(string? search)` — escaped ILike filtering",
+    "- `.WithStatus(ActionStatus? status)` — enum filtering",
+    "- `.WithParent(Guid? parentId)` — hierarchy filtering",
+    "- etc.",
+    "",
+    "**Query building order:**",
+    "1. `AsSplitQuery()` (if multiple collection includes)",
+    "2. `TagWith(\"ClassName\")` (SQL identification)",
+    "3. `IncludeRelations()` (navigation properties)",
+    "4. `ApplyFilters()` (WHERE + AsNoTracking)",
+    "5. `OrderBy().ThenBy()` (deterministic sorting)",
+    "6. `ApplyPagination()` (Skip/Take)",
+    "",
+    "**Safety:** All user-supplied search input escaped with `EscapeILike()` before `EF.Functions.ILike`."
+  ],
+  "consequences": [
+    "**Positive:**",
+    "- Encapsulates all filter logic per entity in one class",
+    "- Fluent API is self-documenting",
+    "- Pagination and tracking are standardised across all queries",
+    "- ILike injection prevention is built into the base class",
+    "",
+    "**Negative:**",
+    "- More ceremony than bare `IQueryable` extension methods for simple cases",
+    "- Mutable builder state — instances are created per-request (never cached or shared). The builder is not thread-safe. For parallel data+count queries (via `Task.WhenAll`), create two separate `QueryParameters` instances or apply filters to both queries before awaiting.",
+    "",
+    "**Sorting:** Sorting is applied externally after `ApplyFilters()` at step 5 of the query building order. The builder does not own sort configuration — the query class applies `OrderBy().ThenBy()` based on request parameters or defaults."
+  ],
+  "status": "accepted",
+  "origin": "Capstone convention, adopted by Identity (ADR-0019), adopted by Actions for consistency.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00"
+}

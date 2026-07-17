@@ -1,0 +1,46 @@
+{
+  "id": "01KXR2E3YC0GAWZKWHNS60A0CG",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0016",
+  "title": "PascalCase Database Column Naming",
+  "slug": "pascalcase-database-column-naming",
+  "number": 16,
+  "context": [
+    "PostgreSQL convention is snake_case for column names. EF Core's default is PascalCase (matching C# property names). Two approaches:",
+    "",
+    "1. **PascalCase (EF default):** Zero configuration — no `.HasColumnName()` calls. Column names match C# properties exactly. Requires double-quoting in raw SQL.",
+    "2. **snake_case:** Follows PostgreSQL convention. Requires `UseSnakeCaseNamingConvention()` from Npgsql or per-property `.HasColumnName()`. No quoting in raw SQL."
+  ],
+  "decision": [
+    "**Use EF Core's default PascalCase column naming.** No `.HasColumnName()` overrides.",
+    "",
+    "- Column names match C# property names exactly (e.g., `CreatedDate`, `TenantId`, `WorkflowDefinitionId`)",
+    "- Raw SQL (RLS policies, migrations, ad-hoc queries) must use double-quoted identifiers: `\"CreatedDate\"`",
+    "- Consistent with Capstone and Identity codebases"
+  ],
+  "consequences": [
+    "**Positive:**",
+    "- Zero configuration — no `.HasColumnName()` calls, no naming convention package to configure",
+    "- Column names are predictable from C# code (no mental snake_case translation)",
+    "",
+    "**Negative:**",
+    "- Raw SQL requires double-quoting: `SELECT \"CreatedDate\" FROM \"actions\".\"ActionEntities\"`",
+    "- Deviates from PostgreSQL community convention (snake_case is idiomatic)",
+    "- RLS policies are long-lived security-critical SQL that will carry the quoting burden permanently",
+    "- Third-party SQL tools (pgAdmin, Metabase, psql) generate unquoted identifiers by default, which fail against PascalCase columns",
+    "",
+    "**Trade-off accepted:** The zero-configuration benefit and cross-project consistency with Capstone and Identity outweigh the quoting cost. Raw SQL in this codebase is limited to RLS policies, data migrations, and occasional debugging. Developers working in psql or third-party tools must remember to quote identifiers."
+  ],
+  "status": "accepted",
+  "origin": "Capstone convention, adopted by Identity (ADR-0017), adopted by Actions for cross-project consistency.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00",
+  "links": [
+    {
+      "id": "01KXR35HSV8M8SRTTE3XR4MPHJ",
+      "target_type": "adr",
+      "target": "ADR-CORE-0017",
+      "rel": "references",
+      "created_at": "2026-07-17T13:10:03.8370761+00:00"
+    }
+  ]
+}

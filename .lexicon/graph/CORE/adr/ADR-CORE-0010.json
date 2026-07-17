@@ -1,0 +1,81 @@
+{
+  "id": "01KXR2E3Y7DB71F8178QX5C3FA",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0010",
+  "title": "CommandResult Pattern for Commands",
+  "slug": "commandresult-pattern-for-commands",
+  "number": 10,
+  "context": [
+    "Commands need to communicate success, failure, and structured error information to endpoints. Three approaches were evaluated:",
+    "",
+    "1. **Exceptions** — standard .NET but conflates expected domain outcomes (not found, protected entity) with unexpected failures. Expensive, hard to pattern-match.",
+    "2. **OneOf discriminated unions** — used by Identity. Type-safe but adds a library dependency (`OneOf`), and the exhaustive match syntax is verbose for simple success/failure.",
+    "3. **CommandResult records** — lightweight, no dependencies, consistent error shape with HTTP status code mapping."
+  ],
+  "decision": [
+    "All commands return **CommandResult** variants. No OneOf. No exceptions for expected domain outcomes.",
+    "",
+    "```csharp",
+    "public readonly record struct CommandError(string Code, string Message, int StatusCode = 400);",
+    "",
+    "public record CommandResult",
+    "{",
+    "    public CommandError? Error { get; init; }",
+    "    public bool Succeeded => Error is null;",
+    "    public static readonly CommandResult Success = new();",
+    "    public static CommandResult Fail(string code, string message, int statusCode = 400) => ...;",
+    "}",
+    "",
+    "public record CommandResult<T> : CommandResult",
+    "{",
+    "    public T? Value { get; init; }",
+    "    public static CommandResult<T> Ok(T value) => ...;",
+    "    public new static CommandResult<T> Fail(string code, string message, int statusCode = 400) => ...;",
+    "}",
+    "```",
+    "",
+    "**Command type → return type mapping:**",
+    "- Save → `CommandResult<EntityMapperResult<T>>`",
+    "- Delete → `CommandResult`",
+    "- Lifecycle/Action → `CommandResult` or `CommandResult<T>`",
+    "",
+    "**Error codes** use `{MODULE}-{NNN}` format (e.g., `ACTION-001` for not found, `ACTION-002` for uniqueness conflict, `ACTION-003` for protection violation).",
+    "",
+    "**Endpoint consumption:**",
+    "```csharp",
+    "if (!result.Succeeded) { await SendProblemAsync(result.Error); return; }",
+    "```"
+  ],
+  "consequences": [
+    "**Positive:**",
+    "- Zero library dependencies",
+    "- Consistent error shape with code, message, and HTTP status",
+    "- Endpoints map errors to HTTP responses mechanically",
+    "- Error codes are greppable across the codebase",
+    "",
+    "**Negative:**",
+    "- No compile-time exhaustiveness (unlike OneOf's `.Match()`)",
+    "- Caller must check `Succeeded` before accessing `Value`. On a failed result, `Value` is `default(T)` — null for reference types, default for value types. Accessing without checking produces `NullReferenceException`. Consider adding `[MemberNotNullWhen(true, nameof(Value))]` for nullable analysis support.",
+    "",
+    "**Error code registry:** Error codes are documented per command in a comment block. Codes must be unique within the module. See also ADR-0025 for how CommandResult maps to RFC 9457 ProblemDetails on the wire.",
+    "",
+    "**Trade-off accepted:** The consistency and simplicity benefits outweigh the loss of exhaustive matching. Expected domain errors are few and well-documented per command."
+  ],
+  "alternatives": [
+    "1. **Exceptions** — standard .NET but conflates expected domain outcomes (not found, protected entity) with unexpected failures. Expensive, hard to pattern-match.",
+    "2. **OneOf discriminated unions** — used by Identity. Type-safe but adds a library dependency (`OneOf`), and the exhaustive match syntax is verbose for simple success/failure.",
+    "3. **CommandResult records** — lightweight, no dependencies, consistent error shape with HTTP status code mapping."
+  ],
+  "status": "accepted",
+  "origin": "New Actions decision, replacing Identity's OneOf pattern.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00",
+  "links": [
+    {
+      "id": "01KXR35C729KJPTS9R529J849E",
+      "target_type": "adr",
+      "target": "ADR-CORE-0025",
+      "rel": "references",
+      "created_at": "2026-07-17T13:09:58.1147709+00:00"
+    }
+  ]
+}

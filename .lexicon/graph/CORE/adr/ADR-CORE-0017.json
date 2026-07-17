@@ -1,0 +1,67 @@
+{
+  "id": "01KXR2E3YDQ4C9QBHVKFRV7SF6",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0017",
+  "title": "POST for Grid List Endpoints",
+  "slug": "post-for-grid-list-endpoints",
+  "number": 17,
+  "context": [
+    "Grid/list endpoints need to accept complex filter payloads: pagination (page, pageSize), sorting, search text, multi-select enum filters (EnumDTO arrays), date ranges, and nested filter objects. These payloads are awkward in query strings, especially with EnumDTO objects."
+  ],
+  "decision": [
+    "All grid-list endpoints use **POST** with the grid request payload in the request body.",
+    "",
+    "Canonical route:",
+    "",
+    "```http",
+    "POST /api/v1/{entities}/grid-list",
+    "```",
+    "",
+    "This route is the documented API surface for server-side paging, sorting, filtering, and search from `nxgn-data-grid` and related grid clients.",
+    "",
+    "Compatibility aliases may be registered only to preserve existing clients or known UI experiments:",
+    "",
+    "```http",
+    "POST /api/v1/{entities}/grid",
+    "POST /api/v1/{entities}/server-grid",
+    "```",
+    "",
+    "Aliases are additive. They must call the same handler as `grid-list`, and frontend constants, PRDs, designs, tests, and new documentation should point to `grid-list`.",
+    "",
+    "Do not introduce new `/list` grid routes. Lookup/dropdown endpoints remain separate and may use `GET` when query parameters are sufficient."
+  ],
+  "consequences": [
+    "**Positive:**",
+    "- Complex grid requests can carry filters, sort descriptors, search text, paging, and future metadata without URL length limits.",
+    "- `grid-list` names the route by its UI/API contract instead of implying a general list or lookup endpoint.",
+    "- Compatibility aliases allow older UI code to keep working while docs and new modules converge.",
+    "",
+    "**Negative:**",
+    "- POST grid-list routes require clients and tests to avoid assuming all reads are GET requests.",
+    "- Route aliases can hide drift if teams document or test the alias instead of the canonical `grid-list` route.",
+    "",
+    "**Mitigation:**",
+    "- Treat `grid-list` as the only canonical route in generated clients, frontend route constants, browser plans, and API docs.",
+    "- Keep aliases in endpoint registration only when there is an explicit compatibility reason.",
+    "- Integration tests should cover the canonical route; alias tests should be narrow compatibility tests."
+  ],
+  "status": "accepted",
+  "origin": "Capstone convention, adopted by Identity (ADR-0020), adopted by Actions for filter complexity.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00",
+  "links": [
+    {
+      "id": "01KXR34ZD01EGSJ626RF1EYQZ5",
+      "target_type": "adr",
+      "target": "ADR-CORE-0005",
+      "rel": "references",
+      "created_at": "2026-07-17T13:09:44.9930933+00:00"
+    },
+    {
+      "id": "01KXR35JGHHQAR8S89QN433ENA",
+      "target_type": "adr",
+      "target": "ADR-CORE-0020",
+      "rel": "references",
+      "created_at": "2026-07-17T13:10:04.5630900+00:00"
+    }
+  ]
+}

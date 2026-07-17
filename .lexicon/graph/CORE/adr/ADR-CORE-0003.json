@@ -1,0 +1,39 @@
+{
+  "id": "01KXR2E3Y2GJQ741WMDFKGB560",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0003",
+  "title": "Dual Identifier Endpoints (UUID + Slug)",
+  "slug": "dual-identifier-endpoints-uuid-slug",
+  "number": 3,
+  "context": [
+    "Actions serves three interface surfaces: Web (Angular), CLI, and MCP. Web consumers work naturally with UUIDs. CLI and MCP consumers benefit from human-readable slugs — `workflow-definitions/corrective-action-v2` is more ergonomic than `workflow-definitions/a1b2c3d4-...`.",
+    "",
+    "Requiring a separate resolve-by-slug endpoint adds an extra round-trip for CLI/MCP consumers on every operation."
+  ],
+  "decision": [
+    "**All entity API endpoints accept both UUID and slug identifiers.** Format detection disambiguates — UUID format is unambiguous (8-4-4-4-12 hex pattern), so anything that doesn't match UUID is treated as a slug.",
+    "",
+    "- Slugs are unique within entity type and tenant scope, enforced by a composite unique index on `(TenantId, Slug)` per entity table",
+    "- Slugs are immutable after creation (enforced by EntityMapper — slug property is set on create, intentionally omitted on update). Changing a slug would break CLI scripts and bookmarks.",
+    "- Slugs must not parse as valid UUIDs. Validation rejects slugs matching the UUID format pattern.",
+    "- Slug format: lowercase-kebab-case, max 128 characters, `[a-z0-9]([a-z0-9-]*[a-z0-9])?` pattern",
+    "- Web UI uses UUIDs; CLI and MCP use slugs",
+    "- Lookup endpoints return both UUID and slug in responses"
+  ],
+  "consequences": [
+    "**Positive:**",
+    "- Single endpoint serves all consumers — no separate slug-resolution API",
+    "- CLI/MCP workflows are human-readable and scriptable",
+    "- Zero cost for web consumers (UUIDs work unchanged)",
+    "",
+    "**Negative:**",
+    "- Every entity endpoint has implicit format-detection logic (cross-cutting concern)",
+    "- Slug immutability is a permanent constraint — renaming requires creating a new entity",
+    "- Query layer must support lookup by either identifier type",
+    "",
+    "**Trade-off accepted:** CLI and MCP are confirmed interface surfaces. The format-detection cost is paid once in the base query infrastructure and amortised across all features."
+  ],
+  "status": "accepted",
+  "origin": "Identity convention (ADR-0003), adopted by Actions for confirmed CLI/MCP requirement.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00"
+}

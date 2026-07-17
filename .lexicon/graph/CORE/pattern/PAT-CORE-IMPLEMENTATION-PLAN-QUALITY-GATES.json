@@ -1,0 +1,187 @@
+{
+  "id": "01KXR2EKKXYFFP0KNEYZGETEVG",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES",
+  "title": "Implementation Plan Quality Gates",
+  "slug": "implementation-plan-quality-gates",
+  "purpose": [
+    "Plans must prove conformance to PRD acceptance criteria, linked design decisions, ADRs, patterns, and repo-specific integration contracts before beads are created."
+  ],
+  "category": "planning",
+  "origin": "Action Core adversarial review, 2026-05-04",
+  "status": "current",
+  "created_at": "2026-07-17T12:57:32.0030626+00:00",
+  "examples": [
+    {
+      "id": "01KXR2S2FJS1Z4ACM22MFNENHN",
+      "name": "Gate-backed planning task",
+      "description": [
+        "The task names the PRD/design/pattern source, concrete files, and verification instead of relying on a broad translation placeholder."
+      ],
+      "code": "T042 Implement Action translation keys\nRefs: FR-ACTION-AUDIT-TRAIL, DD-ACTION-PERMISSIONS-TRANSLATIONS-UI-CONTRACT, PAT-CORE-WEB-TRANSLATIONS\nFiles: ActionsTranslationKeys.cs, ApplicationTranslationKeyRegistry.cs, ApplicationTranslationCatalogue.cs, translation-key.models.ts, actions-translation-keys.ts\nVerify: registry coverage test fails on missing key and seeded catalogue contains every module key.",
+      "language": "markdown",
+      "is_counter": 0,
+      "sort_order": 10,
+      "created_at": "2026-07-17T13:03:14.9351640+00:00"
+    },
+    {
+      "id": "01KXR2S2Q62KK64H55EP148ZRG",
+      "name": "Broad cross-cutting placeholder",
+      "description": [
+        "This hides separate permission, navigation, translation, UI component, aggregate-state, and fixture obligations, so beads created from the task will miss required work."
+      ],
+      "code": "T042 Wire UI, translations, and permissions.\nVerify: run tests.",
+      "language": "markdown",
+      "is_counter": 1,
+      "sort_order": 20,
+      "created_at": "2026-07-17T13:03:15.1756269+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KXR3613B0SK38KEN89JA1EAR",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-COMMANDS",
+      "rel": "references",
+      "created_at": "2026-07-17T13:10:19.5005814+00:00"
+    },
+    {
+      "id": "01KXR361FY674SKVN2VQJ662QG",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-DTO-MAPPER",
+      "rel": "references",
+      "created_at": "2026-07-17T13:10:19.9038468+00:00"
+    },
+    {
+      "id": "01KXR362D7NZ3JFBC1YSA6970H",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-ENDPOINTS",
+      "rel": "references",
+      "created_at": "2026-07-17T13:10:20.8423894+00:00"
+    },
+    {
+      "id": "01KXR362VD91PERJXEBY2FXTPQ",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-ENTITY-MAPPER",
+      "rel": "references",
+      "created_at": "2026-07-17T13:10:21.2949416+00:00"
+    },
+    {
+      "id": "01KXR3635NPYAH142Q8Y242W6A",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-QUERIES",
+      "rel": "references",
+      "created_at": "2026-07-17T13:10:21.6227917+00:00"
+    },
+    {
+      "id": "01KXR363G0GVBGSBM7QHQDNPHP",
+      "target_type": "pattern",
+      "target": "PAT-CORE-WEB-TRANSLATIONS",
+      "rel": "references",
+      "created_at": "2026-07-17T13:10:21.9530880+00:00"
+    },
+    {
+      "id": "01KXR363YA81275VSXD6W5DWMZ",
+      "target_type": "pattern",
+      "target": "PAT-CORE-WEB-UI-COMPONENTS",
+      "rel": "references",
+      "created_at": "2026-07-17T13:10:22.4121796+00:00"
+    }
+  ],
+  "rules": [
+    {
+      "id": "01KXR2S2ZDGA2T1NPTCQFT52QA",
+      "rule_text": "A plan must include an acceptance-criteria parity table that maps every active PRD acceptance criterion to a concrete task, a linked test case, or an explicit documented deferral with the downstream owner and prerequisite design artifact.",
+      "rule_type": "must",
+      "sort_order": 10,
+      "created_at": "2026-07-17T13:03:15.4387191+00:00"
+    },
+    {
+      "id": "01KXR2S36M041M1B14GW8YPCJJ",
+      "rule_text": "A plan must load and cite linked ADRs, architecture documents, and patterns for the module, then create file-scoped tasks for each implementation obligation those artifacts impose.",
+      "rule_type": "must",
+      "sort_order": 20,
+      "created_at": "2026-07-17T13:03:15.6698183+00:00"
+    },
+    {
+      "id": "01KXR2S3GA5QW5N3AQWN5BCY94",
+      "rule_text": "A plan must run and record the module health checks: lex coverage, lex link suggest, lex endpoint suggest, lex decision path-check, and lex external-dependency check.",
+      "rule_type": "must",
+      "sort_order": 30,
+      "created_at": "2026-07-17T13:03:15.9800077+00:00"
+    },
+    {
+      "id": "01KXR2S3TRERSF55XAM7YCJ7RM",
+      "rule_text": "A plan that introduces or changes feature APIs must name endpoint classes, request/response DTOs, commands, queries, validators, DTOMapper, EntityMapper, and tests using the repo endpoint conventions: Get, Save, GetGridList, GetLookupList, Delete, plus domain command endpoints for non-CRUD transitions.",
+      "rule_type": "must",
+      "sort_order": 40,
+      "created_at": "2026-07-17T13:03:16.3190848+00:00"
+    },
+    {
+      "id": "01KXR2S43ANX12A6SXM9Z6C5T0",
+      "rule_text": "A plan that touches command/query handlers must include the optional dbContext pattern: accept an optional shared DbContext, create one through IDbContextFactory when null, own disposal only for locally-created contexts, and preserve the caller-owned context for transactional composition.",
+      "rule_type": "must",
+      "sort_order": 50,
+      "created_at": "2026-07-17T13:03:16.5896716+00:00"
+    },
+    {
+      "id": "01KXR2S4DBEXEG96R554QJ6XA0",
+      "rule_text": "A plan with UI work must identify the owning UI design, use nxgn.ui components, include client-side aggregate-root state and parallel lookup loading, register routes and menu items, and align the screen structure with existing module list/capture designs.",
+      "rule_type": "must",
+      "sort_order": 60,
+      "created_at": "2026-07-17T13:03:16.9094666+00:00"
+    },
+    {
+      "id": "01KXR2S4NF3PFDADJVCJXK7YJG",
+      "rule_text": "A plan with permissions must include seed and verification tasks for the permission constants, permission catalogue, role template definitions, navigation seed gates, frontend permission constants, and at least one test proving seeded personas receive the intended grants.",
+      "rule_type": "must",
+      "sort_order": 70,
+      "created_at": "2026-07-17T13:03:17.1685500+00:00"
+    },
+    {
+      "id": "01KXR2S4YESPSAETPDAAZ1TYT9",
+      "rule_text": "A plan with translation keys must include backend contract keys, key registry, seeded catalogue values, frontend key models, module test translation constants, and fixture coverage assertions so missing keys fail in tests before browser E2E.",
+      "rule_type": "must",
+      "sort_order": 80,
+      "created_at": "2026-07-17T13:03:17.4551621+00:00"
+    },
+    {
+      "id": "01KXR2S56VQQDFZGB4NZY717G4",
+      "rule_text": "Do not mark a plan bead-ready when it only has FR-to-task coverage; missing ADR, pattern, permission, translation, endpoint naming, mapper, UI alignment, or seeding gates are plan defects.",
+      "rule_type": "must_not",
+      "sort_order": 90,
+      "created_at": "2026-07-17T13:03:17.7270964+00:00"
+    },
+    {
+      "id": "01KXR2S5GAP8P0GKQWNZNC1T0Z",
+      "rule_text": "Do not hide missing implementation scope behind broad tasks such as 'wire UI', 'add translations', 'seed permissions', or 'follow patterns'; each cross-cutting obligation must have an explicit task and verification step.",
+      "rule_type": "must_not",
+      "sort_order": 100,
+      "created_at": "2026-07-17T13:03:18.0272634+00:00"
+    }
+  ],
+  "sections": [
+    {
+      "id": "01KXR2S1YF6SJ0J1S991S063HE",
+      "title": "Planning Contract",
+      "content": [
+        "A plan must be a conformance document, not only a work breakdown. It should identify every active PRD acceptance criterion that creates implementation work, every linked design decision that constrains implementation, and every linked ADR or pattern that imposes a file-level or behavior-level obligation. Any intentionally deferred work must name the downstream module, owning design, and blocking artifact instead of being silently omitted."
+      ],
+      "section_type": "narrative",
+      "sort_order": 0,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:03:14.3848125+00:00"
+    },
+    {
+      "id": "01KXR2S27DR3EXX0VEJS8YPC3H",
+      "title": "Required Review Gates",
+      "content": [
+        "Before a plan is accepted, run the Lex health checks for the module and review the plan against these gates: PRD acceptance-criteria parity, design-decision parity, ADR and pattern parity, endpoint naming, CQRS and mapper separation, optional dbContext usage, permission and navigation seeding, translation key registration and seeded values, UI component alignment, client-side aggregate-root state, and test/evidence coverage. A gate may be marked not applicable only when the linked PRD or design explicitly excludes the work."
+      ],
+      "section_type": "narrative",
+      "sort_order": 0,
+      "heading_level": 2,
+      "created_at": "2026-07-17T13:03:14.6702873+00:00"
+    }
+  ]
+}

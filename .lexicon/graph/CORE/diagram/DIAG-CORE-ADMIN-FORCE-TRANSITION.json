@@ -1,0 +1,28 @@
+{
+  "id": "01KXR31EF6JP0F1Y1D2RPAFC7S",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "DIAG-CORE-ADMIN-FORCE-TRANSITION",
+  "title": "Admin Force Transition",
+  "diagram_type": "sequence",
+  "format": "mermaid",
+  "content": [
+    "sequenceDiagram",
+    "    autonumber",
+    "    participant A as Admin Browser",
+    "    participant BFF",
+    "    participant API as Actions API",
+    "    participant DB as PostgreSQL",
+    "",
+    "    A->>BFF: POST /api/admin/actions/{id}/force-transition<br/>Cookie __Host-actions<br/>Body {toState, reason}<br/>(reason ≥ 50 characters, required)",
+    "    BFF->>API: POST /api/v1/admin/actions/{id}/force-transition<br/>Authorization Bearer JWT",
+    "    API->>API: Verify permission from JWT claims<br/>Require actions.admin.force_transition<br/>Missing → 403 Forbidden",
+    "    API->>DB: SELECT action WHERE id=@id (RLS)",
+    "    API->>DB: UPDATE action<br/>SET current_state=@toState, version=version+1<br/>(NO guard evaluation — bypassed for force transitions)",
+    "    API->>DB: INSERT state_history<br/>from_state, to_state, force_transition=true<br/>actor=admin user_id, reason",
+    "    API->>DB: INSERT audit_event<br/>action.force_transitioned<br/>details {action_id, from_state, to_state, admin_id, reason}<br/>(force transitions prominently flagged in audit trail)",
+    "    API-->>BFF: 200 OK<br/>Body updated ActionDTO",
+    "    BFF-->>A: 200 OK<br/>Body updated ActionDTO",
+    ""
+  ],
+  "created_at": "2026-07-17T13:07:49.3495684+00:00"
+}

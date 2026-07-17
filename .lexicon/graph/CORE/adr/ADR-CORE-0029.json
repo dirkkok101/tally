@@ -1,0 +1,48 @@
+{
+  "id": "01KXR2E3YQZB12BVP7DD2P1SJG",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0029",
+  "title": "Keep action classification bands as platform-owned enums",
+  "slug": "keep-action-classification-bands-as-platform-owned-enums",
+  "number": 29,
+  "context": [
+    "ADR-CORE-0004 permits C# enums for system-owned finite states, while ADR-CORE-0028 requires owning admin modules for tenant-configurable lookup data. Browser E2E and clean-client commissioning raised whether Priority, RiskLevel, SourceSystem, EvidenceType, and HierarchyOfControls are tenant-configurable. These fields drive escalation matrices, compliance guard logic, M2M application isolation, evidence upload semantics, and safety-control ordering across multiple modules. Treating them as tenant rows would make guards, reports, integrations, and cross-tenant behavior depend on mutable configuration rather than a stable platform contract."
+  ],
+  "decision": [
+    "Priority, RiskLevel, SourceSystem, EvidenceType, and HierarchyOfControls are platform-owned finite classifications and must remain C# enums stored with EF HasConversion<string>() unless a future accepted ADR supersedes this decision. Tenants configure behavior around these classifications through owner modules such as Escalation Rules and Compliance Profiles, but they do not create, rename, delete, or reorder the classifications themselves. RiskLevel remains the canonical platform band set Low, Moderate, High, Extreme for guard and reporting semantics. If clients need custom risk scoring, labels, or likelihood x consequence matrices, introduce a dedicated tenant Risk Matrix admin module that maps tenant-specific rows to these canonical bands rather than replacing the canonical enum. SourceSystem is an integration identity/app-isolation concept, not a tenant lookup; adding a new source system requires a platform integration decision and Identity/application registration alignment. EvidenceType is an evidence media/category contract for upload semantics, not a tenant document-type catalogue. HierarchyOfControls follows the fixed safety-control hierarchy used by ISO 45001/NIOSH/OSHA guidance; tenants configure whether and when HoC enforcement applies, not the hierarchy values."
+  ],
+  "consequences": [
+    "No admin modules are required for these five classifications. Existing enum lookup endpoints and translation keys remain valid for display, while mutable tenant setup remains focused on true owner modules. Guard evaluation, escalation rules, app isolation, reporting, and browser E2E stay deterministic across tenants. The trade-off is that tenant-specific risk or evidence terminology cannot be represented by editing these enum values; that requirement must be modeled as a separate owner module with explicit canonical mapping if it becomes product scope."
+  ],
+  "alternatives": [
+    "Make every dropdown tenant-configurable: rejected because it would add admin surfaces for platform semantics and break deterministic cross-module behavior. Add mutable seed rows only for tests: rejected by ADR-CORE-0028 because it hides missing product surfaces. Replace RiskLevel with tenant risk matrices immediately: rejected because current PRDs only require canonical high/extreme guard behavior and do not define a risk-matrix module. Treat SourceSystem as tenant data: rejected because M2M app isolation and Identity client registration are platform integration contracts. Treat HierarchyOfControls as tenant data: rejected because the ordered hierarchy is a regulatory/safety framework, while enforcement configuration already belongs to Compliance Profiles."
+  ],
+  "status": "accepted",
+  "date": "2026-05-04",
+  "deciders": "AMPS architecture",
+  "origin": "Research requested 2026-05-04 after clean-system E2E lookup review.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00",
+  "links": [
+    {
+      "id": "01KXR2E3YQVMB629D8ZEJHPKHC",
+      "target_type": "adr",
+      "target": "ADR-CORE-0004",
+      "rel": "see-also",
+      "created_at": "2026-07-17T12:57:15.9918634+00:00"
+    },
+    {
+      "id": "01KXR2E3YQND4AB6D35FK0Y9N8",
+      "target_type": "adr",
+      "target": "ADR-CORE-0028",
+      "rel": "see-also",
+      "created_at": "2026-07-17T12:57:15.9919398+00:00"
+    },
+    {
+      "id": "01KXR35VQN1J0RZW5048EWAQWP",
+      "target_type": "pattern",
+      "target": "PAT-CORE-CONFIGURATION-OWNERSHIP-E2E-DATA",
+      "rel": "clarifies",
+      "created_at": "2026-07-17T13:10:14.0065185+00:00"
+    }
+  ]
+}

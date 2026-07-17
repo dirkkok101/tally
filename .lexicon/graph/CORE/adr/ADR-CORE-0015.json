@@ -1,0 +1,45 @@
+{
+  "id": "01KXR2E3YCA97J2SQAHD7HS9NF",
+  "module_id": "01KXR2C3RACFENBCQ800YKK351",
+  "ref_code": "ADR-CORE-0015",
+  "title": "Child Routes Preferred for Entity Capture",
+  "slug": "child-routes-preferred-for-entity-capture",
+  "number": 15,
+  "context": [
+    "Entity capture (add/edit forms) can be presented via modals or child routes. Each has trade-offs:",
+    "",
+    "**Modals:** Quick to implement for simple forms. No URL change. But: not deep-linkable, no browser back/forward, can't nest further child routes, complex state management for large forms.",
+    "",
+    "**Child routes:** Deep-linkable URLs, browser navigation works, can nest further children, CaptureState service manages parent-child data flow. But: more infrastructure per form (route config, CaptureState, CSS hide parent)."
+  ],
+  "decision": [
+    "**Child routes are the default for entity capture.** Modals are permitted for simple cases.",
+    "",
+    "**Use child routes when:**",
+    "- Form has 3+ fields",
+    "- Form has nested data (child collections, tabs)",
+    "- Deep linking is valuable (bookmarkable edit URL)",
+    "- Further child routes are needed (e.g., evidence upload within action capture)",
+    "",
+    "**Use modals when:**",
+    "- Simple 1-2 field edit (e.g., quick status change, inline rename)",
+    "- Confirmation dialogs (delete confirmation, \"are you sure\" prompts)",
+    "- One-time-display data (success summary, generated key display)",
+    "",
+    "**CaptureState pattern:** Component-scoped `@Injectable()` with signal state. Parent populates on load; child routes inject and update. Parent hides content via `[class.d-none]` (not `@if` — preserves state service instance)."
+  ],
+  "consequences": [
+    "**Positive:**",
+    "- Consistent navigation model — URLs reflect application state",
+    "- Browser back/forward/refresh work correctly",
+    "- CaptureState enables parent-child data sharing without prop drilling",
+    "- Nested child routes support complex aggregates (action → evidence → upload)",
+    "",
+    "**Negative:**",
+    "- More infrastructure than modals for simple cases (route config, state service, CSS hiding)",
+    "- Parent stays in memory when hidden (acceptable — signals are lightweight)"
+  ],
+  "status": "accepted",
+  "origin": "Identity convention (ADR-0015), softened for Actions with explicit modal escape hatch.",
+  "created_at": "2026-07-17T12:57:15.9677334+00:00"
+}
