@@ -1,0 +1,7 @@
+{
+  "id": "01KXR50Z0F1FTK67HWD613EKQF",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "condition": "At discovery or design, a useful Ledger baseline is shown to require retained online-banking credentials, a hosted service, or a continuously running daemon; stop and reframe the product boundary before PRD or plan work continues.",
+  "monitored": 1,
+  "created_at": "2026-07-17T13:42:30.6720639+00:00"
+}

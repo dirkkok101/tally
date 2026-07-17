@@ -1,0 +1,11 @@
+{
+  "id": "01KXR55K6YSDW4A786WJKCTTTP",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "OQ-LEDGER-12",
+  "question": "Can an existing finance CLI satisfy the six LEDGER goals through public commands and a thin Tally adapter?",
+  "context": [
+    "A positive answer triggers the monitored do-less kill criterion and avoids unnecessary custom ledger maintenance."
+  ],
+  "status": "open",
+  "created_at": "2026-07-17T13:45:02.4312586+00:00"
+}

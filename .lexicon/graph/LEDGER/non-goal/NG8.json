@@ -1,0 +1,12 @@
+{
+  "id": "01KXR4ZB2CGGK3DE7DB7EX2TVZ",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "NG8",
+  "text": [
+    "Perform bank balance reconciliation, cash-flow forecasting, or payment scheduling in the first Ledger release."
+  ],
+  "rationale": [
+    "These are separable future concerns and are not required to establish trustworthy spend actuals."
+  ],
+  "created_at": "2026-07-17T13:41:37.4855217+00:00"
+}

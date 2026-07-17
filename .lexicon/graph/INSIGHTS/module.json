@@ -1,0 +1,49 @@
+{
+  "id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "project_id": "01KXR2C3JQBT2WPM9JCSA9JMXD",
+  "name": "Budget Insights",
+  "code": "INSIGHTS",
+  "scope": "standard",
+  "description": [
+    "Owns analytics, projections, and daily, weekly, and monthly reporting. Awaiting its own brainstorm."
+  ],
+  "problem_statement": [
+    "Raw transactions and monthly budget amounts do not tell Dirk whether spending pace is on track at daily, weekly, and monthly intervals or which categories require attention."
+  ],
+  "why_now": [
+    "Once ledger and budget data exist, concise periodic analysis is the primary user outcome."
+  ],
+  "created_at": "2026-07-17T13:40:10.2544357+00:00",
+  "dependencies": [
+    {
+      "id": "01KXR4X4JTFAC2H24BYBJAEZ2C",
+      "project_id": "01KXR2C3JQBT2WPM9JCSA9JMXD",
+      "target": "BUDGET",
+      "kind": "hard",
+      "rationale": [
+        "On-track analysis compares actual spend with monthly category budgets."
+      ],
+      "created_at": "2026-07-17T13:40:25.3072771+00:00"
+    },
+    {
+      "id": "01KXR4X4VN3FHESFQE0A8EMA6Z",
+      "project_id": "01KXR2C3JQBT2WPM9JCSA9JMXD",
+      "target": "CLASSIFY",
+      "kind": "soft",
+      "rationale": [
+        "Classification quality improves category analytics, while uncategorized spend can still be reported explicitly."
+      ],
+      "created_at": "2026-07-17T13:40:25.5904372+00:00"
+    },
+    {
+      "id": "01KXR4X4A7MTY528HPN4VE7XQY",
+      "project_id": "01KXR2C3JQBT2WPM9JCSA9JMXD",
+      "target": "LEDGER",
+      "kind": "hard",
+      "rationale": [
+        "Spend analysis is calculated from canonical transactions."
+      ],
+      "created_at": "2026-07-17T13:40:25.0325353+00:00"
+    }
+  ]
+}

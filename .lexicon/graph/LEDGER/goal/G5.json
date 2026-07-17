@@ -1,0 +1,10 @@
+{
+  "id": "01KXR4YW5SE4E66HPDD4DPTMAX",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "G5",
+  "text": [
+    "Expose non-interactive, self-documenting commands that AI agents can discover and invoke safely."
+  ],
+  "target": "Every Ledger command provides help and machine-readable schema, accepts deterministic non-interactive input, emits JSON results and structured errors, and uses stable exit codes.",
+  "created_at": "2026-07-17T13:41:22.2342035+00:00"
+}

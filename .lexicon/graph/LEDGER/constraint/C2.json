@@ -1,0 +1,11 @@
+{
+  "id": "01KXR50MWG2AMR5AF0B58E0GBF",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "C2",
+  "title": "Agent-facing command contract",
+  "description": [
+    "Commands must be non-interactive by default for agents, self-documenting through help and machine-readable schemas, support JSON input and output where structured data is involved, return structured errors, and use deterministic exit codes."
+  ],
+  "type": "technical",
+  "created_at": "2026-07-17T13:42:20.3059268+00:00"
+}

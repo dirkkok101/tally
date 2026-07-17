@@ -1,0 +1,10 @@
+{
+  "id": "01KXR4YVKJTC7E1J6Z0C4FHST7",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "G2",
+  "text": [
+    "Record canonical transaction facts without losing financial precision or source provenance."
+  ],
+  "target": "Every accepted transaction round-trips its account, original description, exact base-10 amount, currency, effective date, and stable reference with no binary rounding.",
+  "created_at": "2026-07-17T13:41:21.6514130+00:00"
+}

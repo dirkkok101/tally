@@ -1,0 +1,9 @@
+{
+  "id": "01KXR5601K12VS33BDG0GPP54S",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "term": "Owned Bank Account",
+  "definition": [
+    "A local record representing one of Dirk's accounts at a financial institution, identified without storing login credentials or an unmasked secret account number."
+  ],
+  "created_at": "2026-07-17T13:45:15.5725830+00:00"
+}

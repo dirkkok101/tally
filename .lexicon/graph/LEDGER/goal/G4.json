@@ -1,0 +1,10 @@
+{
+  "id": "01KXR4YW0CN386M49PFTTPMWNM",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "G4",
+  "text": [
+    "Prevent movements between the user's own accounts from being counted as external spend."
+  ],
+  "target": "Related transfer legs can be linked and excluded from spend totals while both bank-side transaction facts remain present.",
+  "created_at": "2026-07-17T13:41:22.0616965+00:00"
+}

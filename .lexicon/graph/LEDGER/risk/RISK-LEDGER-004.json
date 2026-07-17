@@ -1,0 +1,14 @@
+{
+  "id": "01KXR54SMJJ4N20TBXGN3XYV5E",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "RISK-LEDGER-004",
+  "description": [
+    "CLI JSON schemas, exit codes, or command names could drift from the bundled AI skills and silently break agent workflows."
+  ],
+  "likelihood": "Medium",
+  "impact": "High",
+  "mitigation": [
+    "Version public command schemas and skills together, expose machine-readable schemas, and add compatibility tests for representative agent invocations."
+  ],
+  "created_at": "2026-07-17T13:44:36.2434410+00:00"
+}

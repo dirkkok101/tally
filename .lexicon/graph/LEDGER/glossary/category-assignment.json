@@ -1,0 +1,9 @@
+{
+  "id": "01KXR560HZXYH8B074NZ0VDVGZ",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "term": "Category Assignment",
+  "definition": [
+    "The attributable relationship between a transaction and a spend category, including whether it was manual, rule-based, suggested, or corrected when that information is available."
+  ],
+  "created_at": "2026-07-17T13:45:16.0958454+00:00"
+}

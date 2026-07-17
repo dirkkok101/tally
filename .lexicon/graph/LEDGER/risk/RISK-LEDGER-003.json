@@ -1,0 +1,14 @@
+{
+  "id": "01KXR54SFA8DHE5C6YYMKEGBCF",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "RISK-LEDGER-003",
+  "description": [
+    "Transfers, refunds, reversals, cash withdrawals, or split purchases could be modeled as ordinary spend and distort category totals."
+  ],
+  "likelihood": "Medium",
+  "impact": "High",
+  "mitigation": [
+    "Make these transaction relationships explicit domain cases, preserve original legs, and test spend inclusion rules before downstream budget logic is accepted."
+  ],
+  "created_at": "2026-07-17T13:44:36.0751119+00:00"
+}

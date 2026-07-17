@@ -1,0 +1,12 @@
+{
+  "id": "01KXR4Z9V0AAVXVWJ0MZ2R3TNP",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "NG1",
+  "text": [
+    "Parse PDF, CSV, or Excel statements or orchestrate bulk imports in the Ledger module."
+  ],
+  "rationale": [
+    "INGEST owns heterogeneous file parsing, deduplication, review, and creation of canonical Ledger transactions."
+  ],
+  "created_at": "2026-07-17T13:41:36.2260152+00:00"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "01KXR4YWAZC0BK6RHN520BZMH1",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "G6",
+  "text": [
+    "Query and aggregate actual transactions consistently by account, date range, spend category, and categorization state."
+  ],
+  "target": "The same filtered transaction set always reconciles exactly to its reported total and is consumable by BUDGET and INSIGHTS without duplicating finance logic.",
+  "created_at": "2026-07-17T13:41:22.4000969+00:00"
+}

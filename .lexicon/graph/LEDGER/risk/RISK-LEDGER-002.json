@@ -1,0 +1,14 @@
+{
+  "id": "01KXR54SAB5MDPPKCDGY3B3H4V",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "RISK-LEDGER-002",
+  "description": [
+    "Loss, theft, or unintended disclosure of the local database could expose sensitive personal financial history."
+  ],
+  "likelihood": "Medium",
+  "impact": "High",
+  "mitigation": [
+    "Resolve storage permissions, secrets-free logging, backup and restore, and encryption-at-rest posture in discovery and design before planning."
+  ],
+  "created_at": "2026-07-17T13:44:35.9161798+00:00"
+}

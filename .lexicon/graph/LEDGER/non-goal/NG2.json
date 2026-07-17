@@ -1,0 +1,12 @@
+{
+  "id": "01KXR4ZA0Q8P99TCADRTTN3B96",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "NG2",
+  "text": [
+    "Automatically choose transaction categories in the Ledger module."
+  ],
+  "rationale": [
+    "CLASSIFY owns rules, suggestions, confidence, and learning; Ledger stores explicit assignments and corrections."
+  ],
+  "created_at": "2026-07-17T13:41:36.4084956+00:00"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "01KXR4YVTCABAYSEPTQFX04CZX",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "G3",
+  "text": [
+    "Maintain a shared spend-category catalogue and support explicit category assignment and correction without rewriting original transaction facts."
+  ],
+  "target": "Every categorized transaction has explicit category allocation data under the chosen allocation model; allocation corrections are attributable and preserve the original transaction facts.",
+  "created_at": "2026-07-17T13:41:21.8697392+00:00"
+}

@@ -1,0 +1,39 @@
+{
+  "id": "01KXR4WP1MGN2WCZVPHWKR70SZ",
+  "project_id": "01KXR2C3JQBT2WPM9JCSA9JMXD",
+  "name": "Interaction Channels",
+  "code": "CHANNELS",
+  "scope": "standard",
+  "description": [
+    "Owns optional human interaction over stable Tally contracts; no channel is selected yet. A WhatsApp or Hermes-like path may remain an external agent adapter over the CLI. If a web interface is selected, the architecture must use a PostgreSQL database through Entity Framework Core, a backend on the latest stable .NET available to the project, and a frontend on the latest stable Angular using the NxGN UI npm package. That web choice implies a service boundary and must be resolved before technical design rather than treated as a cosmetic frontend addition. Awaiting its own brainstorm."
+  ],
+  "problem_statement": [
+    "Dirk needs convenient access to Tally commands and insights, but choosing a web application or WhatsApp-style interface before the CLI contract is stable would couple the finance core to an uncertain delivery channel."
+  ],
+  "why_now": [
+    "The boundary must be explicit now so CLI design remains channel-neutral while human interaction is deferred."
+  ],
+  "created_at": "2026-07-17T13:40:10.4208479+00:00",
+  "dependencies": [
+    {
+      "id": "01KXR4X53V05WBVFV42HYNCEPV",
+      "project_id": "01KXR2C3JQBT2WPM9JCSA9JMXD",
+      "target": "INSIGHTS",
+      "kind": "hard",
+      "rationale": [
+        "Human-facing channels primarily deliver generated insights and reports."
+      ],
+      "created_at": "2026-07-17T13:40:25.8525007+00:00"
+    },
+    {
+      "id": "01KXR4X5C7G4ZZW9JJKNNSPT8C",
+      "project_id": "01KXR2C3JQBT2WPM9JCSA9JMXD",
+      "target": "LEDGER",
+      "kind": "soft",
+      "rationale": [
+        "A future channel may expose entry and query commands, but the initial channel can remain report-only."
+      ],
+      "created_at": "2026-07-17T13:40:26.1198869+00:00"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "id": "01KXR4ZAHBHEA66PBCYFN1DE6V",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "NG5",
+  "text": [
+    "Connect directly to online banking, retain bank credentials, initiate payments, or modify bank-side data."
+  ],
+  "rationale": [
+    "The initial product is local and statement/manual-entry based; live banking materially expands security and integration scope."
+  ],
+  "created_at": "2026-07-17T13:41:36.9399727+00:00"
+}

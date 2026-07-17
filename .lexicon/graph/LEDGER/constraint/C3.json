@@ -1,0 +1,11 @@
+{
+  "id": "01KXR50N26D2D3Y477CDFDEWR0",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "C3",
+  "title": "Financial data correctness",
+  "description": [
+    "Amounts use exact base-10 semantics with explicit currency; date meaning and sign convention are explicit; original bank or user-entered facts are preserved; corrections are modeled rather than silently overwriting source facts; aggregate totals must reconcile to selected transactions."
+  ],
+  "type": "technical",
+  "created_at": "2026-07-17T13:42:20.4871775+00:00"
+}

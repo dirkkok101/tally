@@ -1,0 +1,12 @@
+{
+  "id": "01KXR4ZAQ0WDST48G6QDRKPRZ2",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "NG6",
+  "text": [
+    "Implement multi-user accounts, roles, tenancy, or a hosted synchronization service."
+  ],
+  "rationale": [
+    "Tally is initially a single-user local executable; Actions' identity and RLS architecture is not applicable."
+  ],
+  "created_at": "2026-07-17T13:41:37.1214110+00:00"
+}

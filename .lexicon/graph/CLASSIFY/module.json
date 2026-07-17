@@ -1,0 +1,29 @@
+{
+  "id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "project_id": "01KXR2C3JQBT2WPM9JCSA9JMXD",
+  "name": "Transaction Classification",
+  "code": "CLASSIFY",
+  "scope": "standard",
+  "description": [
+    "Owns deterministic and assisted category suggestions, confidence, rules, and correction feedback; depends on LEDGER. Awaiting its own brainstorm."
+  ],
+  "problem_statement": [
+    "Transaction descriptions vary between banks and periods, so manually assigning every transaction to a spend category will not scale and inconsistent assignments will weaken budget analysis."
+  ],
+  "why_now": [
+    "Classification behavior must be isolated before statement ingestion automates high-volume transaction creation."
+  ],
+  "created_at": "2026-07-17T13:40:09.7035134+00:00",
+  "dependencies": [
+    {
+      "id": "01KXR4X383XJG8F43Q0F6M458P",
+      "project_id": "01KXR2C3JQBT2WPM9JCSA9JMXD",
+      "target": "LEDGER",
+      "kind": "hard",
+      "rationale": [
+        "Classification evaluates and updates canonical ledger transactions and spend-category assignments."
+      ],
+      "created_at": "2026-07-17T13:40:23.9405646+00:00"
+    }
+  ]
+}

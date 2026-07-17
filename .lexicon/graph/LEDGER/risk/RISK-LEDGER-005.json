@@ -1,0 +1,14 @@
+{
+  "id": "01KXR54SSSMJA4EBPHKKHGTZ81",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "RISK-LEDGER-005",
+  "description": [
+    "Choosing an embedded CLI store now could create avoidable migration work if the web channel and its mandatory PostgreSQL service architecture are selected soon afterward."
+  ],
+  "likelihood": "Medium",
+  "impact": "High",
+  "mitigation": [
+    "Resolve the web-versus-agent-only horizon in discovery; treat a web selection as a project ADR and design an explicit data migration rather than assuming provider portability."
+  ],
+  "created_at": "2026-07-17T13:44:36.4108464+00:00"
+}

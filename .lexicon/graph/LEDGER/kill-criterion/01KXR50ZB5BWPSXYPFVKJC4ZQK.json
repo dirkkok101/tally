@@ -1,0 +1,7 @@
+{
+  "id": "01KXR50ZB5BWPSXYPFVKJC4ZQK",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "condition": "Before planning, local file permissions, backup and restore, and the chosen encryption-at-rest posture cannot meet the accepted financial-data security constraint without a custom cryptography subsystem; stop and select a safer storage approach.",
+  "monitored": 1,
+  "created_at": "2026-07-17T13:42:31.0141950+00:00"
+}

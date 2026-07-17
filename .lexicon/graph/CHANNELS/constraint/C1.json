@@ -1,0 +1,11 @@
+{
+  "id": "01KXR542NFB2N9QSK1XVSG7A98",
+  "module_id": "01KXR4WP1MGN2WCZVPHWKR70SZ",
+  "ref_code": "C1",
+  "title": "Conditional NxGN web stack",
+  "description": [
+    "If Tally selects a web interface, persistence uses PostgreSQL through Entity Framework Core; the backend targets the project's latest stable .NET; the frontend targets the project's latest stable Angular and uses the NxGN UI npm package. Exact installed package versions and package identity are verified from project files when the web module is designed; downgrades are not an option."
+  ],
+  "type": "technical",
+  "created_at": "2026-07-17T13:44:12.7201943+00:00"
+}

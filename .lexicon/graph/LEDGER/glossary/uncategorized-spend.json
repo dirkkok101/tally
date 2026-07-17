@@ -1,0 +1,9 @@
+{
+  "id": "01KXR5612VS4M6YCJ06RFKEW1E",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "term": "Uncategorized Spend",
+  "definition": [
+    "A transaction currently included in spend but not assigned to a spend category; it remains visible and reportable rather than being silently forced into a category."
+  ],
+  "created_at": "2026-07-17T13:45:16.6365943+00:00"
+}

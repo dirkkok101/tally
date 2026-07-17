@@ -1,0 +1,10 @@
+{
+  "id": "01KXR4YVENSBJ8M56SM5NY65WG",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "G1",
+  "text": [
+    "Represent every owned bank account as a stable local record without storing online-banking credentials."
+  ],
+  "target": "Dirk's three accounts across two banks can be uniquely registered, listed, renamed, and referenced by subsequent commands.",
+  "created_at": "2026-07-17T13:41:21.4946488+00:00"
+}

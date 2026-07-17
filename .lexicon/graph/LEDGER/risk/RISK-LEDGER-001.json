@@ -1,0 +1,14 @@
+{
+  "id": "01KXR54S51XF5Z98NFBF3QEGRA",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "RISK-LEDGER-001",
+  "description": [
+    "Duplicate, missing, or incorrectly normalized transaction facts could make every budget and insight confidently wrong."
+  ],
+  "likelihood": "High",
+  "impact": "High",
+  "mitigation": [
+    "Preserve source provenance, use stable references and later import fingerprints, make uncategorized or suspected duplicates reviewable, and require reconciliation invariants in design tests."
+  ],
+  "created_at": "2026-07-17T13:44:35.7459993+00:00"
+}
