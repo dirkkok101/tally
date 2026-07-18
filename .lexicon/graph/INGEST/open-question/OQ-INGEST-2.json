@@ -4,9 +4,12 @@
   "ref_code": "OQ-INGEST-2",
   "question": "Are any required PDFs scanned, password-protected, multi-column, or locale-dependent, and what worksheets, encodings, or locale conventions occur in tabular exports?",
   "context": [
-    "No source variant was available to inspect. The pre-planning fixture spike must detect text-native versus scanned/password-protected PDF behavior plus workbook sheets, formulas, locale, encoding, and resource bounds; unsupported active or ambiguous content fails closed."
+    "Resolved by structural and executable inspection of every initial fixture. The evidence distinguishes text extraction and PDF permission encryption from an opening-password requirement and does not infer support for scans or tabular formats."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "All three PDFs are text-extractable, multi-page or multi-column where applicable, and use ZAR formatting. None requires OCR or an opening password; one carries PDF permission encryption but permits text extraction. Unsupported scans, password prompts, and tabular encodings fail closed."
+  ],
   "owner": "INGEST pre-planning spike",
   "created_at": "2026-07-18T09:45:49.5472248+00:00",
   "links": [

@@ -1,0 +1,71 @@
+{
+  "id": "01KXTET2NG1S9P87E2XKP4RN19",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "type": "functional",
+  "ref_code": "FR-INGEST-STATEMENT-PREVIEW",
+  "title": "Preview a statement without financial mutation",
+  "description": [
+    "Fingerprint one caller-owned source, validate one explicitly selected active LEDGER account, and produce a deterministic candidate batch without committing any transaction. Implements G1 and UC-INGEST-001."
+  ],
+  "rationale": [
+    "Review and reconciliation must precede any durable financial effect."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "preview a downloaded statement against the correct owned account"
+  ],
+  "story_so_that": [
+    "I can inspect the complete proposed import before anything changes"
+  ],
+  "acceptance_criteria": [
+    "Given a readable supported source and one explicitly selected active canonical account, when preview runs, then INGEST fingerprints the source content, validates statement metadata against the selected account, records adapter and LEDGER contract versions, and returns one stable batch and manifest revision.",
+    "Given the same unchanged source content, selected account, adapter version, and LEDGER contract version, when preview is repeated, then it produces the same ordered source-record outcomes, candidate facts, reconciliation evidence, and manifest identity.",
+    "Given a missing, archived, conflicting, multi-account, or ambiguous selected account, when preview runs, then INGEST blocks the batch rather than inferring an account from the filename or untrusted statement text.",
+    "Given a source that changes while being read or no longer matches its recorded fingerprint, when preview completes, then INGEST returns a stable source-changed failure and persists no committable manifest.",
+    "Given any preview success or failure, when the operation ends, then the caller-owned source remains byte-for-byte unchanged and no LEDGER transaction has been created."
+  ],
+  "security_criteria": [
+    "The source path must not be placed in process arguments where platform process listings would disclose it; supported structured input carries the path privately."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T11:11:59.6650278+00:00",
+  "links": [
+    {
+      "id": "01KXTF0BNAQCRWTY1A88SC477K",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:15:25.4833192+00:00"
+    },
+    {
+      "id": "01KXTF09GVVK9W5RAX36C2KB0G",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-OWNER-BANK-STATEMENT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:15:23.2927151+00:00"
+    },
+    {
+      "id": "01KXTEYY1CJK7HCJEHCXCN676A",
+      "target_type": "requirement",
+      "target": "FR-INGEST-VARIANT-QUALIFICATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:14:38.7652070+00:00"
+    },
+    {
+      "id": "01KXTET2NHNVEJQTND0BVP38PD",
+      "target_type": "use_case",
+      "target": "UC-INGEST-001",
+      "rel": "implements",
+      "created_at": "2026-07-18T11:11:59.6658433+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXTET2NJTK9MGD3GJ0NK9Q2J",
+      "target": "P1",
+      "created_at": "2026-07-18T11:11:59.6650278+00:00"
+    }
+  ]
+}

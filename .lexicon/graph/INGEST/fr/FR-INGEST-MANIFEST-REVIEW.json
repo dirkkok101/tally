@@ -1,0 +1,64 @@
+{
+  "id": "01KXTEW3RG300XXE7DTZHZZMQW",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "type": "functional",
+  "ref_code": "FR-INGEST-MANIFEST-REVIEW",
+  "title": "Review and approve an immutable manifest revision",
+  "description": [
+    "Expose the complete candidate, exclusion, duplicate, conflict, version, and reconciliation record and require explicit approval of one exact immutable revision before commit. Implements G3 and UC-INGEST-002."
+  ],
+  "rationale": [
+    "Approval is meaningful only when it names the exact evidence that commit will use."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "review and approve one frozen interpretation of my statement"
+  ],
+  "story_so_that": [
+    "commit cannot use changed facts or a different revision"
+  ],
+  "acceptance_criteria": [
+    "Given a completed preview, when the manifest is inspected, then it exposes safe batch identity, source fingerprint, selected account, adapter and LEDGER contract versions, ordered source-record outcomes, candidate facts, exclusions, exact duplicates, overlap conflicts, validation results, and reconciliation evidence.",
+    "Given a manifest whose transaction-bearing records are all accepted or proven exact duplicates and whose required controls reconcile, when the owner explicitly approves that exact revision, then its approval state and actor are recorded without LEDGER mutation.",
+    "Given any blocked record, unresolved overlap, failed control, incompatible version, or missing required fact, when approval is attempted, then INGEST rejects approval and preserves the uncommittable manifest.",
+    "Given an attempted change to amount, currency, date, original description, sign, or provenance, when review is performed, then INGEST rejects inline editing and requires a corrected source or adapter plus a new preview.",
+    "Given a changed account decision, duplicate disposition, adapter version, or LEDGER contract version, when the batch is reconsidered, then INGEST creates a new manifest revision and invalidates approval of prior revisions for commit."
+  ],
+  "security_criteria": [
+    "Inspection and approval artifacts must remain owner-only and must not expose full account identifiers or credentials."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T11:13:06.3210495+00:00",
+  "links": [
+    {
+      "id": "01KXTF0C7BRVKW9XVCW0DXCS0P",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:15:26.0599135+00:00"
+    },
+    {
+      "id": "01KXTEYZMJ36JCVP142B8RFF22",
+      "target_type": "requirement",
+      "target": "FR-INGEST-SOURCE-RECONCILIATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:14:40.4037957+00:00"
+    },
+    {
+      "id": "01KXTEW3RHWF9356FA7CK480TY",
+      "target_type": "use_case",
+      "target": "UC-INGEST-002",
+      "rel": "implements",
+      "created_at": "2026-07-18T11:13:06.3218555+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXTEW3RJ699NEFGH5WF2K0CR",
+      "target": "P1",
+      "created_at": "2026-07-18T11:13:06.3210495+00:00"
+    }
+  ]
+}

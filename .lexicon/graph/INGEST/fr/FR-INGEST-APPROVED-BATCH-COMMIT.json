@@ -1,0 +1,71 @@
+{
+  "id": "01KXTEW4BXFGWKZRQD2SKNV36Q",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "type": "functional",
+  "ref_code": "FR-INGEST-APPROVED-BATCH-COMMIT",
+  "title": "Commit approved candidates through public LEDGER operations",
+  "description": [
+    "Invoke only the discovered versioned LEDGER transaction contract for accepted candidates in an approved manifest using stable per-candidate idempotency identities. Implements G4 and UC-INGEST-003."
+  ],
+  "rationale": [
+    "INGEST must not bypass canonical validation or own a second financial datastore contract."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "commit the exact approved candidates into the Ledger"
+  ],
+  "story_so_that": [
+    "the reviewed statement facts become canonical without private coupling"
+  ],
+  "acceptance_criteria": [
+    "Given an approved immutable manifest revision whose adapter and discovered LEDGER versions remain compatible, when commit starts, then INGEST validates its fingerprint, approval, versions, account state, and candidate identities before the first mutation.",
+    "Given an accepted candidate, when it is committed, then INGEST invokes only the public LEDGER transaction-recording operation with the frozen request, statement-import provenance, and a stable candidate idempotency identity.",
+    "Given an Exact Duplicate outcome, when commit traverses the manifest, then INGEST records the prior canonical reference and invokes no new LEDGER write for that candidate.",
+    "Given a successful LEDGER result, when INGEST records the outcome, then the returned stable transaction reference round-trips through the public LEDGER read contract with the approved immutable facts.",
+    "Given a LEDGER validation, compatibility, or idempotency conflict for a candidate, when commit receives it, then INGEST durably records the stable outcome and stops before unsafe continuation."
+  ],
+  "security_criteria": [
+    "INGEST must never open private LEDGER storage, call private implementation APIs, or expose transaction request payloads in logs."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T11:13:06.9419660+00:00",
+  "links": [
+    {
+      "id": "01KXTF0E7T9QNPQSGQY8VQZ5AX",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:15:28.1230651+00:00"
+    },
+    {
+      "id": "01KXTEZ0PZT7AWY1EGAYQJ8EP6",
+      "target_type": "requirement",
+      "target": "FR-INGEST-MANIFEST-REVIEW",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:14:41.5042147+00:00"
+    },
+    {
+      "id": "01KXTEZ17XS8FVE8NESK9NA47R",
+      "target_type": "requirement",
+      "target": "FR-INGEST-REPLAY-OVERLAP-SAFETY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:14:42.0468464+00:00"
+    },
+    {
+      "id": "01KXTEW4BY4TWK6A4R7H3J2Y05",
+      "target_type": "use_case",
+      "target": "UC-INGEST-003",
+      "rel": "implements",
+      "created_at": "2026-07-18T11:13:06.9427676+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXTEW4BZNDVZN98C9MNYTFH3",
+      "target": "P1",
+      "created_at": "2026-07-18T11:13:06.9419660+00:00"
+    }
+  ]
+}

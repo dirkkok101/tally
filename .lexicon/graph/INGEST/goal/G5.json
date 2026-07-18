@@ -5,6 +5,6 @@
   "text": [
     "Make repeated and overlapping statement imports duplicate-safe and conflict-explicit."
   ],
-  "target": "Re-importing identical content or an overlapping statement creates no second canonical transaction for the same exact source fact; non-identical identity reuse or merely similar matches fail with stable reviewable conflicts. Evidence: analogous — LEDGER idempotent writes; deterministic source-row identity remains assumption A3 and the OQ-INGEST-4 spike gate.",
+  "target": "Exact-file replay under the same adapter contract creates no second canonical transaction. Cross-file overlap may be suppressed only with identity-grade evidence; otherwise it becomes a blocking Overlap Conflict. The real fixtures disprove tuple-only identity because one contains a repeated date-description-amount tuple and no layout exposes an explicit row ID.",
   "created_at": "2026-07-18T09:42:37.4268667+00:00"
 }

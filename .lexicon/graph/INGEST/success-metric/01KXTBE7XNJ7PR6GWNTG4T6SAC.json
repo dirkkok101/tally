@@ -2,7 +2,7 @@
   "id": "01KXTBE7XNJ7PR6GWNTG4T6SAC",
   "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
   "metric": "Replay and overlap duplicate safety",
-  "current": "Manual consolidation has no deterministic duplicate baseline.",
+  "current": "Exact-file replay inputs are deterministic, but overlapping and corrected statement identity is not yet proven and remains fail-closed under OQ-INGEST-4.",
   "target": "Zero second canonical transactions across exact-file replay, renamed exact replay, overlapping windows with exact identities, lost-output retry, and repeated resume verification.",
   "by_when": "Before INGEST commit operations are released",
   "measured": 0,

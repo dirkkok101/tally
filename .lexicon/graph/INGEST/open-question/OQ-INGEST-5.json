@@ -4,9 +4,12 @@
   "ref_code": "OQ-INGEST-5",
   "question": "Which completeness and reconciliation evidence does each format expose?",
   "context": [
-    "The pre-planning fixture spike must inventory row counts, debit/credit totals, opening/closing balances, page counts, sequence markers, and any other source controls per Format Variant. PRD requires complete row accounting even when a source exposes no independent totals."
+    "Resolved by executable reconciliation of every initial fixture. The graph retains only structural controls and Boolean conclusions, never raw financial values."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "Every initial fixture exposes statement period plus opening and closing balances, and all reconcile exactly as opening economic balance plus normalized signed movement equals closing economic balance. One variant also exposes running balances. No fixture exposes a trustworthy transaction-count or debit/credit-total control, so those are not required."
+  ],
   "owner": "INGEST pre-planning spike",
   "created_at": "2026-07-18T09:45:50.4088483+00:00",
   "links": [

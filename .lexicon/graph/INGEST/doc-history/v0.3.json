@@ -1,0 +1,9 @@
+{
+  "id": "01KXTFQH3QFFRNTX9E0FRCZ6GZ",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "version": "0.3",
+  "changes": [
+    "PRD complete: 11 FRs, 6 NFRs, 6 UCs, and 11 linked test intents. Fixture evidence qualifies two text-native PDF variants across all three initial accounts, validates ZAR, owner-economic sign, dates, account classes, and exact balance reconciliation, and keeps cross-statement overlap identity fail-closed. Requirements formalize passive preview, immutable approval, exact replay, candidate-granular LEDGER commit, crash resume, safe diagnostics, and artifact cleanup; CHANNELS retains UI ownership."
+  ],
+  "created_at": "2026-07-18T11:28:04.7277953+00:00"
+}

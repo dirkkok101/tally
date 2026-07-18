@@ -4,9 +4,12 @@
   "ref_code": "OQ-INGEST-1",
   "question": "Which exact file formats and layout variants can each bank and each of the three initial accounts export?",
   "context": [
-    "No extract was available during discovery. Before design/planning promises any adapter, run /lex:spike with redacted representative files from every required account path and record exact Format Variants, fields, encodings, and machine-readable alternatives. PRD may define qualification rules without naming a supported bank format."
+    "Resolved by a privacy-safe throwaway spike over all three private local fixtures. The initial supported scope is bounded to the detected PDF variants; no raw filenames, identifiers, rows, balances, amounts, or descriptions are retained in the graph."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "The initial supported evidence set is three text-native PDFs covering two layout variants. Tabular exports remain unsupported until separately qualified with real fixtures."
+  ],
   "owner": "INGEST pre-planning spike",
   "created_at": "2026-07-18T09:45:49.2302074+00:00",
   "links": [

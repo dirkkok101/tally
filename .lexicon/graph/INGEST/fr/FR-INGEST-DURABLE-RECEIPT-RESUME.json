@@ -1,0 +1,71 @@
+{
+  "id": "01KXTEW4MN1E1RHCCKRQVJW6ER",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "type": "functional",
+  "ref_code": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+  "title": "Record durable outcomes and resume interrupted commit",
+  "description": [
+    "Persist each candidate outcome before continuing and resume only unresolved candidates from the exact approved manifest and original LEDGER requests. Implements G4 and UC-INGEST-003."
+  ],
+  "rationale": [
+    "Candidate-granular commit is safe only when every crash point has one deterministic recovery path."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "resume an interrupted import without guessing what already committed"
+  ],
+  "story_so_that": [
+    "every candidate ends accepted once, returned as prior, or explicitly unresolved"
+  ],
+  "acceptance_criteria": [
+    "Given an approved batch commit, when any candidate receives a structured LEDGER result, then INGEST durably records its accepted, exact-duplicate, conflicted, rejected, or unresolved receipt outcome before attempting the next candidate.",
+    "Given interruption after a durable receipt outcome, when resume runs, then it skips terminal candidates and reuses the exact frozen request and original idempotency identity only for unresolved candidates.",
+    "Given interruption after LEDGER committed but before INGEST recorded the outcome, when resume replays the original request and identity, then LEDGER returns the original result and INGEST records it without a second transaction.",
+    "Given any resume or status request, when it runs, then it uses the frozen manifest and durable receipt rather than rereading or reparsing the caller-owned source.",
+    "Given every candidate has a terminal outcome, when commit or resume completes, then INGEST returns one complete receipt with exact outcome counts and canonical references and marks no candidate merely processed."
+  ],
+  "security_criteria": [
+    "Receipts are owner-only sensitive artifacts; structured status may expose safe identifiers and outcome categories but not raw financial payloads."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T11:13:07.2224880+00:00",
+  "links": [
+    {
+      "id": "01KXTF0CQR5A8JHE993ERNFVE9",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:15:26.5858270+00:00"
+    },
+    {
+      "id": "01KXTF0EQJZKNBDWVHZFT93ZT4",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:15:28.6277205+00:00"
+    },
+    {
+      "id": "01KXTEZ1RD2E1HDGN6MX1R2H8G",
+      "target_type": "requirement",
+      "target": "FR-INGEST-APPROVED-BATCH-COMMIT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:14:42.5748125+00:00"
+    },
+    {
+      "id": "01KXTEW4MQSVJ8YAYFFZKZ4ZR6",
+      "target_type": "use_case",
+      "target": "UC-INGEST-003",
+      "rel": "implements",
+      "created_at": "2026-07-18T11:13:07.2233480+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXTEW4MRF70WFHK97TJH7GFM",
+      "target": "P1",
+      "created_at": "2026-07-18T11:13:07.2224880+00:00"
+    }
+  ]
+}

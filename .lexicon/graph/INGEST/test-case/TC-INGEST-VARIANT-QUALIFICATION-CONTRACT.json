@@ -1,0 +1,40 @@
+{
+  "id": "01KXTF4X7TFYEAWEX1MV53206B",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "TC-INGEST-VARIANT-QUALIFICATION-CONTRACT",
+  "slug": "variant-qualification-contract",
+  "title": "Verify supported variant qualification",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "The three private fixtures are available outside tracked test artifacts together with redacted structural equivalents and unsupported or over-limit adversarial fixtures.",
+  "steps": "Run variant detection and passive bounded preview across qualified, permission-encrypted, changed-layout, active-content, scan-only, password, malformed, and over-limit cases.",
+  "expected": "Every acceptance criterion of FR-INGEST-VARIANT-QUALIFICATION holds; only the two evidenced PDF variants qualify and all unsafe or unsupported cases fail before mutation.",
+  "owner": "INGEST implementation",
+  "created_at": "2026-07-18T11:17:54.5554898+00:00",
+  "links": [
+    {
+      "id": "01KXTF5K6RJ2HJA0BZT96G8AJ1",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-OWNER-BANK-STATEMENT",
+      "rel": "validates",
+      "created_at": "2026-07-18T11:18:17.0491026+00:00"
+    },
+    {
+      "id": "01KXTF4X7WE9HHYWNXT37Q3495",
+      "target_type": "requirement",
+      "target": "FR-INGEST-VARIANT-QUALIFICATION",
+      "rel": "verifies",
+      "created_at": "2026-07-18T11:17:54.5562022+00:00"
+    },
+    {
+      "id": "01KXTF5NPX5ZX5K7NQWC0V6R9N",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-BOUNDED-PARSING",
+      "rel": "verifies",
+      "created_at": "2026-07-18T11:18:19.6147284+00:00"
+    }
+  ]
+}

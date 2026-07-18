@@ -1,0 +1,33 @@
+{
+  "id": "01KXTF4YZYXZJ2DR61B2F7MMER",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "TC-INGEST-APPROVED-BATCH-COMMIT-CONTRACT",
+  "slug": "approved-batch-commit-contract",
+  "title": "Verify approved batch commit through LEDGER",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "unhappy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A compatible public LEDGER test contract, approved and unapproved manifests, exact duplicates, and stable failure responses are available.",
+  "steps": "Commit each manifest through the public process boundary, inspect calls and durable outcomes, and round-trip returned canonical references.",
+  "expected": "Every acceptance criterion of FR-INGEST-APPROVED-BATCH-COMMIT holds; only frozen accepted candidates reach the public LEDGER operation and unsafe failure stops continuation.",
+  "owner": "INGEST implementation",
+  "created_at": "2026-07-18T11:17:56.3516423+00:00",
+  "links": [
+    {
+      "id": "01KXTF5M8NEWS76DA3C6AHZN1E",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-LEDGER-PUBLIC-CONTRACT",
+      "rel": "validates",
+      "created_at": "2026-07-18T11:18:18.1341938+00:00"
+    },
+    {
+      "id": "01KXTF4Z007V6HEW0EDE0CJDDT",
+      "target_type": "requirement",
+      "target": "FR-INGEST-APPROVED-BATCH-COMMIT",
+      "rel": "verifies",
+      "created_at": "2026-07-18T11:17:56.3526195+00:00"
+    }
+  ]
+}

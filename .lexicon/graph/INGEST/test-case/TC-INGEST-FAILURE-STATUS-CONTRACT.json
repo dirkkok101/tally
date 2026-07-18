@@ -1,0 +1,26 @@
+{
+  "id": "01KXTF4ZJ8JCMA6CB7RK9DZ62M",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "TC-INGEST-FAILURE-STATUS-CONTRACT",
+  "slug": "failure-status-contract",
+  "title": "Verify safe failure and status reporting",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "unhappy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Fixtures trigger every documented source, parser, account, reconciliation, overlap, compatibility, resource, LEDGER, and interruption category.",
+  "steps": "Run each failure through the published process contract and inspect result, stderr, durable batch state, and mutation counters.",
+  "expected": "Every acceptance criterion of FR-INGEST-FAILURE-STATUS holds, including stable next-action metadata, no payload disclosure, and correct last durable frontier.",
+  "owner": "INGEST implementation",
+  "created_at": "2026-07-18T11:17:56.9370983+00:00",
+  "links": [
+    {
+      "id": "01KXTF4ZJAVDTHFS78GF2HRWCC",
+      "target_type": "requirement",
+      "target": "FR-INGEST-FAILURE-STATUS",
+      "rel": "verifies",
+      "created_at": "2026-07-18T11:17:56.9382555+00:00"
+    }
+  ]
+}

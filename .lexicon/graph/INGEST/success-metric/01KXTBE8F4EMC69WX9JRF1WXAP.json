@@ -2,7 +2,7 @@
   "id": "01KXTBE8F4EMC69WX9JRF1WXAP",
   "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
   "metric": "Sensitive artifact and diagnostic protection",
-  "current": "No INGEST artifact or logging baseline exists.",
+  "current": "The spike emitted only structural metadata and retained no harness or extracted values; production permission, diagnostic, crash, and cleanup controls are not yet implemented.",
   "target": "Zero financial payload disclosures in logs, stderr, or process arguments; 100% of persisted INGEST artifacts pass owner-only permission and success/failure/crash cleanup checks.",
   "by_when": "Before any supported statement is processed outside test fixtures",
   "measured": 0,

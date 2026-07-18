@@ -4,10 +4,10 @@
   "ref_code": "OQ-INGEST-4",
   "question": "What constitutes stable source-row identity across repeated files, overlapping statement windows, corrected statements, and files renamed by the owner?",
   "context": [
-    "The pre-planning fixture spike must exercise exact replay, renamed identical files, overlapping windows, corrected statements, repeated identical rows, and conflicting identity reuse. Until validated, A3 is active and uncertain matches remain blocking Overlap Conflicts."
+    "Fixture evidence disproves tuple-only identity: no explicit source transaction ID is present and one statement repeats a date-description-amount tuple. Content fingerprint plus row ordinal handles exact-file replay, but overlapping and corrected statement behavior still requires representative fixtures and remains open."
   ],
   "status": "open",
-  "owner": "INGEST pre-planning spike",
+  "owner": "INGEST design and future fixture evidence",
   "created_at": "2026-07-18T09:45:50.1228908+00:00",
   "links": [
     {

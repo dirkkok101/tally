@@ -1,0 +1,33 @@
+{
+  "id": "01KXTF4Y3MT9YDGQK8JPP4095H",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "TC-INGEST-SOURCE-RECONCILIATION-CONTRACT",
+  "slug": "source-reconciliation-contract",
+  "title": "Verify complete source reconciliation",
+  "level": "integration",
+  "surface": "service",
+  "scenario": "unhappy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Qualified fixtures and mutations with omitted, duplicated, sign-inverted, control-mismatched, and unexplained records are available.",
+  "steps": "Preview each source and injected mutation, verify row accounting, opening and closing equations, and running-balance transitions where supplied.",
+  "expected": "Every acceptance criterion of FR-INGEST-SOURCE-RECONCILIATION holds; all qualified fixtures reconcile and every corrupted case stays unapproved and uncommittable.",
+  "owner": "INGEST implementation",
+  "created_at": "2026-07-18T11:17:55.4457530+00:00",
+  "links": [
+    {
+      "id": "01KXTF4Y3PP3Y65NZ26BJC3TVH",
+      "target_type": "requirement",
+      "target": "FR-INGEST-SOURCE-RECONCILIATION",
+      "rel": "verifies",
+      "created_at": "2026-07-18T11:17:55.4466033+00:00"
+    },
+    {
+      "id": "01KXTF5MR7YR6CTW6PBT33J6GD",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-DETERMINISTIC-INTEGRITY",
+      "rel": "verifies",
+      "created_at": "2026-07-18T11:18:18.6323477+00:00"
+    }
+  ]
+}

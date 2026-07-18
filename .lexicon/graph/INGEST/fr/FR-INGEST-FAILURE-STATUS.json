@@ -1,0 +1,57 @@
+{
+  "id": "01KXTEW4ZA4BMSXPQ943XQ7BPG",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "type": "functional",
+  "ref_code": "FR-INGEST-FAILURE-STATUS",
+  "title": "Report blocked and failed ingestion safely",
+  "description": [
+    "Return stable metadata-only status for unsupported, malformed, permission, compatibility, reconciliation, overlap, resource, LEDGER, and interruption outcomes while preserving the last durable state. Implements G7 and UC-INGEST-005."
+  ],
+  "rationale": [
+    "The owner must know whether retry, resume, correction, or abandonment is safe without inspecting private files or logs."
+  ],
+  "priority": 1,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "understand the last durable ingestion state after any failure"
+  ],
+  "story_so_that": [
+    "I can choose a safe next action without risking duplicates or data loss"
+  ],
+  "acceptance_criteria": [
+    "Given any preview, review, commit, resume, or cleanup failure, when the result is returned, then it includes a stable INGEST error code and category, safe batch or candidate identifiers if available, whether any LEDGER mutation may have occurred, the last durable receipt state, and whether retry, resume, or correction is allowed.",
+    "Given an unsupported, malformed, permission, source-change, resource-limit, compatibility, or reconciliation failure before commit, when status is inspected, then it proves no LEDGER mutation occurred and no committable manifest exists.",
+    "Given a blocking overlap or ambiguous financial fact, when status is inspected, then it identifies the blocked source-context record safely and requires a new reviewed resolution rather than automatic continuation.",
+    "Given a commit-stage failure after some terminal outcomes, when status is inspected, then it identifies the same approved manifest, completed outcomes, unresolved frontier, and safe resume operation.",
+    "Given any expected domain failure, when diagnostics are emitted, then stdout contains one structured result, stderr contains metadata only, and no stack trace or parser exception substitutes for the stable contract."
+  ],
+  "security_criteria": [
+    "Errors and diagnostics must never serialize source paths, rows, descriptions, balances, amounts, full identifiers, credentials, manifests, or LEDGER requests."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T11:13:07.5634343+00:00",
+  "links": [
+    {
+      "id": "01KXTF0D843019Z1E3434JR3KV",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:15:27.1095590+00:00"
+    },
+    {
+      "id": "01KXTEW4ZCPXKAJCETPR3TQS2M",
+      "target_type": "use_case",
+      "target": "UC-INGEST-005",
+      "rel": "implements",
+      "created_at": "2026-07-18T11:13:07.5643385+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXTEW4ZDBC24YFRWDCW9K8BQ",
+      "target": "P1",
+      "created_at": "2026-07-18T11:13:07.5634343+00:00"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "id": "01KXTEXKEK06KD4EXFGC1A8FKG",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "NFR-INGEST-DETERMINISTIC-INTEGRITY",
+  "title": "Preserve deterministic extraction and financial integrity",
+  "description": [
+    "Qualified adapters must produce repeatable ordered source outcomes and exact reconciliation without unexplained records or floating-point arithmetic."
+  ],
+  "category": "data_integrity",
+  "target": "100% of repeated previews for every qualified fixture produce semantically identical ordered outcomes; 100% of source records are accounted for; every available opening, closing, and running-balance control reconciles exactly in integer minor units; zero unexplained transaction-bearing records are eligible for approval.",
+  "load_condition": "Every supported fixture, every adapter-version compatibility fixture, and generated boundary cases for dates, signs, zero movement, duplicate tuples, and control mismatches.",
+  "measurement": "Golden-fixture replay, independent normalization digests, exact minor-unit reconciliation assertions, mutation-negative tests, and property-based boundary tests in CI.",
+  "rationale": [
+    "Silent extraction drift would corrupt every downstream budget and insight while still looking plausible."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-18T11:13:55.1564822+00:00",
+  "links": [
+    {
+      "id": "01KXTEZ3BE7QYCR7KWEPQA2VZ2",
+      "target_type": "requirement",
+      "target": "FR-INGEST-FINANCIAL-NORMALIZATION",
+      "rel": "supports",
+      "created_at": "2026-07-18T11:14:44.2072277+00:00"
+    },
+    {
+      "id": "01KXTEZ4DN3V2FQKDRT77ERXCN",
+      "target_type": "requirement",
+      "target": "FR-INGEST-MANIFEST-REVIEW",
+      "rel": "supports",
+      "created_at": "2026-07-18T11:14:45.3018330+00:00"
+    },
+    {
+      "id": "01KXTEZ4XAS8QJY6XZQREAYRFB",
+      "target_type": "requirement",
+      "target": "FR-INGEST-REPLAY-OVERLAP-SAFETY",
+      "rel": "supports",
+      "created_at": "2026-07-18T11:14:45.8028775+00:00"
+    },
+    {
+      "id": "01KXTEZ3VYBJX9DGTQPNESCDM6",
+      "target_type": "requirement",
+      "target": "FR-INGEST-SOURCE-RECONCILIATION",
+      "rel": "supports",
+      "created_at": "2026-07-18T11:14:44.7355427+00:00"
+    },
+    {
+      "id": "01KXTEZ2VBRPFZQQ1RASYETKYZ",
+      "target_type": "requirement",
+      "target": "FR-INGEST-VARIANT-QUALIFICATION",
+      "rel": "supports",
+      "created_at": "2026-07-18T11:14:43.6927182+00:00"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "id": "01KXTET22M5H584RXAPGJPS6J4",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "type": "functional",
+  "ref_code": "FR-INGEST-CONTRACT-DISCOVERY",
+  "title": "Discover the INGEST command contract",
+  "description": [
+    "Expose versioned non-interactive operations, supported variants, limits, schemas, outcomes, errors, and exit categories before reading a statement or mutating LEDGER. Implements G7 and UC-INGEST-006."
+  ],
+  "rationale": [
+    "An AI Agent Host must be able to invoke ingestion safely without scraping prose or guessing compatibility."
+  ],
+  "priority": 0,
+  "complexity": "S",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "discover the complete ingestion contract through an AI Agent Host or direct CLI use"
+  ],
+  "story_so_that": [
+    "every statement workflow uses compatible structured operations and predictable recovery"
+  ],
+  "acceptance_criteria": [
+    "Given a compatible Tally executable, when the client requests INGEST help or schema discovery, then it returns the versioned operations preview, inspect, approve, commit, resume, status, abandon, and cleanup with their input/result schemas, supported Format Variants, safe limits, stable errors, and exit categories without reading a source or mutating LEDGER.",
+    "Given any INGEST operation, when a valid request completes, then exactly one structured business result is written to stdout, metadata-only diagnostics use stderr, and the documented exit category matches the result.",
+    "Given an unknown operation, malformed input, or forbidden unknown field, when invocation is attempted, then INGEST returns a stable usage or validation error before source processing or LEDGER mutation.",
+    "Given incompatible INGEST, adapter, or LEDGER contract versions, when compatibility is checked, then INGEST returns a stable compatibility failure before source processing or mutation."
+  ],
+  "security_criteria": [
+    "Help, schemas, diagnostics, and errors must not contain statement payloads, full account identifiers, credentials, or source paths."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T11:11:59.0618424+00:00",
+  "links": [
+    {
+      "id": "01KXTF08G4JT2V2NH5A3XQN14R",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-AI-AGENT-HOST",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:15:22.2458107+00:00"
+    },
+    {
+      "id": "01KXTET22Q10Z1AGAZJQHNJAJN",
+      "target_type": "use_case",
+      "target": "UC-INGEST-006",
+      "rel": "implements",
+      "created_at": "2026-07-18T11:11:59.0630511+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXTET22RE2T3C41QX9G8RJQK",
+      "target": "P1",
+      "created_at": "2026-07-18T11:11:59.0618424+00:00"
+    }
+  ]
+}

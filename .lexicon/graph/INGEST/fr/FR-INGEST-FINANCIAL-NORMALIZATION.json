@@ -1,0 +1,65 @@
+{
+  "id": "01KXTET2Y0H2DJEFWA1T1A3EB1",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "type": "functional",
+  "ref_code": "FR-INGEST-FINANCIAL-NORMALIZATION",
+  "title": "Normalize exact source financial facts",
+  "description": [
+    "Translate each qualified transaction-bearing record into the canonical LEDGER fields under the resolved currency, account-class, sign, and date rules while preserving provenance. Implements G2 and UC-INGEST-001."
+  ],
+  "rationale": [
+    "Financially plausible substitutions are more dangerous than explicit rejection."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "have statement records normalized exactly and account-aware"
+  ],
+  "story_so_that": [
+    "asset and credit-account movements mean the same thing throughout Tally"
+  ],
+  "acceptance_criteria": [
+    "Given a transaction-bearing source record with complete evidence, when it is normalized, then the candidate preserves the selected account, original description, exact base-10 amount, ZAR, transaction date, optional distinct posting date, adapter version, source fingerprint, source-context record identity, and source reference without precision loss.",
+    "Given an asset or liability statement movement, when its signed amount is normalized, then positive means the owner economic position improved and negative means it worsened: asset increases and liability reductions are positive; asset decreases and liability increases are negative.",
+    "Given a source transaction date that includes its year, when it is normalized, then that exact calendar date is the Effective Date.",
+    "Given a source row with zero monetary movement, when it is accounted for, then it is retained as an explicitly excluded non-transaction record with a stable reason and no zero-amount LEDGER candidate is created.",
+    "Given a missing or ambiguous amount, sign, currency, date, description, record boundary, account meaning, or provenance field, when normalization is attempted, then the source record is blocked without inventing or editing a value.",
+    "Given a row date without a year in the qualified yearless layout, when exactly one matching calendar date falls inside the explicit statement period, then that date is the Effective Date; otherwise the batch is blocked."
+  ],
+  "security_criteria": [
+    "Normalized candidates and manifests are sensitive financial artifacts and must never be serialized into logs or diagnostic messages."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T11:11:59.9371891+00:00",
+  "links": [
+    {
+      "id": "01KXTF0A0ZNR0WBZ13SR4ZF0WJ",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-OWNER-BANK-STATEMENT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:15:23.8090330+00:00"
+    },
+    {
+      "id": "01KXTEYYJAEC7TGRJADZ6K8W7P",
+      "target_type": "requirement",
+      "target": "FR-INGEST-STATEMENT-PREVIEW",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:14:39.3078060+00:00"
+    },
+    {
+      "id": "01KXTET2Y1CSHCWM4NZA933MWY",
+      "target_type": "use_case",
+      "target": "UC-INGEST-001",
+      "rel": "implements",
+      "created_at": "2026-07-18T11:11:59.9379710+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXTET2Y2AMMH8EVB9PD5PABF",
+      "target": "P1",
+      "created_at": "2026-07-18T11:11:59.9371891+00:00"
+    }
+  ]
+}

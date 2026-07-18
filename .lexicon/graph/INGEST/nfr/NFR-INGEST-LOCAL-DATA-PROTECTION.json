@@ -1,0 +1,97 @@
+{
+  "id": "01KXTEXKRBE0ATCQV50F506QED",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "NFR-INGEST-LOCAL-DATA-PROTECTION",
+  "title": "Protect local statement and ingestion data",
+  "description": [
+    "Keep source, temporary, manifest, receipt, and diagnostic handling local, owner-only, passive, and payload-free."
+  ],
+  "category": "security",
+  "target": "Zero source or financial payload disclosures in process arguments, logs, stderr, crash diagnostics, or telemetry; 100% of persisted INGEST directories and files use 0700 and 0600 respectively where supported; zero source modifications or retained source copies; 100% of success, failure, crash, abandonment, and startup-cleanup tests leave no orphan extraction temporary.",
+  "load_condition": "Preview, review, commit, resume, status, abandon, and cleanup across success, expected failure, unexpected parser failure, and injected process termination.",
+  "measurement": "Permission assertions, canary scans across stdout/stderr/logs/process arguments, before-and-after source hashes, and deterministic artifact inventory checks.",
+  "rationale": [
+    "Statements and manifests contain highly sensitive household financial data even in a single-owner local product."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-18T11:13:55.4680298+00:00",
+  "links": [
+    {
+      "id": "01KXTEZ8X6KA7KPP6FHB5EPKCF",
+      "target_type": "requirement",
+      "target": "FR-INGEST-APPROVED-BATCH-COMMIT",
+      "rel": "supports",
+      "created_at": "2026-07-18T11:14:49.8953984+00:00"
+    },
+    {
+      "id": "01KXTEZACWENRS08P0GKBJ2VQP",
+      "target_type": "requirement",
+      "target": "FR-INGEST-ARTIFACT-CLEANUP",
+      "rel": "supports",
+      "created_at": "2026-07-18T11:14:51.4210639+00:00"
+    },
+    {
+      "id": "01KXTEZ5BQQBGJ9BANFPYN92NA",
+      "target_type": "requirement",
+      "target": "FR-INGEST-CONTRACT-DISCOVERY",
+      "rel": "supports",
+      "created_at": "2026-07-18T11:14:46.2643582+00:00"
+    },
+    {
+      "id": "01KXTEZ9D2VARB9PWXNWBCD6T3",
+      "target_type": "requirement",
+      "target": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+      "rel": "supports",
+      "created_at": "2026-07-18T11:14:50.4040928+00:00"
+    },
+    {
+      "id": "01KXTEZ9X86MKPP47C20J6BDH3",
+      "target_type": "requirement",
+      "target": "FR-INGEST-FAILURE-STATUS",
+      "rel": "supports",
+      "created_at": "2026-07-18T11:14:50.9214293+00:00"
+    },
+    {
+      "id": "01KXTEZ6VRWQTYDMWAYJSBAZWC",
+      "target_type": "requirement",
+      "target": "FR-INGEST-FINANCIAL-NORMALIZATION",
+      "rel": "supports",
+      "created_at": "2026-07-18T11:14:47.8011291+00:00"
+    },
+    {
+      "id": "01KXTEZ7WESFQMWGVCCR8Y44WB",
+      "target_type": "requirement",
+      "target": "FR-INGEST-MANIFEST-REVIEW",
+      "rel": "supports",
+      "created_at": "2026-07-18T11:14:48.8472208+00:00"
+    },
+    {
+      "id": "01KXTEZ8CG352BT62PKJ2RK7ST",
+      "target_type": "requirement",
+      "target": "FR-INGEST-REPLAY-OVERLAP-SAFETY",
+      "rel": "supports",
+      "created_at": "2026-07-18T11:14:49.3617069+00:00"
+    },
+    {
+      "id": "01KXTEZ7AWYTH9NQSXGTV1NSJH",
+      "target_type": "requirement",
+      "target": "FR-INGEST-SOURCE-RECONCILIATION",
+      "rel": "supports",
+      "created_at": "2026-07-18T11:14:48.2858258+00:00"
+    },
+    {
+      "id": "01KXTEZ6ANTAAYSYP6TY8Y7Y6X",
+      "target_type": "requirement",
+      "target": "FR-INGEST-STATEMENT-PREVIEW",
+      "rel": "supports",
+      "created_at": "2026-07-18T11:14:47.2546429+00:00"
+    },
+    {
+      "id": "01KXTEZ5TRKT5KRC7B5PZHBXEN",
+      "target_type": "requirement",
+      "target": "FR-INGEST-VARIANT-QUALIFICATION",
+      "rel": "supports",
+      "created_at": "2026-07-18T11:14:46.7457715+00:00"
+    }
+  ]
+}

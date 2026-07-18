@@ -1,0 +1,26 @@
+{
+  "id": "01KXTF4YNP89X6YHMDB0QFK5EP",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "TC-INGEST-REPLAY-OVERLAP-SAFETY-CONTRACT",
+  "slug": "replay-overlap-safety-contract",
+  "title": "Verify replay and overlap safety",
+  "level": "integration",
+  "surface": "service",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Fixtures cover renamed exact replay, identical tuples at different positions, proven exact identity, uncertain overlap, and identity reuse with changed facts.",
+  "steps": "Preview each fixture against prior batch and canonical provenance and observe duplicate, candidate, replay, and conflict outcomes.",
+  "expected": "Every acceptance criterion of FR-INGEST-REPLAY-OVERLAP-SAFETY holds; exact replay has no new effect, tuple collisions remain distinct, and uncertain overlap blocks.",
+  "owner": "INGEST implementation",
+  "created_at": "2026-07-18T11:17:56.0233883+00:00",
+  "links": [
+    {
+      "id": "01KXTF4YNR4ZVSAZ527CQNX3Q4",
+      "target_type": "requirement",
+      "target": "FR-INGEST-REPLAY-OVERLAP-SAFETY",
+      "rel": "verifies",
+      "created_at": "2026-07-18T11:17:56.0241665+00:00"
+    }
+  ]
+}

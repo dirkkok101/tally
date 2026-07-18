@@ -2,7 +2,7 @@
   "id": "01KXTBE7N3VQYN8WVXY9WV9C7M",
   "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
   "metric": "Deterministic preview reproducibility",
-  "current": "No automated preview exists.",
+  "current": "Spike baseline: independent repeated runs produced identical privacy-safe normalization outcomes; the production preview contract is not yet implemented.",
   "target": "100% of repeated previews for the same source, adapter, account, and contract produce semantically identical ordered candidates, validations, fingerprint, and reconciliation evidence.",
   "by_when": "Before the first INGEST adapter is eligible for release",
   "measured": 0,

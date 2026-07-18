@@ -4,8 +4,8 @@
   "ref_code": "A1",
   "title": "Each initial account has at least one bounded local export path",
   "description": [
-    "Assume every one of the three initial accounts can supply at least one CSV, XLSX, text-native PDF, or equivalently bounded local variant whose transaction records and required LEDGER fields can be extracted and reconciled without cloud parsing or generic OCR. No extract was available in this discovery run; validate through OQ-INGEST-1/2/3/5 and a pre-planning /lex:spike before promising adapter support."
+    "Validated for the initial scope: all three owned accounts have bounded local, text-extractable PDF fixtures. The sample set contains eight pages across two layout variants."
   ],
-  "status": "active",
+  "status": "validated",
   "created_at": "2026-07-18T10:11:34.5651548+00:00"
 }

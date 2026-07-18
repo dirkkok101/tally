@@ -2,7 +2,7 @@
   "id": "01KXTBE7C7S8GTH1BVP5SEC398",
   "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
   "metric": "Supported-fixture extraction completeness",
-  "current": "No supported fixtures or baseline exist.",
+  "current": "Spike baseline: all three private fixtures were fully row-accounted and every available balance control reconciled; production adapter tests are not yet implemented.",
   "target": "100% of transaction-bearing records and every available source control are accounted for with zero unexplained rows before a Format Variant is supported.",
   "by_when": "Before the first INGEST adapter is eligible for release",
   "measured": 0,

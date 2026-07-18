@@ -1,0 +1,71 @@
+{
+  "id": "01KXTEW423P09NB6YXCJ9NA2GY",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "type": "functional",
+  "ref_code": "FR-INGEST-REPLAY-OVERLAP-SAFETY",
+  "title": "Handle exact replay and uncertain overlap safely",
+  "description": [
+    "Return prior outcomes for exact source replay, suppress only identity-grade duplicate candidates, and block merely similar or overlapping records. Implements G5 and UC-INGEST-004."
+  ],
+  "rationale": [
+    "The real fixtures contain a duplicate date-description-amount tuple and no explicit transaction IDs, proving that fuzzy or tuple-only suppression can erase valid facts."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "re-import or overlap statements without creating or deleting financial facts by guesswork"
+  ],
+  "story_so_that": [
+    "duplicates are prevented without collapsing legitimate repeated transactions"
+  ],
+  "acceptance_criteria": [
+    "Given byte-identical source content under the same supported adapter contract and selected account, when it is previewed again under any filename, then INGEST identifies Exact Replay and returns the prior batch or receipt without new LEDGER mutation.",
+    "Given two identical date-description-amount records at different source positions in one statement, when they are normalized, then both remain distinct source-context candidates and tuple equality alone never collapses either record.",
+    "Given a prior candidate with the same variant-defined identity and the same immutable financial facts, when a new supported source proves that identity, then the candidate is reported as an Exact Duplicate and is not written again.",
+    "Given an overlapping window or similar amount, date, or description without identity-grade evidence, when preview runs, then INGEST emits a blocking Overlap Conflict and does not claim a duplicate.",
+    "Given reuse of an exact identity with different immutable facts, when preview or commit checks it, then INGEST returns a stable conflict, preserves the original effect, and makes no new mutation for that candidate."
+  ],
+  "security_criteria": [
+    "Duplicate and conflict diagnostics must use safe batch and candidate identifiers rather than statement descriptions or amounts."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T11:13:06.6289502+00:00",
+  "links": [
+    {
+      "id": "01KXTF0F7257HS52ZWAEA1QMYA",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:15:29.1227299+00:00"
+    },
+    {
+      "id": "01KXTF0B3E0F96NNFF9VT64YVH",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-OWNER-BANK-STATEMENT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:15:24.9113142+00:00"
+    },
+    {
+      "id": "01KXTEZ05ZFN649PJBW1JX3SZM",
+      "target_type": "requirement",
+      "target": "FR-INGEST-STATEMENT-PREVIEW",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:14:40.9601093+00:00"
+    },
+    {
+      "id": "01KXTEW426MZP7HBJ4ATNQQZF8",
+      "target_type": "use_case",
+      "target": "UC-INGEST-004",
+      "rel": "implements",
+      "created_at": "2026-07-18T11:13:06.6300062+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXTEW427P6DH0CAMJTZM71CK",
+      "target": "P1",
+      "created_at": "2026-07-18T11:13:06.6289502+00:00"
+    }
+  ]
+}

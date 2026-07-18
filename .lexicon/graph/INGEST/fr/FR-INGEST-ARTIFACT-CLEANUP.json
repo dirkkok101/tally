@@ -1,0 +1,64 @@
+{
+  "id": "01KXTEW59363CH1PSG2HC1X0BB",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "type": "functional",
+  "ref_code": "FR-INGEST-ARTIFACT-CLEANUP",
+  "title": "Abandon and clean up ingestion artifacts safely",
+  "description": [
+    "Remove extraction temporaries deterministically, retain only the state needed for review or resume, and allow explicit owner cleanup without changing the source or canonical LEDGER effects. Implements UC-INGEST-005 under A4."
+  ],
+  "rationale": [
+    "Sensitive temporary data must not linger, while premature deletion must not destroy recoverability."
+  ],
+  "priority": 1,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "abandon or clean up an ingestion attempt safely"
+  ],
+  "story_so_that": [
+    "private artifacts do not accumulate and resumable state is not destroyed accidentally"
+  ],
+  "acceptance_criteria": [
+    "Given preview, commit, failure, or abandonment reaches a safe boundary, when temporary extraction data is no longer required, then INGEST removes it deterministically and retains no caller-owned source copy.",
+    "Given a crash left known temporary artifacts, when the next safe INGEST invocation starts, then cleanup identifies and removes only orphaned INGEST temporaries without touching sources, manifests required for resume, receipts, or LEDGER data.",
+    "Given an incomplete batch, when the owner explicitly abandons it, then INGEST records abandonment, prevents future commit or resume for that manifest revision, removes disposable temporaries, leaves prior canonical transactions unchanged, and leaves the source untouched.",
+    "Given an incomplete manifest or receipt still required for review or resume, when cleanup is requested, then INGEST rejects destructive cleanup with a stable retained-for-recovery result.",
+    "Given a completed metadata-only receipt or safely abandoned batch, when the owner explicitly requests cleanup, then INGEST removes only the selected retained INGEST artifacts and reports the result without deleting any canonical transaction or caller-owned source."
+  ],
+  "security_criteria": [
+    "Persisted INGEST directories use owner-only mode 0700 and files mode 0600 where supported; inability to establish owner-only protection blocks sensitive persistence."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T11:13:07.8760274+00:00",
+  "links": [
+    {
+      "id": "01KXTF0DR4V98C96VW4ZXQM5BV",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:15:27.6217921+00:00"
+    },
+    {
+      "id": "01KXTEZ2A7NNC2M37G28B3306V",
+      "target_type": "requirement",
+      "target": "FR-INGEST-FAILURE-STATUS",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:14:43.1439541+00:00"
+    },
+    {
+      "id": "01KXTEW594F91RBXWD3BYCT7M3",
+      "target_type": "use_case",
+      "target": "UC-INGEST-005",
+      "rel": "implements",
+      "created_at": "2026-07-18T11:13:07.8769586+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXTEW5973W71YVNV2N3MER1K",
+      "target": "P1",
+      "created_at": "2026-07-18T11:13:07.8760274+00:00"
+    }
+  ]
+}

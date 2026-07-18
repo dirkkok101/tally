@@ -1,0 +1,57 @@
+{
+  "id": "01KXTET2CB2091VPAWG1R4X5PC",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "type": "functional",
+  "ref_code": "FR-INGEST-VARIANT-QUALIFICATION",
+  "title": "Qualify and detect supported statement variants",
+  "description": [
+    "Support only the two fixture-proven text-native PDF layout variants needed by the three initial accounts and fail closed on every other source shape. Implements G6 and UC-INGEST-001."
+  ],
+  "rationale": [
+    "Extension-based or best-effort parsing can turn layout drift into plausible but false financial facts."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "have each real statement recognized only by a proven adapter"
+  ],
+  "story_so_that": [
+    "a changed or unsupported document cannot silently enter the Ledger"
+  ],
+  "acceptance_criteria": [
+    "Given any of the three qualified private fixtures, when variant detection runs, then exactly one of the two versioned text-native PDF variants is selected from structural evidence rather than filename or extension.",
+    "Given the qualified permission-encrypted fixture that is text-extractable without an opening password, when it is previewed, then the matching adapter processes it under the same passive bounded rules as the other qualified fixtures.",
+    "Given a scan-only PDF, opening-password requirement, unsupported tabular export, active-content dependency, external fetch, malformed structure, ambiguous variant, or changed layout, when detection runs, then INGEST returns a stable unsupported or unsafe-source result and creates no committable manifest or LEDGER transaction.",
+    "Given a source exceeding any advertised adapter bound for size, pages, records, nesting, decompression, memory, or processing time, when preview is attempted, then processing stops with a stable resource-limit result before mutation.",
+    "Given a proposed new or revised adapter, when it lacks representative fixtures that account for every source record and reconcile every required financial control deterministically, then the variant cannot be advertised as supported."
+  ],
+  "security_criteria": [
+    "Adapters must treat documents as passive data and never execute formulas, macros, scripts, links, embedded objects, or remote fetches."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T11:11:59.3730312+00:00",
+  "links": [
+    {
+      "id": "01KXTF0908BM2CH89SJQSM47G9",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-OWNER-BANK-STATEMENT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:15:22.7618305+00:00"
+    },
+    {
+      "id": "01KXTET2CEZ5BER60C9KWRCXEW",
+      "target_type": "use_case",
+      "target": "UC-INGEST-001",
+      "rel": "implements",
+      "created_at": "2026-07-18T11:11:59.3742101+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXTET2CFVDQ5N2J9QY43MNW4",
+      "target": "P1",
+      "created_at": "2026-07-18T11:11:59.3730312+00:00"
+    }
+  ]
+}

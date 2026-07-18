@@ -1,0 +1,65 @@
+{
+  "id": "01KXTET37W4S00Y3TXEHNDD4E7",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "type": "functional",
+  "ref_code": "FR-INGEST-SOURCE-RECONCILIATION",
+  "title": "Reconcile every supported statement before approval",
+  "description": [
+    "Account for every source record and prove opening economic balance plus normalized movements equals closing economic balance before a batch becomes committable. Implements G3 and UC-INGEST-001."
+  ],
+  "rationale": [
+    "A parser that returns plausible rows without completeness proof cannot populate a trustworthy ledger."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "see proof that the whole statement was interpreted"
+  ],
+  "story_so_that": [
+    "omitted, duplicated, or sign-inverted rows cannot be approved silently"
+  ],
+  "acceptance_criteria": [
+    "Given a qualified statement, when preview completes, then every source record has exactly one accepted-candidate, exact-duplicate, excluded-non-transaction, or blocked outcome with a stable reason.",
+    "Given any supported initial fixture, when its normalized non-zero movements are summed with its opening economic balance, then the result equals its closing economic balance exactly in minor units.",
+    "Given a supported variant that supplies running balances, when records are normalized, then every consecutive running-balance transition reconciles exactly to its signed movement.",
+    "Given a source control that the detected variant exposes, when preview completes, then the manifest records and verifies that control exactly.",
+    "Given an unexplained transaction-bearing record, amount mismatch, running-balance mismatch, opening/closing mismatch, or ambiguous exclusion, when reconciliation runs, then the manifest remains unapproved and uncommittable.",
+    "Given a control type that the source does not expose, when preview completes, then the manifest reports that control as unavailable rather than fabricating a value."
+  ],
+  "security_criteria": [
+    "Reconciliation output may expose counts, Boolean outcomes, and safe identifiers, but diagnostics must not expose raw rows, descriptions, balances, or amounts."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T11:12:00.2536347+00:00",
+  "links": [
+    {
+      "id": "01KXTF0AGGQP1569EZJ2V6MNR2",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-OWNER-BANK-STATEMENT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:15:24.3051834+00:00"
+    },
+    {
+      "id": "01KXTEYZ3X00X1VYWBP0M0181N",
+      "target_type": "requirement",
+      "target": "FR-INGEST-FINANCIAL-NORMALIZATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:14:39.8714533+00:00"
+    },
+    {
+      "id": "01KXTET37Y70KYB8TRTASDGYR5",
+      "target_type": "use_case",
+      "target": "UC-INGEST-001",
+      "rel": "implements",
+      "created_at": "2026-07-18T11:12:00.2544534+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXTET37ZSNAH9QD847RN0G6X",
+      "target": "P1",
+      "created_at": "2026-07-18T11:12:00.2536347+00:00"
+    }
+  ]
+}

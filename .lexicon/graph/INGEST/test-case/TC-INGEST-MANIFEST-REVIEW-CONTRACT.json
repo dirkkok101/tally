@@ -1,0 +1,26 @@
+{
+  "id": "01KXTF4YD29EY0EG4389FTR7T7",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "TC-INGEST-MANIFEST-REVIEW-CONTRACT",
+  "slug": "manifest-review-contract",
+  "title": "Verify immutable manifest review and approval",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "unhappy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Committable and blocked manifest revisions with changed facts, decisions, and versions are available.",
+  "steps": "Inspect, approve, mutate decisions, attempt source-fact edits, and request commit approval for exact and mismatched revisions.",
+  "expected": "Every acceptance criterion of FR-INGEST-MANIFEST-REVIEW holds; only one exact fully reconciled revision can be approved and any change creates a new revision.",
+  "owner": "INGEST implementation",
+  "created_at": "2026-07-18T11:17:55.7476164+00:00",
+  "links": [
+    {
+      "id": "01KXTF4YD48P098MD8B5MWCZ7E",
+      "target_type": "requirement",
+      "target": "FR-INGEST-MANIFEST-REVIEW",
+      "rel": "verifies",
+      "created_at": "2026-07-18T11:17:55.7482746+00:00"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "01KXTF4Z9GHA36PVY94QXKXHF1",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "TC-INGEST-DURABLE-RECEIPT-RESUME-CONTRACT",
+  "slug": "durable-receipt-resume-contract",
+  "title": "Verify durable receipt and interrupted resume",
+  "level": "e2e",
+  "surface": "persistence",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A multi-candidate approved manifest, durable receipt store, idempotent LEDGER contract, and fault injection at every commit boundary are available.",
+  "steps": "Inject termination and receipt failures before and after LEDGER effects and receipt durability, then run status and repeated resume.",
+  "expected": "Every acceptance criterion of FR-INGEST-DURABLE-RECEIPT-RESUME holds; each candidate reaches one terminal or explicit unresolved outcome and no second canonical transaction is created.",
+  "owner": "INGEST implementation",
+  "created_at": "2026-07-18T11:17:56.6575208+00:00",
+  "links": [
+    {
+      "id": "01KXTF4Z9JK0F32KZYC2A2WS3X",
+      "target_type": "requirement",
+      "target": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+      "rel": "verifies",
+      "created_at": "2026-07-18T11:17:56.6582396+00:00"
+    },
+    {
+      "id": "01KXTF5P7PDH2DBE7M0SGR753T",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY",
+      "rel": "verifies",
+      "created_at": "2026-07-18T11:18:20.1513042+00:00"
+    }
+  ]
+}

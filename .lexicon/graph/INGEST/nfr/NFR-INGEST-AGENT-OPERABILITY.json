@@ -1,0 +1,41 @@
+{
+  "id": "01KXTEXMX0NBEEWGM1H36BCV8N",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "NFR-INGEST-AGENT-OPERABILITY",
+  "title": "Keep agent invocation deterministic and inspectable",
+  "description": [
+    "Make every INGEST workflow discoverable and safely automatable without prose parsing, prompts, or background processes."
+  ],
+  "category": "operability",
+  "target": "100% of public operations publish machine-readable input/result/error schemas and stable exit categories; every invocation returns exactly one stdout business envelope; expected failures contain no stack trace; no operation requires an interactive prompt, watcher, daemon, network call, or source reread for status and resume.",
+  "load_condition": "All public operations across success, validation, blocked, unsupported, compatibility, resource, interruption, and cleanup outcomes.",
+  "measurement": "Published-binary schema snapshots, stdout/stderr cardinality assertions, exit-code matrix, process-lifecycle tests, offline tests, and no-orphan-process checks.",
+  "rationale": [
+    "The AI Agent Host is the primary operational client and needs a stable machine contract rather than a human-only CLI."
+  ],
+  "priority": 1,
+  "created_at": "2026-07-18T11:13:56.6415723+00:00",
+  "links": [
+    {
+      "id": "01KXTEZFX99WGCRSP4G9463M41",
+      "target_type": "requirement",
+      "target": "FR-INGEST-ARTIFACT-CLEANUP",
+      "rel": "supports",
+      "created_at": "2026-07-18T11:14:57.0664538+00:00"
+    },
+    {
+      "id": "01KXTEZEVZ6D0NYQHZ1WDMFR57",
+      "target_type": "requirement",
+      "target": "FR-INGEST-CONTRACT-DISCOVERY",
+      "rel": "supports",
+      "created_at": "2026-07-18T11:14:56.0004537+00:00"
+    },
+    {
+      "id": "01KXTEZFCFNNWZMJ2Z8251RPMD",
+      "target_type": "requirement",
+      "target": "FR-INGEST-FAILURE-STATUS",
+      "rel": "supports",
+      "created_at": "2026-07-18T11:14:56.5281008+00:00"
+    }
+  ]
+}

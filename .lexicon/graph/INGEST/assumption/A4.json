@@ -4,8 +4,8 @@
   "ref_code": "A4",
   "title": "Minimal local retention is acceptable",
   "description": [
-    "Assume INGEST does not copy caller-owned source files, removes extraction temporaries after success and failure, retains incomplete owner-only manifests and receipts for review/resume, and retains completed metadata-only receipts until explicit cleanup. Validate the owner's preferred retention duration before PRD hardens the default."
+    "The first-release retention policy is conservative and explicit: INGEST never copies caller-owned source files; removes extraction temporaries after success, failure, abandonment, and safe startup recovery; retains incomplete owner-only manifests and receipts for review or resume; and retains completed metadata-only receipts until explicit owner cleanup. Future configurable durations require a separate requirement."
   ],
-  "status": "active",
+  "status": "validated",
   "created_at": "2026-07-18T10:11:35.4319711+00:00"
 }
