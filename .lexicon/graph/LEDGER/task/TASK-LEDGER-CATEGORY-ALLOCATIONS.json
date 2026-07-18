@@ -1,0 +1,334 @@
+{
+  "id": "01KXT0P36Q0FTFJX3A4HZGMH8C",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06A6E7WPPCP8KDAKCJ1H4",
+  "ref_code": "TASK-LEDGER-CATEGORY-ALLOCATIONS",
+  "slug": "CATEGORY-ALLOCATIONS",
+  "title": "Implement category assignment and correction",
+  "description": [
+    "Deliver assign/correct handlers and append-only allocation storage with one active category per active transaction."
+  ],
+  "objective": [
+    "Apply and correct attributable category decisions without rewriting transaction facts or losing prior allocations."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 40,
+  "created_at": "2026-07-18T07:05:09.0800297+00:00",
+  "decisions": [
+    {
+      "id": "01KXT0P36VT4A6ZEWPX4XKG8ZR",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT15ZSM89REMJQ48S2H6Q6J",
+      "target": "TASK-LEDGER-CATEGORIES",
+      "dependency_type": "compile",
+      "reason": [
+        "Allocations require active category identity and lifecycle policy."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:13:49.8781934+00:00"
+    },
+    {
+      "id": "01KXT1AN31GE5TD0H0XH0JG98Z",
+      "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:16:22.7546758+00:00"
+    },
+    {
+      "id": "01KXT15Z9DM9RQ5F2WRE3ZDB99",
+      "target": "TASK-LEDGER-TRANSACTIONS-RECORD-GET",
+      "dependency_type": "compile",
+      "reason": [
+        "Allocations require TransactionStore and transaction identity."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:13:49.3579571+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0P36VM19P3RVTE3VT1F98",
+      "path": "src/Tally/Contracts/Ledger/Transactions/CategoryAllocationContracts.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36V93B33MCRTZ4TR3JX",
+      "path": "src/Tally/Domain/Ledger/Transactions/CategoryAllocation.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36WJPRTGTCZTPGA99Y0",
+      "path": "src/Tally/Features/Ledger/Transactions/CategoryAllocationHandlers.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36WETM3ZAM4XEJDP78D",
+      "path": "src/Tally/Infrastructure/Storage/Transactions/CategoryAllocationStore.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36WCNEH46JTZ6WBYS2V",
+      "path": "src/Tally/Features/Ledger/Transactions/CategoryAllocationOperationModule.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36WKCWA21D5VZ69S5TE",
+      "path": "tests/Tally.Tests/Features/Ledger/Transactions/CategoryAllocationTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT0P36WSD35M8G4PH603958",
+      "name": "CategoryAllocationOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36WVM2JHKC1EXR4CT4P",
+      "name": "CategoryAllocationStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36WGKN51K1F29PKMR5F",
+      "name": "TransactionStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-FACT",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36WM800MX427TC9CY56",
+      "name": "CategoryStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-SPEND-CATEGORY",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36W6APTHQ6E0Q7ZJKD5",
+      "name": "LedgerMutationExecutor.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0P36VD5MRFTPT6ZAWYC0C",
+      "kind": "acceptance_check",
+      "text": [
+        "Assigning an active category to an active uncategorized transaction appends exactly one active allocation and leaves source facts unchanged."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36VTFZ9HJFKXQ90VHST",
+      "kind": "acceptance_check",
+      "text": [
+        "Correct with active replacement and reason atomically retires prior allocation and appends one attributable active allocation; history retains both."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36V3871PKHYYB18HE7F",
+      "kind": "acceptance_check",
+      "text": [
+        "Inactive transaction, missing/archived category, no active allocation, or same-as-active correction returns its stable error with no allocation change."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36V7B7H7NNBDGQME3P1",
+      "kind": "acceptance_check",
+      "text": [
+        "Category rename resolves current display name through stable ID for active and retired allocations."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36VZHZKRW1EZRT4GKA1",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical mutation replay returns the original allocation outcome without a second row."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36VR0QTEARFYAZ9APP8",
+      "kind": "expected_output",
+      "text": [
+        "Allocation contracts/domain/store/handlers/module"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36VBCTSF9D9E9RB4AAM",
+      "kind": "expected_output",
+      "text": [
+        "Real-SQLite allocation history tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36V1FJVQA6EFXQV7Q1A",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT store category on TransactionFact, update allocations in place, create splits/hierarchy, or assign archived categories — per DD-LEDGER-IMMUTABLE-HISTORY."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36V86W8TQE71REYT3RQ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT implement before OQ-LEDGER-6 resolves consistently."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0P36W9J99D6CVHEFGM6AR",
+      "target_ref_code": "OQ-LEDGER-6",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KXR55J26NDF2WS6NRR6C23VX",
+      "target_title": "Validate flat, archivable categories with one active category allocation per transaction for the first release.",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36WXYDNKC315QZBJVH6",
+      "target_ref_code": "NFR-LEDGER-ATTRIBUTABLE-HISTORY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFZJ0XVBBX0FPF6FJ7E2Y",
+      "target_title": "Retain attributable correction history",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36W1R70N197E7DG2AV9",
+      "target_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGF1VZPC8WADN6FY234H0",
+      "target_title": "TransactionOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36W0Q0T90P49KMWR996",
+      "target_ref_code": "TC-LEDGER-CATEGORY-ASSIGNMENT-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK5BDCD6DVBMMT7TBWHCN",
+      "target_title": "Verify assign and correct transaction categories contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXT0P36VQQV6KHD8S2XF6GJT",
+      "target": "FR-LEDGER-CATEGORY-ASSIGNMENT",
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0P36W9NT68G4NC14H68J9",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show one-active invariant, append-only correction, archived-category rejection, and replay."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36WVNM5WK2Q4887HTZV",
+      "gate_type": "self-review",
+      "description": [
+        "TransactionFact remains category-free and allocation SQL contains no in-place history update."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0P36WXKC3QW6B7HSMXFPV",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Features.Ledger.Transactions.CategoryAllocationTests --no-restore",
+      "expected_result": "exit 0; at least 12 assignment/correction/history/restriction/replay cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 240,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ]
+}

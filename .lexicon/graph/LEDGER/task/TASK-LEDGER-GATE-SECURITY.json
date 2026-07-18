@@ -1,0 +1,335 @@
+{
+  "id": "01KXT0Y3KT230K98NCG210SA11",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-GATE-SECURITY",
+  "slug": "GATE-SECURITY",
+  "title": "Validate local financial-data security",
+  "description": [
+    "Security validation task intentionally has no Implements link: consolidate permissions, host-protection, input, logging, diagnostics, backup, skill-path, and malicious-value checks."
+  ],
+  "objective": [
+    "Prove every supported local artifact and process surface protects personal financial data and fails closed without custom cryptography."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 20,
+  "created_at": "2026-07-18T07:09:31.6427414+00:00",
+  "dependencies": [
+    {
+      "id": "01KXT1AWJ36B75KYFA13VV3K5D",
+      "target": "TASK-LEDGER-CORE-PROCESS-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires TallyProcess.RunAsync from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:16:30.4044440+00:00"
+    },
+    {
+      "id": "01KXT1AX1YW82DH0MQ8GZHAY9B",
+      "target": "TASK-LEDGER-CORE-STORAGE",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires IHostArtifactProtection from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:16:30.9110295+00:00"
+    },
+    {
+      "id": "01KXT168P2ME6RV80TC3C361VW",
+      "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Security validation exercises the complete published process and all artifact paths."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:13:58.9790529+00:00"
+    },
+    {
+      "id": "01KXT1AXK33YQRYES4CYJRKNMH",
+      "target": "TASK-LEDGER-RESTORE-ACTIVATE",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires AuthoritativeStoreActivator from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:16:31.4606544+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0Y3KXK51NXAYJBDKXCFF1",
+      "path": "tests/Tally.Tests/Security/ArtifactPermissionsTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KXVH3GHNS1Y6XEAAWB",
+      "path": "tests/Tally.Tests/Security/DiagnosticCanaryTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KX46V74XMZT9HRBHKN",
+      "path": "tests/Tally.Tests/Security/HostProtectionEvidenceTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KXAQEYXXBJJFHR837H",
+      "path": "scripts/verify-ledger-security.sh",
+      "action": "create",
+      "role": "security gate",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT0Y3KXXW35FFG66RS99EPD",
+      "name": "IHostArtifactProtection",
+      "direction": "consumes",
+      "contract_ref_code": "DD-LEDGER-EMBEDDED-STORAGE",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KX3MWMD67Z3YF07D3C",
+      "name": "TallyProcess.RunAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KXKEH6RSQP31TNZNB1",
+      "name": "AuthoritativeStoreActivator",
+      "direction": "consumes",
+      "contract_ref_code": "DD-LEDGER-CANDIDATE-ACTIVATION",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KXRJS2RHHZGZ55968M",
+      "name": "VerifiedLocalSecurityGate",
+      "direction": "produces",
+      "contract_ref_code": "NFR-LEDGER-LOCAL-DATA-PROTECTION",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0Y3KWYXBE3A2N4JB6MR2E",
+      "kind": "acceptance_check",
+      "text": [
+        "Supported-host tests assert 0700 data roots and 0600 DB/WAL/SHM/candidate/manifest/backup/skill artifacts after create, crash, restore, and evolution paths."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KWHPC64EWD6TS3CJJB",
+      "kind": "acceptance_check",
+      "text": [
+        "Host-protection check rejects absent/invalid evidence before declaring production conformance; no custom crypto/key derivation/encryption algorithm exists."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KW4Y16ZSCHTTM4MYZX",
+      "kind": "acceptance_check",
+      "text": [
+        "Canary descriptions, credentials, full identifiers, JSON payloads, SQL, paths, exception text, and stack traces never appear in logs, stderr, expected errors, or correlation diagnostics."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KX8SHTC3G9Y3W79P9Z",
+      "kind": "acceptance_check",
+      "text": [
+        "Malformed/oversized/unknown JSON fields, unsafe artifact/skill paths, symlink/path traversal, permissions, full disk, lock, and corrupt store fail before partial mutation."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KXH0D2E8MYC51H0ZAP",
+      "kind": "acceptance_check",
+      "text": [
+        "Published process runs offline with the owner OS identity trust boundary and opens no listener."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KXXK0ZEJRVTH9X4W0R",
+      "kind": "expected_output",
+      "text": [
+        "ArtifactPermissionsTests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KX5XQN7JHK1XP2SR14",
+      "kind": "expected_output",
+      "text": [
+        "DiagnosticCanaryTests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KXMA44WDAF6SFA9W9T",
+      "kind": "expected_output",
+      "text": [
+        "HostProtectionEvidenceTests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KXGXW9NJVFE4T7TVJ3",
+      "kind": "expected_output",
+      "text": [
+        "scripts/verify-ledger-security.sh"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KX7XV0QP0YKEZWRR08",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT mark ext4 alone as encryption-at-rest evidence, add application users/auth, log DTOs, or implement custom cryptography."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KXWQJ2W4W2WYNJ8J1N",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use sanitized unit-only substitutes for real Linux permission/path/process checks."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0Y3KY6DPMJCKRA3WFXWV1",
+      "target_ref_code": "DD-LEDGER-EMBEDDED-STORAGE",
+      "target_entity_type": "design_decision",
+      "target_entity_id": "01KXSWZ6WJJ89QZ0KYCV9EPTV7",
+      "target_title": "Raw SQLite with host-managed at-rest protection",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KY3KT6352SZPRNZ4XF",
+      "target_ref_code": "EXT-LEDGER-HOST-OS-SECURITY",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXRJ5PA5XVWAK3AY9ERRTQ7G",
+      "target_title": "Host OS Storage and Key Protection",
+      "relationship": "references",
+      "required": 0,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KYQWJW5817MKJDY0JP",
+      "target_ref_code": "NFR-LEDGER-LOCAL-DATA-PROTECTION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFY0879FNP1G5123TXCPZ",
+      "target_title": "Protect local financial data",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KY48XBEWXCP69GWWFM",
+      "target_ref_code": "NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFXNVGXH9FYFN6KF8KSE9",
+      "target_title": "Make mutations atomic and durable",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KYWDHEN67ZTM6MZK44",
+      "target_ref_code": "TC-LEDGER-LOCAL-DATA-PROTECTION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSXGA4X7RA3QMZQ1PX4MRRR",
+      "target_title": "Verify local artifact and diagnostic protection",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0Y3KXW5M6TA7K5GPD8TTF",
+      "gate_type": "test-evidence",
+      "description": [
+        "Preserve permission, canary, malicious-path/input, offline, and host-protection results."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KYCAPYRM9CT64B3ZW4",
+      "gate_type": "branch-review",
+      "description": [
+        "Security reviewer confirms no secret-bearing field/log/custom crypto or unsafe path remains."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0Y3KX0GF8M4ZNNDQYB82Q",
+      "phase": "after",
+      "command": "bash scripts/verify-ledger-security.sh",
+      "expected_result": "exit 0; at least 24 real-host/process security cases run, 0 fail, every artifact mode is compliant, no canary is found, and host-protection evidence is reported",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    }
+  ]
+}

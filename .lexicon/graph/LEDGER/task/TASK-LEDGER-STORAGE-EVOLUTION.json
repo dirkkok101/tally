@@ -1,0 +1,357 @@
+{
+  "id": "01KXT0W0YVCX6SH6Y1A5BY75BC",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06AV2YBFA37A3CEQMT346",
+  "ref_code": "TASK-LEDGER-STORAGE-EVOLUTION",
+  "slug": "STORAGE-EVOLUTION",
+  "title": "Implement safe storage evolution and status",
+  "description": [
+    "Deliver status plus isolated prepare/activate evolution with preflight, recovery point, complete validation, and atomic generation switch."
+  ],
+  "objective": [
+    "Upgrade supported storage exactly once while every failure leaves the original verified generation authoritative."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 30,
+  "created_at": "2026-07-18T07:08:23.3874370+00:00",
+  "decisions": [
+    {
+      "id": "01KXT0W0YYNWDMJC7YTXDSHPNA",
+      "target": "DD-LEDGER-CANDIDATE-ACTIVATION",
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YYRDKR0SM582BTWN1X",
+      "target": "DD-LEDGER-EMBEDDED-STORAGE",
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT1B0TW80PRCBE7HYCA4WC5",
+      "target": "TASK-LEDGER-BACKUP-VERIFY",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires DurableLedgerVerifier from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:16:34.7810479+00:00"
+    },
+    {
+      "id": "01KXT29G0F2TJ42P735X6QE9NR",
+      "target": "TASK-LEDGER-DURABLE-STATE-VERIFIER",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes DurableLedgerVerifier."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:33:13.3606942+00:00"
+    },
+    {
+      "id": "01KXT166KX2PSCJN5M5K9GKBXP",
+      "target": "TASK-LEDGER-RESTORE-ACTIVATE",
+      "dependency_type": "compile",
+      "reason": [
+        "Evolution reuses the verified candidate activation seam."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:13:56.8625517+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0W0YYDNB5V484HYRP49T6",
+      "path": "src/Tally/Contracts/Ledger/Recovery/StorageEvolutionContracts.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YYRACZXYRFDF9AD0CB",
+      "path": "src/Tally/Infrastructure/Recovery/MigrationCandidateBuilder.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YYZHYVT7QMVAE49F7G",
+      "path": "src/Tally/Infrastructure/Recovery/StorageEvolutionService.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YYKMYY8AEK053RM3PA",
+      "path": "src/Tally/Features/Ledger/Recovery/StorageEvolutionOperationModule.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YY17W7FPS634AD11JV",
+      "path": "tests/Tally.Tests/Features/Ledger/Recovery/StorageEvolutionTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YY8X2V8W3CBAYYV469",
+      "path": "tests/Tally.Tests/Infrastructure/Recovery/MigrationCandidateBuilderTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT0W0YYM400KRC8N2CRFZZJ",
+      "name": "StorageEvolutionOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YYQCCNJHD4XDYPJ21G",
+      "name": "StorageEvolutionService",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YYNMN96ERQ7R0SJM97",
+      "name": "MigrationCandidateBuilder",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YYD8VTQHTJGQ00D032",
+      "name": "BackupService",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YYM858Y2JX7NC7ZD3B",
+      "name": "DurableLedgerVerifier",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YY56GK65FXWCBPTX2R",
+      "name": "AuthoritativeStoreActivator",
+      "direction": "consumes",
+      "contract_ref_code": "DD-LEDGER-CANDIDATE-ACTIVATION",
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0W0YYJCYYKR488R5BPRSK",
+      "kind": "acceptance_check",
+      "text": [
+        "storage.status returns contract/storage versions, current generation/fingerprint, permissions, integrity, and host-protection evidence without financial payload."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YY4FM5ZFRR6K05TCFX",
+      "kind": "acceptance_check",
+      "text": [
+        "evolution.prepare validates source integrity, compatibility, permissions, free space, protection, and recovery requirements before transformation."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YYAWSSQYFY9XBFMKDK",
+      "kind": "acceptance_check",
+      "text": [
+        "A verified recovery point exists before isolated candidate transformation; candidate validation compares version, all durable state/history, relationships, idempotency, counts, integrity, and exact declared totals."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YY05TZPHFJXFFXNPP8",
+      "kind": "acceptance_check",
+      "text": [
+        "evolution.activate requires expected current fingerprint and explicit authorization, revalidates under lock, atomically switches once, and retains recovery generation."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YY4Z84CPW46AWBYYAQ",
+      "kind": "acceptance_check",
+      "text": [
+        "Any preflight/conversion/validation/activation failure leaves original current and reports stable version/integrity/host error."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YYV8T7D7VFRJ6RMK63",
+      "kind": "expected_output",
+      "text": [
+        "Storage status/evolution contracts/service/module"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YYCKT8F5TQVQPM7RZR",
+      "kind": "expected_output",
+      "text": [
+        "Migration candidate builder"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YY5MDAPPCR6PZ3W28A",
+      "kind": "expected_output",
+      "text": [
+        "Preflight/equivalence/activation tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YYQAP454MKS0YFT2G2",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT migrate live state in place, skip verified recovery, activate on stale fingerprint, or expose partial candidate — rejected per DD-LEDGER-CANDIDATE-ACTIVATION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YY3CF146E5BX4J1HDW",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT invent provider-neutral migration interfaces or permit downgrade/newer-than-binary mutation."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0W0YYD3MWC591BA0EP9JA",
+      "target_ref_code": "NFR-LEDGER-VERIFIED-RECOVERABILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFYKENRZNNNRNH8E8NWYD",
+      "target_title": "Prove Ledger recoverability",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZ7PHJ74GJM0WW3KF6",
+      "target_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGFP6T4HV8E4YASJ6A3FT",
+      "target_title": "RecoveryStorageOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZQY5SAYE4JX2J4AVA",
+      "target_ref_code": "TC-LEDGER-SAFE-STORAGE-EVOLUTION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK7FBSYF372PSHVZMD37W",
+      "target_title": "Verify upgrade or migrate ledger storage safely contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZ9H7VG6TC30DAYDDX",
+      "target_ref_code": "TC-LEDGER-VERIFIED-RECOVERY-DRILL",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSXGB390FKV1Z5SXH87EX6A",
+      "target_title": "Reproduce complete Durable Ledger State",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXT0W0YYCVJ8T0NY9DHE204Q",
+      "target": "FR-LEDGER-SAFE-STORAGE-EVOLUTION",
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0W0YYW6ZWDCWJ05NQZS0B",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show preflight-before-write, verified recovery, complete equivalence, atomic once-only activation, and rollback."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YYDRTTZP50080BM89A",
+      "gate_type": "self-review",
+      "description": [
+        "No in-place migration path or generic migration abstraction exists."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0W0YYEMVV7Z6BRCJCBFAV",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~StorageEvolutionTests|FullyQualifiedName~MigrationCandidateBuilderTests' --no-restore",
+      "expected_result": "exit 0; at least 18 preflight/recovery/equivalence/version/crash cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ]
+}

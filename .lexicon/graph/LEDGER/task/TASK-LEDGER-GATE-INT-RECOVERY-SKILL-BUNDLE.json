@@ -1,0 +1,248 @@
+{
+  "id": "01KXT21TGRBPY98HTW46XKKT10",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE",
+  "slug": "GATE-INT-RECOVERY-SKILL-BUNDLE",
+  "title": "Compose the recovery and system operation bundle",
+  "description": [
+    "Convergence gate intentionally has no Implements link: compose completed backup, restore, storage-evolution, schema/version, and skill modules without changing their contracts."
+  ],
+  "objective": [
+    "Produce one deterministic 13-operation bundle for recovery and system capabilities, rejecting missing, duplicate, or version-incompatible descriptors before dispatch."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 3,
+  "created_at": "2026-07-18T07:29:01.9775135+00:00",
+  "dependencies": [
+    {
+      "id": "01KXT21TGXZRERZG2D7GQ9NF40",
+      "target": "TASK-LEDGER-AGENT-SKILLS",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes SkillOperationModule."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGXRAEQRC4M91WFSVE8",
+      "target": "TASK-LEDGER-BACKUP-VERIFY",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes BackupOperationModule."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGXM5BY522NQH2GM6DJ",
+      "target": "TASK-LEDGER-RESTORE-ACTIVATE",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes RestoreOperationModule."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGXVSP5YQEP8BP2CJ9D",
+      "target": "TASK-LEDGER-STORAGE-EVOLUTION",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes StorageEvolutionOperationModule."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT21TGXAQFAYPYNWG2ZPFC0",
+      "path": "src/Tally/Composition/Ledger/RecoverySkillOperationBundle.cs",
+      "action": "create",
+      "role": "integration composition",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGXD6R2QDXJJA7QTVYS",
+      "path": "tests/Tally.Tests/Composition/Ledger/RecoverySkillOperationBundleTests.cs",
+      "action": "test",
+      "role": "integration",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT21TGX7BBDZE1G36G5H08X",
+      "name": "RecoverySkillOperationBundle",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGX6HGMJXDWC03CSCKW",
+      "name": "BackupOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGXM6940TQ4N32YFDY6",
+      "name": "RestoreOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGXWMHCTHGB24PG4N8R",
+      "name": "StorageEvolutionOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGXBNTF1XH3A5C10P2M",
+      "name": "SkillOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-SYSTEM-SKILL-CONTRACTS",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT21TGWAK7YCEY74V9C8BQR",
+      "kind": "acceptance_check",
+      "text": [
+        "The bundle contains exactly 13 unique descriptors: 7 recovery/storage operations and 6 schema/version/skill operations defined by the consumed modules."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGWG9JX0GB6FCJSZ1VJ",
+      "kind": "acceptance_check",
+      "text": [
+        "Descriptor order is operationId ordinal and every source descriptor field is retained byte-for-byte after canonical serialization."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGWGJ560YVDBEQY8J4S",
+      "kind": "acceptance_check",
+      "text": [
+        "A missing module, duplicate operationId, duplicate CLI path, or incompatible contract range returns a deterministic composition failure before dispatch."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGW0MHNAYH8S5P9MS5F",
+      "kind": "acceptance_check",
+      "text": [
+        "Focused tests compare the complete bundle inventory with all source modules and prove no descriptor is added, dropped, or rewritten."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGW61C100SBMCHZ9EH2",
+      "kind": "constraint",
+      "text": [
+        "Use explicit compile-time module composition."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGWQDDQG3V6XJBTYVMB",
+      "kind": "expected_output",
+      "text": [
+        "RecoverySkillOperationBundle"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGWM41WH54VQAPDS31F",
+      "kind": "expected_output",
+      "text": [
+        "Exact-set composition tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGWFQD8Z3XM7NCGNZ4E",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT perform recovery, install skills, discover modules through reflection, or duplicate descriptor schemas in composition."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGWNERHJJ0THWQ6CX5G",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept a count-only assertion without exact set equality."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT21TGXZW94JTSRNKTHKK0H",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show exact 13-ID set equality and each rejected composition state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGX5V4R3HJMX8BVEBSA",
+      "gate_type": "self-review",
+      "description": [
+        "No recovery action, skill installation, reflection, or descriptor copy is introduced."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT21TGXPZHEQQCV5M1H0GAE",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Composition.Ledger.RecoverySkillOperationBundleTests --no-restore",
+      "expected_result": "exit 0; at least 8 exact-inventory/duplicate/missing/version cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 180,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    }
+  ]
+}

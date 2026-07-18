@@ -1,0 +1,428 @@
+{
+  "id": "01KXT0KHY1471CHD8D8G9XDR9D",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT069TD553802AT505MG72F",
+  "ref_code": "TASK-LEDGER-CORE-STORAGE",
+  "slug": "CORE-STORAGE",
+  "title": "Implement the SQLite runtime and storage foundation",
+  "description": [
+    "Foundation task intentionally has no Implements link: establish raw-SQLite runtime, storage/idempotency metadata, migration composition, permissions, and generation primitives; domain schema arrives through separately reviewed V001 fragments."
+  ],
+  "objective": [
+    "Provide a real-store-tested LedgerDb, schema-fragment registry, storage metadata schema, generation activation primitives, and owner-only artifact policy."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 20,
+  "created_at": "2026-07-18T07:03:45.8586325+00:00",
+  "decisions": [
+    {
+      "id": "01KXT0KHY4HR8PAAMD94XCEWHC",
+      "target": "DD-LEDGER-CANDIDATE-ACTIVATION",
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY4X6A9JAJ22RVF5FMR",
+      "target": "DD-LEDGER-EMBEDDED-STORAGE",
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT15Q5H08005M5DP9FHT6KC",
+      "target": "TASK-LEDGER-CORE-PROCESS-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Storage project and package references require the solution/process scaffold."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:13:41.0422176+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT2VQE82PFSY2P2QNE65JN7",
+      "path": "src/Tally/Infrastructure/Storage/LedgerDb.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE9QMK03H9EDKXG5N9F",
+      "path": "src/Tally/Infrastructure/Storage/LedgerConnectionFactory.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE9MFHKNCGJ5CN44WTY",
+      "path": "src/Tally/Infrastructure/Storage/LedgerSchema.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE9XP5974X7YN82PXCQ",
+      "path": "src/Tally/Infrastructure/Storage/Migrations/V001/V001StorageSchema.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE97SPWE5YDAH8T396P",
+      "path": "src/Tally/Infrastructure/Storage/StoreGenerationManager.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE97QBSJMS45KF4QR6Z",
+      "path": "src/Tally/Infrastructure/Storage/HostArtifactProtection.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE9TTCYZQFQS29374P6",
+      "path": "src/Tally/Application/Ports/StoragePorts.cs",
+      "action": "create",
+      "role": "narrow host ports",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE9ZAK1FMQ7KWS57SV9",
+      "path": "tests/Tally.Tests/Infrastructure/Storage/LedgerStorageFoundationTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT2VQE9ZFFANJ2GJT0SQE4V",
+      "name": "LedgerDb",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE9WJ3XW8FZKD1H3M5C",
+      "name": "LedgerConnectionFactory",
+      "direction": "produces",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE977WGQDB7DTE5V64S",
+      "name": "LedgerSchemaFragmentRegistry",
+      "direction": "produces",
+      "contract_ref_code": "DD-LEDGER-EMBEDDED-STORAGE",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE92FQE05D4AAXEBXCV",
+      "name": "V001StorageSchema",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE9JAS6ZG4RHETMK5ZT",
+      "name": "StoreGenerationManager",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE9JG5Z9VJQ65PJ3V04",
+      "name": "IAuthoritativeStoreActivator",
+      "direction": "produces",
+      "contract_ref_code": "DD-LEDGER-CANDIDATE-ACTIVATION",
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE9QV277Q5424AJWE8G",
+      "name": "IHostArtifactProtection",
+      "direction": "produces",
+      "contract_ref_code": "DD-LEDGER-EMBEDDED-STORAGE",
+      "sort_order": 6,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT2VQE7G2JF4EDMWYN59G15",
+      "kind": "acceptance_check",
+      "text": [
+        "New data roots are 0700 and databases, WAL, SHM, candidates, manifests, pointers, and backups are 0600."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE8J8ABRGWSA9YP3WG1",
+      "kind": "acceptance_check",
+      "text": [
+        "Supported connections enable foreign_keys, WAL, busy timeout, synchronous FULL financial writes, and reject a newer user_version before mutation."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE8YA0MX0R09YR17CN7",
+      "kind": "acceptance_check",
+      "text": [
+        "V001StorageSchema creates only store generation, artifact manifest, idempotency record, and migration metadata from their linked models; the registry accepts explicit uniquely named V001 fragments and applies the eventual complete set in one transaction."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE8VJ2AJ66FXYKWHM9W",
+      "kind": "acceptance_check",
+      "text": [
+        "StoreGenerationManager accepts only an owner-only CURRENT pointer to a verified generation and atomically replaces it while retaining the prior generation."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE8HXPXMMHG4QNA1WJV",
+      "kind": "acceptance_check",
+      "text": [
+        "A duplicate/missing fragment, migration, lock, permission, or integrity failure exposes no partial schema or unverified current generation."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE8QKZTS2F6R17D3TSZ",
+      "kind": "constraint",
+      "text": [
+        "Use PRAGMA user_version and ordered immutable migrations; CompleteV001Schema is composed only at TASK-LEDGER-GATE-INT-CORE."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE8GE768MEGFACH68FS",
+      "kind": "constraint",
+      "text": [
+        "Exclude QuerySnapshot tables from Durable Ledger State."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE8S6HPNDB5CB1RR1HX",
+      "kind": "expected_output",
+      "text": [
+        "LedgerDb and connection policy"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE8X9FVZDH9KBBV78DH",
+      "kind": "expected_output",
+      "text": [
+        "Explicit V001 schema-fragment registry and storage fragment"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE89E8122YHW8464P65",
+      "kind": "expected_output",
+      "text": [
+        "Linux owner-only artifact protection"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE8T2MQ0RXT6V56VNY7",
+      "kind": "expected_output",
+      "text": [
+        "Generation/CURRENT primitives"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE8KMFBAJ3ZTS6PF80Q",
+      "kind": "expected_output",
+      "text": [
+        "Real-SQLite foundation tests"
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE88PSWTQQF7DA5AQ6V",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT create account, category, transaction, allocation, relationship, or query-snapshot tables without their dedicated schema-fragment tasks."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE8A4CCKSDQQ8PYG1YK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use EF Core, PostgreSQL, SQLite REAL money, provider-neutral repositories, in-place live migration, direct DB-file rename, SQLCipher, custom cryptography, a database server, or mocked SQLite behavior."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0KHY611HQPQVF14RTP4K0",
+      "target_ref_code": "DIAG-LEDGER-LEDGER-ER",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KXSX8ZAN0YWHNV7JM6JJJS56",
+      "target_title": "LEDGER durable and ephemeral data model",
+      "relationship": "references",
+      "required": 0,
+      "sort_order": 12,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY6C1KCPRWP5HKW7SWM",
+      "target_ref_code": "NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFXNVGXH9FYFN6KF8KSE9",
+      "target_title": "Make mutations atomic and durable",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY6H1AW03KM6S6X38JX",
+      "target_ref_code": "NFR-LEDGER-LOCAL-DATA-PROTECTION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFY0879FNP1G5123TXCPZ",
+      "target_title": "Protect local financial data",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY6EXBR20ZGAAP2DR6A",
+      "target_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSX0TXD7DC9JE60YQPSQPD0",
+      "target_title": "StoreGenerationAndArtifactManifest",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT2W10N8HBVW12MRTSKZ5EH",
+      "target_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSX0T6ZF6721V2KH6F0B6CE",
+      "target_title": "IdempotencyRecord",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 15,
+      "created_at": "2026-07-18T07:43:20.5989870+00:00"
+    },
+    {
+      "id": "01KXT0KHY6HA1EJA7BCKEXQMYG",
+      "target_ref_code": "TC-LEDGER-LOCAL-DATA-PROTECTION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSXGA4X7RA3QMZQ1PX4MRRR",
+      "target_title": "Verify local artifact and diagnostic protection",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 13,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY6RZHMF0V8HSQ8PCR8",
+      "target_ref_code": "TC-LEDGER-ATOMIC-CRASH-RECOVERY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSXG95SJK6DF2MYPDPAE3GX",
+      "target_title": "Prove mutation crash atomicity and idempotency",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 14,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT2VQE9RC9VNTX9PNYFM696",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show connection policy, fragment atomicity, rollback, permission, and pointer evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KXT2VQE9M6C4BP42F8VR20TJ",
+      "gate_type": "self-review",
+      "description": [
+        "V001StorageSchema contains only the linked storage and idempotency models."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT2VQE9G40A25977J9ZSFAR",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Infrastructure.Storage.LedgerStorageFoundationTests --no-restore",
+      "expected_result": "exit 0; at least 12 real-SQLite connection/migration/rollback/permission/pointer cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    }
+  ]
+}

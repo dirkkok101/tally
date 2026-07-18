@@ -1,0 +1,330 @@
+{
+  "id": "01KXT0W0YSSD951FQZCWC1VKQ5",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06AV2YBFA37A3CEQMT346",
+  "ref_code": "TASK-LEDGER-BACKUP-VERIFY",
+  "slug": "BACKUP-VERIFY",
+  "title": "Create and independently verify Ledger backups",
+  "description": [
+    "Implement the versioned backup operations on the shared DurableLedgerVerifier; publication remains impossible until complete-state verification succeeds."
+  ],
+  "objective": [
+    "Publish exactly one owner-only versioned backup artifact after checksum, compatibility, complete Durable Ledger State, relationship, idempotency, count, and exact-total verification succeeds."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 10,
+  "created_at": "2026-07-18T07:08:23.3874370+00:00",
+  "decisions": [
+    {
+      "id": "01KXT0W0YVQHSPN3GKKGVE9VXY",
+      "target": "DD-LEDGER-EMBEDDED-STORAGE",
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YV6X8X54A5XZ555YVN",
+      "target": "DD-LEDGER-IDEMPOTENT-MUTATIONS",
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT26D62G3JD44A4098HSQDH",
+      "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes ArtifactReconciler."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:31:32.1634810+00:00"
+    },
+    {
+      "id": "01KXT26DQ8WX0FWJG6KBC0Z1QR",
+      "target": "TASK-LEDGER-CORE-STORAGE",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes IHostArtifactProtection."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:31:32.7134642+00:00"
+    },
+    {
+      "id": "01KXT26CKC4KEC6JV3S3AHDEGQ",
+      "target": "TASK-LEDGER-DURABLE-STATE-VERIFIER",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes DurableLedgerVerifier."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:31:31.5656328+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT25YEYJVEHTJAP1PGV8W65",
+      "path": "src/Tally/Contracts/Ledger/Recovery/BackupContracts.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    },
+    {
+      "id": "01KXT25YEYZVZBWBQCMBH4TNZQ",
+      "path": "src/Tally/Infrastructure/Recovery/BackupService.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    },
+    {
+      "id": "01KXT25YEY0R683H0NA196R91K",
+      "path": "src/Tally/Features/Ledger/Recovery/BackupOperationModule.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    },
+    {
+      "id": "01KXT25YEYRFZWRK103XDZ4900",
+      "path": "tests/Tally.Tests/Features/Ledger/Recovery/BackupTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT25YEYV6MZQ3VQG6ZQMC1R",
+      "name": "BackupOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    },
+    {
+      "id": "01KXT25YEZ88N4FNSHGH2S76SE",
+      "name": "BackupService",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    },
+    {
+      "id": "01KXT25YEZZMCGWTVJ9QDR1HPJ",
+      "name": "DurableLedgerVerifier",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    },
+    {
+      "id": "01KXT25YEZZ37Y27JGRCXMZSJY",
+      "name": "ArtifactReconciler",
+      "direction": "consumes",
+      "contract_ref_code": "DD-LEDGER-IDEMPOTENT-MUTATIONS",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    },
+    {
+      "id": "01KXT25YEZTV0W7BRKXEJGRBE6",
+      "name": "IHostArtifactProtection",
+      "direction": "consumes",
+      "contract_ref_code": "DD-LEDGER-EMBEDDED-STORAGE",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT25YEXGSD8MSZXDBD1CZQM",
+      "kind": "acceptance_check",
+      "text": [
+        "backup.create under the writer lock uses SQLite online backup to private staging, invokes DurableLedgerVerifier, writes the verified checksum/version/fingerprint/counts/totals manifest, flushes, and atomically publishes a non-existing 0600 target without changing live state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    },
+    {
+      "id": "01KXT25YEYVE2PZAR620BX0MA3",
+      "kind": "acceptance_check",
+      "text": [
+        "backup.verify independently checks the artifact checksum and compatibility, then returns the complete report produced by DurableLedgerVerifier."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    },
+    {
+      "id": "01KXT25YEYC6TY7HERQZ1NKJ8D",
+      "kind": "acceptance_check",
+      "text": [
+        "A corrupt, incomplete, unsupported, inaccessible, unsafe, or existing artifact path returns the specified stable error and mutates neither artifact nor live store."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    },
+    {
+      "id": "01KXT25YEYF7MN6SHDWFDT1931",
+      "kind": "acceptance_check",
+      "text": [
+        "Diagnostics expose no descriptions, credentials, or unmasked identifiers; owner-only permissions and host-protection posture are preserved."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    },
+    {
+      "id": "01KXT25YEYYJ08K25X5HT0M135",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical create replay reconciles the published manifest and returns the original artifact result; a changed request conflicts."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    },
+    {
+      "id": "01KXT25YEY19SQ3XPXG1ME1RDB",
+      "kind": "constraint",
+      "text": [
+        "Use the exact backup operation and stable-error contract in DM-LEDGER-RECOVERY-STORAGE-CONTRACTS."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    },
+    {
+      "id": "01KXT25YEYB9M7GVHNGSPV9XAG",
+      "kind": "expected_output",
+      "text": [
+        "Backup contracts/service/module"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    },
+    {
+      "id": "01KXT25YEYA49GRPEKD2DSMTSQ",
+      "kind": "expected_output",
+      "text": [
+        "Verified manifest publication"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    },
+    {
+      "id": "01KXT25YEYWDGEQDNVXVE38QFH",
+      "kind": "expected_output",
+      "text": [
+        "Artifact/replay/security tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    },
+    {
+      "id": "01KXT25YEYXZR2R6Y91TYXG1AY",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT copy a live WAL database file directly, overwrite an existing target, include QuerySnapshot rows, weaken permissions, or rely on database-only idempotency."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    },
+    {
+      "id": "01KXT25YEYDAQPFJE1XR2H289Z",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT publish before the shared verifier returns its complete successful report."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0W0YW2BM64YNTAE5TWWXF",
+      "target_ref_code": "NFR-LEDGER-LOCAL-DATA-PROTECTION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFY0879FNP1G5123TXCPZ",
+      "target_title": "Protect local financial data",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YWRW4752DVJD8TPMT1",
+      "target_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGFP6T4HV8E4YASJ6A3FT",
+      "target_title": "RecoveryStorageOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YX8QDZJ8MT4NQ9A9NV",
+      "target_ref_code": "TC-LEDGER-BACKUP-VERIFICATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK52DMJ9R9PK0FQF3FE2S",
+      "target_title": "Verify create and verify ledger backups contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXT0W0YV26QR5FA0W3FF9NGY",
+      "target": "FR-LEDGER-BACKUP-VERIFICATION",
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT25YEZ0TP52PMY895SJM9B",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show verified manifest publication, corruption rejection, owner-only permissions, and artifact replay."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    },
+    {
+      "id": "01KXT25YEZD2NPEBVH0TP1N4VD",
+      "gate_type": "self-review",
+      "description": [
+        "Snapshots are excluded by the shared verifier and no raw payload enters diagnostics."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT25YEZCGPEPBVV3MG5E7NH",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Features.Ledger.Recovery.BackupTests --no-restore",
+      "expected_result": "exit 0; at least 14 publication/path/permission/replay/verifier-boundary cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "01KXT069GD3347N15180MYTNVK",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "ref_code": "SP-LEDGER-00-EVIDENCE-GATES",
+  "title": "Owner evidence gates",
+  "description": [
+    "Resolve OQ-LEDGER-1 through OQ-LEDGER-6 before dependent implementation."
+  ],
+  "sort_order": 0,
+  "created_at": "2026-07-18T06:56:31.2464443+00:00"
+}

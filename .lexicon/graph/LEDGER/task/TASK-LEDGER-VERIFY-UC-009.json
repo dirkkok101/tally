@@ -1,0 +1,266 @@
+{
+  "id": "01KXT126T8PYNCZ96K81J9EBH5",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-VERIFY-UC-009",
+  "slug": "VERIFY-UC-009",
+  "title": "TransactionCorrectionWorkflow",
+  "description": [
+    "Verification-only task intentionally has no Implements link: trace UC-LEDGER-009 main scenario and every failure path through the published CLI."
+  ],
+  "objective": [
+    "Prove UC-LEDGER-009 through observable process results and durable-state invariants."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 110,
+  "created_at": "2026-07-18T07:11:45.9941647+00:00",
+  "dependencies": [
+    {
+      "id": "01KXT16DD85CY3ZR64QNB355KN",
+      "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Use-case verification invokes the fully wired published public contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:14:03.8168074+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT126TDZ0GDCQ5WBVP7R2F8",
+      "path": "tests/Tally.Tests/EndToEnd/UC009TransactionCorrectionWorkflowTests.cs",
+      "action": "test",
+      "role": "verification",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT19M7S6B6DH2Y8S4WBDKXP",
+      "name": "PublishedTallyFixture",
+      "direction": "consumes",
+      "notes": [
+        "Release published-process E2E fixture"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:15:49.1136294+00:00"
+    },
+    {
+      "id": "01KXT19M7TDEGP2C9CHAD94PVF",
+      "name": "CompletePublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "Exactly 38 wired operations"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:15:49.1136294+00:00"
+    },
+    {
+      "id": "01KXT19M7TM6DR843GSBQ54SDV",
+      "name": "VerifiedUC009",
+      "direction": "produces",
+      "contract_ref_code": "UC-LEDGER-009",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:15:49.1136294+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT126TC6D11WCNYCRHH2GGX",
+      "kind": "acceptance_check",
+      "text": [
+        "Void/supersede with reason preserves original facts, appends attributable history, retires all active relationships atomically, and default actuals count only valid outcome."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TCG3QDF20TB376W7DP",
+      "kind": "acceptance_check",
+      "text": [
+        "Supersession creates an independent replacement and copies no financial relationship; history exposes original/replacement/retired links/actor/reason."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TC4S60JXGX8JHW7EE3",
+      "kind": "acceptance_check",
+      "text": [
+        "Not found, absent reason/key, repeated/incompatible correction, relationship retirement failure, and invalid replacement produce documented all-or-nothing outcomes."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TC0WRXW16N0SAP65AM",
+      "kind": "constraint",
+      "text": [
+        "Invoke the Release published tally executable; inspect stdout, stderr, exit code, and real temporary SQLite state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TC65NWHYH28TFJGB33",
+      "kind": "expected_output",
+      "text": [
+        "UC009TransactionCorrectionWorkflowTests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TCP0GMRC1PBNRFXMNM",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT mutate/delete original facts or silently transfer relationships."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TC8W0HCH3ADFQ6PN9W",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT omit UC-LEDGER-009 rollback and history-inclusive paths."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TDDD0535AT9Z8E2JRV",
+      "kind": "note",
+      "text": [
+        "This gate validates completed behavior and intentionally has no Implements link."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TDSWTTCVWF2V4GNA6C",
+      "kind": "note",
+      "text": [
+        "Operations exercised: ledger.transaction.void|supersede|get and ledger.actuals.query."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT126TDG6266TQ6Y0PPCS34",
+      "target_ref_code": "UC-LEDGER-009",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXRJSSNMJX6N8FQ2FK9QY0QS",
+      "target_title": "Void or supersede an erroneous transaction",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TDTFBMSGGYPBPZ5K61",
+      "target_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGF1VZPC8WADN6FY234H0",
+      "target_title": "TransactionOperationContracts",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TD9TS89C7VNHQWASB8",
+      "target_ref_code": "FR-LEDGER-TRANSACTION-CORRECTION",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXSQBX8VHG12WG2VF5XXDB0E",
+      "target_title": "Void or supersede erroneous transactions",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TDFNHS7R2ESCF6HD8F",
+      "target_ref_code": "FR-LEDGER-IDEMPOTENT-WRITES",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXSQBX8TSCMJV15PDGZSHYVE",
+      "target_title": "Make public writes idempotent",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TD8YV0TZ6SRPGMZA30",
+      "target_ref_code": "TC-LEDGER-TRANSACTION-CORRECTION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK8PV2RHM4XM3TYJQMKPV",
+      "target_title": "Verify void or supersede erroneous transactions contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TD634SHPKFJM3T4HKY",
+      "target_ref_code": "TC-LEDGER-ATTRIBUTABLE-HISTORY-INVARIANTS",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSXG9F9YQX3AA2Q5QSB1PY5",
+      "target_title": "Verify attributable financial history",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT126TDAN0T0KHCQSZC3R07",
+      "gate_type": "test-evidence",
+      "description": [
+        "Evidence maps UC-LEDGER-009 main scenario and each numbered failure path to stdout/error/exit/state assertions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TD5WDYJ99SERDA688A",
+      "gate_type": "self-review",
+      "description": [
+        "No scenario calls handlers or SQLite directly."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT126TDKWVA6FA4RF9KHHBB",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.EndToEnd.UC009TransactionCorrectionWorkflowTests --no-restore",
+      "expected_result": "exit 0; at least 10 main/failure-path scenarios run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ]
+}

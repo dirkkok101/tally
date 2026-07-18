@@ -1,0 +1,11 @@
+{
+  "id": "01KXT06B5N11DPFN2347XT7G32",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "ref_code": "SP-LEDGER-05-VERIFICATION",
+  "title": "Integration and use-case verification",
+  "description": [
+    "Wire the public surface and prove security, every use case, and module completion."
+  ],
+  "sort_order": 5,
+  "created_at": "2026-07-18T06:56:32.9506504+00:00"
+}

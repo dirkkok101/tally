@@ -1,0 +1,239 @@
+{
+  "id": "01KXT2XZD9CT63JKHPAF9JXVJG",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT069TD553802AT505MG72F",
+  "ref_code": "TASK-LEDGER-CORE-SCHEMA-CATALOGUE",
+  "slug": "CORE-SCHEMA-CATALOGUE",
+  "title": "Implement the V001 catalogue schema fragment",
+  "description": [
+    "Schema foundation intentionally has no Implements link: translate the approved account, category, and catalogue-lifecycle models into one independently verified V001 fragment."
+  ],
+  "objective": [
+    "Create exact account, spend-category, and attributable catalogue-lifecycle tables, constraints, indexes, and active-name uniqueness without implementing catalogue behavior."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 21,
+  "created_at": "2026-07-18T07:44:24.4911988+00:00",
+  "decisions": [
+    {
+      "id": "01KXT2XZDBD28ZNZK7QEMWBD4Z",
+      "target": "DD-LEDGER-EMBEDDED-STORAGE",
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDBQF7V4VR5XV3G1NNZ",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT2XZDCASJV3HGKEEKH6XQ9",
+      "target": "TASK-LEDGER-CORE-STORAGE",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes LedgerDb and LedgerSchemaFragmentRegistry."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT2XZDCJPVTQJY893M9QC3P",
+      "path": "src/Tally/Infrastructure/Storage/Migrations/V001/V001CatalogueSchema.cs",
+      "action": "create",
+      "role": "schema fragment",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDCMH42K5AMV345VKTV",
+      "path": "tests/Tally.Tests/Infrastructure/Storage/LedgerCatalogueSchemaTests.cs",
+      "action": "test",
+      "role": "real SQLite schema verification",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT2XZDCN4709AQ9MZSCHAN3",
+      "name": "V001CatalogueSchema",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-ACCOUNT",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDCA0V5Z69AANPTA60C",
+      "name": "LedgerSchemaFragmentRegistry",
+      "direction": "consumes",
+      "contract_ref_code": "DD-LEDGER-EMBEDDED-STORAGE",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDCRG2VF9BM1XVZJGS5",
+      "name": "LedgerDb",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT2XZDBX7QY8GHR9EZQ9V9A",
+      "kind": "acceptance_check",
+      "text": [
+        "V001CatalogueSchema creates every field, enum check, lifecycle foreign key, RESTRICT rule, status timestamp rule, and active uniqueness constraint in the three linked models."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDBFJY3T50XYA0KQJB0",
+      "kind": "acceptance_check",
+      "text": [
+        "Account active masked identity is unique within institution; category active normalized name is unique; archive history remains attributable and append-only."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDB710XDYEKWT6CRA9F",
+      "kind": "acceptance_check",
+      "text": [
+        "Applying the fragment twice in one migration plan is rejected before SQL; an injected statement failure rolls back every catalogue table and index."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDB69G0XCEV0VTWH4XR",
+      "kind": "constraint",
+      "text": [
+        "Implement an explicit V001 fragment only; TASK-LEDGER-GATE-INT-CORE owns complete-schema composition."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDB96ZM9RK8N1QNXXGH",
+      "kind": "expected_output",
+      "text": [
+        "V001CatalogueSchema"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDBMK66Q1Q4ZQQDBW5W",
+      "kind": "expected_output",
+      "text": [
+        "LedgerCatalogueSchemaTests real-SQLite constraint tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDBBY2WMZZ8MMXA57BJ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT create transaction, allocation, relationship, snapshot, recovery, or idempotency tables in this fragment."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDB0XRQXMEAF328T50N",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add hard delete, account reactivation, category hierarchy, full account numbers, EF Core, or mocked SQLite tests."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT2XZDC5B6RDJ3BV117N40B",
+      "target_ref_code": "DM-LEDGER-ACCOUNT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSX0RKNG8K33ZABGEHG0HBK",
+      "target_title": "Account",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDC8D67AGJW34C8K615",
+      "target_ref_code": "DM-LEDGER-SPEND-CATEGORY",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSX0RXQS0HJPM9092VHE2P0",
+      "target_title": "SpendCategory",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDC9733HG0JNAW8XGSX",
+      "target_ref_code": "DM-LEDGER-CATALOGUE-LIFECYCLE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYV1AHPKBV4679JRDD8Q1H",
+      "target_title": "CatalogueLifecycleEvents",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT2XZDCRN8DSE1C582702K6",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show exact table, index, foreign-key, check, uniqueness, and rollback evidence for every linked model."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDCPZQETYDRV86G91Z2",
+      "gate_type": "self-review",
+      "description": [
+        "The fragment contains every linked model field and no tables owned by another fragment."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT2XZDC13PKSV5KN1PRR3QT",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Infrastructure.Storage.LedgerCatalogueSchemaTests --no-restore",
+      "expected_result": "exit 0; at least 10 real-SQLite table/index/foreign-key/check/rollback cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 240,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    }
+  ]
+}

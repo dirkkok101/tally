@@ -1,0 +1,341 @@
+{
+  "id": "01KXT0SMDZTVX1WWRH3ZJVA6X5",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06AGT9EPMYN1DCHN46ZV9",
+  "ref_code": "TASK-LEDGER-RELATIONSHIP-CORRECTIONS",
+  "slug": "RELATIONSHIP-CORRECTIONS",
+  "title": "Implement relationship revoke and replace",
+  "description": [
+    "Deliver attributable transfer/refund revoke, replace, and history-inclusive relationship detail."
+  ],
+  "objective": [
+    "Retire or replace one active financial relationship atomically after fully revalidating the proposed roles and spend effect."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 30,
+  "created_at": "2026-07-18T07:07:05.0252128+00:00",
+  "decisions": [
+    {
+      "id": "01KXT0SME4D4MEEXDK4V80A260",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT1AZ6DAAVXVYA7CYKRTCG0",
+      "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:16:33.1022985+00:00"
+    },
+    {
+      "id": "01KXT161XDFQXNYNPQP8BFMGQQ",
+      "target": "TASK-LEDGER-REFUNDS",
+      "dependency_type": "compile",
+      "reason": [
+        "Correction must revalidate both transfer and refund policies and modify the shared RelationshipStore after both exist."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:13:52.0462833+00:00"
+    },
+    {
+      "id": "01KXT1AZQEYZYQ9TB9VJ8337T5",
+      "target": "TASK-LEDGER-TRANSFERS",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires TransferPolicy from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:16:33.6469606+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0SME4AY50E10JDC7MPSGY",
+      "path": "src/Tally/Contracts/Ledger/Relationships/RelationshipLifecycleContracts.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME5GG7Y4FK1HVH35847",
+      "path": "src/Tally/Domain/Ledger/Relationships/RelationshipLifecycle.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME5RMRER3M7WPY774MY",
+      "path": "src/Tally/Features/Ledger/Relationships/RelationshipLifecycleHandlers.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME5T1W5GHWBEH18NSSQ",
+      "path": "src/Tally/Infrastructure/Storage/Relationships/RelationshipStore.cs",
+      "action": "modify",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME55NZNJVM5C0YT4VZ4",
+      "path": "src/Tally/Features/Ledger/Relationships/RelationshipLifecycleOperationModule.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME5Z1DTP84M0MJBJYHR",
+      "path": "tests/Tally.Tests/Features/Ledger/Relationships/RelationshipLifecycleTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT0SME526VRX8XEWF6HTCWQ",
+      "name": "RelationshipLifecycleOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME57GDQXC84A8VB3GAK",
+      "name": "RelationshipStore.RevokeAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME5F4GFFVHPEXA6M6GK",
+      "name": "RelationshipStore.ReplaceAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME5QPTRGQBD27X9A75E",
+      "name": "TransferPolicy",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME58HW6J337R9WK6XN3",
+      "name": "RefundPolicy",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME5EQ40RK452454HAS9",
+      "name": "LedgerMutationExecutor.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0SME4MG10S2YNZ0HVRS7G",
+      "kind": "acceptance_check",
+      "text": [
+        "Revoke active transfer/refund with reason appends attributable lifecycle event, retires it atomically, and removes its active spend effect."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME4182WMBCKHB6KBX7F",
+      "kind": "acceptance_check",
+      "text": [
+        "Replace revalidates lifecycle, role, cardinality, amount, account, currency, sign, cumulative refund, and exclusivity before retiring old and activating exactly one distinct relationship."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME45S581Z9VJK4EZ1F7",
+      "kind": "acceptance_check",
+      "text": [
+        "Invalid replacement leaves the old relationship active; inactive re-revoke returns the documented lifecycle error with no change."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME43VFKCSZAK7DPTWWN",
+      "kind": "acceptance_check",
+      "text": [
+        "History detail returns participants/type/reason/actor/time and replacement references for active/retired chain."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME4S28359YFC8G1G025",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical replay returns original before/after outcome; changed replay conflicts without altering the chain."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME45WCPGBW2NQTNWK52",
+      "kind": "expected_output",
+      "text": [
+        "Relationship lifecycle contracts/domain/handlers/module"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME4MQ8T8SHXDFMSHRCM",
+      "kind": "expected_output",
+      "text": [
+        "RelationshipStore lifecycle support"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME4QVSJHTGXRA87XHYB",
+      "kind": "expected_output",
+      "text": [
+        "Atomic correction tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME45PRFXH97HD8S043J",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT edit a relationship in place, retire before replacement validation, silently move roles, or erase history — per DD-LEDGER-IMMUTABLE-HISTORY."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME4CDC5EPZY8RCTF2T8",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT bypass TransferPolicy or RefundPolicy during replacement."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0SME874HAD0WXJKJM9B6S",
+      "target_ref_code": "OQ-LEDGER-5",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KXR55HWRSWNEKE7H763R8173",
+      "target_title": "Validate the proposed transfer, refund/reversal, and cash-withdrawal spend policies with representative transactions.",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME8AVFASEGFWA3D3BR7",
+      "target_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGFC3892700GHYSWPE777",
+      "target_title": "RelationshipActualsOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME8V82TXYF5JVV5BN67",
+      "target_ref_code": "TC-LEDGER-RELATIONSHIP-CORRECTION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK6W7AC84YR8SA3TGXYB9",
+      "target_title": "Verify revoke or replace financial relationships contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXT0SME48HT6ZERM2KTK9FCX",
+      "target": "FR-LEDGER-RELATIONSHIP-CORRECTION",
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0SME8SCH6H68EK7HYH1BZ",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show validation-before-retirement, rollback, lifecycle history, spend-effect, and replay evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME8FR6EF5QWFK7RZAHA",
+      "gate_type": "self-review",
+      "description": [
+        "All replacement paths reuse typed transfer/refund policies."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0SME8N7DTX74W660Q5DP4",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Features.Ledger.Relationships.RelationshipLifecycleTests --no-restore",
+      "expected_result": "exit 0; at least 14 revoke/replace/rollback/history/replay cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ]
+}

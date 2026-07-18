@@ -1,0 +1,298 @@
+{
+  "id": "01KXT1ZHV835PPKVJ98JY3VG8K",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06AV2YBFA37A3CEQMT346",
+  "ref_code": "TASK-LEDGER-DURABLE-STATE-VERIFIER",
+  "slug": "DURABLE-STATE-VERIFIER",
+  "title": "Build the complete Durable Ledger State verifier",
+  "description": [
+    "Shared recovery foundation intentionally has no Implements link: independently verify every durable entity, lifecycle, relationship, idempotency outcome, count, and exact reconciliation total in a candidate or backup store."
+  ],
+  "objective": [
+    "Provide one real-SQLite verifier whose successful report is required before backup publication, restore activation, or storage-evolution activation."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 5,
+  "created_at": "2026-07-18T07:27:47.5618899+00:00",
+  "decisions": [
+    {
+      "id": "01KXT1ZHVAGJ2TE8FRPJ2QPC30",
+      "target": "DD-LEDGER-CANDIDATE-ACTIVATION",
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVABT38M3HZZ47GKQK0",
+      "target": "DD-LEDGER-EMBEDDED-STORAGE",
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT1ZHVBQ4W0QWTRB74CPX63",
+      "target": "TASK-LEDGER-ACTUALS-PROJECTION",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes ActualsCalculator.Calculate."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVBB0N5PZKA3QPCT9M3",
+      "target": "TASK-LEDGER-ACTUALS-SNAPSHOT",
+      "dependency_type": "compile",
+      "reason": [
+        "Complete-state verification uses the final actuals projection while excluding snapshots."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVBH6CJEH1Y7PYQ0WWX",
+      "target": "TASK-LEDGER-CORE-STORAGE",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes LedgerDb."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT1ZHVAG1SXKAQS2R2KYZ92",
+      "path": "src/Tally/Domain/Ledger/Recovery/DurableLedgerReport.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVA7B8DRDF1CBAE3FVA",
+      "path": "src/Tally/Infrastructure/Recovery/DurableLedgerVerifier.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVA67K4WFPDJ7F5VK4Z",
+      "path": "tests/Tally.Tests/Infrastructure/Recovery/DurableLedgerVerifierTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT1ZHVA8AR8NJ9N421XQD4P",
+      "name": "DurableLedgerVerifier",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVA1HJ3VQDMATDVPKCK",
+      "name": "LedgerDb",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVAKGQ2R1BPQ9ED3BFG",
+      "name": "ActualsCalculator.Calculate",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT1ZHVANWBMZ02D8ZKGY771",
+      "kind": "acceptance_check",
+      "text": [
+        "Verification opens the selected non-live store read-only and checks checksum metadata, SQLite integrity, foreign keys, schema and storage compatibility before domain reconciliation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVA3HGYPJEKA26JCT7S",
+      "kind": "acceptance_check",
+      "text": [
+        "The report includes every Durable Ledger State aggregate and lifecycle type, active and retired relationship cardinalities, idempotency outcomes, per-type counts, and exact Int64 reconciliation totals; QuerySnapshot rows are excluded."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVAPM3NQT87BT5WXGQ3",
+      "kind": "acceptance_check",
+      "text": [
+        "Any missing type, orphan, invalid lifecycle, relationship-role conflict, idempotency mismatch, count mismatch, overflow, or total mismatch returns a stable failed report and cannot activate or publish the store."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVAF6YQK00KM894VR2G",
+      "kind": "acceptance_check",
+      "text": [
+        "A verified backup restored into a fresh private generation reproduces the source report exactly apart from generation-specific metadata."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVA4XAW8M38FDZZB82B",
+      "kind": "acceptance_check",
+      "text": [
+        "Tests use real SQLite files and deterministic corruptions; diagnostics contain identifiers and counts only, never descriptions, credentials, unmasked account identifiers, or serialized financial payloads."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVAX08DNP70ZX3R6ENE",
+      "kind": "constraint",
+      "text": [
+        "Use exact Int64 minor-unit arithmetic with checked overflow."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVAA41C8W0S1BYFVTEE",
+      "kind": "expected_output",
+      "text": [
+        "DurableLedgerReport"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVA9N17ZSFPX4FS60CZ",
+      "kind": "expected_output",
+      "text": [
+        "DurableLedgerVerifier"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVAT8C6NCFHSA9SEHFW",
+      "kind": "expected_output",
+      "text": [
+        "Complete-state and recovery-drill tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVAVP9262XGMMD7CV2G",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT treat PRAGMA integrity_check, a checksum, or row counts alone as complete-state verification."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVADS0DARN52060RSJM",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT include QuerySnapshot state, mutate the inspected store, use EF Core, mock SQLite, or claim encryption from ext4."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT1ZHVANAZDYA0EAWQP8T2J",
+      "target_ref_code": "NFR-LEDGER-VERIFIED-RECOVERABILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFYKENRZNNNRNH8E8NWYD",
+      "target_title": "Prove Ledger recoverability",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVANERSJAN40FC7GKXE",
+      "target_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSX0TXD7DC9JE60YQPSQPD0",
+      "target_title": "StoreGenerationAndArtifactManifest",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVBFH5CDQT264T67VTJ",
+      "target_ref_code": "TC-LEDGER-VERIFIED-RECOVERY-DRILL",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSXGB390FKV1Z5SXH87EX6A",
+      "target_title": "Reproduce complete Durable Ledger State",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT1ZHVAWYNMPZPMN5WBAMHC",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show per-type counts, exact totals, corruption rejection, snapshot exclusion, and fresh-generation reproduction."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    },
+    {
+      "id": "01KXT1ZHVACTQAHMW5J573Y340",
+      "gate_type": "self-review",
+      "description": [
+        "Compare the report inventory with every durable model in the LEDGER design."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT1ZHVACMMTGJYDGKZHWVND",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Infrastructure.Recovery.DurableLedgerVerifierTests --no-restore",
+      "expected_result": "exit 0; at least 16 complete-state/corruption/reconciliation/recovery cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+    }
+  ]
+}

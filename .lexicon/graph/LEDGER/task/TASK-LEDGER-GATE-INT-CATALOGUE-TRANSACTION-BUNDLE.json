@@ -1,0 +1,248 @@
+{
+  "id": "01KXT21TGQEBAM9S5BN7P639J5",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-GATE-INT-CATALOGUE-TRANSACTION-BUNDLE",
+  "slug": "GATE-INT-CATALOGUE-TRANSACTION-BUNDLE",
+  "title": "Compose the catalogue and transaction operation bundle",
+  "description": [
+    "Convergence gate intentionally has no Implements link: compose the completed account, category, transaction, and allocation modules without changing their contracts."
+  ],
+  "objective": [
+    "Produce one deterministic 17-operation bundle for all catalogue and transaction commands, rejecting missing, duplicate, or version-incompatible descriptors before dispatch."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 1,
+  "created_at": "2026-07-18T07:29:01.9775135+00:00",
+  "dependencies": [
+    {
+      "id": "01KXT21TGTC22QMJBHD8J2JXQ3",
+      "target": "TASK-LEDGER-ACCOUNTS",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes AccountOperationModule."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGVTXGH5SHBY2AMJNAC",
+      "target": "TASK-LEDGER-CATEGORIES",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes CategoryOperationModule."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGVW3VP7BRF47QKT8RD",
+      "target": "TASK-LEDGER-CATEGORY-ALLOCATIONS",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes CategoryAllocationOperationModule."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGVQDHY99FJKVAFA394",
+      "target": "TASK-LEDGER-TRANSACTION-CORRECTIONS",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes final TransactionOperationModule."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT21TGT29FZJTB3Q0NBZ3N5",
+      "path": "src/Tally/Composition/Ledger/CatalogueTransactionOperationBundle.cs",
+      "action": "create",
+      "role": "integration composition",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGTPDZ21CAHCTHN7J0J",
+      "path": "tests/Tally.Tests/Composition/Ledger/CatalogueTransactionOperationBundleTests.cs",
+      "action": "test",
+      "role": "integration",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT21TGTP1JYWWWM52ZMQBGV",
+      "name": "CatalogueTransactionOperationBundle",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGT5K9CWZG9AK526P5T",
+      "name": "AccountOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGTR9157Z08MSH5ME4Q",
+      "name": "CategoryOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGTQ7Q606Q4MP4968C3",
+      "name": "CategoryAllocationOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGTYQFAEWP09M0W6GF3",
+      "name": "TransactionOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT21TGSA8SDYJY2HH6QN31V",
+      "kind": "acceptance_check",
+      "text": [
+        "The bundle contains exactly 17 unique descriptors: 11 account/category operations and 6 transaction/allocation/correction operations defined by the consumed modules."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGSHNBMBK3AV0X9000T",
+      "kind": "acceptance_check",
+      "text": [
+        "Descriptor order is operationId ordinal; every CLI path, operationId, kind, contract range, schema, error, and exit entry is retained unchanged from its source module."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGTP9MAN5QKWAHPK39R",
+      "kind": "acceptance_check",
+      "text": [
+        "A missing module, duplicate operationId, duplicate CLI path, or incompatible contract range returns a deterministic composition failure before any handler can dispatch."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGTSDFHDNRYCEK4JTKX",
+      "kind": "acceptance_check",
+      "text": [
+        "Focused tests compare the complete bundle inventory with all four source modules and prove no descriptor is added, dropped, or rewritten."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGTR57HC0HDXTJ60FE8",
+      "kind": "constraint",
+      "text": [
+        "Use explicit compile-time module composition."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGT4FC4ETBJ7RBKSNKP",
+      "kind": "expected_output",
+      "text": [
+        "CatalogueTransactionOperationBundle"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGTM9MQWG61B3ZMVM7Y",
+      "kind": "expected_output",
+      "text": [
+        "Exact-set composition tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGTQ1KAA8M34AGYM6PX",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT hand-maintain a second operation schema, discover modules through reflection, or make this gate implement domain behavior."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGT3QWJC65A8BPVQE3K",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept a count-only assertion without exact set equality."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT21TGTX9ZTZXDB493MDBFZ",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show exact 17-ID set equality and each rejected composition state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGTQT558GKVZHHAAED4",
+      "gate_type": "self-review",
+      "description": [
+        "No domain handler or duplicate descriptor schema is introduced."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT21TGTPZEV9SKN6P8Z82C3",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Composition.Ledger.CatalogueTransactionOperationBundleTests --no-restore",
+      "expected_result": "exit 0; at least 8 exact-inventory/duplicate/missing/version cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 180,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    }
+  ]
+}

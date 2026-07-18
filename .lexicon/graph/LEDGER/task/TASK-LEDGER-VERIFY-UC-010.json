@@ -1,0 +1,265 @@
+{
+  "id": "01KXT126T8NS1Y8KHM91PYERDC",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-VERIFY-UC-010",
+  "slug": "VERIFY-UC-010",
+  "title": "RefundWorkflow",
+  "description": [
+    "Verification-only task intentionally has no Implements link: trace UC-LEDGER-010 main scenario and every failure path through the published CLI."
+  ],
+  "objective": [
+    "Prove UC-LEDGER-010 through observable process results and durable-state invariants."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 120,
+  "created_at": "2026-07-18T07:11:45.9941647+00:00",
+  "dependencies": [
+    {
+      "id": "01KXT16DZEFCHF9HRHZXXFQWRQ",
+      "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Use-case verification invokes the fully wired published public contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:14:04.3993292+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT126TE7XS0J68MQAM956SQ",
+      "path": "tests/Tally.Tests/EndToEnd/UC010RefundWorkflowTests.cs",
+      "action": "test",
+      "role": "verification",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT19MXDFF08BNHRDQHSG5T1",
+      "name": "PublishedTallyFixture",
+      "direction": "consumes",
+      "notes": [
+        "Release published-process E2E fixture"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:15:49.8048473+00:00"
+    },
+    {
+      "id": "01KXT19MXDSWYT5G3JH1K2NDMN",
+      "name": "CompletePublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "Exactly 38 wired operations"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:15:49.8048473+00:00"
+    },
+    {
+      "id": "01KXT19MXDX8CDSKJ4VARMZ9GC",
+      "name": "VerifiedUC010",
+      "direction": "produces",
+      "contract_ref_code": "UC-LEDGER-010",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:15:49.8048473+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT126TDW9KTKKXMJDEH7BRF",
+      "kind": "acceptance_check",
+      "text": [
+        "Valid same-account/currency opposite-sign active original/credit creates one full-credit relationship and offsets current original category in credit EffectiveDate period."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TDMKSF99XJQNQ4ARZX",
+      "kind": "acceptance_check",
+      "text": [
+        "Multiple partial credits remain within cumulative original magnitude and later category correction moves their category offset."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TDB8PSM8PF5R662C9Z",
+      "kind": "acceptance_check",
+      "text": [
+        "Account/currency/sign/lifecycle/over-refund/transfer/reuse/refund-as-original violations return stable no-link outcomes; failed write is atomic."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TDNQ06CPY6FHHV7SJE",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical replay returns one relationship and a refund-heavy selected period may produce negative Budget Actual."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TEZNR7MNRW1ZDW8HBT",
+      "kind": "constraint",
+      "text": [
+        "Invoke the Release published tally executable; inspect stdout, stderr, exit code, and real temporary SQLite state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TDX1PT8RDP8AGGFDWE",
+      "kind": "expected_output",
+      "text": [
+        "UC010RefundWorkflowTests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TDJ8EZGR8BE7EX8EFD",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT infer refunds, split one credit, or use original date/category history instead of current category and credit date."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TD6V0DQ2TJ1EEAW044",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT omit UC-LEDGER-010 role/cardinality failures."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TEHXRX9M85VF00AY0X",
+      "kind": "note",
+      "text": [
+        "This gate validates completed behavior and intentionally has no Implements link."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TE976QVENGMC1K871M",
+      "kind": "note",
+      "text": [
+        "Operations exercised: ledger.refund.confirm|ledger.relationship.get|ledger.actuals.query."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT126TEZ288WMBGGE5A3Y23",
+      "target_ref_code": "UC-LEDGER-010",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXRJSSY6YRTH22NP5KK9JQPR",
+      "target_title": "Confirm a refund or reversal",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TECH6DPQGKEV77PHSQ",
+      "target_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGFC3892700GHYSWPE777",
+      "target_title": "RelationshipActualsOperationContracts",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TERMX6JX262YRDP3A4",
+      "target_ref_code": "FR-LEDGER-REFUND-CONFIRMATION",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXSQCYJA0F0J6BD9QTWZ58Q5",
+      "target_title": "Confirm refunds and reversals",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TES5ZC8NP4ZQCS4T92",
+      "target_ref_code": "FR-LEDGER-IDEMPOTENT-WRITES",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXSQBX8TSCMJV15PDGZSHYVE",
+      "target_title": "Make public writes idempotent",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TEBV1YGV0Z2CFKRQA3",
+      "target_ref_code": "TC-LEDGER-REFUND-CONFIRMATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK6J7H2DEEE7855N5YAKT",
+      "target_title": "Verify confirm refunds and reversals contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT126TEKCHAR1SKYKQN7PMA",
+      "gate_type": "test-evidence",
+      "description": [
+        "Evidence maps UC-LEDGER-010 main scenario and each numbered failure path to stdout/error/exit/state assertions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TERG4V3JK0BSNPKF97",
+      "gate_type": "self-review",
+      "description": [
+        "No scenario calls handlers or SQLite directly."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT126TEMV4JQXFYEZHJED5E",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.EndToEnd.UC010RefundWorkflowTests --no-restore",
+      "expected_result": "exit 0; at least 11 main/failure-path scenarios run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ]
+}

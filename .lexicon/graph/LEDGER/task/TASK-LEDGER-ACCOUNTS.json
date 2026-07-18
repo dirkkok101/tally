@@ -1,0 +1,357 @@
+{
+  "id": "01KXT0P36NBWT55EDENVM16TJ0",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06A6E7WPPCP8KDAKCJ1H4",
+  "ref_code": "TASK-LEDGER-ACCOUNTS",
+  "slug": "ACCOUNTS",
+  "title": "Implement account lifecycle operations",
+  "description": [
+    "Deliver create/get/list/rename/archive account behavior through typed handlers, real SQLite storage, and a self-contained operation module."
+  ],
+  "objective": [
+    "Maintain stable masked deposit-account identities and attributable lifecycle history without credentials or physical deletion."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 10,
+  "created_at": "2026-07-18T07:05:09.0800297+00:00",
+  "decisions": [
+    {
+      "id": "01KXT0P36RPE9HDKCDNFNB5XNV",
+      "target": "DD-LEDGER-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36RPQSJ2EYAVVD1TH07",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT1AFC1E30WSMHJQHKPX7PE",
+      "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:16:16.8987907+00:00"
+    },
+    {
+      "id": "01KXT1AFWJS427KRG8QY4NZBGF",
+      "target": "TASK-LEDGER-CORE-STORAGE",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires LedgerDb from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:16:17.4275601+00:00"
+    },
+    {
+      "id": "01KXT15X5FX7SAMW4T3F7G18KR",
+      "target": "TASK-LEDGER-GATE-EVIDENCE-ACCOUNTS",
+      "dependency_type": "compile",
+      "reason": [
+        "Account contracts cannot start until OQ-LEDGER-4 resolves."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:13:47.1848160+00:00"
+    },
+    {
+      "id": "01KXT15WJWZZBPQHQESHTGVAJW",
+      "target": "TASK-LEDGER-GATE-INT-CORE",
+      "dependency_type": "compile",
+      "reason": [
+        "Account slice consumes the proven core seam."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:13:46.5898138+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0P36RSEY2FQTZDTEVY6X7",
+      "path": "src/Tally/Contracts/Ledger/Accounts/AccountContracts.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36RG6A6QECMM0TVCYA2",
+      "path": "src/Tally/Domain/Ledger/Accounts/Account.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36RXNME4PJAQ7PHAYSG",
+      "path": "src/Tally/Features/Ledger/Accounts/AccountHandlers.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36REWC6C48X67ZWC0FP",
+      "path": "src/Tally/Infrastructure/Storage/Accounts/AccountStore.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36RPXM2X37AYXBYP85T",
+      "path": "src/Tally/Features/Ledger/Accounts/AccountOperationModule.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36RCF6NTPAA2687CR5A",
+      "path": "tests/Tally.Tests/Features/Ledger/Accounts/AccountOperationTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36RMV2EVE5DKCSHYNWH",
+      "path": "tests/Tally.Tests/Infrastructure/Storage/AccountStoreTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT0P36SH9V97HF01DZAR72R",
+      "name": "AccountOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36S2Q6KD2S5Y53F52B6",
+      "name": "AccountStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-ACCOUNT",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36S7VGC3VVBG24GH70J",
+      "name": "AccountDetail",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36S8V0QEWDZW6YESD87",
+      "name": "LedgerMutationExecutor.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36S2B4K4ZPPH3TMQ0AB",
+      "name": "LedgerDb",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0P36REH04JVWRZ9J2M9H9",
+      "kind": "acceptance_check",
+      "text": [
+        "Valid unique institution/display/type/masked identifier/ZAR input creates one active account with a stable ULID and no credential/full account number."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36R5JE6K5VT4GPQRA4D",
+      "kind": "acceptance_check",
+      "text": [
+        "Rename appends an attributable lifecycle event while preserving account ID and transaction references."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36RF2XQPDZC9JXH284M",
+      "kind": "acceptance_check",
+      "text": [
+        "Archive appends history, preserves detail/list visibility, and causes new transaction attempts to return LEDGER-ACCOUNT-ARCHIVED with no write."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36R7VRGKSWJY69PCQNH",
+      "kind": "acceptance_check",
+      "text": [
+        "Get/list honor includeHistory and lifecycle/institution filters with deterministic ordering and one result per account."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36R709QYXFDXV4N0Y9F",
+      "kind": "acceptance_check",
+      "text": [
+        "Every mutation uses LedgerMutationExecutor and returns byte-equivalent logical results on identical replay."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36RJZMGC2DCW1JJTCNH",
+      "kind": "expected_output",
+      "text": [
+        "Account contracts/domain/store/handlers/module"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36R8FFBRCDY6ZA5PVHG",
+      "kind": "expected_output",
+      "text": [
+        "Real-SQLite and handler tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36R3BGTR6BEF6G7BPAZ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT hard-delete or update lifecycle history in place; append events and retain RESTRICT references per DD-LEDGER-IMMUTABLE-HISTORY."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36RSFZ0DSQVMNBJP9SE",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT introduce repositories, mediator, HTTP endpoints, credentials, or full account identifiers per DD-LEDGER-APPLICATION-ARCHITECTURE."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36REKGNJCFGXGAQQXFB",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT implement before OQ-LEDGER-4 resolves without invalidating account contracts."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0P36STK002SWWXN6208C4",
+      "target_ref_code": "OQ-LEDGER-4",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KXR55HQT16GDQ57C2QH8HFWM",
+      "target_title": "Confirm that the three initial accounts are deposit accounts and that bank name, owner label, account type, currency, and masked distinguishing identifier are sufficient.",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36SH66JVQZQBTKSZBC2",
+      "target_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGEQ3PSBB0XQ74D60EZWK",
+      "target_title": "AccountCategoryOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36ST6GZAE4S663C94TK",
+      "target_ref_code": "TC-LEDGER-ACCOUNT-MAINTENANCE-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQJCN18EQW8FPHCQAS6H0P",
+      "target_title": "Verify account maintenance contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXT0P36RFPGB4PMD179H0QT5",
+      "target": "FR-LEDGER-ACCOUNT-MAINTENANCE",
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0P36S7W2354ZN17BK04TK",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show stable IDs, attributable history, archive rejection, masked output, and replay evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36S6YA7124KT5HSBFD9",
+      "gate_type": "self-review",
+      "description": [
+        "Search account production paths for credential/full identifier fields and physical delete SQL; find none."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0P36SG69THYSA3PFPZV9V",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~AccountOperationTests|FullyQualifiedName~AccountStoreTests' --no-restore",
+      "expected_result": "exit 0; at least 14 create/rename/archive/filter/security/replay cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 240,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ]
+}

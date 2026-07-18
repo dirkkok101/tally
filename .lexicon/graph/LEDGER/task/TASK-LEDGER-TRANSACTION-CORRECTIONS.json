@@ -1,0 +1,340 @@
+{
+  "id": "01KXT0SME0C0MES8TYZWWY0ST2",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06AGT9EPMYN1DCHN46ZV9",
+  "ref_code": "TASK-LEDGER-TRANSACTION-CORRECTIONS",
+  "slug": "TRANSACTION-CORRECTIONS",
+  "title": "Implement transaction void and supersession",
+  "description": [
+    "Deliver attributable void/supersede behavior that preserves source facts and atomically retires every active financial relationship."
+  ],
+  "objective": [
+    "Ensure default active state counts only the valid transaction outcome while complete correction and retired-link history remains queryable."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 40,
+  "created_at": "2026-07-18T07:07:05.0252128+00:00",
+  "decisions": [
+    {
+      "id": "01KXT0SME8AJZXXX0G4ZSXY8D8",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT1B1BRSD0SJFD40EJSXTJE",
+      "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:16:35.3212549+00:00"
+    },
+    {
+      "id": "01KXT162Z50VJVB0GDMQJK1RF0",
+      "target": "TASK-LEDGER-REFUNDS",
+      "dependency_type": "compile",
+      "reason": [
+        "Transaction correction must retire both transfer and refund roles."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:13:53.1265831+00:00"
+    },
+    {
+      "id": "01KXT1B1WZFEEPPG801FXWAS6T",
+      "target": "TASK-LEDGER-TRANSACTIONS-RECORD-GET",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires TransactionBaseOperationModule from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:16:35.8725133+00:00"
+    },
+    {
+      "id": "01KXT162EF6TWEE3VH969YMK99",
+      "target": "TASK-LEDGER-TRANSFERS",
+      "dependency_type": "compile",
+      "reason": [
+        "Transaction correction consumes RelationshipStore.RetireForTransactionAsync."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:13:52.5927604+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0SME8CH55HZM3ACR4YXCW",
+      "path": "src/Tally/Contracts/Ledger/Transactions/TransactionContracts.cs",
+      "action": "modify",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME867P4QNF1Z8ZAGBF6",
+      "path": "src/Tally/Domain/Ledger/Transactions/TransactionLifecycle.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME8EDTSBDGJ1A73AF5G",
+      "path": "src/Tally/Features/Ledger/Transactions/TransactionCorrectionHandlers.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME8XDC7TQVN99ENHJMP",
+      "path": "src/Tally/Infrastructure/Storage/Transactions/TransactionStore.cs",
+      "action": "modify",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME8HP66G60TBZVMMGSW",
+      "path": "src/Tally/Features/Ledger/Transactions/TransactionOperationModule.cs",
+      "action": "modify",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME8FRKK4VJCFT72DZF9",
+      "path": "tests/Tally.Tests/Features/Ledger/Transactions/TransactionCorrectionTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT19D735W6A4ZERE2KT0N4H",
+      "name": "TransactionOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:15:41.9227425+00:00"
+    },
+    {
+      "id": "01KXT19D74YKFPD9MM63715YNQ",
+      "name": "TransactionBaseOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:15:41.9227425+00:00"
+    },
+    {
+      "id": "01KXT19D74NKV7SR5QFRWX5G11",
+      "name": "TransactionStore.VoidAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:15:41.9227425+00:00"
+    },
+    {
+      "id": "01KXT19D74JDYWKGED4Q3RGNH5",
+      "name": "TransactionStore.SupersedeAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:15:41.9227425+00:00"
+    },
+    {
+      "id": "01KXT19D74VESZ956JGNPT1XN4",
+      "name": "RelationshipStore.RetireForTransactionAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:15:41.9227425+00:00"
+    },
+    {
+      "id": "01KXT19D74GEHF5Q59A0H04XHV",
+      "name": "LedgerMutationExecutor.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:15:41.9227425+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0SME8JCQ21CNABZ023JQH",
+      "kind": "acceptance_check",
+      "text": [
+        "Void active transaction with reason appends attributable event, marks inactive, retires every active transfer/refund atomically, and default actuals exclude it."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME8Y7DY03N8FS2AHE3W",
+      "kind": "acceptance_check",
+      "text": [
+        "Supersede validates and creates one independent replacement, appends linkage/event, inactivates original, retires active relationships, and never copies relationships automatically."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME8BWMSS4FB212A5BAY",
+      "kind": "acceptance_check",
+      "text": [
+        "Any replacement validation or relationship-retirement failure leaves original and all links unchanged and creates no replacement/idempotency outcome."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME86F7DGB0KVQRTPF9M",
+      "kind": "acceptance_check",
+      "text": [
+        "History detail returns original/replacement facts, reason, actor/time, allocation history, and retired relationship IDs."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME8F016ET88C42RPH2M",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical correction replay returns original outcome; incompatible second correction returns stable lifecycle/conflict."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME88PK0FT1Q3ZDNKSAB",
+      "kind": "expected_output",
+      "text": [
+        "Transaction lifecycle contracts/domain/handlers"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME8EA52Q4DK09S9K11K",
+      "kind": "expected_output",
+      "text": [
+        "Transaction store/module correction support"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME856WVZT4EW2M1SHH9",
+      "kind": "expected_output",
+      "text": [
+        "Atomic correction tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME8H928MXW01ZK0W2VB",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT edit/delete source facts, copy relationships to replacement, partially retire links, or implement general event sourcing — rejected per DD-LEDGER-IMMUTABLE-HISTORY."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME8ADQK0WS3P4N6EBWK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT implement a correction path that bypasses RelationshipStore.RetireForTransactionAsync."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0SME9JC2QA4WXBWEQW14R",
+      "target_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGF1VZPC8WADN6FY234H0",
+      "target_title": "TransactionOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME9M4HXHN9YT4D4G451",
+      "target_ref_code": "TC-LEDGER-TRANSACTION-CORRECTION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK8PV2RHM4XM3TYJQMKPV",
+      "target_title": "Verify void or supersede erroneous transactions contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXT0SME8D7D1X6MSVGEG7SFF",
+      "target": "FR-LEDGER-TRANSACTION-CORRECTION",
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0SME9E99CEP1Q85X0VDWW",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show atomic relationship retirement, no silent copy, rollback, active totals, and history."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME9V9V5EZABY36MMWBE",
+      "gate_type": "self-review",
+      "description": [
+        "Original transaction columns remain untouched after every correction."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0SME9ER8E6MJBZN0XSDEE",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Features.Ledger.Transactions.TransactionCorrectionTests --no-restore",
+      "expected_result": "exit 0; at least 14 void/supersede/retirement/rollback/history/replay cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ]
+}

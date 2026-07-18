@@ -1,0 +1,342 @@
+{
+  "id": "01KXT0W0YT3E35WQ2JH52NR232",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06AV2YBFA37A3CEQMT346",
+  "ref_code": "TASK-LEDGER-RESTORE-ACTIVATE",
+  "slug": "RESTORE-ACTIVATE",
+  "title": "Implement safe restore prepare and activation",
+  "description": [
+    "Deliver separate-target candidate restore, complete validation, explicit authorized atomic activation, and retained prior generation."
+  ],
+  "objective": [
+    "Recover from a verified backup without changing CURRENT until a candidate is fully revalidated against the expected authoritative fingerprint."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 20,
+  "created_at": "2026-07-18T07:08:23.3874370+00:00",
+  "decisions": [
+    {
+      "id": "01KXT0W0YXWDDFDBMA302YT11D",
+      "target": "DD-LEDGER-CANDIDATE-ACTIVATION",
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT1B092B69WDT4528SCW7Y5",
+      "target": "TASK-LEDGER-CORE-STORAGE",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires StoreGenerationManager from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:16:34.2114473+00:00"
+    },
+    {
+      "id": "01KXT29FESGB1G6RFAVKVSBRA8",
+      "target": "TASK-LEDGER-DURABLE-STATE-VERIFIER",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes DurableLedgerVerifier."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:33:12.7945292+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0W0YX82K86BSJKG7DGBXX",
+      "path": "src/Tally/Contracts/Ledger/Recovery/RestoreContracts.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YXYHY7ETGJ134JVAA1",
+      "path": "src/Tally/Infrastructure/Recovery/RestoreService.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YXBZ1AKKKW95XYVJ9F",
+      "path": "src/Tally/Infrastructure/Storage/AuthoritativeStoreActivator.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YXWGBHD40ZPM0PM3K6",
+      "path": "src/Tally/Features/Ledger/Recovery/RestoreOperationModule.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YXVFR1B16BT1JKH0Q4",
+      "path": "tests/Tally.Tests/Features/Ledger/Recovery/RestoreTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YXA854626VWBRXD3T3",
+      "path": "tests/Tally.Tests/Infrastructure/Storage/AuthoritativeStoreActivatorTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT0W0YXAY30202TSF5G68WQ",
+      "name": "RestoreOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YXG4PZE4GX6ZMJ8MAP",
+      "name": "RestoreService",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YX8EHM4KQBN7TAXS00",
+      "name": "AuthoritativeStoreActivator",
+      "direction": "produces",
+      "contract_ref_code": "DD-LEDGER-CANDIDATE-ACTIVATION",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YXEN4RRM2R3DCCXNSQ",
+      "name": "IAuthoritativeStoreActivator",
+      "direction": "consumes",
+      "contract_ref_code": "DD-LEDGER-CANDIDATE-ACTIVATION",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YXGYQ73MTRFPF7JPQK",
+      "name": "DurableLedgerVerifier",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YX8KSPS09P623KVDKT",
+      "name": "StoreGenerationManager",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0W0YX3GXMDGQYV6V6XM1X",
+      "kind": "acceptance_check",
+      "text": [
+        "restore.prepare restores compatible verified backup into a distinct generation and returns candidate/source fingerprints and complete verification without changing CURRENT."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YXPTQ4R62X3XB52SRK",
+      "kind": "acceptance_check",
+      "text": [
+        "Candidate validation matches every durable type/history, relationship rule, idempotency outcome, count, integrity result, and exact total from verified backup."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YXTFB0RKQEXH6YE9QF",
+      "kind": "acceptance_check",
+      "text": [
+        "Any compatibility/integrity/permission/space/validation failure leaves current generation authoritative and exposes no partial candidate as current."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YXN2PD9MBG335GKYJ9",
+      "kind": "acceptance_check",
+      "text": [
+        "restore.activate requires candidateId, expectedCurrentFingerprint, authorizeReplacement=true; under exclusive lock it revalidates, flushes, atomically replaces CURRENT, fsyncs directory, and retains previous generation."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YXS4VT06QG3WTQV7Q6",
+      "kind": "acceptance_check",
+      "text": [
+        "Crash before pointer replacement leaves old current; after successful replacement candidate is current with original idempotent outcome recoverable on retry."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YXQW31628W3WF2J48D",
+      "kind": "expected_output",
+      "text": [
+        "Restore contracts/service/module"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YXTC6633QEPR63YHK6",
+      "kind": "expected_output",
+      "text": [
+        "Concrete AuthoritativeStoreActivator"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YX7SN082YVA7BAH3FR",
+      "kind": "expected_output",
+      "text": [
+        "Activation crash/fingerprint tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YX0PTDWQ7ATYYJ9HJK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT restore over the live database, use two database renames, activate an unverified/stale/unauthorized candidate, or delete prior recovery generation — rejected per DD-LEDGER-CANDIDATE-ACTIVATION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YXRX8SW34C2KYPFZZP",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT trust prepare-time validation without activate-time revalidation."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0W0YXV7Y92DNPTZW526DW",
+      "target_ref_code": "NFR-LEDGER-VERIFIED-RECOVERABILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFYKENRZNNNRNH8E8NWYD",
+      "target_title": "Prove Ledger recoverability",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YY0NNZ2CN1TGTXNVDC",
+      "target_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGFP6T4HV8E4YASJ6A3FT",
+      "target_title": "RecoveryStorageOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YY9R2HZYNRZ2JS3WGC",
+      "target_ref_code": "TC-LEDGER-SAFE-RESTORE-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK759MF0EQM55HZSY6ZYY",
+      "target_title": "Verify restore the ledger safely contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YYCPBZFJYX7PPMB5DN",
+      "target_ref_code": "TC-LEDGER-VERIFIED-RECOVERY-DRILL",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSXGB390FKV1Z5SXH87EX6A",
+      "target_title": "Reproduce complete Durable Ledger State",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXT0W0YXB06CGCM17K32VZ1M",
+      "target": "FR-LEDGER-SAFE-RESTORE",
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0W0YXYNYKC35VM13S9VGB",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show candidate equivalence and crash behavior immediately before/after CURRENT replacement."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YXQP4SDN5CQKBDFR4H",
+      "gate_type": "self-review",
+      "description": [
+        "Every activation path verifies expected fingerprint and explicit authorization."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0W0YXEY62R98FDKZWSMZX",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~RestoreTests|FullyQualifiedName~AuthoritativeStoreActivatorTests' --no-restore",
+      "expected_result": "exit 0; at least 16 separate-target/fingerprint/authorization/crash/retry cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ]
+}

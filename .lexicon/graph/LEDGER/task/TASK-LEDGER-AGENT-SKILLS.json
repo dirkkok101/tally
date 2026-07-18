@@ -1,0 +1,366 @@
+{
+  "id": "01KXT0W0YVPF8KENQE78VZ5H0X",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06AV2YBFA37A3CEQMT346",
+  "ref_code": "TASK-LEDGER-AGENT-SKILLS",
+  "slug": "AGENT-SKILLS",
+  "title": "Implement version-matched bundled agent skills",
+  "description": [
+    "Embed Codex and Claude Code skill bundles/manifests and expose list/check/idempotent install through public operation modules."
+  ],
+  "objective": [
+    "Install only executable-matched skills that teach discoverable public commands and reject incompatibility before any host-file mutation."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 40,
+  "created_at": "2026-07-18T07:08:23.3874370+00:00",
+  "decisions": [
+    {
+      "id": "01KXT0W0YZQWK06F6MFJ89E8WZ",
+      "target": "DD-LEDGER-SKILL-COMPATIBILITY",
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT1AHECNQRKWDFBD9BXRSJB",
+      "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires ArtifactReconciler from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:16:19.0217176+00:00"
+    },
+    {
+      "id": "01KXT1AHY6WQ8B972BCWGGHHRP",
+      "target": "TASK-LEDGER-CORE-PROCESS-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires OperationRegistry from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:16:19.5267313+00:00"
+    },
+    {
+      "id": "01KXT1674TVBF86H1PCVV2T13H",
+      "target": "TASK-LEDGER-GATE-INT-CORE",
+      "dependency_type": "compile",
+      "reason": [
+        "Skill operations consume the proven registry, process, artifact, and idempotency seams."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:13:57.4032213+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0W0YZ6K4HTAB985PP3FS8",
+      "path": "src/Tally/Skills/skill-manifest.json",
+      "action": "create",
+      "role": "manifest",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZ9SCV3AV30W7CTTQD",
+      "path": "src/Tally/Skills/Codex/SKILL.md",
+      "action": "create",
+      "role": "Codex bundle",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZ10M9WM5TQSE5P8J8",
+      "path": "src/Tally/Skills/ClaudeCode/SKILL.md",
+      "action": "create",
+      "role": "Claude Code bundle",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZJ7B5WPN1EX7M7ZP8",
+      "path": "src/Tally/Contracts/System/SkillContracts.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZCKSM84MZ8TP4HEVN",
+      "path": "src/Tally/Features/System/Skills/SkillService.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZBJXXDWJCJKQQ11CD",
+      "path": "src/Tally/Features/System/Skills/SkillOperationModule.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZ3A1STP461P9P2DY2",
+      "path": "tests/Tally.Tests/Features/System/Skills/SkillCompatibilityTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT0W0YZ2S1Q5FGXEDKA8J1C",
+      "name": "SkillOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-SYSTEM-SKILL-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZ65K0WYD9ABTKJM07",
+      "name": "SkillService",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-SYSTEM-SKILL-CONTRACTS",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZY7T3EENXAWAAZE12",
+      "name": "OperationRegistry",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZMYRHCF4EEYJ7HWGP",
+      "name": "ArtifactReconciler",
+      "direction": "consumes",
+      "contract_ref_code": "DD-LEDGER-IDEMPOTENT-MUTATIONS",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0W0YZKNC9D87XJ4A5CHKS",
+      "kind": "acceptance_check",
+      "text": [
+        "Embedded manifest declares provider, bundle checksum, operation IDs, executable range, and contract range and is generated/validated against OperationRegistry."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZCDYRBQJ24NDGJP6T",
+      "kind": "acceptance_check",
+      "text": [
+        "skill list/check are read-only and classify compatible/missing/outdated/newer/invalid for codex|claude-code and project|user scopes."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZSE53RYQ14843D475",
+      "kind": "acceptance_check",
+      "text": [
+        "skill install fails before write for unsupported provider/incompatible contract/unsafe path/invalid manifest; compatible install publishes only documented provider scope then verifies checksum/version."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZ1S52GSE2YET885Z3",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical install replay returns original path/version/checksum with no second effect; crash after publication reconciles matching manifest."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZA24W0ZWSRK5BGDRR",
+      "kind": "acceptance_check",
+      "text": [
+        "Bundled skills use only tally help/schema/public operations, include idempotency and safe-error workflows, and never teach private SQLite/file access."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZ9YC914D5NC8708WW",
+      "kind": "expected_output",
+      "text": [
+        "Codex and Claude Code skill sources"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZ7KQG9RKZ37RCMDK3",
+      "kind": "expected_output",
+      "text": [
+        "Embedded manifest and installer"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZEJKQM6PNAB6ZH5FF",
+      "kind": "expected_output",
+      "text": [
+        "Skill operation contracts/module"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZD45KD7TNQW8GH8MR",
+      "kind": "expected_output",
+      "text": [
+        "Parity/compatibility/install tests"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZHY66MP8JV5PQ91FP",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use repo-only skills, remotely fetch latest bundles, install incompatible content, bypass CLI via SQLite, or create a general plugin runtime — rejected per DD-LEDGER-SKILL-COMPATIBILITY."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZ3KST52P2SZ7AH246",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT duplicate descriptor metadata manually; manifest parity comes from OperationRegistry."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0W0YZ4NMNGYTCGKB4YT5F",
+      "target_ref_code": "NFR-LEDGER-AGENT-CONTRACT-STABILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFY9C8649APJ7XN79GBZ3",
+      "target_title": "Keep the agent contract stable",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZPFQTG79BW7H827NT",
+      "target_ref_code": "DM-LEDGER-SYSTEM-SKILL-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGG1EGBHD7GW145CK4G5M",
+      "target_title": "SystemSkillOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZ9JDN451BN0RVYW1Q",
+      "target_ref_code": "FA-LEDGER-CONTRACT-SKILLS",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXSWZ4J0VXGSGZ2V5JDGK17C",
+      "target_title": "Contract and Skills",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZSKPMJKVHB0A16B9V",
+      "target_ref_code": "TC-LEDGER-SKILL-COMPATIBILITY-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK7RAE1THD3HDQMYPAC53",
+      "target_title": "Verify distribute version-matched agent skills contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZQJ0D63F11BS9NZAM",
+      "target_ref_code": "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSXG8TR927NTWCDM2MBGVTV",
+      "target_title": "Verify every agent operation contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXT0W0YZ9W2DXB4WD6DJ6NHH",
+      "target": "FR-LEDGER-SKILL-COMPATIBILITY",
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0W0YZ9G3HSVM70AJW739W",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show both provider bundles match registry and incompatibility fails before mutation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    },
+    {
+      "id": "01KXT0W0YZDHC5QM61V4EX1TTJ",
+      "gate_type": "self-review",
+      "description": [
+        "Search skills for SQLite/table/file instructions; find none."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0W0YZ1NZQ2GPT45RRENMK",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Features.System.Skills.SkillCompatibilityTests --no-restore",
+      "expected_result": "exit 0; at least 14 parity/compatibility/path/permission/crash/replay cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+    }
+  ]
+}

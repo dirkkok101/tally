@@ -1,0 +1,377 @@
+{
+  "id": "01KXT0P36QBA70Q583C8P98HBY",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06A6E7WPPCP8KDAKCJ1H4",
+  "ref_code": "TASK-LEDGER-TRANSACTIONS-RECORD-GET",
+  "slug": "TRANSACTIONS-RECORD-GET",
+  "title": "Implement immutable transaction record and get",
+  "description": [
+    "Deliver ledger.transaction.record/get over exact source facts, validated provenance, account state, idempotency, and real SQLite."
+  ],
+  "objective": [
+    "Record one immutable canonical account movement and round-trip every accepted source fact without precision or provenance loss."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 30,
+  "created_at": "2026-07-18T07:05:09.0800297+00:00",
+  "decisions": [
+    {
+      "id": "01KXT0P36TKC13SH148A5S6Q6Y",
+      "target": "DD-LEDGER-FINANCIAL-REPRESENTATION",
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TA7WZJP7BWEPQV866",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT15YSA5RYZPT92J1WGC9H3",
+      "target": "TASK-LEDGER-ACCOUNTS",
+      "dependency_type": "compile",
+      "reason": [
+        "Transactions require AccountStore and archived-account policy."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:13:48.8431494+00:00"
+    },
+    {
+      "id": "01KXT1B2EK08XXYBWSGRNSBHDR",
+      "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:16:36.4364652+00:00"
+    },
+    {
+      "id": "01KXT1B3058D4KEBXZHAGNTMVF",
+      "target": "TASK-LEDGER-CORE-MONEY-DATES",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires Money from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:16:36.9987953+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0P36VXCF5XH4XQ8V9AABE",
+      "path": "src/Tally/Contracts/Ledger/Transactions/TransactionContracts.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36VNFAEPDKERN47KTRN",
+      "path": "src/Tally/Domain/Ledger/Transactions/TransactionFact.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36VS9WR896G3BYQN9FK",
+      "path": "src/Tally/Features/Ledger/Transactions/TransactionRecordHandlers.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36VPW3NJR73KG7HE7N5",
+      "path": "src/Tally/Infrastructure/Storage/Transactions/TransactionStore.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36VFZJN5WFR700BGP1A",
+      "path": "src/Tally/Features/Ledger/Transactions/TransactionOperationModule.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36VFRC6VW1354M7FP05",
+      "path": "tests/Tally.Tests/Features/Ledger/Transactions/TransactionRecordingTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36V1TNHH1B099J7P3S2",
+      "path": "tests/Tally.Tests/Infrastructure/Storage/TransactionStoreTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT19BTET2VZZKKC0GY82YC3",
+      "name": "TransactionBaseOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:15:40.4945507+00:00"
+    },
+    {
+      "id": "01KXT19BTFMYT59GYTJZN7HCFC",
+      "name": "TransactionStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-FACT",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:15:40.4945507+00:00"
+    },
+    {
+      "id": "01KXT19BTFW0TC5JJ8T2Z737CZ",
+      "name": "TransactionDetail",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:15:40.4945507+00:00"
+    },
+    {
+      "id": "01KXT19BTF2YYGRWMKAD8FBY6Q",
+      "name": "AccountStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-ACCOUNT",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:15:40.4945507+00:00"
+    },
+    {
+      "id": "01KXT19BTF6SGWPMBXPWFSPAF0",
+      "name": "Money",
+      "direction": "consumes",
+      "contract_ref_code": "DD-LEDGER-FINANCIAL-REPRESENTATION",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:15:40.4945507+00:00"
+    },
+    {
+      "id": "01KXT19BTFJ5F1NADZFSXXFW5V",
+      "name": "LedgerMutationExecutor.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:15:40.4945507+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0P36TXC3S5NC0YGJZ6PFW",
+      "kind": "acceptance_check",
+      "text": [
+        "Valid active account, canonical nonzero signedAmount, ZAR, required dates/description/provenance, optional source reference, actor, and key create one immutable TransactionDetail."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TKHMWY9B5W8GTX2NM",
+      "kind": "acceptance_check",
+      "text": [
+        "TransactionDate and distinct PostingDate round-trip independently; EffectiveDate follows the resolved rule."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TNTWHKKXR3SWD2713",
+      "kind": "acceptance_check",
+      "text": [
+        "Missing/zero/malformed/unsupported input or archived/missing account returns the documented stable error and creates no transaction/idempotency row."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36T70P2016BK0356NSW",
+      "kind": "acceptance_check",
+      "text": [
+        "Get returns unchanged source facts; includeHistory exposes empty/available lifecycle, allocation, and relationship collections without mutating."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TNAR5G4MEWG8GY57D",
+      "kind": "acceptance_check",
+      "text": [
+        "Provenance kind is exactly manual_agent|statement_import|other in wire/domain/SQL with no semantic translation; sourceReference uniqueness is enforced per account/provenance."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36VQSW2T247BEEFXE6M",
+      "kind": "expected_output",
+      "text": [
+        "Transaction contracts/domain/store/handlers/module"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36V48FPABMKCEXD43P9",
+      "kind": "expected_output",
+      "text": [
+        "Real-SQLite source-fact tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TRZYMH2MMFP38TQ7Q",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT update transaction source facts, embed category/relationship columns, use floating point, infer provenance, or silently normalize bank dates — per governing decisions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36VKX39PQDY3FP2EDP2",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept credentials or expose unmasked account identifiers in results/diagnostics."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36VAFCAPZMRRKR37NKX",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT implement before OQ-LEDGER-1..3 are resolved consistently."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0P36VSRJJZYG8NY0G5778",
+      "target_ref_code": "OQ-LEDGER-1",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KXR55H94B58EENF5CK7AG9HP",
+      "target_title": "Validate the active ZAR-only first-release assumption against all three owned accounts.",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36VB5BJ9QPKHD697A61",
+      "target_ref_code": "OQ-LEDGER-2",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KXR55HE0PW79V66CPV02371F",
+      "target_title": "Validate the active signed-account-delta convention against statement samples from both banks.",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36V8B93QG9MJ3K0GYF0",
+      "target_ref_code": "OQ-LEDGER-3",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KXR55HK04VCG68SMJB7Z88R6",
+      "target_title": "Validate transaction date as the default Effective Date and identify whether either bank supplies a distinct posting date.",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36VVC46JZ6ANRMB0BHQ",
+      "target_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGF1VZPC8WADN6FY234H0",
+      "target_title": "TransactionOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36VYTA83QGRMP3HZRCP",
+      "target_ref_code": "TC-LEDGER-TRANSACTION-RECORDING-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK908FJNQCMJ4ZVD1G4SY",
+      "target_title": "Verify record canonical transactions contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXT0P36T1800G8JRJ3PGYE72",
+      "target": "FR-LEDGER-TRANSACTION-RECORDING",
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0P36V7PTEHVGGK883CPA7",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show exact round-trip, distinct dates, enum parity, account restrictions, and idempotency."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36V4PMVHHMFWMHN4G1G",
+      "gate_type": "self-review",
+      "description": [
+        "Diff contains no mutable source-fact update and no second provenance vocabulary."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0P36V5G0YFHQ1T0DHK2QA",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~TransactionRecordingTests|FullyQualifiedName~TransactionStoreTests' --no-restore",
+      "expected_result": "exit 0; at least 16 exactness/date/provenance/account/replay cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 240,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ]
+}

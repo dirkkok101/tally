@@ -1,0 +1,407 @@
+{
+  "id": "01KXT0SME08S97WDJY61TB2SX6",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06AGT9EPMYN1DCHN46ZV9",
+  "ref_code": "TASK-LEDGER-ACTUALS-PROJECTION",
+  "slug": "ACTUALS-PROJECTION",
+  "title": "Implement exact actuals projection and totals",
+  "description": [
+    "Build filter canonicalization, active-state projection, deterministic ordering, and exact Net Account Movement, External Spend, and Budget Actual formulas."
+  ],
+  "objective": [
+    "Compute reconcilable transaction membership and named totals over active transaction/allocation/relationship state without duplicating rules downstream."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 50,
+  "created_at": "2026-07-18T07:07:05.0252128+00:00",
+  "decisions": [
+    {
+      "id": "01KXT0SME93M69R10W81Q6MT0A",
+      "target": "DD-LEDGER-FINANCIAL-REPRESENTATION",
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME9Q52ZAN51QXAKWX0Z",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT163FPTYNZFT4W570JHDQA",
+      "target": "TASK-LEDGER-CATEGORY-ALLOCATIONS",
+      "dependency_type": "compile",
+      "reason": [
+        "Budget Actual consumes active category allocation history."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:13:53.6549394+00:00"
+    },
+    {
+      "id": "01KXT1AGDG2C613RP3VK82PF01",
+      "target": "TASK-LEDGER-CORE-MONEY-DATES",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires Money from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:16:17.9691615+00:00"
+    },
+    {
+      "id": "01KXT163ZY54MZE9EJS2FTC8FS",
+      "target": "TASK-LEDGER-RELATIONSHIP-CORRECTIONS",
+      "dependency_type": "compile",
+      "reason": [
+        "Actuals must use final active/retired relationship lifecycle semantics."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:13:54.1750269+00:00"
+    },
+    {
+      "id": "01KXT164GQ82Y8WV000TYRBWJ5",
+      "target": "TASK-LEDGER-TRANSACTION-CORRECTIONS",
+      "dependency_type": "compile",
+      "reason": [
+        "Actuals must exclude final void/supersession state."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:13:54.7117801+00:00"
+    },
+    {
+      "id": "01KXT1AGXE2XNYF35ZK8HDFXQ3",
+      "target": "TASK-LEDGER-TRANSFERS",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires RelationshipStore from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:16:18.4791902+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0SME954026DDV61DAAHP6",
+      "path": "src/Tally/Domain/Ledger/Actuals/ActualsFilter.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME9E4T7FJNEYYRB432P",
+      "path": "src/Tally/Domain/Ledger/Actuals/ActualsItem.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME91YA4DPZ5CVSS3AKE",
+      "path": "src/Tally/Domain/Ledger/Actuals/ActualsCalculator.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME9F9Y5NQS6GBZKMME4",
+      "path": "src/Tally/Infrastructure/Storage/Actuals/ActualsProjectionStore.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME9WFB31MKDGF6QHWXH",
+      "path": "tests/Tally.Tests/Domain/Ledger/ActualsCalculatorTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME9AM4C8VZ4Y7K07JBX",
+      "path": "tests/Tally.Tests/Infrastructure/Storage/ActualsProjectionTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT0SME909J315FJRQ9V08RV",
+      "name": "ActualsFilter",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME96S8N6KENP1N3S1PN",
+      "name": "ActualsCalculator.Calculate",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME947EREXCPRZW4C7JZ",
+      "name": "ActualsProjectionStore",
+      "direction": "produces",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME9BKG3QRSG8YTM9EQT",
+      "name": "Money",
+      "direction": "consumes",
+      "contract_ref_code": "DD-LEDGER-FINANCIAL-REPRESENTATION",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME90KFEMZ50QAECY0T2",
+      "name": "RelationshipStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME9XS3FDNEQKN6RTV51",
+      "name": "CategoryAllocationStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0SME9WANMYVQKQT2XBX9S",
+      "kind": "acceptance_check",
+      "text": [
+        "All supplied account/date/category/transfer/refund/relationship/categorization/lifecycle filters combine with AND semantics; invalid combinations return field errors."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME9XFNP9XZE9CEEJ33W",
+      "kind": "acceptance_check",
+      "text": [
+        "Default projection excludes inactive transactions/retired relationships; empty matches return success with empty items and exact zero totals."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME9RR7V02PE11TTNH2R",
+      "kind": "acceptance_check",
+      "text": [
+        "Net Account Movement is exact signed selected sum; External Spend includes qualifying outflow magnitudes, subtracts in-set active refunds, excludes transfer principal/unrelated inflows, and includes separate fees/unlinked cash."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME936VG9A3KY38B9QKW",
+      "kind": "acceptance_check",
+      "text": [
+        "Budget Actual applies External Spend to current active category allocation; refund uses its own EffectiveDate and original's current category and may make a period negative."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME9T5WSKBJ1Q2VFRT6N",
+      "kind": "acceptance_check",
+      "text": [
+        "Ordering is EffectiveDate descending then transaction ULID descending and identical state/filter yields identical projection/totals."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME9D2MPCPJEGWVPGJFJ",
+      "kind": "acceptance_check",
+      "text": [
+        "At 100000 active transactions, first complete projection/totals meets the designed under-2-second p95 target on the supported benchmark profile."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME9NNV3T4TMHWK2V8BH",
+      "kind": "expected_output",
+      "text": [
+        "ActualsFilter/Item/Calculator"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME9FCHV9C97N14R1Z0J",
+      "kind": "expected_output",
+      "text": [
+        "ActualsProjectionStore"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME906ACQ86TZVXPDRS9",
+      "kind": "expected_output",
+      "text": [
+        "Formula/filter/performance tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME9T9C4NQNE6FTP7QMX",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use floating point, infer relationships, count retired/inactive state by default, offset refunds outside selected membership, or move budget amounts/pacing into LEDGER."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME9PYDHFZZV9XB6XB8S",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT expose a live offset-paginated public command from this task; snapshot publication belongs to the next task."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0SMEAFDS5RKQ350DRWKQJ",
+      "target_ref_code": "OQ-LEDGER-5",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KXR55HWRSWNEKE7H763R8173",
+      "target_title": "Validate the proposed transfer, refund/reversal, and cash-withdrawal spend policies with representative transactions.",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEADK19DC3WX98X1MK4",
+      "target_ref_code": "OQ-LEDGER-6",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KXR55J26NDF2WS6NRR6C23VX",
+      "target_title": "Validate flat, archivable categories with one active category allocation per transaction for the first release.",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEAJ7D5G7Q6E4ZRBPWQ",
+      "target_ref_code": "NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFYX4NQ8JXNGWNYBA7EK5",
+      "target_title": "Respond at personal-ledger scale",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEARWQJ282DCMWN44TC",
+      "target_ref_code": "TC-LEDGER-ACTUALS-QUERY-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK4RJQWQ8EXZ3DQ1YEJGF",
+      "target_title": "Verify query and reconcile ledger actuals contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEA77F5HTWZDX6TV5C9",
+      "target_ref_code": "TC-LEDGER-PERSONAL-SCALE-PERFORMANCE",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSXGAF3HK64JMBCCXQ9M6S0",
+      "target_title": "Measure personal-ledger performance",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXT0SME9AMFRYRQ3845FACA1",
+      "target": "FR-LEDGER-ACTUALS-QUERY",
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0SMEAXA59BEYV1QFVGKHK",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach exact reconciliation for every named formula plus the personal-scale benchmark."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEA5NS1Z0YMQQVXRTXR",
+      "gate_type": "self-review",
+      "description": [
+        "BUDGET amounts/pacing and inferred classification are absent."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0SME9C4RE2KS4JAVGNFC7",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~ActualsCalculatorTests|FullyQualifiedName~ActualsProjectionTests' --no-restore",
+      "expected_result": "exit 0; at least 24 formula/filter/integrity cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME9QTZCXBTKQ9XDY6YK",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ActualsProjectionTests.PersonalScale --no-restore",
+      "expected_result": "exit 0; benchmark test reports 100000 transactions and p95 below 2000 ms",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ]
+}

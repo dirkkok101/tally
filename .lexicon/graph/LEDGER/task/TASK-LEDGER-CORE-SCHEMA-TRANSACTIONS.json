@@ -1,0 +1,233 @@
+{
+  "id": "01KXT2XZDA21D3KFHZFV40SQPJ",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT069TD553802AT505MG72F",
+  "ref_code": "TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS",
+  "slug": "CORE-SCHEMA-TRANSACTIONS",
+  "title": "Implement the V001 transaction schema fragment",
+  "description": [
+    "Schema foundation intentionally has no Implements link: translate immutable transaction facts, lifecycle events, and category-allocation history into one independently verified V001 fragment."
+  ],
+  "objective": [
+    "Create exact immutable transaction, correction-lifecycle, and category-allocation tables, constraints, indexes, and active-allocation uniqueness without implementing handlers."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 22,
+  "created_at": "2026-07-18T07:44:24.4911988+00:00",
+  "decisions": [
+    {
+      "id": "01KXT2XZDC6FH4WSMPJ8S4JM4A",
+      "target": "DD-LEDGER-EMBEDDED-STORAGE",
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDCXT9XR9306288Q25G",
+      "target": "DD-LEDGER-FINANCIAL-REPRESENTATION",
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDCZ5SVWANN309J6WNF",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT2XZDD8E096XQKXYJW50B3",
+      "target": "TASK-LEDGER-CORE-STORAGE",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes LedgerDb and LedgerSchemaFragmentRegistry."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT2XZDD2ARGW6N2M577BFR0",
+      "path": "src/Tally/Infrastructure/Storage/Migrations/V001/V001TransactionSchema.cs",
+      "action": "create",
+      "role": "schema fragment",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDDG158A4V821EJMSYA",
+      "path": "tests/Tally.Tests/Infrastructure/Storage/LedgerTransactionSchemaTests.cs",
+      "action": "test",
+      "role": "real SQLite schema verification",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT2XZDDXQGYD5GR1XXPXVSY",
+      "name": "V001TransactionSchema",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-FACT",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDD2H63EQ6E87GS8Y7Q",
+      "name": "LedgerSchemaFragmentRegistry",
+      "direction": "consumes",
+      "contract_ref_code": "DD-LEDGER-EMBEDDED-STORAGE",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDDJGVYMAF7WW1B1JE0",
+      "name": "LedgerDb",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT2XZDCGHJNEFJNXF9JRD12",
+      "kind": "acceptance_check",
+      "text": [
+        "V001TransactionSchema creates every linked field, enum/date/money check, account/category RESTRICT foreign key, source-reference uniqueness rule, lifecycle terminal rule, and one-active-allocation constraint."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDCVQR14NT1J53DR1S7",
+      "kind": "acceptance_check",
+      "text": [
+        "signedAmountMinor is nonzero Int64, currency is literal ZAR, facts are insert-only by contract, and supersession/allocation history retains attributable linkage."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDCFMNKESM0B89WR0QS",
+      "kind": "acceptance_check",
+      "text": [
+        "Applying the fragment twice in one migration plan is rejected before SQL; an injected statement failure rolls back every transaction, lifecycle, and allocation table/index."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDD6DXM4092XM58GCBT",
+      "kind": "constraint",
+      "text": [
+        "Implement an explicit V001 fragment only; TASK-LEDGER-GATE-INT-CORE owns complete-schema composition."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDDE69P9X15R80ZMEFC",
+      "kind": "expected_output",
+      "text": [
+        "V001TransactionSchema"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDDGYMV5PWYVMKAX9XE",
+      "kind": "expected_output",
+      "text": [
+        "LedgerTransactionSchemaTests real-SQLite constraint tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDC14J9JXN1RMS0G2AM",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT create catalogue, relationship, snapshot, recovery, or idempotency tables in this fragment."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDD0JVSX42HYVDVR3R2",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use SQLite REAL money, mutable fact columns, category columns on transaction facts, EF Core, or mocked SQLite tests."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT2XZDD2MJ04V9F1JJT603D",
+      "target_ref_code": "DM-LEDGER-TRANSACTION-FACT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSX0S8863WG00NQZ215JXSR",
+      "target_title": "TransactionFact",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDDYGGDJP24NZA73X3Y",
+      "target_ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSX0SK0MJ04VKFJG66C4VRD",
+      "target_title": "TransactionLifecycleAndAllocation",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT2XZDD5C82KKR295N85RQQ",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show exact table, index, foreign-key, check, uniqueness, and rollback evidence for every linked model."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KXT2XZDD0HMZ2CE2ZVTCBY2P",
+      "gate_type": "self-review",
+      "description": [
+        "The fragment contains every linked model field and no tables owned by another fragment."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT2XZDD0KJVERQ3DZ4T5QC5",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Infrastructure.Storage.LedgerTransactionSchemaTests --no-restore",
+      "expected_result": "exit 0; at least 10 real-SQLite table/index/foreign-key/check/rollback cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 240,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    }
+  ]
+}

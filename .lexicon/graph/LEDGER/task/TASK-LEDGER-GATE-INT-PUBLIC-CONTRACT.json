@@ -1,0 +1,353 @@
+{
+  "id": "01KXT0Y3KR1T14S7HXJT3J2J1A",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+  "slug": "GATE-INT-PUBLIC-CONTRACT",
+  "title": "Wire and prove the complete public CLI contract",
+  "description": [
+    "Integration gate intentionally has no Implements link: explicitly compose every feature operation module and prove the released descriptor/process inventory."
+  ],
+  "objective": [
+    "Expose exactly the 38 designed public operations through one registry with deterministic schemas, stable errors/exits, idempotency classification, and published-binary behavior."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 10,
+  "created_at": "2026-07-18T07:09:31.6427414+00:00",
+  "dependencies": [
+    {
+      "id": "01KXT27MCYF46T3C41MRWYTEG4",
+      "target": "TASK-LEDGER-CORE-PROCESS-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes OperationRegistry."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:32:12.3193200+00:00"
+    },
+    {
+      "id": "01KXT27JRGWY9XEGMVQ48N7D7M",
+      "target": "TASK-LEDGER-GATE-INT-CATALOGUE-TRANSACTION-BUNDLE",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes CatalogueTransactionOperationBundle."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:32:10.6412885+00:00"
+    },
+    {
+      "id": "01KXT27KWATKK15PTF3ZZVTH3R",
+      "target": "TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes RecoverySkillOperationBundle."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:32:11.7877339+00:00"
+    },
+    {
+      "id": "01KXT27K9Z00XXVJ6TN741Z69V",
+      "target": "TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes RelationshipActualsOperationBundle."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:32:11.2003039+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT13WNPNE8CKXKX8KMAG1ZF",
+      "path": "src/Tally/Bootstrap/LedgerServices.cs",
+      "action": "modify",
+      "role": "explicit composition",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:12:41.1418574+00:00"
+    },
+    {
+      "id": "01KXT13WNQ038TGY5JAYW3GC0Y",
+      "path": "src/Tally/Cli/OperationRegistry.cs",
+      "action": "modify",
+      "role": "complete registry",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:12:41.1418574+00:00"
+    },
+    {
+      "id": "01KXT13WNQQSNY8JPD899YK7GH",
+      "path": "tests/Tally.Tests/Process/PublishedTallyFixture.cs",
+      "action": "test",
+      "role": "published process fixture",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:12:41.1418574+00:00"
+    },
+    {
+      "id": "01KXT13WNQZ06C0KGCKR9D6MCW",
+      "path": "tests/Tally.Tests/Cli/PublicContractInventoryTests.cs",
+      "action": "test",
+      "role": "contract inventory",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:12:41.1418574+00:00"
+    },
+    {
+      "id": "01KXT13WNQAWXSYBCRT2TCX0Y5",
+      "path": "tests/Tally.Tests/Process/PublishedLedgerContractTests.cs",
+      "action": "test",
+      "role": "published contract",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:12:41.1418574+00:00"
+    },
+    {
+      "id": "01KXT13WNQDTJPEPTVCMCQEBHQ",
+      "path": "tests/Tally.Tests/Cli/Snapshots/ledger-operations-v1.json",
+      "action": "test",
+      "role": "deterministic inventory",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:12:41.1418574+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT26ZB8XFD3SKV74T93C1PD",
+      "name": "CatalogueTransactionOperationBundle",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:31:50.7604653+00:00"
+    },
+    {
+      "id": "01KXT26ZB92J8HJEKAF8HPYATK",
+      "name": "RelationshipActualsOperationBundle",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:31:50.7604653+00:00"
+    },
+    {
+      "id": "01KXT26ZB90A6G81W2320N6YXS",
+      "name": "RecoverySkillOperationBundle",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:31:50.7604653+00:00"
+    },
+    {
+      "id": "01KXT26ZBARS2HAR9BBK3RX6VC",
+      "name": "OperationRegistry",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:31:50.7604653+00:00"
+    },
+    {
+      "id": "01KXT26ZBAC0K6PG0X283QMBM7",
+      "name": "PublishedTallyFixture",
+      "direction": "produces",
+      "notes": [
+        "Release-published process E2E fixture"
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:31:50.7604653+00:00"
+    },
+    {
+      "id": "01KXT26ZBAA4NS1457NQNVHB8X",
+      "name": "CompletePublicContract",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "Exactly 38 explicitly wired operations"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:31:50.7604653+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0Y3KVX3333J0BGC5J95GZ",
+      "kind": "acceptance_check",
+      "text": [
+        "LedgerServices explicitly registers every operation module and OperationRegistry contains exactly the 38 design operation IDs/paths with no aliases, duplicate IDs/paths, generic invoke/CRUD/SQL/database operations, reflection scan, or private storage schema."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KVB6KNSN1N81P633N3",
+      "kind": "acceptance_check",
+      "text": [
+        "Every descriptor has concrete request/result schema, complete stable errors/exits, help/example, supported versions, handler, and mutation idempotency requirement matching the five operation-contract data models."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KVM6AG76BTD6AFZP92",
+      "kind": "acceptance_check",
+      "text": [
+        "Published tally schema list/show and representative success/error invocation write one stdout object, safe stderr metadata, and documented exits; schema inventory is deterministic across runs."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KVHW1YVTJ8YT2K5DAE",
+      "kind": "acceptance_check",
+      "text": [
+        "Every public mutation routes through LedgerMutationExecutor; actuals first page is the only internal ephemeral cache write without a public idempotency key."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KVME1CMP9PVY9CY5G7",
+      "kind": "acceptance_check",
+      "text": [
+        "Native-AOT publish and offline process inventory complete without dynamic-code warnings, network listeners, orphan processes, or missing source-generated JSON types."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KVX4GG7WF8KMRAWBDX",
+      "kind": "expected_output",
+      "text": [
+        "Explicit root module composition"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KVQEW4K6FTRFHFR96W",
+      "kind": "expected_output",
+      "text": [
+        "38-operation schema snapshot"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KVTXK53G5FEVDV91EG",
+      "kind": "expected_output",
+      "text": [
+        "PublicContractInventoryTests and PublishedLedgerContractTests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KVJJRTJ2TKTXHXBRWQ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT auto-discover modules by reflection, add aliases/generic commands, hand-maintain a second schema manifest, or expose HTTP/storage internals."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KV8TT8V3MMVMCZGDVV",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT weaken any feature descriptor to make inventory tests easier."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0Y3KWSH4DPP40BFC8CS94",
+      "target_ref_code": "NFR-LEDGER-AGENT-CONTRACT-STABILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFY9C8649APJ7XN79GBZ3",
+      "target_title": "Keep the agent contract stable",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KW87HY12XRN5642MA0",
+      "target_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSX0V97NBKV7XJQ6F2GGR07",
+      "target_title": "OperationDescriptorAndEnvelope",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KWBP2MGAC824H6Y3RA",
+      "target_ref_code": "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSXG8TR927NTWCDM2MBGVTV",
+      "target_title": "Verify every agent operation contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KW1S1YRBRAW4RNZHPJ",
+      "target_ref_code": "TC-LEDGER-OFFLINE-SELF-CONTAINED",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSXGARJWH67PJ3TH12CNVDZ",
+      "target_title": "Verify offline self-contained operation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0Y3KWEGQFXA0186835WDD",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach the exact 38-operation inventory and published success/error stream evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    },
+    {
+      "id": "01KXT0Y3KW2MYMW8MACE2SMQZM",
+      "gate_type": "branch-review",
+      "description": [
+        "Reviewer compares every descriptor with its operation-contract data model."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0Y3KW487YVHARGJF7214M",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~PublicContractInventoryTests|FullyQualifiedName~PublishedLedgerContractTests' --no-restore",
+      "expected_result": "exit 0; at least 40 inventory/process cases run, exactly 38 operations are reported, and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+    }
+  ]
+}

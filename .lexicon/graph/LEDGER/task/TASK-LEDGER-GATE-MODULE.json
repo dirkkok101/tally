@@ -1,0 +1,447 @@
+{
+  "id": "01KXT126TASV2XZW0TGWH92YGE",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-GATE-MODULE",
+  "slug": "GATE-MODULE",
+  "title": "Complete the LEDGER v1 module gate",
+  "description": [
+    "Exactly-one module completion gate intentionally has no Implements link: converge all feature, security, use-case, build, graph, publish, and offline checks."
+  ],
+  "objective": [
+    "Prove the completed LEDGER implementation is release-buildable, fully tested, graph-conformant, Native-AOT publishable, offline, and ready for review."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 200,
+  "created_at": "2026-07-18T07:11:45.9941647+00:00",
+  "dependencies": [
+    {
+      "id": "01KXT1AW0MKQDHE2116S87QWM9",
+      "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires CompletePublicContract from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 13,
+      "created_at": "2026-07-18T07:16:29.8448233+00:00"
+    },
+    {
+      "id": "01KXT16FJ9VYQ3ZYA6Z57E2RV6",
+      "target": "TASK-LEDGER-GATE-SECURITY",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires the consolidated security gate."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:14:06.0265522+00:00"
+    },
+    {
+      "id": "01KXT16G2X4ZNSQK3JV53BAGD1",
+      "target": "TASK-LEDGER-VERIFY-UC-001",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires every designed use case and failure path to be verified."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:14:06.5579993+00:00"
+    },
+    {
+      "id": "01KXT16GKS1Y3RZBK092CQ4RYN",
+      "target": "TASK-LEDGER-VERIFY-UC-002",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires every designed use case and failure path to be verified."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:14:07.0982051+00:00"
+    },
+    {
+      "id": "01KXT16H41S60ZQ0S459H1C2Y0",
+      "target": "TASK-LEDGER-VERIFY-UC-003",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires every designed use case and failure path to be verified."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:14:07.6189668+00:00"
+    },
+    {
+      "id": "01KXT16HMJNHV3RYPBBYPXYNC8",
+      "target": "TASK-LEDGER-VERIFY-UC-004",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires every designed use case and failure path to be verified."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:14:08.1477807+00:00"
+    },
+    {
+      "id": "01KXT16J5RSEJYQBA7W5X3MG9N",
+      "target": "TASK-LEDGER-VERIFY-UC-005",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires every designed use case and failure path to be verified."
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:14:08.6975586+00:00"
+    },
+    {
+      "id": "01KXT16JPEHBE4DCSV6G7T2HZM",
+      "target": "TASK-LEDGER-VERIFY-UC-006",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires every designed use case and failure path to be verified."
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-18T07:14:09.2312067+00:00"
+    },
+    {
+      "id": "01KXT16K6HTVMNESP1SM58NM0F",
+      "target": "TASK-LEDGER-VERIFY-UC-007",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires every designed use case and failure path to be verified."
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-18T07:14:09.7458478+00:00"
+    },
+    {
+      "id": "01KXT16KPXW47SWJ5HPHJBBDG0",
+      "target": "TASK-LEDGER-VERIFY-UC-008",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires every designed use case and failure path to be verified."
+      ],
+      "sort_order": 8,
+      "created_at": "2026-07-18T07:14:10.2699696+00:00"
+    },
+    {
+      "id": "01KXT16M7XF16R0XRA3VZ8TR8M",
+      "target": "TASK-LEDGER-VERIFY-UC-009",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires every designed use case and failure path to be verified."
+      ],
+      "sort_order": 9,
+      "created_at": "2026-07-18T07:14:10.8147380+00:00"
+    },
+    {
+      "id": "01KXT16MR6A8J59RGXVG3QM3KP",
+      "target": "TASK-LEDGER-VERIFY-UC-010",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires every designed use case and failure path to be verified."
+      ],
+      "sort_order": 10,
+      "created_at": "2026-07-18T07:14:11.3356903+00:00"
+    },
+    {
+      "id": "01KXT16N8DN18AMK0W4XQ4KVKG",
+      "target": "TASK-LEDGER-VERIFY-UC-011",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires every designed use case and failure path to be verified."
+      ],
+      "sort_order": 11,
+      "created_at": "2026-07-18T07:14:11.8544869+00:00"
+    },
+    {
+      "id": "01KXT16NSK4YYK0C2R7MZD3CX4",
+      "target": "TASK-LEDGER-VERIFY-UC-012",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires every designed use case and failure path to be verified."
+      ],
+      "sort_order": 12,
+      "created_at": "2026-07-18T07:14:12.4045752+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT126TGWNMTH53P300KTJ6A",
+      "path": "scripts/verify-ledger-module.sh",
+      "action": "create",
+      "role": "module gate",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TGS1FDBEWVMDF8N5FY",
+      "path": "docs/verification/ledger-v1.md",
+      "action": "document",
+      "role": "evidence report",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT19Q1JYP8W1QR8T75JN8WN",
+      "name": "CompletePublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:15:51.9860014+00:00"
+    },
+    {
+      "id": "01KXT19Q1KBY60X9JTJ56MJ6AE",
+      "name": "VerifiedLocalSecurityGate",
+      "direction": "consumes",
+      "contract_ref_code": "NFR-LEDGER-LOCAL-DATA-PROTECTION",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:15:51.9860014+00:00"
+    },
+    {
+      "id": "01KXT19Q1KVTJQQT4ZPC4PNGGC",
+      "name": "VerifiedUC001",
+      "direction": "consumes",
+      "contract_ref_code": "UC-LEDGER-001",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:15:51.9860014+00:00"
+    },
+    {
+      "id": "01KXT19Q1K27G6BEHT91ZA6KCD",
+      "name": "VerifiedUC002",
+      "direction": "consumes",
+      "contract_ref_code": "UC-LEDGER-002",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:15:51.9860014+00:00"
+    },
+    {
+      "id": "01KXT19Q1K44XZ9GZZD8A4G5ZF",
+      "name": "VerifiedUC003",
+      "direction": "consumes",
+      "contract_ref_code": "UC-LEDGER-003",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:15:51.9860014+00:00"
+    },
+    {
+      "id": "01KXT19Q1KX2V0J9D81VQXT7H4",
+      "name": "VerifiedUC004",
+      "direction": "consumes",
+      "contract_ref_code": "UC-LEDGER-004",
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:15:51.9860014+00:00"
+    },
+    {
+      "id": "01KXT19Q1KV7Y9293V82E7NR4S",
+      "name": "VerifiedUC005",
+      "direction": "consumes",
+      "contract_ref_code": "UC-LEDGER-005",
+      "sort_order": 6,
+      "created_at": "2026-07-18T07:15:51.9860014+00:00"
+    },
+    {
+      "id": "01KXT19Q1KMYCC5HQZAD9MPJMX",
+      "name": "VerifiedUC006",
+      "direction": "consumes",
+      "contract_ref_code": "UC-LEDGER-006",
+      "sort_order": 7,
+      "created_at": "2026-07-18T07:15:51.9860014+00:00"
+    },
+    {
+      "id": "01KXT19Q1KJ6MJ2VN40N5SS681",
+      "name": "VerifiedUC007",
+      "direction": "consumes",
+      "contract_ref_code": "UC-LEDGER-007",
+      "sort_order": 8,
+      "created_at": "2026-07-18T07:15:51.9860014+00:00"
+    },
+    {
+      "id": "01KXT19Q1K3TVR5AB4S60C94JN",
+      "name": "VerifiedUC008",
+      "direction": "consumes",
+      "contract_ref_code": "UC-LEDGER-008",
+      "sort_order": 9,
+      "created_at": "2026-07-18T07:15:51.9860014+00:00"
+    },
+    {
+      "id": "01KXT19Q1KPVR66MDJBVTMZ8E3",
+      "name": "VerifiedUC009",
+      "direction": "consumes",
+      "contract_ref_code": "UC-LEDGER-009",
+      "sort_order": 10,
+      "created_at": "2026-07-18T07:15:51.9860014+00:00"
+    },
+    {
+      "id": "01KXT19Q1KJCPY3RZWSH77SQMM",
+      "name": "VerifiedUC010",
+      "direction": "consumes",
+      "contract_ref_code": "UC-LEDGER-010",
+      "sort_order": 11,
+      "created_at": "2026-07-18T07:15:51.9860014+00:00"
+    },
+    {
+      "id": "01KXT19Q1KX1AVHQPRGY18TMHN",
+      "name": "VerifiedUC011",
+      "direction": "consumes",
+      "contract_ref_code": "UC-LEDGER-011",
+      "sort_order": 12,
+      "created_at": "2026-07-18T07:15:51.9860014+00:00"
+    },
+    {
+      "id": "01KXT19Q1KF5CRQWKB7FW8J8DH",
+      "name": "VerifiedUC012",
+      "direction": "consumes",
+      "contract_ref_code": "UC-LEDGER-012",
+      "sort_order": 13,
+      "created_at": "2026-07-18T07:15:51.9860014+00:00"
+    },
+    {
+      "id": "01KXT19Q1KA3Z3Q0R14VTV6PYV",
+      "name": "VerifiedLedgerV1Module",
+      "direction": "produces",
+      "sort_order": 14,
+      "created_at": "2026-07-18T07:15:51.9860014+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT126TGYZKBK7492SW1KEZV",
+      "kind": "acceptance_check",
+      "text": [
+        "dotnet restore/build/format and the full xUnit suite exit 0 with zero warnings/failures; test output reports a nonzero count for every planned test class."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TGV7HXWG4H6THX6R9M",
+      "kind": "acceptance_check",
+      "text": [
+        "Release linux-x64 Native-AOT publish exits 0 and the published binary completes the 38-operation offline contract inventory with no orphan process/listener."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TG94VG069744JRX2A1",
+      "kind": "acceptance_check",
+      "text": [
+        "Core and security scripts exit 0; personal-scale test reports p95 targets; verified recovery drill reproduces every durable state type and exact totals."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TGSK69J87WTVP4W403",
+      "kind": "acceptance_check",
+      "text": [
+        "lex coverage reports 17/17 active FRs covered, no gaps/orphan tests; lex check --fast reports 0 errors/warnings; plan coverage remains gate-clean."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TG5WD2K5RE01WKYEHJ",
+      "kind": "acceptance_check",
+      "text": [
+        "git diff --check is empty and the verification report lists every command/result and any intentionally non-code-covered file."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TG3NAZ1VECCTEV4ESW",
+      "kind": "constraint",
+      "text": [
+        "Run from repository root on the supported linux-x64 host."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TGGV6C2MPN4B6V1XWK",
+      "kind": "expected_output",
+      "text": [
+        "scripts/verify-ledger-module.sh"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TGB064G3VV924YFJB5",
+      "kind": "expected_output",
+      "text": [
+        "docs/verification/ledger-v1.md with command evidence"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TG52GK4ZGTQ81S0RDP",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept zero-match filtered tests, Debug-only proof, skipped recovery/security/performance checks, or a manually edited coverage table."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TGG7THQDSQF8ERNWFK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT create beads, deploy, or write execution status into planning_state from this task."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TGZ94E0YKVCW4XZ66R",
+      "kind": "note",
+      "text": [
+        "This is the sole module-completion gate; per-task tests remain mandatory and are not replaced."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT126THRVBNR45V3807AYYD",
+      "gate_type": "test-evidence",
+      "description": [
+        "Verification report contains raw command summaries and exact counts/timings for every gate."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126THREKY19T70AG7ED8C",
+      "gate_type": "branch-review",
+      "description": [
+        "Fresh reviewer confirms graph, implementation, tests, and published behavior agree."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT126THSK9XCJJ9756RQBK2",
+      "phase": "after",
+      "command": "bash scripts/verify-ledger-module.sh",
+      "expected_result": "exit 0; restore/build/format/full tests/AOT publish/core/security/performance/recovery/Lex/diff checks all report success, every suite reports nonzero tests, and 0 failures/warnings remain",
+      "required": 1,
+      "timeout_seconds": 1800,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ]
+}

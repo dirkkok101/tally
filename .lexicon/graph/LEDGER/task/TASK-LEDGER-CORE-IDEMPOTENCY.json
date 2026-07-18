@@ -1,0 +1,402 @@
+{
+  "id": "01KXT0KHY28FZPR7MBPQMFJ9QZ",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT069TD553802AT505MG72F",
+  "ref_code": "TASK-LEDGER-CORE-IDEMPOTENCY",
+  "slug": "CORE-IDEMPOTENCY",
+  "title": "Implement transactional mutation idempotency",
+  "description": [
+    "Build the common mutation executor, canonical request hashing, stored outcomes, and artifact reconciliation for every public write."
+  ],
+  "objective": [
+    "Guarantee identical replay returns the original result while changed replay, invalid input, busy failure, and crash boundaries preserve one effect."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 40,
+  "created_at": "2026-07-18T07:03:45.8586325+00:00",
+  "decisions": [
+    {
+      "id": "01KXT0KHY7NWNN3CW2F5NJK7PK",
+      "target": "DD-LEDGER-IDEMPOTENT-MUTATIONS",
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT15TFEWS5FNZZ7VYF9M3G7",
+      "target": "TASK-LEDGER-CORE-PROCESS-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Mutation executor consumes CommandResult and process contract primitives."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:13:44.4312887+00:00"
+    },
+    {
+      "id": "01KXT15SYCJTGJ6D3TNDB0TWST",
+      "target": "TASK-LEDGER-CORE-STORAGE",
+      "dependency_type": "compile",
+      "reason": [
+        "IdempotencyStore requires the initialized SQLite schema and LedgerDb."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:13:43.8857943+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0KHY7E9AG8HT1ZMDDM96Q",
+      "path": "src/Tally/Application/LedgerMutationExecutor.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7CRT6BV6J6MHDVAQG",
+      "path": "src/Tally/Domain/Ledger/IdempotencyIdentity.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7HA6EW3YY3AQC3XKE",
+      "path": "src/Tally/Infrastructure/Storage/IdempotencyStore.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY728A9STF3S2ZF17YV",
+      "path": "src/Tally/Infrastructure/Artifacts/ArtifactReconciler.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY71YP5MS9549NCQCH2",
+      "path": "src/Tally/Contracts/Common/IdempotencyContracts.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7QT1S0EWBDFWJFSWE",
+      "path": "tests/Tally.Tests/Application/LedgerMutationExecutorTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7X7WAZMH9ZBEYR1KR",
+      "path": "tests/Tally.Tests/Infrastructure/Artifacts/ArtifactReconcilerTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT0KHY7DQJM9W8QXADY5FPX",
+      "name": "LedgerMutationExecutor.ExecuteAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7XPJ88X2121C43635",
+      "name": "IdempotencyStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY73X5ZTSSJVGXNHPTZ",
+      "name": "CanonicalRequestHasher",
+      "direction": "produces",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7P4CX3XG05S1CTGX5",
+      "name": "ArtifactReconciler",
+      "direction": "produces",
+      "contract_ref_code": "DD-LEDGER-IDEMPOTENT-MUTATIONS",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7KTHJGCG4R93D64TQ",
+      "name": "LedgerDb",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7QCM83GBZARVRPPCM",
+      "name": "CommandResult<TResult>",
+      "direction": "consumes",
+      "contract_ref_code": "ADR-CORE-0010",
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0KHY7BHV701MMX1X63HTY",
+      "kind": "acceptance_check",
+      "text": [
+        "Identity is contract version + operation ID + caller key; hash includes normalized input and actor."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7XXTJXZ6ZKZWQN7M9",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical replay returns the stored result/entity/artifact with no volatile replay field and no second effect."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7VFXN1S4QCZ3DHA06",
+      "kind": "acceptance_check",
+      "text": [
+        "Changed operation/version/actor/payload always returns LEDGER-IDEMPOTENCY-001 and preserves the first outcome."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7PVZE80YBSR2GT4S4",
+      "kind": "acceptance_check",
+      "text": [
+        "Validation and busy/resource failures occur before key consumption."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7KHA13G4ZJ5HWENZC",
+      "kind": "acceptance_check",
+      "text": [
+        "Domain changes, events, stored result, and IdempotencyRecord commit in one transaction; pre-commit crash leaves none."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7EQVN762TN5KY85SC",
+      "kind": "acceptance_check",
+      "text": [
+        "Artifact publication uses deterministic identity, private staging, checksum, flush, atomic publication, and retry reconciliation."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7Z12690ZQ1XTK7MH9",
+      "kind": "expected_output",
+      "text": [
+        "LedgerMutationExecutor and IdempotencyStore"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7FGNFDE0C6F5NJ5WN",
+      "kind": "expected_output",
+      "text": [
+        "CanonicalRequestHasher"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7JXNWEFVKF38MBSJ4",
+      "kind": "expected_output",
+      "text": [
+        "ArtifactReconciler"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY754N3D4KH66MYW56R",
+      "kind": "expected_output",
+      "text": [
+        "Crash/replay tests"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7HEXF86Y2HHSFQ2PW",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT rely on caller retries or database-only idempotency for files — rejected per DD-LEDGER-IDEMPOTENT-MUTATIONS."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY70G30D69FKKBM0HA4",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT store correlation IDs, durations, or replay flags in successful outcomes."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7HFNSR1WSAF065Z0D",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT reserve keys for invalid/busy requests."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0KHY8W6AX6YGMWPXXK4NE",
+      "target_ref_code": "ADR-CORE-0010",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3Y7DB71F8178QX5C3FA",
+      "target_title": "CommandResult Pattern for Commands",
+      "relationship": "governed-by",
+      "required": 0,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY8WTK8SCJT4NE7327D",
+      "target_ref_code": "DIAG-LEDGER-MUTATION-SEQUENCE",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KXSX8ZPZ82S8K9T04V2B56YZ",
+      "target_title": "Idempotent Ledger mutation sequence",
+      "relationship": "references",
+      "required": 0,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY8K43ZSAYYFBMX24BE",
+      "target_ref_code": "NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFXNVGXH9FYFN6KF8KSE9",
+      "target_title": "Make mutations atomic and durable",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY8AT88P7ZP6F24KSR3",
+      "target_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSX0T6ZF6721V2KH6F0B6CE",
+      "target_title": "IdempotencyRecord",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY8EVTX247VAXYM9PQV",
+      "target_ref_code": "TC-LEDGER-IDEMPOTENT-WRITES-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK68FSTHPRH9311ZBSJRM",
+      "target_title": "Verify make public writes idempotent contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY8XN0KDD5FTWSCPHVF",
+      "target_ref_code": "TC-LEDGER-ATOMIC-CRASH-RECOVERY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSXG95SJK6DF2MYPDPAE3GX",
+      "target_title": "Prove mutation crash atomicity and idempotency",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXT0KHY7R81F7G65QWFKD4CF",
+      "target": "FR-LEDGER-IDEMPOTENT-WRITES",
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0KHY7GCXZW7KWV1R0YMS6",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show identical/changed replay, validation/busy reuse, rollback, and artifact reconciliation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY79SC72TCR246C03Q6",
+      "gate_type": "self-review",
+      "description": [
+        "Confirm all later public mutation modules consume one executor."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0KHY7G774DA5NP46P70YR",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~LedgerMutationExecutorTests|FullyQualifiedName~ArtifactReconcilerTests' --no-restore",
+      "expected_result": "exit 0; at least 16 replay/conflict/crash cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ]
+}

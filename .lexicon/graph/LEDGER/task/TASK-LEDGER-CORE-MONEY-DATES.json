@@ -1,0 +1,362 @@
+{
+  "id": "01KXT0KHY1C0XEBFXVD04S2ZKF",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT069TD553802AT505MG72F",
+  "ref_code": "TASK-LEDGER-CORE-MONEY-DATES",
+  "slug": "CORE-MONEY-DATES",
+  "title": "Implement exact money, identifiers, and dates",
+  "description": [
+    "Implement validated ZAR minor units, signed balance delta, Effective Date, exact totals, and ULID primitives."
+  ],
+  "objective": [
+    "Provide deterministic value types that reject lossy inputs and round-trip accepted money/date values exactly."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 30,
+  "created_at": "2026-07-18T07:03:45.8586325+00:00",
+  "decisions": [
+    {
+      "id": "01KXT0KHY60VQF0M3KCQB4JD5W",
+      "target": "DD-LEDGER-FINANCIAL-REPRESENTATION",
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT15QPS0S12CEFQ1QPQJT3F",
+      "target": "TASK-LEDGER-CORE-PROCESS-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Value types compile against common validation/result contracts."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:13:41.5938569+00:00"
+    },
+    {
+      "id": "01KXT15R9DVD7GM8X5RFTDJDV4",
+      "target": "TASK-LEDGER-GATE-EVIDENCE-CURRENCY",
+      "dependency_type": "compile",
+      "reason": [
+        "Money currency semantics cannot be implemented before OQ-LEDGER-1 resolves."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:13:42.1901307+00:00"
+    },
+    {
+      "id": "01KXT15SBE0G08APF9HBR6SE12",
+      "target": "TASK-LEDGER-GATE-EVIDENCE-DATES",
+      "dependency_type": "compile",
+      "reason": [
+        "Effective Date semantics cannot be implemented before OQ-LEDGER-3 resolves."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:13:43.2797808+00:00"
+    },
+    {
+      "id": "01KXT15RT9PB1FY9AE3XHEHN5V",
+      "target": "TASK-LEDGER-GATE-EVIDENCE-SIGNS",
+      "dependency_type": "compile",
+      "reason": [
+        "Signed amount semantics cannot be implemented before OQ-LEDGER-2 resolves."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:13:42.7297871+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0KHY6VXMHSCF1HCWS03YB",
+      "path": "src/Tally/Domain/Ledger/Money.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY6GEHV5J0PKC0QJ21W",
+      "path": "src/Tally/Domain/Ledger/LedgerCurrency.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY6ZAM90GPB5SB1EKSC",
+      "path": "src/Tally/Domain/Ledger/EffectiveDate.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY6JPZJYZAPB61EC6ZB",
+      "path": "src/Tally/Domain/Ledger/LedgerId.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY6VBF86K1839WV8DRB",
+      "path": "src/Tally/Domain/Ledger/ExactTotals.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY60M582KNMENWWPEY2",
+      "path": "tests/Tally.Tests/Domain/Ledger/MoneyAndDateTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT0KHY7GV3G85WH0CPNMZG7",
+      "name": "Money",
+      "direction": "produces",
+      "contract_ref_code": "DD-LEDGER-FINANCIAL-REPRESENTATION",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY79RCD2HQ202T3XRNZ",
+      "name": "EffectiveDate.Resolve",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-FACT",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7RV7908QNBTFZ5HH3",
+      "name": "LedgerId",
+      "direction": "produces",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7MNC219RSBZX04YDF",
+      "name": "ExactTotals",
+      "direction": "produces",
+      "contract_ref_code": "NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0KHY6CH2SZZ3DRMD3QNC7",
+      "kind": "acceptance_check",
+      "text": [
+        "Canonical -123.45 parses once to Int64 minor units and formats identically without floating point."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY6RSX4MMPTB02KG7PJ",
+      "kind": "acceptance_check",
+      "text": [
+        "JSON numbers, exponents, negative zero, zero transaction amounts, excessive scale, unsupported currency, and overflow return stable field errors."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY6Y670M8E42WTFJ13B",
+      "kind": "acceptance_check",
+      "text": [
+        "Signed amount follows the resolved owned-account delta rule."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY6B17EKSNQC2BYJN3F",
+      "kind": "acceptance_check",
+      "text": [
+        "TransactionDate/PostingDate round-trip as yyyy-MM-dd and EffectiveDate follows resolved precedence without timezone fabrication."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY640RB0033TQVA8AB4",
+      "kind": "acceptance_check",
+      "text": [
+        "Identifiers are 26-character ULIDs and total accumulation detects overflow."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY6VWG7HX10HCJTKQ2M",
+      "kind": "expected_output",
+      "text": [
+        "Money, LedgerCurrency, EffectiveDate, LedgerId, ExactTotals"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY63HJYK6E5RH4984KG",
+      "kind": "expected_output",
+      "text": [
+        "Boundary/property tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY63GMWZ19427NH46GH",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use REAL/double/float/JSON numeric money, decimal-text persistence, or a speculative currency table — rejected per DD-LEDGER-FINANCIAL-REPRESENTATION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY6FV8WKJFZ0Q577CXJ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT implement before OQ-LEDGER-1..3 resolve without invalidating the decision."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0KHY78S6K3HHW14VF1K7Z",
+      "target_ref_code": "OQ-LEDGER-1",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KXR55H94B58EENF5CK7AG9HP",
+      "target_title": "Validate the active ZAR-only first-release assumption against all three owned accounts.",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7BSRK3J1ECJ4M5GP5",
+      "target_ref_code": "OQ-LEDGER-2",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KXR55HE0PW79V66CPV02371F",
+      "target_title": "Validate the active signed-account-delta convention against statement samples from both banks.",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7V5TSAFE2T3D8WS2W",
+      "target_ref_code": "OQ-LEDGER-3",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KXR55HK04VCG68SMJB7Z88R6",
+      "target_title": "Validate transaction date as the default Effective Date and identify whether either bank supplies a distinct posting date.",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7T7HN8PTHR0QVQG9Y",
+      "target_ref_code": "NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFXBTBZ6YXSZEFF4WWRCX",
+      "target_title": "Preserve exact financial arithmetic",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY75J7T1FJA0GWSZ0A7",
+      "target_ref_code": "DM-LEDGER-TRANSACTION-FACT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSX0S8863WG00NQZ215JXSR",
+      "target_title": "TransactionFact",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7AXJ70N38BGW1DQR1",
+      "target_ref_code": "TC-LEDGER-EXACT-MONEY-CONFORMANCE",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSXG9VA93KYJ7T384439ZHH",
+      "target_title": "Verify exact money and actuals formulas",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXT0KHY6V9E451V9T3RY3TJC",
+      "target": "FR-LEDGER-ACTUALS-QUERY",
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY6A5SKSTY32K7AH4FT",
+      "target": "FR-LEDGER-TRANSACTION-RECORDING",
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0KHY77TGT2D53VWBVXZW2",
+      "gate_type": "test-evidence",
+      "description": [
+        "Include overflow, lexical rejection, round-trip, sign, and date precedence evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY7JDW0QC7MG2GX4SAJ",
+      "gate_type": "self-review",
+      "description": [
+        "Production financial paths contain no double, float, REAL, or JSON numeric money."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0KHY77F9DSAMYTF6YWHFB",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Domain.Ledger.MoneyAndDateTests --no-restore",
+      "expected_result": "exit 0; at least 20 boundary/property cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 180,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ]
+}

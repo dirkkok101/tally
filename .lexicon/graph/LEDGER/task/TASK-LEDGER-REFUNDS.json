@@ -1,0 +1,325 @@
+{
+  "id": "01KXT0SMDZQPA5HC8QWH3E92EV",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06AGT9EPMYN1DCHN46ZV9",
+  "ref_code": "TASK-LEDGER-REFUNDS",
+  "slug": "REFUNDS",
+  "title": "Implement refund and reversal confirmation",
+  "description": [
+    "Deliver explicit full/partial refund confirmation using the entire credit and cumulative active-refund limits."
+  ],
+  "objective": [
+    "Create attributable refund relationships that safely offset the original transaction category in the credit's own Effective Date period."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 20,
+  "created_at": "2026-07-18T07:07:05.0252128+00:00",
+  "decisions": [
+    {
+      "id": "01KXT0SME3SH9DD190CWE3WJ5F",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT1AY3EENJ5NWCYRDWBBD3P",
+      "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:16:31.9830908+00:00"
+    },
+    {
+      "id": "01KXT1AYMP15CYEDDZDYQ61GVH",
+      "target": "TASK-LEDGER-TRANSACTIONS-RECORD-GET",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires TransactionStore from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:16:32.5358893+00:00"
+    },
+    {
+      "id": "01KXT161C7KVXG81VPGHJ0DK64",
+      "target": "TASK-LEDGER-TRANSFERS",
+      "dependency_type": "compile",
+      "reason": [
+        "Refunds consume the RelationshipStore and active-role model created with transfers."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:13:51.4968160+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0SME3EBTX8XMWD7RK42Z8",
+      "path": "src/Tally/Contracts/Ledger/Relationships/RefundContracts.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME3BB7YQTRCNTXY3AGZ",
+      "path": "src/Tally/Domain/Ledger/Relationships/RefundPolicy.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME3WGHCR3KRJV4P6QCN",
+      "path": "src/Tally/Features/Ledger/Relationships/RefundHandlers.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME3F1BRVTTYAGY7AA63",
+      "path": "src/Tally/Features/Ledger/Relationships/RefundOperationModule.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME3KEW62M5Q6TS9FVEB",
+      "path": "tests/Tally.Tests/Features/Ledger/Relationships/RefundTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT0SME4A7QZ5T18MJFV21N1",
+      "name": "RefundOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME4QAZGP3SHS36HQS85",
+      "name": "RefundPolicy",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME4SV8XBBC3242BK23Y",
+      "name": "RelationshipStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME4YSPKVMXFJNBEJKJY",
+      "name": "TransactionStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-FACT",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME4KDQ0NJVFP8XQA57T",
+      "name": "LedgerMutationExecutor.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0SME3W7FQC550HZKMYKN2",
+      "kind": "acceptance_check",
+      "text": [
+        "Active same-account ZAR opposite-sign original/credit plus reason creates one active attributable refund using the credit's entire magnitude."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME3C7X88XNYC5H219RG",
+      "kind": "acceptance_check",
+      "text": [
+        "Multiple partial credits may link to one original only while cumulative active magnitude is at most the original."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME33SVA428W28HCWDY8",
+      "kind": "acceptance_check",
+      "text": [
+        "Different account/currency, same sign, inactive participant, over-refund, transfer role, refund-credit reuse, or refund-credit-as-original returns a stable error and creates no link."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME3SVA9FKEXR950898F",
+      "kind": "acceptance_check",
+      "text": [
+        "Refund detail retains explicit original/credit roles and exact amount without changing source facts."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME3JGDZRRC7BHR2E939",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical replay returns the first relationship and concurrent credit reuse yields one active role."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME32E85YVM1RAV389YW",
+      "kind": "expected_output",
+      "text": [
+        "Refund contracts/policy/handler/module"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME3ZXD6T20K71A414S2",
+      "kind": "expected_output",
+      "text": [
+        "Cumulative refund and role tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME36C2BT07CH1QPGSTY",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT infer refunds from description/date, split one credit across originals, mutate category/source facts, or permit transfer/refund role overlap — per DD-LEDGER-IMMUTABLE-HISTORY."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME328M84RJPN95JPWCZ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT implement before OQ-LEDGER-5 resolves consistently."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0SME497GAPTPM3NDF9YHW",
+      "target_ref_code": "OQ-LEDGER-5",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KXR55HWRSWNEKE7H763R8173",
+      "target_title": "Validate the proposed transfer, refund/reversal, and cash-withdrawal spend policies with representative transactions.",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME4NAH53KJF169JQVZV",
+      "target_ref_code": "NFR-LEDGER-ATTRIBUTABLE-HISTORY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFZJ0XVBBX0FPF6FJ7E2Y",
+      "target_title": "Retain attributable correction history",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME4QXGA0JZNANS0ZV56",
+      "target_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGFC3892700GHYSWPE777",
+      "target_title": "RelationshipActualsOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME4XMSGZ2MY451V6AMH",
+      "target_ref_code": "TC-LEDGER-REFUND-CONFIRMATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK6J7H2DEEE7855N5YAKT",
+      "target_title": "Verify confirm refunds and reversals contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXT0SME30E9CNTE8HBCKSTEE",
+      "target": "FR-LEDGER-REFUND-CONFIRMATION",
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0SME4RVZ0GXVWYR8JANQD",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show cumulative bounds, full-credit use, exclusivity, later-period semantics, and replay."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME4Y78ABKCXFP5836KN",
+      "gate_type": "self-review",
+      "description": [
+        "No inferred or split-credit relationship behavior exists."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0SME45P5J6PY5WSVA0H6V",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Features.Ledger.Relationships.RefundTests --no-restore",
+      "expected_result": "exit 0; at least 14 partial/cumulative/role/category/date/replay cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ]
+}

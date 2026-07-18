@@ -1,0 +1,276 @@
+{
+  "id": "01KXT126T9KNXMEC5M1W8N2FMV",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-VERIFY-UC-012",
+  "slug": "VERIFY-UC-012",
+  "title": "StorageEvolutionWorkflow",
+  "description": [
+    "Verification-only task intentionally has no Implements link: trace UC-LEDGER-012 main scenario and every failure path through the published CLI."
+  ],
+  "objective": [
+    "Prove UC-LEDGER-012 through observable process results and durable-state invariants."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 140,
+  "created_at": "2026-07-18T07:11:45.9941647+00:00",
+  "dependencies": [
+    {
+      "id": "01KXT16F26P9JAS1ANPJKFVSFT",
+      "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Use-case verification invokes the fully wired published public contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:14:05.5112203+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT126TF8K1380HSWK3JXSNQ",
+      "path": "tests/Tally.Tests/EndToEnd/UC012StorageEvolutionWorkflowTests.cs",
+      "action": "test",
+      "role": "verification",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT19PB6Y1RK89KHHHK4Q9T5",
+      "name": "PublishedTallyFixture",
+      "direction": "consumes",
+      "notes": [
+        "Release published-process E2E fixture"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:15:51.2697399+00:00"
+    },
+    {
+      "id": "01KXT19PB6596MD5Z2FYJGVV5J",
+      "name": "CompletePublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "Exactly 38 wired operations"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:15:51.2697399+00:00"
+    },
+    {
+      "id": "01KXT19PB6VHGDPRD4HRYFX7C0",
+      "name": "VerifiedUC012",
+      "direction": "produces",
+      "contract_ref_code": "UC-LEDGER-012",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:15:51.2697399+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT126TFBHG7PX01CWYGK10G",
+      "kind": "acceptance_check",
+      "text": [
+        "Preflight validates source integrity/version, target compatibility, permissions, space, and host protection before transformation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TFBYA85YH0XS7H8G86",
+      "kind": "acceptance_check",
+      "text": [
+        "Verified recovery exists before isolated candidate transformation; validation proves complete state, relationships, idempotency, counts, integrity, exact totals, and declared version."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TFBYAW53KHDC9KZNJA",
+      "kind": "acceptance_check",
+      "text": [
+        "Explicit authorized activation switches once and retains recovery; unsupported/corrupt/unsafe/full/interrupted/mismatched/unauthorized paths leave original current."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TFPMT85K5JP65X85PD",
+      "kind": "acceptance_check",
+      "text": [
+        "Post-activation validation and idempotent retry report the same completed transition."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TFEG5ERWBJR2Y70X73",
+      "kind": "constraint",
+      "text": [
+        "Invoke the Release published tally executable; inspect stdout, stderr, exit code, and real temporary SQLite state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TFKGHPN298R05QHXKW",
+      "kind": "expected_output",
+      "text": [
+        "UC012StorageEvolutionWorkflowTests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TFRKKMD35B1KNEDF39",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT migrate live state in place or activate before complete validation/authorization."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TFJ4CZJDYAEV0V343X",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT omit any UC-LEDGER-012 preflight, recovery, interruption, or post-activation path."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TFNWH9ASH1HHV7YM79",
+      "kind": "note",
+      "text": [
+        "This gate validates completed behavior and intentionally has no Implements link."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TF0DJZ34WVMBEY31F6",
+      "kind": "note",
+      "text": [
+        "Operations exercised: ledger.storage.status|evolution.prepare|evolution.activate."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT126TG9Y7XQN9SAMA1HBNJ",
+      "target_ref_code": "UC-LEDGER-012",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXRKC2R2VJDPDP2Q4CMGY06N",
+      "target_title": "Upgrade or migrate Ledger storage safely",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TGVCYV7MX7PNF9Q3ES",
+      "target_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGFP6T4HV8E4YASJ6A3FT",
+      "target_title": "RecoveryStorageOperationContracts",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TGRZ8XX78SWDR81DRD",
+      "target_ref_code": "FR-LEDGER-SAFE-STORAGE-EVOLUTION",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXSQDTAMTJ1Y16FE3S7BJDP8",
+      "target_title": "Upgrade or migrate Ledger storage safely",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TGCYCZ5F23DBE46CER",
+      "target_ref_code": "FR-LEDGER-IDEMPOTENT-WRITES",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXSQBX8TSCMJV15PDGZSHYVE",
+      "target_title": "Make public writes idempotent",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TG205X279C2DYQQQNR",
+      "target_ref_code": "TC-LEDGER-SAFE-STORAGE-EVOLUTION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK7FBSYF372PSHVZMD37W",
+      "target_title": "Verify upgrade or migrate ledger storage safely contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TG5DJ97P5NBCVFD6RK",
+      "target_ref_code": "TC-LEDGER-VERIFIED-RECOVERY-DRILL",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSXGB390FKV1Z5SXH87EX6A",
+      "target_title": "Reproduce complete Durable Ledger State",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT126TGA7E2PB462TQHEFYB",
+      "gate_type": "test-evidence",
+      "description": [
+        "Evidence maps UC-LEDGER-012 main scenario and each numbered failure path to stdout/error/exit/state assertions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TGPZRJ4JRFN6XN3QGV",
+      "gate_type": "self-review",
+      "description": [
+        "No scenario calls handlers or SQLite directly."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT126TG1A5GTFYM8BR7W5DR",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.EndToEnd.UC012StorageEvolutionWorkflowTests --no-restore",
+      "expected_result": "exit 0; at least 12 main/failure-path scenarios run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ]
+}

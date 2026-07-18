@@ -1,0 +1,548 @@
+{
+  "id": "01KXT0KHY0G0YQW0FRT8BEWTY9",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT069TD553802AT505MG72F",
+  "ref_code": "TASK-LEDGER-CORE-PROCESS-CONTRACT",
+  "slug": "CORE-PROCESS-CONTRACT",
+  "title": "Build the self-contained process and operation contract",
+  "description": [
+    "Create the .NET 10 Native-AOT solution and descriptor-driven process boundary every Ledger slice registers with."
+  ],
+  "objective": [
+    "Produce a publishable tally executable whose explicit registry drives dispatch, help, schema, structured streams, errors, exits, and version reporting."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 10,
+  "created_at": "2026-07-18T07:03:45.8586325+00:00",
+  "decisions": [
+    {
+      "id": "01KXT0KHY3BY7WZ9Y2VD9KWXN7",
+      "target": "DD-LEDGER-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3XW451ERSR2DM5R9F",
+      "target": "DD-LEDGER-CLI-OPERATION-CONTRACT",
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0KHY3FBMN16GRZ3NMSYM0",
+      "path": "Directory.Build.props",
+      "action": "create",
+      "role": "build policy",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3H6CEFV9QY8EKDQSC",
+      "path": "Directory.Packages.props",
+      "action": "create",
+      "role": "central versions",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3X3ZATBZA3F335M7H",
+      "path": "Tally.slnx",
+      "action": "create",
+      "role": "solution",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3T63YCJREZNJ8PRQV",
+      "path": "src/Tally/Tally.csproj",
+      "action": "create",
+      "role": "executable",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY37APJ447YG94Y4CJB",
+      "path": "src/Tally/Program.cs",
+      "action": "create",
+      "role": "entrypoint",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY34BXDE4AB4RFFWEP7",
+      "path": "src/Tally/Cli/TallyProcess.cs",
+      "action": "create",
+      "role": "process adapter",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3N8DMVTEXQYHJJDKE",
+      "path": "src/Tally/Cli/OperationRegistry.cs",
+      "action": "create",
+      "role": "registry",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3DBDNV60VEH1QYM7S",
+      "path": "src/Tally/Application/OperationAbstractions.cs",
+      "action": "create",
+      "role": "handlers/results",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY30SEYKF4XQBJSQ2QJ",
+      "path": "src/Tally/Contracts/Common/ProcessContracts.cs",
+      "action": "create",
+      "role": "envelopes/errors",
+      "required": 1,
+      "sort_order": 8,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3HQMSMJFQ51F21SBS",
+      "path": "src/Tally/Contracts/System/SystemContracts.cs",
+      "action": "create",
+      "role": "schema/version contracts",
+      "required": 1,
+      "sort_order": 9,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3B0PHGDR9A0FYCRRK",
+      "path": "src/Tally/Features/System/Contract/SystemOperationModule.cs",
+      "action": "create",
+      "role": "handlers",
+      "required": 1,
+      "sort_order": 10,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY38QS2TW2826J4GW62",
+      "path": "src/Tally/Bootstrap/LedgerServices.cs",
+      "action": "create",
+      "role": "explicit DI",
+      "required": 1,
+      "sort_order": 11,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3KVF5DCVYBVG3HHQE",
+      "path": "tests/Tally.Tests/Tally.Tests.csproj",
+      "action": "create",
+      "role": "xUnit project",
+      "required": 1,
+      "sort_order": 12,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3VA5YKKVMF50BFVT3",
+      "path": "tests/Tally.Tests/Cli/CliContractTests.cs",
+      "action": "test",
+      "role": "contract tests",
+      "required": 1,
+      "sort_order": 13,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT0KHY3YJS11QE9M2904AC3",
+      "name": "TallyProcess.RunAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY4Q93BFT15QN1NM3Y6",
+      "name": "OperationRegistry",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY4XSDKH6AA58PV31S0",
+      "name": "OperationDescriptor",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY47A37EYQBPA68GG6M",
+      "name": "ICommandHandler<TCommand,TResult>",
+      "direction": "produces",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY4TZN1E8BVGPQ1JZEB",
+      "name": "IQueryHandler<TQuery,TResult>",
+      "direction": "produces",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY48BFQVWG2WETHP64G",
+      "name": "CommandResult<TResult>",
+      "direction": "produces",
+      "contract_ref_code": "ADR-CORE-0010",
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0KHY3B5RVFM3A8966VQ28",
+      "kind": "acceptance_check",
+      "text": [
+        "Release linux-x64 publish contains one native tally executable and adjacent SQLite native library; invocations start no daemon/listener and leave no child process."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3E856QB9J54TTJ2TT",
+      "kind": "acceptance_check",
+      "text": [
+        "tally schema list/show, tally version, and help return deterministic descriptor-derived operation, request, result, error, exit, compatibility, and example metadata without store access."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3WWNCP3DP79M0ZKD7",
+      "kind": "acceptance_check",
+      "text": [
+        "Valid JSON through explicit --input - or @file writes exactly one result envelope to stdout; malformed JSON, unknown fields, and unknown operations fail before mutation with documented error/exit."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY37WRAH8XNF703G7ZM",
+      "kind": "acceptance_check",
+      "text": [
+        "Expected and sanitized unexpected failures keep diagnostics on stderr with metadata/correlation only and never serialize financial payloads or stack traces."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3JF2SBSZMV0K6HC04",
+      "kind": "acceptance_check",
+      "text": [
+        "Every asynchronous process/handler boundary propagates CancellationToken and registration is explicit."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3R5DDST32R0HYGZ5V",
+      "kind": "constraint",
+      "text": [
+        "Treat compiler warnings as errors and enable nullable."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3KW6QWDJVFHKBGX40",
+      "kind": "constraint",
+      "text": [
+        "Use source-generated JSON metadata compatible with Native AOT."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY31Z4TGTTKZ70QFRX7",
+      "kind": "expected_output",
+      "text": [
+        "net10.0 solution/projects"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3YZ62R8YWW48XF6BF",
+      "kind": "expected_output",
+      "text": [
+        "Native-AOT process host and source-generated common contracts"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3YS9J56EEGBRYKJ9J",
+      "kind": "expected_output",
+      "text": [
+        "OperationDescriptor registry with schema/version operations"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY34V4GQ46P8SQNPFTX",
+      "kind": "expected_output",
+      "text": [
+        "Focused contract tests"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3GDQ98QWQJTTNKCG9",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add FastEndpoints, Controllers, Minimal APIs, Aspire, PostgreSQL, EF Core, a daemon/listener, mediator, event bus, generic repository, reflection scanning, or plugin runtime — per DD-LEDGER-APPLICATION-ARCHITECTURE."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3VR4TTKVPHVKHQHDB",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT expose generic invoke/save/update/delete/SQL/database operations or v1 aliases — rejected per DD-LEDGER-CLI-OPERATION-CONTRACT."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3W4RR32434CTW6DFZ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT throw expected domain outcomes; use CommandResult<T> and stable exit categories."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3WQNYKE2PWCNJHX4P",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT place finance policy in TallyProcess or OperationRegistry."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0KHY42JWCVJN94HEDY2PC",
+      "target_ref_code": "ADR-CORE-0010",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3Y7DB71F8178QX5C3FA",
+      "target_title": "CommandResult Pattern for Commands",
+      "relationship": "governed-by",
+      "required": 0,
+      "sort_order": 8,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY43E55G7W74E0WHH29",
+      "target_ref_code": "ADR-CORE-0021",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3YHHJX75J3BATYF9GWQ",
+      "target_title": "Explicit DI Registration — No Reflection Scanning",
+      "relationship": "governed-by",
+      "required": 0,
+      "sort_order": 9,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY406VHM9J9RJCXWWAH",
+      "target_ref_code": "ADR-CORE-0024",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3YKCP5BKYH14H09RFQ7",
+      "target_title": "Vertical Slice Architecture",
+      "relationship": "governed-by",
+      "required": 0,
+      "sort_order": 10,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY41X32YH9DCRZADJGW",
+      "target_ref_code": "ADR-CORE-0025",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3YMRWHJF2BNS9MBBY1C",
+      "target_title": "Error Handling Strategy",
+      "relationship": "governed-by",
+      "required": 0,
+      "sort_order": 11,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY4ZF3ADMWM3BD5YJ9S",
+      "target_ref_code": "MD-LEDGER-MASTER",
+      "target_entity_type": "module_design",
+      "target_entity_id": "01KXSX4QZEPRQ0R5D3936TW3GA",
+      "target_title": "Financial Ledger technical design",
+      "relationship": "references",
+      "required": 0,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY4B0KSV1RGCEFA52VY",
+      "target_ref_code": "DIAG-LEDGER-COMPONENTS",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KXSX8YZ3ZWG519120WW2Q4D3",
+      "target_title": "LEDGER component architecture",
+      "relationship": "references",
+      "required": 0,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY4FS345TDGYXB3Q1HZ",
+      "target_ref_code": "NFR-LEDGER-AGENT-CONTRACT-STABILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFY9C8649APJ7XN79GBZ3",
+      "target_title": "Keep the agent contract stable",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY4CTN2NPJE5KQ2MK4E",
+      "target_ref_code": "NFR-LEDGER-SELF-CONTAINED-LOCAL-OPERATION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFZ7CYGE4ER8E0BE86W0E",
+      "target_title": "Operate as a self-contained local executable",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY4SNFD2F5VEB081RNE",
+      "target_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSX0V97NBKV7XJQ6F2GGR07",
+      "target_title": "OperationDescriptorAndEnvelope",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY44SZ11612V3845B29",
+      "target_ref_code": "FA-LEDGER-CONTRACT-SKILLS",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXSWZ4J0VXGSGZ2V5JDGK17C",
+      "target_title": "Contract and Skills",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY4Q7G6ENV19K8NZAWR",
+      "target_ref_code": "TC-LEDGER-CONTRACT-DISCOVERY-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK5Y8G5FWX71EX06BQJ5R",
+      "target_title": "Verify discover the ledger command contract contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY4JP0K1MCAV8F9YHKW",
+      "target_ref_code": "TC-LEDGER-STRUCTURED-INVOCATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK8DPT6JBFW66YP24QVVC",
+      "target_title": "Verify invoke ledger operations non-interactively contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXT0KHY2HV14REYACB45FT0Q",
+      "target": "FR-LEDGER-CONTRACT-DISCOVERY",
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY3G9V1K067FZY0Z1HT",
+      "target": "FR-LEDGER-STRUCTURED-INVOCATION",
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0KHY45A2654TB2JRGH41E",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach contract-test and AOT publish output with zero failures/warnings."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY4EFHNXVZVWE68CC1N",
+      "gate_type": "self-review",
+      "description": [
+        "Compare process code with every rejected alternative in both decisions."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0KHY43FRTBSA00Z4CDSNH",
+      "phase": "after",
+      "command": "dotnet restore Tally.slnx && dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Cli.CliContractTests --no-restore",
+      "expected_result": "exit 0; at least 10 tests run, 0 failed, and build emits 0 warnings",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    },
+    {
+      "id": "01KXT0KHY47TQ6DAQF1W6RFQ0G",
+      "phase": "after",
+      "command": "dotnet publish src/Tally/Tally.csproj -c Release -r linux-x64 --self-contained true -p:PublishAot=true --no-restore",
+      "expected_result": "exit 0; publish directory contains executable tally and adjacent native SQLite library",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+    }
+  ]
+}

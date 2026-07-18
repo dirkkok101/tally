@@ -1,0 +1,11 @@
+{
+  "id": "01KXT06AV2YBFA37A3CEQMT346",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "ref_code": "SP-LEDGER-04-RECOVERY-SKILLS",
+  "title": "Recovery and skills",
+  "description": [
+    "Deliver backup, activation, evolution, and bundled agent skills."
+  ],
+  "sort_order": 4,
+  "created_at": "2026-07-18T06:56:32.6115736+00:00"
+}

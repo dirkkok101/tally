@@ -1,0 +1,245 @@
+{
+  "id": "01KXT0ZW3DV524VRQFC8F58S1W",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-VERIFY-UC-003",
+  "slug": "VERIFY-UC-003",
+  "title": "CategoryAllocationWorkflow",
+  "description": [
+    "Verification-only task intentionally has no Implements link: trace UC-LEDGER-003 main scenario and every failure path through the published CLI."
+  ],
+  "objective": [
+    "Prove UC-LEDGER-003 through observable process results and durable-state invariants."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 50,
+  "created_at": "2026-07-18T07:10:29.4870620+00:00",
+  "dependencies": [
+    {
+      "id": "01KXT16A7Y4BTD0YAY89CJT8FB",
+      "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Use-case verification invokes the fully wired published public contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:14:00.5758110+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0ZW3HQAGG9GSR0RW4GQEE",
+      "path": "tests/Tally.Tests/EndToEnd/UC003CategoryAllocationWorkflowTests.cs",
+      "action": "test",
+      "role": "verification",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT19FYSAQVZPB44ZCBRB7Z2",
+      "name": "PublishedTallyFixture",
+      "direction": "consumes",
+      "notes": [
+        "Release published-process E2E fixture"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:15:44.7290110+00:00"
+    },
+    {
+      "id": "01KXT19FYTAEC8PM27DR0FQKS8",
+      "name": "CompletePublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "Exactly 38 wired operations"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:15:44.7290110+00:00"
+    },
+    {
+      "id": "01KXT19FYTG7H51ZJ18891B1P5",
+      "name": "VerifiedUC003",
+      "direction": "produces",
+      "contract_ref_code": "UC-LEDGER-003",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:15:44.7290110+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0ZW3H48R34N68CFA148PY",
+      "kind": "acceptance_check",
+      "text": [
+        "The agent retrieves transaction/allocation history, assigns an active category, corrects it with reason, and later queries use one active allocation while retaining both decisions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3H2JYCYJADPJ1XR3K9",
+      "kind": "acceptance_check",
+      "text": [
+        "Missing transaction, archived/missing category, inactive transaction, cardinality violation, and same active decision return documented no-mutation outcomes."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3HK3D57C2TD8DWDCZ5",
+      "kind": "acceptance_check",
+      "text": [
+        "Source transaction facts remain unchanged and identical retry creates no second allocation."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3HVYNQT8EMK7T0DB5P",
+      "kind": "constraint",
+      "text": [
+        "Invoke the Release published tally executable; inspect stdout, stderr, exit code, and real temporary SQLite state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3H0WX1P1A4J158EVHQ",
+      "kind": "expected_output",
+      "text": [
+        "UC003CategoryAllocationWorkflowTests with main/failure paths"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3HKWCB80BDG609JCGV",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT treat a correction as an in-place update or rewrite transaction facts."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3HB4PSKWBPDY7XDGMX",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT omit UC-LEDGER-003 no-change/idempotency path."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3HP9YP01DBV52GT3CF",
+      "kind": "note",
+      "text": [
+        "This gate validates completed behavior and therefore intentionally has no Implements link."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0ZW3H69TW8M3VHEVQ6HRW",
+      "target_ref_code": "UC-LEDGER-003",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXRHVE62YSN7X36CCGJ66W7G",
+      "target_title": "Assign or correct a spend category",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3H1QSFFJD99QEGWKQG",
+      "target_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGF1VZPC8WADN6FY234H0",
+      "target_title": "TransactionOperationContracts",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3HBNDJE1RGZD1P2BEF",
+      "target_ref_code": "FR-LEDGER-CATEGORY-ASSIGNMENT",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXSQBX8WZZ2P4QX8Q3TXDMWQ",
+      "target_title": "Assign and correct transaction categories",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3HDMEVGE9RKNCBMXM1",
+      "target_ref_code": "FR-LEDGER-IDEMPOTENT-WRITES",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXSQBX8TSCMJV15PDGZSHYVE",
+      "target_title": "Make public writes idempotent",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3HS9VG778KPKQDCSS1",
+      "target_ref_code": "TC-LEDGER-CATEGORY-ASSIGNMENT-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK5BDCD6DVBMMT7TBWHCN",
+      "target_title": "Verify assign and correct transaction categories contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0ZW3H4REA22SGF7XFP1M2",
+      "gate_type": "test-evidence",
+      "description": [
+        "Evidence maps UC-LEDGER-003 main scenario and each numbered failure path to stdout/error/exit/state assertions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3HSH0HZNDNCA46NT0W",
+      "gate_type": "self-review",
+      "description": [
+        "No scenario calls handlers or SQLite directly."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0ZW3HHNYX1113VJBAEX44",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.EndToEnd.UC003CategoryAllocationWorkflowTests --no-restore",
+      "expected_result": "exit 0; at least 7 main/failure-path scenarios run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    }
+  ]
+}

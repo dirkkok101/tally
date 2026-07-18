@@ -1,0 +1,287 @@
+{
+  "id": "01KXT126T73SM2TMNBSE1CH6CV",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-VERIFY-UC-007",
+  "slug": "VERIFY-UC-007",
+  "title": "BackupRecoveryWorkflow",
+  "description": [
+    "Verification-only task intentionally has no Implements link: trace UC-LEDGER-007 main scenario and every failure path through the published CLI."
+  ],
+  "objective": [
+    "Prove UC-LEDGER-007 through observable process results and durable-state invariants."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 90,
+  "created_at": "2026-07-18T07:11:45.9941647+00:00",
+  "dependencies": [
+    {
+      "id": "01KXT16CBYP3DV3SJB4X1735NG",
+      "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Use-case verification invokes the fully wired published public contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:14:02.7510256+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT126TBQS0Q3XRG23SZ7J5A",
+      "path": "tests/Tally.Tests/EndToEnd/UC007BackupRecoveryWorkflowTests.cs",
+      "action": "test",
+      "role": "verification",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT19JRSJYC7WR4FN88X2GEM",
+      "name": "PublishedTallyFixture",
+      "direction": "consumes",
+      "notes": [
+        "Release published-process E2E fixture"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:15:47.6088492+00:00"
+    },
+    {
+      "id": "01KXT19JRTT708AZ3W3JSH66WX",
+      "name": "CompletePublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "Exactly 38 wired operations"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:15:47.6088492+00:00"
+    },
+    {
+      "id": "01KXT19JRT38FN6F3PYV8W5XAX",
+      "name": "VerifiedUC007",
+      "direction": "produces",
+      "contract_ref_code": "UC-LEDGER-007",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:15:47.6088492+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT126TA22Q46FGMPXM5ND56",
+      "kind": "acceptance_check",
+      "text": [
+        "Create produces one owner-only complete-state backup; independent verify confirms versions, integrity, every durable type/history, relationships, idempotency, counts, and exact totals without live mutation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TA9JD1543F4PKDPCCF",
+      "kind": "acceptance_check",
+      "text": [
+        "Prepare restores/validates a separate candidate; only explicit authorized activation against expected fingerprint switches CURRENT and retains prior generation."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TAVV50RR6MTP5TRPQW",
+      "kind": "acceptance_check",
+      "text": [
+        "Unsafe destination/full disk/corrupt/incompatible/incomplete/unavailable protection/unauthorized/mismatched candidate paths preserve the authoritative Ledger."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TA7YA7NMX8VCG4RRK3",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical create/activate retries reproduce original artifacts/generation outcomes without second effects."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TAXDFFWPD66DR4S464",
+      "kind": "constraint",
+      "text": [
+        "Invoke the Release published tally executable; inspect stdout, stderr, exit code, and real temporary SQLite state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TA4F1RN1QS3P5ZGDSG",
+      "kind": "expected_output",
+      "text": [
+        "UC007BackupRecoveryWorkflowTests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TASP7BKT64E780DW64",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT verify by comparing only file bytes or activate directly over the live DB."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TACDP4VYJ29QRAPMZA",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT omit any UC-LEDGER-007 complete-state or authorization failure."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TANQHVFC7ZPNXFB7FM",
+      "kind": "note",
+      "text": [
+        "This gate validates completed behavior and intentionally has no Implements link."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TARBW8W9PKHXTKMN57",
+      "kind": "note",
+      "text": [
+        "Operations exercised: ledger.backup.create|verify and ledger.restore.prepare|activate."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT126TB6DE93FSGAGWRWZEN",
+      "target_ref_code": "UC-LEDGER-007",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXRHVF67CVQ8HWKC1VQQETFP",
+      "target_title": "Back up and recover the local ledger",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TBTN2447667Z8VKXSV",
+      "target_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGFP6T4HV8E4YASJ6A3FT",
+      "target_title": "RecoveryStorageOperationContracts",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 6,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TBN902188SHP4VCZNC",
+      "target_ref_code": "FR-LEDGER-BACKUP-VERIFICATION",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXSQDTAHSDK4MMVJ2NJB2RHX",
+      "target_title": "Create and verify Ledger backups",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TBQ3AKRP12T2W9AKH5",
+      "target_ref_code": "FR-LEDGER-SAFE-RESTORE",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXSQDTAKFR7EDMZKG7WBK3QX",
+      "target_title": "Restore the Ledger safely",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TB3Z0VGJA1DTWC3C50",
+      "target_ref_code": "TC-LEDGER-BACKUP-VERIFICATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK52DMJ9R9PK0FQF3FE2S",
+      "target_title": "Verify create and verify ledger backups contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TBEBKXTHN5H8FZXGDE",
+      "target_ref_code": "TC-LEDGER-SAFE-RESTORE-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK759MF0EQM55HZSY6ZYY",
+      "target_title": "Verify restore the ledger safely contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TB94NGXC1ZBKKYHQZ2",
+      "target_ref_code": "TC-LEDGER-VERIFIED-RECOVERY-DRILL",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSXGB390FKV1Z5SXH87EX6A",
+      "target_title": "Reproduce complete Durable Ledger State",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT126TB22X4JCQFE9NNG7YT",
+      "gate_type": "test-evidence",
+      "description": [
+        "Evidence maps UC-LEDGER-007 main scenario and each numbered failure path to stdout/error/exit/state assertions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TBRAPY8QA9VZ8GE7SS",
+      "gate_type": "self-review",
+      "description": [
+        "No scenario calls handlers or SQLite directly."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT126TBBP7MV76FBWY3YQ6D",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.EndToEnd.UC007BackupRecoveryWorkflowTests --no-restore",
+      "expected_result": "exit 0; at least 11 main/failure-path scenarios run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ]
+}

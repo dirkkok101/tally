@@ -1,0 +1,339 @@
+{
+  "id": "01KXT0SME1ZANN2PCS2BPJYA3F",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06AGT9EPMYN1DCHN46ZV9",
+  "ref_code": "TASK-LEDGER-ACTUALS-SNAPSHOT",
+  "slug": "ACTUALS-SNAPSHOT",
+  "title": "Implement atomic snapshot actuals pagination",
+  "description": [
+    "Expose ledger.actuals.query with one BEGIN IMMEDIATE first-page snapshot transaction and read-only cursor pages."
+  ],
+  "objective": [
+    "Return stable cross-process pages and full-set totals despite later writes, without cursor exposure before snapshot commit."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 60,
+  "created_at": "2026-07-18T07:07:05.0252128+00:00",
+  "decisions": [
+    {
+      "id": "01KXT0SMEA8WDDQDXVWWW6EAM5",
+      "target": "DD-LEDGER-SNAPSHOT-ACTUALS",
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT1650VK6MTQC2HF9HT5SD6",
+      "target": "TASK-LEDGER-ACTUALS-PROJECTION",
+      "dependency_type": "compile",
+      "reason": [
+        "Snapshot handler materializes the exact projection and totals."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:13:55.2281835+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0SMEARXRGW3W8GGF2WG6Q",
+      "path": "src/Tally/Contracts/Ledger/Actuals/ActualsContracts.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEASB7XZBM4CG6QGJE1",
+      "path": "src/Tally/Features/Ledger/Actuals/ActualsQueryHandler.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEAQYM48ZBRRZZ8CHM6",
+      "path": "src/Tally/Infrastructure/Storage/Actuals/QuerySnapshotStore.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEA5DY1YJZ1JQFBXV8E",
+      "path": "src/Tally/Features/Ledger/Actuals/ActualsOperationModule.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEAZNKF2EPF87R06NBZ",
+      "path": "tests/Tally.Tests/Features/Ledger/Actuals/ActualsSnapshotTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEAA1NK36CKSDMSSCRA",
+      "path": "tests/Tally.Tests/Process/ActualsCursorProcessTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT0SMEA64Q2N4KWAVKSA8ZS",
+      "name": "ActualsOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEAX6EXT3Q8W9Q4ENR6",
+      "name": "ActualsQueryHandler",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEAXMBSTXNAVRVMN2EW",
+      "name": "QuerySnapshotStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-QUERY-SNAPSHOT",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEAG7R5JSKADGE9W5X8",
+      "name": "ActualsCalculator.Calculate",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEAFKK116XXTKHDC137",
+      "name": "ActualsProjectionStore",
+      "direction": "consumes",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0SMEAESN5XXFR3QQNKSGR",
+      "kind": "acceptance_check",
+      "text": [
+        "First-page request accepts filters+pageSize only, acquires single-writer lock, and in one BEGIN IMMEDIATE reads active state, computes all items/totals, inserts snapshot/items, commits, then emits first page/cursor/expiry."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEAEEDP4F8B8WVFT44M",
+      "kind": "acceptance_check",
+      "text": [
+        "Busy before acquisition returns LEDGER-SNAPSHOT-BUSY; cancellation/crash/write failure before commit returns no cursor and leaves no partial usable snapshot."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEAMK36X7VETCHWCKMC",
+      "kind": "acceptance_check",
+      "text": [
+        "Later request accepts cursor only on a read-only connection and returns fixed ordinal projections/totals despite unrelated corrections after first page."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEAZ8W5G0GBZ24QTMRQ",
+      "kind": "acceptance_check",
+      "text": [
+        "Changed filters, malformed/expired/incompatible/stale-generation cursor returns its documented stable error and no partial page."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEA9ZNPKK3ZF23Z39Q7",
+      "kind": "acceptance_check",
+      "text": [
+        "All pages contain each selected transaction exactly once in EffectiveDate/ULID order; snapshot rows are opportunistically cleaned and excluded from backup."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEAH8Y3D95Q7G1ARMAJ",
+      "kind": "expected_output",
+      "text": [
+        "Actuals public contracts/handler/module"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEAX46HBMBHKNXPVQH7",
+      "kind": "expected_output",
+      "text": [
+        "QuerySnapshotStore"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEA72BKTTXXSC3TB6CE",
+      "kind": "expected_output",
+      "text": [
+        "Atomic concurrency/crash/cursor tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEA2MT8NBM381MVKGAP",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use offset pagination, sort-key-only cursors, daemon-held transactions, read-then-write snapshot phases, or emit a cursor before COMMIT — rejected per DD-LEDGER-SNAPSHOT-ACTUALS."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEAZX0J0H3KA5QJE79N",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT require an idempotency key for the ephemeral first-page cache write or include snapshots in Durable Ledger State."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0SMEBK5R8FRWT17PM2E9Z",
+      "target_ref_code": "DIAG-LEDGER-ACTUALS-SNAPSHOT-SEQUENCE",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KXSX90E8X7KP08ZBGFE76MPQ",
+      "target_title": "Cross-process actuals snapshot pagination",
+      "relationship": "references",
+      "required": 0,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEAWTJ8VNCMZ5VN3GF1",
+      "target_ref_code": "NFR-LEDGER-AGENT-CONTRACT-STABILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFY9C8649APJ7XN79GBZ3",
+      "target_title": "Keep the agent contract stable",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEB0KPF69HKWXTR575N",
+      "target_ref_code": "DM-LEDGER-QUERY-SNAPSHOT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSX0THFTD1GCXNEMCEF90YK",
+      "target_title": "QuerySnapshot",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEBBG7GSBB1A3WSX3MB",
+      "target_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGFC3892700GHYSWPE777",
+      "target_title": "RelationshipActualsOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEBJXAXHKWS65DNHNJ7",
+      "target_ref_code": "TC-LEDGER-SNAPSHOT-PAGINATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK82S85GT2Q384M794CTV",
+      "target_title": "Verify preserve query snapshots across pages contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXT0SMEAZKK31CP2ZQDW0ZGR",
+      "target": "FR-LEDGER-ACTUALS-QUERY",
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEAWQKPYSN4BTWXBK51",
+      "target": "FR-LEDGER-SNAPSHOT-PAGINATION",
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0SMEA8FN2CWG801F0HVVR",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show busy/no-cursor, rollback/no-partial, intervening-write stability, and invalid cursor evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SMEAJSWMZXCP7VH6CYDS",
+      "gate_type": "self-review",
+      "description": [
+        "Trace one first page to confirm read, calculation, insert, and commit share one BEGIN IMMEDIATE transaction."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0SMEA34NWNXWAN9HFF83B",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~ActualsSnapshotTests|FullyQualifiedName~ActualsCursorProcessTests' --no-restore",
+      "expected_result": "exit 0; at least 16 concurrency/crash/stability/cursor cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ]
+}

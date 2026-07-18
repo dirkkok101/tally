@@ -1,0 +1,357 @@
+{
+  "id": "01KXT0P36QBBMQHYFA1SKRK7PS",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06A6E7WPPCP8KDAKCJ1H4",
+  "ref_code": "TASK-LEDGER-CATEGORIES",
+  "slug": "CATEGORIES",
+  "title": "Implement spend-category catalogue operations",
+  "description": [
+    "Deliver the gated flat category catalogue and attributable lifecycle operations."
+  ],
+  "objective": [
+    "Maintain stable category identities and attributable lifecycle history while preserving all historical allocations."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 20,
+  "created_at": "2026-07-18T07:05:09.0800297+00:00",
+  "decisions": [
+    {
+      "id": "01KXT0P36SJR8BPCV1FC7V3FAZ",
+      "target": "DD-LEDGER-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36S9G95CFKTNGM67VGK",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT1AM102B5V7TAPAYP2RCZP",
+      "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:16:21.6652904+00:00"
+    },
+    {
+      "id": "01KXT1AMHQ7YWTSPXBGG67V2ZK",
+      "target": "TASK-LEDGER-CORE-STORAGE",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires LedgerDb from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:16:22.2006909+00:00"
+    },
+    {
+      "id": "01KXT15Y77AKW3T9EAQPMDZXWP",
+      "target": "TASK-LEDGER-GATE-EVIDENCE-CATEGORIES",
+      "dependency_type": "compile",
+      "reason": [
+        "Category contracts cannot start until OQ-LEDGER-6 resolves."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:13:48.2638967+00:00"
+    },
+    {
+      "id": "01KXT15XPNGRVBSQS02EXN92HS",
+      "target": "TASK-LEDGER-GATE-INT-CORE",
+      "dependency_type": "compile",
+      "reason": [
+        "Category slice consumes the proven core seam."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:13:47.7344193+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0P36TETGZQE6T88T4Z7BX",
+      "path": "src/Tally/Contracts/Ledger/Categories/CategoryContracts.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36T3439SGR4ZCB19HG2",
+      "path": "src/Tally/Domain/Ledger/Categories/SpendCategory.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36T3AZG6CAP44KRQKWZ",
+      "path": "src/Tally/Features/Ledger/Categories/CategoryHandlers.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TVEBPCPPA7MSNR2B3",
+      "path": "src/Tally/Infrastructure/Storage/Categories/CategoryStore.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TT8DEQC43SX05X68D",
+      "path": "src/Tally/Features/Ledger/Categories/CategoryOperationModule.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TH7M5YY6HF0H7P4BA",
+      "path": "tests/Tally.Tests/Features/Ledger/Categories/CategoryOperationTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TEHGSJCC3BWGAGN9C",
+      "path": "tests/Tally.Tests/Infrastructure/Storage/CategoryStoreTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT0P36TWZR2CN8NZHBPXQA7",
+      "name": "CategoryOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TRPCQGZR8HN09CQ9P",
+      "name": "CategoryStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-SPEND-CATEGORY",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TK5C97PWPZZRT3KJN",
+      "name": "CategoryDetail",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TK9QWP2FQZSWA296H",
+      "name": "LedgerMutationExecutor.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TQNAZH1HMKEDY1WQ9",
+      "name": "LedgerDb",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0P36SVJKZGDQ267ZYME5J",
+      "kind": "acceptance_check",
+      "text": [
+        "Unique normalized name creates one active category with stable ULID; conflicts return the documented stable error without mutation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36SBMVD3PFXEPKC84N3",
+      "kind": "acceptance_check",
+      "text": [
+        "Rename appends attributable history and preserves ID and prior allocation references."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36SS6WPFPFZTNBHVFGR",
+      "kind": "acceptance_check",
+      "text": [
+        "Archive preserves historical assignments and blocks new assignment/correction until reactivation."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36SA9HVE4DCV790YRWE",
+      "kind": "acceptance_check",
+      "text": [
+        "Reactivation preserves ID, requires no active normalized-name conflict, and appends a lifecycle event."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36SA8CCN9NF6FE6M032",
+      "kind": "acceptance_check",
+      "text": [
+        "List/get expose active/archived state and optional history in deterministic name/ID order; all mutations are idempotent."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TH81YJJF9TFY8GTPZ",
+      "kind": "expected_output",
+      "text": [
+        "Category contracts/domain/store/handlers/module"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TPWDXFACJXS9Y7P37",
+      "kind": "expected_output",
+      "text": [
+        "Real-SQLite and handler tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TNFYKZM4G0CD3GEV0",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT implement hierarchy, split allocations, hard delete, or in-place lifecycle edits — rejected/deferred by DD-LEDGER-IMMUTABLE-HISTORY."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TV0SVF7D0B5RH6CNH",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT introduce generic CRUD save/update/delete commands or HTTP endpoints."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36T2JRGJ0MBXXH4HTSZ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT implement before OQ-LEDGER-6 resolves without invalidating category contracts."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0P36TV9WS0P0Y8AKW8RRQ",
+      "target_ref_code": "NFR-LEDGER-ATTRIBUTABLE-HISTORY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFZJ0XVBBX0FPF6FJ7E2Y",
+      "target_title": "Retain attributable correction history",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TXGCDPFWN7YX0G1QC",
+      "target_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGEQ3PSBB0XQ74D60EZWK",
+      "target_title": "AccountCategoryOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TP4DX0XBFBCCCG491",
+      "target_ref_code": "TC-LEDGER-CATEGORY-CATALOGUE-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK5MS7DFNM22BAXX72MRW",
+      "target_title": "Verify maintain the spend-category catalogue contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXT0P36SGRE2KTSBK54489PX",
+      "target": "FR-LEDGER-CATEGORY-CATALOGUE",
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0P36TX5FKRD1ZSTSGHJFY",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show rename/archive/reactivate history, conflict, restriction, and replay evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    },
+    {
+      "id": "01KXT0P36TN7WFYD7ZFM2S8XMT",
+      "gate_type": "self-review",
+      "description": [
+        "Confirm no hierarchy/split/hard-delete behavior exists."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0P36T0N0P8A0ZQCHH5NJN",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~CategoryOperationTests|FullyQualifiedName~CategoryStoreTests' --no-restore",
+      "expected_result": "exit 0; at least 14 lifecycle/conflict/history/replay cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 240,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+    }
+  ]
+}

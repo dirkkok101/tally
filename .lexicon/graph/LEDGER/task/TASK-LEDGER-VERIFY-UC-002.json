@@ -1,0 +1,256 @@
+{
+  "id": "01KXT0ZW3D3SHPHNS4W16T8YA8",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-VERIFY-UC-002",
+  "slug": "VERIFY-UC-002",
+  "title": "TransactionWorkflow",
+  "description": [
+    "Verification-only task intentionally has no Implements link: trace UC-LEDGER-002 main scenario and every failure path through the published CLI."
+  ],
+  "objective": [
+    "Prove UC-LEDGER-002 through observable process results and durable-state invariants."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 40,
+  "created_at": "2026-07-18T07:10:29.4870620+00:00",
+  "dependencies": [
+    {
+      "id": "01KXT169QY8AHW7N1PZKSEJHR6",
+      "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Use-case verification invokes the fully wired published public contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:14:00.0636802+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0ZW3GAPQ1FKWXTG0G2N52",
+      "path": "tests/Tally.Tests/EndToEnd/UC002TransactionWorkflowTests.cs",
+      "action": "test",
+      "role": "verification",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT19F906P3KQGYYRDP8D2SE",
+      "name": "PublishedTallyFixture",
+      "direction": "consumes",
+      "notes": [
+        "Release published-process E2E fixture"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:15:44.0322442+00:00"
+    },
+    {
+      "id": "01KXT19F912G0X3QXPBSFWB7EN",
+      "name": "CompletePublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "Exactly 38 wired operations"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:15:44.0322442+00:00"
+    },
+    {
+      "id": "01KXT19F91SBDXA9FYDQ07PJD2",
+      "name": "VerifiedUC002",
+      "direction": "produces",
+      "contract_ref_code": "UC-LEDGER-002",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:15:44.0322442+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0ZW3GZ6S1XVGJVVBHDNFA",
+      "kind": "acceptance_check",
+      "text": [
+        "A discovered record schema accepts exact signed ZAR/date/provenance facts for an active account and get round-trips them byte-for-byte logically."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3GXS9KSDY1BP5WMW4F",
+      "kind": "acceptance_check",
+      "text": [
+        "Invalid amount/currency/date/provenance/key and missing/archived account return their stable errors and create no transaction."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3G52J70YVGPY7Z4N5G",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical replay returns the same transaction; conflicting replay preserves original; injected storage failure commits all rows or none."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3GCRZJ1FJF8NB5CM3S",
+      "kind": "constraint",
+      "text": [
+        "Invoke the Release published tally executable; inspect stdout, stderr, exit code, and real temporary SQLite state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3GM83MKYXW58NRXGX8",
+      "kind": "expected_output",
+      "text": [
+        "UC002TransactionWorkflowTests with main/failure paths"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3GJ5JMF4BRDSQ7RS5A",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT compare floating-point representations or bypass the public process contract."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3GVRNFRGYNPEQWMV4K",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT omit UC-LEDGER-002 storage and replay failures."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3GEZK9KN06VCTDSQTR",
+      "kind": "note",
+      "text": [
+        "This gate validates completed behavior and therefore intentionally has no Implements link."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0ZW3H9D2VPZVRSZ96DE2S",
+      "target_ref_code": "UC-LEDGER-002",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXRHVDY1PJJCPRK89R626XFH",
+      "target_title": "Record a canonical transaction",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3HY678N3JSAFR3S8RD",
+      "target_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGF1VZPC8WADN6FY234H0",
+      "target_title": "TransactionOperationContracts",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3HX80S12YNWM7MA731",
+      "target_ref_code": "FR-LEDGER-TRANSACTION-RECORDING",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXSQBX8SZ0ERGS3WGHGN6G2P",
+      "target_title": "Record canonical transactions",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3HP75KGAHFD1PP1GJB",
+      "target_ref_code": "FR-LEDGER-IDEMPOTENT-WRITES",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXSQBX8TSCMJV15PDGZSHYVE",
+      "target_title": "Make public writes idempotent",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3H4FNSX0HRXJ84WK7S",
+      "target_ref_code": "TC-LEDGER-TRANSACTION-RECORDING-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK908FJNQCMJ4ZVD1G4SY",
+      "target_title": "Verify record canonical transactions contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3HF3RXXCFRT4J8YRZX",
+      "target_ref_code": "TC-LEDGER-IDEMPOTENT-WRITES-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK68FSTHPRH9311ZBSJRM",
+      "target_title": "Verify make public writes idempotent contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0ZW3GXGX4N8NVHH345FTN",
+      "gate_type": "test-evidence",
+      "description": [
+        "Evidence maps UC-LEDGER-002 main scenario and each numbered failure path to stdout/error/exit/state assertions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3H14S14EVKVGHR1FX7",
+      "gate_type": "self-review",
+      "description": [
+        "No scenario calls handlers or SQLite directly."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0ZW3GGYKVBT75A6TWJHWC",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.EndToEnd.UC002TransactionWorkflowTests --no-restore",
+      "expected_result": "exit 0; at least 9 main/failure-path scenarios run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    }
+  ]
+}

@@ -1,0 +1,255 @@
+{
+  "id": "01KXT0ZW3ENX5Y3H2ND7YGDRHA",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-VERIFY-UC-004",
+  "slug": "VERIFY-UC-004",
+  "title": "TransferWorkflow",
+  "description": [
+    "Verification-only task intentionally has no Implements link: trace UC-LEDGER-004 main scenario and every failure path through the published CLI."
+  ],
+  "objective": [
+    "Prove UC-LEDGER-004 through observable process results and durable-state invariants."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 60,
+  "created_at": "2026-07-18T07:10:29.4870620+00:00",
+  "dependencies": [
+    {
+      "id": "01KXT16AS69YV0FE6GXAE28PRB",
+      "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Use-case verification invokes the fully wired published public contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:14:01.1274749+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0ZW3JRT1BD2JJZ0X5KTB9",
+      "path": "tests/Tally.Tests/EndToEnd/UC004TransferWorkflowTests.cs",
+      "action": "test",
+      "role": "verification",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT19GM1RR4K7GXQ63DMGQYA",
+      "name": "PublishedTallyFixture",
+      "direction": "consumes",
+      "notes": [
+        "Release published-process E2E fixture"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:15:45.4086994+00:00"
+    },
+    {
+      "id": "01KXT19GM1KVRG3CT6M7P04X91",
+      "name": "CompletePublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "Exactly 38 wired operations"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:15:45.4086994+00:00"
+    },
+    {
+      "id": "01KXT19GM130Y01C19GZ774QA7",
+      "name": "VerifiedUC004",
+      "direction": "produces",
+      "contract_ref_code": "UC-LEDGER-004",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:15:45.4086994+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0ZW3HZFJ3FG77DZNK5FXV",
+      "kind": "acceptance_check",
+      "text": [
+        "Two distinct-account equal-opposite active legs with explicit roles create one transfer; both remain queryable and principal contributes zero External Spend."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3JBBCA19XEWQ9Q82BE",
+      "kind": "acceptance_check",
+      "text": [
+        "Different leg dates are accepted; a separate fee remains unlinked with ordinary spend treatment."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3J3C4XKD185XVW3C19",
+      "kind": "acceptance_check",
+      "text": [
+        "Same account/currency mismatch/same sign/unequal magnitude/inactive/missing/already-related/embedded-fee cases return stable no-relationship outcomes."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3J6NGMHD5H8330SWS5",
+      "kind": "acceptance_check",
+      "text": [
+        "Injected write failure leaves neither leg partially related and replay returns one relationship."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3J7M6388Q8Y9J2NCF4",
+      "kind": "constraint",
+      "text": [
+        "Invoke the Release published tally executable; inspect stdout, stderr, exit code, and real temporary SQLite state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3J6S6XTBRDFM58YXCB",
+      "kind": "expected_output",
+      "text": [
+        "UC004TransferWorkflowTests with main/failure paths"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3JG2JK4FWSH9D2BPEH",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT infer transfer from dates/descriptions or force an embedded fee pair."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3JC6JPQ3NA4KFJ324Q",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT omit any UC-LEDGER-004 role/conservation failure."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3JN12A176JZXABTFW1",
+      "kind": "note",
+      "text": [
+        "This gate validates completed behavior and therefore intentionally has no Implements link."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0ZW3JQHAZJ2KNX7F08PHQ",
+      "target_ref_code": "UC-LEDGER-004",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXRHVEE0R2TAMFKZVPJJQ580",
+      "target_title": "Confirm an owned-account transfer",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3J1T54GQ8AB4PHHBWY",
+      "target_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGFC3892700GHYSWPE777",
+      "target_title": "RelationshipActualsOperationContracts",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3J8A71B83BRGCD7ZMG",
+      "target_ref_code": "FR-LEDGER-TRANSFER-CONFIRMATION",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXSQCYJ8AFV3RA3G86X0E1SB",
+      "target_title": "Confirm owned-account transfers",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3J81VJPTZE2G62Q98Z",
+      "target_ref_code": "FR-LEDGER-IDEMPOTENT-WRITES",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXSQBX8TSCMJV15PDGZSHYVE",
+      "target_title": "Make public writes idempotent",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3JAG9RGJ590NQBPZV6",
+      "target_ref_code": "TC-LEDGER-TRANSFER-CONFIRMATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK99DZS5T99TYN393FMBF",
+      "target_title": "Verify confirm owned-account transfers contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0ZW3JG568F9FCQTT5PW9J",
+      "gate_type": "test-evidence",
+      "description": [
+        "Evidence maps UC-LEDGER-004 main scenario and each numbered failure path to stdout/error/exit/state assertions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    },
+    {
+      "id": "01KXT0ZW3J6GWPB04EH8M2T7B6",
+      "gate_type": "self-review",
+      "description": [
+        "No scenario calls handlers or SQLite directly."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0ZW3JPNFBFDRTWMMT29B7",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.EndToEnd.UC004TransferWorkflowTests --no-restore",
+      "expected_result": "exit 0; at least 10 main/failure-path scenarios run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+    }
+  ]
+}

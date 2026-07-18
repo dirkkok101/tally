@@ -1,0 +1,276 @@
+{
+  "id": "01KXT126T9F8TKWP6NYR701AFJ",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-VERIFY-UC-011",
+  "slug": "VERIFY-UC-011",
+  "title": "RelationshipCorrectionWorkflow",
+  "description": [
+    "Verification-only task intentionally has no Implements link: trace UC-LEDGER-011 main scenario and every failure path through the published CLI."
+  ],
+  "objective": [
+    "Prove UC-LEDGER-011 through observable process results and durable-state invariants."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 130,
+  "created_at": "2026-07-18T07:11:45.9941647+00:00",
+  "dependencies": [
+    {
+      "id": "01KXT16EGV824N85F60TJ8E8EM",
+      "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Use-case verification invokes the fully wired published public contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:14:04.9564187+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT126TED4EKTKXWE1HA6YTY",
+      "path": "tests/Tally.Tests/EndToEnd/UC011RelationshipCorrectionWorkflowTests.cs",
+      "action": "test",
+      "role": "verification",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT19NM1PRQ0RCYHTFZXTE2D",
+      "name": "PublishedTallyFixture",
+      "direction": "consumes",
+      "notes": [
+        "Release published-process E2E fixture"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:15:50.5290107+00:00"
+    },
+    {
+      "id": "01KXT19NM2AR8RQN2GAPD3EQAE",
+      "name": "CompletePublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "Exactly 38 wired operations"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:15:50.5290107+00:00"
+    },
+    {
+      "id": "01KXT19NM28C6DB361H0GA5DRV",
+      "name": "VerifiedUC011",
+      "direction": "produces",
+      "contract_ref_code": "UC-LEDGER-011",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:15:50.5290107+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT126TERT9BX8R4QF0PRF3W",
+      "kind": "acceptance_check",
+      "text": [
+        "Revoke removes active spend effect and appends actor/reason; replace validates all rules before atomically retiring old and activating one new relationship."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TE03B6P1VBJF1NQ03Z",
+      "kind": "acceptance_check",
+      "text": [
+        "History exposes full chain and before/after spend effects reconcile exactly."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TEPB3FV4VQFN2PBST6",
+      "kind": "acceptance_check",
+      "text": [
+        "Absent reason/key, retired relationship, invalid replacement, retirement/replacement interruption, and aggregate mismatch preserve prior active state."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TE9CSC1X8E2ZTSVC4J",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical replay returns original lifecycle result; changed retry conflicts."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TEMC7MRW2B17NRB01F",
+      "kind": "constraint",
+      "text": [
+        "Invoke the Release published tally executable; inspect stdout, stderr, exit code, and real temporary SQLite state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TEZR4CBBPGA7F5GCNK",
+      "kind": "expected_output",
+      "text": [
+        "UC011RelationshipCorrectionWorkflowTests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TES8QJYQVKVH2VAN47",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT edit old relationships in place or retire before validating replacement."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TESCKENQ9EFFC6G051",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT omit UC-LEDGER-011 aggregate fail-closed and atomic rollback paths."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TEWWQGJ1DP8G3R8SSN",
+      "kind": "note",
+      "text": [
+        "This gate validates completed behavior and intentionally has no Implements link."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TES5DHDX5YA0ST1XQN",
+      "kind": "note",
+      "text": [
+        "Operations exercised: ledger.transfer/refund.revoke|replace and ledger.relationship.get."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT126TF86C9TBRHH1FRH87F",
+      "target_ref_code": "UC-LEDGER-011",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXRKC2F4G8K3319PA05K9WGH",
+      "target_title": "Revoke or replace a transfer or refund relationship",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TFP59B9DS02RQRDJZ2",
+      "target_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGFC3892700GHYSWPE777",
+      "target_title": "RelationshipActualsOperationContracts",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TFDPH2F7V034V9JC62",
+      "target_ref_code": "FR-LEDGER-RELATIONSHIP-CORRECTION",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXSQCYJBJCNY42182W7BRMQA",
+      "target_title": "Revoke or replace financial relationships",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TF46DT9M3JF5RPDSPJ",
+      "target_ref_code": "FR-LEDGER-IDEMPOTENT-WRITES",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXSQBX8TSCMJV15PDGZSHYVE",
+      "target_title": "Make public writes idempotent",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TFWP7XQ8TG8FSJMVK3",
+      "target_ref_code": "TC-LEDGER-RELATIONSHIP-CORRECTION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK6W7AC84YR8SA3TGXYB9",
+      "target_title": "Verify revoke or replace financial relationships contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TFZK729E9FTN9M1J6W",
+      "target_ref_code": "TC-LEDGER-ATTRIBUTABLE-HISTORY-INVARIANTS",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSXG9F9YQX3AA2Q5QSB1PY5",
+      "target_title": "Verify attributable financial history",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT126TF6C23VA57Y20EHQM4",
+      "gate_type": "test-evidence",
+      "description": [
+        "Evidence maps UC-LEDGER-011 main scenario and each numbered failure path to stdout/error/exit/state assertions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    },
+    {
+      "id": "01KXT126TFCR7VHBM2NWB9PRR4",
+      "gate_type": "self-review",
+      "description": [
+        "No scenario calls handlers or SQLite directly."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT126TFY95TPS2R5B18A8VY",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.EndToEnd.UC011RelationshipCorrectionWorkflowTests --no-restore",
+      "expected_result": "exit 0; at least 9 main/failure-path scenarios run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+    }
+  ]
+}

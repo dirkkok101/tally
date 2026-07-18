@@ -1,0 +1,351 @@
+{
+  "id": "01KXT0SMDX0WTXRBDRF1643GDW",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06AGT9EPMYN1DCHN46ZV9",
+  "ref_code": "TASK-LEDGER-TRANSFERS",
+  "slug": "TRANSFERS",
+  "title": "Implement owned-account transfer confirmation",
+  "description": [
+    "Deliver explicit transfer confirmation and relationship detail over immutable transaction legs."
+  ],
+  "objective": [
+    "Create one attributable active transfer only when distinct owned-account legs satisfy exact role, sign, currency, amount, account, and lifecycle rules."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 10,
+  "created_at": "2026-07-18T07:07:05.0252128+00:00",
+  "decisions": [
+    {
+      "id": "01KXT0SME1YWZ5AMV4K5641Q29",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXT1B3HSHSZ15ZK5Y540C0RP",
+      "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:16:37.5620511+00:00"
+    },
+    {
+      "id": "01KXT160TH4ZC44VN24J1G1J7N",
+      "target": "TASK-LEDGER-GATE-EVIDENCE-RELATIONSHIPS",
+      "dependency_type": "compile",
+      "reason": [
+        "Relationship policy cannot start until OQ-LEDGER-5 resolves."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:13:50.9306827+00:00"
+    },
+    {
+      "id": "01KXT160AD82H837E43S74HQV0",
+      "target": "TASK-LEDGER-TRANSACTIONS-RECORD-GET",
+      "dependency_type": "compile",
+      "reason": [
+        "Transfer confirmation requires immutable transaction legs."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:13:50.4138188+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT0SME260B3F43NQ52Z943S",
+      "path": "src/Tally/Contracts/Ledger/Relationships/TransferContracts.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME2E9AG8SZYQCW8Q5V8",
+      "path": "src/Tally/Domain/Ledger/Relationships/FinancialRelationship.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME2YT1WNBTE9D8WFQC2",
+      "path": "src/Tally/Domain/Ledger/Relationships/TransferPolicy.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME2DX3DF5YWGN02J568",
+      "path": "src/Tally/Features/Ledger/Relationships/TransferHandlers.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME2X6VWHFS4MAK7HQ7J",
+      "path": "src/Tally/Infrastructure/Storage/Relationships/RelationshipStore.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME2CNKCYQ6XZ496QSPB",
+      "path": "src/Tally/Features/Ledger/Relationships/TransferOperationModule.cs",
+      "action": "create",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME2TA12FXXQ3CPW29AZ",
+      "path": "tests/Tally.Tests/Features/Ledger/Relationships/TransferTests.cs",
+      "action": "test",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT19CHCJ98NWAH75X8PX45M",
+      "name": "TransferOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:15:41.2285739+00:00"
+    },
+    {
+      "id": "01KXT19CHDBHE6B4YPXHCRW6WG",
+      "name": "TransferPolicy",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:15:41.2285739+00:00"
+    },
+    {
+      "id": "01KXT19CHDEQQ1ZGAM6P7PK7JM",
+      "name": "RelationshipStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:15:41.2285739+00:00"
+    },
+    {
+      "id": "01KXT19CHDQ3A7S015DHJXEZP8",
+      "name": "RelationshipStore.RetireForTransactionAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:15:41.2285739+00:00"
+    },
+    {
+      "id": "01KXT19CHDMF66V0S1XW2N6EA0",
+      "name": "TransactionStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-FACT",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:15:41.2285739+00:00"
+    },
+    {
+      "id": "01KXT19CHDYZ2YH869GQSTVWR3",
+      "name": "LedgerMutationExecutor.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:15:41.2285739+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT0SME155FMRW1MAHKB0PVG",
+      "kind": "acceptance_check",
+      "text": [
+        "Two active ZAR transactions on distinct active owned accounts with explicit outflow/inflow roles and equal-opposite principal create one attributable active transfer."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME2CX85D8KXR5XR4JCB",
+      "kind": "acceptance_check",
+      "text": [
+        "Different supplied dates do not block a valid explicit confirmation; a separately recorded fee stays unlinked."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME229FQJ231EQ8RGMQ0",
+      "kind": "acceptance_check",
+      "text": [
+        "Same account/sign, unequal magnitude, different currency, inactive leg, or either leg already in any active transfer/refund returns its documented stable error and creates no relationship."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME2CF39G18XG88CAZVG",
+      "kind": "acceptance_check",
+      "text": [
+        "Relationship get returns roles, exact principal, status, actor/time, and optional history while source transactions remain unchanged."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME2FJ321X8Y7BCGBCMJ",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical replay returns the original relationship; competing role assignment creates at most one active relationship."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME2SQFN3S02X25CY9DS",
+      "kind": "expected_output",
+      "text": [
+        "Transfer contracts/policy/store/handler/module"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME2PXT20C3MHGXGEGP0",
+      "kind": "expected_output",
+      "text": [
+        "Real-SQLite transfer invariant tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME22BBVTN41JPQGYQ91",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT infer transfers from descriptions/dates, mutate transaction facts, link embedded fees, or use a generic polymorphic relationship create — per DD-LEDGER-IMMUTABLE-HISTORY."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME2Q2FSKS0XF9H349T1",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT implement before OQ-LEDGER-5 resolves consistently."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXT0SME3EDER2WE7JK2W3DNR",
+      "target_ref_code": "OQ-LEDGER-5",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KXR55HWRSWNEKE7H763R8173",
+      "target_title": "Validate the proposed transfer, refund/reversal, and cash-withdrawal spend policies with representative transactions.",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME344MZVXA5997FRN95",
+      "target_ref_code": "NFR-LEDGER-ATTRIBUTABLE-HISTORY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFZJ0XVBBX0FPF6FJ7E2Y",
+      "target_title": "Retain attributable correction history",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME3SDBD412DYTE7CNNK",
+      "target_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGFC3892700GHYSWPE777",
+      "target_title": "RelationshipActualsOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME32A9DYDMKT7N9FN5C",
+      "target_ref_code": "TC-LEDGER-TRANSFER-CONFIRMATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK99DZS5T99TYN393FMBF",
+      "target_title": "Verify confirm owned-account transfers contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXT0SME157NHDJ0ZKSZK4K2T",
+      "target": "FR-LEDGER-TRANSFER-CONFIRMATION",
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT0SME2KKZ49512GQRT8RZE",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show equal-opposite conservation, exclusivity, date tolerance, fee separation, and atomic replay."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    },
+    {
+      "id": "01KXT0SME23Y15KQ2XT5Q09H1G",
+      "gate_type": "self-review",
+      "description": [
+        "No description/date inference or source-fact mutation exists."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT0SME2HY3TYC5BBRHRKA6B",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Features.Ledger.Relationships.TransferTests --no-restore",
+      "expected_result": "exit 0; at least 14 conservation/role/date/fee/atomicity/replay cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+    }
+  ]
+}

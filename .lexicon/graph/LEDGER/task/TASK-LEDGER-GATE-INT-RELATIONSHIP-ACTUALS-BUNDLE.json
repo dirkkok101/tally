@@ -1,0 +1,248 @@
+{
+  "id": "01KXT21TGRMZN7PW2V0BRVRKZR",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE",
+  "slug": "GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE",
+  "title": "Compose the relationship and actuals operation bundle",
+  "description": [
+    "Convergence gate intentionally has no Implements link: compose the completed transfer, refund, relationship-lifecycle, and actuals modules without changing their contracts."
+  ],
+  "objective": [
+    "Produce one deterministic 8-operation bundle for relationships and actuals, rejecting missing, duplicate, or version-incompatible descriptors before dispatch."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 2,
+  "created_at": "2026-07-18T07:29:01.9775135+00:00",
+  "dependencies": [
+    {
+      "id": "01KXT21TGW81KE7M6XA06XJVYE",
+      "target": "TASK-LEDGER-ACTUALS-SNAPSHOT",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes ActualsOperationModule."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGWQZ8KH2VQJVKVK1R3",
+      "target": "TASK-LEDGER-REFUNDS",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes RefundOperationModule."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGW8MPC47YAW7JWX8JF",
+      "target": "TASK-LEDGER-RELATIONSHIP-CORRECTIONS",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes RelationshipLifecycleOperationModule."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGWTZMNC0E8JDZT14D2",
+      "target": "TASK-LEDGER-TRANSFERS",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes TransferOperationModule."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXT21TGVQWQ8F3S0N9HT87XE",
+      "path": "src/Tally/Composition/Ledger/RelationshipActualsOperationBundle.cs",
+      "action": "create",
+      "role": "integration composition",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGVM5ZZDBBVB8N5Y4VF",
+      "path": "tests/Tally.Tests/Composition/Ledger/RelationshipActualsOperationBundleTests.cs",
+      "action": "test",
+      "role": "integration",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXT21TGVBP08M0BBRE12EHC1",
+      "name": "RelationshipActualsOperationBundle",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGVD2RPN0EZCSRYA8E0",
+      "name": "TransferOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGWY2XX385MX6CS4SWD",
+      "name": "RefundOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGW6MXABM5XQE234HK6",
+      "name": "RelationshipLifecycleOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGWWGM4JRWE139ADVZV",
+      "name": "ActualsOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "sort_order": 4,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXT21TGV59V1Q5RJ82BMJJJQ",
+      "kind": "acceptance_check",
+      "text": [
+        "The bundle contains exactly the 8 unique transfer, refund, relationship, and actuals descriptors defined by the four consumed modules."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGV2TV4HBNG0FCEHCFS",
+      "kind": "acceptance_check",
+      "text": [
+        "Descriptor order is operationId ordinal and every source descriptor field is retained byte-for-byte after canonical serialization."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGVHNWN591FTBAWH0WB",
+      "kind": "acceptance_check",
+      "text": [
+        "A missing module, duplicate operationId, duplicate CLI path, or incompatible contract range returns a deterministic composition failure before dispatch."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGVJHSWHAHCJGSY4FVB",
+      "kind": "acceptance_check",
+      "text": [
+        "Focused tests compare the complete bundle inventory with all source modules and prove no descriptor is added, dropped, or rewritten."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGVR4R6J68AVK0VCCVV",
+      "kind": "constraint",
+      "text": [
+        "Use explicit compile-time module composition."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGVD3R8NWYR04FNFE9D",
+      "kind": "expected_output",
+      "text": [
+        "RelationshipActualsOperationBundle"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGV27KECF70K1V8JR24",
+      "kind": "expected_output",
+      "text": [
+        "Exact-set composition tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGV5ZS5V1AGFZAA7BDE",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT infer financial relationships, duplicate actuals formulas, use reflection discovery, or implement domain behavior in composition."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGVS2HAQMG7E6B8THZR",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept a count-only assertion without exact set equality."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXT21TGWRHR4V594JNQXGN4P",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show exact 8-ID set equality and each rejected composition state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    },
+    {
+      "id": "01KXT21TGWTJ226Y9YFWTSAP4F",
+      "gate_type": "self-review",
+      "description": [
+        "No relationship rule, actuals formula, or descriptor copy is introduced."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXT21TGW58C2RHV0B5KT0PGH",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Composition.Ledger.RelationshipActualsOperationBundleTests --no-restore",
+      "expected_result": "exit 0; at least 8 exact-inventory/duplicate/missing/version cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 180,
+      "sort_order": 0,
+      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+    }
+  ]
+}
