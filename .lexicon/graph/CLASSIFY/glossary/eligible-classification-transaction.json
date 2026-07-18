@@ -1,0 +1,9 @@
+{
+  "id": "01KXV5PEG8RMYTN7XJDN7E1HEA",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "term": "Eligible Classification Transaction",
+  "definition": [
+    "An active canonical LEDGER transaction that requires an independent category decision under current categorization, transfer, refund, relationship, and lifecycle state. CLASSIFY discovers eligibility through public LEDGER queries and never infers those states from description text."
+  ],
+  "created_at": "2026-07-18T17:51:57.9615196+00:00"
+}

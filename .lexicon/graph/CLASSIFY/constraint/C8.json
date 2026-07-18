@@ -1,0 +1,11 @@
+{
+  "id": "01KXV5KVJGP4919XGB2HMD9WP3",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "C8",
+  "title": "No implicit historical reclassification",
+  "description": [
+    "A rule or normalization change affects future evaluation only. Existing LEDGER assignments change solely through an explicit reasoned correction over an identified transaction set."
+  ],
+  "type": "business",
+  "created_at": "2026-07-18T17:50:33.0407937+00:00"
+}

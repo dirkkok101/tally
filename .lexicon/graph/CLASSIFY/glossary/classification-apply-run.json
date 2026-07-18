@@ -1,0 +1,9 @@
+{
+  "id": "01KXV5PGGANYRHRNPNSKMPRE76",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "term": "Classification Apply Run",
+  "definition": [
+    "An explicitly invoked, replay-safe attempt to submit an identified set of accepted suggestions or approved exact-rule matches through public LEDGER assignment/correction operations, returning one durable structured outcome per transaction."
+  ],
+  "created_at": "2026-07-18T17:52:00.0116935+00:00"
+}

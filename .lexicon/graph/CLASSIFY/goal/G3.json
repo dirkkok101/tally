@@ -1,0 +1,10 @@
+{
+  "id": "01KXV5JBFR9K3ZR2EJ7H9DW7BK",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "G3",
+  "text": [
+    "Apply accepted classification decisions safely through the public LEDGER category-assignment contract."
+  ],
+  "target": "A suggestion alone performs no mutation. Every explicit single or batch apply invokes only public LEDGER assignment/correction operations, preserves source facts, rejects inactive transactions or archived categories, records structured per-transaction outcomes, and is replay-safe.",
+  "created_at": "2026-07-18T17:49:43.8010041+00:00"
+}

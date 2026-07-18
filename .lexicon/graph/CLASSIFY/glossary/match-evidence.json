@@ -1,0 +1,9 @@
+{
+  "id": "01KXV5PFFT9D4VT051SD2BV12X",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "term": "Match Evidence",
+  "definition": [
+    "The structured, privacy-bounded explanation of which allowed normalized features satisfied a Classification Rule. It must be sufficient to review determinism without exposing unrelated transaction payloads or hidden model reasoning."
+  ],
+  "created_at": "2026-07-18T17:51:58.9709247+00:00"
+}

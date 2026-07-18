@@ -1,0 +1,14 @@
+{
+  "id": "01KXV5N29R6YEV83X7C0YMEM7W",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "RISK-CLASSIFY-005",
+  "description": [
+    "Representative history may contain too few recurring labeled decisions for a custom rule engine to save meaningful owner time."
+  ],
+  "likelihood": "High",
+  "impact": "Medium",
+  "mitigation": [
+    "Measure baseline volume and repeat rate during discovery, retain agent-guided manual assignment as the do-less fallback, and enforce the monitored effort/coverage kill criteria before PRD and planning."
+  ],
+  "created_at": "2026-07-18T17:51:12.6970284+00:00"
+}

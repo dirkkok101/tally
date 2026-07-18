@@ -1,0 +1,11 @@
+{
+  "id": "01KXV5KTAK014Y9QN86CN0ATTB",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "C4",
+  "title": "Explicit mutation boundary",
+  "description": [
+    "Evaluation and suggestion are read-only. Category mutation occurs only through an explicit CLASSIFY apply invocation backed by public LEDGER assignment/correction operations; rule activation, batch scope, and correction remain attributable."
+  ],
+  "type": "business",
+  "created_at": "2026-07-18T17:50:31.7638190+00:00"
+}

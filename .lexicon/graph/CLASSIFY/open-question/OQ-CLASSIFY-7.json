@@ -1,0 +1,12 @@
+{
+  "id": "01KXV5NV9QQZFVZ5J8WNFA6MSV",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "OQ-CLASSIFY-7",
+  "question": "What private evaluation fixture and hold-out procedure can measure coverage, conflicts, false applications, and time saved without committing transaction descriptions or spending facts to Git or logs?",
+  "context": [
+    "The selected approach and kill criteria require repeatable empirical evidence while financial data remains owner-only."
+  ],
+  "status": "open",
+  "owner": "CLASSIFY discovery",
+  "created_at": "2026-07-18T17:51:38.2965988+00:00"
+}

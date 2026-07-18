@@ -1,0 +1,12 @@
+{
+  "id": "01KXV5K1J3FYEAX7RVXRKK5QPD",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "NG1",
+  "text": [
+    "Persist canonical transaction facts, own the Spend Category catalogue, or become the authoritative category-assignment history."
+  ],
+  "rationale": [
+    "LEDGER owns FR-LEDGER-CATEGORY-CATALOGUE, FR-LEDGER-CATEGORY-ASSIGNMENT, immutable source facts, corrections, and actuals; CLASSIFY consumes and invokes that public contract."
+  ],
+  "created_at": "2026-07-18T17:50:06.4038451+00:00"
+}

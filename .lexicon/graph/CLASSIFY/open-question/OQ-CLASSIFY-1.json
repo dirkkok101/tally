@@ -1,0 +1,12 @@
+{
+  "id": "01KXV5NSDNE94RN8DEHW3G5VNR",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "OQ-CLASSIFY-1",
+  "question": "What transaction volume, repeat rate, current category coverage, and manual classification time does a representative post-INGEST 90-day LEDGER sample show?",
+  "context": [
+    "This establishes whether CLASSIFY is worth building, provides the do-less baseline, and supplies the monitored volume and effort kill-criterion evidence."
+  ],
+  "status": "open",
+  "owner": "CLASSIFY discovery",
+  "created_at": "2026-07-18T17:51:36.3742724+00:00"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01KXV5N17ZS2FQBGY0KF8MGTZJ",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "RISK-CLASSIFY-002",
+  "description": [
+    "Bank-description or merchant-text drift may make normalization and exact rules brittle, silently reducing coverage or matching the wrong scope."
+  ],
+  "likelihood": "High",
+  "impact": "High",
+  "mitigation": [
+    "Version normalization, expose bounded match evidence, fail multi-match and unknown patterns closed, measure coverage/conflicts by version, and require revalidation before broadening a rule."
+  ],
+  "created_at": "2026-07-18T17:51:11.6167415+00:00"
+}

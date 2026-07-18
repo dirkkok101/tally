@@ -1,0 +1,12 @@
+{
+  "id": "01KXV5K29JQQDFYFA8GZMM70A2",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "NG3",
+  "text": [
+    "Run a watcher, scheduler, daemon, or silent background process that changes categories."
+  ],
+  "rationale": [
+    "Tally is local-first and explicitly invoked; a suggestion never mutates, and every apply is a visible command with structured outcomes."
+  ],
+  "created_at": "2026-07-18T17:50:07.1564823+00:00"
+}

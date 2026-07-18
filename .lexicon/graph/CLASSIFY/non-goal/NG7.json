@@ -1,0 +1,12 @@
+{
+  "id": "01KXV5K3NRHC1YGSH3D2MKVXW5",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "NG7",
+  "text": [
+    "Provide web, messaging, or other human-facing classification screens and conversations."
+  ],
+  "rationale": [
+    "CHANNELS owns presentation and interaction; CLASSIFY exposes a channel-neutral structured command contract."
+  ],
+  "created_at": "2026-07-18T17:50:08.5690809+00:00"
+}

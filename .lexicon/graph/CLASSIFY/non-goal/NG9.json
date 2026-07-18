@@ -1,0 +1,12 @@
+{
+  "id": "01KXV5K4CAA41C93EFVQCE8S3M",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "NG9",
+  "text": [
+    "Retroactively rewrite existing category assignments merely because a rule or normalization version changes."
+  ],
+  "rationale": [
+    "Historical assignments remain authoritative in LEDGER until an explicit reasoned correction is invoked; evaluation may identify candidates but cannot silently rewrite them."
+  ],
+  "created_at": "2026-07-18T17:50:09.2915369+00:00"
+}

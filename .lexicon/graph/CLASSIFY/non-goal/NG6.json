@@ -1,0 +1,12 @@
+{
+  "id": "01KXV5K3AGJFMC7AR48P347HE7",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "NG6",
+  "text": [
+    "Infer transfers, refunds, reversals, voids, supersessions, or other financial relationships from descriptions."
+  ],
+  "rationale": [
+    "LEDGER owns relationship and lifecycle truth. CLASSIFY consumes those states to decide eligibility and must not replace canonical finance semantics with text heuristics."
+  ],
+  "created_at": "2026-07-18T17:50:08.2093078+00:00"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "01KXV5PG55GNM10AEF49NYHDMS",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "term": "Classification Feedback",
+  "definition": [
+    "An attributable owner action accepting, rejecting, or correcting a suggestion and optionally proposing a rule activation, narrowing, retirement, or replacement. Feedback does not automatically generalize or rewrite LEDGER history."
+  ],
+  "created_at": "2026-07-18T17:51:59.6553053+00:00"
+}

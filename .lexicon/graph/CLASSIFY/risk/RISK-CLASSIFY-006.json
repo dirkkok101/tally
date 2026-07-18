@@ -1,0 +1,23 @@
+{
+  "id": "01KXV5N2M5PPZCEEF0ARTZY988",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "RISK-CLASSIFY-006",
+  "description": [
+    "CLASSIFY may couple to private or unstable LEDGER behavior before the public query and assignment contracts are implemented."
+  ],
+  "likelihood": "Medium",
+  "impact": "High",
+  "mitigation": [
+    "Use contract discovery and compatibility gates, depend only on FR-LEDGER-ACTUALS-QUERY and public category operations, and stop planning if the public boundary cannot supply required behavior."
+  ],
+  "created_at": "2026-07-18T17:51:13.0304401+00:00",
+  "links": [
+    {
+      "id": "01KXV5S6V23N7ZV1HPAGZ68839",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACTUALS-QUERY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T17:53:28.4192796+00:00"
+    }
+  ]
+}

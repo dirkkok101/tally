@@ -1,0 +1,9 @@
+{
+  "id": "01KXV5PETK2ESRX8W1HM59YE7J",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "term": "Classification Rule",
+  "definition": [
+    "A versioned owner-approved deterministic predicate over an allowed canonical transaction projection that proposes one active Spend Category and carries explicit scope, rationale, lifecycle, and provenance. A rule is not a LEDGER assignment."
+  ],
+  "created_at": "2026-07-18T17:51:58.2924723+00:00"
+}

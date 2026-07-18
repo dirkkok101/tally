@@ -1,0 +1,14 @@
+{
+  "id": "01KXV5N1ZN2AG4D0S4QGPAM923",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "RISK-CLASSIFY-004",
+  "description": [
+    "Transaction descriptions, normalized tokens, rules, or evaluation artifacts may disclose sensitive spending behavior through logs, files, or agent output."
+  ],
+  "likelihood": "Medium",
+  "impact": "High",
+  "mitigation": [
+    "Keep state owner-only and local, avoid raw-payload logging or serialization, return only necessary structured evidence, and include security canaries in discovery and verification."
+  ],
+  "created_at": "2026-07-18T17:51:12.3737928+00:00"
+}

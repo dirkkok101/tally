@@ -1,0 +1,12 @@
+{
+  "id": "01KXV5NTNW62K6ZMN79C9PMWM1",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "OQ-CLASSIFY-5",
+  "question": "How should owner corrections propose, retire, narrow, or replace a classification rule without treating one corrected transaction as permission to generalize?",
+  "context": [
+    "Correction feedback is the core learning loop, but automatic rule broadening can amplify an erroneous or exceptional decision."
+  ],
+  "status": "open",
+  "owner": "CLASSIFY discovery",
+  "created_at": "2026-07-18T17:51:37.6612352+00:00"
+}
