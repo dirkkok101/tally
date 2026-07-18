@@ -32,11 +32,16 @@ The source material was exported and imported with the same Lex 0.5.3 binary, so
 | LEX-GRAPH-002 | Bug | High | Valid goal ref-codes cannot participate in explicit links |
 | LEX-FR-001 | Bug | High | `fr batch` silently drops persona relationships |
 | LEX-SCHEMA-001 | Bug | Medium | Test-case schemas omit enums enforced by the CLI |
+| LEX-PLAN-001 | Bug | High | `task update` help and machine schema omit supported options |
+| LEX-PLAN-002 | Bug | High | `task batch` claims update support but rejects existing tasks |
 | LEX-DESIGN-E001 | Enhancement | High value | Add first-class CLI operation surfaces instead of forcing HTTP endpoints |
 | LEX-DESIGN-E002 | Enhancement | High value | Distinguish planned greenfield decision paths from missing implemented paths |
 | LEX-DESIGN-E003 | Enhancement | Medium value | Make feature areas group decisions, models, diagrams, and tests in workspace exports |
 | LEX-GRAPH-E001 | Enhancement | High value | Count and project use-case primary actors as first-class persona relationships |
 | LEX-BATCH-E001 | Enhancement | High value | Describe batch standard-input payloads in machine schemas |
+| LEX-PLAN-E001 | Enhancement | High value | Accept transitive compile reachability for interface consumers |
+| LEX-PLAN-E002 | Enhancement | High value | Classify intentionally loose foundation and gate tasks |
+| LEX-PLAN-E003 | Enhancement | Medium value | Make bead-reference coverage warnings phase-aware |
 | LEX-XFER-E001 | Enhancement | High value | Add a canonical cross-repository graph transfer command |
 | LEX-XFER-E002 | Enhancement | High value | Add dry-run and entity-diff support to every importer |
 | LEX-XFER-E003 | Enhancement | High value | Support dependency-closure transfer for links and diagrams |
@@ -374,7 +379,108 @@ Expose every enforced enum through each command's `enum_values` and top-level `e
 
 Use `integration` plus `contract` for public CLI contract intents, and treat runtime error messages as the temporary source for any other missing value set.
 
+### LEX-PLAN-001: `task update` help and machine schema omit supported options
+
+During LEDGER planning, `lex task update --help` documented only the
+multi-value grammars and clear flags. It did not list supported scalar options
+such as `--title`, `--description`, and `--objective`. The corresponding
+machine schema was also empty:
+
+```json
+{
+  "command": "task update",
+  "required": [],
+  "optional": [],
+  "arguments": [],
+  "options": []
+}
+```
+
+This was not merely incomplete presentation. `--summary` was rejected while
+the semantically corresponding `--description` was accepted, and neither the
+help nor schema allowed an agent to discover that distinction before writing.
+The same discoverability problem appeared in `task refs add`: help rendered
+`--required <bool>`, but `--required true` rejected `true` as an unrecognized
+argument; omitting the option created a required reference.
+
+**Expected:**
+
+`task create` and `task update` should expose every accepted scalar,
+multi-value, clear, enum, and conflict rule in both human help and the
+machine-readable schema. Generated help and command parsing should be tested
+from the same option definition.
+
+### LEX-PLAN-002: `task batch` claims update support but rejects existing tasks
+
+The `lex task` command summary describes `task batch` as:
+
+```text
+Create or update task entries in a batch.
+```
+
+Re-submitting a complete `BACKUP-VERIFY` item to revise an existing plan task
+instead returned:
+
+```text
+Error [LEX-002]: Item [0].slug: Task with ref-code
+'TASK-LEDGER-BACKUP-VERIFY' already exists.
+```
+
+The task then had to be cleared and rebuilt through multiple `task update`
+calls, with references and dependencies repaired through separate commands.
+That creates a needless partial-update window and makes recovery harder if one
+step fails.
+
+**Expected:**
+
+Either implement the advertised deterministic upsert behavior, or describe
+the command as create-only. Prefer an explicit `--mode create|update|upsert`
+with whole-item validation and atomic replacement semantics.
+
 ## Enhancement Proposals
+
+### LEX-PLAN-E001: Accept transitive compile reachability for interface consumers
+
+`lex plan audit` requires a direct compile edge from every consuming task to
+the task that first produces the named interface, even when an existing
+compile path already guarantees that producer completes first. For LEDGER,
+this forced many redundant direct edges into the initial public-contract gate.
+Its assembled context reached 4,018 tokens, primarily because 13 direct
+dependencies and their summaries were included.
+
+The plan was improved by introducing three real, independently testable
+operation bundles, but that architectural split should be a design choice,
+not the only way to satisfy a direct-edge checker. Audit should accept
+transitive compile reachability where the consumed interface remains
+available, or distinguish a true direct ABI handoff from ordinary execution
+ordering. When it recommends a direct edge, it should report the projected
+context-budget cost and whether a bundle/convergence task is the better remedy.
+
+### LEX-PLAN-E002: Classify intentionally loose foundation and gate tasks
+
+The final LEDGER plan contains 30 tasks without `implements` references: five
+shared foundations, six evidence gates, seven convergence/security/module
+gates, and twelve use-case verification tasks. Each task explains why it must
+not claim delivery of a functional requirement, yet `lex plan coverage`
+reports all 30 uniformly as loose-task warnings.
+
+Add a constrained task kind such as `implementation`, `foundation`,
+`evidence_gate`, `integration_gate`, and `verification`, plus a required
+justification for non-implementation kinds. Coverage can then reject hollow
+tasks while treating intentionally loose, fully specified gates as healthy.
+This avoids fake FR links added solely to make the status green.
+
+### LEX-PLAN-E003: Make bead-reference coverage warnings phase-aware
+
+`lex:plan` explicitly ends before bead compilation, but `lex plan coverage`
+warned that all 47 LEDGER tasks had no bead references. The warning is true but
+not actionable at the planning gate and guarantees a warning status for every
+new plan that correctly follows the workflow.
+
+Separate plan readiness from execution compilation readiness. Before
+`lex:beads`, missing bead references should be informational or suppressed;
+after compilation, they should become warnings or errors according to task
+kind and plan state.
 
 ### LEX-DESIGN-E001: Add first-class CLI operation surfaces
 
