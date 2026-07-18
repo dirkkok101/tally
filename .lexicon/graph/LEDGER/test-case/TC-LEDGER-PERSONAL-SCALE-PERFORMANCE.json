@@ -1,0 +1,26 @@
+{
+  "id": "01KXSXGAF3HK64JMBCCXQ9M6S0",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "TC-LEDGER-PERSONAL-SCALE-PERFORMANCE",
+  "slug": "PERSONAL-SCALE-PERFORMANCE",
+  "title": "Measure personal-ledger performance",
+  "level": "e2e",
+  "surface": "persistence",
+  "scenario": "performance",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Release binary, production SQLite settings, 100000 active transactions with realistic accounts, allocations, relationships, and filters.",
+  "steps": "Warm according to the benchmark protocol; measure repeated filtered actuals first page plus full-set totals and ordinary single-entity writes; report p50/p95 and environment.",
+  "expected": "Actuals first page and full totals complete below 2 seconds p95; ordinary writes below 1 second p95; exact results remain correct.",
+  "owner": "LEDGER implementation",
+  "created_at": "2026-07-18T06:09:34.1805388+00:00",
+  "links": [
+    {
+      "id": "01KXSXX5GCTGCETZMTRC8NQSAG",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-RELATIONSHIPS-ACTUALS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:16:35.0849293+00:00"
+    }
+  ]
+}

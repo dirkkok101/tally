@@ -4,10 +4,19 @@
   "ref_code": "EXT-LEDGER-AI-AGENT-HOST",
   "name": "AI Agent Host",
   "description": [
-    "Inbound local client: discovers and invokes Tally public commands under the owner's OS identity; sends structured inputs and receives versioned structured results. Authentication is inherited from the local OS session; it has no datastore access. Initial clients are Codex and Claude Code."
+    "Codex and Claude Code contract assumptions are validated by the installed Lex provider model, the explicit OperationDescriptor design, and three independent agent-interface explorations. Runtime compatibility still fails closed through the executable-owned skill manifest and published-binary contract tests."
   ],
   "type": "client",
   "owner": "Personal Finance Owner",
-  "metadata": "{\"gate_type\":\"workflow\",\"validation_basis\":\"client_contract\",\"validation_status\":\"assumed\"}",
-  "created_at": "2026-07-17T17:32:16.8407875+00:00"
+  "metadata": "{\"gate_type\":\"workflow\",\"validation_basis\":\"source_and_client\",\"validation_status\":\"validated\"}",
+  "created_at": "2026-07-17T17:32:16.8407875+00:00",
+  "links": [
+    {
+      "id": "01KXSXHM7MP6JCYF454FS8QXFN",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:10:16.9499975+00:00"
+    }
+  ]
 }

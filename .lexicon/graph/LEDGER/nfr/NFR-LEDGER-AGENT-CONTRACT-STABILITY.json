@@ -36,6 +36,13 @@
       "target": "FR-LEDGER-STRUCTURED-INVOCATION",
       "rel": "supports",
       "created_at": "2026-07-18T04:27:56.2272426+00:00"
+    },
+    {
+      "id": "01KXSXHB05Z260109RS8DBKBD4",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:10:07.4950963+00:00"
     }
   ]
 }

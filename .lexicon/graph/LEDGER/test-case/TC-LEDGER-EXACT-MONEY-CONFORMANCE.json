@@ -1,0 +1,26 @@
+{
+  "id": "01KXSXG9VA93KYJ7T384439ZHH",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "TC-LEDGER-EXACT-MONEY-CONFORMANCE",
+  "slug": "EXACT-MONEY-CONFORMANCE",
+  "title": "Verify exact money and actuals formulas",
+  "level": "unit",
+  "surface": "component",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Canonical boundary examples including one cent, large values, refunds in later periods, transfers, inflows, invalid scales, and overflow.",
+  "steps": "Round-trip all valid strings through Money and persistence representation; reject invalid strings; compute Net Account Movement, External Spend, and Budget Actual over policy matrices.",
+  "expected": "No floating-point path; exact minor-unit equality for every valid case; formulas match the NFR target including negative later-period net spend and transfer exclusions.",
+  "owner": "LEDGER implementation",
+  "created_at": "2026-07-18T06:09:33.5473514+00:00",
+  "links": [
+    {
+      "id": "01KXSXX4K78E61A95B0G5M6BJK",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-TRANSACTIONS-ALLOCATIONS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:16:34.1520872+00:00"
+    }
+  ]
+}

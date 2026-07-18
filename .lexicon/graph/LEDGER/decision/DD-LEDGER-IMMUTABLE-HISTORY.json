@@ -1,0 +1,161 @@
+{
+  "id": "01KXSWZ7J9GPCEHT6NPRX2M79C",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DD-LEDGER-IMMUTABLE-HISTORY",
+  "title": "Immutable financial facts with append-only lifecycle history",
+  "description": [
+    "Shape corrections, allocations, transfers, refunds, and attributable history."
+  ],
+  "decision": [
+    "Transaction facts are insert-only. Void and supersede append TransactionLifecycleEvent rows; supersession creates a new transaction and never silently transfers relationships. Category changes append CategoryAllocation rows and retire the prior active allocation. Transfer and refund confirmations create typed FinancialRelationship rows with explicit roles and amount; revoke and replace append RelationshipLifecycleEvent rows and retire the prior active relationship. Application commands enforce role cardinality, conservation, exclusivity, lifecycle, and cumulative-refund rules inside one SQLite transaction with the idempotency outcome."
+  ],
+  "rationale": [
+    "Mutable source facts or inferred relationships would destroy auditability and make actuals non-reproducible. Narrow typed commands preserve the PRD rules and keep historical references valid."
+  ],
+  "alternatives": [
+    "A: update transaction/category columns in place — rejected. B: general event sourcing — rejected as excessive. C: immutable facts plus explicit lifecycle/history tables — chosen."
+  ],
+  "consequences": [
+    "No public hard delete. Retired history remains queryable and included in Durable Ledger State. Archival blocks new use but does not break old references. Actuals use only active lifecycle/allocation/relationship state as of the query snapshot."
+  ],
+  "status_notes": [
+    "Accepted architecture, conditionally gated: OQ-LEDGER-5 and OQ-LEDGER-6 must be resolved from representative real-account examples before relationship policy or category-allocation implementation starts. Invalid evidence updates this decision and its models/contracts first. Planned areas: src/Tally/Features/Ledger/Transactions and Relationships."
+  ],
+  "status": "accepted",
+  "created_at": "2026-07-18T06:00:14.1545948+00:00",
+  "links": [
+    {
+      "id": "01KXSXE26HCYC34KT3VXWQ4AQV",
+      "target_type": "adr",
+      "target": "ADR-CORE-0020",
+      "rel": "references",
+      "created_at": "2026-07-18T06:08:20.1778909+00:00"
+    },
+    {
+      "id": "01KXSXE2N7SJ1ZXDDG8TAXX2XP",
+      "target_type": "adr",
+      "target": "ADR-CORE-0022",
+      "rel": "references",
+      "created_at": "2026-07-18T06:08:20.6483536+00:00"
+    },
+    {
+      "id": "01KXSYV42A5MSQY1A94TWF3B1E",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-CATALOGUE-LIFECYCLE",
+      "rel": "references",
+      "created_at": "2026-07-18T06:32:56.6514170+00:00"
+    },
+    {
+      "id": "01KXSYNEY8167RRAMPK38C4H89",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "rel": "references",
+      "created_at": "2026-07-18T06:29:51.1777773+00:00"
+    },
+    {
+      "id": "01KXSYNAHFS9N4T39DM34RKN61",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "rel": "references",
+      "created_at": "2026-07-18T06:29:46.6722785+00:00"
+    },
+    {
+      "id": "01KXSXDA2TGXG1C8M8NNSJA2M4",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-ASSIGNMENT",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:55.4837821+00:00"
+    },
+    {
+      "id": "01KXSXDAZP81RJHG7W192BXDEZ",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-REFUND-CONFIRMATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:56.4068700+00:00"
+    },
+    {
+      "id": "01KXSXDBEPVQ0WMEN7TEXKV04G",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-RELATIONSHIP-CORRECTION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:56.8869152+00:00"
+    },
+    {
+      "id": "01KXSXD9KKM7M7TZK046CXP582",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-TRANSACTION-CORRECTION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:54.9966831+00:00"
+    },
+    {
+      "id": "01KXSXDAHE6BES07PM8SVWWR04",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-TRANSFER-CONFIRMATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:55.9519892+00:00"
+    },
+    {
+      "id": "01KXSXDBXGVBY94EYB4VM9AMHA",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-ATTRIBUTABLE-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:57.3611974+00:00"
+    },
+    {
+      "id": "01KXSXPJCM8MWRG4E5X844HZR4",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-5",
+      "rel": "motivated-by",
+      "created_at": "2026-07-18T06:12:58.9011898+00:00"
+    },
+    {
+      "id": "01KXSYKKFFXCG42X3AZF5DQNS5",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-6",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:28:50.2879497+00:00"
+    },
+    {
+      "id": "01KXSXHJAZ69SMFMAK264KDYYP",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-ATTRIBUTABLE-HISTORY-INVARIANTS",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:10:15.0085414+00:00"
+    },
+    {
+      "id": "01KXSXEAG5RHWRJT5WKTS1XZX5",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-CATEGORY-ASSIGNMENT-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:08:28.6779231+00:00"
+    },
+    {
+      "id": "01KXSXEBDKRTNY4VAV8P3Q3GG9",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-REFUND-CONFIRMATION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:08:29.6199302+00:00"
+    },
+    {
+      "id": "01KXSXEBWC4GMQJEJZKDFCKZSB",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-RELATIONSHIP-CORRECTION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:08:30.0934342+00:00"
+    },
+    {
+      "id": "01KXSXEA25B04CMH8FRA21NMJ4",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-TRANSACTION-CORRECTION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:08:28.2298720+00:00"
+    },
+    {
+      "id": "01KXSXEAY5KEP6P88BK505D05N",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-TRANSFER-CONFIRMATION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:08:29.1267561+00:00"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "id": "01KXSX902V06VDMQM4ZRK0GTXM",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DIAG-LEDGER-RECOVERY-WORKFLOW",
+  "title": "Verified restore and evolution activation",
+  "diagram_type": "workflow",
+  "format": "mermaid",
+  "content": [
+    "flowchart TD",
+    "  Start[Prepare request] --> Lock[Acquire writer lock and fingerprint current]",
+    "  Lock --> Candidate[Create private candidate generation]",
+    "  Candidate --> Build[Restore or apply ordered migrations]",
+    "  Build --> Verify[Integrity, foreign keys, versions, counts, totals, history, relationships, idempotency]",
+    "  Verify -->|fail| Reject[Reject candidate; CURRENT unchanged]",
+    "  Verify -->|pass| Manifest[Flush candidate and immutable manifest]",
+    "  Manifest --> Return[Return candidate ID and fingerprint]",
+    "  Return --> Authorize[Activate with explicit authorization and expected current fingerprint]",
+    "  Authorize --> Recheck[Reacquire lock and revalidate]",
+    "  Recheck -->|changed or invalid| Reject",
+    "  Recheck --> Switch[Atomically replace and fsync CURRENT pointer]",
+    "  Switch --> Recovery[Retain previous generation as recovery point]",
+    "  Recovery --> Done[Verified candidate is authoritative]"
+  ],
+  "created_at": "2026-07-18T06:05:34.1725537+00:00",
+  "links": [
+    {
+      "id": "01KXSXE6TCX8T4M877HX08YY5T",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-CANDIDATE-ACTIVATION",
+      "rel": "supports",
+      "created_at": "2026-07-18T06:08:24.9091230+00:00"
+    },
+    {
+      "id": "01KXSXE78B263DCJCEKX9DMREY",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-EMBEDDED-STORAGE",
+      "rel": "supports",
+      "created_at": "2026-07-18T06:08:25.3566067+00:00"
+    },
+    {
+      "id": "01KXSXX2SHX85DA7JNVBAG1Q2W",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-RECOVERY-STORAGE",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:16:32.3060322+00:00"
+    },
+    {
+      "id": "01KXSXVCA982M89QY1EDMC2SVZ",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-VERIFIED-RECOVERABILITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:15:36.5225102+00:00"
+    }
+  ]
+}

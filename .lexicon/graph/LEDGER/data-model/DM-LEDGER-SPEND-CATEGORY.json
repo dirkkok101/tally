@@ -1,0 +1,37 @@
+{
+  "id": "01KXSX0RXQS0HJPM9092VHE2P0",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DM-LEDGER-SPEND-CATEGORY",
+  "name": "SpendCategory",
+  "description": [
+    "Flat user-maintained spend category with lifecycle retained for historical allocations."
+  ],
+  "schema_def": [
+    "spend_category",
+    "- id: ULID text, primary key",
+    "- name: text, required",
+    "- normalizedName: text, required",
+    "- status: enum {active,archived}",
+    "- createdAt: trusted UTC instant",
+    "- archivedAt: nullable trusted UTC instant",
+    "Constraints: flat catalogue only; active normalized name unique; archived categories reject new assignment/correction; reactivation is attributable; RESTRICT historical references.",
+    "Pre-implementation gate: OQ-LEDGER-6 must resolve from representative real-account categorization examples before this model or allocation contracts are implemented."
+  ],
+  "created_at": "2026-07-18T06:01:04.6964709+00:00",
+  "links": [
+    {
+      "id": "01KXSXDMYSNPARREA5Q86K7Z7J",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-CATALOGUE",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:06.6185921+00:00"
+    },
+    {
+      "id": "01KXSXPJTS8P5X35DEP3NN3TGK",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-6",
+      "rel": "motivated-by",
+      "created_at": "2026-07-18T06:12:59.3545707+00:00"
+    }
+  ]
+}

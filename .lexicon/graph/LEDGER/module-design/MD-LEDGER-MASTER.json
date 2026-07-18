@@ -1,0 +1,668 @@
+{
+  "id": "01KXSX4QZEPRQ0R5D3936TW3GA",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "MD-LEDGER-MASTER",
+  "title": "Financial Ledger technical design",
+  "slug": "MASTER",
+  "content": [
+    "# Financial Ledger technical design",
+    "",
+    "## Outcome",
+    "",
+    "LEDGER is a local, agent-first finance core delivered as a .NET 10 Native-AOT command-line executable with one embedded SQLite store and no daemon, listener, hosted dependency, or external database. It records owned accounts, flat spend categories, immutable account movements, attributable corrections, explicit transfer/refund relationships, and exact actuals. INGEST, CLASSIFY, BUDGET, INSIGHTS, and CHANNELS consume this stable contract but own their respective parsing, inference, planning, reporting, and human-delivery concerns.",
+    "",
+    "The selected architecture adapts the reusable intent of Actions and CORE: vertical slices, CQRS-light class separation, explicit DI, CommandResult, stable errors, and pure mapping. It deliberately does not carry over FastEndpoints, HTTP, Aspire, PostgreSQL, EF Core, IDbContextFactory, RLS, tenancy, Angular, grid DTOs, seeds, permissions, navigation, menus, translations, frontend key models, or browser tests.",
+    "",
+    "## System and component shape",
+    "",
+    "One process contains six code zones:",
+    "",
+    "1. Cli — parses explicit resource commands and the versioned envelope, resolves an OperationDescriptor, and maps one Ledger result to stdout, stderr, and an exit category.",
+    "2. Contracts/Ledger — concrete source-generated JSON request/result/error/schema types. Public types never expose SQLite, paths, SQL, implementation exceptions, or provider classes.",
+    "3. Features/Ledger — commands and queries grouped by the five feature areas. Commands own validation and transaction boundaries; queries do not mutate durable domain state.",
+    "4. Domain/Ledger — Money, date, lifecycle, relationship, and actuals policies as pure deterministic code.",
+    "5. Infrastructure/Storage — concrete Microsoft.Data.Sqlite connection, SQL, migrations, generation management, artifacts, and narrow host adapters.",
+    "6. Bootstrap/Skills — explicit DI/operation registration and embedded provider skill bundles.",
+    "",
+    "The executable may ship with the adjacent maintained native SQLite library as Lex does. It still has one application process, one local data root, and no database server.",
+    "",
+    "## Public command contract",
+    "",
+    "The explicit CLI path and stable operation ID are both generated from one registry.",
+    "",
+    "| CLI family | Stable operations |",
+    "|---|---|",
+    "| tally ledger account | ledger.account.create, get, list, rename, archive |",
+    "| tally ledger category | ledger.category.create, get, list, rename, archive, reactivate |",
+    "| tally ledger transaction | ledger.transaction.record, get, void, supersede |",
+    "| tally ledger transaction category | ledger.transaction.category.assign, correct |",
+    "| tally ledger transfer | ledger.transfer.confirm, revoke, replace |",
+    "| tally ledger refund | ledger.refund.confirm, revoke, replace |",
+    "| tally ledger relationship | ledger.relationship.get |",
+    "| tally ledger actuals | ledger.actuals.query |",
+    "| tally ledger backup | ledger.backup.create, verify |",
+    "| tally ledger restore | ledger.restore.prepare, activate |",
+    "| tally ledger storage | ledger.storage.status, evolution.prepare, evolution.activate |",
+    "| tally schema | system.schema.list, system.schema.show |",
+    "| tally version | system.version |",
+    "| tally skill | system.skill.list, check, install |",
+    "",
+    "There is no public generic invoke, save, update, delete, SQL, or database command. No aliases ship in v1. DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS, DM-LEDGER-TRANSACTION-CONTRACTS, DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS, DM-LEDGER-RECOVERY-STORAGE-CONTRACTS, and DM-LEDGER-SYSTEM-SKILL-CONTRACTS define the exact input, result, and stable domain-error set for every operation above; the common envelope and cross-operation errors live in DM-LEDGER-OPERATION-DESCRIPTOR. Unknown fields are rejected, so planning must implement these named schemas rather than an open dictionary or generic payload.",
+    "",
+    "Mutations and complex queries use explicit JSON input: --input - for stdin or --input @file. The explicit marker prevents an absent pipe from blocking unexpectedly. Small read selectors may use named options. Mutation identity is supplied by --idempotency-key; the request envelope contains contractVersion, actor context, and input. Actor context is attribution, not authentication; the runtime also captures trusted OS identity and time.",
+    "",
+    "Money enters and leaves as a canonical string such as \"-123.45\". Dates are yyyy-MM-dd. Unknown fields, JSON numeric money, exponents, excessive scale, negative zero, and overflow fail before storage access.",
+    "",
+    "Every operation writes exactly one result envelope to stdout. Success has contractVersion, operationId, outcome=success, and a stable result. Expected failure has outcome=error plus code, category, safe message, and optional field metadata. Diagnostics go to stderr and contain only safe metadata and a correlation reference; no descriptions, financial payloads, credentials, unmasked account identifiers, request/response serialization, or stack traces. Exit categories are: 0 success; 2 CLI/schema usage; 3 validation; 4 not found; 5 conflict or busy; 6 invalid lifecycle/relationship transition; 7 contract/skill/cursor/storage-version incompatibility; 8 integrity/backup/candidate/activation failure; 9 permission/disk/host-resource failure; 10 sanitized unexpected failure. Structured error code is authoritative.",
+    "",
+    "## Application flows",
+    "",
+    "### Mutation flow",
+    "",
+    "CLI adapter -> descriptor/request mapper -> typed command handler -> concrete LedgerDb write transaction -> pure policy -> SQL facts/history/idempotency -> commit -> stable LedgerResult -> process envelope.",
+    "",
+    "Boundary validation happens before the key is consumed. Domain mutation, attributable lifecycle events, and IdempotencyRecord commit together. Expected errors return CommandResult rather than throw. CancellationToken flows through every asynchronous boundary.",
+    "",
+    "### Query and snapshot flow",
+    "",
+    "Ordinary get/list flow is CLI adapter -> descriptor/request mapper -> typed query handler -> read-only SQLite connection -> concrete projection -> result mapper -> process envelope.",
+    "",
+    "The first actuals page is deliberately different because it creates ephemeral snapshot rows. After boundary validation it acquires the single-writer lock and starts one SQLite BEGIN IMMEDIATE transaction. That same transaction reads active facts, allocations, and relationships, computes exact projection and full-set totals, inserts QuerySnapshot and QuerySnapshotItem rows, and commits before returning a cursor. Busy before acquisition returns LEDGER-SNAPSHOT-BUSY; a crash or cancellation before commit leaves no cursor and no partial snapshot. This is an internal cache write, not a durable domain mutation, and therefore has no public idempotency key. Later cursor pages are read-only.",
+    "",
+    "### Backup and recovery flow",
+    "",
+    "Backup creation acquires the writer lock, creates a consistent online-backup snapshot into a private staging artifact, checks integrity, foreign keys, schema, durable counts, exact totals, correction chains, relationships, and idempotency outcomes, writes a checksum manifest, flushes, and atomically publishes. Verification repeats these checks independently and never mutates the Ledger.",
+    "",
+    "Restore and storage evolution are two-stage. Prepare creates a separate generation, restores or migrates there, and returns a candidate plus immutable verification fingerprint. Activate requires explicit replacement authorization and the expected current fingerprint; it revalidates under the exclusive lock and atomically replaces the owner-only CURRENT pointer. The old generation remains the recovery point. A failure before pointer replacement leaves the old generation current; after replacement the verified candidate is current. Startup rejects missing, malformed, or unverified generations and reports a recovery action without guessing.",
+    "",
+    "## Persistence and financial semantics",
+    "",
+    "The private data root contains generation directories, one CURRENT pointer, retained recovery generations, and manifests. The selected linux-x64 host contract requires a 0700 data root and 0600 database, WAL, SHM, candidate, manifest, and backup artifacts. The root must be on a host-encrypted volume with OS-managed keys. Stock SQLite encryption is not claimed, and Tally contains no custom crypto. The guest-visible root is plain ext4 and does not itself prove encryption; production use requires verifiable cloud-provider encryption evidence or a separately encrypted data volume.",
+    "",
+    "SQLite settings are foreign_keys=ON, journal_mode=WAL, busy_timeout, and synchronous=FULL for durable finance writes. PRAGMA user_version selects ordered immutable migrations. One exclusive writer is the supported trust/concurrency model; a second writer returns a stable busy/conflict result rather than proceeding unsafely.",
+    "",
+    "Signed amount is the owned-account balance delta. ZAR is represented internally and in SQLite as Int64 cents. Transactions are insert-only; dates and original descriptions are source facts. Effective Date is posting date when present, otherwise transaction date. Account/category rename and archival/reactivation append attributable catalogue lifecycle rows. Void/supersede, category correction, and relationship correction append their own lifecycle/history rows. The public and persisted transaction provenance enum is exactly {manual_agent, statement_import, other}; adapters do not infer or translate between a second vocabulary.",
+    "",
+    "Transfers require two active distinct-account transactions with equal-and-opposite principal and explicit outflow/inflow roles. Refunds name original and refund transactions explicitly, enforce role exclusivity and cumulative magnitude, and may make later-period net spend negative. Net Account Movement is the signed selected sum. External Spend is qualifying outflow magnitude minus active in-set refund magnitude, excluding transfer principal and unrelated inflows. Budget Actual applies that formula to the active category allocation. BUDGET owns budget amounts and performance.",
+    "",
+    "## Snapshot pagination",
+    "",
+    "The first actuals request canonicalizes filters, then under the single-writer lock uses one BEGIN IMMEDIATE transaction to read a coherent active state, compute stable full-set exact totals, and materialize every returned projection in QuerySnapshotItem rows ordered by Effective Date descending then Transaction ULID descending. Commit succeeds before the opaque cursor and explicit expiry are emitted. A concurrent writer receives the normal stable busy outcome; a crash before commit creates no usable cursor or partial snapshot.",
+    "",
+    "Later requests supply only that cursor and use read-only connections; filters with a cursor fail schema validation. Cursor version, contract version, filter hash, generation fingerprint, and expiry are checked. Snapshot tables are derived ephemeral cache, cleaned opportunistically, excluded from backup and Durable Ledger State, and never require a daemon. Snapshot creation does not consume a mutation idempotency key because it changes no durable domain state and a failed invocation cannot expose its uncommitted cursor.",
+    "",
+    "## Interface and mapping economics",
+    "",
+    "The only general application interfaces are ICommandHandler<TCommand,TResult> and IQueryHandler<TQuery,TResult>. Destructive platform seams are IAuthoritativeStoreActivator and IHostArtifactProtection. TimeProvider is used directly. LedgerDb, SQLite connections, SQL, serialization, hashes, IDs, pure calculators, and mappers remain concrete. There is no ILedgerRepository<T>, provider-neutral unit of work, mediator, event bus, IFileSystem, generic mapper interface, or migration interface until a second implementation creates a real substitution need.",
+    "",
+    "Boundary mappers normalize public contracts to domain values without database access. Row mappers are pure concrete transformers. Commands, not mappers, own business errors and orchestration. This preserves the CORE DTOMapper/EntityMapper intent without copying the Actions EF upsert model.",
+    "",
+    "## Feature boundaries and dependencies",
+    "",
+    "- Contract and Skills: operation registry, help/schema, process behavior, compatibility, bundled skills.",
+    "- Accounts and Categories: account/category state plus persisted attributable lifecycle events and historical RESTRICT references.",
+    "- Transactions and Allocations: immutable facts, correction history, active allocation.",
+    "- Relationships and Actuals: transfer/refund lifecycle, classification, totals, snapshots.",
+    "- Recovery and Storage: SQLite, permissions, backups, restore, migration, generation activation.",
+    "",
+    "INGEST, CLASSIFY, BUDGET, INSIGHTS, and CHANNELS depend on LEDGER. LEDGER has no runtime dependency on them. Web/WhatsApp timing remains deferred to CHANNELS. If CHANNELS later chooses web, that module owns PostgreSQL, EF Core, latest stable .NET/Angular, NxGN UI, authentication/authorization, navigation, translations, frontend key models, and browser workflows; it must not retrofit those surfaces into LEDGER.",
+    "",
+    "## CORE surface compliance matrix",
+    "",
+    "| Required design axis | LEDGER obligation or explicit non-applicability |",
+    "|---|---|",
+    "| Save/upsert | Rejected. Create, rename, archive/reactivate, void/supersede, assign/correct, confirm/revoke/replace are separate operations with narrow schemas. |",
+    "| Get detail | account/category/transaction/relationship get operations return stable detail/history projections. |",
+    "| GetGridList | No grid/UI. actuals query is the paged filtered finance projection; account/category list are bounded catalogues. |",
+    "| GetLookupList | account and category list can provide stable lightweight selections to downstream callers; there is no UI-specific lookup DTO in LEDGER. |",
+    "| Delete/bulk delete | Omitted. Financial and catalogue history uses archive, void, supersede, revoke, and replace. |",
+    "| Domain command endpoints | Represented as CLI operations, not HTTP endpoints. Transfer, refund, correction, restore, evolution, and skill install use typed commands. |",
+    "| DTOs and frontend key models | Concrete versioned CLI contracts live in Contracts/Ledger. Frontend key models are absent and owned by a future CHANNELS design. |",
+    "| Commands and queries | Every operation maps to one explicit handler. Ordinary queries are read-only. The actuals first page creates an excluded ephemeral cache atomically in one BEGIN IMMEDIATE transaction; it never mutates Durable Ledger State. |",
+    "| DTOMapper and EntityMapper | Pure concrete boundary and row mappers; no EF change tracking, upsert mapper, or EntityMapperResult. |",
+    "| DbContext factory/optional context | Not applicable because raw SQLite is deliberate. LedgerDb owns explicit connections and caller-owned transactions. |",
+    "| Expected paths | Concrete greenfield obligations are listed below; Lex 0.5.3 cannot mark them planned without a false missing-path warning. |",
+    "| Permissions/roles/auth seeds | Not applicable to the single OS identity trust boundary. No application users, tenants, permissions, role templates, or auth fixtures. |",
+    "| Nav/menu/translations/frontend fixtures | Not applicable in LEDGER. CHANNELS owns all human navigation, UI strings, NxGN UI integration, and browser fixtures. |",
+    "| Business seed data/persona seed verification | No accounts, categories, or transactions are seeded. Empty-store initialization is deterministic; acceptance fixtures are test-only. |",
+    "| UI ownership | NG4 and OQ-LEDGER-11 record CHANNELS as the downstream owner. LEDGER has no mockups, routes, components, frontend services, or browser tests. |",
+    "",
+    "## Inherited prior-art compliance",
+    "",
+    "| Inherited item | Disposition |",
+    "|---|---|",
+    "| ADR-CORE-0010 CommandResult | Adapted: preserve success/failure value shape; replace HTTP status with exit category. |",
+    "| ADR-CORE-0021 explicit DI | Adopted: all handlers and descriptors registered explicitly; no reflection scanning. |",
+    "| ADR-CORE-0024 vertical slice | Adopted: group by Ledger use case and keep one executable. |",
+    "| ADR-CORE-0025 error handling | Adopted: expected outcomes are stable results, unexpected exceptions sanitized once. |",
+    "| ADR-CORE-0004 enums over strings | Adopted internally and at schemas where closed values exist. |",
+    "| ADR-CORE-0020 RESTRICT delete | Adopted for historical financial references; no public hard delete. |",
+    "| ADR-CORE-0022 pure EntityMapper | Adapted to pure boundary/row mappers; no EF EntityMapperResult. |",
+    "| ADR-CORE-0016 PascalCase database columns | Rejected: direct SQLite uses stable snake_case SQL identifiers. |",
+    "| ADR-CORE-0018 EF configurations | Not applicable: no EF Core in LEDGER. |",
+    "| ADR-CORE-0027 DbContext factory | Not applicable: no EF Core or hosted parallel request pipeline. |",
+    "| Actions FastEndpoints/Aspire/PostgreSQL/RLS/tenant/UI patterns | Rejected by C1, C5, C6, and NG4/NG6. |",
+    "| Lex Native-AOT/raw SQLite/embedded skill pattern | Adopted and strengthened with finance-specific host protection and verified generation activation. |",
+    "",
+    "## Test architecture",
+    "",
+    "- Pure unit tests cover Money parsing/formatting/overflow, effective dates, lifecycle state machines, transfer/refund cardinality and conservation, allocations, and exact actuals.",
+    "- Handler integration tests use real temporary SQLite stores and exercise constraints, transactions, idempotency, snapshots, backup, restore, and migrations. SQL behavior is not mocked.",
+    "- Published-binary process tests validate every descriptor, help/schema generation, JSON stdin, stdout/stderr isolation, structured errors, exit categories, offline operation, and no orphan process.",
+    "- Recovery tests inject failures before/after database commit, artifact flush/publication, candidate validation, and CURRENT replacement. Only the activation and host-protection ports are substituted; supported-host tests also exercise real permissions and atomic rename.",
+    "- Security tests inspect 0700/0600 artifacts and scan diagnostic/error canaries for descriptions, identifiers, credentials, and payload serialization.",
+    "- Performance tests use 100000 active transactions and enforce actuals first-page/full totals under 2 seconds p95 and ordinary writes under 1 second p95.",
+    "- Recovery drills compare every Durable Ledger State type, exact totals, relationships, history, and idempotency outcomes.",
+    "",
+    "Existing planned FR contract test cases remain the primary trace anchors. Design-specific unit/integration/process cases are added during planning without replacing them.",
+    "",
+    "## Planned implementation locations",
+    "",
+    "The repository is greenfield, so these are obligations rather than current files:",
+    "- src/Tally/Tally.csproj",
+    "- src/Tally/Cli and Contracts/Ledger",
+    "- src/Tally/Features/Ledger/<feature-area>",
+    "- src/Tally/Domain/Ledger",
+    "- src/Tally/Infrastructure/Storage",
+    "- src/Tally/Bootstrap and Skills",
+    "- tests/Tally.Tests",
+    "",
+    "Lex decision expected-path metadata is intentionally not populated before implementation because version 0.5.3 treats every truthful greenfield path as a present-time missing-path warning. The paths above remain reviewable canonical design content until planning creates the corresponding tasks.",
+    "",
+    "## Pre-implementation evidence gates",
+    "",
+    "Planning must create validation tasks for OQ-LEDGER-1 through OQ-LEDGER-6 before it creates implementation tasks that depend on their outcomes. No affected implementation task may start until its gate is resolved from representative samples covering all three accounts and both banks. If evidence invalidates an accepted assumption, planning first updates the affected requirement, decision, data model, operation contract, and tests.",
+    "",
+    "| Gate | Evidence required | Implementation slices blocked |",
+    "|---|---|---|",
+    "| OQ-LEDGER-1 | Currency fields and values from representative statements for all three accounts | Money, transaction recording, actuals totals, account currency |",
+    "| OQ-LEDGER-2 | Debit/credit and signed amount samples from both banks reconciled to owned-account balance delta | Transaction signedAmount, transfer/refund roles, all actuals formulas |",
+    "| OQ-LEDGER-3 | Transaction/value/posting date fields and ordering examples from both banks | Effective Date derivation, transaction contract, actuals filtering/order/snapshots |",
+    "| OQ-LEDGER-4 | Product type and displayed account metadata for all three accounts | Account type enum, account create/detail contracts, account persistence |",
+    "| OQ-LEDGER-5 | Representative transfer, refund/reversal, and cash-withdrawal cases with expected classifications | Relationship rules/contracts, lifecycle corrections, External Spend and Budget Actual |",
+    "| OQ-LEDGER-6 | Representative categorization needs, including archive/correction cases | Category catalogue, allocation cardinality/history, categorized actuals |",
+    "",
+    "OQ-LEDGER-11 remains owned by CHANNELS and does not block this local finance core."
+  ],
+  "origin": "Approved LEDGER PRD, inherited CORE graph, Actions prior art, Lex 0.5.3 implementation, and OQ-LEDGER-8 spike",
+  "status": "current",
+  "created_at": "2026-07-18T06:03:14.7999920+00:00",
+  "links": [
+    {
+      "id": "01KXSX4QZHGBBCKCNWT0XDS9S6",
+      "target_type": "adr",
+      "target": "ADR-CORE-0004",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:03:14.8014238+00:00"
+    },
+    {
+      "id": "01KXSX4QZGG5E8Z7AV2QDMB0C8",
+      "target_type": "adr",
+      "target": "ADR-CORE-0010",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:03:14.8008072+00:00"
+    },
+    {
+      "id": "01KXSX4QZH4C924RVT6PM13VQ0",
+      "target_type": "adr",
+      "target": "ADR-CORE-0016",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:03:14.8017551+00:00"
+    },
+    {
+      "id": "01KXSX4QZHVFBMCJ4FNBBWA5J1",
+      "target_type": "adr",
+      "target": "ADR-CORE-0018",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:03:14.8018659+00:00"
+    },
+    {
+      "id": "01KXSX4QZHMAJDH38BMSZXS9YC",
+      "target_type": "adr",
+      "target": "ADR-CORE-0020",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:03:14.8015571+00:00"
+    },
+    {
+      "id": "01KXSX4QZHM880488V2BRBDVQB",
+      "target_type": "adr",
+      "target": "ADR-CORE-0021",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:03:14.8010774+00:00"
+    },
+    {
+      "id": "01KXSX4QZHD23Z3Q02909ZPARW",
+      "target_type": "adr",
+      "target": "ADR-CORE-0022",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:03:14.8016579+00:00"
+    },
+    {
+      "id": "01KXSX4QZHT9JS85Y6EVH26MA1",
+      "target_type": "adr",
+      "target": "ADR-CORE-0024",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:03:14.8012185+00:00"
+    },
+    {
+      "id": "01KXSX4QZHF8XKKTXQKGWVSD1K",
+      "target_type": "adr",
+      "target": "ADR-CORE-0025",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:03:14.8013093+00:00"
+    },
+    {
+      "id": "01KXSX4QZHYFZ31NJ3PDP57YP2",
+      "target_type": "adr",
+      "target": "ADR-CORE-0027",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:03:14.8019798+00:00"
+    },
+    {
+      "id": "01KXSXCE85K04ZME04A762TQ52",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-APPLICATION-ARCHITECTURE",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:26.9828965+00:00"
+    },
+    {
+      "id": "01KXSXCEPHY3KQYFCZA264X0RK",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-CANDIDATE-ACTIVATION",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:27.4427866+00:00"
+    },
+    {
+      "id": "01KXSXCF4FKW5QVBMY6D9HYDZY",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-CLI-OPERATION-CONTRACT",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:27.8881076+00:00"
+    },
+    {
+      "id": "01KXSXCFKC7003D7XJM9Y78M9D",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-EMBEDDED-STORAGE",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:28.3652118+00:00"
+    },
+    {
+      "id": "01KXSXCG2V3461J346X3P948R2",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-FINANCIAL-REPRESENTATION",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:28.8599376+00:00"
+    },
+    {
+      "id": "01KXSXCGJ0DSJ4ENNN06PBRB1G",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-IDEMPOTENT-MUTATIONS",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:29.3455935+00:00"
+    },
+    {
+      "id": "01KXSXCH0AFQ004YH55BWNB7WJ",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:29.8029344+00:00"
+    },
+    {
+      "id": "01KXSXCHFWZQGZ49ACTJ171GSH",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-SKILL-COMPATIBILITY",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:30.3018675+00:00"
+    },
+    {
+      "id": "01KXSXCHYSP9KYVYGX824EBTXA",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-SNAPSHOT-ACTUALS",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:30.7782500+00:00"
+    },
+    {
+      "id": "01KXSXCRZSP8PMH2V36778PYHJ",
+      "target_type": "design_diagram",
+      "target": "DIAG-LEDGER-ACTUALS-SNAPSHOT-SEQUENCE",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:37.9815753+00:00"
+    },
+    {
+      "id": "01KXSXCSDR4PNVKJ9TEARMJ9CT",
+      "target_type": "design_diagram",
+      "target": "DIAG-LEDGER-COMPONENTS",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:38.4255728+00:00"
+    },
+    {
+      "id": "01KXSXCSX6CP1QTZ6FGWMQEHQ9",
+      "target_type": "design_diagram",
+      "target": "DIAG-LEDGER-LEDGER-ER",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:38.9192947+00:00"
+    },
+    {
+      "id": "01KXSXCTCQT57C5BXPET7C4DE8",
+      "target_type": "design_diagram",
+      "target": "DIAG-LEDGER-MUTATION-SEQUENCE",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:39.4164590+00:00"
+    },
+    {
+      "id": "01KXSXCTTJHK1RWPMS1YJ7EFCP",
+      "target_type": "design_diagram",
+      "target": "DIAG-LEDGER-RECOVERY-WORKFLOW",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:39.8592879+00:00"
+    },
+    {
+      "id": "01KXSXCJEYXCBSMMVK6P8DJBFX",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-ACCOUNT",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:31.2950703+00:00"
+    },
+    {
+      "id": "01KXSYJ8BQ60W20601KBDC6ARB",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:28:06.1351993+00:00"
+    },
+    {
+      "id": "01KXSYV3KNQA4H13WDEVW1KN9X",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-CATALOGUE-LIFECYCLE",
+      "rel": "references",
+      "created_at": "2026-07-18T06:32:56.1828845+00:00"
+    },
+    {
+      "id": "01KXSXCJXG4YJFRQRM4YN8X046",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:31.7613940+00:00"
+    },
+    {
+      "id": "01KXSXCKBYF4K787PGP5KC4HWE",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-IDEMPOTENCY-RECORD",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:32.2235644+00:00"
+    },
+    {
+      "id": "01KXSXCKVVVJE2AJ8Y2SQYC8ZG",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:32.7325942+00:00"
+    },
+    {
+      "id": "01KXSXCMCG7GGP77WXBH99CMG3",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-QUERY-SNAPSHOT",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:33.2660426+00:00"
+    },
+    {
+      "id": "01KXSYJ8BQZR7CD2RWCM95P9FV",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:28:06.1356437+00:00"
+    },
+    {
+      "id": "01KXSYJ8BQ6XZ8BD1B219T8EJ4",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:28:06.1355342+00:00"
+    },
+    {
+      "id": "01KXSXCMVA116AS0YJ9J794ARV",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-SPEND-CATEGORY",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:33.7391866+00:00"
+    },
+    {
+      "id": "01KXSXCNCAW2PMWSCFYNGZ2HYT",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-STORE-GENERATION",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:34.2838135+00:00"
+    },
+    {
+      "id": "01KXSYJ8BQEB20RPKR6WPYKV5Q",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-SYSTEM-SKILL-CONTRACTS",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:28:06.1357356+00:00"
+    },
+    {
+      "id": "01KXSYJ8BQMH72NBTZGPPSPKPW",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:28:06.1354092+00:00"
+    },
+    {
+      "id": "01KXSXCNT6463JN49D0EP68S0R",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-TRANSACTION-FACT",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:34.7277479+00:00"
+    },
+    {
+      "id": "01KXSXCP8NXFSPHS3VM7J2R99Q",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-TRANSACTION-HISTORY",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:35.1900918+00:00"
+    },
+    {
+      "id": "01KXSXCPQ2T3XXKGQ2TK5QEP35",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-ACCOUNTS-CATEGORIES",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:35.6512175+00:00"
+    },
+    {
+      "id": "01KXSXCQ6CJKEDZFHJM76B27YB",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-CONTRACT-SKILLS",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:36.1418395+00:00"
+    },
+    {
+      "id": "01KXSXCQNJ7NC9WWBYP7W98456",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-RECOVERY-STORAGE",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:36.6275937+00:00"
+    },
+    {
+      "id": "01KXSXCR47Y3GBSP5H18JY0QMP",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-RELATIONSHIPS-ACTUALS",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:37.0958177+00:00"
+    },
+    {
+      "id": "01KXSXCRHV6JHTG9WNR972QFCB",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-TRANSACTIONS-ALLOCATIONS",
+      "rel": "references",
+      "created_at": "2026-07-18T06:07:37.5323074+00:00"
+    },
+    {
+      "id": "01KXSXCV93CAP2RV13VMED0TMZ",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACCOUNT-MAINTENANCE",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:40.3240402+00:00"
+    },
+    {
+      "id": "01KXSXCVQZQENG1G97WV1WP0V3",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACTUALS-QUERY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:40.8006266+00:00"
+    },
+    {
+      "id": "01KXSXCW66ZG5RDP83MV0YTDYG",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-BACKUP-VERIFICATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:41.2555137+00:00"
+    },
+    {
+      "id": "01KXSXCWM39SYJ6YEJSA5W3G70",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-ASSIGNMENT",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:41.7005906+00:00"
+    },
+    {
+      "id": "01KXSXCX1PJ5SMSEN6EEH86HHA",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-CATALOGUE",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:42.1350857+00:00"
+    },
+    {
+      "id": "01KXSXCXFFHXV9F6BM8S9S8J48",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:42.5759946+00:00"
+    },
+    {
+      "id": "01KXSXCXYHTGATQN2GR56BRA0P",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-IDEMPOTENT-WRITES",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:43.0581576+00:00"
+    },
+    {
+      "id": "01KXSXCYE10E7G8ECE5NM528XW",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-REFUND-CONFIRMATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:43.5541011+00:00"
+    },
+    {
+      "id": "01KXSXCYXQQ7G6FMHBRAJFENMT",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-RELATIONSHIP-CORRECTION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:44.0564657+00:00"
+    },
+    {
+      "id": "01KXSXCZD2AVYBT9PA6XS4J4PJ",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SAFE-RESTORE",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:44.5478536+00:00"
+    },
+    {
+      "id": "01KXSXCZV5CB61S700BX31FJJ7",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SAFE-STORAGE-EVOLUTION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:44.9985290+00:00"
+    },
+    {
+      "id": "01KXSXD0B08ZFZJEZHB07YBEFT",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SKILL-COMPATIBILITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:45.5053169+00:00"
+    },
+    {
+      "id": "01KXSXD0ST62R68T6YW8K7XFT4",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SNAPSHOT-PAGINATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:45.9796354+00:00"
+    },
+    {
+      "id": "01KXSXD17SK2CK5W501PNWDM2D",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-STRUCTURED-INVOCATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:46.4261495+00:00"
+    },
+    {
+      "id": "01KXSXD1ND3B7VQJ2DNXY38N3S",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-TRANSACTION-CORRECTION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:46.8627804+00:00"
+    },
+    {
+      "id": "01KXSXD246BZ3APP6Q7TNPX2DA",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-TRANSACTION-RECORDING",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:47.3350179+00:00"
+    },
+    {
+      "id": "01KXSXD2HWK0PAGS4FCM645Z1B",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-TRANSFER-CONFIRMATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:47.7731469+00:00"
+    },
+    {
+      "id": "01KXSX4QZJAYD8ZHS034TANDKS",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-1",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:03:14.8021067+00:00"
+    },
+    {
+      "id": "01KXSX4QZJTMZFYZD238JYQ1G6",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-11",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:03:14.8023074+00:00"
+    },
+    {
+      "id": "01KXSYJ8BSMBV734P7S2D8FBWX",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-2",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:28:06.1370036+00:00"
+    },
+    {
+      "id": "01KXSYJ8BSMGPNP69HC6WPNG3E",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-3",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:28:06.1371184+00:00"
+    },
+    {
+      "id": "01KXSYJ8BS05NB946TNFQEZVVQ",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-4",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:28:06.1371901+00:00"
+    },
+    {
+      "id": "01KXSYJ8BST61P94XH3REPC15C",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-5",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:28:06.1372598+00:00"
+    },
+    {
+      "id": "01KXSX4QZJHYGVR3EWRESDHBZV",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-6",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:03:14.8021916+00:00"
+    }
+  ]
+}

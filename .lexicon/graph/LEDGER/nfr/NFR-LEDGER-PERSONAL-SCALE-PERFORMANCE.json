@@ -29,6 +29,13 @@
       "target": "FR-LEDGER-STRUCTURED-INVOCATION",
       "rel": "supports",
       "created_at": "2026-07-18T04:27:58.9544392+00:00"
+    },
+    {
+      "id": "01KXSXHDGP3DX21MED6GYK8NYF",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-PERSONAL-SCALE-PERFORMANCE",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:10:10.0717563+00:00"
     }
   ]
 }

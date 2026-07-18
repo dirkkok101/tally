@@ -1,0 +1,45 @@
+{
+  "id": "01KXSX0SK0MJ04VKFJG66C4VRD",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
+  "name": "TransactionLifecycleAndAllocation",
+  "description": [
+    "Append-only transaction correction and category allocation history."
+  ],
+  "schema_def": [
+    "transaction_lifecycle_event",
+    "- id: ULID text, primary key",
+    "- transactionId: TransactionFact.id, RESTRICT",
+    "- eventType: enum {voided,superseded}",
+    "- replacementTransactionId: TransactionFact.id, nullable, required only for superseded",
+    "- reason: text, required",
+    "- occurredAt: trusted UTC instant",
+    "- actorContext: attributable metadata",
+    "category_allocation",
+    "- id: ULID text, primary key",
+    "- transactionId: TransactionFact.id, RESTRICT",
+    "- categoryId: SpendCategory.id, RESTRICT",
+    "- state: enum {active,retired}",
+    "- replacesAllocationId: nullable self reference",
+    "- reason: text, required for correction",
+    "- createdAt/retiredAt and actorContext",
+    "Constraints: one terminal transaction lifecycle; one active allocation per active transaction; corrections append and retire atomically; supersession does not migrate relationships."
+  ],
+  "created_at": "2026-07-18T06:01:05.3772431+00:00",
+  "links": [
+    {
+      "id": "01KXSXDPTVECJKV4F4Q2GFYTT3",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-ASSIGNMENT",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:08.5401535+00:00"
+    },
+    {
+      "id": "01KXSXDPC64YQKKEGEJYW43HJE",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-TRANSACTION-CORRECTION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:08.0719266+00:00"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "id": "01KXSX8ZPZ82S8K9T04V2B56YZ",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DIAG-LEDGER-MUTATION-SEQUENCE",
+  "title": "Idempotent Ledger mutation sequence",
+  "diagram_type": "sequence",
+  "format": "mermaid",
+  "content": [
+    "sequenceDiagram",
+    "  participant A as Agent",
+    "  participant C as CLI Adapter",
+    "  participant R as Operation Registry",
+    "  participant H as Typed Command Handler",
+    "  participant D as LedgerDb",
+    "  A->>C: command, contract, idempotency key, JSON",
+    "  C->>R: resolve descriptor and schema",
+    "  R-->>C: concrete request and handler",
+    "  C->>H: validated command plus actor",
+    "  H->>D: begin exclusive write transaction",
+    "  D-->>H: prior idempotency outcome or state",
+    "  alt identical replay",
+    "    H-->>C: original stable result",
+    "  else changed request for same identity",
+    "    H-->>C: conflict result",
+    "  else new valid mutation",
+    "    H->>H: apply pure policies",
+    "    H->>D: facts plus history plus idempotency result",
+    "    D-->>H: commit exactly once",
+    "    H-->>C: stable success",
+    "  end",
+    "  C-->>A: one stdout envelope and exit category"
+  ],
+  "created_at": "2026-07-18T06:05:33.7920234+00:00",
+  "links": [
+    {
+      "id": "01KXSXE6CDA2DMKA81C1GWGTJC",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-IDEMPOTENT-MUTATIONS",
+      "rel": "supports",
+      "created_at": "2026-07-18T06:08:24.4621396+00:00"
+    },
+    {
+      "id": "01KXSXX1BNGE4EETGF5Y5M254K",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-CONTRACT-SKILLS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:16:30.8381327+00:00"
+    },
+    {
+      "id": "01KXSXVBTZQ3XTPXNPP51EMGXA",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-IDEMPOTENT-WRITES",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:15:36.0329682+00:00"
+    }
+  ]
+}

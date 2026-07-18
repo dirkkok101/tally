@@ -4,11 +4,11 @@
   "ref_code": "EXT-LEDGER-HOST-OS-SECURITY",
   "name": "Host OS Storage and Key Protection",
   "description": [
-    "Bidirectional local platform dependency: supplies filesystem permissions, atomic file behavior, optional full-disk or volume encryption, and platform key protection used by the accepted storage posture. It receives no online-banking credentials; behavior must be validated by the OQ-LEDGER-8 spike."
+    "Integration contract validated by official SQLite/Microsoft provider documentation and the linux-x64 permission/recovery spike: the host owns encrypted-volume and key protection; Tally owns owner-only artifacts and verification. Each deployment must still demonstrate that its chosen data root is on a conforming protected volume."
   ],
   "type": "service",
   "owner": "Personal Finance Owner",
-  "metadata": "{\"gate_type\":\"data\",\"validation_basis\":\"source_and_client\",\"validation_status\":\"assumed\"}",
+  "metadata": "{\"gate_type\":\"data\",\"validation_basis\":\"source_and_client\",\"validation_status\":\"validated\"}",
   "created_at": "2026-07-17T17:32:17.0943177+00:00",
   "links": [
     {
@@ -17,6 +17,13 @@
       "target": "OQ-LEDGER-8",
       "rel": "see-also",
       "created_at": "2026-07-17T17:32:17.0948426+00:00"
+    },
+    {
+      "id": "01KXSXHKR9ARFCR1T3QETCQRSY",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-LOCAL-DATA-PROTECTION",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:10:16.4582758+00:00"
     }
   ]
 }

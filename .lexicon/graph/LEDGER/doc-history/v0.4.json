@@ -1,0 +1,9 @@
+{
+  "id": "01KXSYWQERWYQ0JYVZTWKGYX79",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.4",
+  "changes": [
+    "Technical design approved: 9 decisions, 15 data models, 5 feature areas, 5 diagrams, and 25 tests define the agent-first CLI contracts, exact financial semantics, embedded storage, snapshot transactions, verified recovery generations, NFR evidence, and explicit OQ1-OQ6 implementation gates. Zero HTTP endpoints is intentional because CHANNELS owns human interfaces."
+  ],
+  "created_at": "2026-07-18T06:33:49.2738574+00:00"
+}

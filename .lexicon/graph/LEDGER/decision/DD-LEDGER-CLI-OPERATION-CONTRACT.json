@@ -1,0 +1,112 @@
+{
+  "id": "01KXSWZ691B67MGFHJNAQ12FPF",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DD-LEDGER-CLI-OPERATION-CONTRACT",
+  "title": "Explicit resource commands from one operation registry",
+  "description": [
+    "Define the public AI-agent contract and its single source of truth."
+  ],
+  "decision": [
+    "Expose Lex-like resource commands under tally ledger, with stable namespaced operation IDs. Every mutation and complex query accepts one versioned JSON request through explicit stdin or file input; simple read selectors may use named options. Each invocation emits exactly one structured result on stdout, metadata-only diagnostics on stderr, and a stable broad exit category. One explicitly registered OperationDescriptor registry generates dispatch, human help, machine schema, compatibility metadata, and skill manifests."
+  ],
+  "rationale": [
+    "Explicit commands are more discoverable and safer than generic CRUD or a public run operation, while a shared registry prevents help, schema, dispatch, and skills from drifting. Typed transfer, refund, correction, restore, and evolution operations make invalid states hard to express."
+  ],
+  "alternatives": [
+    "A: public describe plus generic run with 25 hidden operation names — parser-minimal but weak shell discovery. B: explicit use-case commands — chosen. C: generic save/update/delete resources — rejected because immutable facts and lifecycle rules need narrow verbs."
+  ],
+  "consequences": [
+    "Released command paths, operation IDs, request/result schemas, errors, and exits are compatibility commitments. No aliases in v1. Unknown fields fail before storage access. Mutations require contract version, actor attribution, and idempotency key. The CLI adapter remains thin and never owns finance rules."
+  ],
+  "status_notes": [
+    "Accepted after three independent interface explorations. Planned implementation areas: src/Tally/Cli, src/Tally/Contracts/Ledger, src/Tally/Bootstrap."
+  ],
+  "status": "accepted",
+  "created_at": "2026-07-18T06:00:12.8343979+00:00",
+  "links": [
+    {
+      "id": "01KXSYN6MGPRTM2JF4R63NPFT4",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
+      "rel": "references",
+      "created_at": "2026-07-18T06:29:42.6739579+00:00"
+    },
+    {
+      "id": "01KXSYNYFHSPWY58NMKX0ZX9DT",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "rel": "references",
+      "created_at": "2026-07-18T06:30:07.0901974+00:00"
+    },
+    {
+      "id": "01KXSYNN9DNZXFK7EZN5WWHDEW",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "rel": "references",
+      "created_at": "2026-07-18T06:29:57.6787726+00:00"
+    },
+    {
+      "id": "01KXSYNEF5Y1ZK7DBGABVC3DJS",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "rel": "references",
+      "created_at": "2026-07-18T06:29:50.6940544+00:00"
+    },
+    {
+      "id": "01KXSYNTEYGX9WY5A8RNW8ZQK2",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-SYSTEM-SKILL-CONTRACTS",
+      "rel": "references",
+      "created_at": "2026-07-18T06:30:02.9756553+00:00"
+    },
+    {
+      "id": "01KXSYN9NTPB1FZB6ZNFHVD1AP",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "rel": "references",
+      "created_at": "2026-07-18T06:29:45.7874853+00:00"
+    },
+    {
+      "id": "01KXSXD30YS65ZWMWPERX0XVDZ",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:48.2550205+00:00"
+    },
+    {
+      "id": "01KXSXD3G2SFFNDXQP41V4NVCM",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-STRUCTURED-INVOCATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:48.7391083+00:00"
+    },
+    {
+      "id": "01KXSXD3Y36Q45RZMCTCH0W7CS",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-AGENT-CONTRACT-STABILITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:49.1888304+00:00"
+    },
+    {
+      "id": "01KXSXNC6F6M5BTR634DHJZ666",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:12:19.7917746+00:00"
+    },
+    {
+      "id": "01KXSXE85HZ6504YAJ13ES79FR",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-CONTRACT-DISCOVERY-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:08:26.2900998+00:00"
+    },
+    {
+      "id": "01KXSXE8PCXPX8PKW0DJGNAYCQ",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-STRUCTURED-INVOCATION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:08:26.8292760+00:00"
+    }
+  ]
+}

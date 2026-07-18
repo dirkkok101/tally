@@ -1,0 +1,63 @@
+{
+  "id": "01KXSWZ8TV62D72R0Z6JDR6EWX",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DD-LEDGER-SKILL-COMPATIBILITY",
+  "title": "Executable-owned versioned skill bundles",
+  "description": [
+    "Keep deployed agent guidance synchronized with the real command contract."
+  ],
+  "decision": [
+    "Embed Codex and Claude Code Ledger skill bundles and a manifest in the executable distribution. The manifest declares executable version range, CLI contract versions, provider, bundle checksum, and operation IDs. tally skill list and check are read-only; tally skill install is idempotent, refuses incompatible bundles before writes, installs only through provider-specific project/user locations, and teaches public commands rather than database access."
+  ],
+  "rationale": [
+    "The executable and operation registry are the only reliable compatibility authorities. This mirrors Lex distribution while avoiding separately versioned prose that can teach obsolete commands."
+  ],
+  "alternatives": [
+    "A: repo-only skills — rejected for fresh installs. B: remotely fetched latest skills — rejected for offline and version drift. C: embedded version-matched bundles — chosen."
+  ],
+  "consequences": [
+    "Skill source and embedded copies require parity tests. Installation mutates host files and follows the same artifact idempotency protocol. No skill can bypass the CLI contract or access SQLite directly."
+  ],
+  "status_notes": [
+    "Accepted. Planned implementation areas: src/Tally/Skills and packaged provider bundles."
+  ],
+  "status": "accepted",
+  "created_at": "2026-07-18T06:00:15.4527219+00:00",
+  "links": [
+    {
+      "id": "01KXSYNTZ796F1845CXM7C66X3",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-SYSTEM-SKILL-CONTRACTS",
+      "rel": "references",
+      "created_at": "2026-07-18T06:30:03.4967979+00:00"
+    },
+    {
+      "id": "01KXSXDJW69DTJ7ZJX336Y0B1J",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:04.4871300+00:00"
+    },
+    {
+      "id": "01KXSXDKG2PZ9770SHB4KSPG75",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SKILL-COMPATIBILITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:05.1236063+00:00"
+    },
+    {
+      "id": "01KXSXDKZS3W9X25PHTNGRCPTC",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-AGENT-CONTRACT-STABILITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:05.6268354+00:00"
+    },
+    {
+      "id": "01KXSXEESKC2MPRP5XN2BBD2GS",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-SKILL-COMPATIBILITY-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:08:33.0760753+00:00"
+    }
+  ]
+}

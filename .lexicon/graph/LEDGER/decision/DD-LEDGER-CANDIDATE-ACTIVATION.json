@@ -1,0 +1,105 @@
+{
+  "id": "01KXSWZ8G4C5KRNNJCGMJSMHTZ",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DD-LEDGER-CANDIDATE-ACTIVATION",
+  "title": "Verified store generations with atomic pointer activation",
+  "description": [
+    "Make restore and storage evolution fail closed without overwriting the current Ledger."
+  ],
+  "decision": [
+    "Represent each authoritative store as a generation directory under the private data root. A small owner-only CURRENT pointer names the active generation. Restore and schema evolution are two-stage operations: prepare creates a separate generation, applies or restores state, validates integrity, foreign keys, schema compatibility, counts, exact totals, history, relationships, and idempotency; activate reacquires the exclusive writer lock, checks the expected current fingerprint and explicit authorization, flushes the candidate, then atomically replaces CURRENT and fsyncs the directory. The prior generation remains the recovery point."
+  ],
+  "rationale": [
+    "A single atomic pointer replacement ensures startup sees either the old verified generation or the new verified generation. Replacing a live SQLite file set directly creates multi-file WAL/SHM and crash windows. Two-stage commands also make candidate evidence independently inspectable."
+  ],
+  "alternatives": [
+    "A: migrate the live database in place after backup — rejected. B: rename database files directly — rejected due WAL/SHM and two-rename crash windows. C: verified generation plus atomic pointer switch — chosen."
+  ],
+  "consequences": [
+    "Restore prepare/activate and storage evolution prepare/activate are separate public operations. Activation is a narrow platform seam with injected failure tests. Candidate and prior generations are retained or cleaned only through explicit lifecycle policy; CURRENT never points to an unverified candidate."
+  ],
+  "status_notes": [
+    "Accepted. Planned implementation areas: src/Tally/Infrastructure/Storage/AuthoritativeStoreActivator.cs and Recovery slices."
+  ],
+  "status": "accepted",
+  "created_at": "2026-07-18T06:00:15.1095846+00:00",
+  "links": [
+    {
+      "id": "01KXSYNP92SYT2D0YYJ3732JF6",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "rel": "references",
+      "created_at": "2026-07-18T06:29:58.6915912+00:00"
+    },
+    {
+      "id": "01KXSXDG79QEMC2C1MY3CYVJ8G",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-BACKUP-VERIFICATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:01.7702579+00:00"
+    },
+    {
+      "id": "01KXSXDGSWBY7MYXDHEZ480ZCA",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SAFE-RESTORE",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:02.3653855+00:00"
+    },
+    {
+      "id": "01KXSXDHAWDRX6HK3KG90F3PKB",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SAFE-STORAGE-EVOLUTION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:02.9089150+00:00"
+    },
+    {
+      "id": "01KXSXDHT562KTZY4BREWXT51H",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:03.3986522+00:00"
+    },
+    {
+      "id": "01KXSXDJBQRA136HPC7TGRC102",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-VERIFIED-RECOVERABILITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:03.9599823+00:00"
+    },
+    {
+      "id": "01KXSXHHDYTYSQPPFHWBAT0GF0",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-ATOMIC-CRASH-RECOVERY",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:10:14.0795067+00:00"
+    },
+    {
+      "id": "01KXSXED9DNWMN08KXPQ5GBCP2",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-BACKUP-VERIFICATION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:08:31.5342107+00:00"
+    },
+    {
+      "id": "01KXSXEDT0SBQ0YFQVH8T2B8YF",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-SAFE-RESTORE-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:08:32.0656898+00:00"
+    },
+    {
+      "id": "01KXSXEE82NWZXPJBPHE8DV2F2",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-SAFE-STORAGE-EVOLUTION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:08:32.5156374+00:00"
+    },
+    {
+      "id": "01KXSXHHW2VJ2AKMETTYX193V0",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-VERIFIED-RECOVERY-DRILL",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:10:14.5316712+00:00"
+    }
+  ]
+}

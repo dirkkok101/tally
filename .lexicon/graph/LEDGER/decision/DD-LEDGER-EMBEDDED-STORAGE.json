@@ -1,0 +1,133 @@
+{
+  "id": "01KXSWZ6WJJ89QZ0KYCV9EPTV7",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DD-LEDGER-EMBEDDED-STORAGE",
+  "title": "Raw SQLite with host-managed at-rest protection",
+  "description": [
+    "Resolve OQ-LEDGER-8 for embedded persistence, permissions, encryption, backup, restore, and migration."
+  ],
+  "decision": [
+    "Target .NET 10 Native AOT on linux-x64 first, using raw Microsoft.Data.Sqlite with the maintained bundled SQLite native library, one local store, WAL, foreign keys, FULL synchronous writes for financial mutations, busy timeout, PRAGMA user_version, and explicit SQL migrations. Create the data directory as 0700 and every database, WAL, SHM, temporary candidate, manifest, and backup as 0600. Require the data root to reside on an operator-provisioned encrypted host volume with OS-managed keys; Tally implements no cryptography and fails the supported-host security gate when that protection is not validated."
+  ],
+  "rationale": [
+    "The spike preserved exact totals, relationships, idempotency state, and schema state across verified backup, separate restore, migration candidate, and activation with clean integrity checks and 0600 artifacts. Installed Lex 0.5.3 proves the same .NET 10 Native-AOT plus Microsoft.Data.Sqlite stack. Official provider documentation confirms stock SQLite has no file encryption, so encryption must remain a host capability."
+  ],
+  "alternatives": [
+    "A: SQLite plus host volume encryption — chosen. B: unsupported SQLCipher bundle — rejected as non-default and contrary to maintained-platform preference. C: PostgreSQL plus EF Core — rejected for the self-contained local CLI; reserved for a future CHANNELS web architecture. D: custom field/file encryption — prohibited."
+  ],
+  "consequences": [
+    "The release contains the AOT executable and adjacent native SQLite library but no daemon or database server. The guest-visible VPS root is plain ext4 and cannot be treated as conforming without cloud-provider encryption evidence or a separately encrypted data volume. Storage status reports permission, integrity, version, and host-protection evidence without exposing financial payloads."
+  ],
+  "status_notes": [
+    "Accepted from OQ-LEDGER-8 spike and official provider/storage documentation. Planned implementation area: src/Tally/Infrastructure/Storage."
+  ],
+  "status": "accepted",
+  "created_at": "2026-07-18T06:00:13.4597637+00:00",
+  "links": [
+    {
+      "id": "01KXSXE333TZA8HKW59PKZ4C67",
+      "target_type": "adr",
+      "target": "ADR-CORE-0020",
+      "rel": "references",
+      "created_at": "2026-07-18T06:08:21.0924034+00:00"
+    },
+    {
+      "id": "01KXSXE3HX05HB1KYK6G5T4C68",
+      "target_type": "architecture_doc",
+      "target": "ARCH-CORE-QUALITY-ATTRIBUTES",
+      "rel": "references",
+      "created_at": "2026-07-18T06:08:21.5664345+00:00"
+    },
+    {
+      "id": "01KXSXE40ZVBB0FYJN33HCXVXS",
+      "target_type": "architecture_doc",
+      "target": "ARCH-CORE-SECURITY-COMPLIANCE",
+      "rel": "references",
+      "created_at": "2026-07-18T06:08:22.0478831+00:00"
+    },
+    {
+      "id": "01KXSYNNSFVE02V9YYC5F21XPA",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "rel": "references",
+      "created_at": "2026-07-18T06:29:58.1927206+00:00"
+    },
+    {
+      "id": "01KXSX66FW16DRCYNHG68RZQKR",
+      "target_type": "external_dependency",
+      "target": "EXT-LEDGER-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T06:04:02.4291889+00:00"
+    },
+    {
+      "id": "01KXSXD5B4XG25AKSB35AKXCD6",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-BACKUP-VERIFICATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:50.6290670+00:00"
+    },
+    {
+      "id": "01KXSXD5TN7W3B6PT5BWW20PS8",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SAFE-RESTORE",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:51.1264146+00:00"
+    },
+    {
+      "id": "01KXSXD69JXVYPQPY9PJYBQ82W",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SAFE-STORAGE-EVOLUTION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:51.6027696+00:00"
+    },
+    {
+      "id": "01KXSXD6RSWWWC4X3P5R4623GS",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-LOCAL-DATA-PROTECTION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:52.0905253+00:00"
+    },
+    {
+      "id": "01KXSXD77MBE28YR3371XSEMCR",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-SELF-CONTAINED-LOCAL-OPERATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:52.5648260+00:00"
+    },
+    {
+      "id": "01KXSXD7QMKK05QVCNKJTB0N2A",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-VERIFIED-RECOVERABILITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:53.0773147+00:00"
+    },
+    {
+      "id": "01KXSWZ6WM9XD735KHEAJYHJQ6",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-8",
+      "rel": "motivated-by",
+      "created_at": "2026-07-18T06:00:13.4603418+00:00"
+    },
+    {
+      "id": "01KXSXHFFXMMHNV9DZGGB86EVE",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-LOCAL-DATA-PROTECTION",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:10:12.0941517+00:00"
+    },
+    {
+      "id": "01KXSXHFYEZNN7EMFMC69Y2F5K",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-OFFLINE-SELF-CONTAINED",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:10:12.5591448+00:00"
+    },
+    {
+      "id": "01KXSXHGCR3X9Z3B7MCWJW2MBX",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-VERIFIED-RECOVERY-DRILL",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:10:13.0178828+00:00"
+    }
+  ]
+}

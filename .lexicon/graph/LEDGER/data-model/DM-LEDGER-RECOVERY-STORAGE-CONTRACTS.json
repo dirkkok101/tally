@@ -1,0 +1,94 @@
+{
+  "id": "01KXSYGFP6T4HV8E4YASJ6A3FT",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+  "name": "RecoveryStorageOperationContracts",
+  "description": [
+    "Concrete request, result, fingerprint, and stable-error contracts for backups, restore, storage status, and safe evolution."
+  ],
+  "schema_def": [
+    "All operations use the common OperationDescriptor envelopes. Create, prepare, and activate operations are mutations and require --idempotency-key.",
+    "",
+    "tally ledger backup create / ledger.backup.create",
+    "- input: {targetPath: absolute non-existing file path}",
+    "- result: {artifactId, path, sha256, contractVersion, storageVersion, storeGenerationFingerprint, durableCounts, exactTotals, createdAt}",
+    "- errors: LEDGER-BACKUP-TARGET-EXISTS exit5; LEDGER-PATH-UNSAFE exit3; LEDGER-BACKUP-VERIFY-FAILED exit8; LEDGER-HOST-SPACE-INSUFFICIENT exit9",
+    "",
+    "tally ledger backup verify / ledger.backup.verify",
+    "- input: {artifactPath: absolute file path}",
+    "- result VerificationReport: {artifactId, sha256, storageVersion, storeGenerationFingerprint, integrity, foreignKeys, durableCounts, exactTotals, history, relationships, idempotencyOutcomes, verifiedAt}",
+    "- errors: LEDGER-BACKUP-NOT-FOUND exit4; LEDGER-BACKUP-CHECKSUM-MISMATCH exit8; LEDGER-BACKUP-INTEGRITY-FAILED exit8; LEDGER-BACKUP-INCOMPATIBLE exit7",
+    "",
+    "tally ledger restore prepare / ledger.restore.prepare",
+    "- input: {artifactPath}",
+    "- result: {candidateId, sourceFingerprint, candidateFingerprint, storageVersion, verificationReport}",
+    "- errors: backup verify errors; LEDGER-CANDIDATE-SPACE-INSUFFICIENT exit9; LEDGER-CANDIDATE-PREPARE-FAILED exit8",
+    "",
+    "tally ledger restore activate / ledger.restore.activate",
+    "- input: {candidateId, expectedCurrentFingerprint, authorizeReplacement: true}",
+    "- result: {activeGenerationId, activeFingerprint, recoveryGenerationId, activatedAt}",
+    "- errors: LEDGER-CANDIDATE-NOT-FOUND exit4; LEDGER-CANDIDATE-INVALID exit8; LEDGER-CURRENT-FINGERPRINT-STALE exit5; LEDGER-REPLACEMENT-AUTHORIZATION-REQUIRED exit6; LEDGER-ACTIVATION-FAILED exit8",
+    "",
+    "tally ledger storage status / ledger.storage.status",
+    "- input: {}",
+    "- result: {contractVersion, supportedStorageVersions, currentStorageVersion, currentGenerationId, currentFingerprint, permissions, hostProtectionEvidence, integrityStatus}",
+    "- errors: common storage, integrity, and host errors",
+    "",
+    "tally ledger storage evolution prepare / ledger.storage.evolution.prepare",
+    "- input: {targetStorageVersion}",
+    "- result: {candidateId, sourceFingerprint, candidateFingerprint, sourceStorageVersion, targetStorageVersion, verificationReport}",
+    "- errors: LEDGER-STORAGE-VERSION-UNSUPPORTED exit7; LEDGER-STORAGE-NEWER-THAN-BINARY exit7; LEDGER-CANDIDATE-SPACE-INSUFFICIENT exit9; LEDGER-CANDIDATE-PREPARE-FAILED exit8",
+    "",
+    "tally ledger storage evolution activate / ledger.storage.evolution.activate",
+    "- input: {candidateId, expectedCurrentFingerprint, authorizeReplacement: true}",
+    "- result: same activation result as restore.activate",
+    "- errors: same activation errors as restore.activate",
+    "",
+    "Constraints: paths are never emitted in diagnostics; result paths are owner-requested values. Prepare never changes CURRENT. Activate revalidates candidate and expected current fingerprint under the exclusive writer lock, atomically replaces CURRENT, and retains the previous generation as recovery."
+  ],
+  "created_at": "2026-07-18T06:27:08.1036967+00:00",
+  "links": [
+    {
+      "id": "01KXSYNPR714KXGXGZ4G794YSN",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-BACKUP-VERIFICATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:29:59.1767323+00:00"
+    },
+    {
+      "id": "01KXSYNQ75W98K5851CYPD0JE8",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SAFE-RESTORE",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:29:59.6546550+00:00"
+    },
+    {
+      "id": "01KXSYNQNN3TSR1P6BC1YK56A0",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SAFE-STORAGE-EVOLUTION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:30:00.1184281+00:00"
+    },
+    {
+      "id": "01KXSYNR48Y0RD80B27XEXEZXM",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-BACKUP-VERIFICATION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:30:00.5851902+00:00"
+    },
+    {
+      "id": "01KXSYNRJKVCAJEQVJ7B25NH7H",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-SAFE-RESTORE-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:30:01.0446456+00:00"
+    },
+    {
+      "id": "01KXSYNS31WZXY7VTGX2N6D8ZJ",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-SAFE-STORAGE-EVOLUTION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:30:01.5701535+00:00"
+    }
+  ]
+}

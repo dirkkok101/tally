@@ -1,0 +1,54 @@
+{
+  "id": "01KXSWZ4X6XYS0VKBS2RRCWQJ3",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "FA-LEDGER-ACCOUNTS-CATEGORIES",
+  "name": "Accounts and Categories",
+  "description": [
+    "Owns bank-account and flat spend-category lifecycle without deleting historical references."
+  ],
+  "created_at": "2026-07-18T06:00:11.4315776+00:00",
+  "links": [
+    {
+      "id": "01KXSXH3DBSQMWMVFP673WR6TE",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-ACCOUNT",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:09:59.7246625+00:00"
+    },
+    {
+      "id": "01KXSYN5X6J85Z6Q76YT212DSJ",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:29:41.9275729+00:00"
+    },
+    {
+      "id": "01KXSYV35GDZXMJYQ26G2B6Y5M",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-CATALOGUE-LIFECYCLE",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:32:55.7290611+00:00"
+    },
+    {
+      "id": "01KXSXH3W7PZ1FP9PHR9DTHNSA",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-SPEND-CATEGORY",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:10:00.1998105+00:00"
+    },
+    {
+      "id": "01KXSXH4AHP79791G8HBDXQJ43",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACCOUNT-MAINTENANCE",
+      "rel": "references",
+      "created_at": "2026-07-18T06:10:00.6579237+00:00"
+    },
+    {
+      "id": "01KXSXH4SEHA3TQCJ261CGDY3T",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-CATALOGUE",
+      "rel": "references",
+      "created_at": "2026-07-18T06:10:01.1353243+00:00"
+    }
+  ]
+}

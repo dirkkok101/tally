@@ -1,0 +1,31 @@
+{
+  "id": "01KXSX0THFTD1GCXNEMCEF90YK",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DM-LEDGER-QUERY-SNAPSHOT",
+  "name": "QuerySnapshot",
+  "description": [
+    "Expiry-bound derived cache that freezes actuals projection and totals across CLI processes."
+  ],
+  "schema_def": [
+    "query_snapshot",
+    "- id: random opaque 256-bit token hash, primary key",
+    "- contractVersion/schemaVersion/storeGenerationFingerprint",
+    "- canonicalFilterHash",
+    "- createdAt/expiresAt",
+    "- currencyCode and exact full-set totals: netAccountMovementMinor, externalSpendMinor, budgetActualMinor",
+    "query_snapshot_item",
+    "- snapshotId + ordinal, composite primary key",
+    "- complete immutable result projection required by later pages",
+    "Constraints: later page supplies cursor only; fixed effectiveDate DESC then transactionId DESC order; excluded from Durable Ledger State, backups, and restore; opportunistic expiry cleanup."
+  ],
+  "created_at": "2026-07-18T06:01:06.3529811+00:00",
+  "links": [
+    {
+      "id": "01KXSXDSPM7AYEMS3FFJ68F4G6",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SNAPSHOT-PAGINATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:11.4770492+00:00"
+    }
+  ]
+}

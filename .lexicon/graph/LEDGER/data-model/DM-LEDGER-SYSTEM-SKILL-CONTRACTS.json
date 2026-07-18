@@ -1,0 +1,89 @@
+{
+  "id": "01KXSYGG1EGBHD7GW145CK4G5M",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DM-LEDGER-SYSTEM-SKILL-CONTRACTS",
+  "name": "SystemSkillOperationContracts",
+  "description": [
+    "Concrete request, result, compatibility, and stable-error contracts for schema discovery, version reporting, and bundled skill deployment."
+  ],
+  "schema_def": [
+    "All operations use the common OperationDescriptor envelopes. skill.install is a mutation and requires --idempotency-key.",
+    "",
+    "tally schema list / system.schema.list",
+    "- input: {}",
+    "- result: {operations: [{operationId, cliPath, kind, minimumContractVersion, maximumContractVersion, summary}]}",
+    "- errors: common errors only",
+    "",
+    "tally schema show / system.schema.show",
+    "- input: {operationId, contractVersion?: supported version}",
+    "- result: {descriptor: {operationId, cliPath, kind, contractVersion, requestSchema, resultSchema, errors, exits, examples}}",
+    "- errors: TALLY-OPERATION-NOT-FOUND exit4; TALLY-CONTRACT-002 exit7",
+    "",
+    "tally version / system.version",
+    "- input: {}",
+    "- result: {executableVersion, minimumContractVersion, maximumContractVersion, currentStorageVersion, supportedStorageVersions, bundledSkillManifestVersion}",
+    "- errors: common errors only",
+    "",
+    "tally skill list / system.skill.list",
+    "- input: {provider?: codex|claude-code}",
+    "- result: {skills: [{skillId, provider, version, compatibleExecutableRange, compatibleContractRange, checksum}]}",
+    "- errors: TALLY-SKILL-PROVIDER-UNSUPPORTED exit7",
+    "",
+    "tally skill check / system.skill.check",
+    "- input: {provider: codex|claude-code, scope: project|user}",
+    "- result: {provider, scope, installedPath?, installedVersion?, bundledVersion, compatibility: compatible|missing|outdated|newer|invalid, reasons[]}",
+    "- errors: TALLY-SKILL-PROVIDER-UNSUPPORTED exit7; TALLY-SKILL-MANIFEST-INVALID exit8",
+    "",
+    "tally skill install / system.skill.install",
+    "- input: {provider: codex|claude-code, scope: project|user}",
+    "- result: {provider, scope, installedPath, installedVersion, checksum, compatibility}",
+    "- errors: TALLY-SKILL-PROVIDER-UNSUPPORTED exit7; TALLY-SKILL-INCOMPATIBLE exit7; TALLY-SKILL-PATH-UNSAFE exit3; TALLY-SKILL-PERMISSION-DENIED exit9; TALLY-SKILL-MANIFEST-INVALID exit8",
+    "",
+    "Constraints: descriptors and manifests are generated from the executable-owned registry at build time; schema discovery requires no store. Install writes only the documented provider/scope location, verifies checksum and compatibility after publication, and returns the stored replay result on idempotent replay."
+  ],
+  "created_at": "2026-07-18T06:27:08.4632084+00:00",
+  "links": [
+    {
+      "id": "01KXSYNVGHXDP6F40FBZZBDZMN",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:30:04.0504948+00:00"
+    },
+    {
+      "id": "01KXSYNWE5C457S4ZRACCDV4PS",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SKILL-COMPATIBILITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:30:04.9977681+00:00"
+    },
+    {
+      "id": "01KXSYNVZPD6TYKZGBH5EDBXBN",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-STRUCTURED-INVOCATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:30:04.5356162+00:00"
+    },
+    {
+      "id": "01KXSYNWYDFJSBM1FD6K7XFRVY",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-CONTRACT-DISCOVERY-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:30:05.5181416+00:00"
+    },
+    {
+      "id": "01KXSYNXZ3D2WPXGP1QV0D9D1A",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-SKILL-COMPATIBILITY-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:30:06.5649467+00:00"
+    },
+    {
+      "id": "01KXSYNXG2WNHEVT8XHAASH2N5",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-STRUCTURED-INVOCATION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:30:06.0832652+00:00"
+    }
+  ]
+}

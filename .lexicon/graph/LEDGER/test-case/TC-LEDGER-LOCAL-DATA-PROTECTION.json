@@ -1,0 +1,26 @@
+{
+  "id": "01KXSXGA4X7RA3QMZQ1PX4MRRR",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "TC-LEDGER-LOCAL-DATA-PROTECTION",
+  "slug": "LOCAL-DATA-PROTECTION",
+  "title": "Verify local artifact and diagnostic protection",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "security",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Published executable on a supported encrypted-volume host plus canary descriptions, identifiers, credentials, and payloads.",
+  "steps": "Run normal, failure, backup, restore, evolution, and skill flows; inspect modes for data root and every artifact; scan stdout exclusions, stderr, logs, and manifests for canaries.",
+  "expected": "Data root is 0700; all financial artifacts are 0600; host protection gate is validated; no non-data-return output contains protected canaries or serialized payloads.",
+  "owner": "LEDGER implementation",
+  "created_at": "2026-07-18T06:09:33.8544894+00:00",
+  "links": [
+    {
+      "id": "01KXSXX51EYZSZ615HWQ1CY0KQ",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-RECOVERY-STORAGE",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:16:34.6070863+00:00"
+    }
+  ]
+}

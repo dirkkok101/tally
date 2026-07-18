@@ -1,0 +1,58 @@
+{
+  "id": "01KXSX0SX8SS7SNVPA6VEMRF06",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+  "name": "FinancialRelationshipAndLifecycle",
+  "description": [
+    "Explicit active or retired transfer/refund classification with typed roles and attributable correction."
+  ],
+  "schema_def": [
+    "financial_relationship",
+    "- id: ULID text, primary key",
+    "- type: enum {transfer,refund}",
+    "- sourceTransactionId: TransactionFact.id, RESTRICT",
+    "- targetTransactionId: TransactionFact.id, RESTRICT",
+    "- amountMinor: positive Int64",
+    "- state: enum {active,retired}",
+    "- createdAt and actorContext",
+    "relationship_lifecycle_event",
+    "- id: ULID text, primary key",
+    "- relationshipId: FinancialRelationship.id, RESTRICT",
+    "- eventType: enum {revoked,replaced}",
+    "- replacementRelationshipId: nullable relationship reference",
+    "- reason: text, required",
+    "- occurredAt and actorContext",
+    "Constraints: distinct active transactions; transfer has exactly one outflow and one inflow across distinct owned accounts with equal principal; refund names original debit and refund credit and respects cumulative magnitude; transaction roles are exclusive; revoke/replace retires atomically."
+  ],
+  "created_at": "2026-07-18T06:01:05.7051082+00:00",
+  "links": [
+    {
+      "id": "01KXSXDRPD9V23YV129QMWZ0SH",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACTUALS-QUERY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:10.4461353+00:00"
+    },
+    {
+      "id": "01KXSXDQSAJMV2P5NY629E5EH8",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-REFUND-CONFIRMATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:09.5150410+00:00"
+    },
+    {
+      "id": "01KXSXDR7FC4V64ZE89E03VXT9",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-RELATIONSHIP-CORRECTION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:09.9682053+00:00"
+    },
+    {
+      "id": "01KXSXDQAP2401AGZ1VFY1JD4Y",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-TRANSFER-CONFIRMATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:09.0470589+00:00"
+    }
+  ]
+}

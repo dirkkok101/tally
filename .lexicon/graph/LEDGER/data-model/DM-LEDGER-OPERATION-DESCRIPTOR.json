@@ -1,0 +1,82 @@
+{
+  "id": "01KXSX0V97NBKV7XJQ6F2GGR07",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+  "name": "OperationDescriptorAndEnvelope",
+  "description": [
+    "The authoritative public operation registry, common envelopes, wire primitives, exit categories, and stable cross-operation errors."
+  ],
+  "schema_def": [
+    "operation_descriptor",
+    "- operationId: stable namespaced text",
+    "- cliPath: stable token sequence",
+    "- contractVersion range",
+    "- kind: enum {query, mutation}",
+    "- request/result concrete source-generated JSON types",
+    "- errors: complete stable code/category/exit set for the operation",
+    "- help summary and examples",
+    "- handler factory registered explicitly",
+    "",
+    "request_envelope",
+    "- contractVersion: required supported version",
+    "- actor: required {kind: agent|human|system, label: non-empty safe text, runId?: text}",
+    "- input: required operation-specific object",
+    "- idempotencyKey: required for mutations, supplied by --idempotency-key and excluded from JSON input",
+    "",
+    "result_envelope",
+    "- contractVersion, operationId, outcome",
+    "- success: result",
+    "- error: {code, category, safeMessage, fields?: [{path, code}]}",
+    "Constraints: one JSON object on stdout; diagnostics on stderr only; unknown fields rejected; no database types, paths, SQL, exception text, financial payloads, or secrets in errors. Mutation replay returns the stored byte-equivalent logical result.",
+    "",
+    "common stable errors and exits",
+    "- TALLY-USAGE-001 malformed JSON, missing input, unknown option: usage, exit 2",
+    "- TALLY-CONTRACT-001 unknown field or schema violation: usage, exit 2",
+    "- TALLY-VALIDATION-001 invalid field value: validation, exit 3",
+    "- TALLY-CONTRACT-002 unsupported contract version: incompatible, exit 7",
+    "- LEDGER-IDEMPOTENCY-001 same key with different operation or normalized input: conflict, exit 5",
+    "- LEDGER-STORAGE-001 writer/store busy before transaction acquisition: conflict, exit 5",
+    "- LEDGER-STORAGE-002 newer or incompatible storage generation: incompatible, exit 7",
+    "- LEDGER-INTEGRITY-001 integrity invariant failed: integrity, exit 8",
+    "- LEDGER-HOST-001 permission, protection, space, or host-resource failure: host, exit 9",
+    "- TALLY-INTERNAL-001 sanitized unexpected failure with correlation reference: internal, exit 10",
+    "",
+    "wire primitives",
+    "- Money: canonical signed two-decimal string plus currencyCode=ZAR; never JSON number",
+    "- LocalDate: yyyy-MM-dd",
+    "- identifiers: opaque 26-character ULID strings",
+    "- actor and immutable outcome are persisted so replay is stable",
+    "Descriptor data is the sole generator for help, schema, dispatch, conformance tests, and skill manifests."
+  ],
+  "created_at": "2026-07-18T06:01:07.1133942+00:00",
+  "links": [
+    {
+      "id": "01KXSXDVKZ4H3MXRYGFBCQ5YPZ",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:13.4399462+00:00"
+    },
+    {
+      "id": "01KXSXDWGZDY83SEJVKPRHGJ58",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SKILL-COMPATIBILITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:14.3684173+00:00"
+    },
+    {
+      "id": "01KXSXDW2PCW0VX9VC47R3Q742",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-STRUCTURED-INVOCATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:13.9115825+00:00"
+    },
+    {
+      "id": "01KXSYNZ0ZS52SJJ59J1SQJBKJ",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:30:07.6489929+00:00"
+    }
+  ]
+}

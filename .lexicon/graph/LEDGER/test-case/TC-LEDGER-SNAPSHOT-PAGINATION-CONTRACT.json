@@ -10,8 +10,8 @@
   "automation": "automated",
   "status": "planned",
   "preconditions": "A fresh representative local Ledger and the valid and invalid inputs required by FR-LEDGER-SNAPSHOT-PAGINATION are available.",
-  "steps": "Invoke the relevant operations through the public CLI contract and exercise every acceptance criterion of FR-LEDGER-SNAPSHOT-PAGINATION.",
-  "expected": "All FR-LEDGER-SNAPSHOT-PAGINATION acceptance criteria, including stable-error and no-partial-mutation outcomes, hold.",
+  "steps": "1. Seed a representative real SQLite Ledger.\n2. Start a first-page actuals query while a competing writer owns the lock; assert LEDGER-SNAPSHOT-BUSY and no cursor.\n3. Retry after release; inject cancellation/crash before commit and assert no usable cursor or partial snapshot.\n4. Complete the first page, capture items, exact full-set totals, cursor, and expiry.\n5. Commit financial corrections in another process.\n6. Fetch every later page using cursor only.\n7. Exercise changed-filter, expired, malformed, incompatible-version, and stale-generation cursors.",
+  "expected": "The first page reads, computes, and materializes in one BEGIN IMMEDIATE transaction and emits no cursor before commit. Busy and pre-commit failure leave no partial snapshot. Later pages are read-only and reproduce the committed projection and exact totals despite intervening writes. Every invalid cursor condition returns its documented stable error, satisfying every FR-LEDGER-SNAPSHOT-PAGINATION acceptance criterion.",
   "owner": "LEDGER implementation",
   "created_at": "2026-07-18T04:26:18.5862026+00:00",
   "links": [

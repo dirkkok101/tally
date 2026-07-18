@@ -1,0 +1,98 @@
+{
+  "id": "01KXSWZ777TWQFAG7VCDVNPK3H",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DD-LEDGER-FINANCIAL-REPRESENTATION",
+  "title": "Canonical ZAR minor units and local dates",
+  "description": [
+    "Define exact financial boundary and persistence representations."
+  ],
+  "decision": [
+    "Expose signed monetary values as canonical two-decimal JSON strings with currency ZAR. Validate at most two fractional digits and convert once at the contract boundary to a Money value containing Int64 minor units. Persist amount_minor as SQLite INTEGER and currency_code as constrained TEXT. Persist transaction and posting dates as ISO yyyy-MM-dd TEXT; effective date is posting date when present, otherwise transaction date. Use 26-character ULID strings for durable IDs."
+  ],
+  "rationale": [
+    "ZAR-only scope makes integer cents exact, sortable, and aggregatable in SQLite without decimal coercion. JSON numbers risk binary floating-point callers; decimal strings avoid that. Local bank dates are dates, not instants. ULIDs match the Lex prior art and provide stable sortable references."
+  ],
+  "alternatives": [
+    "A: SQLite REAL/JSON numbers — rejected for rounding risk. B: decimal TEXT — exact but makes database aggregation and range validation harder. C: Int64 minor units with decimal-string boundary — chosen. D: full currency-scale table — deferred until non-ZAR scope exists."
+  ],
+  "consequences": [
+    "Values with more than two decimals, negative zero, exponents, or Int64 overflow fail validation. The signed value always means owned-account balance delta. Presentation converts minor units back to a canonical string; no floating-point arithmetic enters actuals."
+  ],
+  "status_notes": [
+    "Accepted architecture, conditionally gated: OQ-LEDGER-1, OQ-LEDGER-2, and OQ-LEDGER-3 must be resolved from all-account/both-bank evidence before Money, transaction representation, Effective Date, or dependent actuals implementation starts. Invalid evidence updates this decision and its contracts first. Planned areas: src/Tally/Domain/Ledger/Money.cs and src/Tally/Contracts/Ledger."
+  ],
+  "status": "accepted",
+  "created_at": "2026-07-18T06:00:13.8010652+00:00",
+  "links": [
+    {
+      "id": "01KXSYNA3H16MSYVTPG7NFCM3K",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "rel": "references",
+      "created_at": "2026-07-18T06:29:46.2262030+00:00"
+    },
+    {
+      "id": "01KXSXD8PGBT78XN9HWTDTH9TZ",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACTUALS-QUERY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:54.0653511+00:00"
+    },
+    {
+      "id": "01KXSXD86S3YWR9YHGMJPEQCFJ",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-TRANSACTION-RECORDING",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:53.5623535+00:00"
+    },
+    {
+      "id": "01KXSXD958GN9MVE9Q3CTE5NPK",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:54.5379720+00:00"
+    },
+    {
+      "id": "01KXSXPGGPTT3Y1B6W0R4E02S2",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-1",
+      "rel": "motivated-by",
+      "created_at": "2026-07-18T06:12:56.9835274+00:00"
+    },
+    {
+      "id": "01KXSXPGZAHX0MSAVN6F62AHN8",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-2",
+      "rel": "motivated-by",
+      "created_at": "2026-07-18T06:12:57.4511669+00:00"
+    },
+    {
+      "id": "01KXSXPHEH526E8RN17E9B35AS",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-3",
+      "rel": "motivated-by",
+      "created_at": "2026-07-18T06:12:57.9387410+00:00"
+    },
+    {
+      "id": "01KXSXE9KFCNCD1YKJ1KF3CZJ2",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-ACTUALS-QUERY-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:08:27.7609117+00:00"
+    },
+    {
+      "id": "01KXSXHJT25ASKKPQ2X83CJZ0V",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-EXACT-MONEY-CONFORMANCE",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:10:15.4907455+00:00"
+    },
+    {
+      "id": "01KXSXE94AE4MFKC77W3TCAXX5",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-TRANSACTION-RECORDING-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:08:27.2749243+00:00"
+    }
+  ]
+}

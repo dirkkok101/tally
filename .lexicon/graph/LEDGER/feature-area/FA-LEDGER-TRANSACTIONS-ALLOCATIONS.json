@@ -1,0 +1,61 @@
+{
+  "id": "01KXSWZ572AD1TDF8HEXN7Y9BZ",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "FA-LEDGER-TRANSACTIONS-ALLOCATIONS",
+  "name": "Transactions and Allocations",
+  "description": [
+    "Owns immutable transaction facts, attributable void/supersession, and one-active-category allocation history."
+  ],
+  "created_at": "2026-07-18T06:00:11.7475631+00:00",
+  "links": [
+    {
+      "id": "01KXSXH5ARAC7R1KKWBKS1VZJK",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-FINANCIAL-REPRESENTATION",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:10:01.6897927+00:00"
+    },
+    {
+      "id": "01KXSXH5W45N00DXV5EFYAJMR1",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:10:02.2458033+00:00"
+    },
+    {
+      "id": "01KXSYN8Z8Y5M7KYN94BAWEA3G",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:29:45.0660671+00:00"
+    },
+    {
+      "id": "01KXSXH6D22N4Q916VDH1XK1SM",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-TRANSACTION-FACT",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:10:02.7877535+00:00"
+    },
+    {
+      "id": "01KXSXH6XEJWYYRFTR2CM3H76M",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-TRANSACTION-HISTORY",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:10:03.3111653+00:00"
+    },
+    {
+      "id": "01KXSXV8H3JSW8Y74ZFBJ9A56H",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-ASSIGNMENT",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:15:32.6449126+00:00"
+    },
+    {
+      "id": "01KXSXV82SS5JGJS3F3RNGGK5T",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-TRANSACTION-RECORDING",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:15:32.1863464+00:00"
+    }
+  ]
+}

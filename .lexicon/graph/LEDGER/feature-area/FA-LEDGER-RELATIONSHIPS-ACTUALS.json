@@ -1,0 +1,61 @@
+{
+  "id": "01KXSWZ5HPPKVJ4ZBQ3CN8RSYJ",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "FA-LEDGER-RELATIONSHIPS-ACTUALS",
+  "name": "Relationships and Actuals",
+  "description": [
+    "Owns explicit transfer/refund relationships, corrections, actuals classification, exact totals, and stable paginated query snapshots."
+  ],
+  "created_at": "2026-07-18T06:00:12.0871118+00:00",
+  "links": [
+    {
+      "id": "01KXSXH7DC4KFR5GB4S8PDZCVA",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:10:03.8213201+00:00"
+    },
+    {
+      "id": "01KXSXH7YFZCAGZMRQXAPFMGME",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-SNAPSHOT-ACTUALS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:10:04.3683592+00:00"
+    },
+    {
+      "id": "01KXSXH8E6V6XB4GYRVBDQWFM6",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:10:04.8719169+00:00"
+    },
+    {
+      "id": "01KXSXH8YD689BFNJDGDB24X9R",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-QUERY-SNAPSHOT",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:10:05.3906688+00:00"
+    },
+    {
+      "id": "01KXSYNDR4W4KRMRVE60T3P6WB",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:29:49.9572084+00:00"
+    },
+    {
+      "id": "01KXSXV9E9MA946F56SESJYSK9",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACTUALS-QUERY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:15:33.5780287+00:00"
+    },
+    {
+      "id": "01KXSXV90BFVYNZ5W0QXNCAKVX",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-TRANSFER-CONFIRMATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:15:33.1330526+00:00"
+    }
+  ]
+}

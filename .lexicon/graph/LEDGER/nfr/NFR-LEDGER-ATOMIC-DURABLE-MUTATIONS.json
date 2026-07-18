@@ -50,6 +50,13 @@
       "target": "FR-LEDGER-TRANSACTION-CORRECTION",
       "rel": "supports",
       "created_at": "2026-07-18T04:27:52.5659205+00:00"
+    },
+    {
+      "id": "01KXSXHBH2KCBQDHQTA7RA8E9Y",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-ATOMIC-CRASH-RECOVERY",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:10:08.0350552+00:00"
     }
   ]
 }

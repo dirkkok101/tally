@@ -1,0 +1,126 @@
+{
+  "id": "01KXSWZ6JRE2EA51AG7K4M4B5V",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DD-LEDGER-APPLICATION-ARCHITECTURE",
+  "title": "Single-process vertical slices with selective ports",
+  "description": [
+    "Adapt Actions and Lex architecture to a local finance CLI."
+  ],
+  "decision": [
+    "Use one Native-AOT executable project plus focused tests. Organize the application as a thin CLI adapter, versioned contracts, Ledger vertical slices, pure Ledger domain policies, concrete SQLite infrastructure, and explicit bootstrap registration. Separate commands from queries at class level with one store. Use CommandResult<T> adapted to stable exit categories, explicit DI, TimeProvider, and pure boundary/row mappers. Introduce only ICommandHandler, IQueryHandler, IAuthoritativeStoreActivator, and IHostArtifactProtection as justified seams."
+  ],
+  "rationale": [
+    "This retains the useful intent of CORE CQRS-light, vertical slice, CommandResult, explicit DI, error handling, and pure mapping while rejecting web, EF, PostgreSQL, tenancy, RLS, grid, and frontend assumptions. Real SQLite integration tests are more valuable than provider-neutral repositories."
+  ],
+  "alternatives": [
+    "A: layered clean architecture with repositories and mediator — rejected as speculative. B: direct command classes with no application ports — simple but less testable at the CLI seam. C: selective ports at transport and destructive host boundaries — chosen."
+  ],
+  "consequences": [
+    "No FastEndpoints, Aspire, EF Core, DbContext factory, generic repository, event bus, reflection discovery, custom clock, or general filesystem abstraction. A future CHANNELS adapter may invoke the stable CLI; no SDK is promised until that need is real."
+  ],
+  "status_notes": [
+    "Accepted. Planned implementation areas: src/Tally/Features/Ledger, src/Tally/Domain/Ledger, src/Tally/Infrastructure, tests/Tally.Tests."
+  ],
+  "status": "accepted",
+  "created_at": "2026-07-18T06:00:13.1460535+00:00",
+  "links": [
+    {
+      "id": "01KXSXDWZN97YAAKV6R0ZVEY67",
+      "target_type": "adr",
+      "target": "ADR-CORE-0010",
+      "rel": "references",
+      "created_at": "2026-07-18T06:08:14.8384473+00:00"
+    },
+    {
+      "id": "01KXSXDXF4FF581V61A32SDBP3",
+      "target_type": "adr",
+      "target": "ADR-CORE-0021",
+      "rel": "references",
+      "created_at": "2026-07-18T06:08:15.3339622+00:00"
+    },
+    {
+      "id": "01KXSXDXYX86C1VN9075BF7XVC",
+      "target_type": "adr",
+      "target": "ADR-CORE-0024",
+      "rel": "references",
+      "created_at": "2026-07-18T06:08:15.8381078+00:00"
+    },
+    {
+      "id": "01KXSXDYEQXS2KEGA97794QD4W",
+      "target_type": "adr",
+      "target": "ADR-CORE-0025",
+      "rel": "references",
+      "created_at": "2026-07-18T06:08:16.3442567+00:00"
+    },
+    {
+      "id": "01KXSXE18W8773CS4E62RZCWPF",
+      "target_type": "architecture_doc",
+      "target": "ARCH-CORE-CQRS",
+      "rel": "references",
+      "created_at": "2026-07-18T06:08:19.2292299+00:00"
+    },
+    {
+      "id": "01KXSXE1QTTYCAX4JEZBBR0VBF",
+      "target_type": "architecture_doc",
+      "target": "ARCH-CORE-VERTICAL-SLICE",
+      "rel": "references",
+      "created_at": "2026-07-18T06:08:19.7071395+00:00"
+    },
+    {
+      "id": "01KXSXD4WNMHYQ6M6A935MZMFM",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:50.1662969+00:00"
+    },
+    {
+      "id": "01KXSXD4D57SA9QEGCKDQXRKYW",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-SELF-CONTAINED-LOCAL-OPERATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:49.6701868+00:00"
+    },
+    {
+      "id": "01KXSXDYX9CT63KZ9H5JWPWF30",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-COMMANDS",
+      "rel": "references",
+      "created_at": "2026-07-18T06:08:16.8103338+00:00"
+    },
+    {
+      "id": "01KXSXDZTZA4KDCM9M6VJVXYRD",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-DTO-MAPPER",
+      "rel": "references",
+      "created_at": "2026-07-18T06:08:17.7598875+00:00"
+    },
+    {
+      "id": "01KXSXDZBK2C5N5Y1NF7821A6C",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-QUERIES",
+      "rel": "references",
+      "created_at": "2026-07-18T06:08:17.2681553+00:00"
+    },
+    {
+      "id": "01KXSXE0ABS8V663KT7Z1SBQ1B",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-SERVICE-REGISTRATION",
+      "rel": "references",
+      "created_at": "2026-07-18T06:08:18.2522246+00:00"
+    },
+    {
+      "id": "01KXSXE0RG880H4CPASEN8RRPF",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-VERTICAL-SLICE",
+      "rel": "references",
+      "created_at": "2026-07-18T06:08:18.7060073+00:00"
+    },
+    {
+      "id": "01KXSXHF0HKTMEVGDTQ8GWFNPK",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-OFFLINE-SELF-CONTAINED",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:10:11.6026913+00:00"
+    }
+  ]
+}

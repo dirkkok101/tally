@@ -1,0 +1,61 @@
+{
+  "id": "01KXSX90E8X7KP08ZBGFE76MPQ",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DIAG-LEDGER-ACTUALS-SNAPSHOT-SEQUENCE",
+  "title": "Cross-process actuals snapshot pagination",
+  "diagram_type": "sequence",
+  "format": "mermaid",
+  "content": [
+    "sequenceDiagram",
+    "  participant A as Agent",
+    "  participant Q1 as First tally process",
+    "  participant DB as SQLite",
+    "  participant Q2 as Later tally process",
+    "  A->>Q1: actuals query with filters and page size",
+    "  Q1->>DB: acquire writer lock; BEGIN IMMEDIATE",
+    "  alt store busy before transaction",
+    "    DB-->>Q1: busy",
+    "    Q1-->>A: LEDGER-SNAPSHOT-BUSY, no cursor",
+    "  else transaction acquired",
+    "    DB-->>Q1: coherent active facts, allocations, relationships",
+    "    Q1->>Q1: exact classifications, totals, stable projection",
+    "    Q1->>DB: insert snapshot and ordered items",
+    "    alt crash, cancellation, or write failure",
+    "      DB-->>DB: rollback; no partial snapshot",
+    "    else commit succeeds",
+    "      Q1->>DB: COMMIT",
+    "      Q1-->>A: first page, totals, opaque cursor, expiry",
+    "    end",
+    "  end",
+    "  Note over Q1: process exits",
+    "  A->>Q2: actuals query with cursor only",
+    "  Q2->>DB: read-only validate cursor versions, generation, expiry",
+    "  DB-->>Q2: fixed ordinal projection",
+    "  Q2-->>A: stable next page",
+    "  Note over DB: snapshots are ephemeral and excluded from backup"
+  ],
+  "created_at": "2026-07-18T06:05:34.5374775+00:00",
+  "links": [
+    {
+      "id": "01KXSXE7Q32R61AGSZC8K33E2C",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-SNAPSHOT-ACTUALS",
+      "rel": "supports",
+      "created_at": "2026-07-18T06:08:25.8287155+00:00"
+    },
+    {
+      "id": "01KXSXX2AQA5EEPZMHWG3QKXPZ",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-RELATIONSHIPS-ACTUALS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:16:31.8320431+00:00"
+    },
+    {
+      "id": "01KXSXVCTPEKF0C3J517DE5NTX",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SNAPSHOT-PAGINATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:15:37.0477479+00:00"
+    }
+  ]
+}

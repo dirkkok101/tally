@@ -1,0 +1,56 @@
+{
+  "id": "01KXSX8YZ3ZWG519120WW2Q4D3",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DIAG-LEDGER-COMPONENTS",
+  "title": "LEDGER component architecture",
+  "diagram_type": "c4_component",
+  "format": "mermaid",
+  "content": [
+    "flowchart LR",
+    "  Agent[AI Agent or Human Shell] -->|explicit command plus JSON| CLI[CLI Adapter]",
+    "  CLI --> Registry[Operation Descriptor Registry]",
+    "  Registry --> Slices[Ledger Command and Query Slices]",
+    "  Slices --> Domain[Pure Money and Ledger Policies]",
+    "  Slices --> Db[Concrete LedgerDb]",
+    "  Db --> SQLite[(Active SQLite Generation)]",
+    "  Slices --> Recovery[Recovery and Storage Slices]",
+    "  Recovery --> Artifacts[(Private Candidates and Backups)]",
+    "  Recovery --> Activator[Authoritative Store Activator]",
+    "  Activator --> Current[CURRENT Generation Pointer]",
+    "  Security[Host Artifact Protection] --> SQLite",
+    "  Security --> Artifacts",
+    "  Registry --> Skills[Embedded Versioned Skills]",
+    "  Channels[Future CHANNELS Adapter] -. public CLI contract only .-> CLI"
+  ],
+  "created_at": "2026-07-18T06:05:33.0285980+00:00",
+  "links": [
+    {
+      "id": "01KXSXE4FHY5RFAEZXY6YDPDNX",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-APPLICATION-ARCHITECTURE",
+      "rel": "supports",
+      "created_at": "2026-07-18T06:08:22.5148043+00:00"
+    },
+    {
+      "id": "01KXSXE4YB8DMEF8EMEW83DG1V",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-CLI-OPERATION-CONTRACT",
+      "rel": "supports",
+      "created_at": "2026-07-18T06:08:22.9883609+00:00"
+    },
+    {
+      "id": "01KXSXX0X10Y9CY5ERP6QXK08N",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-CONTRACT-SKILLS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:16:30.3701518+00:00"
+    },
+    {
+      "id": "01KXSXVAWWKRC3AD4M0P3GT1SN",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-SELF-CONTAINED-LOCAL-OPERATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:15:35.0692525+00:00"
+    }
+  ]
+}

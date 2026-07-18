@@ -1,0 +1,128 @@
+{
+  "id": "01KXSYGFC3892700GHYSWPE777",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+  "name": "RelationshipActualsOperationContracts",
+  "description": [
+    "Concrete request, result, stable error, filter, totals, and cursor contracts for transfers, refunds, relationships, and actuals."
+  ],
+  "schema_def": [
+    "All operations use the common OperationDescriptor envelopes. Mutations require --idempotency-key.",
+    "",
+    "tally ledger transfer confirm / ledger.transfer.confirm",
+    "- input: {outflowTransactionId, inflowTransactionId, reason}",
+    "- result RelationshipDetail: {relationshipId, type: transfer, roles, principalAmount, currencyCode, status, confirmedActor, confirmedAt}",
+    "- errors: LEDGER-TRANSACTION-NOT-FOUND exit4; LEDGER-TRANSACTION-INACTIVE exit6; LEDGER-TRANSFER-ROLE-INVALID exit6; LEDGER-TRANSFER-SAME-ACCOUNT exit6; LEDGER-TRANSFER-AMOUNT-MISMATCH exit6; LEDGER-RELATIONSHIP-CONFLICT exit5",
+    "",
+    "tally ledger transfer revoke / ledger.transfer.revoke",
+    "- input: {relationshipId, reason}",
+    "- result: {relationship, lifecycleEvent}",
+    "- errors: LEDGER-RELATIONSHIP-NOT-FOUND exit4; LEDGER-RELATIONSHIP-TYPE-MISMATCH exit6; LEDGER-RELATIONSHIP-INACTIVE exit6",
+    "",
+    "tally ledger transfer replace / ledger.transfer.replace",
+    "- input: {relationshipId, outflowTransactionId, inflowTransactionId, reason}",
+    "- result: {retiredRelationship, activeRelationship, lifecycleEvent}",
+    "- errors: revoke errors plus transfer confirm errors",
+    "",
+    "tally ledger refund confirm / ledger.refund.confirm",
+    "- input: {originalTransactionId, refundTransactionId, reason}",
+    "- result RelationshipDetail: {relationshipId, type: refund, roles, principalAmount, currencyCode, status, confirmedActor, confirmedAt}",
+    "- errors: LEDGER-TRANSACTION-NOT-FOUND exit4; LEDGER-TRANSACTION-INACTIVE exit6; LEDGER-REFUND-ROLE-INVALID exit6; LEDGER-REFUND-AMOUNT-EXCEEDED exit6; LEDGER-RELATIONSHIP-CONFLICT exit5",
+    "",
+    "tally ledger refund revoke / ledger.refund.revoke",
+    "- input: {relationshipId, reason}",
+    "- result: {relationship, lifecycleEvent}",
+    "- errors: LEDGER-RELATIONSHIP-NOT-FOUND exit4; LEDGER-RELATIONSHIP-TYPE-MISMATCH exit6; LEDGER-RELATIONSHIP-INACTIVE exit6",
+    "",
+    "tally ledger refund replace / ledger.refund.replace",
+    "- input: {relationshipId, originalTransactionId, refundTransactionId, reason}",
+    "- result: {retiredRelationship, activeRelationship, lifecycleEvent}",
+    "- errors: revoke errors plus refund confirm errors",
+    "",
+    "tally ledger relationship get / ledger.relationship.get",
+    "- input: {relationshipId, includeHistory?: boolean=false}",
+    "- result: RelationshipDetail plus lifecycleHistory[] when requested",
+    "- errors: LEDGER-RELATIONSHIP-NOT-FOUND exit4",
+    "",
+    "tally ledger actuals query / ledger.actuals.query",
+    "- first-page input: {filters?: {accountIds?: id[], effectiveDateFrom?: LocalDate, effectiveDateTo?: LocalDate, categoryIds?: id[], transferState?: included|excluded|only, refundState?: netted|gross|only, relationshipState?: related|unrelated|any, categorizationState?: categorized|uncategorized|any, transactionLifecycle?: active|inactive|any}, pageSize: integer 1..500}",
+    "- later-page input: {cursor} only",
+    "- result: {items: ActualsItem[], totals: {netAccountMovement, externalSpend, budgetActual, currencyCode}, cursor?: opaque text, expiresAt?: UTC instant, snapshotId}",
+    "- errors: LEDGER-ACTUALS-FILTER-INVALID exit3; LEDGER-CURSOR-INVALID exit7; LEDGER-CURSOR-EXPIRED exit7; LEDGER-CURSOR-INCOMPATIBLE exit7; LEDGER-SNAPSHOT-BUSY exit5",
+    "",
+    "Constraints: transfer/refund roles are explicit; active role exclusivity and cumulative refund limits are transactional. First-page snapshot creation is one BEGIN IMMEDIATE transaction; no cursor is returned before commit. Later cursor pages are read-only and cannot include filters."
+  ],
+  "created_at": "2026-07-18T06:27:07.7806667+00:00",
+  "links": [
+    {
+      "id": "01KXSYNHACPAMGMABD0828B5ZP",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACTUALS-QUERY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:29:53.6130034+00:00"
+    },
+    {
+      "id": "01KXSYNGC3XS4F3F3M9MNDEDQ4",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-REFUND-CONFIRMATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:29:52.6445558+00:00"
+    },
+    {
+      "id": "01KXSYNGV8ET7PS53X27G3Q32M",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-RELATIONSHIP-CORRECTION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:29:53.1295986+00:00"
+    },
+    {
+      "id": "01KXSYNHSFHSAWFE9RN0C78NQZ",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SNAPSHOT-PAGINATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:29:54.0961459+00:00"
+    },
+    {
+      "id": "01KXSYNFW74F1RNRA631V286C1",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-TRANSFER-CONFIRMATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:29:52.1363973+00:00"
+    },
+    {
+      "id": "01KXSYNKPYEEGBYCN9PF2A0V5G",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-ACTUALS-QUERY-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:29:56.0637729+00:00"
+    },
+    {
+      "id": "01KXSYNJSS8S2VB6WZQC0X01BG",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-REFUND-CONFIRMATION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:29:55.1306273+00:00"
+    },
+    {
+      "id": "01KXSYNK8VV0ET0DSW3WRJR9MZ",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-RELATIONSHIP-CORRECTION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:29:55.6121914+00:00"
+    },
+    {
+      "id": "01KXSYNM5RP3CF0380VB63TBHW",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-SNAPSHOT-PAGINATION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:29:56.5373932+00:00"
+    },
+    {
+      "id": "01KXSYNJ9Y46JKPRT1PPFXKESJ",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-TRANSFER-CONFIRMATION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:29:54.6229427+00:00"
+    }
+  ]
+}

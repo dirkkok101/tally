@@ -1,0 +1,83 @@
+{
+  "id": "01KXSYV1AHPKBV4679JRDD8Q1H",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DM-LEDGER-CATALOGUE-LIFECYCLE",
+  "name": "CatalogueLifecycleEvents",
+  "description": [
+    "Persisted attributable rename, archive, and category-reactivation history promised by account and category operation contracts."
+  ],
+  "schema_def": [
+    "account_lifecycle_event",
+    "- id: ULID text, primary key",
+    "- accountId: Account.id, required, RESTRICT",
+    "- eventType: enum {renamed, archived}",
+    "- priorDisplayName: text, nullable; required for renamed",
+    "- newDisplayName: text, nullable; required for renamed",
+    "- reason: text, required",
+    "- actorKind: enum {agent, human, system}",
+    "- actorLabel: text, required",
+    "- actorRunId: text, nullable",
+    "- recordedByOsIdentity: text, protected metadata",
+    "- occurredAt: trusted UTC instant",
+    "",
+    "spend_category_lifecycle_event",
+    "- id: ULID text, primary key",
+    "- categoryId: SpendCategory.id, required, RESTRICT",
+    "- eventType: enum {renamed, archived, reactivated}",
+    "- priorName: text, nullable; required for renamed",
+    "- newName: text, nullable; required for renamed",
+    "- reason: text, required",
+    "- actorKind: enum {agent, human, system}",
+    "- actorLabel: text, required",
+    "- actorRunId: text, nullable",
+    "- recordedByOsIdentity: text, protected metadata",
+    "- occurredAt: trusted UTC instant",
+    "",
+    "Constraints: append-only; aggregate state and event insert commit in one idempotent write transaction; event order is occurredAt then ULID; public history exposes safe actor attribution but never recordedByOsIdentity; account has no reactivation operation in v1; category reactivation requires no active normalized-name conflict. OQ-LEDGER-4 and OQ-LEDGER-6 gate implementation of their respective halves."
+  ],
+  "created_at": "2026-07-18T06:32:53.8424410+00:00",
+  "links": [
+    {
+      "id": "01KXSYV4GFKA3FY2801EPWE9GK",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACCOUNT-MAINTENANCE",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:32:57.1043629+00:00"
+    },
+    {
+      "id": "01KXSYV50FCV3XRQK2BVHXH723",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-CATALOGUE",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:32:57.6169054+00:00"
+    },
+    {
+      "id": "01KXSYV1AKGBK529BH5XJF0Z3Y",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-4",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:32:53.8430702+00:00"
+    },
+    {
+      "id": "01KXSYV1AK2XYARZ6B30GYPVAJ",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-6",
+      "rel": "see-also",
+      "created_at": "2026-07-18T06:32:53.8433095+00:00"
+    },
+    {
+      "id": "01KXSYV5G4QZKJ70GHBRMZZKBV",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-ACCOUNT-MAINTENANCE-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:32:58.1171003+00:00"
+    },
+    {
+      "id": "01KXSYV5YDBRYHENDE0HVZJYFW",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-CATEGORY-CATALOGUE-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:32:58.5739595+00:00"
+    }
+  ]
+}

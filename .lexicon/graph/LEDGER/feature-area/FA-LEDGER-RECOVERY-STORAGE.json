@@ -1,0 +1,54 @@
+{
+  "id": "01KXSWZ5WQY5XV1T8R20AMQYET",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "FA-LEDGER-RECOVERY-STORAGE",
+  "name": "Recovery and Storage",
+  "description": [
+    "Owns embedded persistence, artifact protection, backups, separate-target restore, storage evolution, and authoritative-store activation."
+  ],
+  "created_at": "2026-07-18T06:00:12.4401621+00:00",
+  "links": [
+    {
+      "id": "01KXSXH9Z0123GKGSV21MCJH4Q",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-CANDIDATE-ACTIVATION",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:10:06.4333244+00:00"
+    },
+    {
+      "id": "01KXSXH9E00KGKAKTHTKF0PSVQ",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-EMBEDDED-STORAGE",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:10:05.8899479+00:00"
+    },
+    {
+      "id": "01KXSYNMMAXFT2QK7Y397BSGH2",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:29:57.0034192+00:00"
+    },
+    {
+      "id": "01KXSXHAEQAA209S03E30HDHZQ",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-STORE-GENERATION",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:10:06.9358229+00:00"
+    },
+    {
+      "id": "01KXSXV9WYAYZ1TNGPWB3QZ8MX",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-BACKUP-VERIFICATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:15:34.0478036+00:00"
+    },
+    {
+      "id": "01KXSXVAC0ZTM9ANPEGK6JB4R1",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SAFE-RESTORE",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:15:34.5295189+00:00"
+    }
+  ]
+}

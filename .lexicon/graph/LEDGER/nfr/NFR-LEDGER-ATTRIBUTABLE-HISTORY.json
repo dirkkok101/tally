@@ -36,6 +36,13 @@
       "target": "FR-LEDGER-TRANSACTION-CORRECTION",
       "rel": "supports",
       "created_at": "2026-07-18T04:28:00.7918856+00:00"
+    },
+    {
+      "id": "01KXSXHC024GY3692VGFA93VZ8",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-ATTRIBUTABLE-HISTORY-INVARIANTS",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:10:08.5159050+00:00"
     }
   ]
 }

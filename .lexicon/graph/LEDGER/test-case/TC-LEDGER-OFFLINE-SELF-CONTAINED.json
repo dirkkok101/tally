@@ -1,0 +1,26 @@
+{
+  "id": "01KXSXGARJWH67PJ3TH12CNVDZ",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "TC-LEDGER-OFFLINE-SELF-CONTAINED",
+  "slug": "OFFLINE-SELF-CONTAINED",
+  "title": "Verify offline self-contained operation",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Fresh release installation with network denied and process observation enabled.",
+  "steps": "Complete account/category/transaction/relationship/actuals/backup/restore/evolution/schema/skill acceptance workflows; inspect listening sockets and processes before, during, and after.",
+  "expected": "All Ledger workflows succeed without network, daemon, external database, or hosted dependency; no Tally process remains after invocation.",
+  "owner": "LEDGER implementation",
+  "created_at": "2026-07-18T06:09:34.4838002+00:00",
+  "links": [
+    {
+      "id": "01KXSXX5ZJ8SME7D4GYJ7P77KV",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-CONTRACT-SKILLS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:16:35.5715051+00:00"
+    }
+  ]
+}

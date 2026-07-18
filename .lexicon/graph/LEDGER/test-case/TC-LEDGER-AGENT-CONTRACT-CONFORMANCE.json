@@ -1,0 +1,26 @@
+{
+  "id": "01KXSXG8TR927NTWCDM2MBGVTV",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE",
+  "slug": "AGENT-CONTRACT-CONFORMANCE",
+  "title": "Verify every agent operation contract",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Published linux-x64 executable and embedded skills for Codex and Claude Code.",
+  "steps": "Enumerate OperationDescriptors; invoke help and schema; exercise success and each declared expected-error class through JSON stdin; run compatibility mismatch cases; compare stdout, stderr, exits, and skill manifests.",
+  "expected": "Every public operation has deterministic schema/help/compatibility metadata; one structured stdout object; metadata-only stderr; documented non-zero exits; incompatible skills fail before writes.",
+  "owner": "LEDGER implementation",
+  "created_at": "2026-07-18T06:09:32.5061184+00:00",
+  "links": [
+    {
+      "id": "01KXSXX38BDKT8TQ1KNA4VXKJT",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-CONTRACT-SKILLS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:16:32.7806322+00:00"
+    }
+  ]
+}

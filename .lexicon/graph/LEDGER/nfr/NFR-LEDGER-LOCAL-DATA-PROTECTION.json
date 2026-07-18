@@ -36,6 +36,13 @@
       "target": "FR-LEDGER-STRUCTURED-INVOCATION",
       "rel": "supports",
       "created_at": "2026-07-18T04:27:54.7794685+00:00"
+    },
+    {
+      "id": "01KXSXHD041Z8T8W0P8D0F2RBH",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-LOCAL-DATA-PROTECTION",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:10:09.5416389+00:00"
     }
   ]
 }

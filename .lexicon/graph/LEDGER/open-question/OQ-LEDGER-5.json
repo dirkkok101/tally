@@ -4,9 +4,9 @@
   "ref_code": "OQ-LEDGER-5",
   "question": "Validate the proposed transfer, refund/reversal, and cash-withdrawal spend policies with representative transactions.",
   "context": [
-    "PRD may use A6 and A11: confirmed transfers require distinct owned deposit accounts with same-currency equal/opposite principal movements; posting dates may differ; embedded fees are not linkable. Explicit same-account/currency opposite-sign refunds may be partial but cumulative credits cannot exceed the original and offset its active category. Cash withdrawals remain External Spend unless linked to another tracked account. Validate representative examples; invalidation changes the PRD rule, not PRD readiness."
+    "Pre-implementation gate. Evidence required: representative owned-account transfers, partial/full refunds or reversals, and cash withdrawals from the real accounts with owner-confirmed classifications and expected totals. This blocks transfer/refund relationship rules, correction lifecycle, and External Spend/Budget Actual implementation. Planning must create and complete a validation task first; no affected relationship or actuals implementation task may start while this question is open. If examples invalidate the policy, update A6/A11, the PRD, DD-LEDGER-IMMUTABLE-HISTORY, relationship/actuals models and contracts, and tests before implementation."
   ],
   "status": "open",
-  "owner": "Personal Finance Owner",
+  "owner": "LEDGER planning validation",
   "created_at": "2026-07-17T13:45:01.0807520+00:00"
 }

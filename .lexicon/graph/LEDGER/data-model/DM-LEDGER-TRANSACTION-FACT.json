@@ -1,0 +1,43 @@
+{
+  "id": "01KXSX0S8863WG00NQZ215JXSR",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DM-LEDGER-TRANSACTION-FACT",
+  "name": "TransactionFact",
+  "description": [
+    "Canonical immutable bank-account movement. Signed amount is the owned-account balance delta."
+  ],
+  "schema_def": [
+    "transaction_fact",
+    "- id: ULID text, primary key",
+    "- accountId: Account.id, required, RESTRICT",
+    "- signedAmountMinor: Int64, required, non-zero",
+    "- currencyCode: literal ZAR",
+    "- transactionDate: ISO local date, required",
+    "- postingDate: ISO local date, nullable",
+    "- effectiveDate: derived postingDate ?? transactionDate",
+    "- originalDescription: text, required",
+    "- sourceReference: text, nullable",
+    "- provenanceKind: enum {manual_agent,statement_import,other}",
+    "- provenanceReference: text, nullable",
+    "- recordedAt: trusted UTC instant",
+    "- recordedByOsIdentity: text, protected metadata",
+    "Constraints: insert-only; no category or relationship columns; one source reference per account when present; amounts originate from canonical two-decimal strings."
+  ],
+  "created_at": "2026-07-18T06:01:05.0336977+00:00",
+  "links": [
+    {
+      "id": "01KXSXDNXMMBKKK37S9ZPMKM45",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACTUALS-QUERY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:07.6053263+00:00"
+    },
+    {
+      "id": "01KXSXDNFGS1YC9AMVPNHAD7GY",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-TRANSACTION-RECORDING",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:07.1530995+00:00"
+    }
+  ]
+}

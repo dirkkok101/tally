@@ -1,0 +1,77 @@
+{
+  "id": "01KXSWZ865WV1BXCK4E1H8GYW3",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DD-LEDGER-IDEMPOTENT-MUTATIONS",
+  "title": "Transactional idempotency with artifact reconciliation",
+  "description": [
+    "Make database and filesystem mutations safely repeatable for agents."
+  ],
+  "decision": [
+    "Every public mutation requires an idempotency key. The identity is contract version plus operation ID plus key; comparison uses a canonical request hash including attributable actor context. Validation failures and busy/resource failures do not consume the key. Database effects and the stable structured result commit with the IdempotencyRecord in one transaction. Filesystem artifacts use a deterministic artifact ID, private staging path, checksum manifest, flush, verification, and atomic publication; retries reconcile a matching published artifact if publication preceded outcome recording."
+  ],
+  "rationale": [
+    "Database uniqueness alone cannot make backup, restore, migration, or skill file effects exactly repeatable across crashes. Stable artifact identities and manifests bridge the database/filesystem durability boundary without distributed transactions."
+  ],
+  "alternatives": [
+    "A: caller retries without persisted keys — rejected. B: database idempotency only — insufficient for files. C: transactional record plus artifact reconciliation — chosen."
+  ],
+  "consequences": [
+    "A reused key with any changed semantic request returns conflict. Successful replay returns the original result without volatile fields. Operation descriptors declare whether a command is mutating and therefore requires a key."
+  ],
+  "status_notes": [
+    "Accepted. Planned implementation areas: src/Tally/Features/Ledger/Contract and Recovery."
+  ],
+  "status": "accepted",
+  "created_at": "2026-07-18T06:00:14.7906393+00:00",
+  "links": [
+    {
+      "id": "01KXSXDE7G9QXA7EFNA13R6C5N",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-BACKUP-VERIFICATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:59.7295169+00:00"
+    },
+    {
+      "id": "01KXSXDDRWYT28K8K7CQFP83M9",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-IDEMPOTENT-WRITES",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:07:59.2618112+00:00"
+    },
+    {
+      "id": "01KXSXDEQ8JBZCKC7YYGN6V0DE",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SAFE-RESTORE",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:00.2329190+00:00"
+    },
+    {
+      "id": "01KXSXDF6V4KY57Z19FWNX0MZC",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SAFE-STORAGE-EVOLUTION",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:00.7322123+00:00"
+    },
+    {
+      "id": "01KXSXDFPC3VJTQHSQEBT4PB32",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:08:01.2289324+00:00"
+    },
+    {
+      "id": "01KXSXHGWRG7ND9NCAF5JMSRFF",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-ATOMIC-CRASH-RECOVERY",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:10:13.5293418+00:00"
+    },
+    {
+      "id": "01KXSXECSE31ZA23KBWR7N12G2",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-IDEMPOTENT-WRITES-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:08:31.0236506+00:00"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "id": "01KXSX8ZAN0YWHNV7JM6JJJS56",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DIAG-LEDGER-LEDGER-ER",
+  "title": "LEDGER durable and ephemeral data model",
+  "diagram_type": "er",
+  "format": "mermaid",
+  "content": [
+    "erDiagram",
+    "  ACCOUNT ||--o{ ACCOUNT_LIFECYCLE_EVENT : changed_by",
+    "  SPEND_CATEGORY ||--o{ SPEND_CATEGORY_LIFECYCLE_EVENT : changed_by",
+    "  ACCOUNT ||--o{ TRANSACTION_FACT : owns",
+    "  SPEND_CATEGORY ||--o{ CATEGORY_ALLOCATION : classifies",
+    "  TRANSACTION_FACT ||--o{ CATEGORY_ALLOCATION : has_history",
+    "  TRANSACTION_FACT ||--o{ TRANSACTION_LIFECYCLE_EVENT : corrected_by",
+    "  TRANSACTION_FACT o|--o{ TRANSACTION_LIFECYCLE_EVENT : replacement",
+    "  TRANSACTION_FACT ||--o{ FINANCIAL_RELATIONSHIP : source_role",
+    "  TRANSACTION_FACT ||--o{ FINANCIAL_RELATIONSHIP : target_role",
+    "  FINANCIAL_RELATIONSHIP ||--o{ RELATIONSHIP_LIFECYCLE_EVENT : corrected_by",
+    "  IDEMPOTENCY_RECORD o|--o| ARTIFACT_MANIFEST : reconciles",
+    "  STORE_GENERATION ||--|| LEDGER_DATABASE : contains",
+    "  STORE_GENERATION ||--o{ ARTIFACT_MANIFEST : verified_by",
+    "  QUERY_SNAPSHOT ||--o{ QUERY_SNAPSHOT_ITEM : freezes"
+  ],
+  "created_at": "2026-07-18T06:05:33.3984164+00:00",
+  "links": [
+    {
+      "id": "01KXSXE5E9ABJB89Z4GNTT5TCN",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-FINANCIAL-REPRESENTATION",
+      "rel": "supports",
+      "created_at": "2026-07-18T06:08:23.4987777+00:00"
+    },
+    {
+      "id": "01KXSXE5Y1PC0NZTGRDAVCSVBX",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "rel": "supports",
+      "created_at": "2026-07-18T06:08:24.0026532+00:00"
+    },
+    {
+      "id": "01KXSYV6C7PG71XQ75YV0GKXSS",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-CATALOGUE-LIFECYCLE",
+      "rel": "supports",
+      "created_at": "2026-07-18T06:32:59.0161964+00:00"
+    },
+    {
+      "id": "01KXSXX1TZ88MCC12CYFHPZR5N",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-TRANSACTIONS-ALLOCATIONS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T06:16:31.3286106+00:00"
+    },
+    {
+      "id": "01KXSXVBB5BB5YJ1RWGJS12VX1",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-ATTRIBUTABLE-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-18T06:15:35.5268632+00:00"
+    }
+  ]
+}

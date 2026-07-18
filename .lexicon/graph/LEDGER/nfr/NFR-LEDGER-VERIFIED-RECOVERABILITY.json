@@ -36,6 +36,13 @@
       "target": "FR-LEDGER-SAFE-STORAGE-EVOLUTION",
       "rel": "supports",
       "created_at": "2026-07-18T04:27:58.0449912+00:00"
+    },
+    {
+      "id": "01KXSXHEGPXYZ8P009ZTQXRZJ9",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-VERIFIED-RECOVERY-DRILL",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T06:10:11.0958220+00:00"
     }
   ]
 }

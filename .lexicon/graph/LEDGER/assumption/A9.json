@@ -4,8 +4,8 @@
   "ref_code": "A9",
   "title": "Maintained platform encryption is acceptable",
   "description": [
-    "Assume restrictive permissions plus host full-disk/volume encryption, or a maintained encrypted storage provider with platform-protected keys, can meet the accepted at-rest posture. This must be proven by the OQ-LEDGER-8 design spike; custom cryptography is not acceptable."
+    "Validated by OQ-LEDGER-8: restrictive 0700/0600 artifacts plus maintained host full-disk/volume encryption with OS-managed keys is the selected at-rest posture. Microsoft documents that stock SQLite has no file encryption; the executable therefore supplies no custom cryptography. Deployment still verifies that the selected data volume provides the required host protection."
   ],
-  "status": "active",
+  "status": "validated",
   "created_at": "2026-07-17T17:29:18.6144233+00:00"
 }
