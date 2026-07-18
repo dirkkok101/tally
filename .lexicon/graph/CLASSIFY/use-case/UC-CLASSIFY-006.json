@@ -1,0 +1,47 @@
+{
+  "id": "01KXV9EDTJ3NDBEF2EJ7GGHEM2",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "UC-CLASSIFY-006",
+  "title": "Discover and invoke the CLASSIFY agent contract",
+  "preconditions": "CLASSIFY is locally available to the owner process and exposes a versioned contract descriptor.",
+  "postconditions": "The host can orchestrate the workflow without scraping prose, bypassing owner intent, reading CLASSIFY storage, or receiving unrelated financial data.",
+  "main_flow": "The host obtains operation, request, result, error, and compatibility schemas; checks supported versions; invokes evaluate, inspect, apply, explain, rule-manage, or status non-interactively; consumes structured standard output and stable exit categories; and treats standard error as metadata-only diagnostics.",
+  "alt_flows": [
+    "Reject unsupported contract versions before reading or mutation.",
+    "Return stable structured validation errors for malformed requests.",
+    "Do not emit transaction descriptions, normalized tokens, rules, or financial values to diagnostic logs.",
+    "Fail closed when owner identity, local file permissions, or downstream compatibility cannot be established."
+  ],
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The AI Agent Host needs to discover CLASSIFY capabilities or invoke a classification workflow for the owner.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-18T18:57:29.4267906+00:00",
+  "links": [
+    {
+      "id": "01KXV9W0W006PSFHV2JXKDKTSD",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-AI-AGENT-HOST",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:04:54.9136915+00:00"
+    },
+    {
+      "id": "01KXV9W1DYW7EQE967PJMRP4X9",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:04:55.4874336+00:00"
+    },
+    {
+      "id": "01KXV9W22DPK5FRD9F84Y4AQ78",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CONTRACT-DISCOVERY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:04:56.1424485+00:00"
+    },
+    {
+      "id": "01KXV9W2NMTDJDBZWTG4258P91",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-STRUCTURED-INVOCATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:04:56.7577289+00:00"
+    }
+  ]
+}

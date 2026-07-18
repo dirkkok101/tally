@@ -1,0 +1,11 @@
+{
+  "id": "01KXV9NC0WJV1552KX2ZKBSFWB",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "A2",
+  "title": "A stable classification projection can be bounded",
+  "description": [
+    "Assume LEDGER can publish a versioned snapshot-bound projection containing only the canonical fields CLASSIFY is permitted to inspect, without private storage access or duplicated transfer, refund, lifecycle, or categorization semantics. Validate against the implemented public contract and representative statements."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T19:01:16.9575872+00:00"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "01KXV9NKZSH2HKPGCNCG2BQXKF",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "term": "Rule Set Version",
+  "definition": [
+    "An immutable addressable collection of active Classification Rule versions evaluated together. Candidate, active, retired, and superseded lifecycle changes are explicit and attributable."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-18T19:01:25.1141399+00:00"
+}

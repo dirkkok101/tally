@@ -1,0 +1,10 @@
+{
+  "id": "01KXV9NF7C7SD9RZG9ATRX28SC",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "metric": "Deterministic outcome reproducibility",
+  "current": "Not measured; CLASSIFY is not implemented.",
+  "target": "100% of repeated evaluations with identical snapshot, category, normalization, and rule-set fingerprints return semantically identical ordered outcomes and evidence.",
+  "by_when": "Before CLASSIFY v1 acceptance",
+  "measured": 0,
+  "created_at": "2026-07-18T19:01:20.2377381+00:00"
+}

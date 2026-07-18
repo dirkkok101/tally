@@ -1,0 +1,10 @@
+{
+  "id": "01KXV9NMAKZS3T5S2SNB09JFMH",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "term": "Evaluation Fingerprint",
+  "definition": [
+    "A deterministic integrity identity over the LEDGER contract and snapshot or store generation, category catalogue, classification projection, normalization, rule set, and when applicable private evidence source. A mismatch makes prior output stale."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-18T19:01:25.4602454+00:00"
+}

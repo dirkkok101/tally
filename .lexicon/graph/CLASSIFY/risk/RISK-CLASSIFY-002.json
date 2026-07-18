@@ -10,5 +10,14 @@
   "mitigation": [
     "Version normalization, expose bounded match evidence, fail multi-match and unknown patterns closed, measure coverage/conflicts by version, and require revalidation before broadening a rule."
   ],
-  "created_at": "2026-07-18T17:51:11.6167415+00:00"
+  "created_at": "2026-07-18T17:51:11.6167415+00:00",
+  "links": [
+    {
+      "id": "01KXV9W920X8JG5C7F20VA9GK7",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-001",
+      "rel": "motivated-by",
+      "created_at": "2026-07-18T19:05:03.2977754+00:00"
+    }
+  ]
 }

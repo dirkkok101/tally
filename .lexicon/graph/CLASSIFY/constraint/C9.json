@@ -1,0 +1,11 @@
+{
+  "id": "01KXV9NHS0X75QDZ62Y6KDQX9P",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "C9",
+  "title": "Private evaluation evidence isolation",
+  "description": [
+    "Raw representative and held-out rows, descriptions, normalized tokens, and rule-derived payloads remain outside Git and owner-only. CLASSIFY persists or exports only necessary protected local state, source fingerprints, aggregate metrics, and safe decisions; diagnostic channels never contain financial payloads."
+  ],
+  "type": "technical",
+  "created_at": "2026-07-18T19:01:22.8517958+00:00"
+}

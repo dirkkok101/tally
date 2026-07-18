@@ -1,0 +1,32 @@
+{
+  "id": "01KXV9ECEMKY7KY640KACPCN2X",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "UC-CLASSIFY-002",
+  "title": "Inspect and explain a classification outcome",
+  "preconditions": "The referenced evaluation outcome exists and its source transaction, rule, normalization, category, and snapshot identifiers are available.",
+  "postconditions": "The owner can reproduce why the outcome occurred without exposing unrelated transaction data or performing any mutation.",
+  "main_flow": "CLASSIFY returns the outcome type; canonical fields actually inspected; normalization and rule versions; matched rule identifiers and predicates; selected category identifier when present; conflict or no-suggestion reason; staleness state; and the next safe action.",
+  "alt_flows": [
+    "Return stable not-found when the evaluation or transaction reference is unknown.",
+    "Return stale with invalidating state when the underlying transaction, category, rule, normalization, or snapshot changed.",
+    "Do not reconstruct evidence from current state when the historical evidence is unavailable."
+  ],
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner or AI Agent Host requests the reason for a suggestion, no-suggestion, conflict, or stale result.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-18T18:57:28.0215653+00:00",
+  "links": [
+    {
+      "id": "01KXV9ZAXEMWS1FQYNFPGEE7JA",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:06:43.5035654+00:00"
+    },
+    {
+      "id": "01KXV9VWGT83YAX6G80Y0FVMW9",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:04:50.4588890+00:00"
+    }
+  ]
+}

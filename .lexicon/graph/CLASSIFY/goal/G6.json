@@ -1,0 +1,10 @@
+{
+  "id": "01KXV9NBATV0M7MA9V9YW3QGTM",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "G6",
+  "text": [
+    "Validate each candidate normalization or rule-set version against private representative and held-out evidence before activation or broad apply. Evidence [assumption]: an owner-only corpus can measure coverage, conflicts, drift, and incorrect-application canaries without committing financial payloads."
+  ],
+  "target": "Every activation candidate produces a fingerprint-bound deterministic report that accounts for all evidence rows and blocks activation on any incorrect-application canary, stale input, or unexplained conflict; raw evidence remains owner-only and untracked.",
+  "created_at": "2026-07-18T19:01:16.2509380+00:00"
+}

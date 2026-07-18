@@ -1,0 +1,47 @@
+{
+  "id": "01KXV9ECSPD0RTMEW7Q0AMSJYM",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "UC-CLASSIFY-003",
+  "title": "Apply accepted classification decisions",
+  "preconditions": "Every selected outcome is an unambiguous suggestion; the evaluation evidence and input fingerprint are current; target transactions are active and eligible; target categories are active; and a replay key identifies the apply request.",
+  "postconditions": "Successful assignments are attributable in LEDGER; source facts remain unchanged; replay cannot duplicate the decision; each requested transaction has an exact structured outcome.",
+  "main_flow": "CLASSIFY revalidates the LEDGER contract, snapshot-sensitive state, category, transaction, rule, and evidence versions; submits only public LEDGER category assignment or correction operations; records one structured result per requested transaction; and returns applied, already-applied, rejected, and failed totals.",
+  "alt_flows": [
+    "Reject the entire stale selection before mutation when preview evidence no longer matches current state.",
+    "Never apply a conflict or no-suggestion outcome.",
+    "Report per-transaction LEDGER rejection for inactive transactions, archived categories, or invalid corrections.",
+    "On interruption, replay reports already-applied decisions and safely continues or terminates without duplicate assignments."
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The owner explicitly selects current suggestions or invokes an approved exact-rule apply after reviewing preview evidence.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-18T18:57:28.3757399+00:00",
+  "links": [
+    {
+      "id": "01KXV9ZBHJP6SG9YEGW238W0WN",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:06:44.1474884+00:00"
+    },
+    {
+      "id": "01KXV9VX2K5VDGHJM8YFTA4AYK",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:04:51.0286420+00:00"
+    },
+    {
+      "id": "01KXV9VXRBZY8WG34J1BT9VMHQ",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-ASSIGNMENT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:04:51.7249654+00:00"
+    },
+    {
+      "id": "01KXV9VYBM2QBVPY7MKSJ8HRZ9",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-IDEMPOTENT-WRITES",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:04:52.3417508+00:00"
+    }
+  ]
+}

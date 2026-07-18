@@ -4,9 +4,12 @@
   "ref_code": "OQ-CLASSIFY-5",
   "question": "How should owner corrections propose, retire, narrow, or replace a classification rule without treating one corrected transaction as permission to generalize?",
   "context": [
-    "Correction feedback is the core learning loop, but automatic rule broadening can amplify an erroneous or exceptional decision."
+    "This prevents an erroneous correction or one-off exception from propagating automatically."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "A correction records feedback against the exact prior evaluation and rule version, then may propose the smallest retire, narrow, or replacement change with owner rationale. One correction never activates or broadens a rule. Every candidate is privately re-evaluated and activation remains explicit; Ledger correction history remains authoritative and unchanged."
+  ],
   "owner": "CLASSIFY discovery",
   "created_at": "2026-07-18T17:51:37.6612352+00:00"
 }

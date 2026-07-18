@@ -10,5 +10,14 @@
   "mitigation": [
     "Suggestions never mutate; permit batch apply only for owner-approved deterministic rules; validate on held-out representative transactions with zero incorrect applies; preserve reasoned LEDGER correction and rule retirement."
   ],
-  "created_at": "2026-07-18T17:51:11.2695980+00:00"
+  "created_at": "2026-07-18T17:51:11.2695980+00:00",
+  "links": [
+    {
+      "id": "01KXV9W8CRZ16E0S7YKK0GV50P",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-003",
+      "rel": "motivated-by",
+      "created_at": "2026-07-18T19:05:02.6178658+00:00"
+    }
+  ]
 }

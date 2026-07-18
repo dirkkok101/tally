@@ -4,9 +4,9 @@
   "ref_code": "OQ-CLASSIFY-2",
   "question": "Which canonical LEDGER fields may a deterministic rule inspect, and which description normalization transformations remain stable across the three accounts without changing financial meaning?",
   "context": [
-    "The selected rulebook must be useful but bounded; account, direction, description tokens, amount scope, dates, and relationship state can create false matches or private coupling if used carelessly."
+    "The current LEDGER actuals contract names ActualsItem but does not specify the classification-safe descriptive projection. Run /lex:spike against the implemented public contract and private representative statements to propose the smallest allowlist and versioned normalization, then update LEDGER's public contract if needed. CLASSIFY must fail closed and may not read private storage while this remains unresolved."
   ],
-  "status": "open",
-  "owner": "CLASSIFY discovery",
+  "status": "deferred",
+  "owner": "CLASSIFY projection and normalization spike",
   "created_at": "2026-07-18T17:51:36.6774850+00:00"
 }

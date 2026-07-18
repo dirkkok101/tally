@@ -1,0 +1,11 @@
+{
+  "id": "01KXV9NK6MZZNZBG8KGA4ZM04W",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "C11",
+  "title": "Bounded local evaluation",
+  "description": [
+    "Every evaluation and candidate validation advertises and enforces deterministic transaction, rule, evidence-row, memory, and processing-time limits. Exceeding a limit returns a stable structured failure and performs no activation or LEDGER mutation."
+  ],
+  "type": "technical",
+  "created_at": "2026-07-18T19:01:24.3129247+00:00"
+}

@@ -4,9 +4,12 @@
   "ref_code": "OQ-CLASSIFY-4",
   "question": "May an explicitly owner-approved exact rule batch-apply without per-transaction confirmation during an invoked run, and what evidence must the preview expose before apply?",
   "context": [
-    "This determines the useful automation boundary between suggestion-only behavior and safe reduction of repetitive owner decisions."
+    "This keeps batch value without granting a watcher or agent implicit mutation authority."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "V1 is suggestion-only by default. An exact rule may batch-apply only when the owner explicitly activated that rule for broad apply, explicitly invokes apply, and receives a current fingerprint-bound preview showing rule version, category, selected transaction count and identities, conflicts, exclusions, and no-suggestion totals. Apply revalidates all state, never includes conflicts, and returns one replay-safe LEDGER result per transaction."
+  ],
   "owner": "CLASSIFY discovery",
   "created_at": "2026-07-18T17:51:37.3226107+00:00"
 }

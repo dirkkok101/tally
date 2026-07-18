@@ -1,0 +1,40 @@
+{
+  "id": "01KXV9EC3CWCNRWE16CX93Y810",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "UC-CLASSIFY-001",
+  "title": "Evaluate eligible transactions",
+  "preconditions": "The public LEDGER contract is compatible; an active normalization and rule-set version exists; the owner can obtain a snapshot-bound ordered eligible transaction set and active category catalogue.",
+  "postconditions": "LEDGER is unchanged; every eligible transaction is accounted for in stable order; outcomes and evidence are bound to the evaluated snapshot and versions.",
+  "main_flow": "CLASSIFY opens an evaluation run; queries the complete eligible set through LEDGER; validates transaction, category, normalization, and rule-set versions; evaluates each transaction deterministically; emits exactly one suggestion with rule evidence, no-suggestion, or conflict outcome per transaction; and returns coverage and conflict totals without mutation.",
+  "alt_flows": [
+    "Reject an incompatible or unavailable LEDGER contract before evaluation.",
+    "Abort without partial outcomes when the snapshot cannot remain consistent.",
+    "Return an explicit bounded-limit failure without mutation when the transaction or rule limit is exceeded.",
+    "Mark a transaction outcome stale rather than guessing when its lifecycle or category state changes."
+  ],
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner explicitly requests classification after canonical transactions exist in LEDGER.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-18T18:57:27.6611901+00:00",
+  "links": [
+    {
+      "id": "01KXV9ZA9SYD0TZDWKF8PEY0QJ",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:06:42.8743350+00:00"
+    },
+    {
+      "id": "01KXV9VVBC5RQZ57AEA1GGJAYS",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:04:49.2609159+00:00"
+    },
+    {
+      "id": "01KXV9VVZD0VY7KC9MJM7XBA13",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACTUALS-QUERY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:04:49.9025310+00:00"
+    }
+  ]
+}

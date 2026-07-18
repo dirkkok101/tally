@@ -3,7 +3,7 @@
   "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
   "ref_code": "G2",
   "text": [
-    "Produce deterministic, explainable classification outcomes from versioned owner-approved rules."
+    "Produce deterministic, explainable classification outcomes from versioned owner-approved rules. Evidence [assumption]: representative owner history contains recurring patterns that a bounded deterministic rulebook can cover safely; validate through the private classification evidence spike."
   ],
   "target": "For every eligible transaction, the same canonical inputs, active category catalogue, normalization version, and rule set produce the same suggestion with rule/match evidence, explicit no-suggestion, or explicit conflict; no outcome invents a category or hides ambiguity.",
   "created_at": "2026-07-18T17:49:43.4789152+00:00"

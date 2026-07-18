@@ -10,5 +10,14 @@
   "mitigation": [
     "Keep state owner-only and local, avoid raw-payload logging or serialization, return only necessary structured evidence, and include security canaries in discovery and verification."
   ],
-  "created_at": "2026-07-18T17:51:12.3737928+00:00"
+  "created_at": "2026-07-18T17:51:12.3737928+00:00",
+  "links": [
+    {
+      "id": "01KXV9WAACKW6QXY4ZG11Q8XJF",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS",
+      "rel": "motivated-by",
+      "created_at": "2026-07-18T19:05:04.5891996+00:00"
+    }
+  ]
 }

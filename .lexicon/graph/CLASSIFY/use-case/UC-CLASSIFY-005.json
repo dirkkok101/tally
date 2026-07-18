@@ -1,0 +1,40 @@
+{
+  "id": "01KXV9EDEDYXE68BQ0NT7D7XKS",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "UC-CLASSIFY-005",
+  "title": "Use a correction as bounded feedback",
+  "preconditions": "The correction and prior classification provenance are attributable; the affected transaction and active category state can be read through public LEDGER operations.",
+  "postconditions": "The correction remains authoritative in LEDGER; feedback is attributable and reversible; no rule is silently generalized or activated; future evaluations use only an explicitly activated rule version.",
+  "main_flow": "CLASSIFY records feedback against the exact evaluation, rule version, and owner correction; explains the prior match; identifies the smallest affected scope; proposes retire, narrow, or replace actions; and requires candidate validation plus explicit activation.",
+  "alt_flows": [
+    "Record feedback without a rule proposal when prior evidence cannot be proven.",
+    "Never infer a general rule from one correction alone.",
+    "Reject a proposed replacement that broadens into conflicts or an archived category.",
+    "Preserve prior rule and evaluation history when retiring unsafe behavior."
+  ],
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner corrects a category assignment in LEDGER or marks a prior CLASSIFY result unsafe.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-18T18:57:29.0386767+00:00",
+  "links": [
+    {
+      "id": "01KXV9VZKYYV62VJR0K46SYN06",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:04:53.6318763+00:00"
+    },
+    {
+      "id": "01KXV9ZE1E52X7ZRSKC9KMSK4R",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:06:46.7037083+00:00"
+    },
+    {
+      "id": "01KXV9W08KTGB6MDM7KAX47YPF",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-ASSIGNMENT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:04:54.2927738+00:00"
+    }
+  ]
+}

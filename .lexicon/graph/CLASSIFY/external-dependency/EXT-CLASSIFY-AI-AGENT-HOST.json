@@ -1,0 +1,22 @@
+{
+  "id": "01KXV9NE74JRFZSHKCFEMP6HFV",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "EXT-CLASSIFY-AI-AGENT-HOST",
+  "name": "AI Agent Host",
+  "description": [
+    "Inbound local workflow client running under the Personal Finance Owner's OS identity. It discovers CLASSIFY schemas, preserves run and replay identities, presents preview evidence, and interprets structured outcomes without bypassing explicit owner mutation intent."
+  ],
+  "type": "client",
+  "owner": "Personal Finance Owner",
+  "metadata": "{\"gate_type\":\"workflow\",\"validation_basis\":\"client_contract\",\"validation_status\":\"assumed\"}",
+  "created_at": "2026-07-18T19:01:19.2062921+00:00",
+  "links": [
+    {
+      "id": "01KXV9W71196AN3AWPPVQJMS04",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-AI-AGENT-HOST",
+      "rel": "see-also",
+      "created_at": "2026-07-18T19:05:01.2184775+00:00"
+    }
+  ]
+}

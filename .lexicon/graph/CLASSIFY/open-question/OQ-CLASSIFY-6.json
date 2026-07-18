@@ -4,9 +4,12 @@
   "ref_code": "OQ-CLASSIFY-6",
   "question": "How do category rename, archive/reactivation, transaction void/supersession, transfer/refund relationship changes, and stale snapshots invalidate suggestions or active rules?",
   "context": [
-    "LEDGER owns lifecycle truth; CLASSIFY must detect stale evidence and avoid applying obsolete category or transaction decisions."
+    "Invalidation follows canonical identifiers and public lifecycle state; CLASSIFY never re-infers it from description text."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "Every outcome is bound to an Evaluation Fingerprint. Transaction void or supersession, transfer/refund relationship change affecting eligibility, allocation change, category archive/reactivation or identifier change, Ledger contract/store generation or snapshot change, normalization change, and rule-set change make the affected prior outcome stale. Category rename with the same stable active identifier does not alter the proposed identity but display data is refreshed. Stale outcomes cannot apply and must be re-evaluated."
+  ],
   "owner": "CLASSIFY discovery",
   "created_at": "2026-07-18T17:51:37.9725763+00:00"
 }

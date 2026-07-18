@@ -13,6 +13,13 @@
   "created_at": "2026-07-18T17:51:13.0304401+00:00",
   "links": [
     {
+      "id": "01KXV9WBPZBHHKN0YJD36HXXNR",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
+      "rel": "motivated-by",
+      "created_at": "2026-07-18T19:05:06.0163404+00:00"
+    },
+    {
       "id": "01KXV5S6V23N7ZV1HPAGZ68839",
       "target_type": "requirement",
       "target": "FR-LEDGER-ACTUALS-QUERY",

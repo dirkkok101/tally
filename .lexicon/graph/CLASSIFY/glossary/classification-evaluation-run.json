@@ -1,0 +1,10 @@
+{
+  "id": "01KXV9NKMW70FBJKGRKD2071DV",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "term": "Classification Evaluation Run",
+  "definition": [
+    "An explicitly invoked read-only evaluation of one snapshot-bound eligible transaction set using identified category, projection, normalization, and rule-set versions. It accounts for every eligible input and never mutates LEDGER."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-18T19:01:24.7654719+00:00"
+}

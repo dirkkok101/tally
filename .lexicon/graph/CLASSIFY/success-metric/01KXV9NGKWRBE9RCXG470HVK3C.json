@@ -1,0 +1,10 @@
+{
+  "id": "01KXV9NGKWRBE9RCXG470HVK3C",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "metric": "Sensitive payload disclosure",
+  "current": "Not measured; CLASSIFY is not implemented.",
+  "target": "Zero transaction descriptions, normalized tokens, rules, financial values, private corpus rows, or serialized payloads appear in logs, stderr, crash diagnostics, telemetry, or tracked artifacts.",
+  "by_when": "At every CLASSIFY quality gate",
+  "measured": 0,
+  "created_at": "2026-07-18T19:01:21.6620008+00:00"
+}

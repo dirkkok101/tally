@@ -4,9 +4,9 @@
   "ref_code": "OQ-CLASSIFY-1",
   "question": "What transaction volume, repeat rate, current category coverage, and manual classification time does a representative post-INGEST 90-day LEDGER sample show?",
   "context": [
-    "This establishes whether CLASSIFY is worth building, provides the do-less baseline, and supplies the monitored volume and effort kill-criterion evidence."
+    "The supplied bank PDFs establish private source evidence, but no canonical post-INGEST 90-day LEDGER sample or timed owner workflow exists yet. Run /lex:spike after the Ledger/Ingest proof slice can produce a private canonical sample; measure total eligible rows, recurring decisions per month, category coverage, and manual minutes. This is not a PRD blocker, but it is a custom-engine planning and kill-criterion gate."
   ],
-  "status": "open",
-  "owner": "CLASSIFY discovery",
+  "status": "deferred",
+  "owner": "CLASSIFY evidence spike before implementation planning",
   "created_at": "2026-07-18T17:51:36.3742724+00:00"
 }

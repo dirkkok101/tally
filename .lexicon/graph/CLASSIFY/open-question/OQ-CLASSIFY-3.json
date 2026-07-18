@@ -4,9 +4,18 @@
   "ref_code": "OQ-CLASSIFY-3",
   "question": "Which first-release rule shapes are necessary, how are overlapping matches ordered, and when must multiple matches become a Rule Conflict instead of a winner?",
   "context": [
-    "An implicit priority scheme can silently apply the wrong category; discovery must define a small rule vocabulary and fail-closed conflict semantics."
+    "Concrete predicates depend on OQ-CLASSIFY-2. The requirements-level invariant is fixed: rules use only a bounded versioned vocabulary over allowed canonical fields; multiple compatible matches proposing the same category may combine evidence, while incompatible category matches are a Rule Conflict and no implicit priority chooses a winner. /lex:design selects the minimal predicate grammar after the spike."
   ],
-  "status": "open",
-  "owner": "CLASSIFY discovery",
-  "created_at": "2026-07-18T17:51:36.9816096+00:00"
+  "status": "deferred",
+  "owner": "CLASSIFY design after field spike",
+  "created_at": "2026-07-18T17:51:36.9816096+00:00",
+  "links": [
+    {
+      "id": "01KXVA00VJPJR43Y7T5VHXZXC0",
+      "target_type": "open_question",
+      "target": "OQ-CLASSIFY-2",
+      "rel": "see-also",
+      "created_at": "2026-07-18T19:07:05.9711291+00:00"
+    }
+  ]
 }

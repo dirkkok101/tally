@@ -1,0 +1,47 @@
+{
+  "id": "01KXV9ED48BV5PRMDEPN6E0MWZ",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "UC-CLASSIFY-004",
+  "title": "Manage and validate deterministic rules",
+  "preconditions": "The rule references only allowed canonical fields and an active category identifier; a private representative evaluation corpus and current normalization version are available for activation decisions.",
+  "postconditions": "The active rule set is immutable and version-addressable; superseded versions remain inspectable; activation evidence and input fingerprint are attributable; no transaction assignment occurs.",
+  "main_flow": "CLASSIFY saves a draft rule version with owner attribution and rationale; validates its bounded predicate vocabulary; evaluates the candidate rule set against representative and held-out evidence; reports coverage, no-suggestion, conflict, drift, and incorrect-application canaries; and activates or retires a version only through an explicit owner command.",
+  "alt_flows": [
+    "Reject unsupported or semantically unsafe fields and predicates.",
+    "Reject references to unknown or archived categories.",
+    "Refuse activation when required private evidence is absent, stale, or contains an incorrect-application canary.",
+    "Surface overlapping incompatible matches as conflicts instead of silently choosing a winner."
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The owner creates, changes, retires, or proposes activation of a classification rule.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-18T18:57:28.7141658+00:00",
+  "links": [
+    {
+      "id": "01KXV9ZCREQA9DVCMHKT51CBYP",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:06:45.3908241+00:00"
+    },
+    {
+      "id": "01KXV9ZC473DNYH649BW1C8FH8",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:06:44.7441522+00:00"
+    },
+    {
+      "id": "01KXV9VZ0CDSVRX237N8C9C8DH",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:04:53.0051457+00:00"
+    },
+    {
+      "id": "01KXV9ZDCQ8QMA1NXDDBN0ZCT3",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-CATALOGUE",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:06:46.0405517+00:00"
+    }
+  ]
+}

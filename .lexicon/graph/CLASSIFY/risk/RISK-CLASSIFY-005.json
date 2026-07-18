@@ -10,5 +10,14 @@
   "mitigation": [
     "Measure baseline volume and repeat rate during discovery, retain agent-guided manual assignment as the do-less fallback, and enforce the monitored effort/coverage kill criteria before PRD and planning."
   ],
-  "created_at": "2026-07-18T17:51:12.6970284+00:00"
+  "created_at": "2026-07-18T17:51:12.6970284+00:00",
+  "links": [
+    {
+      "id": "01KXV9WB1846SK0DZVQ2SFB2MV",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS",
+      "rel": "motivated-by",
+      "created_at": "2026-07-18T19:05:05.3210101+00:00"
+    }
+  ]
 }

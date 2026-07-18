@@ -1,0 +1,57 @@
+{
+  "id": "01KXV9NDVD5M9YZS2N5XGJNXJN",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
+  "name": "LEDGER Public Contract",
+  "description": [
+    "Outbound internal-module integration used to discover a classification-safe snapshot projection, active categories, transaction and allocation history, and idempotent assignment or correction operations. Runtime compatibility and projection sufficiency remain assumed until published-binary conformance tests exist."
+  ],
+  "type": "api",
+  "owner": "LEDGER",
+  "metadata": "{\"gate_type\":\"api\",\"validation_basis\":\"client_contract\",\"validation_status\":\"assumed\"}",
+  "created_at": "2026-07-18T19:01:18.8306441+00:00",
+  "links": [
+    {
+      "id": "01KXV9W38SP2QGPVCXGS7BXS9C",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACTUALS-QUERY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:04:57.3706900+00:00"
+    },
+    {
+      "id": "01KXV9W4EJWAS8692SXAF90THS",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-ASSIGNMENT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:04:58.5796456+00:00"
+    },
+    {
+      "id": "01KXV9W3W91TRSB30KRP0JT9KJ",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-CATALOGUE",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:04:57.9945175+00:00"
+    },
+    {
+      "id": "01KXV9W5160VXKN9Q3G9W7QWGR",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CONTRACT-DISCOVERY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:04:59.1755094+00:00"
+    },
+    {
+      "id": "01KXV9W6B9HRS39GY34R6NEYBX",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-IDEMPOTENT-WRITES",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:05:00.5225677+00:00"
+    },
+    {
+      "id": "01KXV9W5MSW8RC57FKAESFPZ61",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-STRUCTURED-INVOCATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:04:59.8026949+00:00"
+    }
+  ]
+}

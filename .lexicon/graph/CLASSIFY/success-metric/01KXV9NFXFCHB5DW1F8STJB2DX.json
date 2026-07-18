@@ -1,0 +1,10 @@
+{
+  "id": "01KXV9NFXFCHB5DW1F8STJB2DX",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "metric": "Incorrect broad application canaries",
+  "current": "Unknown pending the private evidence spike.",
+  "target": "Zero incorrect batch-applied category assignments across representative and held-out evidence.",
+  "by_when": "Before any exact-rule batch apply is enabled",
+  "measured": 0,
+  "created_at": "2026-07-18T19:01:20.9439956+00:00"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "01KXVA1CJTDM9KYATC7SFNYK69",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "version": "0.2",
+  "changes": [
+    "Discovery: reused P1, mapped six workflows, dispositioned domains, defined assumptions and gated integrations, resolved batch/correction/staleness policy, added local security and private evaluation rules, audited kill criteria, and routed four empirical questions to spikes."
+  ],
+  "created_at": "2026-07-18T19:07:50.7476339+00:00"
+}

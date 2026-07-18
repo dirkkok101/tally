@@ -1,0 +1,22 @@
+{
+  "id": "01KXV9NEWB6MN2V4KMJ12KD5QA",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS",
+  "name": "Private Classification Evaluation Corpus",
+  "description": [
+    "Owner-maintained representative and held-out canonical transaction examples plus expected outcomes, stored outside Git and diagnostic output. Only source fingerprints, aggregate metrics, and validation decisions may enter the graph."
+  ],
+  "type": "data",
+  "owner": "Personal Finance Owner",
+  "metadata": "{\"gate_type\":\"data\",\"validation_basis\":\"source_and_client\",\"validation_status\":\"assumed\"}",
+  "created_at": "2026-07-18T19:01:19.8844703+00:00",
+  "links": [
+    {
+      "id": "01KXV9ZEMSQCNM0VR6VF50B62J",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T19:06:47.3218076+00:00"
+    }
+  ]
+}
