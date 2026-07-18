@@ -9,7 +9,7 @@
     "Schema foundation intentionally has no Implements link: translate the approved account, category, and catalogue-lifecycle models into one independently verified V001 fragment."
   ],
   "objective": [
-    "Create exact account, spend-category, and attributable catalogue-lifecycle tables, constraints, indexes, and active-name uniqueness without implementing catalogue behavior."
+    "Create exact account, Spend Category, and attributable catalogue-lifecycle tables, constraints, indexes, and active-name uniqueness without implementing catalogue behavior."
   ],
   "planning_state": "planned",
   "priority": 0,

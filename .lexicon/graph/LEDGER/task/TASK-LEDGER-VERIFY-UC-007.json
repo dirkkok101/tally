@@ -71,44 +71,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT126TA22Q46FGMPXM5ND56",
+      "id": "01KXT8HKZNHFM5VWDGBZCHGBG5",
       "kind": "acceptance_check",
       "text": [
-        "Create produces one owner-only complete-state backup; independent verify confirms versions, integrity, every durable type/history, relationships, idempotency, counts, and exact totals without live mutation."
+        "Create produces one owner-only Verified Ledger Backup; independent verify confirms versions, integrity, every durable type/history, relationships, idempotency, counts, and exact totals without live mutation."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-18T09:22:31.0288043+00:00"
     },
     {
-      "id": "01KXT126TA9JD1543F4PKDPCCF",
+      "id": "01KXT8HKZPYAXX7T9AE3SJZ2N7",
       "kind": "acceptance_check",
       "text": [
         "Prepare restores/validates a separate candidate; only explicit authorized activation against expected fingerprint switches CURRENT and retains prior generation."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-18T09:22:31.0288043+00:00"
     },
     {
-      "id": "01KXT126TAVV50RR6MTP5TRPQW",
+      "id": "01KXT8HKZPAEQN0PX0EVJBHYHM",
       "kind": "acceptance_check",
       "text": [
         "Unsafe destination/full disk/corrupt/incompatible/incomplete/unavailable protection/unauthorized/mismatched candidate paths preserve the authoritative Ledger."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-18T09:22:31.0288043+00:00"
     },
     {
-      "id": "01KXT126TA7YA7NMX8VCG4RRK3",
+      "id": "01KXT8HKZPN6THJGS7H7Y87JM8",
       "kind": "acceptance_check",
       "text": [
         "Identical create/activate retries reproduce original artifacts/generation outcomes without second effects."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-18T09:22:31.0288043+00:00"
     },
     {
       "id": "01KXT126TAXDFFWPD66DR4S464",

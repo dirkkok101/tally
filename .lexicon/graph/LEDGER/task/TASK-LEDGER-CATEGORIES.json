@@ -4,7 +4,7 @@
   "sub_plan_id": "01KXT06A6E7WPPCP8KDAKCJ1H4",
   "ref_code": "TASK-LEDGER-CATEGORIES",
   "slug": "CATEGORIES",
-  "title": "Implement spend-category catalogue operations",
+  "title": "Implement Spend Category catalogue operations",
   "description": [
     "Deliver the gated flat category catalogue and attributable lifecycle operations."
   ],

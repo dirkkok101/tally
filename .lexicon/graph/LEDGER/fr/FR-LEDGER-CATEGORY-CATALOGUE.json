@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "type": "functional",
   "ref_code": "FR-LEDGER-CATEGORY-CATALOGUE",
-  "title": "Maintain the spend-category catalogue",
+  "title": "Maintain the Spend Category catalogue",
   "description": [
     "Create and maintain a flat shared catalogue of spend categories. Implements G3 and UC-LEDGER-008 under A10 and A13."
   ],

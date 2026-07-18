@@ -9,7 +9,7 @@
     "Deliver ledger.transaction.record/get over exact source facts, validated provenance, account state, idempotency, and real SQLite."
   ],
   "objective": [
-    "Record one immutable canonical account movement and round-trip every accepted source fact without precision or provenance loss."
+    "Record one immutable Canonical Transaction and round-trip every accepted source fact without precision or provenance loss."
   ],
   "planning_state": "planned",
   "priority": 1,

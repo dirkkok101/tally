@@ -9,7 +9,7 @@
     "Deliver separate-target candidate restore, complete validation, explicit authorized atomic activation, and retained prior generation."
   ],
   "objective": [
-    "Recover from a verified backup without changing CURRENT until a candidate is fully revalidated against the expected authoritative fingerprint."
+    "Recover from a Verified Ledger Backup without changing CURRENT until a candidate is fully revalidated against the expected authoritative fingerprint."
   ],
   "planning_state": "planned",
   "priority": 1,

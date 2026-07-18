@@ -4,7 +4,7 @@
   "sub_plan_id": "01KXT069GD3347N15180MYTNVK",
   "ref_code": "TASK-LEDGER-GATE-EVIDENCE-SIGNS",
   "slug": "GATE-EVIDENCE-SIGNS",
-  "title": "Validate signed account deltas",
+  "title": "Validate Signed Account Amount conventions",
   "description": [
     "Validation-only task intentionally has no Implements link: it resolves OQ-LEDGER-2 from owner-supplied redacted evidence before signed amounts, relationship roles, and actuals implementation."
   ],

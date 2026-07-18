@@ -4,7 +4,7 @@
   "sub_plan_id": "01KXT069GD3347N15180MYTNVK",
   "ref_code": "TASK-LEDGER-GATE-EVIDENCE-CATEGORIES",
   "slug": "GATE-EVIDENCE-CATEGORIES",
-  "title": "Validate category allocation policy",
+  "title": "Validate Category Assignment policy",
   "description": [
     "Validation-only task intentionally has no Implements link: it resolves OQ-LEDGER-6 from owner-supplied redacted evidence before categories, allocations, and categorized actuals implementation."
   ],

@@ -8,7 +8,7 @@
     "Explicitly link qualifying transaction legs as a transfer between owned accounts. Implements G4 and UC-LEDGER-004 under A11."
   ],
   "rationale": [
-    "Transfers must stay visible in account history while contributing zero external spend."
+    "Transfers must stay visible in account history while contributing zero External Spend."
   ],
   "priority": 0,
   "complexity": "L",

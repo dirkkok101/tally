@@ -71,44 +71,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT126TDW9KTKKXMJDEH7BRF",
+      "id": "01KXT8HM7SJM53AVN3XVSE9590",
       "kind": "acceptance_check",
       "text": [
-        "Valid same-account/currency opposite-sign active original/credit creates one full-credit relationship and offsets current original category in credit EffectiveDate period."
+        "Valid same-account/currency opposite-sign active original/credit creates one full-credit relationship and offsets current original category in credit Effective Date period."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-18T09:22:31.2894467+00:00"
     },
     {
-      "id": "01KXT126TDMKSF99XJQNQ4ARZX",
+      "id": "01KXT8HM7THZZ578ZRC8R0J923",
       "kind": "acceptance_check",
       "text": [
         "Multiple partial credits remain within cumulative original magnitude and later category correction moves their category offset."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-18T09:22:31.2894467+00:00"
     },
     {
-      "id": "01KXT126TDB8PSM8PF5R662C9Z",
+      "id": "01KXT8HM7TASFESWAF9VA02WKN",
       "kind": "acceptance_check",
       "text": [
         "Account/currency/sign/lifecycle/over-refund/transfer/reuse/refund-as-original violations return stable no-link outcomes; failed write is atomic."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-18T09:22:31.2894467+00:00"
     },
     {
-      "id": "01KXT126TDNQ06CPY6FHHV7SJE",
+      "id": "01KXT8HM7TDZE1M7D5ER3AY7P6",
       "kind": "acceptance_check",
       "text": [
         "Identical replay returns one relationship and a refund-heavy selected period may produce negative Budget Actual."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-18T09:22:31.2894467+00:00"
     },
     {
       "id": "01KXT126TEZNR7MNRW1ZDW8HBT",
