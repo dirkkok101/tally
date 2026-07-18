@@ -11,10 +11,19 @@
   "objective": [
     "Produce deterministic layout A statement evidence and normalized source records without a generic template or fallback parser."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 20,
   "created_at": "2026-07-18T12:45:42.5606427+00:00",
+  "bead_refs": [
+    {
+      "id": "01KXV2HJ3QYZ8P51PTABC50YGD",
+      "bead_id": "bd-1as",
+      "verification_status": "verified",
+      "verified_at": "2026-07-18T16:56:52.0870739+00:00",
+      "created_at": "2026-07-18T16:56:52.0870739+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXTM5NS456VFHFK9YJH4DE0R",

@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-00-FOUNDATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `15`
 - **Dialect:** `default`
@@ -35,8 +35,8 @@ No task dependencies recorded.
 
 - docs/statements remains ignored and contains exactly the three owner-supplied readable PDF fixtures already assessed during discovery; this gate neither renames nor modifies them.
 - docs/statements/.ingest-fixture-manifest.json is ignored JSON schemaVersion 1 with exactly three fixture objects and exactly two distinct supported variantId values.
-- Each fixture object contains a sourcePath plus expected statementPeriod, accountEvidence, orderedRecords, and reconciliation controls sufficient to assert every source row, exact available balance control, and variant identity; values remain private.
-- Every manifest sourcePath resolves to one readable file under docs/statements, no source path appears more than once, and no statement filename, path, content, amount, balance, record, or expected fact is emitted by verification.
+- Each fixture object contains a repository-relative sourcePath below docs/statements plus expected statementPeriod, accountEvidence, orderedRecords, and reconciliation controls sufficient to assert every source row, exact available balance control, and variant identity; absolute paths are prohibited and all values remain private.
+- Every manifest sourcePath is repository-relative, stays below docs/statements, resolves to one readable file, and appears only once; no statement filename, path, content, amount, balance, record, or expected fact is emitted by verification.
 - The manifest is supplied to fixture-dependent tests through TALLY_INGEST_PRIVATE_FIXTURE_MANIFEST; another worktree or agent must receive that environment variable rather than reconstructing private facts.
 
 ### Failure Criteria
@@ -89,12 +89,15 @@ No task dependencies recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3k6` | `verified` | 2026-07-18T16:56:51.8391224+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3k6` (verified)
 - `governed-by` -> DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling
 - `references` -> EXT-INGEST-OWNER-BANK-STATEMENT: Owner-Supplied Bank Statement
 

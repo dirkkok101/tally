@@ -11,10 +11,19 @@
   "objective": [
     "Prove an owner can preview each qualified statement into one reconciled immutable manifest with no source or LEDGER mutation."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 30,
   "created_at": "2026-07-18T12:56:24.4112574+00:00",
+  "bead_refs": [
+    {
+      "id": "01KXV2HMEXDT6B6ZR3KXE4KTNX",
+      "bead_id": "bd-34o",
+      "verification_status": "verified",
+      "verified_at": "2026-07-18T16:56:54.4936184+00:00",
+      "created_at": "2026-07-18T16:56:54.4936184+00:00"
+    }
+  ],
   "dependencies": [
     {
       "id": "01KXTMS8JXWR2DTPAVCCWTZEYG",

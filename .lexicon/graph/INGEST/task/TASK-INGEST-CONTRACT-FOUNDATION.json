@@ -11,10 +11,19 @@
   "objective": [
     "Produce the typed Native-AOT-safe contract foundation for all eight INGEST operations without registering incomplete handlers."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 20,
   "created_at": "2026-07-18T12:43:01.9014692+00:00",
+  "bead_refs": [
+    {
+      "id": "01KXV2HJBSHP6THPA9SBF13NHB",
+      "bead_id": "bd-twx",
+      "verification_status": "verified",
+      "verified_at": "2026-07-18T16:56:52.3453963+00:00",
+      "created_at": "2026-07-18T16:56:52.3453963+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXTM0RWJ6Z65RNYND2A4XH0C",

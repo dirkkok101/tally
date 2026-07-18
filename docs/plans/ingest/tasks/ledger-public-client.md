@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-LEDGER-PUBLIC-CLIENT`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-02-PREVIEW-REVIEW`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `10`
 - **Dialect:** `default`
@@ -98,12 +98,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2sg` | `verified` | 2026-07-18T16:56:51.3331115+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2sg` (verified)
 - `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): The client consumes FrozenLedgerRecordRequest and stable INGEST compatibility errors.
 - `depends-on:compile` -> [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md): The prerequisite gate proves every operation and contract consumed by the client.
 - `governed-by` -> DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor

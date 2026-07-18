@@ -5,14 +5,14 @@
 - **Ref:** `TASK-INGEST-VERIFY-UC-004`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `60`
 - **Dialect:** `default`
 
 ## Summary
 
-Black-box use-case gate for UC-INGEST-004 exact replay, distinct tuple, identity conflict, and fail-closed overlap behavior.
+Black-box use-case gate for UC-INGEST-004 Exact Replay, distinct tuple, identity conflict, and fail-closed overlap behavior.
 
 ## Objective
 
@@ -36,7 +36,7 @@ Prove repeated or overlapping statements never create an unjustified duplicate s
 
 ### Acceptance Checks
 
-- Byte-identical source content under any filename and the same account returns the prior active/completed batch or receipt before reparsing and creates no new Ledger effect.
+- The same Source Fingerprint, selected account, adapter version, and LEDGER contract version under any filename returns the prior active or completed batch or receipt before reparsing and creates no new Ledger effect; changing any key component requires a new preview.
 - A familiar filename with changed bytes is a new preview, never Exact Replay.
 - Identical date-description-amount rows at distinct source positions remain separate candidates; tuple equality never collapses them.
 - Only variant-proven exact identity with equal immutable facts may be Exact Duplicate; unavailable/incompatible provenance never claims automatic deduplication.
@@ -88,12 +88,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-k94` | `verified` | 2026-07-18T16:56:56.1279270+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-k94` (verified)
 - `covers` -> UC-INGEST-004: Re-import a repeated or overlapping statement safely
 - `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC verification exercises the complete published preview/commit/status contract.
 - `depends-on:compile` -> [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md): Consumes PrivateStatementFixtureSet.

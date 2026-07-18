@@ -5,14 +5,14 @@
 - **Ref:** `TASK-INGEST-PREVIEW-DOMAIN`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-02-PREVIEW-REVIEW`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `20`
 - **Dialect:** `default`
 
 ## Summary
 
-Create pure finance/domain policies for exact normalization, stable identity, source-record accounting, reconciliation, canonical manifests, exact replay, and fail-closed overlap.
+Create pure finance/domain policies for exact normalization, stable identity, source-record accounting, reconciliation, canonical manifests, Exact Replay, and fail-closed overlap.
 
 ## Objective
 
@@ -47,10 +47,10 @@ Turn qualified source evidence into deterministic immutable candidate meaning wi
 - FinancialNormalizer converts exact base-10 evidence to integer minor units and owner-economic sign: asset increases and liability reductions are positive; asset decreases and liability increases are negative; currency is exactly ZAR.
 - TransactionDate is the source date with its year; a yearless date resolves only when exactly one date lies inside the explicit statement period; PostingDate remains distinct and optional; missing or ambiguous facts block without invention.
 - Zero monetary movement becomes excluded_non_transaction with a stable reason and never an ImportCandidate.
-- IngestIdentity derives sourceRecordId from source fingerprint, stable structural position, raw evidence fingerprint, and immutable-facts schema while excluding adapter/manifest/compatible-version metadata; candidateId derives from accountId, sourceRecordId, and immutable normalized facts and drives sourceReference/idempotencyKey.
+- IngestIdentity derives sourceRecordId from Source Fingerprint, stable structural position, raw evidence fingerprint, and immutable-facts schema while excluding adapter/manifest/compatible-version metadata; candidateId derives from accountId, sourceRecordId, and immutable normalized facts and drives sourceReference/idempotencyKey.
 - Identical tuples at different positions remain distinct; filename and fuzzy similarity never affect identity; exact identity with changed immutable facts is conflict.
 - StatementReconciler accounts for every record exactly once and verifies opening plus movements equals closing plus every available running/source control in integer minor units; missing controls are unavailable, not fabricated.
-- ManifestCanonicalizer emits source-generated canonical JSON and manifestRevisionId deterministically; OverlapPolicy returns prior state for selected-account plus exact source fingerprint before parsing and blocks different-source overlapping windows because v1 has no cross-file identity.
+- ManifestCanonicalizer emits source-generated canonical JSON and manifestRevisionId deterministically; OverlapPolicy uses the complete Exact Replay key—Source Fingerprint, selected account, adapter version, and LEDGER contract version—to return prior state before parsing; any changed key component creates a new preview, and different-source overlapping windows remain blocked because v1 has no cross-file identity.
 
 ### Failure Criteria
 
@@ -115,12 +115,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2gk` | `verified` | 2026-07-18T16:56:52.8954418+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2gk` (verified)
 - `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Pure policies construct the canonical manifest and error contract records.
 - `governed-by` -> DD-INGEST-APPLICATION-ARCHITECTURE: Single-process vertical slices with isolated ingestion state
 - `governed-by` -> DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with exact replay and blocked overlap

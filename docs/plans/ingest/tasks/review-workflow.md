@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-REVIEW-WORKFLOW`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-02-PREVIEW-REVIEW`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `40`
 - **Dialect:** `default`
@@ -108,12 +108,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-37p` | `verified` | 2026-07-18T16:56:55.2788864+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-37p` (verified)
 - `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Consumes ImportManifestContract.
 - `depends-on:compile` -> [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md): Consumes ManifestCanonicalizer.
 - `depends-on:compile` -> [TASK-INGEST-PREVIEW-WORKFLOW](../tasks/preview-workflow.md): Inspect and approve consume persisted immutable manifests created by preview.

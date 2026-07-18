@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-VERIFY-UC-003`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `50`
 - **Dialect:** `default`
@@ -89,12 +89,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3ly` | `verified` | 2026-07-18T16:56:55.8624766+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3ly` (verified)
 - `covers` -> UC-INGEST-003: Commit and resume an approved batch
 - `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC verification exercises published commit/resume/status and public Ledger operations.
 - `satisfies` -> NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY: Recover every interrupted commit deterministically

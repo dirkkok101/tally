@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-GATE-MODULE`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `90`
 - **Dialect:** `default`
@@ -106,12 +106,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1vr` | `verified` | 2026-07-18T16:56:56.9599812+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1vr` (verified)
 - `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Consumes CompleteIngestPublicContract.
 - `depends-on:compile` -> [TASK-INGEST-GATE-SECURITY](../tasks/gate-security.md): Module completion requires consolidated security evidence.
 - `depends-on:compile` -> [TASK-INGEST-VERIFY-UC-001](../tasks/verify-uc-001.md): Module completion requires UC-INGEST-001 evidence.

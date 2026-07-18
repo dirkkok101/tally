@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-PDF-EXTRACTION`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-01-FORMAT-CORE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `10`
 - **Dialect:** `default`
@@ -106,12 +106,15 @@ Extract deterministic passive PDF evidence under Native-AOT and resource bounds 
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1j2` | `verified` | 2026-07-18T16:56:51.5888009+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1j2` (verified)
 - `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Extractor failures use the stable IngestError contract.
 - `depends-on:compile` -> [TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES](../tasks/gate-evidence-private-fixtures.md): Fixture-dependent extractor tests consume the validated private expectation manifest.
 - `governed-by` -> DD-INGEST-DOCUMENT-EXTRACTION: Managed in-process PDF extraction with PdfPig

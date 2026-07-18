@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-STATUS-WORKFLOW`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-03-COMMIT-RECOVERY`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `30`
 - **Dialect:** `default`
@@ -102,12 +102,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1tv` | `verified` | 2026-07-18T16:56:54.2387402+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1tv` (verified)
 - `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Status consumes IngestError, BatchStatus, and ImportReceipt contracts.
 - `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md): StatusStateStore reads the V001 INGEST schema.
 - `governed-by` -> DD-INGEST-CLI-OPERATION-CONTRACT: Eight explicit workflow operations from one registry

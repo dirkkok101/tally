@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-ADAPTER-LAYOUT-A`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-01-FORMAT-CORE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `20`
 - **Dialect:** `default`
@@ -97,12 +97,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1as` | `verified` | 2026-07-18T16:56:52.0870739+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1as` (verified)
 - `depends-on:compile` -> [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md): The adapter implements IStatementAdapter over PdfDocumentEvidence and uses the private fixture helper.
 - `governed-by` -> DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam
 - `implements` -> FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts

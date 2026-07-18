@@ -11,10 +11,19 @@
   "objective": [
     "Deliver ingest.resume so repeated recovery converges without a second canonical transaction or a changed request."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 20,
   "created_at": "2026-07-18T12:51:07.3836449+00:00",
+  "bead_refs": [
+    {
+      "id": "01KXV2HK4Y9MT488F8G0K1YTKM",
+      "bead_id": "bd-3ey",
+      "verification_status": "verified",
+      "verified_at": "2026-07-18T16:56:53.1509046+00:00",
+      "created_at": "2026-07-18T16:56:53.1509046+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXTMFJZVFDEGQ5Z8GWKD8S9Z",

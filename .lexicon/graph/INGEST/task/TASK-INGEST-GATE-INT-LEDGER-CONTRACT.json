@@ -11,10 +11,19 @@
   "objective": [
     "Prove that the released LEDGER registry exposes the exact account-read and idempotent transaction record/get contracts INGEST requires without private storage or handler access."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 10,
   "created_at": "2026-07-18T12:43:01.9014692+00:00",
+  "bead_refs": [
+    {
+      "id": "01KXV2HGW6E6CA207FB8PYPXVK",
+      "bead_id": "bd-2dg",
+      "verification_status": "verified",
+      "verified_at": "2026-07-18T16:56:50.8220140+00:00",
+      "created_at": "2026-07-18T16:56:50.8220140+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXTM0RWDC2QYZADE4HB8WBQ9",

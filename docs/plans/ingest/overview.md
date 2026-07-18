@@ -50,31 +50,31 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 
 | Ref | Title | State | Priority | Sub-Plan |
 |---|---|---|---:|---|
-| [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](tasks/gate-int-ledger-contract.md) | Prove the public LEDGER prerequisite | `planned` | 0 | SP-INGEST-00-FOUNDATION: Public prerequisites and local foundations |
-| [TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES](tasks/gate-evidence-private-fixtures.md) | Prepare and validate private statement evidence | `planned` | 0 | SP-INGEST-00-FOUNDATION: Public prerequisites and local foundations |
-| [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | Define the INGEST operation and business contracts | `planned` | 0 | SP-INGEST-00-FOUNDATION: Public prerequisites and local foundations |
-| [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | Create the protected INGEST SQLite foundation | `planned` | 0 | SP-INGEST-00-FOUNDATION: Public prerequisites and local foundations |
-| [TASK-INGEST-PDF-EXTRACTION](tasks/pdf-extraction.md) | Implement bounded in-process PDF extraction | `planned` | 0 | SP-INGEST-01-FORMAT-CORE: Qualified PDF extraction and adapters |
-| [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | Implement the qualified layout A adapter | `planned` | 0 | SP-INGEST-01-FORMAT-CORE: Qualified PDF extraction and adapters |
-| [TASK-INGEST-ADAPTER-LAYOUT-B](tasks/adapter-layout-b.md) | Implement the qualified layout B adapter | `planned` | 0 | SP-INGEST-01-FORMAT-CORE: Qualified PDF extraction and adapters |
-| [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](tasks/gate-int-format-adapters.md) | Prove the qualified adapter set | `planned` | 0 | SP-INGEST-01-FORMAT-CORE: Qualified PDF extraction and adapters |
-| [TASK-INGEST-LEDGER-PUBLIC-CLIENT](tasks/ledger-public-client.md) | Implement the concrete public LEDGER client | `planned` | 0 | SP-INGEST-02-PREVIEW-REVIEW: Preview, reconciliation, and approval |
-| [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | Implement deterministic identity and reconciliation policies | `planned` | 0 | SP-INGEST-02-PREVIEW-REVIEW: Preview, reconciliation, and approval |
-| [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | Implement passive preview and immutable manifest persistence | `planned` | 0 | SP-INGEST-02-PREVIEW-REVIEW: Preview, reconciliation, and approval |
-| [TASK-INGEST-REVIEW-WORKFLOW](tasks/review-workflow.md) | Implement immutable inspect and approval | `planned` | 1 | SP-INGEST-02-PREVIEW-REVIEW: Preview, reconciliation, and approval |
-| [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | Implement the idempotent candidate commit saga | `planned` | 0 | SP-INGEST-03-COMMIT-RECOVERY: Candidate commit and durable recovery |
-| [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md) | Implement deterministic interrupted-commit resume | `planned` | 0 | SP-INGEST-03-COMMIT-RECOVERY: Candidate commit and durable recovery |
-| [TASK-INGEST-STATUS-WORKFLOW](tasks/status-workflow.md) | Implement safe batch status and failure reporting | `planned` | 1 | SP-INGEST-03-COMMIT-RECOVERY: Candidate commit and durable recovery |
-| [TASK-INGEST-ABANDON-CLEANUP](tasks/abandon-cleanup.md) | Implement safe abandon, compaction, and cleanup | `planned` | 1 | SP-INGEST-03-COMMIT-RECOVERY: Candidate commit and durable recovery |
-| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | Wire and prove the complete INGEST public contract | `planned` | 0 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
-| [TASK-INGEST-GATE-SECURITY](tasks/gate-security.md) | Validate INGEST local financial-data security | `planned` | 0 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
-| [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md) | Verify preview and qualification workflow | `planned` | 1 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
-| [TASK-INGEST-VERIFY-UC-002](tasks/verify-uc-002.md) | Verify immutable review and approval workflow | `planned` | 1 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
-| [TASK-INGEST-VERIFY-UC-003](tasks/verify-uc-003.md) | Verify commit and resume workflow | `planned` | 0 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
-| [TASK-INGEST-VERIFY-UC-004](tasks/verify-uc-004.md) | Verify replay and overlap safety workflow | `planned` | 0 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
-| [TASK-INGEST-VERIFY-UC-005](tasks/verify-uc-005.md) | Verify failure handling and cleanup workflow | `planned` | 1 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
-| [TASK-INGEST-VERIFY-UC-006](tasks/verify-uc-006.md) | Verify agent contract discovery and invocation | `planned` | 1 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
-| [TASK-INGEST-GATE-MODULE](tasks/gate-module.md) | Complete the INGEST v1 module gate | `planned` | 0 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
+| [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](tasks/gate-int-ledger-contract.md) | Prove the public LEDGER prerequisite | `ready` | 0 | SP-INGEST-00-FOUNDATION: Public prerequisites and local foundations |
+| [TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES](tasks/gate-evidence-private-fixtures.md) | Prepare and validate private statement evidence | `ready` | 0 | SP-INGEST-00-FOUNDATION: Public prerequisites and local foundations |
+| [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | Define the INGEST operation and business contracts | `ready` | 0 | SP-INGEST-00-FOUNDATION: Public prerequisites and local foundations |
+| [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | Create the protected INGEST SQLite foundation | `ready` | 0 | SP-INGEST-00-FOUNDATION: Public prerequisites and local foundations |
+| [TASK-INGEST-PDF-EXTRACTION](tasks/pdf-extraction.md) | Implement bounded in-process PDF extraction | `ready` | 0 | SP-INGEST-01-FORMAT-CORE: Qualified PDF extraction and adapters |
+| [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | Implement the qualified layout A adapter | `ready` | 0 | SP-INGEST-01-FORMAT-CORE: Qualified PDF extraction and adapters |
+| [TASK-INGEST-ADAPTER-LAYOUT-B](tasks/adapter-layout-b.md) | Implement the qualified layout B adapter | `ready` | 0 | SP-INGEST-01-FORMAT-CORE: Qualified PDF extraction and adapters |
+| [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](tasks/gate-int-format-adapters.md) | Prove the qualified adapter set | `ready` | 0 | SP-INGEST-01-FORMAT-CORE: Qualified PDF extraction and adapters |
+| [TASK-INGEST-LEDGER-PUBLIC-CLIENT](tasks/ledger-public-client.md) | Implement the concrete public LEDGER client | `ready` | 0 | SP-INGEST-02-PREVIEW-REVIEW: Preview, reconciliation, and approval |
+| [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | Implement deterministic identity and reconciliation policies | `ready` | 0 | SP-INGEST-02-PREVIEW-REVIEW: Preview, reconciliation, and approval |
+| [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | Implement passive preview and immutable manifest persistence | `ready` | 0 | SP-INGEST-02-PREVIEW-REVIEW: Preview, reconciliation, and approval |
+| [TASK-INGEST-REVIEW-WORKFLOW](tasks/review-workflow.md) | Implement immutable inspect and approval | `ready` | 1 | SP-INGEST-02-PREVIEW-REVIEW: Preview, reconciliation, and approval |
+| [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | Implement the idempotent candidate commit saga | `ready` | 0 | SP-INGEST-03-COMMIT-RECOVERY: Candidate commit and durable recovery |
+| [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md) | Implement deterministic interrupted-commit resume | `ready` | 0 | SP-INGEST-03-COMMIT-RECOVERY: Candidate commit and durable recovery |
+| [TASK-INGEST-STATUS-WORKFLOW](tasks/status-workflow.md) | Implement safe batch status and failure reporting | `ready` | 1 | SP-INGEST-03-COMMIT-RECOVERY: Candidate commit and durable recovery |
+| [TASK-INGEST-ABANDON-CLEANUP](tasks/abandon-cleanup.md) | Implement safe abandon, compaction, and cleanup | `ready` | 1 | SP-INGEST-03-COMMIT-RECOVERY: Candidate commit and durable recovery |
+| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | Wire and prove the complete INGEST public contract | `ready` | 0 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
+| [TASK-INGEST-GATE-SECURITY](tasks/gate-security.md) | Validate INGEST local financial-data security | `ready` | 0 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
+| [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md) | Verify preview and qualification workflow | `ready` | 1 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
+| [TASK-INGEST-VERIFY-UC-002](tasks/verify-uc-002.md) | Verify immutable review and approval workflow | `ready` | 1 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
+| [TASK-INGEST-VERIFY-UC-003](tasks/verify-uc-003.md) | Verify commit and resume workflow | `ready` | 0 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
+| [TASK-INGEST-VERIFY-UC-004](tasks/verify-uc-004.md) | Verify replay and overlap safety workflow | `ready` | 0 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
+| [TASK-INGEST-VERIFY-UC-005](tasks/verify-uc-005.md) | Verify failure handling and cleanup workflow | `ready` | 1 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
+| [TASK-INGEST-VERIFY-UC-006](tasks/verify-uc-006.md) | Verify agent contract discovery and invocation | `ready` | 1 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
+| [TASK-INGEST-GATE-MODULE](tasks/gate-module.md) | Complete the INGEST v1 module gate | `ready` | 0 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
 
 ### Dependency Graph
 
@@ -285,35 +285,6 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 - [TASK-INGEST-VERIFY-UC-005](tasks/verify-uc-005.md): Task has no implements refs.
 - [TASK-INGEST-VERIFY-UC-006](tasks/verify-uc-006.md): Task has no implements refs.
 
-#### Tasks Without Bead Refs
-
-- [TASK-INGEST-ABANDON-CLEANUP](tasks/abandon-cleanup.md): Task has no bead refs.
-- [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md): Task has no bead refs.
-- [TASK-INGEST-ADAPTER-LAYOUT-B](tasks/adapter-layout-b.md): Task has no bead refs.
-- [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md): Task has no bead refs.
-- [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md): Task has no bead refs.
-- [TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES](tasks/gate-evidence-private-fixtures.md): Task has no bead refs.
-- [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](tasks/gate-int-format-adapters.md): Task has no bead refs.
-- [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](tasks/gate-int-ledger-contract.md): Task has no bead refs.
-- [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md): Task has no bead refs.
-- [TASK-INGEST-GATE-MODULE](tasks/gate-module.md): Task has no bead refs.
-- [TASK-INGEST-GATE-SECURITY](tasks/gate-security.md): Task has no bead refs.
-- [TASK-INGEST-LEDGER-PUBLIC-CLIENT](tasks/ledger-public-client.md): Task has no bead refs.
-- [TASK-INGEST-PDF-EXTRACTION](tasks/pdf-extraction.md): Task has no bead refs.
-- [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md): Task has no bead refs.
-- [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md): Task has no bead refs.
-- [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md): Task has no bead refs.
-- [TASK-INGEST-REVIEW-WORKFLOW](tasks/review-workflow.md): Task has no bead refs.
-- [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md): Task has no bead refs.
-- [TASK-INGEST-STATUS-WORKFLOW](tasks/status-workflow.md): Task has no bead refs.
-- [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md): Task has no bead refs.
-- [TASK-INGEST-VERIFY-UC-002](tasks/verify-uc-002.md): Task has no bead refs.
-- [TASK-INGEST-VERIFY-UC-003](tasks/verify-uc-003.md): Task has no bead refs.
-- [TASK-INGEST-VERIFY-UC-004](tasks/verify-uc-004.md): Task has no bead refs.
-- [TASK-INGEST-VERIFY-UC-005](tasks/verify-uc-005.md): Task has no bead refs.
-- [TASK-INGEST-VERIFY-UC-006](tasks/verify-uc-006.md): Task has no bead refs.
-
 #### Coverage Warnings
 
 - 11 loose task(s) have no implements refs.
-- 25 task(s) have no bead refs.

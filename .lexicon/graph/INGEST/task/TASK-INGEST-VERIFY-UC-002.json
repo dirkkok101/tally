@@ -11,10 +11,19 @@
   "objective": [
     "Prove an owner can inspect and approve exactly one committable immutable revision without editing source facts or mutating LEDGER."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 40,
   "created_at": "2026-07-18T12:56:24.4112574+00:00",
+  "bead_refs": [
+    {
+      "id": "01KXV2HNGPFB0M9MK6J1N8VSQZ",
+      "bead_id": "bd-1ta",
+      "verification_status": "verified",
+      "verified_at": "2026-07-18T16:56:55.5742261+00:00",
+      "created_at": "2026-07-18T16:56:55.5742261+00:00"
+    }
+  ],
   "dependencies": [
     {
       "id": "01KXTMS8JYWS97C7N6N7XKYFQ3",

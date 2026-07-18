@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-RESUME-WORKFLOW`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-03-COMMIT-RECOVERY`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `20`
 - **Dialect:** `default`
@@ -104,12 +104,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3ey` | `verified` | 2026-07-18T16:56:53.1509046+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3ey` (verified)
 - `depends-on:compile` -> [TASK-INGEST-COMMIT-SAGA](../tasks/commit-saga.md): Resume reuses CandidateCommitSaga, BatchCommitLock, and CommitStateStore.
 - `governed-by` -> DD-INGEST-COMMIT-RECOVERY: Per-batch locked idempotent candidate saga
 - `governed-by` -> DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with exact replay and blocked overlap

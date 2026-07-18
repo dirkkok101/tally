@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-GATE-SECURITY`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `20`
 - **Dialect:** `default`
@@ -104,12 +104,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-114` | `verified` | 2026-07-18T16:56:52.6317349+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-114` (verified)
 - `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Security is validated against the complete published eight-operation surface.
 - `depends-on:compile` -> [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md): Consumes PrivateStatementFixtureSet.
 - `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md): Consumes IngestArtifactProtection.EnsureOwnerOnly.

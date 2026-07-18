@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-GATE-INT-LEDGER-CONTRACT`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-00-FOUNDATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `10`
 - **Dialect:** `default`
@@ -92,12 +92,15 @@ No task dependencies recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2dg` | `verified` | 2026-07-18T16:56:50.8220140+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2dg` (verified)
 - `blocked-by` -> TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract
 - `governed-by` -> DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor
 - `verifies` -> TC-INGEST-LEDGER-PUBLIC-CONFORMANCE: Verify INGEST uses only the public LEDGER contract

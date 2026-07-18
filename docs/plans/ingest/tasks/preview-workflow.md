@@ -5,14 +5,14 @@
 - **Ref:** `TASK-INGEST-PREVIEW-WORKFLOW`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-02-PREVIEW-REVIEW`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `30`
 - **Dialect:** `default`
 
 ## Summary
 
-Compose public account lookup, bounded source snapshotting, qualified extraction, domain policies, exact replay/overlap checks, and one atomic preview-state transaction.
+Compose public account lookup, bounded source snapshotting, qualified extraction, domain policies, Exact Replay/overlap checks, and one atomic preview-state transaction.
 
 ## Objective
 
@@ -43,7 +43,7 @@ Deliver ingest.preview as a deterministic no-LEDGER-mutation workflow that persi
 
 - Preview validates contract versions, selected account identifier, path schema, and advertised limits before opening the source; LedgerContractClient confirms exactly one active ZAR account and statement metadata must agree without inference.
 - CallerOwnedSourceReader opens read-only, captures safe before/after metadata, reads no more than the byte limit into one immutable buffer, computes SHA-256 over those exact bytes, and returns source_changed if metadata or bytes change.
-- PreviewStateStore checks selected account plus source fingerprint first: an active or completed exact replay returns prior manifest/status/receipt without reparsing or mutation; only a different source reaches overlap evaluation.
+- PreviewStateStore checks the complete Exact Replay key first: Source Fingerprint, selected account, adapter version, and LEDGER contract version. An active or completed match returns the prior manifest, status, or receipt without reparsing or mutation; any changed key component requires a new preview before overlap evaluation.
 - A new source runs the real extractor and exactly one registered adapter, normalizes/accounts/reconciles every record, blocks any ambiguity or overlap, canonicalizes the complete ordered manifest, and persists batch, revision, records, candidates, controls, and safe status in one INGEST transaction.
 - Success returns stable batchId and manifestRevisionId; any failure creates no committable manifest; every path leaves the source byte-for-byte unchanged and invokes no ledger.transaction.record.
 - PreviewOperationModule exposes a typed handler binding for ingest.preview but is not added to the global registry until GATE-INT-PUBLIC-CONTRACT.
@@ -114,12 +114,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1of` | `verified` | 2026-07-18T16:56:53.7015346+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1of` (verified)
 - `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Consumes IngestOperationContracts.
 - `depends-on:compile` -> [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](../tasks/gate-int-format-adapters.md): Preview consumes only the qualified StatementAdapterRegistry.
 - `depends-on:compile` -> [TASK-INGEST-LEDGER-PUBLIC-CLIENT](../tasks/ledger-public-client.md): Preview validates the selected account through LedgerContractClient.GetAccountAsync.

@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-GATE-INT-PUBLIC-CONTRACT`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `10`
 - **Dialect:** `default`
@@ -113,12 +113,15 @@ No graph references recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2jn` | `verified` | 2026-07-18T16:56:51.1132535+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2jn` (verified)
 - `depends-on:compile` -> [TASK-INGEST-ABANDON-CLEANUP](../tasks/abandon-cleanup.md): Consumes RecoveryCleanupOperationModule.
 - `depends-on:compile` -> [TASK-INGEST-COMMIT-SAGA](../tasks/commit-saga.md): Consumes CommitOperationModule.
 - `depends-on:compile` -> [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](../tasks/gate-int-format-adapters.md): Consumes StatementAdapterRegistry.

@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-VERIFY-UC-005`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `70`
 - **Dialect:** `default`
@@ -90,12 +90,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-113` | `verified` | 2026-07-18T16:56:56.4232517+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-113` (verified)
 - `covers` -> UC-INGEST-005: Handle and clean up a failed ingestion
 - `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC verification exercises published status/abandon/cleanup operations.
 - `depends-on:compile` -> [TASK-INGEST-GATE-SECURITY](../tasks/gate-security.md): The workflow consumes the consolidated security canary and permission evidence.

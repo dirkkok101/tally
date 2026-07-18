@@ -15,7 +15,7 @@ Prove the pinned in-process extractor and two fixture-qualified adapters before 
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md) | Implement bounded in-process PDF extraction | `planned` | 0 |
-| [TASK-INGEST-ADAPTER-LAYOUT-A](../tasks/adapter-layout-a.md) | Implement the qualified layout A adapter | `planned` | 0 |
-| [TASK-INGEST-ADAPTER-LAYOUT-B](../tasks/adapter-layout-b.md) | Implement the qualified layout B adapter | `planned` | 0 |
-| [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](../tasks/gate-int-format-adapters.md) | Prove the qualified adapter set | `planned` | 0 |
+| [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md) | Implement bounded in-process PDF extraction | `ready` | 0 |
+| [TASK-INGEST-ADAPTER-LAYOUT-A](../tasks/adapter-layout-a.md) | Implement the qualified layout A adapter | `ready` | 0 |
+| [TASK-INGEST-ADAPTER-LAYOUT-B](../tasks/adapter-layout-b.md) | Implement the qualified layout B adapter | `ready` | 0 |
+| [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](../tasks/gate-int-format-adapters.md) | Prove the qualified adapter set | `ready` | 0 |

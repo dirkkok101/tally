@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-STATE-FOUNDATION`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-00-FOUNDATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `30`
 - **Dialect:** `default`
@@ -106,12 +106,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3l1` | `verified` | 2026-07-18T16:56:53.9472693+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3l1` (verified)
 - `depends-on:compile` -> [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md): The shared Tally solution and data-root conventions must exist before the separate INGEST store is added.
 - `governed-by` -> DD-INGEST-APPLICATION-ARCHITECTURE: Single-process vertical slices with isolated ingestion state
 - `governed-by` -> DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling

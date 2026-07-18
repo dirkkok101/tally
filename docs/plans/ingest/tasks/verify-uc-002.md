@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-VERIFY-UC-002`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `40`
 - **Dialect:** `default`
@@ -85,12 +85,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1ta` | `verified` | 2026-07-18T16:56:55.5742261+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1ta` (verified)
 - `covers` -> UC-INGEST-002: Review and approve a candidate batch
 - `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC verification exercises published preview/inspect/approve/commit operations.
 - `verifies` -> TC-INGEST-MANIFEST-REVIEW-CONTRACT: Verify immutable manifest review and approval

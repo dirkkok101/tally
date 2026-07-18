@@ -15,7 +15,7 @@ Establish only the upstream contract, public INGEST contract types, and protecte
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md) | Prove the public LEDGER prerequisite | `planned` | 0 |
-| [TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES](../tasks/gate-evidence-private-fixtures.md) | Prepare and validate private statement evidence | `planned` | 0 |
-| [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | Define the INGEST operation and business contracts | `planned` | 0 |
-| [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md) | Create the protected INGEST SQLite foundation | `planned` | 0 |
+| [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md) | Prove the public LEDGER prerequisite | `ready` | 0 |
+| [TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES](../tasks/gate-evidence-private-fixtures.md) | Prepare and validate private statement evidence | `ready` | 0 |
+| [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | Define the INGEST operation and business contracts | `ready` | 0 |
+| [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md) | Create the protected INGEST SQLite foundation | `ready` | 0 |

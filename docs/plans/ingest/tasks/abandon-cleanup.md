@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-ABANDON-CLEANUP`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-03-COMMIT-RECOVERY`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `40`
 - **Dialect:** `default`
@@ -107,12 +107,15 @@ Deliver ingest.abandon, ingest.cleanup, and safe startup cleanup without deletin
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-557` | `verified` | 2026-07-18T16:56:54.7648772+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-557` (verified)
 - `depends-on:compile` -> [TASK-INGEST-COMMIT-SAGA](../tasks/commit-saga.md): Abandon and compaction consume BatchCommitLock and durable candidate outcomes.
 - `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Consumes ImportReceipt.
 - `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md): RecoveryStateStore uses protected ingest.db and artifact enforcement.

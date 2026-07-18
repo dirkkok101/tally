@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-VERIFY-UC-006`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `80`
 - **Dialect:** `default`
@@ -89,12 +89,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3a6` | `verified` | 2026-07-18T16:56:56.6992074+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3a6` (verified)
 - `covers` -> UC-INGEST-006: Discover and invoke the INGEST agent contract
 - `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC verification begins from the complete published descriptor-generated contract.
 - `satisfies` -> NFR-INGEST-AGENT-OPERABILITY: Keep agent invocation deterministic and inspectable

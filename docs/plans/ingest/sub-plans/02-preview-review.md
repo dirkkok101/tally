@@ -15,7 +15,7 @@ Build deterministic financial interpretation, public LEDGER reads, immutable pre
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-INGEST-LEDGER-PUBLIC-CLIENT](../tasks/ledger-public-client.md) | Implement the concrete public LEDGER client | `planned` | 0 |
-| [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md) | Implement deterministic identity and reconciliation policies | `planned` | 0 |
-| [TASK-INGEST-PREVIEW-WORKFLOW](../tasks/preview-workflow.md) | Implement passive preview and immutable manifest persistence | `planned` | 0 |
-| [TASK-INGEST-REVIEW-WORKFLOW](../tasks/review-workflow.md) | Implement immutable inspect and approval | `planned` | 1 |
+| [TASK-INGEST-LEDGER-PUBLIC-CLIENT](../tasks/ledger-public-client.md) | Implement the concrete public LEDGER client | `ready` | 0 |
+| [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md) | Implement deterministic identity and reconciliation policies | `ready` | 0 |
+| [TASK-INGEST-PREVIEW-WORKFLOW](../tasks/preview-workflow.md) | Implement passive preview and immutable manifest persistence | `ready` | 0 |
+| [TASK-INGEST-REVIEW-WORKFLOW](../tasks/review-workflow.md) | Implement immutable inspect and approval | `ready` | 1 |

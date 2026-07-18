@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-CONTRACT-FOUNDATION`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-00-FOUNDATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `20`
 - **Dialect:** `default`
@@ -105,12 +105,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-twx` | `verified` | 2026-07-18T16:56:52.3453963+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-twx` (verified)
 - `depends-on:compile` -> [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md): The common envelope and public Ledger contract types must exist before INGEST contract records compile.
 - `governed-by` -> DD-INGEST-CLI-OPERATION-CONTRACT: Eight explicit workflow operations from one registry
 - `implements` -> FR-INGEST-CONTRACT-DISCOVERY: Discover the INGEST command contract

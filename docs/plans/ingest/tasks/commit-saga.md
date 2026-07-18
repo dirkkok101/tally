@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-COMMIT-SAGA`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-03-COMMIT-RECOVERY`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `10`
 - **Dialect:** `default`
@@ -117,12 +117,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2i6` | `verified` | 2026-07-18T16:56:50.5245819+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2i6` (verified)
 - `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Consumes ImportReceipt and FrozenLedgerRecordRequest.
 - `depends-on:compile` -> [TASK-INGEST-LEDGER-PUBLIC-CLIENT](../tasks/ledger-public-client.md): The saga invokes only LedgerContractClient record/get methods.
 - `depends-on:compile` -> [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md): Commit revalidates stable candidate identity and canonical manifest digest.

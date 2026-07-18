@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-VERIFY-UC-001`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `30`
 - **Dialect:** `default`
@@ -93,12 +93,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-34o` | `verified` | 2026-07-18T16:56:54.4936184+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-34o` (verified)
 - `covers` -> UC-INGEST-001: Preview and qualify a local statement
 - `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC verification exercises the complete published INGEST contract.
 - `depends-on:compile` -> [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md): Consumes PrivateStatementFixtureSet.

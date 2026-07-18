@@ -15,12 +15,12 @@ Converge all slices through public-contract, security, use-case, published-binar
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | Wire and prove the complete INGEST public contract | `planned` | 0 |
-| [TASK-INGEST-GATE-SECURITY](../tasks/gate-security.md) | Validate INGEST local financial-data security | `planned` | 0 |
-| [TASK-INGEST-VERIFY-UC-001](../tasks/verify-uc-001.md) | Verify preview and qualification workflow | `planned` | 1 |
-| [TASK-INGEST-VERIFY-UC-002](../tasks/verify-uc-002.md) | Verify immutable review and approval workflow | `planned` | 1 |
-| [TASK-INGEST-VERIFY-UC-003](../tasks/verify-uc-003.md) | Verify commit and resume workflow | `planned` | 0 |
-| [TASK-INGEST-VERIFY-UC-004](../tasks/verify-uc-004.md) | Verify replay and overlap safety workflow | `planned` | 0 |
-| [TASK-INGEST-VERIFY-UC-005](../tasks/verify-uc-005.md) | Verify failure handling and cleanup workflow | `planned` | 1 |
-| [TASK-INGEST-VERIFY-UC-006](../tasks/verify-uc-006.md) | Verify agent contract discovery and invocation | `planned` | 1 |
-| [TASK-INGEST-GATE-MODULE](../tasks/gate-module.md) | Complete the INGEST v1 module gate | `planned` | 0 |
+| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | Wire and prove the complete INGEST public contract | `ready` | 0 |
+| [TASK-INGEST-GATE-SECURITY](../tasks/gate-security.md) | Validate INGEST local financial-data security | `ready` | 0 |
+| [TASK-INGEST-VERIFY-UC-001](../tasks/verify-uc-001.md) | Verify preview and qualification workflow | `ready` | 1 |
+| [TASK-INGEST-VERIFY-UC-002](../tasks/verify-uc-002.md) | Verify immutable review and approval workflow | `ready` | 1 |
+| [TASK-INGEST-VERIFY-UC-003](../tasks/verify-uc-003.md) | Verify commit and resume workflow | `ready` | 0 |
+| [TASK-INGEST-VERIFY-UC-004](../tasks/verify-uc-004.md) | Verify replay and overlap safety workflow | `ready` | 0 |
+| [TASK-INGEST-VERIFY-UC-005](../tasks/verify-uc-005.md) | Verify failure handling and cleanup workflow | `ready` | 1 |
+| [TASK-INGEST-VERIFY-UC-006](../tasks/verify-uc-006.md) | Verify agent contract discovery and invocation | `ready` | 1 |
+| [TASK-INGEST-GATE-MODULE](../tasks/gate-module.md) | Complete the INGEST v1 module gate | `ready` | 0 |

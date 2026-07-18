@@ -11,10 +11,19 @@
   "objective": [
     "Prove the complete INGEST v1 implementation matches the approved graph and is ready for work review without compiling beads inside planning."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 90,
   "created_at": "2026-07-18T12:56:24.4112574+00:00",
+  "bead_refs": [
+    {
+      "id": "01KXV2HPVZXM95ZKDVTAZR59X5",
+      "bead_id": "bd-1vr",
+      "verification_status": "verified",
+      "verified_at": "2026-07-18T16:56:56.9599812+00:00",
+      "created_at": "2026-07-18T16:56:56.9599812+00:00"
+    }
+  ],
   "dependencies": [
     {
       "id": "01KXTMWY2VNJ24BT90R73TE3J9",

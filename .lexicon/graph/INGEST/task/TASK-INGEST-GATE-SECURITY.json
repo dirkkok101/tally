@@ -11,10 +11,19 @@
   "objective": [
     "Prove that hostile/malformed input and every success/failure/crash path disclose no source payload and leave only authorized protected state."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 20,
   "created_at": "2026-07-18T12:53:26.3581626+00:00",
+  "bead_refs": [
+    {
+      "id": "01KXV2HJMQ0FBEGK14RVYC467D",
+      "bead_id": "bd-114",
+      "verification_status": "verified",
+      "verified_at": "2026-07-18T16:56:52.6317349+00:00",
+      "created_at": "2026-07-18T16:56:52.6317349+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXTMKTPTWQNAKCVDBG1HTHV3",
