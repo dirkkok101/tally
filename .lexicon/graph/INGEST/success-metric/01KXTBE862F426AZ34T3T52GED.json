@@ -1,0 +1,10 @@
+{
+  "id": "01KXTBE862F426AZ34T3T52GED",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "metric": "Interrupted commit recoverability",
+  "current": "No batch receipt or resume capability exists.",
+  "target": "100% of injected interruption points recover to a complete receipt with each candidate accepted once, returned as the prior exact result, or explicitly unresolved/conflicted.",
+  "by_when": "Before INGEST commit operations are released",
+  "measured": 0,
+  "created_at": "2026-07-18T10:13:06.3715565+00:00"
+}

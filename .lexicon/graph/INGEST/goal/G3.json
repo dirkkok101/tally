@@ -5,6 +5,6 @@
   "text": [
     "Expose a complete review and reconciliation boundary before any durable financial mutation."
   ],
-  "target": "Every source row is accounted for exactly once as accepted, duplicate, rejected, or blocked; candidate counts and exact source totals reconcile where the format supplies evidence; unresolved ambiguity prevents commit.",
+  "target": "Every source record is accounted for exactly once. A transaction-bearing record must be accepted, proven an exact duplicate, or blocked; any rejected or ambiguous transaction-bearing record keeps the batch uncommittable, while non-transaction records may be excluded with a stable reason. Candidate counts and available exact source controls reconcile. Evidence: direct — the accepted preview-before-mutation boundary plus UC-INGEST-001/002.",
   "created_at": "2026-07-18T09:42:36.8708834+00:00"
 }

@@ -1,0 +1,10 @@
+{
+  "id": "01KXTBE8F4EMC69WX9JRF1WXAP",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "metric": "Sensitive artifact and diagnostic protection",
+  "current": "No INGEST artifact or logging baseline exists.",
+  "target": "Zero financial payload disclosures in logs, stderr, or process arguments; 100% of persisted INGEST artifacts pass owner-only permission and success/failure/crash cleanup checks.",
+  "by_when": "Before any supported statement is processed outside test fixtures",
+  "measured": 0,
+  "created_at": "2026-07-18T10:13:06.6615522+00:00"
+}

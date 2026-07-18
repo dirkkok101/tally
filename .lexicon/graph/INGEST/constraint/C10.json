@@ -1,0 +1,11 @@
+{
+  "id": "01KXTBCT3WRFK013JJ8TQ44PDE",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "C10",
+  "title": "Exact-only automatic duplicate handling",
+  "description": [
+    "INGEST may automatically suppress only exact file replay or a variant-defined exact Source Row Identity already represented by the same facts. Similar amount, date, description, or window overlap without exact identity is a blocking conflict, never an automatic duplicate."
+  ],
+  "type": "business",
+  "created_at": "2026-07-18T10:12:19.1970970+00:00"
+}

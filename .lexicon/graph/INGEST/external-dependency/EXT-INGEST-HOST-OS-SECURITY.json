@@ -1,0 +1,22 @@
+{
+  "id": "01KXTBNCCB0QE6MG17MQHVWH3E",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "EXT-INGEST-HOST-OS-SECURITY",
+  "name": "Host OS Process and Storage Security",
+  "description": [
+    "Provides the trusted invoking OS identity, owner-only filesystem permissions, protected local storage, process termination behavior, and safe temporary-file primitives used by INGEST. LEDGER validates the host-storage baseline, but INGEST cleanup and artifact conformance remain assumed until its own tests exist."
+  ],
+  "type": "service",
+  "owner": "Personal Finance Owner",
+  "metadata": "{\"gate_type\":\"data\",\"validation_basis\":\"source_and_client\",\"validation_status\":\"assumed\"}",
+  "created_at": "2026-07-18T10:17:00.0447207+00:00",
+  "links": [
+    {
+      "id": "01KXTBNXSBKY1FJ9HT7SPJHGRG",
+      "target_type": "external_dependency",
+      "target": "EXT-LEDGER-HOST-OS-SECURITY",
+      "rel": "see-also",
+      "created_at": "2026-07-18T10:17:17.8681973+00:00"
+    }
+  ]
+}

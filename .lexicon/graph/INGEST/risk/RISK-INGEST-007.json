@@ -1,0 +1,14 @@
+{
+  "id": "01KXTBCV7NP205SPZGBTSJTXE9",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "RISK-INGEST-007",
+  "description": [
+    "A malformed or adversarial document can exhaust local CPU, memory, disk, decompression, or parser time, or attempt active-content and external-resource execution."
+  ],
+  "likelihood": "Medium",
+  "impact": "High",
+  "mitigation": [
+    "Use passive parsers, disable active content and remote fetches, enforce per-variant resource bounds before mutation, return stable limit errors, and verify cleanup after normal and abnormal termination."
+  ],
+  "created_at": "2026-07-18T10:12:20.3420452+00:00"
+}

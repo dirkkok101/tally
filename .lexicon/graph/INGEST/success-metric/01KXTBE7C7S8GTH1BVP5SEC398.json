@@ -1,0 +1,10 @@
+{
+  "id": "01KXTBE7C7S8GTH1BVP5SEC398",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "metric": "Supported-fixture extraction completeness",
+  "current": "No supported fixtures or baseline exist.",
+  "target": "100% of transaction-bearing records and every available source control are accounted for with zero unexplained rows before a Format Variant is supported.",
+  "by_when": "Before the first INGEST adapter is eligible for release",
+  "measured": 0,
+  "created_at": "2026-07-18T10:13:05.5441960+00:00"
+}

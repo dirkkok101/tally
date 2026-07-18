@@ -1,0 +1,11 @@
+{
+  "id": "01KXTBCST5H3947P7Z9RH42DYY",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "C9",
+  "title": "Frozen reviewed manifest",
+  "description": [
+    "Commit uses only the exact immutable Import Manifest revision explicitly approved after preview. Source-derived amount, currency, date, description, and provenance cannot be edited inside INGEST; any changed mapping or eligibility decision produces a new preview and manifest revision."
+  ],
+  "type": "business",
+  "created_at": "2026-07-18T10:12:18.8860441+00:00"
+}

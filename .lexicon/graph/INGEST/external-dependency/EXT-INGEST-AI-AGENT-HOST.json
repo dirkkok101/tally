@@ -1,0 +1,22 @@
+{
+  "id": "01KXTBDQKQJWJP1GH8FCAPPTB2",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "EXT-INGEST-AI-AGENT-HOST",
+  "name": "AI Agent Host",
+  "description": [
+    "Inbound workflow client running under the Personal Finance Owner's OS identity. It discovers INGEST schemas, supplies structured preview/commit/resume input, preserves batch identities, and interprets structured outcomes; INGEST conformance remains assumed until published contract tests exist."
+  ],
+  "type": "client",
+  "owner": "Personal Finance Owner",
+  "metadata": "{\"gate_type\":\"workflow\",\"validation_basis\":\"client_contract\",\"validation_status\":\"assumed\"}",
+  "created_at": "2026-07-18T10:12:49.3998448+00:00",
+  "links": [
+    {
+      "id": "01KXTBNX9X137JTE2QT3K100AW",
+      "target_type": "external_dependency",
+      "target": "EXT-LEDGER-AI-AGENT-HOST",
+      "rel": "see-also",
+      "created_at": "2026-07-18T10:17:17.3740047+00:00"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "01KXTBBF3FT5Z5MTN44C7T5XN9",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "A3",
+  "title": "A supported variant can provide deterministic source-row identity",
+  "description": [
+    "Assume each adopted Format Variant exposes stable row/reference evidence sufficient for exact replay and exact duplicate identity. Similar transactions without that evidence remain overlap conflicts and are never silently collapsed; validate with repeated, renamed, overlapping, and corrected fixtures under OQ-INGEST-4."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T10:11:35.1533174+00:00"
+}

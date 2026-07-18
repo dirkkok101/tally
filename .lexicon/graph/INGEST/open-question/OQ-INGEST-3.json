@@ -4,12 +4,19 @@
   "ref_code": "OQ-INGEST-3",
   "question": "What evidence in the real source files resolves LEDGER OQ-LEDGER-1 through OQ-LEDGER-4 for currency, signed amount, transaction date, and account identity?",
   "context": [
-    "INGEST must not select finance semantics that the canonical ledger contract has not established."
+    "Real source evidence remains unavailable. The pre-planning fixture spike must validate currency, signed amount, transaction/effective date, optional posting date, and account metadata against the resolved LEDGER contract; INGEST cannot override LEDGER semantics."
   ],
   "status": "open",
-  "owner": "INGEST discovery",
+  "owner": "INGEST and LEDGER pre-planning evidence",
   "created_at": "2026-07-18T09:45:49.8394247+00:00",
   "links": [
+    {
+      "id": "01KXTBPDC3Z926CFDEEMMHPPSB",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-OWNER-BANK-STATEMENT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T10:17:33.8287489+00:00"
+    },
     {
       "id": "01KXT9WA0F35NANM7DBHKR6HT0",
       "target_type": "open_question",

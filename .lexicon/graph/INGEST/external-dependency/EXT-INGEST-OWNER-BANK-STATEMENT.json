@@ -1,0 +1,13 @@
+{
+  "id": "01KXTBDQVZ84JC6NZYEXGTQ1ER",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "EXT-INGEST-OWNER-BANK-STATEMENT",
+  "name": "Owner-Supplied Bank Statement",
+  "description": [
+    "Inbound read-only local PDF, CSV, XLSX, or other evidenced export supplied by the Personal Finance Owner. No bank connection or credential is involved; exact variants and fields remain unvalidated because no extract was available during discovery."
+  ],
+  "type": "data",
+  "owner": "Personal Finance Owner",
+  "metadata": "{\"gate_type\":\"data\",\"validation_basis\":\"prd_only\",\"validation_status\":\"assumed\"}",
+  "created_at": "2026-07-18T10:12:49.6645717+00:00"
+}

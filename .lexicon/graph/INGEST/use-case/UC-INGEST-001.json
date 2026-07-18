@@ -1,0 +1,35 @@
+{
+  "id": "01KXTBAWYS1QTV921NYSVFHR4B",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "UC-INGEST-001",
+  "title": "Preview and qualify a local statement",
+  "preconditions": "A compatible Tally executable is available; the target LEDGER account exists and is active; the source is a readable owner-supplied local file; no adapter support is assumed from its extension alone.",
+  "postconditions": "No LEDGER mutation occurred; the source is unchanged; one owner-only manifest revision identifies every candidate, exclusion, validation, adapter/contract version, and reconciliation result.",
+  "main_flow": "1. The owner or delegated AI Agent Host discovers INGEST operations, supported Format Variants, limits, schemas, and errors. 2. The owner supplies the read-only source path and explicit canonical account identity. 3. INGEST fingerprints the source and detects one supported adapter/version without executing active content. 4. The adapter extracts and normalizes transaction-bearing records under the resolved LEDGER finance semantics. 5. INGEST accounts for non-transaction records, validations, duplicates, and reconciliation evidence. 6. INGEST freezes an immutable Import Manifest revision. 7. INGEST returns a structured preview and creates no LEDGER transaction.",
+  "alt_flows": [
+    "2a. Source path is unreadable or changes during preview -> return a stable source failure and persist no committable manifest",
+    "2b. Statement metadata conflicts with the selected account -> block the batch without inferring another account",
+    "3a. No supported Format Variant is detected -> return unsupported-format and no mutation",
+    "3b. Password protection, scanning, active content, external references, or resource limits prevent passive bounded parsing -> fail closed",
+    "4a. A required amount, currency, date, description, source identity, or row boundary is ambiguous -> block the batch rather than guess",
+    "5a. Transaction-bearing records or available source controls do not reconcile -> mark the format/batch uncommittable"
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The Personal Finance Owner has downloaded a local bank statement for an owned account and wants to import it.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-18T10:11:16.5705694+00:00",
+  "links": [
+    {
+      "id": "01KXTBPBECZJW1YG7KEJTS75TN",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T10:17:31.8534526+00:00"
+    },
+    {
+      "id": "01KXTBNSC9TSKD0RR6NAZJEH84",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-OWNER-BANK-STATEMENT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T10:17:13.3539573+00:00"
+    }
+  ]
+}

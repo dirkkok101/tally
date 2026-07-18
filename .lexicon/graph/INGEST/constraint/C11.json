@@ -1,0 +1,11 @@
+{
+  "id": "01KXTBCTD5PC51M3EG6XA04Z56",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "C11",
+  "title": "Passive bounded document processing",
+  "description": [
+    "Adapters treat source files as passive data, never execute macros, formulas, scripts, links, embedded objects, or remote fetches, and enforce documented bounds for file size, pages, worksheets, rows, nesting, decompression, memory, and processing time before mutation."
+  ],
+  "type": "technical",
+  "created_at": "2026-07-18T10:12:19.4944137+00:00"
+}

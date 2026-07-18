@@ -1,0 +1,33 @@
+{
+  "id": "01KXTBAXV2P75FGP5PH9A24Q27",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "UC-INGEST-004",
+  "title": "Re-import a repeated or overlapping statement safely",
+  "preconditions": "Prior canonical writes retain source provenance and idempotency identities; the new source can be fingerprinted; any supported adapter can expose its defined Source Row Identity.",
+  "postconditions": "Exact replay and exact row duplication create no additional canonical transaction; uncertain overlap is explicit and uncommitted; source files and prior receipts remain unchanged.",
+  "main_flow": "1. INGEST compares the source fingerprint and adapter contract with prior batch evidence. 2. Byte-identical content under the same supported variant is treated as exact replay regardless of filename. 3. Exact source-row identities already committed are reported as exact duplicates and not written again. 4. New exact identities remain eligible candidates. 5. Similar but non-identical or corrected records are surfaced as blocking overlap conflicts. 6. The owner receives a preview accounting for prior, new, and conflicted outcomes before any commit.",
+  "alt_flows": [
+    "1a. Prior provenance is unavailable or incompatible -> do not claim automatic deduplication",
+    "2a. Content is changed despite a familiar filename -> treat it as a new preview, not exact replay",
+    "3a. A reused identity carries different facts -> return stable conflict and preserve the original transaction",
+    "5a. Same-amount/date/description records lack exact identity -> never silently collapse them as duplicates"
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The owner previews a statement whose content or date window may overlap an earlier import.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-18T10:11:17.4756469+00:00",
+  "links": [
+    {
+      "id": "01KXTBPCX38MZ4PMN3DBJYS9XM",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T10:17:33.3484817+00:00"
+    },
+    {
+      "id": "01KXTBPCD8J2GE98NY297BWTSW",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-OWNER-BANK-STATEMENT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T10:17:32.8413229+00:00"
+    }
+  ]
+}

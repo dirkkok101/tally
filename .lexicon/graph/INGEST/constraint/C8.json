@@ -1,0 +1,11 @@
+{
+  "id": "01KXTBCSGVBW7GYQF4MHBPCEZ3",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "C8",
+  "title": "Explicit canonical account selection",
+  "description": [
+    "Preview requires the caller to supply one active canonical LEDGER account identity. Statement metadata validates that selection; missing, conflicting, multi-account, or ambiguous metadata blocks commit rather than selecting an account from a filename or masked text."
+  ],
+  "type": "business",
+  "created_at": "2026-07-18T10:12:18.5878865+00:00"
+}

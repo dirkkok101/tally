@@ -5,6 +5,6 @@
   "text": [
     "Make repeated and overlapping statement imports duplicate-safe and conflict-explicit."
   ],
-  "target": "Re-importing the same file or an overlapping statement window creates no second canonical transaction for the same source fact; non-identical reuse or ambiguous matches fail with a stable reviewable conflict.",
+  "target": "Re-importing identical content or an overlapping statement creates no second canonical transaction for the same exact source fact; non-identical identity reuse or merely similar matches fail with stable reviewable conflicts. Evidence: analogous — LEDGER idempotent writes; deterministic source-row identity remains assumption A3 and the OQ-INGEST-4 spike gate.",
   "created_at": "2026-07-18T09:42:37.4268667+00:00"
 }

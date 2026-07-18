@@ -6,7 +6,10 @@
   "context": [
     "Define deterministic matching, explicit owner confirmation, and safe behavior when multiple accounts remain plausible."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "The caller must explicitly supply one active canonical LEDGER account identity for preview. Statement metadata validates that choice; missing, conflicting, multi-account, or ambiguous metadata blocks commit. INGEST never selects an account solely from a filename or masked identifier."
+  ],
   "owner": "INGEST discovery",
   "created_at": "2026-07-18T09:45:51.6174882+00:00",
   "links": [

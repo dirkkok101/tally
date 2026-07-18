@@ -6,7 +6,10 @@
   "context": [
     "Balance provenance and auditability against the exposure created by retaining sensitive financial source data."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "Adopt provisional assumption A4: do not copy caller-owned source files; remove extraction temporaries after success, failure, abandonment, and safe startup recovery; retain incomplete owner-only manifests/receipts for review and resume; retain completed metadata-only receipts until explicit owner cleanup. PRD keeps the retention duration owner-revisable."
+  ],
   "owner": "INGEST discovery",
   "created_at": "2026-07-18T09:45:50.9666323+00:00"
 }

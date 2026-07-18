@@ -4,9 +4,18 @@
   "ref_code": "OQ-INGEST-4",
   "question": "What constitutes stable source-row identity across repeated files, overlapping statement windows, corrected statements, and files renamed by the owner?",
   "context": [
-    "Separate exact replay detection from semantic duplicate review and define which conflicts require owner resolution."
+    "The pre-planning fixture spike must exercise exact replay, renamed identical files, overlapping windows, corrected statements, repeated identical rows, and conflicting identity reuse. Until validated, A3 is active and uncertain matches remain blocking Overlap Conflicts."
   ],
   "status": "open",
-  "owner": "INGEST discovery",
-  "created_at": "2026-07-18T09:45:50.1228908+00:00"
+  "owner": "INGEST pre-planning spike",
+  "created_at": "2026-07-18T09:45:50.1228908+00:00",
+  "links": [
+    {
+      "id": "01KXTBNZA20ZHFE9F5VNA65JPX",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-OWNER-BANK-STATEMENT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T10:17:19.4270133+00:00"
+    }
+  ]
 }

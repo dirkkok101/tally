@@ -5,6 +5,6 @@
   "text": [
     "Expose non-interactive self-documenting INGEST operations that an AI Agent Host can invoke safely."
   ],
-  "target": "Preview, inspect, commit, resume, and status operations provide versioned machine-readable schemas, one structured stdout result, stable module-scoped errors and exit codes, and diagnostics containing no financial payloads.",
+  "target": "Preview, inspect, commit, resume, status, abandon, and cleanup operations provide versioned machine-readable schemas, one structured stdout result, stable module-scoped errors and exit codes, and diagnostics containing no financial payloads. Evidence: analogous — the validated LEDGER AI Agent Host dependency, FR-LEDGER-STRUCTURED-INVOCATION, and UC-INGEST-006.",
   "created_at": "2026-07-18T09:42:37.9386527+00:00"
 }

@@ -1,0 +1,43 @@
+{
+  "id": "01KXTBDR4MBEN9H7RBZGF4HPY2",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "EXT-INGEST-LEDGER-PUBLIC-CONTRACT",
+  "name": "LEDGER Public Contract",
+  "description": [
+    "Outbound internal-module integration used to discover versioned schemas, record canonical transactions with stable idempotency identities, and verify structured results. INGEST never accesses private LEDGER storage; runtime compatibility remains assumed until cross-module published-binary tests exist."
+  ],
+  "type": "api",
+  "owner": "LEDGER",
+  "metadata": "{\"gate_type\":\"api\",\"validation_basis\":\"client_contract\",\"validation_status\":\"assumed\"}",
+  "created_at": "2026-07-18T10:12:49.9416847+00:00",
+  "links": [
+    {
+      "id": "01KXTBNVBGZN4TCHNDPBFTJBFN",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CONTRACT-DISCOVERY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T10:17:15.3774878+00:00"
+    },
+    {
+      "id": "01KXTBNWSF6PYECFJSJEY5JEZJ",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-IDEMPOTENT-WRITES",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T10:17:16.8483312+00:00"
+    },
+    {
+      "id": "01KXTBNVV4M2YHDR6KD4K3WC95",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-STRUCTURED-INVOCATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T10:17:15.8769752+00:00"
+    },
+    {
+      "id": "01KXTBNWA4A17J7MP6Y890JYFB",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-TRANSACTION-RECORDING",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T10:17:16.3584758+00:00"
+    }
+  ]
+}

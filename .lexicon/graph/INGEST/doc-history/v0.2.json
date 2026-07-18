@@ -1,0 +1,9 @@
+{
+  "id": "01KXTBRXQNSNJGS0DFF1PMCSTP",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "version": "0.2",
+  "changes": [
+    "Discovery: reused P1 and mapped six owner/agent workflows; dispositioned all domain areas; added evidence-tagged goals, four assumptions, passive/frozen/exact-dedup/commit constraints, four integration gates, five success metrics, security risk RISK-INGEST-007, precise duplicate/replay terminology, and cross-module links; resolved commit, retention, classification, account-mapping, and diagnostic questions; retained five non-blocking pre-planning fixture-spike questions because no bank extract was available; no kill criterion triggered."
+  ],
+  "created_at": "2026-07-18T10:18:56.1185148+00:00"
+}

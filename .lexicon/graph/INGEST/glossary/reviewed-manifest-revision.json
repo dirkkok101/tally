@@ -1,0 +1,10 @@
+{
+  "id": "01KXTBD9B91WV1F3KN57NMS87A",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "term": "Reviewed Manifest Revision",
+  "definition": [
+    "The exact immutable Import Manifest version inspected and explicitly approved for commit. Any changed account mapping, eligibility decision, adapter version, or contract version requires a new revision and preview. Avoid: current batch when the revision is not named."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-18T10:12:34.7941012+00:00"
+}

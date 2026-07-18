@@ -1,0 +1,17 @@
+{
+  "id": "01KXTBAX9RM2HSKQTNAHK5GHSD",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "UC-INGEST-002",
+  "title": "Review and approve a candidate batch",
+  "preconditions": "The manifest is owner-only, immutable, compatible with the current INGEST and LEDGER contracts, and contains complete candidate and reconciliation outcomes.",
+  "postconditions": "One exact immutable manifest revision is either explicitly approved or remains unapproved and uncommittable; no source-derived financial field was edited and no LEDGER mutation occurred.",
+  "main_flow": "1. The owner or Agent Host inspects batch identity, source fingerprint, account mapping, candidate counts, exclusions, exact duplicates, blocked conflicts, and available reconciliation evidence. 2. INGEST distinguishes transaction-bearing records from explicitly excluded non-transaction records. 3. The owner resolves only permitted decisions such as canonical account selection or an exact duplicate conflict. 4. Any decision change produces a new manifest revision and a new preview. 5. When every transaction-bearing record is accepted or proven an exact duplicate and no blocking ambiguity remains, the owner explicitly approves the exact manifest revision for commit.",
+  "alt_flows": [
+    "1a. Review finds an unexplained row, total mismatch, ambiguous semantic duplicate, or unsupported finance meaning -> keep the batch blocked",
+    "3a. The owner attempts to edit amount, currency, date, or original description -> require a corrected source/new preview instead of changing provenance",
+    "4a. Adapter or LEDGER contract changed after preview -> invalidate approval and require a compatible new preview",
+    "5a. Approval is absent or refers to another revision -> reject commit before mutation"
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"A deterministic preview produced an Import Manifest revision.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-18T10:11:16.9217330+00:00"
+}

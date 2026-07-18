@@ -1,0 +1,10 @@
+{
+  "id": "01KXTBD9KZY8J5R77R1PE1NXYK",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "term": "Passive Parsing",
+  "definition": [
+    "Reading bounded document values without executing formulas, macros, scripts, hyperlinks, embedded objects, or remote fetches. Avoid: opening or rendering, which can imply active behavior."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-18T10:12:35.0729305+00:00"
+}

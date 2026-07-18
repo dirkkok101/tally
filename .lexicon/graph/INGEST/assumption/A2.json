@@ -1,0 +1,11 @@
+{
+  "id": "01KXTBBETH3P4SW6FTKRN2W3YY",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "A2",
+  "title": "One supported source artifact maps to one owned account",
+  "description": [
+    "Assume each supported statement or export represents exactly one canonical owned account. The owner supplies that LEDGER account identity explicitly and statement metadata only validates it; multi-account artifacts remain unsupported until evidence establishes a deterministic split."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T10:11:34.8666134+00:00"
+}

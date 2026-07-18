@@ -6,7 +6,10 @@
   "context": [
     "Classification is post-commit and must never block a financially valid import; discovery only needs to define the handoff and invocation timing."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "Classification is never an INGEST side effect. After successful canonical commit, the Personal Finance Owner or AI Agent Host may invoke CLASSIFY explicitly as a separate command using canonical transaction references; CLASSIFY unavailability cannot change import success."
+  ],
   "owner": "INGEST discovery",
   "created_at": "2026-07-18T09:45:51.2518411+00:00"
 }

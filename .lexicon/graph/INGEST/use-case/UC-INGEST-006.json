@@ -1,0 +1,27 @@
+{
+  "id": "01KXTBAYDJ6SK8HAVF7JYNVWZ5",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "UC-INGEST-006",
+  "title": "Discover and invoke the INGEST agent contract",
+  "preconditions": "A compatible Tally executable is on PATH and the invoking process runs under the owner's trusted OS identity.",
+  "postconditions": "The delegated workflow uses only public contracts and can distinguish success, block, unsupported input, compatibility failure, interruption, and safe retry without parsing prose.",
+  "main_flow": "1. The client requests INGEST help and versioned machine-readable schemas. 2. INGEST reports supported operations, Format Variants, safe limits, result shapes, stable errors, and exit codes without reading a source or mutating LEDGER. 3. The client constructs non-interactive structured input for preview, inspect, commit, resume, status, abandon, or cleanup. 4. INGEST validates compatibility and input before processing. 5. Exactly one structured business result is written to stdout; metadata-only diagnostics use stderr; the documented exit code reflects the result. 6. Lost mutation output is recovered through the original batch and idempotency identities.",
+  "alt_flows": [
+    "1a. Operation or schema is unknown -> return discoverable help and stable usage failure",
+    "2a. Skill, adapter, INGEST, or LEDGER contract versions are incompatible -> fail before source processing or mutation",
+    "3a. Input is malformed or contains forbidden unknown fields -> reject before processing",
+    "5a. Expected domain failure occurs -> return one module-scoped structured error and stable non-zero exit",
+    "6a. Client constructs a new identity after losing output -> refuse unsafe continuation and direct it to status/resume"
+  ],
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The Personal Finance Owner delegates statement ingestion to an AI Agent Host or invokes Tally directly.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-18T10:11:18.0669516+00:00",
+  "links": [
+    {
+      "id": "01KXTBNTWFTER3YXBMHHSBJZ6T",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-AI-AGENT-HOST",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T10:17:14.8966837+00:00"
+    }
+  ]
+}

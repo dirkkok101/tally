@@ -1,0 +1,10 @@
+{
+  "id": "01KXTBE7XNJ7PR6GWNTG4T6SAC",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "metric": "Replay and overlap duplicate safety",
+  "current": "Manual consolidation has no deterministic duplicate baseline.",
+  "target": "Zero second canonical transactions across exact-file replay, renamed exact replay, overlapping windows with exact identities, lost-output retry, and repeated resume verification.",
+  "by_when": "Before INGEST commit operations are released",
+  "measured": 0,
+  "created_at": "2026-07-18T10:13:06.1024307+00:00"
+}

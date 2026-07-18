@@ -5,6 +5,6 @@
   "text": [
     "Support the real statement formats needed by the two banks through versioned local source adapters."
   ],
-  "target": "Each adopted adapter is proven against redacted representative fixtures and fails closed on an unsupported, password-protected, scanned, structurally changed, or semantically incomplete source instead of guessing.",
+  "target": "Each adopted adapter is proven against redacted representative fixtures and fails closed on an unsupported, password-protected, scanned, structurally changed, resource-exhausting, or semantically incomplete source instead of guessing. Evidence: assumption — A1 is unvalidated because no extracts were available; OQ-INGEST-1/2/3/5 require a pre-planning fixture spike.",
   "created_at": "2026-07-18T09:42:37.6755169+00:00"
 }

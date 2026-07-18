@@ -1,0 +1,11 @@
+{
+  "id": "01KXTBCTY9P4MWJKB7SG70D6T9",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "C13",
+  "title": "Candidate-granular durable commit",
+  "description": [
+    "A batch may commit candidates independently only when every candidate has a stable LEDGER idempotency identity and each structured outcome is durably recorded before the next candidate. Failure stops unsafe continuation; resume reuses the exact manifest, request, contract version, and identities for unresolved candidates."
+  ],
+  "type": "technical",
+  "created_at": "2026-07-18T10:12:20.0422150+00:00"
+}

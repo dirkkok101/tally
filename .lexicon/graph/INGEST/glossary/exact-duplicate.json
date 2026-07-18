@@ -1,0 +1,10 @@
+{
+  "id": "01KXTBD8S0G6WKVCBR04625Z8W",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "term": "Exact Duplicate",
+  "definition": [
+    "A Candidate Transaction whose variant-defined Source Row Identity and source-derived financial facts match a prior canonical effect exactly. Only this identity-grade match may be suppressed automatically. Avoid: likely duplicate, fuzzy match."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-18T10:12:34.2096871+00:00"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "01KXTBD9WXJSWWZB0J7ZCNKMST",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "term": "Terminal Candidate Outcome",
+  "definition": [
+    "A durable receipt result proving that one candidate was accepted into LEDGER, returned as an Exact Duplicate, or left blocked/rejected without mutation. A blocked or rejected transaction-bearing record keeps that manifest uncommittable and requires a new reviewed resolution. Avoid: processed, which does not state the financial effect."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-18T10:12:35.3588921+00:00"
+}
