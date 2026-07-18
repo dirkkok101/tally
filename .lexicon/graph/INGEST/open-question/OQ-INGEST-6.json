@@ -1,0 +1,28 @@
+{
+  "id": "01KXT9WAVY9SEV65V3WR11Z7HC",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "OQ-INGEST-6",
+  "question": "Must commit be atomic for an entire import batch, or may it commit rows independently with a deterministic resume receipt?",
+  "context": [
+    "Determine whether existing LEDGER structured and idempotent write operations are sufficient or whether a project-shaping batch contract decision is required."
+  ],
+  "status": "open",
+  "owner": "INGEST discovery",
+  "created_at": "2026-07-18T09:45:50.7194354+00:00",
+  "links": [
+    {
+      "id": "01KXTA0ZEN065C9KP6YA5NB6EZ",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-IDEMPOTENT-WRITES",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T09:48:22.8707121+00:00"
+    },
+    {
+      "id": "01KXTA0YYXXVTAZ9H2TA73CTAR",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-STRUCTURED-INVOCATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T09:48:22.3667909+00:00"
+    }
+  ]
+}

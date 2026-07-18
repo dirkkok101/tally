@@ -1,0 +1,10 @@
+{
+  "id": "01KXT9PEKHY1T7CFDTB0QJ3F1B",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "G7",
+  "text": [
+    "Expose non-interactive self-documenting INGEST operations that an AI Agent Host can invoke safely."
+  ],
+  "target": "Preview, inspect, commit, resume, and status operations provide versioned machine-readable schemas, one structured stdout result, stable module-scoped errors and exit codes, and diagnostics containing no financial payloads.",
+  "created_at": "2026-07-18T09:42:37.9386527+00:00"
+}

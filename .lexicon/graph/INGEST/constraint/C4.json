@@ -1,0 +1,11 @@
+{
+  "id": "01KXT9TZDPHRSQ8VS5ND7MNT35",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "C4",
+  "title": "Preview before mutation",
+  "description": [
+    "No candidate transaction may be committed while a required mapping, required field, reconciliation check, or duplicate conflict remains unresolved. LEDGER mutation requires an explicit commit step after preview."
+  ],
+  "type": "business",
+  "created_at": "2026-07-18T09:45:06.2317679+00:00"
+}

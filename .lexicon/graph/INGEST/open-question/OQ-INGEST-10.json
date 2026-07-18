@@ -1,0 +1,12 @@
+{
+  "id": "01KXT9WC163AAHDH8KFNCNZWDY",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "OQ-INGEST-10",
+  "question": "What exact diagnostic and recovery contract applies to malformed, truncated, password-protected, unsupported, or partially readable statements?",
+  "context": [
+    "The agent-facing result must distinguish a safe unsupported format from a corrupted file and must identify whether retrying is meaningful."
+  ],
+  "status": "open",
+  "owner": "INGEST discovery",
+  "created_at": "2026-07-18T09:45:51.9115462+00:00"
+}

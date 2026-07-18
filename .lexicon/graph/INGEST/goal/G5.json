@@ -1,0 +1,10 @@
+{
+  "id": "01KXT9PE3J6CAQAQR38KE06GNK",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "G5",
+  "text": [
+    "Make repeated and overlapping statement imports duplicate-safe and conflict-explicit."
+  ],
+  "target": "Re-importing the same file or an overlapping statement window creates no second canonical transaction for the same source fact; non-identical reuse or ambiguous matches fail with a stable reviewable conflict.",
+  "created_at": "2026-07-18T09:42:37.4268667+00:00"
+}

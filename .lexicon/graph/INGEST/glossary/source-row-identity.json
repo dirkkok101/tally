@@ -1,0 +1,9 @@
+{
+  "id": "01KXT9X2VMW8B53FQ1WYVHZBNR",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "term": "Source Row Identity",
+  "definition": [
+    "The provenance key that identifies a transaction-bearing record within its source context across retry and resume. Its components are format-specific and are established during discovery."
+  ],
+  "created_at": "2026-07-18T09:46:15.2849304+00:00"
+}

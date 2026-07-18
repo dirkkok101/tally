@@ -1,0 +1,12 @@
+{
+  "id": "01KXT9PY5PH5BM0JQ6X6JKBRHR",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "NG2",
+  "text": [
+    "Choose Spend Categories, learn classification rules, or alter category assignments during import."
+  ],
+  "rationale": [
+    "CLASSIFY owns suggestions and feedback; LEDGER owns explicit Category Assignment and correction. INGEST may request optional downstream classification only after canonical commit."
+  ],
+  "created_at": "2026-07-18T09:42:53.8795348+00:00"
+}

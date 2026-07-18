@@ -1,0 +1,9 @@
+{
+  "id": "01KXTA18VRNNXZQ57T9GFHSZMY",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "version": "0.1",
+  "changes": [
+    "Initial framing: defined the root problem and agent journey; selected a staged local adapter pipeline with normalized CSV as the do-less fallback; bounded parsing, LEDGER, CLASSIFY, security, and UI ownership; added monitored stop conditions, risks, discovery questions, terminology, and explicit upstream evidence links."
+  ],
+  "created_at": "2026-07-18T09:48:32.5050664+00:00"
+}

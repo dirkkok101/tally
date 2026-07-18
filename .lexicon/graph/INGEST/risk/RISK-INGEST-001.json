@@ -1,0 +1,14 @@
+{
+  "id": "01KXT9W7TQTDKD8XBPY89R7AME",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "RISK-INGEST-001",
+  "description": [
+    "A plausible-looking adapter can silently assign the wrong sign, date, currency, account, or row boundary."
+  ],
+  "likelihood": "High",
+  "impact": "High",
+  "mitigation": [
+    "Use redacted representative fixtures, exact field-level previews, source-total reconciliation where available, and fail-closed rules for every ambiguity."
+  ],
+  "created_at": "2026-07-18T09:45:47.6085455+00:00"
+}

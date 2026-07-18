@@ -1,0 +1,12 @@
+{
+  "id": "01KXT9PZFPDYV2ZPJ6X3DPZYSS",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "NG7",
+  "text": [
+    "Watch folders, schedule unattended imports, or require an always-running daemon."
+  ],
+  "rationale": [
+    "The local first release is explicitly invoked by the owner or AI Agent Host; background automation is a later scope decision."
+  ],
+  "created_at": "2026-07-18T09:42:55.2238662+00:00"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "01KXT9PYP454TBK15PCEDA96WS",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "NG4",
+  "text": [
+    "Build a universal document extraction, OCR, or spreadsheet transformation platform."
+  ],
+  "rationale": [
+    "The first release supports only formats evidenced by the three initial accounts; generic parsing would exceed the complexity budget."
+  ],
+  "created_at": "2026-07-18T09:42:54.4050450+00:00"
+}

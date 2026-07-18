@@ -1,0 +1,14 @@
+{
+  "id": "01KXT9W95N379VDBREVPGZTEC5",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "RISK-INGEST-006",
+  "description": [
+    "Supporting every observed PDF, spreadsheet, and locale can expand INGEST into a generic document-processing platform."
+  ],
+  "likelihood": "High",
+  "impact": "Medium",
+  "mitigation": [
+    "Support only evidenced initial fixtures, apply the normalized CSV do-less option, and enforce format-specific kill criteria before design and planning."
+  ],
+  "created_at": "2026-07-18T09:45:48.9819825+00:00"
+}

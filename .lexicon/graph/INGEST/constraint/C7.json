@@ -1,0 +1,11 @@
+{
+  "id": "01KXT9V08N2KTJQQ5ASP6VSQKF",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "C7",
+  "title": "Format scope follows fixtures",
+  "description": [
+    "Do not introduce a generic parser abstraction beyond representative fixtures from the initial accounts. Unsupported or changed layouts are reported explicitly and remain uncommitted."
+  ],
+  "type": "timeline",
+  "created_at": "2026-07-18T09:45:07.0941085+00:00"
+}

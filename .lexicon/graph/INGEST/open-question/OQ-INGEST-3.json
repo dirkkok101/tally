@@ -1,0 +1,42 @@
+{
+  "id": "01KXT9WA0EKZF5EF93Y76HEAG3",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "OQ-INGEST-3",
+  "question": "What evidence in the real source files resolves LEDGER OQ-LEDGER-1 through OQ-LEDGER-4 for currency, signed amount, transaction date, and account identity?",
+  "context": [
+    "INGEST must not select finance semantics that the canonical ledger contract has not established."
+  ],
+  "status": "open",
+  "owner": "INGEST discovery",
+  "created_at": "2026-07-18T09:45:49.8394247+00:00",
+  "links": [
+    {
+      "id": "01KXT9WA0F35NANM7DBHKR6HT0",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-1",
+      "rel": "see-also",
+      "created_at": "2026-07-18T09:45:49.8398592+00:00"
+    },
+    {
+      "id": "01KXTA0Y1HFGYFV2EHA2GD5ZVB",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-2",
+      "rel": "see-also",
+      "created_at": "2026-07-18T09:48:21.4264782+00:00"
+    },
+    {
+      "id": "01KXTA0YG6Z37P29CE77TXD38K",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-3",
+      "rel": "see-also",
+      "created_at": "2026-07-18T09:48:21.8950338+00:00"
+    },
+    {
+      "id": "01KXT9WA0GD23Z2PPGQNXKR4NR",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-4",
+      "rel": "see-also",
+      "created_at": "2026-07-18T09:45:49.8400514+00:00"
+    }
+  ]
+}

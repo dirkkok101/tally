@@ -1,0 +1,9 @@
+{
+  "id": "01KXT9X3NGG84ACA281EA7Y35Y",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "term": "Reconciliation Evidence",
+  "definition": [
+    "Source-provided controls such as row counts, debit and credit totals, opening and closing balances, page counts, or sequence markers used to prove extraction completeness for an import batch. It is not ongoing account balance reconciliation."
+  ],
+  "created_at": "2026-07-18T09:46:16.1132537+00:00"
+}

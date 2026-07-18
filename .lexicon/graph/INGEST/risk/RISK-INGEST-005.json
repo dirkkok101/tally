@@ -1,0 +1,14 @@
+{
+  "id": "01KXT9W8W99AQMZ2QB0A0S12G1",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "RISK-INGEST-005",
+  "description": [
+    "A crash or LEDGER failure during commit can leave a batch whose committed rows and safe resume point are unclear."
+  ],
+  "likelihood": "Medium",
+  "impact": "High",
+  "mitigation": [
+    "Use an immutable manifest plus durable receipt, versioned idempotency keys, explicit state transitions, and crash-resume verification."
+  ],
+  "created_at": "2026-07-18T09:45:48.6821416+00:00"
+}

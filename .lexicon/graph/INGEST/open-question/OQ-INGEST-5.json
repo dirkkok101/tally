@@ -1,0 +1,12 @@
+{
+  "id": "01KXT9WAJ7NS92S088KBD2HVHV",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "OQ-INGEST-5",
+  "question": "Which completeness and reconciliation evidence does each format expose?",
+  "context": [
+    "Investigate row counts, debit and credit totals, statement opening and closing balances, page counts, sequence numbers, and other source controls without turning INGEST into ongoing account reconciliation."
+  ],
+  "status": "open",
+  "owner": "INGEST discovery",
+  "created_at": "2026-07-18T09:45:50.4088483+00:00"
+}

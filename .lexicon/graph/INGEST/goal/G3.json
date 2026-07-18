@@ -1,0 +1,10 @@
+{
+  "id": "01KXT9PDJ62R1X56J6PR6K76MK",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "G3",
+  "text": [
+    "Expose a complete review and reconciliation boundary before any durable financial mutation."
+  ],
+  "target": "Every source row is accounted for exactly once as accepted, duplicate, rejected, or blocked; candidate counts and exact source totals reconcile where the format supplies evidence; unresolved ambiguity prevents commit.",
+  "created_at": "2026-07-18T09:42:36.8708834+00:00"
+}

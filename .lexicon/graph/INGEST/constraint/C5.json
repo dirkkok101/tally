@@ -1,0 +1,27 @@
+{
+  "id": "01KXT9TZQQ6HC9A9SM4G40FZ0A",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "C5",
+  "title": "Finance semantics require evidence",
+  "description": [
+    "Currency, signed amount, transaction date, and account mapping follow the resolved LEDGER evidence gates OQ-LEDGER-1 through OQ-LEDGER-4. An adapter must fail closed rather than invent a missing or ambiguous value."
+  ],
+  "type": "business",
+  "created_at": "2026-07-18T09:45:06.5521149+00:00",
+  "links": [
+    {
+      "id": "01KXT9TZQRKDEX71DE5GFEN0SP",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-1",
+      "rel": "see-also",
+      "created_at": "2026-07-18T09:45:06.5527812+00:00"
+    },
+    {
+      "id": "01KXT9TZQRCPDB29MQJMT952PH",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-4",
+      "rel": "see-also",
+      "created_at": "2026-07-18T09:45:06.5529692+00:00"
+    }
+  ]
+}

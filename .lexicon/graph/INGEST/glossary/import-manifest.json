@@ -1,0 +1,9 @@
+{
+  "id": "01KXT9X3370YRHX4A777DDC6SX",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "term": "Import Manifest",
+  "definition": [
+    "The immutable record of source fingerprint, adapter and contract versions, candidate mappings, validations, reconciliation evidence, and intended idempotency keys reviewed before commit."
+  ],
+  "created_at": "2026-07-18T09:46:15.5284263+00:00"
+}

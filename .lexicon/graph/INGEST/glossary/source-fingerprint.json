@@ -1,0 +1,9 @@
+{
+  "id": "01KXT9X2KD3C71M2SSP0PFCG1Y",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "term": "Source Fingerprint",
+  "definition": [
+    "A deterministic identifier derived from the source artifact for exact-file replay detection. It is not, by itself, proof that two financial transactions are duplicates."
+  ],
+  "created_at": "2026-07-18T09:46:15.0222498+00:00"
+}

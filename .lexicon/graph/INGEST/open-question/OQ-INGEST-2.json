@@ -1,0 +1,12 @@
+{
+  "id": "01KXT9W9QAT5NH0Z0T2Q0BQMM4",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "OQ-INGEST-2",
+  "question": "Are any required PDFs scanned, password-protected, multi-column, or locale-dependent, and what worksheets, encodings, or locale conventions occur in tabular exports?",
+  "context": [
+    "The answer decides whether local deterministic adapters remain feasible and which format variants must fail closed."
+  ],
+  "status": "open",
+  "owner": "INGEST discovery",
+  "created_at": "2026-07-18T09:45:49.5472248+00:00"
+}

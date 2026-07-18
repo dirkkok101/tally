@@ -1,0 +1,12 @@
+{
+  "id": "01KXT9PYY9A76Y66JG855EWSFT",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "NG5",
+  "text": [
+    "Open or modify private LEDGER storage or reimplement canonical financial semantics."
+  ],
+  "rationale": [
+    "All durable effects and validation belong behind the versioned public LEDGER contract."
+  ],
+  "created_at": "2026-07-18T09:42:54.6665943+00:00"
+}

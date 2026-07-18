@@ -1,0 +1,10 @@
+{
+  "id": "01KXT9PD1DBA6WN6MJCZ3V4MYS",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "G1",
+  "text": [
+    "Produce a deterministic candidate import batch from every supported statement without mutating LEDGER."
+  ],
+  "target": "For each supported fixture from the three initial accounts, repeated preview returns the same ordered candidate set, parser version, source fingerprint, validation outcomes, and reconciliation evidence byte-for-byte.",
+  "created_at": "2026-07-18T09:42:36.3342385+00:00"
+}

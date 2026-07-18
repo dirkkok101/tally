@@ -1,0 +1,11 @@
+{
+  "id": "01KXT9TZ53QQ0K4557XXYFTZ9J",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "C3",
+  "title": "Owner-only financial artifacts",
+  "description": [
+    "Keep source files, temporary extraction data, candidate batches, manifests, and receipts local and owner-only. Persisted directories use mode 0700 and files mode 0600 where the platform supports them; logs contain metadata rather than statement payloads; temporary artifacts have deterministic cleanup."
+  ],
+  "type": "regulatory",
+  "created_at": "2026-07-18T09:45:05.9567780+00:00"
+}

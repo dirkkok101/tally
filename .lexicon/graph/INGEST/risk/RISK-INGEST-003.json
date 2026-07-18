@@ -1,0 +1,14 @@
+{
+  "id": "01KXT9W8BSC8RE43KAX0AT0XQ5",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "RISK-INGEST-003",
+  "description": [
+    "Duplicate identity can produce false matches or missed duplicates across repeated files, overlapping statement windows, and corrected statements."
+  ],
+  "likelihood": "Medium",
+  "impact": "High",
+  "mitigation": [
+    "Preserve file and row provenance, define source-row identity during discovery, preview conflicts, and verify repeated and overlapping import scenarios."
+  ],
+  "created_at": "2026-07-18T09:45:48.1543018+00:00"
+}

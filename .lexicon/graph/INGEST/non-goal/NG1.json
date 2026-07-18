@@ -1,0 +1,12 @@
+{
+  "id": "01KXT9PXXF1JRSEGP5XRXX154M",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "NG1",
+  "text": [
+    "Connect to online banking, collect banking credentials, initiate payments, or modify bank-side data."
+  ],
+  "rationale": [
+    "INGEST consumes owner-supplied local exports only; live banking creates a different security and integration product."
+  ],
+  "created_at": "2026-07-18T09:42:53.6165634+00:00"
+}

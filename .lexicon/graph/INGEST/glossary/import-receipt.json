@@ -1,0 +1,9 @@
+{
+  "id": "01KXT9X3CA5X503R0GYC98Y7PG",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "term": "Import Receipt",
+  "definition": [
+    "The durable machine-readable outcome of commit, mapping each candidate to its canonical LEDGER result or explicit unresolved state so an interrupted operation can resume safely."
+  ],
+  "created_at": "2026-07-18T09:46:15.8192673+00:00"
+}

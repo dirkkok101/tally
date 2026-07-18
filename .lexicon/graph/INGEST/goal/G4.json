@@ -1,0 +1,10 @@
+{
+  "id": "01KXT9PDTV17NKXKCVNFT7H70K",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "G4",
+  "text": [
+    "Commit accepted candidates only through the public versioned LEDGER command contract."
+  ],
+  "target": "INGEST reads discoverable LEDGER schemas, never opens private storage, supplies stable idempotency identities, records each structured outcome, and returns a resumable receipt whose accepted transaction references round-trip from LEDGER.",
+  "created_at": "2026-07-18T09:42:37.1483600+00:00"
+}

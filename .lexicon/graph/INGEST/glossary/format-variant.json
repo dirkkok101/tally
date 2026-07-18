@@ -1,0 +1,9 @@
+{
+  "id": "01KXT9X3XZG6KF444XMFKYJTK8",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "term": "Format Variant",
+  "definition": [
+    "A specific, detectable statement layout and encoding contract supported by one Source Adapter version; sharing a file extension does not make two layouts the same variant."
+  ],
+  "created_at": "2026-07-18T09:46:16.3849546+00:00"
+}

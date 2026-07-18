@@ -1,0 +1,10 @@
+{
+  "id": "01KXT9PEBAEB20RN17Y66JB90P",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "G6",
+  "text": [
+    "Support the real statement formats needed by the two banks through versioned local source adapters."
+  ],
+  "target": "Each adopted adapter is proven against redacted representative fixtures and fails closed on an unsupported, password-protected, scanned, structurally changed, or semantically incomplete source instead of guessing.",
+  "created_at": "2026-07-18T09:42:37.6755169+00:00"
+}

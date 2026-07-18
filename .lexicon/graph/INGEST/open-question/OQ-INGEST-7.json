@@ -1,0 +1,12 @@
+{
+  "id": "01KXT9WB3NPDMPPKYD0V3JG2CT",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "OQ-INGEST-7",
+  "question": "Which source, staged, manifest, and receipt artifacts must be retained, for how long, and which may be deleted after a verified commit?",
+  "context": [
+    "Balance provenance and auditability against the exposure created by retaining sensitive financial source data."
+  ],
+  "status": "open",
+  "owner": "INGEST discovery",
+  "created_at": "2026-07-18T09:45:50.9666323+00:00"
+}

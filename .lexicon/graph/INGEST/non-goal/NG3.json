@@ -1,0 +1,12 @@
+{
+  "id": "01KXT9PYDHXZPY5V35A43RWW7B",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "NG3",
+  "text": [
+    "Calculate budgets, spend insights, forecasts, or narrative reports."
+  ],
+  "rationale": [
+    "BUDGET and INSIGHTS consume canonical LEDGER facts after ingestion."
+  ],
+  "created_at": "2026-07-18T09:42:54.1309071+00:00"
+}
