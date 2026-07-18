@@ -1,0 +1,9 @@
+{
+  "id": "01KXTJSJ7QKWPYWA9PW2W85666",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "version": "0.4",
+  "changes": [
+    "Technical design complete: 9 accepted decisions, 0 HTTP endpoints, 7 data models, 4 feature areas, 4 diagrams, and 18 linked test intents. A published Native-AOT spike selected PdfPig 0.1.14; exact replay identities are revision-stable, cross-file overlap remains fail-closed, and all greenfield paths are explicit planning gates."
+  ],
+  "created_at": "2026-07-18T12:21:37.1451536+00:00"
+}

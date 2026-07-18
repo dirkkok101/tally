@@ -1,0 +1,92 @@
+{
+  "id": "01KXTHQQNAGDGN6TFK18JZR8R9",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "DD-INGEST-APPLICATION-ARCHITECTURE",
+  "title": "Single-process vertical slices with isolated ingestion state",
+  "description": [
+    "Place INGEST in the existing Native-AOT Tally executable while preserving its public boundary and private state ownership."
+  ],
+  "decision": [
+    "Use one executable with vertical slices for Contract, Preview, Review, Commit, and Recovery; pure Domain/Ingest policies; concrete PdfPig and raw-SQLite infrastructure; explicit DI; and no HTTP, daemon, mediator, event bus, generic repository, or plugin loader. INGEST owns a separate state store and reaches LEDGER only through the shared public operation executor."
+  ],
+  "rationale": [
+    "This adopts ADR-CORE-0021 and ADR-CORE-0024 plus the deep-module shape of MD-LEDGER-MASTER while respecting C1 and C2. A separate service adds deployment and authentication complexity; direct integration into LEDGER features erases the module boundary; horizontal technical layers scatter one ingestion workflow across the solution."
+  ],
+  "alternatives": [
+    "A: separate INGEST service with HTTP or RPC, rejected because it adds hosting, auth, deployment, and network failure modes. B: embed parsing in LEDGER, rejected because it contaminates the canonical finance core and reverses dependency direction. C: one executable with isolated vertical slices and state, chosen."
+  ],
+  "consequences": [
+    "INGEST ships and versions with Tally, shares system operation infrastructure, and remains independently testable through its public contract. Module isolation is enforced by project paths, dependency tests, separate storage, and public-operation-only LEDGER access rather than a process boundary."
+  ],
+  "status_notes": [
+    "Accepted design. Expected paths are greenfield creation obligations; the next plan must own each path before implementation."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Features/Ingest/**\",\"src/Tally/Domain/Ingest/**\",\"src/Tally/Bootstrap/Features/IngestExtensions.cs\"]}",
+  "created_at": "2026-07-18T12:03:08.5870773+00:00",
+  "links": [
+    {
+      "id": "01KXTHQQNBYE6MK7V6BZPF1S43",
+      "target_type": "adr",
+      "target": "ADR-CORE-0021",
+      "rel": "driven_by",
+      "created_at": "2026-07-18T12:03:08.5879384+00:00"
+    },
+    {
+      "id": "01KXTHQQNCAGQHD8BS071CHMD3",
+      "target_type": "adr",
+      "target": "ADR-CORE-0024",
+      "rel": "driven_by",
+      "created_at": "2026-07-18T12:03:08.5882551+00:00"
+    },
+    {
+      "id": "01KXTJ37FCJ3FSP976NAHDMPK2",
+      "target_type": "requirement",
+      "target": "FR-INGEST-APPROVED-BATCH-COMMIT",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:25.2293896+00:00"
+    },
+    {
+      "id": "01KXTJ384HKMKYKZXWXT1XB0C3",
+      "target_type": "requirement",
+      "target": "FR-INGEST-ARTIFACT-CLEANUP",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:25.9070559+00:00"
+    },
+    {
+      "id": "01KXTJ363DMQH7TFJKBBTXMFQ8",
+      "target_type": "requirement",
+      "target": "FR-INGEST-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:23.8252328+00:00"
+    },
+    {
+      "id": "01KXTJ36S3PD73GEJDX3BWFD58",
+      "target_type": "requirement",
+      "target": "FR-INGEST-STATEMENT-PREVIEW",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:24.5168066+00:00"
+    },
+    {
+      "id": "01KXTHQQNCGFZ5RERV7FJ3RT63",
+      "target_type": "module_design",
+      "target": "MD-LEDGER-MASTER",
+      "rel": "see-also",
+      "created_at": "2026-07-18T12:03:08.5886389+00:00"
+    },
+    {
+      "id": "01KXTJ38P26WGAMZAJNRE3F8TJ",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-AGENT-OPERABILITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:26.4678241+00:00"
+    },
+    {
+      "id": "01KXTJ39A54Z44MAKJ2T9AF12Y",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:27.1103495+00:00"
+    }
+  ]
+}

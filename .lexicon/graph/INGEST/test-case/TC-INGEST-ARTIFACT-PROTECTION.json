@@ -1,0 +1,38 @@
+{
+  "id": "01KXTJ0BJRAHTKQR6012CNCT09",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "TC-INGEST-ARTIFACT-PROTECTION",
+  "slug": "ARTIFACT-PROTECTION",
+  "title": "Verify source and artifact privacy boundaries",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "security",
+  "automation": "automated",
+  "status": "planned",
+  "steps": "Inject unique canaries into source path, rows, descriptions, amounts, balances, identifiers, requests, and manifests; exercise success, expected failure, unexpected parser failure, cancellation, crash, abandonment, startup, compaction, and cleanup; inspect arguments, stdout policy, stderr, logs, diagnostics, files, permissions, and source hashes.",
+  "expected": "No canary appears in process arguments, stderr, logs, crash diagnostics, or telemetry; sensitive stdout appears only for explicit inspect/preview; directories/files use 0700/0600; sources are unchanged; no source copy or extraction temporary remains.",
+  "created_at": "2026-07-18T12:07:51.1295585+00:00",
+  "links": [
+    {
+      "id": "01KXTJ6TY0B034TD8M9KDR32AC",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-HOST-OS-SECURITY",
+      "rel": "verifies",
+      "created_at": "2026-07-18T12:11:23.4578906+00:00"
+    },
+    {
+      "id": "01KXTJ5M7YK2AF8CVM6XGC3CAD",
+      "target_type": "requirement",
+      "target": "FR-INGEST-FAILURE-STATUS",
+      "rel": "verifies",
+      "created_at": "2026-07-18T12:10:43.8394706+00:00"
+    },
+    {
+      "id": "01KXTJ5KKYP7F74Y74RK6EARB3",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-LOCAL-DATA-PROTECTION",
+      "rel": "verifies",
+      "created_at": "2026-07-18T12:10:43.1997011+00:00"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "id": "01KXTHQR1TWR65KAKS1CSBQ7XE",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "DD-INGEST-CLI-OPERATION-CONTRACT",
+  "title": "Eight explicit workflow operations from one registry",
+  "description": [
+    "Define the smallest public surface that still makes every dangerous state transition visible."
+  ],
+  "decision": [
+    "Expose ingest.preview, ingest.inspect, ingest.approve, ingest.commit, ingest.resume, ingest.status, ingest.abandon, and ingest.cleanup as versioned typed operations under tally ingest. One explicitly registered descriptor registry generates dispatch, help, machine schemas, compatibility metadata, limits, stable errors, and skill content. Complex input uses explicit stdin or file JSON; sourcePath is permitted only inside that private input. Each invocation emits exactly one business envelope."
+  ],
+  "rationale": [
+    "The explicit surface minimizes caller knowledge and is the complete test boundary. A three-entry preview/act/status surface hides multiple transition schemas behind an action discriminator. Generic run/import/save/delete operations weaken discovery and make invalid states easy. Separate handwritten help, schema, and dispatch would drift. This adapts DD-LEDGER-CLI-OPERATION-CONTRACT and ADR-CORE-0010/0025 to INGEST."
+  ],
+  "alternatives": [
+    "A: preview plus generic act plus status, rejected because callers still need every hidden transition invariant. B: generic run/import/save/delete, rejected because schemas and lifecycle semantics become ambiguous. C: eight explicit operations from one registry, chosen."
+  ],
+  "consequences": [
+    "Operation IDs, schemas, limits, errors, exits, and state-transition meanings become compatibility commitments. New operations require additive versioning; unknown fields and unsupported versions fail before source processing or mutation."
+  ],
+  "status_notes": [
+    "Accepted design. Missing paths are intentional greenfield planning gates, not current implementation evidence."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Cli/**\",\"src/Tally/Contracts/Ingest/**\",\"src/Tally/Features/Ingest/Contract/**\",\"tests/Tally.Tests/Ingest/Contract/**\"]}",
+  "created_at": "2026-07-18T12:03:08.9878030+00:00",
+  "links": [
+    {
+      "id": "01KXTHQR1XNE94HJXYT3SST480",
+      "target_type": "adr",
+      "target": "ADR-CORE-0010",
+      "rel": "driven_by",
+      "created_at": "2026-07-18T12:03:08.9899504+00:00"
+    },
+    {
+      "id": "01KXTHQR1XX07DB5MPTE8YXEN5",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-CLI-OPERATION-CONTRACT",
+      "rel": "see-also",
+      "created_at": "2026-07-18T12:03:08.9896880+00:00"
+    },
+    {
+      "id": "01KXTJ40R79FBQ5JHJFW51H8FN",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-AI-AGENT-HOST",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T12:09:51.1124977+00:00"
+    },
+    {
+      "id": "01KXTJ3B9G3C61PT2KDJ85S9VQ",
+      "target_type": "requirement",
+      "target": "FR-INGEST-ARTIFACT-CLEANUP",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:29.1371082+00:00"
+    },
+    {
+      "id": "01KXTJ39WQ9HKJRZ76T3XNR31C",
+      "target_type": "requirement",
+      "target": "FR-INGEST-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:27.7045633+00:00"
+    },
+    {
+      "id": "01KXTJ3AGNR20Z02A9Y2XC0ECF",
+      "target_type": "requirement",
+      "target": "FR-INGEST-FAILURE-STATUS",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:28.3420932+00:00"
+    },
+    {
+      "id": "01KXTJ3BXBFNYDSXX3GNXW17CA",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-AGENT-OPERABILITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:29.7724468+00:00"
+    },
+    {
+      "id": "01KXTJ3CHRVE7YM82Q6FZ6HHD5",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:30.4257164+00:00"
+    },
+    {
+      "id": "01KXTJ5PA283TYNY6B2GTYXHE2",
+      "target_type": "test_case",
+      "target": "TC-INGEST-PUBLISHED-CONTRACT-MATRIX",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T12:10:45.9561532+00:00"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "id": "01KXTHXCW2GCHZ4A1Y7DVE2A5F",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "FA-INGEST-CONTRACT-FORMATS",
+  "name": "Contract and Formats",
+  "description": [
+    "Operation descriptors, versioned contracts, schema discovery, PdfPig extraction, adapter qualification, explicit adapter registration, and safe format limits."
+  ],
+  "created_at": "2026-07-18T12:06:14.1474895+00:00",
+  "links": [
+    {
+      "id": "01KXTJ4X5MT8XFQZ6HSCK6DECM",
+      "target_type": "design_decision",
+      "target": "DD-INGEST-CLI-OPERATION-CONTRACT",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T12:10:20.2129662+00:00"
+    },
+    {
+      "id": "01KXTJ4YE9ADQV0HSJ6AVGRYTE",
+      "target_type": "design_decision",
+      "target": "DD-INGEST-DOCUMENT-EXTRACTION",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T12:10:21.5165959+00:00"
+    },
+    {
+      "id": "01KXTJ4XRKMRFM1A9SQ6YWDJNX",
+      "target_type": "design_decision",
+      "target": "DD-INGEST-FORMAT-ADAPTERS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T12:10:20.8203081+00:00"
+    },
+    {
+      "id": "01KXTJ4ZMPJ2QJ637DKZ4ED33N",
+      "target_type": "data_model",
+      "target": "DM-INGEST-FORMAT-EVIDENCE",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T12:10:22.7430883+00:00"
+    },
+    {
+      "id": "01KXTJ4Z1NYJFWD5H6TFHRTPNG",
+      "target_type": "data_model",
+      "target": "DM-INGEST-OPERATION-CONTRACTS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T12:10:22.1339966+00:00"
+    },
+    {
+      "id": "01KXTJ6N5MR75X8HWA5BGBXXPJ",
+      "target_type": "requirement",
+      "target": "FR-INGEST-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:11:17.5574381+00:00"
+    },
+    {
+      "id": "01KXTJ6NQMXBD3TQ8RHJK9RFT6",
+      "target_type": "requirement",
+      "target": "FR-INGEST-VARIANT-QUALIFICATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:11:18.1328831+00:00"
+    }
+  ]
+}

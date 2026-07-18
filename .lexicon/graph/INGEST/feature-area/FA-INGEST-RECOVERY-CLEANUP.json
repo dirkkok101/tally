@@ -1,0 +1,54 @@
+{
+  "id": "01KXTHXE19R5BDNBP7H26FZHJ8",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "FA-INGEST-RECOVERY-CLEANUP",
+  "name": "Recovery and Cleanup",
+  "description": [
+    "Separate SQLite state, status, per-batch locks, idempotent resume, retention compaction, abandonment, owner-only permissions, schema migration, and safe cleanup."
+  ],
+  "created_at": "2026-07-18T12:06:15.3381759+00:00",
+  "links": [
+    {
+      "id": "01KXTJ55BC4M0PR3TWEGNQ7WM5",
+      "target_type": "design_decision",
+      "target": "DD-INGEST-ARTIFACT-SECURITY",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T12:10:28.5900179+00:00"
+    },
+    {
+      "id": "01KXTJ54TAM4GNKDZZ6ZG5XVNH",
+      "target_type": "design_decision",
+      "target": "DD-INGEST-STATE-STORE",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T12:10:28.0443168+00:00"
+    },
+    {
+      "id": "01KXTJ56GRT93CBCGWX8DSEDWY",
+      "target_type": "data_model",
+      "target": "DM-INGEST-ERROR-STATUS-CONTRACTS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T12:10:29.7852080+00:00"
+    },
+    {
+      "id": "01KXTJ55XSRDQR8RQ9DDX62QTB",
+      "target_type": "data_model",
+      "target": "DM-INGEST-STATE-STORE",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T12:10:29.1785966+00:00"
+    },
+    {
+      "id": "01KXTJ6SMX36NRNKTRJ50WFHCJ",
+      "target_type": "requirement",
+      "target": "FR-INGEST-ARTIFACT-CLEANUP",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:11:22.1427275+00:00"
+    },
+    {
+      "id": "01KXTJ6RZAAJ083J0XVFMPG6V6",
+      "target_type": "requirement",
+      "target": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:11:21.4516410+00:00"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01KXTH1PPDQCQM45N7A91KAX7H",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "OQ-INGEST-11",
+  "question": "Can the latest stable upstream PdfPig package publish as a trimmed .NET 10 Native-AOT binary and deterministically extract non-empty text from all three qualified PDF fixtures, including the permission-encrypted fixture, twice each within 5 seconds and 256 MiB peak resident memory?",
+  "context": [
+    "Blocks the production PDF extraction choice in DD-INGEST-DOCUMENT-EXTRACTION. Success requires a published linux-x64 binary, no source path in process arguments, identical per-fixture text digests across two runs, all fixtures readable without an opening password, and each invocation below the INGEST NFR bounds."
+  ],
+  "status": "resolved",
+  "decision": [
+    "Use upstream PdfPig 0.1.14 in-process. A published .NET 10 Native-AOT spike extracted all three qualified fixtures twice with identical digests; worst observed run was 0.37 seconds and 51,416 KiB RSS. The legacy package failed under trimming and is not permitted."
+  ],
+  "created_at": "2026-07-18T11:51:06.7024751+00:00"
+}

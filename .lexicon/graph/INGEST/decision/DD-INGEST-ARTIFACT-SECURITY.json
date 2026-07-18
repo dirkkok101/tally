@@ -1,0 +1,78 @@
+{
+  "id": "01KXTHS0D4Y49485KSQNYYF551",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "DD-INGEST-ARTIFACT-SECURITY",
+  "title": "Memory-only extraction and owner-only payload handling",
+  "description": [
+    "Constrain every source, manifest, receipt, diagnostic, and parser boundary for local financial privacy."
+  ],
+  "decision": [
+    "Carry sourcePath only inside private structured input; open read-only; read a bounded immutable byte buffer; fingerprint the exact bytes; and never persist the path or a source copy. Keep extracted glyphs and source rows in bounded memory until an INGEST transaction persists only required manifest state. Enforce 0700 directories and 0600 state, WAL, SHM, lock, and atomic artifacts where supported. Source paths, rows, descriptions, amounts, balances, full bank identifiers, manifests, requests, and receipts never enter arguments, logs, stderr, crash diagnostics, or telemetry. Source-generated JSON rejects unknown fields and fixes canonical order."
+  ],
+  "rationale": [
+    "The source is caller-owned and the intermediate evidence is as sensitive as the final ledger. External parser processes expose path and lifecycle surfaces; disk extraction creates crash residue; payload logging turns expected failures into disclosure. Memory-only PdfPig extraction passed the NFR bound and removes an entire cleanup class. The trusted OS identity remains the sole first-release access boundary."
+  ],
+  "alternatives": [
+    "A: disk-extracted text, rejected because crashes leave sensitive residue. B: external parser process with a source path argument, rejected because paths leak and lifecycle expands. C: payload logging for diagnosis, rejected as disclosure. D: bounded memory extraction, private structured input, protected state, and metadata-only diagnostics, chosen."
+  ],
+  "consequences": [
+    "Debugging relies on safe identifiers, categories, counts, and correlation references rather than financial payloads. Unsupported host permissions block persistence. Source hashes before and after preview and canary scans become release gates."
+  ],
+  "status_notes": [
+    "Accepted design. The plan must create owner-only artifact, private-input, canary, and cleanup obligations at these paths."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Infrastructure/Ingest/Storage/IngestArtifactProtection.cs\",\"src/Tally/Features/Ingest/Preview/**\",\"src/Tally/Features/Ingest/Recovery/**\",\"tests/Tally.Tests/Ingest/Security/**\"]}",
+  "created_at": "2026-07-18T12:03:50.3093491+00:00",
+  "links": [
+    {
+      "id": "01KXTJ41ZBNEMDBBH5MQ5ZNZAN",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T12:09:52.3642672+00:00"
+    },
+    {
+      "id": "01KXTJ3Y9H1E54S8JRR9W376KZ",
+      "target_type": "requirement",
+      "target": "FR-INGEST-ARTIFACT-CLEANUP",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:48.5944034+00:00"
+    },
+    {
+      "id": "01KXTJ3XPSGPNF3BB98S0XNC1C",
+      "target_type": "requirement",
+      "target": "FR-INGEST-FAILURE-STATUS",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:47.9944042+00:00"
+    },
+    {
+      "id": "01KXTJ3X2WWV7QG4EDAKGKC9GM",
+      "target_type": "requirement",
+      "target": "FR-INGEST-STATEMENT-PREVIEW",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:47.3576595+00:00"
+    },
+    {
+      "id": "01KXTJ3YXJCXHGZYM844FBHDE7",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-BOUNDED-PARSING",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:49.2359705+00:00"
+    },
+    {
+      "id": "01KXTJ3ZFQ6GGAKHN01DDZM9FZ",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-LOCAL-DATA-PROTECTION",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:49.8167596+00:00"
+    },
+    {
+      "id": "01KXTJ5RRV82ZMYT2TH4F36B3V",
+      "target_type": "test_case",
+      "target": "TC-INGEST-ARTIFACT-PROTECTION",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T12:10:48.4760275+00:00"
+    }
+  ]
+}

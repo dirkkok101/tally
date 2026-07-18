@@ -1,0 +1,47 @@
+{
+  "id": "01KXTHWRNZ9BAB4P7V2RNMTKMA",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+  "name": "IngestOperationContracts",
+  "description": [
+    "Concrete versioned request and result shapes for the eight public INGEST CLI operations."
+  ],
+  "schema_def": [
+    "All operations use the common Tally operation envelope and reject unknown fields. Complex input uses --input - or --input @file; sourcePath is forbidden as a named argument.",
+    "",
+    "ingest.preview input {contractVersion, sourcePath, accountId, actor}; result {batchId, manifestRevisionId?, status, adapter?, counts, reconciliationSummary, exactReplayOf?, retryAction?}",
+    "ingest.inspect input {batchId, manifestRevisionId}; result {manifest identity, versions, selected account, ordered record outcomes, candidates, exclusions, duplicates, conflicts, controls, approval state}",
+    "ingest.approve input {batchId, manifestRevisionId, manifestDigest, actor}; result {approvalId, batchId, manifestRevisionId, approvedAt}",
+    "ingest.commit input {batchId, manifestRevisionId, manifestDigest}; result ImportReceipt",
+    "ingest.resume input {batchId}; result ImportReceipt",
+    "ingest.status input {batchId?, limit?: 1..100 default 50, cursor?: opaque}; result BatchStatusDetail when batchId is present, otherwise {items: BatchStatusSummary[] ordered by updatedAt descending then batchId, nextCursor?}",
+    "ingest.abandon input {batchId, reason}; result {batchId, status: abandoned, retainedMetadata, priorLedgerEffectCount}",
+    "ingest.cleanup input {batchId, expectedTerminalStatus}; result {batchId, status: cleaned, removedArtifactKinds[]}",
+    "",
+    "No contract exposes private store paths, source copies, PdfPig types, raw diagnostics, credentials, or private LEDGER types."
+  ],
+  "created_at": "2026-07-18T12:05:53.4721445+00:00",
+  "links": [
+    {
+      "id": "01KXTJ4AGTWBS266Q5YHVYXZB0",
+      "target_type": "requirement",
+      "target": "FR-INGEST-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:01.1168705+00:00"
+    },
+    {
+      "id": "01KXTJ4BA8HF24PTXHWXXG1XFJ",
+      "target_type": "requirement",
+      "target": "FR-INGEST-FAILURE-STATUS",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:01.9322208+00:00"
+    },
+    {
+      "id": "01KXTJ4C3H63TCCYAGP4H4RHE8",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-AGENT-OPERABILITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:02.7383064+00:00"
+    }
+  ]
+}

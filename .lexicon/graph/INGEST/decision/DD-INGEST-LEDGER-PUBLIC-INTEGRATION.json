@@ -1,0 +1,85 @@
+{
+  "id": "01KXTHRZSG001M37D7BN4BY6SH",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "DD-INGEST-LEDGER-PUBLIC-INTEGRATION",
+  "title": "Invoke LEDGER through the shared public operation executor",
+  "description": [
+    "Preserve the discoverable cross-module contract without a child process or private handler coupling."
+  ],
+  "decision": [
+    "Use one concrete LedgerContractClient that resolves released LEDGER operation descriptors and invokes the same typed operation executor used by the CLI. Preview discovers version compatibility and reads the selected account. Commit invokes ledger.transaction.record with provenance kind statement_import, the frozen request, and a stable INGEST candidate idempotency key; every success is verified through ledger.transaction.get before terminal receipt durability. INGEST never references LedgerDb, SQL, storage paths, feature handlers, or private domain types."
+  ],
+  "rationale": [
+    "This is the deepest available in-process boundary: callers know only released operation IDs, schemas, errors, versions, and results, while avoiding self-spawn process overhead and lost cancellation. Direct handler calls make compatibility and black-box tests dishonest. Direct storage access violates C2 and NG5. A transport interface with one implementation is speculative; the concrete client is sufficient."
+  ],
+  "alternatives": [
+    "A: direct LedgerDb or SQL, rejected as forbidden private coupling. B: direct LEDGER handler calls, rejected because they bypass released schemas and compatibility. C: spawn the CLI as a child process, rejected as unnecessary process and cancellation complexity. D: invoke the same public operation executor in-process through a concrete client, chosen."
+  ],
+  "consequences": [
+    "Cross-module tests can enforce that INGEST references only public contracts and operation infrastructure. LEDGER version/schema changes are visible before parsing or mutation. The concrete client must not translate or weaken LEDGER errors."
+  ],
+  "status_notes": [
+    "Accepted design. Planning must create only public-contract integration at the recorded paths and forbid private LEDGER references."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Integration/Ledger/LedgerContractClient.cs\",\"src/Tally/Features/Ingest/Commit/**\",\"tests/Tally.Tests/Ingest/LedgerContract/**\"]}",
+  "created_at": "2026-07-18T12:03:49.6814864+00:00",
+  "links": [
+    {
+      "id": "01KXTJ4365TN84GPKXW7S4DZED",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-CLI-OPERATION-CONTRACT",
+      "rel": "governed-by",
+      "created_at": "2026-07-18T12:09:53.6069207+00:00"
+    },
+    {
+      "id": "01KXTJ43WKP8K8V6E7DFYTPN9F",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "rel": "governed-by",
+      "created_at": "2026-07-18T12:09:54.3247698+00:00"
+    },
+    {
+      "id": "01KXTJ42H1GY4J5YDH7QC604T9",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T12:09:52.9306409+00:00"
+    },
+    {
+      "id": "01KXTJ3RNGZFW3JFTG6F57G00G",
+      "target_type": "requirement",
+      "target": "FR-INGEST-APPROVED-BATCH-COMMIT",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:42.8333604+00:00"
+    },
+    {
+      "id": "01KXTJ3S96SNGRXA9TZNH8MEVZ",
+      "target_type": "requirement",
+      "target": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:43.4632230+00:00"
+    },
+    {
+      "id": "01KXTJ3R00D64ZEF0CSET4DH24",
+      "target_type": "requirement",
+      "target": "FR-INGEST-STATEMENT-PREVIEW",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:42.1457876+00:00"
+    },
+    {
+      "id": "01KXTJ3SX4GJ96RSBEMY3NQWKQ",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:44.1011054+00:00"
+    },
+    {
+      "id": "01KXTJ5QJPG9W9XY23ZCKGTK8X",
+      "target_type": "test_case",
+      "target": "TC-INGEST-LEDGER-PUBLIC-CONFORMANCE",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T12:10:47.2552708+00:00"
+    }
+  ]
+}

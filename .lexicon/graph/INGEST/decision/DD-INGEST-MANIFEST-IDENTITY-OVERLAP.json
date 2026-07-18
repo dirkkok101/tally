@@ -1,0 +1,71 @@
+{
+  "id": "01KXTHQRXPYZZZA5AP8PGNJWBS",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "DD-INGEST-MANIFEST-IDENTITY-OVERLAP",
+  "title": "Content-addressed manifests with exact replay and blocked overlap",
+  "description": [
+    "Define stable identities and the first-release duplicate boundary while OQ-INGEST-4 lacks cross-file evidence."
+  ],
+  "decision": [
+    "Derive batchId from selected account, source SHA-256, adapter compatibility identity, manifest schema, and compatible LEDGER contract. Derive manifestRevisionId from canonical source-generated JSON. Derive sourceRecordId from source fingerprint, stable structural position, raw record-evidence fingerprint, and the immutable-facts schema while excluding adapter and manifest versions. Derive candidateId from selected account, sourceRecordId, and immutable normalized facts while excluding manifest revision and compatible version metadata; derive the LEDGER idempotency key and statement-import source reference from candidateId. Preview checks selected account plus source fingerprint first and returns a prior active or completed batch without reimport. The initial adapters claim no cross-file transaction identity. Identical tuples at distinct source positions remain distinct; a different source with an overlapping account/date window is blocked until identity-grade evidence resolves OQ-INGEST-4."
+  ],
+  "rationale": [
+    "This fully satisfies safe v1 behavior without inventing identity. Tuple, fuzzy, and nearest-date matching can erase valid transactions and are disproven by the fixtures. Random IDs break deterministic replay. Persisting filenames as identity breaks rename safety and leaks private metadata. A content-addressed manifest binds approval and commit to exactly one reviewed meaning."
+  ],
+  "alternatives": [
+    "A: random batch and candidate IDs, rejected because exact replay changes identity. B: filename or date-description-amount tuples, rejected because rename and duplicate tuples disprove uniqueness. C: fuzzy similarity suppression, rejected because false positives erase valid facts. D: content-addressed exact replay with overlap blocking, chosen."
+  ],
+  "consequences": [
+    "Exact source replay is deterministic under any filename and re-review preserves candidate and LEDGER identities. Adapter or compatible contract upgrades cannot make an unchanged candidate new merely by changing version metadata. The initial adapters cannot auto-deduplicate across different sources; overlapping windows remain blocked until OQ-INGEST-4 gains identity-grade fixture evidence. Manifest canonicalization and hash compatibility remain explicitly versioned."
+  ],
+  "status_notes": [
+    "Accepted fail-closed v1 design. Planning must create deterministic identity, manifest, replay, and overlap slices at these paths."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Domain/Ingest/Identity/**\",\"src/Tally/Domain/Ingest/Manifests/**\",\"src/Tally/Features/Ingest/Preview/**\",\"tests/Tally.Tests/Ingest/Identity/**\"]}",
+  "created_at": "2026-07-18T12:03:09.8799099+00:00",
+  "links": [
+    {
+      "id": "01KXTJ3HQ1G74GBDRCFJ4NC7FW",
+      "target_type": "requirement",
+      "target": "FR-INGEST-MANIFEST-REVIEW",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:35.7148325+00:00"
+    },
+    {
+      "id": "01KXTJ3JCN5482PTMAGXPN0K10",
+      "target_type": "requirement",
+      "target": "FR-INGEST-REPLAY-OVERLAP-SAFETY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:36.4069046+00:00"
+    },
+    {
+      "id": "01KXTJ3JYJZQ2Y0NBPEWNPC4QX",
+      "target_type": "requirement",
+      "target": "FR-INGEST-SOURCE-RECONCILIATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:36.9790617+00:00"
+    },
+    {
+      "id": "01KXTJ3H0J1ECGARH4GZY9A4Y9",
+      "target_type": "requirement",
+      "target": "FR-INGEST-STATEMENT-PREVIEW",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:34.9950580+00:00"
+    },
+    {
+      "id": "01KXTJ3KHN5K6R3R2AXMDS70ZQ",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-DETERMINISTIC-INTEGRITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:37.5902614+00:00"
+    },
+    {
+      "id": "01KXTHQRXRZ0K5A8WKED278QKR",
+      "target_type": "open_question",
+      "target": "OQ-INGEST-4",
+      "rel": "motivated-by",
+      "created_at": "2026-07-18T12:03:09.8806403+00:00"
+    }
+  ]
+}

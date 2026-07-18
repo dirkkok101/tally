@@ -1,0 +1,78 @@
+{
+  "id": "01KXTH9565ARERVH83K6KPSJ82",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "DD-INGEST-DOCUMENT-EXTRACTION",
+  "title": "Managed in-process PDF extraction with PdfPig",
+  "description": [
+    "Choose the passive PDF text and glyph-position extraction dependency for the two qualified INGEST format variants inside the self-contained Native-AOT Tally CLI."
+  ],
+  "decision": [
+    "Pin the upstream PdfPig package at version 0.1.14 for the first qualified adapter set. A concrete PdfStatementTextExtractor reads caller-owned bytes inside the Tally process and returns ordered page, glyph, text, and coordinate evidence to the two format-specific adapters. It never executes active content, follows external links, renders pages, performs OCR, or mutates the source. Unsupported encryption, scans, malformed structures, ambiguous layouts, changed layouts, and configured resource bounds fail closed. Package version and extraction-policy version are included in the adapter compatibility identity. Do not introduce a generic PDF parser port until a second real implementation exists."
+  ],
+  "rationale": [
+    "Spike OQ-INGEST-11 on 2026-07-18 published a trimmed self-contained linux-x64 .NET 10 Native-AOT harness against the current upstream PdfPig 0.1.14 package. All three qualified fixtures, including the permission-encrypted fixture, produced non-empty page/glyph evidence twice with identical digests. Worst observed invocation was 0.37 seconds and 51,416 KiB peak RSS versus the 5-second and 256-MiB limits. The legacy UglyToad.PdfPig 1.7.0-custom-5 package published with trim warnings and failed at runtime because its reflection factory was trimmed. Poppler child-process extraction was rejected because it adds distribution, process-lifecycle, and source-path handling complexity; a custom PDF parser was rejected as unsafe and out of scope."
+  ],
+  "alternatives": [
+    "A: legacy UglyToad.PdfPig 1.7.0-custom-5, rejected after a trimmed Native-AOT runtime failure. B: Poppler child process, rejected for distribution, process, cancellation, and source-path complexity. C: custom PDF parsing, rejected as unsafe and outside scope. D: upstream PdfPig 0.1.14 in-process, chosen by published-binary fixture evidence."
+  ],
+  "consequences": [
+    "PdfPig is pinned; every upgrade reruns Native-AOT publish, deterministic private golden fixtures, malformed-input bounds, and permission-encrypted coverage before an adapter version can change. PdfPig types remain inside Infrastructure/Ingest/Pdf."
+  ],
+  "status_notes": [
+    "Accepted from OQ-INGEST-11 spike. The production paths do not exist yet and are mandatory plan targets."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Tally.csproj\",\"src/Tally/Infrastructure/Ingest/Pdf/PdfStatementTextExtractor.cs\",\"tests/Tally.Tests/Ingest/PdfExtraction/**\"]}",
+  "created_at": "2026-07-18T11:55:10.9187065+00:00",
+  "links": [
+    {
+      "id": "01KXTJ41BZT1GH9ZJ733W7GM8B",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-OWNER-BANK-STATEMENT",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T12:09:51.7440199+00:00"
+    },
+    {
+      "id": "01KXTH9H136R8376ZD2WFQVENM",
+      "target_type": "requirement",
+      "target": "FR-INGEST-VARIANT-QUALIFICATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T11:55:23.0451173+00:00"
+    },
+    {
+      "id": "01KXTH9HQHY7DY0QSKJETV9EVN",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-BOUNDED-PARSING",
+      "rel": "implements",
+      "created_at": "2026-07-18T11:55:23.7622766+00:00"
+    },
+    {
+      "id": "01KXTH9JAHAQVQQHT4DHW564JX",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-DETERMINISTIC-INTEGRITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T11:55:24.3705530+00:00"
+    },
+    {
+      "id": "01KXTH9K5SDP13ETT3019CA4HZ",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-LOCAL-DATA-PROTECTION",
+      "rel": "implements",
+      "created_at": "2026-07-18T11:55:25.2428899+00:00"
+    },
+    {
+      "id": "01KXTH956SHJ7TH656ZVXNQHAA",
+      "target_type": "open_question",
+      "target": "OQ-INGEST-11",
+      "rel": "motivated-by",
+      "created_at": "2026-07-18T11:55:10.9374566+00:00"
+    },
+    {
+      "id": "01KXTJ5MXZEBX165M0FJPM6277",
+      "target_type": "test_case",
+      "target": "TC-INGEST-PDF-EXTRACTION-AOT",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T12:10:44.5443393+00:00"
+    }
+  ]
+}

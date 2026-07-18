@@ -1,0 +1,39 @@
+{
+  "id": "01KXTHWTD61VVVD80GRQKHKJ52",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+  "name": "LedgerCommitContractSnapshot",
+  "description": [
+    "The exact public LEDGER request/result subset frozen by INGEST for each accepted candidate."
+  ],
+  "schema_def": [
+    "FrozenLedgerRecordRequest {ledgerContractVersion, operationId: ledger.transaction.record, idempotencyKey, actor, input:{accountId, signedAmount canonical decimal string, currencyCode: ZAR, transactionDate, postingDate?, originalDescription, sourceReference, provenance:{kind: statement_import, reference}}}",
+    "LedgerRecordResult {transactionId, accountId, signedAmount, currencyCode, transactionDate, postingDate?, effectiveDate, originalDescription, sourceReference?, provenance, lifecycleStatus, recordedActor, recordedAt}",
+    "",
+    "The request is created once at manifest freeze and persisted byte-for-byte. Commit and resume invoke the shared public operation executor. A success becomes terminal only after ledger.transaction.get returns the same immutable facts. No private LEDGER type or store handle crosses the boundary."
+  ],
+  "created_at": "2026-07-18T12:05:55.2399455+00:00",
+  "links": [
+    {
+      "id": "01KXTJ4RDR7XS8J60RZ75DJZRG",
+      "target_type": "requirement",
+      "target": "FR-INGEST-APPROVED-BATCH-COMMIT",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:15.3538291+00:00"
+    },
+    {
+      "id": "01KXTJ4S8TJ9S8YRZ9PV0B8STW",
+      "target_type": "requirement",
+      "target": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:16.2190770+00:00"
+    },
+    {
+      "id": "01KXTJ4SVJX2AXGEJK1TBSR7XV",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:16.8196289+00:00"
+    }
+  ]
+}

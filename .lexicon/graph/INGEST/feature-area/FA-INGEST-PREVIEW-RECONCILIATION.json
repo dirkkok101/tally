@@ -1,0 +1,47 @@
+{
+  "id": "01KXTHXD9NHNF036C8V6ZXY121",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "FA-INGEST-PREVIEW-RECONCILIATION",
+  "name": "Preview and Reconciliation",
+  "description": [
+    "Source snapshotting, account validation, normalization, source-record accounting, controls, exact replay, overlap blocking, and immutable manifest creation."
+  ],
+  "created_at": "2026-07-18T12:06:14.5820325+00:00",
+  "links": [
+    {
+      "id": "01KXTJ5094FK708KYNX6Q69D37",
+      "target_type": "design_decision",
+      "target": "DD-INGEST-MANIFEST-IDENTITY-OVERLAP",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T12:10:23.3969592+00:00"
+    },
+    {
+      "id": "01KXTJ51JB60E34F2ZBGVM81C2",
+      "target_type": "data_model",
+      "target": "DM-INGEST-FORMAT-EVIDENCE",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T12:10:24.7162765+00:00"
+    },
+    {
+      "id": "01KXTJ50X49YXW27RJADVKEXSR",
+      "target_type": "data_model",
+      "target": "DM-INGEST-IMPORT-MANIFEST",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T12:10:24.0401765+00:00"
+    },
+    {
+      "id": "01KXTJ6PYQEEPZJGX45ZYPFQKT",
+      "target_type": "requirement",
+      "target": "FR-INGEST-SOURCE-RECONCILIATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:11:19.3841169+00:00"
+    },
+    {
+      "id": "01KXTJ6PBARD8DQJRJSMCVWY79",
+      "target_type": "requirement",
+      "target": "FR-INGEST-STATEMENT-PREVIEW",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:11:18.7628816+00:00"
+    }
+  ]
+}

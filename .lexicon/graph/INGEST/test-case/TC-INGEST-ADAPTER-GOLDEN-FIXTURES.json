@@ -1,0 +1,38 @@
+{
+  "id": "01KXTJ09R1WGDS1MNGV12F4NRC",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "TC-INGEST-ADAPTER-GOLDEN-FIXTURES",
+  "slug": "ADAPTER-GOLDEN-FIXTURES",
+  "title": "Verify both qualified adapters against golden fixtures",
+  "level": "integration",
+  "surface": "service",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "steps": "Run the real PdfPig extractor and both explicitly registered adapters over every injected private fixture plus changed-layout, ambiguous, zero-movement, duplicate-tuple, date-boundary, and control-mismatch mutations.",
+  "expected": "Exactly one adapter matches each qualified fixture; every record is accounted for; exact controls reconcile; identical tuples at different positions remain distinct; unsupported, ambiguous, changed, or unreconciled variants fail closed without LEDGER mutation.",
+  "created_at": "2026-07-18T12:07:49.2500154+00:00",
+  "links": [
+    {
+      "id": "01KXTJ6W7KPR914XS98MR2S2QK",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-OWNER-BANK-STATEMENT",
+      "rel": "verifies",
+      "created_at": "2026-07-18T12:11:24.7881708+00:00"
+    },
+    {
+      "id": "01KXTJ5E137MFBT9BBCFYSXVTX",
+      "target_type": "requirement",
+      "target": "FR-INGEST-SOURCE-RECONCILIATION",
+      "rel": "verifies",
+      "created_at": "2026-07-18T12:10:37.4768592+00:00"
+    },
+    {
+      "id": "01KXTJ5DAP0QFTQNNRJKN1BA69",
+      "target_type": "requirement",
+      "target": "FR-INGEST-VARIANT-QUALIFICATION",
+      "rel": "verifies",
+      "created_at": "2026-07-18T12:10:36.7598205+00:00"
+    }
+  ]
+}

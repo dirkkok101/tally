@@ -1,0 +1,62 @@
+{
+  "id": "01KXTHY3QWETJBKB5DVWQR30E5",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "DIAG-INGEST-STATE-ER",
+  "title": "INGEST durable state model",
+  "diagram_type": "er",
+  "format": "mermaid",
+  "content": [
+    "erDiagram",
+    "  INGEST_BATCH ||--o{ MANIFEST_REVISION : owns",
+    "  MANIFEST_REVISION ||--|{ SOURCE_RECORD_OUTCOME : accounts_for",
+    "  MANIFEST_REVISION ||--o{ CANDIDATE : proposes",
+    "  MANIFEST_REVISION ||--o{ RECONCILIATION_CONTROL : proves",
+    "  MANIFEST_REVISION ||--o| MANIFEST_APPROVAL : approved_by",
+    "  INGEST_BATCH ||--o| IMPORT_RECEIPT : concludes",
+    "  IMPORT_RECEIPT ||--o{ CANDIDATE_RECEIPT : records",
+    "  CANDIDATE ||--o| CANDIDATE_RECEIPT : resolves",
+    "  INGEST_BATCH {",
+    "    text batch_id PK",
+    "    text source_fingerprint",
+    "    text account_id",
+    "    text adapter_identity",
+    "    text status",
+    "  }",
+    "  MANIFEST_REVISION {",
+    "    text manifest_revision_id PK",
+    "    text batch_id FK",
+    "    integer revision_number",
+    "    text canonical_digest",
+    "  }",
+    "  CANDIDATE {",
+    "    text candidate_id PK",
+    "    text source_record_id FK",
+    "    text idempotency_key",
+    "    text frozen_ledger_request",
+    "  }",
+    "  CANDIDATE_RECEIPT {",
+    "    text candidate_id FK",
+    "    text outcome",
+    "    text ledger_transaction_id",
+    "    text error_code",
+    "  }",
+    ""
+  ],
+  "created_at": "2026-07-18T12:06:37.5659303+00:00",
+  "links": [
+    {
+      "id": "01KXTJ5ATDX5VTG1AW37C09VDC",
+      "target_type": "data_model",
+      "target": "DM-INGEST-STATE-STORE",
+      "rel": "supports",
+      "created_at": "2026-07-18T12:10:34.1899815+00:00"
+    },
+    {
+      "id": "01KXTJ5BFJZQGZ5BJN59TG3JT9",
+      "target_type": "requirement",
+      "target": "FR-INGEST-MANIFEST-REVIEW",
+      "rel": "illustrates",
+      "created_at": "2026-07-18T12:10:34.8675053+00:00"
+    }
+  ]
+}

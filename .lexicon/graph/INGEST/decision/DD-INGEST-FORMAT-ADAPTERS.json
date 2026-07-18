@@ -1,0 +1,78 @@
+{
+  "id": "01KXTHQRFWVREEFMZGKHKR45E5",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "DD-INGEST-FORMAT-ADAPTERS",
+  "title": "Two explicit adapters behind one narrow real seam",
+  "description": [
+    "Separate fixture-qualified layout variability from the stable ingestion protocol without creating a generic parser platform."
+  ],
+  "decision": [
+    "Define IStatementAdapter with an immutable descriptor, a structural Probe operation, and an Extract operation over PdfDocumentEvidence. Register exactly pdf-text-layout-a-v1 and pdf-text-layout-b-v1 explicitly. Run every probe and require exactly one exact match; none or multiple fail closed. Each adapter owns row boundaries, variant-local source-record identity, dates, signs, controls, and exclusions for its qualified fixtures. There is no dynamic loading, user-authored rule language, OCR fallback, or generic table parser."
+  ],
+  "rationale": [
+    "Two independently qualified adapters make this a real seam. Deleting it would smear detection and row semantics into preview orchestration. A single conditional parser grows into an untestable switch; regex or template configuration turns finance semantics into unreviewed data; per-bank child processes add lifecycle and distribution complexity. C7 and NG4 require the narrow registry."
+  ],
+  "alternatives": [
+    "A: one conditional parser, rejected because detection and extraction drift together. B: user-authored regex or template rules, rejected because unreviewed configuration would own financial semantics. C: dynamic plugins or child processes, rejected as unsupported deployment and security complexity. D: two explicit adapters behind IStatementAdapter, chosen because two real implementations exist."
+  ],
+  "consequences": [
+    "Each advertised variant requires representative golden fixtures, exclusive structural detection, deterministic extraction, explicit bounds, and a versioned compatibility identity. Adding a third format is an adapter plus evidence change, never a generic fallback."
+  ],
+  "status_notes": [
+    "Accepted design. The next plan must create both adapters, the real seam, and golden-fixture coverage at these paths."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Infrastructure/Ingest/Pdf/IStatementAdapter.cs\",\"src/Tally/Infrastructure/Ingest/Pdf/PdfTextLayoutAStatementAdapter.cs\",\"src/Tally/Infrastructure/Ingest/Pdf/PdfTextLayoutBStatementAdapter.cs\",\"tests/Tally.Tests/Ingest/Adapters/**\"]}",
+  "created_at": "2026-07-18T12:03:09.4376158+00:00",
+  "links": [
+    {
+      "id": "01KXTJ3EFGABZBJSD0JYYN5K7J",
+      "target_type": "requirement",
+      "target": "FR-INGEST-FINANCIAL-NORMALIZATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:32.4014539+00:00"
+    },
+    {
+      "id": "01KXTJ3F1TAD2EAC9S2Q5PMV2K",
+      "target_type": "requirement",
+      "target": "FR-INGEST-SOURCE-RECONCILIATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:32.9882803+00:00"
+    },
+    {
+      "id": "01KXTJ3DSWEBPXHQTAGF4C09MF",
+      "target_type": "requirement",
+      "target": "FR-INGEST-STATEMENT-PREVIEW",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:31.7128154+00:00"
+    },
+    {
+      "id": "01KXTJ3D6G9WHCVT22YGCTRTFN",
+      "target_type": "requirement",
+      "target": "FR-INGEST-VARIANT-QUALIFICATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:31.0894809+00:00"
+    },
+    {
+      "id": "01KXTJ3FP7QKS6M625RBDCYWNY",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-BOUNDED-PARSING",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:33.6407311+00:00"
+    },
+    {
+      "id": "01KXTJ3GC3T1AGXTXYJC5WT9KM",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-DETERMINISTIC-INTEGRITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:34.3410202+00:00"
+    },
+    {
+      "id": "01KXTJ5NJTAW6C9X5JQWCF6GZF",
+      "target_type": "test_case",
+      "target": "TC-INGEST-ADAPTER-GOLDEN-FIXTURES",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T12:10:45.2118131+00:00"
+    }
+  ]
+}

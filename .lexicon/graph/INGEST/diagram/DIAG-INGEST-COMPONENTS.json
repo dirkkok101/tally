@@ -1,0 +1,40 @@
+{
+  "id": "01KXTHY2S2M9FPAKX0W2DVPKPY",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "DIAG-INGEST-COMPONENTS",
+  "title": "INGEST component architecture",
+  "diagram_type": "c4_component",
+  "format": "mermaid",
+  "content": [
+    "flowchart LR",
+    "  Agent[Owner or AI Agent Host] --> Cli[CLI and Operation Registry]",
+    "  Cli --> Ops[INGEST Typed Handlers]",
+    "  Ops --> Domain[Normalization Reconciliation Manifest Rules]",
+    "  Ops --> Pdf[PdfPig Extractor]",
+    "  Pdf --> Registry[IStatementAdapter Registry]",
+    "  Registry --> A[PDF Layout A v1]",
+    "  Registry --> B[PDF Layout B v1]",
+    "  Ops --> Store[(INGEST SQLite State)]",
+    "  Ops --> Client[LedgerContractClient]",
+    "  Client --> Executor[Public LEDGER Operation Executor]",
+    "  Executor --> Ledger[(LEDGER Store)]",
+    "  Channels[CHANNELS module no PRD or design yet] -. possible future public-contract consumer .-> Cli"
+  ],
+  "created_at": "2026-07-18T12:06:36.5793391+00:00",
+  "links": [
+    {
+      "id": "01KXTJ576K0PWSH6RPZYZXSRBB",
+      "target_type": "design_decision",
+      "target": "DD-INGEST-APPLICATION-ARCHITECTURE",
+      "rel": "supports",
+      "created_at": "2026-07-18T12:10:30.4845032+00:00"
+    },
+    {
+      "id": "01KXTJ57T0JM9QKZFCR8XE6NAV",
+      "target_type": "requirement",
+      "target": "FR-INGEST-CONTRACT-DISCOVERY",
+      "rel": "illustrates",
+      "created_at": "2026-07-18T12:10:31.1055928+00:00"
+    }
+  ]
+}

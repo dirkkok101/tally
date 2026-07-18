@@ -49,16 +49,6 @@
   "created_at": "2026-07-17T13:40:09.8826992+00:00",
   "dependencies": [
     {
-      "id": "01KXR4X3SDWJKMW7JX3P4J6GPY",
-      "project_id": "01KXR2C3JQBT2WPM9JCSA9JMXD",
-      "target": "CLASSIFY",
-      "kind": "soft",
-      "rationale": [
-        "Imports may request automatic category suggestions, but uncategorized transactions remain valid."
-      ],
-      "created_at": "2026-07-17T13:40:24.4948912+00:00"
-    },
-    {
       "id": "01KXR4X3H2GN5M35GWN274NRTV",
       "project_id": "01KXR2C3JQBT2WPM9JCSA9JMXD",
       "target": "LEDGER",

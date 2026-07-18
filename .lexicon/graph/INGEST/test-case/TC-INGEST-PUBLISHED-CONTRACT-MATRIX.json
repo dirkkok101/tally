@@ -1,0 +1,38 @@
+{
+  "id": "01KXTJ0A38FMCTWB1M28PFZZ8N",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "TC-INGEST-PUBLISHED-CONTRACT-MATRIX",
+  "slug": "PUBLISHED-CONTRACT-MATRIX",
+  "title": "Verify the published INGEST operation contract",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "steps": "Invoke schema discovery and all eight operations through the published binary using private stdin/file JSON; exercise success and every stable failure category; inspect stdout, stderr, exits, offline behavior, cancellation, and process lifetime.",
+  "expected": "Descriptors, schemas, limits, errors, and exits remain versioned and consistent; each invocation emits one stdout envelope; stderr is metadata-only; unknown fields fail before processing; no prompt, daemon, network call, or orphan process appears.",
+  "created_at": "2026-07-18T12:07:49.6098395+00:00",
+  "links": [
+    {
+      "id": "01KXTJ6T8JH4JZK4A39HQ871ZT",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-AI-AGENT-HOST",
+      "rel": "verifies",
+      "created_at": "2026-07-18T12:11:22.7721700+00:00"
+    },
+    {
+      "id": "01KXTJ5ENK590W10FFKR7DGG7H",
+      "target_type": "requirement",
+      "target": "FR-INGEST-CONTRACT-DISCOVERY",
+      "rel": "verifies",
+      "created_at": "2026-07-18T12:10:38.1325793+00:00"
+    },
+    {
+      "id": "01KXTJ5F9PEDY52E12WC4PMEME",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-AGENT-OPERABILITY",
+      "rel": "verifies",
+      "created_at": "2026-07-18T12:10:38.7756987+00:00"
+    }
+  ]
+}

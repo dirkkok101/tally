@@ -1,0 +1,78 @@
+{
+  "id": "01KXTHRZEQT7CMKEAHBXTV4J1P",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "DD-INGEST-STATE-STORE",
+  "title": "Separate raw-SQLite ingestion state with retention compaction",
+  "description": [
+    "Persist review and recovery state without opening LEDGER storage or retaining source payloads longer than required."
+  ],
+  "decision": [
+    "Use a separate owner-only ingest.db under the Tally data root with Microsoft.Data.Sqlite, snake_case tables, foreign keys, WAL, synchronous FULL, bounded busy handling, PRAGMA user_version migrations, and explicit transactions. Persist immutable manifest revisions, approvals, frozen candidate requests, reconciliation controls, and candidate receipts while incomplete. After verified completion, atomically compact sensitive manifest data to a metadata-only receipt; retain that receipt until explicit cleanup. After an interrupted process releases its batch lock, explicit abandon preserves prior LEDGER effects and retains a terminal metadata tombstone. Safe startup cleanup removes only unlocked stale INGEST lock or atomic-publication artifacts that durable state proves disposable. Normal extraction is memory-only and creates no temporary."
+  ],
+  "rationale": [
+    "A separate store makes C2 enforceable and lets A4 retention differ from Durable Ledger State. Sharing LedgerDb or tables creates private coupling. Flat JSON files make candidate-granular transactional recovery and concurrent state checks fragile. A distributed transaction across INGEST and LEDGER does not exist; public idempotency closes the honest cross-store gap."
+  ],
+  "alternatives": [
+    "A: share LedgerDb or LEDGER tables, rejected by C2 and retention coupling. B: JSON files per batch, rejected because atomic candidate receipts, migrations, queries, and concurrency become fragile. C: separate raw-SQLite INGEST state, chosen. D: PostgreSQL or hosted store, rejected by C1."
+  ],
+  "consequences": [
+    "INGEST and LEDGER cannot share an atomic database transaction. The design relies visibly on stable LEDGER idempotency and INGEST receipt durability. Sensitive incomplete state is queryable and recoverable; completed state is compacted and may be explicitly removed."
+  ],
+  "status_notes": [
+    "Accepted design. Separate state, migrations, retention, and cleanup paths are explicit greenfield plan obligations."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Infrastructure/Ingest/Storage/**\",\"src/Tally/Features/Ingest/Recovery/**\",\"tests/Tally.Tests/Ingest/Storage/**\"]}",
+  "created_at": "2026-07-18T12:03:49.3371270+00:00",
+  "links": [
+    {
+      "id": "01KXTJ3P23EFGNZ3WKZAFB8D3Z",
+      "target_type": "requirement",
+      "target": "FR-INGEST-ARTIFACT-CLEANUP",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:40.1639101+00:00"
+    },
+    {
+      "id": "01KXTJ3MTNQ6DSN3F0NCNSVETS",
+      "target_type": "requirement",
+      "target": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:38.9021993+00:00"
+    },
+    {
+      "id": "01KXTJ3NECRTBZS1D3M13NF98Y",
+      "target_type": "requirement",
+      "target": "FR-INGEST-FAILURE-STATUS",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:39.5336228+00:00"
+    },
+    {
+      "id": "01KXTJ3M3MFS246MDA74BCQYSN",
+      "target_type": "requirement",
+      "target": "FR-INGEST-MANIFEST-REVIEW",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:38.1656614+00:00"
+    },
+    {
+      "id": "01KXTJ3PPSJFK48WQKCBY53R3G",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:40.8268777+00:00"
+    },
+    {
+      "id": "01KXTJ3QBWAZC2W36Y657RBG6F",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-LOCAL-DATA-PROTECTION",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:41.5017353+00:00"
+    },
+    {
+      "id": "01KXTJ5PY57M3B393XF8A95WGY",
+      "target_type": "test_case",
+      "target": "TC-INGEST-STATE-STORE-CONFORMANCE",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T12:10:46.5982380+00:00"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "01KXTJ09C7WM75QS1CE2XGD3AA",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "TC-INGEST-PDF-EXTRACTION-AOT",
+  "slug": "PDF-EXTRACTION-AOT",
+  "title": "Verify PdfPig Native-AOT extraction conformance",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "performance",
+  "automation": "automated",
+  "status": "planned",
+  "steps": "Publish the linux-x64 self-contained Native-AOT Tally binary with PdfPig pinned; inject each qualified private fixture through the test-only fixture provider; preview every fixture twice while measuring wall time and peak RSS; compare page/glyph evidence digests; include the permission-encrypted fixture.",
+  "expected": "Every fixture yields non-empty deterministic evidence twice; the encrypted fixture needs no opening password; each run is under 5 seconds and 256 MiB; no trim/AOT failure, source argument, external process, or fixture disclosure occurs.",
+  "created_at": "2026-07-18T12:07:48.8731646+00:00",
+  "links": [
+    {
+      "id": "01KXTJ5C25FMSVQ85WCCEMZABV",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-BOUNDED-PARSING",
+      "rel": "verifies",
+      "created_at": "2026-07-18T12:10:35.4626614+00:00"
+    },
+    {
+      "id": "01KXTJ5CN1ZMB4JBAFTCP160DM",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-DETERMINISTIC-INTEGRITY",
+      "rel": "verifies",
+      "created_at": "2026-07-18T12:10:36.0675701+00:00"
+    }
+  ]
+}

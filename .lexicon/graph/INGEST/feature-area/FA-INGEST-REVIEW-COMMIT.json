@@ -1,0 +1,54 @@
+{
+  "id": "01KXTHXDP44MSQBCAN4ZXS7SXE",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "FA-INGEST-REVIEW-COMMIT",
+  "name": "Review and Commit",
+  "description": [
+    "Sensitive manifest inspection, exact-revision approval, frozen LEDGER requests, public contract invocation, canonical round-trip verification, and terminal receipts."
+  ],
+  "created_at": "2026-07-18T12:06:14.9814152+00:00",
+  "links": [
+    {
+      "id": "01KXTJ52Z82F0VEECF1ZRE312R",
+      "target_type": "design_decision",
+      "target": "DD-INGEST-COMMIT-RECOVERY",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T12:10:26.1531656+00:00"
+    },
+    {
+      "id": "01KXTJ528WBHM7ZGRXH4RA3E8J",
+      "target_type": "design_decision",
+      "target": "DD-INGEST-LEDGER-PUBLIC-INTEGRATION",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T12:10:25.4370349+00:00"
+    },
+    {
+      "id": "01KXTJ545CH5J9K24SMT68VQCM",
+      "target_type": "data_model",
+      "target": "DM-INGEST-IMPORT-RECEIPT",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T12:10:27.3733607+00:00"
+    },
+    {
+      "id": "01KXTJ53KH1A840P696CXNSS96",
+      "target_type": "data_model",
+      "target": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+      "rel": "belongs_to",
+      "created_at": "2026-07-18T12:10:26.8021660+00:00"
+    },
+    {
+      "id": "01KXTJ6R9J3G995TMVNFTH1B6H",
+      "target_type": "requirement",
+      "target": "FR-INGEST-APPROVED-BATCH-COMMIT",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:11:20.7554114+00:00"
+    },
+    {
+      "id": "01KXTJ6QN7ZZTQNEGD36RVBXMN",
+      "target_type": "requirement",
+      "target": "FR-INGEST-MANIFEST-REVIEW",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:11:20.1041635+00:00"
+    }
+  ]
+}

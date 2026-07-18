@@ -1,0 +1,52 @@
+{
+  "id": "01KXTHWSPAYJP1YS5JKDP4ZPN0",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "DM-INGEST-STATE-STORE",
+  "name": "IngestStateStore",
+  "description": [
+    "Separate owner-only raw-SQLite state supporting immutable review, recovery, compaction, and safe cleanup."
+  ],
+  "schema_def": [
+    "ingest_batch(batch_id TEXT PRIMARY KEY, source_fingerprint TEXT NOT NULL, selected_account_id TEXT NOT NULL, adapter_identity TEXT NOT NULL, ledger_contract_version TEXT NOT NULL, manifest_schema_version TEXT NOT NULL, period_start TEXT, period_end TEXT, status INTEGER NOT NULL, created_at TEXT NOT NULL, updated_at TEXT NOT NULL)",
+    "manifest_revision(manifest_revision_id TEXT PRIMARY KEY, batch_id TEXT NOT NULL REFERENCES ingest_batch, revision_number INTEGER NOT NULL, canonical_digest TEXT NOT NULL, committable INTEGER NOT NULL, created_at TEXT NOT NULL, UNIQUE(batch_id, revision_number))",
+    "source_record_outcome(manifest_revision_id TEXT NOT NULL REFERENCES manifest_revision, source_record_id TEXT NOT NULL, record_order INTEGER NOT NULL, disposition INTEGER NOT NULL, reason_code TEXT NOT NULL, candidate_id TEXT, prior_canonical_ref TEXT, PRIMARY KEY(manifest_revision_id, source_record_id))",
+    "import_candidate(candidate_id TEXT PRIMARY KEY, manifest_revision_id TEXT NOT NULL REFERENCES manifest_revision, source_record_id TEXT NOT NULL, immutable_facts_json TEXT NOT NULL, frozen_ledger_request_json TEXT NOT NULL, idempotency_key TEXT NOT NULL UNIQUE, commit_state INTEGER NOT NULL)",
+    "reconciliation_control(manifest_revision_id TEXT NOT NULL REFERENCES manifest_revision, control_order INTEGER NOT NULL, kind INTEGER NOT NULL, availability INTEGER NOT NULL, evidence_json TEXT, PRIMARY KEY(manifest_revision_id, control_order))",
+    "manifest_approval(approval_id TEXT PRIMARY KEY, manifest_revision_id TEXT NOT NULL REFERENCES manifest_revision, manifest_digest TEXT NOT NULL, actor TEXT NOT NULL, trusted_os_identity TEXT NOT NULL, approved_at TEXT NOT NULL, active INTEGER NOT NULL)",
+    "import_receipt(receipt_id TEXT PRIMARY KEY, batch_id TEXT NOT NULL REFERENCES ingest_batch, status INTEGER NOT NULL, summary_json TEXT NOT NULL, completed_at TEXT)",
+    "candidate_receipt(receipt_id TEXT NOT NULL REFERENCES import_receipt, candidate_id TEXT NOT NULL, outcome INTEGER NOT NULL, ledger_transaction_id TEXT, error_code TEXT, attempted_at TEXT, terminal_at TEXT, PRIMARY KEY(receipt_id, candidate_id))",
+    "",
+    "All identifiers are stable text; enums persist as constrained integers with source-generated contract names. Foreign keys are ON, WAL and synchronous FULL are required, and PRAGMA user_version controls immutable migrations."
+  ],
+  "created_at": "2026-07-18T12:05:54.5070295+00:00",
+  "links": [
+    {
+      "id": "01KXTJ4M33S39N77W44DA3MY1N",
+      "target_type": "requirement",
+      "target": "FR-INGEST-ARTIFACT-CLEANUP",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:10.9163217+00:00"
+    },
+    {
+      "id": "01KXTJ4KBTMFHFNYHCS20VFG1T",
+      "target_type": "requirement",
+      "target": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:10.1716576+00:00"
+    },
+    {
+      "id": "01KXTJ4JP7ZP30275JY0TDMM9V",
+      "target_type": "requirement",
+      "target": "FR-INGEST-MANIFEST-REVIEW",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:09.4807899+00:00"
+    },
+    {
+      "id": "01KXTJ4MSGJG1B0TECKYB969C9",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-LOCAL-DATA-PROTECTION",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:11.6333199+00:00"
+    }
+  ]
+}

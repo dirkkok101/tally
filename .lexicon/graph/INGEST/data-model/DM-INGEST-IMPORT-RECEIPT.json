@@ -1,0 +1,47 @@
+{
+  "id": "01KXTHWT1G93XYFNQBE5E8R4FY",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "DM-INGEST-IMPORT-RECEIPT",
+  "name": "ImportReceiptAndCandidateOutcome",
+  "description": [
+    "Durable candidate-granular recovery and terminal metadata contracts."
+  ],
+  "schema_def": [
+    "ImportReceipt {receiptId, batchId, manifestRevisionId, status: approved|committing|interrupted|completed|abandoned, counts, unresolvedCandidateIds[], candidateOutcomes[], createdAt, updatedAt, completedAt?}",
+    "CandidateReceipt {candidateId, state: pending|attempting|accepted|exact_duplicate|conflicted|rejected|unresolved, attemptNumber, ledgerOperationId, ledgerContractVersion, idempotencyKey, ledgerTransactionId?, stableErrorCode?, retryDisposition, attemptedAt?, terminalAt?}",
+    "CompletedMetadataReceipt {receiptId, batchId, sourceFingerprint, selectedAccountId, adapterIdentity, versions, outcomeCounts, candidateSafeRefs[], ledgerTransactionRefs[], completedAt}",
+    "",
+    "Before a LEDGER call, attempting plus the exact request/key are durable. Accepted, exact_duplicate, conflicted, and rejected are terminal; unresolved is replayable only with the frozen request/key. Completed compaction removes descriptions, amounts, balances, record text, controls, and request payloads."
+  ],
+  "created_at": "2026-07-18T12:05:54.8654841+00:00",
+  "links": [
+    {
+      "id": "01KXTJ4NHHV82JXRTTH3MCQ63Y",
+      "target_type": "requirement",
+      "target": "FR-INGEST-APPROVED-BATCH-COMMIT",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:12.4027367+00:00"
+    },
+    {
+      "id": "01KXTJ4Q4VDH4H673AQ6RRZNGM",
+      "target_type": "requirement",
+      "target": "FR-INGEST-ARTIFACT-CLEANUP",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:14.0446814+00:00"
+    },
+    {
+      "id": "01KXTJ4PDATYNQEA8TEWV17H0B",
+      "target_type": "requirement",
+      "target": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:13.2910734+00:00"
+    },
+    {
+      "id": "01KXTJ4QS96V4HY8SCHB0W2E8M",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:14.6990433+00:00"
+    }
+  ]
+}

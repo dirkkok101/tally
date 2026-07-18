@@ -1,0 +1,47 @@
+{
+  "id": "01KXTHWTR02Y3S3QB2FTQ8WDYT",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
+  "name": "IngestErrorAndStatusContracts",
+  "description": [
+    "Stable safe workflow, parser, compatibility, resource, overlap, and recovery outcomes."
+  ],
+  "schema_def": [
+    "IngestError {code, category: usage|validation|unsupported|unsafe_source|compatibility|permission|resource|reconciliation|overlap|ledger|interrupted|conflict|unexpected, safeMessage, batchId?, candidateId?, mutationPossibility: none|possible|confirmed, durableState?, retryAction: none|retry|repreview|resume|abandon|correct_source, field?}",
+    "BatchStatusSummary {batchId, status, adapterId?, createdAt, updatedAt, outcomeCounts, nextAllowedOperations[]}",
+    "BatchStatusDetail {summary, manifestRevisionId?, approved, receiptStatus?, terminalCounts, unresolvedFrontier, lastStableError?, retainedArtifactKinds[]}",
+    "",
+    "Errors and status never contain source paths, statement rows, descriptions, amounts, balances, full bank identifiers, requests, manifests, stack traces, or parser exceptions. Exit categories mirror the shared Tally contract; structured code remains authoritative."
+  ],
+  "created_at": "2026-07-18T12:05:55.5851342+00:00",
+  "links": [
+    {
+      "id": "01KXTJ4V3PA75Y0FZBAX7QME7P",
+      "target_type": "requirement",
+      "target": "FR-INGEST-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:18.1049992+00:00"
+    },
+    {
+      "id": "01KXTJ4TFKXE7XCMJAKF3JP0T4",
+      "target_type": "requirement",
+      "target": "FR-INGEST-FAILURE-STATUS",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:17.4599517+00:00"
+    },
+    {
+      "id": "01KXTJ4VQAZCTHZHF6AN2PKSMW",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-AGENT-OPERABILITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:18.7308564+00:00"
+    },
+    {
+      "id": "01KXTJ4WE0P8M8NJ2WS190ZN2H",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-LOCAL-DATA-PROTECTION",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:19.4575453+00:00"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "01KXTJ0AV78TA1TXWZMK9VQSRC",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "TC-INGEST-LEDGER-PUBLIC-CONFORMANCE",
+  "slug": "LEDGER-PUBLIC-CONFORMANCE",
+  "title": "Verify INGEST uses only the public LEDGER contract",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "unhappy",
+  "automation": "automated",
+  "status": "planned",
+  "steps": "Run preview, commit, resume, compatibility, validation, idempotency-conflict, and transaction-round-trip cases through the shared public operation executor and published binary; scan dependencies and paths for private LEDGER references.",
+  "expected": "INGEST uses only released descriptors, requests, results, and errors; every accepted candidate records statement_import provenance and a stable idempotency key; private handlers, SQL, database paths, and domain types are unreachable; incompatible versions fail before parsing or mutation.",
+  "created_at": "2026-07-18T12:07:50.3771928+00:00",
+  "links": [
+    {
+      "id": "01KXTJ6VKVWYC95BH3K5FF3W2A",
+      "target_type": "external_dependency",
+      "target": "EXT-INGEST-LEDGER-PUBLIC-CONTRACT",
+      "rel": "verifies",
+      "created_at": "2026-07-18T12:11:24.1562046+00:00"
+    },
+    {
+      "id": "01KXTJ5H6AM9GQN3MSN1M9DSES",
+      "target_type": "requirement",
+      "target": "FR-INGEST-APPROVED-BATCH-COMMIT",
+      "rel": "verifies",
+      "created_at": "2026-07-18T12:10:40.7154221+00:00"
+    },
+    {
+      "id": "01KXTJ5HR2TZXXY5QJV6HRDJF8",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "verifies",
+      "created_at": "2026-07-18T12:10:41.2836436+00:00"
+    }
+  ]
+}

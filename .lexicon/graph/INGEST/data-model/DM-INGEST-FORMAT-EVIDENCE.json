@@ -1,0 +1,57 @@
+{
+  "id": "01KXTHWS004PTKCD4PTYVTE0BR",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+  "name": "FormatVariantAndSourceEvidence",
+  "description": [
+    "In-memory passive document evidence and the real two-adapter seam."
+  ],
+  "schema_def": [
+    "FormatVariantDescriptor {variantId, adapterVersion, extractionPolicyVersion, manifestSchemaVersion, supportedMediaType, hardLimits}",
+    "PdfDocumentEvidence {sourceFingerprint, byteLength, pages[{pageNumber, width, height, orderedGlyphs[{value, boundingBox, contentOrder}]}]}",
+    "VariantProbeResult {variantId, outcome: no_match|exact_match|unsafe, structuralEvidenceCodes[]}",
+    "SourceRecordEvidence {sourceRecordId, pageNumber, recordOrdinal, recordKind, originalTextEvidence, sourceReference?, rawDateEvidence, rawAmountEvidence, rawControlEvidence}",
+    "ExtractedStatement {variant, statementPeriod, accountEvidence, orderedRecords[], controls[]}",
+    "ReconciliationControl {kind: opening_balance|closing_balance|running_balance|source_total|record_count, availability: verified|failed|unavailable, safeEvidenceRef}",
+    "",
+    "IStatementAdapter exposes Descriptor, Probe(PdfDocumentEvidence), and Extract(PdfDocumentEvidence, selected-account context). Exactly two implementations are registered in v1 and exactly one probe must match."
+  ],
+  "created_at": "2026-07-18T12:05:53.7935111+00:00",
+  "links": [
+    {
+      "id": "01KXTJ4DFFM5RB3RXHCFSGQTC5",
+      "target_type": "requirement",
+      "target": "FR-INGEST-FINANCIAL-NORMALIZATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:04.1445115+00:00"
+    },
+    {
+      "id": "01KXTJ4E6A18M9SZ6HGS4FZK8N",
+      "target_type": "requirement",
+      "target": "FR-INGEST-SOURCE-RECONCILIATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:04.8755237+00:00"
+    },
+    {
+      "id": "01KXTJ4CSTZWRSGPKGB8B20N8D",
+      "target_type": "requirement",
+      "target": "FR-INGEST-VARIANT-QUALIFICATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:03.4515528+00:00"
+    },
+    {
+      "id": "01KXTJ4ETFKMWPDVS4SAHSD896",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-BOUNDED-PARSING",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:05.5208934+00:00"
+    },
+    {
+      "id": "01KXTJ4FETT3SNV2NZ093BBWNS",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-DETERMINISTIC-INTEGRITY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:06.1710542+00:00"
+    }
+  ]
+}

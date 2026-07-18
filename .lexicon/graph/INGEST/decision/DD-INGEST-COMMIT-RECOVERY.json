@@ -1,0 +1,64 @@
+{
+  "id": "01KXTHS03EDX6S5S1QP19Y3KQ5",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "DD-INGEST-COMMIT-RECOVERY",
+  "title": "Per-batch locked idempotent candidate saga",
+  "description": [
+    "Close every cross-store crash window during candidate-granular commit."
+  ],
+  "decision": [
+    "Commit and resume acquire one owner-only per-batch OS lock. For each frozen candidate in deterministic order, INGEST first durably records an attempting state and exact LEDGER request/key, invokes the public LEDGER operation outside the INGEST transaction, verifies the returned canonical detail, then durably records a terminal outcome before advancing. Process loss releases the OS lock. Resume treats attempting as unresolved and replays the exact request/key; terminal candidates are skipped only after their stored canonical reference remains structurally valid. Conflicts, compatibility failures, receipt-write failures, and unsafe results stop continuation."
+  ],
+  "rationale": [
+    "Holding an INGEST SQLite transaction across a LEDGER call would create long locks without atomicity. An in-memory cursor loses the recovery frontier. Batch-atomic import is impossible across two stores and conflicts with the accepted PRD. The stable LEDGER idempotency record makes the uncertain commit-before-receipt window replay-safe, while the per-batch OS lock prevents concurrent callers from racing the same saga."
+  ],
+  "alternatives": [
+    "A: whole-batch distributed transaction, unavailable across separate stores. B: hold an INGEST SQLite transaction across each LEDGER call, rejected because it still is not atomic and creates long locks. C: in-memory progress, rejected because crash loses the frontier. D: per-batch lock plus durable attempting and terminal candidate states with idempotent replay, chosen."
+  ],
+  "consequences": [
+    "Commit is intentionally a recoverable saga. Every candidate request and key freezes before its call, every terminal outcome persists before the next, and faults stop the frontier. Lock acquisition, crash release, receipt write failure, and replay conflicts require direct integration coverage."
+  ],
+  "status_notes": [
+    "Accepted design. The plan must create candidate saga, batch lock, and crash-window verification paths."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Features/Ingest/Commit/**\",\"src/Tally/Infrastructure/Ingest/Storage/BatchCommitLock.cs\",\"tests/Tally.Tests/Ingest/CommitRecovery/**\"]}",
+  "created_at": "2026-07-18T12:03:49.9992435+00:00",
+  "links": [
+    {
+      "id": "01KXTJ3TGFGT3E90D89JQ3VSCC",
+      "target_type": "requirement",
+      "target": "FR-INGEST-APPROVED-BATCH-COMMIT",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:44.7205769+00:00"
+    },
+    {
+      "id": "01KXTJ3V7P8M2HC2DNQ83XZY8C",
+      "target_type": "requirement",
+      "target": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:45.4629182+00:00"
+    },
+    {
+      "id": "01KXTJ3VS2T2RBRPQ30W8X3B0V",
+      "target_type": "requirement",
+      "target": "FR-INGEST-FAILURE-STATUS",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:46.0189939+00:00"
+    },
+    {
+      "id": "01KXTJ3WCNAT0W7KRG0M339S87",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:09:46.6465189+00:00"
+    },
+    {
+      "id": "01KXTJ5R550P4G1W31D7855N19",
+      "target_type": "test_case",
+      "target": "TC-INGEST-COMMIT-RECOVERY-MATRIX",
+      "rel": "validated-by",
+      "created_at": "2026-07-18T12:10:47.8465920+00:00"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "01KXTJ0B755W6A58QQR2NBNYZK",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "TC-INGEST-COMMIT-RECOVERY-MATRIX",
+  "slug": "COMMIT-RECOVERY-MATRIX",
+  "title": "Verify every candidate commit crash window",
+  "level": "e2e",
+  "surface": "persistence",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "steps": "Inject process termination and receipt failures before attempting, after attempting and before the LEDGER call, after LEDGER commit and before receipt durability, after terminal receipt durability, and between candidates; repeat resume and concurrent commit attempts.",
+  "expected": "One batch lock serializes writers; resume reuses exact frozen requests and keys; every candidate converges to one terminal outcome or explicit conflict; no second canonical transaction is created; unsafe failures stop the frontier.",
+  "created_at": "2026-07-18T12:07:50.7589585+00:00",
+  "links": [
+    {
+      "id": "01KXTJ5J9Q5CCPV2WKWTS4ZZXY",
+      "target_type": "requirement",
+      "target": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+      "rel": "verifies",
+      "created_at": "2026-07-18T12:10:41.8487402+00:00"
+    },
+    {
+      "id": "01KXTJ5JX9WTFX1NKR5XHFBKSV",
+      "target_type": "nfr",
+      "target": "NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY",
+      "rel": "verifies",
+      "created_at": "2026-07-18T12:10:42.4753628+00:00"
+    }
+  ]
+}

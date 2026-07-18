@@ -1,0 +1,48 @@
+{
+  "id": "01KXTHWSBZWXX66S4X6DF2XG8Y",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "DM-INGEST-IMPORT-MANIFEST",
+  "name": "ImportBatchAndManifestRevision",
+  "description": [
+    "Content-addressed immutable review state binding source evidence, decisions, and the exact later LEDGER requests."
+  ],
+  "schema_def": [
+    "ImportBatch {batchId, sourceFingerprint, selectedAccountId, adapterIdentity, ledgerContractVersion, manifestSchemaVersion, statementPeriod, status, createdAt, updatedAt}",
+    "ManifestRevision {manifestRevisionId, batchId, revisionNumber, canonicalDigest, previousRevisionId?, committable, createdAt}",
+    "SourceRecordOutcome {manifestRevisionId, sourceRecordId stable across manifest and compatible-version changes, order, disposition: accepted_candidate|exact_duplicate|excluded_non_transaction|blocked, reasonCode, candidateId?, priorCanonicalRef?}",
+    "ImportCandidate {candidateId derived from accountId plus stable sourceRecordId plus immutable facts and independent of manifest revision, sourceRecordId, accountId, signedAmountMinor, currencyCode: ZAR, transactionDate, postingDate?, originalDescription, sourceReference derived from candidateId, provenance, ledgerIdempotencyKey derived from candidateId, frozenLedgerRequest, crossFileIdentity?}",
+    "ManifestApproval {approvalId, manifestRevisionId, manifestDigest, actor, trustedOsIdentity, approvedAt, active}",
+    "Manifest controls and validation results are immutable children. Source-derived financial facts never update; a changed decision creates a new revision. Initial adapters always leave crossFileIdentity absent."
+  ],
+  "created_at": "2026-07-18T12:05:54.1765448+00:00",
+  "links": [
+    {
+      "id": "01KXTJ4GT5B4T5AJ4N6RWNV3T0",
+      "target_type": "requirement",
+      "target": "FR-INGEST-MANIFEST-REVIEW",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:07.5585764+00:00"
+    },
+    {
+      "id": "01KXTJ4HDFKY5VTQR01NYGQ6E4",
+      "target_type": "requirement",
+      "target": "FR-INGEST-REPLAY-OVERLAP-SAFETY",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:08.1766308+00:00"
+    },
+    {
+      "id": "01KXTJ4J3CXJDXM5PG7HEK9W6T",
+      "target_type": "requirement",
+      "target": "FR-INGEST-SOURCE-RECONCILIATION",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:08.8770050+00:00"
+    },
+    {
+      "id": "01KXTJ4G5HCCWEEEGBCXJ4F3FJ",
+      "target_type": "requirement",
+      "target": "FR-INGEST-STATEMENT-PREVIEW",
+      "rel": "implements",
+      "created_at": "2026-07-18T12:10:06.8979281+00:00"
+    }
+  ]
+}

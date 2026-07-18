@@ -1,0 +1,55 @@
+{
+  "id": "01KXTHY33RWZRYD48H6S2WA3MJ",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "DIAG-INGEST-PREVIEW-COMMIT-SEQUENCE",
+  "title": "Preview approval commit and receipt sequence",
+  "diagram_type": "sequence",
+  "format": "mermaid",
+  "content": [
+    "sequenceDiagram",
+    "  actor Caller as Owner or AI Agent Host",
+    "  participant I as INGEST",
+    "  participant P as PdfPig and Adapter",
+    "  participant S as INGEST State",
+    "  participant L as Public LEDGER Contract",
+    "  Caller->>I: ingest.preview via private JSON input",
+    "  I->>L: discover contract and get selected account",
+    "  I->>P: bounded immutable source bytes",
+    "  P-->>I: records controls and variant evidence",
+    "  I->>I: normalize reconcile replay and overlap",
+    "  I->>S: persist immutable manifest revision",
+    "  I-->>Caller: preview result",
+    "  Caller->>I: ingest.inspect",
+    "  I-->>Caller: exact manifest view",
+    "  Caller->>I: ingest.approve with digest",
+    "  I->>S: persist approval",
+    "  Caller->>I: ingest.commit",
+    "  loop Frozen candidates in order",
+    "    I->>S: mark attempting with stable request and key",
+    "    I->>L: ledger.transaction.record",
+    "    L-->>I: stable result or prior idempotent result",
+    "    I->>L: ledger.transaction.get round trip",
+    "    I->>S: persist terminal candidate receipt",
+    "  end",
+    "  I->>S: compact to metadata-only receipt",
+    "  I-->>Caller: complete receipt",
+    ""
+  ],
+  "created_at": "2026-07-18T12:06:36.9214285+00:00",
+  "links": [
+    {
+      "id": "01KXTJ58DFF5VDSB2KR3FHNW4C",
+      "target_type": "design_decision",
+      "target": "DD-INGEST-COMMIT-RECOVERY",
+      "rel": "supports",
+      "created_at": "2026-07-18T12:10:31.7285878+00:00"
+    },
+    {
+      "id": "01KXTJ591DE4A6F36GTT1RKYMM",
+      "target_type": "requirement",
+      "target": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+      "rel": "illustrates",
+      "created_at": "2026-07-18T12:10:32.3665553+00:00"
+    }
+  ]
+}
