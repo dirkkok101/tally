@@ -1,0 +1,41 @@
+{
+  "id": "01KXSQFZJ0XVBBX0FPF6FJ7E2Y",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "NFR-LEDGER-ATTRIBUTABLE-HISTORY",
+  "title": "Retain attributable correction history",
+  "description": [
+    "Transaction corrections, category corrections, transfer/refund confirmation, revocation, and replacement remain explainable without mutating or deleting their prior facts."
+  ],
+  "category": "data_integrity",
+  "target": "100% of lifecycle conformance events retain stable subject references, event type, reason, actor context, timestamp, prior and resulting state, and replacement reference where applicable.",
+  "load_condition": "All correction and relationship lifecycle paths, including cascading relationship retirement during transaction void or supersession.",
+  "measurement": "Automated history reconstruction tests that compare active actuals with the complete retained event chain.",
+  "rationale": [
+    "Attribution makes financial corrections auditable and prevents silent rewriting. Supports G2, G3, G4, and G6."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-18T04:24:31.5537724+00:00",
+  "links": [
+    {
+      "id": "01KXSQPCDEMY7RJ1EG0T74H2J0",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-ASSIGNMENT",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:28:01.3267846+00:00"
+    },
+    {
+      "id": "01KXSQPCXGHJKKRFDBWCKB97X9",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-RELATIONSHIP-CORRECTION",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:28:01.8415763+00:00"
+    },
+    {
+      "id": "01KXSQPBWP6RQARE0WWGFXZWE0",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-TRANSACTION-CORRECTION",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:28:00.7918856+00:00"
+    }
+  ]
+}

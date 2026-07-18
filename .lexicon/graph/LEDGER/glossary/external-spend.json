@@ -3,8 +3,8 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "term": "External Spend",
   "definition": [
-    "Outflow from owned accounts that represents consumption outside the owner's tracked account set after confirmed transfers and accepted refund/reversal rules are applied. Avoid: every negative transaction or owned-account transfer."
+    "An exact net-spend amount for a selected set: add the positive magnitudes of active outflows in the set that are not principal legs of active owned-account transfers, then subtract the magnitudes of active linked refund/reversal credits in the set. Separately recorded fees and unlinked cash withdrawals remain included; unrelated inflows are excluded. A period can be negative when in-period refunds exceed in-period outflows. Avoid: raw signed account movement or every negative transaction."
   ],
-  "source": "discovery",
+  "source": "prd",
   "created_at": "2026-07-17T17:30:38.9327636+00:00"
 }

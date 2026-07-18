@@ -1,0 +1,26 @@
+{
+  "id": "01KXSQK99DZS5T99TYN393FMBF",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "TC-LEDGER-TRANSFER-CONFIRMATION-CONTRACT",
+  "slug": "transfer-confirmation-contract",
+  "title": "Verify confirm owned-account transfers contract",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A fresh representative local Ledger and the valid and invalid inputs required by FR-LEDGER-TRANSFER-CONFIRMATION are available.",
+  "steps": "Invoke the relevant operations through the public CLI contract and exercise every acceptance criterion of FR-LEDGER-TRANSFER-CONFIRMATION.",
+  "expected": "All FR-LEDGER-TRANSFER-CONFIRMATION acceptance criteria, including stable-error and no-partial-mutation outcomes, hold.",
+  "owner": "LEDGER implementation",
+  "created_at": "2026-07-18T04:26:19.8220000+00:00",
+  "links": [
+    {
+      "id": "01KXSQK99E7FPG740H9H25KZB0",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-TRANSFER-CONFIRMATION",
+      "rel": "verifies",
+      "created_at": "2026-07-18T04:26:19.8226470+00:00"
+    }
+  ]
+}

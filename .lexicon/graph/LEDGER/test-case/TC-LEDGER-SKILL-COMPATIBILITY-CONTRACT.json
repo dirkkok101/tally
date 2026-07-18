@@ -1,0 +1,26 @@
+{
+  "id": "01KXSQK7RAE1THD3HDQMYPAC53",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "TC-LEDGER-SKILL-COMPATIBILITY-CONTRACT",
+  "slug": "skill-compatibility-contract",
+  "title": "Verify distribute version-matched agent skills contract",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A fresh representative local Ledger and the valid and invalid inputs required by FR-LEDGER-SKILL-COMPATIBILITY are available.",
+  "steps": "Invoke the relevant operations through the public CLI contract and exercise every acceptance criterion of FR-LEDGER-SKILL-COMPATIBILITY.",
+  "expected": "All FR-LEDGER-SKILL-COMPATIBILITY acceptance criteria, including stable-error and no-partial-mutation outcomes, hold.",
+  "owner": "LEDGER implementation",
+  "created_at": "2026-07-18T04:26:18.2511017+00:00",
+  "links": [
+    {
+      "id": "01KXSQK7RBVCRKBSDJZAA0HPWZ",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SKILL-COMPATIBILITY",
+      "rel": "verifies",
+      "created_at": "2026-07-18T04:26:18.2517951+00:00"
+    }
+  ]
+}

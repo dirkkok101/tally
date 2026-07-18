@@ -3,10 +3,10 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "NG4",
   "text": [
-    "Provide a web frontend, WhatsApp integration, or other human delivery channel."
+    "Provide web or messaging pages, navigation, menus, translations, application permissions, browser workflows, frontend key models, or any other human delivery surface in LEDGER."
   ],
   "rationale": [
-    "CHANNELS will consume stable CLI or application contracts after the finance core is proven."
+    "LEDGER is a contract-only local CLI. The named downstream CHANNELS PRD and design own every human UI artifact and workflow; if CHANNELS selects web it must apply PostgreSQL with Entity Framework Core, the latest stable .NET and Angular versions available to that project, and the NxGN UI npm package. No sibling module currently has mockups or frontend artifacts requiring parity."
   ],
   "created_at": "2026-07-17T13:41:36.7690735+00:00"
 }

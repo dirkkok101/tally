@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "metric": "Safe storage evolution",
   "current": "No Tally storage format or migration path",
-  "target": "Every tested supported upgrade/migration either activates a candidate with matching integrity, counts, exact totals and active relationships after verified backup, or leaves the original Ledger authoritative with zero partial activation",
+  "target": "Every tested supported upgrade/migration either activates a candidate whose complete Durable Ledger State manifest, idempotency outcomes, relationship rules, per-type counts, integrity, and exact derived totals match the source and declared transformation after verified backup, or leaves the original authoritative with zero partial activation.",
   "by_when": "LEDGER acceptance",
   "measured": 0,
   "created_at": "2026-07-17T17:54:10.1793388+00:00"

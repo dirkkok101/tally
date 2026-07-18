@@ -1,0 +1,49 @@
+{
+  "id": "01KXSQDTAHSDK4MMVJ2NJB2RHX",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "type": "functional",
+  "ref_code": "FR-LEDGER-BACKUP-VERIFICATION",
+  "title": "Create and verify Ledger backups",
+  "description": [
+    "Create consistent, version-identifiable backups and verify them independently without mutating the live Ledger. Implements G8 and UC-LEDGER-007."
+  ],
+  "rationale": [
+    "Long-lived personal financial history needs a recovery artifact whose integrity can be proven before a restore is needed."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "create and verify a Ledger backup"
+  ],
+  "story_so_that": [
+    "the owner can prove financial history is recoverable"
+  ],
+  "acceptance_criteria": [
+    "Given a healthy Ledger, when the owner creates a backup, then one version-identifiable consistent artifact containing the complete Durable Ledger State is produced with owner-only host permissions and the live Ledger is unchanged.",
+    "Given a backup artifact, when it is verified independently of the live Ledger, then compatibility, integrity, storage metadata, accounts, categories, transactions, correction chains, allocation history, active and retired relationships, idempotency records/outcomes, per-type counts, relationship/cardinality rules, and exact derived totals must all validate before success is reported.",
+    "Given a corrupt, incomplete, unsupported, or permission-inaccessible artifact, when verification is attempted, then a stable failure is returned and neither the artifact nor live Ledger is mutated.",
+    "Given backup or verification output and diagnostics, when inspected, then no credential, unmasked account identifier, or transaction description is emitted."
+  ],
+  "security_criteria": [
+    "Backup artifacts must inherit owner-only access and must not weaken the accepted at-rest protection posture."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T04:23:20.6536049+00:00",
+  "links": [
+    {
+      "id": "01KXSQDTAJGP0691XN6B84D8RZ",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-007",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:23:20.6582074+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXSQHA1EJDQ819W4AYQDV8M9",
+      "target": "P1",
+      "created_at": "2026-07-18T04:25:15.0532986+00:00"
+    }
+  ]
+}

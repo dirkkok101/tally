@@ -1,0 +1,41 @@
+{
+  "id": "01KXSQFY0879FNP1G5123TXCPZ",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "NFR-LEDGER-LOCAL-DATA-PROTECTION",
+  "title": "Protect local financial data",
+  "description": [
+    "Ledger stores, backups, temporary candidates, logs, diagnostics, and non-data-return output must preserve the accepted sole-owner local trust boundary without custom cryptography; explicit requested data results remain permitted."
+  ],
+  "category": "security",
+  "target": "100% of created financial artifacts have owner-only host access; zero diagnostics, logs, or non-data-return outputs contain credentials, unmasked account identifiers, transaction descriptions, or serialized financial payloads; the selected maintained at-rest protection passes OQ-LEDGER-8 before planning.",
+  "load_condition": "Normal operation, errors, backup, restore, upgrade, migration, and skill invocation on each supported host.",
+  "measurement": "Permission inspection, secret and payload canary scans, negative-path tests, and the required storage security spike.",
+  "rationale": [
+    "Personal financial history is sensitive even though the present household-only use is outside application auth, tenancy, and hosted compliance scope. Supports G1, G5, and G8."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-18T04:24:29.9611029+00:00",
+  "links": [
+    {
+      "id": "01KXSQP5K3GNB8YAPG2BWETEM8",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACCOUNT-MAINTENANCE",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:27:54.3403160+00:00"
+    },
+    {
+      "id": "01KXSQP6F22JFHWH5H1MBBMDW6",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-BACKUP-VERIFICATION",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:27:55.2350997+00:00"
+    },
+    {
+      "id": "01KXSQP60TSWG6RSN8XZ0GBR36",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-STRUCTURED-INVOCATION",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:27:54.7794685+00:00"
+    }
+  ]
+}

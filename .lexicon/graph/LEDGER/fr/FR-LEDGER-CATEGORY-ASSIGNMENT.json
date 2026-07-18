@@ -1,0 +1,46 @@
+{
+  "id": "01KXSQBX8WZZ2P4QX8Q3TXDMWQ",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "type": "functional",
+  "ref_code": "FR-LEDGER-CATEGORY-ASSIGNMENT",
+  "title": "Assign and correct transaction categories",
+  "description": [
+    "Maintain one attributable active category allocation per active transaction without rewriting transaction source facts. Implements G3 and UC-LEDGER-003 under A5."
+  ],
+  "rationale": [
+    "Explicit, correctable allocation is the canonical input to BUDGET and INSIGHTS while classification remains a separate concern."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "assign and correct the category of a transaction"
+  ],
+  "story_so_that": [
+    "spend across accounts uses consistent categories"
+  ],
+  "acceptance_criteria": [
+    "Given an active transaction and active category, when the owner assigns the category, then exactly one active allocation is returned and the transaction source facts remain unchanged.",
+    "Given a categorized active transaction, an active replacement category, and a reason, when the owner corrects the allocation, then the prior allocation is retired, the replacement becomes active, and both remain attributable in history.",
+    "Given an inactive transaction or archived category, when an assignment or correction is attempted, then the Ledger returns a stable validation error and changes no allocation.",
+    "Given a category rename, when historical and active assignments are queried, then they retain the same category identifier and resolve to the current display name."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T04:22:18.1335190+00:00",
+  "links": [
+    {
+      "id": "01KXSQBX8W2M4X9HVBTHMYKR86",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-003",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:22:18.1401838+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXSQHAB0Y0BGFPV7M06M415D",
+      "target": "P1",
+      "created_at": "2026-07-18T04:25:15.3590708+00:00"
+    }
+  ]
+}

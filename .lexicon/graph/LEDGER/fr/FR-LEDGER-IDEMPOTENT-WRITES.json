@@ -1,0 +1,117 @@
+{
+  "id": "01KXSQBX8TSCMJV15PDGZSHYVE",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "type": "functional",
+  "ref_code": "FR-LEDGER-IDEMPOTENT-WRITES",
+  "title": "Make public writes idempotent",
+  "description": [
+    "Apply deterministic idempotency semantics to every public Ledger mutation, including account/category maintenance, transaction and relationship changes, backup creation, restore activation, and storage evolution. Implements G7 across every mutation use case."
+  ],
+  "rationale": [
+    "An agent may retry after losing command output; retry safety must not depend on knowing whether the first write committed."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "retry any mutation safely"
+  ],
+  "story_so_that": [
+    "agent interruptions cannot duplicate or conflict with financial history"
+  ],
+  "acceptance_criteria": [
+    "Given any previously successful public mutation, when the same idempotency identity, operation, contract version, and semantically identical request are submitted again, then the original structured result is returned and no second domain or artifact effect occurs.",
+    "Given a previously successful idempotency identity, when it is reused for another operation, contract version, or materially different request, then the Ledger returns the same module-scoped conflict code on every retry and preserves the original effect.",
+    "Given an invalid mutation request, when validation fails, then no domain or artifact effect occurs and the supplied idempotency identity remains available for a corrected request.",
+    "Given two sequential identical retries, when their structured results are compared, then they identify the same resulting entity and outcome.",
+    "Given any public mutation without a valid caller-visible idempotency identity, when invocation is attempted, then the Ledger rejects it before mutation with a stable validation error."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T04:22:18.1335190+00:00",
+  "links": [
+    {
+      "id": "01KXSRA1SR791NBQCJREAVGV1C",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-001",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:38:45.8174357+00:00"
+    },
+    {
+      "id": "01KXSQBX8TH0H3PNSZYNZ1FAS9",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-002",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:22:18.1385522+00:00"
+    },
+    {
+      "id": "01KXSRA2PM12Z5BHF3WZBSSC3W",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-003",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:38:46.7412261+00:00"
+    },
+    {
+      "id": "01KXSRA35J806HDJGANZM3QP36",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-004",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:38:47.2195169+00:00"
+    },
+    {
+      "id": "01KXSQBX8TVT02KQVX18P12TYK",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-006",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:22:18.1386311+00:00"
+    },
+    {
+      "id": "01KXSRA41CA424ESJQV9W4XNDS",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-007",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:38:48.1098211+00:00"
+    },
+    {
+      "id": "01KXSRA4FENC60FFYABHH0PDJ3",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-008",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:38:48.5594384+00:00"
+    },
+    {
+      "id": "01KXSRA4X47N5NE1V9HCMM1AHM",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-009",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:38:48.9979016+00:00"
+    },
+    {
+      "id": "01KXSRA5CPBEYX7S510HCJZ0G5",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-010",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:38:49.4957687+00:00"
+    },
+    {
+      "id": "01KXSRA5TPQADDK5W178SGES6F",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-011",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:38:49.9427683+00:00"
+    },
+    {
+      "id": "01KXSRA68BRR3K93D145NQTTSD",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-012",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:38:50.3802497+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXSQHB7MEJ4YTRC1X5Y9X1W3",
+      "target": "P1",
+      "created_at": "2026-07-18T04:25:16.2756691+00:00"
+    }
+  ]
+}

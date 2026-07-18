@@ -1,0 +1,49 @@
+{
+  "id": "01KXSQDTAD4TBE8A2M89F3BM2Q",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "type": "functional",
+  "ref_code": "FR-LEDGER-STRUCTURED-INVOCATION",
+  "title": "Invoke Ledger operations non-interactively",
+  "description": [
+    "Provide deterministic JSON-oriented process input, output, diagnostics, and error behavior for the public command contract. Implements G5 and UC-LEDGER-006 under C2 and C14."
+  ],
+  "rationale": [
+    "Agents must distinguish structured outcomes from diagnostics and must never parse prose to know whether a financial mutation succeeded."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "agents to invoke commands through a stable process contract"
+  ],
+  "story_so_that": [
+    "automation can handle success and failure deterministically"
+  ],
+  "acceptance_criteria": [
+    "Given a structured public operation, when valid JSON input is supplied through the documented non-interactive input path, then exactly one structured result is written to stdout and the process exits with the documented success code.",
+    "Given an expected validation, conflict, lifecycle, compatibility, cursor, or not-found failure, when the operation completes, then the documented structured error channel contains one machine-readable module-scoped error, diagnostics remain on stderr, and the documented non-zero exit is stable.",
+    "Given malformed JSON or unknown fields forbidden by the operation schema, when invocation is attempted, then validation fails before any mutation.",
+    "Given a successful or expected-failure invocation, when stderr is inspected, then it contains no transaction description, full account identifier, credential, or serialized request or response body."
+  ],
+  "security_criteria": [
+    "Diagnostics and logs contain metadata only, never financial payloads, credentials, or full account identifiers."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T04:23:20.6536049+00:00",
+  "links": [
+    {
+      "id": "01KXSQDTAFHBM5RBB5X5FM3NAP",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-006",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:23:20.6552529+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXSQHD9TR29ZKGGV064V5HSA",
+      "target": "P1",
+      "created_at": "2026-07-18T04:25:18.3929901+00:00"
+    }
+  ]
+}

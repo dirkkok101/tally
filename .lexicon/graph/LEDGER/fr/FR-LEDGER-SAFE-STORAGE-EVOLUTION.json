@@ -1,0 +1,47 @@
+{
+  "id": "01KXSQDTAMTJ1Y16FE3S7BJDP8",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "type": "functional",
+  "ref_code": "FR-LEDGER-SAFE-STORAGE-EVOLUTION",
+  "title": "Upgrade or migrate Ledger storage safely",
+  "description": [
+    "Preflight, back up, build, validate, and atomically activate supported storage upgrades or migrations. Implements G8 and UC-LEDGER-012."
+  ],
+  "rationale": [
+    "The embedded store must evolve over years without partial upgrades or private manual edits."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "upgrade or migrate Ledger storage with a verified rollback point"
+  ],
+  "story_so_that": [
+    "new releases cannot silently corrupt financial history"
+  ],
+  "acceptance_criteria": [
+    "Given a supported source Ledger, when an upgrade or migration is requested, then compatibility, permissions, available space, and required recovery conditions are checked before source mutation.",
+    "Given successful preflight, when evolution begins, then a verified backup or equivalent verified recovery point is established before candidate activation.",
+    "Given a completed candidate, when validation runs, then target storage version, every Durable Ledger State type, idempotency outcome, per-type count, relationship/cardinality rule, integrity result, and exact derived total must match the source and declared migration outcome before activation.",
+    "Given successful candidate validation, when activation occurs, then it is atomic and the new version becomes authoritative exactly once.",
+    "Given any preflight, conversion, validation, or activation failure, when the operation ends, then the original Ledger remains authoritative and no partially evolved store is exposed."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T04:23:20.6536049+00:00",
+  "links": [
+    {
+      "id": "01KXSQDTAM550M6DBD3HQZG8C0",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-012",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:23:20.6602202+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXSQHCCZ2G2X6KNPSHTV5YF7",
+      "target": "P1",
+      "created_at": "2026-07-18T04:25:17.4702579+00:00"
+    }
+  ]
+}

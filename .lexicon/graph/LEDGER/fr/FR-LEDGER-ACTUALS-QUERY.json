@@ -1,0 +1,50 @@
+{
+  "id": "01KXSQCYJC2RVMH6KBHKV1K3FB",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "type": "functional",
+  "ref_code": "FR-LEDGER-ACTUALS-QUERY",
+  "title": "Query and reconcile Ledger actuals",
+  "description": [
+    "Return exact transaction membership and aggregates for canonical Ledger facts. Implements G6 and UC-LEDGER-005 for downstream BUDGET and INSIGHTS consumers."
+  ],
+  "rationale": [
+    "Analysis is trustworthy only when every total can be traced to the exact selected transactions under explicit active-state semantics."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "query exact transaction sets and totals"
+  ],
+  "story_so_that": [
+    "the owner and downstream modules can reconcile every spend result"
+  ],
+  "acceptance_criteria": [
+    "Given explicit filters for account, inclusive date range, category, transfer state, refund state, relationship state, categorization state, and transaction lifecycle state, when actuals are queried, then only transactions matching every supplied filter are returned.",
+    "Given no lifecycle-state override, when actuals are queried, then voided and superseded transactions and retired relationships do not affect default totals.",
+    "Given any selected transaction set, when Net Account Movement is returned, then it equals the exact base-10 sum of each selected active transaction's Signed Account Amount, with inflows positive and outflows negative.",
+    "Given no matching transactions, when actuals are queried, then the Ledger returns a successful empty collection with zero exact totals rather than a not-found error.",
+    "Given unchanged Ledger state and identical filters, when the query is repeated, then membership, ordering, and exact aggregates are identical.",
+    "Given an active cash-withdrawal outflow that is not part of an active owned-account transfer, when external-spend actuals are queried, then the withdrawal is included under its active category or uncategorized state.",
+    "Given a selected transaction set, when External Spend is returned, then it adds the positive magnitudes of qualifying active outflows in the set, subtracts active linked refund/reversal magnitudes in the set, excludes active owned-transfer principal legs and unrelated inflows, and includes separately recorded fees and unlinked cash withdrawals.",
+    "Given a Spend Category filter, when Budget Actual is returned, then it applies the External Spend formula to the current active category allocation, each refund uses its own Effective Date and the original's current category, and a refund-heavy period may return a negative net spend amount."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T04:22:52.2328224+00:00",
+  "links": [
+    {
+      "id": "01KXSQCYJCKNSW7EAVMGJBH2PN",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-005",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:22:52.2368799+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXSQH9QE4BHDQ6X08FTWPFQF",
+      "target": "P1",
+      "created_at": "2026-07-18T04:25:14.7330045+00:00"
+    }
+  ]
+}

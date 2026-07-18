@@ -1,0 +1,47 @@
+{
+  "id": "01KXSQCYJ8AFV3RA3G86X0E1SB",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "type": "functional",
+  "ref_code": "FR-LEDGER-TRANSFER-CONFIRMATION",
+  "title": "Confirm owned-account transfers",
+  "description": [
+    "Explicitly link qualifying transaction legs as a transfer between owned accounts. Implements G4 and UC-LEDGER-004 under A11."
+  ],
+  "rationale": [
+    "Transfers must stay visible in account history while contributing zero external spend."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "confirm the two legs of an owned-account transfer"
+  ],
+  "story_so_that": [
+    "moving money between owned accounts is not counted as external spend"
+  ],
+  "acceptance_criteria": [
+    "Given two active transactions on distinct active owned deposit accounts with ZAR equal-and-opposite principal amounts, when the owner confirms them as a transfer with a reason, then one active attributable transfer relationship is created.",
+    "Given an active confirmed transfer, when default external-spend actuals are queried, then the paired principal contributes exactly zero while both transaction legs remain queryable.",
+    "Given qualifying legs with different supplied dates, when the owner explicitly confirms the relationship, then the date difference alone does not prevent confirmation.",
+    "Given same-account legs, same-sign legs, unequal principal magnitudes, different currencies, inactive legs, or either leg already participating in any active transfer or refund relationship, when transfer confirmation is attempted, then the Ledger returns a stable validation error and creates no relationship.",
+    "Given a bank fee recorded separately from the equal-and-opposite principal legs, when the transfer is confirmed, then the fee remains an unlinked transaction and retains its own spend treatment."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T04:22:52.2328224+00:00",
+  "links": [
+    {
+      "id": "01KXSQCYJ918GXHPM2D4BNRF64",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-004",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:22:52.2339894+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXSQHE6S954VZ39MRVWK3Z0Y",
+      "target": "P1",
+      "created_at": "2026-07-18T04:25:19.3205370+00:00"
+    }
+  ]
+}

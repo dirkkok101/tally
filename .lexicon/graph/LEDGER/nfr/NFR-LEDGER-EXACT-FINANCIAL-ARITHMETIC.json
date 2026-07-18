@@ -1,0 +1,48 @@
+{
+  "id": "01KXSQFXBTBZ6YXSZEFF4WWRCX",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC",
+  "title": "Preserve exact financial arithmetic",
+  "description": [
+    "All stored and derived monetary values use exact base-10 semantics with no binary floating-point rounding in persisted facts or aggregates."
+  ],
+  "category": "data_integrity",
+  "target": "100% of conformance examples round-trip Signed Account Amount exactly; Net Account Movement equals the exact signed selected sum; External Spend equals positive qualifying outflow magnitudes minus active in-set refund magnitudes with transfer principal and unrelated inflows excluded; Budget Actual applies that formula to the active category allocation.",
+  "load_condition": "All supported transaction, transfer, refund, correction, and query paths.",
+  "measurement": "Automated conformance tests use boundary decimals, mixed signs, cross-period refunds, partial refunds, transfers, fees, cash withdrawals, corrections, empty sets, and repeated aggregation to check each named formula independently.",
+  "rationale": [
+    "Rounding or semantic drift would make all later budgets and insights untrustworthy. Supports G2, G4, and G6."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-18T04:24:29.3077997+00:00",
+  "links": [
+    {
+      "id": "01KXSQP2YW0F0E75BJT7W0H1DJ",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACTUALS-QUERY",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:27:51.6447890+00:00"
+    },
+    {
+      "id": "01KXSQP2GQVBJXXDX21TN9EHFR",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-REFUND-CONFIRMATION",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:27:51.1919852+00:00"
+    },
+    {
+      "id": "01KXSQP1M8X681PW9GCDEJK31Q",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-TRANSACTION-RECORDING",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:27:50.2816874+00:00"
+    },
+    {
+      "id": "01KXSQP235TZ6M8CX04PX4QY0Q",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-TRANSFER-CONFIRMATION",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:27:50.7582424+00:00"
+    }
+  ]
+}

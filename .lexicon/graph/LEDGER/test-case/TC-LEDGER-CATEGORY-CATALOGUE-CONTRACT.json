@@ -1,0 +1,26 @@
+{
+  "id": "01KXSQK5MS7DFNM22BAXX72MRW",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "TC-LEDGER-CATEGORY-CATALOGUE-CONTRACT",
+  "slug": "category-catalogue-contract",
+  "title": "Verify maintain the spend-category catalogue contract",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A fresh representative local Ledger and the valid and invalid inputs required by FR-LEDGER-CATEGORY-CATALOGUE are available.",
+  "steps": "Invoke the relevant operations through the public CLI contract and exercise every acceptance criterion of FR-LEDGER-CATEGORY-CATALOGUE.",
+  "expected": "All FR-LEDGER-CATEGORY-CATALOGUE acceptance criteria, including stable-error and no-partial-mutation outcomes, hold.",
+  "owner": "LEDGER implementation",
+  "created_at": "2026-07-18T04:26:16.0907804+00:00",
+  "links": [
+    {
+      "id": "01KXSQK5MWBF8ABV6CDJZAJA0A",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-CATALOGUE",
+      "rel": "verifies",
+      "created_at": "2026-07-18T04:26:16.0921971+00:00"
+    }
+  ]
+}

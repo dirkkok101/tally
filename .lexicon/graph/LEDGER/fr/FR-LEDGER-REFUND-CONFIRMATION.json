@@ -1,0 +1,47 @@
+{
+  "id": "01KXSQCYJA0F0J6BD9QTWZ58Q5",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "type": "functional",
+  "ref_code": "FR-LEDGER-REFUND-CONFIRMATION",
+  "title": "Confirm refunds and reversals",
+  "description": [
+    "Explicitly link a full or partial refund or reversal to its original transaction. Implements G6 and UC-LEDGER-010 under A6."
+  ],
+  "rationale": [
+    "Refunds must offset the original category without being misreported as unrelated income or spend."
+  ],
+  "priority": 1,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "confirm a refund against its original transaction"
+  ],
+  "story_so_that": [
+    "category actuals reflect the net spend"
+  ],
+  "acceptance_criteria": [
+    "Given active same-account ZAR transactions with opposite signs, when the owner explicitly confirms one transaction as a refund or reversal of the other with a reason, then one active attributable refund relationship is created without inferring the relationship from description or date alone.",
+    "Given an active refund relationship, when category actuals are queried, then the refund offsets the original transaction's current active category allocation.",
+    "Given one or more active partial refunds, when another refund is proposed, then confirmation succeeds only if cumulative active refunded magnitude does not exceed the original transaction magnitude.",
+    "Given same-sign, different-account, different-currency, inactive, over-refund, transfer-linked, refund-credit-as-original, or refund-credit-reuse participants, when confirmation is attempted, then the Ledger returns a stable validation error and creates no relationship.",
+    "Given a valid refund credit, when it is confirmed, then its entire magnitude participates in exactly one active refund relationship to one original; an original may have multiple active refund credits only while their cumulative magnitude remains at most the original magnitude."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T04:22:52.2328224+00:00",
+  "links": [
+    {
+      "id": "01KXSQCYJBCWZT3DA73570NN62",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-010",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:22:52.2352220+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXSQHBH0XBWYR2GX16EQ39PK",
+      "target": "P1",
+      "created_at": "2026-07-18T04:25:16.5748447+00:00"
+    }
+  ]
+}

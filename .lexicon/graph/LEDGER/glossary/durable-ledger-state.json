@@ -1,0 +1,10 @@
+{
+  "id": "01KXSRCKP1SX65N02FSG10S5FX",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "term": "Durable Ledger State",
+  "definition": [
+    "All authoritative persisted logical state required to preserve behavior after restart or recovery: storage/schema metadata; accounts and categories with lifecycle history; Canonical Transactions and void/supersession chains; category-allocation history; active and retired transfer/refund relationships; and idempotency identities with their original outcomes. Query cursors and derived caches are excluded because they may be rebuilt or expired."
+  ],
+  "source": "prd",
+  "created_at": "2026-07-18T04:40:09.6664887+00:00"
+}

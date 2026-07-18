@@ -1,0 +1,9 @@
+{
+  "id": "01KXSRK3C5HM9PFE93MWEEJ8RS",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.3",
+  "changes": [
+    "PRD: 17 functional requirements, 8 measurable non-functional requirements, 17 planned contract-test intents, persona/workflow traceability, explicit CHANNELS UI ownership, aggregate formulas, global mutation idempotency, relationship role/amount conservation, complete durable-state recovery, and two rounds of export/reviewer remediation recorded."
+  ],
+  "created_at": "2026-07-18T04:43:42.3422553+00:00"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "01KXSQK82S85GT2Q384M794CTV",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "TC-LEDGER-SNAPSHOT-PAGINATION-CONTRACT",
+  "slug": "snapshot-pagination-contract",
+  "title": "Verify preserve query snapshots across pages contract",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A fresh representative local Ledger and the valid and invalid inputs required by FR-LEDGER-SNAPSHOT-PAGINATION are available.",
+  "steps": "Invoke the relevant operations through the public CLI contract and exercise every acceptance criterion of FR-LEDGER-SNAPSHOT-PAGINATION.",
+  "expected": "All FR-LEDGER-SNAPSHOT-PAGINATION acceptance criteria, including stable-error and no-partial-mutation outcomes, hold.",
+  "owner": "LEDGER implementation",
+  "created_at": "2026-07-18T04:26:18.5862026+00:00",
+  "links": [
+    {
+      "id": "01KXSQK82V7W13237WXRE1V1CM",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SNAPSHOT-PAGINATION",
+      "rel": "verifies",
+      "created_at": "2026-07-18T04:26:18.5870486+00:00"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "id": "01KXSQDTAGKNX8F1FK1JK3N189",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "type": "functional",
+  "ref_code": "FR-LEDGER-SKILL-COMPATIBILITY",
+  "title": "Distribute version-matched agent skills",
+  "description": [
+    "Ship deployable agent skills that use only the public CLI contract and declare their supported contract version. Implements G5 and UC-LEDGER-006 under C7."
+  ],
+  "rationale": [
+    "Bundled automation is part of the product contract and must not drift into private storage coupling."
+  ],
+  "priority": 1,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "install compatible Tally skills with the executable"
+  ],
+  "story_so_that": [
+    "AI agents can use Ledger commands safely without bespoke prompting"
+  ],
+  "acceptance_criteria": [
+    "Given a supported agent host, when the Ledger skill is installed through the executable's documented installer, then its instructions and declared CLI contract version are available without copying private database files or implementation APIs.",
+    "Given a skill and executable with compatible declared contract versions, when a Ledger workflow is invoked, then the skill uses only discoverable public operations and schemas.",
+    "Given an incompatible skill contract version, when execution is attempted, then compatibility fails before any Ledger mutation and returns a stable module-scoped error.",
+    "Given a breaking public contract change, when a release is produced, then the contract version changes and its bundled skills declare compatibility with that version."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T04:23:20.6536049+00:00",
+  "links": [
+    {
+      "id": "01KXSQDTAG4N58JGB7K925PD14",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-006",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:23:20.6569870+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXSQHCP681T6N40RMY8C9R9X",
+      "target": "P1",
+      "created_at": "2026-07-18T04:25:17.7650282+00:00"
+    }
+  ]
+}

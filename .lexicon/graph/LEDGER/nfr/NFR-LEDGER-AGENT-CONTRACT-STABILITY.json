@@ -1,0 +1,41 @@
+{
+  "id": "01KXSQFY9C8649APJ7XN79GBZ3",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "NFR-LEDGER-AGENT-CONTRACT-STABILITY",
+  "title": "Keep the agent contract stable",
+  "description": [
+    "The public process contract is the only supported automation boundary and evolves through explicit contract versions matched by bundled skills."
+  ],
+  "category": "architecture",
+  "target": "100% of public Ledger operations expose deterministic schemas, structured expected errors, documented exits, and compatibility metadata; 100% of incompatible skill tests fail before mutation.",
+  "load_condition": "Every public operation and every bundled supported-agent skill across compatible and incompatible version pairs.",
+  "measurement": "Generated contract inventory plus automated schema snapshot, error/exit, stream-separation, and skill compatibility tests.",
+  "rationale": [
+    "Agents must not depend on prose, private storage, or implementation APIs. Supports G5 and G7."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-18T04:24:30.2531353+00:00",
+  "links": [
+    {
+      "id": "01KXSQP6Z351M1DPWBCA1JCYZB",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CONTRACT-DISCOVERY",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:27:55.7495460+00:00"
+    },
+    {
+      "id": "01KXSQP7W5KX29N6WTDWGE5FVZ",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SKILL-COMPATIBILITY",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:27:56.6780433+00:00"
+    },
+    {
+      "id": "01KXSQP7E229Q23ZEWDE4VFQC0",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-STRUCTURED-INVOCATION",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:27:56.2272426+00:00"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "id": "01KXSQFXNVGXH9FYFN6KF8KSE9",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS",
+  "title": "Make mutations atomic and durable",
+  "description": [
+    "Each successful Ledger mutation is durable as one logical change; validation, storage, crash, integrity, and resource failures fail closed without partial domain state."
+  ],
+  "category": "reliability",
+  "target": "For every injected failure point, restart inspection observes either the complete committed mutation exactly once or the unchanged pre-operation state, with zero partial entities or relationships.",
+  "load_condition": "All public writes, including multi-entity corrections, relationship replacement, restore activation, and storage evolution.",
+  "measurement": "Automated fault-injection and restart tests at each persistence boundary, followed by integrity, count, relationship, and exact-total checks.",
+  "rationale": [
+    "Partial writes can silently corrupt financial meaning and recovery. Supports G2, G4, G7, and G8."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-18T04:24:29.6278802+00:00",
+  "links": [
+    {
+      "id": "01KXSQP3C9GXGXDHVKGTYESS7M",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-IDEMPOTENT-WRITES",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:27:52.0743474+00:00"
+    },
+    {
+      "id": "01KXSQP490Z2F0KSTKCBZQHNWK",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-RELATIONSHIP-CORRECTION",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:27:52.9932742+00:00"
+    },
+    {
+      "id": "01KXSQP4PP4NS9BW19QQH83PJ7",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SAFE-RESTORE",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:27:53.4315941+00:00"
+    },
+    {
+      "id": "01KXSQP558WPQWQFVVHM6H7ZYN",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SAFE-STORAGE-EVOLUTION",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:27:53.8971404+00:00"
+    },
+    {
+      "id": "01KXSQP3VNQQJE0HD7Z4BX51VX",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-TRANSACTION-CORRECTION",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:27:52.5659205+00:00"
+    }
+  ]
+}

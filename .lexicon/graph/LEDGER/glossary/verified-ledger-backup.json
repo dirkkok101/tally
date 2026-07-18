@@ -3,8 +3,8 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "term": "Verified Ledger Backup",
   "definition": [
-    "A point-in-time, version-identifiable, access-restricted Ledger artifact whose integrity and compatibility can be checked without mutating the live Ledger. Avoid: unverified file copy or export report."
+    "A point-in-time, version-identifiable, access-restricted artifact containing the complete Durable Ledger State, whose compatibility, integrity, per-entity counts, relationship/cardinality rules, idempotency outcomes, and exact derived totals can be checked independently without mutating the live Ledger. Avoid: unverified file copy or transaction-only export report."
   ],
-  "source": "discovery",
+  "source": "prd",
   "created_at": "2026-07-17T17:30:39.5117235+00:00"
 }

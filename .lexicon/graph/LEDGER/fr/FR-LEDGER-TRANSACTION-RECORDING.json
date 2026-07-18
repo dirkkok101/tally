@@ -1,0 +1,50 @@
+{
+  "id": "01KXSQBX8SZ0ERGS3WGHGN6G2P",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "type": "functional",
+  "ref_code": "FR-LEDGER-TRANSACTION-RECORDING",
+  "title": "Record canonical transactions",
+  "description": [
+    "Record exact immutable source facts and provenance for a transaction on an active owned account. Implements G2 and UC-LEDGER-002 under A1-A4 and A12."
+  ],
+  "rationale": [
+    "Trustworthy actuals require precise signed amounts, dates, source identity, and provenance rather than normalized or silently edited values."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "record a precise transaction from an owned account"
+  ],
+  "story_so_that": [
+    "the original financial fact can always be reproduced and reconciled"
+  ],
+  "acceptance_criteria": [
+    "Given an active account and valid original description, exact base-10 signed amount, ZAR currency, transaction date, source reference, provenance, and idempotency identity, when the transaction is recorded, then the Ledger returns one stable transaction containing those values without precision loss.",
+    "Given a transaction with a distinct supplied posting date, when it is recorded, then both transaction date and posting date round-trip without substituting one for the other.",
+    "Given any missing required fact, unsupported currency, zero amount, malformed date, or archived account, when recording is attempted, then the Ledger returns a stable validation error and creates no transaction.",
+    "Given a recorded transaction, when it is read later, then its account identity, original description, signed amount, currency, supplied dates, source reference, provenance, and stable identifier are unchanged.",
+    "Given an account inflow or outflow, when its signed amount is recorded under the first-release convention, then inflow is positive and outflow is negative as the exact owned-account balance delta."
+  ],
+  "security_criteria": [
+    "Returned and diagnostic data must not expose unmasked account identifiers or credentials."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T04:22:18.1335190+00:00",
+  "links": [
+    {
+      "id": "01KXSQBX8SCEPYVEWMT107ZEPJ",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-002",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:22:18.1374895+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXSQHDX19Q23R0BQBRVFNVKW",
+      "target": "P1",
+      "created_at": "2026-07-18T04:25:19.0081638+00:00"
+    }
+  ]
+}

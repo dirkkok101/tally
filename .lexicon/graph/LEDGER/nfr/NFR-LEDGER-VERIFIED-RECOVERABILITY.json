@@ -1,0 +1,41 @@
+{
+  "id": "01KXSQFYKENRZNNNRNH8E8NWYD",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "NFR-LEDGER-VERIFIED-RECOVERABILITY",
+  "title": "Prove Ledger recoverability",
+  "description": [
+    "Backup, independent verification, separate-target restore, and supported storage evolution must preserve the complete authoritative financial state."
+  ],
+  "category": "reliability",
+  "target": "Every accepted recovery drill reproduces the complete Durable Ledger State, including metadata, accounts, categories, transactions/correction chains, allocation history, active/retired relationships, idempotency outcomes, per-type counts, relationship rules, and exact derived totals; every failed drill leaves the previous Ledger authoritative.",
+  "load_condition": "A representative acceptance Ledger containing every durable entity and history type, identical and conflicting idempotency outcomes, active and retired relationships, and the supported maximum version distance.",
+  "measurement": "Automated backup-verify-restore and upgrade/migration drills compare normalized complete-state manifests and derived totals, with corruption, omission, permission, disk-space, compatibility, and activation fault cases.",
+  "rationale": [
+    "A backup is useful only when restoration and evolution are independently proven. Supports G8."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-18T04:24:30.5751632+00:00",
+  "links": [
+    {
+      "id": "01KXSQP89ENK4T79XKB48GBHZW",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-BACKUP-VERIFICATION",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:27:57.1035894+00:00"
+    },
+    {
+      "id": "01KXSQP8QG6ZR44X78QBM71K23",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SAFE-RESTORE",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:27:57.5527545+00:00"
+    },
+    {
+      "id": "01KXSQP96WKH9144KGDG5SXVWT",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SAFE-STORAGE-EVOLUTION",
+      "rel": "supports",
+      "created_at": "2026-07-18T04:27:58.0449912+00:00"
+    }
+  ]
+}

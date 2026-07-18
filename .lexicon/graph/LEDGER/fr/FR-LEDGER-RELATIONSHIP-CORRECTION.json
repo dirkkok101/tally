@@ -1,0 +1,46 @@
+{
+  "id": "01KXSQCYJBJCNY42182W7BRMQA",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "type": "functional",
+  "ref_code": "FR-LEDGER-RELATIONSHIP-CORRECTION",
+  "title": "Revoke or replace financial relationships",
+  "description": [
+    "Correct transfer and refund relationships through attributable lifecycle events. Implements G4 and G6 through UC-LEDGER-011."
+  ],
+  "rationale": [
+    "Incorrect links distort actuals just as incorrect transactions do and therefore require explicit reversible correction rather than silent editing."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "revoke or replace an incorrect transfer or refund link"
+  ],
+  "story_so_that": [
+    "actuals are recalculated without losing the prior decision"
+  ],
+  "acceptance_criteria": [
+    "Given an active transfer or refund relationship and a reason, when the owner revokes it, then it becomes retired, the event is attributable, and active actuals are recalculated atomically.",
+    "Given an active relationship and proposed replacement participants, when the owner replaces it with a reason, then role exclusivity, cardinality, amount conservation, account, currency, sign, and lifecycle rules are revalidated before the prior relationship is retired and exactly one valid replacement is activated atomically.",
+    "Given an inactive relationship, when it is revoked again, then the Ledger returns a stable lifecycle error and changes no actuals.",
+    "Given any retired relationship, when history-inclusive detail is requested, then its participants, type, lifecycle reason, actor context, time, and replacement reference where applicable remain queryable."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T04:22:52.2328224+00:00",
+  "links": [
+    {
+      "id": "01KXSQCYJCDYRYR0W4CYSQBZRB",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-011",
+      "rel": "implements",
+      "created_at": "2026-07-18T04:22:52.2360739+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXSQHBTWAQTBMSYPSFF1T44B",
+      "target": "P1",
+      "created_at": "2026-07-18T04:25:16.8917272+00:00"
+    }
+  ]
+}
