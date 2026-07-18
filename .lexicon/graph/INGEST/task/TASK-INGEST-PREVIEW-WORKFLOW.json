@@ -231,64 +231,64 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXTMAH8R3NKAJAXDB6MVSCSD",
+      "id": "01KXTZVVT7BQAP0X5PFM4F7NYT",
       "kind": "acceptance_check",
       "text": [
         "Preview validates contract versions, selected account identifier, path schema, and advertised limits before opening the source; LedgerContractClient confirms exactly one active ZAR account and statement metadata must agree without inference."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-18T16:10:03.9755958+00:00"
     },
     {
-      "id": "01KXTMAH8RASHK5VZQD5J5N1ZZ",
+      "id": "01KXTZVVT88815635QKFGEA0RA",
       "kind": "acceptance_check",
       "text": [
         "CallerOwnedSourceReader opens read-only, captures safe before/after metadata, reads no more than the byte limit into one immutable buffer, computes SHA-256 over those exact bytes, and returns source_changed if metadata or bytes change."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-18T16:10:03.9755958+00:00"
     },
     {
-      "id": "01KXTMAH8R15VB02SX09FCM696",
+      "id": "01KXTZVVT884YGZ6K0N39VZYQH",
       "kind": "acceptance_check",
       "text": [
-        "PreviewStateStore checks selected account plus source fingerprint first: an active or completed exact replay returns prior manifest/status/receipt without reparsing or mutation; only a different source reaches overlap evaluation."
+        "PreviewStateStore checks the complete Exact Replay key first: Source Fingerprint, selected account, adapter version, and LEDGER contract version. An active or completed match returns the prior manifest, status, or receipt without reparsing or mutation; any changed key component requires a new preview before overlap evaluation."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-18T16:10:03.9755958+00:00"
     },
     {
-      "id": "01KXTMAH8RV67YGPV5TBS1Y2TY",
+      "id": "01KXTZVVT8865X9ECH3D4C43TX",
       "kind": "acceptance_check",
       "text": [
         "A new source runs the real extractor and exactly one registered adapter, normalizes/accounts/reconciles every record, blocks any ambiguity or overlap, canonicalizes the complete ordered manifest, and persists batch, revision, records, candidates, controls, and safe status in one INGEST transaction."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-18T16:10:03.9755958+00:00"
     },
     {
-      "id": "01KXTMAH8RQZ5VBEJ5DRBCTZ4F",
+      "id": "01KXTZVVT8FQTXH96F0K5TY1MV",
       "kind": "acceptance_check",
       "text": [
         "Success returns stable batchId and manifestRevisionId; any failure creates no committable manifest; every path leaves the source byte-for-byte unchanged and invokes no ledger.transaction.record."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-18T16:10:03.9755958+00:00"
     },
     {
-      "id": "01KXTMAH8R8PP84EJ9AP4QJFXG",
+      "id": "01KXTZVVT87H3917T7YV2P5XSP",
       "kind": "acceptance_check",
       "text": [
         "PreviewOperationModule exposes a typed handler binding for ingest.preview but is not added to the global registry until GATE-INT-PUBLIC-CONTRACT."
       ],
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-18T16:10:03.9755958+00:00"
     },
     {
       "id": "01KXTMAH8SP7TEFPWXG2ZM687N",

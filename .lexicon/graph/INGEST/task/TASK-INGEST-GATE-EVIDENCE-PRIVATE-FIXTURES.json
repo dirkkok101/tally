@@ -72,54 +72,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXTN93YH8GMG33PVHE7QFDJK",
+      "id": "01KXTZVS0GXH7F089KS32WSCPR",
       "kind": "acceptance_check",
       "text": [
         "docs/statements remains ignored and contains exactly the three owner-supplied readable PDF fixtures already assessed during discovery; this gate neither renames nor modifies them."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T13:05:03.9529962+00:00"
+      "created_at": "2026-07-18T16:10:01.1039239+00:00"
     },
     {
-      "id": "01KXTN93YHRT03F5051QPACH7C",
+      "id": "01KXTZVS0H3G49YRFXXWMT94TB",
       "kind": "acceptance_check",
       "text": [
         "docs/statements/.ingest-fixture-manifest.json is ignored JSON schemaVersion 1 with exactly three fixture objects and exactly two distinct supported variantId values."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T13:05:03.9529962+00:00"
+      "created_at": "2026-07-18T16:10:01.1039239+00:00"
     },
     {
-      "id": "01KXTN93YHE1M5G3K3G7958SQP",
+      "id": "01KXTZVS0HS047W33FR1RBE2C2",
       "kind": "acceptance_check",
       "text": [
-        "Each fixture object contains a sourcePath plus expected statementPeriod, accountEvidence, orderedRecords, and reconciliation controls sufficient to assert every source row, exact available balance control, and variant identity; values remain private."
+        "Each fixture object contains a repository-relative sourcePath below docs/statements plus expected statementPeriod, accountEvidence, orderedRecords, and reconciliation controls sufficient to assert every source row, exact available balance control, and variant identity; absolute paths are prohibited and all values remain private."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T13:05:03.9529962+00:00"
+      "created_at": "2026-07-18T16:10:01.1039239+00:00"
     },
     {
-      "id": "01KXTN93YH958F77PQZXF6RJJJ",
+      "id": "01KXTZVS0HWZ3ZTK5ACAF7RHEE",
       "kind": "acceptance_check",
       "text": [
-        "Every manifest sourcePath resolves to one readable file under docs/statements, no source path appears more than once, and no statement filename, path, content, amount, balance, record, or expected fact is emitted by verification."
+        "Every manifest sourcePath is repository-relative, stays below docs/statements, resolves to one readable file, and appears only once; no statement filename, path, content, amount, balance, record, or expected fact is emitted by verification."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T13:05:03.9529962+00:00"
+      "created_at": "2026-07-18T16:10:01.1039239+00:00"
     },
     {
-      "id": "01KXTN93YH03NVB641DKY23MYM",
+      "id": "01KXTZVS0HCKT8EC4R91P40ZXA",
       "kind": "acceptance_check",
       "text": [
         "The manifest is supplied to fixture-dependent tests through TALLY_INGEST_PRIVATE_FIXTURE_MANIFEST; another worktree or agent must receive that environment variable rather than reconstructing private facts."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T13:05:03.9529962+00:00"
+      "created_at": "2026-07-18T16:10:01.1039239+00:00"
     },
     {
       "id": "01KXTN93YHYWB42MRS28M47VGP",

@@ -7,7 +7,7 @@
     "Constrain every source, manifest, receipt, diagnostic, and parser boundary for local financial privacy."
   ],
   "decision": [
-    "Carry sourcePath only inside private structured input; open read-only; read a bounded immutable byte buffer; fingerprint the exact bytes; and never persist the path or a source copy. Keep extracted glyphs and source rows in bounded memory until an INGEST transaction persists only required manifest state. Enforce 0700 directories and 0600 state, WAL, SHM, lock, and atomic artifacts where supported. Source paths, rows, descriptions, amounts, balances, full bank identifiers, manifests, requests, and receipts never enter arguments, logs, stderr, crash diagnostics, or telemetry. Source-generated JSON rejects unknown fields and fixes canonical order."
+    "Runtime operation input carries sourcePath only inside private structured input; open read-only; read a bounded immutable byte buffer; fingerprint the exact bytes; and never persist the path or a source copy in production or runtime artifacts. The ignored test-only fixture manifest may retain only a repository-relative sourcePath below docs/statements; that locator must never enter runtime state, logs, receipts, graph or exported documentation, committed files, or test output. Keep extracted glyphs and source rows in bounded memory until an INGEST transaction persists only required manifest state. Enforce 0700 directories and 0600 state, WAL, SHM, lock, and atomic artifacts where supported. Source paths, rows, descriptions, amounts, balances, full bank identifiers, manifests, requests, and receipts never enter arguments, logs, stderr, crash diagnostics, or telemetry. Source-generated JSON rejects unknown fields and fixes canonical order."
   ],
   "rationale": [
     "The source is caller-owned and the intermediate evidence is as sensitive as the final ledger. External parser processes expose path and lifecycle surfaces; disk extraction creates crash residue; payload logging turns expected failures into disclosure. Memory-only PdfPig extraction passed the NFR bound and removes an entire cleanup class. The trusted OS identity remains the sole first-release access boundary."
@@ -16,7 +16,7 @@
     "A: disk-extracted text, rejected because crashes leave sensitive residue. B: external parser process with a source path argument, rejected because paths leak and lifecycle expands. C: payload logging for diagnosis, rejected as disclosure. D: bounded memory extraction, private structured input, protected state, and metadata-only diagnostics, chosen."
   ],
   "consequences": [
-    "Debugging relies on safe identifiers, categories, counts, and correlation references rather than financial payloads. Unsupported host permissions block persistence. Source hashes before and after preview and canary scans become release gates."
+    "Debugging relies on safe identifiers, categories, counts, and correlation references rather than financial payloads. Unsupported host permissions block persistence. Source hashes before and after preview and canary scans become release gates. Private fixture tests may resolve only repository-relative locators below the ignored docs/statements root, and verification must prove those locators never escape into tracked or runtime artifacts."
   ],
   "status_notes": [
     "Accepted design. The plan must create owner-only artifact, private-input, canary, and cleanup obligations at these paths."

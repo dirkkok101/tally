@@ -165,74 +165,74 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXTX85E7K2HEZZHKN43FQTFV",
+      "id": "01KXV0NWEZR3CXSBCZ3MYHJ9FD",
       "kind": "acceptance_check",
       "text": [
         "FinancialNormalizer converts exact base-10 evidence to integer minor units and owner-economic sign: asset increases and liability reductions are positive; asset decreases and liability increases are negative; currency is exactly ZAR."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T15:24:21.3191560+00:00"
+      "created_at": "2026-07-18T16:24:16.6067517+00:00"
     },
     {
-      "id": "01KXTX85E85FQHDAYT880B1AC6",
+      "id": "01KXV0NWEZFNKH243YC60B9SDM",
       "kind": "acceptance_check",
       "text": [
         "TransactionDate is the source date with its year; a yearless date resolves only when exactly one date lies inside the explicit statement period; PostingDate remains distinct and optional; missing or ambiguous facts block without invention."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T15:24:21.3191560+00:00"
+      "created_at": "2026-07-18T16:24:16.6067517+00:00"
     },
     {
-      "id": "01KXTX85E8GVKH949JG0EDMCYY",
+      "id": "01KXV0NWEZKMHPQAADHTQ5MQF8",
       "kind": "acceptance_check",
       "text": [
         "Zero monetary movement becomes excluded_non_transaction with a stable reason and never an ImportCandidate."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T15:24:21.3191560+00:00"
+      "created_at": "2026-07-18T16:24:16.6067517+00:00"
     },
     {
-      "id": "01KXTX85E836K4S67K38YK0B0S",
+      "id": "01KXV0NWEZCN85842RBA01CVMF",
       "kind": "acceptance_check",
       "text": [
         "IngestIdentity derives sourceRecordId from Source Fingerprint, stable structural position, raw evidence fingerprint, and immutable-facts schema while excluding adapter/manifest/compatible-version metadata; candidateId derives from accountId, sourceRecordId, and immutable normalized facts and drives sourceReference/idempotencyKey."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T15:24:21.3191560+00:00"
+      "created_at": "2026-07-18T16:24:16.6067517+00:00"
     },
     {
-      "id": "01KXTX85E8JCGPFST0474V7CHP",
+      "id": "01KXV0NWF0949D51T8VTJG5J84",
       "kind": "acceptance_check",
       "text": [
         "Identical tuples at different positions remain distinct; filename and fuzzy similarity never affect identity; exact identity with changed immutable facts is conflict."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T15:24:21.3191560+00:00"
+      "created_at": "2026-07-18T16:24:16.6067517+00:00"
     },
     {
-      "id": "01KXTX85E89Q6QGRBZ4R4HVKC1",
+      "id": "01KXV0NWF0CNNGKY7HW8QP8V2W",
       "kind": "acceptance_check",
       "text": [
         "StatementReconciler accounts for every record exactly once and verifies opening plus movements equals closing plus every available running/source control in integer minor units; missing controls are unavailable, not fabricated."
       ],
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-18T15:24:21.3191560+00:00"
+      "created_at": "2026-07-18T16:24:16.6067517+00:00"
     },
     {
-      "id": "01KXTX85E8JRXAXQG45CTTA0YZ",
+      "id": "01KXV0NWF0EZX1EQYQFF5CVTJZ",
       "kind": "acceptance_check",
       "text": [
-        "ManifestCanonicalizer emits source-generated canonical JSON and manifestRevisionId deterministically; OverlapPolicy returns prior state for selected-account plus exact Source Fingerprint before parsing and blocks different-source overlapping windows because v1 has no cross-file identity."
+        "ManifestCanonicalizer emits source-generated canonical JSON and manifestRevisionId deterministically; OverlapPolicy uses the complete Exact Replay key—Source Fingerprint, selected account, adapter version, and LEDGER contract version—to return prior state before parsing; any changed key component creates a new preview, and different-source overlapping windows remain blocked because v1 has no cross-file identity."
       ],
       "required": 1,
       "sort_order": 6,
-      "created_at": "2026-07-18T15:24:21.3191560+00:00"
+      "created_at": "2026-07-18T16:24:16.6067517+00:00"
     },
     {
       "id": "01KXTMAH8QP6Z443Y9A9MWRJXX",

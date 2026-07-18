@@ -6,7 +6,11 @@
   "context": [
     "Blocks INGEST bead compilation until the planned preview workflow and UC-INGEST-004 agree on replay preconditions."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "TASK-INGEST-PREVIEW-WORKFLOW and UC-INGEST-004 use the same four-part Exact Replay key and require a new preview whenever any component changes."
+  ],
+  "owner": "INGEST design",
   "created_at": "2026-07-18T15:17:06.9081723+00:00",
   "links": [
     {

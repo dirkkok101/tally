@@ -21,7 +21,7 @@
   ],
   "acceptance_criteria": [
     "Given any of the three qualified private fixtures, when variant detection runs, then exactly one of the two versioned text-native PDF variants is selected from structural evidence rather than filename or extension.",
-    "Given the qualified permission-encrypted fixture that is text-extractable without an opening password, when it is previewed, then the matching adapter processes it under the same passive bounded rules as the other qualified fixtures.",
+    "Given the qualified permission-encrypted fixture that is text-extractable without an opening password, when it is previewed twice, then each run selects exactly the fixture manifest variantId, reproduces every expected ordered record and reconciliation control, requires no opening password, OCR, external process, or external fetch, completes within 5 seconds and 256 MiB peak resident memory, and creates no LEDGER transaction.",
     "Given a scan-only PDF, opening-password requirement, unsupported tabular export, active-content dependency, external fetch, malformed structure, ambiguous variant, or changed layout, when detection runs, then INGEST returns a stable unsupported or unsafe-source result and creates no committable manifest or LEDGER transaction.",
     "Given a source exceeding any advertised adapter bound for size, pages, records, nesting, decompression, memory, or processing time, when preview is attempted, then processing stops with a stable resource-limit result before mutation.",
     "Given a proposed new or revised adapter, when it lacks representative fixtures that account for every source record and reconcile every required financial control deterministically, then the variant cannot be advertised as supported."

@@ -6,7 +6,11 @@
   "context": [
     "Blocks INGEST bead compilation until FR-INGEST-STATEMENT-PREVIEW and UC-INGEST-004 define one replay identity contract."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "Exact Replay requires the same Source Fingerprint, selected account, adapter version, and LEDGER contract version. Filename is excluded; any account or version change requires a new preview."
+  ],
+  "owner": "INGEST design",
   "created_at": "2026-07-18T15:17:06.5220564+00:00",
   "links": [
     {

@@ -85,64 +85,64 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXTMS8JZXHKT98XVTKM2B7J0",
+      "id": "01KXV0NWX0X15KEYV0K3XG1JZQ",
       "kind": "acceptance_check",
       "text": [
-        "Byte-identical source content under any filename and the same account returns the prior active/completed batch or receipt before reparsing and creates no new Ledger effect."
+        "The same Source Fingerprint, selected account, adapter version, and LEDGER contract version under any filename returns the prior active or completed batch or receipt before reparsing and creates no new Ledger effect; changing any key component requires a new preview."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-18T16:24:17.0566188+00:00"
     },
     {
-      "id": "01KXTMS8JZKK2DJB3372ZY4SEA",
+      "id": "01KXV0NWX18Z7B2PGNZWFAPXSK",
       "kind": "acceptance_check",
       "text": [
         "A familiar filename with changed bytes is a new preview, never Exact Replay."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-18T16:24:17.0566188+00:00"
     },
     {
-      "id": "01KXTMS8JZZ6X1N43WF0AG1NCC",
+      "id": "01KXV0NWX163FD7W4FNJVJ58FV",
       "kind": "acceptance_check",
       "text": [
         "Identical date-description-amount rows at distinct source positions remain separate candidates; tuple equality never collapses them."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-18T16:24:17.0566188+00:00"
     },
     {
-      "id": "01KXTMS8JZAJ3M51ZR9CZATK7N",
+      "id": "01KXV0NWX1KWHAJ96YC9BTB2DS",
       "kind": "acceptance_check",
       "text": [
         "Only variant-proven exact identity with equal immutable facts may be Exact Duplicate; unavailable/incompatible provenance never claims automatic deduplication."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-18T16:24:17.0566188+00:00"
     },
     {
-      "id": "01KXTMS8JZT7XXG7ERMN04H2EA",
+      "id": "01KXV0NWX126B5WQMCYKBWKMYF",
       "kind": "acceptance_check",
       "text": [
         "An exact identity reused with changed immutable facts returns stable conflict and preserves the original transaction."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-18T16:24:17.0566188+00:00"
     },
     {
-      "id": "01KXTMS8JZM0D0BDF3Z888E25V",
+      "id": "01KXV0NWX1WRGCZSH6DTEZP8HM",
       "kind": "acceptance_check",
       "text": [
         "A different source with an overlapping account/date window and no cross-file identity returns blocking Overlap Conflict and remains uncommitted."
       ],
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-18T16:24:17.0566188+00:00"
     },
     {
       "id": "01KXTMS8JZEJ02KXSDHZ64SV4M",

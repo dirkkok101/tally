@@ -21,7 +21,7 @@
   ],
   "acceptance_criteria": [
     "Given a readable supported source and one explicitly selected active canonical account, when preview runs, then INGEST fingerprints the source content, validates statement metadata against the selected account, records adapter and LEDGER contract versions, and returns one stable batch and manifest revision.",
-    "Given the same unchanged source content, selected account, adapter version, and LEDGER contract version, when preview is repeated, then it produces the same ordered source-record outcomes, candidate facts, reconciliation evidence, and manifest identity.",
+    "Given the same Source Fingerprint, selected account, adapter version, and LEDGER contract version, when preview is repeated under any filename, then INGEST identifies Exact Replay and returns the same ordered source-record outcomes, candidate facts, reconciliation evidence, and manifest identity.",
     "Given a missing, archived, conflicting, multi-account, or ambiguous selected account, when preview runs, then INGEST blocks the batch rather than inferring an account from the filename or untrusted statement text.",
     "Given a source that changes while being read or no longer matches its recorded fingerprint, when preview completes, then INGEST returns a stable source-changed failure and persists no committable manifest.",
     "Given any preview success or failure, when the operation ends, then the caller-owned source remains byte-for-byte unchanged and no LEDGER transaction has been created."

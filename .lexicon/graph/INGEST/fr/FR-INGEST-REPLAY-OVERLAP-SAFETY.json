@@ -20,7 +20,7 @@
     "duplicates are prevented without collapsing legitimate repeated transactions"
   ],
   "acceptance_criteria": [
-    "Given byte-identical source content under the same supported adapter contract and selected account, when it is previewed again under any filename, then INGEST identifies Exact Replay and returns the prior batch or receipt without new LEDGER mutation.",
+    "Given the same Source Fingerprint, selected account, adapter version, and LEDGER contract version, when a source is previewed again under any filename, then INGEST identifies Exact Replay and returns the prior batch or receipt without new LEDGER mutation.",
     "Given two identical date-description-amount records at different source positions in one statement, when they are normalized, then both remain distinct source-context candidates and tuple equality alone never collapses either record.",
     "Given a prior candidate with the same variant-defined identity and the same immutable financial facts, when a new supported source proves that identity, then the candidate is reported as an Exact Duplicate and is not written again.",
     "Given an overlapping window or similar amount, date, or description without identity-grade evidence, when preview runs, then INGEST emits a blocking Overlap Conflict and does not claim a duplicate.",

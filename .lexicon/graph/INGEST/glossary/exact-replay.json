@@ -3,8 +3,8 @@
   "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
   "term": "Exact Replay",
   "definition": [
-    "A new ingestion attempt whose source content, supported Format Variant, and relevant adapter contract reproduce a prior batch identity exactly, so the prior outcome can be returned without new canonical effects. Avoid: duplicate transaction, which is a row-level financial claim."
+    "A new ingestion attempt whose Source Fingerprint, selected account, adapter version, and LEDGER contract version reproduce a prior batch identity exactly, regardless of filename, so the prior outcome can be returned without new canonical effects. Avoid: Exact Duplicate, which is a row-level financial identity claim."
   ],
-  "source": "discovery",
+  "source": "design",
   "created_at": "2026-07-18T10:12:33.9114270+00:00"
 }
