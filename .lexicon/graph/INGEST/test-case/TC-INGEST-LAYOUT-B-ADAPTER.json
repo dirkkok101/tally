@@ -1,0 +1,40 @@
+{
+  "id": "01KXTMY504HQSHE29XQ0CJ3DR3",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "TC-INGEST-LAYOUT-B-ADAPTER",
+  "slug": "LAYOUT-B-ADAPTER",
+  "title": "Verify qualified layout B adapter",
+  "level": "integration",
+  "surface": "service",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "TALLY_INGEST_PRIVATE_FIXTURE_MANIFEST names the ignored permission-encrypted layout B fixture and its external expected facts; PdfPig extraction is available.",
+  "steps": "Load each layout B fixture through PrivateStatementFixtureSet; extract twice; run PdfTextLayoutBStatementAdapter probe/extraction; verify permission-encrypted handling, yearless-date resolution, ordered records, exact facts, exclusions, controls, and safe digests; run layout A, ambiguous-year, password-required, and drifted evidence as negative cases.",
+  "expected": "Exactly pdf-text-layout-b-v1 matches its assigned fixture; negative inputs fail closed; every external expected fact/control agrees twice; no path/content enters output or source control.",
+  "cleanup": "Dispose immutable evidence and isolated test state; leave caller-owned fixture bytes unchanged.",
+  "created_at": "2026-07-18T12:59:04.5809917+00:00",
+  "links": [
+    {
+      "id": "01KXTMY7YX9SYJ72ACV1MPR78B",
+      "target_type": "requirement",
+      "target": "FR-INGEST-FINANCIAL-NORMALIZATION",
+      "rel": "verifies",
+      "created_at": "2026-07-18T12:59:07.6147124+00:00"
+    },
+    {
+      "id": "01KXTMY8KYPYE58N9F2PQJBACW",
+      "target_type": "requirement",
+      "target": "FR-INGEST-SOURCE-RECONCILIATION",
+      "rel": "verifies",
+      "created_at": "2026-07-18T12:59:08.2877226+00:00"
+    },
+    {
+      "id": "01KXTMY79Q7Q5SFENKNH7Q2RGA",
+      "target_type": "requirement",
+      "target": "FR-INGEST-VARIANT-QUALIFICATION",
+      "rel": "verifies",
+      "created_at": "2026-07-18T12:59:06.9359223+00:00"
+    }
+  ]
+}

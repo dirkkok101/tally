@@ -1,0 +1,374 @@
+{
+  "id": "01KXTMFJZP6HM0TQHXEGSDS414",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ6ABPSMYY5091FY1325K",
+  "ref_code": "TASK-INGEST-RESUME-WORKFLOW",
+  "slug": "RESUME-WORKFLOW",
+  "title": "Implement deterministic interrupted-commit resume",
+  "description": [
+    "Reuse CandidateCommitSaga for only unresolved frozen requests and prove every before/after Ledger and receipt-durability crash window."
+  ],
+  "objective": [
+    "Deliver ingest.resume so repeated recovery converges without a second canonical transaction or a changed request."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 20,
+  "created_at": "2026-07-18T12:51:07.3836449+00:00",
+  "decisions": [
+    {
+      "id": "01KXTMFJZVFDEGQ5Z8GWKD8S9Z",
+      "target": "DD-INGEST-COMMIT-RECOVERY",
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZV0B1T6ZTXQX3YEZB9",
+      "target": "DD-INGEST-MANIFEST-IDENTITY-OVERLAP",
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXTMFJZWFNKS3EAX2XNQA4VJ",
+      "target": "TASK-INGEST-COMMIT-SAGA",
+      "dependency_type": "compile",
+      "reason": [
+        "Resume reuses CandidateCommitSaga, BatchCommitLock, and CommitStateStore."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXTMFJZV7TJ6710S56Z6GKDZ",
+      "path": "src/Tally/Features/Ingest/Commit/ResumeCommand.cs",
+      "action": "create",
+      "role": "batch resume input",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZV75C1PNNZY2GDPRF3",
+      "path": "src/Tally/Features/Ingest/Commit/ResumeHandler.cs",
+      "action": "create",
+      "role": "resume validation and saga invocation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZVPV8K6QYTBKPR40W1",
+      "path": "src/Tally/Features/Ingest/Commit/ResumeOperationModule.cs",
+      "action": "create",
+      "role": "resume descriptor binding",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZVA0YDMVB0ZTTWVE31",
+      "path": "tests/Tally.Tests/Ingest/CommitRecovery/CommitFaultInjector.cs",
+      "action": "test",
+      "role": "internal crash-point harness",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZVKANTK54XH6C2DGKX",
+      "path": "tests/Tally.Tests/Ingest/CommitRecovery/ResumeCrashMatrixTests.cs",
+      "action": "test",
+      "role": "full recovery matrix",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXTMFJZVS5NRWBW8XQKBJXYK",
+      "name": "CandidateCommitSaga.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-IMPORT-RECEIPT",
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZVF8KKF5PACV3GT0S7",
+      "name": "BatchCommitLock",
+      "direction": "consumes",
+      "contract_ref_code": "DD-INGEST-COMMIT-RECOVERY",
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZWE56RP9JTESMJVSPD",
+      "name": "CommitStateStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-STATE-STORE",
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZWQB3KE6E7WD8A2ET9",
+      "name": "ResumeOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXTMFJZVEHFRD1WHWAXWRDH5",
+      "kind": "acceptance_check",
+      "text": [
+        "Resume requires one batchId, acquires the same BatchCommitLock, loads only the frozen approved manifest/requests/keys and durable receipt, and never rereads or reparses the source."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZVMHPQQSVQHTCX33XS",
+      "kind": "acceptance_check",
+      "text": [
+        "Terminal accepted, exact_duplicate, conflicted, and rejected candidates are skipped only after any stored canonical reference still validates; pending, attempting, or unresolved candidates replay the exact stored request/key in original order."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZVTTCAYEH83DZ62SJJ",
+      "kind": "acceptance_check",
+      "text": [
+        "Fault injection before Ledger call, after Ledger commit, before INGEST receipt durability, after receipt durability, and between candidates produces a recoverable durable frontier and stops further candidates."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZVK7VR9ZVEDGXDADEJ",
+      "kind": "acceptance_check",
+      "text": [
+        "A crash after Ledger commit but before receipt durability replays the original key and records the original public result with no second transaction."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZV3ATGD2R703ZPERMN",
+      "kind": "acceptance_check",
+      "text": [
+        "Changed request bytes, manifest digest, candidate identity, adapter/manifest/Ledger compatibility, canonical detail, or reused key with changed facts returns stable conflict and does not continue."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZV0BMVDCSSHFCJ9685",
+      "kind": "acceptance_check",
+      "text": [
+        "Repeated resume converges to one complete receipt with exact terminal counts; concurrent resume/commit is rejected by the per-batch lock."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZVGAC6XJJH6RY5BDKY",
+      "kind": "acceptance_check",
+      "text": [
+        "ResumeOperationModule binds ingest.resume but global registration waits for the public-contract gate."
+      ],
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZVQPSRPBG9W65ZCZ54",
+      "kind": "constraint",
+      "text": [
+        "Fault hooks are internal test seams only and must not become public configuration or production plugin ports."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZVJX4XDSA2CBHY1TY7",
+      "kind": "expected_output",
+      "text": [
+        "ResumeHandler"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZVT6B2X4SB2P3QEN9K",
+      "kind": "expected_output",
+      "text": [
+        "ResumeOperationModule"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZV5HTNTVTKVNGAK9T8",
+      "kind": "expected_output",
+      "text": [
+        "Fault-injection crash matrix tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZV22KGEPZ029BE5ZF2",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT generate a new idempotency key/request, choose a latest manifest, reread the source, retry terminal candidates blindly, or proceed after mismatch."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZVDEZ2W6MT3NTC0YXX",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add a second recovery engine; call CandidateCommitSaga.ExecuteAsync with resume mode — per DD-INGEST-COMMIT-RECOVERY."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZVN13A2F6N595X8SJD",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use an in-memory cursor or hold a database transaction across public Ledger execution."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXTMFJZWTYK33XGKH3GMT7H1",
+      "target_ref_code": "NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXTEXMB56QHCK46RMFVHPJBG",
+      "target_title": "Recover every interrupted commit deterministically",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZWRRD7NTV6ZSYC7WWS",
+      "target_ref_code": "DM-INGEST-IMPORT-RECEIPT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXTHWT1G93XYFNQBE5E8R4FY",
+      "target_title": "ImportReceiptAndCandidateOutcome",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZWT7FMMEM1FEQEC83H",
+      "target_ref_code": "DIAG-INGEST-BATCH-STATE",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KXTHY3E527K6D544C6TEC49D",
+      "target_title": "Import batch lifecycle",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZW8P8NRDR0XDP6N5VG",
+      "target_ref_code": "FA-INGEST-RECOVERY-CLEANUP",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXTHXE19R5BDNBP7H26FZHJ8",
+      "target_title": "Recovery and Cleanup",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZWJ0ABW3QWY8QKN2X4",
+      "target_ref_code": "TC-INGEST-DURABLE-RECEIPT-RESUME-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTF4Z9GHA36PVY94QXKXHF1",
+      "target_title": "Verify durable receipt and interrupted resume",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZW2RP8BCQQR08DR72J",
+      "target_ref_code": "TC-INGEST-COMMIT-RECOVERY-MATRIX",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTJ0B755W6A58QQR2NBNYZK",
+      "target_title": "Verify every candidate commit crash window",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXTMFJZVXCPGEYVP5VGSDM00",
+      "target": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXTMFJZW5VWSJ2DWGW07F7QK",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach one durable-state timeline and canonical transaction count per injected interruption boundary."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZWFCCTKA3121WCTPB1",
+      "gate_type": "branch-review",
+      "description": [
+        "Reviewer confirms resume can execute only stored frozen requests through the shared saga."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXTMFJZWETKQH472RFX32XCM",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ResumeCrashMatrixTests",
+      "expected_result": "exit 0; all 5 required interruption boundaries plus changed-request, incompatible-version, concurrent-lock, canonical-mismatch, and repeated-resume cases run; at least 16 cases are discovered and 0 tests fail with zero second transactions",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ]
+}

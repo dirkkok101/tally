@@ -1,0 +1,11 @@
+{
+  "id": "01KXTKQ6ABPSMYY5091FY1325K",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "ref_code": "SP-INGEST-03-COMMIT-RECOVERY",
+  "title": "Candidate commit and durable recovery",
+  "description": [
+    "Deliver the per-candidate idempotent saga, resume, status, abandonment, compaction, and cleanup."
+  ],
+  "sort_order": 3,
+  "created_at": "2026-07-18T12:37:47.9804332+00:00"
+}

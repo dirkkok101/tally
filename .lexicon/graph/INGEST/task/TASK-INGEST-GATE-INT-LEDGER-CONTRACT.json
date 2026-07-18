@@ -1,0 +1,288 @@
+{
+  "id": "01KXTM0RWAR9XRZN5CMAYTH997",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ57FSS5HGH1WQNMKD6E8",
+  "ref_code": "TASK-INGEST-GATE-INT-LEDGER-CONTRACT",
+  "slug": "GATE-INT-LEDGER-CONTRACT",
+  "title": "Prove the public LEDGER prerequisite",
+  "description": [
+    "Integration gate intentionally has no INGEST Implements link: it proves the upstream producer seam before any INGEST consumer is allowed to compile. Lex task dependencies are plan-local, so TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT is recorded as required blocked-by context and must complete operationally first."
+  ],
+  "objective": [
+    "Prove that the released LEDGER registry exposes the exact account-read and idempotent transaction record/get contracts INGEST requires without private storage or handler access."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 10,
+  "created_at": "2026-07-18T12:43:01.9014692+00:00",
+  "decisions": [
+    {
+      "id": "01KXTM0RWDC2QYZADE4HB8WBQ9",
+      "target": "DD-INGEST-LEDGER-PUBLIC-INTEGRATION",
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXTM0RWE7QVRKH4BNZ5BG52J",
+      "path": "src/Tally/Application/OperationAbstractions.cs",
+      "action": "read",
+      "role": "shared public executor contract",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWES6T234V3V8GGRBBA",
+      "path": "src/Tally/Cli/OperationRegistry.cs",
+      "action": "read",
+      "role": "released operation registry",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWFM3BE7705C3RF0AHP",
+      "path": "src/Tally/Contracts/Ledger/Accounts/AccountContracts.cs",
+      "action": "read",
+      "role": "public account contract",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWFJP478781QNT8N4M2",
+      "path": "src/Tally/Contracts/Ledger/Transactions/TransactionContracts.cs",
+      "action": "read",
+      "role": "public transaction contract",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWFMXGBW8RH2CVYV5GJ",
+      "path": "tests/Tally.Tests/Ingest/LedgerContract/LedgerIngestPrerequisiteTests.cs",
+      "action": "test",
+      "role": "integration gate",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXTMWRR891MJW2V3WAYMBCT1",
+      "name": "VerifiedLedgerOperationRegistry",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "Validated external OperationRegistry from the blocked-by LEDGER gate"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:58:19.2719930+00:00"
+    },
+    {
+      "id": "01KXTMWRR9C1QGZGZ15W91KKXP",
+      "name": "VerifiedLedgerAccountDetail",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
+      "notes": [
+        "Validated external AccountDetail contract"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:58:19.2719930+00:00"
+    },
+    {
+      "id": "01KXTMWRR9NQ2E954RQF48X4A4",
+      "name": "VerifiedLedgerTransactionDetail",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "notes": [
+        "Validated external TransactionDetail contract"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:58:19.2719930+00:00"
+    },
+    {
+      "id": "01KXTMWRR9JW7QACXAEVK2J8H4",
+      "name": "LedgerIngestContractPrerequisite",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+      "notes": [
+        "Local proof that upstream public contracts satisfy INGEST"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:58:19.2719930+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXTM0RWD82HM22GA9Z9XAD2N",
+      "kind": "acceptance_check",
+      "text": [
+        "Given completed TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT, OperationRegistry exposes ledger.account.get, ledger.transaction.record, and ledger.transaction.get with concrete versioned source-generated schemas and documented stable errors/exits."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWEAGPHEE8YSG0XXPAK",
+      "kind": "acceptance_check",
+      "text": [
+        "ledger.account.get returns AccountDetail with accountId, accountClass, currencyCode, and active or archived status; ledger.transaction.record/get round-trip every immutable fact required by DM-INGEST-LEDGER-COMMIT-CONTRACT."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWESRST8T8T54869KGB",
+      "kind": "acceptance_check",
+      "text": [
+        "Replaying ledger.transaction.record with the same idempotency key and byte-equivalent logical input returns the prior logical result; the same key with different normalized input returns LEDGER-IDEMPOTENCY-001 and creates no second transaction."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWEZ6P13HF653JCNNX9",
+      "kind": "acceptance_check",
+      "text": [
+        "The test compiles using only Contracts/Ledger, Application operation abstractions, and OperationRegistry; no LedgerDb, storage path, SQL, feature handler, or private domain reference is accessible."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWEN8N1B508W0GNB876",
+      "kind": "constraint",
+      "text": [
+        "Treat upstream Ledger operation descriptors and contract records as read-only public dependencies."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWESSKGXR6SG0MVR54M",
+      "kind": "expected_output",
+      "text": [
+        "LedgerIngestPrerequisite contract test"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWEZQSQQ7PX9ZC353CW",
+      "kind": "expected_output",
+      "text": [
+        "Public account and transaction seam evidence"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWEPY7HVRWN5439DSJB",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT open LedgerDb or SQL, call LEDGER feature handlers, or reference private Ledger domain types — rejected per DD-INGEST-LEDGER-PUBLIC-INTEGRATION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWENFFJWXTAJVX2EW60",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT spawn tally as a child process for in-process composition — rejected per DD-INGEST-LEDGER-PUBLIC-INTEGRATION."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWEVSCCBX8VNC5V14FQ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT weaken or duplicate canonical LEDGER validation inside the gate."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWEVAZQ69A5SVCX2ZPY",
+      "kind": "note",
+      "text": [
+        "Removal impact: none; this task validates planned LEDGER behavior and changes no LEDGER implementation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXTNXF6CXZ4B1HV5JJQKPHEH",
+      "target_ref_code": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXT0Y3KR1T14S7HXJT3J2J1A",
+      "target_title": "Wire and prove the complete public CLI contract",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-18T13:16:10.8294661+00:00"
+    },
+    {
+      "id": "01KXTM0RWJBZ8P1JZ5KX9F31BJ",
+      "target_ref_code": "TC-INGEST-LEDGER-PUBLIC-CONFORMANCE",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTJ0AV78TA1TXWZMK9VQSRC",
+      "target_title": "Verify INGEST uses only the public LEDGER contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXTM0RWGE6FP4FHTBY82JW8P",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach descriptor, replay, conflict, and private-reference guard results."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWGWMEH42HNKXDYK42Q",
+      "gate_type": "branch-review",
+      "description": [
+        "Reviewer confirms every consumed type is a released public contract."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXTM0RWGCGNEHHSTASJVCXY4",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~LedgerIngestPrerequisiteTests",
+      "expected_result": "exit 0; at least 8 prerequisite cases are discovered, exactly the three required operation descriptors are exercised, and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "01KXTKQ6NXHSTNEAX7K97NATP4",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "ref_code": "SP-INGEST-04-VERIFICATION",
+  "title": "Public integration and workflow gates",
+  "description": [
+    "Converge all slices through public-contract, security, use-case, published-binary, and module completion gates."
+  ],
+  "sort_order": 4,
+  "created_at": "2026-07-18T12:37:48.3508703+00:00"
+}

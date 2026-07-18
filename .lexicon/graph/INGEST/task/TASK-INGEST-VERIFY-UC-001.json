@@ -1,0 +1,282 @@
+{
+  "id": "01KXTMS8JQJMZ2YGYP0HN3R8D8",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ6NXHSTNEAX7K97NATP4",
+  "ref_code": "TASK-INGEST-VERIFY-UC-001",
+  "slug": "VERIFY-UC-001",
+  "title": "Verify preview and qualification workflow",
+  "description": [
+    "Black-box use-case gate for UC-INGEST-001 main scenario and every documented failure path using the published binary and injected private fixtures."
+  ],
+  "objective": [
+    "Prove an owner can preview each qualified statement into one reconciled immutable manifest with no source or LEDGER mutation."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 30,
+  "created_at": "2026-07-18T12:56:24.4112574+00:00",
+  "dependencies": [
+    {
+      "id": "01KXTMS8JXWR2DTPAVCCWTZEYG",
+      "target": "TASK-INGEST-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "UC verification exercises the complete published INGEST contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMX2KXN090PFTYABCYQPTR",
+      "target": "TASK-INGEST-PDF-EXTRACTION",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes PrivateStatementFixtureSet."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:58:29.3743594+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXTMS8JWP5SY9KCAB5Z1M7PK",
+      "path": "tests/Tally.Tests/Ingest/E2E/PreviewQualificationWorkflowTests.cs",
+      "action": "test",
+      "role": "UC-INGEST-001 black-box gate",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXTMS8JWZD4J3XZMH5Y1K2J2",
+      "name": "CompleteIngestPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JW2AG4DPQWZ8TCMNE5",
+      "name": "PrivateStatementFixtureSet",
+      "direction": "consumes",
+      "contract_ref_code": "EXT-INGEST-OWNER-BANK-STATEMENT",
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JWQARGSAAFY5YHJNDC",
+      "name": "UCIngest001Evidence",
+      "direction": "produces",
+      "contract_ref_code": "UC-INGEST-001",
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXTMS8JV350ZZF21PYFV32SP",
+      "kind": "acceptance_check",
+      "text": [
+        "Main scenario discovers the contract, supplies one private source and explicit active account, selects exactly one qualified adapter, normalizes every record, verifies every available control, freezes one immutable revision, and returns preview with zero ledger.transaction.record calls."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JWKR6BZ2KDSZT2MRP6",
+      "kind": "acceptance_check",
+      "text": [
+        "Each of the three fixtures run twice with identical ordered outcomes, candidate facts, controls, and manifest identity within 5 seconds and 256 MiB peak RSS; before/after source hashes match."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JWAM0R18C9DCCCMGBH",
+      "kind": "acceptance_check",
+      "text": [
+        "Unreadable/source-changed input returns stable source failure with no committable manifest; conflicting/missing/ambiguous account blocks without inference."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JW636HM8EQYW5X1Q9Q",
+      "kind": "acceptance_check",
+      "text": [
+        "Unsupported, password-required, scan-only, active/external, ambiguous-variant, malformed, or over-limit input fails closed with no mutation."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JWSJ7ZGBQEYG4KVH3N",
+      "kind": "acceptance_check",
+      "text": [
+        "Missing/ambiguous amount, currency, sign, date, description, provenance, identity, or row boundary blocks rather than guesses."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JWA6Q15CAWXY9SW52Z",
+      "kind": "acceptance_check",
+      "text": [
+        "Unexplained records or any opening/closing/running/source-control mismatch leaves the manifest uncommittable."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JW21RYRKDPJASRBVCC",
+      "kind": "constraint",
+      "text": [
+        "The test fails loudly with a safe diagnostic when the external private fixture manifest is unavailable."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JWP9X27XTMTRYD29HG",
+      "kind": "expected_output",
+      "text": [
+        "UCIngest001Evidence"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JW1TXD00A9V9MFQAJD",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT inspect internal handlers/stores to assert success; use published operations and public Ledger observations only."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JW4J6JQ9T3N4KF2RYN",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT print or commit private fixture paths, content, or facts."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXTMS8JWB5AEA0V4PA2T1TRH",
+      "target_ref_code": "UC-INGEST-001",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXTBAWYS1QTV921NYSVFHR4B",
+      "target_title": "Preview and qualify a local statement",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JXKQ1HPVWT05Q75NP0",
+      "target_ref_code": "NFR-INGEST-DETERMINISTIC-INTEGRITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXTEXKEK06KD4EXFGC1A8FKG",
+      "target_title": "Preserve deterministic extraction and financial integrity",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JXDATAN2EYWRDTBP3P",
+      "target_ref_code": "NFR-INGEST-BOUNDED-PARSING",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXTEXM19R263D66YHS6EFCCS",
+      "target_title": "Bound passive statement processing",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JXGJ8TT64ZTD5GP7AS",
+      "target_ref_code": "TC-INGEST-VARIANT-QUALIFICATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTF4X7TFYEAWEX1MV53206B",
+      "target_title": "Verify supported variant qualification",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JXH93WPQAZX9FKJN9E",
+      "target_ref_code": "TC-INGEST-STATEMENT-PREVIEW-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTF4XGN7EGTA20FHTKK9Y8T",
+      "target_title": "Verify deterministic statement preview",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JXJX0954PZHQ45P0K1",
+      "target_ref_code": "TC-INGEST-FINANCIAL-NORMALIZATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTF4XT50N2ACSKZCWDZC4XQ",
+      "target_title": "Verify exact financial normalization",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JXZZ8AHJ2MEX1MBV6F",
+      "target_ref_code": "TC-INGEST-SOURCE-RECONCILIATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTF4Y3MT9YDGQK8JPP4095H",
+      "target_title": "Verify complete source reconciliation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXTMS8JWZ00RCZBB4RGP9WBD",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach redacted main-scenario steps, failure codes, source hashes, controls, elapsed time, RSS, and zero-Ledger-mutation evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXTMS8JWKDH8RBT7GAP9Z6PB",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~PreviewQualificationWorkflowTests",
+      "expected_result": "exit 0; all 3 private fixtures run twice, at least 14 main/failure-path cases are discovered, 0 tests fail, and observed Ledger transaction count remains unchanged",
+      "required": 1,
+      "timeout_seconds": 1200,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ]
+}

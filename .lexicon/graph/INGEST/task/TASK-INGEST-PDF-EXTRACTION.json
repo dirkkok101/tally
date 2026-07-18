@@ -1,0 +1,403 @@
+{
+  "id": "01KXTM5NRX5EK74QWKJPJMR790",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ5KH6GNPRCN7TY5FCA4Q",
+  "ref_code": "TASK-INGEST-PDF-EXTRACTION",
+  "slug": "PDF-EXTRACTION",
+  "title": "Implement bounded in-process PDF extraction",
+  "description": [
+    "Pin the spike-proven upstream package, convert one immutable byte buffer to ordered page/glyph evidence, and define the one real format-adapter seam."
+  ],
+  "objective": [
+    "Extract deterministic passive PDF evidence under Native-AOT and resource bounds without source mutation, child processes, disk extraction, or a speculative parser port."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 10,
+  "created_at": "2026-07-18T12:45:42.5606427+00:00",
+  "decisions": [
+    {
+      "id": "01KXTM5NS1K1EN1MCRRYVGWAW3",
+      "target": "DD-INGEST-DOCUMENT-EXTRACTION",
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXTM5NS3PNAQ4NRHCS5RC5SQ",
+      "target": "TASK-INGEST-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Extractor failures use the stable IngestError contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTN9DKPXPR0WF2Q7KJAGGXZ",
+      "target": "TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES",
+      "dependency_type": "compile",
+      "reason": [
+        "Fixture-dependent extractor tests consume the validated private expectation manifest."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T13:05:13.8475562+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXTM5NS2JEHEDF7R1GH37MJX",
+      "path": "src/Tally/Tally.csproj",
+      "action": "modify",
+      "role": "pin PdfPig 0.1.14",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS2G6E6YD66HXD0837W",
+      "path": "src/Tally/Infrastructure/Ingest/Pdf/PdfDocumentEvidence.cs",
+      "action": "create",
+      "role": "ordered passive evidence records",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS2XSPT6D1QNFPXH1E3",
+      "path": "src/Tally/Infrastructure/Ingest/Pdf/PdfStatementTextExtractor.cs",
+      "action": "create",
+      "role": "concrete bounded extractor",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS2J4SPSVCQS97SZFNN",
+      "path": "src/Tally/Infrastructure/Ingest/Pdf/IStatementAdapter.cs",
+      "action": "create",
+      "role": "real two-implementation seam",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS2R7NM8RDPD9RJKR08",
+      "path": "tests/Tally.Tests/Ingest/Fixtures/PrivateStatementFixtureSet.cs",
+      "action": "test",
+      "role": "external ignored fixture injection",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS24M0ARQ8GXSSQ7CRW",
+      "path": "tests/Tally.Tests/Ingest/PdfExtraction/PdfStatementTextExtractorTests.cs",
+      "action": "test",
+      "role": "determinism, bounds, and AOT evidence",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXTNAGME6VDDC1HKKJX19QK1",
+      "name": "IngestError",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T13:05:49.7096895+00:00"
+    },
+    {
+      "id": "01KXTNAGMEW2TW44BBE654MRE7",
+      "name": "PrivateFixtureExpectationManifest",
+      "direction": "consumes",
+      "contract_ref_code": "EXT-INGEST-OWNER-BANK-STATEMENT",
+      "notes": [
+        "Validated by TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES and supplied via TALLY_INGEST_PRIVATE_FIXTURE_MANIFEST."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T13:05:49.7096895+00:00"
+    },
+    {
+      "id": "01KXTNAGMF7A0V9F5F82G36KC8",
+      "name": "PdfStatementTextExtractor.ExtractAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+      "sort_order": 2,
+      "created_at": "2026-07-18T13:05:49.7096895+00:00"
+    },
+    {
+      "id": "01KXTNAGMF8XF7JNV0WYHD4C7F",
+      "name": "PdfDocumentEvidence",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+      "sort_order": 3,
+      "created_at": "2026-07-18T13:05:49.7096895+00:00"
+    },
+    {
+      "id": "01KXTNAGMF1H7AHAV0X2E9T5P6",
+      "name": "IStatementAdapter",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+      "sort_order": 4,
+      "created_at": "2026-07-18T13:05:49.7096895+00:00"
+    },
+    {
+      "id": "01KXTNAGMF2XJP16VBNFC3YT2J",
+      "name": "PrivateStatementFixtureSet",
+      "direction": "produces",
+      "contract_ref_code": "EXT-INGEST-OWNER-BANK-STATEMENT",
+      "sort_order": 5,
+      "created_at": "2026-07-18T13:05:49.7096895+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXTM5NS1BHRK7X3RD30EYG3Z",
+      "kind": "acceptance_check",
+      "text": [
+        "src/Tally/Tally.csproj pins package PdfPig at exactly 0.1.14 and introduces no legacy UglyToad.PdfPig package, Poppler executable, custom PDF parser, OCR library, or dynamic-code dependency."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS1RQP05883D3S28AVK",
+      "kind": "acceptance_check",
+      "text": [
+        "PdfStatementTextExtractor accepts a bounded immutable byte buffer, CancellationToken, and extraction limits and returns ordered PdfDocumentEvidence page/glyph/text/coordinate data with no PdfPig type escaping Infrastructure/Ingest/Pdf."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS1JB4H50FZDXVN12W3",
+      "kind": "acceptance_check",
+      "text": [
+        "The extractor never follows links, renders, executes scripts or embedded objects, performs remote fetch, writes extracted text to disk, or modifies the caller-owned source."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS1JRBZG8JS5NPNW7J6",
+      "kind": "acceptance_check",
+      "text": [
+        "Unsupported opening-password encryption, scan-only content, malformed structure, ambiguous content order, and every configured byte/page/glyph/time bound return a stable pre-mutation IngestError."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS1TYXBZYX941D23363",
+      "kind": "acceptance_check",
+      "text": [
+        "PrivateStatementFixtureSet reads only the path named by TALLY_INGEST_PRIVATE_FIXTURE_MANIFEST; the ignored manifest supplies three source paths, variant IDs, and expected private facts, and neither paths nor facts enter source control or test output."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS15M722B0TYJ31QPPA",
+      "kind": "acceptance_check",
+      "text": [
+        "All three private fixtures, including the permission-encrypted fixture, extract non-empty evidence twice with identical digests; Release linux-x64 Native-AOT publish succeeds with zero trim/dynamic-code warnings."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS2EDMHQ9M9CN959MNG",
+      "kind": "constraint",
+      "text": [
+        "Hard limits are checked before allocation or continued parsing where the source makes that possible; cancellation is propagated at every async boundary."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS20MH9BGPRSE1QY6QN",
+      "kind": "expected_output",
+      "text": [
+        "Pinned PdfPig dependency"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS2T5A4ZZ10B35SFXBM",
+      "kind": "expected_output",
+      "text": [
+        "PdfStatementTextExtractor"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS2MBTF1SA3PY18B1GJ",
+      "kind": "expected_output",
+      "text": [
+        "PdfDocumentEvidence and IStatementAdapter seam"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS2FS2G6XHBRJNG9V57",
+      "kind": "expected_output",
+      "text": [
+        "Private fixture injection helper"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS2Q2ZGKW63MG8DSK5J",
+      "kind": "expected_output",
+      "text": [
+        "Native-AOT extraction tests"
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS1QYXCTWXJJT77BBV5",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use legacy UglyToad.PdfPig 1.7.0-custom-5, Poppler, a child process, or a custom parser — rejected per DD-INGEST-DOCUMENT-EXTRACTION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS1GX80XCA97R8VWPMM",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT introduce a generic PDF parser interface; PdfStatementTextExtractor remains concrete until a second real production implementation exists."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS1JNZ8ZSBAXSTFZJ8N",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT place source paths in process arguments, logs, test names, snapshots, or failure messages — per DD-INGEST-ARTIFACT-SECURITY."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS13TQ4XC1JCSNXW2JP",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT commit fixture bytes, fixture manifests, filenames, expected private facts, or extracted text."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS2SR37WSA3QX0W9Q8K",
+      "kind": "note",
+      "text": [
+        "The ignored private fixture manifest is external test evidence, not a tracked deliverable."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXTM5NS34K4RJ9E4JQCHGA4C",
+      "target_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXTHWS004PTKCD4PTYVTE0BR",
+      "target_title": "FormatVariantAndSourceEvidence",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS3F45E4GPC0CQNY3DC",
+      "target_ref_code": "TC-INGEST-PDF-EXTRACTION-AOT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTJ09C7WM75QS1CE2XGD3AA",
+      "target_title": "Verify PdfPig Native-AOT extraction conformance",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXTM5NS18T3N8GE85PECB036",
+      "target": "FR-INGEST-VARIANT-QUALIFICATION",
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXTM5NS3BGRS6C4G273ATDG6",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach redacted two-run digests, resource measurements, and Native-AOT publish output."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS35YYVMXYWTZSR4H5A",
+      "gate_type": "self-review",
+      "description": [
+        "Confirm no fixture path/content or PdfPig type crosses its permitted boundary."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXTM5NS3MT5GM7VTW3AC1BAG",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~PdfStatementTextExtractorTests",
+      "expected_result": "exit 0; at least 12 extraction, malformed-input, encrypted, bound, cancellation, and determinism cases are discovered and 0 tests fail without printing source paths or content",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS3RWGEC1MAB7P30611",
+      "phase": "after",
+      "command": "dotnet publish src/Tally/Tally.csproj -c Release -r linux-x64 --self-contained true -p:PublishAot=true",
+      "expected_result": "exit 0; a native tally executable is produced with 0 trim or dynamic-code warnings attributable to PdfPig or INGEST",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ]
+}

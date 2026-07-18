@@ -1,0 +1,242 @@
+{
+  "id": "01KXTMS8JTF1TSSY5Z0R4M64WF",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ6NXHSTNEAX7K97NATP4",
+  "ref_code": "TASK-INGEST-VERIFY-UC-006",
+  "slug": "VERIFY-UC-006",
+  "title": "Verify agent contract discovery and invocation",
+  "description": [
+    "Black-box use-case gate for UC-INGEST-006 schema discovery, structured invocation, compatibility, stable exits, and recovery-directed agent behavior."
+  ],
+  "objective": [
+    "Prove a zero-context AI Agent Host can discover and safely drive every INGEST transition without parsing prose or inventing identity."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 80,
+  "created_at": "2026-07-18T12:56:24.4112574+00:00",
+  "dependencies": [
+    {
+      "id": "01KXTMS8K1PG21QPAKAB9WNW75",
+      "target": "TASK-INGEST-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "UC verification begins from the complete published descriptor-generated contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXTMS8K1HBSS22RFM55QBWYS",
+      "path": "tests/Tally.Tests/Ingest/E2E/AgentContractWorkflowTests.cs",
+      "action": "test",
+      "role": "UC-INGEST-006 zero-context agent gate",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXTMS8K1E232YMX90GG9S98C",
+      "name": "CompleteIngestPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K1SQ21R1S06ZGME9KW",
+      "name": "UCIngest006Evidence",
+      "direction": "produces",
+      "contract_ref_code": "UC-INGEST-006",
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXTMS8K0VS9G1WPHVPTTX1JD",
+      "kind": "acceptance_check",
+      "text": [
+        "A clean client discovers exactly eight operations, request/result schemas, two variant descriptors, limits, versions, stable errors/exits, examples, and next-operation semantics without source/store access."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K0F5K596H1AX5J1EP5",
+      "kind": "acceptance_check",
+      "text": [
+        "The client constructs valid stdin/file JSON, invokes preview through cleanup non-interactively, receives exactly one stdout envelope per call, uses metadata-only stderr, and branches on structured outcome/exit rather than prose."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K11H32RNPM1KMYDATB",
+      "kind": "acceptance_check",
+      "text": [
+        "Unknown operation/schema returns help plus stable usage failure; malformed/unknown-field input fails before source processing."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K1HGZQ0M18E1C4K0MN",
+      "kind": "acceptance_check",
+      "text": [
+        "Incompatible client/INGEST/adapter/manifest/Ledger versions fail before parsing or mutation."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K18HM63JB0E6KX9QGJ",
+      "kind": "acceptance_check",
+      "text": [
+        "Expected domain failures return module-scoped stable error and non-zero documented exit without stack trace."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K1VQXXEP87G41A3Y5R",
+      "kind": "acceptance_check",
+      "text": [
+        "After output loss the client cannot construct a new identity to continue; status/resume with the original batch recovers safely and no daemon, prompt, network, or source reread is required."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K1Q9039SVE18M4HTKD",
+      "kind": "constraint",
+      "text": [
+        "The harness starts with only tally on PATH plus generated schema output and runs with network access disabled."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K1B8YD5E3YT26E9KPV",
+      "kind": "expected_output",
+      "text": [
+        "UCIngest006Evidence"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K1HVKHWK12AXPTB851",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use internal types, database inspection, interactive prompts, prose scraping, or reconstructed candidate IDs in the agent harness."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K17X0N1F8C72DX5XCM",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add bundled skill content not generated from the same descriptors."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXTMS8K17QN4E152EMZD9C76",
+      "target_ref_code": "UC-INGEST-006",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXTBAYDJ6SK8HAVF7JYNVWZ5",
+      "target_title": "Discover and invoke the INGEST agent contract",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K1THVHMYF64TWVTA7W",
+      "target_ref_code": "NFR-INGEST-AGENT-OPERABILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXTEXMX0NBEEWGM1H36BCV8N",
+      "target_title": "Keep agent invocation deterministic and inspectable",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K1C0CK9NX00Q8W0PZ9",
+      "target_ref_code": "NFR-INGEST-PUBLIC-CONTRACT-COMPATIBILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXTEXMM1MP9RB4PYFRHADBR3",
+      "target_title": "Preserve public contract compatibility boundaries",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K1JAM656R3T3H0ESR8",
+      "target_ref_code": "TC-INGEST-CONTRACT-DISCOVERY-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTF4WZES1WGCEWCZFEV3Y2N",
+      "target_title": "Verify INGEST contract discovery",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K1EZ6WS5H3VA2W2667",
+      "target_ref_code": "TC-INGEST-PUBLISHED-CONTRACT-MATRIX",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTJ0A38FMCTWB1M28PFZZ8N",
+      "target_title": "Verify the published INGEST operation contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXTMS8K1ZXFJZCY4Y729X7SX",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach eight-operation schema inventory, representative envelopes/exits, offline observation, and output-loss recovery trace."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXTMS8K1V0CE4JKDPHFF2MZP",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~AgentContractWorkflowTests",
+      "expected_result": "exit 0; at least 16 schema, valid workflow, usage, malformed, version, domain-error, output-loss recovery, offline, no-prompt, and no-orphan-process cases are discovered and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 1200,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ]
+}

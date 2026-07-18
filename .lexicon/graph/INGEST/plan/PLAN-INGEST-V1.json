@@ -1,0 +1,25 @@
+{
+  "id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "PLAN-INGEST-V1",
+  "title": "Statement Ingestion v1 implementation",
+  "description": [
+    "Greenfield implementation plan from MD-INGEST-MASTER; 0% of designed application elements exist. INGEST starts only after the active LEDGER V1 public-contract gate produces the shared .NET 10 Native-AOT process, OperationRegistry, account contract, and transaction record/get contract.",
+    "C1: Run inside the self-contained Tally CLI without a required daemon, cloud parser, bank API, or separate service. The first release supports only formats evidenced by the three initial accounts.",
+    "C2: Discover and invoke versioned public LEDGER operations and schemas. INGEST must never open the ledger database directly, call private implementation APIs, or duplicate canonical financial validation.",
+    "C3: Keep source files, temporary extraction data, candidate batches, manifests, and receipts local and owner-only. Persisted directories use mode 0700 and files mode 0600 where the platform supports them; logs contain metadata rather than statement payloads; temporary artifacts have deterministic cleanup.",
+    "C4: No candidate transaction may be committed while a required mapping, required field, reconciliation check, or duplicate conflict remains unresolved. LEDGER mutation requires an explicit commit step after preview.",
+    "C5: Currency, signed amount, transaction date, and account mapping follow the resolved LEDGER evidence gates OQ-LEDGER-1 through OQ-LEDGER-4. An adapter must fail closed rather than invent a missing or ambiguous value.",
+    "C6: Every candidate batch records its source-adapter version and the discovered LEDGER contract version. An unsupported adapter version, format variant, or LEDGER contract fails before mutation.",
+    "C7: Do not introduce a generic parser abstraction beyond representative fixtures from the initial accounts. Unsupported or changed layouts are reported explicitly and remain uncommitted.",
+    "C8: Preview requires the caller to supply one active canonical LEDGER account identity. Statement metadata validates that selection; missing, conflicting, multi-account, or ambiguous metadata blocks commit rather than selecting an account from a filename or masked text.",
+    "C9: Commit uses only the exact immutable Import Manifest revision explicitly approved after preview. Source-derived amount, currency, date, description, and provenance cannot be edited inside INGEST; any changed mapping or eligibility decision produces a new preview and manifest revision.",
+    "C10: INGEST may automatically suppress only exact file replay or a variant-defined exact Source Row Identity already represented by the same facts. Similar amount, date, description, or window overlap without exact identity is a blocking conflict, never an automatic duplicate.",
+    "C11: Adapters treat source files as passive data, never execute macros, formulas, scripts, links, embedded objects, or remote fetches, and enforce documented bounds for file size, pages, worksheets, rows, nesting, decompression, memory, and processing time before mutation.",
+    "C12: INGEST reads the supplied source without modifying, deleting, or relocating it; fingerprints the content used for preview; commits the frozen manifest rather than rereading the source; and reports permission or path changes as stable failures.",
+    "C13: A batch may commit candidates independently only when every candidate has a stable LEDGER idempotency identity and each structured outcome is durably recorded before the next candidate. Failure stops unsafe continuation; resume reuses the exact manifest, request, contract version, and identities for unresolved candidates.",
+    "Global implementation constraints: target net10.0 with nullable and warnings-as-errors; publish linux-x64 self-contained Native-AOT; pin upstream PdfPig 0.1.14; use source-generated JSON; propagate CancellationToken through async boundaries; use explicit DI registration; use raw Microsoft.Data.Sqlite for separate ingest.db with snake_case SQL; do not add HTTP, FastEndpoints, Aspire, PostgreSQL, EF Core, a daemon, reflection scanning, dynamic plugins, generic repositories, OCR, or network access."
+  ],
+  "status": "active",
+  "created_at": "2026-07-18T12:37:46.5229149+00:00"
+}

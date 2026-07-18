@@ -1,0 +1,504 @@
+{
+  "id": "01KXTMKTPKSZ51KNVAZQJZRAMG",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ6NXHSTNEAX7K97NATP4",
+  "ref_code": "TASK-INGEST-GATE-INT-PUBLIC-CONTRACT",
+  "slug": "GATE-INT-PUBLIC-CONTRACT",
+  "title": "Wire and prove the complete INGEST public contract",
+  "description": [
+    "Integration gate intentionally has no Implements link: it converges all six operation modules, the exact adapter registry, state/client services, and source-generated contracts into the shared process without changing any existing ledger.* operation."
+  ],
+  "objective": [
+    "Expose exactly eight ingest.* operations through the released registry and published Native-AOT binary while preserving exactly 38 ledger.* operations."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 10,
+  "created_at": "2026-07-18T12:53:26.3581626+00:00",
+  "dependencies": [
+    {
+      "id": "01KXTMKTPTCYRPDQ0HZXMM8BVA",
+      "target": "TASK-INGEST-ABANDON-CLEANUP",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes RecoveryCleanupOperationModule."
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPSF0V7T5P43MQ85BVR",
+      "target": "TASK-INGEST-COMMIT-SAGA",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes CommitOperationModule."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMWXEVTQ5WAX1F7TZB2ZX0",
+      "target": "TASK-INGEST-GATE-INT-FORMAT-ADAPTERS",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes StatementAdapterRegistry."
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-18T12:58:24.0919887+00:00"
+    },
+    {
+      "id": "01KXTMWWT51YJ5WN490N4XFH8R",
+      "target": "TASK-INGEST-GATE-INT-LEDGER-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes VerifiedLedgerOperationRegistry."
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-18T12:58:23.4307778+00:00"
+    },
+    {
+      "id": "01KXTMKTPSG5B0NCGZE7YTA3M4",
+      "target": "TASK-INGEST-PREVIEW-WORKFLOW",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes PreviewOperationModule and qualified format/state dependencies."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPT14C0FQTW4K41ZZ7V",
+      "target": "TASK-INGEST-RESUME-WORKFLOW",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes ResumeOperationModule."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPS5RFANN1Y0H694HTY",
+      "target": "TASK-INGEST-REVIEW-WORKFLOW",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes ReviewOperationModule."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPTVJCAE4YF8E4DKXJ9",
+      "target": "TASK-INGEST-STATUS-WORKFLOW",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes StatusOperationModule."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXTMKTPQVVNXRM2BJJC21QEJ",
+      "path": "src/Tally/Bootstrap/Features/IngestExtensions.cs",
+      "action": "create",
+      "role": "explicit INGEST DI/composition",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPQ8F7Z9G0YG4TA7V5N",
+      "path": "src/Tally/Bootstrap/LedgerServices.cs",
+      "action": "modify",
+      "role": "call additive INGEST registration",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPRN62R237ZA4XY9ACD",
+      "path": "src/Tally/Cli/OperationRegistry.cs",
+      "action": "modify",
+      "role": "compose additive INGEST descriptors",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPRMXR3CT6EBSPGVB72",
+      "path": "tests/Tally.Tests/Cli/PublicContractInventoryTests.cs",
+      "action": "modify",
+      "role": "scope exact Ledger count by prefix",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPR1Y74PPBM2AHY5REC",
+      "path": "tests/Tally.Tests/Ingest/Contract/IngestPublicContractInventoryTests.cs",
+      "action": "test",
+      "role": "exact eight-operation inventory",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPRPQ8706599MP8PQMV",
+      "path": "tests/Tally.Tests/Process/PublishedIngestContractTests.cs",
+      "action": "test",
+      "role": "released binary contract matrix",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPRW2S836N4DMHHD4SM",
+      "path": "tests/Tally.Tests/Cli/Snapshots/ingest-operations-v1.json",
+      "action": "test",
+      "role": "deterministic eight-operation snapshot",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXTMWSFMCA13PPHMMP3VY02C",
+      "name": "VerifiedLedgerOperationRegistry",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "Shared registry validated by the prerequisite gate"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:58:20.0201172+00:00"
+    },
+    {
+      "id": "01KXTMWSFN335VPDG8WRSCXT3G",
+      "name": "PreviewOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "notes": [
+        "Preview descriptor"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:58:20.0201172+00:00"
+    },
+    {
+      "id": "01KXTMWSFNHSH1SK2AYSMYES22",
+      "name": "ReviewOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "notes": [
+        "Inspect and approve descriptors"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:58:20.0201172+00:00"
+    },
+    {
+      "id": "01KXTMWSFNFNA4G7FKWCA89C37",
+      "name": "CommitOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "notes": [
+        "Commit descriptor"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:58:20.0201172+00:00"
+    },
+    {
+      "id": "01KXTMWSFNJJ3K454V9D2PT8K9",
+      "name": "ResumeOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "notes": [
+        "Resume descriptor"
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:58:20.0201172+00:00"
+    },
+    {
+      "id": "01KXTMWSFNPG2XPXVZ84ZG6V6C",
+      "name": "StatusOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "notes": [
+        "Status descriptor"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:58:20.0201172+00:00"
+    },
+    {
+      "id": "01KXTMWSFN2VWEZ42HD14A0F7J",
+      "name": "RecoveryCleanupOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "notes": [
+        "Abandon and cleanup descriptors"
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-18T12:58:20.0201172+00:00"
+    },
+    {
+      "id": "01KXTMWSFNKJNTWMZXMBBGRCZ1",
+      "name": "StatementAdapterRegistry",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+      "notes": [
+        "Exactly two qualified adapters"
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-18T12:58:20.0201172+00:00"
+    },
+    {
+      "id": "01KXTMWSFNXJQ01VGC9ZMYR29W",
+      "name": "IngestOperationBundle",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "notes": [
+        "Exactly eight descriptors"
+      ],
+      "sort_order": 8,
+      "created_at": "2026-07-18T12:58:20.0201172+00:00"
+    },
+    {
+      "id": "01KXTMWSFNYX9J6WT6KFKAWD29",
+      "name": "CompleteIngestPublicContract",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "notes": [
+        "Published eight-operation surface"
+      ],
+      "sort_order": 9,
+      "created_at": "2026-07-18T12:58:20.0201172+00:00"
+    },
+    {
+      "id": "01KXTMWSFNABEYGWM38PA505TP",
+      "name": "PublishedIngestTallyFixture",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "notes": [
+        "Release binary process fixture extended for INGEST"
+      ],
+      "sort_order": 10,
+      "created_at": "2026-07-18T12:58:20.0201172+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXTNDEJW3S33M64PJ2NWNZ8E",
+      "kind": "acceptance_check",
+      "text": [
+        "IngestExtensions explicitly registers exactly PdfTextLayoutAStatementAdapter, PdfTextLayoutBStatementAdapter, StatementAdapterRegistry, IngestDatabase/migrator/protection, LedgerContractClient, every handler/store, and six operation modules; no reflection scan or plugin loading occurs."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T13:07:25.9163066+00:00"
+    },
+    {
+      "id": "01KXTNDEJX734D479VVPDK2PB0",
+      "kind": "acceptance_check",
+      "text": [
+        "OperationRegistry contains exactly 8 unique ingest.* IDs/paths and preserves exactly 38 unique ledger.* IDs/paths; at this milestone the combined total is 46. Ledger inventory assertions are changed from global-total to ledger-prefix exactness, so no Ledger operation/schema/error/example is removed or weakened."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T13:07:25.9163066+00:00"
+    },
+    {
+      "id": "01KXTNDEJX52Q7BPZTXFD4TDHZ",
+      "kind": "acceptance_check",
+      "text": [
+        "Every ingest descriptor has a concrete source-generated request/result type, complete stable errors/exits, limits, versions, help/example, mutation classification, and matching handler. The registry remains the sole source for dispatch, help, schema, compatibility, and snapshots."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T13:07:25.9163066+00:00"
+    },
+    {
+      "id": "01KXTNDEJX8MN4337EC0T5RN45",
+      "kind": "acceptance_check",
+      "text": [
+        "tally schema list/show reports the exact eight operations and two qualified variants without reading a source or opening ingest.db; unknown operation/field/malformed input/incompatible version fails before processing."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T13:07:25.9163066+00:00"
+    },
+    {
+      "id": "01KXTNDEJXJXW8WF7XJACT1Q4S",
+      "kind": "acceptance_check",
+      "text": [
+        "Published success and expected-failure invocations emit exactly one stdout business envelope, metadata-only stderr, and documented exit categories; sourcePath is accepted only inside --input - or --input @file JSON."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T13:07:25.9163066+00:00"
+    },
+    {
+      "id": "01KXTNDEJX6D59M2YQDHC2GX5C",
+      "kind": "acceptance_check",
+      "text": [
+        "Release linux-x64 self-contained Native-AOT publish succeeds offline with no trim/dynamic-code warning, network listener, daemon, child process, or missing JSON metadata."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T13:07:25.9163066+00:00"
+    },
+    {
+      "id": "01KXTMKTPQH4JZKAPYE47TAENE",
+      "kind": "constraint",
+      "text": [
+        "The combined registry is additive: 38 ledger.* plus 8 ingest.* at this milestone; future modules must receive their own prefix-scoped inventory."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPQ4SQ9HXCB7W9KE7EP",
+      "kind": "expected_output",
+      "text": [
+        "IngestExtensions"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPQ0G0MB1EHQG3XXGND",
+      "kind": "expected_output",
+      "text": [
+        "IngestOperationBundle"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPQARQ58CPC26HVEJG9",
+      "kind": "expected_output",
+      "text": [
+        "Eight-operation snapshot"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPQV3S1EDDDG7WDNDWF",
+      "kind": "expected_output",
+      "text": [
+        "Published INGEST contract tests"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPQ90JGG1JCPB8P80VC",
+      "kind": "expected_output",
+      "text": [
+        "Prefix-safe shared registry inventory"
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPQ8X1FFQ9A20BXMFZT",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT auto-discover services/modules, hand-maintain a second schema manifest, add aliases/generic CRUD/import/run operations, or introduce HTTP — rejected per governing decisions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPQCJ23YX6G40SSV9HN",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT change the meaning or count of ledger.* operations to add INGEST; preserve 38 Ledger descriptors and scope its inventory test by prefix."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPQH8F2EYWYN2YV2XNB",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT globally register incomplete handlers before every producer task is complete."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPQACWSPDNH81EDM6R3",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT expose private store paths, SQL, PdfPig types, source content, exceptions, or financial payloads in help/errors/diagnostics."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPQJA9KZQ1YGPK3HVSB",
+      "kind": "note",
+      "text": [
+        "Removal impact: replace the planned global count assertion of 38 with exact ledger-prefix count 38 plus exact ingest-prefix count 8. All 38 Ledger operations, schemas, examples, errors, and tests retain coverage; no information is lost."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXTMKTPRFC6J66VMHDKQCEJK",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach prefix counts, exact eight-operation snapshot, stream/exit matrix, and AOT output."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPRCRV68Y4JD096EEQX",
+      "gate_type": "branch-review",
+      "description": [
+        "Reviewer compares every descriptor with its request/result/error model and confirms no Ledger regression."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXTMKTPRWJ49JBTE58ZWC7Z0",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~PublicContractInventoryTests|FullyQualifiedName~IngestPublicContractInventoryTests|FullyQualifiedName~PublishedIngestContractTests'",
+      "expected_result": "exit 0; at least 30 inventory/process cases run, exactly 38 ledger.* and 8 ingest.* operations are reported, and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPRX17VAHW3MB4CG39A",
+      "phase": "after",
+      "command": "dotnet publish src/Tally/Tally.csproj -c Release -r linux-x64 --self-contained true -p:PublishAot=true",
+      "expected_result": "exit 0; the native tally binary publishes with 0 warnings and schema list reports exactly 8 ingest.* operations",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    }
+  ]
+}

@@ -1,0 +1,391 @@
+{
+  "id": "01KXTM0RWDQH7Z9MV4VP207KKA",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ57FSS5HGH1WQNMKD6E8",
+  "ref_code": "TASK-INGEST-STATE-FOUNDATION",
+  "slug": "STATE-FOUNDATION",
+  "title": "Create the protected INGEST SQLite foundation",
+  "description": [
+    "Create only the separate raw-SQLite connection, immutable V001 schema, migration runner, and owner-only artifact enforcement used by feature-owned SQL stores."
+  ],
+  "objective": [
+    "Provide an owner-only ingest.db with deterministic schema evolution and no access path to LedgerDb."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 30,
+  "created_at": "2026-07-18T12:43:01.9014692+00:00",
+  "decisions": [
+    {
+      "id": "01KXTM0RWM7RZAX0RDA4CJW8SG",
+      "target": "DD-INGEST-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWNGJSFS3VGDYSM98FK",
+      "target": "DD-INGEST-ARTIFACT-SECURITY",
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWN8KNA0Q2M5F6FE2DA",
+      "target": "DD-INGEST-STATE-STORE",
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXTM0RWPSEWYAJVEPZFBSBRD",
+      "target": "TASK-INGEST-GATE-INT-LEDGER-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "The shared Tally solution and data-root conventions must exist before the separate INGEST store is added."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXTM0RWN7CRYVAWV9PNQWDDK",
+      "path": "src/Tally/Infrastructure/Ingest/Storage/IngestDatabase.cs",
+      "action": "create",
+      "role": "separate connection boundary",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWN8DX6X0GK9KN9D6Q6",
+      "path": "src/Tally/Infrastructure/Ingest/Storage/IngestSchemaMigrator.cs",
+      "action": "create",
+      "role": "migration runner",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWN6HE1FAFKNMK5BDB9",
+      "path": "src/Tally/Infrastructure/Ingest/Storage/Migrations/IngestMigrationV001.cs",
+      "action": "create",
+      "role": "immutable V001 schema",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWN0RRXZY10F1JV2TGG",
+      "path": "src/Tally/Infrastructure/Ingest/Storage/IngestArtifactProtection.cs",
+      "action": "create",
+      "role": "owner-only protection",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWN2JWGTTECQNGM0DXN",
+      "path": "tests/Tally.Tests/Ingest/Storage/IngestDatabaseFoundationTests.cs",
+      "action": "test",
+      "role": "real SQLite conformance",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWNZ89RV02BDHCZDAKE",
+      "path": "tests/Tally.Tests/Ingest/Security/IngestArtifactProtectionTests.cs",
+      "action": "test",
+      "role": "permission/isolation tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXTM0RWNXR1S88STMY2DKEYX",
+      "name": "IngestDatabase",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-STATE-STORE",
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWNC3Y0DA6DJEYFNPHB",
+      "name": "IngestSchemaMigrator.ApplyAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-STATE-STORE",
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWPTCKK9NJZHR93QVD4",
+      "name": "IngestArtifactProtection.EnsureOwnerOnly",
+      "direction": "produces",
+      "contract_ref_code": "DD-INGEST-ARTIFACT-SECURITY",
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWPA8BCV27K3M7Y5CYY",
+      "name": "LedgerIngestContractPrerequisite",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+      "notes": [
+        "Shared host prerequisite; no shared store"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXTM0RWNMTRSE4STGFKGGVZW",
+      "kind": "acceptance_check",
+      "text": [
+        "IngestDatabase opens only <TallyDataRoot>/ingest/ingest.db, enables foreign_keys, WAL, synchronous=FULL, and bounded busy handling, and never opens or attaches LedgerDb."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWNZF0PB4PNQPYAFKRC",
+      "kind": "acceptance_check",
+      "text": [
+        "IngestMigrationV001 creates every table, key, uniqueness rule, and relationship in DM-INGEST-STATE-STORE with snake_case identifiers; PRAGMA user_version advances atomically from 0 to 1."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWNPMQ0Z93YZE0Z3BFZ",
+      "kind": "acceptance_check",
+      "text": [
+        "Repeated migration is idempotent, unknown newer user_version fails with a stable compatibility result, and interruption leaves either the complete prior or complete V001 schema."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWNVTTZ7W5A66PTZJ49",
+      "kind": "acceptance_check",
+      "text": [
+        "IngestArtifactProtection creates directories as 0700 and state, WAL, SHM, lock, and atomic artifacts as 0600 where supported; inability to establish protection blocks persistence."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWN6ZGCNMV7EN7MPBNS",
+      "kind": "acceptance_check",
+      "text": [
+        "Real temporary SQLite tests enforce immutable revision numbering, unique idempotency keys, foreign keys, and concurrent writer bounds; architecture guards find no LedgerDb or private LEDGER storage reference."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWN5394PH81XFGEANVZ",
+      "kind": "constraint",
+      "text": [
+        "Use explicit SQL transactions and propagate CancellationToken through every asynchronous SQLite call."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWN1FBJ556XTW0QAWJV",
+      "kind": "expected_output",
+      "text": [
+        "IngestDatabase"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWNW07DZE7869X73BQY",
+      "kind": "expected_output",
+      "text": [
+        "IngestMigrationV001 and migrator"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWN6J6VYZXF4DYEBSA8",
+      "kind": "expected_output",
+      "text": [
+        "IngestArtifactProtection"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWNDYMA0G158ZWT2F9Z",
+      "kind": "expected_output",
+      "text": [
+        "Real-SQLite foundation tests"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWNT5RSVWRGWKMNRY10",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT share LedgerDb or LEDGER tables, attach databases, or use private LEDGER storage — rejected per DD-INGEST-STATE-STORE."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWNGC4YFHCCA4YTGG9G",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT replace raw Microsoft.Data.Sqlite with EF Core, PostgreSQL, JSON batch files, or a generic repository — rejected per DD-INGEST-STATE-STORE and DD-INGEST-APPLICATION-ARCHITECTURE."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWNFK0W77F2VZ6YMK2Y",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT persist when owner-only permissions cannot be established — per DD-INGEST-ARTIFACT-SECURITY."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWNFMNFE0YZKW589W3T",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT modify V001 after release; add a new immutable migration version."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXTM0RWPS0MJXKDH02Z1Q1MS",
+      "target_ref_code": "NFR-INGEST-LOCAL-DATA-PROTECTION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXTEXKRBE0ATCQV50F506QED",
+      "target_title": "Protect local statement and ingestion data",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWPGDRXQM8Y2N4DSRG9",
+      "target_ref_code": "DM-INGEST-STATE-STORE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXTHWSPAYJP1YS5JKDP4ZPN0",
+      "target_title": "IngestStateStore",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWP8M3SFY9BJYSZDVW0",
+      "target_ref_code": "DIAG-INGEST-STATE-ER",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KXTHY3QWETJBKB5DVWQR30E5",
+      "target_title": "INGEST durable state model",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWPHSCW2RWGNMMWSQA0",
+      "target_ref_code": "FA-INGEST-RECOVERY-CLEANUP",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXTHXE19R5BDNBP7H26FZHJ8",
+      "target_title": "Recovery and Cleanup",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWPG19WJKNKBJW6PMHR",
+      "target_ref_code": "TC-INGEST-STATE-STORE-CONFORMANCE",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTJ0AE3MFPKV4CPF4GD2PQY",
+      "target_title": "Verify INGEST SQLite state and retention",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWPBJG1PB94J0XN9FN6",
+      "target_ref_code": "TC-INGEST-ARTIFACT-PROTECTION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTJ0BJRAHTKQR6012CNCT09",
+      "target_title": "Verify source and artifact privacy boundaries",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXTM0RWM25RYTM8TVJT540BT",
+      "target": "FR-INGEST-ARTIFACT-CLEANUP",
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXTM0RWPZVHZ12817XZXW189",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach real SQLite PRAGMA, migration, constraint, and permission evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWP929X6QGJV4CMW2TW",
+      "gate_type": "branch-review",
+      "description": [
+        "Reviewer confirms no INGEST storage reference reaches LedgerDb or LEDGER tables."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXTM0RWPQBTJWDWWYVZYS807",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~IngestDatabaseFoundationTests|FullyQualifiedName~IngestArtifactProtectionTests'",
+      "expected_result": "exit 0; at least 18 migration, constraint, concurrency, permission, and isolation cases are discovered against real temporary SQLite stores and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ]
+}

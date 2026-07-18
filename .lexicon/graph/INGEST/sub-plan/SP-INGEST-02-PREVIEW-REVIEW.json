@@ -1,0 +1,11 @@
+{
+  "id": "01KXTKQ60H80VCQRZFJDPG8Y1D",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "ref_code": "SP-INGEST-02-PREVIEW-REVIEW",
+  "title": "Preview, reconciliation, and approval",
+  "description": [
+    "Build deterministic financial interpretation, public LEDGER reads, immutable preview persistence, inspection, and approval."
+  ],
+  "sort_order": 2,
+  "created_at": "2026-07-18T12:37:47.6667281+00:00"
+}

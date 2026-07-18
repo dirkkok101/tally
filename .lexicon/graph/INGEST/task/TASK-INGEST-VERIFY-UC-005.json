@@ -1,0 +1,249 @@
+{
+  "id": "01KXTMS8JSASZKR5VKFA9KNFGJ",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ6NXHSTNEAX7K97NATP4",
+  "ref_code": "TASK-INGEST-VERIFY-UC-005",
+  "slug": "VERIFY-UC-005",
+  "title": "Verify failure handling and cleanup workflow",
+  "description": [
+    "Black-box use-case gate for UC-INGEST-005 diagnostics, durable status, retry/resume/abandon decisions, and state-checked cleanup."
+  ],
+  "objective": [
+    "Prove an owner can recover from or safely terminate every failed ingestion without payload disclosure, source damage, or Ledger deletion."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 70,
+  "created_at": "2026-07-18T12:56:24.4112574+00:00",
+  "dependencies": [
+    {
+      "id": "01KXTMS8K0KEGJVVDF68S2ZQR9",
+      "target": "TASK-INGEST-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "UC verification exercises published status/abandon/cleanup operations."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K03XVA6YGTJ27S0KS0",
+      "target": "TASK-INGEST-GATE-SECURITY",
+      "dependency_type": "compile",
+      "reason": [
+        "The workflow consumes the consolidated security canary and permission evidence."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXTMS8K0NGHNCBXA1KWZ79BX",
+      "path": "tests/Tally.Tests/Ingest/E2E/FailureCleanupWorkflowTests.cs",
+      "action": "test",
+      "role": "UC-INGEST-005 black-box gate",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXTMS8K0JHD9RKJBDE2Q1KHA",
+      "name": "CompleteIngestPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K0KHV8183SEBP8FSN5",
+      "name": "IngestSecurityGateEvidence",
+      "direction": "consumes",
+      "contract_ref_code": "NFR-INGEST-LOCAL-DATA-PROTECTION",
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K0E2T3C9M5FHTNN5RH",
+      "name": "UCIngest005Evidence",
+      "direction": "produces",
+      "contract_ref_code": "UC-INGEST-005",
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXTMS8K0F9ZHPA74FSHCKKJR",
+      "kind": "acceptance_check",
+      "text": [
+        "Every failure returns stable code/category, safe IDs, mutation possibility, last durable state, and retry/resume/abandon/correct-source guidance with one stdout result and metadata-only stderr."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K0H5EMADAMW5ZAR4F5",
+      "kind": "acceptance_check",
+      "text": [
+        "When payload would be needed to explain an error, the result uses safe correlation/record IDs instead and canary data is absent from every output/log."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K0HRR3B3GFD6MBE0WN",
+      "kind": "acceptance_check",
+      "text": [
+        "Permission-establishment failure persists no sensitive artifact and performs no Ledger mutation."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K0ZZRBGB7RW78K7TVX",
+      "kind": "acceptance_check",
+      "text": [
+        "Status proves pre-commit failures have no committable manifest/effect and commit-stage failures preserve exact completed outcomes plus unresolved frontier."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K0G23J7NHX73M6E3MK",
+      "kind": "acceptance_check",
+      "text": [
+        "A simulated crash leaves only known durable/recoverable artifacts; next safe startup removes disposable residue and retains required state."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K0R2P2DHECAXDEQXGF",
+      "kind": "acceptance_check",
+      "text": [
+        "Cleanup rejects ambiguous/locked/recoverable targets; abandon prevents commit/resume but preserves prior effects; terminal cleanup removes only selected INGEST artifacts and leaves source/Ledger unchanged."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K0AYWNXJQ8MYQRW69H",
+      "kind": "constraint",
+      "text": [
+        "Filesystem observations are restricted to isolated test data roots and source hashes; cleanup never targets the repository fixture directory."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K0NJXHM5YD62ZCES15",
+      "kind": "expected_output",
+      "text": [
+        "UCIngest005Evidence"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K01P0RW71FF7GX6FM8",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT inspect/delete files directly from the test except through isolated setup/observation helpers; invoke public abandon/cleanup for behavior."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K04C5PWCV63PDM4N0S",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT emit private payload when a case fails."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXTMS8K0G5XNRQZB7MB9Z1V0",
+      "target_ref_code": "UC-INGEST-005",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXTBAY3YGDTXKEJH46PNXJRH",
+      "target_title": "Handle and clean up a failed ingestion",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K04K9R8S97DTY73HMF",
+      "target_ref_code": "NFR-INGEST-LOCAL-DATA-PROTECTION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXTEXKRBE0ATCQV50F506QED",
+      "target_title": "Protect local statement and ingestion data",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K0AXPK826BXQFYX908",
+      "target_ref_code": "TC-INGEST-FAILURE-STATUS-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTF4ZJ8JCMA6CB7RK9DZ62M",
+      "target_title": "Verify safe failure and status reporting",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K0QMTWGGXDX9MNK615",
+      "target_ref_code": "TC-INGEST-ARTIFACT-CLEANUP-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTF4ZVVXAWMSCVZ8GY6C60J",
+      "target_title": "Verify abandon and artifact cleanup",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXTMS8K0M9SZ777KX2PF5CX2",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach safe error/status envelopes and before/after artifact/source/Ledger inventories."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXTMS8K050V3KATXPJB794FH",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~FailureCleanupWorkflowTests",
+      "expected_result": "exit 0; at least 14 diagnostic, permission, pre/post-mutation status, crash residue, retained-for-recovery, abandon, terminal cleanup, source, and Ledger-preservation cases are discovered and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 1200,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ]
+}

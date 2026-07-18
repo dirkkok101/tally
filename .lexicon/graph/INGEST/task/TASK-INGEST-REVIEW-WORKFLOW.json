@@ -1,0 +1,409 @@
+{
+  "id": "01KXTMAH8M6QY4DXC1MFKQAZFA",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ60H80VCQRZFJDPG8Y1D",
+  "ref_code": "TASK-INGEST-REVIEW-WORKFLOW",
+  "slug": "REVIEW-WORKFLOW",
+  "title": "Implement immutable inspect and approval",
+  "description": [
+    "Expose the exact sensitive manifest to its owner and record approval only for one committable digest without editing source-derived facts or mutating LEDGER."
+  ],
+  "objective": [
+    "Deliver ingest.inspect and ingest.approve with immutable revision, compatibility, actor, and approval invalidation guarantees."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 40,
+  "created_at": "2026-07-18T12:48:21.7802577+00:00",
+  "decisions": [
+    {
+      "id": "01KXTMAH8TG3B4QACTN9E4KZHJ",
+      "target": "DD-INGEST-MANIFEST-IDENTITY-OVERLAP",
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXTMX0PZC945W11H4Y60QDHZ",
+      "target": "TASK-INGEST-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes ImportManifestContract."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:58:27.4247268+00:00"
+    },
+    {
+      "id": "01KXTMX1BTFJR3P3E2C2QFTH4G",
+      "target": "TASK-INGEST-PREVIEW-DOMAIN",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes ManifestCanonicalizer."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:58:28.0912076+00:00"
+    },
+    {
+      "id": "01KXTMAH8V8XH6FF1X2PF1150P",
+      "target": "TASK-INGEST-PREVIEW-WORKFLOW",
+      "dependency_type": "compile",
+      "reason": [
+        "Inspect and approve consume persisted immutable manifests created by preview."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMX1ZZYYC0CMH5P0NFB7AE",
+      "target": "TASK-INGEST-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes IngestDatabase."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:58:28.7371123+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXTMAH8TM6D48QW38KJ8RX42",
+      "path": "src/Tally/Features/Ingest/Review/InspectQuery.cs",
+      "action": "create",
+      "role": "exact manifest query",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8T79NW2YS3YJBVAPMF",
+      "path": "src/Tally/Features/Ingest/Review/InspectHandler.cs",
+      "action": "create",
+      "role": "sensitive owner result mapping",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8T1HA2BWFMZ0801ESA",
+      "path": "src/Tally/Features/Ingest/Review/ApproveCommand.cs",
+      "action": "create",
+      "role": "exact revision transition",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8TJGJP7G1P1E1C8CFQ",
+      "path": "src/Tally/Features/Ingest/Review/ApproveHandler.cs",
+      "action": "create",
+      "role": "approval orchestration",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8TKFDD1VNXXB5TF74X",
+      "path": "src/Tally/Features/Ingest/Review/ReviewOperationModule.cs",
+      "action": "create",
+      "role": "inspect/approve descriptor bindings",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8TJEHTDJJG0SZK1S50",
+      "path": "src/Tally/Infrastructure/Ingest/Storage/ReviewStateStore.cs",
+      "action": "create",
+      "role": "manifest read and approval SQL",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8TDA1Z31W3S3ASMRCR",
+      "path": "tests/Tally.Tests/Ingest/Review/ReviewWorkflowTests.cs",
+      "action": "test",
+      "role": "inspect/approval state tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXTMAH8T9VFZ53A22D0DFGEM",
+      "name": "ImportManifestContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-IMPORT-MANIFEST",
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8TS1VC28ETRKA7P1WC",
+      "name": "IngestDatabase",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-STATE-STORE",
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8T44JBQWGJVSF9WRVH",
+      "name": "ManifestCanonicalizer",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-IMPORT-MANIFEST",
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8TXGD5NAPAD1KGSV56",
+      "name": "PreviewStateStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-STATE-STORE",
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8TK549PPP9PWMFZVWH",
+      "name": "ReviewStateStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-STATE-STORE",
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8T22JRC8PSJN9GKABQ",
+      "name": "ReviewOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXTMAH8TXQPY0M8KTP4BVP4S",
+      "kind": "acceptance_check",
+      "text": [
+        "ingest.inspect requires exact batchId plus manifestRevisionId and returns the complete owner-only manifest view: identities, versions, selected account, ordered record outcomes, immutable candidates, exclusions, duplicates, conflicts, controls, validations, and approval state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8T63YC4MARMDH2BD5B",
+      "kind": "acceptance_check",
+      "text": [
+        "Inspect performs no mutation and deterministic repeated reads return semantically identical ordered content."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8TK843HZ25JG7TBRNY",
+      "kind": "acceptance_check",
+      "text": [
+        "Approve rehashes the stored canonical manifest, checks exact digest/revision, committable state, every record/control, active selected account, compatible adapter/manifest/Ledger versions, and trusted actor attribution before one atomic approval insert."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8TS2YY8HJCQFV8AE14",
+      "kind": "acceptance_check",
+      "text": [
+        "Any blocked record, overlap, failed control, incompatible version, missing fact, digest mismatch, stale account, or absent actor returns a stable failure and leaves the revision unapproved."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8TFT1P0B1WW1T2MGGB",
+      "kind": "acceptance_check",
+      "text": [
+        "Requests cannot update amount, currency, date, originalDescription, sign, provenance, account, adapter, duplicate disposition, or version; changed meaning requires a new preview/revision and prior approval is inactive for commit."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8TDR4V3NNT5W674JNB",
+      "kind": "acceptance_check",
+      "text": [
+        "ReviewOperationModule produces inspect/approve descriptor bindings but global registration waits for GATE-INT-PUBLIC-CONTRACT."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8TYR0GPM5PN3S4MMF2",
+      "kind": "constraint",
+      "text": [
+        "Inspect is a query; approve is a narrow CommandResult transition with expected domain failures, not an EF/HTTP CRUD save."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8T6PY6DB9JX3PCP3KQ",
+      "kind": "expected_output",
+      "text": [
+        "InspectHandler"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8TD6PAAF8K7YEW1TZS",
+      "kind": "expected_output",
+      "text": [
+        "ApproveHandler"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8TTAMZ40DCTCN0VK8A",
+      "kind": "expected_output",
+      "text": [
+        "ReviewStateStore"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8THRQ3NXD07PG2Q2JJ",
+      "kind": "expected_output",
+      "text": [
+        "ReviewOperationModule"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8T1T2GYXEWH78D5R6X",
+      "kind": "expected_output",
+      "text": [
+        "ReviewWorkflowTests"
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8TYVK3GC3ERG8B8J1M",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT implement a generic save/update or inline manifest editor — rejected by DD-INGEST-CLI-OPERATION-CONTRACT and DD-INGEST-MANIFEST-IDENTITY-OVERLAP."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8T5TBJXRH2D5C86KGX",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT approve by batchId alone, mutable latest revision, or unchecked digest."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8TTKE0YNQDYXVFC3WK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT mutate Ledger or reread/reparse the source during inspect or approve."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8TMZSFFZMD60MX143B",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT log or send the sensitive manifest to stderr/telemetry; it is allowed only in explicit stdout business output."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXTMAH8VGY7T315ZG0C97Y5B",
+      "target_ref_code": "DM-INGEST-IMPORT-MANIFEST",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXTHWSBZWXX66S4X6DF2XG8Y",
+      "target_title": "ImportBatchAndManifestRevision",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8VY586B3M2T86414NY",
+      "target_ref_code": "TC-INGEST-MANIFEST-REVIEW-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTF4YD29EY0EG4389FTR7T7",
+      "target_title": "Verify immutable manifest review and approval",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXTMAH8T025CBZ8FRJEGRMSM",
+      "target": "FR-INGEST-MANIFEST-REVIEW",
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXTMAH8TQN23089E264HAAJZ",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach immutable digest, approval, invalidation, and no-mutation state evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8TDJK291RJHN82FMF8",
+      "gate_type": "branch-review",
+      "description": [
+        "Reviewer confirms no public contract permits source-derived financial edits."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXTMAH8TPV2VKNBHMSDA2T8X",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ReviewWorkflowTests",
+      "expected_result": "exit 0; at least 16 exact-inspect, deterministic-order, approval, blocked, digest, version, actor, inline-edit rejection, invalidation, and no-Ledger-mutation cases are discovered and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ]
+}

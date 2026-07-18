@@ -160,7 +160,7 @@
     "- `src/Tally/Bootstrap/Features/IngestExtensions.cs`",
     "- `tests/Tally.Tests/Ingest`",
     "",
-    "Lex 0.5.3 treats truthful greenfield `expected_paths` as present-time missing-path warnings. As in MD-LEDGER-MASTER, the exact paths are canonical here and must become task acceptance criteria in planning; decision metadata is not populated until the implementation creates those paths.",
+    "Lex 0.5.3 treats truthful greenfield `expected_paths` as present-time missing-path warnings. The recorded decision paths are canonical greenfield planning obligations; `lex decision path-check` remains warning until implementation creates them, and each path must appear in at least one task file contract.",
     "",
     "## Evidence and remaining gate",
     "",

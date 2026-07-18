@@ -1,0 +1,467 @@
+{
+  "id": "01KXTMAH8KHBTH5TXTWA02D20X",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ60H80VCQRZFJDPG8Y1D",
+  "ref_code": "TASK-INGEST-PREVIEW-DOMAIN",
+  "slug": "PREVIEW-DOMAIN",
+  "title": "Implement deterministic identity and reconciliation policies",
+  "description": [
+    "Create pure finance/domain policies for exact normalization, stable identity, source-record accounting, reconciliation, canonical manifests, exact replay, and fail-closed overlap."
+  ],
+  "objective": [
+    "Turn qualified source evidence into deterministic immutable candidate meaning without filesystem, SQLite, PdfPig, or LEDGER side effects."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 20,
+  "created_at": "2026-07-18T12:48:21.7802577+00:00",
+  "decisions": [
+    {
+      "id": "01KXTMAH8QRXXGQFE5V22X5TEZ",
+      "target": "DD-INGEST-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8Q2WTWGM5AKSKCXKD1",
+      "target": "DD-INGEST-MANIFEST-IDENTITY-OVERLAP",
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXTMAH8R2TVCHB3P45S0N38Q",
+      "target": "TASK-INGEST-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Pure policies construct the canonical manifest and error contract records."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXTMAH8Q2P4H8JSFEX7RPMJ8",
+      "path": "src/Tally/Domain/Ingest/Identity/IngestIdentity.cs",
+      "action": "create",
+      "role": "stable batch/record/candidate identities",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QEJ22PRJBY0J6S3FJ",
+      "path": "src/Tally/Domain/Ingest/Normalization/FinancialNormalizer.cs",
+      "action": "create",
+      "role": "money, sign, date, provenance normalization",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QJ2572A6C7HBZN4M4",
+      "path": "src/Tally/Domain/Ingest/Reconciliation/StatementReconciler.cs",
+      "action": "create",
+      "role": "record accounting and controls",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QZ5YFJSC9ZFJVP7G9",
+      "path": "src/Tally/Domain/Ingest/Manifests/ManifestCanonicalizer.cs",
+      "action": "create",
+      "role": "canonical manifest digest",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QPM21NKDPAFZ2RXW6",
+      "path": "src/Tally/Domain/Ingest/Overlap/OverlapPolicy.cs",
+      "action": "create",
+      "role": "exact replay and blocked overlap policy",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8Q78M21DFMSS0JPQV2",
+      "path": "tests/Tally.Tests/Ingest/Identity/IngestIdentityTests.cs",
+      "action": "test",
+      "role": "identity collision and stability tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8Q69S8F3C36QFZ51NV",
+      "path": "tests/Tally.Tests/Ingest/Preview/FinancialNormalizationTests.cs",
+      "action": "test",
+      "role": "money/sign/date tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QM1P3XE0DK5SKWFGS",
+      "path": "tests/Tally.Tests/Ingest/Preview/ReconciliationAndManifestTests.cs",
+      "action": "test",
+      "role": "accounting, controls, canonicalization, overlap tests",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXTMAH8QXN7V218E86C3TCNQ",
+      "name": "ImportManifestContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-IMPORT-MANIFEST",
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QBZDYBD8MSF7E7M9K",
+      "name": "IngestIdentity",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-IMPORT-MANIFEST",
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8Q8VG2E31FEB1G7EBX",
+      "name": "FinancialNormalizer",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-IMPORT-MANIFEST",
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8R535GFR7MRRDD0Q8N",
+      "name": "StatementReconciler",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-IMPORT-MANIFEST",
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8RYTGXQQWW4VRKKK2F",
+      "name": "ManifestCanonicalizer",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-IMPORT-MANIFEST",
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8RR95SF6VZ1MX619BB",
+      "name": "OverlapPolicy",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-IMPORT-MANIFEST",
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXTMAH8QTBTNRMQB21CSVQ63",
+      "kind": "acceptance_check",
+      "text": [
+        "FinancialNormalizer converts exact base-10 evidence to integer minor units and owner-economic sign: asset increases and liability reductions are positive; asset decreases and liability increases are negative; currency is exactly ZAR."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QCBEN98S4E90P13ZF",
+      "kind": "acceptance_check",
+      "text": [
+        "TransactionDate is the source date with its year; a yearless date resolves only when exactly one date lies inside the explicit statement period; PostingDate remains distinct and optional; missing or ambiguous facts block without invention."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QT0SVVDE3JMQK36HX",
+      "kind": "acceptance_check",
+      "text": [
+        "Zero monetary movement becomes excluded_non_transaction with a stable reason and never an ImportCandidate."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QH1KXJAXV1MNZHKWD",
+      "kind": "acceptance_check",
+      "text": [
+        "IngestIdentity derives sourceRecordId from source fingerprint, stable structural position, raw evidence fingerprint, and immutable-facts schema while excluding adapter/manifest/compatible-version metadata; candidateId derives from accountId, sourceRecordId, and immutable normalized facts and drives sourceReference/idempotencyKey."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8Q7B85R6MWH6T6EJ39",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical tuples at different positions remain distinct; filename and fuzzy similarity never affect identity; exact identity with changed immutable facts is conflict."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QRVY8KYBZVVXDKF23",
+      "kind": "acceptance_check",
+      "text": [
+        "StatementReconciler accounts for every record exactly once and verifies opening plus movements equals closing plus every available running/source control in integer minor units; missing controls are unavailable, not fabricated."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QJZYCSWC4QCAZ7MAJ",
+      "kind": "acceptance_check",
+      "text": [
+        "ManifestCanonicalizer emits source-generated canonical JSON and manifestRevisionId deterministically; OverlapPolicy returns prior state for selected-account plus exact source fingerprint before parsing and blocks different-source overlapping windows because v1 has no cross-file identity."
+      ],
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QP6Z443Y9A9MWRJXX",
+      "kind": "constraint",
+      "text": [
+        "All hashes use an explicit versioned canonical byte representation; all state and disposition enums are closed system-owned types."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QY7XQ04S66TCYT8CW",
+      "kind": "expected_output",
+      "text": [
+        "IngestIdentity"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QMMY94FZYBB0HJNP4",
+      "kind": "expected_output",
+      "text": [
+        "FinancialNormalizer"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QD43F02P58VVSZEVS",
+      "kind": "expected_output",
+      "text": [
+        "StatementReconciler"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QS59D52Z8JZBYJMNQ",
+      "kind": "expected_output",
+      "text": [
+        "ManifestCanonicalizer"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QCETA2SGQESJCZ90A",
+      "kind": "expected_output",
+      "text": [
+        "OverlapPolicy"
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8Q7BJ4CK87VEZDRXHF",
+      "kind": "expected_output",
+      "text": [
+        "Pure domain tests"
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QRZMM5M4AM1RXD4S0",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use random IDs, filename identity, date-description-amount tuple collapse, fuzzy similarity, or nearest-date matching — rejected per DD-INGEST-MANIFEST-IDENTITY-OVERLAP."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8Q7803958EZC88P0PF",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT include manifest revision, adapter version, executable version, or compatible Ledger version in sourceRecordId or candidateId."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8Q6CPYJGHQYEH6WKVY",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use floating point, edit source facts, infer a missing account/date/sign/currency, or fabricate unavailable controls."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QE9YH1JGPTWBFQV5K",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add filesystem, SQLite, PdfPig, OperationRegistry, or Ledger calls to Domain/Ingest."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXTMAH8RH1FMB3DTH36D7FSX",
+      "target_ref_code": "NFR-INGEST-DETERMINISTIC-INTEGRITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXTEXKEK06KD4EXFGC1A8FKG",
+      "target_title": "Preserve deterministic extraction and financial integrity",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8RTB8WWHWK2YRR7M7H",
+      "target_ref_code": "DM-INGEST-IMPORT-MANIFEST",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXTHWSBZWXX66S4X6DF2XG8Y",
+      "target_title": "ImportBatchAndManifestRevision",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8RKTW6BDQNYWDF4FYQ",
+      "target_ref_code": "DIAG-INGEST-PREVIEW-COMMIT-SEQUENCE",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KXTHY33RWZRYD48H6S2WA3MJ",
+      "target_title": "Preview approval commit and receipt sequence",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8RMW9WE44NS44MBC1S",
+      "target_ref_code": "TC-INGEST-FINANCIAL-NORMALIZATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTF4XT50N2ACSKZCWDZC4XQ",
+      "target_title": "Verify exact financial normalization",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8RZVYZZWVZ0183VVGG",
+      "target_ref_code": "TC-INGEST-SOURCE-RECONCILIATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTF4Y3MT9YDGQK8JPP4095H",
+      "target_title": "Verify complete source reconciliation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8RF77W1K6KEEGXMDM6",
+      "target_ref_code": "TC-INGEST-REPLAY-OVERLAP-SAFETY-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTF4YNP89X6YHMDB0QFK5EP",
+      "target_title": "Verify replay and overlap safety",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXTMAH8Q1TKHXYSW54X98J6R",
+      "target": "FR-INGEST-FINANCIAL-NORMALIZATION",
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QMKAEEFK6J0JA2PE2",
+      "target": "FR-INGEST-REPLAY-OVERLAP-SAFETY",
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8QR7RMKECG7TWPZ3CH",
+      "target": "FR-INGEST-SOURCE-RECONCILIATION",
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXTMAH8RQ7SEXNY927465HRP",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach stable identity vectors and exact minor-unit reconciliation evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8RZTRXKKMW7MKXAYYK",
+      "gate_type": "branch-review",
+      "description": [
+        "Reviewer confirms Domain/Ingest has no side-effecting infrastructure references."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXTMAH8R7W4Q88A32E7YZF0X",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~IngestIdentityTests|FullyQualifiedName~FinancialNormalizationTests|FullyQualifiedName~ReconciliationAndManifestTests'",
+      "expected_result": "exit 0; at least 35 identity, tuple-collision, sign, date, zero-movement, accounting, control, canonicalization, exact-replay, and overlap cases are discovered and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ]
+}

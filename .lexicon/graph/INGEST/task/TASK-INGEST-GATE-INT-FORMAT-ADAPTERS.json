@@ -1,0 +1,358 @@
+{
+  "id": "01KXTM5NS02J2S6RZBAFJWZXW9",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ5KH6GNPRCN7TY5FCA4Q",
+  "ref_code": "TASK-INGEST-GATE-INT-FORMAT-ADAPTERS",
+  "slug": "GATE-INT-FORMAT-ADAPTERS",
+  "title": "Prove the qualified adapter set",
+  "description": [
+    "Integration gate converges the extractor and both adapters into the exact explicit v1 registry before preview can consume any format behavior."
+  ],
+  "objective": [
+    "Prove exclusive detection, deterministic extraction, exact private fixture expectations, and advertised resource bounds for exactly two supported variants."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 40,
+  "created_at": "2026-07-18T12:45:42.5606427+00:00",
+  "decisions": [
+    {
+      "id": "01KXTM5NS5YK7YXNEEFV4MKESA",
+      "target": "DD-INGEST-DOCUMENT-EXTRACTION",
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS5ZZR3HSSBHS4EGHZ5",
+      "target": "DD-INGEST-FORMAT-ADAPTERS",
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXTM5NS6AQZZZGK3Q31QDQTC",
+      "target": "TASK-INGEST-ADAPTER-LAYOUT-A",
+      "dependency_type": "compile",
+      "reason": [
+        "The gate consumes PdfTextLayoutAStatementAdapter."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS6B9D635G1XY44XHKX",
+      "target": "TASK-INGEST-ADAPTER-LAYOUT-B",
+      "dependency_type": "compile",
+      "reason": [
+        "The gate consumes PdfTextLayoutBStatementAdapter."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTMWW3SKVTG65JDVDS30JFM",
+      "target": "TASK-INGEST-PDF-EXTRACTION",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes PdfStatementTextExtractor.ExtractAsync."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:58:22.7140989+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXTM5NS66BVGACQE3JAWYTJ6",
+      "path": "src/Tally/Infrastructure/Ingest/Pdf/StatementAdapterRegistry.cs",
+      "action": "create",
+      "role": "exact explicit adapter registry",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS63Q5KZNJ4EB6ZA0F9",
+      "path": "tests/Tally.Tests/Ingest/Adapters/AdapterQualificationTests.cs",
+      "action": "test",
+      "role": "cross-adapter exclusivity and golden gate",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS6BFFA41WWXN08RZWE",
+      "path": "tests/Tally.Tests/Ingest/Adapters/AdapterResourceBoundTests.cs",
+      "action": "test",
+      "role": "resource and one-over-limit gate",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXTM5NS694CSEZ5X05YARYA1",
+      "name": "PdfStatementTextExtractor.ExtractAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS6HJV78TWWYP52CY8N",
+      "name": "PdfTextLayoutAStatementAdapter",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS6KG2ZJ45T17DRSKKP",
+      "name": "PdfTextLayoutBStatementAdapter",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS69WTRCCS9KV5QQYPH",
+      "name": "StatementAdapterRegistry",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS6ZTM1BHYRYP1GY3A4",
+      "name": "QualifiedStatementAdapterSet",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXTM5NS50PBRYYGN0MBGSQ8E",
+      "kind": "acceptance_check",
+      "text": [
+        "StatementAdapterRegistry explicitly contains exactly one PdfTextLayoutAStatementAdapter and one PdfTextLayoutBStatementAdapter in deterministic order; no reflection scan, plugin, fallback, third variant, or user configuration exists."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS527MJ2B72D0JDXN2N",
+      "kind": "acceptance_check",
+      "text": [
+        "Every one of the three private fixtures produces exactly one exact_match and the variant ID declared by the ignored private fixture manifest; zero or multiple matches return a stable unsupported result."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS5QZ3F6N7DJA5HSJJD",
+      "kind": "acceptance_check",
+      "text": [
+        "Each fixture is extracted twice through the real PdfPig extractor and selected adapter with identical ordered source records, dispositions, controls, and safe digests."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS6WM75Q9EXZ65CNZF0",
+      "kind": "acceptance_check",
+      "text": [
+        "Every transaction-bearing source record is accepted, proven exact duplicate by fixture evidence, or blocked; non-transaction exclusions carry stable reasons; all available opening, closing, running-balance, total, and record-count controls match exactly."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS6BY7MY0DM9NN91K5N",
+      "kind": "acceptance_check",
+      "text": [
+        "One-over-limit and malformed sources fail before state or LEDGER mutation; measured direct extraction plus adapter work stays below 5 seconds and 256 MiB peak RSS per fixture on the supported release host."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS65P4T4W0NAY5CNJQH",
+      "kind": "constraint",
+      "text": [
+        "A new or revised adapter cannot enter the registry without representative private golden evidence and exact reconciliation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS6RXASS7NS1TR4KXX6",
+      "kind": "expected_output",
+      "text": [
+        "StatementAdapterRegistry"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS6YKNZR14SQCWDF023",
+      "kind": "expected_output",
+      "text": [
+        "QualifiedStatementAdapterSet"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS687VPNEPH8H6T9QJP",
+      "kind": "expected_output",
+      "text": [
+        "AdapterQualificationTests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS6KHY0A4H6SNS6EQ45",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT advertise a format from filename/extension or partial fixture success."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS61M3MV059FGDV61CP",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add OCR, generic tables, regex templates, dynamic plugins, or best-effort fallback — rejected per both governing decisions."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS63T9511XPRY0X5MEZ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT print or persist private fixture paths, descriptions, amounts, balances, records, or expected facts."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXTM5NS68QFZQ5J11399T8PV",
+      "target_ref_code": "NFR-INGEST-BOUNDED-PARSING",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXTEXM19R263D66YHS6EFCCS",
+      "target_title": "Bound passive statement processing",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS61TQDNK8FXBBM1QVE",
+      "target_ref_code": "NFR-INGEST-DETERMINISTIC-INTEGRITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXTEXKEK06KD4EXFGC1A8FKG",
+      "target_title": "Preserve deterministic extraction and financial integrity",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS69BAB4JZCPZQ9BTNY",
+      "target_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXTHWS004PTKCD4PTYVTE0BR",
+      "target_title": "FormatVariantAndSourceEvidence",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS6FDVDX8G5XFRQW219",
+      "target_ref_code": "FA-INGEST-CONTRACT-FORMATS",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXTHXCW2GCHZ4A1Y7DVE2A5F",
+      "target_title": "Contract and Formats",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS6Q0KMA0NYGAERK88X",
+      "target_ref_code": "TC-INGEST-ADAPTER-GOLDEN-FIXTURES",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTJ09R1WGDS1MNGV12F4NRC",
+      "target_title": "Verify both qualified adapters against golden fixtures",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXTM5NS5D6X2XVD4WWVTQXQ8",
+      "target": "FR-INGEST-SOURCE-RECONCILIATION",
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS52E9HXPJR11805AB6",
+      "target": "FR-INGEST-VARIANT-QUALIFICATION",
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXTM5NS626G4B5VM0B7R7CJJ",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach redacted exact-match matrix, deterministic digests, controls, elapsed time, and peak RSS."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS6BWNDTQKHEZ13ZG7G",
+      "gate_type": "branch-review",
+      "description": [
+        "Reviewer confirms the registry has exactly two explicit implementations and no fallback path."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXTM5NS66E87FXN0Q07B6S8Q",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~AdapterQualificationTests|FullyQualifiedName~AdapterResourceBoundTests'",
+      "expected_result": "exit 0; all 3 injected fixtures run twice, exactly 2 variants are advertised, at least 20 qualification/resource cases are discovered, and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ]
+}

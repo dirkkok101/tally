@@ -1,0 +1,400 @@
+{
+  "id": "01KXTMS8JT8WBSTHHHQ19DAMAY",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ6NXHSTNEAX7K97NATP4",
+  "ref_code": "TASK-INGEST-GATE-MODULE",
+  "slug": "GATE-MODULE",
+  "title": "Complete the INGEST v1 module gate",
+  "description": [
+    "Final convergence gate intentionally has no Implements link: it proves build, all tests, Native-AOT publish, architecture/privacy guards, Lex coverage, and every expected implementation path after all security/use-case evidence exists."
+  ],
+  "objective": [
+    "Prove the complete INGEST v1 implementation matches the approved graph and is ready for work review without compiling beads inside planning."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 90,
+  "created_at": "2026-07-18T12:56:24.4112574+00:00",
+  "dependencies": [
+    {
+      "id": "01KXTMWY2VNJ24BT90R73TE3J9",
+      "target": "TASK-INGEST-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes CompleteIngestPublicContract."
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-18T12:58:24.7327647+00:00"
+    },
+    {
+      "id": "01KXTMS8K382WWRHNQHYNVA3K7",
+      "target": "TASK-INGEST-GATE-SECURITY",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires consolidated security evidence."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K3S7897QJ4TBMMSNPR",
+      "target": "TASK-INGEST-VERIFY-UC-001",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires UC-INGEST-001 evidence."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K3TY323ZRARR5EYGEB",
+      "target": "TASK-INGEST-VERIFY-UC-002",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires UC-INGEST-002 evidence."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K3MWJXSG32G2CS1C8D",
+      "target": "TASK-INGEST-VERIFY-UC-003",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires UC-INGEST-003 evidence."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K30YN56SSMQ5T1HDR0",
+      "target": "TASK-INGEST-VERIFY-UC-004",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires UC-INGEST-004 evidence."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K3DXJCCA4BZPWTSQDH",
+      "target": "TASK-INGEST-VERIFY-UC-005",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires UC-INGEST-005 evidence."
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K3QNVAJ4VQNYYE8BYR",
+      "target": "TASK-INGEST-VERIFY-UC-006",
+      "dependency_type": "compile",
+      "reason": [
+        "Module completion requires UC-INGEST-006 evidence."
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXTMS8K2D8C7RTHFY03X002M",
+      "path": "Tally.slnx",
+      "action": "read",
+      "role": "solution build surface",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K2ATCWYR5KC46B82VN",
+      "path": "src/Tally/Tally.csproj",
+      "action": "read",
+      "role": "AOT application surface",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K2SG3FS3MRJ9H8M5N4",
+      "path": "tests/Tally.Tests/Tally.Tests.csproj",
+      "action": "read",
+      "role": "complete test surface",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K20JFRN8MP79KYY6SD",
+      "path": "tests/Tally.Tests/Ingest/IngestModuleGuardTests.cs",
+      "action": "test",
+      "role": "module architecture/privacy/path guards",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXTMS8K2F426B1J439S19NQY",
+      "name": "CompleteIngestPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K27YVTP235KW8GSP2Y",
+      "name": "IngestSecurityGateEvidence",
+      "direction": "consumes",
+      "contract_ref_code": "NFR-INGEST-LOCAL-DATA-PROTECTION",
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K2GPPV5ZXXRYZKRPJH",
+      "name": "UCIngest001Evidence",
+      "direction": "consumes",
+      "contract_ref_code": "UC-INGEST-001",
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K2M63RMM85SF6QMTQ1",
+      "name": "UCIngest002Evidence",
+      "direction": "consumes",
+      "contract_ref_code": "UC-INGEST-002",
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K281173XK4VQX9FMVA",
+      "name": "UCIngest003Evidence",
+      "direction": "consumes",
+      "contract_ref_code": "UC-INGEST-003",
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K22S0Q6KPGN1M47BCF",
+      "name": "UCIngest004Evidence",
+      "direction": "consumes",
+      "contract_ref_code": "UC-INGEST-004",
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K2906DS80VC60NWZ69",
+      "name": "UCIngest005Evidence",
+      "direction": "consumes",
+      "contract_ref_code": "UC-INGEST-005",
+      "sort_order": 6,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K27ENT0GMXH1RF2MP3",
+      "name": "UCIngest006Evidence",
+      "direction": "consumes",
+      "contract_ref_code": "UC-INGEST-006",
+      "sort_order": 7,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXTMS8K1NA9GK89071C8YJ0K",
+      "kind": "acceptance_check",
+      "text": [
+        "Release build completes with 0 warnings/errors; the full test project reports at least 250 discovered tests and 0 failed/skipped required INGEST gates."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K1KCEQ7S9PP1VMT20X",
+      "kind": "acceptance_check",
+      "text": [
+        "Release linux-x64 self-contained Native-AOT publish produces one tally executable plus required SQLite native library with 0 trim/dynamic-code warnings and no network listener/daemon/child process."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K1VQZ1B9SMC7QT4HH8",
+      "kind": "acceptance_check",
+      "text": [
+        "IngestModuleGuardTests confirm vertical feature ownership, explicit DI, exactly 8 ingest.* and 38 ledger.* operations, raw separate SQLite, no private Ledger references, no HTTP/FastEndpoints/Aspire/PostgreSQL/EF/OCR/plugin/generic parser, and no fixture/source payload tracked."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K20EF4RXAS2TEHMZ42",
+      "kind": "acceptance_check",
+      "text": [
+        "lex coverage --module INGEST reports healthy with 11 of 11 active FRs covered, 0 gaps, and 0 orphan tests; lex decision path-check reports healthy with all 31 expected path patterns matched."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K2MPHDV9Y8KGYZXK5B",
+      "kind": "acceptance_check",
+      "text": [
+        "Every security and UC evidence producer is present, every private fixture is external/ignored, git diff contains no statement filename/content, and source/hash/artifact checks are green."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K2Z42CA2KWACFKRJM7",
+      "kind": "acceptance_check",
+      "text": [
+        "No bead refs are created by this task; planning/execution status remains owned by Lex/br pipeline stages."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K2KP6KSCNH1MNRFJ3G",
+      "kind": "constraint",
+      "text": [
+        "All commands run from repository root with the external private fixture manifest injected only for tests that require it."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K2DSZCMNABP0YHMRR4",
+      "kind": "expected_output",
+      "text": [
+        "IngestModuleGuardTests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K2290BC35JF2ACDTPF",
+      "kind": "expected_output",
+      "text": [
+        "Complete INGEST build/test/AOT/coverage evidence"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K2Y7AAEQQX5F9TNJ80",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT waive a failed required gate, reduce test discovery thresholds to hide missing classes, or treat zero-match filters as success."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K246JFQ0AZ4JSZMWBK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT ship private statements/expectations, source paths, extracted facts, temporary spike code, or generated plan input files."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K2RPSYTW68H39Q0H1Z",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT compile beads, write execution status, or implement unapproved OQ-INGEST-4 cross-file identity."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXTMS8K28JH897W3DGFX4HVQ",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach full build/test/publish/coverage/path-check output and private-fixture exclusion proof."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8K2NBXKTZ9DH77TKPNP",
+      "gate_type": "branch-review",
+      "description": [
+        "Reviewer compares implementation paths, interfaces, dependencies, and forbidden alternatives with MD-INGEST-MASTER."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXTNAHJNY4NSH1Z7M5SHEFK8",
+      "phase": "after",
+      "command": "dotnet build Tally.slnx -c Release",
+      "expected_result": "exit 0; 0 warnings and 0 errors",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-18T13:05:50.6771816+00:00"
+    },
+    {
+      "id": "01KXTNAHJPQNCZW5Y3ZXS08V7G",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj -c Release --no-build",
+      "expected_result": "exit 0; at least 250 tests are discovered, all required INGEST gate classes run, and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 1800,
+      "sort_order": 1,
+      "created_at": "2026-07-18T13:05:50.6771816+00:00"
+    },
+    {
+      "id": "01KXTNAHJPHB64W6EW2KF4FT60",
+      "phase": "after",
+      "command": "dotnet publish src/Tally/Tally.csproj -c Release -r linux-x64 --self-contained true -p:PublishAot=true",
+      "expected_result": "exit 0; native tally executable and SQLite library exist with 0 trim/dynamic-code warnings",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 2,
+      "created_at": "2026-07-18T13:05:50.6771816+00:00"
+    },
+    {
+      "id": "01KXTNAHJP27BFXQ9NWAQ7C2FW",
+      "phase": "after",
+      "command": "lex coverage --module INGEST --json",
+      "expected_result": "status healthy; TotalRequirements=11, CoveredRequirements=11, MissingRequirements=0, OrphanTestCases=0, ErrorCount=0",
+      "required": 1,
+      "timeout_seconds": 120,
+      "sort_order": 3,
+      "created_at": "2026-07-18T13:05:50.6771816+00:00"
+    },
+    {
+      "id": "01KXTNAHJPDX7S7E624S5YDFCZ",
+      "phase": "after",
+      "command": "lex decision path-check --module INGEST --json",
+      "expected_result": "status healthy; missing_count=0 and all 31 expected path patterns have at least one match",
+      "required": 1,
+      "timeout_seconds": 120,
+      "sort_order": 4,
+      "created_at": "2026-07-18T13:05:50.6771816+00:00"
+    }
+  ]
+}

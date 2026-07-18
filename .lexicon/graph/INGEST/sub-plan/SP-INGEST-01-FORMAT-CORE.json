@@ -1,0 +1,11 @@
+{
+  "id": "01KXTKQ5KH6GNPRCN7TY5FCA4Q",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "ref_code": "SP-INGEST-01-FORMAT-CORE",
+  "title": "Qualified PDF extraction and adapters",
+  "description": [
+    "Prove the pinned in-process extractor and two fixture-qualified adapters before preview orchestration depends on them."
+  ],
+  "sort_order": 1,
+  "created_at": "2026-07-18T12:37:47.2504822+00:00"
+}

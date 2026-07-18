@@ -1,0 +1,310 @@
+{
+  "id": "01KXTM5NRZ8P6N498029ZYDXGD",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ5KH6GNPRCN7TY5FCA4Q",
+  "ref_code": "TASK-INGEST-ADAPTER-LAYOUT-B",
+  "slug": "ADAPTER-LAYOUT-B",
+  "title": "Implement the qualified layout B adapter",
+  "description": [
+    "Encode only the structural detection, row boundaries, financial semantics, exclusions, and source controls proven by the private layout B fixture, including permission encryption and yearless dates."
+  ],
+  "objective": [
+    "Produce deterministic layout B statement evidence and normalized source records without a generic template or fallback parser."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 30,
+  "created_at": "2026-07-18T12:45:42.5606427+00:00",
+  "decisions": [
+    {
+      "id": "01KXTM5NS5G3142B9T4GVQJ9Q7",
+      "target": "DD-INGEST-FORMAT-ADAPTERS",
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXTM5NS5XG2SAGM2F35S97DD",
+      "target": "TASK-INGEST-PDF-EXTRACTION",
+      "dependency_type": "compile",
+      "reason": [
+        "The adapter implements IStatementAdapter over PdfDocumentEvidence and uses the private fixture helper."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXTM5NS5HYQFQTZTBEF2PYQQ",
+      "path": "src/Tally/Infrastructure/Ingest/Pdf/PdfTextLayoutBStatementAdapter.cs",
+      "action": "create",
+      "role": "layout B probe and extraction",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS5Y18T84TWHR3Y453F",
+      "path": "tests/Tally.Tests/Ingest/Adapters/LayoutBStatementAdapterTests.cs",
+      "action": "test",
+      "role": "private golden-fixture tests",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXTM5NS58KNP0CEHS9TS92BE",
+      "name": "IStatementAdapter",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS5M2JSMM1SQWJA8481",
+      "name": "PdfDocumentEvidence",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS52KAKPTQ5S7P922AA",
+      "name": "PrivateStatementFixtureSet",
+      "direction": "consumes",
+      "contract_ref_code": "EXT-INGEST-OWNER-BANK-STATEMENT",
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS5G3FRZKME7C4PHYSX",
+      "name": "PdfTextLayoutBStatementAdapter",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXTM5NS5GWDYP1K48DHJWSB4",
+      "kind": "acceptance_check",
+      "text": [
+        "Descriptor advertises exactly pdf-text-layout-b-v1, its adapter/extraction/manifest versions, media type, and hard limits."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS5TB00CNKG7N2KAXST",
+      "kind": "acceptance_check",
+      "text": [
+        "Probe selects exact_match only from layout B structural evidence, including the permission-encrypted but opening-password-free fixture, and returns no_match for layout A and unsupported fixtures."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS5NKW7Q73QPV84E9QQ",
+      "kind": "acceptance_check",
+      "text": [
+        "Extract accounts for every layout B source record in order, preserves raw evidence privately, distinguishes transaction and non-transaction records, and exposes all variant controls."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS55DYNY27TSFWZ7QKZ",
+      "kind": "acceptance_check",
+      "text": [
+        "A yearless source date resolves only when exactly one calendar date lies inside the explicit statement period; zero or multiple matches block the record and batch."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS5SHC566NCD77V2CQ7",
+      "kind": "acceptance_check",
+      "text": [
+        "Layout B account-class, owner-economic sign, zero-movement exclusion, amount, description, source-reference, and control rules reproduce every private expected fact in integer minor units."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS59BHYKGEH6NTBKKJM",
+      "kind": "acceptance_check",
+      "text": [
+        "Two runs produce identical ordered evidence and structural positions; password-required, scan-only, malformed, or drifted structures fail closed."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS51JVH8F5FJ1M3ABK6",
+      "kind": "constraint",
+      "text": [
+        "All private expected facts come through PrivateStatementFixtureSet and remain outside source control."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS5BVVB4KBEHT9KCGYM",
+      "kind": "expected_output",
+      "text": [
+        "PdfTextLayoutBStatementAdapter"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS5Z0RDXJJ0X1RN7Y94",
+      "kind": "expected_output",
+      "text": [
+        "LayoutBStatementAdapterTests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS5YEPXK45BN2JCM5FP",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add conditional branches for layout A or future banks — rejected single-parser alternative per DD-INGEST-FORMAT-ADAPTERS."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS5MX6YGGXYEJGM38XV",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT guess a year, use filename/extension, fuzzy-match rows, or fall back to OCR/template configuration."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS56DW87YK74DY4CHKH",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT commit private fixtures, expected facts, filenames, extracted text, or payload snapshots."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXTM5NS5T1VSZ3PTC0TFZ2A3",
+      "target_ref_code": "NFR-INGEST-DETERMINISTIC-INTEGRITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXTEXKEK06KD4EXFGC1A8FKG",
+      "target_title": "Preserve deterministic extraction and financial integrity",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS5ZW7GFZNXZ89JHN0X",
+      "target_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXTHWS004PTKCD4PTYVTE0BR",
+      "target_title": "FormatVariantAndSourceEvidence",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS5Z7E2J7WKP1416KHA",
+      "target_ref_code": "TC-INGEST-ADAPTER-GOLDEN-FIXTURES",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTJ09R1WGDS1MNGV12F4NRC",
+      "target_title": "Verify both qualified adapters against golden fixtures",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTN3V1041T94S39WRM8WBT6",
+      "target_ref_code": "TC-INGEST-LAYOUT-B-ADAPTER",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTMY504HQSHE29XQ0CJ3DR3",
+      "target_title": "Verify qualified layout B adapter",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T13:02:10.9788505+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXTM5NS56GCBBANQJZGFV3J0",
+      "target": "FR-INGEST-FINANCIAL-NORMALIZATION",
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS59Q0ZXD8SSFR2EXQY",
+      "target": "FR-INGEST-SOURCE-RECONCILIATION",
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS5BENNH71B4FA8H4J6",
+      "target": "FR-INGEST-VARIANT-QUALIFICATION",
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXTM5NS5M3QKY9KT45WCQ84S",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach redacted encrypted-fixture, date-resolution, record/control, and digest evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KXTM5NS54C6PTK1W33WYJXXS",
+      "gate_type": "branch-review",
+      "description": [
+        "Reviewer confirms no layout A or generic parser behavior entered this adapter."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXTM5NS5SFYWFB4QR4A1ZREQ",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~LayoutBStatementAdapterTests",
+      "expected_result": "exit 0; at least 12 probe, encryption, yearless-date, drift, row-accounting, financial-fact, control, and repeatability cases are discovered and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    }
+  ]
+}

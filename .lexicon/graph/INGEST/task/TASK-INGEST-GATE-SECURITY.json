@@ -1,0 +1,387 @@
+{
+  "id": "01KXTMKTPN6HDN8HA3N1XGG0RE",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ6NXHSTNEAX7K97NATP4",
+  "ref_code": "TASK-INGEST-GATE-SECURITY",
+  "slug": "GATE-SECURITY",
+  "title": "Validate INGEST local financial-data security",
+  "description": [
+    "Security gate intentionally has no Implements link: it consolidates personal financial payload, passive parser, permissions, source preservation, diagnostics, cleanup, and resource-bound obligations across the published module."
+  ],
+  "objective": [
+    "Prove that hostile/malformed input and every success/failure/crash path disclose no source payload and leave only authorized protected state."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 20,
+  "created_at": "2026-07-18T12:53:26.3581626+00:00",
+  "decisions": [
+    {
+      "id": "01KXTMKTPTWQNAKCVDBG1HTHV3",
+      "target": "DD-INGEST-ARTIFACT-SECURITY",
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPT38YW5ZR1R8CY67WM",
+      "target": "DD-INGEST-DOCUMENT-EXTRACTION",
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPTSNGRW40QV6QWGJJA",
+      "target": "DD-INGEST-STATE-STORE",
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXTMKTPVE1EC5XER2F8W9TR3",
+      "target": "TASK-INGEST-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Security is validated against the complete published eight-operation surface."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMWYPX4Z1GYRQ2RKWPY0PX",
+      "target": "TASK-INGEST-PDF-EXTRACTION",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes PrivateStatementFixtureSet."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:58:25.3757625+00:00"
+    },
+    {
+      "id": "01KXTMWZD4X865CTN7V0JKPMZC",
+      "target": "TASK-INGEST-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes IngestArtifactProtection.EnsureOwnerOnly."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:58:26.0858864+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXTMKTPTCN7DQ617X0H2EWRK",
+      "path": "tests/Tally.Tests/Ingest/Security/IngestSecurityBoundaryTests.cs",
+      "action": "test",
+      "role": "permissions, source, temp, architecture gate",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPTM400K6TVX62YPBQG",
+      "path": "tests/Tally.Tests/Ingest/Security/IngestResourceCanaryTests.cs",
+      "action": "test",
+      "role": "malformed/bounds/payload canaries",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPTGSA8T67DXDG46MVK",
+      "path": "tests/Tally.Tests/Process/PublishedIngestSecurityTests.cs",
+      "action": "test",
+      "role": "process arguments/streams/network/orphan gate",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXTMWST47B5S2XNZQGAJ2406",
+      "name": "CompleteIngestPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "notes": [
+        "Published INGEST surface"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:58:20.3555905+00:00"
+    },
+    {
+      "id": "01KXTMWST51TYD7BMN6AQRVN0D",
+      "name": "IngestArtifactProtection.EnsureOwnerOnly",
+      "direction": "consumes",
+      "contract_ref_code": "DD-INGEST-ARTIFACT-SECURITY",
+      "notes": [
+        "Permission enforcement"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:58:20.3555905+00:00"
+    },
+    {
+      "id": "01KXTMWST563KCZY33H6JRM8RQ",
+      "name": "PrivateStatementFixtureSet",
+      "direction": "consumes",
+      "contract_ref_code": "EXT-INGEST-OWNER-BANK-STATEMENT",
+      "notes": [
+        "External private fixture injection"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:58:20.3555905+00:00"
+    },
+    {
+      "id": "01KXTMWST5G384GSBFSPFHA6PM",
+      "name": "PublishedIngestTallyFixture",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "notes": [
+        "Published process boundary"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:58:20.3555905+00:00"
+    },
+    {
+      "id": "01KXTMWST5N2QHAR4CDPDZ4SK7",
+      "name": "IngestSecurityGateEvidence",
+      "direction": "produces",
+      "contract_ref_code": "NFR-INGEST-LOCAL-DATA-PROTECTION",
+      "notes": [
+        "Consolidated security proof"
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:58:20.3555905+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXTMKTPT4MCA05WEABSC1V73",
+      "kind": "acceptance_check",
+      "text": [
+        "Published preview receives sourcePath only through private stdin/file JSON; process command line, environment diagnostics, stdout errors, stderr, logs, crash output, and telemetry contain none of the fixture path, canary, row, description, amount, balance, full identifier, request, manifest, or receipt payload."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPT8C2H2RKJRAJY1MPP",
+      "kind": "acceptance_check",
+      "text": [
+        "INGEST directories are 0700 and database/WAL/SHM/lock/atomic files are 0600 where supported; permission-establishment failure returns stable permission error before sensitive persistence or Ledger mutation."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPT4K5RGX7RQT3MPV21",
+      "kind": "acceptance_check",
+      "text": [
+        "Before/after SHA-256 proves every private source unchanged across preview success, malformed/unsupported/resource failure, approval, commit, resume, abandonment, cleanup, cancellation, and injected crash."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPTJ18NR76MSBD704VE",
+      "kind": "acceptance_check",
+      "text": [
+        "Malformed, scan-only, password-required, ambiguous, active-content/external-reference, decompression, nesting, byte, page, record, memory, and wall-time cases fail closed before mutation and start no network listener, child process, renderer, OCR, or remote fetch."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPT8NFKQVTRQQK2XADB",
+      "kind": "acceptance_check",
+      "text": [
+        "Normal extraction creates no temporary; crash/startup cleanup removes only known unlocked disposable INGEST artifacts and leaves no orphan extraction temporary."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPT0BJV03QTMTT7K7ZZ",
+      "kind": "acceptance_check",
+      "text": [
+        "Architecture guards reject HTTP/FastEndpoints/Aspire/PostgreSQL/EF, reflection/plugin loading, private Ledger storage/handler references, payload logging, and source argument options."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPTK073K91Z3BBEMPAQ",
+      "kind": "constraint",
+      "text": [
+        "Security failures themselves must use metadata-only stable identifiers and never echo the triggering payload."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPTC125N55FCJ0F8BHT",
+      "kind": "expected_output",
+      "text": [
+        "IngestSecurityGateEvidence"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPTGR5P5X6K79M4R2WC",
+      "kind": "expected_output",
+      "text": [
+        "Published security boundary tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPTG18WGHBWJWC5A03X",
+      "kind": "expected_output",
+      "text": [
+        "Malformed/resource canary tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPT3EMCK1TMP5V5HX1D",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT weaken canary assertions, redact after logging, or treat process isolation as sufficient — prevent payload entry at each boundary."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPTZ3MB48XEXQCKMWRE",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT skip owner-only mode checks on supported hosts or continue after failure."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPT9YJWWEHE6P1V2GYD",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT persist test fixture paths/content or emit them when a security assertion fails."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXTMKTPV7JBKGJBP097E7X7V",
+      "target_ref_code": "RISK-INGEST-004",
+      "target_entity_type": "risk",
+      "target_entity_id": "01KXT9W8KSHECEANS9W814PFQM",
+      "target_title": "Raw statements or extracted temporary data can leak through permissions, logs, crash artifacts, or indefinite retention.",
+      "relationship": "references",
+      "required": 0,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPVA9Y7HBEC90D569Y3",
+      "target_ref_code": "RISK-INGEST-007",
+      "target_entity_type": "risk",
+      "target_entity_id": "01KXTBCV7NP205SPZGBTSJTXE9",
+      "target_title": "A malformed or adversarial document can exhaust local CPU, memory, disk, decompression, or parser time, or attempt active-content and external-resource execution.",
+      "relationship": "references",
+      "required": 0,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPVPXDZFEVYYRNR92GT",
+      "target_ref_code": "NFR-INGEST-LOCAL-DATA-PROTECTION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXTEXKRBE0ATCQV50F506QED",
+      "target_title": "Protect local statement and ingestion data",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPVTZ8WMVFE8SA9E2XC",
+      "target_ref_code": "NFR-INGEST-BOUNDED-PARSING",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXTEXM19R263D66YHS6EFCCS",
+      "target_title": "Bound passive statement processing",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPVHSJ9Y6H7FJC99JV3",
+      "target_ref_code": "TC-INGEST-ARTIFACT-PROTECTION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTJ0BJRAHTKQR6012CNCT09",
+      "target_title": "Verify source and artifact privacy boundaries",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPV6P07HD34V0N6MZD7",
+      "target_ref_code": "TC-INGEST-PDF-EXTRACTION-AOT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTJ09C7WM75QS1CE2XGD3AA",
+      "target_title": "Verify PdfPig Native-AOT extraction conformance",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXTMKTPV3YXGA176F0NXN0JY",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach redacted permission modes, source hashes, canary absence, resource, network, process, and temporary inventories."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    },
+    {
+      "id": "01KXTMKTPVGVT5VYQ3Z08FX2ZF",
+      "gate_type": "branch-review",
+      "description": [
+        "Reviewer inspects every source/payload boundary and all forbidden dependency guards."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXTMKTPVFF704EMXPW4PN53D",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~IngestSecurityBoundaryTests|FullyQualifiedName~IngestResourceCanaryTests|FullyQualifiedName~PublishedIngestSecurityTests'",
+      "expected_result": "exit 0; at least 28 permission, canary, source-hash, malformed/resource, temporary, offline, process, stream, architecture, and crash cases are discovered and 0 tests fail without echoing canary payloads",
+      "required": 1,
+      "timeout_seconds": 1200,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+    }
+  ]
+}

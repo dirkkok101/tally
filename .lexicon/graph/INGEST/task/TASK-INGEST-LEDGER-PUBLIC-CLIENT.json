@@ -1,0 +1,332 @@
+{
+  "id": "01KXTMAH8HS44VZDF52WXTAH1G",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ60H80VCQRZFJDPG8Y1D",
+  "ref_code": "TASK-INGEST-LEDGER-PUBLIC-CLIENT",
+  "slug": "LEDGER-PUBLIC-CLIENT",
+  "title": "Implement the concrete public LEDGER client",
+  "description": [
+    "Use the shared typed operation executor for account lookup and transaction record/get; expose no transport abstraction and no private LEDGER implementation."
+  ],
+  "objective": [
+    "Provide one concrete LedgerContractClient that preserves released schemas, errors, versions, cancellation, and idempotency unchanged."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 10,
+  "created_at": "2026-07-18T12:48:21.7802577+00:00",
+  "decisions": [
+    {
+      "id": "01KXTMAH8MQYJG5S2Z2WA3HRM2",
+      "target": "DD-INGEST-LEDGER-PUBLIC-INTEGRATION",
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXTMAH8QAC4C7KXGEG3R6FCT",
+      "target": "TASK-INGEST-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "The client consumes FrozenLedgerRecordRequest and stable INGEST compatibility errors."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8PQFA7Y8FV9K4BH380",
+      "target": "TASK-INGEST-GATE-INT-LEDGER-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "The prerequisite gate proves every operation and contract consumed by the client."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXTMAH8NQJSGNBMWB6XZCM20",
+      "path": "src/Tally/Integration/Ledger/LedgerContractClient.cs",
+      "action": "create",
+      "role": "public operation executor client",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8NVX7CYCH9ZAHKZWV7",
+      "path": "tests/Tally.Tests/Ingest/LedgerContract/LedgerContractClientTests.cs",
+      "action": "test",
+      "role": "account/record/get contract tests",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8NCM6KN7YG8RQJQ24F",
+      "path": "tests/Tally.Tests/Ingest/LedgerContract/LedgerBoundaryArchitectureTests.cs",
+      "action": "test",
+      "role": "private-reference guards",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXTMWS34PBDK6Y2S0TBCW2KN",
+      "name": "VerifiedLedgerOperationRegistry",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "Validated by the local prerequisite gate"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:58:19.6203650+00:00"
+    },
+    {
+      "id": "01KXTMWS350C9MNBMNHENQXCFT",
+      "name": "VerifiedLedgerAccountDetail",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
+      "notes": [
+        "Validated external AccountDetail contract"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:58:19.6203650+00:00"
+    },
+    {
+      "id": "01KXTMWS351WN1K5GM0W4FB3WD",
+      "name": "VerifiedLedgerTransactionDetail",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "notes": [
+        "Validated external TransactionDetail contract"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:58:19.6203650+00:00"
+    },
+    {
+      "id": "01KXTMWS35AGTSQ7N1BZZAGH32",
+      "name": "LedgerIngestContractPrerequisite",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+      "notes": [
+        "Upstream gate evidence"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:58:19.6203650+00:00"
+    },
+    {
+      "id": "01KXTMWS35E9JDSM62YW42TWTR",
+      "name": "FrozenLedgerRecordRequest",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+      "notes": [
+        "Frozen INGEST public request"
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:58:19.6203650+00:00"
+    },
+    {
+      "id": "01KXTMWS35GFNHDG6B0WT38FCB",
+      "name": "LedgerContractClient.GetAccountAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
+      "notes": [
+        "Public account lookup"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:58:19.6203650+00:00"
+    },
+    {
+      "id": "01KXTMWS35YFFA1ZDZZ9588CP3",
+      "name": "LedgerContractClient.RecordTransactionAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+      "notes": [
+        "Public idempotent write"
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-18T12:58:19.6203650+00:00"
+    },
+    {
+      "id": "01KXTMWS386T6VVF3E1DPP5AVM",
+      "name": "LedgerContractClient.GetTransactionAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+      "notes": [
+        "Public canonical verification"
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-18T12:58:19.6203650+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXTMAH8MY2SXB7SF47X7WY9G",
+      "kind": "acceptance_check",
+      "text": [
+        "LedgerContractClient.GetAccountAsync invokes ledger.account.get through OperationRegistry and returns the released AccountDetail without inferring or translating account identity, class, currency, or lifecycle."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8MDW2KDBKP7D06VHKC",
+      "kind": "acceptance_check",
+      "text": [
+        "RecordTransactionAsync invokes ledger.transaction.record with the persisted FrozenLedgerRecordRequest, provenance kind statement_import, sourceReference and idempotency key derived by INGEST; GetTransactionAsync invokes ledger.transaction.get for round-trip verification."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8NXJJMAJGW11W9W5ZM",
+      "kind": "acceptance_check",
+      "text": [
+        "Unsupported Ledger contract versions fail before source parsing or mutation; all public stable errors and exits are preserved without translation to weaker generic failures."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8NE5TDFK4JFPENG5HC",
+      "kind": "acceptance_check",
+      "text": [
+        "Cancellation propagates into the shared executor; the client neither spawns a process nor catches an unexpected exception to expose it as payload."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8N0KEJPZTSHXTYKDDK",
+      "kind": "acceptance_check",
+      "text": [
+        "Architecture tests reject references to LedgerDb, Infrastructure/Storage/Ledger, Features/Ledger handlers, private Ledger domain types, SQL, or storage paths."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8NRP8BRQP9JPCGNS37",
+      "kind": "constraint",
+      "text": [
+        "Only released operation IDs, common envelopes, Ledger contract records, and stable errors may cross this boundary."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8N3ZF7ESKWB75EYCBF",
+      "kind": "expected_output",
+      "text": [
+        "LedgerContractClient"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8NB7X35XM4KTJVRQ99",
+      "kind": "expected_output",
+      "text": [
+        "Public-contract client and architecture tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8NVRCJAJSVYBCVHSEK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT open LedgerDb/SQL or call feature handlers directly — rejected per DD-INGEST-LEDGER-PUBLIC-INTEGRATION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8NS4B71GZ7T4HYQNXN",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT spawn the CLI as a child process or add an ILedgerTransport interface with one implementation — rejected alternatives per DD-INGEST-LEDGER-PUBLIC-INTEGRATION."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8N9NW64JZDWTEWS52R",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT duplicate or weaken LEDGER account, money, date, provenance, source-reference, or idempotency validation."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXTMAH8PNXZ3Q7F6AVTE0AYE",
+      "target_ref_code": "TC-INGEST-LEDGER-PUBLIC-CONFORMANCE",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTJ0AV78TA1TXWZMK9VQSRC",
+      "target_title": "Verify INGEST uses only the public LEDGER contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXTMAH8MXQNY70MHZ73307M2",
+      "target": "FR-INGEST-APPROVED-BATCH-COMMIT",
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXTMAH8P26MR38E9BR6Z54TS",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach account, transaction round-trip, replay, version, and stable-error evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KXTMAH8PP5PPPB663ZXRR0M1",
+      "gate_type": "branch-review",
+      "description": [
+        "Reviewer confirms the client references no private Ledger namespace or store."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXTMAH8PGM5Y346TC7DV9D2Q",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~LedgerContractClientTests|FullyQualifiedName~LedgerBoundaryArchitectureTests'",
+      "expected_result": "exit 0; at least 14 account, version, record/get, replay, cancellation, error-preservation, and private-reference cases are discovered and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    }
+  ]
+}

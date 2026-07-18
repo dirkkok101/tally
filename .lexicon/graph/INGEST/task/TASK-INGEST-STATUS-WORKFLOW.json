@@ -1,0 +1,351 @@
+{
+  "id": "01KXTMFJZPM48W2NQH6FDCB488",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ6ABPSMYY5091FY1325K",
+  "ref_code": "TASK-INGEST-STATUS-WORKFLOW",
+  "slug": "STATUS-WORKFLOW",
+  "title": "Implement safe batch status and failure reporting",
+  "description": [
+    "Read one detailed batch or a stable cursor page of retained summaries and map every expected failure to metadata-only durable-state guidance."
+  ],
+  "objective": [
+    "Deliver ingest.status with deterministic paging, mutation certainty, unresolved frontier, and safe retry/resume actions without source access."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 30,
+  "created_at": "2026-07-18T12:51:07.3836449+00:00",
+  "decisions": [
+    {
+      "id": "01KXTMFJZWZTK1593TMZCMH3NA",
+      "target": "DD-INGEST-CLI-OPERATION-CONTRACT",
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXTMFJZX4CQ3RCDM5BJEZXZV",
+      "target": "TASK-INGEST-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Status consumes IngestError, BatchStatus, and ImportReceipt contracts."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZYRAABG21JT7VTSQ5R",
+      "target": "TASK-INGEST-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "StatusStateStore reads the V001 INGEST schema."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXTMFJZX2HZPW13XQEWN636J",
+      "path": "src/Tally/Features/Ingest/Recovery/StatusQuery.cs",
+      "action": "create",
+      "role": "detail/page request",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZXYZ6AREHZEQF8SY7K",
+      "path": "src/Tally/Features/Ingest/Recovery/StatusHandler.cs",
+      "action": "create",
+      "role": "safe status mapping",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZXK8YP4N7GFYHEAKPK",
+      "path": "src/Tally/Features/Ingest/Recovery/StatusOperationModule.cs",
+      "action": "create",
+      "role": "status descriptor binding",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZXA2480KKZYKBY0A3Q",
+      "path": "src/Tally/Infrastructure/Ingest/Storage/StatusStateStore.cs",
+      "action": "create",
+      "role": "detail and cursor-page SQL",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZXGZH5EHXDC07MX0BQ",
+      "path": "tests/Tally.Tests/Ingest/Recovery/StatusWorkflowTests.cs",
+      "action": "test",
+      "role": "status/error/paging tests",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXTMFJZXM7NKS2ZHJGJ5Z509",
+      "name": "BatchStatusSummary",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZX6R7ZSDNRN27KVH9E",
+      "name": "IngestError",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZX32WR5NZF6344ZBVJ",
+      "name": "ImportReceipt",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-IMPORT-RECEIPT",
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZXH6AE39QKJPJEPPD8",
+      "name": "IngestDatabase",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-STATE-STORE",
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZX1B3EQYFX9XT7N87K",
+      "name": "StatusStateStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-STATE-STORE",
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZXXP691XF5DF215EF5",
+      "name": "StatusOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXTMFJZW93JPG6340JYZ8XAW",
+      "kind": "acceptance_check",
+      "text": [
+        "With batchId, status returns BatchStatusDetail for the exact batch: safe summary, manifest revision, approval, receipt state, terminal counts, unresolved frontier, last stable error, retained artifact kinds, and next allowed operations without rereading the source."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZWFRCET60QNZS7VNHR",
+      "kind": "acceptance_check",
+      "text": [
+        "Without batchId, limit defaults to 50, accepts only 1 through 100, cursor is opaque and tamper-rejected, results order by updatedAt descending then batchId, and nextCursor neither skips nor duplicates rows under a stable snapshot."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZWV8HVV0N1VKEVY85K",
+      "kind": "acceptance_check",
+      "text": [
+        "Pre-commit source/permission/resource/compatibility/reconciliation failures report mutationPossibility=none and no committable manifest; overlap identifies only safe source-context IDs and requires repreview."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZWAFPB3B9K9V0AYMWM",
+      "kind": "acceptance_check",
+      "text": [
+        "Commit-stage failures report mutationPossibility=possible or confirmed from durable evidence, the exact approved manifest, completed outcomes, unresolved frontier, and resume or abandon guidance."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZWHE3TNH2C9AJ27D2G",
+      "kind": "acceptance_check",
+      "text": [
+        "Every expected failure uses one stable IngestError code/category/retryAction; stdout has one structured result and diagnostics never contain stack trace, parser exception, path, row, description, amount, balance, full identifier, manifest, or request."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZWWA31K6HB6WG6FQ2T",
+      "kind": "acceptance_check",
+      "text": [
+        "StatusOperationModule binds ingest.status but global registration waits for the public-contract gate."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZXVTMQVV5DVFAHJTDM",
+      "kind": "constraint",
+      "text": [
+        "Cursor encoding is deterministic and integrity-checked but contains no financial payload."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZWVM46WHZNG2CPXSTK",
+      "kind": "expected_output",
+      "text": [
+        "StatusQuery/Handler"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZW2VDKXWW7JAT2RND0",
+      "kind": "expected_output",
+      "text": [
+        "StatusStateStore"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZW139T6A2DDK5Q5TE9",
+      "kind": "expected_output",
+      "text": [
+        "StatusOperationModule"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZWKWAQ5R8KSJ70RQ4T",
+      "kind": "expected_output",
+      "text": [
+        "StatusWorkflowTests"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZWTBJN8VGQSCQZM4JE",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT query or mutate Ledger, reread the source, use offset paging, expose raw exceptions/payloads, or return an ambiguous boolean for mutation possibility."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZWERA63TNRAB6F84F1",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT modify durable state in StatusHandler — adapted read-only query rule per PAT-CORE-API-QUERIES."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZW1JY52C1RT1NCEBW6",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT invent retry guidance inconsistent with the durable batch state."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXTMFJZXBY30QG5XCE158BFD",
+      "target_ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXTHWTR02Y3S3QB2FTQ8WDYT",
+      "target_title": "IngestErrorAndStatusContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZXNFBTN5NMAHWJ9TVM",
+      "target_ref_code": "TC-INGEST-FAILURE-STATUS-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTF4ZJ8JCMA6CB7RK9DZ62M",
+      "target_title": "Verify safe failure and status reporting",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXTMFJZWDY9BT7GY80MH8XZ2",
+      "target": "FR-INGEST-FAILURE-STATUS",
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXTMFJZX35RPF7PCG6CFR5BD",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach deterministic paging and representative pre/post-mutation safe error envelopes."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZX65P8QDVFA5KHHBSB",
+      "gate_type": "self-review",
+      "description": [
+        "Confirm every status field derives from durable state and the handler performs no mutation."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXTMFJZX1TS59C4E2HZJ03XF",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~StatusWorkflowTests",
+      "expected_result": "exit 0; at least 20 detail, empty, default/max/invalid limit, cursor, stable ordering, mutation certainty, retry guidance, payload exclusion, and read-only cases are discovered and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ]
+}

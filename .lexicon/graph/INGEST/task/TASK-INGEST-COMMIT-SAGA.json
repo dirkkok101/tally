@@ -1,0 +1,485 @@
+{
+  "id": "01KXTMFJZN6WHPQ2QAYA72TYZZ",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ6ABPSMYY5091FY1325K",
+  "ref_code": "TASK-INGEST-COMMIT-SAGA",
+  "slug": "COMMIT-SAGA",
+  "title": "Implement the idempotent candidate commit saga",
+  "description": [
+    "Commit one approved frozen candidate at a time under a per-batch OS lock, with durable attempting/terminal states bracketing only public LEDGER calls."
+  ],
+  "objective": [
+    "Deliver ingest.commit so every candidate is accepted once, returned as an exact prior result, or durably stopped without unsafe continuation."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 10,
+  "created_at": "2026-07-18T12:51:07.3836449+00:00",
+  "decisions": [
+    {
+      "id": "01KXTMFJZQ9H5FMDJR8CK7DHFY",
+      "target": "DD-INGEST-COMMIT-RECOVERY",
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXTMWVGV1EFRCBT53X1FDQB0",
+      "target": "TASK-INGEST-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes ImportReceipt and FrozenLedgerRecordRequest."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:58:22.1089359+00:00"
+    },
+    {
+      "id": "01KXTMFJZT2K9KGRRCA8X8BADJ",
+      "target": "TASK-INGEST-LEDGER-PUBLIC-CLIENT",
+      "dependency_type": "compile",
+      "reason": [
+        "The saga invokes only LedgerContractClient record/get methods."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZVTR66A4VBC174VZZG",
+      "target": "TASK-INGEST-PREVIEW-DOMAIN",
+      "dependency_type": "compile",
+      "reason": [
+        "Commit revalidates stable candidate identity and canonical manifest digest."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZTX6ANKBP3TMDG4YE1",
+      "target": "TASK-INGEST-REVIEW-WORKFLOW",
+      "dependency_type": "compile",
+      "reason": [
+        "Commit consumes exact immutable approvals and manifests from ReviewStateStore."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZVNY440MB7ECGG5C96",
+      "target": "TASK-INGEST-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "CommitStateStore and BatchCommitLock require protected ingest.db and artifact primitives."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXTMFJZRHVTSE09XANKHKDG6",
+      "path": "src/Tally/Domain/Ingest/Commit/CandidateCommitState.cs",
+      "action": "create",
+      "role": "closed candidate saga transitions",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZSY8AC9H2JWR9PSS4Q",
+      "path": "src/Tally/Features/Ingest/Commit/CommitCommand.cs",
+      "action": "create",
+      "role": "exact approved revision input",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZSJWZ2T482EAZKDV4N",
+      "path": "src/Tally/Features/Ingest/Commit/CandidateCommitSaga.cs",
+      "action": "create",
+      "role": "candidate orchestration",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZSXR1D9B661GQRSKW0",
+      "path": "src/Tally/Features/Ingest/Commit/CommitOperationModule.cs",
+      "action": "create",
+      "role": "commit descriptor binding",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZSPW71T19MPKQSEP2T",
+      "path": "src/Tally/Infrastructure/Ingest/Storage/CommitStateStore.cs",
+      "action": "create",
+      "role": "attempt/terminal receipt SQL",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZSV282DT6BDC5AABB2",
+      "path": "src/Tally/Infrastructure/Ingest/Storage/BatchCommitLock.cs",
+      "action": "create",
+      "role": "owner-only per-batch process lock",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZSVFJ1YK1WBRHVTR8P",
+      "path": "tests/Tally.Tests/Ingest/CommitRecovery/CommitSagaTests.cs",
+      "action": "test",
+      "role": "state and stop-frontier tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZSQS73D7WG2ZKB9BBG",
+      "path": "tests/Tally.Tests/Ingest/LedgerContract/LedgerRoundTripCommitTests.cs",
+      "action": "test",
+      "role": "public Ledger result verification",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXTMFJZSPKNJS4RX7HKZC40M",
+      "name": "ImportReceipt",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-IMPORT-RECEIPT",
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZS5SQN51CE2R1B72HE",
+      "name": "FrozenLedgerRecordRequest",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZS8K5B0T3J78SNDHWR",
+      "name": "IngestDatabase",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-STATE-STORE",
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZSN29RQ03N8VYWQN3K",
+      "name": "ReviewStateStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-STATE-STORE",
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZSX6FNRJEFR0N8ME37",
+      "name": "LedgerContractClient.RecordTransactionAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZSNX9AT38YKHTPPBBV",
+      "name": "LedgerContractClient.GetTransactionAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZS81BKQJK93G789V8T",
+      "name": "BatchCommitLock",
+      "direction": "produces",
+      "contract_ref_code": "DD-INGEST-COMMIT-RECOVERY",
+      "sort_order": 6,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZST28YR492XVQSVRV0",
+      "name": "CommitStateStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-STATE-STORE",
+      "sort_order": 7,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZSKXS03JY0EE0MF6M3",
+      "name": "CandidateCommitSaga.ExecuteAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-IMPORT-RECEIPT",
+      "sort_order": 8,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZS4JCJ3PYWRZQXZWR1",
+      "name": "CommitOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "sort_order": 9,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXTMFJZR7A9KT0RKNQC3KED0",
+      "kind": "acceptance_check",
+      "text": [
+        "Commit validates exact batch, manifest revision/digest, active approval, compatible adapter/manifest/Ledger versions, active selected account, candidate identity, and canonical manifest integrity before acquiring the lock or causing the first mutation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZRYFA2AP3VN4QTKM6H",
+      "kind": "acceptance_check",
+      "text": [
+        "BatchCommitLock is owner-only, non-reentrant across processes, rejects concurrent commit/resume for one batch, and is released by process loss; different batches may proceed independently."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZR00GX0HXENYBQV77N",
+      "kind": "acceptance_check",
+      "text": [
+        "For each frozen accepted candidate in deterministic manifest order, CommitStateStore durably records attempting plus the exact request and idempotency key before LedgerContractClient.RecordTransactionAsync runs outside any INGEST transaction."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZR0ZMK4J65BF1ERZQ4",
+      "kind": "acceptance_check",
+      "text": [
+        "A successful record result becomes terminal only after GetTransactionAsync round-trips account, signed amount, currency, dates, description, source reference, provenance, and transaction ID exactly and CommitStateStore durably records accepted before the next candidate."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZRKBGGR2J5JZG2VNB9",
+      "kind": "acceptance_check",
+      "text": [
+        "An exact_duplicate candidate records its prior canonical reference and invokes no write; a stable Ledger validation, compatibility, idempotency, round-trip, or receipt-write conflict records the safe frontier and stops continuation."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZR1BP7WZYAJYD40F82",
+      "kind": "acceptance_check",
+      "text": [
+        "When every candidate is terminal, the complete ImportReceipt reports exact counts/canonical references and verified completion; no candidate is labeled merely processed."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZRKTX69ZAFY7Q7262N",
+      "kind": "acceptance_check",
+      "text": [
+        "CommitOperationModule binds ingest.commit but is not globally registered until the public-contract gate."
+      ],
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZRG80A528YGANKAHZW",
+      "kind": "constraint",
+      "text": [
+        "All candidate ordering, request bytes, keys, contract versions, and manifest meaning are frozen before the first Ledger call."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZRA6T1ZGM1TKSCYXM7",
+      "kind": "expected_output",
+      "text": [
+        "CandidateCommitState"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZRZ7YQKAXJ7BRFF39V",
+      "kind": "expected_output",
+      "text": [
+        "BatchCommitLock"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZREBJ1SKSVXV06GVKS",
+      "kind": "expected_output",
+      "text": [
+        "CommitStateStore"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZR7JQJ8J1FH6CTQHYG",
+      "kind": "expected_output",
+      "text": [
+        "CandidateCommitSaga"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZRH4FY9QJJ55D8FDRP",
+      "kind": "expected_output",
+      "text": [
+        "CommitOperationModule"
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZR6AS6EYD8VQBB0T74",
+      "kind": "expected_output",
+      "text": [
+        "Commit saga tests"
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZRRCBVHFKSZQJXYY3Z",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use a whole-batch/distributed transaction, hold SQLite across a Ledger call, or keep progress only in memory — rejected per DD-INGEST-COMMIT-RECOVERY."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZRS4RJ6PQSZADZ46BR",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT regenerate a request/key, reread the source, use a new manifest revision, or skip public transaction.get verification."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZRGSGNFWBRDW58VC8S",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT call private Ledger storage/handlers or continue after an unsafe/conflicting result."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZRZBDAJ9CRJSM0HTTA",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT mark attempting as terminal or advance before durable receipt state."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXTMFJZT8KA3YF71D6J9S0BN",
+      "target_ref_code": "NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXTEXMB56QHCK46RMFVHPJBG",
+      "target_title": "Recover every interrupted commit deterministically",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZTR9WCWA5024M3T9D2",
+      "target_ref_code": "TC-INGEST-COMMIT-RECOVERY-MATRIX",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTJ0B755W6A58QQR2NBNYZK",
+      "target_title": "Verify every candidate commit crash window",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 9,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXTMFJZQAR4CFAJFQ59NBAWV",
+      "target": "FR-INGEST-APPROVED-BATCH-COMMIT",
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZQ4E26JZHYQPZPGXJX",
+      "target": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXTMFJZSKK0SPCRY701EWT9W",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach per-transition durable-state and public round-trip evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KXTMFJZTWHYT77QSXKZQ3T25",
+      "gate_type": "branch-review",
+      "description": [
+        "Reviewer confirms no SQLite transaction spans a Ledger call and no request/key can change."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXTMFJZS0J9GS9WJZAD165Y8",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~CommitSagaTests|FullyQualifiedName~LedgerRoundTripCommitTests'",
+      "expected_result": "exit 0; at least 24 approval, lock, ordering, attempting, duplicate, Ledger result, round-trip, terminal durability, stop-frontier, and completion cases are discovered against real SQLite/public Ledger contracts and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    }
+  ]
+}

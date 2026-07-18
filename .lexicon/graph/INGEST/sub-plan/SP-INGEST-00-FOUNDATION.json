@@ -1,0 +1,11 @@
+{
+  "id": "01KXTKQ57FSS5HGH1WQNMKD6E8",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "ref_code": "SP-INGEST-00-FOUNDATION",
+  "title": "Public prerequisites and local foundations",
+  "description": [
+    "Establish only the upstream contract, public INGEST contract types, and protected SQLite primitives required by every later slice."
+  ],
+  "sort_order": 0,
+  "created_at": "2026-07-18T12:37:46.8644136+00:00"
+}

@@ -1,0 +1,199 @@
+{
+  "id": "01KXTMS8JS8MQG6SJAFE8R8B69",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ6NXHSTNEAX7K97NATP4",
+  "ref_code": "TASK-INGEST-VERIFY-UC-002",
+  "slug": "VERIFY-UC-002",
+  "title": "Verify immutable review and approval workflow",
+  "description": [
+    "Black-box use-case gate for UC-INGEST-002 main scenario and every documented failure path."
+  ],
+  "objective": [
+    "Prove an owner can inspect and approve exactly one committable immutable revision without editing source facts or mutating LEDGER."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 40,
+  "created_at": "2026-07-18T12:56:24.4112574+00:00",
+  "dependencies": [
+    {
+      "id": "01KXTMS8JYWS97C7N6N7XKYFQ3",
+      "target": "TASK-INGEST-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "UC verification exercises published preview/inspect/approve/commit operations."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXTMS8JY5E3T4EXX4ADH9RC7",
+      "path": "tests/Tally.Tests/Ingest/E2E/ReviewApprovalWorkflowTests.cs",
+      "action": "test",
+      "role": "UC-INGEST-002 black-box gate",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXTMS8JYTZX9Z82RKE2JRJEZ",
+      "name": "CompleteIngestPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JYD1NGF37BM54JZSWA",
+      "name": "UCIngest002Evidence",
+      "direction": "produces",
+      "contract_ref_code": "UC-INGEST-002",
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXTMS8JXZTG92QWX5F3S11BR",
+      "kind": "acceptance_check",
+      "text": [
+        "Main scenario previews, inspects the complete exact revision, verifies candidates/exclusions/duplicates/conflicts/controls/versions, approves its digest with actor attribution, and observes approved state with no Ledger transaction."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JXB87CP07HD86HTCRJ",
+      "kind": "acceptance_check",
+      "text": [
+        "An unexplained row, failed control, ambiguous semantic duplicate, overlap, missing fact, or unsupported finance meaning keeps approval blocked."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JXZ5EJK2HF7FPK5WEQ",
+      "kind": "acceptance_check",
+      "text": [
+        "Attempted edits to amount, currency, date, description, sign, account, or provenance are rejected and require corrected source/adapter plus a new preview."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JXWVNPMZ5C8VT9NKWG",
+      "kind": "acceptance_check",
+      "text": [
+        "Adapter, manifest, Ledger contract, account state, or digest change invalidates the old approval and requires a compatible new revision."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JX9R05TAK1ZF1NDV2B",
+      "kind": "acceptance_check",
+      "text": [
+        "Commit with absent approval or an approval for another revision is rejected before mutation."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JY6JF7D01RSVQ8355V",
+      "kind": "constraint",
+      "text": [
+        "Sensitive manifest output is consumed in-memory by the test and never written to snapshots or logs."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JYW18K14B6W18N13HJ",
+      "kind": "expected_output",
+      "text": [
+        "UCIngest002Evidence"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JXVZZ1F1QGKE63YJVH",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT query ingest.db or call handlers directly; assertions use inspect/status and public Ledger observation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JXA5AEYT19QKDBDCMB",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT place manifest payloads in diagnostics or tracked snapshots."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXTMS8JY5KJDBHPABAZTEDP3",
+      "target_ref_code": "UC-INGEST-002",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXTBAX9RM2HSKQTNAHK5GHSD",
+      "target_title": "Review and approve a candidate batch",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KXTMS8JYGDW1ZZ1WPYXPQMKW",
+      "target_ref_code": "TC-INGEST-MANIFEST-REVIEW-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTF4YD29EY0EG4389FTR7T7",
+      "target_title": "Verify immutable manifest review and approval",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXTMS8JYMQ3EYWFWR05AJT6G",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach safe revision/digest/approval state and zero-mutation evidence for every path."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXTMS8JY82CXS7162DZ5EAKZ",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ReviewApprovalWorkflowTests",
+      "expected_result": "exit 0; at least 10 main, blocked, edit, version, digest, account, and wrong-revision cases are discovered and 0 tests fail with zero Ledger mutation",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    }
+  ]
+}

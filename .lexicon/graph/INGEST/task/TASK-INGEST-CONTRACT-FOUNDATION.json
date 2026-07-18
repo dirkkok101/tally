@@ -1,0 +1,375 @@
+{
+  "id": "01KXTM0RWC8VR2ZCCA4XT5753G",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ57FSS5HGH1WQNMKD6E8",
+  "ref_code": "TASK-INGEST-CONTRACT-FOUNDATION",
+  "slug": "CONTRACT-FOUNDATION",
+  "title": "Define the INGEST operation and business contracts",
+  "description": [
+    "Create source-generated public records, stable errors, operation IDs, manifest/receipt views, and compatibility metadata used identically by every later slice."
+  ],
+  "objective": [
+    "Produce the typed Native-AOT-safe contract foundation for all eight INGEST operations without registering incomplete handlers."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 20,
+  "created_at": "2026-07-18T12:43:01.9014692+00:00",
+  "decisions": [
+    {
+      "id": "01KXTM0RWJ6Z65RNYND2A4XH0C",
+      "target": "DD-INGEST-CLI-OPERATION-CONTRACT",
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXTM0RWM9XPEN1WQV7RYJYXY",
+      "target": "TASK-INGEST-GATE-INT-LEDGER-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "The common envelope and public Ledger contract types must exist before INGEST contract records compile."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXTM0RWK4EWVFGN2WQ3BCHQ6",
+      "path": "src/Tally/Contracts/Ingest/IngestOperationContracts.cs",
+      "action": "create",
+      "role": "eight request/result records",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWKZFWBK5Z4JS9SVVVT",
+      "path": "src/Tally/Contracts/Ingest/IngestErrorContracts.cs",
+      "action": "create",
+      "role": "stable errors and status records",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWKKGE3AYSGDP2DZEMY",
+      "path": "src/Tally/Contracts/Ingest/IngestManifestContracts.cs",
+      "action": "create",
+      "role": "manifest and candidate views",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWK8NKTE9YFGAF8XGRS",
+      "path": "src/Tally/Contracts/Ingest/IngestReceiptContracts.cs",
+      "action": "create",
+      "role": "receipt and frozen Ledger records",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWKBND6FDDD82T10YY4",
+      "path": "src/Tally/Contracts/Ingest/IngestJsonContext.cs",
+      "action": "create",
+      "role": "source-generated JSON metadata",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWKCGYJ7FPKNP500J9Y",
+      "path": "src/Tally/Features/Ingest/Contract/IngestOperationIds.cs",
+      "action": "create",
+      "role": "stable operation/version constants",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWKYJMXVVN4N1JF9T3R",
+      "path": "tests/Tally.Tests/Ingest/Contract/IngestContractModelTests.cs",
+      "action": "test",
+      "role": "contract determinism tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXTM0RWKKQMGXJM0WGRMZW26",
+      "name": "IngestOperationIds",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWKX2ZWTFW7VDFE7ETT",
+      "name": "IngestOperationContracts",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWK47AR7EGV04JBVV53",
+      "name": "IngestError",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWKFTC2VGF3G15HXBWS",
+      "name": "BatchStatusSummary",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWK0VB6RQ9M1ZY2KD2D",
+      "name": "ImportManifestContract",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-IMPORT-MANIFEST",
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWK35K2R6Z3TB1ZPPB2",
+      "name": "ImportReceipt",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-IMPORT-RECEIPT",
+      "sort_order": 5,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWKD8X6VQQPAX8WG80F",
+      "name": "FrozenLedgerRecordRequest",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+      "sort_order": 6,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWK36J4V9G6RZGN59RT",
+      "name": "IngestJsonContext",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "sort_order": 7,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXTM0RWJ4334P61AD1WS7V04",
+      "kind": "acceptance_check",
+      "text": [
+        "IngestOperationIds contains exactly ingest.preview, ingest.inspect, ingest.approve, ingest.commit, ingest.resume, ingest.status, ingest.abandon, and ingest.cleanup with no generic operation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWJTPQBE8V4BHZR3F1W",
+      "kind": "acceptance_check",
+      "text": [
+        "Concrete request/result records match DM-INGEST-OPERATION-CONTRACTS, use closed enums for finite states, carry explicit contract versions, and expose sourcePath only inside PreviewRequest."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWJSF19GXGGG5F12VR4",
+      "kind": "acceptance_check",
+      "text": [
+        "IngestError exposes category, mutationPossibility none|possible|confirmed, retryAction, safe identifiers, and durable state but cannot carry source paths, rows, amounts, balances, full bank identifiers, raw requests, manifests, stack traces, or parser exceptions."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWJ0PQS7MFGP0AC3FPC",
+      "kind": "acceptance_check",
+      "text": [
+        "Manifest and receipt records preserve stable identifiers and immutable facts while CompletedMetadataReceipt excludes descriptions, amounts, balances, evidence, controls, and frozen requests."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWJ3XAB4C6YFWBB4TAR",
+      "kind": "acceptance_check",
+      "text": [
+        "IngestJsonContext contains source-generated metadata for every contract type, rejects unknown fields, and produces byte-identical logical JSON across repeated serialization."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWKHWW31FZ3306GSKSG",
+      "kind": "constraint",
+      "text": [
+        "All complex requests use the common structured input envelope; sourcePath is never a named command-line argument."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWJQ2R4WTMPTG3KC5FN",
+      "kind": "expected_output",
+      "text": [
+        "Eight-operation contract set"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWJX2E9RYEDFR3JT6X7",
+      "kind": "expected_output",
+      "text": [
+        "Stable errors and status records"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWK8Y7X2W87KJHAKQV6",
+      "kind": "expected_output",
+      "text": [
+        "Manifest and receipt contracts"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWKKN39KREVGE72VDME",
+      "kind": "expected_output",
+      "text": [
+        "Source-generated IngestJsonContext"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWJGR525K4AZ3DA1R9F",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT hide transitions behind a generic action discriminator — rejected per DD-INGEST-CLI-OPERATION-CONTRACT."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWJ9GNRMQHWHG6WYK3G",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT introduce HTTP DTOs, FastEndpoints, controllers, mutable CRUD DTOs, or UI models — rejected per DD-INGEST-APPLICATION-ARCHITECTURE."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWJ0W90YY4YE3GQR1AP",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT expose SQLite, PdfPig, private LEDGER, filesystem, exception, or parser types in public contracts."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWJP2QCP0XCMT4T4DRW",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use reflection-based JSON metadata or runtime property-order hashing."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXTM0RWMQ0BNVQVYYB0RD3EA",
+      "target_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXTHWRNZ9BAB4P7V2RNMTKMA",
+      "target_title": "IngestOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWMNMV1VREFNEYBPXQA",
+      "target_ref_code": "TC-INGEST-CONTRACT-DISCOVERY-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTF4WZES1WGCEWCZFEV3Y2N",
+      "target_title": "Verify INGEST contract discovery",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 8,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXTM0RWJEA62GVA4BBF8X7ED",
+      "target": "FR-INGEST-CONTRACT-DISCOVERY",
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXTM0RWKTD0RE2V74WZJZ9BD",
+      "gate_type": "self-review",
+      "description": [
+        "Compare every contract record and enum with the five referenced data models."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    },
+    {
+      "id": "01KXTM0RWKCEWYEWHZBHY2ZZ89",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach deterministic serialization and unknown-field rejection output."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXTM0RWK1PNDQZAXMTKH05PW",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~IngestContractModelTests",
+      "expected_result": "exit 0; at least 16 schema, deterministic serialization, unknown-field, and payload-exclusion cases are discovered and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 0,
+      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+    }
+  ]
+}
