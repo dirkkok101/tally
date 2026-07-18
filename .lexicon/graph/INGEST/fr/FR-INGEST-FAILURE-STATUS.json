@@ -23,7 +23,7 @@
     "Given any preview, review, commit, resume, or cleanup failure, when the result is returned, then it includes a stable INGEST error code and category, safe batch or candidate identifiers if available, whether any LEDGER mutation may have occurred, the last durable receipt state, and whether retry, resume, or correction is allowed.",
     "Given an unsupported, malformed, permission, source-change, resource-limit, compatibility, or reconciliation failure before commit, when status is inspected, then it proves no LEDGER mutation occurred and no committable manifest exists.",
     "Given a blocking overlap or ambiguous financial fact, when status is inspected, then it identifies the blocked source-context record safely and requires a new reviewed resolution rather than automatic continuation.",
-    "Given a commit-stage failure after some terminal outcomes, when status is inspected, then it identifies the same approved manifest, completed outcomes, unresolved frontier, and safe resume operation.",
+    "Given a commit-stage failure after some Terminal Candidate Outcomes, when status is inspected, then it identifies the same approved manifest, completed outcomes, unresolved frontier, and safe resume operation.",
     "Given any expected domain failure, when diagnostics are emitted, then stdout contains one structured result, stderr contains metadata only, and no stack trace or parser exception substitutes for the stable contract."
   ],
   "security_criteria": [

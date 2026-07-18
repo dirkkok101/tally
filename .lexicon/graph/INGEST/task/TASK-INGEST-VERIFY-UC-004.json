@@ -6,7 +6,7 @@
   "slug": "VERIFY-UC-004",
   "title": "Verify replay and overlap safety workflow",
   "description": [
-    "Black-box use-case gate for UC-INGEST-004 exact replay, distinct tuple, identity conflict, and fail-closed overlap behavior."
+    "Black-box use-case gate for UC-INGEST-004 Exact Replay, distinct tuple, identity conflict, and fail-closed overlap behavior."
   ],
   "objective": [
     "Prove repeated or overlapping statements never create an unjustified duplicate suppression or second canonical transaction."

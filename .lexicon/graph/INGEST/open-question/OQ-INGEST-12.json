@@ -1,0 +1,20 @@
+{
+  "id": "01KXTWTWF2K0WY54XTE5J7NSYK",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "OQ-INGEST-12",
+  "question": "Should the ignored private fixture manifest be an explicit exception to the no-persisted-sourcePath decision, or must private fixture identity become path-free?",
+  "context": [
+    "Blocks INGEST bead compilation until DD-INGEST-ARTIFACT-SECURITY and TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES share one source-path persistence contract."
+  ],
+  "status": "open",
+  "created_at": "2026-07-18T15:17:06.1475231+00:00",
+  "links": [
+    {
+      "id": "01KXTWTWF5FENB0ZZVN1Q12E5J",
+      "target_type": "design_decision",
+      "target": "DD-INGEST-ARTIFACT-SECURITY",
+      "rel": "see-also",
+      "created_at": "2026-07-18T15:17:06.1495496+00:00"
+    }
+  ]
+}

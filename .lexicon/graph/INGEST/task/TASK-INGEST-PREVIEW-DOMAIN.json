@@ -6,7 +6,7 @@
   "slug": "PREVIEW-DOMAIN",
   "title": "Implement deterministic identity and reconciliation policies",
   "description": [
-    "Create pure finance/domain policies for exact normalization, stable identity, source-record accounting, reconciliation, canonical manifests, exact replay, and fail-closed overlap."
+    "Create pure finance/domain policies for exact normalization, stable identity, source-record accounting, reconciliation, canonical manifests, Exact Replay, and fail-closed overlap."
   ],
   "objective": [
     "Turn qualified source evidence into deterministic immutable candidate meaning without filesystem, SQLite, PdfPig, or LEDGER side effects."
@@ -165,74 +165,74 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXTMAH8QTBTNRMQB21CSVQ63",
+      "id": "01KXTX85E7K2HEZZHKN43FQTFV",
       "kind": "acceptance_check",
       "text": [
         "FinancialNormalizer converts exact base-10 evidence to integer minor units and owner-economic sign: asset increases and liability reductions are positive; asset decreases and liability increases are negative; currency is exactly ZAR."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-18T15:24:21.3191560+00:00"
     },
     {
-      "id": "01KXTMAH8QCBEN98S4E90P13ZF",
+      "id": "01KXTX85E85FQHDAYT880B1AC6",
       "kind": "acceptance_check",
       "text": [
         "TransactionDate is the source date with its year; a yearless date resolves only when exactly one date lies inside the explicit statement period; PostingDate remains distinct and optional; missing or ambiguous facts block without invention."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-18T15:24:21.3191560+00:00"
     },
     {
-      "id": "01KXTMAH8QT0SVVDE3JMQK36HX",
+      "id": "01KXTX85E8GVKH949JG0EDMCYY",
       "kind": "acceptance_check",
       "text": [
         "Zero monetary movement becomes excluded_non_transaction with a stable reason and never an ImportCandidate."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-18T15:24:21.3191560+00:00"
     },
     {
-      "id": "01KXTMAH8QH1KXJAXV1MNZHKWD",
+      "id": "01KXTX85E836K4S67K38YK0B0S",
       "kind": "acceptance_check",
       "text": [
-        "IngestIdentity derives sourceRecordId from source fingerprint, stable structural position, raw evidence fingerprint, and immutable-facts schema while excluding adapter/manifest/compatible-version metadata; candidateId derives from accountId, sourceRecordId, and immutable normalized facts and drives sourceReference/idempotencyKey."
+        "IngestIdentity derives sourceRecordId from Source Fingerprint, stable structural position, raw evidence fingerprint, and immutable-facts schema while excluding adapter/manifest/compatible-version metadata; candidateId derives from accountId, sourceRecordId, and immutable normalized facts and drives sourceReference/idempotencyKey."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-18T15:24:21.3191560+00:00"
     },
     {
-      "id": "01KXTMAH8Q7B85R6MWH6T6EJ39",
+      "id": "01KXTX85E8JCGPFST0474V7CHP",
       "kind": "acceptance_check",
       "text": [
         "Identical tuples at different positions remain distinct; filename and fuzzy similarity never affect identity; exact identity with changed immutable facts is conflict."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-18T15:24:21.3191560+00:00"
     },
     {
-      "id": "01KXTMAH8QRVY8KYBZVVXDKF23",
+      "id": "01KXTX85E89Q6QGRBZ4R4HVKC1",
       "kind": "acceptance_check",
       "text": [
         "StatementReconciler accounts for every record exactly once and verifies opening plus movements equals closing plus every available running/source control in integer minor units; missing controls are unavailable, not fabricated."
       ],
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-18T15:24:21.3191560+00:00"
     },
     {
-      "id": "01KXTMAH8QJZYCSWC4QCAZ7MAJ",
+      "id": "01KXTX85E8JRXAXQG45CTTA0YZ",
       "kind": "acceptance_check",
       "text": [
-        "ManifestCanonicalizer emits source-generated canonical JSON and manifestRevisionId deterministically; OverlapPolicy returns prior state for selected-account plus exact source fingerprint before parsing and blocks different-source overlapping windows because v1 has no cross-file identity."
+        "ManifestCanonicalizer emits source-generated canonical JSON and manifestRevisionId deterministically; OverlapPolicy returns prior state for selected-account plus exact Source Fingerprint before parsing and blocks different-source overlapping windows because v1 has no cross-file identity."
       ],
       "required": 1,
       "sort_order": 6,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-18T15:24:21.3191560+00:00"
     },
     {
       "id": "01KXTMAH8QP6Z443Y9A9MWRJXX",

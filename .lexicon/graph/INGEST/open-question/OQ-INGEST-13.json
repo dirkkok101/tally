@@ -1,0 +1,27 @@
+{
+  "id": "01KXTWTWTS3VMJTSQAYN7Y1461",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "OQ-INGEST-13",
+  "question": "Does Exact Replay require unchanged source content, selected account, adapter version, and LEDGER contract version, or only byte identity plus supported variant?",
+  "context": [
+    "Blocks INGEST bead compilation until FR-INGEST-STATEMENT-PREVIEW and UC-INGEST-004 define one replay identity contract."
+  ],
+  "status": "open",
+  "created_at": "2026-07-18T15:17:06.5220564+00:00",
+  "links": [
+    {
+      "id": "01KXTWTWTVCXXG6M0CCS5HBM3X",
+      "target_type": "requirement",
+      "target": "FR-INGEST-STATEMENT-PREVIEW",
+      "rel": "see-also",
+      "created_at": "2026-07-18T15:17:06.5231407+00:00"
+    },
+    {
+      "id": "01KXTWTWTVND1Y131YR7M5542X",
+      "target_type": "use_case",
+      "target": "UC-INGEST-004",
+      "rel": "see-also",
+      "created_at": "2026-07-18T15:17:06.5235120+00:00"
+    }
+  ]
+}

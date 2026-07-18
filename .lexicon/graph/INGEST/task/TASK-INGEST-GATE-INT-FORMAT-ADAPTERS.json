@@ -132,54 +132,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXTM5NS50PBRYYGN0MBGSQ8E",
+      "id": "01KXTX83EKJNYWX40RF9SAT6AG",
       "kind": "acceptance_check",
       "text": [
         "StatementAdapterRegistry explicitly contains exactly one PdfTextLayoutAStatementAdapter and one PdfTextLayoutBStatementAdapter in deterministic order; no reflection scan, plugin, fallback, third variant, or user configuration exists."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-18T15:24:19.2834043+00:00"
     },
     {
-      "id": "01KXTM5NS527MJ2B72D0JDXN2N",
+      "id": "01KXTX83EMPQFKE1YP28JVTKHC",
       "kind": "acceptance_check",
       "text": [
         "Every one of the three private fixtures produces exactly one exact_match and the variant ID declared by the ignored private fixture manifest; zero or multiple matches return a stable unsupported result."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-18T15:24:19.2834043+00:00"
     },
     {
-      "id": "01KXTM5NS5QZ3F6N7DJA5HSJJD",
+      "id": "01KXTX83EMF5VDSRVZDN8SK1M1",
       "kind": "acceptance_check",
       "text": [
         "Each fixture is extracted twice through the real PdfPig extractor and selected adapter with identical ordered source records, dispositions, controls, and safe digests."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-18T15:24:19.2834043+00:00"
     },
     {
-      "id": "01KXTM5NS6WM75Q9EXZ65CNZF0",
+      "id": "01KXTX83EMV95CJHGB4QX8PPHQ",
       "kind": "acceptance_check",
       "text": [
-        "Every transaction-bearing source record is accepted, proven exact duplicate by fixture evidence, or blocked; non-transaction exclusions carry stable reasons; all available opening, closing, running-balance, total, and record-count controls match exactly."
+        "Every transaction-bearing source record is accepted, proven Exact Duplicate by fixture evidence, or blocked; non-transaction exclusions carry stable reasons; all available opening, closing, running-balance, total, and record-count controls match exactly."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-18T15:24:19.2834043+00:00"
     },
     {
-      "id": "01KXTM5NS6BY7MY0DM9NN91K5N",
+      "id": "01KXTX83EMB1VFAERQYK8PEDXK",
       "kind": "acceptance_check",
       "text": [
         "One-over-limit and malformed sources fail before state or LEDGER mutation; measured direct extraction plus adapter work stays below 5 seconds and 256 MiB peak RSS per fixture on the supported release host."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-18T15:24:19.2834043+00:00"
     },
     {
       "id": "01KXTM5NS65P4T4W0NAY5CNJQH",

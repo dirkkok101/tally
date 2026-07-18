@@ -6,7 +6,7 @@
   "slug": "PREVIEW-WORKFLOW",
   "title": "Implement passive preview and immutable manifest persistence",
   "description": [
-    "Compose public account lookup, bounded source snapshotting, qualified extraction, domain policies, exact replay/overlap checks, and one atomic preview-state transaction."
+    "Compose public account lookup, bounded source snapshotting, qualified extraction, domain policies, Exact Replay/overlap checks, and one atomic preview-state transaction."
   ],
   "objective": [
     "Deliver ingest.preview as a deterministic no-LEDGER-mutation workflow that persists only a complete immutable manifest or a stable failure state."

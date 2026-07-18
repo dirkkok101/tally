@@ -7,7 +7,7 @@
     "Separate fixture-qualified layout variability from the stable ingestion protocol without creating a generic parser platform."
   ],
   "decision": [
-    "Define IStatementAdapter with an immutable descriptor, a structural Probe operation, and an Extract operation over PdfDocumentEvidence. Register exactly pdf-text-layout-a-v1 and pdf-text-layout-b-v1 explicitly. Run every probe and require exactly one exact match; none or multiple fail closed. Each adapter owns row boundaries, variant-local source-record identity, dates, signs, controls, and exclusions for its qualified fixtures. There is no dynamic loading, user-authored rule language, OCR fallback, or generic table parser."
+    "Define IStatementAdapter with an immutable descriptor, a structural Probe operation, and an Extract operation over PdfDocumentEvidence. Register exactly pdf-text-layout-a-v1 and pdf-text-layout-b-v1 explicitly. Run every probe and require exactly one exact match; none or multiple fail closed. Each adapter owns row boundaries, variant-local Source Row Identity, dates, signs, controls, and exclusions for its qualified fixtures. There is no dynamic loading, user-authored rule language, OCR fallback, or generic table parser."
   ],
   "rationale": [
     "Two independently qualified adapters make this a real seam. Deleting it would smear detection and row semantics into preview orchestration. A single conditional parser grows into an untestable switch; regex or template configuration turns finance semantics into unreviewed data; per-bank child processes add lifecycle and distribution complexity. C7 and NG4 require the narrow registry."

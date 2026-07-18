@@ -20,11 +20,11 @@
     "every candidate ends accepted once, returned as prior, or explicitly unresolved"
   ],
   "acceptance_criteria": [
-    "Given an approved batch commit, when any candidate receives a structured LEDGER result, then INGEST durably records its accepted, exact-duplicate, conflicted, rejected, or unresolved receipt outcome before attempting the next candidate.",
+    "Given an approved batch commit, when any candidate receives a structured LEDGER result, then INGEST durably records its accepted, Exact Duplicate, conflicted, rejected, or unresolved receipt outcome before attempting the next candidate.",
     "Given interruption after a durable receipt outcome, when resume runs, then it skips terminal candidates and reuses the exact frozen request and original idempotency identity only for unresolved candidates.",
     "Given interruption after LEDGER committed but before INGEST recorded the outcome, when resume replays the original request and identity, then LEDGER returns the original result and INGEST records it without a second transaction.",
     "Given any resume or status request, when it runs, then it uses the frozen manifest and durable receipt rather than rereading or reparsing the caller-owned source.",
-    "Given every candidate has a terminal outcome, when commit or resume completes, then INGEST returns one complete receipt with exact outcome counts and canonical references and marks no candidate merely processed."
+    "Given every candidate has a Terminal Candidate Outcome, when commit or resume completes, then INGEST returns one complete receipt with exact outcome counts and canonical references and marks no candidate merely processed."
   ],
   "security_criteria": [
     "Receipts are owner-only sensitive artifacts; structured status may expose safe identifiers and outcome categories but not raw financial payloads."

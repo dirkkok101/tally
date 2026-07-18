@@ -1,0 +1,20 @@
+{
+  "id": "01KXTWTX6V25DQGSY8H6NEYJPN",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "OQ-INGEST-14",
+  "question": "Must TASK-INGEST-PREVIEW-WORKFLOW treat selected account and contract versions as Exact Replay identity conditions so it matches UC-INGEST-004?",
+  "context": [
+    "Blocks INGEST bead compilation until the planned preview workflow and UC-INGEST-004 agree on replay preconditions."
+  ],
+  "status": "open",
+  "created_at": "2026-07-18T15:17:06.9081723+00:00",
+  "links": [
+    {
+      "id": "01KXTWTX6W99SE39R21SJCYDQE",
+      "target_type": "use_case",
+      "target": "UC-INGEST-004",
+      "rel": "see-also",
+      "created_at": "2026-07-18T15:17:06.9086920+00:00"
+    }
+  ]
+}

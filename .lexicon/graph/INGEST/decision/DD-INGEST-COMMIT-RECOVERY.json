@@ -7,7 +7,7 @@
     "Close every cross-store crash window during candidate-granular commit."
   ],
   "decision": [
-    "Commit and resume acquire one owner-only per-batch OS lock. For each frozen candidate in deterministic order, INGEST first durably records an attempting state and exact LEDGER request/key, invokes the public LEDGER operation outside the INGEST transaction, verifies the returned canonical detail, then durably records a terminal outcome before advancing. Process loss releases the OS lock. Resume treats attempting as unresolved and replays the exact request/key; terminal candidates are skipped only after their stored canonical reference remains structurally valid. Conflicts, compatibility failures, receipt-write failures, and unsafe results stop continuation."
+    "Commit and resume acquire one owner-only per-batch OS lock. For each frozen candidate in deterministic order, INGEST first durably records an attempting state and exact LEDGER request/key, invokes the public LEDGER operation outside the INGEST transaction, verifies the returned canonical detail, then durably records a Terminal Candidate Outcome before advancing. Process loss releases the OS lock. Resume treats attempting as unresolved and replays the exact request/key; terminal candidates are skipped only after their stored canonical reference remains structurally valid. Conflicts, compatibility failures, receipt-write failures, and unsafe results stop continuation."
   ],
   "rationale": [
     "Holding an INGEST SQLite transaction across a LEDGER call would create long locks without atomicity. An in-memory cursor loses the recovery frontier. Batch-atomic import is impossible across two stores and conflicts with the accepted PRD. The stable LEDGER idempotency record makes the uncertain commit-before-receipt window replay-safe, while the per-batch OS lock prevents concurrent callers from racing the same saga."
@@ -16,7 +16,7 @@
     "A: whole-batch distributed transaction, unavailable across separate stores. B: hold an INGEST SQLite transaction across each LEDGER call, rejected because it still is not atomic and creates long locks. C: in-memory progress, rejected because crash loses the frontier. D: per-batch lock plus durable attempting and terminal candidate states with idempotent replay, chosen."
   ],
   "consequences": [
-    "Commit is intentionally a recoverable saga. Every candidate request and key freezes before its call, every terminal outcome persists before the next, and faults stop the frontier. Lock acquisition, crash release, receipt write failure, and replay conflicts require direct integration coverage."
+    "Commit is intentionally a recoverable saga. Every candidate request and key freezes before its call, every Terminal Candidate Outcome persists before the next, and faults stop the frontier. Lock acquisition, crash release, receipt write failure, and replay conflicts require direct integration coverage."
   ],
   "status_notes": [
     "Accepted design. The plan must create candidate saga, batch lock, and crash-window verification paths."
