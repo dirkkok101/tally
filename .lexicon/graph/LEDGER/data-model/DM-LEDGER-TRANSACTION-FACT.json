@@ -4,24 +4,24 @@
   "ref_code": "DM-LEDGER-TRANSACTION-FACT",
   "name": "TransactionFact",
   "description": [
-    "Canonical immutable bank-account movement. Signed amount is the owned-account balance delta."
+    "Canonical immutable bank-account movement. Signed amount is the owner economic-position delta."
   ],
   "schema_def": [
     "transaction_fact",
     "- id: ULID text, primary key",
     "- accountId: Account.id, required, RESTRICT",
-    "- signedAmountMinor: Int64, required, non-zero",
+    "- signedAmountMinor: Int64, required, non-zero; positive improves and negative worsens the owner economic position",
     "- currencyCode: literal ZAR",
     "- transactionDate: ISO local date, required",
     "- postingDate: ISO local date, nullable",
-    "- effectiveDate: derived postingDate ?? transactionDate",
+    "- effectiveDate: derived transactionDate",
     "- originalDescription: text, required",
     "- sourceReference: text, nullable",
     "- provenanceKind: enum {manual_agent,statement_import,other}",
     "- provenanceReference: text, nullable",
     "- recordedAt: trusted UTC instant",
     "- recordedByOsIdentity: text, protected metadata",
-    "Constraints: insert-only; no category or relationship columns; one source reference per account when present; amounts originate from canonical two-decimal strings."
+    "Constraints: insert-only; no category or relationship columns; one source reference per account when present; amounts originate from canonical two-decimal strings; postingDate is preserved when supplied but never substitutes for Effective Date."
   ],
   "created_at": "2026-07-18T06:01:05.0336977+00:00",
   "links": [

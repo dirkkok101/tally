@@ -4,9 +4,12 @@
   "ref_code": "OQ-LEDGER-3",
   "question": "Validate transaction date as the default Effective Date and identify whether either bank supplies a distinct posting date.",
   "context": [
-    "Pre-implementation gate. Evidence required: representative transaction, value, and posting date fields plus ordering examples from both banks. This blocks Effective Date derivation, transaction date contracts, actuals filters/order, and snapshot pagination. Planning must create and complete a validation task first; no affected implementation task may start while this question is open. If posting/value semantics differ, update A4, the PRD, DD-LEDGER-FINANCIAL-REPRESENTATION, transaction/actuals models and contracts, and tests before implementation."
+    "Resolved evidence gate. Initial fixtures expose transaction date only; one layout derives its omitted row years uniquely from statement period. No distinct posting/value-date column occurs in the evidence."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "All initial fixtures expose transaction date and no distinct posting/value-date column. Transaction date is the Effective Date. One layout derives omitted row years uniquely from its explicit statement period; any future distinct posting date is preserved separately without changing Effective Date."
+  ],
   "owner": "LEDGER planning validation",
   "created_at": "2026-07-17T13:45:00.7691818+00:00"
 }

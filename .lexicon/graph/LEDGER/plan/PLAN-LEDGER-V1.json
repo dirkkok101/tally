@@ -14,11 +14,41 @@
     "- No Controllers, Minimal APIs, EF Core, Angular, HTTP endpoints, hosted services, reflection scanning, generic repository, mediator, event bus, custom clock, custom cryptography, or general plugin runtime.",
     "- Use raw Microsoft.Data.Sqlite with the maintained bundled native library; application data root 0700 and all database/WAL/SHM/candidate/manifest/backup artifacts 0600.",
     "- Tests use xUnit against real temporary SQLite stores and published process invocations; do not mock SQL semantics.",
-    "- Exactly 30 tasks intentionally have no Implements link: five shared foundations (storage, three model-owned V001 schema fragments, and complete-state verification), six evidence gates, seven convergence/security/module gates, and twelve UC verification tasks. They establish shared infrastructure or validate prerequisites/completed behavior; each description justifies the loose classification, and no fake FR link is added.",
+    "- Exactly 26 tasks intentionally have no Implements link: five shared foundations (storage, three model-owned V001 schema fragments, and complete-state verification), two remaining evidence gates, seven convergence/security/module gates, and twelve UC verification tasks. They establish shared infrastructure or validate prerequisites/completed behavior; each description justifies the loose classification, and no fake FR link is added.",
     "- Never store raw bank statements, full account numbers, transaction descriptions, or credentials in repository validation evidence.",
     "",
     "Removal impact: none; the repository contains no implementation code."
   ],
   "status": "active",
-  "created_at": "2026-07-18T06:56:30.9196068+00:00"
+  "created_at": "2026-07-18T06:56:30.9196068+00:00",
+  "links": [
+    {
+      "id": "01KXTFTEXBFZ081D8HGWG5AHR6",
+      "target_type": "adr",
+      "target": "ADR-CORE-0010",
+      "rel": "see-also",
+      "created_at": "2026-07-18T11:29:40.7805749+00:00"
+    },
+    {
+      "id": "01KXTFTFJ1C7T86CY6KFYF4YKR",
+      "target_type": "adr",
+      "target": "ADR-CORE-0021",
+      "rel": "see-also",
+      "created_at": "2026-07-18T11:29:41.4429158+00:00"
+    },
+    {
+      "id": "01KXTFTG4QSW2VX0HRRF7KBH1Y",
+      "target_type": "adr",
+      "target": "ADR-CORE-0024",
+      "rel": "see-also",
+      "created_at": "2026-07-18T11:29:42.0405230+00:00"
+    },
+    {
+      "id": "01KXTFTE96GHXXGCYZZGE9Y7RR",
+      "target_type": "module_design",
+      "target": "MD-LEDGER-MASTER",
+      "rel": "see-also",
+      "created_at": "2026-07-18T11:29:40.1349316+00:00"
+    }
+  ]
 }

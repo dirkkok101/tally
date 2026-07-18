@@ -10,8 +10,8 @@
     "All operations use the common OperationDescriptor envelopes. Mutations require --idempotency-key.",
     "",
     "tally ledger account create / ledger.account.create",
-    "- input: {institutionName, displayName, accountType: cheque|savings|other_deposit, maskedIdentifier, currencyCode: ZAR}",
-    "- result AccountDetail: {accountId, institutionName, displayName, accountType, maskedIdentifier, currencyCode, status, createdActor, createdAt}",
+    "- input: {institutionName, displayName, accountType: cheque|savings|credit_card|other_asset|other_liability, maskedIdentifier, currencyCode: ZAR}",
+    "- result AccountDetail: {accountId, institutionName, displayName, accountType, accountClass: asset|liability, maskedIdentifier, currencyCode, status, createdActor, createdAt}",
     "- errors: LEDGER-ACCOUNT-DUPLICATE exit5; LEDGER-ACCOUNT-TYPE-UNSUPPORTED exit3; LEDGER-CURRENCY-UNSUPPORTED exit3",
     "",
     "tally ledger account get / ledger.account.get",
@@ -64,7 +64,7 @@
     "- result: CategoryDetail plus appended lifecycleEventId",
     "- errors: LEDGER-CATEGORY-NOT-FOUND exit4; LEDGER-CATEGORY-ALREADY-ACTIVE exit6; LEDGER-CATEGORY-NAME-CONFLICT exit5",
     "",
-    "Constraints: names are trimmed, non-empty, length-bounded Unicode; maskedIdentifier may contain only masked display data, never a full account number; archive never removes history."
+    "Constraints: names are trimmed, non-empty, length-bounded Unicode; accountType fixes the asset/liability economic polarity; maskedIdentifier may contain only masked display data, never a full account number; archive never removes history."
   ],
   "created_at": "2026-07-18T06:27:07.1087595+00:00",
   "links": [

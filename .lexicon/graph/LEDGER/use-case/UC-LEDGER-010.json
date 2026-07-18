@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "UC-LEDGER-010",
   "title": "Confirm a refund or reversal",
-  "preconditions": "Both Canonical Transactions exist; the original is an outflow on an owned deposit account; the owner or agent explicitly selected the proposed relationship.",
+  "preconditions": "Both Canonical Transactions exist; the original is an outflow on an owned account; the owner or agent explicitly selected the proposed relationship.",
   "postconditions": "The active refund credit belongs in full to exactly one original; one original may have multiple credits only within its magnitude cap; participants have no incompatible active roles; unlinked credits remain ordinary transactions and all source/relationship history remains queryable.",
   "main_flow": "1. The agent retrieves the original outflow, proposed credit, current active category, existing active refund credits, all active roles, and supplies an idempotency identity. 2. The owner or agent explicitly requests a refund/reversal link. 3. Tally validates same account/currency, opposite signs, active participants, no transfer role, that the credit is neither another refund original nor already used as a refund credit, and that cumulative active refund magnitude including this full credit is at most the original magnitude. 4. Tally records the attributable relationship using the credit's entire magnitude without changing either source fact. 5. The credit reduces External Spend in its own Effective Date period and follows the original transaction's current category. 6. Tally returns the relationship and resulting spend effect.",
   "alt_flows": [

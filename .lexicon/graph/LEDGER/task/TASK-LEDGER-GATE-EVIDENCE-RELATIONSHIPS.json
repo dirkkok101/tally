@@ -57,6 +57,15 @@
       "created_at": "2026-07-18T07:51:57.4946467+00:00"
     }
   ],
+  "links": [
+    {
+      "id": "01KXTFYTDJN2JH1V2211A13W5J",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-5",
+      "rel": "see-also",
+      "created_at": "2026-07-18T11:32:03.6358435+00:00"
+    }
+  ],
   "recipe_items": [
     {
       "id": "01KXT3BSSPRJH287G2XVSYVNMY",

@@ -2,11 +2,14 @@
   "id": "01KXR55HQT16GDQ57C2QH8HFWM",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "OQ-LEDGER-4",
-  "question": "Confirm that the three initial accounts are deposit accounts and that bank name, owner label, account type, currency, and masked distinguishing identifier are sufficient.",
+  "question": "Confirm the initial account classes and the minimum safe metadata needed to distinguish them.",
   "context": [
-    "Pre-implementation gate. Evidence required: product type and displayed metadata for each of the three real accounts, including institution, owner label, account type, currency, and safe masked identifier. This blocks Account persistence and account create/get/list contracts. Planning must create and complete a validation task first; no account implementation task may start while this question is open. If a liability/credit product exists or fields are insufficient, update A2/A12, the PRD, DM-LEDGER-ACCOUNT, DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS, and tests before implementation."
+    "Resolved evidence gate. The initial portfolio contains two asset/deposit products and one credit liability. Safe explicit selection uses institution, owner label, account class/type, ZAR, and masked suffix."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "The initial scope contains two asset/deposit products and one credit-liability product. Institution, owner label, explicit account class/type, ZAR currency, and masked distinguishing suffix are sufficient; full account identifiers and credentials are neither required nor stored."
+  ],
   "owner": "LEDGER planning validation",
   "created_at": "2026-07-17T13:45:00.9237336+00:00",
   "links": [

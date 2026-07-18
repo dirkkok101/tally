@@ -20,7 +20,7 @@
     "moving money between owned accounts is not counted as external spend"
   ],
   "acceptance_criteria": [
-    "Given two active transactions on distinct active owned deposit accounts with ZAR equal-and-opposite principal amounts, when the owner confirms them as a transfer with a reason, then one active attributable transfer relationship is created.",
+    "Given two active transactions on distinct active owned accounts with ZAR equal-and-opposite economic movements, when the owner confirms them as a transfer with a reason, then one active attributable transfer relationship is created.",
     "Given an active confirmed transfer, when default external-spend actuals are queried, then the paired principal contributes exactly zero while both transaction legs remain queryable.",
     "Given qualifying legs with different supplied dates, when the owner explicitly confirms the relationship, then the date difference alone does not prevent confirmation.",
     "Given same-account legs, same-sign legs, unequal principal magnitudes, different currencies, inactive legs, or either leg already participating in any active transfer or refund relationship, when transfer confirmation is attempted, then the Ledger returns a stable validation error and creates no relationship.",

@@ -4,8 +4,8 @@
   "ref_code": "A1",
   "title": "First release is ZAR-only",
   "description": [
-    "Assume all three initial owned accounts and their transactions use South African rand. PRD may proceed with explicit currency fields but no exchange-rate reporting; validate with the owner before hardening OQ-LEDGER-1."
+    "Validated against all three private statement fixtures from both institutions: every account and transaction amount is denominated in ZAR. First release retains explicit currency fields and rejects non-ZAR input; no exchange-rate reporting is required."
   ],
-  "status": "active",
+  "status": "validated",
   "created_at": "2026-07-17T17:29:16.4004019+00:00"
 }

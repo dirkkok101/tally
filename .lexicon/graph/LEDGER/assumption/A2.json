@@ -2,10 +2,10 @@
   "id": "01KXRJ063GR9CHWPD025DTN6S0",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "A2",
-  "title": "First release covers deposit accounts",
+  "title": "First release covers owned asset and liability accounts",
   "description": [
-    "Assume the initial three accounts are cash/current/savings-style asset accounts, not credit-card or other liability accounts. This keeps signed account-delta semantics unambiguous until OQ-LEDGER-4 is validated."
+    "Invalidated by all-account statement evidence: two initial products are asset/deposit accounts and one is a credit liability account. Requirements and design must support both account classes without storing credentials or full account numbers."
   ],
-  "status": "active",
+  "status": "invalidated",
   "created_at": "2026-07-17T17:29:16.6576670+00:00"
 }

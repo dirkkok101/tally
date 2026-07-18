@@ -2,10 +2,54 @@
   "id": "01KXT069GD3347N15180MYTNVK",
   "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
   "ref_code": "SP-LEDGER-00-EVIDENCE-GATES",
-  "title": "Owner evidence gates",
+  "title": "Remaining owner evidence gates",
   "description": [
-    "Resolve OQ-LEDGER-1 through OQ-LEDGER-6 before dependent implementation."
+    "OQ-LEDGER-1 through OQ-LEDGER-4 are resolved from all-account statement evidence and their validation tasks are removed. Resolve OQ-LEDGER-5 and OQ-LEDGER-6 before dependent relationship, actuals, and category implementation."
   ],
   "sort_order": 0,
-  "created_at": "2026-07-18T06:56:31.2464443+00:00"
+  "created_at": "2026-07-18T06:56:31.2464443+00:00",
+  "links": [
+    {
+      "id": "01KXTFYR2VV0KFVC4SESBZX5NS",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-1",
+      "rel": "see-also",
+      "created_at": "2026-07-18T11:32:01.2443468+00:00"
+    },
+    {
+      "id": "01KXTFYRPPPPD5A3CW7QFPAZ4P",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-2",
+      "rel": "see-also",
+      "created_at": "2026-07-18T11:32:01.8807917+00:00"
+    },
+    {
+      "id": "01KXTFYSAFXGKG968AT8GH7Q5K",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-3",
+      "rel": "see-also",
+      "created_at": "2026-07-18T11:32:02.5123145+00:00"
+    },
+    {
+      "id": "01KXTFYSTSH6YFB98HG7RMQK31",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-4",
+      "rel": "see-also",
+      "created_at": "2026-07-18T11:32:03.0343554+00:00"
+    },
+    {
+      "id": "01KXTFTGPWJ2A7XYCC2RCM66VY",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-5",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:29:42.6210712+00:00"
+    },
+    {
+      "id": "01KXTFTHABAFFPGGVJWP2S92GS",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-6",
+      "rel": "depends-on",
+      "created_at": "2026-07-18T11:29:43.2459434+00:00"
+    }
+  ]
 }

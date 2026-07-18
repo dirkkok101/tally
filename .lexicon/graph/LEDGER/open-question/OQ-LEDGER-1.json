@@ -4,9 +4,12 @@
   "ref_code": "OQ-LEDGER-1",
   "question": "Validate the active ZAR-only first-release assumption against all three owned accounts.",
   "context": [
-    "Pre-implementation gate. Evidence required: representative statement/export currency fields and values from all three owned accounts across both banks. This blocks implementation of Money, account currency, transaction recording, and actuals totals. Planning must create and complete a validation task first; no implementation task in those slices may start while this question is open. If any initial account is non-ZAR, update A1, the PRD, DD-LEDGER-FINANCIAL-REPRESENTATION, affected data models and operation contracts, and tests before implementation."
+    "Resolved evidence gate. Privacy-safe fixture spike covered all three accounts and both institutions; no raw rows, balances, descriptions, identifiers, or filenames were retained."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "All three private statement fixtures across both institutions are ZAR-denominated. The first release is ZAR-only and rejects other currencies."
+  ],
   "owner": "LEDGER planning validation",
   "created_at": "2026-07-17T13:45:00.4528954+00:00"
 }

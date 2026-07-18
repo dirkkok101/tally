@@ -5,7 +5,7 @@
   "ref_code": "FR-LEDGER-ACCOUNT-MAINTENANCE",
   "title": "Maintain owned bank accounts",
   "description": [
-    "Create and maintain stable local records for owned deposit accounts using masked identity fields only. Implements G1 and UC-LEDGER-001."
+    "Create and maintain stable local records for owned asset and liability accounts using masked identity fields only. Implements G1 and UC-LEDGER-001."
   ],
   "rationale": [
     "All downstream transaction facts need an unambiguous owned-account identity without introducing banking access or credential storage."
@@ -20,7 +20,7 @@
     "transactions from all three accounts remain distinguishable and durable"
   ],
   "acceptance_criteria": [
-    "Given a valid unique bank name, owner label, account type, ZAR currency, display label, and masked distinguishing identifier, when the owner creates an account, then the Ledger returns one active account with a stable identifier and stores no online-banking credential or full account number.",
+    "Given a valid unique institution name, owner label, supported asset or liability account type, ZAR currency, display label, and masked distinguishing identifier, when the owner creates an account, then the Ledger returns one active account with a stable identifier and stores no online-banking credential or full account number.",
     "Given an existing account, when the owner renames its display label, then its stable identifier and previously recorded transaction references remain unchanged.",
     "Given an account referenced by transactions, when the owner archives it, then its history remains queryable and the Ledger rejects new transactions against it with a stable validation error.",
     "Given active and archived accounts, when the owner lists accounts with an explicit lifecycle-state filter, then each matching account is returned once with its stable identifier and masked identity fields."

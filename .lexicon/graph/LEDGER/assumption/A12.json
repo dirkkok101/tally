@@ -4,8 +4,8 @@
   "ref_code": "A12",
   "title": "Proposed masked account identity fields are sufficient",
   "description": [
-    "Assume institution name, owner-chosen account label, supported account type, currency, and a masked distinguishing suffix are sufficient to distinguish the three initial accounts without storing a full account number or credentials. Validate against the actual accounts in OQ-LEDGER-4."
+    "Validated against all three private statements: institution name, owner-chosen label, account class/type, ZAR currency, and a masked distinguishing suffix are sufficient for explicit account selection and differentiation. Tally need not store a full account number or credentials."
   ],
-  "status": "active",
+  "status": "validated",
   "created_at": "2026-07-17T17:42:20.7197645+00:00"
 }

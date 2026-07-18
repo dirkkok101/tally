@@ -176,54 +176,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT0P36TXC3S5NC0YGJZ6PFW",
+      "id": "01KXTFPV10B4CR7Y4EXE6Q3KR6",
       "kind": "acceptance_check",
       "text": [
-        "Valid active account, canonical nonzero signedAmount, ZAR, required dates/description/provenance, optional source reference, actor, and key create one immutable TransactionDetail."
+        "Valid active asset or liability account, canonical nonzero owner-economic signedAmount, ZAR, required dates/description/provenance, optional source reference, actor, and key create one immutable TransactionDetail."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-18T11:27:42.1123516+00:00"
     },
     {
-      "id": "01KXT0P36TKHMWY9B5W8GTX2NM",
+      "id": "01KXTFPV11BZ0AHBBNAZ2KV862",
       "kind": "acceptance_check",
       "text": [
-        "TransactionDate and distinct PostingDate round-trip independently; EffectiveDate follows the resolved rule."
+        "TransactionDate and distinct PostingDate round-trip independently; EffectiveDate is TransactionDate."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-18T11:27:42.1123516+00:00"
     },
     {
-      "id": "01KXT0P36TNTWHKKXR3SWD2713",
+      "id": "01KXTFPV112JMCB8GSCSP1PGZ9",
       "kind": "acceptance_check",
       "text": [
         "Missing/zero/malformed/unsupported input or archived/missing account returns the documented stable error and creates no transaction/idempotency row."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-18T11:27:42.1123516+00:00"
     },
     {
-      "id": "01KXT0P36T70P2016BK0356NSW",
+      "id": "01KXTFPV114PJ7WR8J1R60K49X",
       "kind": "acceptance_check",
       "text": [
         "Get returns unchanged source facts; includeHistory exposes empty/available lifecycle, allocation, and relationship collections without mutating."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-18T11:27:42.1123516+00:00"
     },
     {
-      "id": "01KXT0P36TNAR5G4MEWG8GY57D",
+      "id": "01KXTFPV11257Z5H7F2HY9BK22",
       "kind": "acceptance_check",
       "text": [
         "Provenance kind is exactly manual_agent|statement_import|other in wire/domain/SQL with no semantic translation; sourceReference uniqueness is enforced per account/provenance."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-18T11:27:42.1123516+00:00"
     },
     {
       "id": "01KXT0P36VQSW2T247BEEFXE6M",
@@ -246,70 +246,27 @@
       "created_at": "2026-07-18T07:05:09.0800297+00:00"
     },
     {
-      "id": "01KXT0P36TRZYMH2MMFP38TQ7Q",
+      "id": "01KXTFPV115GXZNFE206HGK5VE",
       "kind": "failure_criterion",
       "text": [
         "Do NOT update transaction source facts, embed category/relationship columns, use floating point, infer provenance, or silently normalize bank dates — per governing decisions."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-18T11:27:42.1123516+00:00"
     },
     {
-      "id": "01KXT0P36VKX39PQDY3FP2EDP2",
+      "id": "01KXTFPV11V876QNP8BKP65YX5",
       "kind": "failure_criterion",
       "text": [
         "Do NOT accept credentials or expose unmasked account identifiers in results/diagnostics."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
-    },
-    {
-      "id": "01KXT0P36VAFCAPZMRRKR37NKX",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT implement before OQ-LEDGER-1..3 are resolved consistently."
-      ],
-      "required": 1,
-      "sort_order": 2,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-18T11:27:42.1123516+00:00"
     }
   ],
   "references": [
-    {
-      "id": "01KXT0P36VSRJJZYG8NY0G5778",
-      "target_ref_code": "OQ-LEDGER-1",
-      "target_entity_type": "open_question",
-      "target_entity_id": "01KXR55H94B58EENF5CK7AG9HP",
-      "target_title": "Validate the active ZAR-only first-release assumption against all three owned accounts.",
-      "relationship": "blocked-by",
-      "required": 1,
-      "sort_order": 5,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
-    },
-    {
-      "id": "01KXT0P36VB5BJ9QPKHD697A61",
-      "target_ref_code": "OQ-LEDGER-2",
-      "target_entity_type": "open_question",
-      "target_entity_id": "01KXR55HE0PW79V66CPV02371F",
-      "target_title": "Validate the active signed-account-delta convention against statement samples from both banks.",
-      "relationship": "blocked-by",
-      "required": 1,
-      "sort_order": 6,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
-    },
-    {
-      "id": "01KXT0P36V8B93QG9MJ3K0GYF0",
-      "target_ref_code": "OQ-LEDGER-3",
-      "target_entity_type": "open_question",
-      "target_entity_id": "01KXR55HK04VCG68SMJB7Z88R6",
-      "target_title": "Validate transaction date as the default Effective Date and identify whether either bank supplies a distinct posting date.",
-      "relationship": "blocked-by",
-      "required": 1,
-      "sort_order": 7,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
-    },
     {
       "id": "01KXT0P36VVC46JZ6ANRMB0BHQ",
       "target_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",

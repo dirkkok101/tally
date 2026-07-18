@@ -2,10 +2,10 @@
   "id": "01KXRJ06C759X1VHVDWPCRS82Z",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "A3",
-  "title": "Signed amount is the owned-account balance delta",
+  "title": "Signed amount is the owned-account economic delta",
   "description": [
-    "Assume inflows to a tracked deposit account are positive and outflows are negative; positive spend magnitudes are derived for reporting. Validate against both banks before PRD hardens OQ-LEDGER-2."
+    "Validated across all three private statement fixtures from both institutions. Positive means the owner economic position improves: an asset increases or a liability owed decreases. Negative means it worsens: an asset decreases or a liability owed increases. Each fixture reconciles opening economic balance plus signed movements to closing economic balance."
   ],
-  "status": "active",
+  "status": "validated",
   "created_at": "2026-07-17T17:29:16.9359940+00:00"
 }

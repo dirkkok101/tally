@@ -4,8 +4,8 @@
   "ref_code": "A4",
   "title": "Transaction date is the default effective date",
   "description": [
-    "Assume the bank-reported transaction date drives period queries, posting date is preserved when supplied, and date-only facts do not gain fabricated time or timezone. Validate OQ-LEDGER-3."
+    "Validated for the initial statement variants: the bank-reported transaction date is the Effective Date, date-only facts gain no time or timezone, and a distinct posting/value-date column is absent. One variant omits row years, but its explicit statement period uniquely derives each year. A future supplied posting date is preserved separately and does not replace Effective Date."
   ],
-  "status": "active",
+  "status": "validated",
   "created_at": "2026-07-17T17:29:17.2388721+00:00"
 }

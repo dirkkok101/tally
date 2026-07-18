@@ -24,7 +24,7 @@
     "Given a transaction with a distinct supplied posting date, when it is recorded, then both transaction date and posting date round-trip without substituting one for the other.",
     "Given any missing required fact, unsupported currency, zero amount, malformed date, or archived account, when recording is attempted, then the Ledger returns a stable validation error and creates no transaction.",
     "Given a recorded transaction, when it is read later, then its account identity, original description, signed amount, currency, supplied dates, source reference, provenance, and stable identifier are unchanged.",
-    "Given an account inflow or outflow, when its signed amount is recorded under the first-release convention, then inflow is positive and outflow is negative as the exact owned-account balance delta."
+    "Given a movement on an active owned asset or liability account, when its signed amount is recorded, then a positive value means the owner economic position improved and a negative value means it worsened: asset increases and liability reductions are positive; asset decreases and liability increases are negative."
   ],
   "security_criteria": [
     "Returned and diagnostic data must not expose unmasked account identifiers or credentials."

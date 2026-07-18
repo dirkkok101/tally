@@ -9,7 +9,7 @@
     "Deliver create/get/list/rename/archive account behavior through typed handlers, real SQLite storage, and a self-contained operation module."
   ],
   "objective": [
-    "Maintain stable masked deposit-account identities and attributable lifecycle history without credentials or physical deletion."
+    "Maintain stable masked owned asset and liability account identities and attributable lifecycle history without credentials or physical deletion."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -47,16 +47,6 @@
       ],
       "sort_order": 3,
       "created_at": "2026-07-18T07:16:17.4275601+00:00"
-    },
-    {
-      "id": "01KXT15X5FX7SAMW4T3F7G18KR",
-      "target": "TASK-LEDGER-GATE-EVIDENCE-ACCOUNTS",
-      "dependency_type": "compile",
-      "reason": [
-        "Account contracts cannot start until OQ-LEDGER-4 resolves."
-      ],
-      "sort_order": 1,
-      "created_at": "2026-07-18T07:13:47.1848160+00:00"
     },
     {
       "id": "01KXT15WJWZZBPQHQESHTGVAJW",
@@ -178,54 +168,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT0P36REH04JVWRZ9J2M9H9",
+      "id": "01KXTFPVSQV61PX0VYMZ9804RV",
       "kind": "acceptance_check",
       "text": [
-        "Valid unique institution/display/type/masked identifier/ZAR input creates one active account with a stable ULID and no credential/full account number."
+        "Valid unique institution/display/type/masked identifier/ZAR input creates one active asset or liability account with a stable ULID and no credential/full account number."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-18T11:27:42.9031272+00:00"
     },
     {
-      "id": "01KXT0P36R5JE6K5VT4GPQRA4D",
+      "id": "01KXTFPVSRYGNSRGQ6SQ25FDEZ",
       "kind": "acceptance_check",
       "text": [
         "Rename appends an attributable lifecycle event while preserving account ID and transaction references."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-18T11:27:42.9031272+00:00"
     },
     {
-      "id": "01KXT0P36RF2XQPDZC9JXH284M",
+      "id": "01KXTFPVSR39QYP5BE8GPCCH4B",
       "kind": "acceptance_check",
       "text": [
         "Archive appends history, preserves detail/list visibility, and causes new transaction attempts to return LEDGER-ACCOUNT-ARCHIVED with no write."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-18T11:27:42.9031272+00:00"
     },
     {
-      "id": "01KXT0P36R7VRGKSWJY69PCQNH",
+      "id": "01KXTFPVSR3D9B89ES6J2FKJNG",
       "kind": "acceptance_check",
       "text": [
         "Get/list honor includeHistory and lifecycle/institution filters with deterministic ordering and one result per account."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-18T11:27:42.9031272+00:00"
     },
     {
-      "id": "01KXT0P36R709QYXFDXV4N0Y9F",
+      "id": "01KXTFPVSR9FDB9EMRG0C7FC9V",
       "kind": "acceptance_check",
       "text": [
         "Every mutation uses LedgerMutationExecutor and returns byte-equivalent logical results on identical replay."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-18T11:27:42.9031272+00:00"
     },
     {
       "id": "01KXT0P36RJZMGC2DCW1JJTCNH",
@@ -248,48 +238,27 @@
       "created_at": "2026-07-18T07:05:09.0800297+00:00"
     },
     {
-      "id": "01KXT0P36R3BGTR6BEF6G7BPAZ",
+      "id": "01KXTFPVSR8J1184FTFEHGXTTY",
       "kind": "failure_criterion",
       "text": [
         "Do NOT hard-delete or update lifecycle history in place; append events and retain RESTRICT references per DD-LEDGER-IMMUTABLE-HISTORY."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-18T11:27:42.9031272+00:00"
     },
     {
-      "id": "01KXT0P36RSFZ0DSQVMNBJP9SE",
+      "id": "01KXTFPVSRB7HBWVN81C6VFHMQ",
       "kind": "failure_criterion",
       "text": [
         "Do NOT introduce repositories, mediator, HTTP endpoints, credentials, or full account identifiers per DD-LEDGER-APPLICATION-ARCHITECTURE."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
-    },
-    {
-      "id": "01KXT0P36REKGNJCFGXGAQQXFB",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT implement before OQ-LEDGER-4 resolves without invalidating account contracts."
-      ],
-      "required": 1,
-      "sort_order": 2,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-18T11:27:42.9031272+00:00"
     }
   ],
   "references": [
-    {
-      "id": "01KXT0P36STK002SWWXN6208C4",
-      "target_ref_code": "OQ-LEDGER-4",
-      "target_entity_type": "open_question",
-      "target_entity_id": "01KXR55HQT16GDQ57C2QH8HFWM",
-      "target_title": "Confirm that the three initial accounts are deposit accounts and that bank name, owner label, account type, currency, and masked distinguishing identifier are sufficient.",
-      "relationship": "blocked-by",
-      "required": 1,
-      "sort_order": 6,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
-    },
     {
       "id": "01KXT0P36SH66JVQZQBTKSZBC2",
       "target_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",

@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "term": "Net Account Movement",
   "definition": [
-    "The exact base-10 sum of Signed Account Amount values for the selected Canonical Transactions. It preserves inflow-positive and outflow-negative account movement and is distinct from External Spend and Budget Actual, which transform qualifying outflows to positive magnitudes, subtract linked refund magnitudes, and exclude unrelated inflows and owned-transfer principal."
+    "The exact base-10 sum of Signed Account Amount values for selected Canonical Transactions. Positive means net improvement and negative means net deterioration in the owner economic position. It is distinct from External Spend and Budget Actual, which transform qualifying outflows to positive magnitudes, subtract linked refund magnitudes, and exclude unrelated inflows and owned-transfer principal."
   ],
   "source": "prd",
   "created_at": "2026-07-18T04:37:32.7320860+00:00"

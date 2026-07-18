@@ -4,21 +4,21 @@
   "ref_code": "DM-LEDGER-ACCOUNT",
   "name": "Account",
   "description": [
-    "Owned deposit-account identity and lifecycle. Historical transactions retain RESTRICT references after archival."
+    "Owned asset or liability account identity and lifecycle. Historical transactions retain RESTRICT references after archival."
   ],
   "schema_def": [
     "account",
     "- id: ULID text, primary key",
     "- institutionName: text, required",
     "- displayName: text, required",
-    "- accountType: enum {cheque,savings,other_deposit}",
+    "- accountType: enum {cheque,savings,credit_card,other_asset,other_liability}",
+    "- accountClass: derived enum {asset,liability}",
     "- maskedIdentifier: text, required, never a full account number",
     "- currencyCode: literal ZAR",
     "- status: enum {active,archived}",
     "- createdAt: trusted UTC instant",
     "- archivedAt: nullable trusted UTC instant",
-    "Pre-implementation gate: OQ-LEDGER-4 must resolve from all three real accounts before this model or its public contracts are implemented.",
-    "Constraints: first release accepts owned deposit accounts only; active masked identity is unique within institution; archived accounts reject new transactions; no hard delete. OQ-LEDGER-4 validates these fields against all three real accounts before implementation."
+    "Constraints: first release accepts owned asset and liability accounts; accountType deterministically defines accountClass; active masked identity is unique within institution; archived accounts reject new transactions; no hard delete. OQ-LEDGER-4 is resolved by all-account evidence."
   ],
   "created_at": "2026-07-18T06:01:04.3740995+00:00",
   "links": [

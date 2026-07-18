@@ -4,9 +4,12 @@
   "ref_code": "OQ-LEDGER-2",
   "question": "Validate the active signed-account-delta convention against statement samples from both banks.",
   "context": [
-    "Pre-implementation gate. Evidence required: representative debit, credit, signed-value, and balance examples from both banks reconciled to the owned-account balance delta convention. This blocks signedAmount parsing/persistence, transfer and refund roles, and all actuals formulas. Planning must create and complete a validation task first; no affected implementation task may start while this question is open. If either bank uses a different convention or an account is a liability, update A3, the PRD, DD-LEDGER-FINANCIAL-REPRESENTATION, affected models/contracts, and tests before implementation."
+    "Resolved evidence gate. All three statement fixtures reconcile exactly under owner economic polarity across asset and liability products. This replaces the former deposit-only assumption and unblocks signedAmount, relationship, and actuals design."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "All three fixtures reconcile exactly when signed amount is the owner economic-position delta: asset increases and liability reductions are positive; asset decreases and liability increases are negative. This convention spans deposit and credit-liability accounts."
+  ],
   "owner": "LEDGER planning validation",
   "created_at": "2026-07-17T13:45:00.6095342+00:00"
 }

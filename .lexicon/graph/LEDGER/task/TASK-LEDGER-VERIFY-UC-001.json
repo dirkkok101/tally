@@ -69,6 +69,15 @@
       "created_at": "2026-07-18T07:15:43.3020708+00:00"
     }
   ],
+  "links": [
+    {
+      "id": "01KXTFZ276AMH53MSCX01TBJ73",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-001",
+      "rel": "see-also",
+      "created_at": "2026-07-18T11:32:11.6229260+00:00"
+    }
+  ],
   "recipe_items": [
     {
       "id": "01KXT0ZW3FX1XJZ5PBZFSAFD6Y",

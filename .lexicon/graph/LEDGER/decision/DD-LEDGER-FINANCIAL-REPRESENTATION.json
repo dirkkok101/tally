@@ -7,19 +7,19 @@
     "Define exact financial boundary and persistence representations."
   ],
   "decision": [
-    "Expose signed monetary values as canonical two-decimal JSON strings with currency ZAR. Validate at most two fractional digits and convert once at the contract boundary to a Money value containing Int64 minor units. Persist amount_minor as SQLite INTEGER and currency_code as constrained TEXT. Persist transaction and posting dates as ISO yyyy-MM-dd TEXT; effective date is posting date when present, otherwise transaction date. Use 26-character ULID strings for durable IDs."
+    "Expose signed monetary values as canonical two-decimal JSON strings with currency ZAR. Validate at most two fractional digits and convert once at the contract boundary to a Money value containing Int64 minor units. Persist amount_minor as SQLite INTEGER and currency_code as constrained TEXT. Signed amount is the owner economic-position delta: asset increases and liability reductions are positive; asset decreases and liability increases are negative. Persist transaction and optional posting dates as ISO yyyy-MM-dd TEXT; Effective Date is transaction date and a distinct supplied posting date is preserved separately. Use 26-character ULID strings for durable IDs."
   ],
   "rationale": [
-    "ZAR-only scope makes integer cents exact, sortable, and aggregatable in SQLite without decimal coercion. JSON numbers risk binary floating-point callers; decimal strings avoid that. Local bank dates are dates, not instants. ULIDs match the Lex prior art and provide stable sortable references."
+    "All three private statement fixtures across both institutions are ZAR and reconcile exactly under one owner-economic-polarity convention across asset and credit-liability accounts. ZAR-only scope makes integer cents exact, sortable, and aggregatable in SQLite without decimal coercion. JSON numbers risk binary floating-point callers; decimal strings avoid that. Local bank dates are dates, not instants. The initial fixtures supply transaction date but no distinct posting/value-date column. ULIDs match the Lex prior art and provide stable sortable references."
   ],
   "alternatives": [
-    "A: SQLite REAL/JSON numbers — rejected for rounding risk. B: decimal TEXT — exact but makes database aggregation and range validation harder. C: Int64 minor units with decimal-string boundary — chosen. D: full currency-scale table — deferred until non-ZAR scope exists."
+    "A: SQLite REAL/JSON numbers — rejected for rounding risk. B: decimal TEXT — exact but makes database aggregation and range validation harder. C: Int64 minor units with decimal-string boundary and owner-economic polarity — chosen. D: raw statement balance polarity — rejected because liability display semantics would invert transfers and spend. E: posting date as Effective Date — rejected because the initial evidence only establishes transaction date. F: full currency-scale table — deferred until non-ZAR scope exists."
   ],
   "consequences": [
-    "Values with more than two decimals, negative zero, exponents, or Int64 overflow fail validation. The signed value always means owned-account balance delta. Presentation converts minor units back to a canonical string; no floating-point arithmetic enters actuals."
+    "Values with more than two decimals, negative zero, exponents, or Int64 overflow fail validation. The signed value always means owner economic-position delta, independent of asset or liability account class. Presentation converts minor units back to a canonical string; no floating-point arithmetic enters actuals. Transaction date drives period membership; a distinct posting date round-trips as source evidence only."
   ],
   "status_notes": [
-    "Accepted architecture, conditionally gated: OQ-LEDGER-1, OQ-LEDGER-2, and OQ-LEDGER-3 must be resolved from all-account/both-bank evidence before Money, transaction representation, Effective Date, or dependent actuals implementation starts. Invalid evidence updates this decision and its contracts first. Planned areas: src/Tally/Domain/Ledger/Money.cs and src/Tally/Contracts/Ledger."
+    "Accepted and evidence-resolved on 2026-07-18 by a privacy-safe throwaway spike over all three private statement fixtures from both institutions. OQ-LEDGER-1 through OQ-LEDGER-4 are resolved; dependent implementation may use this updated contract."
   ],
   "status": "accepted",
   "created_at": "2026-07-18T06:00:13.8010652+00:00",
@@ -72,6 +72,13 @@
       "target": "OQ-LEDGER-3",
       "rel": "motivated-by",
       "created_at": "2026-07-18T06:12:57.9387410+00:00"
+    },
+    {
+      "id": "01KXTEGPC9YF0YYEYYKSVAKACF",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-4",
+      "rel": "see-also",
+      "created_at": "2026-07-18T11:06:52.1690180+00:00"
     },
     {
       "id": "01KXSXE9KFCNCD1YKJ1KF3CZJ2",
