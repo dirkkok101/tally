@@ -1,19 +1,19 @@
 # Lex Transfer and Workflow Feedback
 
-This document records defects and enhancement opportunities observed while transferring reusable architecture knowledge from the NxGN Actions Lex graph into a new Tally graph and then using the packaged Lex skills and CLI to frame and discover Tally's first module.
+This document records defects and enhancement opportunities observed while transferring reusable architecture knowledge from the NxGN Actions Lex graph into a new Tally graph and then using the packaged Lex skills and CLI to frame, discover, and formalize Tally's first module.
 
 ## Environment
 
 | Item | Value |
 |------|-------|
-| Date observed | 2026-07-17 |
+| Date observed | 2026-07-17 to 2026-07-18 |
 | Lex version | 0.5.3 |
 | Source repository | `/home/ubuntu/nxgn.actions/main` |
 | Target repository | `/home/ubuntu/tally/main` |
 | Source module | `CORE` (`Platform Core`) |
 | Intended transfer | 29 ADRs, 33 patterns, 16 architecture documents |
 
-The source material was exported and imported with the same Lex 0.5.3 binary, so the `LEX-XFER-*` findings are same-version round-trip defects rather than cross-version compatibility problems. The later `LEX-SKILL-*`, `LEX-CLI-*`, and `LEX-GRAPH-*` findings were reproduced with the same installed version during brainstorm and discovery.
+The source material was exported and imported with the same Lex 0.5.3 binary, so the `LEX-XFER-*` findings are same-version round-trip defects rather than cross-version compatibility problems. The later `LEX-SKILL-*`, `LEX-CLI-*`, `LEX-GRAPH-*`, `LEX-FR-*`, and `LEX-SCHEMA-*` findings were reproduced with the same installed version during brainstorm, discovery, and PRD work.
 
 ## Summary
 
@@ -29,7 +29,11 @@ The source material was exported and imported with the same Lex 0.5.3 binary, so
 | LEX-SKILL-002 | Bug | High | Discovery requires a goal description field that the goal CLI does not expose |
 | LEX-CLI-001 | Bug | High | Invalid command arguments can print an error and still exit successfully |
 | LEX-GRAPH-001 | Bug | Medium | Module statistics undercount explicit links |
+| LEX-GRAPH-002 | Bug | High | Valid goal ref-codes cannot participate in explicit links |
+| LEX-FR-001 | Bug | High | `fr batch` silently drops persona relationships |
+| LEX-SCHEMA-001 | Bug | Medium | Test-case schemas omit enums enforced by the CLI |
 | LEX-GRAPH-E001 | Enhancement | High value | Count and project use-case primary actors as first-class persona relationships |
+| LEX-BATCH-E001 | Enhancement | High value | Describe batch standard-input payloads in machine schemas |
 | LEX-XFER-E001 | Enhancement | High value | Add a canonical cross-repository graph transfer command |
 | LEX-XFER-E002 | Enhancement | High value | Add dry-run and entity-diff support to every importer |
 | LEX-XFER-E003 | Enhancement | High value | Support dependency-closure transfer for links and diagrams |
@@ -296,6 +300,77 @@ Define and document whether `link_count` means outgoing, incoming, internal, or 
 
 Query links from each relevant entity with `lex link list --ref-code <REF> --json` and deduplicate by link ID. There is currently no module-wide `link list` filter.
 
+### LEX-GRAPH-002: Valid goal ref-codes cannot participate in explicit links
+
+LEDGER goals were created through the supported goal commands and expose valid graph ref-codes `G1` through `G8`. Functional and non-functional requirements then referenced those goals in their descriptions and rationales. Attempting to make the traceability explicit failed:
+
+```sh
+lex link create \
+  --source FR-LEDGER-ACCOUNT-MAINTENANCE \
+  --target G1 \
+  --rel motivated-by \
+  --if-not-exists
+```
+
+```text
+Error [LEX-006]: Unknown entity prefix in ref-code 'G1'.
+```
+
+`lex goal list --module LEDGER --json` and `lex goal show` both identify the goal as `G1`; there is no alternative canonical ref-code exposed to callers. `lex link suggest --module LEDGER --json` also returned no suggestions for requirement text containing `G1` through `G8`.
+
+**Expected:**
+
+Every ref-code emitted by a first-class graph entity should be accepted by `link create`, `link list`, `trace`, and `link suggest`. Either teach the link resolver that `G<n>` is a goal ref-code or generate goals with an unambiguous canonical prefix while preserving backwards compatibility.
+
+**Workaround:**
+
+Keep goal references in requirement descriptions and rationales, link FRs to their use cases, and link NFRs to the FRs they support. This preserves readable traceability but cannot produce a complete explicit goal-to-requirement graph.
+
+### LEX-FR-001: `fr batch` silently drops persona relationships
+
+A valid functional-requirement batch included the same persona value accepted by `fr create` and `fr update`:
+
+```json
+{
+  "slug": "account-maintenance",
+  "title": "Maintain owned bank accounts",
+  "personas": ["P1"]
+}
+```
+
+The batch succeeded and created all 17 requirements, but `lex stats --module LEDGER --json` still reported `"personas_linked": 0`, and `lex fr show FR-LEDGER-ACCOUNT-MAINTENANCE --json` contained no persona relationship. Running this explicit update for each requirement fixed the projection and changed the statistic to one linked persona:
+
+```sh
+lex fr update FR-LEDGER-ACCOUNT-MAINTENANCE --personas P1
+```
+
+**Expected:**
+
+`fr batch` should accept every semantically equivalent create field, reject unsupported fields, and never report success after silently dropping relationship data. Its machine schema or example should define whether `personas` is a string or an array.
+
+**Workaround:**
+
+After every batch, inspect a representative requirement with `fr show` and apply `fr update <REF> --personas <CODE>` explicitly.
+
+### LEX-SCHEMA-001: Test-case schemas omit enums enforced by the CLI
+
+`lex schema test-case create --json` describes `level`, `surface`, `scenario`, `automation`, and `status` as unconstrained strings and emits an empty `enums` object. Runtime validation nevertheless rejects values and reveals hidden enum sets only through errors:
+
+```text
+Error [LEX-006]: Invalid level 'acceptance'. Must be one of: unit, integration, e2e.
+Error [LEX-006]: Invalid surface 'cli'. Must be one of: browser, api, service, component, persistence, contract.
+```
+
+This is especially awkward for a self-documenting, agent-facing CLI: `cli` is a natural surface for Tally contract tests, while the accepted representation is the undiscoverable value `contract`.
+
+**Expected:**
+
+Expose every enforced enum through each command's `enum_values` and top-level `enums` projection. Add schema-versus-runtime contract tests for all constrained string options, including scenario, automation, and lifecycle status.
+
+**Workaround:**
+
+Use `integration` plus `contract` for public CLI contract intents, and treat runtime error messages as the temporary source for any other missing value set.
+
 ## Enhancement Proposals
 
 ### LEX-GRAPH-E001: Model use-case primary actors as persona relationships
@@ -329,6 +404,21 @@ The graph projection stores the actor inside an opaque JSON string:
 `lex use-case list --module LEDGER --json` also omits the primary actor. This makes the discovery readiness rule—every persona must be the primary actor in at least one use case—impossible to verify from stats or list output and forces one `show` call per use case.
 
 Promote `primary_actor`, `trigger_event`, `depth_tier`, and status to first-class graph fields, validate the actor against project personas, count that relationship in `personas_linked`, and expose it in list output. Add an integrity check for missing or unknown persona codes.
+
+### LEX-BATCH-E001: Describe batch standard-input payloads in machine schemas
+
+`lex schema fr batch --json` exposes only `--module` and `--example`; it does not say that the command reads a JSON array from standard input, whether EOF is required, which properties are accepted, or how create-versus-update is selected. `lex fr batch --module LEDGER --example` is useful to a human but is not a schema an agent can validate mechanically.
+
+Add a structured batch payload schema containing:
+
+- Top-level input type and standard-input requirement
+- Required and optional item properties
+- Property types, enums, and nullability
+- Create/update identity and conflict rules
+- Relationship-field shapes such as `personas` and `related`
+- Per-item atomicity and whole-batch failure semantics
+
+The same contract should be available for every batch-capable entity and should be exercised by generated examples in release tests.
 
 ### LEX-XFER-E001: Canonical cross-repository graph transfer
 
