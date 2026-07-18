@@ -32,6 +32,9 @@ The source material was exported and imported with the same Lex 0.5.3 binary, so
 | LEX-GRAPH-002 | Bug | High | Valid goal ref-codes cannot participate in explicit links |
 | LEX-FR-001 | Bug | High | `fr batch` silently drops persona relationships |
 | LEX-SCHEMA-001 | Bug | Medium | Test-case schemas omit enums enforced by the CLI |
+| LEX-DESIGN-E001 | Enhancement | High value | Add first-class CLI operation surfaces instead of forcing HTTP endpoints |
+| LEX-DESIGN-E002 | Enhancement | High value | Distinguish planned greenfield decision paths from missing implemented paths |
+| LEX-DESIGN-E003 | Enhancement | Medium value | Make feature areas group decisions, models, diagrams, and tests in workspace exports |
 | LEX-GRAPH-E001 | Enhancement | High value | Count and project use-case primary actors as first-class persona relationships |
 | LEX-BATCH-E001 | Enhancement | High value | Describe batch standard-input payloads in machine schemas |
 | LEX-XFER-E001 | Enhancement | High value | Add a canonical cross-repository graph transfer command |
@@ -372,6 +375,99 @@ Expose every enforced enum through each command's `enum_values` and top-level `e
 Use `integration` plus `contract` for public CLI contract intents, and treat runtime error messages as the temporary source for any other missing value set.
 
 ## Enhancement Proposals
+
+### LEX-DESIGN-E001: Add first-class CLI operation surfaces
+
+The `lex:design` workflow requires explicit external interfaces and runs
+`lex endpoint suggest` as a design gate, but the only first-class interface
+entity is HTTP-shaped:
+
+```json
+{
+  "required": ["module", "slug", "method", "path"],
+  "method": ["get", "post", "put", "delete", "patch"]
+}
+```
+
+LEDGER is intentionally a local CLI with no listener or HTTP contract. Its
+external surface consists of stable operation IDs, command-token paths, JSON
+standard-input schemas, stdout result schemas, stderr rules, and exit
+categories. Encoding these as fake GET/POST endpoints would misstate the
+architecture. Omitting endpoints is semantically correct, but
+`lex endpoint suggest --module LEDGER --json` then reports HTTP suggestions
+because requirements contain generic words such as `detail`, `restore`, and
+`filter`.
+
+Add an interface/operation entity that can represent at least `cli`, `http`,
+`event`, and `library` transports. A CLI operation should model:
+
+- Stable operation ID and tokenized command path
+- Read-only or mutating classification
+- Versioned request and result schemas
+- Standard-input and file-input behavior
+- Structured errors and process exit categories
+- Help/schema/compatibility metadata
+- Links to tests, feature areas, and requirements
+
+`endpoint suggest`, coverage, exporters, design import, and plan context should
+reason over the selected transport instead of assuming HTTP. Until then, the
+LEDGER design records its operation registry as `DM-LEDGER-OPERATION-DESCRIPTOR`
+and explains why no endpoint entities exist.
+
+### LEX-DESIGN-E002: Support planned expected paths in greenfield designs
+
+The packaged `lex:design` skill requires decisions to record concrete expected
+implementation paths before planning and treats `lex decision path-check`
+warnings as a design gate. Lex 0.5.3, however, has only one unqualified
+`expected_path` value: every path is checked for existence immediately.
+
+For a greenfield module with no source project yet, every truthful path such as
+`src/Tally/Infrastructure/Storage` is therefore reported missing. The agent
+must choose between a permanently warning design, dishonest references to
+unrelated existing files, premature implementation scaffolding during design,
+or omission of the structured metadata.
+
+Add lifecycle semantics to expected paths, for example:
+
+```text
+--expected-path src/Tally/Infrastructure/Storage --path-state planned
+```
+
+Design review should validate that planned paths are concrete, non-overlapping,
+and assigned to implementation tasks. `path-check` should require existence
+only for `implemented` decisions or after a linked plan task is complete. The
+current LEDGER workaround keeps the planned path contract in
+`MD-LEDGER-MASTER` and leaves decision path metadata empty so the graph remains
+truthful.
+
+The same lifecycle gap appears in the full composite check. Immediately after
+design authoring, `lex check --json` passed with 546 drift warnings, including
+one `unanchored` warning for every new LEDGER decision and data model even
+though no implementation phase has begun. The pre-design baseline already had
+514 inherited CORE warnings; the 32-warning delta is exactly the new greenfield
+design surface. Drift should become actionable only when an entity reaches the
+lifecycle stage where code anchors are expected.
+
+### LEX-DESIGN-E003: Export complete feature-area membership
+
+The design skill says a feature area groups decisions, endpoints, and models.
+LEDGER created five feature areas and explicit links from each area to its
+decisions, data models, requirements, and verification concerns. The workspace
+export nevertheless groups only HTTP endpoints by feature area. The exporter
+source and generated output confirm that its `belongs_to` grouping query is
+limited to `api_endpoint -> feature_area`.
+
+For a CLI module with no fake HTTP endpoints, this produces empty
+`features/<area>/api-surface.md` and `ui-mockup.md` files while all test cases
+land in `features/_ungrouped/test-plan.md`. Decisions and data models remain
+global, so the required feature-by-feature design walk loses the membership
+captured in the graph.
+
+Support feature-area membership for decisions, data models, diagrams, mockups,
+test cases, and interface/operation entities. The workspace exporter should
+project each member into the owning area or emit an area-local index that links
+to its canonical document. Empty HTTP/UI projection files should be omitted
+when the module has no such surface.
 
 ### LEX-GRAPH-E001: Model use-case primary actors as persona relationships
 
