@@ -1,0 +1,84 @@
+{
+  "id": "01KXXFAZDV5ETFQAPK518P3W60",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "type": "functional",
+  "ref_code": "FR-BUDGET-POSITION-QUERY",
+  "title": "Calculate exact budget positions",
+  "description": [
+    "Compare one explicit plan revision with current corrected public LEDGER Budget Actuals under one snapshot, without interpretation. Implements G4 and G7 through UC-BUDGET-003."
+  ],
+  "rationale": [
+    "The owner and INSIGHTS need one reproducible raw answer for plan versus actual before any pace, forecast, or narrative is added."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "an exact category and total plan-versus-actual position"
+  ],
+  "story_so_that": [
+    "every amount can be reconciled before decisions or analysis"
+  ],
+  "acceptance_criteria": [
+    "Given a Budget Period with one Active revision and no revision selector, when Get Budget Position is requested, then the result is bound to that Active revision and reports its Active lifecycle status.",
+    "Given an explicit readable Draft, Active, or Superseded revision identifier, when Get Budget Position is requested, then that revision is evaluated without activation or lifecycle mutation and its status is returned.",
+    "Given a period has no Active revision and no revision selector, when Get Budget Position is requested, then BUDGET returns the explicit No Active Budget Plan Revision state and does not fabricate a zero plan.",
+    "Given a selected plan and no matching LEDGER actuals, when the position is returned, then every planned value is preserved, actual totals are exact zero, and the state remains distinct from an empty or absent plan.",
+    "Given LEDGER actuals assigned to a category with a positive planned entry, when the position is calculated, then those actuals appear exactly once in that category budgeted position.",
+    "Given LEDGER actuals assigned to a category with a Zero Budget entry, when the position is calculated, then those actuals appear exactly once in that category Zero Budget position.",
+    "Given LEDGER actuals assigned to a valid category omitted from the selected revision, when the position is calculated, then those actuals appear exactly once as Unbudgeted Spend for that stable category.",
+    "Given LEDGER actuals without a current Spend Category assignment, when the position is calculated, then those actuals appear exactly once as Uncategorized Spend and no category or planned amount is invented.",
+    "Given any selected plan and LEDGER snapshot, when category and total values are returned, then planned totals equal the exact sum of explicit entries and actual totals equal the exact sum of budgeted, Zero Budget, Unbudgeted, and Uncategorized actuals.",
+    "Given a planned category or total whose planned amount is at least its actual amount, when variance is returned, then Remaining equals planned minus actual and Over equals exact zero.",
+    "Given a planned category or total whose actual amount exceeds its planned amount, when variance is returned, then Over equals actual minus planned and Remaining equals exact zero.",
+    "Given a refund-heavy category or period produces a negative LEDGER Budget Actual, when the position is returned, then the negative value is preserved exactly and is not clamped or reclassified.",
+    "Given identical plan revision, LEDGER snapshot, period, category state, and categorization state, when the position is repeated, then categorized positions are ordered by stable category identifier ascending, the Uncategorized position follows them, and exact values, states, and provenance are semantically identical.",
+    "Given a successful position, when provenance is inspected, then it includes plan identity, revision identifier and status, period boundaries, currency, category-contract version, LEDGER contract version, snapshot identifier, and calculation schema version.",
+    "Given LEDGER corrections, allocation changes, relationship changes, voids, or supersessions after an earlier query, when a new position is requested, then current corrected actuals are recomputed under a new cited snapshot while the selected plan revision remains unchanged.",
+    "Given a position is returned, when its schema is inspected, then it contains no pace, forecast, trend, anomaly, recommendation, narrative, alert, or spending-control decision.",
+    "Given a position query completes, when durable BUDGET state is inspected, then no separate actual or report snapshot was persisted by BUDGET.",
+    "Given an Unbudgeted or Uncategorized position, when its values are returned, then Planned, Remaining, and Over are explicitly not applicable rather than zero, while its exact actual value remains present."
+  ],
+  "security_criteria": [
+    "A position is owner-readable financial data and may be emitted only by the explicit structured data-return operation."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T15:18:56.7002378+00:00",
+  "links": [
+    {
+      "id": "01KXXFQ3XNXX674J0362T8JVFJ",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-LEDGER-COMPOSITION",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:25:34.5185141+00:00"
+    },
+    {
+      "id": "01KXXFQ335X5JJ3ZSHSK34MC8H",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-IDENTITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:25:33.6697855+00:00"
+    },
+    {
+      "id": "01KXXFFDDH28G8DXNMD7C2KV2W",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SNAPSHOT-PAGINATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:21:22.0982472+00:00"
+    },
+    {
+      "id": "01KXXFAZDXQHCZZTF3RMCY6X8T",
+      "target_type": "use_case",
+      "target": "UC-BUDGET-003",
+      "rel": "implements",
+      "created_at": "2026-07-19T15:18:56.7010563+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXXFAZDYYGEGESG4VF6RNDVA",
+      "target": "P1",
+      "created_at": "2026-07-19T15:18:56.7002378+00:00"
+    }
+  ]
+}

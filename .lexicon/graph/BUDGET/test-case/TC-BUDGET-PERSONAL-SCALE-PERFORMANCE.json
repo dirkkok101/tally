@@ -1,0 +1,33 @@
+{
+  "id": "01KXXFMPB5B32YR1NCVXSEH0D3",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-PERSONAL-SCALE-PERFORMANCE",
+  "slug": "personal-scale-performance",
+  "title": "Measure personal-budget performance",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "performance",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "The supported release host contains 100000 active LEDGER transactions, 1000 Budget Periods, 1000 revisions in the selected period, and 1000 entries in the selected revision with warm local stores and network disabled.",
+  "steps": "Run at least 100 measured invocations per operation under NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE and collect p50, p95, maximum duration, and peak resident memory.",
+  "expected": "Get Budget Position is at or below 3 seconds p95 and Create Draft, Activate Plan Revision, Get Plan Revision, and List Plan Revisions are each at or below 1 second p95.",
+  "owner": "BUDGET implementation",
+  "created_at": "2026-07-19T15:24:15.0784976+00:00",
+  "links": [
+    {
+      "id": "01KXXFSWJ2927XVCN6SNEK4WNA",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:27:05.2845985+00:00"
+    },
+    {
+      "id": "01KXXFMPB7QSY2YH25EXCTJSWS",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:24:15.0791552+00:00"
+    }
+  ]
+}

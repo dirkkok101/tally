@@ -1,0 +1,48 @@
+{
+  "id": "01KXXFE05JC78X3NE6SVZEXPP2",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY",
+  "title": "Preserve public contract boundaries",
+  "description": [
+    "Keep BUDGET versioned, channel-neutral, and dependent only on public LEDGER contracts while exposing a stable read projection to INSIGHTS."
+  ],
+  "category": "architecture",
+  "target": "100% of Public Budget Operations publish deterministic versioned request, result, error, exit, authority, mutability, idempotency, limit, and compatibility metadata; zero private LEDGER storage or implementation references; every unsupported BUDGET, LEDGER, or INSIGHTS version fails before mutation or partial financial output.",
+  "load_condition": "Every public operation and every supported or one-version-incompatible producer-consumer contract pairing.",
+  "measurement": "Schema snapshots, compatibility matrices, dependency-boundary compilation tests, and contract tests for Agent Host, LEDGER, and INSIGHTS seams.",
+  "rationale": [
+    "Downstream design must not turn a local module boundary into private coupling or an implicit UI contract."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-19T15:20:35.7636891+00:00",
+  "links": [
+    {
+      "id": "01KXXFG2JT28H8F0B9RF0FA89H",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-CONTRACT-DISCOVERY",
+      "rel": "supports",
+      "created_at": "2026-07-19T15:21:43.7711433+00:00"
+    },
+    {
+      "id": "01KXXFG1TRDW5F33098EW92PVN",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-INSIGHTS-PROJECTION",
+      "rel": "supports",
+      "created_at": "2026-07-19T15:21:43.0013418+00:00"
+    },
+    {
+      "id": "01KXXFG13SY30YSD1P83HC9K0A",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-LEDGER-COMPOSITION",
+      "rel": "supports",
+      "created_at": "2026-07-19T15:21:42.2660992+00:00"
+    },
+    {
+      "id": "01KXXFG3AKY1NVJBE3N36V3YS6",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-STRUCTURED-INVOCATION",
+      "rel": "supports",
+      "created_at": "2026-07-19T15:21:44.5325615+00:00"
+    }
+  ]
+}

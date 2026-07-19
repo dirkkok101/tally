@@ -1,0 +1,34 @@
+{
+  "id": "01KXXFE0N28R5S42TW4EF21C2J",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION",
+  "title": "Operate as a self-contained local planner",
+  "description": [
+    "Complete every accepted BUDGET workflow inside the Tally process without operational infrastructure."
+  ],
+  "category": "operability",
+  "target": "100% of BUDGET acceptance workflows complete with network access disabled, non-interactively, and with no Tally daemon, watcher, scheduler, service, port, or background process running before or after invocation.",
+  "load_condition": "Draft, activation, plan/history read, position, contract discovery, compatibility failure, replay, and recovery scenarios.",
+  "measurement": "An isolated acceptance suite disables network access, checks process state before and after each operation, and fails on prompts or background resources.",
+  "rationale": [
+    "The selected scope is one local in-process capability, not a service or automation engine."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-19T15:20:36.2599497+00:00",
+  "links": [
+    {
+      "id": "01KXXFG453FGWVZZ9HAE9HHHEE",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-CONTRACT-DISCOVERY",
+      "rel": "supports",
+      "created_at": "2026-07-19T15:21:45.3806476+00:00"
+    },
+    {
+      "id": "01KXXFG4ZXZ3RBWR53DNMXQPHM",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-STRUCTURED-INVOCATION",
+      "rel": "supports",
+      "created_at": "2026-07-19T15:21:46.2380925+00:00"
+    }
+  ]
+}

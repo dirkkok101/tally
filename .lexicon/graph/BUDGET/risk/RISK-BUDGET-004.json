@@ -8,7 +8,7 @@
   "likelihood": "Medium",
   "impact": "High",
   "mitigation": [
-    "Keep activated revisions immutable and expose both revision identity and effective semantics; require explicit treatment of historical restatement before PRD."
+    "Keep revision payloads immutable, close completed periods to new drafts and activation, expose selected revision status and current corrected actuals provenance, and assign durable report snapshots to INSIGHTS."
   ],
   "created_at": "2026-07-19T13:27:33.6056274+00:00"
 }

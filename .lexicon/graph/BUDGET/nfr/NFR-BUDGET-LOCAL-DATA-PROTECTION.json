@@ -1,0 +1,48 @@
+{
+  "id": "01KXXFDZREHAMKSGRREYYVEPG4",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "NFR-BUDGET-LOCAL-DATA-PROTECTION",
+  "title": "Protect local budget data",
+  "description": [
+    "Keep plan, position, and idempotency data inside the trusted owner-controlled local boundary."
+  ],
+  "category": "security",
+  "target": "Zero budget or actual payload disclosures in process arguments, ordinary logs, stderr, telemetry, crash diagnostics, Git, or shared temporary files; 100% of persisted BUDGET directories and files use owner-only access such as 0700 and 0600 where supported; explicit structured data-return operations are the only payload output.",
+  "load_condition": "Success, validation failure, compatibility failure, storage failure, crash recovery, replay, history, and position workflows.",
+  "measurement": "Permission, log-capture, process-inspection, crash, repository-status, and temporary-artifact tests scan every non-data-return surface for seeded canary values.",
+  "rationale": [
+    "Monthly targets and actual positions are sensitive financial data even in a single-user local product."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-19T15:20:35.3428829+00:00",
+  "links": [
+    {
+      "id": "01KXXFFXYY5DJ96FJP6FDED9SS",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-DRAFT",
+      "rel": "supports",
+      "created_at": "2026-07-19T15:21:39.0395396+00:00"
+    },
+    {
+      "id": "01KXXFFYS8CCK6HAK5WRJKYY4J",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-HISTORY",
+      "rel": "supports",
+      "created_at": "2026-07-19T15:21:39.8815281+00:00"
+    },
+    {
+      "id": "01KXXFFZKSBC1GSQMY7S5DSHNA",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "supports",
+      "created_at": "2026-07-19T15:21:40.7305229+00:00"
+    },
+    {
+      "id": "01KXXFG0BZRY2Z93F6F2G0GQ98",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-STRUCTURED-INVOCATION",
+      "rel": "supports",
+      "created_at": "2026-07-19T15:21:41.5041869+00:00"
+    }
+  ]
+}

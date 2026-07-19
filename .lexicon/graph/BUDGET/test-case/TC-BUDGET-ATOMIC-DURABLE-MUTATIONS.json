@@ -1,0 +1,33 @@
+{
+  "id": "01KXXFMM418W05CKA3QVN4W3AX",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+  "slug": "atomic-durable-mutations",
+  "title": "Verify atomic durable plan mutation",
+  "level": "integration",
+  "surface": "persistence",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Create Draft and Activate Plan Revision can be interrupted at every boundary before and after validation, idempotency, revision durability, supersession, activation, and result delivery.",
+  "steps": "Inject each interruption and restart BUDGET to verify NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS.",
+  "expected": "Each case exposes either the complete mutation exactly once or the unchanged prior state; no partial revision, missing outcome, duplicate draft, or multiply active period exists.",
+  "owner": "BUDGET implementation",
+  "created_at": "2026-07-19T15:24:12.8021186+00:00",
+  "links": [
+    {
+      "id": "01KXXFSRNAPW79T1YT3YS7TY41",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-ACTIVATION",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:27:01.2913946+00:00"
+    },
+    {
+      "id": "01KXXFMM42NKJ7BDH8T6HR670V",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:24:12.8028194+00:00"
+    }
+  ]
+}

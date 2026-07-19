@@ -4,8 +4,8 @@
   "ref_code": "A2",
   "title": "Independent category amount semantics",
   "description": [
-    "Assume each Category Budget Entry is an independent non-negative exact ZAR amount, explicit zero differs from omission, omitted categories are Unbudgeted, and the computed plan total is informative rather than a separately enforced envelope cap."
+    "Validated for v1: each Category Budget Entry is an independent non-negative exact ZAR amount; explicit zero differs from omission; omitted categories are Unbudgeted; the computed total is informative rather than a separately enforced envelope cap."
   ],
-  "status": "active",
+  "status": "validated",
   "created_at": "2026-07-19T14:29:52.3294669+00:00"
 }

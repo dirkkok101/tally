@@ -1,0 +1,41 @@
+{
+  "id": "01KXXFDYWYCESY48TM7S12KXVV",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+  "title": "Make plan mutations atomic and durable",
+  "description": [
+    "Persist draft creation, activation lifecycle changes, and idempotency outcomes as indivisible recoverable mutations."
+  ],
+  "category": "reliability",
+  "target": "For 100% of injected failure and interruption points, restart inspection observes either the complete mutation exactly once or the unchanged pre-operation state; zero partial revisions, duplicate drafts, missing outcomes, or multiply active periods occur.",
+  "load_condition": "Failures before and after validation, idempotency reservation, revision durability, prior-revision supersession, activation durability, and result delivery.",
+  "measurement": "Failure-injection and restart tests inspect durable plan, revision, lifecycle, and idempotency state after every cut point.",
+  "rationale": [
+    "Local process interruption must not make owner intent ambiguous."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-19T15:20:34.4628515+00:00",
+  "links": [
+    {
+      "id": "01KXXFFTPER7PWE7B6F0FY8T6Y",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-IDEMPOTENT-MUTATIONS",
+      "rel": "supports",
+      "created_at": "2026-07-19T15:21:35.6956134+00:00"
+    },
+    {
+      "id": "01KXXFFSY16QWR82R54CSS5AGS",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-ACTIVATION",
+      "rel": "supports",
+      "created_at": "2026-07-19T15:21:34.9145731+00:00"
+    },
+    {
+      "id": "01KXXFFS6E3Y0SG1ZM4KQV3MMN",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-DRAFT",
+      "rel": "supports",
+      "created_at": "2026-07-19T15:21:34.1593580+00:00"
+    }
+  ]
+}

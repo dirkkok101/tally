@@ -3,7 +3,8 @@
   "module_id": "01KXR4WNPW86216H643PZ6KA36",
   "term": "Unbudgeted Spend",
   "definition": [
-    "Actual spend assigned to a valid Spend Category for which the Active Budget Plan Revision has no Category Budget Entry."
+    "Actual spend assigned to a valid Spend Category for which the selected Budget Plan Revision has no Category Budget Entry."
   ],
+  "source": "prd",
   "created_at": "2026-07-19T13:27:41.5175365+00:00"
 }

@@ -1,0 +1,33 @@
+{
+  "id": "01KXXFJZKTQ57Q1N8K9RSXVBNT",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-STRUCTURED-INVOCATION-CONTRACT",
+  "slug": "structured-invocation-contract",
+  "title": "Verify structured BUDGET invocation",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Valid, malformed, forbidden-field, expected-failure, interrupted-delivery, and metadata-canary invocations are available with stdout, stderr, exit, log, process, and temporary-artifact capture.",
+  "steps": "Invoke the relevant Public Budget Operations and exercise every acceptance criterion of FR-BUDGET-STRUCTURED-INVOCATION, including its validation, lifecycle, compatibility, authority, replay, and unavailable paths where applicable.",
+  "expected": "Every acceptance criterion of FR-BUDGET-STRUCTURED-INVOCATION holds; all documented errors are stable; every rejected or failed mutation leaves the required prior state unchanged; no prohibited side effect occurs.",
+  "owner": "BUDGET implementation",
+  "created_at": "2026-07-19T15:23:19.0348475+00:00",
+  "links": [
+    {
+      "id": "01KXXFNBD8MYY50QB7M45MH82X",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-AI-AGENT-HOST",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:24:36.6496196+00:00"
+    },
+    {
+      "id": "01KXXFJZKVKMXPE5Q0MTA7D1E7",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-STRUCTURED-INVOCATION",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:23:19.0355406+00:00"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "01KXXFMKPM8Z4Z4DYAEYADG97Z",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-EXACT-FINANCIAL-INTEGRITY",
+  "slug": "exact-financial-integrity",
+  "title": "Verify exact budget arithmetic",
+  "level": "unit",
+  "surface": "component",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Property generators and fixtures cover exact positive, zero, negative-refund, omitted, uncategorized, boundary, and high-scale ZAR values.",
+  "steps": "Exercise every arithmetic and bucket-accounting invariant in NFR-BUDGET-EXACT-FINANCIAL-INTEGRITY across generated plan and LEDGER actual combinations.",
+  "expected": "Every amount round-trips exactly; every entry and actual is counted once; all plan, actual, Remaining, and Over equations reconcile with zero floating-point drift.",
+  "owner": "BUDGET implementation",
+  "created_at": "2026-07-19T15:24:12.3728278+00:00",
+  "links": [
+    {
+      "id": "01KXXFSQVN7DR8V6RXTF3B71ZS",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:27:00.4706705+00:00"
+    },
+    {
+      "id": "01KXXFMKPN2ZEKS6T07G66DQZT",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-EXACT-FINANCIAL-INTEGRITY",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:24:12.3737420+00:00"
+    }
+  ]
+}

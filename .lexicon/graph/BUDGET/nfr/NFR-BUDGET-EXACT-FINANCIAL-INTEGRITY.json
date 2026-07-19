@@ -1,0 +1,34 @@
+{
+  "id": "01KXXFDYF56XK8J7V4E0EP2E0N",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "NFR-BUDGET-EXACT-FINANCIAL-INTEGRITY",
+  "title": "Preserve exact budget arithmetic",
+  "description": [
+    "Round-trip plan amounts and reconcile every Budget Position without floating-point drift, omission, or double counting."
+  ],
+  "category": "data_integrity",
+  "target": "100% of conformance examples round-trip Category Budget Entries exactly in ZAR; plan totals equal the exact entry sum; actual totals equal the exact sum of budgeted, Zero Budget, Unbudgeted, and Uncategorized values; Remaining or Over equations reconcile exactly.",
+  "load_condition": "All supported plan states, including empty, all-zero, refund-heavy, unbudgeted, uncategorized, corrected, and category-lifecycle cases.",
+  "measurement": "Property tests and fixture-based contract tests compare integer minor-unit or equivalent exact-decimal values and assert all reconciliation equations.",
+  "rationale": [
+    "A plausible but unreconciled position would make BUDGET more dangerous than a manual comparison."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-19T15:20:34.0229018+00:00",
+  "links": [
+    {
+      "id": "01KXXFFQN0M460ZPKEZPZ5KMXH",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-DRAFT",
+      "rel": "supports",
+      "created_at": "2026-07-19T15:21:32.5767374+00:00"
+    },
+    {
+      "id": "01KXXFFRDHJZZGTCQCXEJF2Z56",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "supports",
+      "created_at": "2026-07-19T15:21:33.3620984+00:00"
+    }
+  ]
+}

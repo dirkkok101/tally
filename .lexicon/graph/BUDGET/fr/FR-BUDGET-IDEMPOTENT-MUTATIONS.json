@@ -1,0 +1,65 @@
+{
+  "id": "01KXXF900MG25JA48NB873H40R",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "type": "functional",
+  "ref_code": "FR-BUDGET-IDEMPOTENT-MUTATIONS",
+  "title": "Make plan mutations replay-safe",
+  "description": [
+    "Give Create Draft and Activate Plan Revision deterministic idempotency behavior. Implements G3 and G6 through UC-BUDGET-001, UC-BUDGET-002, and UC-BUDGET-005 under C13."
+  ],
+  "rationale": [
+    "Agent retries and interrupted local processes must never create duplicate revisions or ambiguous activation state."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "retries of plan mutations to be safe"
+  ],
+  "story_so_that": [
+    "agent and process failures cannot duplicate or corrupt monthly intent"
+  ],
+  "acceptance_criteria": [
+    "Given Create Draft or Activate Plan Revision, when the request omits its required idempotency key, then validation fails before mutation.",
+    "Given a completed mutation and the same idempotency key with byte-equivalent logical input, when the request is replayed, then the prior logical result and stable identifiers are returned and no second mutation occurs.",
+    "Given an existing idempotency key and different normalized logical input, when the key is reused, then BUDGET returns a stable conflict and plan state remains unchanged.",
+    "Given interruption before durable commit, when the same mutation is retried, then either the mutation commits exactly once or the pre-operation state remains authoritative.",
+    "Given interruption after durable commit but before the caller receives the result, when the same mutation is retried, then the committed prior result is returned without creating another revision or activation.",
+    "Given an idempotency outcome is inspected, when diagnostics are emitted, then only safe identifiers, fingerprints, status, and timing metadata appear outside the explicit data result."
+  ],
+  "security_criteria": [
+    "Idempotency records retain fingerprints and outcome metadata without duplicating financial request payloads into diagnostics."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T15:17:51.7647083+00:00",
+  "links": [
+    {
+      "id": "01KXXF900NMTGSYGPWRN28SPVV",
+      "target_type": "use_case",
+      "target": "UC-BUDGET-001",
+      "rel": "implements",
+      "created_at": "2026-07-19T15:17:51.7655368+00:00"
+    },
+    {
+      "id": "01KXXF900NK7SRCXSQF80NPP5X",
+      "target_type": "use_case",
+      "target": "UC-BUDGET-002",
+      "rel": "implements",
+      "created_at": "2026-07-19T15:17:51.7656594+00:00"
+    },
+    {
+      "id": "01KXXF900NVHS55QNNMSN2Z6NF",
+      "target_type": "use_case",
+      "target": "UC-BUDGET-005",
+      "rel": "implements",
+      "created_at": "2026-07-19T15:17:51.7657497+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXXF900P57D4XAMGY3BWZK1W",
+      "target": "P1",
+      "created_at": "2026-07-19T15:17:51.7647083+00:00"
+    }
+  ]
+}

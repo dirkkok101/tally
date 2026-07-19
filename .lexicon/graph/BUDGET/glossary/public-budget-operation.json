@@ -1,0 +1,10 @@
+{
+  "id": "01KXXF3HEF7MCZXDQCF2Z68193",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "term": "Public Budget Operation",
+  "definition": [
+    "One versioned channel-neutral BUDGET capability using the canonical Create Draft, Get Plan Revision, List Plan Revisions, Activate Plan Revision, Get Budget Position, or Discover Contract vocabulary. It is not an HTTP endpoint or UI action."
+  ],
+  "source": "prd",
+  "created_at": "2026-07-19T15:14:53.0087120+00:00"
+}

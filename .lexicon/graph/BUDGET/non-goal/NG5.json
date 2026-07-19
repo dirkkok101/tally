@@ -6,7 +6,7 @@
     "Implement automatic rollover, sinking funds, percentage allocation, income-linked rules, weekly or annual plans, variable pay-cycle budgets, or a generic recurring policy engine in v1."
   ],
   "rationale": [
-    "These multiply effective-value and revision semantics beyond the explicit fixed monthly-plan root problem and the M complexity budget; discovery may still choose a fixed non-calendar monthly start day."
+    "These multiply effective-value and revision semantics beyond the validated explicit calendar-month spending-plan problem and the M complexity budget."
   ],
   "created_at": "2026-07-19T13:26:16.6007949+00:00"
 }

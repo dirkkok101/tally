@@ -1,0 +1,26 @@
+{
+  "id": "01KXXFJJYHJ0K2F400NTD9ST19",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-PLAN-IDENTITY-CONTRACT",
+  "slug": "plan-identity-contract",
+  "title": "Verify monthly plan identity contract",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A clean BUDGET state and valid, missing, repeated, invalid, non-calendar, and non-ZAR period inputs are available.",
+  "steps": "Invoke the relevant Public Budget Operations and exercise every acceptance criterion of FR-BUDGET-PLAN-IDENTITY, including its validation, lifecycle, compatibility, authority, replay, and unavailable paths where applicable.",
+  "expected": "Every acceptance criterion of FR-BUDGET-PLAN-IDENTITY holds; all documented errors are stable; every rejected or failed mutation leaves the required prior state unchanged; no prohibited side effect occurs.",
+  "owner": "BUDGET implementation",
+  "created_at": "2026-07-19T15:23:06.0663838+00:00",
+  "links": [
+    {
+      "id": "01KXXFJJYKGT7J0K1A0SJT0SB0",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-IDENTITY",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:23:06.0671870+00:00"
+    }
+  ]
+}

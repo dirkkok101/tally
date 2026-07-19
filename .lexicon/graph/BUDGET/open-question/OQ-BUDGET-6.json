@@ -6,9 +6,9 @@
   "context": [
     "Copy-forward may reduce maintenance without adopting inheritance or automatic rollover, but it must not silently revive inactive categories or stale amounts."
   ],
-  "status": "deferred",
+  "status": "resolved",
   "decision": [
-    "No dedicated copy-previous or inherited-plan operation in v1. The Agent Host may read a prior revision and submit an ordinary explicit draft. Revisit only if representative maintenance exceeds 15 minutes."
+    "v1 provides no dedicated copy-previous or inherited-plan operation. An Agent Host may read a prior revision and submit a new complete ordinary draft; a future PRD may reconsider only if measured representative maintenance exceeds 15 minutes."
   ],
   "owner": "BUDGET discovery",
   "created_at": "2026-07-19T13:27:37.7841224+00:00"

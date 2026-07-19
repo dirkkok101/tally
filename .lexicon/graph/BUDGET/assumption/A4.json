@@ -4,8 +4,8 @@
   "ref_code": "A4",
   "title": "Current corrected actuals define position",
   "description": [
-    "Assume every Budget Position recomputes current corrected actuals from a cited LEDGER snapshot. BUDGET preserves plan revisions but does not preserve historical actual or report snapshots; durable reporting belongs to INSIGHTS."
+    "Validated for v1: every Budget Position recomputes current corrected actuals from a cited LEDGER snapshot; BUDGET preserves plan revisions but no historical actual or report snapshots, which belong to INSIGHTS."
   ],
-  "status": "active",
+  "status": "validated",
   "created_at": "2026-07-19T14:29:53.2915063+00:00"
 }

@@ -3,7 +3,7 @@
   "module_id": "01KXR4WNPW86216H643PZ6KA36",
   "ref_code": "G5",
   "text": [
-    "Keep budget plans safe across LEDGER Spend Category rename, archive, and reactivation. Evidence [analogous]: LEDGER G3 and UC-LEDGER-008 preserve stable category identity and block new use of archived categories. Actor/workflow trace: P1 through UC-BUDGET-001, UC-BUDGET-002, and UC-BUDGET-004."
+    "Keep budget plans safe across LEDGER Spend Category rename, archive, and reactivation. Evidence [analogous]: LEDGER G3 and UC-LEDGER-008 preserve stable category identity and block new use of archived categories. Actor/workflow trace: P1 through UC-BUDGET-001, UC-BUDGET-002, and UC-BUDGET-004. Requirement trace: FR-BUDGET-CATEGORY-LIFECYCLE, FR-BUDGET-PLAN-DRAFT, FR-BUDGET-PLAN-ACTIVATION, and FR-BUDGET-PLAN-HISTORY."
   ],
   "target": "Stable category identity survives rename; historical revisions remain readable after archive; new or revised entries cannot target an inactive category; reactivation never silently revives an omitted or retired amount.",
   "created_at": "2026-07-19T13:25:24.4258574+00:00"

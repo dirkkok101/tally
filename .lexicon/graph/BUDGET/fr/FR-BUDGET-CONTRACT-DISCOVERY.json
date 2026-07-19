@@ -1,0 +1,54 @@
+{
+  "id": "01KXXFB8XKPEXG4YNJCMEG2QAD",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "type": "functional",
+  "ref_code": "FR-BUDGET-CONTRACT-DISCOVERY",
+  "title": "Discover the BUDGET operation contract",
+  "description": [
+    "Expose human help and versioned machine-readable schemas for every Public Budget Operation. Implements G6 through UC-BUDGET-005 under C16 and C17."
+  ],
+  "rationale": [
+    "The AI Agent Host must discover capability, authority, inputs, side effects, and failures without prompts or private storage knowledge."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "agents to inspect every BUDGET operation before invoking it"
+  ],
+  "story_so_that": [
+    "delegated planning remains safe and self-documenting"
+  ],
+  "acceptance_criteria": [
+    "Given the self-contained Tally executable, when an agent requests top-level or BUDGET help non-interactively, then Create Draft, Get Plan Revision, List Plan Revisions, Activate Plan Revision, Get Budget Position, and Discover Contract are described without starting a daemon or mutation.",
+    "Given any Public Budget Operation, when its machine schema is requested, then BUDGET returns versioned request, result, expected error, exit, authority, mutability, idempotency, limit, and compatibility metadata.",
+    "Given a schema request for the same contract version, when it is repeated, then its semantic content and deterministic ordering are identical.",
+    "Given a requested operation is not in the public BUDGET contract, when discovery or invocation is attempted, then BUDGET returns a stable unknown-operation error and exposes no private storage or implementation detail.",
+    "Given contract discovery, when its output is inspected, then it contains schemas and safe examples but no persisted owner plan, category amount, actual, or position payload."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T15:19:06.4204892+00:00",
+  "links": [
+    {
+      "id": "01KXXFFEYES1K4J2RM4DRHQT74",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-AI-AGENT-HOST",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:21:23.6636953+00:00"
+    },
+    {
+      "id": "01KXXFB8XNXZTYWDRJ7JQ2SNCE",
+      "target_type": "use_case",
+      "target": "UC-BUDGET-005",
+      "rel": "implements",
+      "created_at": "2026-07-19T15:19:06.4212966+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXXFB8XP1S2AY6R337AH5RQW",
+      "target": "P1",
+      "created_at": "2026-07-19T15:19:06.4204892+00:00"
+    }
+  ]
+}

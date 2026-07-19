@@ -1,0 +1,11 @@
+{
+  "id": "01KXXF36C42GW0VGC4ABHZ9T3E",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "C17",
+  "title": "Single-owner authority and seed boundary",
+  "description": [
+    "Budget Plan and Budget Position are owner-scoped resources. P1 under the trusted local operating-system identity may Read, Create Draft, and explicitly Activate; the AI Agent Host receives only that delegated identity and no independent principal. BUDGET seeds no plans, amounts, permissions, roles, role templates, menus, translations, navigation, or frontend key models; Spend Categories come only from LEDGER, and CHANNELS owns any future presentation seeds."
+  ],
+  "type": "technical",
+  "created_at": "2026-07-19T15:14:41.6696741+00:00"
+}

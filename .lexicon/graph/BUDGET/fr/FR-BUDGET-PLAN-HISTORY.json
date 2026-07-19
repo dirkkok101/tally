@@ -1,0 +1,58 @@
+{
+  "id": "01KXXF59M99XK6ZABRZ25YVQZC",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "type": "functional",
+  "ref_code": "FR-BUDGET-PLAN-HISTORY",
+  "title": "Inspect plan state and revision history",
+  "description": [
+    "Return deterministic current state and immutable Draft, Active, and Superseded plan evidence for one period. Implements G1, G3, and G5 through UC-BUDGET-004."
+  ],
+  "rationale": [
+    "The owner must reconstruct what was proposed and what governed a period without treating superseded intent as deleted."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "inspect every plan revision and its lifecycle history"
+  ],
+  "story_so_that": [
+    "monthly intent and later changes remain attributable"
+  ],
+  "acceptance_criteria": [
+    "Given a period with revisions, when List Plan Revisions is requested, then all Draft, Active, and Superseded revisions are returned by creation timestamp ascending with stable revision identifier ascending as the tie-breaker.",
+    "Given an explicit revision identifier, when Get Plan Revision succeeds, then its exact entries, computed total, period, currency, status, actor, reason, creation timestamp, and activation or supersession provenance are returned.",
+    "Given a completed period, when plan state is requested, then Closed Budget Period is returned while all revision history remains readable.",
+    "Given a Spend Category was renamed, when an earlier revision is read, then its stable category identifier is unchanged and any current display name is supplemental rather than a rewrite of stored intent.",
+    "Given a Spend Category is archived, when an earlier revision is read, then its entry remains readable and is marked with the current inactive lifecycle state without becoming eligible for new use.",
+    "Given an unknown revision identifier, when Get Plan Revision is requested, then BUDGET returns a stable Not Found result and no plan state changes."
+  ],
+  "security_criteria": [
+    "History reads return financial content only through the explicit structured data channel under the trusted owner identity."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T15:15:50.5388320+00:00",
+  "links": [
+    {
+      "id": "01KXXFQ28ZTJ9AGGEA5TZHAZXA",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-IDENTITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:25:32.8319499+00:00"
+    },
+    {
+      "id": "01KXXF59MBMMBWFPA3XNKYQ9TA",
+      "target_type": "use_case",
+      "target": "UC-BUDGET-004",
+      "rel": "implements",
+      "created_at": "2026-07-19T15:15:50.5396929+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXXF59MCV9PHNQSZKWM3RZDP",
+      "target": "P1",
+      "created_at": "2026-07-19T15:15:50.5388320+00:00"
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "id": "01KXXF58SXMVNKMBXHX6DJDSYJ",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "type": "functional",
+  "ref_code": "FR-BUDGET-PLAN-DRAFT",
+  "title": "Create immutable plan drafts",
+  "description": [
+    "Create attributable immutable Draft Budget Plan Revisions from complete explicit category entries without changing active intent. Implements G1, G2, G3, and G5 through UC-BUDGET-001."
+  ],
+  "rationale": [
+    "The owner needs inspectable proposed intent before any plan governs a Budget Position."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "create or revise a complete monthly category plan as a draft"
+  ],
+  "story_so_that": [
+    "planned intent can be checked before activation without rewriting history"
+  ],
+  "acceptance_criteria": [
+    "Given a current or future Budget Period and a complete valid draft request, when Create Draft succeeds, then one new immutable Draft Budget Plan Revision with a stable revision identifier is returned and the active revision is unchanged.",
+    "Given exact non-negative ZAR Category Budget Entries, when a draft is created, then every submitted category identifier and amount round-trips exactly and the draft total equals their exact base-10 sum.",
+    "Given a ZAR 0.00 Category Budget Entry, when the draft is read, then that category is returned as explicit Zero Budget.",
+    "Given an active Spend Category omitted from the request, when the draft is read, then no entry is invented and the category remains Unbudgeted.",
+    "Given an empty entry collection, when a draft is created, then an explicit empty draft is returned and remains distinct from No Budget Plan and an all-Zero Budget draft.",
+    "Given an existing Draft, Active, or Superseded revision and newly submitted complete content, when the owner revises the plan, then a new Draft revision is created and the source revision remains unchanged.",
+    "Given a negative amount, duplicate category identifier, malformed amount, or incomplete request, when Create Draft is invoked, then validation fails before any plan mutation.",
+    "Given an unknown, inactive, archived, or stale Spend Category reference, when Create Draft is invoked, then the entire request fails before any revision is created.",
+    "Given a successful draft creation, when its provenance is read, then owner context, reason, creation timestamp, period identity, currency, and category-contract version are present.",
+    "Given a completed Closed Budget Period, when Create Draft is requested, then BUDGET returns a stable closed-period error and creates no plan or revision.",
+    "Given Create Draft omits actor context or a non-blank owner reason, when validation runs, then BUDGET rejects the request before creating a plan or revision."
+  ],
+  "security_criteria": [
+    "Draft creation requires the trusted owner identity or explicitly delegated Agent Host context; financial payloads may appear only in the structured data result."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T15:15:49.6938195+00:00",
+  "links": [
+    {
+      "id": "01KXXFFHAHNN4P4V3AGTQXQDM7",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:21:26.0981539+00:00"
+    },
+    {
+      "id": "01KXXFPYZ7BGECAY80PD5FTPYE",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-CATEGORY-LIFECYCLE",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:25:29.4480602+00:00"
+    },
+    {
+      "id": "01KXXFPY6BVVX18B7B4GBT9Q69",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-IDENTITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:25:28.6523079+00:00"
+    },
+    {
+      "id": "01KXXF58SYWAH8PNKN9W03XKV3",
+      "target_type": "use_case",
+      "target": "UC-BUDGET-001",
+      "rel": "implements",
+      "created_at": "2026-07-19T15:15:49.6946292+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXXF58SZ0BY7SM50T778CQWD",
+      "target": "P1",
+      "created_at": "2026-07-19T15:15:49.6938195+00:00"
+    }
+  ]
+}

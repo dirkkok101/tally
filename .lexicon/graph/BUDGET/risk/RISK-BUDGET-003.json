@@ -8,7 +8,7 @@
   "likelihood": "Medium",
   "impact": "High",
   "mitigation": [
-    "Persist explicit period boundaries and revision provenance; resolve calendar-month versus owner-cycle semantics in discovery; bind positions to exact dates and snapshot identity."
+    "Persist the validated calendar-month Effective Date boundaries and revision provenance; reject inferred, locale-derived, variable-cycle, or overlapping period semantics; bind every position to exact dates and snapshot identity."
   ],
   "created_at": "2026-07-19T13:27:33.2095654+00:00"
 }

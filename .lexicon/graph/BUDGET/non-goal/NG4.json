@@ -3,10 +3,10 @@
   "module_id": "01KXR4WNPW86216H643PZ6KA36",
   "ref_code": "NG4",
   "text": [
-    "Provide web, messaging, desktop, notification, or other human delivery surfaces."
+    "Provide web, browser, messaging, desktop, notification, navigation/menu, translated UI, frontend route, or frontend key-model surfaces."
   ],
   "rationale": [
-    "CHANNELS owns human interaction; BUDGET exposes a channel-neutral structured CLI contract."
+    "BUDGET is the source contract owner and exposes only a channel-neutral structured local contract. CHANNELS is the named downstream UI/page owner; its future PRD/design owns pages, browser workflows, navigation and menu visibility, translations, presentation permissions, and frontend models."
   ],
   "created_at": "2026-07-19T13:26:16.1734231+00:00"
 }

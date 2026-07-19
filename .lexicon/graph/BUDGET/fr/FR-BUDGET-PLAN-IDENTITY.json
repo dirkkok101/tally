@@ -1,0 +1,57 @@
+{
+  "id": "01KXXF58C3N05WEV3203JHF9X9",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "type": "functional",
+  "ref_code": "FR-BUDGET-PLAN-IDENTITY",
+  "title": "Identify monthly budget plans",
+  "description": [
+    "Establish one stable Budget Plan identity for one explicit ZAR calendar-month period. Implements G1 and supports UC-BUDGET-001 and UC-BUDGET-004 under A1, C4, and C15."
+  ],
+  "rationale": [
+    "Every draft, activation, history read, and position query needs the same non-inferred period identity."
+  ],
+  "priority": 0,
+  "complexity": "S",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "each monthly spending plan to have one stable explicit identity"
+  ],
+  "story_so_that": [
+    "agents and later analysis cannot select different periods silently"
+  ],
+  "acceptance_criteria": [
+    "Given a valid year and month in the accepted ZAR boundary, when the first Create Draft for that period succeeds, then one Budget Plan identity is created whose period starts on that month first Effective Date inclusive and ends on the next month first Effective Date exclusive.",
+    "Given an existing Budget Plan and the same explicit year and month, when any later plan operation is requested, then the same stable plan identity, currency, start date, and end date are returned.",
+    "Given an operation whose schema requires a Budget Period and the caller omits it or relies only on invocation time, when the operation is requested, then BUDGET rejects the request before reading or mutating plan state.",
+    "Given a non-calendar interval, invalid month, or non-ZAR currency for an operation that accepts a Budget Period, when the operation is requested, then BUDGET returns a stable validation error and creates no plan or revision.",
+    "Given a valid period with no Budget Plan, when plan state is requested, then BUDGET returns the explicit No Budget Plan state rather than Not Found, an empty plan, or a zero plan.",
+    "Given the trusted current Effective Date is within a Budget Period start-inclusive and end-exclusive boundaries, when its lifecycle eligibility is evaluated, then the period is Current.",
+    "Given the trusted current Effective Date is before a Budget Period start, when its lifecycle eligibility is evaluated, then the period is Future.",
+    "Given the trusted current Effective Date is on or after a Budget Period end, when its lifecycle eligibility is evaluated, then the period is Closed."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T15:15:49.2528267+00:00",
+  "links": [
+    {
+      "id": "01KXXF58C5PY7HT1FCVWXW6T1Q",
+      "target_type": "use_case",
+      "target": "UC-BUDGET-001",
+      "rel": "implements",
+      "created_at": "2026-07-19T15:15:49.2538642+00:00"
+    },
+    {
+      "id": "01KXXF58C6V1YD0WMVACMQADH7",
+      "target_type": "use_case",
+      "target": "UC-BUDGET-004",
+      "rel": "implements",
+      "created_at": "2026-07-19T15:15:49.2540743+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXXF58C7VM5JZ4AWGX88YTWN",
+      "target": "P1",
+      "created_at": "2026-07-19T15:15:49.2528267+00:00"
+    }
+  ]
+}

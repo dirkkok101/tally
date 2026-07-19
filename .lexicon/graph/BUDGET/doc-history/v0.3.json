@@ -1,0 +1,9 @@
+{
+  "id": "01KXXG2FX1BJBW1KCH4AX61W44",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "version": "0.3",
+  "changes": [
+    "PRD complete: 11 active FRs with 90 atomic acceptance criteria, 7 measurable NFRs, 5 P1 use cases, and 18 planned verification intents; formalized calendar-month identity, trusted period state, immutable draft and activation lifecycle, category safety, replay behavior, exact current-corrected position semantics, public LEDGER and read-only INSIGHTS boundaries, agent contract, local privacy, canonical operation and authority/seed vocabulary, and CHANNELS-owned UI deferral; all 8 questions resolved, coverage healthy, export coherent, dependency tests linked, and fresh graph-only requirements review approved."
+  ],
+  "created_at": "2026-07-19T15:31:47.2351757+00:00"
+}

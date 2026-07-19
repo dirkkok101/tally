@@ -1,0 +1,73 @@
+{
+  "id": "01KXXFBAZHEXT50QKDFH4FHDY9",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "type": "functional",
+  "ref_code": "FR-BUDGET-STRUCTURED-INVOCATION",
+  "title": "Invoke BUDGET operations non-interactively",
+  "description": [
+    "Provide deterministic JSON-oriented input, output, diagnostics, and failure behavior for every Public Budget Operation. Implements G6 through UC-BUDGET-005 under C1, C7, and C8."
+  ],
+  "rationale": [
+    "Agents must distinguish business results from diagnostics and must never parse prose to determine whether plan intent changed."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "agents to invoke BUDGET through a stable process contract"
+  ],
+  "story_so_that": [
+    "success, failure, and mutation state are machine-verifiable"
+  ],
+  "acceptance_criteria": [
+    "Given a Public Budget Operation and valid structured input through the documented non-interactive data path, when invocation succeeds, then exactly one structured business-result envelope is written to stdout and the process exits with the documented success code.",
+    "Given an expected validation, authority, conflict, lifecycle, compatibility, snapshot, resource, or Not Found failure, when invocation ends, then exactly one machine-readable BUDGET error envelope is written to stdout, diagnostics remain on stderr, and the documented non-zero exit category is stable.",
+    "Given malformed JSON or a schema-forbidden unknown field, when invocation is attempted, then validation fails before any plan read requiring financial output or any mutation.",
+    "Given any Public Budget Operation, when it is invoked, then it requires no interactive prompt, watcher, daemon, scheduler, network call, or background Tally process.",
+    "Given a successful or expected-failure invocation, when stderr, logs, telemetry, crash diagnostics, process arguments, and shared temporary locations are inspected, then they contain no category amount, plan entry, Budget Actual, position payload, credential, or serialized request or response body.",
+    "Given a mutation result whose delivery is interrupted, when the caller invokes the documented status or replay path, then the outcome is resolved through its idempotency key without heuristic inspection of storage.",
+    "Given an operation result or error, when a caller parses it, then operation name, contract version, result or error type, correlation identifier, and compatibility metadata are explicit."
+  ],
+  "security_criteria": [
+    "Diagnostics contain metadata only; financial requests and results never appear in process arguments, ordinary logs, telemetry, crash diagnostics, or shared temporary files."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T15:19:08.5298772+00:00",
+  "links": [
+    {
+      "id": "01KXXFFFRDE03EZQV53NPSM2RW",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-AI-AGENT-HOST",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:21:24.4946590+00:00"
+    },
+    {
+      "id": "01KXXFFGH91A1RKBGPJSTR6BBE",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:21:25.2902321+00:00"
+    },
+    {
+      "id": "01KXXFQ5J5K3YR1E9PC9A3AMS2",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-CONTRACT-DISCOVERY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:25:36.1979734+00:00"
+    },
+    {
+      "id": "01KXXFBAZJBTX18PCFF19GH7FH",
+      "target_type": "use_case",
+      "target": "UC-BUDGET-005",
+      "rel": "implements",
+      "created_at": "2026-07-19T15:19:08.5306147+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXXFBAZKZN1E6WJPVE93M3NW",
+      "target": "P1",
+      "created_at": "2026-07-19T15:19:08.5298772+00:00"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "01KXXFJYD4MPDR2RD18XQAQ6MN",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-CONTRACT-DISCOVERY-CONTRACT",
+  "slug": "contract-discovery-contract",
+  "title": "Verify BUDGET contract discovery",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "The self-contained executable exposes every Public Budget Operation and supports schema, help, repeat, and unknown-operation requests.",
+  "steps": "Invoke the relevant Public Budget Operations and exercise every acceptance criterion of FR-BUDGET-CONTRACT-DISCOVERY, including its validation, lifecycle, compatibility, authority, replay, and unavailable paths where applicable.",
+  "expected": "Every acceptance criterion of FR-BUDGET-CONTRACT-DISCOVERY holds; all documented errors are stable; every rejected or failed mutation leaves the required prior state unchanged; no prohibited side effect occurs.",
+  "owner": "BUDGET implementation",
+  "created_at": "2026-07-19T15:23:17.7969302+00:00",
+  "links": [
+    {
+      "id": "01KXXFNANAKMVY2G9YPFQHXFNY",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-AI-AGENT-HOST",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:24:35.8831875+00:00"
+    },
+    {
+      "id": "01KXXFJYD5DRKJCY5FJ04GG3M7",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-CONTRACT-DISCOVERY",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:23:17.7978408+00:00"
+    }
+  ]
+}

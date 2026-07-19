@@ -1,0 +1,95 @@
+{
+  "id": "01KXXF92J52M61D2Z38JQSJJYM",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "type": "functional",
+  "ref_code": "FR-BUDGET-LEDGER-COMPOSITION",
+  "title": "Compose only through public LEDGER contracts",
+  "description": [
+    "Consume version-compatible public LEDGER category and Budget Actual operations without private storage access or financial-semantic duplication. Implements G4 and G5 through UC-BUDGET-001, UC-BUDGET-002, and UC-BUDGET-003."
+  ],
+  "rationale": [
+    "BUDGET is trustworthy only if canonical category and actual semantics remain owned by LEDGER."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "budget planning to use canonical Ledger categories and actuals"
+  ],
+  "story_so_that": [
+    "plan comparisons reconcile with the financial source of truth"
+  ],
+  "acceptance_criteria": [
+    "Given BUDGET starts an operation requiring LEDGER, when compatibility is checked, then the required category, Budget Actual, snapshot, error, and contract versions are verified before plan mutation or position calculation.",
+    "Given category validation is required, when BUDGET reads category state, then it uses the public LEDGER category identity and lifecycle result without maintaining an authoritative duplicate catalogue.",
+    "Given a Budget Position request, when BUDGET obtains actuals, then it requests Budget Actual values for the exact Budget Period and current category and categorization state under one cited LEDGER snapshot.",
+    "Given LEDGER returns transfer, refund, correction, allocation, void, supersession, or lifecycle-aware Budget Actual values, when BUDGET consumes them, then those values are used verbatim and no financial transaction is reclassified or reinterpreted.",
+    "Given LEDGER actuals require multiple pages, when BUDGET completes the query, then every page belongs to the same snapshot and every returned member is accounted for exactly once.",
+    "Given the LEDGER snapshot expires or any page, integrity check, or contract call fails, when position calculation ends, then BUDGET returns a stable unavailable result and emits no partial position or totals.",
+    "Given any BUDGET workflow, when public LEDGER operations are inspected, then zero account, transaction, relationship, category-assignment, or lifecycle mutation is requested.",
+    "Given an unsupported or incompatible LEDGER contract version, when a dependent BUDGET operation is requested, then it fails before plan mutation or financial-data result and does not fall back to private storage."
+  ],
+  "security_criteria": [
+    "BUDGET may use only public LEDGER operation contracts and never access private LEDGER storage, handlers, or implementation types."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T15:17:54.3742540+00:00",
+  "links": [
+    {
+      "id": "01KXXFFA4XM9DPFXJ98TSQ4689",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:21:18.7497871+00:00"
+    },
+    {
+      "id": "01KXXFFAYF0H92RJ88SN12FSYP",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACTUALS-QUERY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:21:19.5687197+00:00"
+    },
+    {
+      "id": "01KXXFFBP88T5X540GC5HEA441",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-CATALOGUE",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:21:20.3291337+00:00"
+    },
+    {
+      "id": "01KXXFFCG25G0YE9XZXWR30NY4",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CONTRACT-DISCOVERY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:21:21.1554151+00:00"
+    },
+    {
+      "id": "01KXXF92J7SNBDBCF24V8RWEWV",
+      "target_type": "use_case",
+      "target": "UC-BUDGET-001",
+      "rel": "implements",
+      "created_at": "2026-07-19T15:17:54.3750260+00:00"
+    },
+    {
+      "id": "01KXXF92J7F232B4TDFD51J3VS",
+      "target_type": "use_case",
+      "target": "UC-BUDGET-002",
+      "rel": "implements",
+      "created_at": "2026-07-19T15:17:54.3751160+00:00"
+    },
+    {
+      "id": "01KXXF92J7MQ1TV532FS76HGM0",
+      "target_type": "use_case",
+      "target": "UC-BUDGET-003",
+      "rel": "implements",
+      "created_at": "2026-07-19T15:17:54.3751888+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXXF92J89HB78RNWMSHF3K92",
+      "target": "P1",
+      "created_at": "2026-07-19T15:17:54.3742540+00:00"
+    }
+  ]
+}

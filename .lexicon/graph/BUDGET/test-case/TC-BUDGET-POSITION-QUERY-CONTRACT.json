@@ -1,0 +1,26 @@
+{
+  "id": "01KXXFJVVPKJKTGX38HD706M9E",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-POSITION-QUERY-CONTRACT",
+  "slug": "position-query-contract",
+  "title": "Verify exact budget position contract",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Representative absent, empty, all-zero, budgeted, unbudgeted, uncategorized, refund-heavy, corrected, Draft, Active, and Superseded plan-position fixtures are available.",
+  "steps": "Invoke the relevant Public Budget Operations and exercise every acceptance criterion of FR-BUDGET-POSITION-QUERY, including its validation, lifecycle, compatibility, authority, replay, and unavailable paths where applicable.",
+  "expected": "Every acceptance criterion of FR-BUDGET-POSITION-QUERY holds; all documented errors are stable; every rejected or failed mutation leaves the required prior state unchanged; no prohibited side effect occurs.",
+  "owner": "BUDGET implementation",
+  "created_at": "2026-07-19T15:23:15.1916085+00:00",
+  "links": [
+    {
+      "id": "01KXXFJVVRZRFRXARC6ZF8J4PA",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:23:15.1924694+00:00"
+    }
+  ]
+}

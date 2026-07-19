@@ -1,0 +1,26 @@
+{
+  "id": "01KXXFJSE69T4XK1H7T9335SE2",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-IDEMPOTENT-MUTATIONS-CONTRACT",
+  "slug": "idempotent-mutations-contract",
+  "title": "Verify replay-safe mutation contract",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Create Draft and Activate Plan Revision inputs plus repeat, conflicting-key, and interruption points before and after durable commit are available.",
+  "steps": "Invoke the relevant Public Budget Operations and exercise every acceptance criterion of FR-BUDGET-IDEMPOTENT-MUTATIONS, including its validation, lifecycle, compatibility, authority, replay, and unavailable paths where applicable.",
+  "expected": "Every acceptance criterion of FR-BUDGET-IDEMPOTENT-MUTATIONS holds; all documented errors are stable; every rejected or failed mutation leaves the required prior state unchanged; no prohibited side effect occurs.",
+  "owner": "BUDGET implementation",
+  "created_at": "2026-07-19T15:23:12.7108625+00:00",
+  "links": [
+    {
+      "id": "01KXXFJSE84J66PVPY30BP791F",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-IDEMPOTENT-MUTATIONS",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:23:12.7120199+00:00"
+    }
+  ]
+}

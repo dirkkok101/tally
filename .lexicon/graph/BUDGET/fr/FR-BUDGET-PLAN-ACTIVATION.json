@@ -1,0 +1,81 @@
+{
+  "id": "01KXXF597PDNTRR8B1XMRNR245",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "type": "functional",
+  "ref_code": "FR-BUDGET-PLAN-ACTIVATION",
+  "title": "Activate one plan revision explicitly",
+  "description": [
+    "Make one validated revision govern a current or future Budget Period through an atomic attributable activation. Implements G1, G3, and G5 through UC-BUDGET-002."
+  ],
+  "rationale": [
+    "Saving a draft must never silently change the plan used for owner decisions."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "explicitly activate a reviewed plan revision"
+  ],
+  "story_so_that": [
+    "exactly one attributable version governs each open period"
+  ],
+  "acceptance_criteria": [
+    "Given a valid Draft revision for a current or future Budget Period and explicit owner activation authority, when Activate Plan Revision succeeds, then that revision is Active and its activation provenance records actor, reason, and timestamp.",
+    "Given a period with an existing Active revision, when another valid Draft is activated, then the new revision becomes Active and the prior revision becomes Superseded in the same atomic mutation.",
+    "Given a successful activation, when the period state is read, then exactly one Active revision is returned.",
+    "Given a completed Closed Budget Period, when activation is requested, then BUDGET returns a stable closed-period error and no revision lifecycle state changes.",
+    "Given a Draft whose category contract is stale or contains a category that is unknown, inactive, or archived at activation time, when activation is requested, then the entire activation is rejected and the former Active revision remains unchanged.",
+    "Given absent explicit activation authority, when activation is requested, then BUDGET fails closed before mutation.",
+    "Given a validation, concurrency, storage, or resource failure during activation, when the operation ends, then either the complete new lifecycle state is durable or the complete prior lifecycle state remains authoritative, with no partial or multiply active result.",
+    "Given Activate Plan Revision omits actor context or a non-blank owner reason, when validation runs, then BUDGET rejects the request before any revision lifecycle state changes."
+  ],
+  "security_criteria": [
+    "Activation requires explicit owner authority, records attributable provenance, and fails closed on absent or ambiguous authority."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T15:15:50.1350530+00:00",
+  "links": [
+    {
+      "id": "01KXXFFJ39ZNHK769JZS3RJXTP",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:21:26.8901096+00:00"
+    },
+    {
+      "id": "01KXXFQ0M8CAXAF426CRG83YNN",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-CATEGORY-LIFECYCLE",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:25:31.1456872+00:00"
+    },
+    {
+      "id": "01KXXFQ1GP601BTETM9X422NBW",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-IDEMPOTENT-MUTATIONS",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:25:32.0553244+00:00"
+    },
+    {
+      "id": "01KXXFPZS4C6QYW8PBEGDHV94C",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-DRAFT",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:25:30.2770108+00:00"
+    },
+    {
+      "id": "01KXXF597Q41GNG9Y46HGGSV5P",
+      "target_type": "use_case",
+      "target": "UC-BUDGET-002",
+      "rel": "implements",
+      "created_at": "2026-07-19T15:15:50.1358959+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXXF597RKQG4MA265MPPSV45",
+      "target": "P1",
+      "created_at": "2026-07-19T15:15:50.1350530+00:00"
+    }
+  ]
+}

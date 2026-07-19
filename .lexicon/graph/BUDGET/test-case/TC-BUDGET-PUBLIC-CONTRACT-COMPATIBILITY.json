@@ -1,0 +1,61 @@
+{
+  "id": "01KXXFMNG4CT13XZKM3DCKTMV5",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY",
+  "slug": "public-contract-compatibility",
+  "title": "Verify BUDGET contract compatibility",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Version-compatible and one-version-incompatible Agent Host, BUDGET, LEDGER, and INSIGHTS contract fixtures are available, and private LEDGER types are excluded from the test compile boundary.",
+  "steps": "Inspect every operation schema and exercise every compatibility pairing required by NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY.",
+  "expected": "All metadata is present and deterministic; compatible pairs work; incompatible pairs fail before mutation or partial financial output; no private LEDGER dependency compiles.",
+  "owner": "BUDGET implementation",
+  "created_at": "2026-07-19T15:24:14.2138772+00:00",
+  "links": [
+    {
+      "id": "01KXXFNEE3XX37FHVJGFD7WFXR",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-AI-AGENT-HOST",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:24:39.7481072+00:00"
+    },
+    {
+      "id": "01KXXFNF5KCHWG20Y6K5WPF92W",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-HOST-OS-SECURITY",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:24:40.5006218+00:00"
+    },
+    {
+      "id": "01KXXFNFYVRX8SX0HJXZTY225C",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-INSIGHTS-CONSUMER-CONTRACT",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:24:41.3081184+00:00"
+    },
+    {
+      "id": "01KXXFNDMZTKG13NX148Q9C9G5",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-LEDGER-PUBLIC-CONTRACT",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:24:38.9444854+00:00"
+    },
+    {
+      "id": "01KXXFSTZDDKB9SNRCCQ7HJDT4",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-LEDGER-COMPOSITION",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:27:03.6627660+00:00"
+    },
+    {
+      "id": "01KXXFMNG64X08WKH9GKA69QX8",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:24:14.2146868+00:00"
+    }
+  ]
+}

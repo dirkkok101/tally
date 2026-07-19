@@ -8,7 +8,7 @@
   ],
   "status": "resolved",
   "decision": [
-    "Only current and future periods accept activation. Activation atomically supersedes the prior active revision; completed periods are closed and cannot be retroactively restated in v1. Recorded as A3."
+    "Only current and future periods accept new Drafts or activation. Activation atomically supersedes the prior Active revision; completed periods are Closed and cannot receive new plan intent or be retroactively restated in v1. Recorded in validated A3."
   ],
   "owner": "BUDGET discovery",
   "created_at": "2026-07-19T13:27:37.4002555+00:00"

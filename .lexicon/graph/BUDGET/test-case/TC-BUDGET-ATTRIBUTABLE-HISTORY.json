@@ -1,0 +1,33 @@
+{
+  "id": "01KXXFMMHH32VCB6XAHQFY0QHW",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-ATTRIBUTABLE-HISTORY",
+  "slug": "attributable-history",
+  "title": "Verify attributable plan history",
+  "level": "integration",
+  "surface": "persistence",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A plan can undergo repeated draft creation, activation, supersession, category rename/archive, and period closure under distinct actor reasons and timestamps.",
+  "steps": "Exercise the lifecycle and inspect every event and immutable revision required by NFR-BUDGET-ATTRIBUTABLE-HISTORY.",
+  "expected": "Every required stable reference, actor, reason, timestamp, prior state, resulting state, and replacement reference is present; historical plan payload hashes remain unchanged.",
+  "owner": "BUDGET implementation",
+  "created_at": "2026-07-19T15:24:13.2346559+00:00",
+  "links": [
+    {
+      "id": "01KXXFSSECF6CAQP4H2GAGR56P",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-HISTORY",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:27:02.0929228+00:00"
+    },
+    {
+      "id": "01KXXFMMHKB97TQ8QPW592WQK5",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-ATTRIBUTABLE-HISTORY",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:24:13.2353486+00:00"
+    }
+  ]
+}

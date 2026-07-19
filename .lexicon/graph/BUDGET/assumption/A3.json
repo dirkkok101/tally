@@ -4,8 +4,8 @@
   "ref_code": "A3",
   "title": "Completed periods are closed",
   "description": [
-    "Assume plan activation is allowed only for current or future Budget Periods. A completed period is closed in v1, preserving its plan revision history without retroactive activation or restatement."
+    "Validated for v1: plan mutation is allowed only for current or future Budget Periods; a completed period is Closed and retains readable revision history without new drafts, activation, or retroactive restatement."
   ],
-  "status": "active",
+  "status": "validated",
   "created_at": "2026-07-19T14:29:52.7822888+00:00"
 }

@@ -3,7 +3,7 @@
   "module_id": "01KXR4WNPW86216H643PZ6KA36",
   "ref_code": "G6",
   "text": [
-    "Expose non-interactive self-documenting BUDGET operations that an AI Agent Host can invoke safely. Evidence [analogous]: LEDGER and INGEST already establish the versioned structured local process-contract pattern for the same owner and Agent Host. Actor/workflow trace: P1 delegating through the Agent Host in UC-BUDGET-005."
+    "Expose non-interactive self-documenting BUDGET operations that an AI Agent Host can invoke safely. Evidence [analogous]: LEDGER and INGEST already establish the versioned structured local process-contract pattern for the same owner and Agent Host. Actor/workflow trace: P1 delegating through the Agent Host in UC-BUDGET-005. Requirement trace: FR-BUDGET-CONTRACT-DISCOVERY, FR-BUDGET-STRUCTURED-INVOCATION, and FR-BUDGET-IDEMPOTENT-MUTATIONS."
   ],
   "target": "Plan create, inspect, revise, activate, list, position, and contract-discovery operations expose versioned schemas, deterministic structured results and errors, stable exit categories, compatibility checks, and payload-free diagnostics.",
   "created_at": "2026-07-19T13:25:24.8435585+00:00"

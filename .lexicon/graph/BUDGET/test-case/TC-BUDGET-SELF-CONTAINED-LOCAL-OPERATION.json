@@ -1,0 +1,33 @@
+{
+  "id": "01KXXFMNXK6519SXMH7JYSDJYR",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-SELF-CONTAINED-LOCAL-OPERATION",
+  "slug": "self-contained-local-operation",
+  "title": "Verify self-contained local operation",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Network access is disabled and no Tally daemon, watcher, scheduler, service, port, or background process is running.",
+  "steps": "Execute every accepted workflow and operational failure path required by NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION, then inspect process and network state.",
+  "expected": "Every workflow completes non-interactively and leaves no network dependency or background resource before or after invocation.",
+  "owner": "BUDGET implementation",
+  "created_at": "2026-07-19T15:24:14.6450929+00:00",
+  "links": [
+    {
+      "id": "01KXXFSVSNHZBRE3QTQQHNZCSR",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-STRUCTURED-INVOCATION",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:27:04.5019227+00:00"
+    },
+    {
+      "id": "01KXXFMNXP31E30C98HKJ3MHPD",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION",
+      "rel": "verifies",
+      "created_at": "2026-07-19T15:24:14.6464330+00:00"
+    }
+  ]
+}

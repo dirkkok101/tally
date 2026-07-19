@@ -1,0 +1,62 @@
+{
+  "id": "01KXXFB6A6PTQGRFMBVQ4J2N3G",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "type": "functional",
+  "ref_code": "FR-BUDGET-INSIGHTS-PROJECTION",
+  "title": "Expose a read-only INSIGHTS projection",
+  "description": [
+    "Publish the exact plan and Budget Position contract that INSIGHTS may consume while retaining BUDGET ownership of plan mutations. Implements G7 and supports UC-BUDGET-003."
+  ],
+  "rationale": [
+    "INSIGHTS needs trustworthy raw inputs, but interpretation and report persistence must remain downstream."
+  ],
+  "priority": 1,
+  "complexity": "S",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "INSIGHTS to consume the same exact budget baseline"
+  ],
+  "story_so_that": [
+    "analysis cannot diverge from the position the owner can reconcile"
+  ],
+  "acceptance_criteria": [
+    "Given a version-compatible INSIGHTS consumer, when it requests plan or position data, then BUDGET returns the same exact domain result and provenance available through the owner read contract.",
+    "Given the INSIGHTS projection schema, when it is inspected, then period identity, plan revision identity and status, exact entries and totals, category lifecycle evidence, actual buckets, Remaining or Over values, and LEDGER snapshot provenance are present.",
+    "Given the INSIGHTS projection schema, when it is inspected, then pace, forecast, trend, anomaly, recommendation, narrative, alert, and durable report-snapshot fields are absent.",
+    "Given an INSIGHTS caller, when available BUDGET capabilities are enumerated, then no Create Draft, Activate Plan Revision, or other mutation authority is granted through the consumer projection.",
+    "Given an unsupported BUDGET projection version, when INSIGHTS requests data, then BUDGET returns a stable compatibility failure and no partial projection.",
+    "Given INSIGHTS stores or interprets a returned projection, when BUDGET state is inspected, then no report, recommendation, or consumer-specific state was created."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T15:19:03.7515874+00:00",
+  "links": [
+    {
+      "id": "01KXXFFE6ASJWY6C2JW9AE85XH",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-INSIGHTS-CONSUMER-CONTRACT",
+      "rel": "supports",
+      "created_at": "2026-07-19T15:21:22.8911328+00:00"
+    },
+    {
+      "id": "01KXXFQ4QZB1EE1DWFWFQG7QZE",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T15:25:35.3602822+00:00"
+    },
+    {
+      "id": "01KXXFB6A8TF9WWD2KADNT50H2",
+      "target_type": "use_case",
+      "target": "UC-BUDGET-003",
+      "rel": "implements",
+      "created_at": "2026-07-19T15:19:03.7524143+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXXFB6A9CWVJAMYFGCWH954J",
+      "target": "P1",
+      "created_at": "2026-07-19T15:19:03.7515874+00:00"
+    }
+  ]
+}
