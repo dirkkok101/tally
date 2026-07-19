@@ -1,0 +1,46 @@
+{
+  "id": "01KXXJD95HW2ZWF7QVM1NEN2YY",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DIAG-BUDGET-MUTATION-SEQUENCE",
+  "title": "Replay-safe draft and activation mutation",
+  "diagram_type": "sequence",
+  "format": "mermaid",
+  "content": [
+    "sequenceDiagram",
+    "  participant C as CLI caller",
+    "  participant H as Budget command",
+    "  participant L as Public LEDGER executor",
+    "  participant B as budget.db",
+    "  C->>H: typed request + key",
+    "  H->>H: schema, owner, period and request validation",
+    "  H->>B: lookup key digest/request hash",
+    "  alt completed exact replay",
+    "    B-->>H: immutable outcome references",
+    "    H-->>C: prior logical result",
+    "  else new request",
+    "    H->>L: compatible current category evidence",
+    "    L-->>H: active lifecycle evidence",
+    "    H->>B: BEGIN IMMEDIATE",
+    "    H->>B: recheck local state; append payload/events; update Active pointer if activation",
+    "    H->>B: persist outcome references and COMMIT",
+    "    H-->>C: stable mutation result",
+    "  end"
+  ],
+  "created_at": "2026-07-19T16:12:37.9361012+00:00",
+  "links": [
+    {
+      "id": "01KXXJN882KPFKA8QSB1SW4V1B",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-IDEMPOTENT-MUTATIONS",
+      "rel": "supports",
+      "created_at": "2026-07-19T16:16:59.1396154+00:00"
+    },
+    {
+      "id": "01KXXJN8Z3B1NFP9MYVV1638YJ",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-IDEMPOTENT-MUTATIONS",
+      "rel": "illustrates",
+      "created_at": "2026-07-19T16:16:59.8765040+00:00"
+    }
+  ]
+}

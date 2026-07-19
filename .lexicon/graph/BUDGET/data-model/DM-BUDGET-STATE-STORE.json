@@ -1,0 +1,56 @@
+{
+  "id": "01KXXJD710EW8T4XADJT8T3696",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DM-BUDGET-STATE-STORE",
+  "name": "BudgetStateStore",
+  "description": [
+    "The complete BUDGET-owned raw-SQLite durability boundary and its exclusions."
+  ],
+  "schema_def": [
+    "budget.db under owner-only Tally data root",
+    "Tables: budget_plan, budget_plan_revision, budget_plan_entry, budget_lifecycle_event, budget_idempotency_record.",
+    "Metadata: PRAGMA user_version with ordered immutable migrations.",
+    "Settings: foreign_keys=ON, journal_mode=WAL, synchronous=FULL, bounded busy_timeout.",
+    "Write boundary: one BEGIN IMMEDIATE transaction for replay reservation, revision/lifecycle mutation, Active constraint, and outcome references.",
+    "Protection: directories 0700; database, WAL, SHM, lock, and recognized temporary artifacts 0600 where supported; host-managed encrypted volume required; no custom crypto.",
+    "Never persisted: LEDGER transactions/actuals, category catalogue authority, actuals cursor or snapshot, calculated BudgetPosition, analytics/report output, consumer state, serialized request/response bodies."
+  ],
+  "created_at": "2026-07-19T16:12:35.7392724+00:00",
+  "links": [
+    {
+      "id": "01KXXJK5EXKYXTBNF80BHKW9QN",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-ACTIVATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:50.7501339+00:00"
+    },
+    {
+      "id": "01KXXJK4MH2W2904DXDCS35Z1V",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-DRAFT",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:49.9066318+00:00"
+    },
+    {
+      "id": "01KXXJK68P4FBR0QSZVZET2QW6",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:51.5754089+00:00"
+    },
+    {
+      "id": "01KXXJK71TV35WQVFAMC5D6G3Z",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-LOCAL-DATA-PROTECTION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:52.3798000+00:00"
+    },
+    {
+      "id": "01KXXJK7VVA53JD1TEPNWWG90W",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-LOCAL-DATA-PROTECTION",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:53.2123165+00:00"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "id": "01KXXJD70YHPRKCX5T2ZJP6W5W",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DM-BUDGET-REVISION-ENTRY",
+  "name": "BudgetPlanRevisionAndEntry",
+  "description": [
+    "Immutable revision payload and exact category amounts, with separately mutable constrained lifecycle status."
+  ],
+  "schema_def": [
+    "budget_plan_revision",
+    "- revision_id: ULID text primary key",
+    "- plan_id: foreign key",
+    "- revision_number: positive integer",
+    "- status: enum Draft|Active|Superseded",
+    "- actor_kind, actor_label: required attributable values",
+    "- actor_run_id: nullable attribution value",
+    "- reason: non-blank bounded text",
+    "- created_at_utc: trusted instant",
+    "- category_contract_version: released semantic version",
+    "- payload_hash: SHA-256 canonical payload",
+    "- activated_at_utc, superseded_at_utc: nullable trusted instants",
+    "- superseded_by_revision_id: nullable same-plan foreign key",
+    "Constraints: unique(plan_id,revision_number); at most one Active per plan via partial unique index; status transitions only Draft->Active->Superseded; content, provenance, and hash columns immutable while constrained lifecycle columns change only during activation.",
+    "",
+    "budget_plan_entry",
+    "- revision_id + category_id: composite primary key",
+    "- planned_minor_units: Int64 >= 0",
+    "Constraints: stable category ULID only; explicit zero row is preserved; omission has no row; no name snapshot; rows immutable; computed total is exact checked sum, not separately authoritative."
+  ],
+  "created_at": "2026-07-19T16:12:35.7392724+00:00",
+  "links": [
+    {
+      "id": "01KXXJJY5905H30F887PK8JTZV",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-CATEGORY-LIFECYCLE",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:43.2743908+00:00"
+    },
+    {
+      "id": "01KXXJJWNXJAXJP5G0RR5C4613",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-ACTIVATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:41.7578436+00:00"
+    },
+    {
+      "id": "01KXXJJVX983H22RCWC697GV74",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-DRAFT",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:40.9696630+00:00"
+    },
+    {
+      "id": "01KXXJJXEBR3P8DM2N28VA57MB",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:42.5397968+00:00"
+    },
+    {
+      "id": "01KXXJJYYFWZW24SM9DB26F8SF",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-PLAN-DRAFT-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:44.0800668+00:00"
+    },
+    {
+      "id": "01KXXJJZSSNTT5Z1YJEVFPQES3",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-PLAN-HISTORY-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:44.9544711+00:00"
+    }
+  ]
+}

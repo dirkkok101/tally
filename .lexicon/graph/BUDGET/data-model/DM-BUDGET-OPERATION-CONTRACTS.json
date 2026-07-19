@@ -1,0 +1,59 @@
+{
+  "id": "01KXXJD70VEXEC9XJW661AYMPD",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
+  "name": "BudgetOperationContracts",
+  "description": [
+    "Concrete versioned request, result, authority, idempotency, limit, and stable error contracts for the five public BUDGET operations plus shared contract discovery."
+  ],
+  "schema_def": [
+    "All operations use the common Tally envelope, source-generated JSON, unknown-field rejection, canonical Money strings, DateOnly period boundaries, opaque ULIDs, one stdout business result, and metadata-only stderr. The required common envelope actor supplies attribution; actor is not duplicated inside operation input. Trusted OS owner/delegated authority is captured by the host context, not accepted as caller JSON.",
+    "",
+    "budget.plan.draft.create input {period:{year,month,currencyCode:ZAR}, entries:[{categoryId,plannedAmount}], reason}; mutation key required; result BudgetPlanRevisionMutationResult containing immutable revision payload and exact DraftCreated event snapshot, with no live period/category/status enrichment.",
+    "budget.plan.revision.get input {revisionId}; result BudgetPlanRevisionDetail containing immutable revision payload plus current supplemental CategoryLifecycleEvidence.",
+    "budget.plan.revision.list input {period:{year,month,currencyCode:ZAR}}; result {periodState, planState, planId?, activeRevisionId?, revisions:BudgetPlanRevisionSummary[]} ordered createdAt then revisionId; summary contains identity, number, status, actor/reason, creation and activation/supersession provenance, but no entries or live category evidence.",
+    "budget.plan.revision.activate input {revisionId, reason}; trusted owner/delegated host context and mutation key required; result BudgetPlanRevisionMutationResult containing immutable payload plus exact activation and prior-supersession event snapshots, not later live status.",
+    "budget.position.get input {period:{year,month,currencyCode:ZAR}, revisionId?}; selected revision must belong to the supplied period/currency or BUDGET-REVISION-PERIOD-MISMATCH is returned before LEDGER; result BudgetPosition or explicit NoActiveBudgetPlanRevision.",
+    "system.schema.list/show discover descriptors without owner data.",
+    "",
+    "Stable module errors include validation, revision-period-mismatch, period-closed, plan/revision-not-found, no-active-revision, category-invalid/inactive/stale, authority-required, lifecycle-invalid, idempotency-conflict, busy, LEDGER-incompatible/unavailable/snapshot-invalid, integrity, host-resource, and sanitized internal categories mapped to shared exit classes. There is no status, Save, edit, delete, copy, rollover, reopen, or rebalance operation."
+  ],
+  "created_at": "2026-07-19T16:12:35.7392724+00:00",
+  "links": [
+    {
+      "id": "01KXXJJNHRCJ1BRCKYET784DG3",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:34.4571874+00:00"
+    },
+    {
+      "id": "01KXXJJQ8CYP7MYWTKXXHNFMFN",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-IDEMPOTENT-MUTATIONS",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:36.2057452+00:00"
+    },
+    {
+      "id": "01KXXJJPDNVHSH43KAZH3ZX2X5",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-STRUCTURED-INVOCATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:35.3501536+00:00"
+    },
+    {
+      "id": "01KXXJJR1Q2NC3RFAM8ZAD0VH4",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-CONTRACT-DISCOVERY-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:37.0160274+00:00"
+    },
+    {
+      "id": "01KXXJJRTHMY64H2BNGMSZFT7C",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-STRUCTURED-INVOCATION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:37.8097990+00:00"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "id": "01KXXJD7F24A36K2FPGMAXT4F7",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "FA-BUDGET-CONTRACT-AUTHORITY",
+  "name": "Contract and Authority",
+  "description": [
+    "Operation descriptors, source-generated schemas, structured envelopes, compatibility, trusted owner/delegated context, contract discovery, and process behavior."
+  ],
+  "created_at": "2026-07-19T16:12:36.1957175+00:00",
+  "links": [
+    {
+      "id": "01KXXJPA5DP2H4T73ZH3KH55C6",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-APPLICATION-ARCHITECTURE",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:17:33.8705977+00:00"
+    },
+    {
+      "id": "01KXXJMFNK9YVWEGB12DVSJKRY",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-CLI-OPERATION-CONTRACT",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:16:33.9725048+00:00"
+    },
+    {
+      "id": "01KXXJPBQSVNZHASN84WV9HZ4C",
+      "target_type": "design_diagram",
+      "target": "DIAG-BUDGET-COMPONENTS",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:17:35.4818552+00:00"
+    },
+    {
+      "id": "01KXXJPAYDM20GHWWDGRSATHYK",
+      "target_type": "data_model",
+      "target": "DM-BUDGET-OPERATION-CONTRACTS",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:17:34.6700323+00:00"
+    },
+    {
+      "id": "01KXXJME3H9JEX2XPHBPPYYWX7",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:16:32.3702035+00:00"
+    },
+    {
+      "id": "01KXXJMEW9EQ28NQYK613VQE4C",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-STRUCTURED-INVOCATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:16:33.1624480+00:00"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "id": "01KXXK5PJ8B3TZ9679DEG7BQ4B",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "version": "0.4",
+  "changes": [
+    "Technical design complete: one canonical module narrative, 9 accepted decisions, 8 data models, 4 feature areas, and 5 diagrams; selected five typed BUDGET operations plus shared discovery, separate owner-only raw SQLite, immutable revision payloads with atomic lifecycle events, event-time idempotent replay, trusted period time, released LEDGER category/actuals composition with inclusive-date mapping, pure exhaustive exact position calculation, read-only INSIGHTS capability projection, explicit CORE compliance and CHANNELS UI boundary; fresh graph-only review corrected selector-period validation, archived-category bucketing, mutation/read DTO separation, actor ownership, and checked arithmetic; coverage healthy with greenfield paths and four assumed external contracts retained as planning gates."
+  ],
+  "created_at": "2026-07-19T16:25:58.0890259+00:00"
+}

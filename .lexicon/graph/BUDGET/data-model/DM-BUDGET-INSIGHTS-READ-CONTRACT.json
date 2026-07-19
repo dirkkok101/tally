@@ -1,0 +1,42 @@
+{
+  "id": "01KXXJD712R35XBQTGT37YQY9S",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
+  "name": "BudgetReadCapabilityDescriptor",
+  "description": [
+    "Versioned read-only consumer view that reuses exact BUDGET read DTOs and cannot grant plan mutation."
+  ],
+  "schema_def": [
+    "budget_read_capability_descriptor",
+    "- contractVersion",
+    "- allowedOperations: exactly [budget.plan.revision.get, budget.position.get]",
+    "- request/result schema fingerprints",
+    "- compatibility range",
+    "- errors and limits",
+    "Constraints: no budget.plan.draft.create, budget.plan.revision.activate, mutation handler, idempotency key, authority grant, analytics field, transport implementation, report persistence, or consumer state. Unsupported versions fail before partial projection."
+  ],
+  "created_at": "2026-07-19T16:12:35.7392724+00:00",
+  "links": [
+    {
+      "id": "01KXXJMBQ2HYCT1X4HE136MXQA",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-INSIGHTS-PROJECTION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:16:29.9228184+00:00"
+    },
+    {
+      "id": "01KXXJMCGJHCAY72HANQ7ZRVKA",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:16:30.7395584+00:00"
+    },
+    {
+      "id": "01KXXJMDA8C1QCYJ2WNC1552ER",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-INSIGHTS-PROJECTION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:16:31.5610645+00:00"
+    }
+  ]
+}

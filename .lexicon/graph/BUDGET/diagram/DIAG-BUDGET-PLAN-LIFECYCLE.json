@@ -1,0 +1,39 @@
+{
+  "id": "01KXXJD95H7RNY95ZXCGSXSJVQ",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DIAG-BUDGET-PLAN-LIFECYCLE",
+  "title": "Budget plan revision and period lifecycle",
+  "diagram_type": "state",
+  "format": "mermaid",
+  "content": [
+    "stateDiagram-v2",
+    "  [*] --> NoBudgetPlan",
+    "  NoBudgetPlan --> Draft: Create Draft in Current or Future",
+    "  Draft --> Draft: Create another immutable Draft",
+    "  Draft --> Active: Activate selected Draft",
+    "  Active --> Superseded: Activate another Draft atomically",
+    "  Draft --> Draft: period becomes Closed; reads only",
+    "  Active --> Active: period becomes Closed; reads only",
+    "  Superseded --> Superseded",
+    "  note right of Draft: Payload immutable; zero rows explicit; omission absent",
+    "  note right of Active: At most one per plan",
+    "  note right of Superseded: History never deleted"
+  ],
+  "created_at": "2026-07-19T16:12:37.9361012+00:00",
+  "links": [
+    {
+      "id": "01KXXJN6QQCY63HQ3HW7V97RF0",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-PLAN-REVISION-LIFECYCLE",
+      "rel": "supports",
+      "created_at": "2026-07-19T16:16:57.5922108+00:00"
+    },
+    {
+      "id": "01KXXJN7FEP6WR22Z93VSB3AK1",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-ACTIVATION",
+      "rel": "illustrates",
+      "created_at": "2026-07-19T16:16:58.3512243+00:00"
+    }
+  ]
+}

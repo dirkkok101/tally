@@ -1,0 +1,64 @@
+{
+  "id": "01KXXJD6KGG7TSP661YVQPTWR7",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DD-BUDGET-INSIGHTS-READ-PROJECTION",
+  "title": "Reuse exact owner reads through a mutation-free INSIGHTS capability set",
+  "description": [
+    "Give INSIGHTS stable raw plan and position inputs without granting plan mutation or copying projection logic."
+  ],
+  "decision": [
+    "Publish BudgetPlanRevisionDetail and BudgetPosition as the shared owner/INSIGHTS read DTOs. Publish a versioned BudgetReadCapabilityDescriptor containing only budget.plan.revision.get and budget.position.get. A future concrete INSIGHTS client invokes those released descriptors through the shared operation executor. No BUDGET-specific transport port, mutation descriptor, handler, idempotency key, report state, or analytics field crosses this boundary."
+  ],
+  "rationale": [
+    "A second INSIGHTS projection would drift from what the owner reconciles. Giving a generic executor view without an allowed-operation contract obscures the no-mutation promise. The capability descriptor provides an auditable architectural boundary while reusing the exact deep read result."
+  ],
+  "alternatives": [
+    "A: duplicate INSIGHTS DTOs and calculation, rejected for parity drift. B: expose every BUDGET descriptor, rejected because mutation authority becomes ambiguous. C: same exact read DTOs plus an explicit read-only capability set, chosen."
+  ],
+  "consequences": [
+    "Consumer compatibility tests prove schema identity, provenance completeness, forbidden analytics fields, and absence of mutation operations. INSIGHTS owns any stored report or interpretation. The consumer dependency remains assumed until its later PRD/design and contract test validate the pairing."
+  ],
+  "status_notes": [
+    "Accepted. This is a source contract, not a UI or network API."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Contracts/Budget/Plans/**\",\"src/Tally/Contracts/Budget/Position/**\",\"src/Tally/Contracts/Budget/Projection/**\",\"tests/Tally.Tests/Budget/InsightsContract/**\"]}",
+  "created_at": "2026-07-19T16:12:35.3046138+00:00",
+  "links": [
+    {
+      "id": "01KXXJJKXV4CTZ2XCW9VQB6P1Z",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-INSIGHTS-CONSUMER-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T16:15:32.7964421+00:00"
+    },
+    {
+      "id": "01KXXJJHKDXR5503ASKR0HMWKB",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-INSIGHTS-PROJECTION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:30.4143078+00:00"
+    },
+    {
+      "id": "01KXXJJJDPZM5CET1EYGF0SA9M",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:31.2548928+00:00"
+    },
+    {
+      "id": "01KXXJJK6M4VJ5T7WR456G33BJ",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:32.0529413+00:00"
+    },
+    {
+      "id": "01KXXJJMQSJ02QC3YJ7G5D0Q4X",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-INSIGHTS-PROJECTION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:33.6267847+00:00"
+    }
+  ]
+}

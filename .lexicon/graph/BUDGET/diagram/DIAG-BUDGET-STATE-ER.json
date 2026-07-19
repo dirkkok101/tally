@@ -1,0 +1,40 @@
+{
+  "id": "01KXXJD95HMWV9B77W3JCTC13B",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DIAG-BUDGET-STATE-ER",
+  "title": "BUDGET durable state model",
+  "diagram_type": "er",
+  "format": "mermaid",
+  "content": [
+    "erDiagram",
+    "  BUDGET_PLAN ||--o{ BUDGET_PLAN_REVISION : owns",
+    "  BUDGET_PLAN ||--o| BUDGET_PLAN_REVISION : active_pointer",
+    "  BUDGET_PLAN_REVISION ||--o{ BUDGET_PLAN_ENTRY : contains",
+    "  BUDGET_PLAN ||--o{ BUDGET_LIFECYCLE_EVENT : records",
+    "  BUDGET_PLAN_REVISION ||--o{ BUDGET_LIFECYCLE_EVENT : concerns",
+    "  BUDGET_IDEMPOTENCY_RECORD }o--|| BUDGET_PLAN : resolves",
+    "  BUDGET_IDEMPOTENCY_RECORD }o--o| BUDGET_PLAN_REVISION : result_revision",
+    "  BUDGET_PLAN { string plan_id PK string period_start string period_end_exclusive string currency_code string active_revision_id FK }",
+    "  BUDGET_PLAN_REVISION { string revision_id PK string plan_id FK int revision_number string status string payload_hash }",
+    "  BUDGET_PLAN_ENTRY { string revision_id PK string category_id PK long planned_minor_units }",
+    "  BUDGET_LIFECYCLE_EVENT { string event_id PK string plan_id FK string revision_id FK string event_type int event_sequence }",
+    "  BUDGET_IDEMPOTENCY_RECORD { string key_digest PK string operation_id string request_hash string result_hash }"
+  ],
+  "created_at": "2026-07-19T16:12:37.9361012+00:00",
+  "links": [
+    {
+      "id": "01KXXJNBAZVC1TREB14MWN7T6S",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-STATE-STORE",
+      "rel": "supports",
+      "created_at": "2026-07-19T16:17:02.3039503+00:00"
+    },
+    {
+      "id": "01KXXJNC3HQTXGRNJN905J6TW3",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-HISTORY",
+      "rel": "illustrates",
+      "created_at": "2026-07-19T16:17:03.0905970+00:00"
+    }
+  ]
+}

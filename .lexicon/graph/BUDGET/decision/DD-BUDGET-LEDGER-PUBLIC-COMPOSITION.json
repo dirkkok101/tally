@@ -1,0 +1,92 @@
+{
+  "id": "01KXXJD6KEE0JVWJ62KA1MK6CY",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DD-BUDGET-LEDGER-PUBLIC-COMPOSITION",
+  "title": "Consume category and actuals truth only through released LEDGER operations",
+  "description": [
+    "Validate categories and obtain complete corrected Budget Actuals without private storage access or duplicated finance semantics."
+  ],
+  "decision": [
+    "Use the concrete shared LedgerContractClient to resolve and invoke released ledger.category.list/get and ledger.actuals.query descriptors through the public operation executor. Draft and activation cite the compatible category contract and require every referenced stable category to be active in the returned lifecycle evidence. Position maps the Budget Period [startInclusive,endExclusive) to LEDGER's inclusive filters as effectiveDateFrom=startInclusive and effectiveDateTo=endExclusive.AddDays(-1), uses active transaction/current allocation state, transfer principal excluded, refunds netted, and categorized plus uncategorized membership. Every page must share one snapshot and all ordinals must be complete. Any non-null assigned category is bucketed by plan membership even when its current lifecycle is archived; unknown category evidence is an integrity failure."
+  ],
+  "rationale": [
+    "LEDGER owns category identity, allocation, transfer, refund, correction, void, supersession, and snapshot semantics. Direct SQL, handlers, or private types would make compatibility tests false. Recomputing actuals in BUDGET would create two finance engines. The existing public client and executor are already a real cross-module seam; an additional port would be speculative."
+  ],
+  "alternatives": [
+    "A: direct LedgerDb/SQL, rejected as forbidden. B: direct feature handlers, rejected because it bypasses released schemas. C: spawn the CLI child process, rejected as needless process and cancellation complexity. D: invoke released descriptors in-process through the shared concrete client, chosen."
+  ],
+  "consequences": [
+    "An incompatible category or actuals contract fails before BUDGET mutation or financial output. A failed, expired, incomplete, duplicate, or mixed snapshot yields no partial position. BUDGET never invokes a LEDGER mutation. Published-binary and in-process conformance remain an upstream implementation gate."
+  ],
+  "status_notes": [
+    "Accepted. The BUDGET-to-LEDGER dependency remains hard and the external contract remains assumed until conformance passes."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Integration/Ledger/LedgerContractClient.cs\",\"src/Tally/Contracts/Ledger/**\",\"src/Tally/Features/Ledger/Actuals/**\",\"src/Tally/Features/Budget/Position/**\",\"tests/Tally.Tests/Budget/LedgerContract/**\"]}",
+  "created_at": "2026-07-19T16:12:35.3046138+00:00",
+  "links": [
+    {
+      "id": "01KXXJJ484GKDGHKE4S8Y8ARS3",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
+      "rel": "references",
+      "created_at": "2026-07-19T16:15:16.7415201+00:00"
+    },
+    {
+      "id": "01KXXJJ516AJZ9WC0FQZDGQQ3E",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "rel": "references",
+      "created_at": "2026-07-19T16:15:17.5435504+00:00"
+    },
+    {
+      "id": "01KXXJJ3G2FBGX94M0427M0GA8",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T16:15:15.9717155+00:00"
+    },
+    {
+      "id": "01KXXJJ16MJGHA1KP2S8JP3F5A",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-CATEGORY-LIFECYCLE",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:13.6216864+00:00"
+    },
+    {
+      "id": "01KXXJJ0D09T19RSRR6NNABRZA",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-LEDGER-COMPOSITION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:12.8012968+00:00"
+    },
+    {
+      "id": "01KXXJJ1Z6DZ0N8SP9P0CZDRER",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:14.4076628+00:00"
+    },
+    {
+      "id": "01KXXJJ2QXS7HWMV62J61J5GX1",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:15.1984220+00:00"
+    },
+    {
+      "id": "01KXXJJ5V84XZ13KETAZ7DXCV7",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-CATEGORY-LIFECYCLE-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:18.3773487+00:00"
+    },
+    {
+      "id": "01KXXJJ6JJMNPBNT9QQTX15G76",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:19.1234924+00:00"
+    }
+  ]
+}

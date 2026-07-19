@@ -1,0 +1,99 @@
+{
+  "id": "01KXXJD6KCDT03BF2HHX1MB4SV",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DD-BUDGET-PLAN-REVISION-LIFECYCLE",
+  "title": "Immutable revision payloads with atomic lifecycle transitions",
+  "description": [
+    "Represent monthly intent, explicit zero and omission, history, activation, supersession, and closure without rewriting prior plan content."
+  ],
+  "decision": [
+    "Create one BudgetPlan per explicit ZAR calendar month and append immutable BudgetPlanRevision plus CategoryBudgetEntry rows. Persist Draft, Active, and Superseded as closed enums; payload rows never update. A plan stores the current Active revision pointer, protected by a partial unique Active index. Create Draft appends only. Activate changes lifecycle state and pointer plus attributable events in one BEGIN IMMEDIATE transaction. Closed is computed from trusted date and blocks new draft or activation while preserving reads."
+  ],
+  "rationale": [
+    "The model makes owner intent reconstructable and distinguishes No Budget Plan, no Active revision, empty plan, all-zero plan, and no actuals. Updating a plan payload would erase provenance; event sourcing every read would exceed the moderate complexity ceiling. Immutable payloads plus transactional lifecycle columns/events provide auditable history with simple queries."
+  ],
+  "alternatives": [
+    "A: mutable current-plan rows, rejected because revisions disappear. B: full event-sourced aggregate, rejected as unnecessary complexity. C: immutable payloads with explicit lifecycle rows and constrained current pointer, chosen."
+  ],
+  "consequences": [
+    "Create Budget Draft and Activate Budget Plan Revision are distinct commands. List order is creation instant then revision ULID. Stable category IDs and amounts survive rename/archive; current names and lifecycle are supplemental. No delete, reopen, in-place edit, auto-rollover, or automatic reactivation exists."
+  ],
+  "status_notes": [
+    "Accepted. Plan and revision identifiers use the established opaque 26-character ULID wire primitive."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Features/Budget/Plans/**\",\"src/Tally/Domain/Budget/Plans/**\",\"tests/Tally.Tests/Budget/Plans/**\"]}",
+  "created_at": "2026-07-19T16:12:35.3046138+00:00",
+  "links": [
+    {
+      "id": "01KXXJHP0XTAT3RMT47VAR8B9M",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-CATEGORY-LIFECYCLE",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:02.1746761+00:00"
+    },
+    {
+      "id": "01KXXJHM9HZRSHGAXYSP16SMF1",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-ACTIVATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:00.4023508+00:00"
+    },
+    {
+      "id": "01KXXJHKHMRNMC0G16KBD6EM92",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-DRAFT",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:14:59.6377878+00:00"
+    },
+    {
+      "id": "01KXXJHN3WFQB0KB00RPWM7FY6",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:01.2449729+00:00"
+    },
+    {
+      "id": "01KXXJHJRA5TE6Q8RCC4AYCHS9",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-IDENTITY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:14:58.8274258+00:00"
+    },
+    {
+      "id": "01KXXJHPZB8S0VES861NMEZQD6",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-ATTRIBUTABLE-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:03.1477997+00:00"
+    },
+    {
+      "id": "01KXXJHSDVC5HRGHN25MXXZ4TA",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-PLAN-ACTIVATION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:05.6605851+00:00"
+    },
+    {
+      "id": "01KXXJHRMPKVW4AXKXN115WZPF",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-PLAN-DRAFT-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:04.8553896+00:00"
+    },
+    {
+      "id": "01KXXJHT6Y361SW1ZFGC9RDFH6",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-PLAN-HISTORY-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:06.4638617+00:00"
+    },
+    {
+      "id": "01KXXJHQVHHNYN1MR2634FCQ3E",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-PLAN-IDENTITY-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:04.0506078+00:00"
+    }
+  ]
+}

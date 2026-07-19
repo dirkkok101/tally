@@ -1,0 +1,113 @@
+{
+  "id": "01KXXJD6K8PQN6V33GKNFHEPP5",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DD-BUDGET-APPLICATION-ARCHITECTURE",
+  "title": "Typed vertical slices with one earned public-contract seam",
+  "description": [
+    "Choose the BUDGET module boundary, class organization, and interface economy inside the existing local Tally executable."
+  ],
+  "decision": [
+    "Use five typed caller-oriented BUDGET operations plus shared schema discovery. Map each operation to one vertical slice with concrete domain policies, raw-SQLite storage, source-generated contracts, explicit DI, TimeProvider, pure mappers, and the existing concrete LedgerContractClient over the shared public operation executor. Keep only the existing generic command/query handler interfaces; add no repository, store, calculator, clock, mapper, mediator, event, or transport interface."
+  ],
+  "rationale": [
+    "The interface is the complete test surface and hides period, lifecycle, replay, bucketing, and provenance complexity. Removing BUDGET would smear those rules across Agent Host and INSIGHTS callers. The LEDGER executor seam is real because CLI, INGEST, CLASSIFY, and BUDGET consume it; storage and calculator substitutions are hypothetical and real SQLite plus pure tests are stronger."
+  ],
+  "alternatives": [
+    "A: three-entry plan/position/contract facade, rejected because action discriminators expose hidden invariants to every caller. B: five explicit capabilities, chosen for schema and error clarity. C: full ports and adapters, rejected except for the already shared LEDGER executor because all new ports would have one production implementation."
+  ],
+  "consequences": [
+    "CreateBudgetDraftCommand, GetBudgetPlanRevisionQuery, ListBudgetPlanRevisionsQuery, ActivateBudgetPlanRevisionCommand, and GetBudgetPositionQuery become stable class-level obligations. BudgetContractMapper and BudgetRowMapper are concrete pure transformers. Expected failures use result values; CancellationToken crosses every async boundary. No FastEndpoints, HTTP, EF, daemon, or background work is introduced."
+  ],
+  "status_notes": [
+    "Accepted after sequential interface comparison. Missing paths are explicit greenfield planning gates."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Features/Budget/**\",\"src/Tally/Domain/Budget/**\",\"src/Tally/Bootstrap/Features/BudgetExtensions.cs\",\"tests/Tally.Tests/Budget/**\"]}",
+  "created_at": "2026-07-19T16:12:35.3046138+00:00",
+  "links": [
+    {
+      "id": "01KXXJGXD92801DAWBTGRZ2X8X",
+      "target_type": "adr",
+      "target": "ADR-CORE-0004",
+      "rel": "references",
+      "created_at": "2026-07-19T16:14:36.9706271+00:00"
+    },
+    {
+      "id": "01KXXJGY4Y7Q45DNH6S06TGZ2N",
+      "target_type": "adr",
+      "target": "ADR-CORE-0010",
+      "rel": "references",
+      "created_at": "2026-07-19T16:14:37.7269523+00:00"
+    },
+    {
+      "id": "01KXXJGYZEXR85V32N49WQYMZA",
+      "target_type": "adr",
+      "target": "ADR-CORE-0021",
+      "rel": "references",
+      "created_at": "2026-07-19T16:14:38.5753122+00:00"
+    },
+    {
+      "id": "01KXXJH17QDFM0A72HRE9DKDQG",
+      "target_type": "adr",
+      "target": "ADR-CORE-0022",
+      "rel": "references",
+      "created_at": "2026-07-19T16:14:40.8878921+00:00"
+    },
+    {
+      "id": "01KXXJGZQ97Y274Y7H9AMPTX37",
+      "target_type": "adr",
+      "target": "ADR-CORE-0024",
+      "rel": "references",
+      "created_at": "2026-07-19T16:14:39.3384522+00:00"
+    },
+    {
+      "id": "01KXXJH0GBS0DKE6BCDZYZ82Q7",
+      "target_type": "adr",
+      "target": "ADR-CORE-0025",
+      "rel": "references",
+      "created_at": "2026-07-19T16:14:40.1398836+00:00"
+    },
+    {
+      "id": "01KXXJGV62F2DYPWEXRTQQTP2Z",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-STRUCTURED-INVOCATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:14:34.6910743+00:00"
+    },
+    {
+      "id": "01KXXJGVX7MZRKC8XAZMJ3BRFB",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:14:35.4324005+00:00"
+    },
+    {
+      "id": "01KXXJGWNAPE5SM5GEJCSPFM3R",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:14:36.2033429+00:00"
+    },
+    {
+      "id": "01KXXJH2SAEG4TTJM7ZY74CKMP",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-SERVICE-REGISTRATION",
+      "rel": "references",
+      "created_at": "2026-07-19T16:14:42.4752979+00:00"
+    },
+    {
+      "id": "01KXXJH2042SXPW3CP34C18E76",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-VERTICAL-SLICE",
+      "rel": "references",
+      "created_at": "2026-07-19T16:14:41.6695849+00:00"
+    },
+    {
+      "id": "01KXXJH3GYSDD586AXYEYJMZXA",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-SELF-CONTAINED-LOCAL-OPERATION",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:14:43.2310026+00:00"
+    }
+  ]
+}

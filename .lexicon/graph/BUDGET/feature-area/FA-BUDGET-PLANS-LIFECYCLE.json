@@ -1,0 +1,96 @@
+{
+  "id": "01KXXJD7XG1W48H4MXZCVAR4VA",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "FA-BUDGET-PLANS-LIFECYCLE",
+  "name": "Plans and Lifecycle",
+  "description": [
+    "Calendar-month identity, immutable draft payloads, history reads, category validation, activation, supersession, period closure, and replay-safe mutations."
+  ],
+  "created_at": "2026-07-19T16:12:36.6576505+00:00",
+  "links": [
+    {
+      "id": "01KXXJPCG77CZ2MQM0QD21JDZS",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-IDEMPOTENT-MUTATIONS",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:17:36.2641600+00:00"
+    },
+    {
+      "id": "01KXXJMKEGKA8V8AJ01EXKW9JM",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-PLAN-REVISION-LIFECYCLE",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:16:37.8414128+00:00"
+    },
+    {
+      "id": "01KXXJPD9N0MFMPJ8RZHYAYGS6",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-TRUSTED-PERIOD-TIME",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:17:37.0787548+00:00"
+    },
+    {
+      "id": "01KXXJPHABTRHF46ATW7C62FB5",
+      "target_type": "design_diagram",
+      "target": "DIAG-BUDGET-MUTATION-SEQUENCE",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:17:41.1968162+00:00"
+    },
+    {
+      "id": "01KXXJPGHSV1PHGS9N9QNP70MY",
+      "target_type": "design_diagram",
+      "target": "DIAG-BUDGET-PLAN-LIFECYCLE",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:17:40.4104435+00:00"
+    },
+    {
+      "id": "01KXXJPFT45W2YD6X57WWMZ4Y8",
+      "target_type": "data_model",
+      "target": "DM-BUDGET-LIFECYCLE-IDEMPOTENCY",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:17:39.6529314+00:00"
+    },
+    {
+      "id": "01KXXJPE5JZW6RDBGTTYRD37Q7",
+      "target_type": "data_model",
+      "target": "DM-BUDGET-PERIOD-PLAN",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:17:37.9706911+00:00"
+    },
+    {
+      "id": "01KXXJPF1CEM5EV8M4MH0VYJ9S",
+      "target_type": "data_model",
+      "target": "DM-BUDGET-REVISION-ENTRY",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:17:38.8610088+00:00"
+    },
+    {
+      "id": "01KXXJMHYE4AWKCPY5BSKYZAJG",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-ACTIVATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:16:36.3028911+00:00"
+    },
+    {
+      "id": "01KXXJMH6MPE6DJ486WVBQEWRY",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-DRAFT",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:16:35.5411196+00:00"
+    },
+    {
+      "id": "01KXXJMJQ9M4TX68BAMXRZPF8N",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:16:37.0981230+00:00"
+    },
+    {
+      "id": "01KXXJMGEMSZ5XJDMDDR2X8C7H",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-IDENTITY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:16:34.7728991+00:00"
+    }
+  ]
+}

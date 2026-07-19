@@ -1,0 +1,99 @@
+{
+  "id": "01KXXJD6KBP451G8EHJ09EC7YG",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DD-BUDGET-STATE-STORE",
+  "title": "Separate owner-only raw-SQLite budget state",
+  "description": [
+    "Persist plan intent, lifecycle, and replay outcomes without coupling them to Durable Ledger State or report retention."
+  ],
+  "decision": [
+    "Use one owner-only budget.db under the Tally data root with Microsoft.Data.Sqlite, snake_case tables, foreign keys, WAL, synchronous FULL, bounded busy handling, PRAGMA user_version migrations, explicit BEGIN IMMEDIATE writer transactions, and one-writer constraints. Store plan, revision, entry, lifecycle, Active pointer, and idempotency metadata only. Do not persist LEDGER actual members, cursors, calculated positions, reports, or consumer state."
+  ],
+  "rationale": [
+    "Sharing Ledger storage violates the public boundary and couples plan retention to financial facts. JSON files make atomic activation, one-Active enforcement, revision allocation, and replay recovery fragile. EF and a hosted database add layers and infrastructure without a second provider or request server. Raw SQLite matches established Tally storage and makes invariants directly testable."
+  ],
+  "alternatives": [
+    "A: store plans in LEDGER, rejected as forbidden ownership coupling. B: canonical JSON files, rejected for multi-row atomicity and concurrency. C: EF/PostgreSQL, rejected by the self-contained local boundary. D: separate raw SQLite, chosen."
+  ],
+  "consequences": [
+    "BudgetStateStore and migrations remain concrete. Real temporary SQLite is required in integration tests. The data root and directories use 0700 and database, WAL, SHM, lock, and recognized temporary files use 0600 where supported. Host volume protection remains an external deployment gate; no custom encryption is claimed."
+  ],
+  "status_notes": [
+    "Accepted. The store is BUDGET-owned and is never read by other modules."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Infrastructure/Budget/Storage/**\",\"src/Tally/Features/Budget/Recovery/**\",\"tests/Tally.Tests/Budget/Storage/**\",\"tests/Tally.Tests/Budget/Security/**\"]}",
+  "created_at": "2026-07-19T16:12:35.3046138+00:00",
+  "links": [
+    {
+      "id": "01KXXJHGDBETZB91W7PC8FJQD2",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-EMBEDDED-STORAGE",
+      "rel": "see-also",
+      "created_at": "2026-07-19T16:14:56.4282174+00:00"
+    },
+    {
+      "id": "01KXXJHDC8DG4V6JDF7JPZZJCG",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-IDEMPOTENT-MUTATIONS",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:14:53.3218951+00:00"
+    },
+    {
+      "id": "01KXXJHBWBK16XGGGW6ZDN3J17",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-ACTIVATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:14:51.7884978+00:00"
+    },
+    {
+      "id": "01KXXJHB5F6MPPX7E06X4M496H",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-DRAFT",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:14:51.0567723+00:00"
+    },
+    {
+      "id": "01KXXJHCK71ZKVYW3VGF7XWGEH",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:14:52.5198923+00:00"
+    },
+    {
+      "id": "01KXXJHE5N669V9MAB4306RGYB",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:14:54.1340673+00:00"
+    },
+    {
+      "id": "01KXXJHEXDVV7WWCBA7113TD08",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-ATTRIBUTABLE-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:14:54.8939273+00:00"
+    },
+    {
+      "id": "01KXXJHFNJMC3MG9G0WXQ1DRM4",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-LOCAL-DATA-PROTECTION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:14:55.6677455+00:00"
+    },
+    {
+      "id": "01KXXJHH7G82S8KQQW26DFEEEB",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:14:57.2656000+00:00"
+    },
+    {
+      "id": "01KXXJHHZ1WXGEX7AC5AR50XDW",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-LOCAL-DATA-PROTECTION",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:14:58.0179447+00:00"
+    }
+  ]
+}

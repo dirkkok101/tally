@@ -1,0 +1,64 @@
+{
+  "id": "01KXXJD6KFFAQQ7132KS2A4BE2",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DD-BUDGET-TRUSTED-PERIOD-TIME",
+  "title": "Compute period eligibility from host TimeProvider",
+  "description": [
+    "Make Current, Future, and Closed boundaries deterministic and immune to caller time, locale, and timestamp ambiguity."
+  ],
+  "decision": [
+    "Require explicit year and month in every period-scoped request. Construct a start-inclusive and next-month-start-exclusive DateOnly interval. Capture one trusted host current calendar date from TimeProvider at operation start and use it for every eligibility check and transaction recheck. Do not accept caller current date, time zone, locale, or timestamp and do not persist period state as authority."
+  ],
+  "rationale": [
+    "Caller time permits reopening or closing periods by crafted input, while persisted state becomes stale merely because the calendar advances. One captured host date makes the operation internally consistent and directly testable through the framework TimeProvider."
+  ],
+  "alternatives": [
+    "A: caller-supplied now, rejected as untrusted and locale-sensitive. B: persist and schedule period closure, rejected because it adds background work and stale state. C: derive state from explicit boundaries and host TimeProvider on each operation, chosen."
+  ],
+  "consequences": [
+    "Current, Future, and Closed are closed enums on results. Draft and activation commands reject Closed periods. Reads remain available. Tests substitute TimeProvider directly; no custom IClock is created and no scheduler is required."
+  ],
+  "status_notes": [
+    "Accepted. One trusted date value is captured before local mutation and reused inside the transaction."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Domain/Budget/Periods/**\",\"src/Tally/Features/Budget/Plans/**\",\"tests/Tally.Tests/Budget/Periods/**\"]}",
+  "created_at": "2026-07-19T16:12:35.3046138+00:00",
+  "links": [
+    {
+      "id": "01KXXJJFA7JYQEAPG2PQ6K4B8V",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-ACTIVATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:28.0726840+00:00"
+    },
+    {
+      "id": "01KXXJJEJSBBZZ7HV2SZCS1EHW",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-DRAFT",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:27.3219974+00:00"
+    },
+    {
+      "id": "01KXXJJDSGAEG1EEY3AK1J7FVH",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-IDENTITY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:26.5132069+00:00"
+    },
+    {
+      "id": "01KXXJJGTH2PY4WV28W8AJ3K9E",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-PLAN-ACTIVATION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:29.6183455+00:00"
+    },
+    {
+      "id": "01KXXJJG33FTJQ6GFN9QJ4AP1H",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-PLAN-IDENTITY-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:28.8680920+00:00"
+    }
+  ]
+}

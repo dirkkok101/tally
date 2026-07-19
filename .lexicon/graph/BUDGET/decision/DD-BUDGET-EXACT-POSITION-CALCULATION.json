@@ -1,0 +1,85 @@
+{
+  "id": "01KXXJD6KETPPZDGNA00EREY9X",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DD-BUDGET-EXACT-POSITION-CALCULATION",
+  "title": "Pure exhaustive bucketing over one complete LEDGER snapshot",
+  "description": [
+    "Produce deterministic exact raw Budget Position values without double counting, hidden omissions, interpretation, or durable derived state."
+  ],
+  "decision": [
+    "Bind one immutable plan revision before calling LEDGER and reject an explicit revision that does not belong to the supplied period/currency. Materialize one complete compatible actuals snapshot in memory and pass both to a concrete pure BudgetPositionCalculator. Use Int64 ZAR minor units and checked addition, subtraction, and magnitude operations; overflow returns a stable integrity failure with no partial result. Assign every Budget Actual exactly once to Budgeted, ZeroBudget, Unbudgeted, or Uncategorized; a non-null assigned category omitted from the plan is Unbudgeted regardless of current active/archived lifecycle. Sort category IDs ascending and place Uncategorized last. Calculate exact totals and mutually exclusive Remaining or Over values. Persist no position, actual, cursor, report, or consumer state."
+  ],
+  "rationale": [
+    "A pure calculator is the smallest deep boundary that makes all arithmetic and state distinctions property-testable without storage. SQL aggregation in either store would either duplicate LEDGER semantics or cross the private boundary. Persisted positions would become stale after corrections and confuse BUDGET with INSIGHTS report ownership."
+  ],
+  "alternatives": [
+    "A: query BUDGET and LEDGER tables in joined SQL, rejected because stores and ownership are separate. B: persist monthly materialized positions, rejected as stale derived history. C: pure in-memory calculation over a cited complete snapshot, chosen."
+  ],
+  "consequences": [
+    "Unbudgeted and Uncategorized values carry actual only; planned, Remaining, and Over are not applicable. Negative refund-heavy actuals are preserved. No Active revision returns before a LEDGER call. Any pagination or reconciliation failure returns no partial totals. The calculation schema version becomes provenance and compatibility metadata."
+  ],
+  "status_notes": [
+    "Accepted. Calculation tests must assert full-set reconciliation and deterministic ordering at the public result surface."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Features/Budget/Position/**\",\"src/Tally/Domain/Budget/Position/**\",\"tests/Tally.Tests/Budget/Position/**\",\"tests/Tally.Tests/Budget/Performance/**\"]}",
+  "created_at": "2026-07-19T16:12:35.3046138+00:00",
+  "links": [
+    {
+      "id": "01KXXJJAGXRVY0J28DB2V5ZPQA",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-SNAPSHOT-ACTUALS",
+      "rel": "references",
+      "created_at": "2026-07-19T16:15:23.1660240+00:00"
+    },
+    {
+      "id": "01KXXJJ840CGGTV9288EWGDQNY",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-INSIGHTS-PROJECTION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:20.7051709+00:00"
+    },
+    {
+      "id": "01KXXJJ7B6G60T23DC6CN3T606",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:19.9117524+00:00"
+    },
+    {
+      "id": "01KXXJJ8Y77DA1ZPY1046WB5PZ",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-EXACT-FINANCIAL-INTEGRITY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:21.5438144+00:00"
+    },
+    {
+      "id": "01KXXJJ9QV218ZSKN8V4AZWW6F",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:22.3638069+00:00"
+    },
+    {
+      "id": "01KXXJJC71BWYDC2AMDXW6MEZA",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-EXACT-FINANCIAL-INTEGRITY",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:24.8987121+00:00"
+    },
+    {
+      "id": "01KXXJJD0JDP2B9ARMXYAJ2DBH",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-PERSONAL-SCALE-PERFORMANCE",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:25.7156001+00:00"
+    },
+    {
+      "id": "01KXXJJBBBH8AP5AR93G4BTGHY",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-POSITION-QUERY-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:24.0125577+00:00"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "id": "01KXXJD70ZX2H07DVSF5RCCPQM",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DM-BUDGET-LIFECYCLE-IDEMPOTENCY",
+  "name": "BudgetLifecycleAndIdempotency",
+  "description": [
+    "Attributable state-transition evidence plus replay metadata that references immutable outcomes without copying financial payloads."
+  ],
+  "schema_def": [
+    "budget_lifecycle_event",
+    "- event_id: ULID text primary key",
+    "- plan_id, revision_id",
+    "- event_type: DraftCreated|RevisionActivated|RevisionSuperseded",
+    "- actor_kind, actor_label: required attributable values",
+    "- actor_run_id: nullable attribution value",
+    "- reason: non-blank bounded text",
+    "- occurred_at_utc: trusted instant",
+    "- prior_status, resulting_status: closed nullable enums",
+    "- replacement_revision_id: nullable ULID",
+    "- event_sequence: positive per-plan integer",
+    "Constraints: unique(plan_id,event_sequence); append-only; exact prior/result/replacement chain; no update/delete.",
+    "",
+    "budget_idempotency_record",
+    "- key_digest: SHA-256 primary key",
+    "- contract_version, operation_id, request_hash",
+    "- state: Completed",
+    "- plan_id, result_revision_id, prior_active_revision_id nullable",
+    "- lifecycle_event_ids: canonical ordered stable references",
+    "- result_hash",
+    "- created_at_utc, completed_at_utc",
+    "Constraints: module-wide key; same operation/request rehydrates the exact event-time mutation snapshot, never later live revision/category/period state; any mismatch conflicts; no request/response JSON or duplicate amounts."
+  ],
+  "created_at": "2026-07-19T16:12:35.7392724+00:00",
+  "links": [
+    {
+      "id": "01KXXJK1D5Z946073HATBT5E33",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-IDEMPOTENT-MUTATIONS",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:46.5986115+00:00"
+    },
+    {
+      "id": "01KXXJK0M5917FV2327611ZCV3",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-ACTIVATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:45.7979774+00:00"
+    },
+    {
+      "id": "01KXXJK284MFWFFMBF8F7JSTQ4",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:47.4608980+00:00"
+    },
+    {
+      "id": "01KXXJK32Z6561Q52GYPAZ0PNN",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-ATTRIBUTABLE-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:48.3199590+00:00"
+    },
+    {
+      "id": "01KXXJK3VWH6F69K2B8M24QKH4",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-IDEMPOTENT-MUTATIONS-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:49.1172799+00:00"
+    }
+  ]
+}

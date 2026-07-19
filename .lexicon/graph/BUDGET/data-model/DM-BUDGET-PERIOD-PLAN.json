@@ -1,0 +1,49 @@
+{
+  "id": "01KXXJD70XWXSTFQXMKWVYYD7S",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DM-BUDGET-PERIOD-PLAN",
+  "name": "BudgetPeriodAndPlan",
+  "description": [
+    "Stable identity for one explicit ZAR calendar month and its current Active pointer; period lifecycle is computed, not persisted as authority."
+  ],
+  "schema_def": [
+    "budget_plan",
+    "- plan_id: ULID text primary key",
+    "- period_start: DateOnly text yyyy-MM-dd, required",
+    "- period_end_exclusive: DateOnly text yyyy-MM-dd, required",
+    "- currency_code: closed ZAR value",
+    "- active_revision_id: nullable ULID foreign key",
+    "- created_at_utc: trusted instant",
+    "Constraints: unique(currency_code, period_start); start is month first; end is next month first; active pointer references same plan; no delete.",
+    "",
+    "BudgetPeriod value",
+    "- year, month, currencyCode",
+    "- startInclusive, endExclusive",
+    "- state: Current|Future|Closed computed from one host TimeProvider DateOnly",
+    "States kept distinct in results: NoBudgetPlan, NoActiveBudgetPlanRevision, EmptyPlan, AllZeroPlan, and PlanWithNoActuals."
+  ],
+  "created_at": "2026-07-19T16:12:35.7392724+00:00",
+  "links": [
+    {
+      "id": "01KXXJJTBBYKB25ZPPQNV5BEH3",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:39.3722647+00:00"
+    },
+    {
+      "id": "01KXXJJSK90Z16E0ENPD089BFA",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-IDENTITY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:38.6026345+00:00"
+    },
+    {
+      "id": "01KXXJJV4YJ4433WJEQ5MRB4DS",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-PLAN-IDENTITY-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:40.1915775+00:00"
+    }
+  ]
+}

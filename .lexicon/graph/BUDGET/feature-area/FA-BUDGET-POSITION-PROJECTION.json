@@ -1,0 +1,82 @@
+{
+  "id": "01KXXJD8AS4BNHYHK575EH4CZQ",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "FA-BUDGET-POSITION-PROJECTION",
+  "name": "Position and Projection",
+  "description": [
+    "Public LEDGER snapshot composition, exact exhaustive position calculation, provenance, and the read-only INSIGHTS capability projection."
+  ],
+  "created_at": "2026-07-19T16:12:37.0820493+00:00",
+  "links": [
+    {
+      "id": "01KXXJMPDXJYCVXADXJMB9PGJS",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-EXACT-POSITION-CALCULATION",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:16:40.8939125+00:00"
+    },
+    {
+      "id": "01KXXJPJTW96RM7VNTCRZ06FAH",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-INSIGHTS-READ-PROJECTION",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:17:42.7499914+00:00"
+    },
+    {
+      "id": "01KXXJPJ3CR1WGR9MWF2N384AX",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-LEDGER-PUBLIC-COMPOSITION",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:17:41.9973569+00:00"
+    },
+    {
+      "id": "01KXXJPP2202WDS2VR02PN7E5Q",
+      "target_type": "design_diagram",
+      "target": "DIAG-BUDGET-POSITION-SEQUENCE",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:17:46.0516341+00:00"
+    },
+    {
+      "id": "01KXXJPN7Z9YHMTG83SX0JVE9H",
+      "target_type": "data_model",
+      "target": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:17:45.2160662+00:00"
+    },
+    {
+      "id": "01KXXJPKMTEAJBSGHBGMHT9AG0",
+      "target_type": "data_model",
+      "target": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:17:43.5790829+00:00"
+    },
+    {
+      "id": "01KXXJPMDX9RQGMP9JAHFWEQR1",
+      "target_type": "data_model",
+      "target": "DM-BUDGET-POSITION-PROJECTION",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:17:44.3819633+00:00"
+    },
+    {
+      "id": "01KXXJMNNEX32B0QAEG9GWRJRK",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-INSIGHTS-PROJECTION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:16:40.1115875+00:00"
+    },
+    {
+      "id": "01KXXJMMY34KCG3C4ZAVHGXER1",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-LEDGER-COMPOSITION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:16:39.3644671+00:00"
+    },
+    {
+      "id": "01KXXJMM63TW1E6ZPDTK1EJYJA",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:16:38.5965451+00:00"
+    }
+  ]
+}

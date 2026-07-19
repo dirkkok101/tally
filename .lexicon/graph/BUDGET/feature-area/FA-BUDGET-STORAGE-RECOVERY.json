@@ -1,0 +1,61 @@
+{
+  "id": "01KXXJD8RA9KF30QD1E6PAFM9G",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "FA-BUDGET-STORAGE-RECOVERY",
+  "name": "Storage and Recovery",
+  "description": [
+    "Raw-SQLite schema, migrations, atomicity, one-Active enforcement, locks, owner-only artifacts, idempotency outcomes, interruption recovery, and local privacy."
+  ],
+  "created_at": "2026-07-19T16:12:37.5156653+00:00",
+  "links": [
+    {
+      "id": "01KXXJN4EM8G3HDJD81AZCCZXJ",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-STATE-STORE",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:16:55.2531268+00:00"
+    },
+    {
+      "id": "01KXXJPRA8QEBHXWZQA9EWMWNY",
+      "target_type": "design_diagram",
+      "target": "DIAG-BUDGET-STATE-ER",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:17:48.3614201+00:00"
+    },
+    {
+      "id": "01KXXJPQGR3SRP3THPRET1TBBV",
+      "target_type": "data_model",
+      "target": "DM-BUDGET-LIFECYCLE-IDEMPOTENCY",
+      "rel": "supports",
+      "created_at": "2026-07-19T16:17:47.5449364+00:00"
+    },
+    {
+      "id": "01KXXJPPSN6SM0YZE8R2MWY46W",
+      "target_type": "data_model",
+      "target": "DM-BUDGET-STATE-STORE",
+      "rel": "belongs-to",
+      "created_at": "2026-07-19T16:17:46.8058812+00:00"
+    },
+    {
+      "id": "01KXXJN23BTQPNC0AKCBY36K3H",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-IDEMPOTENT-MUTATIONS",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:16:52.8441645+00:00"
+    },
+    {
+      "id": "01KXXJN2WRPXZPA3CYRJHXVK1D",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:16:53.6576127+00:00"
+    },
+    {
+      "id": "01KXXJN3NZWM5SJRC9BTHTFZC4",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-LOCAL-DATA-PROTECTION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:16:54.4643216+00:00"
+    }
+  ]
+}

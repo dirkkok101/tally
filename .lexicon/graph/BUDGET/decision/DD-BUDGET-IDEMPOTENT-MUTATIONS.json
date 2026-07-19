@@ -1,0 +1,78 @@
+{
+  "id": "01KXXJD6KD1TZ555KC9W63CJWZ",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DD-BUDGET-IDEMPOTENT-MUTATIONS",
+  "title": "Transactional replay from immutable outcome references",
+  "description": [
+    "Make draft creation and activation safe across caller retry, process interruption, and result-delivery loss without duplicating financial payloads."
+  ],
+  "decision": [
+    "Require a module-wide idempotency key for both mutations. Compare contract version, operation ID, key digest, and a canonical source-generated logical-request hash including actor, reason, selectors, and category-ID-sorted entries. Commit the mutation, lifecycle events, result hash, and stable outcome references in one local transaction. Mutation results contain the immutable payload and exact cited lifecycle-event snapshots but exclude live period state, later revision status, and current category enrichment. Rehydrate replay results from those immutable rows; do not persist a serialized financial response copy."
+  ],
+  "rationale": [
+    "A uniqueness check alone cannot resolve commit-before-delivery. Storing full response JSON duplicates sensitive plan amounts and couples durability to a wire version. Immutable revision and lifecycle rows already contain the exact logical result, so stable references close the interruption window with less sensitive duplication."
+  ],
+  "alternatives": [
+    "A: caller retry without records, rejected as duplicate-prone. B: store full request/response JSON, rejected for privacy and schema duplication. C: transactional fingerprints plus immutable outcome references, chosen."
+  ],
+  "consequences": [
+    "Exact same replay returns the original plan/revision IDs, statuses, actor, reason, and timestamps even after period closure or later category change. A different operation or logical input with the same key conflicts. Boundary validation and transient pre-transaction failures do not consume the key. Fault injection must cover every commit and delivery cut point."
+  ],
+  "status_notes": [
+    "Accepted. Same-operation replay is the documented recovery path; no extra status operation is introduced."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Features/Budget/Plans/**\",\"src/Tally/Infrastructure/Budget/Storage/Idempotency/**\",\"tests/Tally.Tests/Budget/Idempotency/**\"]}",
+  "created_at": "2026-07-19T16:12:35.3046138+00:00",
+  "links": [
+    {
+      "id": "01KXXJHY3MKXSW277DPPDX1V4C",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-IDEMPOTENT-MUTATIONS",
+      "rel": "see-also",
+      "created_at": "2026-07-19T16:15:10.4530715+00:00"
+    },
+    {
+      "id": "01KXXJHV1JFRJK68F2MP2FKF3K",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-IDEMPOTENT-MUTATIONS",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:07.3164430+00:00"
+    },
+    {
+      "id": "01KXXJHWJQEBNXQZA78Z60KCJ0",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-ACTIVATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:08.8880755+00:00"
+    },
+    {
+      "id": "01KXXJHVTSH95WV6PT86A1RDF5",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-DRAFT",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:08.1223646+00:00"
+    },
+    {
+      "id": "01KXXJHXC822BSZ3W4HBWJ190X",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:09.7057061+00:00"
+    },
+    {
+      "id": "01KXXJHZMQSJVP80QNWP3YHY3S",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:12.0242435+00:00"
+    },
+    {
+      "id": "01KXXJHYXC8R85ZC8MZV88NYXA",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-IDEMPOTENT-MUTATIONS-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:15:11.2769471+00:00"
+    }
+  ]
+}

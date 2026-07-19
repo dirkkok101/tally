@@ -1,0 +1,54 @@
+{
+  "id": "01KXXJD711P2JRXFDR2N9PB4KA",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+  "name": "LedgerBudgetCompositionContracts",
+  "description": [
+    "The exact released LEDGER category and actuals evidence BUDGET may consume through the shared public executor."
+  ],
+  "schema_def": [
+    "Category evidence from compatible ledger.category.list/get",
+    "- ledgerContractVersion",
+    "- categoryId, current displayName, lifecycle status",
+    "- category contract/version compatibility evidence",
+    "Use: draft and activation require every referenced stable ID active; reads use current name/status as supplemental evidence only. Archived assigned IDs remain valid historical evidence and are still bucketed in positions.",
+    "",
+    "Budget Actual evidence from compatible ledger.actuals.query",
+    "- filters: effectiveDateFrom=period start and inclusive effectiveDateTo=period endExclusive minus one day; active transaction lifecycle; current allocations; owned-transfer principal excluded; refunds netted; categorization any",
+    "- snapshotId, expiresAt, ledgerContractVersion, storeGenerationFingerprint, cursor/page ordinal evidence",
+    "- each item: transaction identity/ordinal, current categoryId nullable, current category lifecycle evidence, exact signed budgetActualMinor",
+    "- full-set exact budgetActual total",
+    "Constraints: never pass endExclusive as LEDGER's inclusive effectiveDateTo; all pages share one snapshot; every ordinal exactly once; any non-null stable category ID is Budgeted/ZeroBudget when present in the plan or Unbudgeted when omitted regardless of current active/archived lifecycle; unknown referenced IDs are integrity failure; BUDGET uses returned Budget Actual verbatim; no private types or mutation operations; any incompatibility/page/expiry/integrity failure yields no partial BUDGET result."
+  ],
+  "created_at": "2026-07-19T16:12:35.7392724+00:00",
+  "links": [
+    {
+      "id": "01KXXJK9FFS1N4ZGGEYX82V1NQ",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-CATEGORY-LIFECYCLE",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:54.8642551+00:00"
+    },
+    {
+      "id": "01KXXJK8PB54Y3T0F7QDGDNS4Y",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-LEDGER-COMPOSITION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:54.0599623+00:00"
+    },
+    {
+      "id": "01KXXJKA9HTQ1W2BKZPTJGC9RY",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:15:55.6983577+00:00"
+    },
+    {
+      "id": "01KXXJM7H1YGDC9TF18457NNVV",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:16:25.6346810+00:00"
+    }
+  ]
+}

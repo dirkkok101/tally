@@ -1,0 +1,61 @@
+{
+  "id": "01KXXJD712CJ4BKM0CY1JTQYJT",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DM-BUDGET-POSITION-PROJECTION",
+  "name": "BudgetPositionProjection",
+  "description": [
+    "Deterministic exact plan-versus-current-actual result shared by owner reads and the INSIGHTS read contract."
+  ],
+  "schema_def": [
+    "BudgetPosition",
+    "- calculationSchemaVersion",
+    "- planId, revisionId, revisionStatus",
+    "- period {year,month,startInclusive,endExclusive,state}",
+    "- currencyCode: ZAR",
+    "- categoryContractVersion",
+    "- ledger {contractVersion,snapshotId,expiresAt,storeGenerationFingerprint}",
+    "- categoryPositions[] ordered categoryId ascending",
+    "- uncategorizedPosition last",
+    "- totals",
+    "",
+    "CategoryPosition",
+    "- categoryId, currentDisplayName?, currentLifecycle",
+    "- kind: Budgeted|ZeroBudget|Unbudgeted",
+    "- planned: Money? (null only Unbudgeted)",
+    "- actual: signed Money",
+    "- remaining, over: Money? (null only Unbudgeted)",
+    "UncategorizedPosition kind Uncategorized with categoryId/name absent, actual present, planned/remaining/over null.",
+    "Totals contain exact planned, actual, remaining, over and exact bucket subtotals. Planned equals explicit entry sum; actual equals Budgeted + ZeroBudget + Unbudgeted + Uncategorized. Negative actuals remain signed. No pace, forecast, trend, anomaly, recommendation, narrative, alert, control decision, or report-snapshot field."
+  ],
+  "created_at": "2026-07-19T16:12:35.7392724+00:00",
+  "links": [
+    {
+      "id": "01KXXJM9770JXSG2GY6S8R69C8",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-INSIGHTS-PROJECTION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:16:27.3685982+00:00"
+    },
+    {
+      "id": "01KXXJM8CVW7NYS7D6DB3NGF7T",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:16:26.5241805+00:00"
+    },
+    {
+      "id": "01KXXJMA3F2N337R4WR7B08511",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-EXACT-FINANCIAL-INTEGRITY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:16:28.2722230+00:00"
+    },
+    {
+      "id": "01KXXJMAVDNWFWP28BBJ8RGRDK",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-POSITION-QUERY-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:16:29.0380854+00:00"
+    }
+  ]
+}

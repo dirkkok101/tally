@@ -1,0 +1,47 @@
+{
+  "id": "01KXXJD95H6B8HDFN78YS6XQMG",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DIAG-BUDGET-POSITION-SEQUENCE",
+  "title": "Snapshot-bound Budget Position calculation",
+  "diagram_type": "sequence",
+  "format": "mermaid",
+  "content": [
+    "sequenceDiagram",
+    "  participant C as Owner or INSIGHTS",
+    "  participant Q as GetBudgetPositionQuery",
+    "  participant B as budget.db",
+    "  participant L as Public LEDGER actuals",
+    "  participant P as BudgetPositionCalculator",
+    "  C->>Q: explicit period + optional revision",
+    "  Q->>B: bind selected immutable revision",
+    "  alt no Active and no selector",
+    "    Q-->>C: NoActiveBudgetPlanRevision",
+    "  else selected revision",
+    "    Q->>L: exact interval and budget-actual filters",
+    "    loop every cursor page in same snapshot",
+    "      L-->>Q: ordered items, totals, cursor/provenance",
+    "    end",
+    "    Q->>Q: verify compatibility, ordinals and full-set total",
+    "    Q->>P: immutable plan + complete snapshot",
+    "    P-->>Q: exact ordered reconciled position",
+    "    Q-->>C: position + plan/category/LEDGER provenance",
+    "  end"
+  ],
+  "created_at": "2026-07-19T16:12:37.9361012+00:00",
+  "links": [
+    {
+      "id": "01KXXJN9RAHXWX07T0XVA083HR",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-EXACT-POSITION-CALCULATION",
+      "rel": "supports",
+      "created_at": "2026-07-19T16:17:00.6834140+00:00"
+    },
+    {
+      "id": "01KXXJNAHQHQ14Z2QSC9BPHBEE",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "illustrates",
+      "created_at": "2026-07-19T16:17:01.4966997+00:00"
+    }
+  ]
+}

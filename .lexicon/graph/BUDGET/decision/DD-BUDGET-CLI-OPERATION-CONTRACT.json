@@ -1,0 +1,92 @@
+{
+  "id": "01KXXJD6KANRW1K8DP7RC8G2V4",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DD-BUDGET-CLI-OPERATION-CONTRACT",
+  "title": "Five explicit BUDGET operations from one registry",
+  "description": [
+    "Make every v1 plan and position capability discoverable without HTTP, generic CRUD, or hidden actions."
+  ],
+  "decision": [
+    "Expose budget.plan.draft.create, budget.plan.revision.get, budget.plan.revision.list, budget.plan.revision.activate, and budget.position.get under tally budget. Reuse system.schema.list/show for Discover Contract. One explicitly registered descriptor registry generates dispatch, help, machine schemas, compatibility metadata, limits, errors, authority, mutability, idempotency metadata, and process envelopes. Complex input uses explicit stdin or file JSON and every invocation emits one business envelope."
+  ],
+  "rationale": [
+    "The chosen surface preserves the canonical product verbs and makes mutation versus query semantics inspectable. A generic invoke, save, edit, delete, copy, rollover, reopen, or rebalance operation would weaken immutable lifecycle and caller safety. Separate help, schema, and dispatch sources would drift."
+  ],
+  "alternatives": [
+    "A: generic budget.plan.execute with an action field, rejected as a shallow facade. B: HTTP Save/Get/Grid/Delete endpoints, rejected because the module has no network or UI. C: five explicit operations plus shared registry discovery, chosen."
+  ],
+  "consequences": [
+    "Operation IDs, paths, schemas, stable errors, exit categories, and replay behavior are compatibility commitments. Create Draft and Activate require idempotency keys, trusted owner context, actor attribution, and reason. Reads do not accept mutation authority. Unknown fields and incompatible versions fail before financial reads or writes."
+  ],
+  "status_notes": [
+    "No Lex endpoint entities are created because the released surface is a local operation registry, not HTTP; the operation contract data model is authoritative."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Cli/**\",\"src/Tally/Contracts/Budget/**\",\"src/Tally/Features/Budget/Contract/**\",\"tests/Tally.Tests/Budget/Contract/**\"]}",
+  "created_at": "2026-07-19T16:12:35.3046138+00:00",
+  "links": [
+    {
+      "id": "01KXXJH7AJ7GEBT4Y4GFQPWD3H",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-CLI-OPERATION-CONTRACT",
+      "rel": "see-also",
+      "created_at": "2026-07-19T16:14:47.1232230+00:00"
+    },
+    {
+      "id": "01KXXJH82SSBW09T4PSDSDZ5EQ",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "rel": "references",
+      "created_at": "2026-07-19T16:14:47.8980307+00:00"
+    },
+    {
+      "id": "01KXXJH4A7Q5D3M5W4CTP8F1PT",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:14:44.0401714+00:00"
+    },
+    {
+      "id": "01KXXJH5T859080TWKHQYJCF8K",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-IDEMPOTENT-MUTATIONS",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:14:45.5777417+00:00"
+    },
+    {
+      "id": "01KXXJH51HEC9JDWQ7BV3TV879",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-STRUCTURED-INVOCATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:14:44.7865277+00:00"
+    },
+    {
+      "id": "01KXXJH6J39H4FPHAQC5ZWY06Q",
+      "target_type": "nfr",
+      "target": "NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "implements",
+      "created_at": "2026-07-19T16:14:46.3407266+00:00"
+    },
+    {
+      "id": "01KXXJH8VR8FB3HKRT2CXZM427",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-CONTRACT-DISCOVERY-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:14:48.6974308+00:00"
+    },
+    {
+      "id": "01KXXJHADCTQ307ATDA3Q4SDAF",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:14:50.2852168+00:00"
+    },
+    {
+      "id": "01KXXJH9MA349NCAXFS9DZ991T",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-STRUCTURED-INVOCATION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T16:14:49.4838365+00:00"
+    }
+  ]
+}

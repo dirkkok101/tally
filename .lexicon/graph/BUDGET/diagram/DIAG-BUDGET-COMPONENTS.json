@@ -1,0 +1,42 @@
+{
+  "id": "01KXXJD95GPSDBC0QC68K1D0G3",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "DIAG-BUDGET-COMPONENTS",
+  "title": "BUDGET component architecture",
+  "diagram_type": "c4_component",
+  "format": "mermaid",
+  "content": [
+    "flowchart LR",
+    "  Caller[Owner or Agent Host] --> CLI[CLI adapter]",
+    "  CLI --> Registry[Operation descriptor registry]",
+    "  Registry --> Plans[Plan vertical slices]",
+    "  Registry --> Position[Position vertical slice]",
+    "  Plans --> Domain[Pure period and lifecycle policies]",
+    "  Plans --> Store[(budget.db)]",
+    "  Plans --> Client[LedgerContractClient]",
+    "  Position --> Store",
+    "  Position --> Client",
+    "  Position --> Calc[BudgetPositionCalculator]",
+    "  Client --> Executor[Shared public operation executor]",
+    "  Executor --> Ledger[Released LEDGER contracts]",
+    "  Insights[Future INSIGHTS read client] --> Registry",
+    "  Bootstrap[Explicit BudgetExtensions registration] --> Registry"
+  ],
+  "created_at": "2026-07-19T16:12:37.9361012+00:00",
+  "links": [
+    {
+      "id": "01KXXJN569SKANB1Y56TH2NSCB",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-APPLICATION-ARCHITECTURE",
+      "rel": "supports",
+      "created_at": "2026-07-19T16:16:56.0104497+00:00"
+    },
+    {
+      "id": "01KXXJN5Z61BA64P0GW1HCYWCS",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-STRUCTURED-INVOCATION",
+      "rel": "illustrates",
+      "created_at": "2026-07-19T16:16:56.8071362+00:00"
+    }
+  ]
+}
