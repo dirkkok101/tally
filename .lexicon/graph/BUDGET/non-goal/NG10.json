@@ -1,0 +1,12 @@
+{
+  "id": "01KXX8WR1ENS0AATFPB6YB7XRK",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "NG10",
+  "text": [
+    "Support currencies or conversion rules outside the accepted ZAR-only LEDGER boundary in v1."
+  ],
+  "rationale": [
+    "Cross-currency budgets require exchange-rate ownership and reporting semantics that neither LEDGER nor the current root problem provides."
+  ],
+  "created_at": "2026-07-19T13:26:18.9273306+00:00"
+}

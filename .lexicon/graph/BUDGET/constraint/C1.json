@@ -1,0 +1,11 @@
+{
+  "id": "01KXX8WREWKXWM8WZDBPCW05E5",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "C1",
+  "title": "Local in-process contract",
+  "description": [
+    "BUDGET runs in the existing Tally process and structured CLI; it adds no daemon, network dependency, service, port, scheduler, or cloud requirement."
+  ],
+  "type": "technical",
+  "created_at": "2026-07-19T13:26:19.3579949+00:00"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "01KXX8Z960T2R3S6E0D6SYCPT2",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "term": "Uncategorized Spend",
+  "definition": [
+    "Actual spend that LEDGER reports without a current Spend Category assignment; BUDGET exposes it separately and never treats it as zero or invents a plan category."
+  ],
+  "created_at": "2026-07-19T13:27:42.0171187+00:00"
+}

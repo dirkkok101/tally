@@ -1,0 +1,10 @@
+{
+  "id": "01KXX8V3MKXM95Z5QXQGZ2Q7WP",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "G7",
+  "text": [
+    "Keep planning and position results deterministic and auditable without owning analytics interpretation."
+  ],
+  "target": "Equivalent plan and unchanged LEDGER snapshot inputs produce semantically identical ordered results; all values cite plan revision and actuals snapshot provenance, while no result invents pace, forecast, trend, anomaly, or narrative.",
+  "created_at": "2026-07-19T13:25:25.2683149+00:00"
+}

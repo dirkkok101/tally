@@ -1,0 +1,10 @@
+{
+  "id": "01KXX8V17RNVWKJWQ19TCS1B9P",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "G1",
+  "text": [
+    "Represent each owner-approved monthly spending plan as a stable local record for one explicit Budget Period and ZAR currency."
+  ],
+  "target": "Each Budget Period has stable identity and at most one Active Budget Plan Revision; repeated reads of unchanged state return the same period, currency, revision, status, and exact planned total.",
+  "created_at": "2026-07-19T13:25:22.8095542+00:00"
+}

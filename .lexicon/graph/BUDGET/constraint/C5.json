@@ -1,0 +1,11 @@
+{
+  "id": "01KXX8WT7WYG6RZ231MKPWXYGA",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "C5",
+  "title": "Immutable activated intent",
+  "description": [
+    "An activated Budget Plan Revision is immutable. Any later change is a new attributable revision; drafts never alter the active plan implicitly and retroactive interpretation must be explicit."
+  ],
+  "type": "business",
+  "created_at": "2026-07-19T13:26:21.1811182+00:00"
+}

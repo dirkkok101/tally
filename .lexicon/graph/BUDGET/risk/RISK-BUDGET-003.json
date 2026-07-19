@@ -1,0 +1,14 @@
+{
+  "id": "01KXX8Z0JRZ52JBK9K561PEHZM",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "RISK-BUDGET-003",
+  "description": [
+    "Ambiguous month boundaries, local time assumptions, or revision effective timing can place actuals or intent in the wrong Budget Period."
+  ],
+  "likelihood": "Medium",
+  "impact": "High",
+  "mitigation": [
+    "Persist explicit period boundaries and revision provenance; resolve calendar-month versus owner-cycle semantics in discovery; bind positions to exact dates and snapshot identity."
+  ],
+  "created_at": "2026-07-19T13:27:33.2095654+00:00"
+}

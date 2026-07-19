@@ -1,0 +1,9 @@
+{
+  "id": "01KXX8Z6KH3FXJ0C8JB9YN0K9R",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "term": "Budget Plan",
+  "definition": [
+    "The stable owner planning identity for one Budget Period, containing a history of draft, active, and superseded Budget Plan Revisions."
+  ],
+  "created_at": "2026-07-19T13:27:39.3784376+00:00"
+}

@@ -1,0 +1,7 @@
+{
+  "id": "01KXX8YXHZJKR4KWN2XX814FS3",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "condition": "Stop BUDGET and route the contract gap to LEDGER if, at discovery or pre-design re-check, the public LEDGER contract cannot provide stable Spend Category lifecycle plus snapshot-consistent category, unbudgeted, and uncategorized actuals without private-store access or duplicated finance semantics.",
+  "monitored": 1,
+  "created_at": "2026-07-19T13:27:30.1121292+00:00"
+}

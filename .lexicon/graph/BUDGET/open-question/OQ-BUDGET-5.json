@@ -1,0 +1,12 @@
+{
+  "id": "01KXX8Z4NQE5RHB73D4PXY0SR8",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "OQ-BUDGET-5",
+  "question": "Can a newly activated revision affect an already-started or completed Budget Period, and how must as-planned versus restated comparisons be exposed?",
+  "context": [
+    "Retroactive revision semantics determine auditability and whether historical INSIGHTS results remain reproducible."
+  ],
+  "status": "open",
+  "owner": "BUDGET discovery",
+  "created_at": "2026-07-19T13:27:37.4002555+00:00"
+}

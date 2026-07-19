@@ -1,0 +1,11 @@
+{
+  "id": "01KXX8WV28W6DX82M60W5XK0ZF",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "C7",
+  "title": "Explicit invocation only",
+  "description": [
+    "Plan changes, activation, and position queries occur only through explicit owner or delegated AI Agent Host commands; no watcher or background process mutates budget intent."
+  ],
+  "type": "technical",
+  "created_at": "2026-07-19T13:26:22.0250762+00:00"
+}

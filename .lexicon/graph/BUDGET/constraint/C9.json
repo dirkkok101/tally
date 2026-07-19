@@ -1,0 +1,11 @@
+{
+  "id": "01KXX8WVWSW9DKFH09DNDSJ4P6",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "C9",
+  "title": "Stable category identity",
+  "description": [
+    "Budget entries reference stable LEDGER Spend Category identifiers rather than display names; LEDGER lifecycle state governs whether an identifier may receive a new entry."
+  ],
+  "type": "business",
+  "created_at": "2026-07-19T13:26:22.8741090+00:00"
+}

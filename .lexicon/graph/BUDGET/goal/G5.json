@@ -1,0 +1,10 @@
+{
+  "id": "01KXX8V2T8NG308RK7ACFF0B0V",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "G5",
+  "text": [
+    "Keep budget plans safe across LEDGER Spend Category rename, archive, and reactivation."
+  ],
+  "target": "Stable category identity survives rename; historical revisions remain readable after archive; new or revised entries cannot target an inactive category; reactivation never silently revives an omitted or retired amount.",
+  "created_at": "2026-07-19T13:25:24.4258574+00:00"
+}

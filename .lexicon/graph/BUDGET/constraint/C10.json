@@ -1,0 +1,11 @@
+{
+  "id": "01KXX8WWAY46GKJ2NM6DB5PP9J",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "C10",
+  "title": "Raw position not interpretation",
+  "description": [
+    "BUDGET may return exact planned, actual, remaining, over, unbudgeted, and uncategorized values with provenance, but pace, forecast, trend, anomaly, recommendation, and narrative belong to INSIGHTS."
+  ],
+  "type": "business",
+  "created_at": "2026-07-19T13:26:23.3271032+00:00"
+}

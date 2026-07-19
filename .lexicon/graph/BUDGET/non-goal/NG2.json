@@ -1,0 +1,12 @@
+{
+  "id": "01KXX8WMHYDWME0DJZJGZTV8ZF",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "NG2",
+  "text": [
+    "Parse statements, orchestrate imports, or classify transactions."
+  ],
+  "rationale": [
+    "INGEST owns source-to-LEDGER commit and CLASSIFY owns suggestions and explicit classification apply; BUDGET begins with canonical LEDGER state."
+  ],
+  "created_at": "2026-07-19T13:26:15.3600532+00:00"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01KXX8YZRVAERNYT8J6FMBT448",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "RISK-BUDGET-001",
+  "description": [
+    "Incomplete or incorrect category assignments can make an exact Budget Position appear trustworthy while material spend remains uncategorized or misclassified."
+  ],
+  "likelihood": "Medium",
+  "impact": "High",
+  "mitigation": [
+    "Expose categorized, unbudgeted, and uncategorized coverage explicitly; never hide incomplete actuals; consume only the referenced LEDGER snapshot."
+  ],
+  "created_at": "2026-07-19T13:27:32.3807721+00:00"
+}

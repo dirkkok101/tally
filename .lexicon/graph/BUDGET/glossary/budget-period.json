@@ -1,0 +1,9 @@
+{
+  "id": "01KXX8Z66ZDFX0RYB645T6V5JR",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "term": "Budget Period",
+  "definition": [
+    "One explicit monthly date interval for which the owner records spending intent; its boundaries and identity are stable and never inferred from invocation time."
+  ],
+  "created_at": "2026-07-19T13:27:38.9762965+00:00"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01KXX8Z2PCSW5FKRDR09947PHK",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "RISK-BUDGET-008",
+  "description": [
+    "Budget values and spending position can leak through diagnostics, tracked artifacts, command arguments, or permissive local files."
+  ],
+  "likelihood": "Low",
+  "impact": "High",
+  "mitigation": [
+    "Use owner-only local storage and artifacts, structured non-secret input, payload-free diagnostics, and privacy verification inherited from the Tally host boundary."
+  ],
+  "created_at": "2026-07-19T13:27:35.3735264+00:00"
+}

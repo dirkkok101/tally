@@ -1,0 +1,12 @@
+{
+  "id": "01KXX9137A85578123327E3N8M",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "NG11",
+  "text": [
+    "Enforce spending limits or reject, delay, or alter a LEDGER transaction or Category Assignment because a budget is absent, zero, or exceeded."
+  ],
+  "rationale": [
+    "A budget expresses and measures owner intent; LEDGER remains authoritative and writable under its own rules, while BUDGET and INSIGHTS expose position rather than controlling spend."
+  ],
+  "created_at": "2026-07-19T13:28:41.4521246+00:00"
+}

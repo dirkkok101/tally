@@ -1,0 +1,9 @@
+{
+  "id": "01KXX8ZA10BPBM3FVH633QHFHH",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "term": "Planned Spend",
+  "definition": [
+    "The exact owner-approved ZAR amount in an Active Budget Plan Revision for a Category Budget Entry or the plan total; it is intent, not an actual or forecast."
+  ],
+  "created_at": "2026-07-19T13:27:42.8809694+00:00"
+}

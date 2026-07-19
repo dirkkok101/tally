@@ -1,0 +1,12 @@
+{
+  "id": "01KXX8WPRYZ8VDZSRBANAJK502",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "NG7",
+  "text": [
+    "Implement shared-household approvals, multiple users, roles, tenancy, or a hosted synchronization service."
+  ],
+  "rationale": [
+    "Tally remains a single-owner local executable under the trusted OS identity boundary."
+  ],
+  "created_at": "2026-07-19T13:26:17.6316432+00:00"
+}

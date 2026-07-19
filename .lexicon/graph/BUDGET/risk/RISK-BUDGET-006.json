@@ -1,0 +1,14 @@
+{
+  "id": "01KXX8Z1TN0098J0EBPSHHVW36",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "RISK-BUDGET-006",
+  "description": [
+    "Monthly plan maintenance may cost more owner time than it saves, causing budgets to become stale and INSIGHTS to compare against abandoned intent."
+  ],
+  "likelihood": "Medium",
+  "impact": "High",
+  "mitigation": [
+    "Validate the 15-minute maintenance criterion, make staleness explicit, and keep the target-file fallback viable."
+  ],
+  "created_at": "2026-07-19T13:27:34.4865791+00:00"
+}

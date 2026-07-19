@@ -1,0 +1,11 @@
+{
+  "id": "01KXX8WSRZ4R8YFJVKHK52JK55",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "C4",
+  "title": "Unambiguous monthly boundaries",
+  "description": [
+    "Every Budget Period has explicit local date boundaries and one stable identity; period interpretation cannot depend on invocation time or an agent locale. The exact calendar-month versus owner-cycle rule remains a discovery question."
+  ],
+  "type": "business",
+  "created_at": "2026-07-19T13:26:20.7041858+00:00"
+}

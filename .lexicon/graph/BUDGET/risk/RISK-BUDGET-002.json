@@ -1,0 +1,14 @@
+{
+  "id": "01KXX8Z067A5AJZJCDX9MP6ZRJ",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "RISK-BUDGET-002",
+  "description": [
+    "Spend Category rename, archive, reactivation, or correction can detach a monthly plan from current category state or silently revive old intent."
+  ],
+  "likelihood": "Medium",
+  "impact": "High",
+  "mitigation": [
+    "Reference stable identifiers, preserve historical revisions, validate lifecycle on every draft revision and activation, and require explicit new intent after reactivation."
+  ],
+  "created_at": "2026-07-19T13:27:32.8086501+00:00"
+}

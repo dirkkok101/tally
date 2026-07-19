@@ -1,0 +1,9 @@
+{
+  "id": "01KXX8Z9KE444YTYWK624XR4FD",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "term": "Budget Position",
+  "definition": [
+    "A deterministic snapshot-bound comparison of one Active Budget Plan Revision with public LEDGER actuals, returning exact planned, actual, remaining or over, Unbudgeted Spend, and Uncategorized Spend values with provenance."
+  ],
+  "created_at": "2026-07-19T13:27:42.4477241+00:00"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "01KXX8Z3FN8X7K2ETT6FYM1VNS",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "OQ-BUDGET-2",
+  "question": "Is the v1 plan a set of independent category amounts, or must those amounts reconcile to an overall monthly spending cap?",
+  "context": [
+    "A required envelope total changes validation, omission semantics, and whether unallocated planned money exists."
+  ],
+  "status": "open",
+  "owner": "BUDGET discovery",
+  "created_at": "2026-07-19T13:27:36.1821547+00:00"
+}

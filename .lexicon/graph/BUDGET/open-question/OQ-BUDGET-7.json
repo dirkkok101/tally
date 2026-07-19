@@ -1,0 +1,12 @@
+{
+  "id": "01KXX8Z5EHB0NHQWHV563Y15HB",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "OQ-BUDGET-7",
+  "question": "Is spend-only category planning sufficient for v1, or is an income, savings, debt-payment, or cash-flow target essential to the owner's definition of a useful monthly budget?",
+  "context": [
+    "A broader answer may trigger NG9 and the complexity kill criterion rather than being smuggled into category spending scope."
+  ],
+  "status": "open",
+  "owner": "BUDGET discovery",
+  "created_at": "2026-07-19T13:27:38.1942294+00:00"
+}

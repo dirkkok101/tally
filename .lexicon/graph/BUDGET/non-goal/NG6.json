@@ -1,0 +1,12 @@
+{
+  "id": "01KXX8WPA46SVW0PR5EBM911BX",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "NG6",
+  "text": [
+    "Autonomously create, rebalance, activate, or revise a budget from spending behavior."
+  ],
+  "rationale": [
+    "Budget amounts express owner intent; analytics may propose changes later, but only an explicit attributable owner command may change or activate a plan."
+  ],
+  "created_at": "2026-07-19T13:26:17.1584583+00:00"
+}

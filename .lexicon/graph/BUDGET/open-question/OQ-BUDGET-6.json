@@ -1,0 +1,12 @@
+{
+  "id": "01KXX8Z51P33MTNGN5SHVCBYEE",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "OQ-BUDGET-6",
+  "question": "Does the owner need an explicit copy-previous-plan operation in v1, and if so which category lifecycle changes must block or alter the copy?",
+  "context": [
+    "Copy-forward may reduce maintenance without adopting inheritance or automatic rollover, but it must not silently revive inactive categories or stale amounts."
+  ],
+  "status": "open",
+  "owner": "BUDGET discovery",
+  "created_at": "2026-07-19T13:27:37.7841224+00:00"
+}

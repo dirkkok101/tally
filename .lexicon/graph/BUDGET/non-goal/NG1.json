@@ -1,0 +1,12 @@
+{
+  "id": "01KXX8WM40880H5RFB13PGCQ3D",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "NG1",
+  "text": [
+    "Own canonical accounts, transactions, transfers, refunds, Spend Categories, Category Assignments, or their correction history."
+  ],
+  "rationale": [
+    "LEDGER is authoritative for all financial facts, relationships, category identity, actuals membership, and corrections; BUDGET consumes only its public contract."
+  ],
+  "created_at": "2026-07-19T13:26:14.9136890+00:00"
+}

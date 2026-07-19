@@ -1,0 +1,12 @@
+{
+  "id": "01KXX8WNBCDJ0BFXCJ926TMG30",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "NG4",
+  "text": [
+    "Provide web, messaging, desktop, notification, or other human delivery surfaces."
+  ],
+  "rationale": [
+    "CHANNELS owns human interaction; BUDGET exposes a channel-neutral structured CLI contract."
+  ],
+  "created_at": "2026-07-19T13:26:16.1734231+00:00"
+}

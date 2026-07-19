@@ -1,0 +1,14 @@
+{
+  "id": "01KXX8Z1D9SSMGJ1NR0AS1W2Q4",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "RISK-BUDGET-005",
+  "description": [
+    "Recurring, rollover, income, and exception features can turn a small monthly-plan module into a hidden policy engine."
+  ],
+  "likelihood": "High",
+  "impact": "Medium",
+  "mitigation": [
+    "Enforce C6 and NG5; select explicit monthly snapshots; trigger the monitored reframe criterion if the simple model is not useful."
+  ],
+  "created_at": "2026-07-19T13:27:34.0580922+00:00"
+}

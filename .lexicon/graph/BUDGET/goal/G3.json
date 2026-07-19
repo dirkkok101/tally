@@ -1,0 +1,10 @@
+{
+  "id": "01KXX8V20F47DC8TCQJWMQV3Q9",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "G3",
+  "text": [
+    "Preserve attributable budget drafting, activation, and revision history without rewriting prior intent."
+  ],
+  "target": "Activation is explicit; every change creates a new immutable Budget Plan Revision with owner, reason, and timestamp; all prior revisions remain inspectable and no draft silently changes the active plan.",
+  "created_at": "2026-07-19T13:25:23.6002117+00:00"
+}

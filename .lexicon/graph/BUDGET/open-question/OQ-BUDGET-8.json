@@ -1,0 +1,12 @@
+{
+  "id": "01KXX8Z5SZKQH4QRMPK0MKKE8T",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "OQ-BUDGET-8",
+  "question": "Must a historical Budget Position preserve the original LEDGER snapshot, or may it recompute current corrected actuals while clearly citing the active plan revision?",
+  "context": [
+    "The choice affects reproducibility, storage, correction visibility, cursor expiry, and the boundary between source-of-truth actuals and retained derived artifacts."
+  ],
+  "status": "open",
+  "owner": "BUDGET discovery",
+  "created_at": "2026-07-19T13:27:38.5607145+00:00"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "01KXX8Z346A0ARW6JTWXA6VAM7",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "OQ-BUDGET-1",
+  "question": "Is a Budget Period always a calendar month in the owner's local timezone, or may it use another fixed monthly start day?",
+  "context": [
+    "The answer determines period identity, date boundaries, overlap rules, copy-forward behavior, and alignment with LEDGER actuals and INSIGHTS reports."
+  ],
+  "status": "open",
+  "owner": "BUDGET discovery",
+  "created_at": "2026-07-19T13:27:35.8159933+00:00"
+}

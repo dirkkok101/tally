@@ -1,0 +1,11 @@
+{
+  "id": "01KXX8WWRMDY4B0QC8RB1T99BJ",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "C11",
+  "title": "Explicit actuals completeness",
+  "description": [
+    "A Budget Position must expose unbudgeted and uncategorized actuals rather than omitting them or treating them as zero; transfer, refund, void, supersession, and allocation behavior is inherited from the referenced LEDGER snapshot."
+  ],
+  "type": "business",
+  "created_at": "2026-07-19T13:26:23.7653475+00:00"
+}

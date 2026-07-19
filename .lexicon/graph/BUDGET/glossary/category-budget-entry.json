@@ -1,0 +1,9 @@
+{
+  "id": "01KXX8Z7V91478SRVBWWMB2CDB",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "term": "Category Budget Entry",
+  "definition": [
+    "An exact ZAR planned-spend amount for one stable LEDGER Spend Category identifier within one Budget Plan Revision."
+  ],
+  "created_at": "2026-07-19T13:27:40.6498501+00:00"
+}

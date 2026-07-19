@@ -1,0 +1,14 @@
+{
+  "id": "01KXX8Z0Z4079TGVSTJ1PY12DT",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "RISK-BUDGET-004",
+  "description": [
+    "Retroactive plan revisions can rewrite the story of whether prior spending was on budget and make reports irreproducible."
+  ],
+  "likelihood": "Medium",
+  "impact": "High",
+  "mitigation": [
+    "Keep activated revisions immutable and expose both revision identity and effective semantics; require explicit treatment of historical restatement before PRD."
+  ],
+  "created_at": "2026-07-19T13:27:33.6056274+00:00"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "01KXX8V1M4ZH8EPZRH9H5AGNFK",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "G2",
+  "text": [
+    "Assign exact planned spending amounts to stable LEDGER Spend Category identifiers while distinguishing zero budget from no budget."
+  ],
+  "target": "Every Category Budget Entry round-trips its stable category identifier and exact base-10 ZAR amount; Zero Budget is explicit, omission remains Unbudgeted, and category entries sum exactly to a computed plan total without implying a separately enforced overall cap.",
+  "created_at": "2026-07-19T13:25:23.2049619+00:00"
+}

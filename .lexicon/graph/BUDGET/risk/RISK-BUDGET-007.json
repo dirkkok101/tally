@@ -1,0 +1,14 @@
+{
+  "id": "01KXX8Z28HG43A4M3VYNQ0ES9N",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "RISK-BUDGET-007",
+  "description": [
+    "BUDGET and INSIGHTS may duplicate variance, pace, and reporting calculations and later disagree."
+  ],
+  "likelihood": "Medium",
+  "impact": "High",
+  "mitigation": [
+    "Keep BUDGET to exact plan and raw position values with provenance; assign all time-based interpretation and narrative to INSIGHTS."
+  ],
+  "created_at": "2026-07-19T13:27:34.9301118+00:00"
+}
