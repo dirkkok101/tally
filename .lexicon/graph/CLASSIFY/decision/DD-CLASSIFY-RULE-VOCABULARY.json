@@ -1,0 +1,76 @@
+{
+  "id": "01KXWCGAPC0FKK1RST3FG0WHHM",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DD-CLASSIFY-RULE-VOCABULARY",
+  "title": "Closed typed rule grammar with code-owned normalization versions",
+  "description": [
+    "Keep owner-managed rules deterministic, reviewable, Native-AOT safe, and incapable of executing arbitrary expressions."
+  ],
+  "decision": [
+    "Represent every immutable rule version as one or more AND-combined typed conditions over classification_v1 fields. Allow description.normalized equals, starts_with, and contains_token_sequence; account.id equals; amount.direction equals; and amount.absolute_minor equals or between_inclusive. Normalization v1 performs Unicode NFKC, invariant case folding, punctuation boundaries, and whitespace collapse while preserving digits and token order. Forbid OR, NOT, priority, regex, fuzzy, wildcard, script, plugin, and model-score predicates."
+  ],
+  "rationale": [
+    "A normalized typed grammar makes validation, canonical hashing, persistence, explanation, and property testing finite. Arbitrary JSON expressions have two readings and invite executor drift. Regex or plugins expand denial, injection, and AOT risk. Delegating interpretation to the Agent Host makes outcomes session-dependent. The exact small registry is subject to the private projection and normalization spike; failed evidence routes back to design or the do-less path rather than permitting silent grammar expansion."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Domain/Classify/Rules/**\",\"src/Tally/Domain/Classify/Normalization/**\",\"src/Tally/Contracts/Classify/Rules/**\",\"tests/Tally.Tests/Classify/Rules/**\"]}",
+  "created_at": "2026-07-19T05:10:11.9177809+00:00",
+  "links": [
+    {
+      "id": "01KXWCSPX20Q5E237XY6N9RZBS",
+      "target_type": "adr",
+      "target": "ADR-CORE-0004",
+      "rel": "driven_by",
+      "created_at": "2026-07-19T05:15:19.3317865+00:00"
+    },
+    {
+      "id": "01KXWCSNMV6PGEG81717S42236",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:18.0442020+00:00"
+    },
+    {
+      "id": "01KXWCSMD9R9V4JXNJSGHA581R",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-LIFECYCLE",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:16.7788169+00:00"
+    },
+    {
+      "id": "01KXWCSN1GTAR3XW5VEK6P7QRM",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-VALIDATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:17.4251127+00:00"
+    },
+    {
+      "id": "01KXWCSP87ZFBYWXSD7R5S9YPN",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-DETERMINISTIC-INTEGRITY",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:18.6639172+00:00"
+    },
+    {
+      "id": "01KXWCSR91KRY2E7FE277604X6",
+      "target_type": "open_question",
+      "target": "OQ-CLASSIFY-2",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T05:15:20.7386714+00:00"
+    },
+    {
+      "id": "01KXWCSRX1SE2ZQ9HHP608W97X",
+      "target_type": "open_question",
+      "target": "OQ-CLASSIFY-3",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T05:15:21.3788399+00:00"
+    },
+    {
+      "id": "01KXWCSQJWC6M2VVP7E56KT36M",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-DETERMINISTIC-PROPERTY-MATRIX",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:15:20.0287789+00:00"
+    }
+  ]
+}

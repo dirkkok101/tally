@@ -1,0 +1,32 @@
+{
+  "id": "01KXWCN1516CDZ4HE19JTCFH01",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DIAG-CLASSIFY-COMPONENTS",
+  "title": "CLASSIFY component architecture",
+  "diagram_type": "c4_component",
+  "format": "mermaid",
+  "content": [
+    "flowchart LR",
+    "  Host[AI Agent Host or owner] --> Registry[Shared Tally operation registry]",
+    "  Registry --> Slices[CLASSIFY vertical slices]",
+    "  Slices --> Engine[Pure normalization and rule engine]",
+    "  Slices --> State[(classify.db)]",
+    "  Slices --> Corpus[Private corpus reader]",
+    "  Slices --> Client[LedgerContractClient]",
+    "  Client --> Executor[Shared public operation executor]",
+    "  Executor --> Ledger[LEDGER public contracts]",
+    "  State --> Protect[Owner-only artifact protection]",
+    "  Corpus --> Engine",
+    "  Ledger --> Slices"
+  ],
+  "created_at": "2026-07-19T05:12:45.9862880+00:00",
+  "links": [
+    {
+      "id": "01KXWCVCH4PPQRZZCBRF97A110",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STRUCTURED-INVOCATION",
+      "rel": "illustrates",
+      "created_at": "2026-07-19T05:16:14.2459633+00:00"
+    }
+  ]
+}

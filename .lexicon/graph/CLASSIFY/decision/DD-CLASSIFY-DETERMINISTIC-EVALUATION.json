@@ -1,0 +1,55 @@
+{
+  "id": "01KXWCGB26EAQZKA4ZZDSMQ7V2",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DD-CLASSIFY-DETERMINISTIC-EVALUATION",
+  "title": "Pure ordered evaluation with fingerprint-bound evidence",
+  "description": [
+    "Produce one reproducible suggestion, no-suggestion, conflict, or stale outcome without hidden precedence or Ledger mutation."
+  ],
+  "decision": [
+    "Acquire the full bounded Ledger projection before evaluation, process items by projection ordinal and rules by stable version ID, combine compatible same-category matches, and fail incompatible categories to conflict with no winner. Persist one atomic evaluation containing every outcome, aggregate counts, canonical fingerprint dimensions, and evidence limited to rule, condition, field, predicate, and normalized-value hash references. Outcome inspection never reconstructs missing evidence from current state."
+  ],
+  "rationale": [
+    "Streaming partial durability could publish incomplete results. Priority-based winners hide ambiguity. Persisting full projection payload creates unnecessary financial retention, while storing no evidence makes historical explanation impossible. The bounded metadata evidence is sufficient for the PRD contract. A pure engine plus one atomic store commit keeps the interface equal to the verification surface."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Features/Classify/Evaluation/**\",\"src/Tally/Domain/Classify/Evaluation/**\",\"tests/Tally.Tests/Classify/Evaluation/**\"]}",
+  "created_at": "2026-07-19T05:10:12.2951128+00:00",
+  "links": [
+    {
+      "id": "01KXWCSSJ4VEP3Q5XSA3XNKH4M",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:22.0535223+00:00"
+    },
+    {
+      "id": "01KXWCST67Q3N66J8MMYRRY8ZT",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-OUTCOME-EXPLANATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:22.6962248+00:00"
+    },
+    {
+      "id": "01KXWCSTS1AZFYTG6DX7F8W1QV",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-OUTCOME-INVALIDATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:23.2985118+00:00"
+    },
+    {
+      "id": "01KXWCSVEE4YJ7SS35PMEPJJ65",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-DETERMINISTIC-INTEGRITY",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:23.9830661+00:00"
+    },
+    {
+      "id": "01KXWCSW4V6NDNARX71H5XFFQ6",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-DETERMINISTIC-EVALUATION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:15:24.7004068+00:00"
+    }
+  ]
+}

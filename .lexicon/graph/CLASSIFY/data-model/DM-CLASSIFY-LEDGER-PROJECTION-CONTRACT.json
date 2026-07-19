@@ -1,0 +1,29 @@
+{
+  "id": "01KXWCJDBZJ4735YSR5NKDRAWK",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+  "name": "LedgerClassificationProjectionContracts",
+  "description": [
+    "The exact purpose-scoped public LEDGER projection, category snapshot, lifecycle fingerprint, selected-item mutation state, drift preconditions, and assignment/correction subset consumed by CLASSIFY."
+  ],
+  "schema_def": [
+    "ClassificationProjectionRequest(purpose=evaluation|apply_preflight, item_projection=classification_v1, categorization_state=requires_independent_decision when evaluation, transaction_ids[] required and bounded when apply_preflight, cursor?); ClassificationProjectionDescriptor(contract_version, projection_version, store_generation_fingerprint, snapshot_id, expires_at, category_identity_lifecycle_fingerprint, active_categories[]); ClassificationProjectionItem(ordinal, transaction_id, account_id, effective_date, signed_amount, source_description, amount_direction, category_mutation_state=assignable|correctable|ineligible, current_category_id?, current_allocation_id?, transaction_revision, relationship_revision, allocation_revision); CategoryIdentity(category_id, display_name, lifecycle_state); LedgerCategoryMutation(operation_id, transaction_id, category_id, expected_transaction_revision, expected_relationship_revision, expected_allocation_revision, expected_active_allocation_id?, reason?, idempotency_key); LedgerCategoryMutationResult(allocation_id, prior_allocation_id?, transaction_id, category_id, outcome). Evaluation returns only requires_independent_decision items. Apply preflight returns every explicitly selected ID or a stable missing result; CLASSIFY rejects the whole run unless every item is assignable or explicitly correctable. Assignment requires expected_active_allocation_id absent and atomically asserts no active allocation. Correction requires the exact current allocation ID and owner reason. Any revision or allocation mismatch is a stable stale-precondition result before mutation."
+  ],
+  "created_at": "2026-07-19T05:11:20.1925614+00:00",
+  "links": [
+    {
+      "id": "01KXWCTEXA3NPASR5XE6F20KE0",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-APPLY-EXECUTION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:43.9156114+00:00"
+    },
+    {
+      "id": "01KXWCTE9C45XN8NFG5P7TVHHA",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:43.2774957+00:00"
+    }
+  ]
+}

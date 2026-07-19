@@ -1,0 +1,62 @@
+{
+  "id": "01KXWCGCEJAMGD1686WT6WVQWM",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DD-CLASSIFY-ARTIFACT-RETENTION",
+  "title": "Fixed owner-only retention and recognized-artifact cleanup",
+  "description": [
+    "Preserve attributable classification history without creating arbitrary deletion, path traversal, or private temporary-payload risks."
+  ],
+  "decision": [
+    "Enforce 0700 directories and 0600 store, WAL, lock, report, and temporary artifacts where supported. Persist minimal stable references and fingerprints, not corpus copies or full projections. Abandon only unreferenced drafts, validations, evaluations, and previews. Cleanup accepts no path and removes only recognized unlocked temporaries, expired unreferenced previews, and already-abandoned removable payload after ownership and link checks. Referenced rule, apply, allocation, and feedback history is RESTRICT-retained."
+  ],
+  "rationale": [
+    "Generic path cleanup or hard delete could escape the module or erase provenance. Indefinite raw payload retention creates disclosure. Memory-only temporaries plus fixed-policy cleanup remove crash residue without inventing a filesystem abstraction. This adapts the CORE RESTRICT principle and Tally metadata-only diagnostic posture to private classification evidence."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Infrastructure/Classify/Storage/ClassifyArtifactProtection.cs\",\"src/Tally/Features/Classify/Recovery/**\",\"tests/Tally.Tests/Classify/Security/**\"]}",
+  "created_at": "2026-07-19T05:10:13.7155621+00:00",
+  "links": [
+    {
+      "id": "01KXWCTB0NAR3G074T7PHHVB5R",
+      "target_type": "adr",
+      "target": "ADR-CORE-0020",
+      "rel": "driven_by",
+      "created_at": "2026-07-19T05:15:39.9264736+00:00"
+    },
+    {
+      "id": "01KXWCTBPV3SYPEM67C1G6R5Q6",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T05:15:40.6360294+00:00"
+    },
+    {
+      "id": "01KXWCT9232SJA2REHS29NGXRY",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STATE-RETENTION-CLEANUP",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:37.9247489+00:00"
+    },
+    {
+      "id": "01KXWCTABR8PF9PCDY9XXNJRRK",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-ATTRIBUTABLE-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:39.2569764+00:00"
+    },
+    {
+      "id": "01KXWCT9QT9ZKYYXNEH0NMJDYT",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-LOCAL-DATA-PROTECTION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:38.6192987+00:00"
+    },
+    {
+      "id": "01KXWCTCCYW52FQ7M9KJKDJ4HA",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-LOCAL-ARTIFACT-PROTECTION",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:15:41.3437857+00:00"
+    }
+  ]
+}

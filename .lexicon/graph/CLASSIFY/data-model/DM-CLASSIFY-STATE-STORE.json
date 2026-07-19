@@ -1,0 +1,36 @@
+{
+  "id": "01KXWCJGM514904QHQZEJD3SEG",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DM-CLASSIFY-STATE-STORE",
+  "name": "ClassificationStateStore",
+  "description": [
+    "Owner-only raw-SQLite schema, migrations, idempotency, guarded state transitions, abandonment tombstones, cleanup events, and recognized-artifact policy."
+  ],
+  "schema_def": [
+    "classify_store_meta(schema_version, store_id, created_at); operation_idempotency(idempotency_key PK, operation_id, contract_version, request_fingerprint, terminal_result, created_at); active_normalization(singleton PK, normalization_version, activation_epoch); abandonment_tombstone(tombstone_id PK, subject_type, subject_id, reason, actor, abandoned_at, removed_payload_count); cleanup_event(cleanup_id PK, policy_version, recognized_removed_count, expired_preview_count, abandoned_payload_count, actor, occurred_at); immutable-table UPDATE and DELETE guards; mutable run transitions require expected prior state; SQLite foreign_keys ON, WAL, synchronous FULL, bounded busy handling, user_version migrations"
+  ],
+  "created_at": "2026-07-19T05:11:23.5296968+00:00",
+  "links": [
+    {
+      "id": "01KXWCTRJ7ZSKV5V25R32FR6AC",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STATE-RETENTION-CLEANUP",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:53.8007265+00:00"
+    },
+    {
+      "id": "01KXWCTQVXTZBMJRXQQFNNTFP6",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STATUS-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:53.0857390+00:00"
+    },
+    {
+      "id": "01KXWCTS7E100MM75WS3ZXNY1W",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-ATTRIBUTABLE-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:54.4796974+00:00"
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "id": "01KXWCGABBFD4436XW6FKY5AF7",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION",
+  "title": "Use purpose-scoped classification projections on the public Ledger actuals contract",
+  "description": [
+    "Acquire complete eligible evaluation inputs and exact current apply-preflight state, including already-categorized corrections, without private Ledger reads or duplicated relationship semantics."
+  ],
+  "decision": [
+    "Extend the next compatible ledger.actuals.query contract with a closed purpose of evaluation or apply_preflight and itemProjection classification_v1. Evaluation fixes categorizationState to requires_independent_decision. Apply preflight requires a bounded transactionIds selection and returns every selected transaction with Ledger-owned assignable, correctable, or ineligible mutation state plus current allocation identity and revisions, including already-categorized transactions. The first page returns snapshot and projection versions, store generation, expiry, category identity lifecycle fingerprint, active category catalogue, and ordered minimal classification items. Assignment asserts no active allocation; correction carries the expected active allocation identity and projection revisions so Ledger can reject drift atomically. Invoke projection and mutation operations through the concrete shared LedgerContractClient and released operation executor only."
+  ],
+  "rationale": [
+    "One public projection family preserves stable ordering and Ledger-owned categorization, transfer, refund, relationship, allocation, and lifecycle truth, but evaluation eligibility and apply preflight have different membership. A single requires-independent-decision filter cannot preflight explicit corrections because those transactions are already categorized. Purpose-scoped requests make that distinction closed and discoverable. Current allocation and revision preconditions close the race between preview, all-item preflight, and each Ledger write. Direct SQL or handlers violate the boundary; re-inferring eligibility in CLASSIFY duplicates finance semantics; a private query cannot be compatibility-tested. The extension remains a hard upstream gate until published-binary conformance passes."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Integration/Ledger/LedgerContractClient.cs\",\"src/Tally/Features/Ledger/RelationshipsActuals/**\",\"src/Tally/Contracts/Ledger/**\",\"tests/Tally.Tests/Classify/LedgerContract/**\"]}",
+  "created_at": "2026-07-19T05:10:11.5643443+00:00",
+  "links": [
+    {
+      "id": "01KXWCSK31DWV6Y679PFX622HV",
+      "target_type": "design_decision",
+      "target": "DD-INGEST-LEDGER-PUBLIC-INTEGRATION",
+      "rel": "see-also",
+      "created_at": "2026-07-19T05:15:15.4262665+00:00"
+    },
+    {
+      "id": "01KXWCSJE8VQGNMVV0A5XWQ3QG",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-SNAPSHOT-ACTUALS",
+      "rel": "see-also",
+      "created_at": "2026-07-19T05:15:14.7610653+00:00"
+    },
+    {
+      "id": "01KXWCSGEG8ZP219MZ2NR1K2H5",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T05:15:12.7215572+00:00"
+    },
+    {
+      "id": "01KXWCSF7544B243SBMCJD17BD",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-APPLY-EXECUTION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:11.4618183+00:00"
+    },
+    {
+      "id": "01KXWCSEKVZGRHPNGHYA5TDD6Y",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:10.8441092+00:00"
+    },
+    {
+      "id": "01KXWCSFT6Y4D41V9AA8ZGMJQN",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-OUTCOME-INVALIDATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:12.0718340+00:00"
+    },
+    {
+      "id": "01KXWCSH385S7M4EVD4HKP9TA0",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACTUALS-QUERY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T05:15:13.3848852+00:00"
+    },
+    {
+      "id": "01KXWCSHSGAYPX87B4EJS6NK54",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-ASSIGNMENT",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T05:15:14.0972824+00:00"
+    },
+    {
+      "id": "01KXWDEHJEZGT5KWA5TT1KD667",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-APPLY-EXECUTION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:26:41.9988847+00:00"
+    },
+    {
+      "id": "01KXWCSKRTPFYJ3XTQ74V0E92A",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-ELIGIBLE-PROJECTION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:15:16.1240763+00:00"
+    }
+  ]
+}

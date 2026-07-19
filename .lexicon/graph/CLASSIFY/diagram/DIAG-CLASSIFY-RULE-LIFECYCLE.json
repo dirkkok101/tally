@@ -1,0 +1,31 @@
+{
+  "id": "01KXWCN33MA2F8PXK7RNC1W01H",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DIAG-CLASSIFY-RULE-LIFECYCLE",
+  "title": "Classification rule and rule-set lifecycle",
+  "diagram_type": "state",
+  "format": "mermaid",
+  "content": [
+    "stateDiagram-v2",
+    "  [*] --> Draft: rule.save",
+    "  Draft --> Validated: rule.validate passes",
+    "  Draft --> Abandoned: abandon unreferenced",
+    "  Validated --> Active: rule.activate creates successor rule set",
+    "  Validated --> Abandoned: abandon unreferenced",
+    "  Active --> Retired: rule.retire creates successor rule set",
+    "  Active --> Superseded: validated replacement activates",
+    "  Retired --> [*]",
+    "  Superseded --> [*]",
+    "  Abandoned --> [*]"
+  ],
+  "created_at": "2026-07-19T05:12:47.9893499+00:00",
+  "links": [
+    {
+      "id": "01KXWCVFNNRVQ809XPE4W0P2NN",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-LIFECYCLE",
+      "rel": "illustrates",
+      "created_at": "2026-07-19T05:16:17.4624187+00:00"
+    }
+  ]
+}

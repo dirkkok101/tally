@@ -1,0 +1,82 @@
+{
+  "id": "01KXWCJYZ7SYSPAJMAFTTBE12Z",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "FA-CLASSIFY-STATE-RECOVERY",
+  "name": "State and Recovery",
+  "description": [
+    "Owns the separate owner-only SQLite store, operation idempotency, safe status, locks, retention, abandonment, startup recovery, and fixed-policy cleanup."
+  ],
+  "created_at": "2026-07-19T05:11:38.2167196+00:00",
+  "links": [
+    {
+      "id": "01KXWCVAABDPKYBG3KNKT4RASX",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-ARTIFACT-RETENTION",
+      "rel": "belongs_to",
+      "created_at": "2026-07-19T05:16:11.9807092+00:00"
+    },
+    {
+      "id": "01KXWCV9KWHE6TZ9PJTXZ8XVWG",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-STATE-STORE",
+      "rel": "belongs_to",
+      "created_at": "2026-07-19T05:16:11.2617640+00:00"
+    },
+    {
+      "id": "01KXWCVB1NPYZGAH616FZMB07P",
+      "target_type": "data_model",
+      "target": "DM-CLASSIFY-STATE-STORE",
+      "rel": "belongs_to",
+      "created_at": "2026-07-19T05:16:12.7268884+00:00"
+    },
+    {
+      "id": "01KXWCVBRX5MMZ5CY9R40E5H1T",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STATE-RETENTION-CLEANUP",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:16:13.4706336+00:00"
+    },
+    {
+      "id": "01KXWDFKAK1TPSQJKXT76J43VG",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STATUS-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:27:16.5650725+00:00"
+    },
+    {
+      "id": "01KXWD62TA88K42R5NFERNYHNE",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-ATTRIBUTABLE-HISTORY-INVARIANTS",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:22:04.7471693+00:00"
+    },
+    {
+      "id": "01KXWD63M2JEYJKEZ4HWSPN7NF",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-LOCAL-ARTIFACT-PROTECTION",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:22:05.5712517+00:00"
+    },
+    {
+      "id": "01KXWD64940DT3JP3577QXRYXE",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-OFFLINE-PROCESS-ISOLATION",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:22:06.2453146+00:00"
+    },
+    {
+      "id": "01KXWD6503RJ734VKCZYED7GZ8",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-STATE-RETENTION-CLEANUP-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:22:06.9800617+00:00"
+    },
+    {
+      "id": "01KXWD65PE27JEEWRNW0D74XW3",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-STATUS-HISTORY-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:22:07.6948329+00:00"
+    }
+  ]
+}

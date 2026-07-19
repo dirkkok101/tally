@@ -1,0 +1,46 @@
+{
+  "id": "01KXWCN2MDWGAHF7F8GEA2DCED",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DIAG-CLASSIFY-APPLY-SAGA",
+  "title": "Preview preflight and replay-safe apply saga",
+  "diagram_type": "sequence",
+  "format": "mermaid",
+  "content": [
+    "sequenceDiagram",
+    "  participant H as Owner or Agent Host",
+    "  participant P as classify.apply.preview",
+    "  participant A as classify.apply.run",
+    "  participant S as classify.db",
+    "  participant L as LEDGER public executor",
+    "  H->>P: current outcomes, exact rule, or explicit corrections",
+    "  P->>L: purpose=apply_preflight plus exact transaction IDs",
+    "  L-->>P: all items, mutation states, allocations, revisions",
+    "  P->>S: persist expiry-bound preview and preconditions",
+    "  P-->>H: preview evidence and id",
+    "  H->>A: preview id plus apply identity",
+    "  A->>L: repeat purpose=apply_preflight for all items",
+    "  L-->>A: exact current items and revisions",
+    "  alt any missing, stale, or ineligible item",
+    "    A-->>H: reject whole run before mutation",
+    "  else all current",
+    "    loop deterministic item order",
+    "      A->>S: persist planned operation, preconditions, and key",
+    "      A->>L: assign absent allocation or correct expected allocation",
+    "      L-->>A: atomic precondition and replay-safe result",
+    "      A->>S: persist terminal item result",
+    "    end",
+    "    A-->>H: exact per-item result envelope",
+    "  end",
+    "  Note over A,L: crash resume replays only planned or unresolved items with frozen requests and keys"
+  ],
+  "created_at": "2026-07-19T05:12:47.5026128+00:00",
+  "links": [
+    {
+      "id": "01KXWCVEVWBSTF75GQ1D5AQQK8",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-APPLY-EXECUTION",
+      "rel": "illustrates",
+      "created_at": "2026-07-19T05:16:16.6374796+00:00"
+    }
+  ]
+}

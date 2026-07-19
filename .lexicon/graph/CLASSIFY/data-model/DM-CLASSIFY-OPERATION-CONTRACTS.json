@@ -1,0 +1,29 @@
+{
+  "id": "01KXWCJCQXQ5BBRC27KWC2BHB9",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DM-CLASSIFY-OPERATION-CONTRACTS",
+  "name": "ClassifyOperationContracts",
+  "description": [
+    "Source-generated versioned request, result, error, descriptor, limit, mutability, idempotency, compatibility, and process-envelope shapes for the twelve public CLASSIFY operations."
+  ],
+  "schema_def": [
+    "OperationDescriptor(operation_id, contract_version, request_schema, result_schema, error_schema, exit_category, mutability, idempotency, limits, compatibility); EvaluateRequest(actor, idempotency_key, contract_version); OutcomeGetRequest(evaluation_id, transaction_id); ApplySelection=SelectedOutcomes(outcome_ids[])|ExactRule(rule_version_id)|ExplicitCorrections(items[transaction_id,outcome_id,current_category_id,target_category_id,reason]); ApplyPreviewRequest(evaluation_id, selection); ApplyRunRequest(preview_id, apply_id); RuleSaveRequest(rule_id, prior_version_id, category_id, normalization_version, conditions, reason); RuleValidateRequest(candidate_ids, corpus_source); RuleActivateRequest(validation_id, broad_apply_allowed, reason); RuleRetireRequest(rule_version_id, reason); FeedbackRecordRequest(outcome_id, decision, ledger_allocation_refs, reason); StatusRequest(subject_type, subject_id); AbandonRequest(subject_type, subject_id, reason); CleanupRequest(policy_version); ClassifyResultEnvelope(contract_version, operation_id, outcome, result_or_error, correlation_ref). Common mutation envelope requires actor and idempotency key; selection union rejects mixed modes and corrections always require exact transaction, outcome, current and target category, and reason."
+  ],
+  "created_at": "2026-07-19T05:11:19.5545602+00:00",
+  "links": [
+    {
+      "id": "01KXWCTD1VX8YCX8A6R60J6R49",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:42.0125571+00:00"
+    },
+    {
+      "id": "01KXWCTDN3W8B52Q3QDY4VMBRE",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STRUCTURED-INVOCATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:42.6282553+00:00"
+    }
+  ]
+}

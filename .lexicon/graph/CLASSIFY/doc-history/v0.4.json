@@ -1,0 +1,9 @@
+{
+  "id": "01KXWDJ088GW92Y8QZE7484GZY",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "version": "0.4",
+  "changes": [
+    "Technical design complete: selected twelve explicit Native-AOT vertical slices; defined nine accepted decisions, nine data models, five feature areas, and five diagrams; purpose-scoped the public LEDGER projection for evaluation versus apply preflight; added atomic allocation and revision preconditions for corrections; grouped all 20 planned tests; recorded the no-HTTP and CHANNELS-owned UI boundary; and retained greenfield paths plus four external dependencies as planning gates."
+  ],
+  "created_at": "2026-07-19T05:28:35.3372247+00:00"
+}

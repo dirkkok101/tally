@@ -1,0 +1,62 @@
+{
+  "id": "01KXWCGC3N5XX1JQQ49WFAJTRS",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DD-CLASSIFY-APPLY-SAGA",
+  "title": "Expiry-bound preview and per-item idempotent Ledger saga",
+  "description": [
+    "Close every cross-store crash window while keeping all-item preflight and explicit owner mutation authority."
+  ],
+  "decision": [
+    "Persist an expiry-bound preview over one current evaluation fingerprint and an exact selection after purpose=apply_preflight returns every selected identity, Ledger-owned mutation state, current allocation identity, and lifecycle revisions. Apply acquires a per-run owner lock, repeats that all-item preflight, and rejects the whole run before mutation on any drift. For each item in deterministic transaction order, durably freeze the exact public Ledger operation, target, expected allocation and revisions, correction reason, request fingerprint, and derived per-item idempotency key; invoke Ledger outside the CLASSIFY transaction; and durably record the terminal result before advancing. Resume replays only planned or unresolved items with the exact frozen request and key."
+  ],
+  "rationale": [
+    "A distributed transaction across separate stores does not exist. Holding a CLASSIFY SQLite transaction across Ledger calls creates locks without atomicity. A requires-independent-decision query cannot inspect explicit corrections, and preflight without Ledger-enforced allocation and revision conditions leaves a race before each write. Calling Ledger before durable intent loses the recovery frontier. Storing only an aggregate receipt cannot reconcile individual commits. The purpose-scoped preflight, frozen preconditions, and Ledger idempotency close drift, commit-before-result, and result-before-CLASSIFY-durability windows while preserving a precise test surface."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Features/Classify/Apply/**\",\"src/Tally/Infrastructure/Classify/Storage/ClassificationApplyLock.cs\",\"tests/Tally.Tests/Classify/ApplyRecovery/**\"]}",
+  "created_at": "2026-07-19T05:10:13.3661502+00:00",
+  "links": [
+    {
+      "id": "01KXWCT7SNJ9CNN3TNZHKS76Y3",
+      "target_type": "design_decision",
+      "target": "DD-INGEST-COMMIT-RECOVERY",
+      "rel": "see-also",
+      "created_at": "2026-07-19T05:15:36.6308392+00:00"
+    },
+    {
+      "id": "01KXWCT57FEHWSAG226QH8R4Z1",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-APPLY-AUTHORIZATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:34.0004334+00:00"
+    },
+    {
+      "id": "01KXWCT5X3C9EH8JFZVVGAPMJQ",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-APPLY-EXECUTION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:34.6924631+00:00"
+    },
+    {
+      "id": "01KXWCT765FCTVYWAMYDRSYN5H",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-IDEMPOTENT-WRITES",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T05:15:36.0063185+00:00"
+    },
+    {
+      "id": "01KXWCT6H2C1RR0DZ9405PK0VB",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-APPLY-RECOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:35.3310377+00:00"
+    },
+    {
+      "id": "01KXWCT8E06191BCSAEC6M7BGP",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-APPLY-CRASH-RECOVERY-MATRIX",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:15:37.2809772+00:00"
+    }
+  ]
+}

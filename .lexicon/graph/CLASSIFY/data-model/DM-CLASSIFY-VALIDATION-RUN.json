@@ -1,0 +1,22 @@
+{
+  "id": "01KXWCJF6P3ET4FT3NW91YQ53P",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+  "name": "ClassificationValidationRun",
+  "description": [
+    "Aggregate-only private candidate evidence that binds every activation decision without retaining corpus rows or values."
+  ],
+  "schema_def": [
+    "validation_run(validation_run_id PK, candidate_fingerprint, corpus_fingerprint, expected_outcome_fingerprint, projection_contract_version, category_lifecycle_fingerprint, normalization_version, started_at, completed_at?, lifecycle_state, actor); validation_report(validation_run_id PK/FK, total_rows, suggestion_count, no_suggestion_count, conflict_count, stale_count, drift_canary_count, incorrect_application_canary_count, unexplained_conflict_count, report_fingerprint); no raw corpus row, description, normalized token, financial value, expected outcome, or path column"
+  ],
+  "created_at": "2026-07-19T05:11:22.0718867+00:00",
+  "links": [
+    {
+      "id": "01KXWCTJCD30E91DVG42S6HKAT",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-VALIDATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:47.4706982+00:00"
+    }
+  ]
+}

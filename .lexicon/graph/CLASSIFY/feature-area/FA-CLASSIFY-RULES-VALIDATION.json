@@ -1,0 +1,68 @@
+{
+  "id": "01KXWCJXW02KRTJM8N9XJPP03K",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "FA-CLASSIFY-RULES-VALIDATION",
+  "name": "Rules and Validation",
+  "description": [
+    "Owns immutable rule versions, typed conditions, rule sets, private aggregate-only validation, activation, retirement, replacement, and exact broad-apply authority."
+  ],
+  "created_at": "2026-07-19T05:11:37.0904968+00:00",
+  "links": [
+    {
+      "id": "01KXWCTYGNBM8R4TS3KZFTYNK6",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-PRIVATE-VALIDATION",
+      "rel": "belongs_to",
+      "created_at": "2026-07-19T05:15:59.8962094+00:00"
+    },
+    {
+      "id": "01KXWCTXP6H2FJA6RT4S3YC4CA",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-RULE-VOCABULARY",
+      "rel": "belongs_to",
+      "created_at": "2026-07-19T05:15:59.0475292+00:00"
+    },
+    {
+      "id": "01KXWCTZ8Q78FBPF188X2V88HB",
+      "target_type": "data_model",
+      "target": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "rel": "belongs_to",
+      "created_at": "2026-07-19T05:16:00.6642321+00:00"
+    },
+    {
+      "id": "01KXWCV01BCJ0QTYAZPJES6MS8",
+      "target_type": "data_model",
+      "target": "DM-CLASSIFY-VALIDATION-RUN",
+      "rel": "belongs_to",
+      "created_at": "2026-07-19T05:16:01.4520176+00:00"
+    },
+    {
+      "id": "01KXWDFJH926NC0ZS18Z1A3TJ9",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-LIFECYCLE",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:27:15.7540241+00:00"
+    },
+    {
+      "id": "01KXWCV0ZZE8JVRF5589RPEDY7",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-VALIDATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:16:02.4322767+00:00"
+    },
+    {
+      "id": "01KXWD5TCP6JZTC0V504BB1B1V",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-RULE-LIFECYCLE-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:21:56.1196010+00:00"
+    },
+    {
+      "id": "01KXWD5V2AJJ77D07696PBCBWH",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-RULE-VALIDATION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:21:56.8113475+00:00"
+    }
+  ]
+}

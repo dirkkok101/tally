@@ -1,0 +1,62 @@
+{
+  "id": "01KXWCGBRABFTQEM2ABFJ7CZ6M",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DD-CLASSIFY-PRIVATE-VALIDATION",
+  "title": "Memory-only private corpus validation with aggregate durability",
+  "description": [
+    "Gate rule and normalization activation on representative owner evidence without retaining or disclosing raw financial rows."
+  ],
+  "decision": [
+    "Read one bounded owner-only JSONL corpus path only from private structured input, open read-only without following the final symbolic link, fingerprint exact bytes, and stream rows through the production normalization and evaluation engine. Persist only candidate, corpus, expected-outcome, projection, category, and normalization fingerprints plus aggregate counts and canary outcomes. Require current evidence with zero incorrect-application canaries and zero unexplained incompatible conflicts before activation or broad authority."
+  ],
+  "rationale": [
+    "Copying corpus data into the state store or graph increases disclosure and retention. An external validation service violates locality. A separate evaluator risks semantic drift. Aggregate-only durability satisfies activation proof while the production engine makes validation representative. If the corpus is unavailable, preserving the last active rule set but blocking new authority is the only fail-closed behavior consistent with the PRD."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Infrastructure/Classify/Corpus/**\",\"src/Tally/Features/Classify/Rules/Validate/**\",\"tests/Tally.Tests/Classify/Validation/**\"]}",
+  "created_at": "2026-07-19T05:10:13.0037537+00:00",
+  "links": [
+    {
+      "id": "01KXWCT39960GYR5R6DYP8EDCK",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T05:15:32.0107366+00:00"
+    },
+    {
+      "id": "01KXWCT1B5FEZBMSEYCE1C1B9B",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-VALIDATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:30.0218081+00:00"
+    },
+    {
+      "id": "01KXWCT2MS9363R1HK8C3FACJD",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-BOUNDED-EVALUATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:31.3545932+00:00"
+    },
+    {
+      "id": "01KXWCT1YK15DYDWASJJXT6PG7",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-LOCAL-DATA-PROTECTION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:30.6443004+00:00"
+    },
+    {
+      "id": "01KXWCT4HWSMNEQT9PHB42BD5C",
+      "target_type": "open_question",
+      "target": "OQ-CLASSIFY-7",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T05:15:33.3098608+00:00"
+    },
+    {
+      "id": "01KXWCT3YGC027MC0AV0Z0WCBC",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-RULE-VALIDATION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:15:32.6896565+00:00"
+    }
+  ]
+}

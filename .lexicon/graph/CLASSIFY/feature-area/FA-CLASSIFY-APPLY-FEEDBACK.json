@@ -1,0 +1,82 @@
+{
+  "id": "01KXWCJYK99D3KN0R2JP5F8ANF",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "FA-CLASSIFY-APPLY-FEEDBACK",
+  "name": "Apply and Feedback",
+  "description": [
+    "Owns read-only preview authorization, all-item preflight, the replay-safe public LEDGER assignment/correction saga, attributable feedback, and bounded proposals."
+  ],
+  "created_at": "2026-07-19T05:11:37.8339265+00:00",
+  "links": [
+    {
+      "id": "01KXWCV5SNVPT310Q5EDHHR4EX",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-APPLY-SAGA",
+      "rel": "belongs_to",
+      "created_at": "2026-07-19T05:16:07.3509732+00:00"
+    },
+    {
+      "id": "01KXWCV6K9TZC8WJWZZS2V6Z1D",
+      "target_type": "data_model",
+      "target": "DM-CLASSIFY-APPLY-RUN",
+      "rel": "belongs_to",
+      "created_at": "2026-07-19T05:16:08.1705219+00:00"
+    },
+    {
+      "id": "01KXWCV7CKYWPHRAXHCJ3H7VMX",
+      "target_type": "data_model",
+      "target": "DM-CLASSIFY-FEEDBACK-PROPOSAL",
+      "rel": "belongs_to",
+      "created_at": "2026-07-19T05:16:08.9803009+00:00"
+    },
+    {
+      "id": "01KXWDFF0Y3DH2RSMZRXJZ1BAC",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-APPLY-AUTHORIZATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:27:12.1595716+00:00"
+    },
+    {
+      "id": "01KXWCV84C0PW5HTHDH848ZPQ5",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-APPLY-EXECUTION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:16:09.7409408+00:00"
+    },
+    {
+      "id": "01KXWCV8X1T5WSKQQ70W5METQ7",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-CORRECTION-FEEDBACK",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:16:10.5308180+00:00"
+    },
+    {
+      "id": "01KXWD5Z994A2JHP5MKJEK20BT",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-APPLY-AUTHORIZATION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:22:01.1301188+00:00"
+    },
+    {
+      "id": "01KXWD602SJM337JTCX3FVYS0X",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-APPLY-CRASH-RECOVERY-MATRIX",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:22:01.9467439+00:00"
+    },
+    {
+      "id": "01KXWD60ZED7CNZW8JSSMZBZ7G",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-APPLY-EXECUTION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:22:02.8637292+00:00"
+    },
+    {
+      "id": "01KXWD61W13TR4347MDJRZFJ2E",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-CORRECTION-FEEDBACK-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:22:03.7779140+00:00"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "01KXWCN3J9X1HT7C4ESVGG5EMX",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DIAG-CLASSIFY-STATE-ER",
+  "title": "CLASSIFY durable state model",
+  "diagram_type": "er",
+  "format": "mermaid",
+  "content": [
+    "erDiagram",
+    "  CLASSIFICATION_RULE ||--o{ RULE_VERSION : versions",
+    "  RULE_VERSION ||--|{ RULE_CONDITION : contains",
+    "  RULE_SET_VERSION ||--|{ RULE_SET_MEMBER : contains",
+    "  RULE_VERSION ||--o{ RULE_SET_MEMBER : participates",
+    "  VALIDATION_RUN ||--|| VALIDATION_REPORT : produces",
+    "  VALIDATION_RUN ||--o{ RULE_SET_VERSION : authorizes",
+    "  RULE_SET_VERSION ||--o{ EVALUATION_RUN : evaluates",
+    "  EVALUATION_RUN ||--|{ CLASSIFICATION_OUTCOME : contains",
+    "  CLASSIFICATION_OUTCOME ||--o{ MATCH_EVIDENCE : explains",
+    "  EVALUATION_RUN ||--o{ APPLY_PREVIEW : authorizes",
+    "  APPLY_PREVIEW ||--|{ APPLY_PREVIEW_ITEM : selects",
+    "  APPLY_PREVIEW ||--o{ APPLY_RUN : executes",
+    "  APPLY_RUN ||--|{ APPLY_ITEM : tracks",
+    "  CLASSIFICATION_OUTCOME ||--o{ CLASSIFICATION_FEEDBACK : receives",
+    "  CLASSIFICATION_FEEDBACK ||--o| RULE_PROPOSAL : proposes"
+  ],
+  "created_at": "2026-07-19T05:12:48.4585030+00:00",
+  "links": [
+    {
+      "id": "01KXWCVH51BVRQ36S6TEPS50CD",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STATE-RETENTION-CLEANUP",
+      "rel": "illustrates",
+      "created_at": "2026-07-19T05:16:18.9779571+00:00"
+    },
+    {
+      "id": "01KXWCVGDEQN9BPPPJ5AV8WA4X",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STATUS-HISTORY",
+      "rel": "illustrates",
+      "created_at": "2026-07-19T05:16:18.2235328+00:00"
+    }
+  ]
+}

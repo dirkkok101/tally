@@ -1,0 +1,22 @@
+{
+  "id": "01KXWCJEMC0Y34ANP6YWT0TED7",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+  "name": "ClassificationRuleLifecycle",
+  "description": [
+    "Immutable logical rules, versions, conditions, rule sets, activation evidence, broad-apply authority, retirement, replacement, and active pointers."
+  ],
+  "schema_def": [
+    "classification_rule(rule_id PK, created_at, created_by); rule_version(rule_version_id PK, rule_id FK, prior_version_id?, normalization_version, category_id, scope_hash, reason, lifecycle_state, broad_apply_allowed, validation_run_id?, created_at, created_by); rule_condition(rule_version_id FK, ordinal, typed_condition, PK(rule_version_id, ordinal)); rule_set_version(rule_set_version_id PK, prior_rule_set_version_id?, normalization_version, validation_run_id, reason, created_at, created_by); rule_set_member(rule_set_version_id FK, rule_version_id FK, PK(rule_set_version_id, rule_version_id)); active_rule_set(singleton PK, rule_set_version_id FK, activation_epoch); rule_lifecycle_event(event_id PK, subject_id, prior_state, resulting_state, replacement_id?, reason, actor, occurred_at)"
+  ],
+  "created_at": "2026-07-19T05:11:21.4851793+00:00",
+  "links": [
+    {
+      "id": "01KXWCTH6HXD3F5J0E5V0GF3YQ",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-LIFECYCLE",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:46.2581519+00:00"
+    }
+  ]
+}

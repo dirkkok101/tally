@@ -1,0 +1,45 @@
+{
+  "id": "01KXWCN1T41HW370W69SBF8WQH",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DIAG-CLASSIFY-EVALUATION-SEQUENCE",
+  "title": "Snapshot-bound deterministic evaluation",
+  "diagram_type": "sequence",
+  "format": "mermaid",
+  "content": [
+    "sequenceDiagram",
+    "  participant H as Owner or Agent Host",
+    "  participant C as classify.evaluate",
+    "  participant L as LedgerContractClient",
+    "  participant E as Rule Engine",
+    "  participant S as classify.db",
+    "  H->>C: typed request plus idempotency",
+    "  C->>L: discover compatible classification_v1 projection",
+    "  L-->>C: purpose=evaluation descriptor and limits",
+    "  loop every snapshot page",
+    "    C->>L: ledger.actuals.query purpose=evaluation",
+    "    L-->>C: eligible ordered page and fingerprint dimensions",
+    "  end",
+    "  C->>E: complete bounded projection plus active rule set",
+    "  E-->>C: ordered outcomes and bounded evidence",
+    "  C->>S: atomic evaluation transaction",
+    "  S-->>C: durable evaluation id",
+    "  C-->>H: one result envelope"
+  ],
+  "created_at": "2026-07-19T05:12:46.6611434+00:00",
+  "links": [
+    {
+      "id": "01KXWCVE330DB2GHTA7K74FZSP",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "rel": "illustrates",
+      "created_at": "2026-07-19T05:16:15.8441318+00:00"
+    },
+    {
+      "id": "01KXWCVDB2N91A2FPFGAHRTK9R",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+      "rel": "illustrates",
+      "created_at": "2026-07-19T05:16:15.0757095+00:00"
+    }
+  ]
+}

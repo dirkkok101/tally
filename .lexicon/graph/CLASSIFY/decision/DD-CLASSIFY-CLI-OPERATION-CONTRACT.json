@@ -1,0 +1,83 @@
+{
+  "id": "01KXWCG9ZF36JCVEYTX20E414B",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DD-CLASSIFY-CLI-OPERATION-CONTRACT",
+  "title": "Twelve explicit CLASSIFY operations from one registry",
+  "description": [
+    "Make every first-release classification capability, mutation boundary, error, limit, and replay rule discoverable without HTTP or hidden action discriminators."
+  ],
+  "decision": [
+    "Expose exactly classify.evaluate, classify.outcome.get, classify.apply.preview, classify.apply.run, classify.rule.save, classify.rule.validate, classify.rule.activate, classify.rule.retire, classify.feedback.record, classify.status, classify.abandon, and classify.cleanup. One explicitly registered descriptor registry generates CLI dispatch, help, schema, compatibility, stable errors, limits, mutability, idempotency metadata, and process envelopes. Complex input uses explicit stdin or file JSON and every invocation emits one business envelope."
+  ],
+  "rationale": [
+    "A generic invoke, manage, run, save, or delete surface would move operation knowledge into callers and weaken schema discovery. A three-entry facade is smaller only syntactically. Separate help, schema, and dispatch definitions would drift. The selected shape reuses the established Ledger and Ingest public process contract while honoring the canonical PRD vocabulary. HTTP Save, GetGridList, GetLookupList, and Delete endpoints are inapplicable because CLASSIFY is a channel-neutral local CLI module."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Cli/**\",\"src/Tally/Contracts/Classify/**\",\"src/Tally/Features/Classify/Contract/**\",\"tests/Tally.Tests/Classify/Contract/**\"]}",
+  "created_at": "2026-07-19T05:10:11.1849248+00:00",
+  "links": [
+    {
+      "id": "01KXWCSAS7K2HTZ0525F2Z0M3C",
+      "target_type": "adr",
+      "target": "ADR-CORE-0010",
+      "rel": "driven_by",
+      "created_at": "2026-07-19T05:15:06.9203924+00:00"
+    },
+    {
+      "id": "01KXWCSBE2MNFA6X21KP9H7Q5H",
+      "target_type": "adr",
+      "target": "ADR-CORE-0025",
+      "rel": "driven_by",
+      "created_at": "2026-07-19T05:15:07.5878439+00:00"
+    },
+    {
+      "id": "01KXWCSCPSBFR3BZNK0N21R6DW",
+      "target_type": "design_decision",
+      "target": "DD-INGEST-CLI-OPERATION-CONTRACT",
+      "rel": "see-also",
+      "created_at": "2026-07-19T05:15:08.8899055+00:00"
+    },
+    {
+      "id": "01KXWCSC41ZZ9PKVFR3AVZ2WKC",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-CLI-OPERATION-CONTRACT",
+      "rel": "see-also",
+      "created_at": "2026-07-19T05:15:08.2907628+00:00"
+    },
+    {
+      "id": "01KXWCSDB3TCF6HXGHGQ6JCCNJ",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-AI-AGENT-HOST",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T05:15:09.5407789+00:00"
+    },
+    {
+      "id": "01KXWCS8RA7931E5ZDCS8AEY9A",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:04.8433023+00:00"
+    },
+    {
+      "id": "01KXWCS9CHS3YM8ZSSW3GPY395",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STRUCTURED-INVOCATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:05.4899747+00:00"
+    },
+    {
+      "id": "01KXWCSA10B71YXG6XK710VP3V",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:06.1454626+00:00"
+    },
+    {
+      "id": "01KXWCSDZSDAAQNMM709Q1X80Z",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-PUBLISHED-CONTRACT-MATRIX",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:15:10.2026138+00:00"
+    }
+  ]
+}

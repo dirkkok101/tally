@@ -1,0 +1,82 @@
+{
+  "id": "01KXWCJXG6W9BK2PME4QW0QSC3",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "FA-CLASSIFY-CONTRACT-VOCABULARY",
+  "name": "Contract and Vocabulary",
+  "description": [
+    "Owns the twelve operation descriptors, source-generated contracts, stable errors and exits, compatibility, deterministic limits, closed rule field and predicate descriptors, and normalization versions."
+  ],
+  "created_at": "2026-07-19T05:11:36.7114568+00:00",
+  "links": [
+    {
+      "id": "01KXWCTSWXHMB2A0S1HTHANNGV",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-CLI-OPERATION-CONTRACT",
+      "rel": "belongs_to",
+      "created_at": "2026-07-19T05:15:55.1684297+00:00"
+    },
+    {
+      "id": "01KXWCTTN4GS5W5KXF3NKZXFJE",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-RULE-VOCABULARY",
+      "rel": "belongs_to",
+      "created_at": "2026-07-19T05:15:55.9419223+00:00"
+    },
+    {
+      "id": "01KXWCTVCFQ3KJAWTDV90FHY1V",
+      "target_type": "data_model",
+      "target": "DM-CLASSIFY-OPERATION-CONTRACTS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-19T05:15:56.6886999+00:00"
+    },
+    {
+      "id": "01KXWCTW3FXYYWM72EQEE3N261",
+      "target_type": "data_model",
+      "target": "DM-CLASSIFY-RULE-VOCABULARY",
+      "rel": "belongs_to",
+      "created_at": "2026-07-19T05:15:57.4240472+00:00"
+    },
+    {
+      "id": "01KXWCTWVATG6TFQJ2563K0DG4",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:58.1873919+00:00"
+    },
+    {
+      "id": "01KXWDFFKTSW27W4M3Y9HREH4D",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STRUCTURED-INVOCATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:27:12.7636215+00:00"
+    },
+    {
+      "id": "01KXWD5QK0XT8NVWFJF6TRD2M9",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-CONTRACT-DISCOVERY-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:21:53.2495534+00:00"
+    },
+    {
+      "id": "01KXWD5SNAJVW4Z4EXET355R6G",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-ELIGIBLE-PROJECTION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:21:55.3709820+00:00"
+    },
+    {
+      "id": "01KXWD5S0MEV58WMTSNXA4Y3Z7",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-PUBLISHED-CONTRACT-MATRIX",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:21:54.7092775+00:00"
+    },
+    {
+      "id": "01KXWD5R8HW16KWP4MNH8TQXQR",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-STRUCTURED-INVOCATION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:21:53.9388837+00:00"
+    }
+  ]
+}

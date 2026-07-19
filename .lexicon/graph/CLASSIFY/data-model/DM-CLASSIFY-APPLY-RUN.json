@@ -1,0 +1,36 @@
+{
+  "id": "01KXWCJFXE8B1Q7ZRY82MXCYKQ",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DM-CLASSIFY-APPLY-RUN",
+  "name": "ClassificationApplyPreviewAndRun",
+  "description": [
+    "Expiry-bound exact authorization plus purpose-scoped preflight evidence, durable per-item Ledger preconditions, terminal result, and resume frontier for assignment and correction."
+  ],
+  "schema_def": [
+    "apply_preview(preview_id PK, operation_idempotency_id UNIQUE, evaluation_id FK, evaluation_fingerprint, selection_mode, selection_hash, ledger_contract_version, projection_version, store_generation_fingerprint, preflight_snapshot_id, preflight_expires_at, category_lifecycle_fingerprint, target_category_fingerprint, rule_authority_fingerprint, expires_at, selected_count, exclusion_count, no_suggestion_count, conflict_count, actor, created_at); apply_preview_item(preview_id FK, ordinal, outcome_id FK, transaction_id, mode=assign|correct, category_id, rule_version_id?, expected_current_category_id?, expected_active_allocation_id?, expected_transaction_revision, expected_relationship_revision, expected_allocation_revision, correction_reason?, PK(preview_id, ordinal)); apply_run(apply_id PK, preview_id FK, request_fingerprint, lifecycle_state, unresolved_frontier, actor, started_at, completed_at?); apply_item(apply_id FK, ordinal, transaction_id, ledger_operation_id, category_id, expected_active_allocation_id?, expected_transaction_revision, expected_relationship_revision, expected_allocation_revision, correction_reason?, ledger_request_fingerprint, ledger_idempotency_key, item_state, ledger_result_fingerprint?, ledger_allocation_id?, prior_ledger_allocation_id?, safe_error_code?, PK(apply_id, ordinal)). Apply begins only after repeated all-item apply_preflight matches the preview; frozen item fields form the exact replay request; terminal item rows never invoke Ledger again."
+  ],
+  "created_at": "2026-07-19T05:11:22.7990568+00:00",
+  "links": [
+    {
+      "id": "01KXWCTN67D7A1JWZ89JA6E69J",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-APPLY-AUTHORIZATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:50.3447146+00:00"
+    },
+    {
+      "id": "01KXWCTNSQH45YW72Z94BMERZF",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-APPLY-EXECUTION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:50.9682747+00:00"
+    },
+    {
+      "id": "01KXWCTPF8W38Z1MPGB90C2C8Q",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-APPLY-RECOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:51.6576179+00:00"
+    }
+  ]
+}

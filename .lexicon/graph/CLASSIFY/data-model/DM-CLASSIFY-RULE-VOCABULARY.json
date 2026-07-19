@@ -1,0 +1,29 @@
+{
+  "id": "01KXWCJDZ6HCM3V4JF7QERQHN0",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DM-CLASSIFY-RULE-VOCABULARY",
+  "name": "ClassificationRuleVocabulary",
+  "description": [
+    "Closed code-owned field, predicate, value, and normalization descriptors that make rule contracts finite and deterministic."
+  ],
+  "schema_def": [
+    "NormalizationDescriptor(version, unicode_form, case_fold, punctuation_policy, whitespace_policy, preserves_digits, preserves_token_order, max_input_length); FieldDescriptor(field_key, value_type, allowed_predicates, max_value_length); PredicateDescriptor(predicate_kind, operand_type, cardinality); RuleCondition(condition_id, ordinal, field_key, predicate_kind, value_text?, value_minor_min?, value_minor_max?, enum_value?); allowed fields: description.normalized, account.id, amount.direction, amount.absolute_minor; logical composition: AND only"
+  ],
+  "created_at": "2026-07-19T05:11:20.8075378+00:00",
+  "links": [
+    {
+      "id": "01KXWCTGDHMAP5RDH6JFCWTW8K",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:45.4591318+00:00"
+    },
+    {
+      "id": "01KXWCTFMQRK99RCKQHXB5Z126",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-LIFECYCLE",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:44.6647161+00:00"
+    }
+  ]
+}

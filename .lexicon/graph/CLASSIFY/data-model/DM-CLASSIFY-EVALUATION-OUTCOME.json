@@ -1,0 +1,36 @@
+{
+  "id": "01KXWCJFJKQ05X63ZSNR5NGY8V",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+  "name": "ClassificationEvaluationAndOutcome",
+  "description": [
+    "One atomic ordered evaluation, exact fingerprint dimensions, one outcome per projected transaction, and bounded historical match evidence."
+  ],
+  "schema_def": [
+    "evaluation_run(evaluation_id PK, operation_idempotency_id UNIQUE, rule_set_version_id, normalization_version, ledger_contract_version, projection_version, store_generation_fingerprint, snapshot_id, snapshot_expires_at, category_lifecycle_fingerprint, ordered_items_fingerprint, input_count, suggestion_count, no_suggestion_count, conflict_count, stale_count, lifecycle_state, actor, created_at); classification_outcome(outcome_id PK, evaluation_id FK, ordinal, transaction_id, outcome_type, category_id?, item_lifecycle_fingerprint, safe_reason, UNIQUE(evaluation_id, ordinal), UNIQUE(evaluation_id, transaction_id)); match_evidence(outcome_id FK, rule_version_id, condition_id, field_key, predicate_kind, normalized_value_hash, PK(outcome_id, rule_version_id, condition_id))"
+  ],
+  "created_at": "2026-07-19T05:11:22.4527311+00:00",
+  "links": [
+    {
+      "id": "01KXWCTK1JM02WN4HQPCCJJQYC",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:48.1469127+00:00"
+    },
+    {
+      "id": "01KXWCTKSFGH704TDPB2T6CAJB",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-OUTCOME-EXPLANATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:48.9127309+00:00"
+    },
+    {
+      "id": "01KXWCTMG57549786BDJNFY8TR",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-OUTCOME-INVALIDATION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:49.6380826+00:00"
+    }
+  ]
+}

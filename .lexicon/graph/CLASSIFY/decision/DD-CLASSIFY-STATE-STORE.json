@@ -1,0 +1,69 @@
+{
+  "id": "01KXWCGBD9GSJ1AZJCRFDFJBDN",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DD-CLASSIFY-STATE-STORE",
+  "title": "Separate raw-SQLite classification state with immutable history",
+  "description": [
+    "Persist rule lifecycle, outcomes, apply recovery, feedback, and cleanup without coupling their retention to Durable Ledger State."
+  ],
+  "decision": [
+    "Use one owner-only classify.db under the Tally data root with Microsoft.Data.Sqlite, snake_case tables, foreign keys, WAL, synchronous FULL, bounded busy handling, user_version migrations, explicit transactions, operation idempotency, and guarded single-writer transitions. Immutable versions, outcomes, terminal item results, feedback, and lifecycle rows reject update and delete. Raw corpus rows and full Ledger projections are never persisted."
+  ],
+  "rationale": [
+    "Sharing Ledger storage violates the public boundary and couples retention. Flat JSON files make atomic activation, row accounting, migrations, idempotency, and saga recovery fragile. A hosted database violates the self-contained constraint. EF and DbContext add a mapping and migration layer without a second provider or hosted request pipeline. Raw SQLite matches the established Tally storage model and permits exact invariant tests."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Infrastructure/Classify/Storage/**\",\"src/Tally/Features/Classify/Recovery/**\",\"tests/Tally.Tests/Classify/Storage/**\"]}",
+  "created_at": "2026-07-19T05:10:12.6498656+00:00",
+  "links": [
+    {
+      "id": "01KXWCT04WNJCRQGNA7E98BPCZ",
+      "target_type": "adr",
+      "target": "ADR-CORE-0020",
+      "rel": "driven_by",
+      "created_at": "2026-07-19T05:15:28.7979614+00:00"
+    },
+    {
+      "id": "01KXWCSZF6MCWXE5VC1TQE613E",
+      "target_type": "design_decision",
+      "target": "DD-INGEST-STATE-STORE",
+      "rel": "see-also",
+      "created_at": "2026-07-19T05:15:28.1036565+00:00"
+    },
+    {
+      "id": "01KXWCSXGXRXH4ECY3H8C2G2HT",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STATE-RETENTION-CLEANUP",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:26.1105466+00:00"
+    },
+    {
+      "id": "01KXWCSWTXEHFCDJKMMSAK731A",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STATUS-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:25.4062526+00:00"
+    },
+    {
+      "id": "01KXWCSY5FY25MJ1WCFA8XW46P",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-ATTRIBUTABLE-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:26.7683592+00:00"
+    },
+    {
+      "id": "01KXWCSYVG6QPGWWY0RG6D8A89",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-LOCAL-DATA-PROTECTION",
+      "rel": "implements",
+      "created_at": "2026-07-19T05:15:27.4736037+00:00"
+    },
+    {
+      "id": "01KXWCT0R9DJNA5JRQJEVEYH5R",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-ATTRIBUTABLE-HISTORY-INVARIANTS",
+      "rel": "validated-by",
+      "created_at": "2026-07-19T05:15:29.4186486+00:00"
+    }
+  ]
+}
