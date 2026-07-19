@@ -1,0 +1,11 @@
+{
+  "id": "01KXXKX16FGEYFVSRAABAC7C8D",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "ref_code": "SP-BUDGET-02-POSITION-PROJECTION",
+  "title": "Exact position and consumer projection",
+  "description": [
+    "Implement checked exhaustive bucketing, public position composition, and the mutation-free INSIGHTS capability set."
+  ],
+  "sort_order": 2,
+  "created_at": "2026-07-19T16:38:42.6404222+00:00"
+}

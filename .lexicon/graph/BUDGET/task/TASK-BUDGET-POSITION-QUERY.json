@@ -1,0 +1,329 @@
+{
+  "id": "01KXXMH1N4KEJTZM8FMTQA4GWF",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX16FGEYFVSRAABAC7C8D",
+  "ref_code": "TASK-BUDGET-POSITION-QUERY",
+  "slug": "POSITION-QUERY",
+  "title": "Compose exact budget positions through Ledger",
+  "description": [
+    "Implement revision selection, public Ledger snapshot acquisition, pure calculation, mapping, and no-retention behavior for budget.position.get."
+  ],
+  "objective": [
+    "Owners receive one exact provenance-bound position for an explicit or Active revision, with no partial or retained financial projection."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 2,
+  "created_at": "2026-07-19T16:49:38.4689007+00:00",
+  "decisions": [
+    {
+      "id": "01KXXMH1N6YKFPC6EF1EY314VZ",
+      "target": "DD-BUDGET-EXACT-POSITION-CALCULATION",
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N6PE5HMTG5R6GDWAMY",
+      "target": "DD-BUDGET-LEDGER-PUBLIC-COMPOSITION",
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N656ZVS31V420T84RB",
+      "target": "DD-BUDGET-TRUSTED-PERIOD-TIME",
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXXN8B82QFC7KYJ5GEQSEB10",
+      "target": "TASK-BUDGET-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Position DTO mapping extends the pure BudgetContractMapper root."
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-19T17:02:21.9557505+00:00"
+    },
+    {
+      "id": "01KXXMH1N7JW7BBV7ZHQ8E8T4C",
+      "target": "TASK-BUDGET-LEDGER-BUDGET-CLIENT",
+      "dependency_type": "compile",
+      "reason": [
+        "Current category and actual evidence comes only from the public client."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXN8ACZJAPE1RH3K0SKSF1P",
+      "target": "TASK-BUDGET-PERIOD-IDENTITY",
+      "dependency_type": "compile",
+      "reason": [
+        "Position results derive period boundaries and lifecycle from the trusted resolver."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-19T17:02:21.0884746+00:00"
+    },
+    {
+      "id": "01KXXMH1N7EK8835WAC15KC4W3",
+      "target": "TASK-BUDGET-POSITION-CALCULATOR",
+      "dependency_type": "compile",
+      "reason": [
+        "The query delegates all bucketing and arithmetic to the pure calculator."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMR5RTSE5QST9Q85Z2PC0W",
+      "target": "TASK-BUDGET-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Revision selection reads exact persisted plan state."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:53:32.0594014+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMH1N6E2YQ5J3WTATYXHV5",
+      "path": "src/Tally/Features/Budget/Position/Get/GetBudgetPositionQuery.cs",
+      "action": "create",
+      "role": "position vertical slice",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N61BYKDW7A8TR7VYNZ",
+      "path": "src/Tally/Features/Budget/Contract/BudgetContractMapper.Position.cs",
+      "action": "create",
+      "role": "pure position DTO mapping",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N68CHC5KQ5C4QJ87HG",
+      "path": "tests/Tally.Tests/Budget/Position/GetBudgetPositionQueryTests.cs",
+      "action": "test",
+      "role": "composition contract tests",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXNAB8RHC921T3V6BW9YQCN",
+      "name": "BudgetStateStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-STATE-STORE",
+      "sort_order": 0,
+      "created_at": "2026-07-19T17:03:27.5118316+00:00"
+    },
+    {
+      "id": "01KXXNAB8SVGZK8PNA5K7EY97W",
+      "name": "LedgerContractClient.QueryBudgetActualsAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "sort_order": 1,
+      "created_at": "2026-07-19T17:03:27.5118316+00:00"
+    },
+    {
+      "id": "01KXXNAB8SJJ1V0X0YCC8SAJQW",
+      "name": "BudgetPositionCalculator.Calculate",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "sort_order": 2,
+      "created_at": "2026-07-19T17:03:27.5118316+00:00"
+    },
+    {
+      "id": "01KXXNAB8SMRZ11JT79PAXP5BF",
+      "name": "BudgetPeriodResolver.Resolve",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-PERIOD-PLAN",
+      "sort_order": 3,
+      "created_at": "2026-07-19T17:03:27.5118316+00:00"
+    },
+    {
+      "id": "01KXXNAB8S649B9S5JKPW0XV10",
+      "name": "BudgetContractMapper",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
+      "sort_order": 4,
+      "created_at": "2026-07-19T17:03:27.5118316+00:00"
+    },
+    {
+      "id": "01KXXNAB8SXFFBXVFANR2E3J1P",
+      "name": "GetBudgetPositionQuery.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "sort_order": 5,
+      "created_at": "2026-07-19T17:03:27.5118316+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXMH1N6AMP5CZ1Q701S98Y2",
+      "kind": "acceptance_check",
+      "text": [
+        "Without a selector, load the period's Active revision or return NoActiveBudgetPlanRevision before Ledger; with a selector, require that readable revision belongs to the supplied period and ZAR before Ledger."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N6ZP9WPHD167K16C83",
+      "kind": "acceptance_check",
+      "text": [
+        "Query current public category and actual evidence for exactly [startInclusive,endExclusive) mapped to inclusive Ledger dates, consume one complete snapshot, then calculate once."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N6KCGYT79G8XYCWPV1",
+      "kind": "acceptance_check",
+      "text": [
+        "Return revision status, period, category contract, Ledger contract/snapshot/generation, calculation schema, ordered category positions, Uncategorized last, and exact totals."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N631TA8KD7EW0QQQD1",
+      "kind": "acceptance_check",
+      "text": [
+        "No matching actuals preserves all planned values with exact zero actuals; later Ledger correction yields a new cited snapshot while the revision stays unchanged."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N6DEFZWS3MXMQXK57C",
+      "kind": "acceptance_check",
+      "text": [
+        "Any revision mismatch, Ledger incompatibility/unavailability/expiry/integrity, unknown category, cancellation, overflow, or resource failure returns no partial position and persists no actual/cursor/position/report."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N6MKRKA2PYARKRHXHZ",
+      "kind": "expected_output",
+      "text": [
+        "GetBudgetPositionQuery"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N67QYGRZSQ0FQZNSXC",
+      "kind": "expected_output",
+      "text": [
+        "Budget position contract mapping"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N6YEW96PEQ7K2X8JZK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT call Ledger before revision-period/currency validation, fabricate a zero plan, query private storage, retain derived data, or translate Ledger errors into weaker success."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N6VCPKQ8TF9HQ5NW0K",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add analytics, recommendations, alerts, control decisions, or mutation behavior."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXMH1N6GX8WXZ0SXJ3MVS4D",
+      "target_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD712CJ4BKM0CY1JTQYJT",
+      "target_title": "BudgetPositionProjection",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N60FM7E64AZRG522M1",
+      "target_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD711P2JRXFDR2N9PB4KA",
+      "target_title": "LedgerBudgetCompositionContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N6WVG2YHHQWF9EPGGM",
+      "target_ref_code": "TC-BUDGET-POSITION-QUERY-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFJVVPKJKTGX38HD706M9E",
+      "target_title": "Verify exact budget position contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXXMH1N6CXC54526884J1SGD",
+      "target": "FR-BUDGET-LEDGER-COMPOSITION",
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N69JDX59BMVFGS2YXT",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXMH1N6J3RGS4A5TBP5SMG0",
+      "gate_type": "self-review",
+      "description": [
+        "Trace every precondition and failure to prove no Ledger-before-validation or partial result path."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXMH1N6DQK8AT037JF5WVZ2",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~GetBudgetPositionQueryTests",
+      "expected_result": "exit 0; at least 24 active/explicit selection, mismatch-before-Ledger, no-active, no-actuals, correction, snapshot, category, expiry, integrity, overflow, cancellation, and no-retention cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 540,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ]
+}

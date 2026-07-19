@@ -1,0 +1,277 @@
+{
+  "id": "01KXXMQ14GQW7NEJVHEQGXNSRB",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX24YJN8XH96VER4AQ086",
+  "ref_code": "TASK-BUDGET-GATE-MODULE",
+  "slug": "GATE-MODULE",
+  "title": "Complete the BUDGET v1 module gate",
+  "description": [
+    "Final validation gate with no implements refs; converge build, test, AOT, contract, recovery, security, performance, use-case, graph, and dependency evidence."
+  ],
+  "objective": [
+    "BUDGET v1 is reproducibly buildable, tested, exact, locally secure, externally validated, and ready for work review."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 7,
+  "created_at": "2026-07-19T16:52:54.5452616+00:00",
+  "decisions": [
+    {
+      "id": "01KXXMQ14SF43697EW4JS0DYA0",
+      "target": "DD-BUDGET-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXXMQ14TA3A2XQBEVD4F5P8E",
+      "target": "TASK-BUDGET-GATE-GRAPH-QUALITY",
+      "dependency_type": "compile",
+      "reason": [
+        "Final convergence consumes current graph and behavioral evidence."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMQ14SJTHJ4YPJ3HAD0PBX",
+      "path": "Tally.slnx",
+      "action": "read",
+      "role": "full solution",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14SJYEFSPM2PWSXANHX",
+      "path": "src/Tally/Tally.csproj",
+      "action": "read",
+      "role": "Native-AOT executable",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14S5V9RR6G9HZAXN25D",
+      "path": "tests/Tally.Tests/Tally.Tests.csproj",
+      "action": "read",
+      "role": "test project",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14TMAFCBT7FMZC9YC41",
+      "path": "tests/Tally.Tests/Budget/BudgetModuleGuardTests.cs",
+      "action": "test",
+      "role": "architecture/suite guards",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14TG23T6ZTPY299ZHD0",
+      "path": "scripts/verify-budget-module.sh",
+      "action": "create",
+      "role": "module convergence runner",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14TYGD48S2Z4X7N5EFQ",
+      "path": "docs/verification/budget-v1.md",
+      "action": "document",
+      "role": "safe completion report",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14TWWRCCPX8B19F7BX9",
+      "path": ".lexicon/graph/BUDGET/external-dependency/EXT-BUDGET-AI-AGENT-HOST.json",
+      "action": "modify",
+      "role": "lex-cli validation status",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14T3BX63J07JWKB1X2A",
+      "path": ".lexicon/graph/BUDGET/external-dependency/EXT-BUDGET-HOST-OS-SECURITY.json",
+      "action": "modify",
+      "role": "lex-cli validation status",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14T3P4HWMB641C0SYVA",
+      "path": ".lexicon/graph/BUDGET/external-dependency/EXT-BUDGET-INSIGHTS-CONSUMER-CONTRACT.json",
+      "action": "modify",
+      "role": "lex-cli validation status",
+      "required": 1,
+      "sort_order": 8,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14TE5WH3F1HYMXEWVXC",
+      "path": ".lexicon/graph/BUDGET/external-dependency/EXT-BUDGET-LEDGER-PUBLIC-CONTRACT.json",
+      "action": "modify",
+      "role": "lex-cli validation status",
+      "required": 1,
+      "sort_order": 9,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXMQ14T9D1VGPQ8ST70CWKH",
+      "name": "BudgetGraphQualityEvidence",
+      "direction": "consumes",
+      "contract_ref_code": "PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES",
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14T7DJ8EV0BPM08KJ62",
+      "name": "VerifiedBudgetV1Module",
+      "direction": "produces",
+      "contract_ref_code": "NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION",
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXMQ14SEDKDSQB4C380YMGE",
+      "kind": "acceptance_check",
+      "text": [
+        "Release restore/build, format verification, full tests, and linux-x64 Native-AOT publish exit 0 with zero build, trim, reflection, dynamic-code, or descriptor warnings."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14SRMV6Z271TAGF88M4",
+      "kind": "acceptance_check",
+      "text": [
+        "Current BudgetGraphQualityEvidence confirms nonzero named-suite discovery, all requirements/tests/paths, intentional CLI-only endpoint status, dependency evidence, and no forbidden surface."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14S62PJMS7W01D4W60W",
+      "kind": "acceptance_check",
+      "text": [
+        "Ledger, Agent Host, Host OS, and INSIGHTS statuses change from assumed to validated through lex CLI only after their named evidence succeeds; otherwise this gate fails."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14S28B1V8KFNA3CV30B",
+      "kind": "acceptance_check",
+      "text": [
+        "All five kill criteria are rechecked: public Ledger seam, persistence value, M policy ceiling, <=15-minute monthly maintenance, and exact once-only reconciliation."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14SSDSR1CHF3CKEKX0B",
+      "kind": "acceptance_check",
+      "text": [
+        "The completion report records commands, counts, safe fingerprints, dependency statuses, kill checks, and commit IDs without financial payloads."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14SEHKSNT43DQ7QTP72",
+      "kind": "expected_output",
+      "text": [
+        "VerifiedBudgetV1Module"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14S92F1B38EFVJNKCPE",
+      "kind": "expected_output",
+      "text": [
+        "Safe module completion report"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14SZ64M7KVMNJ1678RD",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept aggregate tests when graph evidence is missing/stale, update dependency status without evidence, edit graph JSON directly, waive a kill criterion, or add HTTP/UI/EF/remote/background/policy-engine behavior."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXMQ14T1RVXC6ZRNC7781Q3",
+      "target_ref_code": "NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXXFE05JC78X3NE6SVZEXPP2",
+      "target_title": "Preserve public contract boundaries",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14T5R5A1C5HV9RW22B6",
+      "target_ref_code": "NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXXFE0N28R5S42TW4EF21C2J",
+      "target_title": "Operate as a self-contained local planner",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXMQ14TGJ0TB1C2V4QVN36F",
+      "gate_type": "ci",
+      "description": [
+        "The module script and safe reports reproduce from a clean checkout with generated owner-local fixtures."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXMQ14TJ1RMRDST8XG5R769",
+      "phase": "after",
+      "command": "bash scripts/verify-budget-module.sh",
+      "expected_result": "exit 0; Release build, format, full tests, Native-AOT publish, graph/evidence/dependency/kill-criterion/git-diff checks have nonzero discovery and 0 failures or warnings",
+      "required": 1,
+      "timeout_seconds": 3000,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ]
+}

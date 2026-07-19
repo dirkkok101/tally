@@ -1,0 +1,349 @@
+{
+  "id": "01KXXMQ14G8C6HBQTVMXMZXRMA",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX24YJN8XH96VER4AQ086",
+  "ref_code": "TASK-BUDGET-GATE-GRAPH-QUALITY",
+  "slug": "GATE-GRAPH-QUALITY",
+  "title": "Converge BUDGET graph and evidence quality",
+  "description": [
+    "Validation-only graph gate with no implements refs; prove traceability, design paths, dependency checks, intentional no-endpoint status, and named-suite discovery after behavioral gates complete."
+  ],
+  "objective": [
+    "One reproducible marker proves the implemented BUDGET graph is complete and every verification surface is non-vacuous."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 6,
+  "created_at": "2026-07-19T16:52:54.5452616+00:00",
+  "dependencies": [
+    {
+      "id": "01KXXMQ14R7D2NF1P5HXMXSAWX",
+      "target": "TASK-BUDGET-GATE-ATOMIC-RECOVERY",
+      "dependency_type": "compile",
+      "reason": [
+        "Require recovery evidence."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14R2D731W136S9ATDNX",
+      "target": "TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Require complete public contract evidence."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14RS64QZJBQ9VTGGKR4",
+      "target": "TASK-BUDGET-GATE-PERFORMANCE",
+      "dependency_type": "compile",
+      "reason": [
+        "Require performance evidence."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14RWQH2VEMDFWJ13WAR",
+      "target": "TASK-BUDGET-GATE-SECURITY",
+      "dependency_type": "compile",
+      "reason": [
+        "Require security evidence."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14SSFSW13KJDDDB2QB9",
+      "target": "TASK-BUDGET-VERIFY-UC-001",
+      "dependency_type": "compile",
+      "reason": [
+        "Require UC-001 evidence."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14SDT1B83W0EZ25JBEH",
+      "target": "TASK-BUDGET-VERIFY-UC-002",
+      "dependency_type": "compile",
+      "reason": [
+        "Require UC-002 evidence."
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14SFF2WE2QYFS0D7DW0",
+      "target": "TASK-BUDGET-VERIFY-UC-003",
+      "dependency_type": "compile",
+      "reason": [
+        "Require UC-003 evidence."
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14SFS141XCZ8TDRQ0K9",
+      "target": "TASK-BUDGET-VERIFY-UC-004",
+      "dependency_type": "compile",
+      "reason": [
+        "Require UC-004 evidence."
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14SYTY1AZANKDKJTGXD",
+      "target": "TASK-BUDGET-VERIFY-UC-005",
+      "dependency_type": "compile",
+      "reason": [
+        "Require UC-005 evidence."
+      ],
+      "sort_order": 8,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMQ14RXW35F8YPHZYVSXAK",
+      "path": ".lexicon/graph/BUDGET/module.json",
+      "action": "read",
+      "role": "canonical module",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14RAD5T4TP1J0XD1QRP",
+      "path": "tests/Tally.Tests/Budget/BudgetGraphEvidenceGuardTests.cs",
+      "action": "test",
+      "role": "suite/forbidden-surface guards",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14RQW0N0P3BJYZ4SQQW",
+      "path": "scripts/verify-budget-graph.sh",
+      "action": "create",
+      "role": "graph and named-suite gate",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14RX09HPJ167ECB4RTB",
+      "path": "docs/verification/budget-graph.md",
+      "action": "document",
+      "role": "safe graph report",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXMQ14RQ523BRHMRTGDAPMS",
+      "name": "CompleteBudgetPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14R97DBDQDJ8WGPYD11",
+      "name": "BudgetRecoveryGateEvidence",
+      "direction": "consumes",
+      "contract_ref_code": "NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14RPNMAR8BCZXS70TRM",
+      "name": "BudgetSecurityGateEvidence",
+      "direction": "consumes",
+      "contract_ref_code": "NFR-BUDGET-LOCAL-DATA-PROTECTION",
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14RTX4GCQ7D0JTFTWY0",
+      "name": "BudgetPerformanceGateEvidence",
+      "direction": "consumes",
+      "contract_ref_code": "NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE",
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14RN5ZBR26FXH4F6081",
+      "name": "VerifiedBudgetUc001",
+      "direction": "consumes",
+      "contract_ref_code": "UC-BUDGET-001",
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14R2ZSJQGZYVG7XFGTX",
+      "name": "VerifiedBudgetUc002",
+      "direction": "consumes",
+      "contract_ref_code": "UC-BUDGET-002",
+      "sort_order": 5,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14R02CGR61RCGR8M5W7",
+      "name": "VerifiedBudgetUc003",
+      "direction": "consumes",
+      "contract_ref_code": "UC-BUDGET-003",
+      "sort_order": 6,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14R0C28307MGSC0N6K6",
+      "name": "VerifiedBudgetUc004",
+      "direction": "consumes",
+      "contract_ref_code": "UC-BUDGET-004",
+      "sort_order": 7,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14RC6D39A9DNKK552FE",
+      "name": "VerifiedBudgetUc005",
+      "direction": "consumes",
+      "contract_ref_code": "UC-BUDGET-005",
+      "sort_order": 8,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14RNN7Y3P0VZ1GSF9CG",
+      "name": "BudgetGraphQualityEvidence",
+      "direction": "produces",
+      "contract_ref_code": "PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES",
+      "sort_order": 9,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXMQ14QBEPNQD90R0VBT685",
+      "kind": "acceptance_check",
+      "text": [
+        "Lex coverage reports all 11 active FRs covered, all 18 planned test cases linked, zero orphan tests, and zero gaps."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14QTWJK1KHSXTNHEHA8",
+      "kind": "acceptance_check",
+      "text": [
+        "Decision path-check reports all 34 expected paths matched; link suggestions are empty; the three known endpoint heuristics are recorded as non-applicable because the accepted design is local CLI-only."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14QBEWN3ADWCS7AY8GQ",
+      "kind": "acceptance_check",
+      "text": [
+        "Every named feature, Ledger, contract, recovery, security, performance, INSIGHTS, and UC test class has nonzero discovery before aggregate totals are accepted."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14QT5THZEJG07EXJRCX",
+      "kind": "acceptance_check",
+      "text": [
+        "External dependency check shows evidence-linked statuses and the report records exact commands, counts, ref-codes, and safe fingerprints without finance payloads."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14Q8MSRTCDNH56264Z0",
+      "kind": "acceptance_check",
+      "text": [
+        "Plan coverage/audit, task contracts, dependency edges, context budgets, placeholder scans, and forbidden-surface scans are clean."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14Q2M99JM9D3DREW5JF",
+      "kind": "expected_output",
+      "text": [
+        "BudgetGraphQualityEvidence"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14QTXFGVGK5YPCNB4P5",
+      "kind": "expected_output",
+      "text": [
+        "Reproducible graph-quality report"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14QYSGVP04YRM8GQQ8J",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT suppress gaps/warnings, add HTTP to silence endpoint heuristics, accept zero-discovery or aggregate-only totals, edit graph JSON/Markdown, or update dependency status without evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXMQ14RKKQCRPAFE1PHSAFK",
+      "target_ref_code": "PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES",
+      "target_entity_type": "pattern",
+      "target_entity_id": "01KXR2EKKXYFFP0KNEYZGETEVG",
+      "target_title": "Implementation Plan Quality Gates",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXMQ14R014A98ZF00E62VDD",
+      "gate_type": "branch-review",
+      "description": [
+        "Review graph commands and per-class discovery counts from a clean checkout."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXMQ14RPN9Q2PVTEGW99SE5",
+      "phase": "after",
+      "command": "bash scripts/verify-budget-graph.sh",
+      "expected_result": "exit 0; coverage is 11 of 11 with 18 linked tests and zero gaps, all 34 design paths match, links are clean, 3 CLI-only endpoint heuristics are explicitly matched, every named suite discovers tests, and 0 graph/plan/forbidden-surface checks fail",
+      "required": 1,
+      "timeout_seconds": 1200,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ]
+}

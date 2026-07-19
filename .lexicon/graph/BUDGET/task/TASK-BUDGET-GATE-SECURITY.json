@@ -1,0 +1,300 @@
+{
+  "id": "01KXXMKGSP57B4HE8GFYAKH2T1",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX1MYQCYMQQX5AEM6AH01",
+  "ref_code": "TASK-BUDGET-GATE-SECURITY",
+  "slug": "GATE-SECURITY",
+  "title": "Validate BUDGET local data security",
+  "description": [
+    "Validation-only security gate with no implements refs; consolidate identity, permissions, payload isolation, offline operation, and hostile-input evidence."
+  ],
+  "objective": [
+    "Every BUDGET workflow remains owner-only, offline, non-interactive, payload-safe, path-safe, and free of background or remote processing."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 3,
+  "created_at": "2026-07-19T16:50:59.5105332+00:00",
+  "decisions": [
+    {
+      "id": "01KXXMKGSTVS44TP0P2RAFNYFN",
+      "target": "DD-BUDGET-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSTYBHQYY71QX7DTZC9",
+      "target": "DD-BUDGET-STATE-STORE",
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXXMKGSVFJM3FNVJJQ7C8E29",
+      "target": "TASK-BUDGET-GATE-ATOMIC-RECOVERY",
+      "dependency_type": "compile",
+      "reason": [
+        "Security includes interruption and restart artifact behavior."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSVEJZZC5J8WBX0TZEW",
+      "target": "TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Security validation executes every published operation."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMR24KNQHVEPBMB9QVZ2CY",
+      "target": "TASK-BUDGET-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Security inspection consumes the real BudgetStateStore and protected artifacts."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:53:28.3399237+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMKGSTJPN6A9DJMW5BF9X5",
+      "path": "tests/Tally.Tests/Budget/Security/BudgetSecurityGateTests.cs",
+      "action": "test",
+      "role": "security/privacy matrix",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSTNV3TDVJJD7ZWSTTN",
+      "path": "scripts/verify-budget-security.sh",
+      "action": "create",
+      "role": "filesystem/network/process gate",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSTF2QQ36JHTWF3ZG4E",
+      "path": "docs/verification/budget-security.md",
+      "action": "document",
+      "role": "safe security evidence",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXMKGSTM1P3WXKZAE5PN6NT",
+      "name": "CompleteBudgetPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSV185WVNB5M5D7D9GX",
+      "name": "BudgetStateStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-STATE-STORE",
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSVTKT9PR4PWC7KXADK",
+      "name": "BudgetSecurityGateEvidence",
+      "direction": "produces",
+      "contract_ref_code": "NFR-BUDGET-LOCAL-DATA-PROTECTION",
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXMKGSTBKMQY02KFMYRVA7K",
+      "kind": "acceptance_check",
+      "text": [
+        "Success, validation, compatibility, storage, replay, history, position, interruption, and restart preserve 0700 directories, 0600 files, owner identity, and zero orphan financial artifacts."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSTC1B57BYP9582CRYS",
+      "kind": "acceptance_check",
+      "text": [
+        "Seeded canaries in amounts, names, requests, results, keys, and failures appear in none of arguments, tracked files, stderr, logs, telemetry, crash output, reports, or unrelated results."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSTA13EE5RB5WC31YGA",
+      "kind": "acceptance_check",
+      "text": [
+        "Malformed JSON, unknown fields, symlinks, permissive modes, wrong owner, unknown files, outside-root paths, over-limits, and incompatible versions fail before mutation or Ledger read as designed."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGST2PJ44V84WHJXMWMV",
+      "kind": "acceptance_check",
+      "text": [
+        "All workflows complete with network denied, no prompt/TTY read, and no daemon, watcher, scheduler, service, port, child process, or background worker before or after invocation."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGST4KARFMMD2WFEGVS5",
+      "kind": "acceptance_check",
+      "text": [
+        "Only the explicit structured stdout data result contains requested financial payloads; errors and reports are metadata-only."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGST7RMYBATHEF71YTD8",
+      "kind": "expected_output",
+      "text": [
+        "BudgetSecurityGateEvidence"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGST96DXCVBEQ7Y3H2E8",
+      "kind": "expected_output",
+      "text": [
+        "Metadata-only security report"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGST9WHGTJJKF0KHNYQV",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT rely on log redaction while payloads remain in arguments, errors, crashes, telemetry, Git, or temp files."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSTNEVSNR6WBDQHQWVW",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT skip linux-x64 permission, symlink, path traversal, crash, network-denied, or process-isolation cases."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSTSHXG4Y4WA0966A5V",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT mark green from unit tests alone; execute the published Native-AOT binary."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXMKGSVTH2G6W4H2K6Z9D20",
+      "target_ref_code": "EXT-BUDGET-HOST-OS-SECURITY",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXXCM5W569DN62VJ2VGR2B9A",
+      "target_title": "Host operating-system security",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSV7DJMFRQBMJ4EW13V",
+      "target_ref_code": "NFR-BUDGET-LOCAL-DATA-PROTECTION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXXFDZREHAMKSGRREYYVEPG4",
+      "target_title": "Protect local budget data",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSVMX62HDCPXPDXFEBY",
+      "target_ref_code": "NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXXFE0N28R5S42TW4EF21C2J",
+      "target_title": "Operate as a self-contained local planner",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSV713NA9F3HCMPXPR3",
+      "target_ref_code": "TC-BUDGET-LOCAL-DATA-PROTECTION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFMN080TQ51HA34KR6CKNF",
+      "target_title": "Verify local budget privacy boundaries",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSV2AVRTDC2072ZNK73",
+      "target_ref_code": "TC-BUDGET-SELF-CONTAINED-LOCAL-OPERATION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFMNXK6519SXMH7JYSDJYR",
+      "target_title": "Verify self-contained local operation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXMKGSV4AP7SVTYRYAX2P36",
+      "gate_type": "test-evidence",
+      "description": [
+        "Published-host evidence covers disclosure, tampering, attribution, path, and resource boundaries."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXMKGSV1NZ32FGASBG3K9Q5",
+      "phase": "after",
+      "command": "bash scripts/verify-budget-security.sh",
+      "expected_result": "exit 0; nonzero cases cover every workflow and hostile boundary, zero canary leaks, exact 0700/0600 modes, zero network/prompt/outside-root activity, and zero leftover processes or temporaries",
+      "required": 1,
+      "timeout_seconds": 1200,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ]
+}

@@ -1,0 +1,290 @@
+{
+  "id": "01KXXMBV0ZAY004C86CE3GMTC0",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX07BQ2HRFBDWBTGP63VB",
+  "ref_code": "TASK-BUDGET-LEDGER-BUDGET-CLIENT",
+  "slug": "LEDGER-BUDGET-CLIENT",
+  "title": "Extend the shared Ledger contract client for BUDGET",
+  "description": [
+    "Add category and snapshot Budget Actual methods to the concrete client created by INGEST."
+  ],
+  "objective": [
+    "BUDGET consumes released Ledger operations through one cancellation-aware client with unchanged schemas, cursors, versions, and errors."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 3,
+  "created_at": "2026-07-19T16:46:47.8408153+00:00",
+  "decisions": [
+    {
+      "id": "01KXXMBV144ZCR44V0SWSBKPBW",
+      "target": "DD-BUDGET-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV14DDK4489TH57GX5RP",
+      "target": "DD-BUDGET-LEDGER-PUBLIC-COMPOSITION",
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXXMBV1677CSQ72KEB5AXBNB",
+      "target": "TASK-BUDGET-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Use BudgetPeriod and BUDGET compatibility errors."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV15GWYBGKSG5XZ7WX1N",
+      "target": "TASK-BUDGET-GATE-INT-LEDGER-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Consume only the proven public seam."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMBV15RSYRK95HMJT2XS1V",
+      "path": "src/Tally/Integration/Ledger/LedgerContractClient.cs",
+      "action": "modify",
+      "role": "shared client",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV15Z78YZNVNHJ50PM02",
+      "path": "tests/Tally.Tests/Budget/LedgerContract/BudgetLedgerContractClientTests.cs",
+      "action": "test",
+      "role": "client tests",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV15FXQSFTDBAEXYGDRA",
+      "path": "tests/Tally.Tests/Budget/LedgerContract/BudgetLedgerBoundaryArchitectureTests.cs",
+      "action": "test",
+      "role": "private-boundary guards",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXMBV15GR6Y2GYTWSBG06ZM",
+      "name": "VerifiedLedgerBudgetContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV15Q1732QJTS3HF848A",
+      "name": "LedgerContractClient.ListBudgetCategoriesAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV152BYEG2BB1RZ1QABQ",
+      "name": "LedgerContractClient.GetBudgetCategoryAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV152R59CEHRDBYX9WGS",
+      "name": "LedgerContractClient.QueryBudgetActualsAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXMBV140AAGHRBA7905J3Y2",
+      "kind": "acceptance_check",
+      "text": [
+        "ListBudgetCategoriesAsync and GetBudgetCategoryAsync preserve stable IDs, lifecycle, descriptor compatibility, errors, and cancellation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV157BMC0GEYAZ6X4HS5",
+      "kind": "acceptance_check",
+      "text": [
+        "QueryBudgetActualsAsync maps the half-open period to inclusive dates, consumes every page and ordinal once, checks shared snapshot/generation evidence, and returns exact signed values."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV15J3F5QW30WS3Q6S7G",
+      "kind": "acceptance_check",
+      "text": [
+        "Incompatibility, unavailable operations, bad cursors, missing ordinals, unknown categories, and expected Ledger failures yield no partial position."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV15PQ8V1HP1Q3SF2BEW",
+      "kind": "acceptance_check",
+      "text": [
+        "The concrete client stays additive and never spawns a process or catches unexpected exceptions into payloads."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV15G09YJ89VM60R3MJ3",
+      "kind": "expected_output",
+      "text": [
+        "BUDGET LedgerContractClient methods"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV15GE0E7ESJTCHS29Y9",
+      "kind": "expected_output",
+      "text": [
+        "Boundary and compatibility tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV15ZY7WEX4XKVB3FJ4J",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add a client interface, transport abstraction, HTTP, process, SQL, or direct handler seam."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV15SG27VH5GMYZ7F8X2",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT duplicate Ledger calculations, drop CancellationToken, rewrite errors, retain actual payloads, or break INGEST/CLASSIFY methods."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXMBV15Y8WH57WWCHXX6VK9",
+      "target_ref_code": "TASK-INGEST-LEDGER-PUBLIC-CLIENT",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXTMAH8HS44VZDF52WXTAH1G",
+      "target_title": "Implement the concrete public LEDGER client",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV15HB3RQDPE19R0VFXH",
+      "target_ref_code": "NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXXFE05JC78X3NE6SVZEXPP2",
+      "target_title": "Preserve public contract boundaries",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV15E4PVPFJPNS68EXV7",
+      "target_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD711P2JRXFDR2N9PB4KA",
+      "target_title": "LedgerBudgetCompositionContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV15K5ZW03YF84RFTAZA",
+      "target_ref_code": "TC-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFJTN75M32B91FMS1967PH",
+      "target_title": "Verify public LEDGER composition contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV15PZ5KZVVFF4D2HY1A",
+      "target_ref_code": "TC-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFMNG4CT13XZKM3DCKTMV5",
+      "target_title": "Verify BUDGET contract compatibility",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXXMBV14TFJ9A8FKPMR7CYN3",
+      "target": "FR-BUDGET-CATEGORY-LIFECYCLE",
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV14W3DBAZJ5XFRS8X9S",
+      "target": "FR-BUDGET-LEDGER-COMPOSITION",
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXMBV15J18NRX6M6VG1Q7P2",
+      "gate_type": "self-review",
+      "description": [
+        "Confirm the shared client remains concrete, additive, cancellation-aware, and public-only."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXMBV155SHX8RR10X0ABMCM",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~BudgetLedgerContractClientTests|FullyQualifiedName~BudgetLedgerBoundaryArchitectureTests'",
+      "expected_result": "exit 0; at least 18 category, date, paging, total, version, expiry, cancellation, error, additive-client, and boundary cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ]
+}

@@ -1,0 +1,258 @@
+{
+  "id": "01KXXMEZ2MMNWZ1ADRCB7J7JQB",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX0PG2AYCGNGJG41HJJJ1",
+  "ref_code": "TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR",
+  "slug": "IDEMPOTENT-MUTATION-EXECUTOR",
+  "title": "Implement replay-safe mutation execution",
+  "description": [
+    "Build one concrete transactional executor for canonical request hashing and immutable event-time outcome rehydration."
+  ],
+  "objective": [
+    "Create Draft and Activate retries commit at most once and replay the original logical result without retaining financial payloads."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 2,
+  "created_at": "2026-07-19T16:48:30.2936612+00:00",
+  "decisions": [
+    {
+      "id": "01KXXMEZ2QDYK2FC82A97WRJCW",
+      "target": "DD-BUDGET-IDEMPOTENT-MUTATIONS",
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2QPT7SS3KRF0CJ6KE1",
+      "target": "DD-BUDGET-STATE-STORE",
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXXMEZ2RD2CZWTVXDVCZF0ZW",
+      "target": "TASK-BUDGET-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "The executor uses the idempotency and lifecycle tables in BudgetStateStore."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMEZ2RQ7P637239CVGCZMF",
+      "path": "src/Tally/Infrastructure/Budget/Storage/Idempotency/BudgetMutationCanonicalizer.cs",
+      "action": "create",
+      "role": "canonical request hashing",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2R6ZN4YDV2B5DXFX82",
+      "path": "src/Tally/Infrastructure/Budget/Storage/Idempotency/BudgetMutationExecutor.cs",
+      "action": "create",
+      "role": "transactional replay execution",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2R0YP500QH2K5HRB39",
+      "path": "tests/Tally.Tests/Budget/Idempotency/BudgetMutationExecutorTests.cs",
+      "action": "test",
+      "role": "replay/conflict/cutpoint tests",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXMEZ2R8M95VNRRW9R050AH",
+      "name": "BudgetStateStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-STATE-STORE",
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2RC50DJ8KJK6RKW3SN",
+      "name": "BudgetMutationExecutor.ExecuteAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-LIFECYCLE-IDEMPOTENCY",
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXMEZ2QFKFMRP4YGHJSY1WG",
+      "kind": "acceptance_check",
+      "text": [
+        "Missing mutation key fails before BEGIN IMMEDIATE; the store keeps only SHA-256 key digest, operation/version, canonical request hash, outcome references, and result hash."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2QEEKZSQ0XNPTT6K2K",
+      "kind": "acceptance_check",
+      "text": [
+        "The same key plus equivalent normalized logical input rehydrates the exact original revision and lifecycle event snapshots with no live status, category, or period enrichment."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2R5NDMPTGYN0D5DFT6",
+      "kind": "acceptance_check",
+      "text": [
+        "The same key plus different operation/version/input returns a stable conflict and changes no plan state."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2RDKD9NSMB9Q9XGEMN",
+      "kind": "acceptance_check",
+      "text": [
+        "Interruption before commit leaves the prior state authoritative; interruption after commit replays the single committed outcome."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2RYZVQ2XQ06RQSCXSF",
+      "kind": "expected_output",
+      "text": [
+        "BudgetMutationExecutor"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2RARHS5Z4S7MMEKVQF",
+      "kind": "expected_output",
+      "text": [
+        "BudgetMutationCanonicalizer"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2R9035KV1EFCKZ79TK",
+      "kind": "expected_output",
+      "text": [
+        "Replay and crash-cutpoint tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2RSYBZE2Y16SS063S1",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT store raw idempotency keys, request/response JSON, duplicated amounts, category names, or later live result state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2R1Z9EANMCJYV7CHY8",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT reserve outside the business transaction, return an in-progress ambiguity, or add a generic cross-module abstraction."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXMEZ2R9GV48CKJE9H3M301",
+      "target_ref_code": "NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXXFDYWYCESY48TM7S12KXVV",
+      "target_title": "Make plan mutations atomic and durable",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2RGV8RYGA0VYB44DZC",
+      "target_ref_code": "DM-BUDGET-LIFECYCLE-IDEMPOTENCY",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD70ZX2H07DVSF5RCCPQM",
+      "target_title": "BudgetLifecycleAndIdempotency",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2RA3VBZW0MA0E1THSW",
+      "target_ref_code": "DIAG-BUDGET-MUTATION-SEQUENCE",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KXXJD95HW2ZWF7QVM1NEN2YY",
+      "target_title": "Replay-safe draft and activation mutation",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2RSJJYV3AWTWDPA11E",
+      "target_ref_code": "TC-BUDGET-IDEMPOTENT-MUTATIONS-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFJSE69T4XK1H7T9335SE2",
+      "target_title": "Verify replay-safe mutation contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXXMEZ2QAZ0P5AXD0CTTT2FD",
+      "target": "FR-BUDGET-IDEMPOTENT-MUTATIONS",
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXMEZ2RG97MA9DY3D9Z1FDC",
+      "gate_type": "test-evidence",
+      "description": [
+        "Crash-cutpoint and real-SQLite tests prove at-most-once commit plus exact event-time replay."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXMEZ2RZSZVW9QZRX2JCDEP",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetMutationExecutorTests",
+      "expected_result": "exit 0; at least 18 missing-key, equivalent-input, conflict, event-time replay, pre/post-commit interruption, transaction, and payload-exclusion cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ]
+}

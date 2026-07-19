@@ -1,0 +1,247 @@
+{
+  "id": "01KXXMQ14FXTRMVEVWQS7K1XTA",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX24YJN8XH96VER4AQ086",
+  "ref_code": "TASK-BUDGET-VERIFY-UC-005",
+  "slug": "VERIFY-UC-005",
+  "title": "Verify agent contract discovery and invocation",
+  "description": [
+    "Validation-only UC task with no implements refs; trace UC-BUDGET-005 success and all three failure paths through the published binary."
+  ],
+  "objective": [
+    "UC-BUDGET-005 proves deterministic discovery, bounded owner/delegated invocation, fail-closed mutation authority, replay, and metadata-only failures."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 5,
+  "created_at": "2026-07-19T16:52:54.5452616+00:00",
+  "decisions": [
+    {
+      "id": "01KXXMQ14PT1HSAGPC33TG7F4A",
+      "target": "DD-BUDGET-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14PJ5Z8N00RB5BEEPXZ",
+      "target": "DD-BUDGET-CLI-OPERATION-CONTRACT",
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14PX1MTC7KYWPSJ0322",
+      "target": "DD-BUDGET-IDEMPOTENT-MUTATIONS",
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXXMQ14QV2SQER5CSQDK8D6R",
+      "target": "TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Execute the published process contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14QYNPKXNFXNEQBJ8T3",
+      "target": "TASK-BUDGET-GATE-SECURITY",
+      "dependency_type": "compile",
+      "reason": [
+        "Consume host, privacy, offline, and process-isolation evidence."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMQ14QDAVPPHF20ANAWD15",
+      "path": "tests/Tally.Tests/Budget/Acceptance/BudgetUc005AgentContractTests.cs",
+      "action": "test",
+      "role": "UC-005 acceptance matrix",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXMQ14QJC8BY89W32TYT291",
+      "name": "CompleteBudgetPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14Q83MA8SDX78HKTW3K",
+      "name": "BudgetSecurityGateEvidence",
+      "direction": "consumes",
+      "contract_ref_code": "NFR-BUDGET-LOCAL-DATA-PROTECTION",
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14QFYR3GZ9QBY1AS8AE",
+      "name": "VerifiedBudgetUc005",
+      "direction": "produces",
+      "contract_ref_code": "UC-BUDGET-005",
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXMQ14P01TQN1NCAHJ4PA2V",
+      "kind": "acceptance_check",
+      "text": [
+        "system.schema discovery exposes all five operations, request/result/error/exit/authority/mutability/idempotency/limit/compatibility semantics without owner-data reads."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14PMZ66HPX148SRRT3T",
+      "kind": "acceptance_check",
+      "text": [
+        "Trusted owner and delegated Agent Host contexts produce the same domain invariants; reads return requested data only and mutations require explicit intent, authority, actor, reason, and key."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14PBX4JR3JX8Q195VAA",
+      "kind": "acceptance_check",
+      "text": [
+        "Unsupported version and unknown operation provide stable compatibility guidance; missing mutation inputs fail closed; host/storage failures are structured and metadata-only."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14P43TS4KSK8R18GPH1",
+      "kind": "acceptance_check",
+      "text": [
+        "Arguments, stderr, logs, Git, crash output, and shared temporary files contain no financial payload; network is denied and no prompt or background process exists."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14PT56C6TNM2DCBJJX0",
+      "kind": "acceptance_check",
+      "text": [
+        "Equivalent retry returns the same stable result and conflicting retry performs no state change."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14P2B7V2VXQE64BX70Y",
+      "kind": "expected_output",
+      "text": [
+        "VerifiedBudgetUc005"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14PRV5X5T39CRS2W3BF",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT omit failure paths, pass financial JSON through argv, grant mutation through INSIGHTS, accept prompts, or inspect only in-process descriptors."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXMQ14QFVCMV4AJEEH9Z5QB",
+      "target_ref_code": "UC-BUDGET-005",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXXCKSNF4QR59FP73FNX2AHX",
+      "target_title": "Discover and invoke the agent contract",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14QTRXFWS6WAXMH0YJ4",
+      "target_ref_code": "EXT-BUDGET-AI-AGENT-HOST",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXXCM5ET3VXJ8Q6FZ2473950",
+      "target_title": "AI Agent Host",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14QYFP3JXW4BY37AVYY",
+      "target_ref_code": "TC-BUDGET-CONTRACT-DISCOVERY-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFJYD4MPDR2RD18XQAQ6MN",
+      "target_title": "Verify BUDGET contract discovery",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14Q9GTCBSYKZAJE44SS",
+      "target_ref_code": "TC-BUDGET-STRUCTURED-INVOCATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFJZKTQ57Q1N8K9RSXVBNT",
+      "target_title": "Verify structured BUDGET invocation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14Q8YANS9S6PHZESB7D",
+      "target_ref_code": "TC-BUDGET-SELF-CONTAINED-LOCAL-OPERATION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFMNXK6519SXMH7JYSDJYR",
+      "target_title": "Verify self-contained local operation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXMQ14QFKDMXHWH54KPC3CP",
+      "gate_type": "test-evidence",
+      "description": [
+        "Each UC-BUDGET-005 failure path is exercised against the published process with canary scans."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXMQ14QS2JPH7DASRQZ40H2",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetUc005AgentContractTests",
+      "expected_result": "exit 0; at least 16 discovery, owner/delegated, read, mutation, version, unknown, authority, replay, host/storage, payload-isolation, offline, and no-background cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ]
+}

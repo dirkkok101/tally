@@ -1,0 +1,333 @@
+{
+  "id": "01KXXMBV0XTR56CBASRA6ZNC69",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX07BQ2HRFBDWBTGP63VB",
+  "ref_code": "TASK-BUDGET-LEDGER-BUDGET-CONTRACT",
+  "slug": "LEDGER-BUDGET-CONTRACT",
+  "title": "Extend Ledger budget composition contracts",
+  "description": [
+    "Add exact category-lifecycle and Budget Actual evidence to the released Ledger category and snapshot actuals operations."
+  ],
+  "objective": [
+    "Ledger publishes versioned evidence that lets BUDGET validate entries and account every relevant actual exactly once without private access."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 1,
+  "created_at": "2026-07-19T16:46:47.8408153+00:00",
+  "decisions": [
+    {
+      "id": "01KXXMBV1115D2C7YCABKB7XPM",
+      "target": "DD-BUDGET-LEDGER-PUBLIC-COMPOSITION",
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMBV11D7Y0VP6Z6Q3KPA8V",
+      "path": "src/Tally/Contracts/Ledger/Categories/CategoryContracts.cs",
+      "action": "modify",
+      "role": "category lifecycle evidence",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV12CB3XKA3GZV326JBP",
+      "path": "src/Tally/Contracts/Ledger/Actuals/ActualsContracts.cs",
+      "action": "modify",
+      "role": "Budget Actual contracts",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV127FBDWQAGYFTD6CHA",
+      "path": "src/Tally/Features/Ledger/Categories/CategoryOperationModule.cs",
+      "action": "modify",
+      "role": "category descriptors",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV12GW6Y1S7F3Y9RGJCJ",
+      "path": "src/Tally/Features/Ledger/Actuals/ActualsQueryHandler.cs",
+      "action": "modify",
+      "role": "snapshot projection",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV125AD6VQ8DPNSV7YYX",
+      "path": "src/Tally/Features/Ledger/Actuals/ActualsOperationModule.cs",
+      "action": "modify",
+      "role": "actuals descriptor",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV12B2D87BET2NWN48SS",
+      "path": "tests/Tally.Tests/Budget/LedgerContract/LedgerBudgetCategoryLifecycleTests.cs",
+      "action": "test",
+      "role": "lifecycle contract tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV126MN2V0KSZDG2SA67",
+      "path": "tests/Tally.Tests/Budget/LedgerContract/LedgerBudgetActualsProjectionTests.cs",
+      "action": "test",
+      "role": "snapshot accounting tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXMBV12WX4FMS2XKY962CP8",
+      "name": "LedgerBudgetCategoryEvidence",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV12EVQ1S5FJEX8D4K34",
+      "name": "LedgerBudgetActualsQueryRequest",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV12253ZD8AYW6D9PM20",
+      "name": "LedgerBudgetActualItem",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXMBV11W3PPXJPGKHBFK6JK",
+      "kind": "acceptance_check",
+      "text": [
+        "ledger.category.list/get expose stable category ID, current display name, Active or Archived lifecycle, and compatibility evidence in deterministic order."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV11J2KTFREKF48TAQ6A",
+      "kind": "acceptance_check",
+      "text": [
+        "ledger.actuals.query accepts inclusive dates and returns one complete snapshot with identity, ordinal, nullable category ID, lifecycle evidence, signed budgetActualMinor, generation, and exact full-set total."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV11QRHW0GB3QYHM616T",
+      "kind": "acceptance_check",
+      "text": [
+        "Ledger applies transaction lifecycle, current allocation, owned-transfer exclusion, refund netting, and categorization semantics; BUDGET consumes them verbatim."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV11230796GD8K09XXZW",
+      "kind": "acceptance_check",
+      "text": [
+        "All pages share one snapshot, contain every ordinal exactly once, reconcile totals, and fail atomically on expiry, cursor, version, lifecycle, or integrity errors."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV11GW9PY23918GB0RMR",
+      "kind": "expected_output",
+      "text": [
+        "LedgerBudgetCompositionContracts"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV11E14GGPPWWJGBYZRY",
+      "kind": "expected_output",
+      "text": [
+        "Budget Actual and category lifecycle projection behavior"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV11MWK9V9QV2FSBN4ZS",
+      "kind": "expected_output",
+      "text": [
+        "Focused public-contract tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV114K0CTMK0R494KNST",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT create a private BUDGET Ledger query, open LedgerDb, expose storage rows, or duplicate Ledger finance semantics."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV11TY8AN9W15DQC76FW",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT pass an exclusive end boundary as Ledger effectiveDateTo."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV11JFDHNDR8T2F6MN50",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT drop archived assigned IDs, treat them as uncategorized, or mutate Ledger facts."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXMBV12A4NH0HSEY9EV31FV",
+      "target_ref_code": "TASK-LEDGER-CATEGORIES",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXT0P36QBBMQHYFA1SKRK7PS",
+      "target_title": "Implement Spend Category catalogue operations",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV13YX4TXQWZT0HEHNCS",
+      "target_ref_code": "TASK-LEDGER-ACTUALS-SNAPSHOT",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXT0SME1ZANN2PCS2BPJYA3F",
+      "target_title": "Implement atomic snapshot actuals pagination",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV13NAR5G5KNE3S28MZZ",
+      "target_ref_code": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXT0Y3KR1T14S7HXJT3J2J1A",
+      "target_title": "Wire and prove the complete public CLI contract",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV12QSC3T6YTET8KV5AS",
+      "target_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD711P2JRXFDR2N9PB4KA",
+      "target_title": "LedgerBudgetCompositionContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV12FXQ5F9RWN2DJARSJ",
+      "target_ref_code": "FA-BUDGET-POSITION-PROJECTION",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXXJD8AS4BNHYHK575EH4CZQ",
+      "target_title": "Position and Projection",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV138N2KDPYRVDT7BS93",
+      "target_ref_code": "TC-BUDGET-CATEGORY-LIFECYCLE-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFJR373WM0RZY04CR54W1Y",
+      "target_title": "Verify category lifecycle contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV13JTD7XR7NZMP5S8JA",
+      "target_ref_code": "TC-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFJTN75M32B91FMS1967PH",
+      "target_title": "Verify public LEDGER composition contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXXMBV11C95DZ333SKCMJRVQ",
+      "target": "FR-BUDGET-CATEGORY-LIFECYCLE",
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV11NRRNT1Z4C62D73CM",
+      "target": "FR-BUDGET-LEDGER-COMPOSITION",
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXMBV12V93CZ15N3YE2C9XT",
+      "gate_type": "test-evidence",
+      "description": [
+        "Prove exact public evidence and complete snapshot accounting without private Ledger access."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXMBV12VDER6WYGR5G3NEVW",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~LedgerBudgetCategoryLifecycleTests|FullyQualifiedName~LedgerBudgetActualsProjectionTests'",
+      "expected_result": "exit 0; at least 24 lifecycle, date, paging, exclusion, total, archived-assignment, expiry, version, and integrity cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ]
+}

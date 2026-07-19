@@ -1,0 +1,273 @@
+{
+  "id": "01KXXMBV0ZN7WKYKW6DFFVE4FK",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX07BQ2HRFBDWBTGP63VB",
+  "ref_code": "TASK-BUDGET-GATE-INT-LEDGER-CONTRACT",
+  "slug": "GATE-INT-LEDGER-CONTRACT",
+  "title": "Prove the Ledger budget prerequisite",
+  "description": [
+    "Validation-only gate with no implements refs; prove the complete released BUDGET seam."
+  ],
+  "objective": [
+    "Published descriptors, category lifecycle, snapshot actuals, date mapping, compatibility, and private-boundary guards satisfy every BUDGET consumer."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 2,
+  "created_at": "2026-07-19T16:46:47.8408153+00:00",
+  "decisions": [
+    {
+      "id": "01KXXMBV13HPSKFNNNCQYK9BAD",
+      "target": "DD-BUDGET-LEDGER-PUBLIC-COMPOSITION",
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXXMBV14MPSSBH7CF4F5M2F3",
+      "target": "TASK-BUDGET-LEDGER-BUDGET-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "The gate executes the contracts produced by this task."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMBV1390TC04BHX31KC0R5",
+      "path": "src/Tally/Cli/OperationRegistry.cs",
+      "action": "read",
+      "role": "released registry",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV13726V1YHPBZSQX8Z9",
+      "path": "src/Tally/Contracts/Ledger/Categories/CategoryContracts.cs",
+      "action": "read",
+      "role": "category schema",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV13C63ZMGPN1EWT861R",
+      "path": "src/Tally/Contracts/Ledger/Actuals/ActualsContracts.cs",
+      "action": "read",
+      "role": "actuals schema",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV13WP2NXN7RW80P4C0W",
+      "path": "src/Tally/Features/Ledger/Actuals/ActualsQueryHandler.cs",
+      "action": "read",
+      "role": "public behavior",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV134ESF58A0T69SQC05",
+      "path": "tests/Tally.Tests/Budget/LedgerContract/LedgerBudgetPrerequisiteTests.cs",
+      "action": "test",
+      "role": "integration gate",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXMBV14VV883QYCW8BEEKRM",
+      "name": "LedgerBudgetCategoryEvidence",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV14HS78NTP58B3J8371",
+      "name": "LedgerBudgetActualItem",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV14VPVZ3S3T8NWGXCFH",
+      "name": "VerifiedLedgerBudgetContract",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXMBV13T5H584JWHET2T096",
+      "kind": "acceptance_check",
+      "text": [
+        "The released registry exposes compatible ledger.category.list/get and ledger.actuals.query descriptors with every required field."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV13S29B7W8HHGWD9T34",
+      "kind": "acceptance_check",
+      "text": [
+        "A January half-open period maps to inclusive January 1 through January 31, consumes every page once, and reconciles exact totals."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV13MXEA03DJ9N2Y7S2N",
+      "kind": "acceptance_check",
+      "text": [
+        "Active and archived assigned categories remain stable IDs; unknown IDs, duplicate or missing ordinals, changed generation, expiry, and incompatible contracts yield no partial evidence."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV13ST3QWZPGM9J6Q8A4",
+      "kind": "acceptance_check",
+      "text": [
+        "Architecture scans find zero BUDGET references to LedgerDb, storage paths, private handlers, private domain types, SQL, or storage configuration."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV138FW2ZP0VT218TZYY",
+      "kind": "expected_output",
+      "text": [
+        "VerifiedLedgerBudgetContract"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV13VRV75MDVNN7C8YGV",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept descriptor presence or mocks alone; execute released operations through OperationRegistry."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV13RS0HEHSF0AX8BZC3",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT translate, weaken, or synthesize Ledger evidence."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV13Y45CHWX62AAVV77X",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT continue when the blocked-by Ledger gate is absent or failing."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXMBV14TWCTW68G96CGMSJ0",
+      "target_ref_code": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXT0Y3KR1T14S7HXJT3J2J1A",
+      "target_title": "Wire and prove the complete public CLI contract",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV14TQ0M03K8BJXCSJQQ",
+      "target_ref_code": "EXT-BUDGET-LEDGER-PUBLIC-CONTRACT",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXXCM50TD0MEDSZKJ31KFQ7B",
+      "target_title": "LEDGER Public Contract",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV14QASGVDHSHH2S9NRA",
+      "target_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD711P2JRXFDR2N9PB4KA",
+      "target_title": "LedgerBudgetCompositionContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV14S505QJJCB5PJGKPY",
+      "target_ref_code": "TC-BUDGET-CATEGORY-LIFECYCLE-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFJR373WM0RZY04CR54W1Y",
+      "target_title": "Verify category lifecycle contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV1451SXQ42N6GNPPJKA",
+      "target_ref_code": "TC-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFJTN75M32B91FMS1967PH",
+      "target_title": "Verify public LEDGER composition contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXMBV14NTTDZ913MDZZ1N0F",
+      "gate_type": "branch-review",
+      "description": [
+        "Review the released Ledger seam against blocked-by producer outputs."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXMBV147YCFRPWF5EP76ANR",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~LedgerBudgetPrerequisiteTests",
+      "expected_result": "exit 0; at least 20 descriptor, month-boundary, paging, total, archived, unknown, expiry, version, and private-boundary cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ]
+}

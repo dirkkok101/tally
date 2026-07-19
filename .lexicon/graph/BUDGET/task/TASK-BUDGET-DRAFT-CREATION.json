@@ -1,0 +1,357 @@
+{
+  "id": "01KXXMEZ2MV0KVVYRW6TQJ7E30",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX0PG2AYCGNGJG41HJJJ1",
+  "ref_code": "TASK-BUDGET-DRAFT-CREATION",
+  "slug": "DRAFT-CREATION",
+  "title": "Create immutable budget plan drafts",
+  "description": [
+    "Implement the complete Create Draft vertical slice with explicit entries, category validation, attribution, and replay safety."
+  ],
+  "objective": [
+    "Owners can create exact current/future monthly Draft revisions without changing active intent or rewriting prior revisions."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 3,
+  "created_at": "2026-07-19T16:48:30.2936612+00:00",
+  "decisions": [
+    {
+      "id": "01KXXMEZ2REDPDJA3NRZVXXX5M",
+      "target": "DD-BUDGET-LEDGER-PUBLIC-COMPOSITION",
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2RZET9ZJW9RVWCZM5G",
+      "target": "DD-BUDGET-PLAN-REVISION-LIFECYCLE",
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXXMEZ2TMS2ATTK279MNRAP5",
+      "target": "TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR",
+      "dependency_type": "compile",
+      "reason": [
+        "Draft creation requires atomic replay execution."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2TJ1H8AZR8NY4HWBPH",
+      "target": "TASK-BUDGET-LEDGER-BUDGET-CLIENT",
+      "dependency_type": "compile",
+      "reason": [
+        "Draft validation consumes public category lifecycle evidence."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2SEWZFA98GTSQS0C1V",
+      "target": "TASK-BUDGET-PERIOD-IDENTITY",
+      "dependency_type": "compile",
+      "reason": [
+        "Draft eligibility uses trusted period identity."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXN84M1XH2FB3MC2P8589JH",
+      "target": "TASK-BUDGET-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Draft creation loads and mutates typed plan, revision, entry, event, and active-pointer state."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-19T17:02:15.1704202+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMEZ2SBPPNSG2S7R83W9RA",
+      "path": "src/Tally/Domain/Budget/Plans/BudgetPlan.cs",
+      "action": "create",
+      "role": "stable plan identity",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2SNESDGMSFGBQ01863",
+      "path": "src/Tally/Domain/Budget/Plans/BudgetPlanRevision.cs",
+      "action": "create",
+      "role": "immutable revision and entry model",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2SGXY1G1P0QT1X06E7",
+      "path": "src/Tally/Features/Budget/Plans/CreateDraft/CreateBudgetDraftCommand.cs",
+      "action": "create",
+      "role": "draft vertical slice",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2SKNNWZTCAY3YN7C51",
+      "path": "tests/Tally.Tests/Budget/Plans/CreateBudgetDraftCommandTests.cs",
+      "action": "test",
+      "role": "draft contract tests",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXNA6Z6D51D4NTWFN6N111K",
+      "name": "BudgetPeriodResolver.Resolve",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-PERIOD-PLAN",
+      "sort_order": 0,
+      "created_at": "2026-07-19T17:03:23.1098113+00:00"
+    },
+    {
+      "id": "01KXXNA6Z71M2WRKBENFZGD28V",
+      "name": "LedgerContractClient.ListBudgetCategoriesAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "sort_order": 1,
+      "created_at": "2026-07-19T17:03:23.1098113+00:00"
+    },
+    {
+      "id": "01KXXNA6Z7K67VGGRMGEMKNBBD",
+      "name": "BudgetMutationExecutor.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-LIFECYCLE-IDEMPOTENCY",
+      "sort_order": 2,
+      "created_at": "2026-07-19T17:03:23.1098113+00:00"
+    },
+    {
+      "id": "01KXXNA6Z7EW2JGSV18PPH540D",
+      "name": "BudgetStateStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-STATE-STORE",
+      "sort_order": 3,
+      "created_at": "2026-07-19T17:03:23.1098113+00:00"
+    },
+    {
+      "id": "01KXXNA6Z7A4D4G82PSJXW28SR",
+      "name": "BudgetPlan",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-PERIOD-PLAN",
+      "sort_order": 4,
+      "created_at": "2026-07-19T17:03:23.1098113+00:00"
+    },
+    {
+      "id": "01KXXNA6Z79AKMQCFF12YG0J62",
+      "name": "BudgetPlanRevision",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-REVISION-ENTRY",
+      "sort_order": 5,
+      "created_at": "2026-07-19T17:03:23.1098113+00:00"
+    },
+    {
+      "id": "01KXXNA6Z7867NDJ0W6GFV5YZV",
+      "name": "CreateBudgetDraftCommand.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-REVISION-ENTRY",
+      "sort_order": 6,
+      "created_at": "2026-07-19T17:03:23.1098113+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXMEZ2SY0S5BBJ38Q5PR569",
+      "kind": "acceptance_check",
+      "text": [
+        "A complete current/future request validates actor, reason, key, unique stable category IDs, active lifecycle, category contract version, and exact nonnegative Int64 minor-unit amounts before mutation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2SJZ7DA1DG049CKBP2",
+      "kind": "acceptance_check",
+      "text": [
+        "Success creates or reuses one period plan, a new immutable sequential Draft revision, exact explicit entries including zero, and one attributable DraftCreated event; active_revision_id is unchanged."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2S48VB3HCTJ92DBY2N",
+      "kind": "acceptance_check",
+      "text": [
+        "Empty, all-zero, omitted/unbudgeted, and nonempty drafts remain distinct; checked totals round-trip exactly."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2S7ZGG03CEBZ4EKF2A",
+      "kind": "acceptance_check",
+      "text": [
+        "Closed periods, negative/malformed/overflow amounts, duplicate/display-name-only/unknown/inactive/archived/stale categories, or missing attribution fail with no plan or revision change."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2S8V4Q7YJ4CCC65K3N",
+      "kind": "acceptance_check",
+      "text": [
+        "Revising any Draft/Active/Superseded content creates a new Draft and never modifies or copies hidden intent from the source."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2SYQ9A21SBHG7M9SQQ",
+      "kind": "expected_output",
+      "text": [
+        "BudgetPlan domain model"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2S981SJ5024JY3XSB7",
+      "kind": "expected_output",
+      "text": [
+        "BudgetPlanRevision domain model"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2S6QEDCZ6B5JQBTP0D",
+      "kind": "expected_output",
+      "text": [
+        "CreateBudgetDraftCommand"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2S29FQJVBAREDJ3P29",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT activate on save, copy omitted categories, persist names or period state, mutate earlier content, accept archived categories, or perform partial entry writes."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2SJ7ZGMYV4XGQ43AK8",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT query private Ledger storage or bypass BudgetMutationExecutor."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXMEZ2S58CYS9Y2S3WJVSCT",
+      "target_ref_code": "DM-BUDGET-PERIOD-PLAN",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD70XWXSTFQXMKWVYYD7S",
+      "target_title": "BudgetPeriodAndPlan",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2S8JCXKZYBPTQPQ1QB",
+      "target_ref_code": "DM-BUDGET-REVISION-ENTRY",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD70YHPRKCX5T2ZJP6W5W",
+      "target_title": "BudgetPlanRevisionAndEntry",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2SRVNM5JEGTWBCER3E",
+      "target_ref_code": "TC-BUDGET-PLAN-DRAFT-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFJM6K9R9S8XY028BDYQ51",
+      "target_title": "Verify immutable plan draft contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2SETS35W1RQ45TABJ8",
+      "target_ref_code": "TC-BUDGET-CATEGORY-LIFECYCLE-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFJR373WM0RZY04CR54W1Y",
+      "target_title": "Verify category lifecycle contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXXMEZ2R9GJGVS9C4R0AAN2J",
+      "target": "FR-BUDGET-CATEGORY-LIFECYCLE",
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2RQH6BARJD6H7B46V5",
+      "target": "FR-BUDGET-PLAN-DRAFT",
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2R55380Y9QCCZHV5DK",
+      "target": "FR-BUDGET-PLAN-IDENTITY",
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXMEZ2S53RDM3BNXFCZK0T5",
+      "gate_type": "self-review",
+      "description": [
+        "Trace every rejected request to prove no plan/revision/event/idempotency mutation occurs."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXMEZ2S55E0VKCHE7X3N89K",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~CreateBudgetDraftCommandTests",
+      "expected_result": "exit 0; at least 24 success, empty, all-zero, omission, revision, category lifecycle, validation, overflow, closed, attribution, atomicity, and replay cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ]
+}

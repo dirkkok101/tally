@@ -1,0 +1,388 @@
+{
+  "id": "01KXXM9PD635H2W4JG81F4PCMH",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX07BQ2HRFBDWBTGP63VB",
+  "ref_code": "TASK-BUDGET-CONTRACT-FOUNDATION",
+  "slug": "CONTRACT-FOUNDATION",
+  "title": "Publish BUDGET operation contracts",
+  "description": [
+    "Create source-generated BUDGET DTOs, closed enums, stable errors, exactly five operation descriptors, and pure contract mapping roots."
+  ],
+  "objective": [
+    "The Tally registry can represent every BUDGET request, result, error, authority, idempotency, limit, and compatibility contract without loading owner data."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 4,
+  "created_at": "2026-07-19T16:45:37.5761387+00:00",
+  "decisions": [
+    {
+      "id": "01KXXM9PD8TWBJKWP2THY4TAR8",
+      "target": "DD-BUDGET-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-19T16:45:37.5761387+00:00"
+    },
+    {
+      "id": "01KXXM9PD8B8XH3A2VET8WWXYW",
+      "target": "DD-BUDGET-CLI-OPERATION-CONTRACT",
+      "created_at": "2026-07-19T16:45:37.5761387+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMY86EKTTE799F78YAMVJX",
+      "path": "src/Tally/Contracts/Budget/Plans/BudgetPlanContracts.cs",
+      "action": "create",
+      "role": "plan request and result contracts",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:56:51.1488294+00:00"
+    },
+    {
+      "id": "01KXXMY86ES6N2X4BTQ97XJZ6D",
+      "path": "src/Tally/Contracts/Budget/Position/BudgetPositionContracts.cs",
+      "action": "create",
+      "role": "position result contracts",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:56:51.1488294+00:00"
+    },
+    {
+      "id": "01KXXMY86E5PFTJNP5TCD4K8F7",
+      "path": "src/Tally/Contracts/Budget/BudgetErrors.cs",
+      "action": "create",
+      "role": "stable errors and exits",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:56:51.1488294+00:00"
+    },
+    {
+      "id": "01KXXMY86E52TKHXRNF6910RDR",
+      "path": "src/Tally/Contracts/Budget/BudgetJsonContext.cs",
+      "action": "create",
+      "role": "source-generated JSON",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:56:51.1488294+00:00"
+    },
+    {
+      "id": "01KXXMY86E1PE40DKECZ3B2N6Y",
+      "path": "src/Tally/Features/Budget/Contract/BudgetOperationModule.cs",
+      "action": "create",
+      "role": "five operation descriptors",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:56:51.1488294+00:00"
+    },
+    {
+      "id": "01KXXMY86ESCPEYK7SM2A98EYF",
+      "path": "src/Tally/Features/Budget/Contract/BudgetContractMapper.cs",
+      "action": "create",
+      "role": "pure mapper root",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T16:56:51.1488294+00:00"
+    },
+    {
+      "id": "01KXXMY86EY8A48C78BGPZD51Y",
+      "path": "tests/Tally.Tests/Budget/Contract/BudgetOperationContractTests.cs",
+      "action": "test",
+      "role": "descriptor and schema tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-19T16:56:51.1488294+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXMY86F9NN6QS5WQ382248Y",
+      "name": "BudgetOperationContracts",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:56:51.1488294+00:00"
+    },
+    {
+      "id": "01KXXMY86FGEV7HH2SR9KDNSTK",
+      "name": "BudgetOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:56:51.1488294+00:00"
+    },
+    {
+      "id": "01KXXMY86FGJJVFT7V56QM6TMD",
+      "name": "BudgetJsonContext",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:56:51.1488294+00:00"
+    },
+    {
+      "id": "01KXXMY86FXTT0YQ52P6RRX1GK",
+      "name": "BudgetContractMapper",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:56:51.1488294+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXMY86DT0WFH8M6K82TVJQV",
+      "kind": "acceptance_check",
+      "text": [
+        "The descriptor inventory contains exactly five BUDGET operation IDs with versioned request, result, error, mutability, idempotency, authority, limit, compatibility, and exit metadata; system.schema.list/show remain shared operations."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:56:51.1488294+00:00"
+    },
+    {
+      "id": "01KXXMY86E2WTMHBPHR231Y22Q",
+      "kind": "acceptance_check",
+      "text": [
+        "Source-generated JSON rejects unknown fields; malformed, incompatible, missing-actor, and missing-idempotency requests fail before handler or storage effects."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:56:51.1488294+00:00"
+    },
+    {
+      "id": "01KXXMY86E1P4RM15FR24FPWV4",
+      "kind": "acceptance_check",
+      "text": [
+        "Money uses canonical ZAR minor-unit-safe wire rules, IDs are opaque ULIDs, states are closed enums, and actor comes only from the trusted common envelope."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:56:51.1488294+00:00"
+    },
+    {
+      "id": "01KXXMY86E5BBRPH35EC3PV6MD",
+      "kind": "acceptance_check",
+      "text": [
+        "Schema discovery and unknown-operation handling perform no BudgetStateStore or Ledger read."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:56:51.1488294+00:00"
+    },
+    {
+      "id": "01KXXMY86EHFH5G31GSSMB9MR6",
+      "kind": "expected_output",
+      "text": [
+        "BudgetOperationContracts"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:56:51.1488294+00:00"
+    },
+    {
+      "id": "01KXXMY86E90XGEFYZNGB7TH7G",
+      "kind": "expected_output",
+      "text": [
+        "BudgetJsonContext"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:56:51.1488294+00:00"
+    },
+    {
+      "id": "01KXXMY86EV4EE39WP2VGTV6YV",
+      "kind": "expected_output",
+      "text": [
+        "BudgetOperationModule descriptors"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:56:51.1488294+00:00"
+    },
+    {
+      "id": "01KXXMY86ESATP5J3Z8NY28R9N",
+      "kind": "expected_output",
+      "text": [
+        "Pure BudgetContractMapper root"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:56:51.1488294+00:00"
+    },
+    {
+      "id": "01KXXM9PD9ZKF2RA8AB9XJVY0E",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add Save, edit, delete, copy, rollover, reopen, rebalance, status, generic invoke, HTTP, FastEndpoints, reflection scanning, mediator, event bus, or hidden alias operations."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:45:37.5761387+00:00"
+    },
+    {
+      "id": "01KXXM9PD9ECR7EQDZDT8BMA0S",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT duplicate actor or trusted period state inside caller JSON."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:45:37.5761387+00:00"
+    },
+    {
+      "id": "01KXXM9PD90HQ34WXDJ7E2S78M",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT serialize financial payloads into errors, stderr, logs, crash diagnostics, or descriptor metadata."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:45:37.5761387+00:00"
+    },
+    {
+      "id": "01KXXM9PD98XG6C02C9XENY8A9",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use strings for system-owned states where closed enums apply."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:45:37.5761387+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXM9PDAEFWN7V9V3JWWDEKH",
+      "target_ref_code": "TASK-LEDGER-CORE-PROCESS-CONTRACT",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXT0KHY0G0YQW0FRT8BEWTY9",
+      "target_title": "Build the self-contained process and operation contract",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-19T16:45:37.5761387+00:00"
+    },
+    {
+      "id": "01KXXM9PDANXS3V1QDW1J6FZ9T",
+      "target_ref_code": "ADR-CORE-0004",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3Y3HMG3XPZHM0SNNAEZ",
+      "target_title": "Enum Over String Constants for System-Owned Status Fields",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:45:37.5761387+00:00"
+    },
+    {
+      "id": "01KXXM9PDAY67MM9NNJTBCEB3J",
+      "target_ref_code": "ADR-CORE-0010",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3Y7DB71F8178QX5C3FA",
+      "target_title": "CommandResult Pattern for Commands",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:45:37.5761387+00:00"
+    },
+    {
+      "id": "01KXXM9PDA9C8D2MD9GZ4Z5HAT",
+      "target_ref_code": "ADR-CORE-0021",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3YHHJX75J3BATYF9GWQ",
+      "target_title": "Explicit DI Registration — No Reflection Scanning",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:45:37.5761387+00:00"
+    },
+    {
+      "id": "01KXXM9PDADGGJEEXYTZFY04QP",
+      "target_ref_code": "NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXXFE05JC78X3NE6SVZEXPP2",
+      "target_title": "Preserve public contract boundaries",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-19T16:45:37.5761387+00:00"
+    },
+    {
+      "id": "01KXXM9PDAHMWQ5S8N6YZ9MW18",
+      "target_ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD70VEXEC9XJW661AYMPD",
+      "target_title": "BudgetOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:45:37.5761387+00:00"
+    },
+    {
+      "id": "01KXXM9PDAK3Q4KVX2XF9ABRJP",
+      "target_ref_code": "FA-BUDGET-CONTRACT-AUTHORITY",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXXJD7F24A36K2FPGMAXT4F7",
+      "target_title": "Contract and Authority",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 5,
+      "created_at": "2026-07-19T16:45:37.5761387+00:00"
+    },
+    {
+      "id": "01KXXM9PDBE6HBSN02RYS320FB",
+      "target_ref_code": "TC-BUDGET-CONTRACT-DISCOVERY-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFJYD4MPDR2RD18XQAQ6MN",
+      "target_title": "Verify BUDGET contract discovery",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 8,
+      "created_at": "2026-07-19T16:45:37.5761387+00:00"
+    },
+    {
+      "id": "01KXXM9PDBZ6Z1GJ1H2AMYKR5X",
+      "target_ref_code": "TC-BUDGET-STRUCTURED-INVOCATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFJZKTQ57Q1N8K9RSXVBNT",
+      "target_title": "Verify structured BUDGET invocation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 9,
+      "created_at": "2026-07-19T16:45:37.5761387+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXXM9PD8NGMN60R96ASXQS01",
+      "target": "FR-BUDGET-CONTRACT-DISCOVERY",
+      "created_at": "2026-07-19T16:45:37.5761387+00:00"
+    },
+    {
+      "id": "01KXXM9PD8XEC9TPS8P5YT0CND",
+      "target": "FR-BUDGET-STRUCTURED-INVOCATION",
+      "created_at": "2026-07-19T16:45:37.5761387+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXM9PDAHX58J27SF3JKCHNK",
+      "gate_type": "self-review",
+      "description": [
+        "Inventory exactly five public operations and two read-only INSIGHTS operations; confirm no hidden alias, mutation grant, or HTTP surface."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:45:37.5761387+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXN82KCQY2D4YZHAEVHMPA9",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetOperationContractTests",
+      "expected_result": "exit 0; at least 20 exact-inventory, schema, enum, unknown-field, compatibility, authority, idempotency, and no-data-read cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-07-19T17:02:13.0998756+00:00"
+    }
+  ]
+}

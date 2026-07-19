@@ -1,0 +1,28 @@
+{
+  "id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "PLAN-BUDGET-V1",
+  "title": "Budget Planning v1 implementation",
+  "description": [
+    "Greenfield plan from MD-BUDGET-MASTER: none of the 34 designed implementation paths exist, so every task creates or extends a designed surface and no behavior is removed. Cross-plan prerequisites are PLAN-LEDGER-V1 and PLAN-INGEST-V1; blocked-by task references name their producers.",
+    "",
+    "C1: BUDGET remains inside the self-contained Tally CLI and adds no HTTP endpoint, service, daemon, background worker, network dependency, EF Core, DbContext, generic repository, or provider abstraction.",
+    "C2: One ZAR calendar month has one stable BudgetPlan and immutable revisions with Draft, Active, and Superseded lifecycle; at most one revision is Active and activation is atomic and attributable.",
+    "C3: Exact amounts are signed-safe checked Int64 minor units. Zero Budget is explicit, omission is Unbudgeted, and every actual is bucketed exactly once as Budgeted, ZeroBudget, Unbudgeted, or Uncategorized.",
+    "C4: Period state is derived from the host TimeProvider current DateOnly. Caller-supplied or persisted lifecycle authority is forbidden.",
+    "C5: Draft creation and activation are replay-safe by idempotency key plus canonical request hash. Replays return the event-time immutable outcome and conflicts perform no mutation.",
+    "C6: BUDGET reads category lifecycle and snapshot actuals only through released ledger.category.list/get and ledger.actuals.query operations via the shared concrete LedgerContractClient; it never opens Ledger storage or duplicates finance semantics.",
+    "C7: The BUDGET actuals interval is [startInclusive,endExclusive); it maps to Ledger inclusive filters with from=startInclusive and to=endExclusive.AddDays(-1).",
+    "C8: Archived assigned categories remain bucketed by plan membership, unknown category identities are integrity failures, and selected revisions must belong to the requested period and currency before any Ledger read.",
+    "C9: Position calculation is pure, deterministic, ordered by category ID with Uncategorized last, complete before publication, checked for overflow, and retains no actual, cursor, position, or report payload.",
+    "C10: budget.db is a separate owner-only raw-SQLite store using 0700 directories, 0600 files, foreign_keys ON, WAL, synchronous FULL, user_version migrations, and BEGIN IMMEDIATE for mutations.",
+    "C11: The registry exposes exactly budget.plan.draft.create, budget.plan.revision.get, budget.plan.revision.list, budget.plan.revision.activate, and budget.position.get; system.schema.list/show remain the shared discovery operations.",
+    "C12: INSIGHTS receives only a read-only capability descriptor for plan revision get and position get. UI, permissions, menus, translations, seeded roles, and browser behavior belong to future CHANNELS work.",
+    "C13: Logs and diagnostics contain metadata and stable identifiers only, never serialized requests, response bodies, category amounts, actuals, database payloads, connection strings, tokens, or credentials.",
+    "C14: Kill criteria remain active: stop for a private Ledger dependency, choose the external-file fallback if persistence has no material value, reframe if policy-engine scope exceeds M, choose do-less if monthly maintenance exceeds 15 minutes, and stop if exact once-only reconciliation cannot be proved.",
+    "",
+    "Platform constraints: target .NET 10 Native-AOT and linux-x64; use file-scoped namespaces, nullable reference types, primary constructors, explicit DI, CancellationToken propagation, source-generated JSON, raw Microsoft.Data.Sqlite, structured metadata-only logging, and zero warnings. Existing shared process and client files are extended additively. No direct graph JSON editing, raw exported Markdown authoring, or hidden product capability is in scope."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T16:38:41.0975932+00:00"
+}

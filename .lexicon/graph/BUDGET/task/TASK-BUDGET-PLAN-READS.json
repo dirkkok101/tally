@@ -1,0 +1,327 @@
+{
+  "id": "01KXXMEZ2NNWAWXEBSYCY78N37",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX0PG2AYCGNGJG41HJJJ1",
+  "ref_code": "TASK-BUDGET-PLAN-READS",
+  "slug": "PLAN-READS",
+  "title": "Read budget revisions and period history",
+  "description": [
+    "Implement exact revision detail and deterministic period revision-list queries with supplemental current category evidence."
+  ],
+  "objective": [
+    "Owners can reconstruct immutable plan intent and attributable lifecycle history without mutating or rewriting it."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 4,
+  "created_at": "2026-07-19T16:48:30.2936612+00:00",
+  "decisions": [
+    {
+      "id": "01KXXMEZ2TD9SCKG222ZBJEECH",
+      "target": "DD-BUDGET-LEDGER-PUBLIC-COMPOSITION",
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2T3ETGETFHKWT59KEV",
+      "target": "DD-BUDGET-PLAN-REVISION-LIFECYCLE",
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2TE944N622V5WD1HW1",
+      "target": "DD-BUDGET-TRUSTED-PERIOD-TIME",
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXXMEZ2VRR2KAMD4ZBC6DVJW",
+      "target": "TASK-BUDGET-DRAFT-CREATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Reads consume the persisted plan and revision model."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMR30X2B9KYF3Y9DT5E28P",
+      "target": "TASK-BUDGET-LEDGER-BUDGET-CLIENT",
+      "dependency_type": "compile",
+      "reason": [
+        "Revision detail enrichment consumes the public category client."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:53:29.2462387+00:00"
+    },
+    {
+      "id": "01KXXN860DY7929M93S71ZQPKS",
+      "target": "TASK-BUDGET-PERIOD-IDENTITY",
+      "dependency_type": "compile",
+      "reason": [
+        "List results derive Current, Future, or Closed from the trusted host date."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-19T17:02:16.5904034+00:00"
+    },
+    {
+      "id": "01KXXMR3XVH54MYHM22JKSA87Y",
+      "target": "TASK-BUDGET-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Both queries consume persisted plan and revision state."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:53:30.1723631+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMEZ2TAKWBVPYXZ4TWW9M6",
+      "path": "src/Tally/Features/Budget/Plans/GetRevision/GetBudgetPlanRevisionQuery.cs",
+      "action": "create",
+      "role": "revision detail query",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2T7YEKWE12CCM3VE8G",
+      "path": "src/Tally/Features/Budget/Plans/ListRevisions/ListBudgetPlanRevisionsQuery.cs",
+      "action": "create",
+      "role": "period history query",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2T5MW3N0TN4GEB5YJC",
+      "path": "tests/Tally.Tests/Budget/Plans/BudgetPlanReadQueryTests.cs",
+      "action": "test",
+      "role": "read/history tests",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXNA7Z9SS3HX8GYNFCFYHB0",
+      "name": "BudgetStateStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-STATE-STORE",
+      "sort_order": 0,
+      "created_at": "2026-07-19T17:03:24.1374467+00:00"
+    },
+    {
+      "id": "01KXXNA7ZAS25BZRPYYVSS4ERF",
+      "name": "LedgerContractClient.ListBudgetCategoriesAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "sort_order": 1,
+      "created_at": "2026-07-19T17:03:24.1374467+00:00"
+    },
+    {
+      "id": "01KXXNA7ZAW5N6RCD0JPJHA5EF",
+      "name": "BudgetPeriodResolver.Resolve",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-PERIOD-PLAN",
+      "sort_order": 2,
+      "created_at": "2026-07-19T17:03:24.1374467+00:00"
+    },
+    {
+      "id": "01KXXNA7ZA5XDMJNY8GN9D4X4V",
+      "name": "GetBudgetPlanRevisionQuery.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-REVISION-ENTRY",
+      "sort_order": 3,
+      "created_at": "2026-07-19T17:03:24.1374467+00:00"
+    },
+    {
+      "id": "01KXXNA7ZA6013TCYJHKC5HS57",
+      "name": "ListBudgetPlanRevisionsQuery.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-PERIOD-PLAN",
+      "sort_order": 4,
+      "created_at": "2026-07-19T17:03:24.1374467+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXMEZ2T2JXCR1YT0SFBPNBD",
+      "kind": "acceptance_check",
+      "text": [
+        "Get returns exact immutable entries, checked total, period, currency, status, attribution, timestamps, and activation/supersession provenance for the revision ID."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2T7G6QA9MK144FM6HJ",
+      "kind": "acceptance_check",
+      "text": [
+        "Current category display/lifecycle evidence is supplemental; rename/archive never rewrites stored ID, amount, provenance, or payload hash."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2TZCE4PNGNZS51P7W3",
+      "kind": "acceptance_check",
+      "text": [
+        "List returns explicit period state and NoBudgetPlan/no-active distinctions, then all summaries by createdAt and revisionId ascending without entries or live category evidence."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2TY8PDGZ5MRAY3BK26",
+      "kind": "acceptance_check",
+      "text": [
+        "Closed history remains readable; unknown revision returns stable not-found and mismatched identities are never inferred."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2TT1ARW2Y63KWHF9T3",
+      "kind": "acceptance_check",
+      "text": [
+        "Both queries propagate cancellation and perform no mutation, idempotency reservation, actuals query, or retained report write."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2T8AY0RSQVSR00X23Y",
+      "kind": "expected_output",
+      "text": [
+        "GetBudgetPlanRevisionQuery"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2T7K2D3RRQ33Y653VK",
+      "kind": "expected_output",
+      "text": [
+        "ListBudgetPlanRevisionsQuery"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2TD0PJ9B0QS9F72JX2",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT rewrite history with current names, omit Draft or Superseded revisions, collapse absent/empty/all-zero states, or return non-deterministic order."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2TZDF6MS7825E1S32Z",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT call Ledger for list summaries or expose raw SQL rows."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXMEZ2TXC7SCHMH7GYHDK7Q",
+      "target_ref_code": "DM-BUDGET-PERIOD-PLAN",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD70XWXSTFQXMKWVYYD7S",
+      "target_title": "BudgetPeriodAndPlan",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2VJ0ABX7BJQE4PAGFP",
+      "target_ref_code": "DM-BUDGET-REVISION-ENTRY",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD70YHPRKCX5T2ZJP6W5W",
+      "target_title": "BudgetPlanRevisionAndEntry",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2VKXE9CPP8VTEY1ECT",
+      "target_ref_code": "TC-BUDGET-PLAN-HISTORY-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFJPSMBFA2EYS50ACQK08Y",
+      "target_title": "Verify plan history contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2V3SHYGA56DP46Y1PK",
+      "target_ref_code": "TC-BUDGET-ATTRIBUTABLE-HISTORY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFMMHH32VCB6XAHQFY0QHW",
+      "target_title": "Verify attributable plan history",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXXMEZ2T2TQ49SV9J4PXGFE9",
+      "target": "FR-BUDGET-CATEGORY-LIFECYCLE",
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2TCT43P7D58YX57F5A",
+      "target": "FR-BUDGET-PLAN-HISTORY",
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2TFCAJY7BZP33PTK43",
+      "target": "FR-BUDGET-PLAN-IDENTITY",
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXMEZ2TQ3STYQS0EEHVTCDJ",
+      "gate_type": "test-evidence",
+      "description": [
+        "Prove immutable payload identity remains byte-equivalent across category rename/archive enrichment."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXMEZ2T0R3W96PVYFEYANHB",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetPlanReadQueryTests",
+      "expected_result": "exit 0; at least 20 detail, ordering, state distinction, rename, archive, closed, not-found, cancellation, and no-mutation cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ]
+}

@@ -1,0 +1,229 @@
+{
+  "id": "01KXXMKGSP8TXMNVCPS2XC9FNE",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX1MYQCYMQQX5AEM6AH01",
+  "ref_code": "TASK-BUDGET-GATE-PERFORMANCE",
+  "slug": "GATE-PERFORMANCE",
+  "title": "Measure BUDGET personal-scale performance",
+  "description": [
+    "Validation-only performance gate with no implements refs; benchmark every operation at the approved generous local scale."
+  ],
+  "objective": [
+    "Published BUDGET operations meet their p95 targets with exact results, bounded memory, network disabled, and non-vacuous samples."
+  ],
+  "planning_state": "planned",
+  "priority": 2,
+  "sort_order": 4,
+  "created_at": "2026-07-19T16:50:59.5105332+00:00",
+  "decisions": [
+    {
+      "id": "01KXXMKGSVJSZWRDQ9BKQ05DBD",
+      "target": "DD-BUDGET-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSVWHMTJCHFPJBNX600",
+      "target": "DD-BUDGET-EXACT-POSITION-CALCULATION",
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXXMKGSW4J0JVC2B12T96GAX",
+      "target": "TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Benchmark the published operation boundary."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSWYY28GBCXH6BSZJYP",
+      "target": "TASK-BUDGET-GATE-SECURITY",
+      "dependency_type": "compile",
+      "reason": [
+        "Benchmark artifacts and execution must preserve privacy and offline isolation."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMKGSWHC7YXBC85WCQX8K1",
+      "path": "tests/Tally.Tests/Budget/Performance/BudgetPersonalScalePerformanceTests.cs",
+      "action": "test",
+      "role": "load generator and result guards",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSWRETYKV4D15S0MCPJ",
+      "path": "scripts/verify-budget-performance.sh",
+      "action": "create",
+      "role": "benchmark runner",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSWMMJNXW5KT0XDRDV2",
+      "path": "docs/verification/budget-performance.md",
+      "action": "document",
+      "role": "safe benchmark report",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXMKGSWP5X21YX1ESC4TDMB",
+      "name": "CompleteBudgetPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSW2N2Q5YAN3KM5CRGW",
+      "name": "BudgetPerformanceGateEvidence",
+      "direction": "produces",
+      "contract_ref_code": "NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE",
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXMKGSV3AYR4V322H9KCD04",
+      "kind": "acceptance_check",
+      "text": [
+        "Generate 100000 active Ledger transactions, 1000 Budget Periods, 1000 revisions in the selected period, and 1000 entries in the selected revision without private fixture payloads."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSVJJ3K43WGPCHK28RE",
+      "kind": "acceptance_check",
+      "text": [
+        "After warm-up, record at least 100 measured invocations per operation with p50, p95, maximum duration, peak resident memory, exact result checks, and environment fingerprint."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSVZ5EJJRSD8XEJVT65",
+      "kind": "acceptance_check",
+      "text": [
+        "Get Budget Position including Ledger snapshot completes within 3 seconds p95; draft, activate, revision get, and revision list each complete within 1 second p95."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSVT8WVN962R0WMZEE2",
+      "kind": "acceptance_check",
+      "text": [
+        "Network remains denied, no migration/backup runs overlap, no test class has zero discovery, and the report contains no financial fixture content."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSW3GVW1HQMQ7W3N6FC",
+      "kind": "expected_output",
+      "text": [
+        "BudgetPerformanceGateEvidence"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSW2DPY39359M63RCWA",
+      "kind": "expected_output",
+      "text": [
+        "Metadata-only benchmark report"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSVRRRTYZHEMSADQS5P",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT reduce approved load, exclude Ledger snapshot time, report only averages, accept fewer than 100 samples, or disable exact-result checks."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSWQEGRAW1J8Q9N4ADH",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT run the benchmark in normal task-level unit suites or commit raw generated finance rows."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXMKGSWVSVS4PHK4PN48KKM",
+      "target_ref_code": "NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXXFE157SBSM3AC1PPRFPY0N",
+      "target_title": "Respond at personal-budget scale",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSWKDE16SQER2ZV9VQH",
+      "target_ref_code": "TC-BUDGET-PERSONAL-SCALE-PERFORMANCE",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFMPB5B32YR1NCVXSEH0D3",
+      "target_title": "Measure personal-budget performance",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXMKGSWGXJ197M86PCS28P5",
+      "gate_type": "test-evidence",
+      "description": [
+        "Review sample counts, host fingerprint, percentile math, exact-result guards, and committed-artifact exclusions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXMKGSWT8AER8BPET5Z7QC2",
+      "phase": "after",
+      "command": "bash scripts/verify-budget-performance.sh",
+      "expected_result": "exit 0; all 5 operations have at least 100 measured samples, position p95 is <=3s, other p95 values are <=1s, exact outputs reconcile, memory is reported, and 0 discovery or benchmark checks fail",
+      "required": 1,
+      "timeout_seconds": 2400,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ]
+}

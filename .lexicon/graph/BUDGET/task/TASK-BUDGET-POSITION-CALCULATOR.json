@@ -1,0 +1,273 @@
+{
+  "id": "01KXXMH1N3W2H8JR5K3HBMT05G",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX16FGEYFVSRAABAC7C8D",
+  "ref_code": "TASK-BUDGET-POSITION-CALCULATOR",
+  "slug": "POSITION-CALCULATOR",
+  "title": "Build the exact budget position calculator",
+  "description": [
+    "Implement pure checked exhaustive bucketing for immutable plan entries and one complete Ledger Budget Actual snapshot."
+  ],
+  "objective": [
+    "Every actual and planned amount reconciles deterministically into Budgeted, ZeroBudget, Unbudgeted, or Uncategorized without interpretation."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 1,
+  "created_at": "2026-07-19T16:49:38.4689007+00:00",
+  "decisions": [
+    {
+      "id": "01KXXMH1N5Y9B6BXS2652HFSEQ",
+      "target": "DD-BUDGET-EXACT-POSITION-CALCULATION",
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXXMH1N6Q53Z87YMFH7CSCJT",
+      "target": "TASK-BUDGET-DRAFT-CREATION",
+      "dependency_type": "compile",
+      "reason": [
+        "The calculator consumes immutable plan revision and entry domain types."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMR4V56AR6DXPMWP6FYFFM",
+      "target": "TASK-BUDGET-LEDGER-BUDGET-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "The calculator consumes the exact LedgerBudgetActualItem contract."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:53:31.1106981+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMH1N5X91V31GHKKX3JCXJ",
+      "path": "src/Tally/Domain/Budget/Position/BudgetPositionCalculator.cs",
+      "action": "create",
+      "role": "pure checked calculator",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N5BTVX4Y82KBPW3P2P",
+      "path": "tests/Tally.Tests/Budget/Position/BudgetPositionCalculatorTests.cs",
+      "action": "test",
+      "role": "example and property tests",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXNAA4PYCZD0D9ARN070GFS",
+      "name": "BudgetPlanRevision",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-REVISION-ENTRY",
+      "sort_order": 0,
+      "created_at": "2026-07-19T17:03:26.3584950+00:00"
+    },
+    {
+      "id": "01KXXNAA4QQV2V79RW31F6GPNK",
+      "name": "LedgerBudgetActualItem",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "sort_order": 1,
+      "created_at": "2026-07-19T17:03:26.3584950+00:00"
+    },
+    {
+      "id": "01KXXNAA4QHHCW6AV698529KHE",
+      "name": "BudgetPositionCalculator.Calculate",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "sort_order": 2,
+      "created_at": "2026-07-19T17:03:26.3584950+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXMH1N58XMJ5N1RKA0FYC4V",
+      "kind": "acceptance_check",
+      "text": [
+        "Each actual with a stable category is Budgeted or ZeroBudget when an explicit entry exists, otherwise Unbudgeted; null category is Uncategorized; each ordinal is consumed exactly once."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N583PADZVKK4XB0M54",
+      "kind": "acceptance_check",
+      "text": [
+        "Explicit zero entries remain ZeroBudget; omitted categories have null planned/remaining/over; Uncategorized has no invented ID/name/planned values."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N5P1N2KSG3WDRV8KXB",
+      "kind": "acceptance_check",
+      "text": [
+        "Planned equals checked explicit-entry sum and actual equals checked sum of all four bucket kinds; every bucket and total reconciles to the Ledger snapshot total."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N5T25A3R55X4JNTMJ5",
+      "kind": "acceptance_check",
+      "text": [
+        "Remaining is max(planned-actual,0), Over is max(actual-planned,0), signed negative actuals remain exact, and every Int64 operation is checked before result publication."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N5Z4DCN12YB35961Q9",
+      "kind": "acceptance_check",
+      "text": [
+        "Category positions sort by stable ID ascending with Uncategorized last; identical inputs produce semantically identical results and provenance."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N59SSJ9KW2VPH7QJSN",
+      "kind": "expected_output",
+      "text": [
+        "BudgetPositionCalculator"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N5H8QZYN3VKM5FCEEZ",
+      "kind": "expected_output",
+      "text": [
+        "Property and invariant tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N5Q9QY6YGVZ2G5CYAQ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use decimal/double arithmetic, clamp refunds, omit zero rows, merge Unbudgeted/Uncategorized, invent plan values, or publish partial output on overflow/integrity failure."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N5CVC16CWAFG92GK1R",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT read storage, call Ledger, retain snapshots, add pace/forecast/trend/narrative, or mutate lifecycle state."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXMH1N6HHT1AT9YZX5MSK9C",
+      "target_ref_code": "NFR-BUDGET-EXACT-FINANCIAL-INTEGRITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXXFDYF56XK8J7V4E0EP2E0N",
+      "target_title": "Preserve exact budget arithmetic",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N5VJN3X0Y6PP1CXVW4",
+      "target_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD712CJ4BKM0CY1JTQYJT",
+      "target_title": "BudgetPositionProjection",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N6P1FQ7HQNSMG3XMAB",
+      "target_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD711P2JRXFDR2N9PB4KA",
+      "target_title": "LedgerBudgetCompositionContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N67NK03W8MGT3ZQMQ7",
+      "target_ref_code": "DIAG-BUDGET-POSITION-SEQUENCE",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KXXJD95H6B8HDFN78YS6XQMG",
+      "target_title": "Snapshot-bound Budget Position calculation",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N6WKK2WC4TH5SYRNKD",
+      "target_ref_code": "TC-BUDGET-EXACT-FINANCIAL-INTEGRITY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFMKPM8Z4Z4DYAEYADG97Z",
+      "target_title": "Verify exact budget arithmetic",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXXMH1N5A1EJM9AZG3540MRE",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXMH1N5DXCHH147ZNYXNSER",
+      "gate_type": "test-evidence",
+      "description": [
+        "Property tests prove once-only accounting and checked reconciliation across signed boundary values."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXMH1N5QPS4QVENVTVSE46C",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetPositionCalculatorTests",
+      "expected_result": "exit 0; at least 28 bucket, zero, omission, negative, ordering, reconciliation, duplicate, missing, unknown, overflow, determinism, and property cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ]
+}

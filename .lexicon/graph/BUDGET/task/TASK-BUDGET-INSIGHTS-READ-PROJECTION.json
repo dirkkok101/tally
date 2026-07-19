@@ -1,0 +1,313 @@
+{
+  "id": "01KXXMH1N4NKTKTHDFA3BX4VBC",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX16FGEYFVSRAABAC7C8D",
+  "ref_code": "TASK-BUDGET-INSIGHTS-READ-PROJECTION",
+  "slug": "INSIGHTS-READ-PROJECTION",
+  "title": "Publish the read-only INSIGHTS budget projection",
+  "description": [
+    "Bind the exact owner revision and position reads to a versioned capability set with no mutation authority or consumer state."
+  ],
+  "objective": [
+    "INSIGHTS can consume the same exact BUDGET results and provenance without receiving plan-write capability or causing BUDGET-side reports."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 3,
+  "created_at": "2026-07-19T16:49:38.4689007+00:00",
+  "decisions": [
+    {
+      "id": "01KXXMH1N774C3PP949357CHBA",
+      "target": "DD-BUDGET-EXACT-POSITION-CALCULATION",
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N7V708YKJTMWZEKZH5",
+      "target": "DD-BUDGET-INSIGHTS-READ-PROJECTION",
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXXN8E5FJX3928KDTA0JHRR9",
+      "target": "TASK-BUDGET-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "The capability reuses exact owner operation descriptors and schema fingerprints from BudgetOperationModule."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-19T17:02:24.9442693+00:00"
+    },
+    {
+      "id": "01KXXMH1N7TZMNDHGM6N82RFW7",
+      "target": "TASK-BUDGET-PLAN-READS",
+      "dependency_type": "compile",
+      "reason": [
+        "The capability reuses exact revision reads."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N7D3TMGX277P2H092H",
+      "target": "TASK-BUDGET-POSITION-QUERY",
+      "dependency_type": "compile",
+      "reason": [
+        "The capability reuses exact position reads."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMY74SZRWDTSWRWRWHWPKE",
+      "path": "src/Tally/Contracts/Budget/Projection/BudgetReadCapabilityDescriptor.cs",
+      "action": "create",
+      "role": "read-only consumer contract",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:56:50.0730603+00:00"
+    },
+    {
+      "id": "01KXXMY74TK7E53P48WVN1TQ7S",
+      "path": "src/Tally/Features/Budget/Projection/BudgetReadProjectionModule.cs",
+      "action": "create",
+      "role": "read-only descriptor binding",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:56:50.0730603+00:00"
+    },
+    {
+      "id": "01KXXMY74TN6145B4EF70NQB7B",
+      "path": "tests/Tally.Tests/Budget/InsightsContract/BudgetInsightsContractTests.cs",
+      "action": "test",
+      "role": "read parity and mutation exclusion",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:56:50.0730603+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXNACCVNJHHCZBEKMHQC4EH",
+      "name": "BudgetReadCapabilityDescriptor",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
+      "sort_order": 0,
+      "created_at": "2026-07-19T17:03:28.6674830+00:00"
+    },
+    {
+      "id": "01KXXNACCWDQF9KZBNCSFB54MT",
+      "name": "GetBudgetPlanRevisionQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-REVISION-ENTRY",
+      "sort_order": 1,
+      "created_at": "2026-07-19T17:03:28.6674830+00:00"
+    },
+    {
+      "id": "01KXXNACCWG5T9PYZ3AD16D7R2",
+      "name": "GetBudgetPositionQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "sort_order": 2,
+      "created_at": "2026-07-19T17:03:28.6674830+00:00"
+    },
+    {
+      "id": "01KXXNACCW82CXR65BE5WM81P8",
+      "name": "BudgetOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
+      "sort_order": 3,
+      "created_at": "2026-07-19T17:03:28.6674830+00:00"
+    },
+    {
+      "id": "01KXXNACCWCXJGSXCRP5AMX0BB",
+      "name": "BudgetReadProjectionModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
+      "sort_order": 4,
+      "created_at": "2026-07-19T17:03:28.6674830+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXMH1N7HCVZ50Y3CG22EAN9",
+      "kind": "acceptance_check",
+      "text": [
+        "The capability contains exactly budget.plan.revision.get and budget.position.get with the same request/result schema fingerprints, compatibility range, stable errors, and limits as owner reads."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N7SZXW28NJ9C7BDV1F",
+      "kind": "acceptance_check",
+      "text": [
+        "Compatible invocation returns byte-equivalent domain content and provenance through the existing read handlers; unsupported versions fail before partial projection."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N7W09H3MHT19WJ8X1M",
+      "kind": "acceptance_check",
+      "text": [
+        "Plan identity, revision/status, entries/totals, lifecycle evidence, bucket values, variance, and Ledger snapshot provenance remain present."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N7FHSSMZ834YPTKTSY",
+      "kind": "acceptance_check",
+      "text": [
+        "Draft creation, activation, mutation authority, idempotency, pace, forecast, trend, anomaly, recommendation, narrative, alert, transport, report persistence, and consumer state are absent."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N78BQAB0VYR16SA2E6",
+      "kind": "acceptance_check",
+      "text": [
+        "After a consumer read, budget.db contains no report, recommendation, projection, or consumer-specific record."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N7SV9X889JAKCSPQAZ",
+      "kind": "expected_output",
+      "text": [
+        "BudgetReadProjectionModule"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N7P5DB0NQJ5YZW1D85",
+      "kind": "expected_output",
+      "text": [
+        "INSIGHTS compatibility and mutation-exclusion tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N7HQ7CJPY3V628VGMK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT create separate calculation or read implementations, expose mutations, add an INSIGHTS transport/client, or persist downstream state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N72T45E66CW7EFEB9C",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT weaken compatibility, strip provenance, or add interpretation fields."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXMH1N7NBKK7CF0SY34BWEC",
+      "target_ref_code": "EXT-BUDGET-INSIGHTS-CONSUMER-CONTRACT",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXXCM69D4PPVMSNEKB7DB823",
+      "target_title": "INSIGHTS Consumer Contract",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N7MZTF9J9KVRD531NG",
+      "target_ref_code": "NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXXFE05JC78X3NE6SVZEXPP2",
+      "target_title": "Preserve public contract boundaries",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N79XMTG741YBYX3689",
+      "target_ref_code": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD712R35XBQTGT37YQY9S",
+      "target_title": "BudgetReadCapabilityDescriptor",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N71H7YGWFW3RJ35ZJC",
+      "target_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD712CJ4BKM0CY1JTQYJT",
+      "target_title": "BudgetPositionProjection",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXXMH1N7DQC9MGQB2PKAYQGR",
+      "target_ref_code": "TC-BUDGET-INSIGHTS-PROJECTION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFJX5HB8EG5SKYF9ASDS6P",
+      "target_title": "Verify read-only INSIGHTS projection contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXXMH1N71RCW24ETMT706AQK",
+      "target": "FR-BUDGET-INSIGHTS-PROJECTION",
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXMH1N701C2RMBM4CJ1X6MV",
+      "gate_type": "branch-review",
+      "description": [
+        "Review the capability inventory and schema fingerprints against the two owner reads."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXMH1N71N8PDZPNRCAGR5T8",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetInsightsContractTests",
+      "expected_result": "exit 0; at least 16 exact-capability, schema parity, read-result parity, compatibility, mutation exclusion, analytics exclusion, and no-consumer-state cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    }
+  ]
+}

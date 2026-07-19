@@ -1,0 +1,11 @@
+{
+  "id": "01KXXKX07BQ2HRFBDWBTGP63VB",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "ref_code": "SP-BUDGET-00-FOUNDATION",
+  "title": "Upstream contracts and runtime foundation",
+  "description": [
+    "Prove and consume the public Ledger seam, publish exact BUDGET contracts, and establish owner-only durable state before business workflows."
+  ],
+  "sort_order": 0,
+  "created_at": "2026-07-19T16:38:41.6445095+00:00"
+}

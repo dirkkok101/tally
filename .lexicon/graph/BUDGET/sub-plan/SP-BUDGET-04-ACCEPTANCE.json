@@ -1,0 +1,11 @@
+{
+  "id": "01KXXKX24YJN8XH96VER4AQ086",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "ref_code": "SP-BUDGET-04-ACCEPTANCE",
+  "title": "Use-case, graph, and module acceptance",
+  "description": [
+    "Exercise all five use cases through the published boundary, converge graph evidence, validate dependencies, and complete the module gate."
+  ],
+  "sort_order": 4,
+  "created_at": "2026-07-19T16:38:43.6151176+00:00"
+}

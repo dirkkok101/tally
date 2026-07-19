@@ -1,0 +1,296 @@
+{
+  "id": "01KXXMKGSNNRV9W873NVM4RBQC",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX1MYQCYMQQX5AEM6AH01",
+  "ref_code": "TASK-BUDGET-GATE-ATOMIC-RECOVERY",
+  "slug": "GATE-ATOMIC-RECOVERY",
+  "title": "Prove mutation durability and restart recovery",
+  "description": [
+    "Validation-only recovery gate with no implements refs; inject every designed draft and activation cut point against real budget.db."
+  ],
+  "objective": [
+    "Restart always observes one complete committed mutation exactly once or the unchanged pre-operation state with attributable immutable history."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 2,
+  "created_at": "2026-07-19T16:50:59.5105332+00:00",
+  "decisions": [
+    {
+      "id": "01KXXMKGSSNK2EBQP2SKPAYPQ9",
+      "target": "DD-BUDGET-IDEMPOTENT-MUTATIONS",
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSSPDX2502C3HT0SAAK",
+      "target": "DD-BUDGET-PLAN-REVISION-LIFECYCLE",
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSSDABQQKWX7S5CY91H",
+      "target": "DD-BUDGET-STATE-STORE",
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXXMKGST1DR320HEJWFWTYB7",
+      "target": "TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Recovery executes published mutation operations."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGST5EKV5565NV599QB5",
+      "target": "TASK-BUDGET-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Recovery inspects the real designed durability boundary."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMKGSS45JNQ6KG3GR07Q0Y",
+      "path": "tests/Tally.Tests/Budget/Recovery/BudgetAtomicRecoveryTests.cs",
+      "action": "test",
+      "role": "failure-injection restart matrix",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSS02MS8N7D7EM067G2",
+      "path": "scripts/verify-budget-recovery.sh",
+      "action": "create",
+      "role": "recovery runner",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSS3EYG73WWDQQAVXC1",
+      "path": "docs/verification/budget-recovery.md",
+      "action": "document",
+      "role": "safe recovery evidence",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXMKGSS0KHV877YRCN4R0FM",
+      "name": "CompleteBudgetPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSSJWZATKF6QCBNA5CT",
+      "name": "BudgetStateStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-STATE-STORE",
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSTC3XWB1VP0RX8GGQB",
+      "name": "BudgetRecoveryGateEvidence",
+      "direction": "produces",
+      "contract_ref_code": "NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXMKGSSR97HAQ3RVN800RHA",
+      "kind": "acceptance_check",
+      "text": [
+        "Inject failures before/after validation, replay lookup, revision insert, entry insert, prior supersession, activation, active pointer, events, outcome references, commit, and result delivery."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSSQVYTZBNY8Y9NVXDC",
+      "kind": "acceptance_check",
+      "text": [
+        "After each restart, observe either zero mutation or exactly one complete revision/lifecycle/outcome chain; no partial revision, missing event, duplicate Draft, stale pointer, or multiple Active rows."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSSTE6Y2N8AHYC742YE",
+      "kind": "acceptance_check",
+      "text": [
+        "Retry every interrupted key and prove pre-commit retries commit once while post-commit retries return the exact original event-time result."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSS6ETJB4S49VRHAD10",
+      "kind": "acceptance_check",
+      "text": [
+        "History sequences, prior/result statuses, replacement IDs, actor/reason, hashes, and active pointer reconcile after recovery."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSS4MVZFJBKFCN0ZKSB",
+      "kind": "acceptance_check",
+      "text": [
+        "WAL/SHM/temp cleanup and permission state remain owner-only after forced termination."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSSJ4XPH11XAX4BZJ9H",
+      "kind": "expected_output",
+      "text": [
+        "BudgetRecoveryGateEvidence"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSSP17ZPJC6VG0KT0BB",
+      "kind": "expected_output",
+      "text": [
+        "Metadata-only recovery report"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSSXSWTKAVKXQVJP76V",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT simulate transactions with mocks or accept in-process assertions without reopening a real database."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSS2RP0AANKEF9P9TY4",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT repair partial rows in tests, weaken FULL sync, skip result-delivery cutpoints, or compare only aggregate row counts."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXMKGSTYC74HRZRTJH84JEJ",
+      "target_ref_code": "NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXXFDYWYCESY48TM7S12KXVV",
+      "target_title": "Make plan mutations atomic and durable",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSTXC1H1P6DM4JDPZWF",
+      "target_ref_code": "NFR-BUDGET-ATTRIBUTABLE-HISTORY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXXFDZAR0JDCGFNS6P5GSRB6",
+      "target_title": "Retain attributable plan history",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSTZ10ECB8WDCXEVC3N",
+      "target_ref_code": "DM-BUDGET-LIFECYCLE-IDEMPOTENCY",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD70ZX2H07DVSF5RCCPQM",
+      "target_title": "BudgetLifecycleAndIdempotency",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGST1G5MN9HNZ5MP1XPM",
+      "target_ref_code": "DIAG-BUDGET-MUTATION-SEQUENCE",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KXXJD95HW2ZWF7QVM1NEN2YY",
+      "target_title": "Replay-safe draft and activation mutation",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 5,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSTH5DWDXCTZN1E9TV5",
+      "target_ref_code": "TC-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFMM418W05CKA3QVN4W3AX",
+      "target_title": "Verify atomic durable plan mutation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSTSNKCTS92JRD7STDR",
+      "target_ref_code": "TC-BUDGET-ATTRIBUTABLE-HISTORY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFMMHH32VCB6XAHQFY0QHW",
+      "target_title": "Verify attributable plan history",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXMKGSTFXMD99EG6B0Q2BS3",
+      "gate_type": "test-evidence",
+      "description": [
+        "Review per-cutpoint durable state, not aggregate-only totals."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXMKGSTYZZQABQEMQT5QHAV",
+      "phase": "after",
+      "command": "bash scripts/verify-budget-recovery.sh",
+      "expected_result": "exit 0; every named draft/activation cutpoint discovers tests and restart inspection reports exactly prior-or-complete state, one Active maximum, exact replay, owner-only artifacts, and 0 failures",
+      "required": 1,
+      "timeout_seconds": 1200,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ]
+}

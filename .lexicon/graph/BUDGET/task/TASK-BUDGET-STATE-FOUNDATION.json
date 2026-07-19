@@ -1,0 +1,350 @@
+{
+  "id": "01KXXMBV10BAZX62PQVFT65QQF",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX07BQ2HRFBDWBTGP63VB",
+  "ref_code": "TASK-BUDGET-STATE-FOUNDATION",
+  "slug": "STATE-FOUNDATION",
+  "title": "Establish BUDGET durable state",
+  "description": [
+    "Create the owner-only raw-SQLite store, five-table schema, guarded migrations, row mapping, lifecycle history, and replay references."
+  ],
+  "objective": [
+    "BUDGET has one store whose immutable payloads, guarded transitions, and replay metadata support every later slice."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 5,
+  "created_at": "2026-07-19T16:46:47.8408153+00:00",
+  "decisions": [
+    {
+      "id": "01KXXMBV166WSA70TJA18VX74T",
+      "target": "DD-BUDGET-IDEMPOTENT-MUTATIONS",
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV16HBDRAFSBS83ME4M0",
+      "target": "DD-BUDGET-PLAN-REVISION-LIFECYCLE",
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV16FCKVCFN9X3WV3GHK",
+      "target": "DD-BUDGET-STATE-STORE",
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXXMBV17VC0EVZFDFAMRNQQ0",
+      "target": "TASK-BUDGET-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Mapping and replay use the public contract records and enums."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMBV16P5QPNWCXQJJRGV1Q",
+      "path": "src/Tally/Infrastructure/Budget/Storage/BudgetStorePaths.cs",
+      "action": "create",
+      "role": "owner paths",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV16S1V43G97Q79Y4N9N",
+      "path": "src/Tally/Infrastructure/Budget/Storage/BudgetSchema.cs",
+      "action": "create",
+      "role": "schema/migrations",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV16E416R4TH1BHDYWKA",
+      "path": "src/Tally/Infrastructure/Budget/Storage/BudgetStateStore.cs",
+      "action": "create",
+      "role": "connections/transactions",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV167V4SB06QV4A2M069",
+      "path": "src/Tally/Infrastructure/Budget/Storage/BudgetRowMapper.cs",
+      "action": "create",
+      "role": "row mapping",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV16Y30YS3QAFT02S36H",
+      "path": "src/Tally/Infrastructure/Budget/Storage/Idempotency/BudgetIdempotencyStore.cs",
+      "action": "create",
+      "role": "outcome references",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV1720Q86ECZT68WABPZ",
+      "path": "src/Tally/Bootstrap/Features/BudgetStateExtensions.cs",
+      "action": "create",
+      "role": "explicit state registration",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV17ZZWQRZM2PDJAMGVW",
+      "path": "tests/Tally.Tests/Budget/Storage/BudgetStateStoreTests.cs",
+      "action": "test",
+      "role": "real SQLite tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV17VGF68XDWHMS27MC1",
+      "path": "tests/Tally.Tests/Budget/Storage/BudgetHistoryInvariantTests.cs",
+      "action": "test",
+      "role": "history invariants",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXMBV170W2084FJY0DB446K",
+      "name": "BudgetStateStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-STATE-STORE",
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV179NQ6K31TYZ1Q27F9",
+      "name": "BudgetRowMapper",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-STATE-STORE",
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV17PP35Q6936XB63RDC",
+      "name": "BudgetIdempotencyStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-LIFECYCLE-IDEMPOTENCY",
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXMBV16GHZ1MNZGJMYAR9NB",
+      "kind": "acceptance_check",
+      "text": [
+        "Create 0700 BUDGET directories and 0600 database, WAL, SHM, lock, and recognized temporary files; reject unsafe ownership or modes."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV16YWVH3XV6W958JBGE",
+      "kind": "acceptance_check",
+      "text": [
+        "Apply ordered user_version migrations with foreign_keys, WAL, FULL sync, bounded busy handling, and all five designed tables/constraints."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV165VRSTR6PAF61MZXA",
+      "kind": "acceptance_check",
+      "text": [
+        "Enforce unique ZAR month plans, immutable revision content/entries/provenance/hashes/events, Draft to Active to Superseded, and at most one Active."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV1619EPCMKZS059BQJ9",
+      "kind": "acceptance_check",
+      "text": [
+        "One BEGIN IMMEDIATE spans replay lookup, conflict, revision/event changes, active pointer, prior supersession, and outcome references."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV16AT50D5932MSDR265",
+      "kind": "acceptance_check",
+      "text": [
+        "Never persist actuals, category authority, snapshots, cursors, positions, reports, consumer state, or serialized request/response bodies."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV16G9P199FKYF0ANPKQ",
+      "kind": "expected_output",
+      "text": [
+        "BudgetStateStore"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV16GCZZS8SSQXKE3YFV",
+      "kind": "expected_output",
+      "text": [
+        "BudgetSchema migrations"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV16TAMQ55KCRH0AW842",
+      "kind": "expected_output",
+      "text": [
+        "BudgetRowMapper"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV16MPY55VH6RRVZA8MD",
+      "kind": "expected_output",
+      "text": [
+        "BudgetIdempotencyStore"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV16HNH1ZA9WWVXPA372",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT share ledger.db, use flat JSON, EF/DbContext, hosted storage, generic repositories, provider abstractions, or custom crypto."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV16HG92CPK6DEM24VP2",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT update/delete immutable history, cascade-delete references, persist caller period state, raw keys, serialized payloads, actuals, cursors, or category names."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMYAMASMWJ5GT5Z84Q9HRP",
+      "kind": "note",
+      "text": [
+        "Schema foundation intentionally has no Implements links; lifecycle tasks own behavior, while this cohesive task translates the accepted data models into one independently verified raw-SQLite boundary."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:56:53.6422805+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXMBV173BGER7719G8AMWAS",
+      "target_ref_code": "TASK-LEDGER-CORE-STORAGE",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXT0KHY1471CHD8D8G9XDR9D",
+      "target_title": "Implement the SQLite runtime and storage foundation",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 8,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV17D60Q6S4H8NZSDYJ5",
+      "target_ref_code": "DM-BUDGET-PERIOD-PLAN",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD70XWXSTFQXMKWVYYD7S",
+      "target_title": "BudgetPeriodAndPlan",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV17BQ62RRTB9M17YWPE",
+      "target_ref_code": "DM-BUDGET-REVISION-ENTRY",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD70YHPRKCX5T2ZJP6W5W",
+      "target_title": "BudgetPlanRevisionAndEntry",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV17AT40EHMM5RY3GB3C",
+      "target_ref_code": "DM-BUDGET-LIFECYCLE-IDEMPOTENCY",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD70ZX2H07DVSF5RCCPQM",
+      "target_title": "BudgetLifecycleAndIdempotency",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    },
+    {
+      "id": "01KXXMBV174MFA7JFKYC8PQB3W",
+      "target_ref_code": "DM-BUDGET-STATE-STORE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD710EW8T4XADJT8T3696",
+      "target_title": "BudgetStateStore",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXMBV171BKKPEEQQFBJXG8J",
+      "gate_type": "test-evidence",
+      "description": [
+        "Real SQLite tests prove protection, atomicity, replay, and immutable history."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXMBV17851K1VAJXASN3BY3",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~BudgetStateStoreTests|FullyQualifiedName~BudgetHistoryInvariantTests'",
+      "expected_result": "exit 0; at least 30 migration, pragma, permission, uniqueness, active, immutability, transition, replay, and rollback cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 540,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+    }
+  ]
+}

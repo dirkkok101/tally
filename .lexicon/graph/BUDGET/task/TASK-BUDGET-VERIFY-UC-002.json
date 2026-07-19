@@ -1,0 +1,236 @@
+{
+  "id": "01KXXMQ14EC761Y40Q9N7WW984",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX24YJN8XH96VER4AQ086",
+  "ref_code": "TASK-BUDGET-VERIFY-UC-002",
+  "slug": "VERIFY-UC-002",
+  "title": "Verify activation and revision replacement",
+  "description": [
+    "Validation-only UC task with no implements refs; trace UC-BUDGET-002 success and all three failure paths through the published boundary."
+  ],
+  "objective": [
+    "UC-BUDGET-002 proves explicit atomic activation, prior supersession, category revalidation, attribution, and exact replay."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 2,
+  "created_at": "2026-07-19T16:52:54.5452616+00:00",
+  "decisions": [
+    {
+      "id": "01KXXMQ14MTV2W20XEATKPZCRD",
+      "target": "DD-BUDGET-IDEMPOTENT-MUTATIONS",
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14MP0T0CXPXF2D0YG73",
+      "target": "DD-BUDGET-PLAN-REVISION-LIFECYCLE",
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14M7H311FSQG62EJBQG",
+      "target": "DD-BUDGET-TRUSTED-PERIOD-TIME",
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXXMQ14MT1RDRTCSB3W3FF42",
+      "target": "TASK-BUDGET-ACTIVATION-LIFECYCLE",
+      "dependency_type": "compile",
+      "reason": [
+        "Verify the complete lifecycle slice."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14MM1BP7NFQF2F9DJ7X",
+      "target": "TASK-BUDGET-GATE-ATOMIC-RECOVERY",
+      "dependency_type": "compile",
+      "reason": [
+        "Consume the restart cutpoint evidence."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14M078JKX9NY2CJ6R8M",
+      "target": "TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Execute the published activation boundary."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMQ14MZBVBZRG9NAZ7ZFDW",
+      "path": "tests/Tally.Tests/Budget/Acceptance/BudgetUc002ActivationTests.cs",
+      "action": "test",
+      "role": "UC-002 acceptance matrix",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXMQ14MC70NJ5Q9CZMAVKPV",
+      "name": "CompleteBudgetPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14MRJ5Z1QKV1WZJHCVZ",
+      "name": "BudgetRecoveryGateEvidence",
+      "direction": "consumes",
+      "contract_ref_code": "NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14MMFPFV81ZRA70CA4W",
+      "name": "VerifiedBudgetUc002",
+      "direction": "produces",
+      "contract_ref_code": "UC-BUDGET-002",
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXMQ14M1D1YHS41KHD1QMVK",
+      "kind": "acceptance_check",
+      "text": [
+        "First activation yields one Active; replacement atomically activates the Draft and supersedes the prior Active with exact ordered attributable events."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14M42MVRQD5H8XX35MK",
+      "kind": "acceptance_check",
+      "text": [
+        "Closed period, stale/inactive/archived/unknown category, missing authority/actor/reason/key, non-Draft, and conflict all preserve former state."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14MFP3A3THET5J3NMSH",
+      "kind": "acceptance_check",
+      "text": [
+        "Concurrent activation, storage failure, and every interruption cutpoint restart to either complete prior or complete new state with one Active maximum."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14MZJBMGW0DX3YK2ME9",
+      "kind": "acceptance_check",
+      "text": [
+        "Replay returns original activation/supersession snapshots and never reactivates, creates events, or enriches with later state."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14MWGT4FPBMV7QA53G4",
+      "kind": "expected_output",
+      "text": [
+        "VerifiedBudgetUc002"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14MW875VQF04TTPM8MX",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT omit a UC failure path, bypass published mutation or recovery seams, or accept only in-process state checks."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXMQ14M9F3QN0D8FY4ZHH16",
+      "target_ref_code": "UC-BUDGET-002",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXXCKREHZ0F4JY50FZYJYDK1",
+      "target_title": "Activate or revise a plan",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14MCK49KNHEYSD23VG9",
+      "target_ref_code": "TC-BUDGET-PLAN-ACTIVATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFJNFT199Y2RKCVHRCVW12",
+      "target_title": "Verify explicit plan activation contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14MTGW7VHNWCJZQR9XY",
+      "target_ref_code": "TC-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFMM418W05CKA3QVN4W3AX",
+      "target_title": "Verify atomic durable plan mutation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    },
+    {
+      "id": "01KXXMQ14M06BGN4T7FK93T7AA",
+      "target_ref_code": "TC-BUDGET-ATTRIBUTABLE-HISTORY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFMMHH32VCB6XAHQFY0QHW",
+      "target_title": "Verify attributable plan history",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXMQ14MNXRQSM9RENSJCK07",
+      "gate_type": "test-evidence",
+      "description": [
+        "Every UC-BUDGET-002 failure path includes exact prior-state durability evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXMQ14MJ8MP5AM0RXHS36NZ",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetUc002ActivationTests",
+      "expected_result": "exit 0; at least 18 first/replacement, category drift, closed, authority, conflict, concurrency, restart, attribution, replay, and one-Active cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+    }
+  ]
+}

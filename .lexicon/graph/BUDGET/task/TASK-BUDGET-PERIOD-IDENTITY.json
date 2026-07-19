@@ -1,0 +1,237 @@
+{
+  "id": "01KXXMEZ2J04QXD33T6S0D5NR4",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX0PG2AYCGNGJG41HJJJ1",
+  "ref_code": "TASK-BUDGET-PERIOD-IDENTITY",
+  "slug": "PERIOD-IDENTITY",
+  "title": "Implement trusted monthly period identity",
+  "description": [
+    "Create explicit ZAR calendar-month value semantics and derive Current, Future, or Closed only from TimeProvider."
+  ],
+  "objective": [
+    "Every BUDGET workflow resolves the same validated half-open period and trusted lifecycle state without caller or persisted authority."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 1,
+  "created_at": "2026-07-19T16:48:30.2936612+00:00",
+  "decisions": [
+    {
+      "id": "01KXXMEZ2PT0QV6N7THZNY5XAH",
+      "target": "DD-BUDGET-PLAN-REVISION-LIFECYCLE",
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2P6NJMNMMKV934QPG3",
+      "target": "DD-BUDGET-TRUSTED-PERIOD-TIME",
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXXMEZ2QBY28NFFT8Z2T8NXB",
+      "target": "TASK-BUDGET-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "The period value consumes the published period wire contract and stable errors."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMEZ2PRZGWDDH217YB23PY",
+      "path": "src/Tally/Domain/Budget/Periods/BudgetPeriod.cs",
+      "action": "create",
+      "role": "validated value and boundaries",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2P5KMS67VYS0MAYTJ4",
+      "path": "src/Tally/Domain/Budget/Periods/BudgetPeriodResolver.cs",
+      "action": "create",
+      "role": "trusted lifecycle resolver",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2PZ1Q7236QD3FTDBQK",
+      "path": "tests/Tally.Tests/Budget/Periods/BudgetPeriodTests.cs",
+      "action": "test",
+      "role": "boundary and validation tests",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXMEZ2PDEEBZSQHYHPEM7AK",
+      "name": "BudgetPeriod",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-PERIOD-PLAN",
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2QCEWAE1CA70RNV78Y",
+      "name": "BudgetPeriodResolver.Resolve",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-PERIOD-PLAN",
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXN83KXDV7N4EF0K56DAVSR",
+      "kind": "acceptance_check",
+      "text": [
+        "A valid year/month/ZAR resolves startInclusive on month day one and endExclusive on next month day one; every period-bearing operation requires this explicit input."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T17:02:14.1411379+00:00"
+    },
+    {
+      "id": "01KXXN83KY39QAQ73SNDXG1FEE",
+      "kind": "acceptance_check",
+      "text": [
+        "One TimeProvider-derived DateOnly classifies start-inclusive/end-exclusive periods as Current, Future, or Closed and cannot be overridden by JSON or stored columns."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T17:02:14.1411379+00:00"
+    },
+    {
+      "id": "01KXXN83KYSW9FABZT6R6WKCDA",
+      "kind": "acceptance_check",
+      "text": [
+        "Equivalent explicit period inputs produce equal BudgetPeriod values and identical boundaries regardless of invocation time or caller locale."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T17:02:14.1411379+00:00"
+    },
+    {
+      "id": "01KXXN83KYKWHYK01B3J7Z4V74",
+      "kind": "acceptance_check",
+      "text": [
+        "Invalid month, non-ZAR, non-calendar, overflow, or omitted period returns stable validation before state access."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T17:02:14.1411379+00:00"
+    },
+    {
+      "id": "01KXXMEZ2PSDHCG1ZP1ZK7CZ0C",
+      "kind": "expected_output",
+      "text": [
+        "BudgetPeriod"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2P76CKQS22YDNB2GRX",
+      "kind": "expected_output",
+      "text": [
+        "BudgetPeriodResolver"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2P0DTQJZZPSRSX641D",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT infer the requested period from invocation time, persist period state, accept caller lifecycle state, or use UTC timestamp comparisons for calendar eligibility."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2P30KMVARBB7WTDJ1G",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add rollover, reopen, arbitrary ranges, multi-currency, or policy-engine behavior."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXMEZ2QG540BNGA3YMHMJ4S",
+      "target_ref_code": "DM-BUDGET-PERIOD-PLAN",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD70XWXSTFQXMKWVYYD7S",
+      "target_title": "BudgetPeriodAndPlan",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2Q3645P9495XVMXQEP",
+      "target_ref_code": "FA-BUDGET-PLANS-LIFECYCLE",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXXJD7XG1W48H4MXZCVAR4VA",
+      "target_title": "Plans and Lifecycle",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    },
+    {
+      "id": "01KXXMEZ2QDZJ8CZ6H7P9ZNSCG",
+      "target_ref_code": "TC-BUDGET-PLAN-IDENTITY-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFJJYHJ0K2F400NTD9ST19",
+      "target_title": "Verify monthly plan identity contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXXMEZ2PVZZXES7K367ZNGP6",
+      "target": "FR-BUDGET-PLAN-IDENTITY",
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXMEZ2QPTCHE9JSH17DK55H",
+      "gate_type": "self-review",
+      "description": [
+        "Confirm no caller-supplied or persisted period lifecycle authority exists."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:48:30.2936612+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXN83KYJC0ZFFVG66V46NFC",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetPeriodTests",
+      "expected_result": "exit 0; at least 16 leap-year, year-boundary, inclusive/exclusive, current/future/closed, equality, invalid, and explicit-input cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 0,
+      "created_at": "2026-07-19T17:02:14.1411379+00:00"
+    }
+  ]
+}

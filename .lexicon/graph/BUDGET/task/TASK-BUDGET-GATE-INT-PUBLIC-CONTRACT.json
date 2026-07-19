@@ -1,0 +1,409 @@
+{
+  "id": "01KXXMKGSM8597H47XMZYXVNJM",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX1MYQCYMQQX5AEM6AH01",
+  "ref_code": "TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT",
+  "slug": "GATE-INT-PUBLIC-CONTRACT",
+  "title": "Wire and prove the complete BUDGET contract",
+  "description": [
+    "Validation and wiring gate with no implements refs; compose all handlers into the registry and prove the published process surface."
+  ],
+  "objective": [
+    "The Native-AOT Tally executable discovers and invokes exactly five BUDGET operations plus shared schema discovery with stable contracts and no hidden reads."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 1,
+  "created_at": "2026-07-19T16:50:59.5105332+00:00",
+  "decisions": [
+    {
+      "id": "01KXXMKGSPDTWAKCB3DSXQ33H3",
+      "target": "DD-BUDGET-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSQKEW624DHN0BGBK46",
+      "target": "DD-BUDGET-CLI-OPERATION-CONTRACT",
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXXMKGSS9ZRA9ZE16RTJ2074",
+      "target": "TASK-BUDGET-ACTIVATION-LIFECYCLE",
+      "dependency_type": "compile",
+      "reason": [
+        "Register the activation handler."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSR1B7EZM6HXDNTXZV7",
+      "target": "TASK-BUDGET-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Wiring consumes descriptors and source-generated contracts."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSSCS5SM6JK8V8CH18K",
+      "target": "TASK-BUDGET-DRAFT-CREATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Register the draft handler."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSSDSDHGB1MXWGAZVGD",
+      "target": "TASK-BUDGET-INSIGHTS-READ-PROJECTION",
+      "dependency_type": "compile",
+      "reason": [
+        "Publish the exact read-only consumer capability."
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSSNJKD931MMZWXBWC5",
+      "target": "TASK-BUDGET-PLAN-READS",
+      "dependency_type": "compile",
+      "reason": [
+        "Register both plan read handlers."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSS359ZCWDDDMCZQEXZ",
+      "target": "TASK-BUDGET-POSITION-QUERY",
+      "dependency_type": "compile",
+      "reason": [
+        "Register the position handler."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXXMKGSQT8WVMEYR2T2VREGZ",
+      "path": "src/Tally/Bootstrap/Features/BudgetExtensions.cs",
+      "action": "create",
+      "role": "complete explicit registration",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSQ9629JZBTWRTSB2WG",
+      "path": "src/Tally/Program.cs",
+      "action": "modify",
+      "role": "BUDGET composition",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSQ849SHRSPRBD73Q20",
+      "path": "tests/Tally.Tests/Budget/Contract/BudgetPublishedContractTests.cs",
+      "action": "test",
+      "role": "descriptor/version matrix",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSQ1Y64MFC5S9YHCBTQ",
+      "path": "tests/Tally.Tests/Budget/Process/BudgetProcessContractTests.cs",
+      "action": "test",
+      "role": "stdout/stderr/exit matrix",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSQGTAJV770KHR41A52",
+      "path": "scripts/verify-budget-contract.sh",
+      "action": "create",
+      "role": "published contract gate",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXXNADDKA1SKTHZBS2M1Z3YV",
+      "name": "BudgetOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-19T17:03:29.7146571+00:00"
+    },
+    {
+      "id": "01KXXNADDKT5YHQ0A0AA5TMSGV",
+      "name": "CreateBudgetDraftCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-REVISION-ENTRY",
+      "sort_order": 1,
+      "created_at": "2026-07-19T17:03:29.7146571+00:00"
+    },
+    {
+      "id": "01KXXNADDKKM6BS7C0DNN55MCV",
+      "name": "ActivateBudgetPlanRevisionCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-LIFECYCLE-IDEMPOTENCY",
+      "sort_order": 2,
+      "created_at": "2026-07-19T17:03:29.7146571+00:00"
+    },
+    {
+      "id": "01KXXNADDKKPJ6G3XDQ3CBNHEK",
+      "name": "GetBudgetPlanRevisionQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-REVISION-ENTRY",
+      "sort_order": 3,
+      "created_at": "2026-07-19T17:03:29.7146571+00:00"
+    },
+    {
+      "id": "01KXXNADDK6PQEZWAB3TQVPXDH",
+      "name": "ListBudgetPlanRevisionsQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-PERIOD-PLAN",
+      "sort_order": 4,
+      "created_at": "2026-07-19T17:03:29.7146571+00:00"
+    },
+    {
+      "id": "01KXXNADDKXKFQGJ9ZFQD0P7YX",
+      "name": "GetBudgetPositionQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "sort_order": 5,
+      "created_at": "2026-07-19T17:03:29.7146571+00:00"
+    },
+    {
+      "id": "01KXXNADDKGAWFW8J4S9QX6RRB",
+      "name": "BudgetReadProjectionModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
+      "sort_order": 6,
+      "created_at": "2026-07-19T17:03:29.7146571+00:00"
+    },
+    {
+      "id": "01KXXNADDKA1VKY4M4S885WBYH",
+      "name": "CompleteBudgetPublicContract",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
+      "sort_order": 7,
+      "created_at": "2026-07-19T17:03:29.7146571+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXXMKGSQZV120XBBJWC1GBEH",
+      "kind": "acceptance_check",
+      "text": [
+        "BudgetExtensions explicitly registers contract, state, Ledger client, plan, position, and projection components; Program adds it without reflection scanning."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSQTA6Y1STKGM4DH8W6",
+      "kind": "acceptance_check",
+      "text": [
+        "Published schema inventory contains exactly five BUDGET descriptors with byte-stable semantics, concrete handlers, and shared system.schema.list/show; no alias, HTTP, background operation, or data read during discovery."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSQXD3V5Y7W09T2AET5",
+      "kind": "acceptance_check",
+      "text": [
+        "Each valid invocation emits one versioned business result; malformed, unknown-field, not-found, conflict, closed, stale, compatibility, Ledger, resource, and sanitized internal failures emit one stable error/exit."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSQWBGYNDX2PQ90CZDT",
+      "kind": "acceptance_check",
+      "text": [
+        "Mutations reject actor, authority, reason, and idempotency omissions before effects; incompatible BUDGET/Ledger/INSIGHTS versions fail before mutation or partial financial output."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSQ9CZCDCDPE941BPET",
+      "kind": "acceptance_check",
+      "text": [
+        "linux-x64 Native-AOT publish succeeds with source-generated JSON and zero build, trim, reflection, dynamic-code, or descriptor gaps."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSQ1E24QNWZ6RZCQS9N",
+      "kind": "expected_output",
+      "text": [
+        "BudgetExtensions"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSQYB4AMSZBA99SFCKP",
+      "kind": "expected_output",
+      "text": [
+        "CompleteBudgetPublicContract"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSQYCF411FV3CRBFRYR",
+      "kind": "expected_output",
+      "text": [
+        "Published-binary contract evidence"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSQXYJMCHNY3G3YW7DJ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use reflection registration, hidden conventions, HTTP, services, generic invoke, prompts, unversioned contracts, or serialized diagnostics."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSQYJNNSSB5GX7SQ2Z6",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT mark green with an unregistered descriptor or zero-discovery test class."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSQZ608EPMQW203NK18",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT update external dependency status here; the final module gate owns evidence-based validation."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXXMKGSRRHS4SK8JNYZZKNVY",
+      "target_ref_code": "ADR-CORE-0021",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3YHHJX75J3BATYF9GWQ",
+      "target_title": "Explicit DI Registration — No Reflection Scanning",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSRF58GY2PZ31AV5EM5",
+      "target_ref_code": "PAT-CORE-API-SERVICE-REGISTRATION",
+      "target_entity_type": "pattern",
+      "target_entity_id": "01KXR2EKM1XVWPKAM919E4BCHD",
+      "target_title": "Service Registration Pattern — NXGN Actions API",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSRH6GFPZ244WMZW91Z",
+      "target_ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD70VEXEC9XJW661AYMPD",
+      "target_title": "BudgetOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSRSG0VZQ469MGJQMEV",
+      "target_ref_code": "TC-BUDGET-CONTRACT-DISCOVERY-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFJYD4MPDR2RD18XQAQ6MN",
+      "target_title": "Verify BUDGET contract discovery",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSRFVVNM8NSMG31S7WX",
+      "target_ref_code": "TC-BUDGET-STRUCTURED-INVOCATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFJZKTQ57Q1N8K9RSXVBNT",
+      "target_title": "Verify structured BUDGET invocation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    },
+    {
+      "id": "01KXXMKGSRBMDGF6B5867Y652E",
+      "target_ref_code": "TC-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXXFMNG4CT13XZKM3DCKTMV5",
+      "target_title": "Verify BUDGET contract compatibility",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXXMKGSRQMZMTD6TD4C3A0WP",
+      "gate_type": "branch-review",
+      "description": [
+        "Review the published binary surface and exact operation inventory before acceptance tasks."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXXMKGSRA1E6M6SE78RHM1T0",
+      "phase": "after",
+      "command": "bash scripts/verify-budget-contract.sh",
+      "expected_result": "exit 0; exactly 5 BUDGET descriptors/handlers and 2 INSIGHTS reads are inventoried, both contract classes discover nonzero cases, version/error partitions run, Native-AOT publish succeeds, and 0 tests or warning checks fail",
+      "required": 1,
+      "timeout_seconds": 1200,
+      "sort_order": 0,
+      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+    }
+  ]
+}
