@@ -1,0 +1,355 @@
+{
+  "id": "01KXWFK8XPQ3FVJRXBGYZ7V51W",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "sub_plan_id": "01KXWEE5XA3TV445NDNPVKK5YT",
+  "ref_code": "TASK-CLASSIFY-OUTCOME-EXPLANATION",
+  "slug": "OUTCOME-EXPLANATION",
+  "title": "Explain and invalidate retained outcomes",
+  "description": [
+    "Implement outcome.get with bounded historical evidence, current display names, complete fingerprint staleness, and safe next actions."
+  ],
+  "objective": [
+    "The owner can reproduce a retained outcome or learn exactly why it is stale without reconstruction, unrelated data, or forced apply."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 6,
+  "created_at": "2026-07-19T06:04:14.1384778+00:00",
+  "decisions": [
+    {
+      "id": "01KXWFK8YEWFB30MMM5Q2DJJEJ",
+      "target": "DD-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YEJPA7M75G1PQKQ9MS",
+      "target": "DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXWFK8YFCTF31TRBXQNET6ZF",
+      "target": "TASK-CLASSIFY-EVALUATION-WORKFLOW",
+      "dependency_type": "compile",
+      "reason": [
+        "Outcome inspection reads the retained evaluation and evidence produced by this task."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFNK8QX5GT79CG203HFJPZ",
+      "target": "TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:05:30.2641884+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXWFK8YFWHMTJZC9S825QDSG",
+      "path": "src/Tally/Features/Classify/Evaluation/Outcome/GetClassificationOutcomeQuery.cs",
+      "action": "create",
+      "role": "outcome query",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YFZPS9Q64A1WXH1YZW",
+      "path": "src/Tally/Domain/Classify/Evaluation/ClassificationStalenessPolicy.cs",
+      "action": "create",
+      "role": "fingerprint comparison",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YFE6VBCCJTVQJDVS8R",
+      "path": "src/Tally/Features/Classify/Contract/ClassifyContractMapper.Outcome.cs",
+      "action": "create",
+      "role": "pure explanation mapping",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YF094AC9JVDDAV24BN",
+      "path": "src/Tally/Bootstrap/Features/ClassifyEvaluationExtensions.cs",
+      "action": "create",
+      "role": "explicit evaluation registration",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YFKG8Q6KGJK396TPS6",
+      "path": "tests/Tally.Tests/Classify/Evaluation/OutcomeExplanationTests.cs",
+      "action": "test",
+      "role": "explanation partitions",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YF93PYR33VZ6EV9BQZ",
+      "path": "tests/Tally.Tests/Classify/Evaluation/OutcomeInvalidationTests.cs",
+      "action": "test",
+      "role": "complete staleness matrix",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXWFK8YFA424FGQG91GXX32R",
+      "name": "ClassificationEvaluationStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YF6YMJWQ3PBEC5F5V8",
+      "name": "LedgerContractClient.QueryClassificationProjectionAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YF1DKQNBSCKGCJXXDN",
+      "name": "GetClassificationOutcomeQuery.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YFYCQSH0NPCP7BDYQD",
+      "name": "ClassificationStalenessPolicy.Evaluate",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXWFK8YEDBZ8YQMYEG8BVH05",
+      "kind": "acceptance_check",
+      "text": [
+        "Suggestion, no-suggestion, and conflict explanations return exact retained evaluation, transaction, category, normalization, rule-set, contributing rules, allowed matched fields, and stable reason without unrelated payloads."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YEGF0G6SHGSEBPM70K",
+      "kind": "acceptance_check",
+      "text": [
+        "Unknown outcome and known outcome with unavailable retained evidence return distinct stable statuses and never reconstruct evidence from current state."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YE63KCYMN6PGTHNAHE",
+      "kind": "acceptance_check",
+      "text": [
+        "Transaction, allocation, transfer, refund, category lifecycle, contract, projection, store generation, snapshot, normalization, and rule-set changes each name the changed fingerprint dimension and allow only re-evaluation."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YETQS9K6PJZMAHVA5P",
+      "kind": "acceptance_check",
+      "text": [
+        "A same-identifier active category rename preserves validity and returns the current display name; archive or reactivation stales the outcome."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YEYACM537C0CD0WWC9",
+      "kind": "acceptance_check",
+      "text": [
+        "Stale, conflict, and no-suggestion outcomes remain unappliable."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YFSY0QRKP9J3TE0WFD",
+      "kind": "constraint",
+      "text": [
+        "Query reads retained CLASSIFY evidence and public Ledger display/lifecycle state only; it performs no durable mutation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YEEZMNX5WRG1N1DJZA",
+      "kind": "expected_output",
+      "text": [
+        "GetClassificationOutcomeQuery"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YER98HMFPWS2C7VG0C",
+      "kind": "expected_output",
+      "text": [
+        "ClassificationStalenessPolicy"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YEGD98MKXHAH3CQAR8",
+      "kind": "expected_output",
+      "text": [
+        "Bounded outcome result mapping"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YE2HW2TH24RDEBSWE6",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT reconstruct missing MatchEvidence from current Ledger or rule state - rejected by DD-CLASSIFY-DETERMINISTIC-EVALUATION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YEGKGSAW3CE7T6CWC6",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT treat display-name rename as category identity change."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YE128C5TZ2EDE8TPZG",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT expose raw descriptions, normalized values, corpus rows, hidden rule payloads, or full requests."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YE8X0VCPBVXNKHA5S4",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT offer correction or forced apply as the safe action for stale evidence."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YF8H3VDZK7YAAP2HM0",
+      "kind": "note",
+      "text": [
+        "Staleness comparison is field-complete against EvaluationFingerprint; tests enumerate every PRD trigger."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXWFK8YFK9R091SCZXKPR2JZ",
+      "target_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJFJKQ05X63ZSNR5NGY8V",
+      "target_title": "ClassificationEvaluationAndOutcome",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YFGTSFXC067AME527J",
+      "target_ref_code": "TC-CLASSIFY-OUTCOME-EXPLANATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PGKC1HZB1S5D48PYJPP1",
+      "target_title": "Verify bounded outcome explanation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YFK5G0YN9K5PGHXD77",
+      "target_ref_code": "TC-CLASSIFY-OUTCOME-INVALIDATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PJNH4T6JJF9GTA1GXZ9S",
+      "target_title": "Verify every staleness trigger",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXWFK8YE98AS4AYA5E9S9JAQ",
+      "target": "FR-CLASSIFY-OUTCOME-EXPLANATION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YECE6ZVGXPYVD14YRY",
+      "target": "FR-CLASSIFY-OUTCOME-INVALIDATION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXWFK8YF7QK425R50PK7XAWH",
+      "gate_type": "self-review",
+      "description": [
+        "Compare the staleness matrix one-for-one with all FR-CLASSIFY-OUTCOME-INVALIDATION criteria."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXWFK8YFFYTZMWZ8HVTKYPT4",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~OutcomeExplanationTests|FullyQualifiedName~OutcomeInvalidationTests'",
+      "expected_result": "exit 0; at least 32 explanation, not-found, evidence-unavailable, every-staleness-dimension, rename-control, apply-block, and disclosure cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ]
+}

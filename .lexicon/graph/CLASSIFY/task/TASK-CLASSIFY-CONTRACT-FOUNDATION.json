@@ -1,0 +1,395 @@
+{
+  "id": "01KXWFK8XJAX46D06E9WMW3KRH",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "sub_plan_id": "01KXWEE55356MVFJ84SEJWS2S5",
+  "ref_code": "TASK-CLASSIFY-CONTRACT-FOUNDATION",
+  "slug": "CONTRACT-FOUNDATION",
+  "title": "Publish CLASSIFY operation contracts",
+  "description": [
+    "Create source-generated DTOs, stable errors, descriptors, mapper boundary, and feature-local contract registration for the exact twelve operations."
+  ],
+  "objective": [
+    "The Tally registry can represent every CLASSIFY request, result, error, limit, compatibility, mutability, and idempotency contract without loading private data."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 4,
+  "created_at": "2026-07-19T06:04:14.1384778+00:00",
+  "decisions": [
+    {
+      "id": "01KXWFK8Y3RWZEJ4PSD2ZBZYXY",
+      "target": "DD-CLASSIFY-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3B97EPP814Q6Q3331",
+      "target": "DD-CLASSIFY-CLI-OPERATION-CONTRACT",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXWFK8Y38DGT62KC3E5613V3",
+      "path": "src/Tally/Contracts/Classify/Operations/ClassifyRequests.cs",
+      "action": "create",
+      "role": "versioned requests",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3HVQSN32GC2X4HECJ",
+      "path": "src/Tally/Contracts/Classify/Operations/ClassifyResults.cs",
+      "action": "create",
+      "role": "versioned results",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3ZB52372XPY5J03QK",
+      "path": "src/Tally/Contracts/Classify/Operations/ClassifyErrors.cs",
+      "action": "create",
+      "role": "stable errors and exits",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3CX2HST02WEBN68K6",
+      "path": "src/Tally/Contracts/Classify/Rules/ClassificationRuleContracts.cs",
+      "action": "create",
+      "role": "typed rule wire contracts",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3DZENMFPGPFK5EJFF",
+      "path": "src/Tally/Contracts/Classify/ClassifyJsonContext.cs",
+      "action": "create",
+      "role": "source-generated JSON",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3TFT1T4C2GAZ9AED8",
+      "path": "src/Tally/Features/Classify/Contract/ClassifyOperationModule.cs",
+      "action": "create",
+      "role": "twelve descriptors",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3T9DCQM42HD5RCG70",
+      "path": "src/Tally/Features/Classify/Contract/ClassifyContractMapper.cs",
+      "action": "create",
+      "role": "pure partial mapper root",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y32707BQWTMVFN9JQH",
+      "path": "tests/Tally.Tests/Classify/Contract/ClassifyOperationContractTests.cs",
+      "action": "test",
+      "role": "descriptor tests",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXWFK8Y38YFNKPRSFS329ZV1",
+      "name": "ClassifyOperationContracts",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3W86HS69ZMVXN2ZCF",
+      "name": "ClassifyOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-OPERATION-CONTRACTS",
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3JZQ4B2B5NTT8W1EQ",
+      "name": "ClassifyJsonContext",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-OPERATION-CONTRACTS",
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3A1XKKEKZWM3GH8N1",
+      "name": "ClassifyContractMapper",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-OPERATION-CONTRACTS",
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXWFK8Y3QNX2ZHARQQSEETTM",
+      "kind": "acceptance_check",
+      "text": [
+        "The descriptor set contains exactly the twelve C12 operation IDs with deterministic versioned request, result, error, exit, mutability, idempotency, limit, and compatibility metadata."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3GV7G09HTBV0P76XN",
+      "kind": "acceptance_check",
+      "text": [
+        "Source-generated JSON rejects unknown fields; malformed, incompatible, missing-actor, and missing-idempotency requests fail before a handler effect."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3JESEXMX938AJYS3K",
+      "kind": "acceptance_check",
+      "text": [
+        "Complex input is accepted only through explicit stdin or file JSON and sensitive paths never appear in process arguments."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3ZG24321X6JBQFEA8",
+      "kind": "acceptance_check",
+      "text": [
+        "Descriptor discovery and unknown-operation handling perform no CLASSIFY, private corpus, or Ledger data read."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3QBFKQSD6J2DB670N",
+      "kind": "constraint",
+      "text": [
+        "Reuse OperationRegistry, OperationDescriptor, CommandResult, and process envelopes produced by the Ledger core task."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3YNPFW93XXAR71DCE",
+      "kind": "expected_output",
+      "text": [
+        "ClassifyOperationContracts"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3ACP52K69Y64ZX0Z7",
+      "kind": "expected_output",
+      "text": [
+        "ClassifyJsonContext"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3CF9X5S33RBSM998H",
+      "kind": "expected_output",
+      "text": [
+        "ClassifyOperationModule descriptors"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y32H2Q7AJDAS6Y80BG",
+      "kind": "expected_output",
+      "text": [
+        "Pure ClassifyContractMapper boundary"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y32QAFNQCBF37KYQGG",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT merge capabilities behind generic invoke, manage, run, save, update, list, or delete discriminators - rejected by DD-CLASSIFY-CLI-OPERATION-CONTRACT."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3DA93JFMEYW30CAMG",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add HTTP endpoints, FastEndpoints, reflection scanning, a mediator, or an event bus - rejected by DD-CLASSIFY-APPLICATION-ARCHITECTURE."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y351N1E87SJT7KZESG",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT serialize private payloads to stdout errors, stderr, logs, or crash diagnostics."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y308FWV5VGX3KPANF4",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use strings for system-owned operation state when a closed enum is defined - per ADR-CORE-0004."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3GY96ZVR4NK6NJT8Z",
+      "kind": "note",
+      "text": [
+        "Final Program wiring is owned by TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT after every handler exists."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXWFK8Y4F4S7WG0PGEKAGY9X",
+      "target_ref_code": "TASK-LEDGER-CORE-PROCESS-CONTRACT",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXT0KHY0G0YQW0FRT8BEWTY9",
+      "target_title": "Build the self-contained process and operation contract",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4Q5R2YDA9S5ASHFA3",
+      "target_ref_code": "ADR-CORE-0004",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3Y3HMG3XPZHM0SNNAEZ",
+      "target_title": "Enum Over String Constants for System-Owned Status Fields",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4FS5G8543QSPP7ER2",
+      "target_ref_code": "ADR-CORE-0010",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3Y7DB71F8178QX5C3FA",
+      "target_title": "CommandResult Pattern for Commands",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4HY9EAJNHF1AZNTYD",
+      "target_ref_code": "ADR-CORE-0021",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3YHHJX75J3BATYF9GWQ",
+      "target_title": "Explicit DI Registration — No Reflection Scanning",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y41M9WE7RP5JZ03NPB",
+      "target_ref_code": "NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXW9G29PW7PPZ9105PFV4SVS",
+      "target_title": "Preserve public contract compatibility boundaries",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4VT52R4XW0JZ1KH3B",
+      "target_ref_code": "DM-CLASSIFY-OPERATION-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJCQXQ5BBRC27KWC2BHB9",
+      "target_title": "ClassifyOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4XVFQMMTKWVXR7EJF",
+      "target_ref_code": "FA-CLASSIFY-CONTRACT-VOCABULARY",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXWCJXG6W9BK2PME4QW0QSC3",
+      "target_title": "Contract and Vocabulary",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXWFK8Y2MTVH869T6SY04H1C",
+      "target": "FR-CLASSIFY-CONTRACT-DISCOVERY",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y3BM44XDC3EF2C8PHF",
+      "target": "FR-CLASSIFY-STRUCTURED-INVOCATION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXWFK8Y3NPGDCYMBF0MX9Q3V",
+      "gate_type": "self-review",
+      "description": [
+        "Inventory exactly twelve public operations and confirm no hidden alias or HTTP surface exists."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXWFK8Y3XBVYQY57YYRFKB9Z",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ClassifyOperationContractTests",
+      "expected_result": "exit 0; at least 20 descriptor, deterministic-schema, unknown-field, compatibility, actor, idempotency, and no-data-read cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ]
+}

@@ -1,0 +1,398 @@
+{
+  "id": "01KXWFK8XPRZV8TRGFEN3C472D",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "sub_plan_id": "01KXWEE5XA3TV445NDNPVKK5YT",
+  "ref_code": "TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE",
+  "slug": "RULE-ACTIVATION-LIFECYCLE",
+  "title": "Activate and retire immutable rule sets",
+  "description": [
+    "Implement explicit rule.activate and rule.retire with exact validation evidence, successor rule sets, attribution, and fail-closed broad authority."
+  ],
+  "objective": [
+    "Only current owner-approved evidence can atomically activate an immutable successor rule set; retirement and replacement preserve all prior versions."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 3,
+  "created_at": "2026-07-19T06:04:14.1384778+00:00",
+  "decisions": [
+    {
+      "id": "01KXWFK8YBK6T6A36MXZ48D09W",
+      "target": "DD-CLASSIFY-PRIVATE-VALIDATION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YBZBBPYDW20DRJMF22",
+      "target": "DD-CLASSIFY-RULE-VOCABULARY",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YB5Z6C557XJJWZHATZ",
+      "target": "DD-CLASSIFY-STATE-STORE",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXWFNKYA5A0J17ZAKF377R0M",
+      "target": "TASK-CLASSIFY-RULE-DRAFT-SAVE",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-RULE-DRAFT-SAVE."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:05:30.9558810+00:00"
+    },
+    {
+      "id": "01KXWFK8YCG2T7MR6Q5TVFK4AB",
+      "target": "TASK-CLASSIFY-RULE-VALIDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Activation consumes current aggregate validation evidence and immutable drafts."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXWFK8YC7MRAMQKXNV33FBQZ",
+      "path": "src/Tally/Features/Classify/Rules/Activate/ActivateClassificationRuleCommand.cs",
+      "action": "create",
+      "role": "activation workflow",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YCNXHBB8613V780PKR",
+      "path": "src/Tally/Features/Classify/Rules/Retire/RetireClassificationRuleCommand.cs",
+      "action": "create",
+      "role": "retirement workflow",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YCS3S06Z9K6XJB2RYD",
+      "path": "src/Tally/Domain/Classify/Rules/RuleLifecyclePolicy.cs",
+      "action": "create",
+      "role": "closed transitions",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YCFPX3Z1TS8ZK38D9Y",
+      "path": "src/Tally/Infrastructure/Classify/Storage/Rules/RuleSetStore.cs",
+      "action": "create",
+      "role": "atomic rule-set state",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YCPFAVAKPT1ZSKJ23T",
+      "path": "src/Tally/Bootstrap/Features/ClassifyRuleExtensions.cs",
+      "action": "create",
+      "role": "explicit rule registration",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YCQXNAATFPM8C2FYVB",
+      "path": "tests/Tally.Tests/Classify/Rules/RuleActivationTests.cs",
+      "action": "test",
+      "role": "activation tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YCF1DCPSVPFCNEFBW7",
+      "path": "tests/Tally.Tests/Classify/Rules/RuleRetirementTests.cs",
+      "action": "test",
+      "role": "retirement and replacement tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXWFK8YCHAG7GQZSQHQ6CVVA",
+      "name": "ClassificationValidationStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YC174EYSBKV6PPBZX4",
+      "name": "ClassificationRuleStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YCMVSFDSFM0JA4R3TB",
+      "name": "ActivateClassificationRuleCommand.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YCZ5ETJAQ3NTHYPCXB",
+      "name": "RetireClassificationRuleCommand.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YC2V2V3CTFMHPN8QAX",
+      "name": "RuleSetStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXWFK8YB73QC3A5CJVKZA543",
+      "kind": "acceptance_check",
+      "text": [
+        "Activation requires the exact current validation fingerprint, zero incorrect-application canaries, zero unexplained incompatible conflicts, an active category identity, and explicit owner actor and reason."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YB4PTFDHWFZ3BKYV5W",
+      "kind": "acceptance_check",
+      "text": [
+        "One transaction creates the immutable RuleSetVersion, memberships, lifecycle event, and active pointer; any failure leaves the prior pointer unchanged."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YBX259EH8FF49AT24H",
+      "kind": "acceptance_check",
+      "text": [
+        "Broad apply is false by default and can be true only for the exact activated rule version and validation evidence explicitly authorized by the owner."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YBT3C8HVXYMK19TKNZ",
+      "kind": "acceptance_check",
+      "text": [
+        "Retire or validated replacement creates a successor set, retains prior versions, and records prior/resulting state plus replacement reference."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YB3Q7KVA37JBH34F8Y",
+      "kind": "acceptance_check",
+      "text": [
+        "Same-ID category rename refreshes display; archive, reactivation, identity change, stale evidence, or unavailable corpus blocks new authority."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YCWSBK8KH7QPN36HCY",
+      "kind": "constraint",
+      "text": [
+        "Rule-set activation and retirement are explicit SQLite transactions with attributable immutable history."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YBHE5ERPFZ2WWFNE3M",
+      "kind": "expected_output",
+      "text": [
+        "ActivateClassificationRuleCommand"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YB7E3FDABNFS5ETCT0",
+      "kind": "expected_output",
+      "text": [
+        "RetireClassificationRuleCommand"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YCBW1CKV5X907NRTND",
+      "kind": "expected_output",
+      "text": [
+        "RuleSetStore"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YCHPPKH807A2X80THW",
+      "kind": "expected_output",
+      "text": [
+        "RuleLifecyclePolicy"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YBCSQGGDQP3QD851AJ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT update a rule version or rule-set membership in place - rejected by DD-CLASSIFY-STATE-STORE."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YBJ521FMGXA4NGJC9P",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT activate automatically from save, validation, feedback, correction, import, startup, or evaluation."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YBZCHH86Y3T9S01ZKZ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT grant broad apply when the corpus is missing or evidence is stale."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YBBGV517HPQ4X8QWPZ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT delete retired or superseded versions."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YC3RA975CJH542HE7X",
+      "kind": "note",
+      "text": [
+        "Replacement is activation of a validated successor that names its prior version; there is no separate update operation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXWFK8YCPPA55YR5WKY98E33",
+      "target_ref_code": "NFR-CLASSIFY-ATTRIBUTABLE-HISTORY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXW9G3B24EZV86NVCN5YQA4T",
+      "target_title": "Retain attributable classification history",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YCE5T5EJ33BDE8R2SJ",
+      "target_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJEMC0Y34ANP6YWT0TED7",
+      "target_title": "ClassificationRuleLifecycle",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YCCR07ZAPQNZ1PX6PW",
+      "target_ref_code": "DIAG-CLASSIFY-RULE-LIFECYCLE",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KXWCN33MA2F8PXK7RNC1W01H",
+      "target_title": "Classification rule and rule-set lifecycle",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YCFCQF47DEE5Y7S63S",
+      "target_ref_code": "TC-CLASSIFY-RULE-LIFECYCLE-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PGYNCKBXD6J1CWS57GFP",
+      "target_title": "Verify immutable rule lifecycle",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXWFK8YBG7YDYTGQZHYBDAZJ",
+      "target": "FR-CLASSIFY-RULE-LIFECYCLE",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YBBQA21RZY0JT4X81P",
+      "target": "FR-CLASSIFY-RULE-VALIDATION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXWFK8YC21PP45HD7H88821X",
+      "gate_type": "test-evidence",
+      "description": [
+        "Tests prove every activation source is explicit and every prior version remains immutable and attributable."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXWFK8YC0JGDARFWRXQQZP1M",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~RuleActivationTests|FullyQualifiedName~RuleRetirementTests'",
+      "expected_result": "exit 0; at least 28 evidence, atomicity, broad-authority, rename, archive, corpus-unavailable, retire, replace, and immutable-history cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ]
+}

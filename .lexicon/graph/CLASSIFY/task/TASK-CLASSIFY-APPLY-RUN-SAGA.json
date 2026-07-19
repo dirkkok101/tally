@@ -1,0 +1,413 @@
+{
+  "id": "01KXWFK8XQ6M13J7FP99MJ0QVT",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "sub_plan_id": "01KXWEE68KNW38E47M7H4M09H3",
+  "ref_code": "TASK-CLASSIFY-APPLY-RUN-SAGA",
+  "slug": "APPLY-RUN-SAGA",
+  "title": "Execute the replay-safe apply saga",
+  "description": [
+    "Implement apply.run with repeated all-item preflight, durable frozen per-item intent, Ledger mutation preconditions, exact results, locking, and crash recovery."
+  ],
+  "objective": [
+    "Explicit authorized assignments and corrections reach Ledger at most once per item and every crash window resolves to an exact durable frontier."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 2,
+  "created_at": "2026-07-19T06:04:14.1384778+00:00",
+  "decisions": [
+    {
+      "id": "01KXWFK8YH18VX77N2PWFBMPDH",
+      "target": "DD-CLASSIFY-APPLY-SAGA",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHN20R5PQBJM0T1QER",
+      "target": "DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHSYC310GN2962JJWX",
+      "target": "DD-CLASSIFY-STATE-STORE",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXWFK8YJ3C79MDR0V53NKFNH",
+      "target": "TASK-CLASSIFY-APPLY-PREVIEW",
+      "dependency_type": "compile",
+      "reason": [
+        "Apply consumes the exact expiry-bound preview and selected-item preconditions."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YJ0N1PAYEBPN1C1Q56",
+      "target": "TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT",
+      "dependency_type": "compile",
+      "reason": [
+        "Apply consumes the public assignment and correction methods with frozen preconditions."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXWFK8YH2N9BJ4BRJDEB8RWC",
+      "path": "src/Tally/Features/Classify/Apply/Run/RunClassificationApplyCommand.cs",
+      "action": "create",
+      "role": "apply orchestration",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHBXTK5X1PPFFGGRTE",
+      "path": "src/Tally/Infrastructure/Classify/Storage/ClassificationApplyLock.cs",
+      "action": "create",
+      "role": "owner run lock",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YH8K5Z1XSY6W3GFPWK",
+      "path": "src/Tally/Infrastructure/Classify/Storage/Apply/ClassificationApplyRunStore.cs",
+      "action": "create",
+      "role": "durable intent and results",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHEWPKSNBG7171X5AD",
+      "path": "src/Tally/Domain/Classify/Apply/ApplyReplayPolicy.cs",
+      "action": "create",
+      "role": "frontier and frozen replay",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YH3533RNHBN79N55HB",
+      "path": "src/Tally/Features/Classify/Contract/ClassifyContractMapper.ApplyRun.cs",
+      "action": "create",
+      "role": "pure apply mapping",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YH3041M2C2T98SEFM7",
+      "path": "src/Tally/Bootstrap/Features/ClassifyApplyExtensions.cs",
+      "action": "create",
+      "role": "explicit apply registration",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHB13JVQ9RX15YQT94",
+      "path": "tests/Tally.Tests/Classify/Apply/ClassificationApplySagaTests.cs",
+      "action": "test",
+      "role": "apply contract tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHH1G9NTH23F5GCCAA",
+      "path": "tests/Tally.Tests/Classify/ApplyRecovery/ClassificationApplyCrashRecoveryTests.cs",
+      "action": "test",
+      "role": "crash-window matrix",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXWFK8YH9669V0M4A7HR428Z",
+      "name": "ClassificationApplyPreviewStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-APPLY-RUN",
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHZCQD4QM34HQ0J8JS",
+      "name": "LedgerContractClient.AssignCategoryAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHS6GPPRH4JE8BCR79",
+      "name": "LedgerContractClient.CorrectCategoryAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YH83EZXG18NXMA7KYJ",
+      "name": "RunClassificationApplyCommand.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-APPLY-RUN",
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHM4DM9SSZZMKGC0RQ",
+      "name": "ClassificationApplyRunStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-APPLY-RUN",
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXWFK8YHFQR9NQQBF47KG7TS",
+      "kind": "acceptance_check",
+      "text": [
+        "Before the first Ledger call, apply.run locks the run, repeats apply_preflight for the entire selected set, and rejects all items on any missing, stale, ineligible, allocation, revision, category, authority, or reason mismatch."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHTE8PYFEGPYS071N2",
+      "kind": "acceptance_check",
+      "text": [
+        "For each deterministic transaction-ID item, exact operation, target, expected allocation, revisions, reason, request fingerprint, and derived idempotency key are durable before the Ledger call."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHN9PQCMRT2FEACXGT",
+      "kind": "acceptance_check",
+      "text": [
+        "Ledger atomically asserts assignment absence or exact correction allocation and revisions; CLASSIFY then records applied, already_applied, rejected, failed, or unresolved before advancing."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHGBRSMWJ1XZN8XHDV",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical replay returns prior terminal results; conflicting identity reuse preserves original results and returns stable conflict."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHGQ1GAQN9FRJG6X6E",
+      "kind": "acceptance_check",
+      "text": [
+        "Every injected crash window resumes only planned or unresolved items, never calls Ledger again for terminal rows, and creates zero duplicate allocations."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHDSJRF6NWXYDJ9DKK",
+      "kind": "constraint",
+      "text": [
+        "One owner-only per-run OS lock; Ledger call occurs outside CLASSIFY transaction; all async boundaries propagate CancellationToken."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YH84T4PTK0138JQ106",
+      "kind": "expected_output",
+      "text": [
+        "RunClassificationApplyCommand"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHDHJRBVM013AYMY0X",
+      "kind": "expected_output",
+      "text": [
+        "ClassificationApplyRunStore"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHTFBMSRGWB43A3P8F",
+      "kind": "expected_output",
+      "text": [
+        "ClassificationApplyLock"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHNSS3SEJZDJKPW12Z",
+      "kind": "expected_output",
+      "text": [
+        "ApplyReplayPolicy"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHNDFPXN0BFRGEZ8ZK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT hold a CLASSIFY SQLite transaction across Ledger calls or claim a distributed transaction - rejected by DD-CLASSIFY-APPLY-SAGA."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHKW9Z3XHREYWB5VR0",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT call Ledger before durable exact intent or retain only an aggregate receipt."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHPRQMR92S45K59KZH",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT replay terminal items or regenerate a request, key, reason, allocation expectation, or revision on resume."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHSQKMTFJ6VW2HAN11",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT continue with a partially stale selection or weaken Ledger errors."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YHXCGR2T60ZV8E31EG",
+      "kind": "note",
+      "text": [
+        "The crash matrix must cover commit-before-result and result-before-CLASSIFY-durability windows explicitly."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXWFK8YJ55G9732D1W43VQ27",
+      "target_ref_code": "NFR-CLASSIFY-APPLY-RECOVERY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXW9G304WTQWG1718CJ7WK2Q",
+      "target_title": "Recover classification apply runs deterministically",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YH8EGM691D1Y5VMEDQ",
+      "target_ref_code": "DM-CLASSIFY-APPLY-RUN",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJFXE8B1Q7ZRY82MXCYKQ",
+      "target_title": "ClassificationApplyPreviewAndRun",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YH87DBSXBDK0K0Y7PK",
+      "target_ref_code": "DIAG-CLASSIFY-APPLY-SAGA",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KXWCN2MDWGAHF7F8GEA2DCED",
+      "target_title": "Preview preflight and replay-safe apply saga",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YJY40CV5YZWFY2S2V2",
+      "target_ref_code": "TC-CLASSIFY-APPLY-EXECUTION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PHZRHWHZVT06Y60C9X0D",
+      "target_title": "Verify replay-safe classification apply",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YJENXHA5HE0DKFWC50",
+      "target_ref_code": "TC-CLASSIFY-APPLY-CRASH-RECOVERY-MATRIX",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9QX0VMV7TG67WG63CSVT6",
+      "target_title": "Verify every classification apply crash window",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXWFK8YH2NBBPFHQ9WGCY158",
+      "target": "FR-CLASSIFY-APPLY-EXECUTION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXWFK8YHTT9AN1N65DPNX9FF",
+      "gate_type": "test-evidence",
+      "description": [
+        "Crash injection proves every requested item has exact durable knowledge and zero second category mutations."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXWFK8YHCRHJXSNMQB50R67K",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~ClassificationApplySagaTests|FullyQualifiedName~ClassificationApplyCrashRecoveryTests'",
+      "expected_result": "exit 0; at least 40 all-item-preflight, assign, correct, Ledger-reject, identical-replay, conflict, every crash boundary, frontier, and duplicate-allocation cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ]
+}

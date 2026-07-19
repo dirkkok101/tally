@@ -1,0 +1,50 @@
+{
+  "id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "PLAN-CLASSIFY-V1",
+  "title": "Transaction Classification v1 implementation",
+  "description": [
+    "Greenfield plan from MD-CLASSIFY-MASTER: 0% of designed implementation elements exist; no behavior is removed. Cross-plan prerequisites are PLAN-LEDGER-V1 and PLAN-INGEST-V1; compile edges name their producing tasks.",
+    "",
+    "C1: CLASSIFY must remain inside the self-contained Tally CLI, add no required service, daemon, background worker, network dependency, dynamic plugin system, or generic ML platform, and may own at most one owner-local store for rule, version, feedback, and evaluation state.",
+    "C2: Read eligible transactions, relationship/categorization state, active categories, assignments, corrections, and structured outcomes only through discoverable versioned LEDGER operations; never open or infer private LEDGER storage or duplicate finance validation.",
+    "C3: The same snapshot-bound canonical inputs, active category state, normalization version, and rule set must return identical ordered outcomes. Every suggestion names its rule/version and bounded match evidence; ambiguity returns no-suggestion or conflict.",
+    "C4: Evaluation and suggestion are read-only. Category mutation occurs only through an explicit CLASSIFY apply invocation backed by public LEDGER assignment/correction operations; rule activation, batch scope, and correction remain attributable.",
+    "C5: Transaction descriptions, normalized features, rules, feedback, and evaluation artifacts remain local and owner-readable only. Logs and diagnostics contain metadata and stable identifiers, never serialized requests, descriptions, rule payloads, or financial values.",
+    "C6: Inactive transactions, active transfer principal, linked refund behavior, void/supersession state, archived categories, stale snapshots, missing mappings, and multi-rule conflicts follow public LEDGER truth and cannot be guessed around or mutated.",
+    "C7: Every operation exposes compatible schemas and stable module-scoped outcomes. Apply records a stable request identity and per-transaction result so retry cannot produce a second or conflicting category mutation.",
+    "C8: A rule or normalization change affects future evaluation only. Existing LEDGER assignments change solely through an explicit reasoned correction over an identified transaction set.",
+    "C9: Raw representative and held-out rows, descriptions, normalized tokens, and rule-derived payloads remain outside Git and owner-only. CLASSIFY persists or exports only necessary protected local state, source fingerprints, aggregate metrics, and safe decisions; diagnostic channels never contain financial payloads.",
+    "C10: Every outcome and activation report is bound to the exact LEDGER snapshot or store generation, classification projection contract, category catalogue, normalization, rule-set, and evidence fingerprints. Any mismatch makes the outcome stale and blocks activation or mutation.",
+    "C11: Every evaluation and candidate validation advertises and enforces deterministic transaction, rule, evidence-row, memory, and processing-time limits. Exceeding a limit returns a stable structured failure and performs no activation or LEDGER mutation.",
+    "C12: The shared Tally operation registry must expose exactly the first-release CLASSIFY capabilities classify.evaluate, classify.outcome.get, classify.apply.preview, classify.apply.run, classify.rule.save, classify.rule.validate, classify.rule.activate, classify.rule.retire, classify.feedback.record, classify.status, classify.abandon, and classify.cleanup. Design may choose CLI token paths but may not merge away or silently add product capabilities.",
+    "C13: P1 acts through the invoking trusted OS identity; CLASSIFY defines no application permissions, roles, tenant scope, role templates, seeded users, menus, navigation, translation catalogues, frontend keys, or browser behavior. Any human-facing surface and its permission, translation, navigation, and accessibility contract belongs to the CHANNELS module future PRD and design.",
+    "",
+    "Platform constraints: target .NET 10 Native-AOT and linux-x64; use file-scoped namespaces, nullable reference types, primary constructors, explicit DI, CancellationToken propagation, source-generated JSON, raw Microsoft.Data.Sqlite, structured metadata-only logging, and zero warnings. No HTTP/FastEndpoints, EF Core/DbContext, PostgreSQL, Aspire service, Angular, reflection scanning, mediator, event bus, generic repository, provider abstraction, dynamic plugin, seed data, or network dependency is in scope."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T05:43:57.4609320+00:00",
+  "links": [
+    {
+      "id": "01KXWGCTRB0N522XAP0KY7STS7",
+      "target_type": "module_design",
+      "target": "MD-CLASSIFY-MASTER",
+      "rel": "see-also",
+      "created_at": "2026-07-19T06:18:11.5967051+00:00"
+    },
+    {
+      "id": "01KXWGCW2RXXGE9D3BAWDCBPMH",
+      "target_type": "plan",
+      "target": "PLAN-INGEST-V1",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T06:18:12.9529601+00:00"
+    },
+    {
+      "id": "01KXWGCVDJE3TXDCAH6Z62CSJW",
+      "target_type": "plan",
+      "target": "PLAN-LEDGER-V1",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T06:18:12.2752075+00:00"
+    }
+  ]
+}

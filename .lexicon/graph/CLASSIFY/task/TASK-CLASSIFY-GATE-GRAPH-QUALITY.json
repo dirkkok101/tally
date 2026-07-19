@@ -1,0 +1,378 @@
+{
+  "id": "01KXWG0ND4FXTSNDB6KS8QHBYT",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "sub_plan_id": "01KXWEE6KV9J79GRPXER6KWZGV",
+  "ref_code": "TASK-CLASSIFY-GATE-GRAPH-QUALITY",
+  "slug": "GATE-GRAPH-QUALITY",
+  "title": "Converge CLASSIFY graph and evidence quality",
+  "description": [
+    "Prove traceability, design-path, dependency, suite-discovery, and forbidden-surface health after all behavioral gates complete."
+  ],
+  "objective": [
+    "One reproducible evidence marker proves the implemented CLASSIFY graph is complete and every named verification surface is non-vacuous."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 9,
+  "created_at": "2026-07-19T06:11:32.9009840+00:00",
+  "dependencies": [
+    {
+      "id": "01KXWG0ND746M7T18EE30DYB4J",
+      "target": "TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY",
+      "dependency_type": "compile",
+      "reason": [
+        "Graph evidence requires the private viability result."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND70WG1DJ49P7RQ0AYX",
+      "target": "TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Graph evidence requires the complete public contract marker."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND7R2D3VCQVSQV3GE5K",
+      "target": "TASK-CLASSIFY-GATE-SECURITY",
+      "dependency_type": "compile",
+      "reason": [
+        "Graph evidence requires security evidence."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND7VYPBW4J3Z523VZD6",
+      "target": "TASK-CLASSIFY-VERIFY-UC-001",
+      "dependency_type": "compile",
+      "reason": [
+        "Graph evidence requires UC-CLASSIFY-001 evidence."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND71TXH0JYECX7Q5T0G",
+      "target": "TASK-CLASSIFY-VERIFY-UC-002",
+      "dependency_type": "compile",
+      "reason": [
+        "Graph evidence requires UC-CLASSIFY-002 evidence."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND7539CP9NPN665HJQM",
+      "target": "TASK-CLASSIFY-VERIFY-UC-003",
+      "dependency_type": "compile",
+      "reason": [
+        "Graph evidence requires UC-CLASSIFY-003 evidence."
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND7D6BQHET779QX5TMJ",
+      "target": "TASK-CLASSIFY-VERIFY-UC-004",
+      "dependency_type": "compile",
+      "reason": [
+        "Graph evidence requires UC-CLASSIFY-004 evidence."
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND7GXF0KJJ49GK6QA2G",
+      "target": "TASK-CLASSIFY-VERIFY-UC-005",
+      "dependency_type": "compile",
+      "reason": [
+        "Graph evidence requires UC-CLASSIFY-005 evidence."
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND7ARMDF80AFZQYWN9F",
+      "target": "TASK-CLASSIFY-VERIFY-UC-006",
+      "dependency_type": "compile",
+      "reason": [
+        "Graph evidence requires UC-CLASSIFY-006 evidence."
+      ],
+      "sort_order": 8,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXWG0ND66NWM83FHJ5C083AD",
+      "path": ".lexicon/graph/CLASSIFY/module.json",
+      "action": "read",
+      "role": "canonical module identity",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND6JCABTED938H670HY",
+      "path": "tests/Tally.Tests/Classify/ClassifyGraphEvidenceGuardTests.cs",
+      "action": "test",
+      "role": "suite discovery and forbidden-surface guards",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND6SVYW6V54XMD0SHDS",
+      "path": "scripts/verify-classify-graph.sh",
+      "action": "create",
+      "role": "graph and named-suite gate",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND68Q23CMA83F1WJJ7C",
+      "path": "docs/verification/classify-graph.md",
+      "action": "document",
+      "role": "safe graph evidence report",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXWG0ND6ADXFN4P11JFKG8FC",
+      "name": "CompleteClassifyPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND6HQNSQJ4MTRQ566CX",
+      "name": "ClassifySecurityGateEvidence",
+      "direction": "consumes",
+      "contract_ref_code": "NFR-CLASSIFY-LOCAL-DATA-PROTECTION",
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND6B7YZ3W8GBQZX9M6D",
+      "name": "VerifiedClassifyPrivateEvidenceGate",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND6EPYZCTC2M60BVTZH",
+      "name": "VerifiedClassifyUc001",
+      "direction": "consumes",
+      "contract_ref_code": "UC-CLASSIFY-001",
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND6QZ4K9SW7VS1152RZ",
+      "name": "VerifiedClassifyUc002",
+      "direction": "consumes",
+      "contract_ref_code": "UC-CLASSIFY-002",
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND61B3TPBHJSRJX707D",
+      "name": "VerifiedClassifyUc003",
+      "direction": "consumes",
+      "contract_ref_code": "UC-CLASSIFY-003",
+      "sort_order": 5,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND6JVMRFFXJ5QXHCK6J",
+      "name": "VerifiedClassifyUc004",
+      "direction": "consumes",
+      "contract_ref_code": "UC-CLASSIFY-004",
+      "sort_order": 6,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND7Q45157SP6NNPHV7A",
+      "name": "VerifiedClassifyUc005",
+      "direction": "consumes",
+      "contract_ref_code": "UC-CLASSIFY-005",
+      "sort_order": 7,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND7K4NANEXV7CDHKSEQ",
+      "name": "VerifiedClassifyUc006",
+      "direction": "consumes",
+      "contract_ref_code": "UC-CLASSIFY-006",
+      "sort_order": 8,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND7KNEX8KNC42EQ79WR",
+      "name": "ClassifyGraphQualityEvidence",
+      "direction": "produces",
+      "sort_order": 9,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXWG0ND67VF5W7FJB40RPQ2V",
+      "kind": "acceptance_check",
+      "text": [
+        "Lex coverage reports 13 of 13 active FRs covered, zero orphan tests, zero gaps, and all 20 planned test cases linked to implementation evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND60Z6E1TQTX4D470J4",
+      "kind": "acceptance_check",
+      "text": [
+        "Decision path-check reports all 30 expected paths matched; link suggestions are empty and endpoint suggestions confirm no HTTP surface is required."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND65QEGHZGVDNTMRH6N",
+      "kind": "acceptance_check",
+      "text": [
+        "Every named CLASSIFY feature, integration, security, private-evidence, and UC test class has nonzero discovery before aggregate totals are accepted."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND6EP4AR6JNTYJYDNYV",
+      "kind": "acceptance_check",
+      "text": [
+        "The evidence report records exact commands, counts, graph ref-codes, and safe fingerprints without private fixture content."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND6K1CX5QN8NQKYZ5XY",
+      "kind": "constraint",
+      "text": [
+        "Validation-only gate is intentionally loose; it consumes prior evidence and adds no business behavior."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND6QQJT1VCMK1JS1TGB",
+      "kind": "expected_output",
+      "text": [
+        "ClassifyGraphQualityEvidence"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND6QS63FHBCBTY1TV4G",
+      "kind": "expected_output",
+      "text": [
+        "Reproducible graph-quality report"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND6HAGFGFH26QQSPY1E",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT suppress coverage gaps, path warnings, dependency warnings, zero-discovery suites, or failed kill criteria."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND6B5E63M1NDY3H808C",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT substitute aggregate test totals for per-class discovery evidence."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND6247945QZ5015T8AA",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT edit graph JSON or exported Markdown to manufacture healthy status."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND615A22E1Z3FB9AW3R",
+      "kind": "note",
+      "text": [
+        "External dependency validation remains the final module gate's evidence-based responsibility."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXWG0ND76PY6DW5YBJAH7J6N",
+      "target_ref_code": "PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES",
+      "target_entity_type": "pattern",
+      "target_entity_id": "01KXR2EKKXYFFP0KNEYZGETEVG",
+      "target_title": "Implementation Plan Quality Gates",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXWG0ND79WDH3G8B6K3TXWSA",
+      "gate_type": "branch-review",
+      "description": [
+        "Review graph commands and named-suite counts from a clean checkout before final convergence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXWG0ND78SGJFGQM7PK6NPBP",
+      "phase": "after",
+      "command": "bash scripts/verify-classify-graph.sh",
+      "expected_result": "exit 0; coverage is 13 of 13 with 20 linked tests and zero gaps, all 30 design paths match, link suggestions are empty, every named suite discovers tests, and 0 graph or forbidden-surface checks fail",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    }
+  ]
+}

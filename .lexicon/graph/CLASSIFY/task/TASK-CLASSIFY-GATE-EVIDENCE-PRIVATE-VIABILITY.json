@@ -1,0 +1,369 @@
+{
+  "id": "01KXWFK8XN91YE9K6G59B60YJV",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "sub_plan_id": "01KXWEE5H5V1T58DHFTSNGMEH4",
+  "ref_code": "TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY",
+  "slug": "GATE-EVIDENCE-PRIVATE-VIABILITY",
+  "title": "Prove private classification viability",
+  "description": [
+    "Validation-only monitored gate with no implements refs; it evaluates the selected vocabulary against a private post-INGEST Ledger sample before durable workflow construction."
+  ],
+  "objective": [
+    "Representative owner evidence proves recurrence, material decision reduction, zero incorrect batch-apply canaries, safe hold-out handling, and local-only execution or CLASSIFY stops."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 4,
+  "created_at": "2026-07-19T06:04:14.1384778+00:00",
+  "decisions": [
+    {
+      "id": "01KXWFK8Y8932BHWVCJD8559PN",
+      "target": "DD-CLASSIFY-PRIVATE-VALIDATION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y85YJKC6106B3TDCJ0",
+      "target": "DD-CLASSIFY-RULE-VOCABULARY",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXWFNEP8X2EXSBS4Y62ZKY9G",
+      "target": "TASK-CLASSIFY-DETERMINISTIC-ENGINE",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-DETERMINISTIC-ENGINE."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:05:25.5770260+00:00"
+    },
+    {
+      "id": "01KXWFK8Y997G2Q3DCG5CDA0K7",
+      "target": "TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT",
+      "dependency_type": "compile",
+      "reason": [
+        "The gate consumes the real public Ledger projection client."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y9GG2PFA2QBYJ5R878",
+      "target": "TASK-CLASSIFY-PRIVATE-CORPUS-READER",
+      "dependency_type": "compile",
+      "reason": [
+        "The gate must use the production owner-only reader and deterministic engine."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXWFK8Y8QJBSHFEC3JNNDRWP",
+      "path": ".gitignore",
+      "action": "modify",
+      "role": "private fixture exclusion",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y8M0W19CECAX543NBT",
+      "path": "scripts/verify-classify-private-evidence.sh",
+      "action": "create",
+      "role": "fail-closed evidence runner",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y817RV7VX7HRCDX19E",
+      "path": "tests/Tally.Tests/Classify/Evidence/PrivateClassificationViabilityTests.cs",
+      "action": "test",
+      "role": "monitored thresholds and hold-out",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y852FETWH7HBRPP3J2",
+      "path": "docs/verification/classify-private-evidence.md",
+      "action": "document",
+      "role": "aggregate-only evidence report",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXWFK8Y8DZ5N29Y2TH2BZYP9",
+      "name": "ClassificationEngine.Evaluate",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y82SKP0W4BQZZ16BBB",
+      "name": "PrivateCorpusReader.ReadAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y8R1CSRT4MSKM3FK8G",
+      "name": "LedgerContractClient.QueryClassificationProjectionAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y8HXV1E7C02Y0D7EA0",
+      "name": "VerifiedClassifyPrivateEvidenceGate",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXWFK8Y86WAQ0NDYXR7N007F",
+      "kind": "acceptance_check",
+      "text": [
+        "A private owner-only post-INGEST sample spans at least 90 days, every row has an expected outcome, and the report contains fingerprints and aggregates only."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y80RKX8JRAJ5G5B3Q0",
+      "kind": "acceptance_check",
+      "text": [
+        "Evidence shows at least 20 recurring category decisions per month and the measured manual Ledger workflow exceeds 15 minutes per month; otherwise the gate fails and routes to the do-less workflow."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y80JV5XJXQKXBTRGJW",
+      "kind": "acceptance_check",
+      "text": [
+        "Held-out evaluation shows at least 50 percent fewer per-transaction owner decisions with zero incorrect batch-applied assignments; otherwise the gate fails and custom classifier work stops."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y8DH6H3M4EQXQZCP78",
+      "kind": "acceptance_check",
+      "text": [
+        "The exact v1 vocabulary accounts for every row, preserves drift canaries, emits no unexplained incompatible-category conflict, and requires no cloud, remote embedding, daemon, or data export."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y8ZPNXF4Q9SQYASPZ4",
+      "kind": "acceptance_check",
+      "text": [
+        "The tracked report records only counts, fingerprints, threshold outcomes, environment identity, and timestamp; private paths and payload values are absent."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y8VC5EHWKH2FAHT25A",
+      "kind": "constraint",
+      "text": [
+        "Execution requires TALLY_CLASSIFY_PRIVATE_FIXTURE to name a 0600 owner file outside tracked paths."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y8Y9H7YABSX9ZWDN3E",
+      "kind": "expected_output",
+      "text": [
+        "Safe aggregate private-evidence report"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y86KG4K08YDWSTPJTY",
+      "kind": "expected_output",
+      "text": [
+        "VerifiedClassifyPrivateEvidenceGate"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y85DMXBY5XHSZSSX9D",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT continue downstream tasks when any monitored kill criterion fails or cannot be evidenced."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y8KJSE513WDXNATW3Z",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT weaken conflict rules, broaden the grammar, or cherry-pick the hold-out to manufacture a pass."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y8K1N0PNZ9REZY7CK5",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT commit the private fixture, descriptions, normalized tokens, amounts, expected rows, or source paths."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y8W9ST7WQTT89A8JQJ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use a second evaluator, external service, cloud model, or remote telemetry."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y8ND121AC975BB5T46",
+      "kind": "note",
+      "text": [
+        "This gate intentionally remains loose. Failure closes the bead and returns to the do-less design; it is not an implementation bug to patch around."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXWFK8Y86CSACC05P2A33NDA",
+      "target_ref_code": "OQ-CLASSIFY-1",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KXV5NSDNE94RN8DEHW3G5VNR",
+      "target_title": "What transaction volume, repeat rate, current category coverage, and manual classification time does a representative post-INGEST 90-day LEDGER sample show?",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y82WPW9KT9ZCWJ9A6P",
+      "target_ref_code": "OQ-CLASSIFY-2",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KXV5NSQ4SG7FGNXBCXAGJHYX",
+      "target_title": "Which canonical LEDGER fields may a deterministic rule inspect, and which description normalization transformations remain stable across the three accounts without changing financial meaning?",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y8TBX9PB823R12TDQZ",
+      "target_ref_code": "OQ-CLASSIFY-3",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KXV5NT0MH17WV1NT191SY2PT",
+      "target_title": "Which first-release rule shapes are necessary, how are overlapping matches ordered, and when must multiple matches become a Rule Conflict instead of a winner?",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y8DDNC8J647YFKEYKD",
+      "target_ref_code": "OQ-CLASSIFY-7",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KXV5NV9QQZFVZ5J8WNFA6MSV",
+      "target_title": "What private evaluation fixture and hold-out procedure can measure coverage, conflicts, false applications, and time saved without committing transaction descriptions or spending facts to Git or logs?",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y9BVGQKQFD6Y3WKWQP",
+      "target_ref_code": "TASK-INGEST-GATE-MODULE",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXTMS8JT8WBSTHHHQ19DAMAY",
+      "target_title": "Complete the INGEST v1 module gate",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y8T7D8HGZEAD4W11YM",
+      "target_ref_code": "EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXV9NEWB6MN2V4KMJ12KD5QA",
+      "target_title": "Private Classification Evaluation Corpus",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y91D02JYS0GTBNT1R1",
+      "target_ref_code": "TC-CLASSIFY-DETERMINISTIC-PROPERTY-MATRIX",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PN17CNKRYQ9BRTYQHYQB",
+      "target_title": "Prove classification determinism and row accounting",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXWFK8Y85Y0E8QCNWD02P542",
+      "gate_type": "human-review",
+      "description": [
+        "The owner confirms the private fixture and timed baseline are representative without disclosing row payloads."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXWFK8Y8VH8G7PAXCNV5PPHK",
+      "phase": "after",
+      "command": "bash scripts/verify-classify-private-evidence.sh",
+      "expected_result": "exit 0; the runner discovers at least 10 permission, 90-day, recurrence, timed-baseline, reduction, incorrect-apply, conflict, row-accounting, locality, and disclosure checks and writes an aggregate-only report",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ]
+}

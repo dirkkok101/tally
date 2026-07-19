@@ -1,0 +1,298 @@
+{
+  "id": "01KXWFK8XHCYC34MXD37B8RSAD",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "sub_plan_id": "01KXWEE55356MVFJ84SEJWS2S5",
+  "ref_code": "TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT",
+  "slug": "LEDGER-CLASSIFICATION-CLIENT",
+  "title": "Extend the shared Ledger contract client",
+  "description": [
+    "Add CLASSIFY projection, category-display, assignment, and correction methods to the concrete client created by INGEST."
+  ],
+  "objective": [
+    "CLASSIFY consumes only released Ledger operations through one concrete replay-safe LedgerContractClient."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 3,
+  "created_at": "2026-07-19T06:04:14.1384778+00:00",
+  "decisions": [
+    {
+      "id": "01KXWFK8Y1BTJ1PKK66DXRQDSN",
+      "target": "DD-CLASSIFY-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y179HMA9G8Y5WB5X7C",
+      "target": "DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXWFK8Y2Q7TEVXJ3VW7PHPTQ",
+      "target": "TASK-CLASSIFY-GATE-INT-LEDGER-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "The client may consume only the prerequisite contract proven by this gate."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXWFK8Y1HEPVZTX83T1Q5P3R",
+      "path": "src/Tally/Integration/Ledger/LedgerContractClient.cs",
+      "action": "modify",
+      "role": "shared public contract client",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y1MNDA2RGD14VJRYK1",
+      "path": "tests/Tally.Tests/Classify/LedgerContract/ClassifyLedgerContractClientTests.cs",
+      "action": "test",
+      "role": "client behavior tests",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y173PC0DHRNBMN8V6X",
+      "path": "tests/Tally.Tests/Classify/LedgerContract/ClassifyLedgerBoundaryArchitectureTests.cs",
+      "action": "test",
+      "role": "private-reference guards",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXWFK8Y2DD3H5QRH51S4SPYJ",
+      "name": "VerifiedLedgerClassificationContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y274MY7J28NR3GCM1E",
+      "name": "LedgerContractClient.QueryClassificationProjectionAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y27YQTEVRNWXGJCM9E",
+      "name": "LedgerContractClient.AssignCategoryAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y2F5PS300NXDB8CJB6",
+      "name": "LedgerContractClient.CorrectCategoryAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXWFK8Y18Y4N5P0QBCG7XY75",
+      "kind": "acceptance_check",
+      "text": [
+        "QueryClassificationProjectionAsync discovers a compatible descriptor before reading and consumes every page with exact ordinal accounting."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y1NA64CCSTPXWNCWZW",
+      "kind": "acceptance_check",
+      "text": [
+        "AssignCategoryAsync and CorrectCategoryAsync preserve the frozen idempotency key, expected allocation, revisions, cancellation, and Ledger result without semantic translation."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y1HT0TTZ86EQ6B3X8R",
+      "kind": "acceptance_check",
+      "text": [
+        "Unsupported versions and downstream expected failures return stable CLASSIFY-consumable result values before any private read or mutation."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y1F2VQTHTE86PF22KC",
+      "kind": "acceptance_check",
+      "text": [
+        "Source-reference guards prove the client uses only contracts and the shared public executor."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y1WQX23CFK06K662CM",
+      "kind": "constraint",
+      "text": [
+        "Modify the client produced by TASK-INGEST-LEDGER-PUBLIC-CLIENT; keep its INGEST methods intact."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y1R3CXS3WQH0YHR5JF",
+      "kind": "expected_output",
+      "text": [
+        "Classification methods on the shared LedgerContractClient"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y1XK4Q75F66GFCR0FS",
+      "kind": "expected_output",
+      "text": [
+        "Public-boundary and error-preservation tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y1077JDWZEN3KXAV6A",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT spawn the tally CLI as a child process - rejected by DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y1JTNJCXPGBCCR02P0",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add a second Ledger client interface or speculative ports - rejected by DD-CLASSIFY-APPLICATION-ARCHITECTURE."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y1JJ8FK9Z2EFQ4W52H",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT reference LedgerDb, SQLite, private handlers, or private domain types."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y1TG1J0MCS5TYR4D3M",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT drop CancellationToken or rewrite Ledger error categories."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y164T2EJJDTQHD1WQ8",
+      "kind": "note",
+      "text": [
+        "The blocked-by INGEST task owns initial file creation; this task is an additive extension only."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXWFK8Y26N8X1EMHBRYYNN3C",
+      "target_ref_code": "TASK-INGEST-LEDGER-PUBLIC-CLIENT",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXTMAH8HS44VZDF52WXTAH1G",
+      "target_title": "Implement the concrete public LEDGER client",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y2SR2FZTKX7E8K6A2H",
+      "target_ref_code": "NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXW9G29PW7PPZ9105PFV4SVS",
+      "target_title": "Preserve public contract compatibility boundaries",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y22JZRXHQ9R6J1R5XT",
+      "target_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJDBZJ4735YSR5NKDRAWK",
+      "target_title": "LedgerClassificationProjectionContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXWFK8Y1YVPQTKZ6MSCQQ4Y3",
+      "target": "FR-CLASSIFY-APPLY-EXECUTION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y10M8MR0M1E6RNBH0Z",
+      "target": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXWFK8Y2VS64Y4CVKDHDW6H7",
+      "gate_type": "self-review",
+      "description": [
+        "Confirm the shared client remains concrete, additive, cancellation-aware, and public-contract only."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXWFK8Y2YMH5J8GNGHJ7TN0Q",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~ClassifyLedgerContractClientTests|FullyQualifiedName~ClassifyLedgerBoundaryArchitectureTests'",
+      "expected_result": "exit 0; at least 16 paging, version, assignment, correction, replay, cancellation, error-preservation, and source-boundary cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ]
+}

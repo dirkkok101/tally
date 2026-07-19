@@ -1,0 +1,11 @@
+{
+  "id": "01KXWEE55356MVFJ84SEJWS2S5",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "ref_code": "SP-CLASSIFY-00-FOUNDATION",
+  "title": "Upstream contracts and runtime foundation",
+  "description": [
+    "Hard prerequisites: extend and prove the public Ledger contract, extend the shared client, publish CLASSIFY contracts, and establish owner-only durable state."
+  ],
+  "sort_order": 0,
+  "created_at": "2026-07-19T05:43:57.8602586+00:00"
+}

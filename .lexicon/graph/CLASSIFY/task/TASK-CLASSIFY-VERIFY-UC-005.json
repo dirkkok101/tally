@@ -1,0 +1,240 @@
+{
+  "id": "01KXWFK8XSPPSG2T3327XMB8XZ",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "sub_plan_id": "01KXWEE6KV9J79GRPXER6KWZGV",
+  "ref_code": "TASK-CLASSIFY-VERIFY-UC-005",
+  "slug": "VERIFY-UC-005",
+  "title": "Verify bounded correction feedback",
+  "description": [
+    "Validation-only UC task with no implements refs; it traces UC-CLASSIFY-005 correction provenance, missing evidence, proposal bounds, validation, history, and no automatic generalization."
+  ],
+  "objective": [
+    "UC-CLASSIFY-005 proves corrections remain authoritative in Ledger while CLASSIFY records only attributable bounded non-active feedback proposals."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 7,
+  "created_at": "2026-07-19T06:04:14.1384778+00:00",
+  "decisions": [
+    {
+      "id": "01KXWFK8YVW6Q8XGAE610ZAFW4",
+      "target": "DD-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YVHP8TDRBSDR4YFZ2Z",
+      "target": "DD-CLASSIFY-PRIVATE-VALIDATION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXWFK8YVK74SP4EF3PBPYM5R",
+      "target": "TASK-CLASSIFY-FEEDBACK-PROPOSALS",
+      "dependency_type": "compile",
+      "reason": [
+        "The UC verifies the complete feedback and proposal slice."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YVZ7PQ2HAPY427BBVJ",
+      "target": "TASK-CLASSIFY-STATUS-WORKFLOW",
+      "dependency_type": "compile",
+      "reason": [
+        "The UC verifies retained historical status."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXWFK8YV2W2N01Z4X5FGEMSB",
+      "path": "tests/Tally.Tests/Classify/Acceptance/ClassifyUc005FeedbackTests.cs",
+      "action": "test",
+      "role": "UC-005 acceptance matrix",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXWFK8YVGXE0HFBSTY3RE56A",
+      "name": "RecordClassificationFeedbackCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-FEEDBACK-PROPOSAL",
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YVJKN49MXDWJJ4HVEV",
+      "name": "VerifiedClassifyUc005",
+      "direction": "produces",
+      "contract_ref_code": "UC-CLASSIFY-005",
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KXWGD04ERY5368215EEQB6E0",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-005",
+      "rel": "verifies",
+      "created_at": "2026-07-19T06:18:17.1028901+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXWFK8YV7XV0Q91NQ4CAAAJE",
+      "kind": "acceptance_check",
+      "text": [
+        "Accepted, rejected, and corrected feedback retains exact outcome and rule provenance plus authoritative prior and resulting allocations."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YVBD968472YA7F5SZH",
+      "kind": "acceptance_check",
+      "text": [
+        "One correction produces no proposal or one smallest retire, narrow, or replacement draft and never activates or broadens it."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YVEQBW73BPCNKGVH0D",
+      "kind": "acceptance_check",
+      "text": [
+        "Missing historical evidence records owner decision but creates no reconstructed proposal."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YVENT55Z08PEEHE01N",
+      "kind": "acceptance_check",
+      "text": [
+        "A safe feedback-derived candidate follows the same private validation and explicit activation path; unsafe or archived-category replacements reject."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YV71Q037YBA9KFFW8X",
+      "kind": "acceptance_check",
+      "text": [
+        "Original feedback remains attributable after rule retirement or supersession."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YVSJKYSSZZ871HEKDM",
+      "kind": "constraint",
+      "text": [
+        "Validation-only gate is intentionally loose."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YVN17PAR6TGS2HV45B",
+      "kind": "expected_output",
+      "text": [
+        "VerifiedClassifyUc005"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YVHTEJ7WQYNQFFPD2S",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT infer general behavior from one correction or rewrite Ledger or CLASSIFY history."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YVAAG1CXJYRN8GJPTQ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT omit missing-evidence, archived-category, broaden, no-activate, or retained-history failure paths."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YVWGBSDJFBS79VPBYN",
+      "kind": "note",
+      "text": [
+        "The test oracle compares authoritative Ledger allocation IDs with immutable feedback references."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXWFK8YVTD84ZBNZS9RPJV3A",
+      "target_ref_code": "UC-CLASSIFY-005",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXV9EDEDYXE68BQ0NT7D7XKS",
+      "target_title": "Use a correction as bounded feedback",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YVHCYQFSPV4Z98EEV7",
+      "target_ref_code": "TC-CLASSIFY-CORRECTION-FEEDBACK-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PJA9CY0QXJMHR7WK9RES",
+      "target_title": "Verify bounded correction feedback",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXWFK8YVADR7ZSZ3VNV0V8PE",
+      "gate_type": "test-evidence",
+      "description": [
+        "Every proposal path remains non-active and all original provenance remains queryable."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXWFK8YVFH9GMDRZHKZD7GC2",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ClassifyUc005FeedbackTests",
+      "expected_result": "exit 0; at least 14 accept, reject, correction, allocations, no-proposal, retire, narrow, replace, no-broaden, no-activate, missing-evidence, archived-category, validation, and history cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ]
+}

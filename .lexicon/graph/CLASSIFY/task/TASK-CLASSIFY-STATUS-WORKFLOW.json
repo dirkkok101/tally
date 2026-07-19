@@ -1,0 +1,414 @@
+{
+  "id": "01KXWFK8XRAHGK2B73FVJGKNFM",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "sub_plan_id": "01KXWEE68KNW38E47M7H4M09H3",
+  "ref_code": "TASK-CLASSIFY-STATUS-WORKFLOW",
+  "slug": "STATUS-WORKFLOW",
+  "title": "Expose safe classification status",
+  "description": [
+    "Implement classify.status across rule, validation, evaluation, preview, apply, feedback, abandonment, and cleanup state without source rereads."
+  ],
+  "objective": [
+    "Every retained workflow state reports bounded lifecycle, mutation possibility, exact frontier, and one safe next operation without private reconstruction."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 5,
+  "created_at": "2026-07-19T06:04:14.1384778+00:00",
+  "decisions": [
+    {
+      "id": "01KXWFK8YMV09TFQFKFJG2GT2T",
+      "target": "DD-CLASSIFY-CLI-OPERATION-CONTRACT",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YMM204GFVXGT6E7KAB",
+      "target": "DD-CLASSIFY-STATE-STORE",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXWFK8YNA67W4NC03PA1V7XY",
+      "target": "TASK-CLASSIFY-ABANDON-CLEANUP",
+      "dependency_type": "compile",
+      "reason": [
+        "Status consumes abandonment tombstones and cleanup events."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFNQ17T87T2CKSHCYBXQ18",
+      "target": "TASK-CLASSIFY-APPLY-RUN-SAGA",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-APPLY-RUN-SAGA."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:05:34.1208446+00:00"
+    },
+    {
+      "id": "01KXWFNQQKQPHC620H9RH08T1D",
+      "target": "TASK-CLASSIFY-EVALUATION-WORKFLOW",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-EVALUATION-WORKFLOW."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:05:34.8363837+00:00"
+    },
+    {
+      "id": "01KXWFK8YNTSHH4ABRA8M7CM39",
+      "target": "TASK-CLASSIFY-FEEDBACK-PROPOSALS",
+      "dependency_type": "compile",
+      "reason": [
+        "Status consumes feedback and proposal state."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFNRCJ374FPR8NPGANVFGG",
+      "target": "TASK-CLASSIFY-RULE-DRAFT-SAVE",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-RULE-DRAFT-SAVE."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:05:35.5077868+00:00"
+    },
+    {
+      "id": "01KXWFNS1T5SD0G8T6S4BXECTW",
+      "target": "TASK-CLASSIFY-RULE-VALIDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-RULE-VALIDATION."
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-19T06:05:36.1871171+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXWFK8YNFHY5THBSYRP8CNTQ",
+      "path": "src/Tally/Features/Classify/Recovery/Status/GetClassificationStatusQuery.cs",
+      "action": "create",
+      "role": "status projection",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YN523E3B62H42HDGW9",
+      "path": "src/Tally/Domain/Classify/Recovery/SafeNextActionPolicy.cs",
+      "action": "create",
+      "role": "next-action policy",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YN1YB4F977QXJPEKTP",
+      "path": "src/Tally/Features/Classify/Contract/ClassifyContractMapper.Status.cs",
+      "action": "create",
+      "role": "pure status mapping",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YN0JERPWEHTHWJQ64K",
+      "path": "src/Tally/Bootstrap/Features/ClassifyRecoveryExtensions.cs",
+      "action": "create",
+      "role": "explicit recovery registration",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YNT60ABMS03WEBHKCE",
+      "path": "tests/Tally.Tests/Classify/Recovery/ClassificationStatusTests.cs",
+      "action": "test",
+      "role": "state matrix tests",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YNMPJHX69WGKK8FNYT",
+      "path": "tests/Tally.Tests/Classify/Recovery/StatusPrivacyTests.cs",
+      "action": "test",
+      "role": "no-reread and disclosure tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXWFK8YN2MQ8EWE15CH2GE0Q",
+      "name": "ClassificationRuleStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YNVR76WB0MBYFEB89Z",
+      "name": "ClassificationValidationStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YNCED3CYCSS3NA6PVX",
+      "name": "ClassificationEvaluationStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YNRZR8XQ57TAJ39EX1",
+      "name": "ClassificationApplyRunStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-APPLY-RUN",
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YN8CZRR5C7MMMSQ7BK",
+      "name": "ClassificationFeedbackStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-FEEDBACK-PROPOSAL",
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YNCQAXC3BPKGEQEG1T",
+      "name": "ClassificationRecoveryStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "sort_order": 5,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YNMNF272G3VFGNJ111",
+      "name": "GetClassificationStatusQuery.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "sort_order": 6,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXWFK8YM0QN73K9BF7C4WERR",
+      "kind": "acceptance_check",
+      "text": [
+        "Rule status identifies the active RuleSetVersion and draft, active, retired, and superseded rule versions with safe attributable lifecycle metadata."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YM9C9S0BTKVSRY53EA",
+      "kind": "acceptance_check",
+      "text": [
+        "Validation and evaluation status returns retained fingerprints, lifecycle, aggregates, staleness, and safe next action without corpus or projection reread."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YMWC2SJTPEE1GKJ04H",
+      "kind": "acceptance_check",
+      "text": [
+        "Apply status returns authorized fingerprint, terminal item totals, exact unresolved frontier, mutation possibility, and whether replay or resume is safe."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YMHBDGB41WYE244PMV",
+      "kind": "acceptance_check",
+      "text": [
+        "Feedback, abandonment, and cleanup status returns requested references, decision or event state, actor, reason, safe counts, and next action without payload search."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YMSGMEP9DF12TVRZ86",
+      "kind": "acceptance_check",
+      "text": [
+        "Unknown subjects return stable not-found; expected failures name only retry, resume, re-evaluate, correct, abandon, or cleanup as allowed by durable state."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YNQMAXG3E68D6Y044E",
+      "kind": "constraint",
+      "text": [
+        "Status is a bounded read-only projection over durable CLASSIFY state and public safe identifiers."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YN10M1X8PKEVN6JGZE",
+      "kind": "expected_output",
+      "text": [
+        "GetClassificationStatusQuery"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YN90PCS1A3WD83K807",
+      "kind": "expected_output",
+      "text": [
+        "SafeNextActionPolicy"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YNFMHK71AG0BYW6VHW",
+      "kind": "expected_output",
+      "text": [
+        "Complete recovery registration"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YNGD788NBJZV5E8NV7",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT reread private corpus rows or Ledger projection payloads to construct status."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YNSWXJ3KY67Q7ZRZ5D",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT heuristically search serialized payloads for an unknown subject."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YN1R7WMB7188PNFKCP",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT claim no mutation when a planned or unresolved apply item leaves Ledger outcome unknown."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YNDSSCSVHPH1A3E67Z",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT expose hidden rule contents, descriptions, amounts, normalized tokens, or unrelated records."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YNN20R4FCZ5GY5V4WQ",
+      "kind": "note",
+      "text": [
+        "Every failure-state result contains exactly one safe next operation and explicit mutation-possibility metadata."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXWFK8YN353QRNC5NM34GFX0",
+      "target_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJGM514904QHQZEJD3SEG",
+      "target_title": "ClassificationStateStore",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YNH5Y1BAR383M3ZAAX",
+      "target_ref_code": "FA-CLASSIFY-STATE-RECOVERY",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXWCJYZ7SYSPAJMAFTTBE12Z",
+      "target_title": "State and Recovery",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YNGQ5C3G9WC5Y2PGHG",
+      "target_ref_code": "TC-CLASSIFY-STATUS-HISTORY-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PKQ7PG6NZGF45F0X0BCD",
+      "target_title": "Verify safe classification status and history",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXWFK8YM7Q0H47C18PWTK2XB",
+      "target": "FR-CLASSIFY-STATUS-HISTORY",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXWFK8YN47RD3Y6J12XTZJHX",
+      "gate_type": "self-review",
+      "description": [
+        "Every retained subject and failure state maps to one bounded safe status and next action."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXWFK8YNXVW2J1236BZ65T0Z",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~ClassificationStatusTests|FullyQualifiedName~StatusPrivacyTests'",
+      "expected_result": "exit 0; at least 30 rule, validation, evaluation, preview, apply, feedback, abandon, cleanup, unknown, mutation-possibility, next-action, no-reread, and disclosure cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ]
+}

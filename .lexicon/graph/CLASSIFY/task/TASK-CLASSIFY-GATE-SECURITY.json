@@ -1,0 +1,361 @@
+{
+  "id": "01KXWFK8XR7Y77FAEV4GCCRGVW",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "sub_plan_id": "01KXWEE6KV9J79GRPXER6KWZGV",
+  "ref_code": "TASK-CLASSIFY-GATE-SECURITY",
+  "slug": "GATE-SECURITY",
+  "title": "Validate CLASSIFY local data security",
+  "description": [
+    "Validation-only security gate with no implements refs; it consolidates owner identity, permissions, payload isolation, cleanup, offline operation, and hostile-input evidence."
+  ],
+  "objective": [
+    "Every CLASSIFY workflow remains owner-only, offline, non-interactive, payload-safe, path-safe, and free of background or remote processing."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 2,
+  "created_at": "2026-07-19T06:04:14.1384778+00:00",
+  "decisions": [
+    {
+      "id": "01KXWFK8YPE6Q3MDPD82NTEPFF",
+      "target": "DD-CLASSIFY-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YP5W029DD5T0T1CEWP",
+      "target": "DD-CLASSIFY-ARTIFACT-RETENTION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQPWC1DPKB6QR7C9VH",
+      "target": "DD-CLASSIFY-PRIVATE-VALIDATION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXWFNH29Z7D2NM7X44X87Q2N",
+      "target": "TASK-CLASSIFY-ABANDON-CLEANUP",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-ABANDON-CLEANUP."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:05:28.0103574+00:00"
+    },
+    {
+      "id": "01KXWFNHTV4704JE9RERQADC4M",
+      "target": "TASK-CLASSIFY-APPLY-RUN-SAGA",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-APPLY-RUN-SAGA."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:05:28.7969168+00:00"
+    },
+    {
+      "id": "01KXWFK8YQRCEVTEVZ51VW6DT4",
+      "target": "TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY",
+      "dependency_type": "compile",
+      "reason": [
+        "Security validation includes the private owner-evidence path and report."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQVA6PMFS2G5HXFAND",
+      "target": "TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Security validation executes every published operation through the complete process contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFNJGMG3JH4G9ZDWA86CZQ",
+      "target": "TASK-CLASSIFY-PRIVATE-CORPUS-READER",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-PRIVATE-CORPUS-READER."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:05:29.4932311+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXWFK8YQ255B1W1TQF120ZRD",
+      "path": "tests/Tally.Tests/Classify/Security/ClassifySecurityGateTests.cs",
+      "action": "test",
+      "role": "security and privacy matrix",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQWJ4NKWCNWHFZZPF9",
+      "path": "scripts/verify-classify-security.sh",
+      "action": "create",
+      "role": "network and process isolation gate",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQEXNHY5TX37WT63MQ",
+      "path": "docs/verification/classify-security.md",
+      "action": "document",
+      "role": "metadata-only evidence report",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXWFK8YQTDSHWG7HCN9ENWHV",
+      "name": "CompleteClassifyPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQQ7KJ8K9XN5VH7ZNH",
+      "name": "PrivateCorpusReader.ReadAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQSC9F0WST0HR39AH6",
+      "name": "ClassifyArtifactProtection",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQ6M5BVNCS2P9NYE5Q",
+      "name": "ClassificationApplyRunStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-APPLY-RUN",
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQQ2SCZKAB8V1F4PDA",
+      "name": "ClassifySecurityGateEvidence",
+      "direction": "produces",
+      "contract_ref_code": "NFR-CLASSIFY-LOCAL-DATA-PROTECTION",
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXWFK8YQFT9AHTG43P6101WM",
+      "kind": "acceptance_check",
+      "text": [
+        "Success, expected failure, handled unexpected failure, interruption, resume, abandon, cleanup, and startup recovery preserve 0700 directories, 0600 files, owner identity, and zero raw corpus copies or orphan temporaries."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQEW36K8TX4B2C7DKN",
+      "kind": "acceptance_check",
+      "text": [
+        "Canaries in descriptions, tokens, rules, corpus rows, amounts, requests, and failures appear in none of arguments, tracked files, stdout errors, stderr, logs, telemetry, crash output, reports, or unrelated results."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQW98V4CAKQ013NMQE",
+      "kind": "acceptance_check",
+      "text": [
+        "Malformed JSON, unknown fields, symlinks, permissive modes, wrong owners, unknown files, outside-root paths, over-limits, and incompatible versions fail before activation or Ledger mutation."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQ8R6S2B1TT414SGJ1",
+      "kind": "acceptance_check",
+      "text": [
+        "Every acceptance workflow completes with network denied, no prompt or TTY read, and no Tally daemon, watcher, scheduler, child process, or background worker before or after invocation."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQ7W9QJ4FTW7AEXTF3",
+      "kind": "constraint",
+      "text": [
+        "This gate is intentionally loose and requires the real owner-host filesystem and network-denied published binary."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQWKEQ6SNDM87G5B6E",
+      "kind": "expected_output",
+      "text": [
+        "ClassifySecurityGateEvidence"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQVH8C764R04QXJF78",
+      "kind": "expected_output",
+      "text": [
+        "Security verification report"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQ4DS14YGDWKYCSNQT",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT redact only logs while leaving payloads in arguments, errors, crash files, telemetry, tracked artifacts, or temporary storage."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQ5CNZ857PRY2YFYVD",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT skip permission, symlink, path traversal, crash, or network-denied cases on linux-x64."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQRC87P12NWXZB625G",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use cloud inference, remote embeddings, third-party processing, a daemon, or a hidden child process."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQCZ99EBF1CJFAVGDH",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT mark this validation-only gate green from unit tests alone; execute the published Native-AOT binary."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQNZA6XJ0EA2YK1QMX",
+      "kind": "note",
+      "text": [
+        "The final module gate updates dependency validation status only after this gate and all other evidence are green."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXWFK8YQHS8WAQ69V4D8JTG2",
+      "target_ref_code": "EXT-CLASSIFY-HOST-OS-SECURITY",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXV9NEHRVZF8EQJPYNVMGXGT",
+      "target_title": "Host OS Process and Storage Security",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQH5XXCQVFK058C5HV",
+      "target_ref_code": "NFR-CLASSIFY-LOCAL-DATA-PROTECTION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXW9G1YYFFPN6NBJ16WYKTGC",
+      "target_title": "Protect local classification data",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQHHA0B34Y8YT0D0NP",
+      "target_ref_code": "NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXW9G3PFR7296KD35V6PBE3S",
+      "target_title": "Operate as a self-contained local classifier",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQRBH06DAB46CDNC8A",
+      "target_ref_code": "TC-CLASSIFY-LOCAL-ARTIFACT-PROTECTION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PNE1GTWFPDB2EWQZYW69",
+      "target_title": "Verify classification privacy boundaries",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YQB7E22KNS337RV7B8",
+      "target_ref_code": "TC-CLASSIFY-OFFLINE-PROCESS-ISOLATION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9QXT0SF89207E74SZF9H0",
+      "target_title": "Verify self-contained offline operation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXWFK8YQMTBR9PDC5RGMJJM0",
+      "gate_type": "test-evidence",
+      "description": [
+        "Published-host evidence covers STRIDE-relevant disclosure, tampering, repudiation, and resource boundaries."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXWFK8YQVBY9487CXQN9CYFQ",
+      "phase": "after",
+      "command": "bash scripts/verify-classify-security.sh",
+      "expected_result": "exit 0; the published-binary gate reports nonzero cases for every workflow and hostile boundary, zero payload canary matches, exact 0700/0600 modes, zero network attempts, zero prompts, zero outside-root changes, and zero leftover processes or temporaries",
+      "required": 1,
+      "timeout_seconds": 1200,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ]
+}

@@ -1,0 +1,305 @@
+{
+  "id": "01KXWFK8XT5BARM3C004HYHKJM",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "sub_plan_id": "01KXWEE6KV9J79GRPXER6KWZGV",
+  "ref_code": "TASK-CLASSIFY-GATE-MODULE",
+  "slug": "GATE-MODULE",
+  "title": "Complete the CLASSIFY v1 module gate",
+  "description": [
+    "Final validation gate with no implements refs; it converges contract, security, evidence, all six use cases, build, test, AOT, graph, paths, and dependency status."
+  ],
+  "objective": [
+    "CLASSIFY v1 is reproducibly buildable, tested, Native-AOT compatible, locally secure, externally validated, and ready for work review."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 10,
+  "created_at": "2026-07-19T06:04:14.1384778+00:00",
+  "decisions": [
+    {
+      "id": "01KXWFK8YWMJGHVSNXHWGQTSRZ",
+      "target": "DD-CLASSIFY-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXWG4X51992FNKM43QWE05P3",
+      "target": "TASK-CLASSIFY-GATE-GRAPH-QUALITY",
+      "dependency_type": "compile",
+      "reason": [
+        "Final convergence consumes current ClassifyGraphQualityEvidence after all behavioral gates."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:13:51.9061858+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXWG4Y5P1A4CRD5QXKW8SW29",
+      "path": "Tally.slnx",
+      "action": "read",
+      "role": "full solution",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5PCQ29WZ3HHHKAVP26",
+      "path": "src/Tally/Tally.csproj",
+      "action": "read",
+      "role": "Native-AOT executable",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5P0XA2RJ68J0D5A137",
+      "path": "tests/Tally.Tests/Tally.Tests.csproj",
+      "action": "read",
+      "role": "complete test project",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5P0CM9ET497TW6TQJB",
+      "path": "tests/Tally.Tests/Classify/ClassifyModuleGuardTests.cs",
+      "action": "test",
+      "role": "module architecture and suite-discovery guards",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5PGRYZJC9AFGBDCB79",
+      "path": "scripts/verify-classify-module.sh",
+      "action": "create",
+      "role": "module convergence runner",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5P3XAB4K8KM8VBW9P3",
+      "path": "docs/verification/classify-v1.md",
+      "action": "document",
+      "role": "safe completion report",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5PF17C2MEKPJC0V8BR",
+      "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-AI-AGENT-HOST.json",
+      "action": "modify",
+      "role": "lex-cli validation status",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5PK46BJ2C8N1EJXGHH",
+      "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-HOST-OS-SECURITY.json",
+      "action": "modify",
+      "role": "lex-cli validation status",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5PAE9MX8ZSZFN6MKWE",
+      "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT.json",
+      "action": "modify",
+      "role": "lex-cli validation status",
+      "required": 1,
+      "sort_order": 8,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5P9J89E1SFWRMW3R3Y",
+      "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS.json",
+      "action": "modify",
+      "role": "lex-cli validation status",
+      "required": 1,
+      "sort_order": 9,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXWG4Y5PE4D60KQ2H446PATD",
+      "name": "ClassifyGraphQualityEvidence",
+      "direction": "consumes",
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5PVWEECJ169256SWN1",
+      "name": "VerifiedClassifyV1Module",
+      "direction": "produces",
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXWG4Y5MFH1G57PM8SWBBDAX",
+      "kind": "acceptance_check",
+      "text": [
+        "Release restore, build, format verification, full tests, and linux-x64 Native-AOT publish exit 0 with zero build, trim, reflection, or dynamic-code warnings."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5NSQ91EHK7H3VPGYRH",
+      "kind": "acceptance_check",
+      "text": [
+        "Current ClassifyGraphQualityEvidence confirms nonzero named-suite discovery, complete traceability, matched design paths, and no forbidden surface."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5NP6QGM42SZCZKGMZ0",
+      "kind": "acceptance_check",
+      "text": [
+        "Ledger, Agent Host, Host OS, and private-corpus statuses change from assumed to validated through lex CLI only after their evidence succeeds; otherwise this gate fails."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5NG3YSXZZ1HSZCTH8W",
+      "kind": "acceptance_check",
+      "text": [
+        "The completion report records commands, counts, fingerprints, dependency statuses, and commit IDs without private data."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5PCVS0C6NFFH6GAAPV",
+      "kind": "constraint",
+      "text": [
+        "This loose final gate adds no business behavior and cannot replace task-level evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5N0R6M3MJF6GREV2WD",
+      "kind": "expected_output",
+      "text": [
+        "VerifiedClassifyV1Module"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5PQ0GMCRPQ729FVKK4",
+      "kind": "expected_output",
+      "text": [
+        "Safe module completion report"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5NGRZZHGXQD80BB7B0",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept aggregate tests when ClassifyGraphQualityEvidence is missing or stale."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5NWYA199D2Y7D6RP06",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT update external dependency status without successful named evidence."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5N0DBPGCYBXKMSFTRQ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT edit graph JSON directly; use lex external-dependency update."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    },
+    {
+      "id": "01KXWG4Y5N5CQ3DYS7BDFS13EA",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add HTTP, UI, EF, remote processing, background behavior, seed data, or private fixture content."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXWFK8YX120CMCSACDCY1JJV",
+      "target_ref_code": "NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXW9G3PFR7296KD35V6PBE3S",
+      "target_title": "Operate as a self-contained local classifier",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YX477GWJ7WR5J40JYC",
+      "target_ref_code": "NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXW9G29PW7PPZ9105PFV4SVS",
+      "target_title": "Preserve public contract compatibility boundaries",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXWG4Y5P04H90D3FN1PKVQP0",
+      "gate_type": "ci",
+      "description": [
+        "The module script and safe reports reproduce from a clean checkout plus the owner-private fixture."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXWG4Y5PZEX1GFNZWMVZ1PSC",
+      "phase": "after",
+      "command": "bash scripts/verify-classify-module.sh",
+      "expected_result": "exit 0; Release build, format check, full tests, Native-AOT publish, graph evidence, dependency evidence, and git-diff checks report nonzero discovery and 0 failures or warnings",
+      "required": 1,
+      "timeout_seconds": 2400,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+    }
+  ]
+}

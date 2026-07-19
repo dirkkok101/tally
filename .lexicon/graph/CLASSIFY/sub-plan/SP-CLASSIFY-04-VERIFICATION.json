@@ -1,0 +1,11 @@
+{
+  "id": "01KXWEE6KV9J79GRPXER6KWZGV",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "ref_code": "SP-CLASSIFY-04-VERIFICATION",
+  "title": "Contract, security, use-case, and module gates",
+  "description": [
+    "Converge feature slices into published-binary, local-security, six use-case, and full-module evidence."
+  ],
+  "sort_order": 4,
+  "created_at": "2026-07-19T05:43:59.3568075+00:00"
+}

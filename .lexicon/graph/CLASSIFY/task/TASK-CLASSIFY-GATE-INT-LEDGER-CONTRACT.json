@@ -1,0 +1,302 @@
+{
+  "id": "01KXWFK8XHJY3K3D5KE4K8GYW0",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "sub_plan_id": "01KXWEE55356MVFJ84SEJWS2S5",
+  "ref_code": "TASK-CLASSIFY-GATE-INT-LEDGER-CONTRACT",
+  "slug": "GATE-INT-LEDGER-CONTRACT",
+  "title": "Prove the Ledger classification prerequisite",
+  "description": [
+    "Validation-only integration gate with no implements refs; the producer task delivers behavior and this gate proves the complete released seam."
+  ],
+  "objective": [
+    "Published Ledger descriptors, projection behavior, mutation preconditions, and private-boundary guards satisfy every CLASSIFY consumer before client work begins."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 2,
+  "created_at": "2026-07-19T06:04:14.1384778+00:00",
+  "decisions": [
+    {
+      "id": "01KXWFK8XZVH5CXFR8K1TPEVXW",
+      "target": "DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXWFK8Y1A1N73T4MRF74D32S",
+      "target": "TASK-CLASSIFY-LEDGER-CLASSIFICATION-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "The gate executes the projection and mutation contracts produced by this task."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXWFK8Y0Q039B546G455AYNN",
+      "path": "src/Tally/Cli/OperationRegistry.cs",
+      "action": "read",
+      "role": "released descriptor registry",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y0FAWBG7FS35JZTE92",
+      "path": "src/Tally/Contracts/Ledger/Actuals/ActualsContracts.cs",
+      "action": "read",
+      "role": "projection schema",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y0B1X77JJHE11PSSTJ",
+      "path": "src/Tally/Contracts/Ledger/Transactions/CategoryAllocationContracts.cs",
+      "action": "read",
+      "role": "mutation schema",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y0HAMVSJPRXRN95WW1",
+      "path": "src/Tally/Features/Ledger/Actuals/ActualsQueryHandler.cs",
+      "action": "read",
+      "role": "projection implementation",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y0EV58XZ8GJV130XKV",
+      "path": "src/Tally/Features/Ledger/Transactions/CategoryAllocationHandlers.cs",
+      "action": "read",
+      "role": "precondition implementation",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y0JC6Z3NS21JBTGQP7",
+      "path": "tests/Tally.Tests/Classify/LedgerContract/LedgerClassifyPrerequisiteTests.cs",
+      "action": "test",
+      "role": "integration gate",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXWFK8Y0WT5XMY9SCF0Q0XKQ",
+      "name": "ClassificationProjectionRequest",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y021BBYDJCPZF94QYR",
+      "name": "LedgerCategoryMutationPreconditions",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y0HF14H610PMVZ0XG1",
+      "name": "VerifiedLedgerClassificationContract",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXWFK8Y0C9SG7MN66WDNG8T7",
+      "kind": "acceptance_check",
+      "text": [
+        "The released registry exposes classification_v1 evaluation and apply_preflight schemas plus revision-aware assign and correct schemas."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y0DATANCJTWTXQ3FX4",
+      "kind": "acceptance_check",
+      "text": [
+        "A multi-page evaluation projection preserves membership and ordinals; incompatible versions and expired cursors create no partial evaluation input."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y0B5K7RR7V50CXCKJ6",
+      "kind": "acceptance_check",
+      "text": [
+        "Every apply-preflight ID is represented and every stale allocation or lifecycle revision is rejected before Ledger mutation."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y0TFXNN77DTZAT1H7B",
+      "kind": "acceptance_check",
+      "text": [
+        "Architecture scans find zero CLASSIFY references to LedgerDb, Ledger storage paths, private handlers, or private domain types."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y0MSYB2GA2H6VQ3TZN",
+      "kind": "constraint",
+      "text": [
+        "This validation-only gate is intentionally loose and creates no product behavior."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y0B8NDJ4RESKNZA1D0",
+      "kind": "expected_output",
+      "text": [
+        "VerifiedLedgerClassificationContract integration evidence"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y0G8G35C5GRQ9EBW61",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT mark this gate green from schema presence alone; execute public operations through the released registry."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y0CSEH32MKZJFPN0ZP",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT translate or weaken Ledger errors in a test adapter."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y0T0MV03BS7ES5XCG1",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT continue to client implementation if the blocked-by Ledger public-contract gate is absent or failing."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y0FPMBDHYQQP39K1H9",
+      "kind": "note",
+      "text": [
+        "Failure routes contract work back to LEDGER; it does not authorize a CLASSIFY workaround."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXWFK8Y1W323MJARJZFBZVPW",
+      "target_ref_code": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXT0Y3KR1T14S7HXJT3J2J1A",
+      "target_title": "Wire and prove the complete public CLI contract",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y1987HZW0EB435ZB6D",
+      "target_ref_code": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXV9NDVD5M9YZS2N5XGJNXJN",
+      "target_title": "LEDGER Public Contract",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y12TS4N68YHJB2KH4Z",
+      "target_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJDBZJ4735YSR5NKDRAWK",
+      "target_title": "LedgerClassificationProjectionContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y1AJAWPMZ893WJZBMA",
+      "target_ref_code": "TC-CLASSIFY-ELIGIBLE-PROJECTION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PFW0MG2MY9JFJDMKSHMV",
+      "target_title": "Verify the eligible classification projection",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y1J3BDYH3A8EBZTJSP",
+      "target_ref_code": "TC-CLASSIFY-APPLY-EXECUTION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PHZRHWHZVT06Y60C9X0D",
+      "target_title": "Verify replay-safe classification apply",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXWFK8Y01NF22ZM60BHR8T4P",
+      "gate_type": "branch-review",
+      "description": [
+        "Review the public seam against the blocked-by Ledger plan outputs before downstream tasks proceed."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXWFK8Y02R59CZ3DAGGQ5V4K",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~LedgerClassifyPrerequisiteTests",
+      "expected_result": "exit 0; at least 18 descriptor, paging, eligibility, preflight, stale-write, version, and private-boundary cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ]
+}

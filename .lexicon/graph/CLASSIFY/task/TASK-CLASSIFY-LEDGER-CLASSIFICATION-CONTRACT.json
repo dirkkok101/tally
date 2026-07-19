@@ -1,0 +1,388 @@
+{
+  "id": "01KXWFK8XFHXVNFAPS294P7DH7",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "sub_plan_id": "01KXWEE55356MVFJ84SEJWS2S5",
+  "ref_code": "TASK-CLASSIFY-LEDGER-CLASSIFICATION-CONTRACT",
+  "slug": "LEDGER-CLASSIFICATION-CONTRACT",
+  "title": "Extend Ledger classification contracts",
+  "description": [
+    "Add the purpose-scoped public classification projection and atomic category-mutation preconditions to the Ledger slices created by PLAN-LEDGER-V1."
+  ],
+  "objective": [
+    "Ledger exposes versioned evaluation and apply-preflight projections plus drift-safe assignment and correction contracts without exposing private storage."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 1,
+  "created_at": "2026-07-19T06:04:14.1384778+00:00",
+  "decisions": [
+    {
+      "id": "01KXWFK8XW6A3VV7JFCKFQR9PG",
+      "target": "DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXWFK8XWPDYA3ENNJS35KS51",
+      "path": "src/Tally/Contracts/Ledger/Actuals/ActualsContracts.cs",
+      "action": "modify",
+      "role": "classification projection contracts",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XXAKFAW117GW392FX3",
+      "path": "src/Tally/Contracts/Ledger/Transactions/CategoryAllocationContracts.cs",
+      "action": "modify",
+      "role": "mutation preconditions",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XY0W0MCN9ZS88A2YA8",
+      "path": "src/Tally/Features/Ledger/Actuals/ActualsQueryHandler.cs",
+      "action": "modify",
+      "role": "purpose-scoped projection",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XYQMY8R4M9FE81PCSX",
+      "path": "src/Tally/Features/Ledger/Actuals/ActualsOperationModule.cs",
+      "action": "modify",
+      "role": "versioned descriptor",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XYMVA6B7BPZT3VQGYJ",
+      "path": "src/Tally/Features/Ledger/Transactions/CategoryAllocationHandlers.cs",
+      "action": "modify",
+      "role": "atomic revision assertions",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XYYASNEJS9S090QD0G",
+      "path": "src/Tally/Features/Ledger/Transactions/CategoryAllocationOperationModule.cs",
+      "action": "modify",
+      "role": "mutation descriptor",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XYMYKDVBDTPJ2FVY80",
+      "path": "tests/Tally.Tests/Classify/LedgerContract/LedgerClassificationProjectionTests.cs",
+      "action": "test",
+      "role": "projection contract tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XYFJTQJTQ75D64Z5V0",
+      "path": "tests/Tally.Tests/Classify/LedgerContract/LedgerClassificationMutationPreconditionTests.cs",
+      "action": "test",
+      "role": "stale-write tests",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXWFK8XYT9ZHJNGMW1J2KGDS",
+      "name": "ClassificationProjectionRequest",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XY6H2NPTYAY63JV4Z5",
+      "name": "ClassificationProjectionDescriptor",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XY72WTNWB1VX4NNXS5",
+      "name": "ClassificationProjectionItem",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XY73M446BFX14D3ZP4",
+      "name": "LedgerCategoryMutationPreconditions",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KXWGCWQFXV4Q38WWXXCCVPAB",
+      "target_type": "plan",
+      "target": "PLAN-LEDGER-V1",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T06:18:13.6165864+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXWFK8XWBM04NZMKX84FD2BZ",
+      "kind": "acceptance_check",
+      "text": [
+        "Given purpose=evaluation, the public projection returns only active transactions requiring an independent category decision and preserves complete snapshot order across pages."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XW4XPNGYSAWRQ8S71C",
+      "kind": "acceptance_check",
+      "text": [
+        "Given purpose=apply_preflight and bounded transaction IDs, every selected identity is returned or reported missing with assignable, correctable, or ineligible state plus current allocation and lifecycle revisions."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XWPDE32SCNPN0QC6RQ",
+      "kind": "acceptance_check",
+      "text": [
+        "Given an assignment with an existing allocation or a correction whose expected allocation or revision drifted, Ledger returns a stable stale-precondition result and appends no allocation."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XW9XQ6P7GG5A36J67C",
+      "kind": "acceptance_check",
+      "text": [
+        "Given an incompatible projection or mutation contract version, descriptor validation fails before financial-data read or mutation."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XW6V3HGGVN1HDPJDDK",
+      "kind": "constraint",
+      "text": [
+        "Modify the Ledger Actuals and allocation slices produced by PLAN-LEDGER-V1; do not create parallel implementations."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XWFYJQ5N12PRF90SQ3",
+      "kind": "constraint",
+      "text": [
+        "Preserve source-generated JSON and Native-AOT compatibility."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XWCXKRT4ST20MWZ7EM",
+      "kind": "expected_output",
+      "text": [
+        "Versioned classification_v1 projection contracts"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XWWX6FHDGGEVSE5H41",
+      "kind": "expected_output",
+      "text": [
+        "Ledger-owned mutation-state and revision preconditions"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XW3QQJT83K8GM13X51",
+      "kind": "expected_output",
+      "text": [
+        "Focused projection and stale-write tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XWFRJ76NAAAPEDWSEE",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add a private classification query or direct CLASSIFY access to Ledger storage - rejected by DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XWGQE4M9F5EAZ6BQC6",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT re-infer transfer, refund, lifecycle, categorization, or allocation eligibility outside Ledger - rejected by DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XWHAXVATZPGQNWXBZ5",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT permit correction without the exact expected active allocation and projection revisions - the race would violate DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XWXQ83XB7YAG9PN4RT",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT mutate transaction source facts or historical allocation rows."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XW0H4Y3N2V9H72RTTK",
+      "kind": "note",
+      "text": [
+        "This task cannot start until its three blocked-by Ledger producer tasks exist and are green."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXWFK8XZQFVTW6AX2E9HT3C7",
+      "target_ref_code": "TASK-LEDGER-ACTUALS-SNAPSHOT",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXT0SME1ZANN2PCS2BPJYA3F",
+      "target_title": "Implement atomic snapshot actuals pagination",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XZ94KCH3374DFEJTE0",
+      "target_ref_code": "TASK-LEDGER-CATEGORY-ALLOCATIONS",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXT0P36Q0FTFJX3A4HZGMH8C",
+      "target_title": "Implement category assignment and correction",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XZ7JWEYZ1MB04CY847",
+      "target_ref_code": "TASK-LEDGER-TRANSACTION-CORRECTIONS",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXT0SME0C0MES8TYZWWY0ST2",
+      "target_title": "Implement transaction void and supersession",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XZQE1D9GRS96W81GEH",
+      "target_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJDBZJ4735YSR5NKDRAWK",
+      "target_title": "LedgerClassificationProjectionContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XZR3AXMKAKVP2VXTDX",
+      "target_ref_code": "FA-CLASSIFY-EVALUATION-EXPLANATION",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXWCJY7M7NVWJBVG35SRNS3Q",
+      "target_title": "Evaluation and Explanation",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XZ1BD6B3JH7H1ZTGE0",
+      "target_ref_code": "TC-CLASSIFY-ELIGIBLE-PROJECTION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PFW0MG2MY9JFJDMKSHMV",
+      "target_title": "Verify the eligible classification projection",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXWFK8XWXR5H0KFJH3S56G72",
+      "target": "FR-CLASSIFY-APPLY-EXECUTION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8XWE8QVKJY54XGRR966",
+      "target": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXWFK8XZ8EEXV8PCNJXXWVD3",
+      "gate_type": "test-evidence",
+      "description": [
+        "Tests prove both projection purposes and atomic allocation/revision rejection before mutation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXWFK8XYKS4XTMQB2HWBEETY",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~LedgerClassificationProjectionTests|FullyQualifiedName~LedgerClassificationMutationPreconditionTests'",
+      "expected_result": "exit 0; at least 24 projection, exclusion, pagination, assignment, correction, and stale-precondition cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ]
+}

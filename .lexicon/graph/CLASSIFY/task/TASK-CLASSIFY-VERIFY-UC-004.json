@@ -1,0 +1,269 @@
+{
+  "id": "01KXWFK8XSJ7NC12KQD77F14E1",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "sub_plan_id": "01KXWEE6KV9J79GRPXER6KWZGV",
+  "ref_code": "TASK-CLASSIFY-VERIFY-UC-004",
+  "slug": "VERIFY-UC-004",
+  "title": "Verify rule management and validation",
+  "description": [
+    "Validation-only UC task with no implements refs; it traces UC-CLASSIFY-004 draft, invalid input, private evidence, activation, retirement, replacement, retention, and status behavior."
+  ],
+  "objective": [
+    "UC-CLASSIFY-004 proves immutable owner-approved rule lifecycle with fail-closed private evidence and no transaction assignment."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 6,
+  "created_at": "2026-07-19T06:04:14.1384778+00:00",
+  "decisions": [
+    {
+      "id": "01KXWFK8YTV308WY8PM4XY57Q3",
+      "target": "DD-CLASSIFY-PRIVATE-VALIDATION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YTT6NQ0XQA7PX9R5AG",
+      "target": "DD-CLASSIFY-RULE-VOCABULARY",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXWFK8YTA4WSK3W321VGDPQY",
+      "target": "TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY",
+      "dependency_type": "compile",
+      "reason": [
+        "The UC requires proven representative private evidence."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YTEG66Z6W0RN468T88",
+      "target": "TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE",
+      "dependency_type": "compile",
+      "reason": [
+        "The UC verifies the full immutable rule lifecycle."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YTTFS1WY6D7NX5EBBP",
+      "target": "TASK-CLASSIFY-STATUS-WORKFLOW",
+      "dependency_type": "compile",
+      "reason": [
+        "The UC verifies retained status and safe abandonment."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXWFK8YT8WGRD2AZNAK45VV5",
+      "path": "tests/Tally.Tests/Classify/Acceptance/ClassifyUc004RulesTests.cs",
+      "action": "test",
+      "role": "UC-004 acceptance matrix",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXWFK8YT4E3TGPSJY9G8BN4H",
+      "name": "ActivateClassificationRuleCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YTDW0F8GN39B7XA0XE",
+      "name": "VerifiedClassifyPrivateEvidenceGate",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YTX2WMX967KEXX3SBG",
+      "name": "VerifiedClassifyUc004",
+      "direction": "produces",
+      "contract_ref_code": "UC-CLASSIFY-004",
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KXWGCZEXHAXFAEFG837ZAVF1",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-004",
+      "rel": "verifies",
+      "created_at": "2026-07-19T06:18:16.4142069+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXWFK8YTTWK72QM6CG75XC11",
+      "kind": "acceptance_check",
+      "text": [
+        "Supported active-category rule saves as an immutable draft; unsupported predicates and missing or archived categories create no activatable version."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YT8AS8QRPH0AHWMB08",
+      "kind": "acceptance_check",
+      "text": [
+        "Passing current private evidence permits explicit activation; absent, stale, incorrect-canary, or unexplained-conflict evidence leaves the prior active set unchanged."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YTB2VNBZ7PF2VC81SX",
+      "kind": "acceptance_check",
+      "text": [
+        "Retirement and validated replacement create successor rule sets and preserve all prior versions and provenance."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YTQR99GKA1A60TKFF3",
+      "kind": "acceptance_check",
+      "text": [
+        "Category rename refreshes display, lifecycle changes invalidate authority, and no save, validation, feedback, or startup event activates automatically."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YTB1S7E3AKFPK5ZPM6",
+      "kind": "acceptance_check",
+      "text": [
+        "Status and abandon preserve referenced history and remove only allowed unreferenced payload."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YTRJJYF5C938JGZBAW",
+      "kind": "constraint",
+      "text": [
+        "Validation-only gate is intentionally loose and requires the private evidence gate."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YTDTMY2EP269ZNEX86",
+      "kind": "expected_output",
+      "text": [
+        "VerifiedClassifyUc004"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YT5KECJRHJ9TZ89BHB",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT omit private-corpus unavailable, incorrect-canary, conflict, category lifecycle, or no-auto-activation paths."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YTSA3QQ5TCJE9BB7NN",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use tracked private rows or assert lifecycle only through database internals."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YTTH3G52MHDNF0XS8X",
+      "kind": "note",
+      "text": [
+        "Rule inspection proves immutable references, not raw private examples."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXWFK8YT0P2CD0QKEY21WR46",
+      "target_ref_code": "UC-CLASSIFY-004",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXV9ED48BV5PRMDEPN6E0MWZ",
+      "target_title": "Manage and validate deterministic rules",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YTPVW6E9WWTW4E6NXC",
+      "target_ref_code": "TC-CLASSIFY-RULE-LIFECYCLE-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PGYNCKBXD6J1CWS57GFP",
+      "target_title": "Verify immutable rule lifecycle",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8YT5N9WY47YNF5061BN",
+      "target_ref_code": "TC-CLASSIFY-RULE-VALIDATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PHA63TDD87QZADSB5RDP",
+      "target_title": "Verify private candidate validation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXWFK8YTVV0WKZ268Z6PZ4ES",
+      "gate_type": "test-evidence",
+      "description": [
+        "Every UC-CLASSIFY-004 failure path proves no active-pointer or Ledger mutation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXWFK8YTHY4THE06QXM7C2R4",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ClassifyUc004RulesTests",
+      "expected_result": "exit 0; at least 20 draft, invalid, category, validation, canary, conflict, activate, retire, replace, rename, no-auto-activation, retention, and status cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ]
+}

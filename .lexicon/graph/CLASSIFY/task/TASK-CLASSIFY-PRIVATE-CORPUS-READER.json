@@ -1,0 +1,346 @@
+{
+  "id": "01KXWFK8XM8C1S4Z9F3BKQHMQ6",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "sub_plan_id": "01KXWEE5H5V1T58DHFTSNGMEH4",
+  "ref_code": "TASK-CLASSIFY-PRIVATE-CORPUS-READER",
+  "slug": "PRIVATE-CORPUS-READER",
+  "title": "Implement the private corpus boundary",
+  "description": [
+    "Create the concrete owner-only JSONL reader, exact byte fingerprinting, resource limits, and payload-isolation tests."
+  ],
+  "objective": [
+    "Production validation can stream private owner evidence through the deterministic engine without copying, retaining, following links, or disclosing rows."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 3,
+  "created_at": "2026-07-19T06:04:14.1384778+00:00",
+  "decisions": [
+    {
+      "id": "01KXWFK8Y7CYCB5025DWNFM6RX",
+      "target": "DD-CLASSIFY-ARTIFACT-RETENTION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y7BRDG9GRQAWFNK0Y7",
+      "target": "DD-CLASSIFY-PRIVATE-VALIDATION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXWFK8Y893RP47RXW8X7DTEN",
+      "target": "TASK-CLASSIFY-DETERMINISTIC-ENGINE",
+      "dependency_type": "compile",
+      "reason": [
+        "The reader streams rows into the exact production evaluation engine rather than a second evaluator."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y8E9XS7357AQPEEQ2Q",
+      "target": "TASK-CLASSIFY-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Privacy tests inspect the actual CLASSIFY durable-state boundary."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXWFK8Y7TKHN01VWGPHP8BX6",
+      "path": "src/Tally/Infrastructure/Classify/Corpus/PrivateCorpusReader.cs",
+      "action": "create",
+      "role": "owner-only JSONL streaming",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y7GW82W9PQCMYSM4AK",
+      "path": "src/Tally/Infrastructure/Classify/Corpus/PrivateCorpusRow.cs",
+      "action": "create",
+      "role": "private boundary record",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y76R9Q53CE3GQRW183",
+      "path": "src/Tally/Infrastructure/Classify/Corpus/CorpusFingerprint.cs",
+      "action": "create",
+      "role": "exact byte hash",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y7D389M8MH5MQN37J0",
+      "path": "src/Tally/Infrastructure/Classify/Corpus/PrivateCorpusLimits.cs",
+      "action": "create",
+      "role": "deterministic bounds",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y7NQQV2YX50DZ6YN6Q",
+      "path": "src/Tally/Bootstrap/Features/ClassifyCorpusExtensions.cs",
+      "action": "create",
+      "role": "explicit reader registration",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y7C0QTZV5CMTTNS16K",
+      "path": "tests/Tally.Tests/Classify/Validation/PrivateCorpusReaderTests.cs",
+      "action": "test",
+      "role": "reader boundary tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y7EBB8B2Y0T0T09AY0",
+      "path": "tests/Tally.Tests/Classify/Validation/PrivateCorpusPrivacyTests.cs",
+      "action": "test",
+      "role": "payload isolation tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXWFK8Y7M45MSXS0FSPV1D14",
+      "name": "PrivateCorpusReader.ReadAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y8WHYE79RAQ372T80Q",
+      "name": "CorpusFingerprint",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y8S3X8ERR1Y7C49GSX",
+      "name": "ClassificationEngine.Evaluate",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXWFK8Y74GXB0TQ0GJNMGH0G",
+      "kind": "acceptance_check",
+      "text": [
+        "The corpus path exists only inside structured input; the reader opens one regular owner-readable file read-only and refuses a final symbolic link, wrong owner, or permissive mode."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y755C0Z3986G4EKT0E",
+      "kind": "acceptance_check",
+      "text": [
+        "Exact bytes are SHA-256 fingerprinted before rows stream in bounded order through source-generated JSON validation."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y7H8YZDJ3BNRMAJ99A",
+      "kind": "acceptance_check",
+      "text": [
+        "Malformed, duplicate-ordinal, over-row, over-field, timeout, cancellation, and read failures emit stable metadata-only results and leave no copied or temporary corpus artifact."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y75XT9XQZTQJMS4T2E",
+      "kind": "acceptance_check",
+      "text": [
+        "Tests prove paths, descriptions, normalized tokens, amounts, expected outcomes, and raw rows are absent from durable state and diagnostics."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y79WKGY149K3DP6NK7",
+      "kind": "constraint",
+      "text": [
+        "The concrete reader is the one production implementation; no filesystem abstraction is introduced."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y728M85TEM3BPJR8CD",
+      "kind": "expected_output",
+      "text": [
+        "PrivateCorpusReader"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y7JSW8YR92QBFDP6E1",
+      "kind": "expected_output",
+      "text": [
+        "CorpusFingerprint"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y7BGQHRA8MQYPXHSX4",
+      "kind": "expected_output",
+      "text": [
+        "PrivateCorpusRow boundary type"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y72VD7X7BRPGKTEKBM",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT copy corpus data into classify.db, tracked fixtures, reports, logs, or graph entities - rejected by DD-CLASSIFY-PRIVATE-VALIDATION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y7DWWTGYD9G5C0T3G9",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT follow a final symbolic link or accept unsupported ownership or permissions."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y7FRKK5KMFTJJCZJD9",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT call an external validation service or implement a second evaluator."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y7B5HVX1X2347MRAE9",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT omit CancellationToken propagation across file and JSON streaming boundaries."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y71R30XCQMZ08KNEEC",
+      "kind": "note",
+      "text": [
+        "Private fixture payloads remain ignored and owner-only; only test generators and safe schemas are tracked."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXWFK8Y8HJ6TJ5ZFWYDBJ2DQ",
+      "target_ref_code": "EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXV9NEWB6MN2V4KMJ12KD5QA",
+      "target_title": "Private Classification Evaluation Corpus",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y8YNYKDVW4V7W20CHM",
+      "target_ref_code": "NFR-CLASSIFY-LOCAL-DATA-PROTECTION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXW9G1YYFFPN6NBJ16WYKTGC",
+      "target_title": "Protect local classification data",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y819DAAWW0DXBQ0AZH",
+      "target_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJF6P3ET4FT3NW91YQ53P",
+      "target_title": "ClassificationValidationRun",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXWFK8Y7KE27ZG05Y4R55TQA",
+      "target": "FR-CLASSIFY-RULE-VALIDATION",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y7006MCR463BMB3XAS",
+      "target": "FR-CLASSIFY-STATE-RETENTION-CLEANUP",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXWFK8Y8RMVTY71CQAAJ80K0",
+      "gate_type": "test-evidence",
+      "description": [
+        "Canary scans prove raw private evidence never reaches tracked, durable, or diagnostic outputs."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXWFK8Y8AXWFX2E6YYJW7VPV",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~PrivateCorpusReaderTests|FullyQualifiedName~PrivateCorpusPrivacyTests'",
+      "expected_result": "exit 0; at least 24 ownership, mode, symlink, fingerprint, streaming, malformed-row, limit, cancellation, and disclosure cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ]
+}

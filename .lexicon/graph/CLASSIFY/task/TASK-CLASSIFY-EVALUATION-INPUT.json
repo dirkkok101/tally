@@ -1,0 +1,251 @@
+{
+  "id": "01KXWG0ND3B6Q9H0HPFKAN846V",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "sub_plan_id": "01KXWEE5XA3TV445NDNPVKK5YT",
+  "ref_code": "TASK-CLASSIFY-EVALUATION-INPUT",
+  "slug": "EVALUATION-INPUT",
+  "title": "Acquire bounded Ledger evaluation input",
+  "description": [
+    "Validate the public Ledger descriptor and buffer one complete ordered evaluation snapshot before classification state exists."
+  ],
+  "objective": [
+    "Evaluation receives one bounded, compatible, completely paged Ledger snapshot or a stable pre-state failure."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 4,
+  "created_at": "2026-07-19T06:11:32.9009840+00:00",
+  "decisions": [
+    {
+      "id": "01KXWG0ND57XR8H9TVPBF473DW",
+      "target": "DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION",
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXWG0ND6MR80EMPCCQP9AX33",
+      "target": "TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT",
+      "dependency_type": "compile",
+      "reason": [
+        "Input acquisition uses the verified purpose=evaluation client method."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXWG0ND5EN8R13A7FAK3DY6H",
+      "path": "src/Tally/Features/Classify/Evaluation/Evaluate/ClassificationEvaluationInputLoader.cs",
+      "action": "create",
+      "role": "descriptor and snapshot acquisition",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND54T6TJTSAYCHHYN6Q",
+      "path": "tests/Tally.Tests/Classify/Evaluation/ClassificationEvaluationInputLoaderTests.cs",
+      "action": "test",
+      "role": "paging compatibility and limit tests",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND5YTR96W9TA775F4YF",
+      "path": "tests/Tally.Tests/Classify/Evaluation/ClassificationEvaluationInputCancellationTests.cs",
+      "action": "test",
+      "role": "cancellation and partial-input rejection",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXWG32G71Y2GWTTQPHDVS6YK",
+      "name": "LedgerContractClient.QueryClassificationProjectionAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:12:51.8469039+00:00"
+    },
+    {
+      "id": "01KXWG32G8F0ETGW6779PSW3HV",
+      "name": "ClassificationEvaluationInputLoader.LoadAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:12:51.8469039+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXWG0ND5Q6KG9CBBW1B99SEJ",
+      "kind": "acceptance_check",
+      "text": [
+        "The loader validates purpose=evaluation, classification_v1, projection version, category lifecycle, store generation, snapshot expiry, and the 10000-row bound before returning input."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND5KQN4ZCHS0YR03S4Z",
+      "kind": "acceptance_check",
+      "text": [
+        "All pages are buffered in ordinal order; missing or duplicate ordinals, cursor expiry, page failure, incompatible descriptors, exact-limit overflow, or cancellation returns a stable failure and no evaluation input."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND5GNJXDT5NDEEAF1C4",
+      "kind": "acceptance_check",
+      "text": [
+        "A successful result contains only the bounded public projection fields and one immutable snapshot fingerprint; it creates no CLASSIFY state and performs no Ledger mutation."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND52WHW6B6WQRMMDYPW",
+      "kind": "acceptance_check",
+      "text": [
+        "Repeated acquisition of an unchanged snapshot returns byte-equivalent ordered input and fingerprints."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND59KVA82SXE51VP7W1",
+      "kind": "constraint",
+      "text": [
+        "Propagate CancellationToken across every page request and discard buffered input on any failure."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND5ZGX5XTG1HB36WC6T",
+      "kind": "expected_output",
+      "text": [
+        "ClassificationEvaluationInputLoader"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND57JZJSNM7GCKBR6FH",
+      "kind": "expected_output",
+      "text": [
+        "Bounded immutable evaluation input"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND5CMMEGGCBQZ13MS35",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT open Ledger storage, infer eligibility, or reimplement Ledger lifecycle and allocation rules - per DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND56AG6WPNS9BAMYKJY",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT stream partial pages into CLASSIFY persistence or classification evaluation."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND5B1KKT7BWVCAJXD6K",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT retain raw descriptions or page payloads after the command boundary."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND5S02KG1RQXBZVRKKC",
+      "kind": "note",
+      "text": [
+        "The evaluation command creates its ID only after this loader returns a complete result."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXWG0ND6B3NZPHVPRT77HQXD",
+      "target_ref_code": "NFR-CLASSIFY-BOUNDED-EVALUATION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXW9G2MMBPH1PFPPREPDR4BW",
+      "target_title": "Bound local classification work",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    },
+    {
+      "id": "01KXWG0ND68Z238GY5894G32F5",
+      "target_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJDBZJ4735YSR5NKDRAWK",
+      "target_title": "LedgerClassificationProjectionContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXWG0ND5MVK7REFJYKK9XAH7",
+      "target": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXWG0ND6H8MQRJ207YWB3TRG",
+      "gate_type": "test-evidence",
+      "description": [
+        "Tests prove that incomplete or incompatible Ledger snapshots cannot cross the evaluation boundary."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXWG0ND6YP80057H6KWQE2ZG",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~ClassificationEvaluationInputLoaderTests|FullyQualifiedName~ClassificationEvaluationInputCancellationTests'",
+      "expected_result": "exit 0; at least 20 descriptor, paging, ordering, expiry, cancellation, exact-limit, over-limit, no-state, and no-mutation cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+    }
+  ]
+}

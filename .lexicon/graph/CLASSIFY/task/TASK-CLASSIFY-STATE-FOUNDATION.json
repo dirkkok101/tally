@@ -1,0 +1,404 @@
+{
+  "id": "01KXWFK8XK7ZTCNEV1HEXPM6YW",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "sub_plan_id": "01KXWEE55356MVFJ84SEJWS2S5",
+  "ref_code": "TASK-CLASSIFY-STATE-FOUNDATION",
+  "slug": "STATE-FOUNDATION",
+  "title": "Establish CLASSIFY durable state",
+  "description": [
+    "Create the owner-only raw-SQLite store, full designed schema, guarded migrations, row mapping, and operation idempotency foundation."
+  ],
+  "objective": [
+    "CLASSIFY has one separate owner-only SQLite state store whose immutable history and guarded transitions support every later slice."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 5,
+  "created_at": "2026-07-19T06:04:14.1384778+00:00",
+  "decisions": [
+    {
+      "id": "01KXWFK8Y4JMK2623245FYTPN3",
+      "target": "DD-CLASSIFY-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4NWN9281BX82E730V",
+      "target": "DD-CLASSIFY-STATE-STORE",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXWFK8Y5KN6XSJ61F7ZN1CWB",
+      "target": "TASK-CLASSIFY-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Idempotency results and row mapping use the public CLASSIFY result contracts."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXWFK8Y4JVPCABAF0GDJD99Z",
+      "path": "src/Tally/Infrastructure/Classify/Storage/ClassifyStorePaths.cs",
+      "action": "create",
+      "role": "owned paths",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4M8HNPQQW6T07MFJD",
+      "path": "src/Tally/Infrastructure/Classify/Storage/ClassifySchema.cs",
+      "action": "create",
+      "role": "schema and migrations",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4C8D7ENN5QKC06177",
+      "path": "src/Tally/Infrastructure/Classify/Storage/ClassifyStateStore.cs",
+      "action": "create",
+      "role": "connections and transactions",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4R5N49V04C86SBZQY",
+      "path": "src/Tally/Infrastructure/Classify/Storage/ClassifyOperationIdempotencyStore.cs",
+      "action": "create",
+      "role": "request replay",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y44FVH1YKP59HXQBBV",
+      "path": "src/Tally/Infrastructure/Classify/Storage/ClassifyRowMapper.cs",
+      "action": "create",
+      "role": "pure row mapping",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4X5VJGQWDT2HS4R16",
+      "path": "src/Tally/Bootstrap/Features/ClassifyStateExtensions.cs",
+      "action": "create",
+      "role": "explicit state registration",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y49QDB6ZQ7KRSACJG7",
+      "path": "tests/Tally.Tests/Classify/Storage/ClassifyStateStoreTests.cs",
+      "action": "test",
+      "role": "real SQLite integration tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y5425TTVH9R4X6MMM6",
+      "path": "tests/Tally.Tests/Classify/Storage/ClassifyHistoryInvariantTests.cs",
+      "action": "test",
+      "role": "immutability tests",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXWFK8Y567VGC20YNH3HTJ9Q",
+      "name": "ClassifyStateStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y50E3C10WF2D3AN2JM",
+      "name": "ClassifyOperationIdempotencyStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y5Y526ZZYP70HH26FT",
+      "name": "ClassifyRowMapper",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXWFK8Y4MPTHDT3CAHEN2NGM",
+      "kind": "acceptance_check",
+      "text": [
+        "On linux-x64 the CLASSIFY directory is 0700 and database, WAL, SHM, lock, report, and temporary files are 0600; unsupported ownership or permissions block persistence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4CZQWKWVR5X3E91MF",
+      "kind": "acceptance_check",
+      "text": [
+        "Startup applies ordered user_version migrations with foreign_keys ON, WAL, synchronous FULL, bounded busy handling, and a single supported owner writer."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4RABQKDVCS0YY57H5",
+      "kind": "acceptance_check",
+      "text": [
+        "Rule, validation, evaluation, apply, feedback, abandonment, cleanup, and operation-idempotency tables match the nine CLASSIFY data-model contracts."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4FG86PKNVG5HFF357",
+      "kind": "acceptance_check",
+      "text": [
+        "Immutable versions, outcomes, terminal item results, feedback, and lifecycle rows reject UPDATE and DELETE; guarded transitions require the expected prior state."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4TSTSK6Q28YCQ2P42",
+      "kind": "acceptance_check",
+      "text": [
+        "Reusing an idempotency key with the same request returns the stored result; a different request returns a stable conflict."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4DPYYGYXPS187QXP2",
+      "kind": "constraint",
+      "text": [
+        "Use Microsoft.Data.Sqlite and explicit caller-owned transactions; SQL behavior is verified with real temporary stores."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4CK21ZG4V74STEDRN",
+      "kind": "expected_output",
+      "text": [
+        "ClassifyStateStore"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4F3S1YWP92DNSCTPZ",
+      "kind": "expected_output",
+      "text": [
+        "ClassifySchema migration chain"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4M72TQRF8BCJGRZB0",
+      "kind": "expected_output",
+      "text": [
+        "ClassifyOperationIdempotencyStore"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y467W43Y9NEM195ZSM",
+      "kind": "expected_output",
+      "text": [
+        "ClassifyRowMapper"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4YA0WX8JWD7QCFAXN",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT share the Ledger database, use flat JSON, add a hosted database, or use EF Core/DbContext - rejected by DD-CLASSIFY-STATE-STORE."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y45H1WCWM1ATPMRQ2W",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT introduce generic repositories, provider-neutral units of work, or speculative storage interfaces - rejected by DD-CLASSIFY-APPLICATION-ARCHITECTURE."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4SR6KQC3KSK84NYAK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT persist raw corpus rows or full Ledger projection payloads."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y4DNW4MY0EFTFVKP1A",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT permit implicit cascade deletion of referenced history - per ADR-CORE-0020."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y45X502BGKRHTNWDBJ",
+      "kind": "note",
+      "text": [
+        "The schema is one cohesive blocker; later vertical slices own behavior-specific stores over these tables."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXWFK8Y5N4BMG1H9ZP1QP5BH",
+      "target_ref_code": "TASK-LEDGER-CORE-STORAGE",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXT0KHY1471CHD8D8G9XDR9D",
+      "target_title": "Implement the SQLite runtime and storage foundation",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y5B6TNAMVN05WY402Y",
+      "target_ref_code": "ADR-CORE-0020",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3YGXF1B0J0MC6S0EPAH",
+      "target_title": "RESTRICT-by-Default Delete Taxonomy",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y5JVQ4860JN9EXYNX9",
+      "target_ref_code": "NFR-CLASSIFY-ATTRIBUTABLE-HISTORY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXW9G3B24EZV86NVCN5YQA4T",
+      "target_title": "Retain attributable classification history",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y5ZTAWQW0N38BKDDCR",
+      "target_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJGM514904QHQZEJD3SEG",
+      "target_title": "ClassificationStateStore",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y5G7HH1A83BBF8BA75",
+      "target_ref_code": "FA-CLASSIFY-STATE-RECOVERY",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXWCJYZ7SYSPAJMAFTTBE12Z",
+      "target_title": "State and Recovery",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y5G354A1CGEHMJ5PE8",
+      "target_ref_code": "DIAG-CLASSIFY-STATE-ER",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KXWCN3J9X1HT7C4ESVGG5EMX",
+      "target_title": "CLASSIFY durable state model",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 2,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    },
+    {
+      "id": "01KXWFK8Y5B7VQ8TC9VMTCYTGH",
+      "target_ref_code": "TC-CLASSIFY-ATTRIBUTABLE-HISTORY-INVARIANTS",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9QXEDYZPQR3HVG4FEGSFF",
+      "target_title": "Verify append-only classification history",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXWFK8Y4V6YB242N4VW0BDT5",
+      "target": "FR-CLASSIFY-STATE-RETENTION-CLEANUP",
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXWFK8Y5ZPB0JTT16H5HZRTP",
+      "gate_type": "test-evidence",
+      "description": [
+        "Real SQLite tests prove schema, permission, replay, and immutable-history obligations without mocks."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXWFK8Y59EE9F7P8Y2131KW3",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~ClassifyStateStoreTests|FullyQualifiedName~ClassifyHistoryInvariantTests'",
+      "expected_result": "exit 0; at least 28 migration, pragma, permission, idempotency, transaction, immutability, and guarded-transition cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+    }
+  ]
+}

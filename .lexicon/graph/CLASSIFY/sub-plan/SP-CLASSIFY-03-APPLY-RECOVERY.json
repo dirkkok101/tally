@@ -1,0 +1,11 @@
+{
+  "id": "01KXWEE68KNW38E47M7H4M09H3",
+  "plan_id": "01KXWEE4RK24617DXJNTPQPS8M",
+  "ref_code": "SP-CLASSIFY-03-APPLY-RECOVERY",
+  "title": "Apply, feedback, status, and recovery",
+  "description": [
+    "Implement explicit preview authority, cross-store replay, bounded correction feedback, safe status, abandonment, and fixed cleanup."
+  ],
+  "sort_order": 3,
+  "created_at": "2026-07-19T05:43:58.9958998+00:00"
+}
