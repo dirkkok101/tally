@@ -1,0 +1,76 @@
+{
+  "id": "01KXW9E3KBXWBDY5CD0XA5Q01V",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "type": "functional",
+  "ref_code": "FR-CLASSIFY-RULE-LIFECYCLE",
+  "title": "Manage versioned deterministic rules",
+  "description": [
+    "Create, inspect, activate, retire, and replace attributable immutable Classification Rule versions and Rule Set Versions. Implements G2, G4, and UC-CLASSIFY-004."
+  ],
+  "rationale": [
+    "Reusable owner decisions remain safe only when rule scope and lifecycle are explicit, reviewable, and reversible."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "manage deterministic classification rules as explicit immutable versions"
+  ],
+  "story_so_that": [
+    "reusable behavior can change without losing provenance or rewriting history"
+  ],
+  "acceptance_criteria": [
+    "Given a supported predicate over schema-allowed fields and an active category identifier, when a rule draft is saved, then CLASSIFY records a new immutable draft version with owner, reason, scope, normalization version, and proposed category.",
+    "Given a rule draft is saved, when the operation completes, then no rule or Rule Set Version is activated and no LEDGER mutation occurs.",
+    "Given an unsupported field or predicate, when a rule draft is saved, then CLASSIFY returns stable field-level validation errors and creates no activatable version.",
+    "Given a category identifier is missing from the current catalogue, when a rule draft is saved, then CLASSIFY returns a stable category-not-found error and creates no activatable version.",
+    "Given a category identifier is archived in the current catalogue, when a rule draft is saved, then CLASSIFY returns a stable category-inactive error and creates no activatable version.",
+    "Given a draft whose required private validation passed, when the owner explicitly activates it, then CLASSIFY creates a new immutable active Rule Set Version containing the exact activated rule version.",
+    "Given an active rule, when the owner retires it with a reason, then CLASSIFY creates a new active Rule Set Version without that rule and retains the retired version for inspection.",
+    "Given an active rule that must be narrowed or replaced, when the owner activates a validated successor, then the successor references the prior version and the prior version becomes retired or superseded without in-place mutation.",
+    "Given a category rename that preserves the same active category identifier, when rules are inspected, then their category identity is unchanged and their display name resolves to the current catalogue name.",
+    "Given any owner decision, correction, or feedback event, when CLASSIFY processes it, then no rule version or Rule Set Version is activated automatically."
+  ],
+  "security_criteria": [
+    "Rule inspection and lifecycle diagnostics must not expose normalized tokens or private examples outside the explicit owner-requested data result."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T04:16:33.3832373+00:00",
+  "links": [
+    {
+      "id": "01KXW9KDZXDSVRX1BEY9KDBHB7",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:27.8701095+00:00"
+    },
+    {
+      "id": "01KXW9K5Y9XAC1R40511TF7YP7",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-VALIDATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:19.6265005+00:00"
+    },
+    {
+      "id": "01KXW9KEK1WTN8N72HAV7B41DZ",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-CATALOGUE",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:28.4821716+00:00"
+    },
+    {
+      "id": "01KXW9E3KBN5A2JW1QE0DQ2B5A",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-004",
+      "rel": "implements",
+      "created_at": "2026-07-19T04:16:33.3874542+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXW9JNBADFY0YHXKVC694805",
+      "target": "P1",
+      "created_at": "2026-07-19T04:19:02.6334426+00:00"
+    }
+  ]
+}

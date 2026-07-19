@@ -1,0 +1,63 @@
+{
+  "id": "01KXW9E3KK7BKCESZBHCYXJ8H0",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "type": "functional",
+  "ref_code": "FR-CLASSIFY-CONTRACT-DISCOVERY",
+  "title": "Discover the CLASSIFY command contract",
+  "description": [
+    "Publish every first-release CLASSIFY capability through the shared versioned Tally operation registry before evaluation or mutation. Implements G5 and UC-CLASSIFY-006."
+  ],
+  "rationale": [
+    "An AI Agent Host must discover exact schemas, limits, errors, and mutation semantics without scraping prose or reading CLASSIFY storage."
+  ],
+  "priority": 0,
+  "complexity": "S",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "my agent to discover the complete classification contract"
+  ],
+  "story_so_that": [
+    "every workflow uses compatible operations and predictable safety rules"
+  ],
+  "acceptance_criteria": [
+    "Given a compatible Tally executable, when schema discovery is requested, then the registry exposes every operation required by C12 with its versioned input, result, error, exit, mutability, idempotency, limit, and compatibility contract.",
+    "Given any public CLASSIFY operation, when its schema is requested repeatedly for the same contract version, then the semantic descriptor is deterministic.",
+    "Given an unknown CLASSIFY operation, when schema or invocation is requested, then Tally returns a stable unknown-operation error and no private storage detail.",
+    "Given contract discovery, when descriptors are returned, then no CLASSIFY store, private corpus, or LEDGER data read occurs."
+  ],
+  "security_criteria": [
+    "Help, schemas, diagnostics, and errors contain no transaction descriptions, normalized tokens, rules, corpus rows, financial values, credentials, or local paths."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T04:16:33.3832373+00:00",
+  "links": [
+    {
+      "id": "01KXW9KKJ0P7QTN86R2QY6F5ZY",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-AI-AGENT-HOST",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:33.5695846+00:00"
+    },
+    {
+      "id": "01KXW9KM6TE8EJ0R111DYSRBTC",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CONTRACT-DISCOVERY",
+      "rel": "see-also",
+      "created_at": "2026-07-19T04:19:34.2352303+00:00"
+    },
+    {
+      "id": "01KXW9E3KK7NS0QJV6RGCMWTAP",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-006",
+      "rel": "implements",
+      "created_at": "2026-07-19T04:16:33.3955414+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXW9JQM1GEV7GCZRFJMKMMYG",
+      "target": "P1",
+      "created_at": "2026-07-19T04:19:04.9603902+00:00"
+    }
+  ]
+}

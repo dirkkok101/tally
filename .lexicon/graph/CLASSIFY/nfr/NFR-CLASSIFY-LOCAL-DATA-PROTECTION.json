@@ -1,0 +1,55 @@
+{
+  "id": "01KXW9G1YYFFPN6NBJ16WYKTGC",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "NFR-CLASSIFY-LOCAL-DATA-PROTECTION",
+  "title": "Protect local classification data",
+  "description": [
+    "Rules, feedback, transaction descriptions, normalized tokens, validation evidence, and derived artifacts remain within the sole-owner local trust boundary."
+  ],
+  "category": "security",
+  "target": "Zero private payload disclosures in process arguments, logs, stderr, crash diagnostics, telemetry, or tracked artifacts; 100% of persisted CLASSIFY directories and files use 0700 and 0600 respectively where supported; zero retained raw corpus copies or orphan temporary artifacts after success, failure, crash recovery, abandonment, and cleanup.",
+  "load_condition": "Normal and failed evaluation, validation, rule lifecycle, apply, feedback, status, abandon, cleanup, and process-startup recovery.",
+  "measurement": "Filesystem permission inspection, tracked-file scans, payload and secret canaries, diagnostics capture, crash injection, and temporary-artifact inventory.",
+  "rationale": [
+    "Classification state reveals spending behavior even when Ledger facts remain protected."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-19T04:17:37.2472021+00:00",
+  "links": [
+    {
+      "id": "01KXW9KTVE8CCHZWKSR23784A8",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-CORRECTION-FEEDBACK",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:41.0397937+00:00"
+    },
+    {
+      "id": "01KXW9KT9EDZ4N035Z7M075FS2",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-VALIDATION",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:40.4632929+00:00"
+    },
+    {
+      "id": "01KXW9KWP76X2NGW6QQF0M3AXM",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STATE-RETENTION-CLEANUP",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:42.9208400+00:00"
+    },
+    {
+      "id": "01KXW9KW25MJY57FHQ49EGP4G9",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STATUS-HISTORY",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:42.2783588+00:00"
+    },
+    {
+      "id": "01KXW9KVEQ195YVH6Y84PSE43B",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STRUCTURED-INVOCATION",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:41.6564867+00:00"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "id": "01KXW9G3B24EZV86NVCN5YQA4T",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "NFR-CLASSIFY-ATTRIBUTABLE-HISTORY",
+  "title": "Retain attributable classification history",
+  "description": [
+    "Rule, validation, evaluation, apply, feedback, abandonment, and cleanup lifecycle changes must remain traceable without editing prior records."
+  ],
+  "category": "data_integrity",
+  "target": "100% of lifecycle events retain stable subject references, actor context, reason, trusted timestamp, relevant input fingerprints, prior state, resulting state, and replacement reference where applicable; zero active or historical records are mutated in place.",
+  "load_condition": "Every successful, rejected, superseded, retired, stale, resumed, abandoned, and cleaned workflow transition.",
+  "measurement": "Lifecycle conformance tests, append-only invariant checks, provenance queries, and forbidden-update tests.",
+  "rationale": [
+    "The owner must be able to explain how reusable decisions and Ledger mutations evolved."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-19T04:17:38.6596098+00:00",
+  "links": [
+    {
+      "id": "01KXW9M3GFE69P8NB4B9P7M5SC",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-APPLY-EXECUTION",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:49.9050203+00:00"
+    },
+    {
+      "id": "01KXW9M43YC7S80XMYTERMZ8RS",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-CORRECTION-FEEDBACK",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:50.5278936+00:00"
+    },
+    {
+      "id": "01KXW9M2WK4YNKQ18X49Q93A4K",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-LIFECYCLE",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:49.2681982+00:00"
+    },
+    {
+      "id": "01KXW9M5BPT39MV1N0ZXTD85TM",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STATE-RETENTION-CLEANUP",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:51.7992923+00:00"
+    },
+    {
+      "id": "01KXW9M4QJYGWHA9Q3WFZ5VN0A",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STATUS-HISTORY",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:51.1552250+00:00"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "01KXW9PHZRHWHZVT06Y60C9X0D",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-APPLY-EXECUTION-CONTRACT",
+  "slug": "APPLY-EXECUTION-CONTRACT",
+  "title": "Verify replay-safe classification apply",
+  "level": "e2e",
+  "surface": "persistence",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A public LEDGER test contract supports assignment, correction, idempotent replay, stable rejection, and injected interruption around every call and durability boundary.",
+  "steps": "Apply current uncategorized suggestions; apply one explicit reasoned correction; attempt broad correction; exercise stale preflight; replay identical and conflicting requests; interrupt and resume between items.",
+  "expected": "FR-CLASSIFY-APPLY-EXECUTION holds: preflight is all-or-none, each item reaches one exact status, corrections stay individual, retries create no second allocation, and resume starts from the durable unresolved frontier.",
+  "owner": "CLASSIFY implementation",
+  "created_at": "2026-07-19T04:21:10.2650532+00:00",
+  "links": [
+    {
+      "id": "01KXW9RXDVB84CGPES1DK2BXZS",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
+      "rel": "validates",
+      "created_at": "2026-07-19T04:22:27.5165725+00:00"
+    },
+    {
+      "id": "01KXW9PHZSB8BCEY1FR6DRK8X5",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-APPLY-EXECUTION",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:21:10.2657569+00:00"
+    }
+  ]
+}

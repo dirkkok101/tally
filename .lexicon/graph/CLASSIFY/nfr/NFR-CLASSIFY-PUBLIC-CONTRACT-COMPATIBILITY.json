@@ -1,0 +1,48 @@
+{
+  "id": "01KXW9G29PW7PPZ9105PFV4SVS",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY",
+  "title": "Preserve public contract compatibility boundaries",
+  "description": [
+    "The shared versioned operation registry and public LEDGER contract are the only supported automation and financial-data boundaries."
+  ],
+  "category": "architecture",
+  "target": "100% of public CLASSIFY operations expose deterministic versioned request, result, error, exit, mutability, idempotency, limit, and compatibility metadata; zero private LEDGER storage or implementation references; every unsupported CLASSIFY or LEDGER version fails before financial-data read or mutation.",
+  "load_condition": "Every published operation across compatible and incompatible CLASSIFY, Tally, AI Agent Host, and required LEDGER contract-version pairs.",
+  "measurement": "Generated contract inventory, schema snapshots, dependency-boundary tests, incompatible-version matrix, and source-reference scans.",
+  "rationale": [
+    "Agents and future CHANNELS consumers must not couple to prose, storage, or implementation details."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-19T04:17:37.5914998+00:00",
+  "links": [
+    {
+      "id": "01KXW9KZ5Z0NTQWBQBG9C6M6BA",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-APPLY-EXECUTION",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:45.4726126+00:00"
+    },
+    {
+      "id": "01KXW9KXW4SCMTVN0SRKV77GXX",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-CONTRACT-DISCOVERY",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:44.1336939+00:00"
+    },
+    {
+      "id": "01KXW9KX9CZ8JHDEN2FFREFWXD",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:43.5335425+00:00"
+    },
+    {
+      "id": "01KXW9KYHAVGJKK9998F5Q31SC",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STRUCTURED-INVOCATION",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:44.8114650+00:00"
+    }
+  ]
+}

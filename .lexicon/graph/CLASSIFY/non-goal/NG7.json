@@ -6,7 +6,7 @@
     "Provide web, messaging, or other human-facing classification screens and conversations."
   ],
   "rationale": [
-    "CHANNELS owns presentation and interaction; CLASSIFY exposes a channel-neutral structured command contract."
+    "The CHANNELS module's future PRD and design own every web, messaging, navigation, translation, accessibility, and human conversation surface. CLASSIFY is contract-only now because its product boundary is the channel-neutral structured CLI consumed by the owner or AI Agent Host."
   ],
   "created_at": "2026-07-18T17:50:08.5690809+00:00"
 }

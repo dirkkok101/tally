@@ -1,0 +1,88 @@
+{
+  "id": "01KXW9E3KEX4Q48VTBRSX2DQXK",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "type": "functional",
+  "ref_code": "FR-CLASSIFY-APPLY-EXECUTION",
+  "title": "Apply authorized decisions through public LEDGER operations",
+  "description": [
+    "Execute a replay-safe authorized Classification Apply Run through public LEDGER assignment or correction operations and record one terminal result per requested transaction. Implements G3 and UC-CLASSIFY-003."
+  ],
+  "rationale": [
+    "Agents must recover from retries and partial progress without duplicating or silently changing category history."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "apply reviewed classification decisions safely"
+  ],
+  "story_so_that": [
+    "Ledger category history changes exactly as authorized and every result is recoverable"
+  ],
+  "acceptance_criteria": [
+    "Given an authorized selection whose evaluation, projection, category, normalization, and rule-set fingerprints are current, when apply starts, then CLASSIFY completes preflight before the first LEDGER mutation.",
+    "Given any stale or incompatible item detected during preflight, when apply starts, then CLASSIFY rejects the whole requested selection before the first LEDGER mutation.",
+    "Given an authorized uncategorized active transaction and active category, when its item is submitted, then CLASSIFY invokes only the public LEDGER category-assignment operation with a stable per-transaction idempotency identity.",
+    "Given an already categorized transaction, when a correction is explicitly selected, then CLASSIFY requires a transaction-specific owner reason and never includes that correction in exact-rule broad apply.",
+    "Given an apply request, when processing terminates, then every requested transaction has one structured result of applied, already-applied, rejected, failed, or unresolved.",
+    "Given the same apply identity and semantically identical request, when apply is retried, then CLASSIFY returns the prior terminal item results and creates no second category mutation.",
+    "Given an apply identity reused with different selection, category, mode, fingerprint, or reason, when apply is retried, then CLASSIFY returns a stable conflict and preserves the original results.",
+    "Given interruption between item submissions, when the same apply run is resumed, then completed items reconcile from durable results and processing continues only from the exact unresolved frontier."
+  ],
+  "security_criteria": [
+    "Apply logs and diagnostics contain safe run, item, and error identifiers only, never descriptions, amounts, category payloads, or serialized LEDGER requests."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T04:16:33.3832373+00:00",
+  "links": [
+    {
+      "id": "01KXW9KH3CXNPT12XXQKT2D52Z",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:31.0535321+00:00"
+    },
+    {
+      "id": "01KXW9KGF27W53AYW87563155X",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:30.4031143+00:00"
+    },
+    {
+      "id": "01KXW9K8C45FHH0Z68G9RZK075",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-APPLY-AUTHORIZATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:22.1170811+00:00"
+    },
+    {
+      "id": "01KXW9KHPV0TFCG4DZAJX8PFRS",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-ASSIGNMENT",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:31.6760398+00:00"
+    },
+    {
+      "id": "01KXW9KJA4EFW16ZA5NH6HVS43",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-IDEMPOTENT-WRITES",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:32.2936117+00:00"
+    },
+    {
+      "id": "01KXW9E3KEVDXS1C54CYJJR3EX",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-003",
+      "rel": "implements",
+      "created_at": "2026-07-19T04:16:33.3902711+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXW9JPEQTYVBJ18DQQ9YX1B6",
+      "target": "P1",
+      "created_at": "2026-07-19T04:19:03.7660799+00:00"
+    }
+  ]
+}

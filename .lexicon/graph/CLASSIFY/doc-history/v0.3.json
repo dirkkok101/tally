@@ -1,0 +1,9 @@
+{
+  "id": "01KXWAASNXHCVB44VMKW440AAD",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "version": "0.3",
+  "changes": [
+    "PRD complete: defined 13 functional and 7 non-functional requirements, reused P1 across six workflows, fixed the twelve-operation CLASSIFY contract and CHANNELS UI boundary, added 20 planned verification intents, and traced public LEDGER, local security, AI Agent Host, and private-corpus gates."
+  ],
+  "created_at": "2026-07-19T04:32:13.5056288+00:00"
+}

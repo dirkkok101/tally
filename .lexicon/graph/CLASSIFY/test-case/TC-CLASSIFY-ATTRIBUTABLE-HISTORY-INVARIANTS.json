@@ -1,0 +1,33 @@
+{
+  "id": "01KXW9QXEDYZPQR3HVG4FEGSFF",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-ATTRIBUTABLE-HISTORY-INVARIANTS",
+  "slug": "ATTRIBUTABLE-HISTORY-INVARIANTS",
+  "title": "Verify append-only classification history",
+  "level": "integration",
+  "surface": "persistence",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Every rule, validation, evaluation, apply, feedback, abandonment, cleanup, retirement, supersession, and stale transition can be produced.",
+  "steps": "Execute each transition; inspect provenance fields and prior or resulting references; attempt forbidden in-place updates.",
+  "expected": "NFR-CLASSIFY-ATTRIBUTABLE-HISTORY reaches complete attribution and every forbidden update fails without changing history.",
+  "owner": "CLASSIFY implementation",
+  "created_at": "2026-07-19T04:21:54.7664725+00:00",
+  "links": [
+    {
+      "id": "01KXW9SH55D5J43062RW72TDN8",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-LIFECYCLE",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:22:47.7188265+00:00"
+    },
+    {
+      "id": "01KXW9QXEGEWJ7HATB45Q2FFEM",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-ATTRIBUTABLE-HISTORY",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:21:54.7681090+00:00"
+    }
+  ]
+}

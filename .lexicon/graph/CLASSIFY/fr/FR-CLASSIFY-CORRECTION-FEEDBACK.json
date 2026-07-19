@@ -1,0 +1,67 @@
+{
+  "id": "01KXW9E3KEXG3598PKAV2H1BW0",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "type": "functional",
+  "ref_code": "FR-CLASSIFY-CORRECTION-FEEDBACK",
+  "title": "Turn owner corrections into bounded feedback",
+  "description": [
+    "Record attributable acceptance, rejection, and correction feedback against exact outcomes and propose only explicit narrow rule changes. Implements G4 and UC-CLASSIFY-005."
+  ],
+  "rationale": [
+    "Corrections should improve future assistance without turning a one-off exception into automatic generalized behavior."
+  ],
+  "priority": 1,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "use an accepted, rejected, or corrected outcome as attributable feedback"
+  ],
+  "story_so_that": [
+    "future rule proposals improve without silently changing rules or Ledger history"
+  ],
+  "acceptance_criteria": [
+    "Given an accepted or rejected outcome, when feedback is recorded, then it references the exact transaction, evaluation, outcome, normalization, rule-set, and contributing rule versions plus owner actor, reason, and timestamp.",
+    "Given a category correction completed in LEDGER, when CLASSIFY records feedback, then it references the authoritative prior and resulting Ledger allocations without rewriting either.",
+    "Given one correction, when CLASSIFY derives a response, then it records no proposal or one smallest-scope retire, narrow, or replacement proposal.",
+    "Given a feedback-derived proposal, when it is recorded, then CLASSIFY does not activate the proposal automatically.",
+    "Given a feedback-derived proposal, when it is recorded, then CLASSIFY does not broaden an existing rule automatically.",
+    "Given a feedback-derived candidate, when activation is requested, then the same private validation and explicit activation requirements as any other candidate apply.",
+    "Given historical feedback, when a rule is retired or superseded, then the feedback remains attributable to the original rule version and outcome.",
+    "Given unavailable prior Match Evidence, when feedback is recorded, then CLASSIFY stores the owner decision but creates no rule proposal from reconstructed current evidence."
+  ],
+  "security_criteria": [
+    "Feedback results expose only explicit owner-requested provenance and keep private description and normalized-token payloads owner-only."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T04:16:33.3832373+00:00",
+  "links": [
+    {
+      "id": "01KXW9K8ZNJWFQVA3DX7WFYATP",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-OUTCOME-EXPLANATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:22.7419754+00:00"
+    },
+    {
+      "id": "01KXW9KJX4XMJR8KEJGHFXYX6P",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-ASSIGNMENT",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:32.9015111+00:00"
+    },
+    {
+      "id": "01KXW9E3KFR8DVZTMAVEA4N3V8",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-005",
+      "rel": "implements",
+      "created_at": "2026-07-19T04:16:33.3910325+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXW9JPTDMQB6FTTCMDFR4WK8",
+      "target": "P1",
+      "created_at": "2026-07-19T04:19:04.1403027+00:00"
+    }
+  ]
+}

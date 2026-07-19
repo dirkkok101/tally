@@ -1,0 +1,26 @@
+{
+  "id": "01KXW9PHNA1FBJ5DP2M02MW6JH",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-APPLY-AUTHORIZATION-CONTRACT",
+  "slug": "APPLY-AUTHORIZATION-CONTRACT",
+  "title": "Verify explicit apply authorization",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "unhappy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Current suggestion, no-suggestion, conflict, stale, selected-item, unauthorized exact-rule, and authorized exact-rule examples exist.",
+  "steps": "Complete evaluation without apply; request previews for each outcome partition; request rule-wide apply with and without authority; change one fingerprint after preview.",
+  "expected": "FR-CLASSIFY-APPLY-AUTHORIZATION holds: preview is read-only and exact, only current authorized suggestions enter scope, and missing authority or stale evidence blocks mutation.",
+  "owner": "CLASSIFY implementation",
+  "created_at": "2026-07-19T04:21:09.9315623+00:00",
+  "links": [
+    {
+      "id": "01KXW9PHNCSHBH9WV102NX68PX",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-APPLY-AUTHORIZATION",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:21:09.9323114+00:00"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "id": "01KXW9E3KN88NRFY4V3D1S2TZX",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "type": "functional",
+  "ref_code": "FR-CLASSIFY-STATUS-HISTORY",
+  "title": "Inspect classification status and history",
+  "description": [
+    "Return safe durable status for rule, validation, evaluation, apply, feedback, abandonment, and cleanup workflows without rereading private evidence. Implements G4, G5, and UC-CLASSIFY-002/004/005/006."
+  ],
+  "rationale": [
+    "After interruption or later review, the owner must know the last durable state and safe next action without inspecting storage or replaying private data."
+  ],
+  "priority": 1,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "inspect current and historical classification workflow state"
+  ],
+  "story_so_that": [
+    "I can resume, review, retire, or clean up safely"
+  ],
+  "acceptance_criteria": [
+    "Given a status request, when current rule state is returned, then it identifies the active Rule Set Version and draft, active, retired, and superseded rule versions with safe lifecycle metadata.",
+    "Given a retained validation or evaluation run, when status is requested, then it returns its fingerprint, lifecycle state, aggregate outcomes, staleness state, and safe next action without rereading the corpus or LEDGER projection.",
+    "Given a retained apply run, when status is requested, then it returns the authorized fingerprint, terminal item totals, unresolved frontier, and whether replay or resume is safe.",
+    "Given retained feedback, when status is requested, then it returns the referenced outcome, decision type, proposal state, actor, reason, and rule versions without reconstructing evidence.",
+    "Given an unknown status subject, when status is requested, then CLASSIFY returns stable not-found and does not search private payloads heuristically.",
+    "Given any expected failure, when status is returned, then it identifies whether CLASSIFY or LEDGER mutation may have occurred and names only the safe retry, resume, re-evaluate, correct, abandon, or cleanup action."
+  ],
+  "security_criteria": [
+    "Status output contains only requested safe metadata and never raw corpus rows, unrelated transaction payloads, or hidden rule contents."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T04:16:33.3832373+00:00",
+  "links": [
+    {
+      "id": "01KXW9KARNEA1PY61BK8X7JRXG",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STRUCTURED-INVOCATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:24.5661988+00:00"
+    },
+    {
+      "id": "01KXW9E3KNC9PCSEA6RWPZNPNV",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-002",
+      "rel": "implements",
+      "created_at": "2026-07-19T04:16:33.3977290+00:00"
+    },
+    {
+      "id": "01KXW9K10GYZB237PKD4CFNMXQ",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-004",
+      "rel": "implements",
+      "created_at": "2026-07-19T04:19:14.5777723+00:00"
+    },
+    {
+      "id": "01KXW9K1K4GKQH5Y699TY0BWN6",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-005",
+      "rel": "implements",
+      "created_at": "2026-07-19T04:19:15.1731558+00:00"
+    },
+    {
+      "id": "01KXW9K272KCMYKM824YRDKHHW",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-006",
+      "rel": "implements",
+      "created_at": "2026-07-19T04:19:15.8119066+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXW9JR95DJW2PV780V6X4YH4",
+      "target": "P1",
+      "created_at": "2026-07-19T04:19:05.6368945+00:00"
+    }
+  ]
+}

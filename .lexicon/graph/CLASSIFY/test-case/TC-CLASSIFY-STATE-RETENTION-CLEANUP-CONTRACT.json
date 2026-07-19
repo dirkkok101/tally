@@ -1,0 +1,26 @@
+{
+  "id": "01KXW9PM251WSNBB9QFS1QWNSC",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-STATE-RETENTION-CLEANUP-CONTRACT",
+  "slug": "STATE-RETENTION-CLEANUP-CONTRACT",
+  "title": "Verify retention, abandonment, and cleanup",
+  "level": "e2e",
+  "surface": "persistence",
+  "scenario": "security",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Referenced and unreferenced drafts, evaluations, rule versions, apply results, feedback, recognized temporaries, hostile links, and crash orphans exist.",
+  "steps": "Inspect retained provenance; abandon unreferenced work; attempt hard removal of referenced history; run cleanup after success, failure, crash, and startup; inspect paths and safe result.",
+  "expected": "FR-CLASSIFY-STATE-RETENTION-CLEANUP holds: required history remains, removable derived payload disappears, referenced history rejects deletion, and cleanup never escapes CLASSIFY storage.",
+  "owner": "CLASSIFY implementation",
+  "created_at": "2026-07-19T04:21:12.3906988+00:00",
+  "links": [
+    {
+      "id": "01KXW9PM27RAQAB0WH1WWRP4GH",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STATE-RETENTION-CLEANUP",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:21:12.3914822+00:00"
+    }
+  ]
+}

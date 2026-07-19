@@ -1,0 +1,33 @@
+{
+  "id": "01KXW9QX0VMV7TG67WG63CSVT6",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-APPLY-CRASH-RECOVERY-MATRIX",
+  "slug": "APPLY-CRASH-RECOVERY-MATRIX",
+  "title": "Verify every classification apply crash window",
+  "level": "e2e",
+  "surface": "persistence",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A multi-item apply run and controllable termination points exist before and after preflight, LEDGER calls, and CLASSIFY result durability.",
+  "steps": "Terminate at every boundary; restart; inspect status; replay or resume; compare Ledger allocation history and CLASSIFY item results.",
+  "expected": "NFR-CLASSIFY-APPLY-RECOVERY reaches exact item resolution with no second category mutation and no skipped or falsely terminal item.",
+  "owner": "CLASSIFY implementation",
+  "created_at": "2026-07-19T04:21:54.3327614+00:00",
+  "links": [
+    {
+      "id": "01KXW9SGGRWTHMXQ46RNN4XENJ",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-APPLY-EXECUTION",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:22:47.0683497+00:00"
+    },
+    {
+      "id": "01KXW9QX0XJTMEFE8SPFD6S8DY",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-APPLY-RECOVERY",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:21:54.3336338+00:00"
+    }
+  ]
+}

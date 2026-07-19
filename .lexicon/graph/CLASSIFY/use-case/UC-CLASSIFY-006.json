@@ -5,7 +5,7 @@
   "title": "Discover and invoke the CLASSIFY agent contract",
   "preconditions": "CLASSIFY is locally available to the owner process and exposes a versioned contract descriptor.",
   "postconditions": "The host can orchestrate the workflow without scraping prose, bypassing owner intent, reading CLASSIFY storage, or receiving unrelated financial data.",
-  "main_flow": "The host obtains operation, request, result, error, and compatibility schemas; checks supported versions; invokes evaluate, inspect, apply, explain, rule-manage, or status non-interactively; consumes structured standard output and stable exit categories; and treats standard error as metadata-only diagnostics.",
+  "main_flow": "The host obtains operation, request, result, error, and compatibility schemas; checks supported versions; invokes classify.evaluate, classify.outcome.get, classify.apply.preview, classify.apply.run, classify.rule.save, classify.rule.validate, classify.rule.activate, classify.rule.retire, classify.feedback.record, classify.status, classify.abandon, or classify.cleanup non-interactively; consumes structured standard output and stable exit categories; and treats standard error as metadata-only diagnostics.",
   "alt_flows": [
     "Reject unsupported contract versions before reading or mutation.",
     "Return stable structured validation errors for malformed requests.",

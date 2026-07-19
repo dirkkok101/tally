@@ -1,0 +1,33 @@
+{
+  "id": "01KXW9PNS080ASMFY77FFYEZ3J",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-PUBLISHED-CONTRACT-MATRIX",
+  "slug": "PUBLISHED-CONTRACT-MATRIX",
+  "title": "Verify the published CLASSIFY contract matrix",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Published binaries and AI Agent Host clients cover every supported and adjacent incompatible CLASSIFY and LEDGER contract version.",
+  "steps": "Inventory descriptors; exercise every version pair and operation; scan compiled and source references for private LEDGER dependencies.",
+  "expected": "NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY reaches complete descriptor coverage, all incompatibilities fail before data read or mutation, and private Ledger coupling is absent.",
+  "owner": "CLASSIFY implementation",
+  "created_at": "2026-07-19T04:21:14.1456516+00:00",
+  "links": [
+    {
+      "id": "01KXW9SF77VYVZ69PD3Z062BSA",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-CONTRACT-DISCOVERY",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:22:45.7367264+00:00"
+    },
+    {
+      "id": "01KXW9PNS233PJHBEJTF58JWQG",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:21:14.1465543+00:00"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "01KXW9PHA63TDD87QZADSB5RDP",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-RULE-VALIDATION-CONTRACT",
+  "slug": "RULE-VALIDATION-CONTRACT",
+  "title": "Verify private candidate validation",
+  "level": "integration",
+  "surface": "service",
+  "scenario": "security",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "An owner-only temporal corpus contains passing rows, incorrect-application canaries, drift, conflicts, stale fingerprints, and complete expected outcomes.",
+  "steps": "Validate passing and failing candidates; remove or stale each fingerprint; make the corpus unavailable; inspect aggregate report and tracked or diagnostic outputs.",
+  "expected": "FR-CLASSIFY-RULE-VALIDATION holds: all rows are accounted, unsafe candidates cannot activate or gain broad authority, the prior active set remains usable, and raw private evidence is not exported.",
+  "owner": "CLASSIFY implementation",
+  "created_at": "2026-07-19T04:21:09.5752197+00:00",
+  "links": [
+    {
+      "id": "01KXW9RY6817T729Y4T2YXAH27",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS",
+      "rel": "validates",
+      "created_at": "2026-07-19T04:22:28.2974387+00:00"
+    },
+    {
+      "id": "01KXW9PHA868M2N6YFVA841RMS",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-VALIDATION",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:21:09.5760757+00:00"
+    }
+  ]
+}

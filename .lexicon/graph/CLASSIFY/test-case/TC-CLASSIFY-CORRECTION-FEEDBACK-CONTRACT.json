@@ -1,0 +1,26 @@
+{
+  "id": "01KXW9PJA9CY0QXJMHR7WK9RES",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-CORRECTION-FEEDBACK-CONTRACT",
+  "slug": "CORRECTION-FEEDBACK-CONTRACT",
+  "title": "Verify bounded correction feedback",
+  "level": "integration",
+  "surface": "persistence",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Accepted, rejected, corrected, historical, missing-evidence, and feedback-derived candidate examples are available.",
+  "steps": "Record each decision; derive proposals; attempt automatic activation and broadening; validate and explicitly activate a safe successor; inspect old feedback after retirement.",
+  "expected": "FR-CLASSIFY-CORRECTION-FEEDBACK holds: feedback remains attributable, one correction never generalizes or activates a rule, and missing evidence produces no reconstructed proposal.",
+  "owner": "CLASSIFY implementation",
+  "created_at": "2026-07-19T04:21:10.6026750+00:00",
+  "links": [
+    {
+      "id": "01KXW9PJABS457XB6S2P6BGBHT",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-CORRECTION-FEEDBACK",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:21:10.6035608+00:00"
+    }
+  ]
+}

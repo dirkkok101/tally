@@ -1,0 +1,34 @@
+{
+  "id": "01KXW9G304WTQWG1718CJ7WK2Q",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "NFR-CLASSIFY-APPLY-RECOVERY",
+  "title": "Recover classification apply runs deterministically",
+  "description": [
+    "Every interruption and retry must preserve exact per-transaction mutation knowledge and a safe resume frontier."
+  ],
+  "category": "reliability",
+  "target": "For 100% of injected interruption points before preflight, before a LEDGER call, after LEDGER commit, before CLASSIFY result durability, after result durability, and between items, status or replay resolves every requested transaction to applied once, returned as the prior result, rejected, failed, or explicitly unresolved; zero second category mutations occur.",
+  "load_condition": "Single and multi-item assignment and correction runs, exact retries, conflicting retries, downstream expected failures, and process termination at each durability boundary.",
+  "measurement": "Crash-window matrix using published public contracts, Ledger idempotency assertions, durable-status inspection, and duplicate-allocation checks.",
+  "rationale": [
+    "The AI Agent Host may lose output after Ledger commits, so recoverability must not rely on caller knowledge."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-19T04:17:38.3091585+00:00",
+  "links": [
+    {
+      "id": "01KXW9M1N0YBNBQV8EAEEZ4QQ2",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-APPLY-EXECUTION",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:48.0013375+00:00"
+    },
+    {
+      "id": "01KXW9M29A7WFQZTQ70QXPPTDP",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STATUS-HISTORY",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:48.6508695+00:00"
+    }
+  ]
+}

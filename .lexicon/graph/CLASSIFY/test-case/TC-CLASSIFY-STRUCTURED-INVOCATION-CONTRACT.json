@@ -1,0 +1,33 @@
+{
+  "id": "01KXW9PKBRVZBM7HXDGEGV11W4",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-STRUCTURED-INVOCATION-CONTRACT",
+  "slug": "STRUCTURED-INVOCATION-CONTRACT",
+  "title": "Verify structured CLASSIFY invocation",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "unhappy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Published operations, valid and malformed requests, every expected error category, incompatible versions, and missing mutation metadata are available.",
+  "steps": "Invoke each request through the documented process path; capture stdout, stderr, and exit code; exercise unknown fields, incompatibility, missing actor, and missing idempotency.",
+  "expected": "FR-CLASSIFY-STRUCTURED-INVOCATION holds: one business envelope and stable exit are returned, validation and compatibility fail before effects, and diagnostics remain metadata-only.",
+  "owner": "CLASSIFY implementation",
+  "created_at": "2026-07-19T04:21:11.6738067+00:00",
+  "links": [
+    {
+      "id": "01KXW9SJBS2YBDKVJ41JWF8WBV",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-HOST-OS-SECURITY",
+      "rel": "validates",
+      "created_at": "2026-07-19T04:22:48.9544769+00:00"
+    },
+    {
+      "id": "01KXW9PKBTSAAB40BA788JTDXB",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STRUCTURED-INVOCATION",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:21:11.6747923+00:00"
+    }
+  ]
+}

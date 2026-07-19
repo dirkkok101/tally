@@ -1,0 +1,55 @@
+{
+  "id": "01KXW9G1M1SD55SZ80W7NY4SCN",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "NFR-CLASSIFY-DETERMINISTIC-INTEGRITY",
+  "title": "Preserve deterministic classification integrity",
+  "description": [
+    "Classification outcomes, evidence, validation reports, and accounting totals must remain reproducible for one exact Evaluation Fingerprint."
+  ],
+  "category": "data_integrity",
+  "target": "100% of repeated evaluations and candidate validations with identical fingerprints return semantically identical ordered results; 100% of eligible or corpus rows are accounted for exactly once; zero incompatible-category matches produce a selected category.",
+  "load_condition": "Every supported rule predicate, normalization version, outcome type, category lifecycle state, and representative or generated transaction projection.",
+  "measurement": "Golden-fixture replay, property-based rule overlap tests, row-accounting assertions, and fingerprint-change negative tests.",
+  "rationale": [
+    "Determinism is the safety property that makes rule behavior reviewable and repeatable."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-19T04:17:36.8985844+00:00",
+  "links": [
+    {
+      "id": "01KXW9KQW82GVMMH0H7TE6YP3H",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:37.9929543+00:00"
+    },
+    {
+      "id": "01KXW9KQ8AZH8EQGA0013X8XAV",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:37.3556165+00:00"
+    },
+    {
+      "id": "01KXW9KRETY11JTDMPY7RJHKGR",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-OUTCOME-EXPLANATION",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:38.5876533+00:00"
+    },
+    {
+      "id": "01KXW9KSP66J17H735F8955RGS",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-OUTCOME-INVALIDATION",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:39.8469475+00:00"
+    },
+    {
+      "id": "01KXW9KS38R0CVSWHJGXYCEQXM",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-VALIDATION",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:39.2408597+00:00"
+    }
+  ]
+}

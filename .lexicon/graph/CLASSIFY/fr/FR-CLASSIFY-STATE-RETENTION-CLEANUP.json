@@ -1,0 +1,81 @@
+{
+  "id": "01KXW9E3KPWD9F58YA1EM4NPRG",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "type": "functional",
+  "ref_code": "FR-CLASSIFY-STATE-RETENTION-CLEANUP",
+  "title": "Retain attributable state and clean derived artifacts",
+  "description": [
+    "Preserve the minimal durable provenance required for explanation and replay while abandoning unreferenced drafts and removing temporary evidence-derived artifacts safely. Implements G4, G6, and UC-CLASSIFY-004/005/006."
+  ],
+  "rationale": [
+    "Classification needs durable provenance, but retaining private temporary payloads or deleting referenced history would both be unsafe."
+  ],
+  "priority": 1,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "retain necessary classification history and clean temporary private artifacts"
+  ],
+  "story_so_that": [
+    "auditability does not create unnecessary disclosure or orphaned state"
+  ],
+  "acceptance_criteria": [
+    "Given an activated rule, apply result, or feedback record, when retention is inspected, then CLASSIFY retains the minimal actor, reason, timestamp, stable references, fingerprints, prior state, and resulting state required for explanation and replay.",
+    "Given a validation or evaluation path succeeds, when its result is returned, then raw corpus copies and temporary evidence-derived artifacts are absent.",
+    "Given a validation or evaluation path returns an expected failure, when its result is returned, then raw corpus copies and temporary evidence-derived artifacts are absent.",
+    "Given a validation or evaluation path returns an unexpected handled failure, when its failure is returned, then raw corpus copies and temporary evidence-derived artifacts are absent.",
+    "Given an unreferenced draft rule, validation run, or evaluation run, when the owner explicitly abandons it, then it becomes non-activatable and its removable derived payload is deleted without changing active rules or LEDGER.",
+    "Given a rule version, evaluation, or apply result referenced by active state, Ledger mutation provenance, or feedback, when hard removal is requested, then CLASSIFY rejects removal and requires lifecycle retirement or retained history.",
+    "Given process startup, when orphan temporary artifacts from a prior crash are found, then CLASSIFY validates ownership and removes only recognized CLASSIFY temporaries before accepting new mutation.",
+    "Given cleanup completion, when status is requested, then it returns safe counts and identifiers but no removed payload."
+  ],
+  "security_criteria": [
+    "Persisted CLASSIFY directories and files are owner-only, and cleanup never follows links or paths outside the owned CLASSIFY storage boundary."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T04:16:33.3832373+00:00",
+  "links": [
+    {
+      "id": "01KXW9KPMSX6WWZZD2YXWYXD8H",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:36.7301362+00:00"
+    },
+    {
+      "id": "01KXW9KBBP782ZC09RHVGQ532F",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STATUS-HISTORY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:25.1756844+00:00"
+    },
+    {
+      "id": "01KXW9E3KP0TWDQZY309EHSGVV",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-004",
+      "rel": "implements",
+      "created_at": "2026-07-19T04:16:33.3988275+00:00"
+    },
+    {
+      "id": "01KXW9K3F5TJ4ABS3HJ9ARYXQV",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-005",
+      "rel": "implements",
+      "created_at": "2026-07-19T04:19:17.0948986+00:00"
+    },
+    {
+      "id": "01KXW9K41RK6PTJF849XZPKC34",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-006",
+      "rel": "implements",
+      "created_at": "2026-07-19T04:19:17.6895700+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXW9JRM6KVF5CVWR4YNM4J87",
+      "target": "P1",
+      "created_at": "2026-07-19T04:19:05.9894171+00:00"
+    }
+  ]
+}

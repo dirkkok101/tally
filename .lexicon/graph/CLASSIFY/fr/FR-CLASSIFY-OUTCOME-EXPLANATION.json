@@ -1,0 +1,58 @@
+{
+  "id": "01KXW9E3KARH4D3XTKPKAYB63N",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "type": "functional",
+  "ref_code": "FR-CLASSIFY-OUTCOME-EXPLANATION",
+  "title": "Explain a classification outcome",
+  "description": [
+    "Return the exact bounded evidence and safe next action for any retained suggestion, no-suggestion, conflict, or stale outcome. Implements G2 and UC-CLASSIFY-002."
+  ],
+  "rationale": [
+    "The owner cannot safely approve or correct an outcome whose inputs and rule provenance are opaque."
+  ],
+  "priority": 1,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "inspect why a transaction received its classification outcome"
+  ],
+  "story_so_that": [
+    "I can accept, reject, or correct it from reproducible evidence"
+  ],
+  "acceptance_criteria": [
+    "Given a retained suggestion, when its explanation is requested, then the result identifies the evaluation, transaction, category, normalization version, rule-set version, contributing rule versions, and allowed fields whose predicates matched.",
+    "Given a retained no-suggestion outcome, when its explanation is requested, then the result identifies the evaluated versions and a stable no-match reason without inventing a category.",
+    "Given a retained conflict, when its explanation is requested, then the result identifies every incompatible matching rule version and proposed category without selecting a winner.",
+    "Given a stale outcome, when its explanation is requested, then the result identifies the fingerprint dimension that changed and states that re-evaluation is required.",
+    "Given an unknown outcome, when explanation is requested, then CLASSIFY returns stable not-found status and does not reconstruct historical evidence from current state.",
+    "Given a known outcome whose retained evidence is unavailable, when explanation is requested, then CLASSIFY returns stable evidence-unavailable status and does not reconstruct historical evidence from current state."
+  ],
+  "security_criteria": [
+    "Explanation returns no unrelated transaction fields, corpus rows, hidden rule payloads, or full serialized request."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T04:16:33.3832373+00:00",
+  "links": [
+    {
+      "id": "01KXW9K5A4SZMWGF1EB6JA5RWV",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:18.9822442+00:00"
+    },
+    {
+      "id": "01KXW9E3KACMGJR4DBTRFE11Y3",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-002",
+      "rel": "implements",
+      "created_at": "2026-07-19T04:16:33.3865962+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXW9JN04PQ5KVHS0EG4GTJHK",
+      "target": "P1",
+      "created_at": "2026-07-19T04:19:02.2755775+00:00"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "id": "01KXW9G3PFR7296KD35V6PBE3S",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION",
+  "title": "Operate as a self-contained local classifier",
+  "description": [
+    "Every first-release CLASSIFY workflow runs inside the Tally process under the owner OS identity with no required remote or background component."
+  ],
+  "category": "operability",
+  "target": "100% of CLASSIFY acceptance workflows complete with network access disabled, non-interactively, and with no CLASSIFY or Tally daemon, watcher, scheduler, or background process running before or after invocation.",
+  "load_condition": "Direct owner CLI use and AI Agent Host invocation across evaluation, rule management, validation, apply, feedback, status, abandon, and cleanup.",
+  "measurement": "Network-denied published-binary acceptance suite, process inventory before and after each command, and prompt/TTY detection.",
+  "rationale": [
+    "The selected approach and privacy boundary require explicit local commands rather than hidden automation."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-19T04:17:39.0241405+00:00",
+  "links": [
+    {
+      "id": "01KXW9M5YZP9QAJ1TKNJ5XHY3D",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-CONTRACT-DISCOVERY",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:52.4165599+00:00"
+    },
+    {
+      "id": "01KXW9M6J5HWKBZ8SFZGX9S6RA",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STRUCTURED-INVOCATION",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:53.0309308+00:00"
+    }
+  ]
+}

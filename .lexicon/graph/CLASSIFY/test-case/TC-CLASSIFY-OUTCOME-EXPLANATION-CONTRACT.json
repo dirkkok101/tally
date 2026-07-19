@@ -1,0 +1,26 @@
+{
+  "id": "01KXW9PGKC1HZB1S5D48PYJPP1",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-OUTCOME-EXPLANATION-CONTRACT",
+  "slug": "OUTCOME-EXPLANATION-CONTRACT",
+  "title": "Verify bounded outcome explanation",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Retained suggestion, no-suggestion, conflict, stale, unknown, and evidence-unavailable examples exist.",
+  "steps": "Request each explanation and compare returned provenance, reasons, changed fingerprint dimension, safe next action, and field allowlist.",
+  "expected": "FR-CLASSIFY-OUTCOME-EXPLANATION holds and no historical explanation is reconstructed from current state or enlarged with unrelated private data.",
+  "owner": "CLASSIFY implementation",
+  "created_at": "2026-07-19T04:21:08.8458654+00:00",
+  "links": [
+    {
+      "id": "01KXW9PGKEVAGBSYCH0D4PGGBM",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-OUTCOME-EXPLANATION",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:21:08.8468502+00:00"
+    }
+  ]
+}

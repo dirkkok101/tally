@@ -1,0 +1,26 @@
+{
+  "id": "01KXW9PKQ7PG6NZGF45F0X0BCD",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-STATUS-HISTORY-CONTRACT",
+  "slug": "STATUS-HISTORY-CONTRACT",
+  "title": "Verify safe classification status and history",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Rule, validation, evaluation, apply, feedback, abandon, cleanup, interruption, and unknown-subject states exist.",
+  "steps": "Request current and historical status for every subject; remove access to source corpus and projection; inspect safe-next-action and mutation-possibility fields.",
+  "expected": "FR-CLASSIFY-STATUS-HISTORY holds: durable states and frontiers remain inspectable without source reread or heuristic payload search, and each failure names one safe next action.",
+  "owner": "CLASSIFY implementation",
+  "created_at": "2026-07-19T04:21:12.0399232+00:00",
+  "links": [
+    {
+      "id": "01KXW9PKQ8WRDD420GEA82N1TA",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STATUS-HISTORY",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:21:12.0407434+00:00"
+    }
+  ]
+}

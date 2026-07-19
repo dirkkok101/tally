@@ -1,0 +1,33 @@
+{
+  "id": "01KXW9QXT0SF89207E74SZF9H0",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-OFFLINE-PROCESS-ISOLATION",
+  "slug": "OFFLINE-PROCESS-ISOLATION",
+  "title": "Verify self-contained offline operation",
+  "level": "e2e",
+  "surface": "service",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Network access is denied and no Tally process is running before each workflow.",
+  "steps": "Invoke every CLASSIFY acceptance workflow directly and through the compatible AI Agent Host; detect prompts, network attempts, and remaining processes.",
+  "expected": "NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION reaches complete offline non-interactive coverage with no required or leftover daemon, watcher, scheduler, or background worker.",
+  "owner": "CLASSIFY implementation",
+  "created_at": "2026-07-19T04:21:55.1382568+00:00",
+  "links": [
+    {
+      "id": "01KXW9SHS1FFG1BNW3654P820H",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STRUCTURED-INVOCATION",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:22:48.3540138+00:00"
+    },
+    {
+      "id": "01KXW9QXT3X75BD9EW31PBDVMA",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:21:55.1395719+00:00"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "01KXW99185C7C9BWBMBNRWKQG6",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "C12",
+  "title": "Canonical CLASSIFY operation vocabulary",
+  "description": [
+    "The shared Tally operation registry must expose exactly the first-release CLASSIFY capabilities classify.evaluate, classify.outcome.get, classify.apply.preview, classify.apply.run, classify.rule.save, classify.rule.validate, classify.rule.activate, classify.rule.retire, classify.feedback.record, classify.status, classify.abandon, and classify.cleanup. Design may choose CLI token paths but may not merge away or silently add product capabilities."
+  ],
+  "type": "technical",
+  "created_at": "2026-07-19T04:13:47.1421174+00:00"
+}

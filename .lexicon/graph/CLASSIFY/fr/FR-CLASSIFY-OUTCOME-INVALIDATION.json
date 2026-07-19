@@ -1,0 +1,71 @@
+{
+  "id": "01KXW9E3KFWQ5BKCHRZVY95BXH",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "type": "functional",
+  "ref_code": "FR-CLASSIFY-OUTCOME-INVALIDATION",
+  "title": "Invalidate stale classification outcomes",
+  "description": [
+    "Make prior outcomes unappliable whenever any canonical input represented by their Evaluation Fingerprint changes. Implements G2, G3, and UC-CLASSIFY-002/003."
+  ],
+  "rationale": [
+    "A once-correct suggestion can become unsafe after lifecycle, category, contract, normalization, or rule changes."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "stale suggestions to fail closed"
+  ],
+  "story_so_that": [
+    "an old preview cannot mutate current Ledger state"
+  ],
+  "acceptance_criteria": [
+    "Given a transaction becomes void in public LEDGER state, when a prior outcome is inspected or applied, then CLASSIFY reports it stale and blocks apply.",
+    "Given a transaction is superseded in public LEDGER state, when a prior outcome is inspected or applied, then CLASSIFY reports it stale and blocks apply.",
+    "Given a transaction allocation changes in public LEDGER state, when a prior outcome is inspected or applied, then CLASSIFY reports it stale and blocks apply.",
+    "Given a transaction's transfer relationship changes in public LEDGER state, when a prior outcome is inspected or applied, then CLASSIFY reports it stale and blocks apply.",
+    "Given a transaction's refund or reversal relationship changes in public LEDGER state, when a prior outcome is inspected or applied, then CLASSIFY reports it stale and blocks apply.",
+    "Given a targeted category is archived, when a prior outcome is inspected or applied, then CLASSIFY reports it stale and blocks apply.",
+    "Given a targeted category is reactivated, when a prior outcome created before reactivation is inspected or applied, then CLASSIFY reports it stale and blocks apply.",
+    "Given a targeted category identity changes, when a prior outcome is inspected or applied, then CLASSIFY reports it stale and blocks apply.",
+    "Given a category rename that preserves the same active identifier, when a prior outcome is inspected, then its category identity remains valid and the current display name is returned.",
+    "Given the required LEDGER contract or classification projection version changes, when a prior outcome is inspected or applied, then CLASSIFY identifies that changed fingerprint dimension and blocks apply.",
+    "Given the LEDGER store generation changes, when a prior outcome is inspected or applied, then CLASSIFY identifies that changed fingerprint dimension and blocks apply.",
+    "Given the source LEDGER snapshot is invalid or expired, when a prior outcome is inspected or applied, then CLASSIFY identifies that changed fingerprint dimension and blocks apply.",
+    "Given the normalization version changes, when a prior outcome is inspected or applied, then CLASSIFY identifies that changed fingerprint dimension and blocks apply.",
+    "Given the active Rule Set Version changes, when a prior outcome is inspected or applied, then CLASSIFY identifies that changed fingerprint dimension and blocks apply.",
+    "Given a stale outcome, when the owner requests a safe next action, then CLASSIFY identifies re-evaluation rather than correction or forced apply."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T04:16:33.3832373+00:00",
+  "links": [
+    {
+      "id": "01KXW9K9JR2T0579H3ST0ASCRM",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:23.3540087+00:00"
+    },
+    {
+      "id": "01KXW9E3KJPMXMBQ6Z37G944AJ",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-002",
+      "rel": "implements",
+      "created_at": "2026-07-19T04:16:33.3943610+00:00"
+    },
+    {
+      "id": "01KXW9JYH43TYRENC2WANSAN96",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-003",
+      "rel": "implements",
+      "created_at": "2026-07-19T04:19:12.0378953+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXW9JQ8AB9BJE1CG9Z26ACFH",
+      "target": "P1",
+      "created_at": "2026-07-19T04:19:04.5815306+00:00"
+    }
+  ]
+}

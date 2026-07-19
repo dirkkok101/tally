@@ -1,0 +1,75 @@
+{
+  "id": "01KXW9E3K74E965T0931Z2ZDBA",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "type": "functional",
+  "ref_code": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+  "title": "Obtain the eligible classification projection",
+  "description": [
+    "Read one complete snapshot-bound classification input set only through the public LEDGER contract. Implements G1 and UC-CLASSIFY-001."
+  ],
+  "rationale": [
+    "CLASSIFY cannot be deterministic or financially correct if it reads an incomplete page, guesses relationship state, or depends on private Ledger storage."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "classification to inspect the complete canonical set that needs an independent category decision"
+  ],
+  "story_so_that": [
+    "no eligible transaction is omitted or classified using duplicated financial semantics"
+  ],
+  "acceptance_criteria": [
+    "Given a compatible public LEDGER contract, when the classification projection schema is discovered, then it explicitly defines the allowed rule-input fields, canonical eligibility states, stable ordering, snapshot identity, expiry behavior, and category-catalogue version.",
+    "Given an explicit evaluation request, when CLASSIFY obtains the first projection page, then the request selects active transactions requiring an independent category decision under public categorization, transfer, refund, relationship, and lifecycle state.",
+    "Given a transaction that public LEDGER state marks inactive, when the projection is obtained, then that transaction is not eligible for an independent CLASSIFY decision.",
+    "Given a transaction that public LEDGER state marks already independently categorized, when the projection is obtained, then that transaction is not eligible for an independent CLASSIFY decision.",
+    "Given a transaction that public LEDGER state marks as an active owned-transfer principal leg, when the projection is obtained, then that transaction is not eligible for an independent CLASSIFY decision.",
+    "Given a transaction that public LEDGER state marks as a linked refund or reversal whose category follows its original, when the projection is obtained, then that transaction is not eligible for an independent CLASSIFY decision.",
+    "Given a projection spanning multiple pages, when every page is consumed through the snapshot cursor, then membership and order remain those of the first-page snapshot and every ordinal appears exactly once.",
+    "Given an unavailable or incompatible LEDGER operation or projection version, when evaluation is requested, then CLASSIFY returns a stable compatibility failure before creating an evaluation outcome.",
+    "Given an expired or invalid snapshot cursor before complete projection acquisition, when evaluation continues, then CLASSIFY returns a stable stale-input failure and publishes no partial evaluation."
+  ],
+  "security_criteria": [
+    "CLASSIFY must use only the schema-declared projection and must never open private LEDGER storage or request unrelated financial fields."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T04:16:33.3832373+00:00",
+  "links": [
+    {
+      "id": "01KXW9KBZBEHTS7V5SGVEM2NQ8",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:25.8041688+00:00"
+    },
+    {
+      "id": "01KXW9KCJSYB9PFSJ50BV0WWYG",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACTUALS-QUERY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:26.4267643+00:00"
+    },
+    {
+      "id": "01KXW9KD8ZPNT24M0NHX0EWRX4",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-CATALOGUE",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:27.1368550+00:00"
+    },
+    {
+      "id": "01KXW9E3K8N6ACK9DC21Y55DH3",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-001",
+      "rel": "implements",
+      "created_at": "2026-07-19T04:16:33.3845770+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXW9JM9MFJF2STYC94SM7D1B",
+      "target": "P1",
+      "created_at": "2026-07-19T04:19:01.5548308+00:00"
+    }
+  ]
+}

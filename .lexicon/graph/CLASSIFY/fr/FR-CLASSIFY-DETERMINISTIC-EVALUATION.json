@@ -1,0 +1,58 @@
+{
+  "id": "01KXW9E3K9D4ZERATBDJEQPDM9",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "type": "functional",
+  "ref_code": "FR-CLASSIFY-DETERMINISTIC-EVALUATION",
+  "title": "Evaluate deterministic classification outcomes",
+  "description": [
+    "Evaluate every eligible transaction through one immutable normalization and rule-set version without mutation. Implements G2 and UC-CLASSIFY-001."
+  ],
+  "rationale": [
+    "A trustworthy classifier must expose ambiguity and absence instead of manufacturing a confident category."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "every eligible transaction to receive one reproducible classification outcome"
+  ],
+  "story_so_that": [
+    "I can review suggestions without hidden guesses or side effects"
+  ],
+  "acceptance_criteria": [
+    "Given a complete eligible projection, active category catalogue, normalization version, and rule-set version, when evaluation completes, then every input ordinal has exactly one outcome of suggestion, no-suggestion, conflict, or stale and the outcome totals equal the input count.",
+    "Given an identical Evaluation Fingerprint, when evaluation is repeated, then ordered outcomes and Match Evidence are semantically identical.",
+    "Given exactly one matching active rule or multiple matching active rules that all propose the same active category, when a transaction is evaluated, then one suggestion names that category and every contributing rule version.",
+    "Given active matching rules that propose different categories, when a transaction is evaluated, then the outcome is Rule Conflict with no selected category.",
+    "Given no active matching rule, when a transaction is evaluated, then the outcome is explicit no-suggestion with no selected category.",
+    "Given any completed evaluation, when LEDGER category history and transaction source facts are inspected, then evaluation has changed neither."
+  ],
+  "security_criteria": [
+    "Evaluation output must contain only the transaction identity and bounded evidence required to review the outcome."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T04:16:33.3832373+00:00",
+  "links": [
+    {
+      "id": "01KXW9K4Q5AKMZBBK4N3WXH5FY",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:18.3744948+00:00"
+    },
+    {
+      "id": "01KXW9E3K9THKD5HDAF5EES6Q4",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-001",
+      "rel": "implements",
+      "created_at": "2026-07-19T04:16:33.3857438+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXW9JMMJ7YGJ03MQ0DEEH1NK",
+      "target": "P1",
+      "created_at": "2026-07-19T04:19:01.9050965+00:00"
+    }
+  ]
+}

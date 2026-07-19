@@ -1,0 +1,33 @@
+{
+  "id": "01KXW9PK0NZQKB2XVB2EQ5Q6W3",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-CONTRACT-DISCOVERY-CONTRACT",
+  "slug": "CONTRACT-DISCOVERY-CONTRACT",
+  "title": "Verify CLASSIFY contract discovery",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A published Tally executable contains the first-release CLASSIFY registry.",
+  "steps": "List and show every C12 operation descriptor twice; request an unknown operation; monitor CLASSIFY, corpus, and LEDGER data access.",
+  "expected": "FR-CLASSIFY-CONTRACT-DISCOVERY holds: the complete deterministic descriptor set is discoverable, unknown operations fail safely, and discovery performs no private data read.",
+  "owner": "CLASSIFY implementation",
+  "created_at": "2026-07-19T04:21:11.3185176+00:00",
+  "links": [
+    {
+      "id": "01KXW9RVCFTN1R3ZFEC3RJZP30",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-AI-AGENT-HOST",
+      "rel": "validates",
+      "created_at": "2026-07-19T04:22:25.4251585+00:00"
+    },
+    {
+      "id": "01KXW9PK0Q9435H6JJPNH7BX0A",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-CONTRACT-DISCOVERY",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:21:11.3193296+00:00"
+    }
+  ]
+}

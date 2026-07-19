@@ -1,0 +1,11 @@
+{
+  "id": "01KXW991NHPWYM9783NYJPYW9E",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "C13",
+  "title": "Local owner authority and CHANNELS ownership",
+  "description": [
+    "P1 acts through the invoking trusted OS identity; CLASSIFY defines no application permissions, roles, tenant scope, role templates, seeded users, menus, navigation, translation catalogues, frontend keys, or browser behavior. Any human-facing surface and its permission, translation, navigation, and accessibility contract belongs to the CHANNELS module's future PRD and design."
+  ],
+  "type": "business",
+  "created_at": "2026-07-19T04:13:47.5706955+00:00"
+}

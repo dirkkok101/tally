@@ -1,0 +1,75 @@
+{
+  "id": "01KXW9E3KC3EHGS6VR0Y600ZCS",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "type": "functional",
+  "ref_code": "FR-CLASSIFY-RULE-VALIDATION",
+  "title": "Validate candidate rule sets against private evidence",
+  "description": [
+    "Evaluate candidate normalization and rule-set versions against owner-only representative and temporal hold-out evidence before activation or broad apply. Implements G6 and UC-CLASSIFY-004."
+  ],
+  "rationale": [
+    "A deterministic rule can still be consistently wrong; private held-out evidence is the activation safety gate."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "validate candidate rules against representative private evidence"
+  ],
+  "story_so_that": [
+    "unsafe or brittle behavior cannot be activated or applied broadly"
+  ],
+  "acceptance_criteria": [
+    "Given a candidate normalization or rule-set version and an owner-only corpus, when validation starts, then the run records the candidate, corpus, expected-outcome, category-catalogue, projection-contract, and normalization fingerprints.",
+    "Given a completed validation run, when its report is returned, then every corpus row is accounted for and aggregate totals report suggestions, no-suggestions, conflicts, stale rows, drift canaries, and incorrect-application canaries.",
+    "Given any missing or stale required fingerprint, when activation is attempted, then CLASSIFY rejects activation without changing the active Rule Set Version.",
+    "Given any incorrect-application canary, when activation is attempted, then CLASSIFY rejects activation without changing the active Rule Set Version.",
+    "Given any unexplained incompatible-category conflict in required evidence, when activation is attempted, then CLASSIFY rejects activation without changing the active Rule Set Version.",
+    "Given an unavailable private corpus, when an existing active rule set is evaluated, then CLASSIFY may use that unchanged active version.",
+    "Given an unavailable private corpus, when a new rule or normalization version is activated, then CLASSIFY rejects activation without changing the active Rule Set Version.",
+    "Given an unavailable private corpus, when broad-apply authorization is requested, then CLASSIFY rejects authorization before LEDGER mutation.",
+    "Given a validation report, when it is persisted or exported, then it contains corpus fingerprints and aggregate outcomes but no raw transaction description, normalized token, financial value, or expected-outcome row."
+  ],
+  "security_criteria": [
+    "Private evidence remains outside Git and is readable only by the trusted owner OS identity."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T04:16:33.3832373+00:00",
+  "links": [
+    {
+      "id": "01KXW9KFTFW88H5HE5VH1TE5N6",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:29.7441030+00:00"
+    },
+    {
+      "id": "01KXW9KF7N6XBN2WJ76H08J684",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:29.1419469+00:00"
+    },
+    {
+      "id": "01KXW9K6JHWACXD6SWS8N5FPJ3",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:20.2747680+00:00"
+    },
+    {
+      "id": "01KXW9E3KCW2R01JQRG8W08322",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-004",
+      "rel": "implements",
+      "created_at": "2026-07-19T04:16:33.3885349+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXW9JNR4GST9TQAZ3BZFTDD4",
+      "target": "P1",
+      "created_at": "2026-07-19T04:19:03.0429354+00:00"
+    }
+  ]
+}

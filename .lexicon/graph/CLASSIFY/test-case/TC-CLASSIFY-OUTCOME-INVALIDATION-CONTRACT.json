@@ -1,0 +1,26 @@
+{
+  "id": "01KXW9PJNH4T6JJF9GTA1GXZ9S",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-OUTCOME-INVALIDATION-CONTRACT",
+  "slug": "OUTCOME-INVALIDATION-CONTRACT",
+  "title": "Verify every staleness trigger",
+  "level": "integration",
+  "surface": "service",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A current retained outcome can be subjected independently to every transaction, relationship, allocation, category, contract, store-generation, snapshot, normalization, and rule-set change in the PRD.",
+  "steps": "Apply each change independently; inspect and attempt apply; perform a same-identifier category rename as the non-stale control.",
+  "expected": "FR-CLASSIFY-OUTCOME-INVALIDATION holds: each semantic change names its fingerprint dimension and blocks apply, while a same-identity rename refreshes display only.",
+  "owner": "CLASSIFY implementation",
+  "created_at": "2026-07-19T04:21:10.9618880+00:00",
+  "links": [
+    {
+      "id": "01KXW9PJNJVWD6AYK70BF0SXH8",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-OUTCOME-INVALIDATION",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:21:10.9625430+00:00"
+    }
+  ]
+}

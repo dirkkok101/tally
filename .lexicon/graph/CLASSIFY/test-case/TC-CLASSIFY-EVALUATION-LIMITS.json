@@ -1,0 +1,33 @@
+{
+  "id": "01KXW9QWKX44CYBSQ3W83YRHM1",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-EVALUATION-LIMITS",
+  "slug": "EVALUATION-LIMITS",
+  "title": "Verify classification performance and hard limits",
+  "level": "integration",
+  "surface": "service",
+  "scenario": "performance",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Benchmark fixtures exist at, below, and one over 10000 eligible transactions, 500 active rules, 10000 corpus rows, and every published resource limit.",
+  "steps": "Run published-binary evaluation and validation; measure wall time and peak RSS; exercise exact and one-over limits; inspect rule and Ledger state.",
+  "expected": "NFR-CLASSIFY-BOUNDED-EVALUATION meets the 5-second and 256-MiB targets and every over-limit request fails before activation or mutation.",
+  "owner": "CLASSIFY implementation",
+  "created_at": "2026-07-19T04:21:53.9186448+00:00",
+  "links": [
+    {
+      "id": "01KXW9SFVF6EKJR142C4FDHPPS",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:22:46.3841937+00:00"
+    },
+    {
+      "id": "01KXW9QWKZJ0BZY08KQPGS9GQG",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-BOUNDED-EVALUATION",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:21:53.9195086+00:00"
+    }
+  ]
+}

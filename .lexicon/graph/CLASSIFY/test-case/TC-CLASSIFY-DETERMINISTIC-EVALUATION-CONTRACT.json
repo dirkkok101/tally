@@ -1,0 +1,26 @@
+{
+  "id": "01KXW9PG82DBH03F23HK78ET6K",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-DETERMINISTIC-EVALUATION-CONTRACT",
+  "slug": "DETERMINISTIC-EVALUATION-CONTRACT",
+  "title": "Verify deterministic classification outcomes",
+  "level": "integration",
+  "surface": "service",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Representative projections, active categories, rule sets covering same-category overlap, incompatible overlap, no-match, and unchanged replay are available.",
+  "steps": "Evaluate every outcome partition; repeat identical fingerprints; inspect ordered totals and Ledger state before and after.",
+  "expected": "FR-CLASSIFY-DETERMINISTIC-EVALUATION holds: every item has exactly one correct outcome, repeated results are identical, conflicts never select a winner, and evaluation performs no mutation.",
+  "owner": "CLASSIFY implementation",
+  "created_at": "2026-07-19T04:21:08.4830294+00:00",
+  "links": [
+    {
+      "id": "01KXW9PG83FWZKYJ7HSYKZA185",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:21:08.4839008+00:00"
+    }
+  ]
+}

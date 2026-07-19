@@ -1,0 +1,41 @@
+{
+  "id": "01KXW9G2MMBPH1PFPPREPDR4BW",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "NFR-CLASSIFY-BOUNDED-EVALUATION",
+  "title": "Bound local classification work",
+  "description": [
+    "Evaluation and private candidate validation must complete predictably at personal-ledger scale or fail before activation or mutation."
+  ],
+  "category": "performance",
+  "target": "On the supported release host, evaluation of 10000 eligible transactions against 500 active rules and validation of 10000 private corpus rows each complete within 5 seconds and 256 MiB peak resident memory; every public operation advertises deterministic transaction, rule, corpus-row, memory, and processing-time limits; one-over-limit tests fail before rule activation or LEDGER mutation.",
+  "load_condition": "Worst-case supported predicate mixes, all outcome types, maximum explanation evidence, and exact configured limit boundaries.",
+  "measurement": "Published-binary benchmarks, peak-memory measurement, exact-limit and one-over-limit tests, and no-mutation assertions.",
+  "rationale": [
+    "A local agent command must not hang, exhaust the host, or partially mutate when inputs are unexpectedly large."
+  ],
+  "priority": 1,
+  "created_at": "2026-07-19T04:17:37.9416068+00:00",
+  "links": [
+    {
+      "id": "01KXW9M0E9XGRGYCJ0G2TPZWCA",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:46.7627182+00:00"
+    },
+    {
+      "id": "01KXW9KZV54BAG1E72X88KD4C4",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:46.1501666+00:00"
+    },
+    {
+      "id": "01KXW9M111Q67S12B0QY1VN2XD",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-VALIDATION",
+      "rel": "supports",
+      "created_at": "2026-07-19T04:19:47.3627790+00:00"
+    }
+  ]
+}

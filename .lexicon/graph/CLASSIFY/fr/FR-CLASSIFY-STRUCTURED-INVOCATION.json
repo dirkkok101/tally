@@ -1,0 +1,79 @@
+{
+  "id": "01KXW9E3KM5K7R05K4Q5XQWRRX",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "type": "functional",
+  "ref_code": "FR-CLASSIFY-STRUCTURED-INVOCATION",
+  "title": "Invoke CLASSIFY operations non-interactively",
+  "description": [
+    "Provide deterministic structured process input, output, diagnostics, compatibility, actor, and idempotency behavior for every public CLASSIFY operation. Implements G5 and UC-CLASSIFY-006."
+  ],
+  "rationale": [
+    "Agents must distinguish business outcomes from diagnostics and must never guess whether an evaluation, rule change, or Ledger mutation succeeded."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "invoke classification through stable structured commands"
+  ],
+  "story_so_that": [
+    "automation handles success, failure, retry, and compatibility deterministically"
+  ],
+  "acceptance_criteria": [
+    "Given valid structured input for a public operation, when invocation completes, then exactly one versioned structured business result is written to stdout and the process exits with the documented category.",
+    "Given an expected validation, not-found, conflict, lifecycle, stale, compatibility, resource, or downstream LEDGER failure, when invocation completes, then one module-scoped machine-readable error is returned with the documented non-zero exit.",
+    "Given malformed input or a forbidden unknown field, when invocation is attempted, then validation fails before evaluation, rule-state change, or LEDGER mutation.",
+    "Given an unsupported CLASSIFY or required LEDGER contract version, when invocation is attempted, then compatibility fails before financial data read or mutation.",
+    "Given a mutating rule, feedback, abandon, cleanup, or apply operation, when its request lacks required actor context or idempotency identity, then CLASSIFY rejects it before mutation.",
+    "Given any successful or expected-failure invocation, when stderr is inspected, then it contains metadata-only diagnostics and no serialized request, result, or financial payload."
+  ],
+  "security_criteria": [
+    "Process arguments, stdout errors, stderr, logs, crash diagnostics, and telemetry must not disclose private financial payloads."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T04:16:33.3832373+00:00",
+  "links": [
+    {
+      "id": "01KXW9KMSR0Q6J5X7C5QZ8J726",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-AI-AGENT-HOST",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:34.8414293+00:00"
+    },
+    {
+      "id": "01KXW9KNDE2HTPQ62J651M5869",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:35.4711062+00:00"
+    },
+    {
+      "id": "01KXW9KA58CE0QQRCD10NG4FVW",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-CONTRACT-DISCOVERY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:23.9452284+00:00"
+    },
+    {
+      "id": "01KXW9KP066C53NSRN9JNX17VR",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-STRUCTURED-INVOCATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T04:19:36.0716269+00:00"
+    },
+    {
+      "id": "01KXW9E3KM54WQYH034FEYXK76",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-006",
+      "rel": "implements",
+      "created_at": "2026-07-19T04:16:33.3967355+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXW9JQYGVGNVXN3M7V1M8XE5",
+      "target": "P1",
+      "created_at": "2026-07-19T04:19:05.2953404+00:00"
+    }
+  ]
+}

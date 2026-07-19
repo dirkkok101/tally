@@ -1,0 +1,33 @@
+{
+  "id": "01KXW9PN17CNKRYQ9BRTYQHYQB",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-DETERMINISTIC-PROPERTY-MATRIX",
+  "slug": "DETERMINISTIC-PROPERTY-MATRIX",
+  "title": "Prove classification determinism and row accounting",
+  "level": "integration",
+  "surface": "service",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Generated rule, ordering, overlap, category, and projection cases cover the supported grammar and boundary sizes.",
+  "steps": "Run repeated and permuted property cases; compare canonical outputs; assert input and corpus ordinal accounting and conflict selection invariants.",
+  "expected": "NFR-CLASSIFY-DETERMINISTIC-INTEGRITY reaches its target with zero unaccounted rows or selected incompatible conflicts.",
+  "owner": "CLASSIFY implementation",
+  "created_at": "2026-07-19T04:21:13.3846970+00:00",
+  "links": [
+    {
+      "id": "01KXW9SDYNVYKZP6CN489DKYF5",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:22:44.4380839+00:00"
+    },
+    {
+      "id": "01KXW9PN190NHBA62JTQ923K4K",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-DETERMINISTIC-INTEGRITY",
+      "rel": "verifies",
+      "created_at": "2026-07-19T04:21:13.3854264+00:00"
+    }
+  ]
+}
