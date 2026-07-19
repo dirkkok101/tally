@@ -1,0 +1,11 @@
+{
+  "id": "01KXXCH5D78JSMS4ESG0PQ1S2S",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "A5",
+  "title": "Host protections are reusable",
+  "description": [
+    "Assume BUDGET can reuse the owner-only local storage, operating-system access controls, and process-safety conventions selected for LEDGER without introducing a separate cryptographic subsystem. Runtime conformance remains an implementation gate."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T14:29:53.7038993+00:00"
+}

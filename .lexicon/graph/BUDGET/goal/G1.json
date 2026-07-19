@@ -3,7 +3,7 @@
   "module_id": "01KXR4WNPW86216H643PZ6KA36",
   "ref_code": "G1",
   "text": [
-    "Represent each owner-approved monthly spending plan as a stable local record for one explicit Budget Period and ZAR currency."
+    "Represent each owner-approved monthly spending plan as a stable local record for one explicit Budget Period and ZAR currency. Evidence [direct]: the owner needs monthly category budgets over the accepted ZAR-only LEDGER boundary; the durable local form is the selected brainstorm approach. Actor/workflow trace: P1 through UC-BUDGET-001 and UC-BUDGET-002."
   ],
   "target": "Each Budget Period has stable identity and at most one Active Budget Plan Revision; repeated reads of unchanged state return the same period, currency, revision, status, and exact planned total.",
   "created_at": "2026-07-19T13:25:22.8095542+00:00"

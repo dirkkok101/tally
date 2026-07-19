@@ -1,0 +1,13 @@
+{
+  "id": "01KXXCM69D4PPVMSNEKB7DB823",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "EXT-BUDGET-INSIGHTS-CONSUMER-CONTRACT",
+  "name": "INSIGHTS Consumer Contract",
+  "description": [
+    "Outbound read dependency. INSIGHTS consumes exact BUDGET plan revisions and raw Budget Position values with provenance, then owns pace, forecast, trends, anomalies, recommendations, narratives, and durable report snapshots. INSIGHTS has no plan-mutation authority through this contract."
+  ],
+  "type": "client",
+  "owner": "INSIGHTS",
+  "metadata": "{\"gate_type\":\"parity\",\"validation_basis\":\"client_contract\",\"validation_status\":\"assumed\"}",
+  "created_at": "2026-07-19T14:31:32.9103284+00:00"
+}

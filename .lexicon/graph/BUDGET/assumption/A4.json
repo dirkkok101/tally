@@ -1,0 +1,11 @@
+{
+  "id": "01KXXCH50A6PDKB3EK38E9T819",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "A4",
+  "title": "Current corrected actuals define position",
+  "description": [
+    "Assume every Budget Position recomputes current corrected actuals from a cited LEDGER snapshot. BUDGET preserves plan revisions but does not preserve historical actual or report snapshots; durable reporting belongs to INSIGHTS."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T14:29:53.2915063+00:00"
+}

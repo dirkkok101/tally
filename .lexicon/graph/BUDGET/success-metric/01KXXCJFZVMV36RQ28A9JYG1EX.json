@@ -1,0 +1,10 @@
+{
+  "id": "01KXXCJFZVMV36RQ28A9JYG1EX",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "metric": "Decision provenance coverage",
+  "current": "Not measured",
+  "target": "100% of plan revisions and Budget Positions identify the period, plan revision, applicable category identity, owner action provenance, and cited LEDGER snapshot",
+  "by_when": "Before v1 release",
+  "measured": 0,
+  "created_at": "2026-07-19T14:30:37.3088447+00:00"
+}

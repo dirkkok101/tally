@@ -1,0 +1,32 @@
+{
+  "id": "01KXXCKR06DZP84CZ70MC0J6BN",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "UC-BUDGET-001",
+  "title": "Draft a monthly category plan",
+  "preconditions": "The owner is authorized; LEDGER exposes a stable active Spend Category catalogue; the requested period and ZAR currency are explicit.",
+  "postconditions": "One attributable immutable draft exists; no active plan changed; no LEDGER state changed; a replay returns the same result without duplication.",
+  "main_flow": "1. The owner selects an explicit calendar-month Budget Period. 2. BUDGET reads the applicable LEDGER Spend Category identities. 3. The owner submits independent non-negative exact ZAR Category Budget Entries, using explicit zero for Zero Budget and omission for Unbudgeted. 4. BUDGET validates period, currency, category lifecycle, uniqueness, and replay identity. 5. BUDGET computes the plan total. 6. BUDGET atomically saves an immutable Draft Budget Plan Revision without changing the active revision.",
+  "alt_flows": [
+    "Invalid period, currency, negative amount, duplicate category, or malformed input is rejected without persistence.",
+    "An inactive, archived, unknown, or stale category catalogue reference is rejected with an actionable error.",
+    "A conflicting replay key or concurrent mutation is rejected without creating a partial or duplicate draft."
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The owner prepares a plan for a current or future calendar-month Budget Period.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-19T14:31:18.2795607+00:00",
+  "links": [
+    {
+      "id": "01KXXCR50C14DWDBHJ0Z15Z1GP",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T14:33:42.6688235+00:00"
+    },
+    {
+      "id": "01KXXCR25AJSYWTY8G3XRGD4CV",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-008",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T14:33:39.7551047+00:00"
+    }
+  ]
+}

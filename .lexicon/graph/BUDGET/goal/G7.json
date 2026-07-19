@@ -3,7 +3,7 @@
   "module_id": "01KXR4WNPW86216H643PZ6KA36",
   "ref_code": "G7",
   "text": [
-    "Keep planning and position results deterministic and auditable without owning analytics interpretation."
+    "Keep planning and position results deterministic and auditable without owning analytics interpretation. Evidence [direct]: the accepted BUDGET-to-INSIGHTS boundary requires one reproducible plan baseline while reserving pace, forecast, trend, anomaly, and narrative for INSIGHTS. Actor/workflow trace: P1 through UC-BUDGET-003 and UC-BUDGET-004; INSIGHTS consumes the raw result."
   ],
   "target": "Equivalent plan and unchanged LEDGER snapshot inputs produce semantically identical ordered results; all values cite plan revision and actuals snapshot provenance, while no result invents pace, forecast, trend, anomaly, or narrative.",
   "created_at": "2026-07-19T13:25:25.2683149+00:00"

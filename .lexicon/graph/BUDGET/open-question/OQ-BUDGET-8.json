@@ -6,7 +6,10 @@
   "context": [
     "The choice affects reproducibility, storage, correction visibility, cursor expiry, and the boundary between source-of-truth actuals and retained derived artifacts."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "Budget Position recomputes current corrected actuals from a cited LEDGER snapshot while binding results to an explicit plan revision. BUDGET retains plan history only; durable report snapshots belong to INSIGHTS. Recorded as A4."
+  ],
   "owner": "BUDGET discovery",
   "created_at": "2026-07-19T13:27:38.5607145+00:00"
 }

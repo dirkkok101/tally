@@ -1,0 +1,9 @@
+{
+  "id": "01KXXCJ0S9EZ10P6BJ6D2S539G",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "term": "Draft Budget Plan Revision",
+  "definition": [
+    "An immutable proposed Budget Plan Revision that has not been activated. Saving it does not change the Budget Position. Do not call it a working active budget."
+  ],
+  "created_at": "2026-07-19T14:30:21.7379990+00:00"
+}

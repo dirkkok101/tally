@@ -1,0 +1,11 @@
+{
+  "id": "01KXXCDHB6KANTJ23KYXN52T2R",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "C13",
+  "title": "Atomic replay-safe plan mutation",
+  "description": [
+    "Draft creation, revision, and activation are atomic and idempotent. Exact retry returns the prior result; conflicting identity reuse, stale category state, validation failure, or resource failure causes no partial revision or activation."
+  ],
+  "type": "technical",
+  "created_at": "2026-07-19T14:27:54.8549588+00:00"
+}

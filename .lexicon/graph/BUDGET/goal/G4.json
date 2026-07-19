@@ -3,7 +3,7 @@
   "module_id": "01KXR4WNPW86216H643PZ6KA36",
   "ref_code": "G4",
   "text": [
-    "Return an exact snapshot-bound Budget Position by composing the active plan with public LEDGER actuals."
+    "Return an exact snapshot-bound Budget Position by composing the active plan with public LEDGER actuals. Evidence [analogous]: LEDGER G6 and UC-LEDGER-005 explicitly define snapshot-consistent Budget Actuals for BUDGET and INSIGHTS. Actor/workflow trace: P1 through UC-BUDGET-003."
   ],
   "target": "Every relevant actual is accounted for exactly once as budgeted, zero-budget, unbudgeted, or uncategorized; category and total actuals reconcile to the referenced LEDGER snapshot, and remaining or over values use exact arithmetic.",
   "created_at": "2026-07-19T13:25:24.0553196+00:00"

@@ -1,0 +1,24 @@
+{
+  "id": "01KXXCKS88V1VDB18KEDE1CX6G",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "UC-BUDGET-004",
+  "title": "Inspect plan and revision history",
+  "preconditions": "The owner is authorized and the requested Budget Period or revision identity is explicit.",
+  "postconditions": "The owner can reconstruct plan intent and activation history without treating a superseded revision as deleted or changing current LEDGER state.",
+  "main_flow": "1. BUDGET lists the period's Draft, Active, and Superseded revisions and indicates whether the period is Closed. 2. The owner selects a revision. 3. BUDGET returns exact Category Budget Entries, historical stable category identities, lifecycle state, totals, owner action, reason, and timestamps. 4. Archived or renamed categories remain attributable without becoming valid for new entries.",
+  "alt_flows": [
+    "An unknown period or revision returns Not Found without leaking other data.",
+    "Missing or inconsistent revision evidence returns an integrity failure rather than inferred history."
+  ],
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner needs to understand what was planned, when it changed, and which revision governed a period.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-19T14:31:19.5618915+00:00",
+  "links": [
+    {
+      "id": "01KXXCR3JRM9KQJMNKGA7TQS3C",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-008",
+      "rel": "references",
+      "created_at": "2026-07-19T14:33:41.2091277+00:00"
+    }
+  ]
+}

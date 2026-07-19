@@ -6,7 +6,10 @@
   "context": [
     "The answer determines period identity, date boundaries, overlap rules, copy-forward behavior, and alignment with LEDGER actuals and INSIGHTS reports."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "v1 uses a calendar month over LEDGER Effective Date: first calendar date inclusive to the next month's first calendar date exclusive. No local-time timestamp or variable monthly start-day semantics. Recorded as A1."
+  ],
   "owner": "BUDGET discovery",
   "created_at": "2026-07-19T13:27:35.8159933+00:00"
 }

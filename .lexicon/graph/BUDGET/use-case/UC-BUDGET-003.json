@@ -1,0 +1,39 @@
+{
+  "id": "01KXXCKRVRR89KQE4PZJM8JQBT",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "UC-BUDGET-003",
+  "title": "Inspect exact budget position",
+  "preconditions": "The requested period is explicit; any selected plan revision is readable; the LEDGER public snapshot contract is available or a stable unavailable state can be returned.",
+  "postconditions": "The result is deterministic for identical inputs, read-only, complete, and bound to both a plan revision and LEDGER snapshot; no report snapshot is retained by BUDGET.",
+  "main_flow": "1. BUDGET resolves the explicit plan revision or the period's single Active Budget Plan Revision. 2. BUDGET requests LEDGER Budget Actual data for the exact Effective Date interval with category and categorization state under one cited snapshot. 3. BUDGET accounts for each actual exactly once as budgeted, Zero Budget, Unbudgeted Spend, or Uncategorized Spend. 4. BUDGET computes exact planned, actual, remaining or over values without pace, forecast, or advice. 5. BUDGET returns raw position data with plan, period, category, and LEDGER snapshot provenance.",
+  "alt_flows": [
+    "No active plan returns an explicit No Active Plan state rather than a fabricated zero plan.",
+    "LEDGER unavailability, expired pagination snapshot, or integrity failure returns an actionable unavailable result without partial totals.",
+    "Concurrent plan activation does not change a query already bound to an explicit plan revision."
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The owner or authorized Agent Host requests the exact plan-versus-actual position for a Budget Period.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-19T14:31:19.1612828+00:00",
+  "links": [
+    {
+      "id": "01KXXCR6CJGJJVF84TJYTKGWT9",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-INSIGHTS-CONSUMER-CONTRACT",
+      "rel": "supports",
+      "created_at": "2026-07-19T14:33:44.0835726+00:00"
+    },
+    {
+      "id": "01KXXCR0NPZNNKF1N3KTB624TW",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T14:33:38.2313498+00:00"
+    },
+    {
+      "id": "01KXXCR1EHK7FH1C3JNRC8W7XH",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-005",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T14:33:39.0267641+00:00"
+    }
+  ]
+}

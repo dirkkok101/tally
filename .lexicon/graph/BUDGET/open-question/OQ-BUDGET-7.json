@@ -6,7 +6,10 @@
   "context": [
     "A broader answer may trigger NG9 and the complexity kill criterion rather than being smuggled into category spending scope."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "v1 is spend-only category planning. If income, savings, debt-payment, or cash-flow targets are essential for usefulness, the existing scope kill criterion triggers reframing before implementation."
+  ],
   "owner": "BUDGET discovery",
   "created_at": "2026-07-19T13:27:38.1942294+00:00"
 }

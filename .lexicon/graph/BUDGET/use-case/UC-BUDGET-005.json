@@ -1,0 +1,25 @@
+{
+  "id": "01KXXCKSNF4QR59FP73FNX2AHX",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "UC-BUDGET-005",
+  "title": "Discover and invoke the agent contract",
+  "preconditions": "The Agent Host runs under the owner's trusted local operating-system identity and can discover the installed BUDGET capability contract.",
+  "postconditions": "The agent receives a stable machine-readable result governed by the same invariants as owner use; unauthorized or ambiguous mutation never occurs.",
+  "main_flow": "1. The Agent Host discovers versioned commands, inputs, outputs, authority requirements, side effects, and error semantics. 2. It chooses an explicit read, draft, or activation operation. 3. BUDGET validates the same domain and authority rules used for direct owner invocation. 4. Read operations return only requested structured data; mutations require explicit intent and replay identity. 5. BUDGET returns deterministic structured results without placing financial payloads in process arguments, logs, Git, or shared temporary files.",
+  "alt_flows": [
+    "Unsupported contract version or unknown command fails with discoverable compatibility guidance.",
+    "Missing explicit mutation authority, replay identity, or required input fails closed without state change.",
+    "Host or storage failure returns structured metadata-only diagnostics without financial payload leakage."
+  ],
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner delegates a bounded BUDGET read or mutation to an authorized AI Agent Host.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-19T14:31:19.9840469+00:00",
+  "links": [
+    {
+      "id": "01KXXCR48Y6AP6HYZMZCER2BR2",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-AI-AGENT-HOST",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T14:33:41.9192363+00:00"
+    }
+  ]
+}

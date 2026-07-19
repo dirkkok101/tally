@@ -4,7 +4,7 @@
   "ref_code": "C8",
   "title": "Owner-only financial privacy",
   "description": [
-    "Budget values, category allocations, and position artifacts remain local and owner-readable; diagnostics log only bounded metadata and never serialize financial plans, actuals, or command payloads."
+    "Budget values, category allocations, and Position artifacts remain local and owner-readable. Financial plan or actual payloads never enter Git, ordinary logs, crash diagnostics, process arguments, or shared temporary files; explicit data-return operations are the only output boundary."
   ],
   "type": "technical",
   "created_at": "2026-07-19T13:26:22.4450666+00:00"

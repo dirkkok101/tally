@@ -1,0 +1,10 @@
+{
+  "id": "01KXXCJDS4K2G6W7H66V99BQV5",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "metric": "Category plan accounting completeness",
+  "current": "Not measured; no persistent BUDGET plan exists",
+  "target": "100% of accepted Category Budget Entries are represented exactly once in the cited immutable plan revision, with explicit Zero Budget distinct from omission",
+  "by_when": "Before v1 plan activation",
+  "measured": 0,
+  "created_at": "2026-07-19T14:30:35.0457315+00:00"
+}

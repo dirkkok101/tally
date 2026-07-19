@@ -6,7 +6,10 @@
   "context": [
     "The brainstorm selects explicit zero-versus-omitted semantics, but discovery must validate whether plan completeness is optional or mandatory."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "Categories are optional. An explicit ZAR 0.00 entry is Zero Budget; an omitted active category is Unbudgeted. Recorded as A2."
+  ],
   "owner": "BUDGET discovery",
   "created_at": "2026-07-19T13:27:36.5727835+00:00"
 }

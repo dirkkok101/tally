@@ -1,0 +1,9 @@
+{
+  "id": "01KXXCJ1M2S1BH3ND7H66KH9RP",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "term": "Closed Budget Period",
+  "definition": [
+    "A completed calendar-month Budget Period that accepts no new plan activation in v1 while its plan revision history remains readable. Do not call it editable history."
+  ],
+  "created_at": "2026-07-19T14:30:22.5954417+00:00"
+}

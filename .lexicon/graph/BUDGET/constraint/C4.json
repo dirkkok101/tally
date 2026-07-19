@@ -4,7 +4,7 @@
   "ref_code": "C4",
   "title": "Unambiguous monthly boundaries",
   "description": [
-    "Every Budget Period has explicit local date boundaries and one stable identity; period interpretation cannot depend on invocation time or an agent locale. The exact calendar-month versus owner-cycle rule remains a discovery question."
+    "V1 Budget Periods are calendar months over LEDGER Effective Date: the first calendar date is inclusive and the first date of the next month is exclusive. Identity and interpretation never depend on invocation time, timestamp conversion, agent locale, or a variable pay cycle."
   ],
   "type": "business",
   "created_at": "2026-07-19T13:26:20.7041858+00:00"

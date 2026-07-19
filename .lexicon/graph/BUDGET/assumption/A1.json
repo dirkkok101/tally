@@ -1,0 +1,11 @@
+{
+  "id": "01KXXCH3MMMVSVD62ZBDJWANYJ",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "A1",
+  "title": "Calendar-month budget period",
+  "description": [
+    "Assume v1 Budget Period is the Ledger Effective Date interval from the first calendar date inclusive to the first calendar date of the next month exclusive. Validate owner preference before PRD approval; variable pay cycles and locale-derived boundaries remain out of scope."
+  ],
+  "status": "active",
+  "created_at": "2026-07-19T14:29:51.8931634+00:00"
+}

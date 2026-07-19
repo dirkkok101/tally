@@ -1,0 +1,11 @@
+{
+  "id": "01KXXCH688W70BKSR5C54CPX6X",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "A7",
+  "title": "Single owner operating-system identity",
+  "description": [
+    "The validated project boundary is one Personal Finance Owner operating under one trusted local operating-system identity. Shared users, hosted access, or delegated principals invalidate this assumption and reopen authorization, tenancy, and compliance design."
+  ],
+  "status": "validated",
+  "created_at": "2026-07-19T14:29:54.5698235+00:00"
+}

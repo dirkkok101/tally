@@ -6,7 +6,10 @@
   "context": [
     "Retroactive revision semantics determine auditability and whether historical INSIGHTS results remain reproducible."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "Only current and future periods accept activation. Activation atomically supersedes the prior active revision; completed periods are closed and cannot be retroactively restated in v1. Recorded as A3."
+  ],
   "owner": "BUDGET discovery",
   "created_at": "2026-07-19T13:27:37.4002555+00:00"
 }

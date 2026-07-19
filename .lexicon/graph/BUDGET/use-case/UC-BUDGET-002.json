@@ -1,0 +1,32 @@
+{
+  "id": "01KXXCKREHZ0F4JY50FZYJYDK1",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "UC-BUDGET-002",
+  "title": "Activate or revise a plan",
+  "preconditions": "The draft is readable and valid against current LEDGER category lifecycle state; the period is not closed; the owner explicitly requested activation.",
+  "postconditions": "Exactly one active revision exists for the period; prior revisions remain immutable and readable; no LEDGER state changed; replay cannot create multiple activations.",
+  "main_flow": "1. BUDGET presents the draft revision, computed total, and any current active revision. 2. The owner explicitly confirms activation. 3. BUDGET revalidates the draft and category references. 4. BUDGET atomically marks the draft Active and the previous active revision, if any, Superseded. 5. BUDGET records owner, reason, time, period, and revision provenance. 6. BUDGET returns the single current Active Budget Plan Revision.",
+  "alt_flows": [
+    "A completed Closed Budget Period rejects activation without restatement.",
+    "A stale, inactive, archived, or otherwise invalid category reference rejects the entire activation.",
+    "Concurrent activation, storage failure, or conflicting replay leaves the former active revision unchanged and creates no partial lifecycle transition."
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The owner explicitly approves a draft for a current or future Budget Period.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-19T14:31:18.7390911+00:00",
+  "links": [
+    {
+      "id": "01KXXCR5P6CVFN0EXE323ZYKEX",
+      "target_type": "external_dependency",
+      "target": "EXT-BUDGET-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T14:33:43.3676900+00:00"
+    },
+    {
+      "id": "01KXXCR2WT0C98MW1AXT8FRRER",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-008",
+      "rel": "depends-on",
+      "created_at": "2026-07-19T14:33:40.5067931+00:00"
+    }
+  ]
+}

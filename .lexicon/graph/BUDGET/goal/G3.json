@@ -3,7 +3,7 @@
   "module_id": "01KXR4WNPW86216H643PZ6KA36",
   "ref_code": "G3",
   "text": [
-    "Preserve attributable budget drafting, activation, and revision history without rewriting prior intent."
+    "Preserve attributable budget drafting, activation, and revision history without rewriting prior intent. Evidence [analogous]: LEDGER already requires attributable immutable financial correction history, and BUDGET applies the same auditability principle to owner intent. Actor/workflow trace: P1 through UC-BUDGET-001, UC-BUDGET-002, and UC-BUDGET-004."
   ],
   "target": "Activation is explicit; every change creates a new immutable Budget Plan Revision with owner, reason, and timestamp; all prior revisions remain inspectable and no draft silently changes the active plan.",
   "created_at": "2026-07-19T13:25:23.6002117+00:00"

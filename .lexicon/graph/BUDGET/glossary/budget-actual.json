@@ -1,0 +1,9 @@
+{
+  "id": "01KXXCJ228E2DY36DA4SYYZR08",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "term": "Budget Actual",
+  "definition": [
+    "The exact transfer-, refund-, correction-, allocation-, void-, and supersession-aware aggregate returned by LEDGER for the requested snapshot and period. BUDGET does not reinterpret it as gross debits or total outflow."
+  ],
+  "created_at": "2026-07-19T14:30:23.0492987+00:00"
+}

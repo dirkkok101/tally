@@ -1,0 +1,10 @@
+{
+  "id": "01KXXCJEN3S31XQC6BY9FKF9QG",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "metric": "Budget Position determinism",
+  "current": "Not measured",
+  "target": "Identical plan revision, LEDGER snapshot, period, category state, and categorization state produce byte-equivalent domain results",
+  "by_when": "Before v1 Budget Position release",
+  "measured": 0,
+  "created_at": "2026-07-19T14:30:35.9405306+00:00"
+}

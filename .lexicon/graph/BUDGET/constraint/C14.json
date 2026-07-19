@@ -1,0 +1,11 @@
+{
+  "id": "01KXXCDHRBP60HTCHY8YQAYQ0B",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "C14",
+  "title": "Derived current actuals only",
+  "description": [
+    "Each Budget Position recomputes current corrected Budget Actuals from one cited LEDGER snapshot and one selected Budget Plan Revision. BUDGET retains plan history but not historical transaction payloads or report snapshots; durable reports belong to INSIGHTS."
+  ],
+  "type": "business",
+  "created_at": "2026-07-19T14:27:55.2758988+00:00"
+}

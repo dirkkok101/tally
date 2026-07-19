@@ -1,0 +1,10 @@
+{
+  "id": "01KXXCJF2ZZA98TCA43QNSBRR7",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "metric": "Plan mutation safety",
+  "current": "Not measured",
+  "target": "Zero LEDGER mutations and zero partially activated or multiply active plans across all validation, concurrency, and replay failures",
+  "by_when": "Before v1 activation release",
+  "measured": 0,
+  "created_at": "2026-07-19T14:30:36.3842096+00:00"
+}

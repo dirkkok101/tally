@@ -1,0 +1,13 @@
+{
+  "id": "01KXXCM5ET3VXJ8Q6FZ2473950",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "EXT-BUDGET-AI-AGENT-HOST",
+  "name": "AI Agent Host",
+  "description": [
+    "Inbound local client dependency. The authorized owner-operated host discovers versioned BUDGET operations and exchanges structured inputs and results through the selected local process contract; mutations carry explicit authority and replay identity, and financial payloads do not travel in process arguments."
+  ],
+  "type": "client",
+  "owner": "Agent Host",
+  "metadata": "{\"gate_type\":\"workflow\",\"validation_basis\":\"client_contract\",\"validation_status\":\"assumed\"}",
+  "created_at": "2026-07-19T14:31:32.0593337+00:00"
+}

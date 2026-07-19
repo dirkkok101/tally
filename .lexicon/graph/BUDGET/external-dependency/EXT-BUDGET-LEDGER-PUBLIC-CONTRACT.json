@@ -1,0 +1,13 @@
+{
+  "id": "01KXXCM50TD0MEDSZKJ31KFQ7B",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "EXT-BUDGET-LEDGER-PUBLIC-CONTRACT",
+  "name": "LEDGER Public Contract",
+  "description": [
+    "Inbound read dependency. BUDGET consumes stable Spend Category identity and lifecycle plus exact snapshot-consistent Budget Actual aggregates over explicit Effective Date intervals, including categorization and transaction lifecycle semantics. BUDGET must never mutate LEDGER."
+  ],
+  "type": "api",
+  "owner": "LEDGER",
+  "metadata": "{\"gate_type\":\"api\",\"validation_basis\":\"client_contract\",\"validation_status\":\"assumed\"}",
+  "created_at": "2026-07-19T14:31:31.6119174+00:00"
+}

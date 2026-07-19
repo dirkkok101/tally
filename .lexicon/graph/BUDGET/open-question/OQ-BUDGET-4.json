@@ -6,7 +6,10 @@
   "context": [
     "Every actual must be visible without inventing a planned amount or letting incomplete classification masquerade as budget compliance."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "Budget Position reports budgeted categories, Zero Budget categories, Unbudgeted Spend, and Uncategorized Spend distinctly. It invents neither categories nor planned amounts and consumes actuals verbatim from LEDGER."
+  ],
   "owner": "BUDGET discovery",
   "created_at": "2026-07-19T13:27:36.9882632+00:00"
 }

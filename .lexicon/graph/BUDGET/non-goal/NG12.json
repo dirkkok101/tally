@@ -1,0 +1,12 @@
+{
+  "id": "01KXXCDJNMTF28AFG6E5XACR59",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "NG12",
+  "text": [
+    "Provide a dedicated copy-previous-plan or inherited-plan operation in v1."
+  ],
+  "rationale": [
+    "The Agent Host can read a prior plan and submit a new explicit draft through the ordinary contract without adding inheritance semantics; revisit only if the 15-minute maintenance criterion fails."
+  ],
+  "created_at": "2026-07-19T14:27:56.2137072+00:00"
+}

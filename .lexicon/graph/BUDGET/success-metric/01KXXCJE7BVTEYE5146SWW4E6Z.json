@@ -1,0 +1,10 @@
+{
+  "id": "01KXXCJE7BVTEYE5146SWW4E6Z",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "metric": "Budget actual accounting completeness",
+  "current": "Not measured; comparison is manual",
+  "target": "100% of LEDGER Budget Actual value for the cited snapshot is accounted for exactly once as budgeted, Zero Budget, Unbudgeted Spend, or Uncategorized Spend",
+  "by_when": "Before v1 Budget Position release",
+  "measured": 0,
+  "created_at": "2026-07-19T14:30:35.5007021+00:00"
+}

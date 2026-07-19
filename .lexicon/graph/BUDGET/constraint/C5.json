@@ -4,7 +4,7 @@
   "ref_code": "C5",
   "title": "Immutable activated intent",
   "description": [
-    "An activated Budget Plan Revision is immutable. Any later change is a new attributable revision; drafts never alter the active plan implicitly and retroactive interpretation must be explicit."
+    "An activated Budget Plan Revision is immutable. Activation is explicit and allowed only for a current or future Budget Period; any later current-period change creates a new attributable revision, while a completed Budget Period is closed and cannot be retroactively reactivated or restated in v1."
   ],
   "type": "business",
   "created_at": "2026-07-19T13:26:21.1811182+00:00"

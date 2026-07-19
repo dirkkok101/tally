@@ -4,7 +4,7 @@
   "ref_code": "C3",
   "title": "Exact ZAR arithmetic",
   "description": [
-    "All planned, actual, remaining, over, and total values use exact base-10 ZAR arithmetic with no binary floating-point or implicit conversion."
+    "Every Category Budget Entry is a non-negative exact base-10 ZAR amount; Zero Budget is valid and distinct from omission. Budget Actual, remaining, over, and total values preserve exact signed LEDGER arithmetic with no binary floating-point or implicit conversion."
   ],
   "type": "business",
   "created_at": "2026-07-19T13:26:20.2757252+00:00"
