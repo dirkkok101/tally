@@ -4,22 +4,22 @@
   "ref_code": "DD-LEDGER-FINANCIAL-REPRESENTATION",
   "title": "Canonical ZAR minor units and local dates",
   "description": [
-    "Define exact financial boundary and persistence representations."
+    "Define exact money, sign, currency, and date semantics shared by facts, evidence observations, matching, and actuals."
   ],
   "decision": [
-    "Expose signed monetary values as canonical two-decimal JSON strings with currency ZAR. Validate at most two fractional digits and convert once at the contract boundary to a Money value containing Int64 minor units. Persist amount_minor as SQLite INTEGER and currency_code as constrained TEXT. Signed amount is the owner economic-position delta: asset increases and liability reductions are positive; asset decreases and liability increases are negative. Persist transaction and optional posting dates as ISO yyyy-MM-dd TEXT; Effective Date is transaction date and a distinct supplied posting date is preserved separately. Use 26-character ULID strings for durable IDs."
+    "Represent ZAR as signed Int64 minor units and public money as canonical decimal strings. Interpret sign as owner economic-position delta. Use transaction date as Effective Date and preserve a distinct supplied posting date. Matching compares normalized exact values under a versioned policy."
   ],
   "rationale": [
-    "All three private statement fixtures across both institutions are ZAR and reconcile exactly under one owner-economic-polarity convention across asset and credit-liability accounts. ZAR-only scope makes integer cents exact, sortable, and aggregatable in SQLite without decimal coercion. JSON numbers risk binary floating-point callers; decimal strings avoid that. Local bank dates are dates, not instants. The initial fixtures supply transaction date but no distinct posting/value-date column. ULIDs match the Lex prior art and provide stable sortable references."
+    "Exact integers prevent rounding drift. One sign convention makes movements, refunds, transfers, pool/category groups, and statement compatibility deterministic."
   ],
   "alternatives": [
-    "A: SQLite REAL/JSON numbers — rejected for rounding risk. B: decimal TEXT — exact but makes database aggregation and range validation harder. C: Int64 minor units with decimal-string boundary and owner-economic polarity — chosen. D: raw statement balance polarity — rejected because liability display semantics would invert transfers and spend. E: posting date as Effective Date — rejected because the initial evidence only establishes transaction date. F: full currency-scale table — deferred until non-ZAR scope exists."
+    "Rejected floating point, provider debit-credit vocabulary in public contracts, inferred exchange rates, and silently substituting posting date."
   ],
   "consequences": [
-    "Values with more than two decimals, negative zero, exponents, or Int64 overflow fail validation. The signed value always means owner economic-position delta, independent of asset or liability account class. Presentation converts minor units back to a canonical string; no floating-point arithmetic enters actuals. Transaction date drives period membership; a distinct posting date round-trips as source evidence only."
+    "Parsing rejects numeric JSON money, excessive scale, overflow, negative zero, and unsupported currency. Any tolerance for reconciliation must be explicit, empirically validated, versioned, and recorded in the match basis."
   ],
   "status_notes": [
-    "Accepted and evidence-resolved on 2026-07-18 by a privacy-safe throwaway spike over all three private statement fixtures from both institutions. OQ-LEDGER-1 through OQ-LEDGER-4 are resolved; dependent implementation may use this updated contract."
+    "Applied unchanged core representation to reconciliation evidence and dimensional actuals."
   ],
   "status": "accepted",
   "created_at": "2026-07-18T06:00:13.8010652+00:00",

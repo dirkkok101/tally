@@ -4,25 +4,10 @@
   "ref_code": "DM-LEDGER-STORE-GENERATION",
   "name": "StoreGenerationAndArtifactManifest",
   "description": [
-    "Private generation, candidate, backup, and recovery metadata used for verification and atomic activation."
+    "Authoritative generation metadata and immutable manifest for complete financial, evidence, reconciliation, dimension, and idempotency state."
   ],
   "schema_def": [
-    "store_generation",
-    "- generationId: ULID",
-    "- storageFormatVersion/schemaVersion/contractVersion",
-    "- state: enum {candidate,active,recovery,rejected}",
-    "- databasePath: internal relative path, never public contract",
-    "- sourceFingerprint and createdAt",
-    "artifact_manifest",
-    "- artifactId/idempotency identity/requestHash",
-    "- artifactType: enum {backup,restore_candidate,evolution_candidate,skill_bundle}",
-    "- SHA-256 checksum",
-    "- storage/contract/schema versions",
-    "- per-durable-type counts and exact reconciliation totals",
-    "- verificationStatus and verifiedAt",
-    "CURRENT",
-    "- owner-only pointer file containing one verified generationId",
-    "Constraints: candidate lives on same private filesystem as CURRENT for activation; checksum is integrity, not encryption; activation requires expected-current fingerprint and directory durability barrier; previous generation remains recoverable."
+    "store_generation: generationId, schemaVersion, reconciliationPolicyVersions, createdAt, createdByVersion, status candidate or current or retained, verificationFingerprint. artifact_manifest: generationId, database and sidecar checksums, permissions, durable table counts, exact movement/spend and pool-category checksum totals, relationship/history checks, evidence identity and link checks, reconciliation decision/current-state checks, statement-scope coverage checks, payment attribution and pool cardinality checks, idempotency outcome checks, integrity and foreign-key results. CURRENT is an owner-private atomically replaced pointer. Ephemeral query snapshots are excluded."
   ],
   "created_at": "2026-07-18T06:01:06.7342987+00:00",
   "links": [

@@ -1,0 +1,33 @@
+{
+  "id": "01KY0BY9W4HESV0R3NBYPD8Q3W",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "TC-LEDGER-RECONCILIATION-POLICY-MATRIX",
+  "slug": "reconciliation-policy-matrix",
+  "title": "Prove deterministic reconciliation policy and ambiguity guards",
+  "level": "unit",
+  "surface": "service",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A versioned ReconciliationPolicyV1 fixture set covers exact matches, shifted dates, competing candidates, conflicting evidence, and no-candidate cases.",
+  "steps": "Evaluate every fixture through candidate projection and apply-policy validation; permute candidate order and repeat logical identities.",
+  "expected": "Only empirically allowed unique strong matches can be automatic; guard candidates block statement-only creation; ambiguity never mutates a transaction; bases and policy versions are stable and order independent.",
+  "owner": "LEDGER",
+  "created_at": "2026-07-20T18:17:18.9814313+00:00",
+  "links": [
+    {
+      "id": "01KY0CG2N1Y0Y549V9DFADGXJQ",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-RECONCILIATION",
+      "rel": "belongs_to",
+      "created_at": "2026-07-20T18:27:01.4098416+00:00"
+    },
+    {
+      "id": "01KY0C4932D8B7QGRHWJ7AM4W7",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-RECONCILIATION-SAFETY",
+      "rel": "validates",
+      "created_at": "2026-07-20T18:20:34.7872665+00:00"
+    }
+  ]
+}

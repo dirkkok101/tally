@@ -2,21 +2,12 @@
   "id": "01KXSX0T6ZF6721V2KH6F0B6CE",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
-  "name": "IdempotencyRecord",
+  "name": "IdempotencyAndLogicalEffectIdentity",
   "description": [
-    "Durable replay identity and original stable outcome for every public mutation."
+    "Atomic replay outcomes plus domain-level uniqueness for evidence registration and reconciliation decisions."
   ],
   "schema_def": [
-    "idempotency_record",
-    "- contractVersion: text",
-    "- operationId: text",
-    "- idempotencyKey: text",
-    "- requestHash: SHA-256 bytes over canonical semantic request including actor",
-    "- outcomeJson: canonical structured result, no volatile fields",
-    "- artifactId: nullable ULID",
-    "- committedAt: trusted UTC instant",
-    "Primary key: contractVersion + operationId + idempotencyKey",
-    "Constraints: identical hash returns stored outcome; changed hash conflicts; row commits with domain effect; validation/busy/resource failures create no row; included in backup and restore verification."
+    "idempotency_record: key, operationId, canonicalRequestHash, actor, state committed, stableResult, committedAt; unique key. Same key and request returns the stored logical result; changed operation or request conflicts. evidence logical identity: kind plus privacy-safe digest unique for one real item, with optional content fingerprint conflict guard. Identical logical evidence registered under a different request key returns the existing record and, for atomic transaction capture, the existing actively linked transaction outcome; it never creates another fact. A changed observation or financial fact conflicts. reconciliation logical identity: evidenceId plus active disposition scope and decision predecessor; confirm, reject, revoke, replace, and coverage completion each have stable uniqueness. Domain effect and request outcome commit together; filesystem artifacts reconcile from committed database state after crashes."
   ],
   "created_at": "2026-07-18T06:01:06.0163586+00:00",
   "links": [

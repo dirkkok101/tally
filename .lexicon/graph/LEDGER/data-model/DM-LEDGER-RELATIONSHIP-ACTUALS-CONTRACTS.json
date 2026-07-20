@@ -4,56 +4,20 @@
   "ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
   "name": "RelationshipActualsOperationContracts",
   "description": [
-    "Concrete request, result, stable error, filter, totals, and cursor contracts for transfers, refunds, relationships, and actuals."
+    "Typed transfer, refund, relationship, and exact channel-neutral actuals contracts including independent dimensions and reconciliation state."
   ],
   "schema_def": [
-    "All operations use the common OperationDescriptor envelopes. Mutations require --idempotency-key.",
-    "",
-    "tally ledger transfer confirm / ledger.transfer.confirm",
-    "- input: {outflowTransactionId, inflowTransactionId, reason}",
-    "- result RelationshipDetail: {relationshipId, type: transfer, roles, principalAmount, currencyCode, status, confirmedActor, confirmedAt}",
-    "- errors: LEDGER-TRANSACTION-NOT-FOUND exit4; LEDGER-TRANSACTION-INACTIVE exit6; LEDGER-TRANSFER-ROLE-INVALID exit6; LEDGER-TRANSFER-SAME-ACCOUNT exit6; LEDGER-TRANSFER-AMOUNT-MISMATCH exit6; LEDGER-RELATIONSHIP-CONFLICT exit5",
-    "",
-    "tally ledger transfer revoke / ledger.transfer.revoke",
-    "- input: {relationshipId, reason}",
-    "- result: {relationship, lifecycleEvent}",
-    "- errors: LEDGER-RELATIONSHIP-NOT-FOUND exit4; LEDGER-RELATIONSHIP-TYPE-MISMATCH exit6; LEDGER-RELATIONSHIP-INACTIVE exit6",
-    "",
-    "tally ledger transfer replace / ledger.transfer.replace",
-    "- input: {relationshipId, outflowTransactionId, inflowTransactionId, reason}",
-    "- result: {retiredRelationship, activeRelationship, lifecycleEvent}",
-    "- errors: revoke errors plus transfer confirm errors",
-    "",
-    "tally ledger refund confirm / ledger.refund.confirm",
-    "- input: {originalTransactionId, refundTransactionId, reason}",
-    "- result RelationshipDetail: {relationshipId, type: refund, roles, principalAmount, currencyCode, status, confirmedActor, confirmedAt}",
-    "- errors: LEDGER-TRANSACTION-NOT-FOUND exit4; LEDGER-TRANSACTION-INACTIVE exit6; LEDGER-REFUND-ROLE-INVALID exit6; LEDGER-REFUND-AMOUNT-EXCEEDED exit6; LEDGER-RELATIONSHIP-CONFLICT exit5",
-    "",
-    "tally ledger refund revoke / ledger.refund.revoke",
-    "- input: {relationshipId, reason}",
-    "- result: {relationship, lifecycleEvent}",
-    "- errors: LEDGER-RELATIONSHIP-NOT-FOUND exit4; LEDGER-RELATIONSHIP-TYPE-MISMATCH exit6; LEDGER-RELATIONSHIP-INACTIVE exit6",
-    "",
-    "tally ledger refund replace / ledger.refund.replace",
-    "- input: {relationshipId, originalTransactionId, refundTransactionId, reason}",
-    "- result: {retiredRelationship, activeRelationship, lifecycleEvent}",
-    "- errors: revoke errors plus refund confirm errors",
-    "",
-    "tally ledger relationship get / ledger.relationship.get",
-    "- input: {relationshipId, includeHistory?: boolean=false}",
-    "- result: RelationshipDetail plus lifecycleHistory[] when requested",
-    "- errors: LEDGER-RELATIONSHIP-NOT-FOUND exit4",
-    "",
-    "tally ledger actuals query / ledger.actuals.query",
-    "- first-page input: {filters?: {accountIds?: id[], effectiveDateFrom?: LocalDate, effectiveDateTo?: LocalDate, categoryIds?: id[], transferState?: included|excluded|only, refundState?: netted|gross|only, relationshipState?: related|unrelated|any, categorizationState?: categorized|uncategorized|any, transactionLifecycle?: active|inactive|any}, pageSize: integer 1..500}",
-    "- later-page input: {cursor} only",
-    "- result: {items: ActualsItem[], totals: {netAccountMovement, externalSpend, budgetActual, currencyCode}, cursor?: opaque text, expiresAt?: UTC instant, snapshotId}",
-    "- errors: LEDGER-ACTUALS-FILTER-INVALID exit3; LEDGER-CURSOR-INVALID exit7; LEDGER-CURSOR-EXPIRED exit7; LEDGER-CURSOR-INCOMPATIBLE exit7; LEDGER-SNAPSHOT-BUSY exit5",
-    "",
-    "Constraints: transfer/refund roles are explicit; active role exclusivity and cumulative refund limits are transactional. First-page snapshot creation is one BEGIN IMMEDIATE transaction; no cursor is returned before commit. Later cursor pages are read-only and cannot include filters."
+    "Transfer confirm, revoke, replace and refund confirm, revoke, replace use explicit transaction roles, reason, idempotency, active-role exclusivity, exact principal conservation, and cumulative refund checks. relationship.get returns stable detail and optional history. actuals.query first-page filters: accountIds, effective date range, categoryIds, poolIds including unassigned, instrumentIds including unknown, cardholderIds including unknown, evidenceKinds, reconciliationStates, transfer/refund/relationship/categorization/lifecycle states, groupBy none or pool or category or pool_category, pageSize 1..500. Later input is cursor only. Result: ordered items; exact totals netAccountMovement, externalSpend, budgetActual and currency; exact groups with unassigned and uncategorized buckets; cursor, expiry, snapshotId. Group sums equal all-up totals. Refunds follow original current pool and category unless explicitly corrected; transfers contribute zero external spend and budget actual. Stable errors cover invalid filters, cursor states, busy, and violated finance invariants."
   ],
   "created_at": "2026-07-18T06:27:07.7806667+00:00",
   "links": [
+    {
+      "id": "01KY0C3MSVBPY19FJVZK574BA6",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-DIMENSIONAL-ATTRIBUTION",
+      "rel": "supports",
+      "created_at": "2026-07-20T18:20:14.0124908+00:00"
+    },
     {
       "id": "01KXSYNHACPAMGMABD0828B5ZP",
       "target_type": "requirement",
@@ -95,6 +59,13 @@
       "target": "TC-LEDGER-ACTUALS-QUERY-CONTRACT",
       "rel": "validated-by",
       "created_at": "2026-07-18T06:29:56.0637729+00:00"
+    },
+    {
+      "id": "01KY0C4624JV351YAYWJ1TRV6Z",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-DIMENSIONAL-ACTUALS-PROPERTY",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T18:20:31.6858852+00:00"
     },
     {
       "id": "01KXSYNJSS8S2VB6WZQC0X01BG",

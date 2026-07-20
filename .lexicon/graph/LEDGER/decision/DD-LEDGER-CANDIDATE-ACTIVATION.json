@@ -4,22 +4,22 @@
   "ref_code": "DD-LEDGER-CANDIDATE-ACTIVATION",
   "title": "Verified store generations with atomic pointer activation",
   "description": [
-    "Make restore and storage evolution fail closed without overwriting the current Ledger."
+    "Define safe activation for restored or migrated authoritative store generations."
   ],
   "decision": [
-    "Represent each authoritative store as a generation directory under the private data root. A small owner-only CURRENT pointer names the active generation. Restore and schema evolution are two-stage operations: prepare creates a separate generation, applies or restores state, validates integrity, foreign keys, schema compatibility, counts, exact totals, history, relationships, and idempotency; activate reacquires the exclusive writer lock, checks the expected current fingerprint and explicit authorization, flushes the candidate, then atomically replaces CURRENT and fsyncs the directory. The prior generation remains the recovery point."
+    "Prepare candidates outside the current generation; validate schema, integrity, all durable counts and invariants, exact totals and dimensional groups, evidence uniqueness, decision/link state, coverage, histories, and idempotency; then atomically replace an owner-private CURRENT pointer using expected fingerprints and explicit replacement authorization."
   ],
   "rationale": [
-    "A single atomic pointer replacement ensures startup sees either the old verified generation or the new verified generation. Replacing a live SQLite file set directly creates multi-file WAL/SHM and crash windows. Two-stage commands also make candidate evidence independently inspectable."
+    "A restore or migration must never partially replace the source of truth. Expanded reconciliation state is just as canonical as transaction amounts."
   ],
   "alternatives": [
-    "A: migrate the live database in place after backup — rejected. B: rename database files directly — rejected due WAL/SHM and two-rename crash windows. C: verified generation plus atomic pointer switch — chosen."
+    "Rejected in-place restore or migration, directory copying over the current store, activation without a manifest, and validation that checks only SQLite integrity."
   ],
   "consequences": [
-    "Restore prepare/activate and storage evolution prepare/activate are separate public operations. Activation is a narrow platform seam with injected failure tests. Candidate and prior generations are retained or cleaned only through explicit lifecycle policy; CURRENT never points to an unverified candidate."
+    "Prepare and activate remain distinct idempotent operations. The prior generation remains a recovery point. Manifests enumerate every durable type and exact invariant."
   ],
   "status_notes": [
-    "Accepted. Planned implementation areas: src/Tally/Infrastructure/Storage/AuthoritativeStoreActivator.cs and Recovery slices."
+    "Expanded verification manifest for evidence, reconciliation, coverage, payment attribution, pools, and dimensional totals."
   ],
   "status": "accepted",
   "created_at": "2026-07-18T06:00:15.1095846+00:00",

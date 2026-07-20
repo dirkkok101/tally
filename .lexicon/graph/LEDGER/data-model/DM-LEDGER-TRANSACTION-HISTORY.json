@@ -2,28 +2,12 @@
   "id": "01KXSX0SK0MJ04VKFJG66C4VRD",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
-  "name": "TransactionLifecycleAndAllocation",
+  "name": "TransactionLifecycleAndCategoryAllocation",
   "description": [
-    "Append-only transaction correction and category allocation history."
+    "Append-only transaction void or supersession events and category allocation history; other dimensions have their own explicit histories."
   ],
   "schema_def": [
-    "transaction_lifecycle_event",
-    "- id: ULID text, primary key",
-    "- transactionId: TransactionFact.id, RESTRICT",
-    "- eventType: enum {voided,superseded}",
-    "- replacementTransactionId: TransactionFact.id, nullable, required only for superseded",
-    "- reason: text, required",
-    "- occurredAt: trusted UTC instant",
-    "- actorContext: attributable metadata",
-    "category_allocation",
-    "- id: ULID text, primary key",
-    "- transactionId: TransactionFact.id, RESTRICT",
-    "- categoryId: SpendCategory.id, RESTRICT",
-    "- state: enum {active,retired}",
-    "- replacesAllocationId: nullable self reference",
-    "- reason: text, required for correction",
-    "- createdAt/retiredAt and actorContext",
-    "Constraints: one terminal transaction lifecycle; one active allocation per active transaction; corrections append and retire atomically; supersession does not migrate relationships."
+    "transaction_lifecycle_event: id, transactionId, type void or superseded, optional replacementTransactionId, required reason, actor, trusted time; at most one active terminal event. category_allocation_event: id, transactionId, categoryId, action assign or correct, optional previousEventId, reason, actor, trusted time; exactly zero or one active allocation. Constraints: facts never update; supersession does not transfer evidence, reconciliation, pool, payment attribution, category, or relationship state; historical catalogue references use RESTRICT."
   ],
   "created_at": "2026-07-18T06:01:05.3772431+00:00",
   "links": [

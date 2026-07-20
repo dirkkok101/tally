@@ -2,9 +2,9 @@
   "id": "01KXSWZ5HPPKVJ4ZBQ3CN8RSYJ",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "FA-LEDGER-RELATIONSHIPS-ACTUALS",
-  "name": "Relationships and Actuals",
+  "name": "Relationships and Dimensional Actuals",
   "description": [
-    "Owns explicit transfer/refund relationships, corrections, actuals classification, exact totals, and stable paginated query snapshots."
+    "Owns transfer/refund history and exact query snapshots with account, category, pool, instrument, cardholder, evidence, and reconciliation filters plus pool-by-category totals."
   ],
   "created_at": "2026-07-18T06:00:12.0871118+00:00",
   "links": [

@@ -2,9 +2,9 @@
   "id": "01KXSWZ4J0VXGSGZ2V5JDGK17C",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "FA-LEDGER-CONTRACT-SKILLS",
-  "name": "Contract and Skills",
+  "name": "Contract and Integration Guidance",
   "description": [
-    "Owns explicit CLI operations, self-documenting schemas, structured process behavior, contract compatibility, and version-matched skills."
+    "Owns the provider-neutral operation registry, typed schemas, help, process envelopes, compatibility, and optional version-matched integration guidance. Schema discovery and all finance operations work without a provider skill."
   ],
   "created_at": "2026-07-18T06:00:11.0731466+00:00",
   "links": [

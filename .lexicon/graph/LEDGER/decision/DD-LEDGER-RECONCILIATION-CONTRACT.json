@@ -1,0 +1,119 @@
+{
+  "id": "01KY0BPZHRNAE4X76HMJ3EC0ND",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DD-LEDGER-RECONCILIATION-CONTRACT",
+  "title": "Explicit match-first evidence reconciliation contract",
+  "description": [
+    "Choose the public and transactional shape for matching approved statement evidence to canonical transactions without duplicates."
+  ],
+  "decision": [
+    "Expose explicit evidence registration, compatibility projection, per-evidence closed disposition, decision lifecycle, and statement coverage operations. Revalidate every apply inside one writer transaction. Persist policy ID, version, exact basis, actor, reason, history, and evidence link. Leave INGEST batch preview, approval, manifests, receipts, and recovery outside LEDGER. Disable automatic match and statement-only application until OQ-LEDGER-13 validates a bounded policy."
+  ],
+  "rationale": [
+    "This shape separates orchestration from financial authority, blocks ambiguous guesses, supports one canonical transaction with multiple evidence records, and makes every decision replay-safe and auditable."
+  ],
+  "alternatives": [
+    "Rejected minimal evaluate/apply/resolve because outcomes become opaque. Rejected Ledger-owned import batches because they duplicate INGEST. Rejected IReconciliationGateway because the CLI is already the public seam and there is one implementation."
+  ],
+  "consequences": [
+    "INGEST performs match-first orchestration and applies one result per row. LEDGER may return review-required and conflict outcomes. A versioned empirical matching spike is a hard implementation gate."
+  ],
+  "status_notes": [
+    "Selected after sequential interface exploration; governed by ADR-CORE-0030 and the revised LEDGER PRD."
+  ],
+  "status": "accepted",
+  "created_at": "2026-07-20T18:13:19.0327569+00:00",
+  "links": [
+    {
+      "id": "01KY0BPZHSZTHN0C62NCKFDZY3",
+      "target_type": "adr",
+      "target": "ADR-CORE-0030",
+      "rel": "driven_by",
+      "created_at": "2026-07-20T18:13:19.0337321+00:00"
+    },
+    {
+      "id": "01KY0CFTM2F5XDMQ0RQVNECZ2N",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-RECONCILIATION",
+      "rel": "belongs_to",
+      "created_at": "2026-07-20T18:26:53.1873141+00:00"
+    },
+    {
+      "id": "01KY0C1HR9YT985M2M0ZVFW7Y6",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-EVIDENCE-REGISTRATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:05.3548919+00:00"
+    },
+    {
+      "id": "01KY0C1P14S7X0CX9H159NFVVN",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-RECONCILIATION-COVERAGE",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:09.7328562+00:00"
+    },
+    {
+      "id": "01KY0C1MYP5V745X3KK83H48DM",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:08.6312504+00:00"
+    },
+    {
+      "id": "01KY0C1JVRH8R31DEYXRNRGBSN",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-RECONCILIATION-PROJECTION",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:06.4894277+00:00"
+    },
+    {
+      "id": "01KY0C1KXXT2T3W6DMDDJ9P1G0",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-STATEMENT-RECONCILIATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:07.5829239+00:00"
+    },
+    {
+      "id": "01KY0C1R49VYDYBMQBDRF20V4H",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:11.8827374+00:00"
+    },
+    {
+      "id": "01KY0C1S60CT5ZNEPP03VMCYS8",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-ATTRIBUTABLE-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:12.9613324+00:00"
+    },
+    {
+      "id": "01KY0C1Q2CH5806QQBDE8NGD6P",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-RECONCILIATION-SAFETY",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:10.7969106+00:00"
+    },
+    {
+      "id": "01KY0BPZHS01K370NHN38YA6CY",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-13",
+      "rel": "see-also",
+      "created_at": "2026-07-20T18:13:19.0334196+00:00"
+    },
+    {
+      "id": "01KY0C41XYJHQ8CKXS6ZY0N43W",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T18:20:27.4552930+00:00"
+    },
+    {
+      "id": "01KY0C40Y8H1D0FJP3EZ22PEER",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-RECONCILIATION-POLICY-MATRIX",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T18:20:26.4407767+00:00"
+    }
+  ]
+}

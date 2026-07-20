@@ -1,0 +1,9 @@
+{
+  "id": "01KY0CHDM4K3QRJFXKJMVBNB1X",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.8",
+  "changes": [
+    "Technical design revised for the Hermes/Tally boundary: 11 accepted decisions, 21 data models, 6 feature areas, 7 diagrams, and 37 planned tests now define provider-neutral multi-evidence lineage, match-first per-evidence reconciliation, append-only decisions and statement coverage, logical-effect replay protection, canonical local payment identity, independent spend pools, exact pool/category actuals, and complete recovery. Fresh export review closed statement-only fact construction, atomic unknown/unassigned initialization, cross-key capture replay, and feature grouping gaps. CHANNELS module dependencies were removed, downstream dependency reasons were made pool-aware, and stale PLAN-LEDGER-V1 was archived pending replanning. OQ-LEDGER-5, OQ-LEDGER-6, OQ-LEDGER-13, and OQ-LEDGER-15 remain explicit pre-implementation evidence gates."
+  ],
+  "created_at": "2026-07-20T18:27:45.4131555+00:00"
+}

@@ -1,0 +1,43 @@
+{
+  "id": "01KY0BTQ6J2YPR81ZERF5RK3YW",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DM-LEDGER-EVIDENCE-RECORD-LINK",
+  "name": "EvidenceRecordObservationAndLink",
+  "description": [
+    "Privacy-conscious provider-neutral evidence identity, normalized observations, and append-only links to canonical transactions."
+  ],
+  "schema_def": [
+    "evidence_record: id ULID; kind agent_capture, statement_row, receipt, external_document, or owner_assertion; logicalIdentityDigest unique; optional opaqueExternalReference; optional contentFingerprint; actor; trusted time. evidence_observation: evidenceId; optional accountId, signedAmountMinor, currencyCode, transactionDate, postingDate, instrumentId, cardholderId, and descriptionFingerprint; no arbitrary metadata or raw payload. evidence_link_event: id, evidenceId, transactionId, role supporting or confirming, action link or revoke or replace, optional decisionId, reason, actor, time. Active confirming statement evidence targets at most one transaction and requires a reconciliation decision; supporting links do not reconcile. One transaction may have many evidence records."
+  ],
+  "created_at": "2026-07-20T18:15:21.5554804+00:00",
+  "links": [
+    {
+      "id": "01KY0C2X013YJCN5JABQ84AB8W",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-IDEMPOTENT-MUTATIONS",
+      "rel": "supports",
+      "created_at": "2026-07-20T18:19:49.6349649+00:00"
+    },
+    {
+      "id": "01KY0C2VZ8MDZ39C5CB9D8FDTS",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "rel": "supports",
+      "created_at": "2026-07-20T18:19:48.5853387+00:00"
+    },
+    {
+      "id": "01KY0C2SXT5GNQ5GKP4GYMK8E7",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-EVIDENCE-REGISTRATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:46.4916465+00:00"
+    },
+    {
+      "id": "01KY0C2TZX1MPXGDRVM3E3R3KR",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-TRANSACTION-RECORDING",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:47.5825362+00:00"
+    }
+  ]
+}

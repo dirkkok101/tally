@@ -16,6 +16,13 @@
   "created_at": "2026-07-20T17:46:00.6666247+00:00",
   "links": [
     {
+      "id": "01KY0CG4Q846NFSYA4YYWQ5S7H",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-ACCOUNTS-CATEGORIES",
+      "rel": "belongs_to",
+      "created_at": "2026-07-20T18:27:03.5296254+00:00"
+    },
+    {
       "id": "01KY0A4ZJV8CA5JXC3WDX817MV",
       "target_type": "requirement",
       "target": "FR-LEDGER-SPEND-POOL-CATALOGUE",

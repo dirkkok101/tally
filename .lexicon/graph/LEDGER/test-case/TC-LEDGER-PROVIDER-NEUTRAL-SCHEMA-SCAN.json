@@ -1,0 +1,33 @@
+{
+  "id": "01KY0BYB9FN4Y1VXRWW1JD0PW3",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "TC-LEDGER-PROVIDER-NEUTRAL-SCHEMA-SCAN",
+  "slug": "provider-neutral-schema-scan",
+  "title": "Reject transport and provider leakage from LEDGER contracts",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "security",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A published Tally binary exposes every LEDGER schema, help document, stable error, and optional guidance manifest.",
+  "steps": "Enumerate the operation registry and scan serialized schemas, examples, errors, diagnostics, manifests, and persisted evidence canaries for forbidden transport concepts and raw source payloads.",
+  "expected": "The public and durable LEDGER contract contains only allowlisted provider-neutral evidence; AgentMail, MIME, mailbox, sender, recipient, WhatsApp, delivery, retry, full identifiers, and payload serialization are absent.",
+  "owner": "LEDGER",
+  "created_at": "2026-07-20T18:17:20.4320302+00:00",
+  "links": [
+    {
+      "id": "01KY0CG9YZ3M9X76GZ6FVFFJQA",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-CONTRACT-SKILLS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-20T18:27:08.8967019+00:00"
+    },
+    {
+      "id": "01KY0C4C6NPBHEZ7C2H5EK9VXZ",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-LOCAL-DATA-PROTECTION",
+      "rel": "validates",
+      "created_at": "2026-07-20T18:20:37.9737123+00:00"
+    }
+  ]
+}

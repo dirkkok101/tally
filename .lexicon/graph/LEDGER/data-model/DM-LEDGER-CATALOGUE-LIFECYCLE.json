@@ -2,38 +2,12 @@
   "id": "01KXSYV1AHPKBV4679JRDD8Q1H",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "DM-LEDGER-CATALOGUE-LIFECYCLE",
-  "name": "CatalogueLifecycleEvents",
+  "name": "FinancialDimensionCatalogueLifecycleEvents",
   "description": [
-    "Persisted attributable rename, archive, and category-reactivation history promised by account and category operation contracts."
+    "Append-only create, rename, archive, and reactivate history for account, category, payment instrument, cardholder, and spend-pool catalogues."
   ],
   "schema_def": [
-    "account_lifecycle_event",
-    "- id: ULID text, primary key",
-    "- accountId: Account.id, required, RESTRICT",
-    "- eventType: enum {renamed, archived}",
-    "- priorDisplayName: text, nullable; required for renamed",
-    "- newDisplayName: text, nullable; required for renamed",
-    "- reason: text, required",
-    "- actorKind: enum {agent, human, system}",
-    "- actorLabel: text, required",
-    "- actorRunId: text, nullable",
-    "- recordedByOsIdentity: text, protected metadata",
-    "- occurredAt: trusted UTC instant",
-    "",
-    "spend_category_lifecycle_event",
-    "- id: ULID text, primary key",
-    "- categoryId: SpendCategory.id, required, RESTRICT",
-    "- eventType: enum {renamed, archived, reactivated}",
-    "- priorName: text, nullable; required for renamed",
-    "- newName: text, nullable; required for renamed",
-    "- reason: text, required",
-    "- actorKind: enum {agent, human, system}",
-    "- actorLabel: text, required",
-    "- actorRunId: text, nullable",
-    "- recordedByOsIdentity: text, protected metadata",
-    "- occurredAt: trusted UTC instant",
-    "",
-    "Constraints: append-only; aggregate state and event insert commit in one idempotent write transaction; event order is occurredAt then ULID; public history exposes safe actor attribution but never recordedByOsIdentity; account has no reactivation operation in v1; category reactivation requires no active normalized-name conflict. OQ-LEDGER-4 and OQ-LEDGER-6 gate implementation of their respective halves."
+    "catalogue_lifecycle_event: id ULID; catalogueKind account, category, payment_instrument, cardholder, or spend_pool; entityId; action create, rename, archive, or reactivate where allowed; previousLabel and newLabel as applicable; required reason for corrective actions; actor; trusted time. Current labels and active state derive from history. Historical transaction, attribution, pool, category, evidence, and reconciliation references use RESTRICT. Archive prevents new assignments but preserves prior facts and query history."
   ],
   "created_at": "2026-07-18T06:32:53.8424410+00:00",
   "links": [

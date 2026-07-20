@@ -1,0 +1,54 @@
+{
+  "id": "01KY0BX6Q9F26P1VB763EM5FV1",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DIAG-LEDGER-RECONCILIATION-SEQUENCE",
+  "title": "Match-first statement reconciliation sequence",
+  "diagram_type": "sequence",
+  "format": "mermaid",
+  "content": [
+    "sequenceDiagram",
+    "  participant Ingest as INGEST",
+    "  participant CLI as LEDGER CLI",
+    "  participant Recon as Reconciliation handler",
+    "  participant DB as LedgerDb",
+    "",
+    "  Ingest->>CLI: evidence.register approved statement row",
+    "  CLI->>DB: commit evidence or return identical logical replay",
+    "  Ingest->>CLI: reconciliation.candidates evidenceId + policy",
+    "  CLI->>DB: read active unreconciled compatible state",
+    "  DB-->>Ingest: candidates, rejections, conflicts, advisory token",
+    "  Ingest->>CLI: reconciliation.apply closed disposition",
+    "  CLI->>Recon: typed request",
+    "  Recon->>DB: BEGIN IMMEDIATE and revalidate current state",
+    "  alt strong unique match and validated policy",
+    "    Recon->>DB: append deterministic decision + confirming link",
+    "  else no candidate and no guard candidate",
+    "    Recon->>DB: create statement-only fact + decision + link",
+    "  else ambiguous or exception",
+    "    Recon->>DB: append reviewable decision/exception only",
+    "  end",
+    "  Recon->>DB: commit effect + idempotency outcome",
+    "  DB-->>Ingest: structured outcome",
+    "  Ingest->>CLI: coverage.complete scope + expected evidence",
+    "  CLI->>DB: derive exact counts, absent prior facts, exceptions",
+    "  DB-->>Ingest: batch summary and exception list",
+    ""
+  ],
+  "created_at": "2026-07-20T18:16:42.9867240+00:00",
+  "links": [
+    {
+      "id": "01KY0C3YSNCSR4F2DGZS19FY69",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-RECONCILIATION-CONTRACT",
+      "rel": "supports",
+      "created_at": "2026-07-20T18:20:24.2462621+00:00"
+    },
+    {
+      "id": "01KY0CFWP3MAZ5B5H1AKBQP9RP",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-RECONCILIATION",
+      "rel": "belongs_to",
+      "created_at": "2026-07-20T18:26:55.3000920+00:00"
+    }
+  ]
+}

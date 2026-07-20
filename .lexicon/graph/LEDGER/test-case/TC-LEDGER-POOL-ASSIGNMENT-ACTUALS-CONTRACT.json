@@ -16,6 +16,13 @@
   "created_at": "2026-07-20T17:46:01.2469500+00:00",
   "links": [
     {
+      "id": "01KY0CG7W2FVNN9H6WJP3FN08J",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-RELATIONSHIPS-ACTUALS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-20T18:27:06.7552293+00:00"
+    },
+    {
       "id": "01KY0A650JS6FZ8HFD8XDEN4H7",
       "target_type": "requirement",
       "target": "FR-LEDGER-POOL-ASSIGNMENT",

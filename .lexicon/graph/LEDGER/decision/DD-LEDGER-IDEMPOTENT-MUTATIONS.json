@@ -2,24 +2,24 @@
   "id": "01KXSWZ865WV1BXCK4E1H8GYW3",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "DD-LEDGER-IDEMPOTENT-MUTATIONS",
-  "title": "Transactional idempotency with artifact reconciliation",
+  "title": "Transactional request and logical-effect idempotency",
   "description": [
-    "Make database and filesystem mutations safely repeatable for agents."
+    "Prevent duplicate finance effects across retries, crashes, evidence re-registration, and reconciliation decisions."
   ],
   "decision": [
-    "Every public mutation requires an idempotency key. The identity is contract version plus operation ID plus key; comparison uses a canonical request hash including attributable actor context. Validation failures and busy/resource failures do not consume the key. Database effects and the stable structured result commit with the IdempotencyRecord in one transaction. Filesystem artifacts use a deterministic artifact ID, private staging path, checksum manifest, flush, verification, and atomic publication; retries reconcile a matching published artifact if publication preceded outcome recording."
+    "Commit each mutation outcome and its IdempotencyRecord in the same database transaction. The same key and canonical request returns the original result; a changed request conflicts. Additionally enforce stable logical identities for evidence and reconciliation decisions so different request keys cannot duplicate one real effect. Reconcile filesystem artifacts against committed database state on retry."
   ],
   "rationale": [
-    "Database uniqueness alone cannot make backup, restore, migration, or skill file effects exactly repeatable across crashes. Stable artifact identities and manifests bridge the database/filesystem durability boundary without distributed transactions."
+    "Request replay protection alone cannot prevent duplicate evidence arriving through another orchestration attempt. Logical uniqueness plus atomic outcomes protects the canonical ledger."
   ],
   "alternatives": [
-    "A: caller retries without persisted keys — rejected. B: database idempotency only — insufficient for files. C: transactional record plus artifact reconciliation — chosen."
+    "Rejected best-effort caller deduplication, transport message IDs as authority, after-commit idempotency writes, and treating every statement replay as a new transaction."
   ],
   "consequences": [
-    "A reused key with any changed semantic request returns conflict. Successful replay returns the original result without volatile fields. Operation descriptors declare whether a command is mutating and therefore requires a key."
+    "Contracts define canonical request fingerprints and logical identity keys. Identical logical evidence under another request key returns the existing evidence and existing linked transaction outcome; changed content or finance facts conflict. Backup and activation artifacts use the same reconciliation rule around durable commits."
   ],
   "status_notes": [
-    "Accepted. Planned implementation areas: src/Tally/Features/Ledger/Contract and Recovery."
+    "Expanded from request/artifact replay to evidence registration and reconciliation decisions."
   ],
   "status": "accepted",
   "created_at": "2026-07-18T06:00:14.7906393+00:00",
@@ -32,11 +32,25 @@
       "created_at": "2026-07-18T06:07:59.7295169+00:00"
     },
     {
+      "id": "01KY0C2G0YY79Y9FJ5MZ1PEPWJ",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-EVIDENCE-REGISTRATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:36.3516817+00:00"
+    },
+    {
       "id": "01KXSXDDRWYT28K8K7CQFP83M9",
       "target_type": "requirement",
       "target": "FR-LEDGER-IDEMPOTENT-WRITES",
       "rel": "implements",
       "created_at": "2026-07-18T06:07:59.2618112+00:00"
+    },
+    {
+      "id": "01KY0C2J8JHN08WH45QFFRB733",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:38.6435739+00:00"
     },
     {
       "id": "01KXSXDEQ8JBZCKC7YYGN6V0DE",
@@ -51,6 +65,13 @@
       "target": "FR-LEDGER-SAFE-STORAGE-EVOLUTION",
       "rel": "implements",
       "created_at": "2026-07-18T06:08:00.7322123+00:00"
+    },
+    {
+      "id": "01KY0C2H5B4BSD7ZN8XRWN230T",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-STATEMENT-RECONCILIATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:37.5160562+00:00"
     },
     {
       "id": "01KXSXDFPC3VJTQHSQEBT4PB32",

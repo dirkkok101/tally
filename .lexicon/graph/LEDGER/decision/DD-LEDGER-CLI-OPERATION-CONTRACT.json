@@ -2,24 +2,24 @@
   "id": "01KXSWZ691B67MGFHJNAQ12FPF",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "DD-LEDGER-CLI-OPERATION-CONTRACT",
-  "title": "Explicit resource commands from one operation registry",
+  "title": "Explicit provider-neutral resource commands from one registry",
   "description": [
-    "Define the public AI-agent contract and its single source of truth."
+    "Define the stable automation boundary used equally by Hermes, sibling modules, and direct local callers."
   ],
   "decision": [
-    "Expose Lex-like resource commands under tally ledger, with stable namespaced operation IDs. Every mutation and complex query accepts one versioned JSON request through explicit stdin or file input; simple read selectors may use named options. Each invocation emits exactly one structured result on stdout, metadata-only diagnostics on stderr, and a stable broad exit category. One explicitly registered OperationDescriptor registry generates dispatch, human help, machine schema, compatibility metadata, and skill manifests."
+    "Generate CLI paths, operation IDs, help, schemas, descriptors, and compatibility checks from one explicit registry. Give evidence, reconciliation candidates and dispositions, decision lifecycle, statement coverage, payment attribution, spend pools, actuals, and recovery their own closed typed operations. Reject unknown fields and generic invocation or batch payloads."
   ],
   "rationale": [
-    "Explicit commands are more discoverable and safer than generic CRUD or a public run operation, while a shared registry prevents help, schema, dispatch, and skills from drifting. Typed transfer, refund, correction, restore, and evolution operations make invalid states hard to express."
+    "Explicit operations make mutation authority, idempotency, privacy, errors, and versioning auditable. Per-evidence atomic commands keep Ledger safe without stealing INGEST batch responsibilities."
   ],
   "alternatives": [
-    "A: public describe plus generic run with 25 hidden operation names — parser-minimal but weak shell discovery. B: explicit use-case commands — chosen. C: generic save/update/delete resources — rejected because immutable facts and lifecycle rules need narrow verbs."
+    "Rejected a generic invoke or open metadata bag because it hides capability and permits provider vocabulary. Rejected minimal evaluate/apply/resolve because it overloads outcomes. Rejected Ledger-owned statement batch commands because INGEST owns that lifecycle."
   ],
   "consequences": [
-    "Released command paths, operation IDs, request/result schemas, errors, and exits are compatibility commitments. No aliases in v1. Unknown fields fail before storage access. Mutations require contract version, actor attribution, and idempotency key. The CLI adapter remains thin and never owns finance rules."
+    "The operation registry is a completeness gate. Every public operation requires a typed contract and process test. Schema discovery works without a skill. New commands expand the registry deliberately rather than through aliases."
   ],
   "status_notes": [
-    "Accepted after three independent interface explorations. Planned implementation areas: src/Tally/Cli, src/Tally/Contracts/Ledger, src/Tally/Bootstrap."
+    "Expanded for evidence, reconciliation, coverage, attribution, pools, and channel-neutral external callers."
   ],
   "status": "accepted",
   "created_at": "2026-07-18T06:00:12.8343979+00:00",
@@ -72,6 +72,62 @@
       "target": "FR-LEDGER-CONTRACT-DISCOVERY",
       "rel": "implements",
       "created_at": "2026-07-18T06:07:48.2550205+00:00"
+    },
+    {
+      "id": "01KY0C21Q7NMNX7101Y6N0YJD4",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-EVIDENCE-REGISTRATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:21.7044640+00:00"
+    },
+    {
+      "id": "01KY0C2745RSEDJK8X0VJTTVRF",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-PAYMENT-ATTRIBUTION",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:27.2382602+00:00"
+    },
+    {
+      "id": "01KY0C29895TT7ZQ7EJ4HHCHPS",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-POOL-ASSIGNMENT",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:29.4180909+00:00"
+    },
+    {
+      "id": "01KY0C262DN8T1NT4S4C8ZR82G",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-RECONCILIATION-COVERAGE",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:26.1582926+00:00"
+    },
+    {
+      "id": "01KY0C24Z0ZFT3YGHP7TKPFW5X",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:25.0257201+00:00"
+    },
+    {
+      "id": "01KY0C22SJ83HA32YMCP349MHH",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-RECONCILIATION-PROJECTION",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:22.8034413+00:00"
+    },
+    {
+      "id": "01KY0C287RJKPREDJEQM2VGNSM",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SPEND-POOL-CATALOGUE",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:28.3774397+00:00"
+    },
+    {
+      "id": "01KY0C23WQAGHD1PKXABNM8F0C",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-STATEMENT-RECONCILIATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:23.9284329+00:00"
     },
     {
       "id": "01KXSXD3G2SFFNDXQP41V4NVCM",

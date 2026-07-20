@@ -4,22 +4,22 @@
   "ref_code": "DD-LEDGER-EMBEDDED-STORAGE",
   "title": "Raw SQLite with host-managed at-rest protection",
   "description": [
-    "Resolve OQ-LEDGER-8 for embedded persistence, permissions, encryption, backup, restore, and migration."
+    "Select durable local persistence and the host-protection boundary for all canonical financial state."
   ],
   "decision": [
-    "Target .NET 10 Native AOT on linux-x64 first, using raw Microsoft.Data.Sqlite with the maintained bundled SQLite native library, one local store, WAL, foreign keys, FULL synchronous writes for financial mutations, busy timeout, PRAGMA user_version, and explicit SQL migrations. Create the data directory as 0700 and every database, WAL, SHM, temporary candidate, manifest, and backup as 0600. Require the data root to reside on an operator-provisioned encrypted host volume with OS-managed keys; Tally implements no cryptography and fails the supported-host security gate when that protection is not validated."
+    "Use raw Microsoft.Data.Sqlite with foreign keys, WAL, synchronous FULL, ordered immutable migrations, one exclusive writer, and owner-private generation directories. Require a host-encrypted volume and 0700 or 0600 artifacts. Store allowlisted privacy-conscious evidence metadata only."
   ],
   "rationale": [
-    "The spike preserved exact totals, relationships, idempotency state, and schema state across verified backup, separate restore, migration candidate, and activation with clean integrity checks and 0600 artifacts. Installed Lex 0.5.3 proves the same .NET 10 Native-AOT plus Microsoft.Data.Sqlite stack. Official provider documentation confirms stock SQLite has no file encryption, so encryption must remain a host capability."
+    "SQLite gives atomic local durability and recovery without a server. Raw SQL keeps constraints and transactions explicit. Host-managed encryption avoids claiming protection stock SQLite does not provide."
   ],
   "alternatives": [
-    "A: SQLite plus host volume encryption — chosen. B: unsupported SQLCipher bundle — rejected as non-default and contrary to maintained-platform preference. C: PostgreSQL plus EF Core — rejected for the self-contained local CLI; reserved for a future CHANNELS web architecture. D: custom field/file encryption — prohibited."
+    "Rejected PostgreSQL, EF Core, and a hosted database as unnecessary operational surface. Rejected custom application cryptography and storing source payloads. Rejected multiple writers because reconciliation and recovery require a simple authority boundary."
   ],
   "consequences": [
-    "The release contains the AOT executable and adjacent native SQLite library but no daemon or database server. The guest-visible VPS root is plain ext4 and cannot be treated as conforming without cloud-provider encryption evidence or a separately encrypted data volume. Storage status reports permission, integrity, version, and host-protection evidence without exposing financial payloads."
+    "All durable types, including evidence, decisions, coverage, attribution, and pools, participate in migrations, backup, validation, and recovery. Production requires independent host-encryption evidence."
   ],
   "status_notes": [
-    "Accepted from OQ-LEDGER-8 spike and official provider/storage documentation. Planned implementation area: src/Tally/Infrastructure/Storage."
+    "Expanded durable scope; persistence technology and security boundary unchanged."
   ],
   "status": "accepted",
   "created_at": "2026-07-18T06:00:13.4597637+00:00",

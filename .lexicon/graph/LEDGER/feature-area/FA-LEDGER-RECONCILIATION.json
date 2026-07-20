@@ -1,0 +1,26 @@
+{
+  "id": "01KY0BX3C2VQF8A0QV3K3FDJV5",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "FA-LEDGER-RECONCILIATION",
+  "name": "Evidence Reconciliation and Coverage",
+  "description": [
+    "Owns read-only candidate projections, atomic match-first dispositions, deterministic and owner-approved decision history, evidence confirmation links, statement scopes, coverage, and explicit exceptions without owning INGEST batches."
+  ],
+  "created_at": "2026-07-20T18:16:39.5552911+00:00",
+  "links": [
+    {
+      "id": "01KY0C3PYP9FWPBSJ6KPZRCTMG",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "rel": "belongs-to",
+      "created_at": "2026-07-20T18:20:16.2147915+00:00"
+    },
+    {
+      "id": "01KY0C3NTRWM7SPKBP8VJVDW41",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "rel": "belongs-to",
+      "created_at": "2026-07-20T18:20:15.0656077+00:00"
+    }
+  ]
+}

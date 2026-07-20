@@ -2,9 +2,9 @@
   "id": "01KXSWZ4X6XYS0VKBS2RRCWQJ3",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "FA-LEDGER-ACCOUNTS-CATEGORIES",
-  "name": "Accounts and Categories",
+  "name": "Accounts and Financial Dimensions",
   "description": [
-    "Owns bank-account and flat spend-category lifecycle without deleting historical references."
+    "Owns account, spend-category, payment-instrument, cardholder, and spend-pool catalogues with stable local IDs, explicit lifecycle history, privacy-safe labels, and RESTRICT historical references."
   ],
   "created_at": "2026-07-18T06:00:11.4315776+00:00",
   "links": [
@@ -23,6 +23,13 @@
       "created_at": "2026-07-18T06:29:41.9275729+00:00"
     },
     {
+      "id": "01KY0C3V9PK5PMKY03G3AYDB25",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS",
+      "rel": "belongs-to",
+      "created_at": "2026-07-20T18:20:20.6628831+00:00"
+    },
+    {
       "id": "01KXSYV35GDZXMJYQ26G2B6Y5M",
       "target_type": "data_model",
       "target": "DM-LEDGER-CATALOGUE-LIFECYCLE",
@@ -30,11 +37,25 @@
       "created_at": "2026-07-18T06:32:55.7290611+00:00"
     },
     {
+      "id": "01KY0C3S6P02ARNVQCBP6Z9N5G",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-PAYMENT-ATTRIBUTION",
+      "rel": "belongs-to",
+      "created_at": "2026-07-20T18:20:18.5191307+00:00"
+    },
+    {
       "id": "01KXSXH3W7PZ1FP9PHR9DTHNSA",
       "target_type": "data_model",
       "target": "DM-LEDGER-SPEND-CATEGORY",
       "rel": "belongs_to",
       "created_at": "2026-07-18T06:10:00.1998105+00:00"
+    },
+    {
+      "id": "01KY0C3T8EMDWBEC0WPPQ3DQN1",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-SPEND-POOL-ASSIGNMENT",
+      "rel": "belongs-to",
+      "created_at": "2026-07-20T18:20:19.5996465+00:00"
     },
     {
       "id": "01KXSXH4AHP79791G8HBDXQJ43",

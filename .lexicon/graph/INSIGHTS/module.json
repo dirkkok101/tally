@@ -54,14 +54,14 @@
   "created_at": "2026-07-17T13:40:10.2544357+00:00",
   "dependencies": [
     {
-      "id": "01KXR4X4JTFAC2H24BYBJAEZ2C",
+      "id": "01KY0C62GG83XAVRK82HSKBGXA",
       "project_id": "01KXR2C3JQBT2WPM9JCSA9JMXD",
       "target": "BUDGET",
       "kind": "hard",
       "rationale": [
-        "On-track analysis compares actual spend with monthly category budgets."
+        "On-track analysis compares exact pool and category actuals with active BUDGET plans."
       ],
-      "created_at": "2026-07-17T13:40:25.3072771+00:00"
+      "created_at": "2026-07-20T18:21:33.5852196+00:00"
     },
     {
       "id": "01KXR4X4VN3FHESFQE0A8EMA6Z",
@@ -74,14 +74,14 @@
       "created_at": "2026-07-17T13:40:25.5904372+00:00"
     },
     {
-      "id": "01KXR4X4A7MTY528HPN4VE7XQY",
+      "id": "01KY0C64D8E4J7YFSDEPYHZZKZ",
       "project_id": "01KXR2C3JQBT2WPM9JCSA9JMXD",
       "target": "LEDGER",
       "kind": "hard",
       "rationale": [
-        "Spend analysis is calculated from canonical transactions."
+        "Structured metrics and exceptions use canonical transactions, reconciliation state, and exact pool and category actuals."
       ],
-      "created_at": "2026-07-17T13:40:25.0325353+00:00"
+      "created_at": "2026-07-20T18:21:35.5290564+00:00"
     }
   ]
 }

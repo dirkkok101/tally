@@ -1,0 +1,98 @@
+{
+  "id": "01KY0BQ0901QFE2XQE628B192H",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DD-LEDGER-DIMENSIONAL-ATTRIBUTION",
+  "title": "Independent local payment, category, and spend-pool dimensions",
+  "description": [
+    "Define stable provider-neutral attribution and pool semantics without conflating account, payment instrument, cardholder, category, or funding pool."
+  ],
+  "decision": [
+    "Use local ULIDs and owner labels for instruments, cardholders, categories, and pools; allow optional masked suffixes but no full provider identifiers. Store instrument and cardholder attribution independently with explicit unknown values. Give each transaction explicit unassigned or one active pool under the v1 assumption, with append-only corrections and no inference across dimensions."
+  ],
+  "rationale": [
+    "These dimensions answer different questions. Stable local identity protects privacy and lets Hermes map provider wording without making the provider authoritative. Explicit unknown and unassigned states fail closed."
+  ],
+  "alternatives": [
+    "Rejected deriving pool from account or cardholder, encoding pools as categories, using provider IDs as primary identity, and silent assignment inheritance."
+  ],
+  "consequences": [
+    "Actuals support pool totals, category totals, and a pool-by-category matrix. OQ-LEDGER-15 must validate one-active-pool cardinality before implementation; mixed-pool evidence requires PRD and design revision."
+  ],
+  "status_notes": [
+    "Resolves the identity design in OQ-LEDGER-14 while preserving private-fixture validation; carries OQ-LEDGER-15 as a cardinality gate."
+  ],
+  "status": "accepted",
+  "created_at": "2026-07-20T18:13:19.7775507+00:00",
+  "links": [
+    {
+      "id": "01KY0CFVNX5WFAPQM4J25TJQ83",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-ACCOUNTS-CATEGORIES",
+      "rel": "belongs_to",
+      "created_at": "2026-07-20T18:26:54.2705824+00:00"
+    },
+    {
+      "id": "01KY0C1Y0MQW1N3XTZQD14Z9QM",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACTUALS-QUERY",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:17.9092584+00:00"
+    },
+    {
+      "id": "01KY0C1TXA98NCVWV5SF7TFQKN",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-PAYMENT-ATTRIBUTION",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:14.7314314+00:00"
+    },
+    {
+      "id": "01KY0C1WZNK2DK7C8AN1EFZ0B7",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-POOL-ASSIGNMENT",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:16.8543516+00:00"
+    },
+    {
+      "id": "01KY0C1VY598VR612PFA2Z3SZN",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SPEND-POOL-CATALOGUE",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:15.7823619+00:00"
+    },
+    {
+      "id": "01KY0C202JZAG1887RYBWGEVAT",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-ATTRIBUTABLE-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:20.0200735+00:00"
+    },
+    {
+      "id": "01KY0C1Z288PJ8DNV72STN9AK1",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:18.9854421+00:00"
+    },
+    {
+      "id": "01KY0BQ092VBP9MMHNDK00MXKX",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-14",
+      "rel": "see-also",
+      "created_at": "2026-07-20T18:13:19.7786623+00:00"
+    },
+    {
+      "id": "01KY0BQ092N4185W626MP9NY2G",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-15",
+      "rel": "see-also",
+      "created_at": "2026-07-20T18:13:19.7784377+00:00"
+    },
+    {
+      "id": "01KY0C4524ZP78ATKM5SZ0N6ST",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-DIMENSIONAL-ACTUALS-PROPERTY",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T18:20:30.6613485+00:00"
+    }
+  ]
+}

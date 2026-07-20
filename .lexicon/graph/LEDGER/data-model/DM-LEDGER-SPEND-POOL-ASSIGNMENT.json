@@ -1,0 +1,43 @@
+{
+  "id": "01KY0BTSBRPW49WGWJSS2KA9HW",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DM-LEDGER-SPEND-POOL-ASSIGNMENT",
+  "name": "SpendPoolAndAssignment",
+  "description": [
+    "Spend-pool catalogue and explicit append-only transaction assignment independent from account, category, payment instrument, and cardholder."
+  ],
+  "schema_def": [
+    "spend_pool: id ULID, owner label, active lifecycle. pool_assignment_event: id, transactionId, state assigned with poolId or explicit unassigned, action initialize, assign, or correct, optional previousEventId, required correction reason, actor, trusted time. Transaction creation atomically appends one initialize-unassigned event. Under the v1 assumption every transaction has exactly one active projection that is either unassigned or one pool. No inference across dimensions. OQ-LEDGER-15 must validate cardinality before implementation; split-pool evidence requires PRD and design revision."
+  ],
+  "created_at": "2026-07-20T18:15:23.7693018+00:00",
+  "links": [
+    {
+      "id": "01KY0C3JQ2FWRVGFH4VJWK873G",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-DIMENSIONAL-ATTRIBUTION",
+      "rel": "supports",
+      "created_at": "2026-07-20T18:20:11.8752344+00:00"
+    },
+    {
+      "id": "01KY0C3DH0KVJRPRKYS94XE5JG",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-POOL-ASSIGNMENT",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:20:06.5614221+00:00"
+    },
+    {
+      "id": "01KY0C3CD0JQASMDZ0EHQBCHAA",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SPEND-POOL-CATALOGUE",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:20:05.4088937+00:00"
+    },
+    {
+      "id": "01KY0BTSBTWW2SRVMQH1CCVH90",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-15",
+      "rel": "see-also",
+      "created_at": "2026-07-20T18:15:23.7701379+00:00"
+    }
+  ]
+}

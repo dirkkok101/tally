@@ -2,24 +2,24 @@
   "id": "01KXSWZ6JRE2EA51AG7K4M4B5V",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "DD-LEDGER-APPLICATION-ARCHITECTURE",
-  "title": "Single-process vertical slices with selective ports",
+  "title": "Single-process provider-neutral vertical slices with selective ports",
   "description": [
-    "Adapt Actions and Lex architecture to a local finance CLI."
+    "Define the internal application shape and the boundary between LEDGER, sibling Tally modules, Hermes, and other external callers."
   ],
   "decision": [
-    "Use one Native-AOT executable project plus focused tests. Organize the application as a thin CLI adapter, versioned contracts, Ledger vertical slices, pure Ledger domain policies, concrete SQLite infrastructure, and explicit bootstrap registration. Separate commands from queries at class level with one store. Use CommandResult<T> adapted to stable exit categories, explicit DI, TimeProvider, and pure boundary/row mappers. Introduce only ICommandHandler, IQueryHandler, IAuthoritativeStoreActivator, and IHostArtifactProtection as justified seams."
+    "Ship one local Native-AOT CLI process with concrete Contracts, Features, Domain, Storage, and Bootstrap zones. Use explicit command/query handlers and only two destructive host ports. Keep every provider, transport, orchestration, schedule, delivery, and human-channel concern outside LEDGER."
   ],
   "rationale": [
-    "This retains the useful intent of CORE CQRS-light, vertical slice, CommandResult, explicit DI, error handling, and pure mapping while rejecting web, EF, PostgreSQL, tenancy, RLS, grid, and frontend assumptions. Real SQLite integration tests are more valuable than provider-neutral repositories."
+    "A single-owner local system needs deterministic process contracts and transactional storage, not a service topology. Explicit vertical slices keep evidence, reconciliation, dimensions, actuals, and recovery cohesive while stable CLI schemas make every caller equal."
   ],
   "alternatives": [
-    "A: layered clean architecture with repositories and mediator — rejected as speculative. B: direct command classes with no application ports — simple but less testable at the CLI seam. C: selective ports at transport and destructive host boundaries — chosen."
+    "Rejected HTTP or daemon hosting because it expands the trust and operational boundary. Rejected repositories, mediator, event bus, generic unit of work, and provider gateways because no second implementation exists. Rejected direct Hermes, AgentMail, or WhatsApp integration because ADR-CORE-0030 assigns orchestration externally."
   ],
   "consequences": [
-    "No FastEndpoints, Aspire, EF Core, DbContext factory, generic repository, event bus, reflection discovery, custom clock, or general filesystem abstraction. A future CHANNELS adapter may invoke the stable CLI; no SDK is promised until that need is real."
+    "LEDGER remains offline and channel-neutral. INGEST orchestrates statement batches and Hermes orchestrates transports. New behavior is added through explicit operations and vertical slices. The application is single-writer by contract."
   ],
   "status_notes": [
-    "Accepted. Planned implementation areas: src/Tally/Features/Ledger, src/Tally/Domain/Ledger, src/Tally/Infrastructure, tests/Tally.Tests."
+    "Revised for provider-neutral evidence, reconciliation, independent financial dimensions, and ADR-CORE-0030."
   ],
   "status": "accepted",
   "created_at": "2026-07-18T06:00:13.1460535+00:00",
@@ -53,11 +53,25 @@
       "created_at": "2026-07-18T06:08:16.3442567+00:00"
     },
     {
+      "id": "01KY0BPQ52C1NCT7KNNBBJHT71",
+      "target_type": "adr",
+      "target": "ADR-CORE-0030",
+      "rel": "driven_by",
+      "created_at": "2026-07-20T18:13:10.4341212+00:00"
+    },
+    {
       "id": "01KXSXE18W8773CS4E62RZCWPF",
       "target_type": "architecture_doc",
       "target": "ARCH-CORE-CQRS",
       "rel": "references",
       "created_at": "2026-07-18T06:08:19.2292299+00:00"
+    },
+    {
+      "id": "01KY0C2PEZPDAZAJCN8VATZ15D",
+      "target_type": "architecture_doc",
+      "target": "ARCH-CORE-TALLY-SYSTEM-CONTEXT",
+      "rel": "references",
+      "created_at": "2026-07-20T18:19:42.9441445+00:00"
     },
     {
       "id": "01KXSXE1QTTYCAX4JEZBBR0VBF",
@@ -121,6 +135,13 @@
       "target": "TC-LEDGER-OFFLINE-SELF-CONTAINED",
       "rel": "validated-by",
       "created_at": "2026-07-18T06:10:11.6026913+00:00"
+    },
+    {
+      "id": "01KY0C471HVFH9RBVRFQQ23KW9",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-PROVIDER-NEUTRAL-SCHEMA-SCAN",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T18:20:32.6940076+00:00"
     }
   ]
 }

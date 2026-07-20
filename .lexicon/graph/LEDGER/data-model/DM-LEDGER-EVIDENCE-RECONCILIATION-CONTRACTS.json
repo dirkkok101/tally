@@ -1,0 +1,78 @@
+{
+  "id": "01KY0BTTT9FVNN9897X5WAR9GQ",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+  "name": "EvidenceReconciliationOperationContracts",
+  "description": [
+    "Exact typed operation inputs, results, transitions, and stable errors for evidence, match-first reconciliation, decisions, and coverage."
+  ],
+  "schema_def": [
+    "evidence.register input: kind, logical identity digest, optional opaque reference and content fingerprint, allowlisted observation; returns existing identical or newly created record; conflicting identity fails. evidence.get returns safe metadata, observation, links, and decisions. evidence.link-supporting appends a non-confirming link. reconciliation.candidates input evidenceId and policy version; returns projection and no mutation. reconciliation.apply input: evidenceId, observation fingerprint, disposition match_existing or create_statement_only or record_ambiguous or record_exception, selected candidateTransactionId for match or candidateTransactionIds for ambiguity, optional typed statementOnlyFact containing accountId, exact amount, currency, dates and owner-safe description, policy version, exact basis, reason. statementOnlyFact is required only for create_statement_only; its account, amount, currency, and dates must equal the registered observation. Apply transactionally revalidates and commits one outcome; statement-only creation also atomically initializes explicit unknown instrument and cardholder attribution and unassigned pool state. decision.get, confirm, reject, revoke, replace append attributable history. coverage.complete input statement scope and expected evidence set; returns exact reconciliation batch summary and exception list including prior transactions absent from statement; coverage.get returns history. Stable errors cover logical identity conflict, stale projection or policy, candidate drift, incompatible evidence or statement-only fact, ambiguity, review required, invalid transition, incomplete coverage, and replay conflict. Automatic match and statement-only are disabled until OQ-LEDGER-13 validates policy."
+  ],
+  "created_at": "2026-07-20T18:15:25.2586300+00:00",
+  "links": [
+    {
+      "id": "01KY0C37TV7ZN4APNKYXY8DQND",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-RECONCILIATION-CONTRACT",
+      "rel": "supports",
+      "created_at": "2026-07-20T18:20:00.7321062+00:00"
+    },
+    {
+      "id": "01KY0C3A77EZ70TXT2RDYK1DW5",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-EVIDENCE-RECORD-LINK",
+      "rel": "references",
+      "created_at": "2026-07-20T18:20:03.1766128+00:00"
+    },
+    {
+      "id": "01KY0C391BRNX4K1N91888MJH4",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "rel": "references",
+      "created_at": "2026-07-20T18:20:01.9645822+00:00"
+    },
+    {
+      "id": "01KY0C35JY6NN0T8KAM1PREFQ1",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-RECONCILIATION-COVERAGE",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:58.4310169+00:00"
+    },
+    {
+      "id": "01KY0C33BB1HDA55A4EW06WDAW",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:56.1405183+00:00"
+    },
+    {
+      "id": "01KY0C2Z4SATKX1TWD2P7Q4SKT",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-RECONCILIATION-PROJECTION",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:51.8345126+00:00"
+    },
+    {
+      "id": "01KY0C3160Q5NP41A4JD0EWS2P",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-STATEMENT-RECONCILIATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:53.9214433+00:00"
+    },
+    {
+      "id": "01KY0BTTTBZA4011N9C3CX8SMH",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-13",
+      "rel": "see-also",
+      "created_at": "2026-07-20T18:15:25.2591690+00:00"
+    },
+    {
+      "id": "01KY0C42Y22ZDKZGGBTH7JW32D",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-RECONCILIATION-POLICY-MATRIX",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T18:20:28.4828807+00:00"
+    }
+  ]
+}

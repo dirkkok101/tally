@@ -2,9 +2,9 @@
   "id": "01KXSWZ572AD1TDF8HEXN7Y9BZ",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "FA-LEDGER-TRANSACTIONS-ALLOCATIONS",
-  "name": "Transactions and Allocations",
+  "name": "Transactions, Evidence, and Attribution",
   "description": [
-    "Owns immutable transaction facts, attributable void/supersession, and one-active-category allocation history."
+    "Owns immutable canonical transaction facts, generic privacy-conscious evidence, transaction correction history, category allocation, payment attribution, pool assignment, and explicit unknown or unassigned states."
   ],
   "created_at": "2026-07-18T06:00:11.7475631+00:00",
   "links": [
@@ -21,6 +21,13 @@
       "target": "DD-LEDGER-IMMUTABLE-HISTORY",
       "rel": "belongs_to",
       "created_at": "2026-07-18T06:10:02.2458033+00:00"
+    },
+    {
+      "id": "01KY0C3R47XR6D6KNSX9KAFNY8",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-EVIDENCE-RECORD-LINK",
+      "rel": "belongs-to",
+      "created_at": "2026-07-20T18:20:17.4162544+00:00"
     },
     {
       "id": "01KXSYN8Z8Y5M7KYN94BAWEA3G",

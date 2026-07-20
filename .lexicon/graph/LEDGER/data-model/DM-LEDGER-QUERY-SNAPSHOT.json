@@ -4,19 +4,10 @@
   "ref_code": "DM-LEDGER-QUERY-SNAPSHOT",
   "name": "QuerySnapshot",
   "description": [
-    "Expiry-bound derived cache that freezes actuals projection and totals across CLI processes."
+    "Ephemeral immutable actuals projection frozen across facts, evidence, reconciliation, payment attribution, pools, categories, and relationships."
   ],
   "schema_def": [
-    "query_snapshot",
-    "- id: random opaque 256-bit token hash, primary key",
-    "- contractVersion/schemaVersion/storeGenerationFingerprint",
-    "- canonicalFilterHash",
-    "- createdAt/expiresAt",
-    "- currencyCode and exact full-set totals: netAccountMovementMinor, externalSpendMinor, budgetActualMinor",
-    "query_snapshot_item",
-    "- snapshotId + ordinal, composite primary key",
-    "- complete immutable result projection required by later pages",
-    "Constraints: later page supplies cursor only; fixed effectiveDate DESC then transactionId DESC order; excluded from Durable Ledger State, backups, and restore; opportunistic expiry cleanup."
+    "query_snapshot: id, contractVersion, canonicalFilterHash, generationFingerprint, createdAt, expiresAt, exact full-set totals, exact requested groups. query_snapshot_item: snapshotId, ordinal, transaction projection including current category, pool or unassigned, instrument or unknown, cardholder or unknown, evidence kinds, reconciliation state, relationship state, and exact contributions. First page creates all rows under one BEGIN IMMEDIATE transaction before exposing a cursor; later pages are read-only. Order is effectiveDate descending then transactionId descending. Snapshot state is ephemeral, excluded from Durable Ledger State and backup, and may be cleaned opportunistically."
   ],
   "created_at": "2026-07-18T06:01:06.3529811+00:00",
   "links": [

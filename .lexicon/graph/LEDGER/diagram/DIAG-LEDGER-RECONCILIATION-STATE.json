@@ -1,0 +1,43 @@
+{
+  "id": "01KY0BX77NCQD92JX4PGQ6VSGK",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DIAG-LEDGER-RECONCILIATION-STATE",
+  "title": "Provider-neutral reconciliation lifecycle",
+  "diagram_type": "state",
+  "format": "mermaid",
+  "content": [
+    "stateDiagram-v2",
+    "  [*] --> RecordedUnreconciled: canonical fact recorded",
+    "  [*] --> StatementOnly: statement evidence creates fact",
+    "  RecordedUnreconciled --> StatementReconciled: validated deterministic match",
+    "  RecordedUnreconciled --> OwnerConfirmedMatch: explicit owner-confirmed match",
+    "  RecordedUnreconciled --> AmbiguousMatch: multiple or unsafe candidates",
+    "  RecordedUnreconciled --> ReconciliationException: incompatible or policy error",
+    "  RecordedUnreconciled --> RecordedAbsentFromStatement: completed scope has no confirming row",
+    "  AmbiguousMatch --> OwnerConfirmedMatch: owner confirms candidate",
+    "  AmbiguousMatch --> StatementOnly: owner confirms no prior fact",
+    "  AmbiguousMatch --> ReconciliationException: owner rejects candidates",
+    "  StatementReconciled --> RecordedUnreconciled: decision revoked",
+    "  OwnerConfirmedMatch --> RecordedUnreconciled: decision revoked",
+    "  StatementOnly --> ReconciliationException: decision replaced after correction",
+    "  RecordedAbsentFromStatement --> StatementReconciled: coverage or evidence corrected",
+    ""
+  ],
+  "created_at": "2026-07-20T18:16:43.5100293+00:00",
+  "links": [
+    {
+      "id": "01KY0C3ZX29SGEVPHSSVQPT6JD",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-RECONCILIATION-CONTRACT",
+      "rel": "supports",
+      "created_at": "2026-07-20T18:20:25.3797917+00:00"
+    },
+    {
+      "id": "01KY0CFXNJVPE28CCHGMVYAG08",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-RECONCILIATION",
+      "rel": "belongs_to",
+      "created_at": "2026-07-20T18:26:56.3072074+00:00"
+    }
+  ]
+}

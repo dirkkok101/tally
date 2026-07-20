@@ -1,0 +1,29 @@
+{
+  "id": "01KY0BTRE9PBBFAS2M7GP801QM",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DM-LEDGER-PAYMENT-ATTRIBUTION",
+  "name": "PaymentInstrumentCardholderAndAttribution",
+  "description": [
+    "Stable local provider-neutral payment identities and append-only per-transaction attribution."
+  ],
+  "schema_def": [
+    "payment_instrument: id ULID, owner label, optional accountId, optional masked suffix, active lifecycle; full provider identifiers prohibited. cardholder: id ULID, owner label, active lifecycle. transaction_attribution_event: id, transactionId, instrument state known with instrumentId or explicit unknown, cardholder state known with cardholderId or explicit unknown, action initialize, assign or correct, optional previousEventId, required correction reason, actor, trusted time. Transaction creation atomically appends one initialize event with independent unknown states. Exactly one active attribution projection exists per transaction; instrument and cardholder knowledge are independent; no inference from provider wording, account, pool, category, description, or evidence kind."
+  ],
+  "created_at": "2026-07-20T18:15:22.8260011+00:00",
+  "links": [
+    {
+      "id": "01KY0C3HNXGR0AEPX46YGRERS9",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-DIMENSIONAL-ATTRIBUTION",
+      "rel": "supports",
+      "created_at": "2026-07-20T18:20:10.8143435+00:00"
+    },
+    {
+      "id": "01KY0C3BAD0MKXFTVWTZCQJ32F",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-PAYMENT-ATTRIBUTION",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:20:04.3023413+00:00"
+    }
+  ]
+}

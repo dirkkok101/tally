@@ -2,24 +2,24 @@
   "id": "01KXSWZ7W0H8923EY3CDX34QY5",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "DD-LEDGER-SNAPSHOT-ACTUALS",
-  "title": "Materialized cross-process query snapshots",
+  "title": "Materialized coherent snapshots for dimensional actuals",
   "description": [
-    "Preserve stable pages and full-set totals across separate CLI invocations."
+    "Guarantee stable cross-process pagination and exact totals over mutable ledger projections."
   ],
   "decision": [
-    "The first actuals page validates input, acquires the single-writer lock, and runs one SQLite BEGIN IMMEDIATE transaction. Inside that transaction it resolves active financial state, computes the complete ordered projection and full-set exact totals, and inserts ephemeral QuerySnapshot and QuerySnapshotItem rows. It commits before returning an opaque random cursor and expiry. Busy before transaction acquisition returns LEDGER-SNAPSHOT-BUSY; rollback, cancellation, or crash before commit returns no cursor and leaves no partial snapshot. Later pages accept only the cursor and use read-only connections to fixed ordinals. Cursor version, contract version, filter hash, expiry, and store-generation fingerprint are validated. Cleanup is opportunistic; snapshots are excluded from backup and Durable Ledger State and do not consume mutation idempotency keys."
+    "Materialize the first page and full-set totals under one immediate transaction from facts, relationships, evidence, reconciliation, category, pool, instrument, and cardholder state. Order by Effective Date then transaction ULID. Later pages read only the opaque snapshot cursor. Exclude snapshots from Durable Ledger State and backups."
   ],
   "rationale": [
-    "A SQLite read transaction cannot persist a snapshot and cannot span CLI processes. A separate read followed by write would race with another mutation. One BEGIN IMMEDIATE transaction serializes the coherent read, exact calculation, and ephemeral materialization under the supported single-writer model. Persisting only IDs would still allow later pages to change after corrections; persisting the returned projection and totals freezes the economic result at personal scale."
+    "Process invocations cannot hold database read transactions across pages. A committed ephemeral snapshot preserves one coherent result and exact pool/category totals."
   ],
   "alternatives": [
-    "A: offset pagination over live rows — rejected as unstable. B: cursor holding only last sort key — rejected after writes. C: long-running daemon transaction — prohibited. D: read transaction followed by snapshot write — rejected because state can change between phases. E: one BEGIN IMMEDIATE transaction that reads, computes, and materializes — chosen."
+    "Rejected offset pagination over live rows, long-lived cross-process transactions, caller-maintained cursors, and pre-aggregated budget-owned totals."
   ],
   "consequences": [
-    "The first actuals page briefly takes the writer lock and may return LEDGER-SNAPSHOT-BUSY under contention; later pages are read-only. Snapshots consume temporary local space and expire after a documented window. No cursor is emitted until commit. Changed filters with a cursor are schema errors. Ordering is effective-date descending then transaction ULID descending. Expired, missing, incompatible, or stale-generation cursors return stable errors."
+    "First-page queries briefly use the single writer and may return busy. Reconciliation alone cannot change monetary totals, while dimension corrections change groups but not the all-up exact total."
   ],
   "status_notes": [
-    "Accepted. Planned implementation area: src/Tally/Features/Ledger/Actuals."
+    "Expanded snapshot projection to reconciliation and independent financial dimensions."
   ],
   "status": "accepted",
   "created_at": "2026-07-18T06:00:14.4650351+00:00",
@@ -39,11 +39,25 @@
       "created_at": "2026-07-18T06:07:57.8552991+00:00"
     },
     {
+      "id": "01KY0C2M0D27DFHYWZ2J5M73N6",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-POOL-ASSIGNMENT",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:40.4305039+00:00"
+    },
+    {
       "id": "01KXSXDCTRS0NTZYBF239CT94E",
       "target_type": "requirement",
       "target": "FR-LEDGER-SNAPSHOT-PAGINATION",
       "rel": "implements",
       "created_at": "2026-07-18T06:07:58.2972203+00:00"
+    },
+    {
+      "id": "01KY0C2N4VFFBWWGKPTJNPSPYR",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:19:41.5958950+00:00"
     },
     {
       "id": "01KXSXDD8XKCK2XKT3RYRXS3Z3",

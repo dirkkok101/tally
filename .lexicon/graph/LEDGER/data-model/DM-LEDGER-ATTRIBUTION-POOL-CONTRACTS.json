@@ -1,0 +1,43 @@
+{
+  "id": "01KY0BTVZY98NRVEK3TRX5A0D0",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS",
+  "name": "PaymentAttributionAndPoolOperationContracts",
+  "description": [
+    "Exact typed operation contracts for instrument, cardholder, pool catalogues and per-transaction assignment corrections."
+  ],
+  "schema_def": [
+    "instrument, cardholder, and pool create/get/list/rename/archive/reactivate use stable local IDs, owner labels, attributable lifecycle, idempotency, and RESTRICT history. Instrument accepts optional account association and masked suffix only. transaction.attribution.assign or correct sets instrument and cardholder independently to known IDs or explicit unknown and appends history. transaction.pool.assign or correct replaces explicit unassigned or one active pool under the v1 assumption and appends history. Stable errors cover missing or archived catalogue items, inactive transaction, same-as-active correction, absent active projection, masked identifier validation, and pool-cardinality violation. No operation accepts provider wording or transport metadata."
+  ],
+  "created_at": "2026-07-20T18:15:26.4637071+00:00",
+  "links": [
+    {
+      "id": "01KY0C3KSJBHSK5MHGNRTZ3VMP",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-DIMENSIONAL-ATTRIBUTION",
+      "rel": "supports",
+      "created_at": "2026-07-20T18:20:12.9797559+00:00"
+    },
+    {
+      "id": "01KY0C3EJX77WCPEPAZG6FEMRB",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-PAYMENT-ATTRIBUTION",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:20:07.6462565+00:00"
+    },
+    {
+      "id": "01KY0C3GNNDBXMTAS6Q2KGHJM5",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-POOL-ASSIGNMENT",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:20:09.7818831+00:00"
+    },
+    {
+      "id": "01KY0C3FN5D5RRP3QF326JWG75",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SPEND-POOL-CATALOGUE",
+      "rel": "implements",
+      "created_at": "2026-07-20T18:20:08.7423058+00:00"
+    }
+  ]
+}

@@ -16,6 +16,13 @@
   "created_at": "2026-07-20T17:45:58.3497514+00:00",
   "links": [
     {
+      "id": "01KY0CG1KJJPR6HAQT4JSZH9SH",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-RECONCILIATION",
+      "rel": "belongs_to",
+      "created_at": "2026-07-20T18:27:00.3389723+00:00"
+    },
+    {
       "id": "01KY0A60XZZ0GSD06M391EH36E",
       "target_type": "requirement",
       "target": "FR-LEDGER-STATEMENT-RECONCILIATION",

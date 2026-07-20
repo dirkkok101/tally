@@ -4,7 +4,7 @@
   "ref_code": "FA-LEDGER-RECOVERY-STORAGE",
   "name": "Recovery and Storage",
   "description": [
-    "Owns embedded persistence, artifact protection, backups, separate-target restore, storage evolution, and authoritative-store activation."
+    "Owns raw SQLite, owner-private generations, permissions, migrations, backups, complete invariant manifests, candidate validation, restore, and atomic activation for every durable Ledger type."
   ],
   "created_at": "2026-07-18T06:00:12.4401621+00:00",
   "links": [

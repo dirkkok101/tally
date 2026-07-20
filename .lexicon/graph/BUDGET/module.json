@@ -59,14 +59,14 @@
   "created_at": "2026-07-17T13:40:10.0775382+00:00",
   "dependencies": [
     {
-      "id": "01KXR4X41KDVG8BANG9QS5FEGD",
+      "id": "01KY0C60J9JA2F9QPGNJQ1HZZ6",
       "project_id": "01KXR2C3JQBT2WPM9JCSA9JMXD",
       "target": "LEDGER",
       "kind": "hard",
       "rationale": [
-        "Monthly category budgets require the ledger's shared spend categories and transaction actuals."
+        "Pool-aware budget positions require LEDGER shared spend pools, categories, exact transaction actuals, and correction history."
       ],
-      "created_at": "2026-07-17T13:40:24.7567728+00:00"
+      "created_at": "2026-07-20T18:21:31.5940006+00:00"
     }
   ]
 }

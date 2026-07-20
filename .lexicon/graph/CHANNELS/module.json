@@ -13,27 +13,5 @@
   "why_now": [
     "The boundary must be explicit now so CLI design remains channel-neutral while human interaction is deferred."
   ],
-  "created_at": "2026-07-17T13:40:10.4208479+00:00",
-  "dependencies": [
-    {
-      "id": "01KXR4X53V05WBVFV42HYNCEPV",
-      "project_id": "01KXR2C3JQBT2WPM9JCSA9JMXD",
-      "target": "INSIGHTS",
-      "kind": "hard",
-      "rationale": [
-        "Human-facing channels primarily deliver generated insights and reports."
-      ],
-      "created_at": "2026-07-17T13:40:25.8525007+00:00"
-    },
-    {
-      "id": "01KXR4X5C7G4ZZW9JJKNNSPT8C",
-      "project_id": "01KXR2C3JQBT2WPM9JCSA9JMXD",
-      "target": "LEDGER",
-      "kind": "soft",
-      "rationale": [
-        "A future channel may expose entry and query commands, but the initial channel can remain report-only."
-      ],
-      "created_at": "2026-07-17T13:40:26.1198869+00:00"
-    }
-  ]
+  "created_at": "2026-07-17T13:40:10.4208479+00:00"
 }

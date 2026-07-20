@@ -4,49 +4,10 @@
   "ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
   "name": "OperationDescriptorAndEnvelope",
   "description": [
-    "The authoritative public operation registry, common envelopes, wire primitives, exit categories, and stable cross-operation errors."
+    "Authoritative provider-neutral operation registry, common envelopes, wire primitives, exit categories, and stable cross-operation errors."
   ],
   "schema_def": [
-    "operation_descriptor",
-    "- operationId: stable namespaced text",
-    "- cliPath: stable token sequence",
-    "- contractVersion range",
-    "- kind: enum {query, mutation}",
-    "- request/result concrete source-generated JSON types",
-    "- errors: complete stable code/category/exit set for the operation",
-    "- help summary and examples",
-    "- handler factory registered explicitly",
-    "",
-    "request_envelope",
-    "- contractVersion: required supported version",
-    "- actor: required {kind: agent|human|system, label: non-empty safe text, runId?: text}",
-    "- input: required operation-specific object",
-    "- idempotencyKey: required for mutations, supplied by --idempotency-key and excluded from JSON input",
-    "",
-    "result_envelope",
-    "- contractVersion, operationId, outcome",
-    "- success: result",
-    "- error: {code, category, safeMessage, fields?: [{path, code}]}",
-    "Constraints: one JSON object on stdout; diagnostics on stderr only; unknown fields rejected; no database types, paths, SQL, exception text, financial payloads, or secrets in errors. Mutation replay returns the stored byte-equivalent logical result.",
-    "",
-    "common stable errors and exits",
-    "- TALLY-USAGE-001 malformed JSON, missing input, unknown option: usage, exit 2",
-    "- TALLY-CONTRACT-001 unknown field or schema violation: usage, exit 2",
-    "- TALLY-VALIDATION-001 invalid field value: validation, exit 3",
-    "- TALLY-CONTRACT-002 unsupported contract version: incompatible, exit 7",
-    "- LEDGER-IDEMPOTENCY-001 same key with different operation or normalized input: conflict, exit 5",
-    "- LEDGER-STORAGE-001 writer/store busy before transaction acquisition: conflict, exit 5",
-    "- LEDGER-STORAGE-002 newer or incompatible storage generation: incompatible, exit 7",
-    "- LEDGER-INTEGRITY-001 integrity invariant failed: integrity, exit 8",
-    "- LEDGER-HOST-001 permission, protection, space, or host-resource failure: host, exit 9",
-    "- TALLY-INTERNAL-001 sanitized unexpected failure with correlation reference: internal, exit 10",
-    "",
-    "wire primitives",
-    "- Money: canonical signed two-decimal string plus currencyCode=ZAR; never JSON number",
-    "- LocalDate: yyyy-MM-dd",
-    "- identifiers: opaque 26-character ULID strings",
-    "- actor and immutable outcome are persisted so replay is stable",
-    "Descriptor data is the sole generator for help, schema, dispatch, conformance tests, and skill manifests."
+    "operation_descriptor: operationId, cliPath, supported contractVersion range, query or mutation kind, concrete source-generated request/result types, complete stable errors, help examples, explicit handler factory. request_envelope: contractVersion, actor kind and safe label with optional runId, typed input, mutation idempotency key outside JSON input. result_envelope: contractVersion, operationId, outcome and success result or error code, category, safe message, optional field codes. Wire: Money canonical decimal string with ZAR, LocalDate yyyy-MM-dd, opaque ULIDs, closed enums. Exits: 0 success; 2 usage or schema; 3 validation; 4 not found; 5 conflict or busy; 6 lifecycle or transition; 7 incompatibility; 8 integrity, ambiguity, review, backup, candidate, or activation; 9 host; 10 sanitized internal. Unknown fields rejected. Public schema and diagnostics prohibit database internals, paths, SQL, exception text, arbitrary metadata, raw source payloads, AgentMail, MIME, mailbox, sender, recipient, WhatsApp, delivery, retry, credentials, and unmasked identifiers. Registry solely generates help, schema, dispatch, conformance tests, and optional guidance manifests."
   ],
   "created_at": "2026-07-18T06:01:07.1133942+00:00",
   "links": [
@@ -77,6 +38,13 @@
       "target": "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE",
       "rel": "validated-by",
       "created_at": "2026-07-18T06:30:07.6489929+00:00"
+    },
+    {
+      "id": "01KY0C481FTXMDDNDS4NY7T4ZK",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-PROVIDER-NEUTRAL-SCHEMA-SCAN",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T18:20:33.7123079+00:00"
     }
   ]
 }

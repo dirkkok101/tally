@@ -1,0 +1,33 @@
+{
+  "id": "01KY0BYAP4E4Z749W3JRAZTGNH",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "TC-LEDGER-DIMENSIONAL-ACTUALS-PROPERTY",
+  "slug": "dimensional-actuals-property",
+  "title": "Prove exact pool and category actuals across corrections",
+  "level": "unit",
+  "surface": "service",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Generators can create exact transaction, refund, reversal, transfer, supersession, category, pool, instrument, cardholder, and reconciliation histories.",
+  "steps": "Generate and shrink histories; query all-up, pool, category, and pool-by-category projections before and after corrections and reconciliation.",
+  "expected": "All grouped minor-unit sums equal all-up totals; transfers contribute zero spend; refunds follow explicit current dimensions; reconciliation alone never changes finance totals; unknown and unassigned buckets lose no transaction.",
+  "owner": "LEDGER",
+  "created_at": "2026-07-20T18:17:19.8131506+00:00",
+  "links": [
+    {
+      "id": "01KY0CG8X46H0NJ6J4V7D8FVTT",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-RELATIONSHIPS-ACTUALS",
+      "rel": "belongs_to",
+      "created_at": "2026-07-20T18:27:07.8134081+00:00"
+    },
+    {
+      "id": "01KY0C4B56NC508TQ234Z4WVMC",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC",
+      "rel": "validates",
+      "created_at": "2026-07-20T18:20:36.9032783+00:00"
+    }
+  ]
+}
