@@ -17,7 +17,7 @@
     "compare recorded month-to-date spend with one transparent plan-relative baseline"
   ],
   "story_so_that": [
-    "pace is reproducible and never mistaken for a forecast"
+    "pace is reproducible and never mistaken for a Forecast"
   ],
   "acceptance_criteria": [
     "Given a started Budget Period with a plan, when a Linear Pace Baseline is calculated, then elapsed calendar days include the As-of local date and total calendar days equal the complete Budget Period length.",

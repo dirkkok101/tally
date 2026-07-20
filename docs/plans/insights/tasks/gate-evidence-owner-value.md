@@ -51,7 +51,7 @@ Private aggregate evidence proves exact metrics, Linear Pace, explanations, and 
 - Do NOT continue to retained-state implementation when the monitored owner-value criterion fails or remains unevidenced.
 - Do NOT cherry-pick cases, weaken canaries, infer owner acceptance, fabricate representative data, or replace the real compiler with a second evaluator.
 - Do NOT commit the private manifest, source names, paths, values, merchant text, expected rows, report bodies, or raw BudgetPosition comparison.
-- Do NOT activate deferred Forecast, Trend, Anomaly, or Attention scope to manufacture value.
+- Do NOT activate deferred Forecast, Trend, Anomaly, or Attention Item scope to manufacture value.
 
 ### Expected Outputs
 

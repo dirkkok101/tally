@@ -16,7 +16,7 @@ Create versioned requests, results, stable errors, source-generated JSON metadat
 
 ## Objective
 
-The shared registry can describe every INSIGHTS operation and policy without reading financial or retained data.
+The shared registry can describe every Public INSIGHTS Operation and policy without reading financial or retained data.
 
 ## References
 
@@ -24,10 +24,10 @@ The shared registry can describe every INSIGHTS operation and policy without rea
 |---|---|---|---|
 | ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning | `adr` | `governed-by` | `true` |
 | DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit INSIGHTS operations from one registry | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry | `design_decision` | `governed-by` | `true` |
 | DM-INSIGHTS-OPERATION-CONTRACTS: InsightsOperationContracts | `data_model` | `touches` | `true` |
-| FR-INSIGHTS-CONTRACT-DISCOVERY: Discover the INSIGHTS operation contract | `requirement` | `implements` | `true` |
-| FR-INSIGHTS-STRUCTURED-INVOCATION: Invoke INSIGHTS operations non-interactively | `requirement` | `implements` | `true` |
+| FR-INSIGHTS-CONTRACT-DISCOVERY: Discover the Public INSIGHTS Operation contract | `requirement` | `implements` | `true` |
+| FR-INSIGHTS-STRUCTURED-INVOCATION: Invoke Public INSIGHTS Operations non-interactively | `requirement` | `implements` | `true` |
 | TASK-LEDGER-CORE-PROCESS-CONTRACT: Build the self-contained process and operation contract | `task` | `blocked-by` | `true` |
 | TC-INSIGHTS-CONTRACT-DISCOVERY: Verify INSIGHTS contract discovery | `test_case` | `verifies` | `true` |
 
@@ -46,7 +46,7 @@ The shared registry can describe every INSIGHTS operation and policy without rea
 - Every descriptor publishes deterministic request/result fingerprints, compatibility range, authority, mutability, idempotency requirement, released limits, stable errors, and exit categories without reading a store or producer.
 - Retain, Restate, Delete, Backup, and Restore require actor attribution and idempotency; Generate, Explain, Get, List, Status, and Verify are read-only; unsupported versions and unknown fields fail before financial reads.
 - Complex input is accepted only through stdin or an approved owner-only file boundary, exactly one business envelope uses stdout, and diagnostics are metadata-only.
-- The released policy catalogue marks Forecast, Trend, Anomaly, and Attention as Deferred and exposes no executable formula, threshold, severity, or mutation operation for them.
+- The released policy catalogue marks Forecast, Trend, Anomaly, and Attention Item as Deferred and exposes no executable formula, threshold, severity, or mutation operation for them.
 
 ### Failure Criteria
 
@@ -121,9 +121,9 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](../tasks/lifecycle-contract-models.md): The eleven public operations include retained-history recovery status and private-receipt contract types.
 - `governed-by` -> ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning
 - `governed-by` -> DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries
-- `governed-by` -> DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit INSIGHTS operations from one registry
-- `implements` -> FR-INSIGHTS-CONTRACT-DISCOVERY: Discover the INSIGHTS operation contract
-- `implements` -> FR-INSIGHTS-STRUCTURED-INVOCATION: Invoke INSIGHTS operations non-interactively
+- `governed-by` -> DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry
+- `implements` -> FR-INSIGHTS-CONTRACT-DISCOVERY: Discover the Public INSIGHTS Operation contract
+- `implements` -> FR-INSIGHTS-STRUCTURED-INVOCATION: Invoke Public INSIGHTS Operations non-interactively
 - `touches` -> DM-INSIGHTS-OPERATION-CONTRACTS: InsightsOperationContracts
 - `verifies` -> TC-INSIGHTS-CONTRACT-DISCOVERY: Verify INSIGHTS contract discovery
 

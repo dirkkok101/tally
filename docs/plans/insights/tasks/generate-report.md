@@ -23,11 +23,11 @@ GenerateInsightReportQuery returns one bounded complete report from one frozen i
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit INSIGHTS operations from one registry | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic report compiler over pure policies | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies | `design_decision` | `governed-by` | `true` |
 | DM-INSIGHTS-OPERATION-CONTRACTS: InsightsOperationContracts | `data_model` | `touches` | `true` |
 | FR-INSIGHTS-REPORT-GENERATION: Generate one deterministic Insight Report | `requirement` | `implements` | `true` |
-| FR-INSIGHTS-STRUCTURED-INVOCATION: Invoke INSIGHTS operations non-interactively | `requirement` | `implements` | `true` |
+| FR-INSIGHTS-STRUCTURED-INVOCATION: Invoke Public INSIGHTS Operations non-interactively | `requirement` | `implements` | `true` |
 | NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity | `nfr` | `satisfies` | `true` |
 | TC-INSIGHTS-REPORT-GENERATION-CONTRACT: Verify deterministic Insight Report generation | `test_case` | `verifies` | `true` |
 
@@ -107,10 +107,10 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): The query implements a published request/result and stable error contract.
 - `depends-on:compile` -> [TASK-INSIGHTS-REPORT-COMPILER](../tasks/report-compiler.md): Generation delegates all analytical semantics to the compiler.
 - `governed-by` -> DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries
-- `governed-by` -> DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit INSIGHTS operations from one registry
-- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic report compiler over pure policies
+- `governed-by` -> DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry
+- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies
 - `implements` -> FR-INSIGHTS-REPORT-GENERATION: Generate one deterministic Insight Report
-- `implements` -> FR-INSIGHTS-STRUCTURED-INVOCATION: Invoke INSIGHTS operations non-interactively
+- `implements` -> FR-INSIGHTS-STRUCTURED-INVOCATION: Invoke Public INSIGHTS Operations non-interactively
 - `satisfies` -> NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity
 - `touches` -> DM-INSIGHTS-OPERATION-CONTRACTS: InsightsOperationContracts
 - `verifies` -> TC-INSIGHTS-REPORT-GENERATION-CONTRACT: Verify deterministic Insight Report generation

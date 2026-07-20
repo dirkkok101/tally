@@ -22,7 +22,7 @@ UC-INSIGHTS-003 produces exactly one immutable snapshot per successful logical r
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only snapshots with replay-safe restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
 | DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads | `design_decision` | `governed-by` | `true` |
 | TC-INSIGHTS-REPORT-HISTORY-STATUS: Verify metadata-first report history and status | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-REPORT-RETENTION-IDEMPOTENCY: Verify retained generation and idempotent replay | `test_case` | `verifies` | `true` |
@@ -96,7 +96,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 
 - `covers` -> UC-INSIGHTS-003: Retain and retrieve a Report Snapshot
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC-003 invokes the complete published retained-report surface.
-- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only snapshots with replay-safe restatement and leaf deletion
+- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion
 - `governed-by` -> DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads
 - `verifies` -> TC-INSIGHTS-REPORT-HISTORY-STATUS: Verify metadata-first report history and status
 - `verifies` -> TC-INSIGHTS-REPORT-RETENTION-IDEMPOTENCY: Verify retained generation and idempotent replay

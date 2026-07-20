@@ -23,7 +23,7 @@ Every accepted evidence set proves compatible versions, complete dated membershi
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic report compiler over pure policies | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies | `design_decision` | `governed-by` | `true` |
 | DIAG-INSIGHTS-GENERATE-SEQUENCE: Coherent deterministic report generation | `design_diagram` | `touches` | `false` |
 | DM-INSIGHTS-COHERENT-EVIDENCE: BoundInsightEvidence | `data_model` | `touches` | `true` |
 | FA-INSIGHTS-EVIDENCE-ANALYSIS: Evidence and Analysis | `feature_area` | `touches` | `true` |
@@ -105,7 +105,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md): The binder produces BoundInsightEvidence and stable state records.
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE](../tasks/gate-int-budget-evidence.md): The binder is written only against the proven public producer contract.
 - `governed-by` -> DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation
-- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic report compiler over pure policies
+- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies
 - `implements` -> FR-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Bind one coherent public evidence set
 - `satisfies` -> NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity
 - `touches` -> DIAG-INSIGHTS-GENERATE-SEQUENCE: Coherent deterministic report generation

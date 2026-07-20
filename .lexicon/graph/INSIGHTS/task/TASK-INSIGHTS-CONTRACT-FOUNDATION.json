@@ -9,7 +9,7 @@
     "Create versioned requests, results, stable errors, source-generated JSON metadata, eleven descriptors, and the pure contract mapper over the shared Tally operation abstractions."
   ],
   "objective": [
-    "The shared registry can describe every INSIGHTS operation and policy without reading financial or retained data."
+    "The shared registry can describe every Public INSIGHTS Operation and policy without reading financial or retained data."
   ],
   "planning_state": "planned",
   "priority": 0,
@@ -204,54 +204,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXZFS9REPH9B1ZS8D54B04QB",
+      "id": "01KXZRM8NAC28B0JHMKKD68BQ5",
       "kind": "acceptance_check",
       "text": [
         "InsightsOperationModule contains exactly insights.report.generate, insights.report.explain, insights.report.get, insights.report.list, insights.report.retain, insights.report.restate, insights.report.delete, insights.status.get, insights.backup.create, insights.backup.verify, and insights.restore.activate in canonical verb order; Discover remains shared system.schema.list/show."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+      "created_at": "2026-07-20T12:39:47.1143172+00:00"
     },
     {
-      "id": "01KXZFS9RE4E66TTJ4FK1FQ32Z",
+      "id": "01KXZRM8NB74D3NABDQV8SS5K0",
       "kind": "acceptance_check",
       "text": [
         "Every descriptor publishes deterministic request/result fingerprints, compatibility range, authority, mutability, idempotency requirement, released limits, stable errors, and exit categories without reading a store or producer."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+      "created_at": "2026-07-20T12:39:47.1143172+00:00"
     },
     {
-      "id": "01KXZFS9RE8DJE3WZBFY67RVT7",
+      "id": "01KXZRM8NBM1M3S77HD2H849YD",
       "kind": "acceptance_check",
       "text": [
         "Retain, Restate, Delete, Backup, and Restore require actor attribution and idempotency; Generate, Explain, Get, List, Status, and Verify are read-only; unsupported versions and unknown fields fail before financial reads."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+      "created_at": "2026-07-20T12:39:47.1143172+00:00"
     },
     {
-      "id": "01KXZFS9REC057T4YEKDJMAMN4",
+      "id": "01KXZRM8NBZPEWR7YSS7YX611T",
       "kind": "acceptance_check",
       "text": [
         "Complex input is accepted only through stdin or an approved owner-only file boundary, exactly one business envelope uses stdout, and diagnostics are metadata-only."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+      "created_at": "2026-07-20T12:39:47.1143172+00:00"
     },
     {
-      "id": "01KXZFS9RE5F7CDN7MTZAAW6GP",
+      "id": "01KXZRM8NBP193BZ28CRTT5Z00",
       "kind": "acceptance_check",
       "text": [
-        "The released policy catalogue marks Forecast, Trend, Anomaly, and Attention as Deferred and exposes no executable formula, threshold, severity, or mutation operation for them."
+        "The released policy catalogue marks Forecast, Trend, Anomaly, and Attention Item as Deferred and exposes no executable formula, threshold, severity, or mutation operation for them."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+      "created_at": "2026-07-20T12:39:47.1143172+00:00"
     },
     {
       "id": "01KXZFS9RFJZNRE5SXYX2PEXKB",

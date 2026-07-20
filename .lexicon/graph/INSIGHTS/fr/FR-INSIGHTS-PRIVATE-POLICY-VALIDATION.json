@@ -23,7 +23,7 @@
     "Given a candidate policy set and owner-only evaluation manifest, when validation starts, then candidate versions, expected-state fingerprint, corpus fingerprint, producer contract versions, window policy, and evaluation-tool version are recorded.",
     "Given a completed validation run, when its result is returned, then every manifest case is accounted for as supported, unavailable, insufficient, correct signal, incorrect signal, correct severity, false severity, or disclosure-canary outcome.",
     "Given sparse, zero, recurring, front-loaded, irregular, refund-heavy, plan-change, category-lifecycle, classification-gap, and correction cases, when required corpus coverage is checked, then every required shape is present or validation fails before policy activation.",
-    "Given any false high-severity Attention Item, when candidate activation is evaluated, then the Attention policy is rejected.",
+    "Given any false high-severity Attention Item, when candidate activation is evaluated, then the Attention Item policy is rejected.",
     "Given a candidate Forecast, Trend, or Anomaly without a deterministic formula, explicit comparable baseline, minimum evidence rule, limitations, and named unavailable state, when activation is evaluated, then that signal policy is rejected.",
     "Given a candidate report shape that the owner does not accept as improving a named decision over raw Budget Position inspection, when the plan gate is evaluated, then the do-less kill criterion is reported as triggered.",
     "Given an unavailable private manifest, when existing released policies are used, then ordinary report generation may continue with their unchanged versions.",

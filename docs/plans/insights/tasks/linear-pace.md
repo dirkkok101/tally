@@ -22,7 +22,7 @@ LinearPaceCalculator classifies supported plan evidence exactly, handles zero pl
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY: Frozen Johannesburg windows and exact Linear Pace | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY: Frozen Johannesburg Analysis Windows and exact Linear Pace | `design_decision` | `governed-by` | `true` |
 | DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation | `data_model` | `touches` | `true` |
 | FR-INSIGHTS-LINEAR-PACE: Calculate a transparent linear pace state | `requirement` | `implements` | `true` |
 | NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity | `nfr` | `satisfies` | `true` |
@@ -97,7 +97,7 @@ No bead references recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md): The calculator returns ExactRational and PaceResult contracts.
-- `governed-by` -> DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY: Frozen Johannesburg windows and exact Linear Pace
+- `governed-by` -> DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY: Frozen Johannesburg Analysis Windows and exact Linear Pace
 - `implements` -> FR-INSIGHTS-LINEAR-PACE: Calculate a transparent linear pace state
 - `satisfies` -> NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity
 - `touches` -> DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation

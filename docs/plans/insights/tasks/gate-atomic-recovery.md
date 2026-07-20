@@ -22,7 +22,7 @@ One reproducible fault matrix proves restart observes exactly one complete outco
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only snapshots with replay-safe restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
 | DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads | `design_decision` | `governed-by` | `true` |
 | DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation | `design_decision` | `governed-by` | `true` |
 | NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable | `nfr` | `satisfies` | `true` |
@@ -114,7 +114,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-INSIGHTS-RESTATE-REPORT](../tasks/restate-report.md): The gate injects Restatement failures.
 - `depends-on:compile` -> [TASK-INSIGHTS-RESTORE-ACTIVATE](../tasks/restore-activate.md): The gate injects candidate and activation failures.
 - `depends-on:compile` -> [TASK-INSIGHTS-RETAIN-REPORT](../tasks/retain-report.md): The gate injects Retain failures.
-- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only snapshots with replay-safe restatement and leaf deletion
+- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion
 - `governed-by` -> DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads
 - `governed-by` -> DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation
 - `satisfies` -> NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable

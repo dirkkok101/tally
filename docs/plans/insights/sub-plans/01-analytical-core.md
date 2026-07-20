@@ -17,8 +17,8 @@ Prove the risky coherence, time, arithmetic, report, and private-value bets befo
 |---|---|---|---:|
 | [TASK-INSIGHTS-BUDGET-EVIDENCE-CLIENT](../tasks/budget-evidence-client.md) | Consume the public BUDGET insight evidence operation | `planned` | 0 |
 | [TASK-INSIGHTS-COHERENT-EVIDENCE-BINDER](../tasks/coherent-evidence-binder.md) | Validate one coherent analytical evidence set | `planned` | 0 |
-| [TASK-INSIGHTS-ANALYSIS-WINDOWS](../tasks/analysis-windows.md) | Implement trusted Johannesburg analysis windows | `planned` | 0 |
-| [TASK-INSIGHTS-EXACT-METRICS](../tasks/exact-metrics.md) | Calculate exact window and category metrics | `planned` | 0 |
+| [TASK-INSIGHTS-ANALYSIS-WINDOWS](../tasks/analysis-windows.md) | Implement trusted Johannesburg Analysis Windows | `planned` | 0 |
+| [TASK-INSIGHTS-EXACT-METRICS](../tasks/exact-metrics.md) | Calculate exact Analysis Window and category metrics | `planned` | 0 |
 | [TASK-INSIGHTS-LINEAR-PACE](../tasks/linear-pace.md) | Implement exact Linear Pace classification | `planned` | 0 |
 | [TASK-INSIGHTS-EVIDENCE-EXPLANATION](../tasks/evidence-explanation.md) | Account for evidence states and render explanations | `planned` | 0 |
 | [TASK-INSIGHTS-REPORT-COMPILER](../tasks/report-compiler.md) | Compile one deterministic immutable Insight Report | `planned` | 0 |

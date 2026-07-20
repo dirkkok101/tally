@@ -2,7 +2,7 @@
   "id": "01KXZDV8R6ZB5P34NV10YZ03QA",
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "ref_code": "DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY",
-  "title": "Frozen Johannesburg windows and exact Linear Pace",
+  "title": "Frozen Johannesburg Analysis Windows and exact Linear Pace",
   "description": [
     "Make time membership and the active plan-relative signal reproducible without caller clocks, locale drift, floating point, or forecast language."
   ],

@@ -199,44 +199,44 @@
       "created_at": "2026-07-20T10:09:53.3580299+00:00"
     },
     {
-      "id": "01KXZG1SPTK5EN2Q3JK6PMGKTY",
+      "id": "01KXZRMAXKA6KXD5G65CWD2AZH",
       "kind": "failure_criterion",
       "text": [
         "Do NOT continue to retained-state implementation when the monitored owner-value criterion fails or remains unevidenced."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+      "created_at": "2026-07-20T12:39:49.4270660+00:00"
     },
     {
-      "id": "01KXZG1SPTXDDFRQYT0QM0TTWJ",
+      "id": "01KXZRMAXM53DGYXADZ2G5MT8W",
       "kind": "failure_criterion",
       "text": [
         "Do NOT cherry-pick cases, weaken canaries, infer owner acceptance, fabricate representative data, or replace the real compiler with a second evaluator."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+      "created_at": "2026-07-20T12:39:49.4270660+00:00"
     },
     {
-      "id": "01KXZG1SPT5KDGNYR2T7DDH1BR",
+      "id": "01KXZRMAXMET4PYQ12ZG1QDH20",
       "kind": "failure_criterion",
       "text": [
         "Do NOT commit the private manifest, source names, paths, values, merchant text, expected rows, report bodies, or raw BudgetPosition comparison."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+      "created_at": "2026-07-20T12:39:49.4270660+00:00"
     },
     {
-      "id": "01KXZG1SPTPN0ZHR76PGV2YD00",
+      "id": "01KXZRMAXMVBPXMHKV95DDXG2N",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT activate deferred Forecast, Trend, Anomaly, or Attention scope to manufacture value."
+        "Do NOT activate deferred Forecast, Trend, Anomaly, or Attention Item scope to manufacture value."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+      "created_at": "2026-07-20T12:39:49.4270660+00:00"
     },
     {
       "id": "01KXZG1SPT8TM87STBDNP6J90Q",

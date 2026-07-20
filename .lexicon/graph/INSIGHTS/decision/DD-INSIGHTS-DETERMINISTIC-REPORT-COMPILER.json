@@ -2,7 +2,7 @@
   "id": "01KXZDV7PWVK7MRJGDG42S1YE2",
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "ref_code": "DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER",
-  "title": "One deep deterministic report compiler over pure policies",
+  "title": "One deep deterministic Insight Report compiler over pure policies",
   "description": [
     "Turn one coherent public evidence result into a complete bounded report without leaking orchestration or analytical invariants to callers."
   ],
@@ -19,7 +19,7 @@
     "Every requested kind is accounted for exactly once in released catalogue order. Signal-local unavailable states preserve exact metrics; coherence, compatibility, integrity, completeness, and exact-arithmetic failures produce no report. The canonical semantic payload excludes the derived reportId and contentFingerprint fields; its SHA-256 becomes contentFingerprint and deterministically derives reportId, avoiding a self-referential hash. No raw source member or merchant text is retained in output beyond bounded derived evidence and stable references."
   ],
   "status_notes": [
-    "Accepted for active exact metrics and Linear Pace. Deferred Forecast, Trend, Anomaly, and Attention policies remain non-executable."
+    "Accepted for active exact metrics and Linear Pace. Deferred Forecast, Trend, Anomaly, and Attention Item policies remain non-executable."
   ],
   "status": "accepted",
   "metadata": "{\"expected_paths\":[\"src/Tally/Features/Insights/Reports/**\",\"src/Tally/Domain/Insights/Reports/**\",\"src/Tally/Domain/Insights/Policies/**\",\"tests/Tally.Tests/Insights/Reports/**\"]}",

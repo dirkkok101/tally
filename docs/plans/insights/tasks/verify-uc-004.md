@@ -22,7 +22,7 @@ UC-INSIGHTS-004 creates exactly one linked child only after a complete meaningfu
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only snapshots with replay-safe restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
 | TC-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Verify deterministic analytical integrity | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-RESTATEMENT-CONTRACT: Verify explicit Restatement and difference semantics | `test_case` | `verifies` | `true` |
 | UC-INSIGHTS-004: Restate and compare a corrected report | `use_case` | `covers` | `true` |
@@ -95,7 +95,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 
 - `covers` -> UC-INSIGHTS-004: Restate and compare a corrected report
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC-004 invokes the published Restate surface.
-- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only snapshots with replay-safe restatement and leaf deletion
+- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion
 - `verifies` -> TC-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Verify deterministic analytical integrity
 - `verifies` -> TC-INSIGHTS-RESTATEMENT-CONTRACT: Verify explicit Restatement and difference semantics
 

@@ -28,7 +28,7 @@ Every analytical INSIGHTS data shape is represented by one deterministic Native-
 | DM-INSIGHTS-COHERENT-EVIDENCE: BoundInsightEvidence | `data_model` | `touches` | `true` |
 | DM-INSIGHTS-INSIGHT-REPORT: InsightReport | `data_model` | `touches` | `true` |
 | DM-INSIGHTS-POLICY-CATALOGUE: InsightPolicyCatalogue | `data_model` | `touches` | `true` |
-| FR-INSIGHTS-CONTRACT-DISCOVERY: Discover the INSIGHTS operation contract | `requirement` | `implements` | `true` |
+| FR-INSIGHTS-CONTRACT-DISCOVERY: Discover the Public INSIGHTS Operation contract | `requirement` | `implements` | `true` |
 
 ## Dependencies
 
@@ -102,7 +102,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 
 - `governed-by` -> ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields
 - `governed-by` -> DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries
-- `implements` -> FR-INSIGHTS-CONTRACT-DISCOVERY: Discover the INSIGHTS operation contract
+- `implements` -> FR-INSIGHTS-CONTRACT-DISCOVERY: Discover the Public INSIGHTS Operation contract
 - `touches` -> DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation
 - `touches` -> DM-INSIGHTS-COHERENT-EVIDENCE: BoundInsightEvidence
 - `touches` -> DM-INSIGHTS-INSIGHT-REPORT: InsightReport

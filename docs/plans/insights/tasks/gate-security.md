@@ -22,7 +22,7 @@ Every public, private-validation, retained-state, failure, backup, restore, and 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit INSIGHTS operations from one registry | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry | `design_decision` | `governed-by` | `true` |
 | DD-INSIGHTS-PRIVATE-POLICY-VALIDATION: Ignored private corpus with privacy-safe release receipts | `design_decision` | `governed-by` | `true` |
 | DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads | `design_decision` | `governed-by` | `true` |
 | DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation | `design_decision` | `governed-by` | `true` |
@@ -110,7 +110,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md): Security covers all retained and recovery artifact/failure paths.
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE](../tasks/gate-evidence-owner-value.md): Security validates the private manifest and receipt boundary.
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Security validates the published operation and process boundary.
-- `governed-by` -> DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit INSIGHTS operations from one registry
+- `governed-by` -> DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry
 - `governed-by` -> DD-INSIGHTS-PRIVATE-POLICY-VALIDATION: Ignored private corpus with privacy-safe release receipts
 - `governed-by` -> DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads
 - `governed-by` -> DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation

@@ -2,7 +2,7 @@
   "id": "01KXZDV6MEQS0Z37RF512P0G8A",
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "ref_code": "DD-INSIGHTS-CLI-OPERATION-CONTRACT",
-  "title": "Eleven explicit INSIGHTS operations from one registry",
+  "title": "Eleven explicit Public INSIGHTS Operations from one registry",
   "description": [
     "Define one discoverable transport-neutral process contract for every accepted INSIGHTS verb without generic action unions or hidden authority."
   ],

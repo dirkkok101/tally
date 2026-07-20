@@ -22,8 +22,8 @@ RestateInsightReportCommand creates one immutable child only when provenance, ve
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic report compiler over pure policies | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only snapshots with replay-safe restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
 | DIAG-INSIGHTS-REPORT-STATE: Report retention and deletion lifecycle | `design_diagram` | `touches` | `true` |
 | DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion | `data_model` | `touches` | `true` |
 | FR-INSIGHTS-REPORT-RESTATEMENT: Create an explicit linked Restatement | `requirement` | `implements` | `true` |
@@ -45,7 +45,7 @@ RestateInsightReportCommand creates one immutable child only when provenance, ve
 
 - Restate requires one compatible existing predecessor plus actor, reason, normalized selectors, and idempotency; unknown, deleted, corrupt, or incompatible predecessors fail before producer access.
 - Exact replay resolves before current evidence; a new request generates through the existing Generate path and never changes the predecessor.
-- InsightReportDiffer compares source identities, policy versions, report schema, exact metrics, evidence states, explanations, and deferred attention collection in fixed section and item order.
+- InsightReportDiffer compares source identities, policy versions, report schema, exact metrics, evidence states, explanations, and deferred Attention Item collection in fixed section and item order.
 - Identical source identities, versions, schema, and semantic content return NoChange and store only the replay outcome; any changed source, version, schema, or content appends one child snapshot and one predecessor link atomically even when visible amounts remain equal.
 - Current-evidence, comparison, cancellation, or write failure returns no partial difference, snapshot, link, or successful outcome; same-key replay never creates a second Restatement.
 
@@ -110,8 +110,8 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-INSIGHTS-GENERATE-REPORT](../tasks/generate-report.md): Restate reuses the approved current report path.
 - `depends-on:compile` -> [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](../tasks/idempotency-executor.md): Restate resolves replay before current producer access.
 - `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md): Restate reads verified predecessors and atomically writes child and link rows.
-- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic report compiler over pure policies
-- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only snapshots with replay-safe restatement and leaf deletion
+- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies
+- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion
 - `implements` -> FR-INSIGHTS-REPORT-RESTATEMENT: Create an explicit linked Restatement
 - `satisfies` -> NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable
 - `touches` -> DIAG-INSIGHTS-REPORT-STATE: Report retention and deletion lifecycle

@@ -22,7 +22,7 @@ Every requested catalogue kind has exactly one evidence state and an explanation
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic report compiler over pure policies | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies | `design_decision` | `governed-by` | `true` |
 | DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation | `data_model` | `touches` | `true` |
 | FA-INSIGHTS-REPORT-EXPLANATION: Report and Explanation | `feature_area` | `touches` | `true` |
 | FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING: Account for every evidence state | `requirement` | `implements` | `true` |
@@ -104,7 +104,7 @@ No bead references recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md): Both policies produce the analytical evidence and explanation contracts.
-- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic report compiler over pure policies
+- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies
 - `implements` -> FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING: Account for every evidence state
 - `implements` -> FR-INSIGHTS-REPORT-EXPLANATION: Explain report evidence deterministically
 - `satisfies` -> NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity

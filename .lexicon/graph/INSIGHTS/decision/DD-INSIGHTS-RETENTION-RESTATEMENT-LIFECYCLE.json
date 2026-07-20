@@ -2,7 +2,7 @@
   "id": "01KXZDVAXWZ8DCJWSQJ1B3R2DP",
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "ref_code": "DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE",
-  "title": "Append-only snapshots with replay-safe restatement and leaf deletion",
+  "title": "Append-only Report Snapshots with replay-safe Restatement and leaf deletion",
   "description": [
     "Preserve exactly what was shown while supporting explicit retention, correction-based comparison, dependency-safe deletion, and stable retries."
   ],

@@ -4,7 +4,7 @@
   "sub_plan_id": "01KXZFNE48SG87EXFDT7SEM0B0",
   "ref_code": "TASK-INSIGHTS-ANALYSIS-WINDOWS",
   "slug": "ANALYSIS-WINDOWS",
-  "title": "Implement trusted Johannesburg analysis windows",
+  "title": "Implement trusted Johannesburg Analysis Windows",
   "description": [
     "Derive deterministic inclusive day, Monday-week, and month-to-date windows from one frozen TimeProvider instant and Budget Period."
   ],

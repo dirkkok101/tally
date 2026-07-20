@@ -3,7 +3,7 @@
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "type": "functional",
   "ref_code": "FR-INSIGHTS-STRUCTURED-INVOCATION",
-  "title": "Invoke INSIGHTS operations non-interactively",
+  "title": "Invoke Public INSIGHTS Operations non-interactively",
   "description": [
     "Provide deterministic structured process input, output, diagnostics, compatibility, authority, and retry behavior for every Public INSIGHTS Operation. Goal trace: G6 and G7."
   ],

@@ -11,7 +11,7 @@
   "load_condition": "Success, validation failure, compatibility failure, source mismatch, resource failure, persistence failure, crash, retry, deletion, private policy validation, backup, verify, restore, and migration on every supported host.",
   "measurement": "Permission and ownership inspection plus seeded-canary scans of process tables, stdout exclusions, stderr, logs, telemetry hooks, crash artifacts, repository status, temp roots, backups, restore candidates, and cleanup state.",
   "rationale": [
-    "Insight reports concentrate sensitive behavioral and financial interpretation beyond the underlying totals."
+    "Insight Reports concentrate sensitive behavioral and financial interpretation beyond the underlying totals."
   ],
   "priority": 0,
   "created_at": "2026-07-20T08:27:12.5325488+00:00",

@@ -22,7 +22,7 @@ UC-INSIGHTS-006 lets Agent Host automate exactly one operation per invocation wi
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit INSIGHTS operations from one registry | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry | `design_decision` | `governed-by` | `true` |
 | TC-INSIGHTS-CONTRACT-DISCOVERY: Verify INSIGHTS contract discovery | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-OFFLINE-PROCESS-ISOLATION: Verify self-contained offline operation | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-STRUCTURED-INVOCATION: Verify structured INSIGHTS invocation | `test_case` | `verifies` | `true` |
@@ -99,7 +99,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `covers` -> UC-INSIGHTS-006: Discover and invoke the structured INSIGHTS contract
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC-006 exercises the published process contract.
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-SECURITY](../tasks/gate-security.md): UC-006 consumes the completed payload and process-isolation evidence.
-- `governed-by` -> DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit INSIGHTS operations from one registry
+- `governed-by` -> DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry
 - `verifies` -> TC-INSIGHTS-CONTRACT-DISCOVERY: Verify INSIGHTS contract discovery
 - `verifies` -> TC-INSIGHTS-OFFLINE-PROCESS-ISOLATION: Verify self-contained offline operation
 - `verifies` -> TC-INSIGHTS-STRUCTURED-INVOCATION: Verify structured INSIGHTS invocation

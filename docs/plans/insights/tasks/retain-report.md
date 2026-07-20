@@ -22,7 +22,7 @@ RetainInsightReportCommand appends exactly one complete immutable ReportSnapshot
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only snapshots with replay-safe restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
 | DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads | `design_decision` | `governed-by` | `true` |
 | DM-INSIGHTS-IDEMPOTENCY: InsightsIdempotencyRecord | `data_model` | `touches` | `true` |
 | DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion | `data_model` | `touches` | `true` |
@@ -107,7 +107,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-INSIGHTS-GENERATE-REPORT](../tasks/generate-report.md): Retain reuses the complete approved generation path.
 - `depends-on:compile` -> [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](../tasks/idempotency-executor.md): Retain must resolve and reserve replay before producer access.
 - `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md): Retain writes the snapshot and payload schema.
-- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only snapshots with replay-safe restatement and leaf deletion
+- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion
 - `governed-by` -> DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads
 - `implements` -> FR-INSIGHTS-REPORT-RETENTION: Retain an immutable Report Snapshot explicitly
 - `satisfies` -> NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable

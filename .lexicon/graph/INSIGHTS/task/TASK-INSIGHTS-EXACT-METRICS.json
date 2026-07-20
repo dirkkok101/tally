@@ -4,7 +4,7 @@
   "sub_plan_id": "01KXZFNE48SG87EXFDT7SEM0B0",
   "ref_code": "TASK-INSIGHTS-EXACT-METRICS",
   "slug": "EXACT-METRICS",
-  "title": "Calculate exact window and category metrics",
+  "title": "Calculate exact Analysis Window and category metrics",
   "description": [
     "Make one deterministic checked pass over complete dated members for total, category, and bucket metrics."
   ],

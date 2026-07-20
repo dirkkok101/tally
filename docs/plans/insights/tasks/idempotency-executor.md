@@ -22,7 +22,7 @@ InsightsIdempotencyExecutor returns prior logical outcomes for exact retries, re
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only snapshots with replay-safe restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
 | DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation | `design_decision` | `governed-by` | `true` |
 | DM-INSIGHTS-IDEMPOTENCY: InsightsIdempotencyRecord | `data_model` | `touches` | `true` |
 | NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable | `nfr` | `satisfies` | `true` |
@@ -98,7 +98,7 @@ No bead references recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md): The replay executor uses the idempotency table and caller-owned SQLite transactions.
-- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only snapshots with replay-safe restatement and leaf deletion
+- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion
 - `governed-by` -> DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation
 - `satisfies` -> NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable
 - `touches` -> DM-INSIGHTS-IDEMPOTENCY: InsightsIdempotencyRecord

@@ -3,7 +3,7 @@
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "type": "functional",
   "ref_code": "FR-INSIGHTS-EXACT-WINDOW-METRICS",
-  "title": "Calculate exact window metrics",
+  "title": "Calculate exact Analysis Window metrics",
   "description": [
     "Account for exact recorded spend across the selected day, week, and month-to-date windows without hiding plan absence, category gaps, refunds, or zero results. Goal trace: G1 and G2."
   ],

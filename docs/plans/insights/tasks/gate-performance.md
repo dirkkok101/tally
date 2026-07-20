@@ -22,7 +22,7 @@ Generate, Retain, Restate, Get, List, Status, and Delete meet their p95 and memo
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic report compiler over pure policies | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies | `design_decision` | `governed-by` | `true` |
 | DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads | `design_decision` | `governed-by` | `true` |
 | NFR-INSIGHTS-PERSONAL-SCALE-PERFORMANCE: Respond at personal-finance scale | `nfr` | `satisfies` | `true` |
 | TC-INSIGHTS-PERSONAL-SCALE-PERFORMANCE: Verify personal-scale performance and limits | `test_case` | `verifies` | `true` |
@@ -98,7 +98,7 @@ No bead references recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Benchmarks invoke the complete published operation surface.
-- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic report compiler over pure policies
+- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies
 - `governed-by` -> DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads
 - `satisfies` -> NFR-INSIGHTS-PERSONAL-SCALE-PERFORMANCE: Respond at personal-finance scale
 - `verifies` -> TC-INSIGHTS-PERSONAL-SCALE-PERFORMANCE: Verify personal-scale performance and limits

@@ -22,7 +22,7 @@
   "acceptance_criteria": [
     "Given an existing compatible Report Snapshot and a valid actor-attributed idempotent Restate request, when current coherent evidence is available, then one new Report Snapshot is generated without modifying the predecessor.",
     "Given a successful Restatement, when its provenance is inspected, then exactly one predecessor identity and the new current source and policy identities are explicit.",
-    "Given predecessor and restated reports, when the difference result is returned, then source-provenance, policy-version, exact-metric, signal-state, explanation, and Attention Item differences are separated and deterministically ordered.",
+    "Given predecessor and restated reports, when the difference result is returned, then Source Provenance, policy-version, exact-metric, signal-state, explanation, and Attention Item differences are separated and deterministically ordered.",
     "Given identical predecessor source identities, policy versions, and semantic content, when Restate is requested, then No Change is returned and no new Report Snapshot is created.",
     "Given any changed producer state or snapshot identity, policy version, report schema version, or semantic report content, when Restate succeeds, then one new linked Report Snapshot is retained even when exact metric values remain equal.",
     "Given an unknown, deleted, corrupted, or incompatible predecessor, when Restate is requested, then the exact stable failure is returned and no new report is created.",

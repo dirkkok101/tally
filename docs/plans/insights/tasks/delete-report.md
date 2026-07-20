@@ -23,7 +23,7 @@ DeleteInsightReportCommand removes only an unreferenced target payload and outgo
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | ADR-CORE-0020: RESTRICT-by-Default Delete Taxonomy | `adr` | `governed-by` | `true` |
-| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only snapshots with replay-safe restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
 | DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads | `design_decision` | `governed-by` | `true` |
 | DIAG-INSIGHTS-REPORT-STATE: Report retention and deletion lifecycle | `design_diagram` | `touches` | `false` |
 | DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion | `data_model` | `touches` | `true` |
@@ -105,7 +105,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](../tasks/idempotency-executor.md): Delete retries must resolve without a second event.
 - `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md): Delete uses snapshot, link, payload, and event tables.
 - `governed-by` -> ADR-CORE-0020: RESTRICT-by-Default Delete Taxonomy
-- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only snapshots with replay-safe restatement and leaf deletion
+- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion
 - `governed-by` -> DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads
 - `implements` -> FR-INSIGHTS-REPORT-DELETION: Delete retained report payloads dependency-safely
 - `satisfies` -> NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable

@@ -16,7 +16,7 @@ Converge all handler slices into the released local INSIGHTS registry and Native
 
 ## Objective
 
-Publish exactly eleven stable INSIGHTS operations plus shared schema discovery.
+Publish exactly eleven stable Public INSIGHTS Operations plus shared schema discovery.
 
 ## References
 
@@ -24,7 +24,7 @@ Publish exactly eleven stable INSIGHTS operations plus shared schema discovery.
 |---|---|---|---|
 | ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning | `adr` | `governed-by` | `true` |
 | DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit INSIGHTS operations from one registry | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry | `design_decision` | `governed-by` | `true` |
 | EXT-INSIGHTS-AI-AGENT-HOST: AI Agent Host | `external_dependency` | `references` | `true` |
 | EXT-INSIGHTS-CHANNELS-CONSUMER-CONTRACT: CHANNELS Consumer Contract | `external_dependency` | `references` | `true` |
 
@@ -130,7 +130,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-INSIGHTS-RETAIN-REPORT](../tasks/retain-report.md): Register Retain.
 - `governed-by` -> ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning
 - `governed-by` -> DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries
-- `governed-by` -> DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit INSIGHTS operations from one registry
+- `governed-by` -> DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry
 - `references` -> EXT-INSIGHTS-AI-AGENT-HOST: AI Agent Host
 - `references` -> EXT-INSIGHTS-CHANNELS-CONSUMER-CONTRACT: CHANNELS Consumer Contract
 

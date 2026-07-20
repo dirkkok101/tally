@@ -3,7 +3,7 @@
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "type": "functional",
   "ref_code": "FR-INSIGHTS-TRUSTED-ANALYSIS-WINDOWS",
-  "title": "Apply trusted calendar analysis windows",
+  "title": "Apply trusted calendar Analysis Windows",
   "description": [
     "Define one unambiguous operation-start As-of Instant and fixed Africa/Johannesburg calendar windows over LEDGER Effective Dates. Goal trace: G1 and G2."
   ],

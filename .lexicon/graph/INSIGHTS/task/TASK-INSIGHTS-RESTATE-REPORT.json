@@ -147,54 +147,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXZG811BT38MRJVA693HGEZ6",
+      "id": "01KXZRMEAT1BPVWT3A3B35K5NX",
       "kind": "acceptance_check",
       "text": [
         "Restate requires one compatible existing predecessor plus actor, reason, normalized selectors, and idempotency; unknown, deleted, corrupt, or incompatible predecessors fail before producer access."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+      "created_at": "2026-07-20T12:39:52.9217339+00:00"
     },
     {
-      "id": "01KXZG811BQ95328WE2QBSSD8Y",
+      "id": "01KXZRMEATMPCC1J4JEYJHAT9P",
       "kind": "acceptance_check",
       "text": [
         "Exact replay resolves before current evidence; a new request generates through the existing Generate path and never changes the predecessor."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+      "created_at": "2026-07-20T12:39:52.9217339+00:00"
     },
     {
-      "id": "01KXZG811BDKT0TH1FHFACF238",
+      "id": "01KXZRMEATJK9SHEDJTY0H903K",
       "kind": "acceptance_check",
       "text": [
-        "InsightReportDiffer compares source identities, policy versions, report schema, exact metrics, evidence states, explanations, and deferred attention collection in fixed section and item order."
+        "InsightReportDiffer compares source identities, policy versions, report schema, exact metrics, evidence states, explanations, and deferred Attention Item collection in fixed section and item order."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+      "created_at": "2026-07-20T12:39:52.9217339+00:00"
     },
     {
-      "id": "01KXZG811B5G2ABMKB4D076Y2J",
+      "id": "01KXZRMEATM818QSWFC72KRDJT",
       "kind": "acceptance_check",
       "text": [
         "Identical source identities, versions, schema, and semantic content return NoChange and store only the replay outcome; any changed source, version, schema, or content appends one child snapshot and one predecessor link atomically even when visible amounts remain equal."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+      "created_at": "2026-07-20T12:39:52.9217339+00:00"
     },
     {
-      "id": "01KXZG811BCQ0NR9S4S4RAG9AN",
+      "id": "01KXZRMEAT38E950A487KN23Y5",
       "kind": "acceptance_check",
       "text": [
         "Current-evidence, comparison, cancellation, or write failure returns no partial difference, snapshot, link, or successful outcome; same-key replay never creates a second Restatement."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+      "created_at": "2026-07-20T12:39:52.9217339+00:00"
     },
     {
       "id": "01KXZG811BD57583WBZMEX2724",

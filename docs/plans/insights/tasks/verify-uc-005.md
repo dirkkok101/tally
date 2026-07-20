@@ -22,7 +22,7 @@ UC-INSIGHTS-005 produces one attributable complete maintenance outcome or leaves
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only snapshots with replay-safe restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
 | DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation | `design_decision` | `governed-by` | `true` |
 | TC-INSIGHTS-BACKUP-VERIFICATION: Verify complete owner-only INSIGHTS backups | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-REPORT-DELETION-DEPENDENCIES: Verify dependency-safe report deletion | `test_case` | `verifies` | `true` |
@@ -102,7 +102,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `covers` -> UC-INSIGHTS-005: Manage retained history and recovery
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md): UC-005 requires completed retained and recovery fault evidence.
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC-005 invokes the complete published maintenance surface.
-- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only snapshots with replay-safe restatement and leaf deletion
+- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion
 - `governed-by` -> DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation
 - `verifies` -> TC-INSIGHTS-BACKUP-VERIFICATION: Verify complete owner-only INSIGHTS backups
 - `verifies` -> TC-INSIGHTS-REPORT-DELETION-DEPENDENCIES: Verify dependency-safe report deletion

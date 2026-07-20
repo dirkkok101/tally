@@ -22,7 +22,7 @@ InsightReportCompiler returns one complete bounded deterministic report or one w
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic report compiler over pure policies | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies | `design_decision` | `governed-by` | `true` |
 | DIAG-INSIGHTS-GENERATE-SEQUENCE: Coherent deterministic report generation | `design_diagram` | `touches` | `true` |
 | DM-INSIGHTS-INSIGHT-REPORT: InsightReport | `data_model` | `touches` | `true` |
 | FA-INSIGHTS-EVIDENCE-ANALYSIS: Evidence and Analysis | `feature_area` | `touches` | `true` |
@@ -54,7 +54,7 @@ InsightReportCompiler returns one complete bounded deterministic report or one w
 
 - Do NOT embed all calculation inside Generate or expose per-metric orchestration to callers — rejected per DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER.
 - Do NOT read a producer, store state, use reflection serialization, hash derived identity fields into themselves, depend on display text, or emit partial reports.
-- Do NOT add Forecast, Trend, Anomaly, or Attention formulas while their FRs remain deferred.
+- Do NOT add Forecast, Trend, Anomaly, or Attention Item formulas while their FRs remain deferred.
 
 ### Expected Outputs
 
@@ -117,7 +117,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-INSIGHTS-EVIDENCE-EXPLANATION](../tasks/evidence-explanation.md): The compiler requires complete state accounting and explanations.
 - `depends-on:compile` -> [TASK-INSIGHTS-EXACT-METRICS](../tasks/exact-metrics.md): The compiler composes exact metric results.
 - `depends-on:compile` -> [TASK-INSIGHTS-LINEAR-PACE](../tasks/linear-pace.md): The compiler composes the active pace policy.
-- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic report compiler over pure policies
+- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies
 - `implements` -> FR-INSIGHTS-REPORT-GENERATION: Generate one deterministic Insight Report
 - `satisfies` -> NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity
 - `touches` -> DIAG-INSIGHTS-GENERATE-SEQUENCE: Coherent deterministic report generation
