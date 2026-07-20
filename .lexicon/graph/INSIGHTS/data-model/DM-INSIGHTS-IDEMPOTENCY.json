@@ -1,0 +1,68 @@
+{
+  "id": "01KXZDXCXPZ5ZKHNSRPMHS8FVB",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DM-INSIGHTS-IDEMPOTENCY",
+  "name": "InsightsIdempotencyRecord",
+  "description": [
+    "Module-wide replay identity and immutable outcome references for every retained-state or recovery mutation."
+  ],
+  "schema_def": [
+    "InsightsIdempotencyRecord {operationId, contractVersion, keyDigest, requestFingerprint, state: Attempting|Succeeded, outcomeKind: Snapshot|NoChange|Deleted|Backup|Restore, outcomeRef, outcomeFingerprint, createdAt, completedAt?}.",
+    "Unique key: operationId plus contractVersion plus keyDigest.",
+    "Canonical request fingerprint includes all logical input, actor, reason, target or predecessor, selected policies, expected-current fingerprint, and safe normalized path identity where applicable.",
+    "Same key and fingerprint returns the prior logical outcome before producer reads or writes; changed fingerprint returns IdempotencyConflict.",
+    "Validation and transient failure do not consume a key. If a snapshot outcome was later deleted, replay resolves to metadata-only Deleted and never recreates content."
+  ],
+  "created_at": "2026-07-20T09:32:32.0555062+00:00",
+  "links": [
+    {
+      "id": "01KXZE8CEG3KRT6T6NM4CDCE5K",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-BACKUP-VERIFY-RESTORE",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:32.0173165+00:00"
+    },
+    {
+      "id": "01KXZE8BDKJVRRPFGZ6QTDZASR",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-DELETION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:30.9638927+00:00"
+    },
+    {
+      "id": "01KXZE8ADZB7BY8X5GWCE9S3BP",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RESTATEMENT",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:29.9518740+00:00"
+    },
+    {
+      "id": "01KXZE89EX1450WWXMKHZW2R0W",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RETENTION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:28.9583138+00:00"
+    },
+    {
+      "id": "01KXZE8DCXG0QQFZCHQ8DT3PE1",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:32.9901619+00:00"
+    },
+    {
+      "id": "01KXZE8FC42J95G4A0XJAYB9Q1",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-REPORT-RETENTION-FAILURE-ATOMICITY",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:38:35.0135370+00:00"
+    },
+    {
+      "id": "01KXZE8ED8HMMBM0T2RTG3MR35",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-REPORT-RETENTION-IDEMPOTENCY",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:38:34.0255398+00:00"
+    }
+  ]
+}

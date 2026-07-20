@@ -1,0 +1,639 @@
+{
+  "id": "01KXZDV4XY2EHRCVNZ4E4FNTDB",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "MD-INSIGHTS-MASTER",
+  "title": "Budget Insights technical design",
+  "slug": "MASTER",
+  "content": [
+    "# Budget Insights technical design",
+    "",
+    "## Outcome",
+    "",
+    "INSIGHTS is an on-demand analytical compiler inside the same .NET 10 Native-AOT `tally` executable as LEDGER, INGEST, CLASSIFY, and BUDGET. It owns deterministic analysis-window policies, exact derived metrics, evidence-state accounting, Linear Pace semantics, source provenance, template explanations, immutable retained Report Snapshots, explicit Restatements, deletion evidence, and recovery metadata. It never owns canonical transactions, category assignment, Budget Plans, Budget Positions, user interfaces, notifications, recommendations, or upstream mutation authority.",
+    "",
+    "The module consumes exactly one `budget.insights.evidence.get` result per generation. BUDGET returns explicit `BoundRevision`, `NoBudgetPlan`, or `NoActiveBudgetPlanRevision` state plus one complete materialized public LEDGER snapshot member set and exact total. BoundRevision also includes the immutable plan and canonical Budget Position calculated from that set; plan-absence states include neither and never invoke the calculator. INSIGHTS validates the binding and reconciles it but never queries LEDGER independently or recalculates Budget Position.",
+    "",
+    "The implementation extends established Tally conventions: source-generated operation contracts in one registry, typed vertical slices, explicit dependency registration, stable expected-failure results, checked ZAR minor units and exact rational values, raw SQLite, owner-only artifacts, `TimeProvider`, and concrete clients over the shared operation executor. There is no HTTP or FastEndpoints surface, EF Core, daemon, network listener, scheduler, queue, hosted model, generic repository, mediator, event bus, plugin runtime, or frontend.",
+    "",
+    "## Interface exploration and selected shape",
+    "",
+    "Three materially different public boundaries were challenged before capture.",
+    "",
+    "1. A minimal facade with `contract`, `report`, and `storage` entry points minimizes names but requires action discriminators for Generate, Explain, Get, List, Retain, Restate, Delete, Status, Backup, Verify, and Restore. Every caller and test must still learn every branch, ordering rule, authority rule, and failure mode, so the small signature hides a shallow union rather than a deep module.",
+    "2. A caller-oriented operation set exposes each accepted verb as one typed operation while shared schema discovery describes all descriptors and the released policy catalogue. Every operation has one request, result, authority, mutability, idempotency, limit, compatibility, and stable-error contract. This is the selected public shape.",
+    "3. A full ports-and-adapters boundary introduces evidence-source, report-store, policy-catalogue, clock, filesystem, fingerprint, and calculator interfaces. Only the shared public operation executor is a demonstrated seam with multiple callers. The remaining abstractions would each have one production adapter and would weaken direct real-SQLite and pure-policy tests.",
+    "",
+    "The internal analytical shape was also compared. Per-metric services optimized for individual callers would force orchestration, source binding, state accounting, and ordering into each caller. A monolithic handler would hide pure policies and make arithmetic difficult to test. The selected hybrid has one deep `InsightReportCompiler` orchestration boundary over concrete pure collaborators: `AnalysisWindowPolicy`, `ExactMetricCalculator`, `LinearPaceCalculator`, `EvidenceStateAccountant`, `InsightExplanationRenderer`, `InsightReportCanonicalizer`, and `InsightReportDiffer`. Storage and public-contract clients remain concrete.",
+    "",
+    "Deleting INSIGHTS would force Agent Host and future CHANNELS consumers to duplicate trusted time, window clipping, exact metric bucketing, pace arithmetic, unavailable-state semantics, provenance, explanation templates, report fingerprints, replay, immutable history, Restatement comparison, dependency-safe deletion, and recovery. The module therefore passes the deletion test.",
+    "",
+    "## Code zones and interface economy",
+    "",
+    "One process contains seven explicit zones:",
+    "",
+    "1. `Cli` resolves INSIGHTS descriptors, accepts structured input from explicit stdin or owner-only file input, and emits one result envelope.",
+    "2. `Contracts/Insights` owns source-generated requests, results, errors, closed enums, exact money and rational wire values, descriptors, policy catalogue metadata, and CHANNELS-consumable report contracts.",
+    "3. `Features/Insights` contains vertical slices for Contract, Reports, History, Recovery, and PolicyValidation. Commands own validation and transactions; queries never mutate retained state.",
+    "4. `Domain/Insights` contains pure time-window, metric, pace, state-accounting, explanation, ordering, canonicalization, fingerprint, and difference policies.",
+    "5. `Infrastructure/Insights/Storage` contains one concrete raw-SQLite generation store, immutable migrations, SQL, integrity checks, owner-only artifact enforcement, bounded writer coordination, backup, and candidate activation.",
+    "6. `Integration/Budget/BudgetContractClient.cs` resolves and invokes only the released `budget.insights.evidence.get` descriptor through the shared operation executor.",
+    "7. `Bootstrap/Features/InsightsExtensions.cs` explicitly registers descriptors, handlers, compiler collaborators, mappers, store services, the BUDGET client, and `TimeProvider`. Reflection scanning is forbidden.",
+    "",
+    "The only general handler abstractions are the existing `ICommandHandler<TCommand,TResult>` and `IQueryHandler<TQuery,TResult>`. `BudgetContractClient` uses the already-real shared executor seam. `InsightsStateStore`, calculators, canonicalizers, mappers, and file operations remain concrete. `TimeProvider` is used directly. There is no `IInsightsRepository`, `IInsightsStore`, `IReportCompiler`, custom clock, provider-neutral unit of work, or mapper interface.",
+    "",
+    "Every asynchronous boundary accepts and forwards `CancellationToken`. Expected validation, unavailable, insufficient, deleted, conflict, compatibility, integrity, resource, and downstream outcomes use typed result values. Unexpected exceptions are sanitized once at the process boundary.",
+    "",
+    "## Public operation contract",
+    "",
+    "The shared Tally registry exposes eleven INSIGHTS operations and reuses shared schema discovery:",
+    "",
+    "| Capability | Stable operation and CLI path | Contract behavior |",
+    "|---|---|---|",
+    "| Discover | `system.schema.list/show` / `tally schema` filtered to INSIGHTS | Returns INSIGHTS descriptors and released policy metadata without financial input. |",
+    "| Generate | `insights.report.generate` / `tally insights report generate` | Freezes trusted time, binds one coherent evidence result, compiles one complete ephemeral report, and writes no durable state. |",
+    "| Explain | `insights.report.explain` / `tally insights report explain` | Returns selected exact stored explanation and provenance for one retained identity; ephemeral reports already include explanations. |",
+    "| Get | `insights.report.get` / `tally insights report get` | Returns one exact immutable retained snapshot, Not Found, or metadata-only Deleted. |",
+    "| List | `insights.report.list` / `tally insights report list` | Returns bounded deterministic metadata only; it never returns report payloads. |",
+    "| Retain | `insights.report.retain` / `tally insights report retain` | Generates and atomically appends one report; it never accepts caller-authored report content. |",
+    "| Restate | `insights.report.restate` / `tally insights report restate` | Generates current evidence, compares one predecessor, and stores one changed linked snapshot or returns No Change. |",
+    "| Delete | `insights.report.delete` / `tally insights report delete` | Removes one unreferenced leaf payload and link and appends one metadata-only Deletion Event. |",
+    "| Status | `insights.status.get` / `tally insights status` | Returns store, integrity, count, successful Backup or Restore verification, and supported-policy metadata only; standalone Verify is read-only and is not recorded. |",
+    "| Backup | `insights.backup.create` / `tally insights backup create` | Creates, verifies, and atomically publishes one owner-only point-in-time artifact. |",
+    "| Verify | `insights.backup.verify` / `tally insights backup verify` | Independently verifies an artifact without changing active state. |",
+    "| Restore | `insights.restore.activate` / `tally insights restore` | Builds and verifies a separate generation and atomically activates it after expected-current revalidation. |",
+    "",
+    "There is no generic Execute, Save/upsert, Edit, Refresh, GetGridList, GetLookupList, Alert, Notify, policy CRUD, arbitrary formula execution, HTTP route, or alias. `Get`, `List`, and `Delete` are explicit domain operations under the accepted transport-neutral vocabulary. Missing endpoint-suggestion heuristics are intentional because the repository has no HTTP surface.",
+    "",
+    "Complex input uses `--input -` or `--input @file`; financial values and private paths never appear in process arguments. Retain, Restate, Delete, Backup, and Restore require the shared idempotency option plus owner attribution, and Delete also requires a non-blank reason. Unknown fields, malformed exact values, unsupported versions, forbidden policies, and over-limit requests fail before producer reads or retained writes. Exactly one business envelope goes to stdout. Stderr and logs contain only correlation reference, operation identity, duration, safe stable IDs, fingerprints, state names, and counts.",
+    "",
+    "Handlers are `GenerateInsightReportQuery`, `ExplainInsightReportQuery`, `GetInsightReportQuery`, `ListInsightReportsQuery`, `RetainInsightReportCommand`, `RestateInsightReportCommand`, `DeleteInsightReportCommand`, `GetInsightsStatusQuery`, `CreateInsightsBackupCommand`, `VerifyInsightsBackupQuery`, and `RestoreInsightsBackupCommand`. Shared schema handlers perform Discover; INSIGHTS does not duplicate them.",
+    "",
+    "## Generation pipeline and coherent evidence",
+    "",
+    "`GenerateInsightReportQuery` freezes one `TimeProvider.GetUtcNow()` instant before any producer read and normalizes the explicit Budget Period, revision selector, requested windows, requested metric and signal kinds, category-breakdown choice, and released policy selectors. It rejects unknown fields, unsupported versions, rolling windows, forbidden policy states, and every count or output bound before acquiring financial evidence.",
+    "",
+    "`BudgetContractClient.GetInsightEvidenceAsync` invokes exactly one compatible `budget.insights.evidence.get`. `CoherentEvidenceBinder` verifies the explicit planState, period relationship, optional revision and position shape, BUDGET and transitive LEDGER contract versions, snapshot identity and generation, member count and ordinals, category identities, exact public LEDGER total, binding fingerprint, and conditional reconciliation. BoundRevision requires plan detail and canonical Budget Position and reconciles every member to each position bucket and total. NoBudgetPlan and NoActiveBudgetPlanRevision require both fields to be absent, prohibit calculator evidence, preserve the complete dated members, and reconcile their checked exact sum to `ledgerBudgetActualTotal`. Any incompatibility, source-state change, missing or duplicate member, stale generation, unknown identity, overflow, or mismatch fails the whole report before output or retention.",
+    "",
+    "INSIGHTS never opens BUDGET or LEDGER storage, imports producer feature handlers or private domain types, invokes `ledger.actuals.query`, or calls `BudgetPositionCalculator`. BUDGET remains the single owner of position arithmetic. LEDGER remains a hard authoritative producer dependency represented transitively in Source Provenance.",
+    "",
+    "## Trusted windows, exact metrics, and Linear Pace",
+    "",
+    "`AnalysisWindowPolicy` converts the frozen instant with the fixed IANA `Africa/Johannesburg` timezone. Day is the As-of local date clipped to the selected monthly Budget Period. Week is Monday through Sunday clipped to the period. Month-to-date starts at the period start and ends at the earlier of As-of local date or period end, inclusive. Historical periods use the full period; future periods return Not Started. LEDGER Effective Date controls membership. Rolling windows are rejected before producer reads.",
+    "",
+    "`ExactMetricCalculator` makes one deterministic pass over the complete dated member set. It preserves signed Int64 ZAR minor units, explicit zero, refunds, Budgeted, Zero Budget, Unbudgeted, and Uncategorized buckets. It produces requested total and category metrics in policy order and proves each member contributes exactly once. Every addition, subtraction, multiplication, magnitude, and conversion is checked; overflow or reconciliation failure aborts the entire report.",
+    "",
+    "`LinearPaceCalculator` uses an exact rational `plannedMinorUnits * elapsedDays / periodDays`. Full-plan overage takes precedence. Non-zero plans yield Below Linear Baseline, At Linear Baseline, Above Linear Baseline, or Over Plan. Zero plans yield Over Zero Plan or At Or Below Zero Plan without division. No plan, no usable revision, future period, or incoherent evidence yields the named unavailable state. The result always cites exact inputs, elapsed fraction, policy version, current-day incompleteness, and the uniform-distribution limitation, and it never claims to be a Forecast or invents daily or weekly sub-budgets.",
+    "",
+    "## Evidence states, report identity, and explanation",
+    "",
+    "The released policy catalogue is code-owned, immutable per build, source-generated, ordered, and fingerprinted. V1 activates calendar windows, exact metrics, Linear Pace, evidence sufficiency, explanation, and ordering policies. Forecast, Trend, Anomaly, and Attention Item kinds remain discoverable as Deferred with no executable formula, baseline, threshold, severity, or activation operation.",
+    "",
+    "`EvidenceStateAccountant` emits exactly one Supported, Unavailable, InsufficientEvidence, NotStarted, or Deferred entry for each requested catalogue kind. Signal-local gaps preserve supported exact metrics. Contract incompatibility, source incoherence, incomplete evidence, integrity failure, and arithmetic failure are whole-report failures with no report body.",
+    "",
+    "`InsightExplanationRenderer` maps structured policy states to deterministic channel-neutral templates. Explanations cite exact inputs, bounds, source identities, evaluated evidence, unmet rule, permitted next action, formula/version, and limitations. They contain no persuasive, recommendation, translation, notification, or delivery wording and never expand to raw merchant descriptions.",
+    "",
+    "`InsightReportCanonicalizer` applies released stable ordering independent of display text and serializes only source-generated contracts with forbidden unknown fields. It canonicalizes the semantic payload without the derived `reportId` and `contentFingerprint`, hashes those bytes with SHA-256, assigns that hash as the content fingerprint, and derives the deterministic ephemeral report identity from it. Repeated generation with the same frozen instant, normalized request, bound evidence, schema, and policy versions therefore returns the same semantic content and fingerprint without a self-referential hash. A retained `snapshotId` is a separate opaque ULID allocated only during Retain or a changed Restatement.",
+    "",
+    "## Retention, Restatement, deletion, and replay",
+    "",
+    "Generate is always ephemeral. `RetainInsightReportCommand` resolves the module-wide idempotency identity before freezing time or reading producers. New requests compile a complete report and, under one `BEGIN IMMEDIATE` transaction, append the immutable Report Snapshot, optional none predecessor, stable metadata, canonical report payload, content fingerprint, actor, reason, and successful outcome reference. The command accepts analysis inputs only, never report content.",
+    "",
+    "`RestateInsightReportCommand` loads and verifies one immutable predecessor, resolves idempotency, then compiles current evidence through the same pipeline. `InsightReportDiffer` compares source identities, policy versions, report schema, exact metrics, evidence states, explanations, and any future Attention Items in deterministic order. Equal source identities, versions, and semantic content return No Change and persist only the replay outcome. Any changed provenance, version, schema, or semantic content appends one snapshot plus one predecessor link atomically, even when visible amounts remain equal.",
+    "",
+    "`DeleteInsightReportCommand` applies RESTRICT: a snapshot referenced by any surviving child cannot be deleted. A leaf deletion removes its canonical payload row and its outgoing Restatement link, then appends one metadata-only Deletion Event and replay outcome in the same transaction. Deletion Events contain report and predecessor identities, actor, reason, trusted time, dependency result, and idempotency evidence, but no amount, explanation, or report body. There is no automatic expiry or cleanup. Existing backups remain unchanged.",
+    "",
+    "The idempotency key digest is scoped by operation ID and contract version. Canonical request hashes include every logical input, actor, reason, target, selected policy, and safe normalized path identity where applicable. The same key and hash returns the prior logical outcome without producer reads; a changed hash conflicts. If a retained outcome was later deleted, replay returns the metadata-only Deleted outcome linked to its Deletion Event and never recreates or discloses removed content. Validation and transient failures do not consume the key.",
+    "",
+    "## Persistence and recovery",
+    "",
+    "INSIGHTS owns one logical raw-SQLite `insights.db` inside an owner-only generation directory; an owner-only `CURRENT` pointer selects the active generation. SQLite uses snake_case tables, foreign keys, WAL, `synchronous=FULL`, bounded busy handling, `PRAGMA user_version`, immutable ordered migrations, explicit transactions, and a single writer. Directories are 0700 and database, WAL, SHM, pointer, lock, backup, manifest, and recognized candidate artifacts are 0600 where supported. Host-managed encrypted-volume evidence remains a deployment prerequisite; Tally claims no custom encryption.",
+    "",
+    "The store persists normalized metadata plus one canonical versioned report payload per retained snapshot. It never persists dated actual members, raw merchant descriptions, canonical transaction bodies, producer cursors, private corpus rows, arbitrary formulas, or an analytical replica. Metadata-first List and Status use normalized columns and never deserialize or emit report payloads. Get and Explain verify schema and content fingerprints before returning a selected payload.",
+    "",
+    "Backup first persists an `Attempting` idempotency reservation containing the request fingerprint and deterministic artifact identity. It writes a read-consistent candidate and manifest under a private target, copies every prior terminal idempotency outcome but removes only the current non-outcome reservation from the candidate, verifies storage version, counts, links, content fingerprints, deletion state, and permissions, then atomically publishes it and records the terminal receipt. A crash after publication is resolved by exact replay against the verified deterministic artifact; completed failure removes the reservation. Standalone Verify is read-only, returns independent evidence, and changes neither active state nor Status. Status exposes only durable verification evidence recorded by successful Backup or Restore.",
+    "",
+    "Restore copies the selected verified backup into a separate new generation, applies only compatible ordered migrations, validates complete business and storage integrity, records the restore replay outcome and recovery event in the candidate, and revalidates it. Activation acquires the exclusive module writer lock, checks the expected current generation fingerprint, flushes the candidate, atomically replaces `CURRENT`, and fsyncs the directory. Startup observes either the complete old or complete new generation. The prior generation remains the recovery point until explicit recognized-artifact cleanup policy is separately approved; failure before pointer replacement leaves it authoritative.",
+    "",
+    "## Private policy validation",
+    "",
+    "Candidate analytical policies are evaluated by an internal release/test harness, not a Public INSIGHTS Operation. `InsightPolicyValidationHarness` accepts the ignored manifest only through `TALLY_INSIGHTS_PRIVATE_EVALUATION_MANIFEST`, validates owner-only path and corpus fingerprints, and reads private cases in memory. It exercises required sparse, zero, recurring, front-loaded, irregular, refund-heavy, plan-change, category-lifecycle, classification-gap, correction, false-severity, and disclosure-canary shapes.",
+    "",
+    "The exported `PolicyValidationReceipt` is release and test evidence outside the active INSIGHTS store. It contains policy, schema, producer, window, corpus, expected-state, and tool fingerprints plus structural case IDs, aggregate outcomes, false-high-severity count, canary status, and owner acceptance state. It contains no filenames, paths, financial values, merchant text, report payloads, or expected rows. The released catalogue embeds only the passed policy and receipt fingerprints. Missing evidence blocks any changed policy release but does not disable unchanged released policies. No owner-facing policy create, edit, activate, retire, validation mutation, scripting, expression, or plugin operation exists.",
+    "",
+    "The planning gate must prove that the active exact-metric and Linear Pace report improves the named owner decision over raw Budget Position and that compact template explanations are accepted. If it does not, the do-less kill criterion removes retained INSIGHTS scope. Deferred Forecast, Trend, Anomaly, or Attention policies require separate graph activation and review after their evidence gates pass.",
+    "",
+    "## Pattern, ADR, endpoint, mapper, seed, and UI compliance",
+    "",
+    "- Vertical-slice organization, closed enums, explicit DI, structured expected failures, pure mapper intent, and RESTRICT deletion are adapted from ADR-CORE-0004, ADR-CORE-0010, ADR-CORE-0020, ADR-CORE-0021, ADR-CORE-0022, ADR-CORE-0024, and ADR-CORE-0025.",
+    "- The authoritative domain vocabulary in C20 overrides Actions CRUD names. Generate, Explain, Get, List, Retain, Restate, Delete, Status, Backup, Verify, and Restore remain aligned across graph entities, operation IDs, CLI paths, classes, tests, plans, and beads.",
+    "- Save, GetGridList, GetLookupList, Assign, Unassign, FastEndpoints, HTTP, ProblemDetails, PostgreSQL, EF configurations, `DbContext`, `IDbContextFactory`, RLS, and tenancy are inapplicable to the accepted local CLI boundary. No DbContext-backed command or query exists; raw-SQLite commands own explicit connections and transactions and queries own short read connections.",
+    "- `InsightsContractMapper` performs the DTOMapper role as a pure concrete boundary transformer for source-generated records, ULIDs, closed enums, canonical exact values, policy selectors, actor/reason, and safe path input. It never opens storage, calls producers, or chooses analytical outcomes.",
+    "- `InsightsRowMapper` performs the EntityMapper role as a pure concrete transformer between SQLite rows and immutable domain records. It never evaluates policies, performs dependency checks, opens transactions, or writes state.",
+    "- Commands own mutation validation, idempotency, locking, transactions, and atomic outcomes. Queries own bounded read projections. The compiler and pure policies own analytical semantics. There is no generic repository or mapper interface.",
+    "- P1 is the sole host-owner persona. Actor text is attribution, not authentication. Host identity and owner-only storage provide the trust boundary. Contract tests prove read versus write authority and the absence of upstream mutations.",
+    "- INSIGHTS creates no application permissions, role templates, navigation or menu seeds, translation registry entries, fixture translations, or frontend key models. There is therefore no seed mapper or persona-to-seed matrix to implement.",
+    "- No mockup, Angular component, frontend service, route, or browser test is in INSIGHTS scope. NG2 is the recorded approval boundary: the existing CHANNELS module must complete its own brainstorm, PRD, and design before it owns screens, navigation, accessibility, translations, conversation, notification, scheduling, or delivery. Until then the only consumer artifact is the channel-neutral structured contract and its parity test.",
+    "",
+    "## Feature boundaries",
+    "",
+    "- Contract and Authority: descriptors, source-generated schemas, compatibility, owner attribution, stable envelopes, canonical verbs, limits, and policy catalogue metadata.",
+    "- Evidence and Analysis: trusted time, one coherent BUDGET read, reconciliation, windows, exact metrics, Linear Pace, evidence states, ordering, and fingerprints.",
+    "- Report and Explanation: complete ephemeral reports, deterministic identities, provenance, template explanations, Get, Explain, and CHANNELS parity.",
+    "- Retention and Recovery: retained snapshots, idempotency, Restatements, differences, List, Delete, Status, generations, backup, verify, restore, and integrity.",
+    "- Policy Release Validation: private corpus boundary, aggregate receipts, policy activation gates, and disclosure canaries.",
+    "",
+    "## Test architecture",
+    "",
+    "- Pure unit tests cover timezone conversion, calendar clipping, Effective Date membership, exact Int64 and rational arithmetic, category and bucket accounting, Linear Pace states, evidence-state exhaustion, deterministic ordering, canonicalization, fingerprints, explanations, and report differences.",
+    "- Real temporary raw-SQLite integration tests cover migrations, immutable payloads, metadata projections, idempotency, concurrent writers, RESTRICT deletion, Deletion Events, restart cut points, corruption detection, and report integrity. SQL is not mocked.",
+    "- Cross-module contract tests invoke the released BUDGET descriptor through the shared executor and prove one snapshot-bound result, forced correction behavior, exact reconciliation, compatibility, resource bounds, no private references, and no independent LEDGER query or position calculation.",
+    "- Published-binary process tests cover all eleven operations plus shared discovery, schemas, canonical ordering, owner authority, stdin/file boundaries, stdout/stderr isolation, stable exit categories, replay after interrupted result delivery, no prompts, network disabled, and no orphan process.",
+    "- Recovery tests inject faults before and after backup publication, receipts, candidate migration, verification, expected-current recheck, pointer replacement, and directory fsync; only a complete verified generation may activate.",
+    "- Private validation tests consume only the ignored manifest path from the environment, prove every required shape and canary, and assert that durable and tracked artifacts contain aggregate evidence only.",
+    "- Security tests enforce 0700/0600 artifacts and scan process arguments, outputs, logs, diagnostics, crashes, temporary paths, backups, validation receipts, and Git state for financial canaries.",
+    "- Performance tests use 100000 active transactions, 1000 category positions, 1000 retained snapshots, every active policy, and one-over-limit variants on the supported release host.",
+    "",
+    "The 23 existing PRD test cases remain the requirement anchors. Planning may add narrower implementation tests without weakening them.",
+    "",
+    "## Planned implementation locations and gates",
+    "",
+    "The repository is greenfield. Canonical planning obligations are:",
+    "",
+    "- `src/Tally/Tally.csproj`",
+    "- `src/Tally/Cli`",
+    "- `src/Tally/Contracts/Insights`",
+    "- `src/Tally/Features/Insights/Contract`",
+    "- `src/Tally/Features/Insights/Evidence`",
+    "- `src/Tally/Features/Insights/Reports`",
+    "- `src/Tally/Features/Insights/History`",
+    "- `src/Tally/Features/Insights/Recovery`",
+    "- `src/Tally/Features/Insights/PolicyValidation`",
+    "- `src/Tally/Domain/Insights`",
+    "- `src/Tally/Infrastructure/Insights/Storage`",
+    "- `src/Tally/Integration/Budget/BudgetContractClient.cs`",
+    "- `src/Tally/Bootstrap/Features/InsightsExtensions.cs`",
+    "- `tests/Tally.Tests/Insights`",
+    "",
+    "Lex truthfully reports these expected paths as missing. Each warning is an explicit greenfield planning gate: the plan must create or reference every governed path before the task closes. The BUDGET composite, transitive LEDGER provenance, Agent Host, CHANNELS parity, Host OS protection, and private evaluation corpus remain assumed external dependencies until their linked tests pass. UI parity is satisfied by the recorded NG2 boundary and absence of UI artifacts, not by pretending a CHANNELS design already exists."
+  ],
+  "origin": "lex:design INSIGHTS",
+  "status": "current",
+  "created_at": "2026-07-20T09:31:18.3357784+00:00",
+  "links": [
+    {
+      "id": "01KXZDV4Y1A3KZE81TJ7BKD6FB",
+      "target_type": "adr",
+      "target": "ADR-CORE-0004",
+      "rel": "see-also",
+      "created_at": "2026-07-20T09:31:18.3370726+00:00"
+    },
+    {
+      "id": "01KXZDV4Y1B97EQ9N15M93QA5F",
+      "target_type": "adr",
+      "target": "ADR-CORE-0010",
+      "rel": "see-also",
+      "created_at": "2026-07-20T09:31:18.3372458+00:00"
+    },
+    {
+      "id": "01KXZDV4Y109NBFXR5D0GXHRXZ",
+      "target_type": "adr",
+      "target": "ADR-CORE-0020",
+      "rel": "see-also",
+      "created_at": "2026-07-20T09:31:18.3375453+00:00"
+    },
+    {
+      "id": "01KXZDV4Y1459W0CK0YND50RJT",
+      "target_type": "adr",
+      "target": "ADR-CORE-0021",
+      "rel": "see-also",
+      "created_at": "2026-07-20T09:31:18.3376709+00:00"
+    },
+    {
+      "id": "01KXZDV4Y1D7Q8934GRAFSXYEM",
+      "target_type": "adr",
+      "target": "ADR-CORE-0022",
+      "rel": "see-also",
+      "created_at": "2026-07-20T09:31:18.3377656+00:00"
+    },
+    {
+      "id": "01KXZDV4Y1WEJWJX1ZFBP44JWS",
+      "target_type": "adr",
+      "target": "ADR-CORE-0024",
+      "rel": "see-also",
+      "created_at": "2026-07-20T09:31:18.3379084+00:00"
+    },
+    {
+      "id": "01KXZDV4Y2R791HQ8NP0FWXXT6",
+      "target_type": "adr",
+      "target": "ADR-CORE-0025",
+      "rel": "see-also",
+      "created_at": "2026-07-20T09:31:18.3380043+00:00"
+    },
+    {
+      "id": "01KXZECAGZFWMV9TCAV3SHWT9G",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-APPLICATION-ARCHITECTURE",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:41.1197201+00:00"
+    },
+    {
+      "id": "01KXZECBF64NB0FE5RAX8AFC1T",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-CLI-OPERATION-CONTRACT",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:42.0873186+00:00"
+    },
+    {
+      "id": "01KXZECCER1H1AWMXGZ5KMA6B1",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:43.0973917+00:00"
+    },
+    {
+      "id": "01KXZECDEBZJ68B7ERTZJQ7CSQ",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:44.1084556+00:00"
+    },
+    {
+      "id": "01KXZECJSS20QM6FZ48JPMMAEF",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:49.5939755+00:00"
+    },
+    {
+      "id": "01KXZECGMEVQ2MH5PTZVHTA3KF",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:47.3749291+00:00"
+    },
+    {
+      "id": "01KXZECFK3H9EWCEQYYSFQVWYQ",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-STATE-STORE",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:46.3084621+00:00"
+    },
+    {
+      "id": "01KXZECEGT5GJQA2HP0E8ZBM2V",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:45.2116296+00:00"
+    },
+    {
+      "id": "01KXZECHR7MENSWQ494V8AR3E5",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:48.5204524+00:00"
+    },
+    {
+      "id": "01KXZED39CYDDT4FJJ9JZVT0NZ",
+      "target_type": "design_diagram",
+      "target": "DIAG-INSIGHTS-COMPONENTS",
+      "rel": "references",
+      "created_at": "2026-07-20T09:41:06.4774433+00:00"
+    },
+    {
+      "id": "01KXZED4AR5F94G27NXN1PWDTE",
+      "target_type": "design_diagram",
+      "target": "DIAG-INSIGHTS-GENERATE-SEQUENCE",
+      "rel": "references",
+      "created_at": "2026-07-20T09:41:07.5453551+00:00"
+    },
+    {
+      "id": "01KXZED8FQGFECTK4TZSADHREP",
+      "target_type": "design_diagram",
+      "target": "DIAG-INSIGHTS-POLICY-VALIDATION",
+      "rel": "references",
+      "created_at": "2026-07-20T09:41:11.8001303+00:00"
+    },
+    {
+      "id": "01KXZED7BTQ81NBKNQDDWCWDF8",
+      "target_type": "design_diagram",
+      "target": "DIAG-INSIGHTS-RECOVERY-WORKFLOW",
+      "rel": "references",
+      "created_at": "2026-07-20T09:41:10.6512581+00:00"
+    },
+    {
+      "id": "01KXZED59TYQQZZ7F4XHMA7C6M",
+      "target_type": "design_diagram",
+      "target": "DIAG-INSIGHTS-REPORT-STATE",
+      "rel": "references",
+      "created_at": "2026-07-20T09:41:08.5391596+00:00"
+    },
+    {
+      "id": "01KXZED69SPTTG3VHM5HF9WC4T",
+      "target_type": "design_diagram",
+      "target": "DIAG-INSIGHTS-STATE-ER",
+      "rel": "references",
+      "created_at": "2026-07-20T09:41:09.5626792+00:00"
+    },
+    {
+      "id": "01KXZECQ07B8QSQNKV8TK56WXQ",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-ANALYTICAL-EVIDENCE",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:53.8967551+00:00"
+    },
+    {
+      "id": "01KXZECNW24N9MADAEF8PCF60M",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-COHERENT-EVIDENCE",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:52.7397201+00:00"
+    },
+    {
+      "id": "01KXZECT2KARMSFJWXZD8Z33H7",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-IDEMPOTENCY",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:57.0442997+00:00"
+    },
+    {
+      "id": "01KXZECR1ZZR5494PD7TD0HD99",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-INSIGHT-REPORT",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:54.9762951+00:00"
+    },
+    {
+      "id": "01KXZECKT57VRRKGTDN5TF2YPM",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:50.6308604+00:00"
+    },
+    {
+      "id": "01KXZECMRJX445FDK3PN48FKV8",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-POLICY-CATALOGUE",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:51.6029816+00:00"
+    },
+    {
+      "id": "01KXZECX317AN63V1M6PD0ND4B",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-POLICY-VALIDATION-RECEIPT",
+      "rel": "references",
+      "created_at": "2026-07-20T09:41:00.1297650+00:00"
+    },
+    {
+      "id": "01KXZECW1X917VVSK0MX548N7V",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:59.0701789+00:00"
+    },
+    {
+      "id": "01KXZECS0JZ0W5MCGCHKWJ39Q9",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:55.9552455+00:00"
+    },
+    {
+      "id": "01KXZECV22QGZ0S09GQ4XT2WJK",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-STATE-STORE",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:58.0517252+00:00"
+    },
+    {
+      "id": "01KXZE1BQABMEG9NRPTB6ZX1TQ",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-AI-AGENT-HOST",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T09:34:41.8994489+00:00"
+    },
+    {
+      "id": "01KXZE1CN5C3QMZD496MHC4F65",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-BUDGET-PUBLIC-READ-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T09:34:42.8538643+00:00"
+    },
+    {
+      "id": "01KXZE1DHNY1EE5R3BHPAFK7YK",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-CHANNELS-CONSUMER-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T09:34:43.7659162+00:00"
+    },
+    {
+      "id": "01KXZE1EF0WE5NXT5HJQX0PZF8",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T09:34:44.7049817+00:00"
+    },
+    {
+      "id": "01KXZE1FC9EHMDTQ9CP4WB6E0B",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-LEDGER-ACTUALS-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T09:34:45.6424862+00:00"
+    },
+    {
+      "id": "01KXZE1G9Z1GK1S2JN79M38TEJ",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-PRIVATE-EVALUATION-CORPUS",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T09:34:46.5922684+00:00"
+    },
+    {
+      "id": "01KXZECY44YM8407MFPD8NRSZ4",
+      "target_type": "feature_area",
+      "target": "FA-INSIGHTS-CONTRACT-AUTHORITY",
+      "rel": "references",
+      "created_at": "2026-07-20T09:41:01.1895550+00:00"
+    },
+    {
+      "id": "01KXZECZ7WHRP3Q626M328A30H",
+      "target_type": "feature_area",
+      "target": "FA-INSIGHTS-EVIDENCE-ANALYSIS",
+      "rel": "references",
+      "created_at": "2026-07-20T09:41:02.3330445+00:00"
+    },
+    {
+      "id": "01KXZED27N00CMSNBJ47S6332G",
+      "target_type": "feature_area",
+      "target": "FA-INSIGHTS-POLICY-RELEASE-VALIDATION",
+      "rel": "references",
+      "created_at": "2026-07-20T09:41:05.3980810+00:00"
+    },
+    {
+      "id": "01KXZED07X26QC4STD0VK20NM3",
+      "target_type": "feature_area",
+      "target": "FA-INSIGHTS-REPORT-EXPLANATION",
+      "rel": "references",
+      "created_at": "2026-07-20T09:41:03.3585963+00:00"
+    },
+    {
+      "id": "01KXZED19K4SA8BK2FJDV56KT2",
+      "target_type": "feature_area",
+      "target": "FA-INSIGHTS-RETENTION-RECOVERY",
+      "rel": "references",
+      "created_at": "2026-07-20T09:41:04.4364171+00:00"
+    },
+    {
+      "id": "01KXZE0Q2PYCD44TF74F8W7W9T",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-BACKUP-VERIFY-RESTORE",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:34:20.7591979+00:00"
+    },
+    {
+      "id": "01KXZE0QYKM8B02NS8PT5YQTB0",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:34:21.6517882+00:00"
+    },
+    {
+      "id": "01KXZE0RTYC9WCDBN2W6BVNN2T",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:34:22.5599446+00:00"
+    },
+    {
+      "id": "01KXZE0ST4G71R19Y1DC6D2ZKJ",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:34:23.5570514+00:00"
+    },
+    {
+      "id": "01KXZE0TPM5CNB8JTGBV8QQ4DC",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-EXACT-WINDOW-METRICS",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:34:24.4694223+00:00"
+    },
+    {
+      "id": "01KXZE0VNPE9TH92W4JQYNPH0V",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-LINEAR-PACE",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:34:25.4627797+00:00"
+    },
+    {
+      "id": "01KXZE0WMWFF4M320EH21S4JXY",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:34:26.4616955+00:00"
+    },
+    {
+      "id": "01KXZE0XJBJ3SRVEATDRRBM43Z",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-DELETION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:34:27.4043291+00:00"
+    },
+    {
+      "id": "01KXZE0YE49MVRAJP2JV0AQNZK",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-EXPLANATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:34:28.2930884+00:00"
+    },
+    {
+      "id": "01KXZE0ZBAHAJ7M24C7993EKC3",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-GENERATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:34:29.2277882+00:00"
+    },
+    {
+      "id": "01KXZE108EN8C8RT1JKG9Q13M7",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:34:30.1591789+00:00"
+    },
+    {
+      "id": "01KXZE114T2JFHWKRYY16FHB4N",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RESTATEMENT",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:34:31.0670599+00:00"
+    },
+    {
+      "id": "01KXZE12449PY01AAJPG7PAV6J",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RETENTION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:34:32.0694321+00:00"
+    },
+    {
+      "id": "01KXZE132KK9WW10ERFD3K3RP1",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-STRUCTURED-INVOCATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:34:33.0440118+00:00"
+    },
+    {
+      "id": "01KXZE141MZEBMXF31E568EAW5",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-TRUSTED-ANALYSIS-WINDOWS",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:34:34.0375724+00:00"
+    },
+    {
+      "id": "01KXZE1510AQJQ4FW917B2XNSK",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE",
+      "rel": "satisfies",
+      "created_at": "2026-07-20T09:34:35.0412484+00:00"
+    },
+    {
+      "id": "01KXZE15YC7FHG84NJNR8BDQ32",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+      "rel": "satisfies",
+      "created_at": "2026-07-20T09:34:35.9808080+00:00"
+    },
+    {
+      "id": "01KXZE16XN3GX8DT7BAY8N87Y3",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-LOCAL-DATA-PROTECTION",
+      "rel": "satisfies",
+      "created_at": "2026-07-20T09:34:36.9827033+00:00"
+    },
+    {
+      "id": "01KXZE17WY8HDVHQQAWJVN469D",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-PERSONAL-SCALE-PERFORMANCE",
+      "rel": "satisfies",
+      "created_at": "2026-07-20T09:34:37.9833405+00:00"
+    },
+    {
+      "id": "01KXZE18WGZY60D2RFH6HW95AT",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "satisfies",
+      "created_at": "2026-07-20T09:34:38.9928237+00:00"
+    },
+    {
+      "id": "01KXZE19VFYYX9EJPSP4EFBDMG",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-SELF-CONTAINED-LOCAL-OPERATION",
+      "rel": "satisfies",
+      "created_at": "2026-07-20T09:34:39.9839975+00:00"
+    },
+    {
+      "id": "01KXZE1AS69V33X53X05AQ1D7R",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-VERIFIED-RECOVERABILITY",
+      "rel": "satisfies",
+      "created_at": "2026-07-20T09:34:40.9347199+00:00"
+    }
+  ]
+}

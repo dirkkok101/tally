@@ -1,0 +1,9 @@
+{
+  "id": "01KXZF59EGTQ488HQ5MF17GF1C",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "version": "0.5",
+  "changes": [
+    "Technical design complete: 9 decisions, 0 HTTP endpoints, 10 data models, 5 feature areas, and 6 diagrams; selected eleven explicit operations plus shared discovery, one coherent BUDGET composite, a deterministic report compiler, exact trusted windows and Linear Pace, immutable raw-SQLite report history, verified recovery, and external private policy evidence."
+  ],
+  "created_at": "2026-07-20T09:54:19.2174403+00:00"
+}

@@ -4,22 +4,22 @@
   "ref_code": "DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
   "title": "Consume one BUDGET-owned coherent evidence operation",
   "description": [
-    "Bind every Insight Report to one public producer result whose exact Budget Position and dated actual members share the same immutable LEDGER snapshot and plan revision."
+    "Bind every Insight Report to one BUDGET-owned public producer result whose explicit planState, optional canonical Budget Position, dated actual members, and exact public LEDGER total represent one immutable source snapshot."
   ],
   "decision": [
-    "INSIGHTS report generation consumes one versioned read-only budget.insights.evidence.get operation. BUDGET owns the operation, captures one immutable Budget Plan Revision, reuses the one complete public LEDGER actuals snapshot already materialized for its canonical BudgetPositionCalculator, and returns the plan detail, exact Budget Position, bounded dated ActualsItem members, shared snapshot identity and generation fingerprint, calculation schema version, and binding fingerprint. INSIGHTS does not issue a second ledger.actuals.query and does not calculate Budget Position. A correction committed before BUDGET captures the snapshot yields a fully post-correction result; a correction after capture yields a fully pre-correction result. Failure to prove one binding returns Source State Changed and no evidence result."
+    "INSIGHTS report generation consumes one versioned read-only budget.insights.evidence.get operation. BUDGET resolves BoundRevision, NoBudgetPlan, or NoActiveBudgetPlanRevision and captures one complete public LEDGER actuals snapshot for every valid state. BoundRevision returns one immutable Budget Plan Revision and the canonical BudgetPosition calculated from that same materialized set. Plan-absence states return no plan detail, BudgetPosition, or calculation schema, do not invoke the calculator, and return the same bounded dated ActualsItem shape plus exact ledgerBudgetActualTotal. Every result carries shared snapshot identity, generation fingerprint, contract versions, and evidence-binding fingerprint. INSIGHTS issues no second ledger.actuals.query and never calculates Budget Position. A correction before capture yields a wholly post-correction result; a correction after capture yields a wholly pre-correction result. Failure to prove one binding returns Source State Changed and no evidence result."
   ],
   "rationale": [
-    "Spike result on 2026-07-20 using a disposable .NET 10 concurrent harness: 1000 of 1000 forced independent budget-position then ledger-actuals reads mixed generations; the composite producer returned 1000 of 1000 fully pre-correction results and 1000 of 1000 fully post-correction results, with 0 mixed generations and 0 member-to-position reconciliation failures. The candidate used public DTO-shaped values, one BUDGET-owned calculator, no INSIGHTS calculation, no private access, no daemon, and no replica."
+    "The 2026-07-20 disposable .NET 10 A3 harness proved the bound-plan protocol: 1000 of 1000 forced independent budget-position then ledger-actuals reads mixed generations, while one BUDGET-owned snapshot produced 1000 coherent pre-correction and 1000 coherent post-correction results with zero mixed or reconciliation failures. The approved INSIGHTS PRD additionally requires exact actual metrics when plan intent is absent. Preserving NoBudgetPlan and NoActiveBudgetPlanRevision inside the same composite is the only public shape that satisfies that requirement without fabricating a zero plan or forcing an independent LEDGER read. Production conformance must verify both the spiked bound path and the designed absence paths."
   ],
   "alternatives": [
     "A: keep independent budget.position.get and ledger.actuals.query calls, rejected because a correction between calls produced mixed evidence in every forced control. B: expose an opaque LEDGER cursor from BUDGET for INSIGHTS to resume, rejected because it adds expiry and cross-owner cursor coupling after BUDGET already materialized the complete snapshot. C: return the already materialized dated members with the canonical position in one BUDGET-owned read, chosen as the smallest coherent seam."
   ],
   "consequences": [
-    "The BUDGET read capability gains one bounded read-only composite operation while retaining its existing plan and position reads. The composite response may be larger and must obey deterministic member and output limits. BUDGET contract, design, plan, and conformance tests must prove a single snapshot/calculator path and concurrent-correction behavior. INSIGHTS treats LEDGER as cited transitive provenance rather than issuing an independent actuals query. No upstream mutation or durable analytical state is introduced."
+    "BUDGET publishes one bounded read-only discriminated result. BoundRevision proves member-to-position reconciliation and one calculator path; plan-absence states prove member-to-ledger-total reconciliation and calculator exclusion. BUDGET contract, design, plan, and conformance tests carry all three states, correction races, and resource bounds. INSIGHTS treats LEDGER as cited transitive provenance and owns all interpretation and retained state. No upstream mutation, cursor handoff, or analytical replica is introduced."
   ],
   "status_notes": [
-    "Accepted by the A3 feasibility spike; this proves the protocol shape, not its production implementation."
+    "Accepted. A3 empirically validates BoundRevision coherence; NoBudgetPlan and NoActiveBudgetPlanRevision are production contract and integration-test gates."
   ],
   "status": "accepted",
   "metadata": "{\"expected_paths\":[\"src/Tally/Contracts/Budget/Insights/**\",\"src/Tally/Features/Budget/Projection/**\",\"src/Tally/Features/Insights/Evidence/**\",\"tests/Tally.Tests/Insights/Evidence/**\"]}",
@@ -54,11 +54,46 @@
       "created_at": "2026-07-20T09:09:11.7917036+00:00"
     },
     {
+      "id": "01KXZEBAK4HPXK659N1SZ5J2PF",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-COHERENT-EVIDENCE",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:08.4215059+00:00"
+    },
+    {
+      "id": "01KXZE62JHPE35S2ME9JBSMMSN",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-BUDGET-PUBLIC-READ-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T09:37:16.3705316+00:00"
+    },
+    {
+      "id": "01KXZE63GWVRM7T861GPQ8P7ZN",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-LEDGER-ACTUALS-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T09:37:17.3416288+00:00"
+    },
+    {
       "id": "01KXZCC11WAS1T4ZM8855WDEWY",
       "target_type": "requirement",
       "target": "FR-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
       "rel": "implements",
       "created_at": "2026-07-20T09:05:34.2694722+00:00"
+    },
+    {
+      "id": "01KXZE61KEJ34H1H898FNW6JFE",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:37:15.3752802+00:00"
+    },
+    {
+      "id": "01KXZE60JJF3N970DAQR2XRDKG",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:37:14.3232104+00:00"
     },
     {
       "id": "01KXZCBYTE4TXV4QFEGVGH58Y1",

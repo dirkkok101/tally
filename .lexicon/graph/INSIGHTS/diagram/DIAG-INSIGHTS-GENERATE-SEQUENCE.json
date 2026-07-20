@@ -1,0 +1,76 @@
+{
+  "id": "01KXZDY1T00W50687XJW0Q1C0P",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DIAG-INSIGHTS-GENERATE-SEQUENCE",
+  "title": "Coherent deterministic report generation",
+  "diagram_type": "sequence",
+  "format": "mermaid",
+  "content": [
+    "sequenceDiagram",
+    "  actor Caller",
+    "  participant Registry as Operation Registry",
+    "  participant Generate as GenerateInsightReportQuery",
+    "  participant Compiler as InsightReportCompiler",
+    "  participant BudgetClient as BudgetContractClient",
+    "  participant Budget as BUDGET Composite",
+    "  participant Ledger as LEDGER Snapshot",
+    "  Caller->>Registry: insights.report.generate request",
+    "  Registry->>Generate: validated typed request",
+    "  Generate->>Generate: freeze TimeProvider and enforce limits",
+    "  Generate->>BudgetClient: GetInsightEvidenceAsync",
+    "  BudgetClient->>Budget: budget.insights.evidence.get",
+    "  Budget->>Budget: resolve explicit planState",
+    "  Budget->>Ledger: materialize one complete snapshot",
+    "  Ledger-->>Budget: dated members plus exact total and snapshot identity",
+    "  alt BoundRevision",
+    "    Budget->>Budget: canonical BudgetPositionCalculator over same members",
+    "    Budget-->>BudgetClient: plan plus position plus members",
+    "  else NoBudgetPlan or NoActiveBudgetPlanRevision",
+    "    Budget-->>BudgetClient: absence state plus members no position",
+    "  end",
+    "  BudgetClient-->>Generate: one bounded coherent public evidence result",
+    "  Generate->>Compiler: compile normalized request and evidence",
+    "  Compiler->>Compiler: reconcile windows metrics pace states explanations order fingerprint",
+    "  Compiler-->>Generate: complete InsightReport",
+    "  Generate-->>Registry: one ephemeral result no write",
+    "  Registry-->>Caller: one stdout envelope"
+  ],
+  "created_at": "2026-07-20T09:32:53.4411539+00:00",
+  "links": [
+    {
+      "id": "01KXZEBSVNQC89VHAWZ2QDTH5W",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+      "rel": "supports",
+      "created_at": "2026-07-20T09:40:24.0544962+00:00"
+    },
+    {
+      "id": "01KXZEBTV0MCA83V0A0KX0MTAW",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER",
+      "rel": "supports",
+      "created_at": "2026-07-20T09:40:25.0570156+00:00"
+    },
+    {
+      "id": "01KXZEBVVFMS5AM9DXF4EDE4N6",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY",
+      "rel": "supports",
+      "created_at": "2026-07-20T09:40:26.0960172+00:00"
+    },
+    {
+      "id": "01KXZEBWT6V9WS0D9KBYV2M3P3",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+      "rel": "illustrates",
+      "created_at": "2026-07-20T09:40:27.0797728+00:00"
+    },
+    {
+      "id": "01KXZEBXS1TDQ51CFD13PCJDWG",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-GENERATION",
+      "rel": "illustrates",
+      "created_at": "2026-07-20T09:40:28.0657980+00:00"
+    }
+  ]
+}

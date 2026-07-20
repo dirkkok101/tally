@@ -1,0 +1,53 @@
+{
+  "id": "01KXZDY19M40RZ0NPTYRFK55P8",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DIAG-INSIGHTS-COMPONENTS",
+  "title": "INSIGHTS component architecture",
+  "diagram_type": "c4_component",
+  "format": "mermaid",
+  "content": [
+    "flowchart LR",
+    "  Caller[Owner or Agent Host] --> CLI[CLI adapter]",
+    "  CLI --> Registry[Operation descriptor registry]",
+    "  Registry --> Reports[Report vertical slices]",
+    "  Registry --> History[History vertical slices]",
+    "  Registry --> Recovery[Recovery vertical slices]",
+    "  Reports --> Compiler[InsightReportCompiler]",
+    "  Compiler --> Policies[Pure window metric pace state and explanation policies]",
+    "  Reports --> BudgetClient[BudgetContractClient]",
+    "  BudgetClient --> Executor[Shared public operation executor]",
+    "  Executor --> Budget[budget.insights.evidence.get]",
+    "  Budget --> Ledger[One materialized LEDGER snapshot]",
+    "  History --> Store[(insights.db active generation)]",
+    "  Reports --> Store",
+    "  Recovery --> Store",
+    "  Recovery --> Generations[Verified generations and backups]",
+    "  Channels[Future CHANNELS consumer] --> Registry",
+    "  Bootstrap[Explicit InsightsExtensions registration] --> Registry",
+    ""
+  ],
+  "created_at": "2026-07-20T09:32:52.9170493+00:00",
+  "links": [
+    {
+      "id": "01KXZEBPZXGWXQPY5GVXWTE1NN",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-APPLICATION-ARCHITECTURE",
+      "rel": "supports",
+      "created_at": "2026-07-20T09:40:21.1180367+00:00"
+    },
+    {
+      "id": "01KXZEBQZZGV8RZZ2VE9CSHSDS",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-STRUCTURED-INVOCATION",
+      "rel": "illustrates",
+      "created_at": "2026-07-20T09:40:22.1439343+00:00"
+    },
+    {
+      "id": "01KXZEBRXAXR6D6RJHHNHN0AXX",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-SELF-CONTAINED-LOCAL-OPERATION",
+      "rel": "illustrates",
+      "created_at": "2026-07-20T09:40:23.0836026+00:00"
+    }
+  ]
+}

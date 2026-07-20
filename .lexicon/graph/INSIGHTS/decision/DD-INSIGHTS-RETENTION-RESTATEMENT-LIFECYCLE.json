@@ -1,0 +1,120 @@
+{
+  "id": "01KXZDVAXWZ8DCJWSQJ1B3R2DP",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE",
+  "title": "Append-only snapshots with replay-safe restatement and leaf deletion",
+  "description": [
+    "Preserve exactly what was shown while supporting explicit retention, correction-based comparison, dependency-safe deletion, and stable retries."
+  ],
+  "decision": [
+    "Generate writes nothing. Retain resolves idempotency before producer reads, generates internally, and atomically appends one immutable snapshot and outcome reference. Restate loads one predecessor, generates current evidence through the same compiler, and appends one child plus predecessor link when provenance, policy, schema, or semantic content changes; identical results return No Change. Delete applies RESTRICT to referenced snapshots, removes one unreferenced leaf payload and outgoing link, and appends one metadata-only Deletion Event. Same key and request replay prior outcomes; changed input conflicts."
+  ],
+  "rationale": [
+    "In-place refresh destroys auditability. Storing arbitrary caller reports breaks provenance. Cascading deletion corrupts surviving Restatement chains. Event sourcing would add replay and projection complexity beyond the moderate budget. Immutable append plus explicit links and metadata-only deletion keeps every accepted lifecycle observable and atomic."
+  ],
+  "alternatives": [
+    "A: update a current report in place, rejected because corrections erase what was shown. B: retain caller-authored report payloads, rejected because provenance cannot be trusted. C: event-source every report calculation, rejected as excessive complexity. D: append immutable generated snapshots, explicit predecessor links, No Change outcomes, and RESTRICT leaf deletion, chosen."
+  ],
+  "consequences": [
+    "Snapshot IDs are opaque ULIDs distinct from deterministic report IDs. Request hashes include operation, version, actor, reason, target, selectors, and safe path identity. If a retained outcome is later deleted, retry returns metadata-only Deleted and never recreates content. No automatic expiry occurs. Existing backups remain point-in-time artifacts."
+  ],
+  "status_notes": [
+    "Accepted. Deletion and replay semantics are direct planning and fault-injection obligations."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Features/Insights/History/Retain/**\",\"src/Tally/Features/Insights/History/Restate/**\",\"src/Tally/Features/Insights/History/Delete/**\",\"src/Tally/Infrastructure/Insights/Storage/Idempotency/**\",\"tests/Tally.Tests/Insights/History/**\"]}",
+  "created_at": "2026-07-20T09:31:24.4776469+00:00",
+  "links": [
+    {
+      "id": "01KXZE5J7N8T7N19ADQGWBHJC3",
+      "target_type": "adr",
+      "target": "ADR-CORE-0020",
+      "rel": "references",
+      "created_at": "2026-07-20T09:36:59.6384375+00:00"
+    },
+    {
+      "id": "01KXZEBH998Q9QVKY9HKXWEH8K",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-IDEMPOTENCY",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:15.2739275+00:00"
+    },
+    {
+      "id": "01KXZEBG869TG0T6AYEYX829XW",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:14.2149201+00:00"
+    },
+    {
+      "id": "01KXZE5AW0NDF2WGC9ESDEZV3P",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-DELETION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:36:52.0967703+00:00"
+    },
+    {
+      "id": "01KXZE5BQJXKTPTF1SASD5W1R1",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:36:52.9793095+00:00"
+    },
+    {
+      "id": "01KXZE59Y8JDP82JZDFZ3X2GGA",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RESTATEMENT",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:36:51.1456722+00:00"
+    },
+    {
+      "id": "01KXZE58YZP8PWGWQK7SMS5PDC",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RETENTION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:36:50.1449915+00:00"
+    },
+    {
+      "id": "01KXZE5CMZCBKWK4W66DKMY4N0",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:36:53.9199214+00:00"
+    },
+    {
+      "id": "01KXZE5DKR09VZKNPQ6X5Z0X68",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:36:54.9048934+00:00"
+    },
+    {
+      "id": "01KXZE5GB2VN6GRWR9XPN2M0RH",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-REPORT-DELETION-DEPENDENCIES",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:36:57.6988845+00:00"
+    },
+    {
+      "id": "01KXZE5HBGNHF2G7PG4PFZMM2D",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-REPORT-RETENTION-FAILURE-ATOMICITY",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:36:58.7373268+00:00"
+    },
+    {
+      "id": "01KXZE5EGKZ7NQ5BWG076JENJN",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-REPORT-RETENTION-IDEMPOTENCY",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:36:55.8283309+00:00"
+    },
+    {
+      "id": "01KXZE5FDXGW3PA3FWYG0KJPYB",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-RESTATEMENT-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:36:56.7667421+00:00"
+    }
+  ]
+}

@@ -12,7 +12,7 @@
 
 ## Summary
 
-Create source-generated BUDGET DTOs, closed enums, stable errors, exactly five operation descriptors, and pure contract mapping roots.
+Create source-generated BUDGET DTOs, closed enums, stable errors, exactly six operation descriptors, and pure contract mapping roots.
 
 ## Objective
 
@@ -26,7 +26,7 @@ The Tally registry can represent every BUDGET request, result, error, authority,
 | ADR-CORE-0010: CommandResult Pattern for Commands | `adr` | `governed-by` | `true` |
 | ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning | `adr` | `governed-by` | `true` |
 | DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-CLI-OPERATION-CONTRACT: Five explicit BUDGET operations from one registry | `design_decision` | `governed-by` | `true` |
+| DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry | `design_decision` | `governed-by` | `true` |
 | DM-BUDGET-OPERATION-CONTRACTS: BudgetOperationContracts | `data_model` | `touches` | `true` |
 | FA-BUDGET-CONTRACT-AUTHORITY: Contract and Authority | `feature_area` | `touches` | `false` |
 | FR-BUDGET-CONTRACT-DISCOVERY: Discover the BUDGET operation contract | `requirement` | `implements` | `true` |
@@ -44,7 +44,7 @@ No task dependencies recorded.
 
 ### Acceptance Checks
 
-- The descriptor inventory contains exactly five BUDGET operation IDs with versioned request, result, error, mutability, idempotency, authority, limit, compatibility, and exit metadata; system.schema.list/show remain shared operations.
+- The descriptor inventory contains exactly six BUDGET operation IDs with versioned request, result, error, mutability, idempotency, authority, limit, compatibility, and exit metadata; system.schema.list/show remain shared operations.
 - Source-generated JSON rejects unknown fields; malformed, incompatible, missing-actor, and missing-idempotency requests fail before handler or storage effects.
 - Money uses canonical ZAR minor-unit-safe wire rules, IDs are opaque ULIDs, states are closed enums, and actor comes only from the trusted common envelope.
 - Schema discovery and unknown-operation handling perform no BudgetStateStore or Ledger read.
@@ -77,9 +77,10 @@ None recorded.
 |---|---|---|---|---|
 | `src/Tally/Contracts/Budget/Plans/BudgetPlanContracts.cs` | `create` | plan request and result contracts | `true` |  |
 | `src/Tally/Contracts/Budget/Position/BudgetPositionContracts.cs` | `create` | position result contracts | `true` |  |
+| `src/Tally/Contracts/Budget/Insights/BudgetInsightEvidence.cs` | `create` | coherent evidence request and result contracts | `true` |  |
 | `src/Tally/Contracts/Budget/BudgetErrors.cs` | `create` | stable errors and exits | `true` |  |
 | `src/Tally/Contracts/Budget/BudgetJsonContext.cs` | `create` | source-generated JSON | `true` |  |
-| `src/Tally/Features/Budget/Contract/BudgetOperationModule.cs` | `create` | five operation descriptors | `true` |  |
+| `src/Tally/Features/Budget/Contract/BudgetOperationModule.cs` | `create` | six operation descriptors | `true` |  |
 | `src/Tally/Features/Budget/Contract/BudgetContractMapper.cs` | `create` | pure mapper root | `true` |  |
 | `tests/Tally.Tests/Budget/Contract/BudgetOperationContractTests.cs` | `test` | descriptor and schema tests | `true` |  |
 
@@ -96,13 +97,13 @@ None recorded.
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetOperationContractTests` | exit 0; at least 20 exact-inventory, schema, enum, unknown-field, compatibility, authority, idempotency, and no-data-read cases are discovered and 0 fail | `true` | 360 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetOperationContractTests` | exit 0; at least 24 exact-inventory, schema, enum, unknown-field, compatibility, authority, idempotency, and no-data-read cases are discovered and 0 fail | `true` | 360 |
 
 ### Review Gates
 
 | Gate | Description | Required |
 |---|---|---|
-| `self-review` | Inventory exactly five public operations and two read-only INSIGHTS operations; confirm no hidden alias, mutation grant, or HTTP surface. | `true` |
+| `self-review` | Inventory exactly six public operations and three read-only INSIGHTS capability operations; confirm no hidden alias, mutation grant, private read, or HTTP surface. | `true` |
 
 ## Bead References
 
@@ -117,7 +118,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `governed-by` -> ADR-CORE-0010: CommandResult Pattern for Commands
 - `governed-by` -> ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning
 - `governed-by` -> DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam
-- `governed-by` -> DD-BUDGET-CLI-OPERATION-CONTRACT: Five explicit BUDGET operations from one registry
+- `governed-by` -> DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry
 - `implements` -> FR-BUDGET-CONTRACT-DISCOVERY: Discover the BUDGET operation contract
 - `implements` -> FR-BUDGET-STRUCTURED-INVOCATION: Invoke BUDGET operations non-interactively
 - `satisfies` -> NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries

@@ -16,7 +16,7 @@ Validation and wiring gate with no implements refs; compose all handlers into th
 
 ## Objective
 
-The Native-AOT Tally executable discovers and invokes exactly five BUDGET operations plus shared schema discovery with stable contracts and no hidden reads.
+The Native-AOT Tally executable discovers and invokes exactly six BUDGET operations plus shared schema discovery with stable contracts and no hidden reads.
 
 ## References
 
@@ -24,7 +24,7 @@ The Native-AOT Tally executable discovers and invokes exactly five BUDGET operat
 |---|---|---|---|
 | ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning | `adr` | `governed-by` | `true` |
 | DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-CLI-OPERATION-CONTRACT: Five explicit BUDGET operations from one registry | `design_decision` | `governed-by` | `true` |
+| DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry | `design_decision` | `governed-by` | `true` |
 | DM-BUDGET-OPERATION-CONTRACTS: BudgetOperationContracts | `data_model` | `touches` | `true` |
 | PAT-CORE-API-SERVICE-REGISTRATION: Service Registration Pattern — NXGN Actions API | `pattern` | `governed-by` | `true` |
 | TC-BUDGET-CONTRACT-DISCOVERY-CONTRACT: Verify BUDGET contract discovery | `test_case` | `verifies` | `true` |
@@ -46,10 +46,10 @@ The Native-AOT Tally executable discovers and invokes exactly five BUDGET operat
 
 ### Acceptance Checks
 
-- BudgetExtensions explicitly registers contract, state, Ledger client, plan, position, and projection components; Program adds it without reflection scanning.
-- Published schema inventory contains exactly five BUDGET descriptors with byte-stable semantics, concrete handlers, and shared system.schema.list/show; no alias, HTTP, background operation, or data read during discovery.
+- BudgetExtensions explicitly registers contract, state, Ledger client, plan, position, coherent evidence, and projection components; Program adds it without reflection scanning.
+- Published schema inventory contains exactly six BUDGET descriptors with byte-stable semantics, concrete handlers, and shared system.schema.list/show; no alias, HTTP, background operation, or data read during discovery.
 - Each valid invocation emits one versioned business result; malformed, unknown-field, not-found, conflict, closed, stale, compatibility, Ledger, resource, and sanitized internal failures emit one stable error/exit.
-- Mutations reject actor, authority, reason, and idempotency omissions before effects; incompatible BUDGET/Ledger/INSIGHTS versions fail before mutation or partial financial output.
+- Mutations reject actor, authority, reason, and idempotency omissions before effects; incompatible BUDGET, LEDGER, or INSIGHTS versions and unprovable evidence bindings fail before mutation or partial financial output.
 - linux-x64 Native-AOT publish succeeds with source-generated JSON and zero build, trim, reflection, dynamic-code, or descriptor gaps.
 
 ### Failure Criteria
@@ -99,7 +99,7 @@ None recorded.
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `bash scripts/verify-budget-contract.sh` | exit 0; exactly 5 BUDGET descriptors/handlers and 2 INSIGHTS reads are inventoried, both contract classes discover nonzero cases, version/error partitions run, Native-AOT publish succeeds, and 0 tests or warning checks fail | `true` | 1200 |
+| `after` | `bash scripts/verify-budget-contract.sh` | exit 0; exactly 6 BUDGET descriptors and handlers and 3 INSIGHTS capability reads are inventoried, contract classes discover nonzero cases, version/error and coherent-evidence partitions run, Native-AOT publish succeeds, and 0 tests or warning checks fail | `true` | 1200 |
 
 ### Review Gates
 
@@ -123,7 +123,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-BUDGET-POSITION-QUERY](../tasks/position-query.md): Register the position handler.
 - `governed-by` -> ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning
 - `governed-by` -> DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam
-- `governed-by` -> DD-BUDGET-CLI-OPERATION-CONTRACT: Five explicit BUDGET operations from one registry
+- `governed-by` -> DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry
 - `governed-by` -> PAT-CORE-API-SERVICE-REGISTRATION: Service Registration Pattern — NXGN Actions API
 - `touches` -> DM-BUDGET-OPERATION-CONTRACTS: BudgetOperationContracts
 - `verifies` -> TC-BUDGET-CONTRACT-DISCOVERY-CONTRACT: Verify BUDGET contract discovery

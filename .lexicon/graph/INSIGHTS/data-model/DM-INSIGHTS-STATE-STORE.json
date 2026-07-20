@@ -1,0 +1,91 @@
+{
+  "id": "01KXZDXDDZ6S5XXFMGSV4WET64",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DM-INSIGHTS-STATE-STORE",
+  "name": "InsightsStateStore",
+  "description": [
+    "One logical owner-only raw-SQLite generation store for retained analytical evidence and module metadata."
+  ],
+  "schema_def": [
+    "Root: one insights.db inside an owner-only generation directory selected by CURRENT.",
+    "Tables: store_metadata, report_snapshot, report_payload, restatement_link, deletion_event, insights_idempotency_record, recovery_receipt, restore_event.",
+    "Metadata: PRAGMA user_version with immutable ordered migrations, active generation fingerprint, and compatibility evidence for policy versions cited by retained reports.",
+    "Settings: foreign_keys=ON, journal_mode=WAL, synchronous=FULL, bounded busy_timeout.",
+    "Write boundary: BEGIN IMMEDIATE for Retain, changed Restate, Delete, idempotency, recovery receipts, restore events, and migration metadata.",
+    "Protection: directories 0700; database, WAL, SHM, CURRENT, lock, backup, manifest, and recognized candidate artifacts 0600 where supported.",
+    "Never persisted: dated actual members, raw merchant text, canonical transaction payload, producer cursor, private corpus row, PolicyValidationReceipt, arbitrary formula, report list payload, or upstream state replica."
+  ],
+  "created_at": "2026-07-20T09:32:32.5760548+00:00",
+  "links": [
+    {
+      "id": "01KXZE8KDWWE5XWCN3N3WQC94X",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-BACKUP-VERIFY-RESTORE",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:39.1651280+00:00"
+    },
+    {
+      "id": "01KXZE8JC8RZF1KYW9KBENJ4XD",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-DELETION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:38.0891896+00:00"
+    },
+    {
+      "id": "01KXZE8HA544T3781Z5JJ7ME58",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:36.9990523+00:00"
+    },
+    {
+      "id": "01KXZE8GBJFEC2KBP4DF2MD37N",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RETENTION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:36.0191980+00:00"
+    },
+    {
+      "id": "01KXZE8MCE8GS4SNCW8JKAV5ST",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:40.1434558+00:00"
+    },
+    {
+      "id": "01KXZE8NAPN7D6X9HTTZWKBD27",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-LOCAL-DATA-PROTECTION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:41.1109793+00:00"
+    },
+    {
+      "id": "01KXZE8P98YV3YGK3RN9DT1MAP",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-VERIFIED-RECOVERABILITY",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:42.0893939+00:00"
+    },
+    {
+      "id": "01KXZE8R83W0Y4DQHGKNYST761",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-LOCAL-DATA-PROTECTION",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:38:44.1000029+00:00"
+    },
+    {
+      "id": "01KXZE8Q808X4K52Z0TKWQS00Z",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-REPORT-RETENTION-FAILURE-ATOMICITY",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:38:43.0732226+00:00"
+    },
+    {
+      "id": "01KXZE8S6QERM7Y6B8M58D67V0",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-RESTORE-FAILURE-ATOMICITY",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:38:45.0805204+00:00"
+    }
+  ]
+}

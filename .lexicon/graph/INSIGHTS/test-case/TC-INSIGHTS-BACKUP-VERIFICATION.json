@@ -10,8 +10,8 @@
   "automation": "automated",
   "status": "planned",
   "preconditions": "A representative store contains reports, chains, deletions, idempotency outcomes, policy metadata, and no ephemeral source snapshots.",
-  "steps": "Create a backup, inspect permissions and manifest, independently verify every durable count, link, fingerprint and outcome, then test corrupt, omitted, incompatible, wrong-owner, and payload-leak candidates.",
-  "expected": "The valid artifact is complete, point-in-time, owner-only and independently verified; invalid artifacts fail with no active-store change or private diagnostic.",
+  "steps": "Create a backup, inspect permissions and manifest, independently verify every durable count, link, fingerprint and terminal outcome, and prove the current backup Attempting reservation is excluded from the artifact. Inject crashes before and after artifact publication and terminal receipt, replay the same key, conflict changed input, run standalone Verify, compare Status before and after Verify, then test corrupt, omitted, incompatible, wrong-owner, and payload-leak candidates.",
+  "expected": "The valid artifact is complete, point-in-time, owner-only, independently verified, and contains every prior terminal outcome but no current non-outcome reservation. Exact replay reconciles artifact publication without duplication; completed failure does not consume the key. Standalone Verify changes neither active state nor Status. Invalid artifacts fail with no active-store change or private diagnostic.",
   "owner": "INSIGHTS implementation",
   "created_at": "2026-07-20T08:31:39.1897480+00:00",
   "links": [

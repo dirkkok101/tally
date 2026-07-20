@@ -1,0 +1,49 @@
+{
+  "id": "01KXZDY3A6DGAFVAFHXNV37624",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DIAG-INSIGHTS-RECOVERY-WORKFLOW",
+  "title": "Verified INSIGHTS restore activation",
+  "diagram_type": "workflow",
+  "format": "mermaid",
+  "content": [
+    "flowchart TD",
+    "  A[Restore request with expected current fingerprint] --> B[Verify source backup independently]",
+    "  B -->|invalid| X[Stable failure active generation unchanged]",
+    "  B --> C[Create separate generation]",
+    "  C --> D[Restore state and apply compatible migrations]",
+    "  D --> E[Verify counts links payload hashes idempotency deletion state and permissions]",
+    "  E -->|invalid| X",
+    "  E --> F[Record restore outcome in candidate and reverify]",
+    "  F --> G[Acquire exclusive INSIGHTS writer lock]",
+    "  G --> H{Current fingerprint still expected?}",
+    "  H -->|no| X",
+    "  H -->|yes| I[Flush candidate and atomically replace CURRENT]",
+    "  I --> J[Fsync directory and return activated generation]",
+    "  J --> K[Prior generation remains recovery point]",
+    ""
+  ],
+  "created_at": "2026-07-20T09:32:54.9843133+00:00",
+  "links": [
+    {
+      "id": "01KXZEC5KYWBX2F0GZJRGK99VJ",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION",
+      "rel": "supports",
+      "created_at": "2026-07-20T09:40:36.0954182+00:00"
+    },
+    {
+      "id": "01KXZEC6KK6BN4PXWDSK7A2J0R",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-BACKUP-VERIFY-RESTORE",
+      "rel": "illustrates",
+      "created_at": "2026-07-20T09:40:37.1089369+00:00"
+    },
+    {
+      "id": "01KXZEC7JAGHHN8E9KN9XWW4SK",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-VERIFIED-RECOVERABILITY",
+      "rel": "illustrates",
+      "created_at": "2026-07-20T09:40:38.0912350+00:00"
+    }
+  ]
+}

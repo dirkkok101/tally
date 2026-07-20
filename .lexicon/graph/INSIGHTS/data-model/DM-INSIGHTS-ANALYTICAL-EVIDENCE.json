@@ -1,0 +1,85 @@
+{
+  "id": "01KXZDXBCJJEXEN98RRW25V9P5",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DM-INSIGHTS-ANALYTICAL-EVIDENCE",
+  "name": "AnalysisWindowMetricStateAndExplanation",
+  "description": [
+    "Exact analytical building blocks used to account for every requested metric and signal deterministically."
+  ],
+  "schema_def": [
+    "AnalysisWindow {kind: Day|Week|MonthToDate, timezone: Africa/Johannesburg, startDateInclusive, endDateInclusive, policyVersion}.",
+    "ExactMoney {currencyCode: ZAR, minorUnits: Int64}.",
+    "ExactRational {numerator: checked Int64, denominator: positive Int32, canonical sign and gcd normalization}.",
+    "MetricResult {metricKind, window, categoryId?, bucketKind?, state, exactValue?, policyVersion, evidenceRefs[], explanation}.",
+    "PaceResult {state: BelowLinearBaseline|AtLinearBaseline|AboveLinearBaseline|OverPlan|OverZeroPlan|AtOrBelowZeroPlan|Unavailable|NotStarted, planAmount?, actualAmount?, elapsedDays?, periodDays?, exactBaseline?, policyVersion, limitations[], explanation}.",
+    "EvidenceState {status: Supported|Unavailable|InsufficientEvidence|NotStarted|Deferred, reasonKind, evaluatedEvidence[], unmetRule?, permittedNextAction?}.",
+    "Explanation {templateVersion, structuredInputs, renderedChannelNeutralText, sourceRefs[], limitations[]}.",
+    "All collections use catalogue order then stable category identity; display text never controls ordering."
+  ],
+  "created_at": "2026-07-20T09:32:30.4832987+00:00",
+  "links": [
+    {
+      "id": "01KXZE7Q28GDMNFTHP7VGV0RX6",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:10.1214762+00:00"
+    },
+    {
+      "id": "01KXZE7N6WNKP734TF5Y44MFV4",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-EXACT-WINDOW-METRICS",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:08.2217937+00:00"
+    },
+    {
+      "id": "01KXZE7P4A1BSV3ZB7VFFW64VH",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-LINEAR-PACE",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:09.1628960+00:00"
+    },
+    {
+      "id": "01KXZE7R1MW87HVFST315CV9M3",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-EXPLANATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:11.1248617+00:00"
+    },
+    {
+      "id": "01KXZE7M9YE2GBRGW5HYJB1024",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-TRUSTED-ANALYSIS-WINDOWS",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:07.2951214+00:00"
+    },
+    {
+      "id": "01KXZE7S2G7GY2TCPQBFJTYJJZ",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-ANALYSIS-WINDOW-CONFORMANCE",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:38:12.1773082+00:00"
+    },
+    {
+      "id": "01KXZE7VZ53XV27GV501RWMSVZ",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-EVIDENCE-STATE-ACCOUNTING",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:38:15.1422133+00:00"
+    },
+    {
+      "id": "01KXZE7T0SYWRS53AS8VY609C6",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-EXACT-METRICS-CONFORMANCE",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:38:13.1460291+00:00"
+    },
+    {
+      "id": "01KXZE7V0DZ54E6JDSD9P0NZTG",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-LINEAR-PACE-CONFORMANCE",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:38:14.1577590+00:00"
+    }
+  ]
+}

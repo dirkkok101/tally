@@ -1,0 +1,47 @@
+{
+  "id": "01KXZDXED5GAT7GWR5N0XBEZB2",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DM-INSIGHTS-POLICY-VALIDATION-RECEIPT",
+  "name": "PolicyValidationReceipt",
+  "description": [
+    "Privacy-safe aggregate release and test evidence, stored outside the active INSIGHTS product store, that built-in analytical policies and the candidate report shape passed private gates."
+  ],
+  "schema_def": [
+    "PolicyValidationReceipt {receiptId, policySetFingerprint, reportSchemaVersion, producerContractVersions, windowPolicyVersion, corpusFingerprint, expectedStateFingerprint, evaluationToolVersion, structuralCaseIds[], aggregateOutcomes, falseHighSeverityCount, disclosureCanaryStatus, ownerDecisionId, ownerAcceptedImprovement, createdAt}.",
+    "aggregateOutcomes counts Supported, Unavailable, InsufficientEvidence, CorrectSignal, IncorrectSignal, CorrectSeverity, FalseSeverity, and Canary outcomes.",
+    "Required shapes: sparse, zero, recurring, front-loaded, irregular, refund-heavy, plan-change, category-lifecycle, classification-gap, correction, and false-severity.",
+    "Forbidden fields: manifest filename or path, amount, merchant text, report payload, source row, expected row, or private case body.",
+    "Storage boundary: release or test evidence outside active insights.db; the released catalogue embeds only the passed policy and receipt fingerprints. A changed policy cannot enter the catalogue without a passing compatible receipt; unchanged released policies remain usable when the corpus is absent."
+  ],
+  "created_at": "2026-07-20T09:32:33.5740105+00:00",
+  "links": [
+    {
+      "id": "01KXZE8YZGVDSS9X5ZVJ52TD8C",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:50.9930260+00:00"
+    },
+    {
+      "id": "01KXZE8ZWCYFHBWJWDFZG64EMY",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:51.9167126+00:00"
+    },
+    {
+      "id": "01KXZE90S2TN6CCG7DGWZTQ78S",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-LOCAL-DATA-PROTECTION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:52.8353604+00:00"
+    },
+    {
+      "id": "01KXZE91QA9QBBBC2838JAXEJ1",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:38:53.8029886+00:00"
+    }
+  ]
+}

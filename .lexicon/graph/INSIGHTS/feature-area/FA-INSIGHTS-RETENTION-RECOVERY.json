@@ -1,0 +1,110 @@
+{
+  "id": "01KXZDY081T9DRQ4T9MAM0WM4Z",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "FA-INSIGHTS-RETENTION-RECOVERY",
+  "name": "Retention and Recovery",
+  "description": [
+    "Immutable Report Snapshots, replay outcomes, Restatements, differences, metadata history, dependency-safe deletion, status, backup, verification, and atomic restore."
+  ],
+  "created_at": "2026-07-20T09:32:51.8426582+00:00",
+  "links": [
+    {
+      "id": "01KXZE9Y52DA53AVW4SZ4APNS4",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE",
+      "rel": "belongs-to",
+      "created_at": "2026-07-20T09:39:22.9150255+00:00"
+    },
+    {
+      "id": "01KXZE9X6V7SHM1BS8ZHP21NT0",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-STATE-STORE",
+      "rel": "belongs-to",
+      "created_at": "2026-07-20T09:39:21.9488045+00:00"
+    },
+    {
+      "id": "01KXZE9Z2EHRQQMWPQH29HTWPG",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION",
+      "rel": "belongs-to",
+      "created_at": "2026-07-20T09:39:23.8555684+00:00"
+    },
+    {
+      "id": "01KXZEA4J5Q6CHPPWTJV2MGQ8Z",
+      "target_type": "design_diagram",
+      "target": "DIAG-INSIGHTS-RECOVERY-WORKFLOW",
+      "rel": "belongs-to",
+      "created_at": "2026-07-20T09:39:29.4784823+00:00"
+    },
+    {
+      "id": "01KXZEA3KVPZAK0AKYCP4F7JW9",
+      "target_type": "design_diagram",
+      "target": "DIAG-INSIGHTS-STATE-ER",
+      "rel": "belongs-to",
+      "created_at": "2026-07-20T09:39:28.5080311+00:00"
+    },
+    {
+      "id": "01KXZEA0V2RXS4YVERSWE1WQ6M",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-IDEMPOTENCY",
+      "rel": "belongs-to",
+      "created_at": "2026-07-20T09:39:25.6675674+00:00"
+    },
+    {
+      "id": "01KXZEA2NHB6RNF7R08C5X38EX",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "rel": "belongs-to",
+      "created_at": "2026-07-20T09:39:27.5378651+00:00"
+    },
+    {
+      "id": "01KXZE9ZYK2GK04D5CC6RNXCRE",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE",
+      "rel": "belongs-to",
+      "created_at": "2026-07-20T09:39:24.7557187+00:00"
+    },
+    {
+      "id": "01KXZEA1R4GP0J8GYHJBAD866B",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-STATE-STORE",
+      "rel": "belongs-to",
+      "created_at": "2026-07-20T09:39:26.5967820+00:00"
+    },
+    {
+      "id": "01KXZE9EZ6533R3ES17FKSCTGR",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-BACKUP-VERIFY-RESTORE",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:39:07.3675643+00:00"
+    },
+    {
+      "id": "01KXZE9E1ABDMFKR2AEH5XTH7Q",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-DELETION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:39:06.4112212+00:00"
+    },
+    {
+      "id": "01KXZE9D3TGTATVHT5C7D6BAZM",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:39:05.4677229+00:00"
+    },
+    {
+      "id": "01KXZE9C3THGYQ27QX9Y1NK737",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RESTATEMENT",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:39:04.4438016+00:00"
+    },
+    {
+      "id": "01KXZE9B3QBTH1GVQDM24A7Z20",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RETENTION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:39:03.4166043+00:00"
+    }
+  ]
+}

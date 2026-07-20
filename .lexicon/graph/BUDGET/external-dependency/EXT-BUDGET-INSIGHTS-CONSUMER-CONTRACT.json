@@ -4,7 +4,7 @@
   "ref_code": "EXT-BUDGET-INSIGHTS-CONSUMER-CONTRACT",
   "name": "INSIGHTS Consumer Contract",
   "description": [
-    "Outbound read dependency. INSIGHTS consumes immutable plan revision detail, exact Budget Position, and bounded dated actual members through one BUDGET-owned coherent evidence operation that cites the shared public LEDGER snapshot. INSIGHTS owns exact-window interpretation, signals, explanations, and durable Report Snapshots; it receives no plan mutation, private-storage, independent LEDGER cursor, or BUDGET calculation authority."
+    "Outbound read dependency. INSIGHTS consumes explicit BoundRevision, NoBudgetPlan, or NoActiveBudgetPlanRevision evidence through one BUDGET-owned coherent operation. Every result carries bounded dated actual members, exact public LEDGER budget-actual total, and shared snapshot provenance; only BoundRevision carries immutable plan detail and the canonical BudgetPosition. INSIGHTS owns exact-window interpretation, signals, explanations, and Report Snapshots and receives no plan mutation, private-storage, independent LEDGER cursor, or BUDGET calculation authority."
   ],
   "type": "client",
   "owner": "INSIGHTS",

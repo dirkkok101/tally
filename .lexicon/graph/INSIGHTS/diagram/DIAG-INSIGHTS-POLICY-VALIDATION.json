@@ -1,0 +1,38 @@
+{
+  "id": "01KXZDY3TXXW450P10W3E50C02",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DIAG-INSIGHTS-POLICY-VALIDATION",
+  "title": "Private analytical policy validation flow",
+  "diagram_type": "data_flow",
+  "format": "mermaid",
+  "content": [
+    "flowchart LR",
+    "  Manifest[Ignored owner-only evaluation manifest] --> Reader[Private corpus reader]",
+    "  Candidate[Candidate built-in policy set] --> Harness[InsightPolicyValidationHarness]",
+    "  Reader --> Harness",
+    "  Harness --> Cases[Deterministic required-shape cases]",
+    "  Cases --> Gate{All cases and canaries pass?}",
+    "  Gate -->|no| Reject[Block changed policy release]",
+    "  Gate -->|yes| Receipt[Privacy-safe PolicyValidationReceipt]",
+    "  Receipt --> Catalogue[Compile released policy catalogue]",
+    "  Receipt -. no private rows paths amounts or merchant text .-> Audit[Plan and release evidence]",
+    ""
+  ],
+  "created_at": "2026-07-20T09:32:55.5181265+00:00",
+  "links": [
+    {
+      "id": "01KXZEC8J8BPNXYZZ2MR0ES5SV",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "rel": "supports",
+      "created_at": "2026-07-20T09:40:39.1140336+00:00"
+    },
+    {
+      "id": "01KXZEC9G3E5NSGT7MYG00FHC9",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "rel": "illustrates",
+      "created_at": "2026-07-20T09:40:40.0680622+00:00"
+    }
+  ]
+}

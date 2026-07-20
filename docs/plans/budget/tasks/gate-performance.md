@@ -40,8 +40,8 @@ Published BUDGET operations meet their p95 targets with exact results, bounded m
 
 - Generate 100000 active Ledger transactions, 1000 Budget Periods, 1000 revisions in the selected period, and 1000 entries in the selected revision without private fixture payloads.
 - After warm-up, record at least 100 measured invocations per operation with p50, p95, maximum duration, peak resident memory, exact result checks, and environment fingerprint.
-- Get Budget Position including Ledger snapshot completes within 3 seconds p95; draft, activate, revision get, and revision list each complete within 1 second p95.
-- Network remains denied, no migration/backup runs overlap, no test class has zero discovery, and the report contains no financial fixture content.
+- Get Budget Position and Get Insight Evidence, including one complete LEDGER snapshot and maximum supported evidence members, each complete within 3 seconds p95; draft, activate, revision get, and revision list each complete within 1 second p95.
+- Network remains denied, no migration or backup runs overlap, no test class has zero discovery, and the report contains no financial fixture content.
 
 ### Failure Criteria
 
@@ -80,7 +80,7 @@ None recorded.
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `bash scripts/verify-budget-performance.sh` | exit 0; all 5 operations have at least 100 measured samples, position p95 is <=3s, other p95 values are <=1s, exact outputs reconcile, memory is reported, and 0 discovery or benchmark checks fail | `true` | 2400 |
+| `after` | `bash scripts/verify-budget-performance.sh` | exit 0; all 6 operations have at least 100 measured samples, position and insight evidence p95 are <=3s, other p95 values are <=1s, exact outputs reconcile, memory and evidence output size are reported, and 0 discovery or benchmark checks fail | `true` | 2400 |
 
 ### Review Gates
 

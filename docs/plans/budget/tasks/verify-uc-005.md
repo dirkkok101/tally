@@ -23,7 +23,7 @@ UC-BUDGET-005 proves deterministic discovery, bounded owner/delegated invocation
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-CLI-OPERATION-CONTRACT: Five explicit BUDGET operations from one registry | `design_decision` | `governed-by` | `true` |
+| DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry | `design_decision` | `governed-by` | `true` |
 | DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references | `design_decision` | `governed-by` | `true` |
 | EXT-BUDGET-AI-AGENT-HOST: AI Agent Host | `external_dependency` | `references` | `true` |
 | TC-BUDGET-CONTRACT-DISCOVERY-CONTRACT: Verify BUDGET contract discovery | `test_case` | `verifies` | `true` |
@@ -42,9 +42,9 @@ UC-BUDGET-005 proves deterministic discovery, bounded owner/delegated invocation
 
 ### Acceptance Checks
 
-- system.schema discovery exposes all five operations, request/result/error/exit/authority/mutability/idempotency/limit/compatibility semantics without owner-data reads.
+- system.schema discovery exposes all six operations, request/result/error/exit/authority/mutability/idempotency/limit/compatibility semantics without owner-data reads.
 - Trusted owner and delegated Agent Host contexts produce the same domain invariants; reads return requested data only and mutations require explicit intent, authority, actor, reason, and key.
-- Unsupported version and unknown operation provide stable compatibility guidance; missing mutation inputs fail closed; host/storage failures are structured and metadata-only.
+- Unsupported version and unknown operation provide stable compatibility guidance; missing mutation inputs and unprovable evidence binding fail closed; host and storage failures are structured and metadata-only.
 - Arguments, stderr, logs, Git, crash output, and shared temporary files contain no financial payload; network is denied and no prompt or background process exists.
 - Equivalent retry returns the same stable result and conflicting retry performs no state change.
 
@@ -102,7 +102,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Execute the published process contract.
 - `depends-on:compile` -> [TASK-BUDGET-GATE-SECURITY](../tasks/gate-security.md): Consume host, privacy, offline, and process-isolation evidence.
 - `governed-by` -> DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam
-- `governed-by` -> DD-BUDGET-CLI-OPERATION-CONTRACT: Five explicit BUDGET operations from one registry
+- `governed-by` -> DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry
 - `governed-by` -> DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references
 - `references` -> EXT-BUDGET-AI-AGENT-HOST: AI Agent Host
 - `verifies` -> TC-BUDGET-CONTRACT-DISCOVERY-CONTRACT: Verify BUDGET contract discovery

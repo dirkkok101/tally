@@ -1,0 +1,40 @@
+{
+  "id": "01KXZDXZRP7QC5XDCP0VCDF1PN",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "FA-INSIGHTS-REPORT-EXPLANATION",
+  "name": "Report and Explanation",
+  "description": [
+    "Complete ephemeral Insight Reports, deterministic identities, channel-neutral explanations, selected retained detail reads, and future CHANNELS consumer parity."
+  ],
+  "created_at": "2026-07-20T09:32:51.3510552+00:00",
+  "links": [
+    {
+      "id": "01KXZE9W8RC1GCGG4CCCPS22N0",
+      "target_type": "design_diagram",
+      "target": "DIAG-INSIGHTS-REPORT-STATE",
+      "rel": "belongs-to",
+      "created_at": "2026-07-20T09:39:20.9853147+00:00"
+    },
+    {
+      "id": "01KXZE9V9A5GT3TE0KNR0DS1KT",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-INSIGHT-REPORT",
+      "rel": "belongs-to",
+      "created_at": "2026-07-20T09:39:19.9795394+00:00"
+    },
+    {
+      "id": "01KXZE9A3AT3N13EFQ171711T5",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-EXPLANATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:39:02.3794198+00:00"
+    },
+    {
+      "id": "01KXZE9937FB8MRPY2EJ6JPQXH",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-GENERATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:39:01.3517639+00:00"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "id": "01KXZDXCDP4YZ72FAYYBJYPHPT",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE",
+  "name": "ReportSnapshotRestatementAndDeletion",
+  "description": [
+    "Immutable retained report identity, explicit predecessor relationship, ordered difference evidence, and metadata-only deletion history."
+  ],
+  "schema_def": [
+    "ReportSnapshot {snapshotId: ULID, reportId, canonicalReportPayload, payloadFingerprint, reportSchemaVersion, analysisRequestFingerprint, sourceFingerprint, policyFingerprint, createdAt, actor, reason}.",
+    "RestatementLink {childSnapshotId unique, predecessorSnapshotId, createdAt}; one predecessor per child; parent may have multiple surviving children.",
+    "RestatementDifference {sourceChanges[], policyChanges[], exactMetricChanges[], stateChanges[], explanationChanges[], attentionChanges[]}; stable section and item ordering; no unrelated source rows.",
+    "DeletionEvent {deletionEventId: ULID, deletedSnapshotId, predecessorSnapshotId?, deletedAt, actor, reason, dependencyResult, idempotencyOutcomeRef}; no amount, explanation, or report content.",
+    "Delete is RESTRICTed while any surviving child references the target. Leaf deletion removes payload and outgoing link atomically and retains the event. No automatic expiry."
+  ],
+  "created_at": "2026-07-20T09:32:31.5430168+00:00",
+  "links": [
+    {
+      "id": "01KXZE83MF1R40KDE6MJ2VJR0H",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-DELETION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:22.9921192+00:00"
+    },
+    {
+      "id": "01KXZE84N34Y6EHBKAHQJ7DCJB",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-HISTORY",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:24.0364296+00:00"
+    },
+    {
+      "id": "01KXZE82P6NKZ7HPAN7Y5FWF79",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RESTATEMENT",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:22.0230590+00:00"
+    },
+    {
+      "id": "01KXZE81QSR59HHWNG9ZSCM9T5",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RETENTION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:21.0508912+00:00"
+    },
+    {
+      "id": "01KXZE87K26453HKFCMMTH52PM",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-REPORT-DELETION-DEPENDENCIES",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:38:27.0430520+00:00"
+    },
+    {
+      "id": "01KXZE88H9F0DEP16JAZJVGKYF",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-REPORT-HISTORY-STATUS",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:38:28.0097711+00:00"
+    },
+    {
+      "id": "01KXZE85MVQC31D7HTJSK47D1A",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-REPORT-RETENTION-IDEMPOTENCY",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:38:25.0521165+00:00"
+    },
+    {
+      "id": "01KXZE86M0R5A5QPA059P8CCF2",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-RESTATEMENT-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:38:26.0490614+00:00"
+    }
+  ]
+}

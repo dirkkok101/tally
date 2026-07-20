@@ -1,0 +1,92 @@
+{
+  "id": "01KXZDV8R6ZB5P34NV10YZ03QA",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY",
+  "title": "Frozen Johannesburg windows and exact Linear Pace",
+  "description": [
+    "Make time membership and the active plan-relative signal reproducible without caller clocks, locale drift, floating point, or forecast language."
+  ],
+  "decision": [
+    "Freeze TimeProvider.GetUtcNow before producer reads. Convert with Africa/Johannesburg, derive inclusive day, Monday-week, and month-to-date windows clipped to the monthly Budget Period, use full historical periods, return Not Started for future periods, and reject rolling windows. Use LEDGER Effective Date for membership. Compute Linear Pace as exact rational plannedMinorUnits multiplied by elapsedDays divided by periodDays with checked arithmetic, full-plan overage precedence, and division-free zero-plan states."
+  ],
+  "rationale": [
+    "Caller-supplied historical clocks would let a request mislabel current corrected producer evidence. Host locale would make week boundaries unstable. Decimal rounding or floating point would create irreproducible boundary states. The fixed calendar and exact rational policy matches the validated A6 owner workflow and remains explicitly a baseline rather than a Forecast."
+  ],
+  "alternatives": [
+    "A: caller-supplied As-of Instant, rejected because it can imply unavailable historical source state. B: rolling windows and locale week starts, rejected as unsupported and ambiguous for v1. C: frozen trusted instant plus fixed Johannesburg calendar windows and exact rational pace, chosen."
+  ],
+  "consequences": [
+    "Current-day incompleteness and uniform-distribution limitations are always emitted. No daily or weekly sub-budget is inferred. Int64 overflow, undefined exact operations, or reconciliation failure aborts the report. Historical generation states that current corrected evidence was used."
+  ],
+  "status_notes": [
+    "Accepted from resolved OQ-INSIGHTS-2 and validated A6."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Domain/Insights/Time/**\",\"src/Tally/Domain/Insights/Metrics/**\",\"src/Tally/Domain/Insights/Pace/**\",\"tests/Tally.Tests/Insights/Time/**\",\"tests/Tally.Tests/Insights/Pace/**\"]}",
+  "created_at": "2026-07-20T09:31:22.2478313+00:00",
+  "links": [
+    {
+      "id": "01KXZEBEBP5MKZA40NPB9HV5RH",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-ANALYTICAL-EVIDENCE",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:12.2792156+00:00"
+    },
+    {
+      "id": "01KXZE44VZ1BSF2X6SECNC2YTD",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-EXACT-WINDOW-METRICS",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:36:13.1842682+00:00"
+    },
+    {
+      "id": "01KXZE45VESVKMX4664HMCYAWN",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-LINEAR-PACE",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:36:14.1910934+00:00"
+    },
+    {
+      "id": "01KXZE43YDQ797XB9T4Z3SVNGM",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-TRUSTED-ANALYSIS-WINDOWS",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:36:12.2384519+00:00"
+    },
+    {
+      "id": "01KXZE46SMC3X0AAVYAFDX3VFD",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:36:15.1569775+00:00"
+    },
+    {
+      "id": "01KXZDV9AD5M620AHJX52FVQ4Y",
+      "target_type": "open_question",
+      "target": "OQ-INSIGHTS-2",
+      "rel": "see-also",
+      "created_at": "2026-07-20T09:31:22.8291907+00:00"
+    },
+    {
+      "id": "01KXZE47QSEDV58YK8YWF9SYB4",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-ANALYSIS-WINDOW-CONFORMANCE",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:36:16.1219680+00:00"
+    },
+    {
+      "id": "01KXZE49MFPY75TA77JT5WHR3E",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-EXACT-METRICS-CONFORMANCE",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:36:18.0641622+00:00"
+    },
+    {
+      "id": "01KXZE48N82BKEAAF84879TQ98",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-LINEAR-PACE-CONFORMANCE",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:36:17.0650550+00:00"
+    }
+  ]
+}

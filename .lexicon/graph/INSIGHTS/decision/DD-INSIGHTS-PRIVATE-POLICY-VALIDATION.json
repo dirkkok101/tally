@@ -1,0 +1,85 @@
+{
+  "id": "01KXZDVD754YT793TP7FAW24PV",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DD-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+  "title": "Ignored private corpus with privacy-safe release receipts",
+  "description": [
+    "Validate built-in analytical policies and owner value without turning private financial evidence into product state or a public policy-authoring surface."
+  ],
+  "decision": [
+    "Use an internal InsightPolicyValidationHarness supplied only by TALLY_INSIGHTS_PRIVATE_EVALUATION_MANIFEST. Read ignored owner-only cases in memory, enforce every required evidence shape and disclosure canary, and emit a PolicyValidationReceipt as release and test evidence outside the active INSIGHTS store. The receipt contains only structural IDs, fingerprints, aggregate outcomes, false-high-severity count, canary status, tool version, and owner acceptance. Compile only passed built-in policy versions and the receipt fingerprint into the released catalogue. Changed policies require fresh evidence; unchanged released policies remain usable without the corpus."
+  ],
+  "rationale": [
+    "A public validation operation would expose release internals and invite policy authoring. Persisting corpus rows or reports would expand sensitive state. Pure synthetic fixtures cannot prove owner value or false severity. An internal manifest-driven harness gives executable evidence while the durable receipt remains privacy safe."
+  ],
+  "alternatives": [
+    "A: public policy CRUD and validation, rejected as outside v1 authority. B: commit anonymized financial examples, rejected because re-identification and drift risks remain. C: synthetic tests only, rejected because they cannot establish owner usefulness. D: ignored private manifest plus aggregate receipt, chosen."
+  ],
+  "consequences": [
+    "No owner-facing create, edit, activate, retire, expression, script, plugin, or validation mutation exists. The active insights.db never stores the private manifest, corpus rows, reports generated for evaluation, or PolicyValidationReceipt. Missing evidence blocks changed policy release but does not break existing reports. The planning gate must prove active report value and explanation usefulness; deferred signals remain non-executable until separate graph activation and review."
+  ],
+  "status_notes": [
+    "Accepted as the design-time and release evidence boundary. OQ-INSIGHTS-10 and A4/A5 remain planning gates."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Features/Insights/PolicyValidation/**\",\"src/Tally/Contracts/Insights/Policies/**\",\"tests/Tally.Tests/Insights/PolicyValidation/**\",\"tests/Tally.Tests/Insights/PrivateEvidence/**\"]}",
+  "created_at": "2026-07-20T09:31:26.8219824+00:00",
+  "links": [
+    {
+      "id": "01KXZEBP1XVTSZ1CEQ7FQ502H6",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-POLICY-CATALOGUE",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:20.1588019+00:00"
+    },
+    {
+      "id": "01KXZEBN0YT9VDT2R011964H8H",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-POLICY-VALIDATION-RECEIPT",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:19.1029244+00:00"
+    },
+    {
+      "id": "01KXZE5ZKZ9NCV57AA7Q286YE5",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-PRIVATE-EVALUATION-CORPUS",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T09:37:13.3446651+00:00"
+    },
+    {
+      "id": "01KXZE5VPP1SHBS7D9BNPBS5KV",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:37:09.3349398+00:00"
+    },
+    {
+      "id": "01KXZE5WMY5MF2K1B0VTZ9XNXM",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:37:10.3036196+00:00"
+    },
+    {
+      "id": "01KXZE5XJPRBFNTYTQVMA6NQ7B",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-LOCAL-DATA-PROTECTION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:37:11.2554348+00:00"
+    },
+    {
+      "id": "01KXZDVDS8NHZ3G3D0GX7K9EY5",
+      "target_type": "open_question",
+      "target": "OQ-INSIGHTS-10",
+      "rel": "see-also",
+      "created_at": "2026-07-20T09:31:27.4005859+00:00"
+    },
+    {
+      "id": "01KXZE5YMD9GKCRD0G4ZMCSHXA",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:37:12.3346722+00:00"
+    }
+  ]
+}

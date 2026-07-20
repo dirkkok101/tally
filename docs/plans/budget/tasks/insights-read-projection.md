@@ -12,11 +12,11 @@
 
 ## Summary
 
-Bind the exact owner revision and position reads to a versioned capability set with no mutation authority or consumer state.
+Bind exact owner reads plus one snapshot-bound evidence read that preserves BoundRevision, NoBudgetPlan, and NoActiveBudgetPlanRevision without mutation authority or consumer state.
 
 ## Objective
 
-INSIGHTS can consume the same exact BUDGET results and provenance without receiving plan-write capability or causing BUDGET-side reports.
+INSIGHTS can consume one coherent plan-state and dated actual member result from one public LEDGER snapshot. BoundRevision includes the canonical BudgetPosition from that same snapshot; plan-absence states include no plan or position and reconcile members to the public LEDGER total without a second read or duplicate calculation.
 
 ## References
 
@@ -24,6 +24,7 @@ INSIGHTS can consume the same exact BUDGET results and provenance without receiv
 |---|---|---|---|
 | DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot | `design_decision` | `governed-by` | `true` |
 | DD-BUDGET-INSIGHTS-READ-PROJECTION: Reuse exact owner reads through a mutation-free INSIGHTS capability set | `design_decision` | `governed-by` | `true` |
+| DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation | `design_decision` | `governed-by` | `true` |
 | DM-BUDGET-INSIGHTS-READ-CONTRACT: BudgetReadCapabilityDescriptor | `data_model` | `touches` | `true` |
 | DM-BUDGET-POSITION-PROJECTION: BudgetPositionProjection | `data_model` | `touches` | `true` |
 | EXT-BUDGET-INSIGHTS-CONSUMER-CONTRACT: INSIGHTS Consumer Contract | `external_dependency` | `references` | `true` |
@@ -38,26 +39,33 @@ INSIGHTS can consume the same exact BUDGET results and provenance without receiv
 | [TASK-BUDGET-PLAN-READS](../tasks/plan-reads.md) | `compile` | The capability reuses exact revision reads. |
 | [TASK-BUDGET-POSITION-QUERY](../tasks/position-query.md) | `compile` | The capability reuses exact position reads. |
 | [TASK-BUDGET-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | The capability reuses exact owner operation descriptors and schema fingerprints from BudgetOperationModule. |
+| [TASK-BUDGET-LEDGER-BUDGET-CLIENT](../tasks/ledger-budget-client.md) | `compile` | The composite evidence operation must reuse the released single-snapshot LEDGER actuals client. |
+| [TASK-BUDGET-POSITION-CALCULATOR](../tasks/position-calculator.md) | `compile` | The composite evidence operation must reuse the canonical Budget Position calculator over the same materialized members. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- The capability contains exactly budget.plan.revision.get and budget.position.get with the same request/result schema fingerprints, compatibility range, stable errors, and limits as owner reads.
-- Compatible invocation returns byte-equivalent domain content and provenance through the existing read handlers; unsupported versions fail before partial projection.
-- Plan identity, revision/status, entries/totals, lifecycle evidence, bucket values, variance, and Ledger snapshot provenance remain present.
-- Draft creation, activation, mutation authority, idempotency, pace, forecast, trend, anomaly, recommendation, narrative, alert, transport, report persistence, and consumer state are absent.
-- After a consumer read, budget.db contains no report, recommendation, projection, or consumer-specific record.
+- The capability contains exactly budget.plan.revision.get, budget.position.get, and budget.insights.evidence.get with versioned request/result fingerprints, compatibility ranges, stable errors, and limits.
+- The composite resolves planState as BoundRevision, NoBudgetPlan, or NoActiveBudgetPlanRevision before composing its result and never collapses an absent plan or active revision into NotFound, empty plan, or zero plan.
+- Every valid composite state invokes the released LEDGER actuals query once and returns that complete materialized dated-member set, exact ledgerBudgetActualTotal, snapshot identity, generation fingerprint, contract versions, and binding fingerprint.
+- BoundRevision supplies the same member set to BudgetPositionCalculator and returns matching immutable plan detail, canonical BudgetPosition, calculation schema, dated member identities, Effective Dates, values, categories, lifecycle evidence, totals, and provenance.
+- NoBudgetPlan and NoActiveBudgetPlanRevision return no plan detail, BudgetPosition, or calculation schema; every member appears exactly once, their checked exact sum equals ledgerBudgetActualTotal, and BudgetPositionCalculator is not invoked.
+- Forced corrections before and after producer snapshot capture return wholly post-correction or wholly pre-correction results; an unprovable binding returns Source State Changed with no partial output.
+- Compatible existing plan and position reads remain unchanged; unsupported versions and one-over-limit evidence requests fail before financial output.
+- Draft creation, activation, mutation authority, idempotency, private access, an INSIGHTS-led second actuals query, duplicate calculation, pace, forecast, trend, anomaly, recommendation, narrative, alert, report persistence, and consumer state are absent.
+- After any consumer read, budget.db contains no report, recommendation, materialized analytical replica, or consumer-specific record.
 
 ### Failure Criteria
 
-- Do NOT create separate calculation or read implementations, expose mutations, add an INSIGHTS transport/client, or persist downstream state.
-- Do NOT weaken compatibility, strip provenance, or add interpretation fields.
+- Do NOT create a separate Budget Position calculation, expose mutations, hand a consumed or expiring LEDGER cursor to INSIGHTS, let INSIGHTS query LEDGER independently for the report, add an INSIGHTS transport port, or persist downstream state.
+- Do NOT weaken compatibility, strip provenance, return mixed snapshot generations, silently truncate members, or add interpretation fields.
 
 ### Expected Outputs
 
-- BudgetReadProjectionModule
-- INSIGHTS compatibility and mutation-exclusion tests
+- BudgetReadCapabilityDescriptor with three read operations
+- BudgetInsightEvidence contract and BUDGET-owned composite query
+- INSIGHTS compatibility, correction-race, reconciliation, resource-limit, and mutation-exclusion tests
 
 ### Constraints
 
@@ -71,31 +79,36 @@ None recorded.
 
 | Path | Action | Role | Required | Notes |
 |---|---|---|---|---|
-| `src/Tally/Contracts/Budget/Projection/BudgetReadCapabilityDescriptor.cs` | `create` | read-only consumer contract | `true` |  |
+| `src/Tally/Contracts/Budget/Projection/BudgetReadCapabilityDescriptor.cs` | `create` | read-only consumer capability | `true` |  |
+| `src/Tally/Contracts/Budget/Insights/BudgetInsightEvidence.cs` | `create` | coherent plan-state position and dated-member result | `true` |  |
 | `src/Tally/Features/Budget/Projection/BudgetReadProjectionModule.cs` | `create` | read-only descriptor binding | `true` |  |
-| `tests/Tally.Tests/Budget/InsightsContract/BudgetInsightsContractTests.cs` | `test` | read parity and mutation exclusion | `true` |  |
+| `src/Tally/Features/Budget/Projection/GetBudgetInsightEvidenceQuery.cs` | `create` | single-snapshot producer composition for bound and absent plan states | `true` |  |
+| `tests/Tally.Tests/Budget/InsightsContract/BudgetInsightsContractTests.cs` | `test` | read parity plan-state coherence and mutation exclusion | `true` |  |
 
 ### Interface Contracts
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| BudgetReadCapabilityDescriptor | `produces` | DM-BUDGET-INSIGHTS-READ-CONTRACT |  |
-| GetBudgetPlanRevisionQuery.HandleAsync | `consumes` | DM-BUDGET-REVISION-ENTRY |  |
-| GetBudgetPositionQuery.HandleAsync | `consumes` | DM-BUDGET-POSITION-PROJECTION |  |
-| BudgetOperationModule | `consumes` | DM-BUDGET-OPERATION-CONTRACTS |  |
-| BudgetReadProjectionModule | `produces` | DM-BUDGET-INSIGHTS-READ-CONTRACT |  |
+| BudgetReadCapabilityDescriptor | `produces` | DM-BUDGET-INSIGHTS-READ-CONTRACT | three-operation read-only capability |
+| GetBudgetPlanRevisionQuery.HandleAsync | `consumes` | DM-BUDGET-REVISION-ENTRY | resolve explicit or active revision and plan-absence states |
+| GetBudgetPositionQuery.HandleAsync | `consumes` | DM-BUDGET-POSITION-PROJECTION | preserve existing owner read behavior |
+| GetBudgetInsightEvidenceQuery.HandleAsync | `produces` | DM-BUDGET-INSIGHTS-READ-CONTRACT | compose all three plan states |
+| LedgerContractClient.QueryBudgetActualsAsync | `consumes` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT | one complete snapshot for every valid plan state |
+| BudgetPositionCalculator.Calculate | `consumes` | DM-BUDGET-POSITION-PROJECTION | invoke only for BoundRevision over the same members |
+| BudgetOperationModule | `consumes` | DM-BUDGET-OPERATION-CONTRACTS | register stable operation descriptor |
+| BudgetReadProjectionModule | `produces` | DM-BUDGET-INSIGHTS-READ-CONTRACT | publish mutation-free consumer set |
 
 ### Verification
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetInsightsContractTests` | exit 0; at least 16 exact-capability, schema parity, read-result parity, compatibility, mutation exclusion, analytics exclusion, and no-consumer-state cases are discovered and 0 fail | `true` | 360 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetInsightsContractTests` | exit 0; exact-capability, all-plan-state, schema-parity, single-snapshot correction-race, bound-position and absent-total reconciliation, limits, compatibility, calculator exclusion, mutation exclusion, analytics exclusion, and no-consumer-state cases are discovered and 0 fail | `true` | 360 |
 
 ### Review Gates
 
 | Gate | Description | Required |
 |---|---|---|
-| `branch-review` | Review the capability inventory and schema fingerprints against the two owner reads. | `true` |
+| `branch-review` | Review the three-operation capability, all three plan states, one-snapshot evidence binding, and schema fingerprints against owner reads and DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE. | `true` |
 
 ## Bead References
 
@@ -106,10 +119,13 @@ No bead references recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `depends-on:compile` -> [TASK-BUDGET-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): The capability reuses exact owner operation descriptors and schema fingerprints from BudgetOperationModule.
+- `depends-on:compile` -> [TASK-BUDGET-LEDGER-BUDGET-CLIENT](../tasks/ledger-budget-client.md): The composite evidence operation must reuse the released single-snapshot LEDGER actuals client.
 - `depends-on:compile` -> [TASK-BUDGET-PLAN-READS](../tasks/plan-reads.md): The capability reuses exact revision reads.
+- `depends-on:compile` -> [TASK-BUDGET-POSITION-CALCULATOR](../tasks/position-calculator.md): The composite evidence operation must reuse the canonical Budget Position calculator over the same materialized members.
 - `depends-on:compile` -> [TASK-BUDGET-POSITION-QUERY](../tasks/position-query.md): The capability reuses exact position reads.
 - `governed-by` -> DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot
 - `governed-by` -> DD-BUDGET-INSIGHTS-READ-PROJECTION: Reuse exact owner reads through a mutation-free INSIGHTS capability set
+- `governed-by` -> DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation
 - `implements` -> FR-BUDGET-INSIGHTS-PROJECTION: Expose a read-only INSIGHTS projection
 - `references` -> EXT-BUDGET-INSIGHTS-CONSUMER-CONTRACT: INSIGHTS Consumer Contract
 - `satisfies` -> NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries

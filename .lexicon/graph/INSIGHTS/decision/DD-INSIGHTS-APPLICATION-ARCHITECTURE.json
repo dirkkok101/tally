@@ -1,0 +1,120 @@
+{
+  "id": "01KXZDV5G5M2DGAES8RZE317T7",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DD-INSIGHTS-APPLICATION-ARCHITECTURE",
+  "title": "Typed analytical compiler with concrete local boundaries",
+  "description": [
+    "Choose the INSIGHTS module boundary, class organization, and interface economy inside the existing local Tally executable."
+  ],
+  "decision": [
+    "Use eleven typed caller-oriented INSIGHTS operations plus shared schema discovery. Map each operation to one vertical slice around a deep InsightReportCompiler and concrete pure analytical policies, raw-SQLite storage, source-generated contracts, explicit DI, TimeProvider, a concrete BudgetContractClient over the shared public executor, and pure concrete mappers. Keep only the existing generic command and query handler abstractions; add no repository, store, compiler, calculator, clock, mapper, mediator, event, or transport interface."
+  ],
+  "rationale": [
+    "The public operation set is the complete test surface and hides coherence, time, arithmetic, state accounting, provenance, replay, immutable history, deletion, and recovery. Removing INSIGHTS would smear those rules across Agent Host and CHANNELS. The shared operation executor is a real seam with multiple consumers; all proposed new ports would have one production implementation."
+  ],
+  "alternatives": [
+    "A: a three-entry contract/report/storage facade, rejected because action discriminators expose every invariant to callers. B: eleven explicit operations plus shared discovery, chosen for contract and error clarity. C: full ports and adapters, rejected except for the already shared public executor because every new adapter would have one implementation."
+  ],
+  "consequences": [
+    "GenerateInsightReportQuery, ExplainInsightReportQuery, GetInsightReportQuery, ListInsightReportsQuery, RetainInsightReportCommand, RestateInsightReportCommand, DeleteInsightReportCommand, GetInsightsStatusQuery, CreateInsightsBackupCommand, VerifyInsightsBackupQuery, and RestoreInsightsBackupCommand are stable class obligations. InsightsContractMapper and InsightsRowMapper are concrete pure transformers. CancellationToken crosses every async boundary. No FastEndpoints, HTTP, EF, daemon, or background process is introduced."
+  ],
+  "status_notes": [
+    "Accepted after sequential public and internal interface comparison. Missing expected paths are explicit greenfield planning gates."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Features/Insights/**\",\"src/Tally/Domain/Insights/**\",\"src/Tally/Bootstrap/Features/InsightsExtensions.cs\",\"tests/Tally.Tests/Insights/**\"]}",
+  "created_at": "2026-07-20T09:31:18.9182585+00:00",
+  "links": [
+    {
+      "id": "01KXZE362PRSS4WQ2BYSHEZ9CC",
+      "target_type": "adr",
+      "target": "ADR-CORE-0004",
+      "rel": "references",
+      "created_at": "2026-07-20T09:35:41.6557800+00:00"
+    },
+    {
+      "id": "01KXZE3727MS5PM3Q869SY9VJ9",
+      "target_type": "adr",
+      "target": "ADR-CORE-0010",
+      "rel": "references",
+      "created_at": "2026-07-20T09:35:42.6644581+00:00"
+    },
+    {
+      "id": "01KXZE3804819FJJ02X9AS0K1G",
+      "target_type": "adr",
+      "target": "ADR-CORE-0021",
+      "rel": "references",
+      "created_at": "2026-07-20T09:35:43.6214924+00:00"
+    },
+    {
+      "id": "01KXZE38ZQ8B3Q2V6XYDJGXGWC",
+      "target_type": "adr",
+      "target": "ADR-CORE-0022",
+      "rel": "references",
+      "created_at": "2026-07-20T09:35:44.6321573+00:00"
+    },
+    {
+      "id": "01KXZE39Y49T1NRJ249SSJYK6P",
+      "target_type": "adr",
+      "target": "ADR-CORE-0024",
+      "rel": "references",
+      "created_at": "2026-07-20T09:35:45.6061028+00:00"
+    },
+    {
+      "id": "01KXZE3AWT47QSXHM1R6EBTFR0",
+      "target_type": "adr",
+      "target": "ADR-CORE-0025",
+      "rel": "references",
+      "created_at": "2026-07-20T09:35:46.5871795+00:00"
+    },
+    {
+      "id": "01KXZE3356DQY8HHES0X98YE20",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-STRUCTURED-INVOCATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:35:38.6629684+00:00"
+    },
+    {
+      "id": "01KXZE342VCQB9EJ89HSZPC07G",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:35:39.6126211+00:00"
+    },
+    {
+      "id": "01KXZE353NJ09QTJQSE0JEG5ZH",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-SELF-CONTAINED-LOCAL-OPERATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:35:40.6622644+00:00"
+    },
+    {
+      "id": "01KXZE3CQNQMD9Y4596KESX3PF",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-SERVICE-REGISTRATION",
+      "rel": "references",
+      "created_at": "2026-07-20T09:35:48.4707929+00:00"
+    },
+    {
+      "id": "01KXZE3BTS8TK89E14CYS08VEE",
+      "target_type": "pattern",
+      "target": "PAT-CORE-API-VERTICAL-SLICE",
+      "rel": "references",
+      "created_at": "2026-07-20T09:35:47.5463633+00:00"
+    },
+    {
+      "id": "01KXZE3DN4VW4TR0SCM819CTJ6",
+      "target_type": "pattern",
+      "target": "PAT-CORE-FEATURE-SLICE-NAMING",
+      "rel": "references",
+      "created_at": "2026-07-20T09:35:49.4135683+00:00"
+    },
+    {
+      "id": "01KXZE3END3EGRVGJKEZAM9FAA",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-OFFLINE-PROCESS-ISOLATION",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:35:50.4457589+00:00"
+    }
+  ]
+}

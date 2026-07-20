@@ -1,0 +1,54 @@
+{
+  "id": "01KXZDXAB8VDC422EP25HGK077",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DM-INSIGHTS-POLICY-CATALOGUE",
+  "name": "InsightPolicyCatalogue",
+  "description": [
+    "Closed code-owned catalogue of active and deferred analytical policy versions and deterministic ordering."
+  ],
+  "schema_def": [
+    "PolicyDescriptor {kind, version, status: Active|Deferred, schemaFingerprint, policyFingerprint, default, order, supportedWindows[], limitSetVersion}.",
+    "Active v1 policy kinds: AnalysisWindowPolicy, ExactMetricPolicy, LinearPacePolicy, EvidenceSufficiencyPolicy, ExplanationPolicy, OrderingPolicy.",
+    "Deferred v1 kinds: ForecastPolicy, TrendPolicy, AnomalyPolicy, AttentionPolicy; no executable formula, baseline, threshold, severity, or activation surface.",
+    "Every active descriptor names deterministic formula/rule identity, evidence requirements, explicit unavailable states, limitations, and compatibility range.",
+    "Catalogue is source-generated and immutable per build; owner-authored scripts, formulas, expressions, plugins, and CRUD are absent."
+  ],
+  "created_at": "2026-07-20T09:32:29.4176843+00:00",
+  "links": [
+    {
+      "id": "01KXZE7CKNSW3FZM5AJ7WM47YN",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:37:59.4141060+00:00"
+    },
+    {
+      "id": "01KXZE7DHMTNKS7RC1KQF2WMSW",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:00.3730591+00:00"
+    },
+    {
+      "id": "01KXZE7EG2748ZZSAX6HSP2JB6",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:01.3480931+00:00"
+    },
+    {
+      "id": "01KXZE7FGNEESQCXF13GHDWF8J",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-CONTRACT-DISCOVERY",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:38:02.3902570+00:00"
+    },
+    {
+      "id": "01KXZE7GFGXDS6GDRPF9NE3J92",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:38:03.3775956+00:00"
+    }
+  ]
+}

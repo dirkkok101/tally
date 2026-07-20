@@ -1,0 +1,113 @@
+{
+  "id": "01KXZDV6MEQS0Z37RF512P0G8A",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DD-INSIGHTS-CLI-OPERATION-CONTRACT",
+  "title": "Eleven explicit INSIGHTS operations from one registry",
+  "description": [
+    "Define one discoverable transport-neutral process contract for every accepted INSIGHTS verb without generic action unions or hidden authority."
+  ],
+  "decision": [
+    "Expose insights.report.generate, insights.report.explain, insights.report.get, insights.report.list, insights.report.retain, insights.report.restate, insights.report.delete, insights.status.get, insights.backup.create, insights.backup.verify, and insights.restore.activate. Reuse system.schema.list and system.schema.show for Discover, including released policy catalogue metadata. One descriptor registry generates schemas, compatibility, limits, authority, mutability, idempotency, stable errors, exit categories, CLI help, and process envelopes."
+  ],
+  "rationale": [
+    "One typed operation per accepted verb keeps invariants and failure modes visible and independently testable. Shared discovery avoids a duplicate INSIGHTS metadata command. Explicit process contracts preserve one automation surface for Agent Host and future CHANNELS without coupling analytical semantics to HTTP or UI."
+  ],
+  "alternatives": [
+    "A: generic insights.execute with an action discriminator, rejected because it hides per-operation schemas, authority, and retry rules. B: HTTP or FastEndpoints routes, rejected because Tally is a local structured CLI with no listener. C: explicit operations from the shared registry, chosen."
+  ],
+  "consequences": [
+    "Complex input uses stdin or owner-only file input; financial values and paths never use process arguments. Exactly one business envelope reaches stdout. Retain, Restate, Delete, Backup, and Restore require actor attribution and idempotency. Explain accepts one retained identity because ephemeral Generate already embeds explanations. No Save, Edit, Refresh, Alert, Notify, policy CRUD, or arbitrary Execute alias exists."
+  ],
+  "status_notes": [
+    "Accepted. Endpoint-suggestion warnings are intentionally inapplicable because no HTTP endpoint entities exist."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Cli/**\",\"src/Tally/Contracts/Insights/**\",\"src/Tally/Features/Insights/Contract/**\",\"tests/Tally.Tests/Insights/Contract/**\"]}",
+  "created_at": "2026-07-20T09:31:20.0796805+00:00",
+  "links": [
+    {
+      "id": "01KXZEB8JVDYWPHJPASFBZ5YT6",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:06.3647044+00:00"
+    },
+    {
+      "id": "01KXZEB9KPGX3MBAX7FTNPC00E",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-POLICY-CATALOGUE",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:07.4152593+00:00"
+    },
+    {
+      "id": "01KXZE3P7Y4QGDR89H0TABT7FM",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-AI-AGENT-HOST",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T09:35:58.2072918+00:00"
+    },
+    {
+      "id": "01KXZE3Q6YYAB8B9JDBP4A4PJ0",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-CHANNELS-CONSUMER-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T09:35:59.1994899+00:00"
+    },
+    {
+      "id": "01KXZE3FJEPR4NZEH9C08YPEJX",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:35:51.3749265+00:00"
+    },
+    {
+      "id": "01KXZE3GGKE4FE4J8MWMAK37JB",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-STRUCTURED-INVOCATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:35:52.3399381+00:00"
+    },
+    {
+      "id": "01KXZE3JC219ZBESS8MRPPPRT6",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-LOCAL-DATA-PROTECTION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:35:54.2432767+00:00"
+    },
+    {
+      "id": "01KXZE3HCJ22BDZN18DDWNKY25",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:35:53.2347718+00:00"
+    },
+    {
+      "id": "01KXZE3R6Z6SRM775Z1287XGGV",
+      "target_type": "pattern",
+      "target": "PAT-CORE-FEATURE-SLICE-NAMING",
+      "rel": "references",
+      "created_at": "2026-07-20T09:36:00.2246398+00:00"
+    },
+    {
+      "id": "01KXZE3KB314AW30FQFMF1XPR0",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-CONTRACT-DISCOVERY",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:35:55.2364675+00:00"
+    },
+    {
+      "id": "01KXZE3N8RM4WNA58G9PXN7D9G",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:35:57.2092858+00:00"
+    },
+    {
+      "id": "01KXZE3MAV46YFEPY1XA2ETJ2J",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-STRUCTURED-INVOCATION",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:35:56.2522700+00:00"
+    }
+  ]
+}

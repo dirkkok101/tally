@@ -1,0 +1,42 @@
+{
+  "id": "01KXZDXATZMMM9GD8BZM6RSFVS",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DM-INSIGHTS-COHERENT-EVIDENCE",
+  "name": "BoundInsightEvidence",
+  "description": [
+    "INSIGHTS-owned validated projection of one BUDGET composite result across bound and absent plan states; it is ephemeral and never a second source of truth."
+  ],
+  "schema_def": [
+    "BoundInsightEvidence {budgetPeriod, planState, planRevisionDetail?, budgetPosition?, datedActualMembers[], ledgerBudgetActualTotal, categoryLifecycleEvidence, budgetContractVersion, ledgerContractVersion, ledgerSnapshotId, ledgerGenerationFingerprint, calculationSchemaVersion?, evidenceBindingFingerprint}.",
+    "Plan states: BoundRevision | NoBudgetPlan | NoActiveBudgetPlanRevision.",
+    "DatedActualMember {ordinal, stableTransactionEvidenceId, effectiveDate, signedActualMinorUnits, stableCategoryId?, bucketKind}.",
+    "BoundRevision invariants: planRevisionDetail, budgetPosition, and calculationSchemaVersion are present; one complete ordered member set shares the position snapshot and generation; every member reconciles exactly once to Budgeted, ZeroBudget, Unbudgeted, or Uncategorized; checked member totals equal both ledgerBudgetActualTotal and BudgetPosition actual totals.",
+    "Plan-absence invariants: planRevisionDetail, budgetPosition, and calculationSchemaVersion are absent; no zero or empty plan is fabricated; the complete ordered members remain present; their checked exact sum equals ledgerBudgetActualTotal; calculator invocation is forbidden.",
+    "All states fail whole-report binding on unknown, duplicate, missing, stale, incompatible, over-limit, or mismatched evidence.",
+    "Ephemeral only: no member, cursor, plan, or position payload is stored by INSIGHTS."
+  ],
+  "created_at": "2026-07-20T09:32:29.9201648+00:00",
+  "links": [
+    {
+      "id": "01KXZE7KB774DQMG3GTE15BW3F",
+      "target_type": "data_model",
+      "target": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
+      "rel": "references",
+      "created_at": "2026-07-20T09:38:06.3124541+00:00"
+    },
+    {
+      "id": "01KXZE7HFNQ3671ZNCYD5PRGBV",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:38:04.4059197+00:00"
+    },
+    {
+      "id": "01KXZE7JEA8XYTH0B1RV3NT8C6",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-COHERENT-EVIDENCE-CONCURRENT-CORRECTION",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:38:05.3872407+00:00"
+    }
+  ]
+}

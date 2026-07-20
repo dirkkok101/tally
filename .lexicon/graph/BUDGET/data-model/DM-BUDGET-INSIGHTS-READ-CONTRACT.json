@@ -4,7 +4,7 @@
   "ref_code": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
   "name": "BudgetReadCapabilityDescriptor",
   "description": [
-    "Versioned read-only consumer view that reuses exact BUDGET and public LEDGER DTOs, binds one coherent analytical evidence result, and cannot grant plan mutation."
+    "Versioned read-only consumer view that reuses exact BUDGET and public LEDGER DTOs, preserves explicit plan-absence states, binds one coherent analytical evidence result, and cannot grant plan mutation."
   ],
   "schema_def": [
     "budget_read_capability_descriptor",
@@ -16,8 +16,11 @@
     "",
     "budget.insights.evidence.get",
     "- input: {budgetPeriod, revisionId?, memberLimit, contractVersion}",
-    "- result: {planRevisionDetail, budgetPosition, datedActualMembers[], ledgerSnapshotId, ledgerStoreGenerationFingerprint, calculationSchemaVersion, evidenceBindingFingerprint}",
-    "- invariants: BUDGET captures one immutable plan revision; one released LEDGER actuals query supplies the complete member set; the canonical BudgetPositionCalculator and datedActualMembers consume that same set; BudgetPosition ledger provenance equals the member-set provenance; every member includes stable transaction identity, Effective Date, exact signed Budget Actual, current category identity or Uncategorized, and required lifecycle provenance; over-limit or unprovable binding returns a stable failure before partial output",
+    "- result BudgetInsightEvidence: {planState: BoundRevision|NoBudgetPlan|NoActiveBudgetPlanRevision, planRevisionDetail?, budgetPosition?, datedActualMembers[], ledgerBudgetActualTotal, ledgerSnapshotId, ledgerStoreGenerationFingerprint, ledgerContractVersion, categoryContractVersion, calculationSchemaVersion?, evidenceBindingFingerprint}",
+    "- BoundRevision invariants: one immutable revision; one released LEDGER actuals query supplies the complete member set; the canonical BudgetPositionCalculator and datedActualMembers consume that same set; BudgetPosition provenance equals member-set provenance; planRevisionDetail, budgetPosition, and calculationSchemaVersion are present",
+    "- NoBudgetPlan and NoActiveBudgetPlanRevision invariants: planRevisionDetail, budgetPosition, and calculationSchemaVersion are absent; the one complete LEDGER member set and exact ledgerBudgetActualTotal remain present; every member appears exactly once and their checked exact sum equals ledgerBudgetActualTotal; no empty or zero plan, revision, position, or NotFound is fabricated; BudgetPositionCalculator is not invoked",
+    "- every member includes stable transaction identity, Effective Date, exact signed Budget Actual, current category identity or Uncategorized, and required lifecycle provenance",
+    "- over-limit, incompatible, incomplete, stale, or unprovable binding returns a stable failure before partial output",
     "",
     "Constraints: no budget.plan.draft.create, budget.plan.revision.activate, mutation handler, idempotency key, private storage, second INSIGHTS-led LEDGER query, duplicate position calculation, authority grant, analytics field, transport implementation, report persistence, or consumer state. Unsupported versions fail before financial processing."
   ],

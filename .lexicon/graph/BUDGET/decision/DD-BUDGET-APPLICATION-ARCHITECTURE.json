@@ -16,7 +16,7 @@
     "A: three-entry plan/position/contract facade, rejected because action discriminators expose hidden invariants to every caller. B: six explicit capabilities, chosen for schema and error clarity after the A3 spike earned the coherent evidence read. C: full ports and adapters, rejected except for the already shared LEDGER executor because all new ports would have one production implementation."
   ],
   "consequences": [
-    "CreateBudgetDraftCommand, GetBudgetPlanRevisionQuery, ListBudgetPlanRevisionsQuery, ActivateBudgetPlanRevisionCommand, and GetBudgetPositionQuery become stable class-level obligations. BudgetContractMapper and BudgetRowMapper are concrete pure transformers. Expected failures use result values; CancellationToken crosses every async boundary. No FastEndpoints, HTTP, EF, daemon, or background work is introduced."
+    "CreateBudgetDraftCommand, GetBudgetPlanRevisionQuery, ListBudgetPlanRevisionsQuery, ActivateBudgetPlanRevisionCommand, GetBudgetPositionQuery, and GetBudgetInsightEvidenceQuery become stable class-level obligations. BudgetContractMapper and BudgetRowMapper are concrete pure transformers. The composite evidence query returns explicit plan-absence states with one public LEDGER snapshot and invokes BudgetPositionCalculator only for BoundRevision. Expected failures use result values; CancellationToken crosses every async boundary. No FastEndpoints, HTTP, EF, daemon, or background work is introduced."
   ],
   "status_notes": [
     "Accepted after sequential interface comparison. Missing paths are explicit greenfield planning gates."

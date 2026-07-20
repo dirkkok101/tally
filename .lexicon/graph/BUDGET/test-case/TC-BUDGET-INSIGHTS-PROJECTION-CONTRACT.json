@@ -9,9 +9,9 @@
   "scenario": "happy",
   "automation": "automated",
   "status": "planned",
-  "preconditions": "Version-compatible and incompatible INSIGHTS consumers can inspect the three-operation read capability and a controllable public LEDGER producer can force corrections before and after composite snapshot capture.",
-  "steps": "Invoke the existing plan and position reads and budget.insights.evidence.get. Exercise every acceptance criterion of FR-BUDGET-INSIGHTS-PROJECTION, including schema parity, one-snapshot member and position reconciliation, pre-capture and post-capture corrections, limits, compatibility, authority, and failure paths.",
-  "expected": "Existing reads preserve exact parity. Every composite success binds one plan revision, exact Budget Position, and dated members to one LEDGER snapshot and one canonical calculation; every unprovable or over-limit result fails before partial output. All errors are stable, no mutation or private access occurs, and no consumer state is created.",
+  "preconditions": "Version-compatible and incompatible INSIGHTS consumers can inspect the three-operation read capability; BUDGET fixtures cover BoundRevision, NoBudgetPlan, and NoActiveBudgetPlanRevision; and a controllable public LEDGER producer can force corrections before and after composite snapshot capture.",
+  "steps": "Invoke the existing plan and position reads and budget.insights.evidence.get. Exercise every acceptance criterion of FR-BUDGET-INSIGHTS-PROJECTION, including schema parity, all three plan states, bound-plan member-to-position reconciliation, plan-absence member-to-ledger-total reconciliation, calculator exclusion for absent states, pre-capture and post-capture corrections, limits, compatibility, authority, and failure paths.",
+  "expected": "Existing reads preserve exact parity. BoundRevision binds one revision, canonical BudgetPosition, and dated members to one LEDGER snapshot and calculator path. NoBudgetPlan and NoActiveBudgetPlanRevision preserve their exact states, return no plan or position, still return one complete member set and exact LEDGER total, and never call the calculator. Every unprovable or over-limit result fails before partial output; no mutation, private access, or consumer state occurs.",
   "owner": "BUDGET implementation",
   "created_at": "2026-07-19T15:23:16.5306833+00:00",
   "links": [

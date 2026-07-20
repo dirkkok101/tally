@@ -1,0 +1,55 @@
+{
+  "id": "01KXZDY29FWXBFAKQBGN2NY8Y4",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DIAG-INSIGHTS-REPORT-STATE",
+  "title": "Report retention and deletion lifecycle",
+  "diagram_type": "state",
+  "format": "mermaid",
+  "content": [
+    "stateDiagram-v2",
+    "  [*] --> Ephemeral: Generate",
+    "  Ephemeral --> Retained: Retain commits complete snapshot",
+    "  Retained --> Retained: Get Explain List no mutation",
+    "  Retained --> NoChange: Restate identical provenance and content",
+    "  Retained --> Restated: Restate changed provenance version or content",
+    "  Restated --> Retained: append child and predecessor link",
+    "  Retained --> Restricted: Delete while surviving child references target",
+    "  Restricted --> Retained: no state change",
+    "  Retained --> Deleted: Delete unreferenced leaf",
+    "  Deleted --> Deleted: identical replay returns deletion evidence",
+    "  NoChange --> [*]",
+    "  Deleted --> [*]",
+    ""
+  ],
+  "created_at": "2026-07-20T09:32:53.9370257+00:00",
+  "links": [
+    {
+      "id": "01KXZEBYR36YHTQBG7VD33Y8JD",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE",
+      "rel": "supports",
+      "created_at": "2026-07-20T09:40:29.0598099+00:00"
+    },
+    {
+      "id": "01KXZEC1MDP4DX0FAHE84Z31ST",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-DELETION",
+      "rel": "illustrates",
+      "created_at": "2026-07-20T09:40:32.0148243+00:00"
+    },
+    {
+      "id": "01KXZEC0PM9JE92YQ55HS39MDM",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RESTATEMENT",
+      "rel": "illustrates",
+      "created_at": "2026-07-20T09:40:31.0614890+00:00"
+    },
+    {
+      "id": "01KXZEBZP74YW74M2YNBN4SM2W",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RETENTION",
+      "rel": "illustrates",
+      "created_at": "2026-07-20T09:40:30.0238695+00:00"
+    }
+  ]
+}

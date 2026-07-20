@@ -1,0 +1,56 @@
+{
+  "id": "01KXZDX9TBYPKXP6DYASKDX5Z7",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+  "name": "InsightsOperationContracts",
+  "description": [
+    "Versioned request, result, authority, idempotency, limit, policy, compatibility, stable-error, and process-envelope contracts for all public INSIGHTS capabilities."
+  ],
+  "schema_def": [
+    "Shared envelope: operationId, contractVersion, schemaFingerprint, correlationRef, resultKind, compatibility, limits, stable exitCategory.",
+    "Discover: system.schema.list/show filtered to INSIGHTS returns eleven descriptors plus policy catalogue metadata.",
+    "insights.report.generate input {budgetPeriod, revisionId?, windows[], metricKinds[], signalKinds[], includeCategoryBreakdown, policySelectors?}; read-only; result InsightReport.",
+    "insights.report.explain input {snapshotId, selector?}; read-only; result stored ExplanationAndProvenance, NotFound, or Deleted.",
+    "insights.report.get input {snapshotId}; read-only; result ReportSnapshot, NotFound, or Deleted.",
+    "insights.report.list input {budgetPeriod?, createdFrom?, createdTo?, actor?, limit}; read-only; result metadata-only ordered items or ResourceLimit.",
+    "insights.report.retain input {analysisRequest, actor, reason}; mutating; idempotency required; result ReportSnapshot.",
+    "insights.report.restate input {predecessorSnapshotId, policySelectors?, actor, reason}; mutating; idempotency required; result ReportSnapshot plus RestatementDifference or NoChange.",
+    "insights.report.delete input {snapshotId, actor, reason}; mutating; idempotency required; result DeletionEvent or DependencyConflict.",
+    "insights.status.get input {}; read-only; result metadata-only StoreStatus.",
+    "insights.backup.create input {target, actor, reason?}; mutating; idempotency required; result BackupReceipt.",
+    "insights.backup.verify input {source}; read-only; result VerificationReceipt.",
+    "insights.restore.activate input {source, expectedCurrentFingerprint, actor, reason?}; mutating; idempotency required; result RestoreReceipt.",
+    "Unknown fields, financial process arguments, unsupported policy versions, upstream mutation authority, and partial output are forbidden."
+  ],
+  "created_at": "2026-07-20T09:32:28.8759396+00:00",
+  "links": [
+    {
+      "id": "01KXZE791JE16RNHFBQ2MSD0EW",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-CONTRACT-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:37:55.7636507+00:00"
+    },
+    {
+      "id": "01KXZE79YPDNF5K38AX1BDSB91",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-STRUCTURED-INVOCATION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:37:56.6954081+00:00"
+    },
+    {
+      "id": "01KXZE7AT9DMEKH0Q1JMPPV0P7",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-CONTRACT-DISCOVERY",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:37:57.5786593+00:00"
+    },
+    {
+      "id": "01KXZE7BQQMZQFJ2M98F9YKCXM",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-STRUCTURED-INVOCATION",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:37:58.5202614+00:00"
+    }
+  ]
+}

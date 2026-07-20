@@ -116,6 +116,8 @@ Platform constraints: target .NET 10 Native-AOT and linux-x64; use file-scoped n
 | [TASK-BUDGET-INSIGHTS-READ-PROJECTION](tasks/insights-read-projection.md) | [TASK-BUDGET-PLAN-READS](tasks/plan-reads.md) | `compile` | The capability reuses exact revision reads. |
 | [TASK-BUDGET-INSIGHTS-READ-PROJECTION](tasks/insights-read-projection.md) | [TASK-BUDGET-POSITION-QUERY](tasks/position-query.md) | `compile` | The capability reuses exact position reads. |
 | [TASK-BUDGET-INSIGHTS-READ-PROJECTION](tasks/insights-read-projection.md) | [TASK-BUDGET-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `compile` | The capability reuses exact owner operation descriptors and schema fingerprints from BudgetOperationModule. |
+| [TASK-BUDGET-INSIGHTS-READ-PROJECTION](tasks/insights-read-projection.md) | [TASK-BUDGET-LEDGER-BUDGET-CLIENT](tasks/ledger-budget-client.md) | `compile` | The composite evidence operation must reuse the released single-snapshot LEDGER actuals client. |
+| [TASK-BUDGET-INSIGHTS-READ-PROJECTION](tasks/insights-read-projection.md) | [TASK-BUDGET-POSITION-CALCULATOR](tasks/position-calculator.md) | `compile` | The composite evidence operation must reuse the canonical Budget Position calculator over the same materialized members. |
 | [TASK-BUDGET-LEDGER-BUDGET-CLIENT](tasks/ledger-budget-client.md) | [TASK-BUDGET-GATE-INT-LEDGER-CONTRACT](tasks/gate-int-ledger-contract.md) | `compile` | Consume only the proven public seam. |
 | [TASK-BUDGET-LEDGER-BUDGET-CLIENT](tasks/ledger-budget-client.md) | [TASK-BUDGET-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `compile` | Use BudgetPeriod and BUDGET compatibility errors. |
 | [TASK-BUDGET-VERIFY-UC-003](tasks/verify-uc-003.md) | [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Execute published owner reads. |
@@ -152,8 +154,8 @@ Platform constraints: target .NET 10 Native-AOT and linux-x64; use file-scoped n
 ### Coverage
 
 - **Status:** `warn`
-- **Required refs:** 153
-- **Covered refs:** 153
+- **Required refs:** 154
+- **Covered refs:** 154
 - **Gaps:** 0
 
 #### Covered References
@@ -171,9 +173,9 @@ Platform constraints: target .NET 10 Native-AOT and linux-x64; use file-scoped n
 | DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam | `design_decision` | `governed-by` | [TASK-BUDGET-GATE-SECURITY](tasks/gate-security.md) | `true` |
 | DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam | `design_decision` | `governed-by` | [TASK-BUDGET-LEDGER-BUDGET-CLIENT](tasks/ledger-budget-client.md) | `true` |
 | DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam | `design_decision` | `governed-by` | [TASK-BUDGET-VERIFY-UC-005](tasks/verify-uc-005.md) | `true` |
-| DD-BUDGET-CLI-OPERATION-CONTRACT: Five explicit BUDGET operations from one registry | `design_decision` | `governed-by` | [TASK-BUDGET-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `true` |
-| DD-BUDGET-CLI-OPERATION-CONTRACT: Five explicit BUDGET operations from one registry | `design_decision` | `governed-by` | [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `true` |
-| DD-BUDGET-CLI-OPERATION-CONTRACT: Five explicit BUDGET operations from one registry | `design_decision` | `governed-by` | [TASK-BUDGET-VERIFY-UC-005](tasks/verify-uc-005.md) | `true` |
+| DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry | `design_decision` | `governed-by` | [TASK-BUDGET-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `true` |
+| DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry | `design_decision` | `governed-by` | [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `true` |
+| DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry | `design_decision` | `governed-by` | [TASK-BUDGET-VERIFY-UC-005](tasks/verify-uc-005.md) | `true` |
 | DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot | `design_decision` | `governed-by` | [TASK-BUDGET-GATE-PERFORMANCE](tasks/gate-performance.md) | `true` |
 | DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot | `design_decision` | `governed-by` | [TASK-BUDGET-INSIGHTS-READ-PROJECTION](tasks/insights-read-projection.md) | `true` |
 | DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot | `design_decision` | `governed-by` | [TASK-BUDGET-POSITION-CALCULATOR](tasks/position-calculator.md) | `true` |
@@ -216,6 +218,7 @@ Platform constraints: target .NET 10 Native-AOT and linux-x64; use file-scoped n
 | DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider | `design_decision` | `governed-by` | [TASK-BUDGET-PLAN-READS](tasks/plan-reads.md) | `true` |
 | DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider | `design_decision` | `governed-by` | [TASK-BUDGET-POSITION-QUERY](tasks/position-query.md) | `true` |
 | DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider | `design_decision` | `governed-by` | [TASK-BUDGET-VERIFY-UC-002](tasks/verify-uc-002.md) | `true` |
+| DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation | `design_decision` | `governed-by` | [TASK-BUDGET-INSIGHTS-READ-PROJECTION](tasks/insights-read-projection.md) | `true` |
 | DM-BUDGET-INSIGHTS-READ-CONTRACT: BudgetReadCapabilityDescriptor | `data_model` | `touches` | [TASK-BUDGET-INSIGHTS-READ-PROJECTION](tasks/insights-read-projection.md) | `true` |
 | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts | `data_model` | `touches` | [TASK-BUDGET-GATE-INT-LEDGER-CONTRACT](tasks/gate-int-ledger-contract.md) | `true` |
 | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts | `data_model` | `touches` | [TASK-BUDGET-LEDGER-BUDGET-CLIENT](tasks/ledger-budget-client.md) | `true` |

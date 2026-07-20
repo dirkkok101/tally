@@ -1,0 +1,113 @@
+{
+  "id": "01KXZDVC672DRPY3E059N040C8",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION",
+  "title": "Verified backup candidates with atomic generation activation",
+  "description": [
+    "Make backup and restore independently verifiable and fail closed across every SQLite and filesystem crash window."
+  ],
+  "decision": [
+    "Backup first records an Attempting idempotency reservation with request hash and deterministic artifact identity, then creates a read-consistent private candidate that includes every prior terminal outcome but removes only the current non-terminal backup reservation. It verifies version, counts, links, payload fingerprints, idempotency, deletion state, permissions, and integrity, atomically publishes the artifact, then records the terminal receipt. Exact replay reconciles an already published verified artifact after a crash; completed failure removes its reservation. Verify is read-only and never changes Status. Restore verifies the source, builds a separate generation, applies compatible migrations, validates it, records the restore outcome in the candidate, revalidates, then under the exclusive writer lock checks the expected current fingerprint and atomically replaces CURRENT followed by directory fsync. The prior generation remains the recovery point."
+  ],
+  "rationale": [
+    "Overwriting a live SQLite database creates WAL and partial-restore windows. A simple file copy cannot prove logical completeness. Generation directories and one atomic pointer make startup observe either the complete old state or the complete verified candidate and reuse the proven LEDGER recovery shape."
+  ],
+  "alternatives": [
+    "A: restore over the live database, rejected because failure can destroy the authoritative store. B: rename individual database and WAL files, rejected because multi-file crash windows remain. C: verified generation plus atomic CURRENT activation, chosen."
+  ],
+  "consequences": [
+    "Backup, candidate, pointer, lock, and prior-generation artifacts are recognized owner-only files. Fault tests cover reservation, candidate creation, removal of the current non-outcome reservation, artifact publication, terminal receipt, migration, verification, expected-current drift, pointer replacement, and fsync. A successful Backup or Restore stores its own durable verification evidence for Status; standalone Verify returns evidence only and changes neither active state nor Status. Restore adds only the current recovery outcome to the restored business state before activation."
+  ],
+  "status_notes": [
+    "Accepted by reuse of the established Tally generation-activation shape; production host proof remains required."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Features/Insights/Recovery/**\",\"src/Tally/Infrastructure/Insights/Storage/Recovery/**\",\"tests/Tally.Tests/Insights/Recovery/**\"]}",
+  "created_at": "2026-07-20T09:31:25.7681740+00:00",
+  "links": [
+    {
+      "id": "01KXZE5TSV1D5ARZEGKPW3P339",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-CANDIDATE-ACTIVATION",
+      "rel": "references",
+      "created_at": "2026-07-20T09:37:08.4121558+00:00"
+    },
+    {
+      "id": "01KXZEBM304BR55YP7DH9NX41D",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-IDEMPOTENCY",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:18.1456561+00:00"
+    },
+    {
+      "id": "01KXZEBJ83SB0XGZ4NPXY84RFX",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:16.2603030+00:00"
+    },
+    {
+      "id": "01KXZEBK653BZ665FQH2QZXNYT",
+      "target_type": "data_model",
+      "target": "DM-INSIGHTS-STATE-STORE",
+      "rel": "references",
+      "created_at": "2026-07-20T09:40:17.2221524+00:00"
+    },
+    {
+      "id": "01KXZE5STZDQP804SRS8XJ4544",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T09:37:07.4245185+00:00"
+    },
+    {
+      "id": "01KXZE5K66SZP0NDK2BW2D9BYW",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-BACKUP-VERIFY-RESTORE",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:37:00.6153465+00:00"
+    },
+    {
+      "id": "01KXZE5N1X82T8MYFE0NZR3FB5",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:37:02.5260725+00:00"
+    },
+    {
+      "id": "01KXZE5P2RYVT32EDWGTV194WX",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-LOCAL-DATA-PROTECTION",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:37:03.5772843+00:00"
+    },
+    {
+      "id": "01KXZE5M2QNY645TGV7CC9TDA9",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-VERIFIED-RECOVERABILITY",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:37:01.5279312+00:00"
+    },
+    {
+      "id": "01KXZE5Q0MGNYNMPHCNE206Y5N",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-BACKUP-VERIFICATION",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:37:04.5331443+00:00"
+    },
+    {
+      "id": "01KXZE5RWDX4XCWMEJGCV4Z8JJ",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-LOCAL-DATA-PROTECTION",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:37:06.4464224+00:00"
+    },
+    {
+      "id": "01KXZE5QXC4CJZJCJGX2YCZ4ZB",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-RESTORE-FAILURE-ATOMICITY",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:37:05.4535460+00:00"
+    }
+  ]
+}
