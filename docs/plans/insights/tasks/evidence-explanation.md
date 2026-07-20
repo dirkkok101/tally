@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-EVIDENCE-EXPLANATION`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-01-ANALYTICAL-CORE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `5`
 - **Dialect:** `default`
@@ -97,12 +97,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-358` | `verified` | 2026-07-20T13:34:42.6163902+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-358` (verified)
 - `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md): Both policies produce the analytical evidence and explanation contracts.
 - `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies
 - `implements` -> FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING: Account for every evidence state

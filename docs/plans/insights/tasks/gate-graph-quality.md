@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-GATE-GRAPH-QUALITY`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-04-ACCEPTANCE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `9`
 - **Dialect:** `default`
@@ -105,12 +105,15 @@ No graph references recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2d5` | `verified` | 2026-07-20T13:34:47.1657851+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2d5` (verified)
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md): Require retained and recovery atomicity evidence.
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Require complete public contract evidence.
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-PERFORMANCE](../tasks/gate-performance.md): Require performance evidence.

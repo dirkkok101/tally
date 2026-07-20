@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-RESTORE-ACTIVATE`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-03-RECOVERY`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `1`
 - **Dialect:** `default`
@@ -99,12 +99,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1i6` | `verified` | 2026-07-20T13:34:37.0590850+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1i6` (verified)
 - `depends-on:compile` -> [TASK-INSIGHTS-BACKUP-VERIFY](../tasks/backup-verify.md): Restore reuses the independent artifact verifier.
 - `depends-on:compile` -> [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](../tasks/idempotency-executor.md): Restore records and replays one outcome inside the activated candidate.
 - `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md): Restore uses generation layout, migrations, integrity, and writer coordination.

@@ -11,10 +11,19 @@
   "objective": [
     "Every analytical INSIGHTS data shape is represented by one deterministic Native-AOT-safe contract without transport, persistence, or UI behavior."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 0,
   "created_at": "2026-07-20T10:05:14.8911171+00:00",
+  "bead_refs": [
+    {
+      "id": "01KXZVRJKF8AG84NSSK605EF1B",
+      "bead_id": "bd-1qz",
+      "verification_status": "verified",
+      "verified_at": "2026-07-20T13:34:34.0959835+00:00",
+      "created_at": "2026-07-20T13:34:34.0959835+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXZFS9RBG35RA1240W2ANWTT",

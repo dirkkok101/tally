@@ -11,10 +11,19 @@
   "objective": [
     "Every requested catalogue kind has exactly one evidence state and an explanation that cites the evaluated rule, provenance, permitted next action, and limitations."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 5,
   "created_at": "2026-07-20T10:09:53.3580299+00:00",
+  "bead_refs": [
+    {
+      "id": "01KXZVRTXR3GX0D9RDQREVYGR4",
+      "bead_id": "bd-358",
+      "verification_status": "verified",
+      "verified_at": "2026-07-20T13:34:42.6163902+00:00",
+      "created_at": "2026-07-20T13:34:42.6163902+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXZG1SPKQT7HCMVBKW2TMBD9",

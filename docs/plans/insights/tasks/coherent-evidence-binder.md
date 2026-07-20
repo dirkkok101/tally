@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-COHERENT-EVIDENCE-BINDER`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-01-ANALYTICAL-CORE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `1`
 - **Dialect:** `default`
@@ -95,12 +95,15 @@ Every accepted evidence set proves compatible versions, complete dated membershi
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2a8` | `verified` | 2026-07-20T13:34:35.3459547+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2a8` (verified)
 - `depends-on:compile` -> [TASK-INSIGHTS-BUDGET-EVIDENCE-CLIENT](../tasks/budget-evidence-client.md): The binder accepts the exact composite returned by the public BUDGET contract client.
 - `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md): The binder produces BoundInsightEvidence and stable state records.
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE](../tasks/gate-int-budget-evidence.md): The binder is written only against the proven public producer contract.

@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-GENERATE-REPORT`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-01-ANALYTICAL-CORE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `7`
 - **Dialect:** `default`
@@ -97,12 +97,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1cr` | `verified` | 2026-07-20T13:34:45.0408795+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1cr` (verified)
 - `depends-on:compile` -> [TASK-INSIGHTS-BUDGET-EVIDENCE-CLIENT](../tasks/budget-evidence-client.md): Generation consumes the single public BUDGET client.
 - `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): The query implements a published request/result and stable error contract.
 - `depends-on:compile` -> [TASK-INSIGHTS-REPORT-COMPILER](../tasks/report-compiler.md): Generation delegates all analytical semantics to the compiler.

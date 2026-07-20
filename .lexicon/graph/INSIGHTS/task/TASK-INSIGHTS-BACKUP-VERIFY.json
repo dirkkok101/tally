@@ -11,10 +11,19 @@
   "objective": [
     "Backup publishes one complete verified artifact and durable receipt, while standalone Verify proves any candidate without changing active state or Status."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 0,
   "created_at": "2026-07-20T10:15:09.7240612+00:00",
+  "bead_refs": [
+    {
+      "id": "01KXZVRHQXJHBNM0JDCB55BDRX",
+      "bead_id": "bd-2bm",
+      "verification_status": "verified",
+      "verified_at": "2026-07-20T13:34:33.2130941+00:00",
+      "created_at": "2026-07-20T13:34:33.2130941+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXZGBEMW0QPK54T9STR4TFSN",

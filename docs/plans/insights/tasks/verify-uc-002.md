@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-VERIFY-UC-002`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-04-ACCEPTANCE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `4`
 - **Dialect:** `default`
@@ -88,12 +88,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2g3` | `verified` | 2026-07-20T13:34:42.1976873+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2g3` (verified)
 - `covers` -> UC-INSIGHTS-002: Inspect report evidence and explanations
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC-002 invokes published Generate, Get, and Explain handlers.
 - `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies

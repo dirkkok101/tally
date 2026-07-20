@@ -11,10 +11,19 @@
   "objective": [
     "ExactMetricCalculator accounts for every member exactly once and returns reconciled signed ZAR metrics for each requested window."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 3,
   "created_at": "2026-07-20T10:09:53.3580299+00:00",
+  "bead_refs": [
+    {
+      "id": "01KXZVRQYBKPVT3X4FAXTRCYNF",
+      "bead_id": "bd-mbq",
+      "verification_status": "verified",
+      "verified_at": "2026-07-20T13:34:39.5631361+00:00",
+      "created_at": "2026-07-20T13:34:39.5631361+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXZG1SPJYBE21YD4KCK9DZC6",

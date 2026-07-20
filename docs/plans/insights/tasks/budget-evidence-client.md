@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-BUDGET-EVIDENCE-CLIENT`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-01-ANALYTICAL-CORE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `0`
 - **Dialect:** `default`
@@ -94,12 +94,15 @@ INSIGHTS invokes exactly one compatible budget.insights.evidence.get operation t
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-388` | `verified` | 2026-07-20T13:34:33.6689686+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-388` (verified)
 - `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): The client returns stable INSIGHTS errors and uses source-generated process contracts.
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE](../tasks/gate-int-budget-evidence.md): The public producer seam must be proven before INSIGHTS consumes it.
 - `governed-by` -> DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries

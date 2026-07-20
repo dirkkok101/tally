@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-VERIFY-UC-005`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-04-ACCEPTANCE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `7`
 - **Dialect:** `default`
@@ -93,12 +93,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-ato` | `verified` | 2026-07-20T13:34:45.4421109+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-ato` (verified)
 - `covers` -> UC-INSIGHTS-005: Manage retained history and recovery
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md): UC-005 requires completed retained and recovery fault evidence.
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC-005 invokes the complete published maintenance surface.

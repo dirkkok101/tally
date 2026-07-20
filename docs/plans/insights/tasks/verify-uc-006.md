@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-VERIFY-UC-006`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-04-ACCEPTANCE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `8`
 - **Dialect:** `default`
@@ -90,12 +90,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2bg` | `verified` | 2026-07-20T13:34:46.2889319+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2bg` (verified)
 - `covers` -> UC-INSIGHTS-006: Discover and invoke the structured INSIGHTS contract
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC-006 exercises the published process contract.
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-SECURITY](../tasks/gate-security.md): UC-006 consumes the completed payload and process-isolation evidence.

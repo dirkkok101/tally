@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-CONTRACT-FOUNDATION`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-00-FOUNDATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `1`
 - **Dialect:** `default`
@@ -69,7 +69,7 @@ The shared registry can describe every Public INSIGHTS Operation and policy with
 
 ### Notes
 
-- Final handler registration and Program wiring belong to TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT after every handler exists.
+- Public-contract gate owns registration and Program wiring.
 
 ### File Contracts
 
@@ -110,12 +110,15 @@ The shared registry can describe every Public INSIGHTS Operation and policy with
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-uh9` | `verified` | 2026-07-20T13:34:35.7549805+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-uh9` (verified)
 - `blocked-by` -> TASK-LEDGER-CORE-PROCESS-CONTRACT: Build the self-contained process and operation contract
 - `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md): Requests, results, JSON metadata, descriptors, and mapper reference the analytical and lifecycle contract records.
 - `depends-on:compile` -> [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](../tasks/lifecycle-contract-models.md): The eleven public operations include retained-history recovery status and private-receipt contract types.

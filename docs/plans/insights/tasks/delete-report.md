@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-DELETE-REPORT`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-02-RETAINED-HISTORY`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `6`
 - **Dialect:** `default`
@@ -96,12 +96,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-34e` | `verified` | 2026-07-20T13:34:43.8357731+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-34e` (verified)
 - `depends-on:compile` -> [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](../tasks/idempotency-executor.md): Delete retries must resolve without a second event.
 - `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md): Delete uses snapshot, link, payload, and event tables.
 - `governed-by` -> ADR-CORE-0020: RESTRICT-by-Default Delete Taxonomy

@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-CONTRACT-MODELS`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-00-FOUNDATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `0`
 - **Dialect:** `default`
@@ -94,12 +94,15 @@ No task dependencies recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1qz` | `verified` | 2026-07-20T13:34:34.0959835+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1qz` (verified)
 - `governed-by` -> ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields
 - `governed-by` -> DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries
 - `implements` -> FR-INSIGHTS-CONTRACT-DISCOVERY: Discover the Public INSIGHTS Operation contract

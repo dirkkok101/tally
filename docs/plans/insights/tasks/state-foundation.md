@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-STATE-FOUNDATION`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-02-RETAINED-HISTORY`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `0`
 - **Dialect:** `default`
@@ -108,12 +108,15 @@ InsightsStateStore provides atomic normalized metadata plus canonical report-pay
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-7kn` | `verified` | 2026-07-20T13:34:34.9477892+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-7kn` (verified)
 - `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md): The store maps immutable report, history, idempotency, and recovery contracts.
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE](../tasks/gate-evidence-owner-value.md): The monitored owner-value gate must pass before retained INSIGHTS state is built.
 - `depends-on:compile` -> [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](../tasks/lifecycle-contract-models.md): The state store maps lifecycle idempotency and recovery contracts.

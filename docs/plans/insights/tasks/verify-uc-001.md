@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-VERIFY-UC-001`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-04-ACCEPTANCE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `3`
 - **Dialect:** `default`
@@ -93,12 +93,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-33p` | `verified` | 2026-07-20T13:34:40.8851987+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-33p` (verified)
 - `covers` -> UC-INSIGHTS-001: Generate an on-demand Insight Report
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE](../tasks/gate-int-budget-evidence.md): UC-001 requires the real coherent producer prerequisite.
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC-001 invokes the published Generate surface.

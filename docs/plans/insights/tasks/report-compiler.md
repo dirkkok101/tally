@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-REPORT-COMPILER`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-01-ANALYTICAL-CORE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `6`
 - **Dialect:** `default`
@@ -106,12 +106,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3ac` | `verified` | 2026-07-20T13:34:44.2376911+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3ac` (verified)
 - `depends-on:compile` -> [TASK-INSIGHTS-ANALYSIS-WINDOWS](../tasks/analysis-windows.md): The compiler composes trusted windows.
 - `depends-on:compile` -> [TASK-INSIGHTS-COHERENT-EVIDENCE-BINDER](../tasks/coherent-evidence-binder.md): The compiler accepts only BoundInsightEvidence.
 - `depends-on:compile` -> [TASK-INSIGHTS-EVIDENCE-EXPLANATION](../tasks/evidence-explanation.md): The compiler requires complete state accounting and explanations.

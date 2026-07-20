@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-00-FOUNDATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `2`
 - **Dialect:** `default`
@@ -93,12 +93,15 @@ No task dependencies recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-200` | `verified` | 2026-07-20T13:34:38.2605623+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-200` (verified)
 - `blocked-by` -> TASK-BUDGET-GATE-INT-LEDGER-CONTRACT: Prove the Ledger budget prerequisite
 - `blocked-by` -> TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete BUDGET contract
 - `blocked-by` -> TASK-BUDGET-INSIGHTS-READ-PROJECTION: Publish the read-only INSIGHTS budget projection

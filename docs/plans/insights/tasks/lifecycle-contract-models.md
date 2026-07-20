@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-00-FOUNDATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `3`
 - **Dialect:** `default`
@@ -95,12 +95,15 @@ No task dependencies recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-21u` | `verified` | 2026-07-20T13:34:40.0242978+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-21u` (verified)
 - `governed-by` -> ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields
 - `governed-by` -> DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries
 - `touches` -> DM-INSIGHTS-IDEMPOTENCY: InsightsIdempotencyRecord

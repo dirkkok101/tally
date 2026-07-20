@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-RESTATE-REPORT`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-02-RETAINED-HISTORY`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `5`
 - **Dialect:** `default`
@@ -101,12 +101,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3t2` | `verified` | 2026-07-20T13:34:43.0283887+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3t2` (verified)
 - `depends-on:compile` -> [TASK-INSIGHTS-GENERATE-REPORT](../tasks/generate-report.md): Restate reuses the approved current report path.
 - `depends-on:compile` -> [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](../tasks/idempotency-executor.md): Restate resolves replay before current producer access.
 - `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md): Restate reads verified predecessors and atomically writes child and link rows.

@@ -1,0 +1,9 @@
+{
+  "id": "01KXZWCT6RGZ84WP480SGHEQTT",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "version": "0.7",
+  "changes": [
+    "Compiled PLAN-INSIGHTS-V1: 35 beads, frontier 3; 81 compile dependencies, zero cycles, all task refs verified, and two consecutive clean bead-polish passes."
+  ],
+  "created_at": "2026-07-20T13:45:37.2414305+00:00"
+}

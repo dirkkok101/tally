@@ -11,10 +11,19 @@
   "objective": [
     "UC-INSIGHTS-001 succeeds end to end only for one complete coherent deterministic report and leaves all upstream and INSIGHTS durable state unchanged."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 3,
   "created_at": "2026-07-20T10:20:30.2237501+00:00",
+  "bead_refs": [
+    {
+      "id": "01KXZVRS7N2KAVQM3GDYG53ZDS",
+      "bead_id": "bd-33p",
+      "verification_status": "verified",
+      "verified_at": "2026-07-20T13:34:40.8851987+00:00",
+      "created_at": "2026-07-20T13:34:40.8851987+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXZGN7MW4YTF9K95BYRN1KW9",

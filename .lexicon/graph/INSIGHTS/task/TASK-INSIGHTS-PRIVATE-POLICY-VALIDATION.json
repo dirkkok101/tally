@@ -11,10 +11,19 @@
   "objective": [
     "Changed built-in policies can enter the released catalogue only after complete owner-only cases, canaries, aggregate outcomes, and owner acceptance pass without private disclosure."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 8,
   "created_at": "2026-07-20T10:09:53.3580299+00:00",
+  "bead_refs": [
+    {
+      "id": "01KXZVRY3R86296CQE2PD39SE4",
+      "bead_id": "bd-1g7",
+      "verification_status": "verified",
+      "verified_at": "2026-07-20T13:34:45.8805680+00:00",
+      "created_at": "2026-07-20T13:34:45.8805680+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXZG1SPRNJ1GCN8X98BEJET0",

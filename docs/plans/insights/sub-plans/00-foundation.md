@@ -15,7 +15,7 @@ Create only the public contract blockers and prove the BUDGET evidence seam befo
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md) | Define INSIGHTS analytical contracts | `planned` | 0 |
-| [TASK-INSIGHTS-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | Publish the eleven-operation INSIGHTS contract foundation | `planned` | 0 |
-| [TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE](../tasks/gate-int-budget-evidence.md) | Prove the coherent BUDGET evidence prerequisite | `planned` | 0 |
-| [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](../tasks/lifecycle-contract-models.md) | Define INSIGHTS lifecycle and recovery contracts | `planned` | 0 |
+| [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md) | Define INSIGHTS analytical contracts | `ready` | 0 |
+| [TASK-INSIGHTS-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | Publish the eleven-operation INSIGHTS contract foundation | `ready` | 0 |
+| [TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE](../tasks/gate-int-budget-evidence.md) | Prove the coherent BUDGET evidence prerequisite | `ready` | 0 |
+| [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](../tasks/lifecycle-contract-models.md) | Define INSIGHTS lifecycle and recovery contracts | `ready` | 0 |

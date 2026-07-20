@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-RETAIN-REPORT`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-02-RETAINED-HISTORY`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `2`
 - **Dialect:** `default`
@@ -98,12 +98,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-6eq` | `verified` | 2026-07-20T13:34:39.1614220+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-6eq` (verified)
 - `depends-on:compile` -> [TASK-INSIGHTS-GENERATE-REPORT](../tasks/generate-report.md): Retain reuses the complete approved generation path.
 - `depends-on:compile` -> [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](../tasks/idempotency-executor.md): Retain must resolve and reserve replay before producer access.
 - `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md): Retain writes the snapshot and payload schema.

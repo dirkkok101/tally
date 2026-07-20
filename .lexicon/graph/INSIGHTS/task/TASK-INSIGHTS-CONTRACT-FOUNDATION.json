@@ -11,10 +11,19 @@
   "objective": [
     "The shared registry can describe every Public INSIGHTS Operation and policy without reading financial or retained data."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 1,
   "created_at": "2026-07-20T10:05:14.8911171+00:00",
+  "bead_refs": [
+    {
+      "id": "01KXZVRM7ANQKVAB2D31H2C3EM",
+      "bead_id": "bd-uh9",
+      "verification_status": "verified",
+      "verified_at": "2026-07-20T13:34:35.7549805+00:00",
+      "created_at": "2026-07-20T13:34:35.7549805+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXZFS9RE8G2HFRYV23T57APY",
@@ -354,14 +363,14 @@
       "created_at": "2026-07-20T10:05:14.8911171+00:00"
     },
     {
-      "id": "01KXZFS9RFDM7K2YVYEGHJDFE6",
+      "id": "01KXZWHX795G02FWPAJBV3RGNK",
       "kind": "note",
       "text": [
-        "Final handler registration and Program wiring belong to TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT after every handler exists."
+        "Public-contract gate owns registration and Program wiring."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+      "created_at": "2026-07-20T13:48:24.1691749+00:00"
     }
   ],
   "references": [

@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-PRIVATE-POLICY-VALIDATION`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-01-ANALYTICAL-CORE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `8`
 - **Dialect:** `default`
@@ -101,12 +101,15 @@ Changed built-in policies can enter the released catalogue only after complete o
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1g7` | `verified` | 2026-07-20T13:34:45.8805680+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1g7` (verified)
 - `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): The harness validates released catalogue and receipt contracts.
 - `depends-on:compile` -> [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](../tasks/lifecycle-contract-models.md): The private harness emits the external aggregate PolicyValidationReceipt.
 - `depends-on:compile` -> [TASK-INSIGHTS-REPORT-COMPILER](../tasks/report-compiler.md): Private cases exercise the real candidate compiler rather than a second evaluator.

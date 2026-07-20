@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-01-ANALYTICAL-CORE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `9`
 - **Dialect:** `default`
@@ -97,12 +97,15 @@ Private aggregate evidence proves exact metrics, Linear Pace, explanations, and 
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-gsb` | `verified` | 2026-07-20T13:34:46.7001699+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-gsb` (verified)
 - `blocked-by` -> OQ-INSIGHTS-10: What owner-only representative evidence horizon and canaries will prove that INSIGHTS adds value over raw Budget Position inspection without false high-severity signals?
 - `depends-on:compile` -> [TASK-INSIGHTS-GENERATE-REPORT](../tasks/generate-report.md): The kill gate evaluates the real active report path.
 - `depends-on:compile` -> [TASK-INSIGHTS-PRIVATE-POLICY-VALIDATION](../tasks/private-policy-validation.md): The kill gate consumes the real manifest reader, harness, canaries, and receipt.

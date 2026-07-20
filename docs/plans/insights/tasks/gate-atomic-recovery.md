@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-GATE-ATOMIC-RECOVERY`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-03-RECOVERY`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `2`
 - **Dialect:** `default`
@@ -103,12 +103,15 @@ One reproducible fault matrix proves restart observes exactly one complete outco
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2ls` | `verified` | 2026-07-20T13:34:37.8656791+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2ls` (verified)
 - `depends-on:compile` -> [TASK-INSIGHTS-BACKUP-VERIFY](../tasks/backup-verify.md): The gate injects Backup and Verify failures.
 - `depends-on:compile` -> [TASK-INSIGHTS-DELETE-REPORT](../tasks/delete-report.md): The gate injects Delete failures.
 - `depends-on:compile` -> [TASK-INSIGHTS-RESTATE-REPORT](../tasks/restate-report.md): The gate injects Restatement failures.

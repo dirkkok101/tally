@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-02-RETAINED-HISTORY`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `1`
 - **Dialect:** `default`
@@ -38,7 +38,7 @@ InsightsIdempotencyExecutor returns prior logical outcomes for exact retries, re
 
 ### Acceptance Checks
 
-- The unique replay identity is operationId plus contractVersion plus keyDigest; the canonical request fingerprint includes every logical input, actor, reason, target or predecessor, selected policies, expected-current fingerprint, and safe normalized path identity where applicable.
+- The unique replay identity is operationId plus contractVersion plus keyDigest; the canonical request fingerprint includes every logical input, actor, reason, target or predecessor, selected policies, and expected-current fingerprint; Backup and Restore additionally include safe normalized path identity.
 - A Succeeded record with the same key and fingerprint returns the exact prior logical outcome before TimeProvider, producer, or write access; the same key with a changed fingerprint returns IdempotencyConflict and changes nothing.
 - New write attempts are reserved transactionally; success stores one immutable outcome reference; validation, cancellation, transient, generation, and persistence failure leave no successful outcome and remove any completed-failure reservation.
 - If a retained snapshot outcome was later deleted, replay resolves to metadata-only Deleted evidence and never recreates or discloses the removed payload.
@@ -91,12 +91,15 @@ InsightsIdempotencyExecutor returns prior logical outcomes for exact retries, re
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2nv` | `verified` | 2026-07-20T13:34:36.5939266+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2nv` (verified)
 - `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md): The replay executor uses the idempotency table and caller-owned SQLite transactions.
 - `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion
 - `governed-by` -> DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation

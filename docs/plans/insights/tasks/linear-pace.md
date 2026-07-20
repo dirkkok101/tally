@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-LINEAR-PACE`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-01-ANALYTICAL-CORE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `4`
 - **Dialect:** `default`
@@ -90,12 +90,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-29y` | `verified` | 2026-07-20T13:34:41.3068858+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-29y` (verified)
 - `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md): The calculator returns ExactRational and PaceResult contracts.
 - `governed-by` -> DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY: Frozen Johannesburg Analysis Windows and exact Linear Pace
 - `implements` -> FR-INSIGHTS-LINEAR-PACE: Calculate a transparent linear pace state

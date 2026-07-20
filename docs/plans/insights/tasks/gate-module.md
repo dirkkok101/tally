@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-GATE-MODULE`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-04-ACCEPTANCE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `10`
 - **Dialect:** `default`
@@ -90,12 +90,15 @@ A clean checkout proves INSIGHTS v1 satisfies the approved design and active PRD
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-881` | `verified` | 2026-07-20T13:34:47.5728128+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-881` (verified)
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-GRAPH-QUALITY](../tasks/gate-graph-quality.md): The final module gate runs only after all contract, behavioral, nonfunctional, use-case, and graph evidence converges.
 - `governed-by` -> MD-INSIGHTS-MASTER: Budget Insights technical design
 - `governed-by` -> PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES: Implementation Plan Quality Gates

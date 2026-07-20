@@ -15,13 +15,13 @@ Prove the risky coherence, time, arithmetic, report, and private-value bets befo
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-INSIGHTS-BUDGET-EVIDENCE-CLIENT](../tasks/budget-evidence-client.md) | Consume the public BUDGET insight evidence operation | `planned` | 0 |
-| [TASK-INSIGHTS-COHERENT-EVIDENCE-BINDER](../tasks/coherent-evidence-binder.md) | Validate one coherent analytical evidence set | `planned` | 0 |
-| [TASK-INSIGHTS-ANALYSIS-WINDOWS](../tasks/analysis-windows.md) | Implement trusted Johannesburg Analysis Windows | `planned` | 0 |
-| [TASK-INSIGHTS-EXACT-METRICS](../tasks/exact-metrics.md) | Calculate exact Analysis Window and category metrics | `planned` | 0 |
-| [TASK-INSIGHTS-LINEAR-PACE](../tasks/linear-pace.md) | Implement exact Linear Pace classification | `planned` | 0 |
-| [TASK-INSIGHTS-EVIDENCE-EXPLANATION](../tasks/evidence-explanation.md) | Account for evidence states and render explanations | `planned` | 0 |
-| [TASK-INSIGHTS-REPORT-COMPILER](../tasks/report-compiler.md) | Compile one deterministic immutable Insight Report | `planned` | 0 |
-| [TASK-INSIGHTS-GENERATE-REPORT](../tasks/generate-report.md) | Generate one ephemeral Insight Report | `planned` | 0 |
-| [TASK-INSIGHTS-PRIVATE-POLICY-VALIDATION](../tasks/private-policy-validation.md) | Validate built-in policies with private owner evidence | `planned` | 0 |
-| [TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE](../tasks/gate-evidence-owner-value.md) | Prove active report and retention value privately | `planned` | 0 |
+| [TASK-INSIGHTS-BUDGET-EVIDENCE-CLIENT](../tasks/budget-evidence-client.md) | Consume the public BUDGET insight evidence operation | `ready` | 0 |
+| [TASK-INSIGHTS-COHERENT-EVIDENCE-BINDER](../tasks/coherent-evidence-binder.md) | Validate one coherent analytical evidence set | `ready` | 0 |
+| [TASK-INSIGHTS-ANALYSIS-WINDOWS](../tasks/analysis-windows.md) | Implement trusted Johannesburg Analysis Windows | `ready` | 0 |
+| [TASK-INSIGHTS-EXACT-METRICS](../tasks/exact-metrics.md) | Calculate exact Analysis Window and category metrics | `ready` | 0 |
+| [TASK-INSIGHTS-LINEAR-PACE](../tasks/linear-pace.md) | Implement exact Linear Pace classification | `ready` | 0 |
+| [TASK-INSIGHTS-EVIDENCE-EXPLANATION](../tasks/evidence-explanation.md) | Account for evidence states and render explanations | `ready` | 0 |
+| [TASK-INSIGHTS-REPORT-COMPILER](../tasks/report-compiler.md) | Compile one deterministic immutable Insight Report | `ready` | 0 |
+| [TASK-INSIGHTS-GENERATE-REPORT](../tasks/generate-report.md) | Generate one ephemeral Insight Report | `ready` | 0 |
+| [TASK-INSIGHTS-PRIVATE-POLICY-VALIDATION](../tasks/private-policy-validation.md) | Validate built-in policies with private owner evidence | `ready` | 0 |
+| [TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE](../tasks/gate-evidence-owner-value.md) | Prove active report and retention value privately | `ready` | 0 |

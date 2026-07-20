@@ -11,10 +11,19 @@
   "objective": [
     "ListInsightReportsQuery and GetInsightsStatusQuery expose deterministic safe metadata, integrity, counts, durable recovery evidence, and supported policies only."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 4,
   "created_at": "2026-07-20T10:13:17.4772449+00:00",
+  "bead_refs": [
+    {
+      "id": "01KXZVRT2B0S5A50ZC47XBJ4SP",
+      "bead_id": "bd-32j",
+      "verification_status": "verified",
+      "verified_at": "2026-07-20T13:34:41.7394300+00:00",
+      "created_at": "2026-07-20T13:34:41.7394300+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXZG811ATEXZN90CT160BHP1",

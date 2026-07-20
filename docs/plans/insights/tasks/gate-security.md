@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-GATE-SECURITY`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-04-ACCEPTANCE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `1`
 - **Dialect:** `default`
@@ -101,12 +101,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2fg` | `verified` | 2026-07-20T13:34:36.1685425+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2fg` (verified)
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md): Security covers all retained and recovery artifact/failure paths.
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE](../tasks/gate-evidence-owner-value.md): Security validates the private manifest and receipt boundary.
 - `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Security validates the published operation and process boundary.

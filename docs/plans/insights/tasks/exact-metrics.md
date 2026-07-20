@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-EXACT-METRICS`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-01-ANALYTICAL-CORE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `3`
 - **Dialect:** `default`
@@ -91,12 +91,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-mbq` | `verified` | 2026-07-20T13:34:39.5631361+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-mbq` (verified)
 - `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md): The calculator consumes evidence and produces exact analytical contracts.
 - `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies
 - `governed-by` -> DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY: Frozen Johannesburg Analysis Windows and exact Linear Pace

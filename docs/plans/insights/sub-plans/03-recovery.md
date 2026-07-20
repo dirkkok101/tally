@@ -15,6 +15,6 @@ Build and fault-test complete point-in-time backup, independent verification, an
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-INSIGHTS-BACKUP-VERIFY](../tasks/backup-verify.md) | Create and independently verify complete INSIGHTS backups | `planned` | 0 |
-| [TASK-INSIGHTS-RESTORE-ACTIVATE](../tasks/restore-activate.md) | Restore through a verified generation and atomic activation | `planned` | 0 |
-| [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md) | Prove retained-state and recovery failure atomicity | `planned` | 0 |
+| [TASK-INSIGHTS-BACKUP-VERIFY](../tasks/backup-verify.md) | Create and independently verify complete INSIGHTS backups | `ready` | 0 |
+| [TASK-INSIGHTS-RESTORE-ACTIVATE](../tasks/restore-activate.md) | Restore through a verified generation and atomic activation | `ready` | 0 |
+| [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md) | Prove retained-state and recovery failure atomicity | `ready` | 0 |

@@ -36,41 +36,41 @@ Greenfield implementation of MD-INSIGHTS-MASTER. Global constraints: target .NET
 
 | Ref | Title | State | Priority | Sub-Plan |
 |---|---|---|---:|---|
-| [TASK-INSIGHTS-CONTRACT-MODELS](tasks/contract-models.md) | Define INSIGHTS analytical contracts | `planned` | 0 | SP-INSIGHTS-00-FOUNDATION: Contracts and upstream prerequisites |
-| [TASK-INSIGHTS-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | Publish the eleven-operation INSIGHTS contract foundation | `planned` | 0 | SP-INSIGHTS-00-FOUNDATION: Contracts and upstream prerequisites |
-| [TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE](tasks/gate-int-budget-evidence.md) | Prove the coherent BUDGET evidence prerequisite | `planned` | 0 | SP-INSIGHTS-00-FOUNDATION: Contracts and upstream prerequisites |
-| [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](tasks/lifecycle-contract-models.md) | Define INSIGHTS lifecycle and recovery contracts | `planned` | 0 | SP-INSIGHTS-00-FOUNDATION: Contracts and upstream prerequisites |
-| [TASK-INSIGHTS-BUDGET-EVIDENCE-CLIENT](tasks/budget-evidence-client.md) | Consume the public BUDGET insight evidence operation | `planned` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
-| [TASK-INSIGHTS-COHERENT-EVIDENCE-BINDER](tasks/coherent-evidence-binder.md) | Validate one coherent analytical evidence set | `planned` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
-| [TASK-INSIGHTS-ANALYSIS-WINDOWS](tasks/analysis-windows.md) | Implement trusted Johannesburg Analysis Windows | `planned` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
-| [TASK-INSIGHTS-EXACT-METRICS](tasks/exact-metrics.md) | Calculate exact Analysis Window and category metrics | `planned` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
-| [TASK-INSIGHTS-LINEAR-PACE](tasks/linear-pace.md) | Implement exact Linear Pace classification | `planned` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
-| [TASK-INSIGHTS-EVIDENCE-EXPLANATION](tasks/evidence-explanation.md) | Account for evidence states and render explanations | `planned` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
-| [TASK-INSIGHTS-REPORT-COMPILER](tasks/report-compiler.md) | Compile one deterministic immutable Insight Report | `planned` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
-| [TASK-INSIGHTS-GENERATE-REPORT](tasks/generate-report.md) | Generate one ephemeral Insight Report | `planned` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
-| [TASK-INSIGHTS-PRIVATE-POLICY-VALIDATION](tasks/private-policy-validation.md) | Validate built-in policies with private owner evidence | `planned` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
-| [TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE](tasks/gate-evidence-owner-value.md) | Prove active report and retention value privately | `planned` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
-| [TASK-INSIGHTS-STATE-FOUNDATION](tasks/state-foundation.md) | Build the owner-only INSIGHTS SQLite generation store | `planned` | 0 | SP-INSIGHTS-02-RETAINED-HISTORY: Immutable retained report history |
-| [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](tasks/idempotency-executor.md) | Implement module-wide retained-operation replay | `planned` | 0 | SP-INSIGHTS-02-RETAINED-HISTORY: Immutable retained report history |
-| [TASK-INSIGHTS-RETAIN-REPORT](tasks/retain-report.md) | Retain an internally generated immutable report | `planned` | 0 | SP-INSIGHTS-02-RETAINED-HISTORY: Immutable retained report history |
-| [TASK-INSIGHTS-REPORT-DETAIL-READS](tasks/report-detail-reads.md) | Read retained report details and explanations | `planned` | 1 | SP-INSIGHTS-02-RETAINED-HISTORY: Immutable retained report history |
-| [TASK-INSIGHTS-REPORT-HISTORY-STATUS](tasks/report-history-status.md) | List metadata history and report store status | `planned` | 1 | SP-INSIGHTS-02-RETAINED-HISTORY: Immutable retained report history |
-| [TASK-INSIGHTS-RESTATE-REPORT](tasks/restate-report.md) | Append explicit Restatements and deterministic differences | `planned` | 0 | SP-INSIGHTS-02-RETAINED-HISTORY: Immutable retained report history |
-| [TASK-INSIGHTS-DELETE-REPORT](tasks/delete-report.md) | Delete one unreferenced report payload safely | `planned` | 1 | SP-INSIGHTS-02-RETAINED-HISTORY: Immutable retained report history |
-| [TASK-INSIGHTS-BACKUP-VERIFY](tasks/backup-verify.md) | Create and independently verify complete INSIGHTS backups | `planned` | 0 | SP-INSIGHTS-03-RECOVERY: Verified backup and atomic recovery |
-| [TASK-INSIGHTS-RESTORE-ACTIVATE](tasks/restore-activate.md) | Restore through a verified generation and atomic activation | `planned` | 0 | SP-INSIGHTS-03-RECOVERY: Verified backup and atomic recovery |
-| [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](tasks/gate-atomic-recovery.md) | Prove retained-state and recovery failure atomicity | `planned` | 0 | SP-INSIGHTS-03-RECOVERY: Verified backup and atomic recovery |
-| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | Wire and prove the complete INSIGHTS public contract | `planned` | 0 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
-| [TASK-INSIGHTS-GATE-SECURITY](tasks/gate-security.md) | Prove local INSIGHTS privacy and process isolation | `planned` | 0 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
-| [TASK-INSIGHTS-GATE-PERFORMANCE](tasks/gate-performance.md) | Prove bounded personal-scale INSIGHTS performance | `planned` | 1 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
-| [TASK-INSIGHTS-VERIFY-UC-001](tasks/verify-uc-001.md) | Verify on-demand Insight Report generation | `planned` | 0 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
-| [TASK-INSIGHTS-VERIFY-UC-002](tasks/verify-uc-002.md) | Verify report evidence and explanation inspection | `planned` | 1 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
-| [TASK-INSIGHTS-VERIFY-UC-003](tasks/verify-uc-003.md) | Verify retained generation and retrieval | `planned` | 0 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
-| [TASK-INSIGHTS-VERIFY-UC-004](tasks/verify-uc-004.md) | Verify Restatement and corrected-report comparison | `planned` | 0 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
-| [TASK-INSIGHTS-VERIFY-UC-005](tasks/verify-uc-005.md) | Verify retained history deletion and recovery | `planned` | 0 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
-| [TASK-INSIGHTS-VERIFY-UC-006](tasks/verify-uc-006.md) | Verify structured contract discovery and invocation | `planned` | 0 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
-| [TASK-INSIGHTS-GATE-GRAPH-QUALITY](tasks/gate-graph-quality.md) | Converge INSIGHTS graph and verification quality | `planned` | 1 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
-| [TASK-INSIGHTS-GATE-MODULE](tasks/gate-module.md) | Complete the INSIGHTS v1 module gate | `planned` | 0 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
+| [TASK-INSIGHTS-CONTRACT-MODELS](tasks/contract-models.md) | Define INSIGHTS analytical contracts | `ready` | 0 | SP-INSIGHTS-00-FOUNDATION: Contracts and upstream prerequisites |
+| [TASK-INSIGHTS-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | Publish the eleven-operation INSIGHTS contract foundation | `ready` | 0 | SP-INSIGHTS-00-FOUNDATION: Contracts and upstream prerequisites |
+| [TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE](tasks/gate-int-budget-evidence.md) | Prove the coherent BUDGET evidence prerequisite | `ready` | 0 | SP-INSIGHTS-00-FOUNDATION: Contracts and upstream prerequisites |
+| [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](tasks/lifecycle-contract-models.md) | Define INSIGHTS lifecycle and recovery contracts | `ready` | 0 | SP-INSIGHTS-00-FOUNDATION: Contracts and upstream prerequisites |
+| [TASK-INSIGHTS-BUDGET-EVIDENCE-CLIENT](tasks/budget-evidence-client.md) | Consume the public BUDGET insight evidence operation | `ready` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
+| [TASK-INSIGHTS-COHERENT-EVIDENCE-BINDER](tasks/coherent-evidence-binder.md) | Validate one coherent analytical evidence set | `ready` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
+| [TASK-INSIGHTS-ANALYSIS-WINDOWS](tasks/analysis-windows.md) | Implement trusted Johannesburg Analysis Windows | `ready` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
+| [TASK-INSIGHTS-EXACT-METRICS](tasks/exact-metrics.md) | Calculate exact Analysis Window and category metrics | `ready` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
+| [TASK-INSIGHTS-LINEAR-PACE](tasks/linear-pace.md) | Implement exact Linear Pace classification | `ready` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
+| [TASK-INSIGHTS-EVIDENCE-EXPLANATION](tasks/evidence-explanation.md) | Account for evidence states and render explanations | `ready` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
+| [TASK-INSIGHTS-REPORT-COMPILER](tasks/report-compiler.md) | Compile one deterministic immutable Insight Report | `ready` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
+| [TASK-INSIGHTS-GENERATE-REPORT](tasks/generate-report.md) | Generate one ephemeral Insight Report | `ready` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
+| [TASK-INSIGHTS-PRIVATE-POLICY-VALIDATION](tasks/private-policy-validation.md) | Validate built-in policies with private owner evidence | `ready` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
+| [TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE](tasks/gate-evidence-owner-value.md) | Prove active report and retention value privately | `ready` | 0 | SP-INSIGHTS-01-ANALYTICAL-CORE: Coherent deterministic analytical core |
+| [TASK-INSIGHTS-STATE-FOUNDATION](tasks/state-foundation.md) | Build the owner-only INSIGHTS SQLite generation store | `ready` | 0 | SP-INSIGHTS-02-RETAINED-HISTORY: Immutable retained report history |
+| [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](tasks/idempotency-executor.md) | Implement module-wide retained-operation replay | `ready` | 0 | SP-INSIGHTS-02-RETAINED-HISTORY: Immutable retained report history |
+| [TASK-INSIGHTS-RETAIN-REPORT](tasks/retain-report.md) | Retain an internally generated immutable report | `ready` | 0 | SP-INSIGHTS-02-RETAINED-HISTORY: Immutable retained report history |
+| [TASK-INSIGHTS-REPORT-DETAIL-READS](tasks/report-detail-reads.md) | Read retained report details and explanations | `ready` | 1 | SP-INSIGHTS-02-RETAINED-HISTORY: Immutable retained report history |
+| [TASK-INSIGHTS-REPORT-HISTORY-STATUS](tasks/report-history-status.md) | List metadata history and report store status | `ready` | 1 | SP-INSIGHTS-02-RETAINED-HISTORY: Immutable retained report history |
+| [TASK-INSIGHTS-RESTATE-REPORT](tasks/restate-report.md) | Append explicit Restatements and deterministic differences | `ready` | 0 | SP-INSIGHTS-02-RETAINED-HISTORY: Immutable retained report history |
+| [TASK-INSIGHTS-DELETE-REPORT](tasks/delete-report.md) | Delete one unreferenced report payload safely | `ready` | 1 | SP-INSIGHTS-02-RETAINED-HISTORY: Immutable retained report history |
+| [TASK-INSIGHTS-BACKUP-VERIFY](tasks/backup-verify.md) | Create and independently verify complete INSIGHTS backups | `ready` | 0 | SP-INSIGHTS-03-RECOVERY: Verified backup and atomic recovery |
+| [TASK-INSIGHTS-RESTORE-ACTIVATE](tasks/restore-activate.md) | Restore through a verified generation and atomic activation | `ready` | 0 | SP-INSIGHTS-03-RECOVERY: Verified backup and atomic recovery |
+| [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](tasks/gate-atomic-recovery.md) | Prove retained-state and recovery failure atomicity | `ready` | 0 | SP-INSIGHTS-03-RECOVERY: Verified backup and atomic recovery |
+| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | Wire and prove the complete INSIGHTS public contract | `ready` | 0 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
+| [TASK-INSIGHTS-GATE-SECURITY](tasks/gate-security.md) | Prove local INSIGHTS privacy and process isolation | `ready` | 0 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
+| [TASK-INSIGHTS-GATE-PERFORMANCE](tasks/gate-performance.md) | Prove bounded personal-scale INSIGHTS performance | `ready` | 1 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
+| [TASK-INSIGHTS-VERIFY-UC-001](tasks/verify-uc-001.md) | Verify on-demand Insight Report generation | `ready` | 0 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
+| [TASK-INSIGHTS-VERIFY-UC-002](tasks/verify-uc-002.md) | Verify report evidence and explanation inspection | `ready` | 1 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
+| [TASK-INSIGHTS-VERIFY-UC-003](tasks/verify-uc-003.md) | Verify retained generation and retrieval | `ready` | 0 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
+| [TASK-INSIGHTS-VERIFY-UC-004](tasks/verify-uc-004.md) | Verify Restatement and corrected-report comparison | `ready` | 0 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
+| [TASK-INSIGHTS-VERIFY-UC-005](tasks/verify-uc-005.md) | Verify retained history deletion and recovery | `ready` | 0 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
+| [TASK-INSIGHTS-VERIFY-UC-006](tasks/verify-uc-006.md) | Verify structured contract discovery and invocation | `ready` | 0 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
+| [TASK-INSIGHTS-GATE-GRAPH-QUALITY](tasks/gate-graph-quality.md) | Converge INSIGHTS graph and verification quality | `ready` | 1 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
+| [TASK-INSIGHTS-GATE-MODULE](tasks/gate-module.md) | Complete the INSIGHTS v1 module gate | `ready` | 0 | SP-INSIGHTS-04-ACCEPTANCE: Integration and acceptance gates |
 
 ### Dependency Graph
 
@@ -416,45 +416,6 @@ Greenfield implementation of MD-INSIGHTS-MASTER. Global constraints: target .NET
 - [TASK-INSIGHTS-VERIFY-UC-005](tasks/verify-uc-005.md): Task has no implements refs.
 - [TASK-INSIGHTS-VERIFY-UC-006](tasks/verify-uc-006.md): Task has no implements refs.
 
-#### Tasks Without Bead Refs
-
-- [TASK-INSIGHTS-ANALYSIS-WINDOWS](tasks/analysis-windows.md): Task has no bead refs.
-- [TASK-INSIGHTS-BACKUP-VERIFY](tasks/backup-verify.md): Task has no bead refs.
-- [TASK-INSIGHTS-BUDGET-EVIDENCE-CLIENT](tasks/budget-evidence-client.md): Task has no bead refs.
-- [TASK-INSIGHTS-COHERENT-EVIDENCE-BINDER](tasks/coherent-evidence-binder.md): Task has no bead refs.
-- [TASK-INSIGHTS-CONTRACT-FOUNDATION](tasks/contract-foundation.md): Task has no bead refs.
-- [TASK-INSIGHTS-CONTRACT-MODELS](tasks/contract-models.md): Task has no bead refs.
-- [TASK-INSIGHTS-DELETE-REPORT](tasks/delete-report.md): Task has no bead refs.
-- [TASK-INSIGHTS-EVIDENCE-EXPLANATION](tasks/evidence-explanation.md): Task has no bead refs.
-- [TASK-INSIGHTS-EXACT-METRICS](tasks/exact-metrics.md): Task has no bead refs.
-- [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](tasks/gate-atomic-recovery.md): Task has no bead refs.
-- [TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE](tasks/gate-evidence-owner-value.md): Task has no bead refs.
-- [TASK-INSIGHTS-GATE-GRAPH-QUALITY](tasks/gate-graph-quality.md): Task has no bead refs.
-- [TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE](tasks/gate-int-budget-evidence.md): Task has no bead refs.
-- [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md): Task has no bead refs.
-- [TASK-INSIGHTS-GATE-MODULE](tasks/gate-module.md): Task has no bead refs.
-- [TASK-INSIGHTS-GATE-PERFORMANCE](tasks/gate-performance.md): Task has no bead refs.
-- [TASK-INSIGHTS-GATE-SECURITY](tasks/gate-security.md): Task has no bead refs.
-- [TASK-INSIGHTS-GENERATE-REPORT](tasks/generate-report.md): Task has no bead refs.
-- [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](tasks/idempotency-executor.md): Task has no bead refs.
-- [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](tasks/lifecycle-contract-models.md): Task has no bead refs.
-- [TASK-INSIGHTS-LINEAR-PACE](tasks/linear-pace.md): Task has no bead refs.
-- [TASK-INSIGHTS-PRIVATE-POLICY-VALIDATION](tasks/private-policy-validation.md): Task has no bead refs.
-- [TASK-INSIGHTS-REPORT-COMPILER](tasks/report-compiler.md): Task has no bead refs.
-- [TASK-INSIGHTS-REPORT-DETAIL-READS](tasks/report-detail-reads.md): Task has no bead refs.
-- [TASK-INSIGHTS-REPORT-HISTORY-STATUS](tasks/report-history-status.md): Task has no bead refs.
-- [TASK-INSIGHTS-RESTATE-REPORT](tasks/restate-report.md): Task has no bead refs.
-- [TASK-INSIGHTS-RESTORE-ACTIVATE](tasks/restore-activate.md): Task has no bead refs.
-- [TASK-INSIGHTS-RETAIN-REPORT](tasks/retain-report.md): Task has no bead refs.
-- [TASK-INSIGHTS-STATE-FOUNDATION](tasks/state-foundation.md): Task has no bead refs.
-- [TASK-INSIGHTS-VERIFY-UC-001](tasks/verify-uc-001.md): Task has no bead refs.
-- [TASK-INSIGHTS-VERIFY-UC-002](tasks/verify-uc-002.md): Task has no bead refs.
-- [TASK-INSIGHTS-VERIFY-UC-003](tasks/verify-uc-003.md): Task has no bead refs.
-- [TASK-INSIGHTS-VERIFY-UC-004](tasks/verify-uc-004.md): Task has no bead refs.
-- [TASK-INSIGHTS-VERIFY-UC-005](tasks/verify-uc-005.md): Task has no bead refs.
-- [TASK-INSIGHTS-VERIFY-UC-006](tasks/verify-uc-006.md): Task has no bead refs.
-
 #### Coverage Warnings
 
 - 17 loose task(s) have no implements refs.
-- 35 task(s) have no bead refs.

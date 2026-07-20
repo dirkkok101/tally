@@ -11,10 +11,19 @@
   "objective": [
     "InsightsIdempotencyExecutor returns prior logical outcomes for exact retries, rejects changed input, and never consumes failed request identities or leaks deleted content."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 1,
   "created_at": "2026-07-20T10:13:17.4772449+00:00",
+  "bead_refs": [
+    {
+      "id": "01KXZVRN1HYK920EDZZEZ1BS20",
+      "bead_id": "bd-2nv",
+      "verification_status": "verified",
+      "verified_at": "2026-07-20T13:34:36.5939266+00:00",
+      "created_at": "2026-07-20T13:34:36.5939266+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXZG8117R36XDC1KF74DQYBZ",
@@ -85,54 +94,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXZG81172099TZD84V2TRXQH",
+      "id": "01KXZSJGXTGY0JCCH2QJVP7ZA5",
       "kind": "acceptance_check",
       "text": [
-        "The unique replay identity is operationId plus contractVersion plus keyDigest; the canonical request fingerprint includes every logical input, actor, reason, target or predecessor, selected policies, expected-current fingerprint, and safe normalized path identity where applicable."
+        "The unique replay identity is operationId plus contractVersion plus keyDigest; the canonical request fingerprint includes every logical input, actor, reason, target or predecessor, selected policies, and expected-current fingerprint; Backup and Restore additionally include safe normalized path identity."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+      "created_at": "2026-07-20T12:56:18.6177659+00:00"
     },
     {
-      "id": "01KXZG81178KWAKWWMR3ZB7KJ8",
+      "id": "01KXZSJGXTPTY4AZM42FXWQ1SK",
       "kind": "acceptance_check",
       "text": [
         "A Succeeded record with the same key and fingerprint returns the exact prior logical outcome before TimeProvider, producer, or write access; the same key with a changed fingerprint returns IdempotencyConflict and changes nothing."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+      "created_at": "2026-07-20T12:56:18.6177659+00:00"
     },
     {
-      "id": "01KXZG8117Q98ZRK48QKBZND7F",
+      "id": "01KXZSJGXTDE0Q3FEK9X23YSZX",
       "kind": "acceptance_check",
       "text": [
         "New write attempts are reserved transactionally; success stores one immutable outcome reference; validation, cancellation, transient, generation, and persistence failure leave no successful outcome and remove any completed-failure reservation."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+      "created_at": "2026-07-20T12:56:18.6177659+00:00"
     },
     {
-      "id": "01KXZG8117WNJJW9YAXATT21YW",
+      "id": "01KXZSJGXTEC1JXND35CEY0FS1",
       "kind": "acceptance_check",
       "text": [
         "If a retained snapshot outcome was later deleted, replay resolves to metadata-only Deleted evidence and never recreates or discloses the removed payload."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+      "created_at": "2026-07-20T12:56:18.6177659+00:00"
     },
     {
-      "id": "01KXZG8117YSEEAZY0TMEHDW83",
+      "id": "01KXZSJGXTHXK9Y8JNYJXNSBZP",
       "kind": "acceptance_check",
       "text": [
         "Backup-specific Attempting reconciliation can retain deterministic artifact identity across a crash while the copied artifact excludes the current non-terminal reservation."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+      "created_at": "2026-07-20T12:56:18.6177659+00:00"
     },
     {
       "id": "01KXZG81172NT2MY5ZXYSETS2K",

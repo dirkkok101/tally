@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT`
 - **Plan:** `PLAN-INSIGHTS-V1`
 - **Sub-Plan:** `SP-INSIGHTS-04-ACCEPTANCE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `0`
 - **Dialect:** `default`
@@ -113,12 +113,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1jf` | `verified` | 2026-07-20T13:34:34.5236026+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1jf` (verified)
 - `depends-on:compile` -> [TASK-INSIGHTS-BACKUP-VERIFY](../tasks/backup-verify.md): Register Backup and Verify.
 - `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Wiring consumes descriptors and source-generated contracts.
 - `depends-on:compile` -> [TASK-INSIGHTS-DELETE-REPORT](../tasks/delete-report.md): Register Delete.

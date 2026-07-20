@@ -11,10 +11,19 @@
   "objective": [
     "UC-INSIGHTS-006 lets Agent Host automate exactly one operation per invocation with stable schemas, envelopes, exits, authority, limits, and no hidden data or process behavior."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 8,
   "created_at": "2026-07-20T10:20:30.2237501+00:00",
+  "bead_refs": [
+    {
+      "id": "01KXZVRYGGDVN81854JFRZ486K",
+      "bead_id": "bd-2bg",
+      "verification_status": "verified",
+      "verified_at": "2026-07-20T13:34:46.2889319+00:00",
+      "created_at": "2026-07-20T13:34:46.2889319+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXZGN7N6PKMTV8THE6T7B6V4",
