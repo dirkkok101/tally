@@ -1,0 +1,9 @@
+{
+  "id": "01KXZ6TNADGBC4WWGP1HM0DQ8Z",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "term": "Evidence Sufficiency",
+  "definition": [
+    "A versioned rule deciding whether coverage, horizon, completeness, compatibility, and comparability are adequate to emit a metric or signal rather than an explicit insufficient-evidence state."
+  ],
+  "created_at": "2026-07-20T07:28:42.3187379+00:00"
+}

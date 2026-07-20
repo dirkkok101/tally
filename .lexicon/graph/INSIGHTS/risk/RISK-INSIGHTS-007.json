@@ -1,0 +1,14 @@
+{
+  "id": "01KXZ6TARZMASD7XSA2KQ3JSTS",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "RISK-INSIGHTS-007",
+  "description": [
+    "A corrupted or incompatible INSIGHTS store can lose retained Report Snapshots or produce duplicate identities after retry, restore, or upgrade."
+  ],
+  "likelihood": "Low",
+  "impact": "High",
+  "mitigation": [
+    "Use stable idempotent report identity, integrity checks, verified backup and separate-target restore, atomic migrations, and fail-closed activation."
+  ],
+  "created_at": "2026-07-20T07:28:31.5201594+00:00"
+}

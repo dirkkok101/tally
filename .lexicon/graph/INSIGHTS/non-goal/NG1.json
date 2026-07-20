@@ -1,0 +1,12 @@
+{
+  "id": "01KXZ6PKY66KQ4XTMNS3CBFFE8",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "NG1",
+  "text": [
+    "Create, edit, activate, categorize, correct, void, supersede, or otherwise mutate LEDGER, CLASSIFY, or BUDGET state."
+  ],
+  "rationale": [
+    "INSIGHTS is a read-only analytical consumer; source modules retain all financial and planning authority."
+  ],
+  "created_at": "2026-07-20T07:26:29.8317002+00:00"
+}

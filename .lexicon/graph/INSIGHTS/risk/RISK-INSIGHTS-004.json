@@ -1,0 +1,14 @@
+{
+  "id": "01KXZ6T9A19J69J4C0TA2QR3GZ",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "RISK-INSIGHTS-004",
+  "description": [
+    "Poorly chosen thresholds or too many Attention Items can create alert fatigue and cause the owner to ignore meaningful exceptions."
+  ],
+  "likelihood": "Medium",
+  "impact": "Medium",
+  "mitigation": [
+    "Use a bounded deterministic set, explicit severity rules, stable ordering, owner-evaluated examples, and no notification behavior inside INSIGHTS."
+  ],
+  "created_at": "2026-07-20T07:28:30.0180465+00:00"
+}

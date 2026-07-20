@@ -1,0 +1,12 @@
+{
+  "id": "01KXZ6TBQG7YYTXM3T6P0BM7JZ",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "OQ-INSIGHTS-1",
+  "question": "Which owner decisions must the first Insight Report improve, and which daily, weekly, or monthly report shape would be used often enough to justify retained INSIGHTS state?",
+  "context": [
+    "This determines the smallest useful report, the do-less comparison, and the acceptance evidence; discovery should walk real current decisions without storing private values in the graph."
+  ],
+  "status": "open",
+  "owner": "INSIGHTS discovery",
+  "created_at": "2026-07-20T07:28:32.4979653+00:00"
+}

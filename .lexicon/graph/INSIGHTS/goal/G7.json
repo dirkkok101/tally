@@ -1,0 +1,10 @@
+{
+  "id": "01KXZ6PKDVC2RY1JM6PH2D05ST",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "G7",
+  "text": [
+    "Keep financial analysis and retained reports local, owner-only, bounded, and recoverable without weakening upstream authority."
+  ],
+  "target": "Generation requires no network or background process; owner-only storage and backup/restore evidence cover all retained INSIGHTS state; zero financial payloads appear in arguments, ordinary logs, telemetry, tracked files, or unrelated results.",
+  "created_at": "2026-07-20T07:26:29.3080686+00:00"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "01KXZ6R18P8VZAGBXYNCW7ZJBE",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "C6",
+  "title": "Versioned deterministic formulas",
+  "description": [
+    "Every metric, Pace Signal, Forecast, Trend, Anomaly, severity rule, and ordering rule is deterministic and versioned. Identical bound inputs and versions produce semantically identical output; formula or threshold changes never rewrite a retained Report Snapshot."
+  ],
+  "type": "technical",
+  "created_at": "2026-07-20T07:27:16.2477997+00:00"
+}

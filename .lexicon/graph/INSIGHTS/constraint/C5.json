@@ -1,0 +1,11 @@
+{
+  "id": "01KXZ6R0QP1WM1HXQKJ39PGEJZ",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "C5",
+  "title": "Explicit trusted time semantics",
+  "description": [
+    "Every analysis names one Budget Period, one As-of Instant, timezone, and Analysis Window definitions. Host current time comes through TimeProvider and is frozen before upstream reads; no metric depends on an implicit clock or locale week boundary."
+  ],
+  "type": "business",
+  "created_at": "2026-07-20T07:27:15.7039335+00:00"
+}

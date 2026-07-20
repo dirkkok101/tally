@@ -1,0 +1,14 @@
+{
+  "id": "01KXZ6TA9B3W39Q959YJM7B0X8",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "RISK-INSIGHTS-006",
+  "description": [
+    "Low classification coverage or category lifecycle changes can make per-category insights incomplete or incomparable while totals still appear authoritative."
+  ],
+  "likelihood": "High",
+  "impact": "Medium",
+  "mitigation": [
+    "Keep Uncategorized Spend and Unbudgeted Spend explicit, report category coverage and lifecycle provenance, and degrade only affected comparisons rather than inventing assignments."
+  ],
+  "created_at": "2026-07-20T07:28:31.0203993+00:00"
+}

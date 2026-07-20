@@ -1,0 +1,9 @@
+{
+  "id": "01KXZ6TJ8KZGM5ET70NB0WC8TR",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "term": "Analysis Window",
+  "definition": [
+    "A versioned timezone-aware interval definition used to group or compare evidence, such as an explicit day, week, month-to-date, or prior comparable period."
+  ],
+  "created_at": "2026-07-20T07:28:39.1886336+00:00"
+}

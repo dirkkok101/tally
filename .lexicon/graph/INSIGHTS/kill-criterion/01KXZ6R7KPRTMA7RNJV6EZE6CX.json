@@ -1,0 +1,7 @@
+{
+  "id": "01KXZ6R7KPRTMA7RNJV6EZE6CX",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "condition": "Stop and reframe through a project ADR if v1 requires a daemon, scheduler, network service, cloud or LLM processing, materialized analytical replica, multiple writers, or complexity above M; re-check at design and plan approval.",
+  "monitored": 1,
+  "created_at": "2026-07-20T07:27:22.7431802+00:00"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "01KXZ6R1V8D4DKWA8TCCFGP3GA",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "C7",
+  "title": "Fail closed on insufficient evidence",
+  "description": [
+    "Absence, stale compatibility, incomplete pagination, snapshot mismatch, sparse evidence, invalid category history, undefined calculation, or an unmet sufficiency rule returns an explicit unavailable or insufficient-evidence state; INSIGHTS never fabricates zero, confidence, a baseline, or a partial report."
+  ],
+  "type": "business",
+  "created_at": "2026-07-20T07:27:16.8412056+00:00"
+}

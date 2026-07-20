@@ -1,0 +1,12 @@
+{
+  "id": "01KXZ6PQ2A939Z6XBRV424DGMD",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "NG7",
+  "text": [
+    "Support multi-user, hosted, remote-service, cross-household, or cross-currency analysis in the first release."
+  ],
+  "rationale": [
+    "Tally's accepted boundary is one trusted local owner and ZAR; broader isolation and currency semantics are separate work."
+  ],
+  "created_at": "2026-07-20T07:26:33.0351444+00:00"
+}

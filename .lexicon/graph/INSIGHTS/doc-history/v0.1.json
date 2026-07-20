@@ -1,0 +1,9 @@
+{
+  "id": "01KXZ6WRJ6MZGFWEZQ8A4QXE1Y",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "version": "0.1",
+  "changes": [
+    "Initial framing: reframed the existing INSIGHTS stub around reproducible provenance-bound periodic analysis; selected an on-demand immutable Insight Report compiler over a continuous analytics replica and the do-less external interpretation fallback; established seven essential outcomes, explicit read-only/channel-neutral/privacy boundaries, a moderate in-process complexity budget, five monitored stop conditions, eight risks, ten discovery questions, and canonical report/signal terminology; routed to comprehensive discovery for time-window, upstream contract, forecast, threshold, retention, restatement, narrative, and private evidence decisions."
+  ],
+  "created_at": "2026-07-20T07:29:51.1750081+00:00"
+}

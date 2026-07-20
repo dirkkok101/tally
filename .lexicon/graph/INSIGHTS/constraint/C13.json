@@ -1,0 +1,11 @@
+{
+  "id": "01KXZ6R4XZ7MBQK3A0VC5MFZ1E",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "C13",
+  "title": "Channel-neutral analytical ownership",
+  "description": [
+    "INSIGHTS owns analytical semantics, provenance, retained reports, and deterministic explanatory text. CHANNELS alone owns screens, conversation, accessibility, translation, scheduling requests, notification policy, and delivery mechanics."
+  ],
+  "type": "business",
+  "created_at": "2026-07-20T07:27:20.0005601+00:00"
+}

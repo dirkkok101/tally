@@ -1,0 +1,12 @@
+{
+  "id": "01KXZ6PR5HF0AESQGSHGW62W7Z",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "NG9",
+  "text": [
+    "Compare the owner with external households, market benchmarks, merchant intelligence, or third-party enrichment data."
+  ],
+  "rationale": [
+    "External data introduces privacy, network, quality, and product concerns not needed for owner-relative budget analysis."
+  ],
+  "created_at": "2026-07-20T07:26:34.1619739+00:00"
+}

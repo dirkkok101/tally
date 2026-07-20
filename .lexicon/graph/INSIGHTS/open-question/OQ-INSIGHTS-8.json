@@ -1,0 +1,12 @@
+{
+  "id": "01KXZ6TF7ZF0G7CPYVF6SM7VBT",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "OQ-INSIGHTS-8",
+  "question": "When upstream corrections change a result, should the owner see only an explicitly requested Restatement, an automatic difference preview, or both?",
+  "context": [
+    "The answer must preserve the immutable original report, avoid implicit background work, and make correction provenance understandable."
+  ],
+  "status": "open",
+  "owner": "INSIGHTS discovery",
+  "created_at": "2026-07-20T07:28:36.0962261+00:00"
+}

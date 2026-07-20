@@ -1,0 +1,12 @@
+{
+  "id": "01KXZ6TCRB47RD3VR55P27W6AR",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "OQ-INSIGHTS-3",
+  "question": "Can the published BUDGET read capability and existing public LEDGER operations provide one snapshot-compatible time series sufficient for daily and weekly analysis, or is a new authoritative public read contract required?",
+  "context": [
+    "Private storage access or replicated upstream truth triggers a monitored stop condition; discovery should use a focused contract spike before PRD."
+  ],
+  "status": "open",
+  "owner": "INSIGHTS discovery",
+  "created_at": "2026-07-20T07:28:33.5483406+00:00"
+}

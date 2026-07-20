@@ -1,0 +1,14 @@
+{
+  "id": "01KXZ6T89BQ9TYXHAFZJ0DW9JS",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "RISK-INSIGHTS-002",
+  "description": [
+    "Later LEDGER corrections or Budget Plan Revision selection changes can make a retained report appear wrong or silently rewrite the owner's historical understanding."
+  ],
+  "likelihood": "Medium",
+  "impact": "High",
+  "mitigation": [
+    "Keep Report Snapshots immutable with complete source provenance; generate separately linked Restatements and show the exact input/version differences."
+  ],
+  "created_at": "2026-07-20T07:28:28.9721575+00:00"
+}

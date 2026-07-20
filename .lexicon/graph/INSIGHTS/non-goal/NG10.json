@@ -1,0 +1,12 @@
+{
+  "id": "01KXZ6PRQ4Z1K7A9G13JRTKM28",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "NG10",
+  "text": [
+    "Reconstruct a historical LEDGER or BUDGET state that was not captured by a retained Report Snapshot."
+  ],
+  "rationale": [
+    "INSIGHTS preserves what it reported and may generate a current correction-based Restatement; it does not become an upstream time-travel store."
+  ],
+  "created_at": "2026-07-20T07:26:34.7252157+00:00"
+}

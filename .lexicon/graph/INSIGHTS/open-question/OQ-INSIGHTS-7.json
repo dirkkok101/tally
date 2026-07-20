@@ -1,0 +1,12 @@
+{
+  "id": "01KXZ6TERYQZQTFCH8GJTCS1VB",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "OQ-INSIGHTS-7",
+  "question": "Which generated reports are retained by default, how long are Report Snapshots kept, what deletion or cleanup is allowed, and what backup/restore guarantees are required?",
+  "context": [
+    "Retention affects privacy, storage complexity, historical comparison, recovery, and the difference between ephemeral generation and durable owner evidence."
+  ],
+  "status": "open",
+  "owner": "INSIGHTS discovery",
+  "created_at": "2026-07-20T07:28:35.6149856+00:00"
+}

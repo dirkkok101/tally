@@ -1,0 +1,14 @@
+{
+  "id": "01KXZ6T9SS11AA1J7JXZFS88K5",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "RISK-INSIGHTS-005",
+  "description": [
+    "Retained reports and explanatory text concentrate sensitive financial behavior and may leak through arguments, diagnostics, exports, backups, or shared temporary files."
+  ],
+  "likelihood": "Medium",
+  "impact": "High",
+  "mitigation": [
+    "Use owner-only storage and backup permissions, stdin or approved private-file input, payload-free structured logging, canary security tests, and no network or tracked report artifacts."
+  ],
+  "created_at": "2026-07-20T07:28:30.5226513+00:00"
+}

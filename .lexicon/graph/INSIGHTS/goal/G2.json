@@ -1,0 +1,10 @@
+{
+  "id": "01KXZ6PGRTYFE22G2JBTB61H21",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "G2",
+  "text": [
+    "Explain spending pace at daily, weekly, and monthly intervals without hiding absent plans, missing actuals, Uncategorized Spend, or insufficient evidence."
+  ],
+  "target": "Every requested interval and category is accounted for by an exact metric plus an explicit interpretable state, or by a named unavailable or insufficient-evidence state with no fabricated zero or confidence.",
+  "created_at": "2026-07-20T07:26:26.5874947+00:00"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "01KXZ6PHA4X6HW5GQ7NCWA24TA",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "G3",
+  "text": [
+    "Produce bounded Forecast, Trend, and Anomaly signals only when the available evidence supports the documented calculation."
+  ],
+  "target": "Every emitted signal identifies its formula, evidence horizon, coverage, comparison baseline, and limitations; inputs below the versioned sufficiency rule emit no predictive signal and return the exact insufficiency reason.",
+  "created_at": "2026-07-20T07:26:27.1416178+00:00"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "01KXZ6TC7RHXJ9W4KNK8JX7KCT",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "OQ-INSIGHTS-2",
+  "question": "What are the exact daily, weekly, and monthly Analysis Window semantics, timezone, week start, partial-period behavior, and relationship between calendar-aligned and rolling comparisons?",
+  "context": [
+    "Different window definitions can reverse pace and trend interpretations; every calculation must use one explicit versioned rule."
+  ],
+  "status": "open",
+  "owner": "INSIGHTS discovery",
+  "created_at": "2026-07-20T07:28:33.0168095+00:00"
+}
