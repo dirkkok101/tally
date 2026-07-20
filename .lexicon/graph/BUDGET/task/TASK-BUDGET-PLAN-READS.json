@@ -4,7 +4,7 @@
   "sub_plan_id": "01KXXKX0PG2AYCGNGJG41HJJJ1",
   "ref_code": "TASK-BUDGET-PLAN-READS",
   "slug": "PLAN-READS",
-  "title": "Read budget revisions and period history",
+  "title": "Read Budget Plan Revisions and Budget Period history",
   "description": [
     "Implement exact revision detail and deterministic period revision-list queries with supplemental current category evidence."
   ],

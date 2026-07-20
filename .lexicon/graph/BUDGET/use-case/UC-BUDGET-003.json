@@ -2,12 +2,12 @@
   "id": "01KXXCKRVRR89KQE4PZJM8JQBT",
   "module_id": "01KXR4WNPW86216H643PZ6KA36",
   "ref_code": "UC-BUDGET-003",
-  "title": "Inspect exact budget position",
+  "title": "Inspect exact Budget Position",
   "preconditions": "The requested period is explicit; any selected plan revision is readable; the LEDGER public snapshot contract is available or a stable unavailable state can be returned.",
-  "postconditions": "The result is deterministic for identical inputs, read-only, complete, and bound to both a plan revision and LEDGER snapshot; no report snapshot is retained by BUDGET.",
+  "postconditions": "The result is deterministic for identical inputs, read-only, complete, and bound to both a Budget Plan Revision and LEDGER snapshot; no report snapshot is retained by BUDGET.",
   "main_flow": "1. BUDGET resolves the explicit plan revision or the period's single Active Budget Plan Revision. 2. BUDGET requests LEDGER Budget Actual data for the exact Effective Date interval with category and categorization state under one cited snapshot. 3. BUDGET accounts for each actual exactly once as budgeted, Zero Budget, Unbudgeted Spend, or Uncategorized Spend. 4. BUDGET computes exact planned, actual, remaining or over values without pace, forecast, or advice. 5. BUDGET returns raw position data with plan, period, category, and LEDGER snapshot provenance.",
   "alt_flows": [
-    "No active plan returns an explicit No Active Plan state rather than a fabricated zero plan.",
+    "No Active Budget Plan Revision returns the explicit No Active Budget Plan Revision state rather than a fabricated zero plan.",
     "LEDGER unavailability, expired pagination snapshot, or integrity failure returns an actionable unavailable result without partial totals.",
     "Concurrent plan activation does not change a query already bound to an explicit plan revision."
   ],

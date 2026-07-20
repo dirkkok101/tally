@@ -10,7 +10,7 @@
     "Create one BudgetPlan per explicit ZAR calendar month and append immutable BudgetPlanRevision plus CategoryBudgetEntry rows. Persist Draft, Active, and Superseded as closed enums; payload rows never update. A plan stores the current Active revision pointer, protected by a partial unique Active index. Create Draft appends only. Activate changes lifecycle state and pointer plus attributable events in one BEGIN IMMEDIATE transaction. Closed is computed from trusted date and blocks new draft or activation while preserving reads."
   ],
   "rationale": [
-    "The model makes owner intent reconstructable and distinguishes No Budget Plan, no Active revision, empty plan, all-zero plan, and no actuals. Updating a plan payload would erase provenance; event sourcing every read would exceed the moderate complexity ceiling. Immutable payloads plus transactional lifecycle columns/events provide auditable history with simple queries."
+    "The model makes owner intent reconstructable and distinguishes No Budget Plan, no Active Budget Plan Revision, empty plan, all-zero plan, and no actuals. Updating a plan payload would erase provenance; event sourcing every read would exceed the moderate complexity ceiling. Immutable payloads plus transactional lifecycle columns/events provide auditable history with simple queries."
   ],
   "alternatives": [
     "A: mutable current-plan rows, rejected because revisions disappear. B: full event-sourced aggregate, rejected as unnecessary complexity. C: immutable payloads with explicit lifecycle rows and constrained current pointer, chosen."

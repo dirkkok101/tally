@@ -4,7 +4,7 @@
   "sub_plan_id": "01KXXKX16FGEYFVSRAABAC7C8D",
   "ref_code": "TASK-BUDGET-POSITION-QUERY",
   "slug": "POSITION-QUERY",
-  "title": "Compose exact budget positions through Ledger",
+  "title": "Compose exact Budget Positions through Ledger",
   "description": [
     "Implement revision selection, public Ledger snapshot acquisition, pure calculation, mapping, and no-retention behavior for budget.position.get."
   ],

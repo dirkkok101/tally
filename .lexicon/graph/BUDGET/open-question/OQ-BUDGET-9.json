@@ -1,0 +1,27 @@
+{
+  "id": "01KXZ5G71QJE5K5V8V43DNQXF8",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "OQ-BUDGET-9",
+  "question": "What result should BUDGET return for a syntactically invalid Budget Period, a valid Budget Period with no Budget Plan, and an unknown Budget Plan Revision?",
+  "context": [
+    "UC-BUDGET-004 says: An unknown period or revision returns Not Found without leaking other data. FR-BUDGET-PLAN-IDENTITY says: Given a valid period with no Budget Plan, when plan state is requested, then BUDGET returns the explicit No Budget Plan state rather than Not Found, an empty plan, or a zero plan. Resolve the contradiction before bead compilation. Review bead: bd-2av. Fingerprint: 81cfde3f35436f9c713fd75d85226e488e5258fd1ceee25c350164127ccef6f5"
+  ],
+  "status": "open",
+  "created_at": "2026-07-20T07:05:31.4484213+00:00",
+  "links": [
+    {
+      "id": "01KXZ5G71SGHW9J29G1D9HE8QM",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-PLAN-IDENTITY",
+      "rel": "see-also",
+      "created_at": "2026-07-20T07:05:31.4493957+00:00"
+    },
+    {
+      "id": "01KXZ5G71RKGWAF5DQJQACM76H",
+      "target_type": "use_case",
+      "target": "UC-BUDGET-004",
+      "rel": "see-also",
+      "created_at": "2026-07-20T07:05:31.4489627+00:00"
+    }
+  ]
+}

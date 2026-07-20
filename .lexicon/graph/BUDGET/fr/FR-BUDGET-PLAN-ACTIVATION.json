@@ -3,7 +3,7 @@
   "module_id": "01KXR4WNPW86216H643PZ6KA36",
   "type": "functional",
   "ref_code": "FR-BUDGET-PLAN-ACTIVATION",
-  "title": "Activate one plan revision explicitly",
+  "title": "Activate one Budget Plan Revision explicitly",
   "description": [
     "Make one validated revision govern a current or future Budget Period through an atomic attributable activation. Implements G1, G3, and G5 through UC-BUDGET-002."
   ],

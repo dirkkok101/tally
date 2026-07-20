@@ -4,7 +4,7 @@
   "sub_plan_id": "01KXXKX0PG2AYCGNGJG41HJJJ1",
   "ref_code": "TASK-BUDGET-ACTIVATION-LIFECYCLE",
   "slug": "ACTIVATION-LIFECYCLE",
-  "title": "Activate one budget plan revision atomically",
+  "title": "Activate one Budget Plan Revision atomically",
   "description": [
     "Implement explicit owner-authorized Draft activation and prior-Active supersession with current category revalidation and replay safety."
   ],

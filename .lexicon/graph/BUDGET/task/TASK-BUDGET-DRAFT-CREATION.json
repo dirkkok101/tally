@@ -4,7 +4,7 @@
   "sub_plan_id": "01KXXKX0PG2AYCGNGJG41HJJJ1",
   "ref_code": "TASK-BUDGET-DRAFT-CREATION",
   "slug": "DRAFT-CREATION",
-  "title": "Create immutable budget plan drafts",
+  "title": "Create immutable Draft Budget Plan Revisions",
   "description": [
     "Implement the complete Create Draft vertical slice with explicit entries, category validation, attribution, and replay safety."
   ],

@@ -17,8 +17,8 @@ Exercise all five use cases through the published boundary, converge graph evide
 |---|---|---|---:|
 | [TASK-BUDGET-VERIFY-UC-001](../tasks/verify-uc-001.md) | Verify monthly draft creation | `planned` | 0 |
 | [TASK-BUDGET-VERIFY-UC-002](../tasks/verify-uc-002.md) | Verify activation and revision replacement | `planned` | 0 |
-| [TASK-BUDGET-VERIFY-UC-003](../tasks/verify-uc-003.md) | Verify exact budget position inspection | `planned` | 0 |
-| [TASK-BUDGET-VERIFY-UC-004](../tasks/verify-uc-004.md) | Verify plan and revision history inspection | `planned` | 1 |
+| [TASK-BUDGET-VERIFY-UC-003](../tasks/verify-uc-003.md) | Verify exact Budget Position inspection | `planned` | 0 |
+| [TASK-BUDGET-VERIFY-UC-004](../tasks/verify-uc-004.md) | Verify Budget Plan and Budget Plan Revision history inspection | `planned` | 1 |
 | [TASK-BUDGET-VERIFY-UC-005](../tasks/verify-uc-005.md) | Verify agent contract discovery and invocation | `planned` | 0 |
 | [TASK-BUDGET-GATE-GRAPH-QUALITY](../tasks/gate-graph-quality.md) | Converge BUDGET graph and evidence quality | `planned` | 1 |
 | [TASK-BUDGET-GATE-MODULE](../tasks/gate-module.md) | Complete the BUDGET v1 module gate | `planned` | 0 |

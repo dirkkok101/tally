@@ -4,7 +4,7 @@
   "sub_plan_id": "01KXXKX24YJN8XH96VER4AQ086",
   "ref_code": "TASK-BUDGET-VERIFY-UC-003",
   "slug": "VERIFY-UC-003",
-  "title": "Verify exact budget position inspection",
+  "title": "Verify exact Budget Position inspection",
   "description": [
     "Validation-only UC task with no implements refs; trace UC-BUDGET-003 success and all three failure paths through owner and INSIGHTS reads."
   ],

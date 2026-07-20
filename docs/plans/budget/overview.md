@@ -60,11 +60,11 @@ Platform constraints: target .NET 10 Native-AOT and linux-x64; use file-scoped n
 | [TASK-BUDGET-STATE-FOUNDATION](tasks/state-foundation.md) | Establish BUDGET durable state | `planned` | 0 | SP-BUDGET-00-FOUNDATION: Upstream contracts and runtime foundation |
 | [TASK-BUDGET-PERIOD-IDENTITY](tasks/period-identity.md) | Implement trusted monthly period identity | `planned` | 0 | SP-BUDGET-01-PLAN-LIFECYCLE: Plan identity and revision lifecycle |
 | [TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR](tasks/idempotent-mutation-executor.md) | Implement replay-safe mutation execution | `planned` | 0 | SP-BUDGET-01-PLAN-LIFECYCLE: Plan identity and revision lifecycle |
-| [TASK-BUDGET-DRAFT-CREATION](tasks/draft-creation.md) | Create immutable budget plan drafts | `planned` | 0 | SP-BUDGET-01-PLAN-LIFECYCLE: Plan identity and revision lifecycle |
-| [TASK-BUDGET-PLAN-READS](tasks/plan-reads.md) | Read budget revisions and period history | `planned` | 1 | SP-BUDGET-01-PLAN-LIFECYCLE: Plan identity and revision lifecycle |
-| [TASK-BUDGET-ACTIVATION-LIFECYCLE](tasks/activation-lifecycle.md) | Activate one budget plan revision atomically | `planned` | 0 | SP-BUDGET-01-PLAN-LIFECYCLE: Plan identity and revision lifecycle |
-| [TASK-BUDGET-POSITION-CALCULATOR](tasks/position-calculator.md) | Build the exact budget position calculator | `planned` | 0 | SP-BUDGET-02-POSITION-PROJECTION: Exact position and consumer projection |
-| [TASK-BUDGET-POSITION-QUERY](tasks/position-query.md) | Compose exact budget positions through Ledger | `planned` | 0 | SP-BUDGET-02-POSITION-PROJECTION: Exact position and consumer projection |
+| [TASK-BUDGET-DRAFT-CREATION](tasks/draft-creation.md) | Create immutable Draft Budget Plan Revisions | `planned` | 0 | SP-BUDGET-01-PLAN-LIFECYCLE: Plan identity and revision lifecycle |
+| [TASK-BUDGET-PLAN-READS](tasks/plan-reads.md) | Read Budget Plan Revisions and Budget Period history | `planned` | 1 | SP-BUDGET-01-PLAN-LIFECYCLE: Plan identity and revision lifecycle |
+| [TASK-BUDGET-ACTIVATION-LIFECYCLE](tasks/activation-lifecycle.md) | Activate one Budget Plan Revision atomically | `planned` | 0 | SP-BUDGET-01-PLAN-LIFECYCLE: Plan identity and revision lifecycle |
+| [TASK-BUDGET-POSITION-CALCULATOR](tasks/position-calculator.md) | Build the exact Budget Position calculator | `planned` | 0 | SP-BUDGET-02-POSITION-PROJECTION: Exact position and consumer projection |
+| [TASK-BUDGET-POSITION-QUERY](tasks/position-query.md) | Compose exact Budget Positions through Ledger | `planned` | 0 | SP-BUDGET-02-POSITION-PROJECTION: Exact position and consumer projection |
 | [TASK-BUDGET-INSIGHTS-READ-PROJECTION](tasks/insights-read-projection.md) | Publish the read-only INSIGHTS budget projection | `planned` | 1 | SP-BUDGET-02-POSITION-PROJECTION: Exact position and consumer projection |
 | [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | Wire and prove the complete BUDGET contract | `planned` | 0 | SP-BUDGET-03-INTEGRATION-GATES: Published contract, recovery, and security gates |
 | [TASK-BUDGET-GATE-ATOMIC-RECOVERY](tasks/gate-atomic-recovery.md) | Prove mutation durability and restart recovery | `planned` | 0 | SP-BUDGET-03-INTEGRATION-GATES: Published contract, recovery, and security gates |
@@ -72,8 +72,8 @@ Platform constraints: target .NET 10 Native-AOT and linux-x64; use file-scoped n
 | [TASK-BUDGET-GATE-PERFORMANCE](tasks/gate-performance.md) | Measure BUDGET personal-scale performance | `planned` | 2 | SP-BUDGET-03-INTEGRATION-GATES: Published contract, recovery, and security gates |
 | [TASK-BUDGET-VERIFY-UC-001](tasks/verify-uc-001.md) | Verify monthly draft creation | `planned` | 0 | SP-BUDGET-04-ACCEPTANCE: Use-case, graph, and module acceptance |
 | [TASK-BUDGET-VERIFY-UC-002](tasks/verify-uc-002.md) | Verify activation and revision replacement | `planned` | 0 | SP-BUDGET-04-ACCEPTANCE: Use-case, graph, and module acceptance |
-| [TASK-BUDGET-VERIFY-UC-003](tasks/verify-uc-003.md) | Verify exact budget position inspection | `planned` | 0 | SP-BUDGET-04-ACCEPTANCE: Use-case, graph, and module acceptance |
-| [TASK-BUDGET-VERIFY-UC-004](tasks/verify-uc-004.md) | Verify plan and revision history inspection | `planned` | 1 | SP-BUDGET-04-ACCEPTANCE: Use-case, graph, and module acceptance |
+| [TASK-BUDGET-VERIFY-UC-003](tasks/verify-uc-003.md) | Verify exact Budget Position inspection | `planned` | 0 | SP-BUDGET-04-ACCEPTANCE: Use-case, graph, and module acceptance |
+| [TASK-BUDGET-VERIFY-UC-004](tasks/verify-uc-004.md) | Verify Budget Plan and Budget Plan Revision history inspection | `planned` | 1 | SP-BUDGET-04-ACCEPTANCE: Use-case, graph, and module acceptance |
 | [TASK-BUDGET-VERIFY-UC-005](tasks/verify-uc-005.md) | Verify agent contract discovery and invocation | `planned` | 0 | SP-BUDGET-04-ACCEPTANCE: Use-case, graph, and module acceptance |
 | [TASK-BUDGET-GATE-GRAPH-QUALITY](tasks/gate-graph-quality.md) | Converge BUDGET graph and evidence quality | `planned` | 1 | SP-BUDGET-04-ACCEPTANCE: Use-case, graph, and module acceptance |
 | [TASK-BUDGET-GATE-MODULE](tasks/gate-module.md) | Complete the BUDGET v1 module gate | `planned` | 0 | SP-BUDGET-04-ACCEPTANCE: Use-case, graph, and module acceptance |
@@ -245,11 +245,11 @@ Platform constraints: target .NET 10 Native-AOT and linux-x64; use file-scoped n
 | FR-BUDGET-IDEMPOTENT-MUTATIONS: Make plan mutations replay-safe | `requirement` | `implements` | [TASK-BUDGET-ACTIVATION-LIFECYCLE](tasks/activation-lifecycle.md) | `true` |
 | FR-BUDGET-INSIGHTS-PROJECTION: Expose a read-only INSIGHTS projection | `requirement` | `implements` | [TASK-BUDGET-INSIGHTS-READ-PROJECTION](tasks/insights-read-projection.md) | `true` |
 | FR-BUDGET-LEDGER-COMPOSITION: Compose only through public LEDGER contracts | `requirement` | `implements` | [TASK-BUDGET-LEDGER-BUDGET-CLIENT](tasks/ledger-budget-client.md) | `true` |
-| FR-BUDGET-PLAN-ACTIVATION: Activate one plan revision explicitly | `requirement` | `implements` | [TASK-BUDGET-ACTIVATION-LIFECYCLE](tasks/activation-lifecycle.md) | `true` |
+| FR-BUDGET-PLAN-ACTIVATION: Activate one Budget Plan Revision explicitly | `requirement` | `implements` | [TASK-BUDGET-ACTIVATION-LIFECYCLE](tasks/activation-lifecycle.md) | `true` |
 | FR-BUDGET-PLAN-DRAFT: Create immutable plan drafts | `requirement` | `implements` | [TASK-BUDGET-DRAFT-CREATION](tasks/draft-creation.md) | `true` |
 | FR-BUDGET-PLAN-HISTORY: Inspect plan state and revision history | `requirement` | `implements` | [TASK-BUDGET-PLAN-READS](tasks/plan-reads.md) | `true` |
-| FR-BUDGET-PLAN-IDENTITY: Identify monthly budget plans | `requirement` | `implements` | [TASK-BUDGET-DRAFT-CREATION](tasks/draft-creation.md) | `true` |
-| FR-BUDGET-POSITION-QUERY: Calculate exact budget positions | `requirement` | `implements` | [TASK-BUDGET-POSITION-CALCULATOR](tasks/position-calculator.md) | `true` |
+| FR-BUDGET-PLAN-IDENTITY: Identify monthly Budget Plans | `requirement` | `implements` | [TASK-BUDGET-DRAFT-CREATION](tasks/draft-creation.md) | `true` |
+| FR-BUDGET-POSITION-QUERY: Calculate exact Budget Positions | `requirement` | `implements` | [TASK-BUDGET-POSITION-CALCULATOR](tasks/position-calculator.md) | `true` |
 | FR-BUDGET-STRUCTURED-INVOCATION: Invoke BUDGET operations non-interactively | `requirement` | `implements` | [TASK-BUDGET-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `true` |
 | NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS: Make plan mutations atomic and durable | `nfr` | `satisfies` | [TASK-BUDGET-GATE-ATOMIC-RECOVERY](tasks/gate-atomic-recovery.md) | `true` |
 | NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS: Make plan mutations atomic and durable | `nfr` | `satisfies` | [TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR](tasks/idempotent-mutation-executor.md) | `true` |

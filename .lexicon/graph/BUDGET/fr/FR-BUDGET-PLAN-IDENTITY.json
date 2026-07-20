@@ -3,7 +3,7 @@
   "module_id": "01KXR4WNPW86216H643PZ6KA36",
   "type": "functional",
   "ref_code": "FR-BUDGET-PLAN-IDENTITY",
-  "title": "Identify monthly budget plans",
+  "title": "Identify monthly Budget Plans",
   "description": [
     "Establish one stable Budget Plan identity for one explicit ZAR calendar-month period. Implements G1 and supports UC-BUDGET-001 and UC-BUDGET-004 under A1, C4, and C15."
   ],

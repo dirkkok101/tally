@@ -4,7 +4,7 @@
   "sub_plan_id": "01KXXKX16FGEYFVSRAABAC7C8D",
   "ref_code": "TASK-BUDGET-POSITION-CALCULATOR",
   "slug": "POSITION-CALCULATOR",
-  "title": "Build the exact budget position calculator",
+  "title": "Build the exact Budget Position calculator",
   "description": [
     "Implement pure checked exhaustive bucketing for immutable plan entries and one complete Ledger Budget Actual snapshot."
   ],

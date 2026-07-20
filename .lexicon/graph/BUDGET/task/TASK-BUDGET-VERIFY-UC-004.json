@@ -4,7 +4,7 @@
   "sub_plan_id": "01KXXKX24YJN8XH96VER4AQ086",
   "ref_code": "TASK-BUDGET-VERIFY-UC-004",
   "slug": "VERIFY-UC-004",
-  "title": "Verify plan and revision history inspection",
+  "title": "Verify Budget Plan and Budget Plan Revision history inspection",
   "description": [
     "Validation-only UC task with no implements refs; trace UC-BUDGET-004 success and both failure paths through published reads."
   ],

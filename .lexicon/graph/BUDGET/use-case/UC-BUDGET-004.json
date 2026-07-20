@@ -2,7 +2,7 @@
   "id": "01KXXCKS88V1VDB18KEDE1CX6G",
   "module_id": "01KXR4WNPW86216H643PZ6KA36",
   "ref_code": "UC-BUDGET-004",
-  "title": "Inspect plan and revision history",
+  "title": "Inspect Budget Plan and Budget Plan Revision history",
   "preconditions": "The owner is authorized and the requested Budget Period or revision identity is explicit.",
   "postconditions": "The owner can reconstruct plan intent and activation history without treating a superseded revision as deleted or changing current LEDGER state.",
   "main_flow": "1. BUDGET lists the period's Draft, Active, and Superseded revisions and indicates whether the period is Closed. 2. The owner selects a revision. 3. BUDGET returns exact Category Budget Entries, historical stable category identities, lifecycle state, totals, owner action, reason, and timestamps. 4. Archived or renamed categories remain attributable without becoming valid for new entries.",

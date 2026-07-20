@@ -15,6 +15,6 @@ Implement checked exhaustive bucketing, public position composition, and the mut
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-BUDGET-POSITION-CALCULATOR](../tasks/position-calculator.md) | Build the exact budget position calculator | `planned` | 0 |
-| [TASK-BUDGET-POSITION-QUERY](../tasks/position-query.md) | Compose exact budget positions through Ledger | `planned` | 0 |
+| [TASK-BUDGET-POSITION-CALCULATOR](../tasks/position-calculator.md) | Build the exact Budget Position calculator | `planned` | 0 |
+| [TASK-BUDGET-POSITION-QUERY](../tasks/position-query.md) | Compose exact Budget Positions through Ledger | `planned` | 0 |
 | [TASK-BUDGET-INSIGHTS-READ-PROJECTION](../tasks/insights-read-projection.md) | Publish the read-only INSIGHTS budget projection | `planned` | 1 |

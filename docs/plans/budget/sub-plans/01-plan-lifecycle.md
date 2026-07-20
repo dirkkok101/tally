@@ -17,6 +17,6 @@ Implement trusted period identity, replay-safe draft creation, historical reads,
 |---|---|---|---:|
 | [TASK-BUDGET-PERIOD-IDENTITY](../tasks/period-identity.md) | Implement trusted monthly period identity | `planned` | 0 |
 | [TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR](../tasks/idempotent-mutation-executor.md) | Implement replay-safe mutation execution | `planned` | 0 |
-| [TASK-BUDGET-DRAFT-CREATION](../tasks/draft-creation.md) | Create immutable budget plan drafts | `planned` | 0 |
-| [TASK-BUDGET-PLAN-READS](../tasks/plan-reads.md) | Read budget revisions and period history | `planned` | 1 |
-| [TASK-BUDGET-ACTIVATION-LIFECYCLE](../tasks/activation-lifecycle.md) | Activate one budget plan revision atomically | `planned` | 0 |
+| [TASK-BUDGET-DRAFT-CREATION](../tasks/draft-creation.md) | Create immutable Draft Budget Plan Revisions | `planned` | 0 |
+| [TASK-BUDGET-PLAN-READS](../tasks/plan-reads.md) | Read Budget Plan Revisions and Budget Period history | `planned` | 1 |
+| [TASK-BUDGET-ACTIVATION-LIFECYCLE](../tasks/activation-lifecycle.md) | Activate one Budget Plan Revision atomically | `planned` | 0 |

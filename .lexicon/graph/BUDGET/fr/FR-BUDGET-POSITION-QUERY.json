@@ -3,9 +3,9 @@
   "module_id": "01KXR4WNPW86216H643PZ6KA36",
   "type": "functional",
   "ref_code": "FR-BUDGET-POSITION-QUERY",
-  "title": "Calculate exact budget positions",
+  "title": "Calculate exact Budget Positions",
   "description": [
-    "Compare one explicit plan revision with current corrected public LEDGER Budget Actuals under one snapshot, without interpretation. Implements G4 and G7 through UC-BUDGET-003."
+    "Compare one explicit Budget Plan Revision with current corrected public LEDGER Budget Actuals under one snapshot, without interpretation. Implements G4 and G7 through UC-BUDGET-003."
   ],
   "rationale": [
     "The owner and INSIGHTS need one reproducible raw answer for plan versus actual before any pace, forecast, or narrative is added."
@@ -28,7 +28,7 @@
     "Given LEDGER actuals assigned to a category with a Zero Budget entry, when the position is calculated, then those actuals appear exactly once in that category Zero Budget position.",
     "Given LEDGER actuals assigned to a valid category omitted from the selected revision, when the position is calculated, then those actuals appear exactly once as Unbudgeted Spend for that stable category.",
     "Given LEDGER actuals without a current Spend Category assignment, when the position is calculated, then those actuals appear exactly once as Uncategorized Spend and no category or planned amount is invented.",
-    "Given any selected plan and LEDGER snapshot, when category and total values are returned, then planned totals equal the exact sum of explicit entries and actual totals equal the exact sum of budgeted, Zero Budget, Unbudgeted, and Uncategorized actuals.",
+    "Given any selected plan and LEDGER snapshot, when category and total values are returned, then planned totals equal the exact sum of explicit entries and actual totals equal the exact sum of budgeted, Zero Budget, Unbudgeted Spend, and Uncategorized Spend actuals.",
     "Given a planned category or total whose planned amount is at least its actual amount, when variance is returned, then Remaining equals planned minus actual and Over equals exact zero.",
     "Given a planned category or total whose actual amount exceeds its planned amount, when variance is returned, then Over equals actual minus planned and Remaining equals exact zero.",
     "Given a refund-heavy category or period produces a negative LEDGER Budget Actual, when the position is returned, then the negative value is preserved exactly and is not clamped or reclassified.",
