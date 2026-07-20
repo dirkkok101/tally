@@ -6,10 +6,10 @@
   "slug": "RESTORE-ACTIVATE",
   "title": "Implement safe restore prepare and activation",
   "description": [
-    "Deliver separate-target candidate restore, complete validation, explicit authorized atomic activation, and retained prior generation."
+    "Deliver separate-target candidate restore, complete-state validation, explicit authorized atomic activation, and retained prior generation."
   ],
   "objective": [
-    "Recover from a Verified Ledger Backup without changing CURRENT until a candidate is fully revalidated against the expected authoritative fingerprint."
+    "Recover from a Verified Ledger Backup without changing CURRENT until every durable type, history, privacy rule, replay outcome, relationship/reconciliation rule, count, and exact total is revalidated against the expected fingerprint."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -152,54 +152,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT0W0YX3GXMDGQYV6V6XM1X",
+      "id": "01KY0E89QK55G171WRKMTVVGFW",
       "kind": "acceptance_check",
       "text": [
-        "restore.prepare restores compatible verified backup into a distinct generation and returns candidate/source fingerprints and complete verification without changing CURRENT."
+        "restore.prepare restores a compatible verified backup into a distinct private generation and returns candidate/source normalized fingerprints plus complete verification without changing CURRENT."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:43.6673533+00:00"
     },
     {
-      "id": "01KXT0W0YXPTQ4R62X3XB52SRK",
+      "id": "01KY0E89QM2KHJ1A68HAR7X7XM",
       "kind": "acceptance_check",
       "text": [
-        "Candidate validation matches every durable type/history, relationship rule, idempotency outcome, count, integrity result, and exact total from verified backup."
+        "Candidate validation matches every durable type/history, evidence privacy rule, reconciliation/relationship invariant, request/logical replay outcome, count, and exact named/dimensional total from the verified backup."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:43.6673533+00:00"
     },
     {
-      "id": "01KXT0W0YXTFB0RKQEXH6YE9QF",
+      "id": "01KY0E89QMFKV1G060EZ70DB2N",
       "kind": "acceptance_check",
       "text": [
-        "Any compatibility/integrity/permission/space/validation failure leaves current generation authoritative and exposes no partial candidate as current."
+        "Any compatibility, integrity, permission, space, privacy, or complete-state failure leaves the current generation authoritative and exposes no partial candidate as current."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:43.6673533+00:00"
     },
     {
-      "id": "01KXT0W0YXN2PD9MBG335GKYJ9",
+      "id": "01KY0E89QM3VPEZ789J4WWX3VM",
       "kind": "acceptance_check",
       "text": [
-        "restore.activate requires candidateId, expectedCurrentFingerprint, authorizeReplacement=true; under exclusive lock it revalidates, flushes, atomically replaces CURRENT, fsyncs directory, and retains previous generation."
+        "restore.activate requires candidateId, expectedCurrentFingerprint, authorizeReplacement=true; under exclusive lock it revalidates, flushes, atomically replaces CURRENT, fsyncs the directory, and retains the previous generation."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:43.6673533+00:00"
     },
     {
-      "id": "01KXT0W0YXS4VT06QG3WTQV7Q6",
+      "id": "01KY0E89QMVA4PH87CKJXWQ1WB",
       "kind": "acceptance_check",
       "text": [
-        "Crash before pointer replacement leaves old current; after successful replacement candidate is current with original idempotent outcome recoverable on retry."
+        "Crash before pointer replacement leaves old current; after successful replacement the candidate is current with original request and logical replay outcomes recoverable on retry."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:43.6673533+00:00"
     },
     {
       "id": "01KXT0W0YXQW31628W3WF2J48D",

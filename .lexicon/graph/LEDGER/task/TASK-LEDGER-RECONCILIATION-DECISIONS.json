@@ -1,0 +1,320 @@
+{
+  "id": "01KY0DT2MEGHN90KYVZQ0P46Y3",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KY0D0QYX4CJZKSVH3MMGT6BK",
+  "ref_code": "TASK-LEDGER-RECONCILIATION-DECISIONS",
+  "slug": "RECONCILIATION-DECISIONS",
+  "title": "Implement reconciliation decision correction lifecycle",
+  "description": [
+    "Deliver owner confirm/reject and attributable get/revoke/replace transitions over immutable decision and evidence-link history."
+  ],
+  "objective": [
+    "Resolve ambiguity and correct wrong reconciliation outcomes only through explicit valid owner intent without duplicate actuals or silent evidence movement."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 30,
+  "created_at": "2026-07-20T18:49:57.6488706+00:00",
+  "decisions": [
+    {
+      "id": "01KY0DT2MW9A5XV77AAQZKKQRB",
+      "target": "DD-LEDGER-IDEMPOTENT-MUTATIONS",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MW4JG7V87WS7PNVF7W",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MWP943MP0759HNAMY3",
+      "target": "DD-LEDGER-RECONCILIATION-CONTRACT",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KY0DT2MXEWX7FXG2D9CJB3JW",
+      "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
+      "dependency_type": "compile",
+      "reason": [
+        "Every decision transition is an idempotent mutation."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0EEEW3R9YCS9NDC823Z0M6",
+      "target": "TASK-LEDGER-EVIDENCE-REGISTRY",
+      "dependency_type": "compile",
+      "reason": [
+        "Decision correction consumes EvidenceStore for evidence identity and links."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T19:01:05.5403534+00:00"
+    },
+    {
+      "id": "01KY0DT2MX18YNCSHC1PA22VHK",
+      "target": "TASK-LEDGER-RECONCILIATION-APPLY",
+      "dependency_type": "compile",
+      "reason": [
+        "Decision corrections operate on active decisions and links created by apply."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0EEFXE7MEZR8AHDQAGT56N",
+      "target": "TASK-LEDGER-TRANSACTIONS-RECORD-GET",
+      "dependency_type": "compile",
+      "reason": [
+        "Decision correction consumes TransactionStore for active compatible targets."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T19:01:06.6076306+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY0DT2MWDC67ER1G6EEN0BNF",
+      "path": "src/Tally/Contracts/Ledger/Reconciliation/ReconciliationDecisionContracts.cs",
+      "action": "create",
+      "role": "public contracts",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MWVBDW3THSDJ9H43HN",
+      "path": "src/Tally/Domain/Ledger/Reconciliation/ReconciliationStateReducer.cs",
+      "action": "create",
+      "role": "append-only state transitions",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MX0KP77VZEMKVTAF4X",
+      "path": "src/Tally/Features/Ledger/Reconciliation/ReconciliationDecisionHandlers.cs",
+      "action": "create",
+      "role": "commands and query",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MXB2D86A019KE23GDM",
+      "path": "src/Tally/Infrastructure/Storage/Reconciliation/ReconciliationDecisionStore.cs",
+      "action": "create",
+      "role": "SQLite history",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MXPWHMQTCPHBRRVB69",
+      "path": "src/Tally/Features/Ledger/Reconciliation/ReconciliationDecisionOperationModule.cs",
+      "action": "create",
+      "role": "explicit descriptors and DI",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MXXPYMG98H1FG1AMZD",
+      "path": "tests/Tally.Tests/Ledger/ReconciliationDecisionOperationTests.cs",
+      "action": "test",
+      "role": "contract and state tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY0DT2MXH108MDCAGWQ9T8SS",
+      "name": "ReconciliationStateReducer",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MXYAW15DYV0NB0PZFM",
+      "name": "ReconciliationDecisionStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MX1MZ123CQSA5EECC4",
+      "name": "ReconciliationDecisionOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MXAC6G33WRVHDYNG6T",
+      "name": "ReconciliationWriteStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MX0SGBFC07F1M6BGEE",
+      "name": "EvidenceStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECORD-LINK",
+      "sort_order": 4,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MXR82F05FG9A7SW3NW",
+      "name": "TransactionStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-FACT",
+      "sort_order": 5,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY0DT2MWK287CSZH3DGDN1GC",
+      "kind": "acceptance_check",
+      "text": [
+        "decision.get returns full ordered history, active decision/link, deterministic or owner-approved basis, actor, reason, policy/version, and current state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MW31YY1XRBYMDK55X9",
+      "kind": "acceptance_check",
+      "text": [
+        "confirm/reject require explicit owner actor and reason; revoke/replace require the expected active predecessor and atomically retire/create links and decisions."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MWWDZT9D95FCESD7BX",
+      "kind": "acceptance_check",
+      "text": [
+        "Missing/inactive/incompatible candidate, evidence confirmed elsewhere, stale predecessor, conflicting replay, or write failure preserves the prior active state and returns a stable result."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MW2YC5XC3SMK98X31M",
+      "kind": "acceptance_check",
+      "text": [
+        "Correction never deletes history, moves evidence to a superseding fact, or permits one evidence record to confirm multiple active transactions."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MWY04CH8Y6MZH5JG4M",
+      "kind": "expected_output",
+      "text": [
+        "Decision contracts/state reducer/store/handlers/module and lifecycle tests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MWJ77H40MXR4165DGB",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT treat Hermes clarification as implicit owner intent; require the typed owner assertion fields per DD-LEDGER-RECONCILIATION-CONTRACT."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MW2Y2H1RM06PMFCB57",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT overwrite/delete decisions or links, silently inherit across supersession, or repair duplicates by editing facts — rejected per DD-LEDGER-IMMUTABLE-HISTORY."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MWWM95BRFPPDMXV04P",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT bypass logical decision idempotency."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY0DT2MXG3AGM5PHJZJXX5E1",
+      "target_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KY0BTQPT00M98Z8NRSF7Y2XP",
+      "target_title": "ReconciliationProjectionDecisionAndCoverage",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MXK8ZY68TFVVYHK5ZS",
+      "target_ref_code": "TC-LEDGER-RECONCILIATION-DECISION-LIFECYCLE-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KY0A4XWJNT3RDXNK4Z6Z2HXE",
+      "target_title": "Verify owner reconciliation decisions and corrections",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KY0DT2MW7ZWCRTHT880PB0N8",
+      "target": "FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY0DT2MX2Y0543B55RDJ16CX",
+      "gate_type": "test-evidence",
+      "description": [
+        "Tests prove explicit owner intent, immutable history, and one active confirmation target."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY0DT2MXGT86ZHM03KC0MEHN",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Ledger.ReconciliationDecisionOperationTests --no-restore",
+      "expected_result": "exit 0; at least 24 confirm, reject, revoke, replace, stale, exclusivity, and replay cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ]
+}

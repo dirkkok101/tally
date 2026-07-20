@@ -16,7 +16,7 @@ Foundation task intentionally has no Implements link: establish raw-SQLite runti
 
 ## Objective
 
-Provide a real-store-tested LedgerDb, schema-fragment registry, storage metadata schema, generation activation primitives, and owner-only artifact policy.
+Provide a real-store-tested LedgerDb, schema-fragment registry, storage metadata schema, generation activation primitives, and owner-only artifact policy for complete provider-neutral Durable Ledger State.
 
 ## References
 
@@ -44,9 +44,9 @@ Provide a real-store-tested LedgerDb, schema-fragment registry, storage metadata
 
 - New data roots are 0700 and databases, WAL, SHM, candidates, manifests, pointers, and backups are 0600.
 - Supported connections enable foreign_keys, WAL, busy timeout, synchronous FULL financial writes, and reject a newer user_version before mutation.
-- V001StorageSchema creates only store generation, artifact manifest, idempotency record, and migration metadata from their linked models; the registry accepts explicit uniquely named V001 fragments and applies the eventual complete set in one transaction.
+- V001StorageSchema creates only generation, artifact-manifest, idempotency, logical-effect, and migration metadata; the registry accepts explicit uniquely named V001 fragments and applies the complete set atomically.
 - StoreGenerationManager accepts only an owner-only CURRENT pointer to a verified generation and atomically replaces it while retaining the prior generation.
-- A duplicate/missing fragment, migration, lock, permission, or integrity failure exposes no partial schema or unverified current generation.
+- A duplicate/missing fragment, migration, lock, permission, integrity, or flush failure exposes no partial schema or unverified current generation.
 
 ### Failure Criteria
 
@@ -68,7 +68,7 @@ Provide a real-store-tested LedgerDb, schema-fragment registry, storage metadata
 
 ### Notes
 
-None recorded.
+- Complete durable-state verification is implemented later and must enumerate evidence, reconciliation, attribution, pool, relationship, history, and idempotency state.
 
 ### File Contracts
 

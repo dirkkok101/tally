@@ -16,17 +16,16 @@ Deliver create/get/list/rename/archive account behavior through typed handlers, 
 
 ## Objective
 
-Maintain stable masked deposit-account identities and attributable lifecycle history without credentials or physical deletion.
+Maintain stable masked owned asset and liability account identities and attributable lifecycle history without credentials or physical deletion.
 
 ## References
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process vertical slices with selective ports | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts | `data_model` | `touches` | `true` |
 | FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain owned bank accounts | `requirement` | `implements` | `true` |
-| OQ-LEDGER-4: Confirm that the three initial accounts are deposit accounts and that bank name, owner label, account type, currency, and masked distinguishing identifier are sufficient. | `open_question` | `blocked-by` | `true` |
 | TC-LEDGER-ACCOUNT-MAINTENANCE-CONTRACT: Verify account maintenance contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -34,7 +33,6 @@ Maintain stable masked deposit-account identities and attributable lifecycle his
 | Depends On | Type | Reason |
 |---|---|---|
 | [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md) | `compile` | Account slice consumes the proven core seam. |
-| [TASK-LEDGER-GATE-EVIDENCE-ACCOUNTS](../tasks/gate-evidence-accounts.md) | `compile` | Account contracts cannot start until OQ-LEDGER-4 resolves. |
 | [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
 | [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | Consumer requires LedgerDb from its producing task; direct compile edge enforces the declared interface contract. |
 
@@ -42,7 +40,7 @@ Maintain stable masked deposit-account identities and attributable lifecycle his
 
 ### Acceptance Checks
 
-- Valid unique institution/display/type/masked identifier/ZAR input creates one active account with a stable ULID and no credential/full account number.
+- Valid unique institution/display/type/masked identifier/ZAR input creates one active asset or liability account with a stable ULID and no credential/full account number.
 - Rename appends an attributable lifecycle event while preserving account ID and transaction references.
 - Archive appends history, preserves detail/list visibility, and causes new transaction attempts to return LEDGER-ACCOUNT-ARCHIVED with no write.
 - Get/list honor includeHistory and lifecycle/institution filters with deterministic ordering and one result per account.
@@ -52,7 +50,6 @@ Maintain stable masked deposit-account identities and attributable lifecycle his
 
 - Do NOT hard-delete or update lifecycle history in place; append events and retain RESTRICT references per DD-LEDGER-IMMUTABLE-HISTORY.
 - Do NOT introduce repositories, mediator, HTTP endpoints, credentials, or full account identifiers per DD-LEDGER-APPLICATION-ARCHITECTURE.
-- Do NOT implement before OQ-LEDGER-4 resolves without invalidating account contracts.
 
 ### Expected Outputs
 
@@ -110,13 +107,11 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `blocked-by` -> OQ-LEDGER-4: Confirm that the three initial accounts are deposit accounts and that bank name, owner label, account type, currency, and masked distinguishing identifier are sufficient.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumer requires LedgerDb from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-ACCOUNTS](../tasks/gate-evidence-accounts.md): Account contracts cannot start until OQ-LEDGER-4 resolves.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md): Account slice consumes the proven core seam.
-- `governed-by` -> DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process vertical slices with selective ports
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history
+- `governed-by` -> DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports
+- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `implements` -> FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain owned bank accounts
 - `touches` -> DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts
 - `verifies` -> TC-LEDGER-ACCOUNT-MAINTENANCE-CONTRACT: Verify account maintenance contract

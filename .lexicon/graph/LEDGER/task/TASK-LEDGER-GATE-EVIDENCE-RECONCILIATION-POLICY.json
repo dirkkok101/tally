@@ -1,0 +1,226 @@
+{
+  "id": "01KY0DT2MAW7CBBW19AS7T0M9H",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT069GD3347N15180MYTNVK",
+  "ref_code": "TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY",
+  "slug": "GATE-EVIDENCE-RECONCILIATION-POLICY",
+  "title": "Validate deterministic reconciliation policy",
+  "description": [
+    "Validation-only task with no Implements link: resolve OQ-LEDGER-13 from private representative agent-capture and statement-row evidence before automatic reconciliation code."
+  ],
+  "objective": [
+    "Produce the bounded versioned match and guard-candidate matrix that permits automatic outcomes without false matches or duplicate statement-only facts."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 7,
+  "created_at": "2026-07-20T18:49:57.6488706+00:00",
+  "decisions": [
+    {
+      "id": "01KY0DT2MH5HYXJ3K4ZQ9Q5PPA",
+      "target": "DD-LEDGER-FINANCIAL-REPRESENTATION",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MJX39QQWDGBM8NHYKZ",
+      "target": "DD-LEDGER-RECONCILIATION-CONTRACT",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY0DT2MJ02PHDYF4DJK94RQ8",
+      "path": "docs/statements/",
+      "action": "read",
+      "role": "private evidence",
+      "required": 1,
+      "notes": [
+        "Never stage or copy source material"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MJ5WZBQBE6J2PHNM3T",
+      "path": "docs/validation/ledger/oq-13-reconciliation-policy.md",
+      "action": "document",
+      "role": "redacted evidence",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MJ0EW5YRRFWJ123YBR",
+      "path": ".lexicon/graph/LEDGER/open-question/OQ-LEDGER-13.json",
+      "action": "modify",
+      "role": "canonical gate state",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY0EEJ1SR70N374WAEC091SG",
+      "name": "OQ-LEDGER-13Resolution",
+      "direction": "produces",
+      "contract_ref_code": "OQ-LEDGER-13",
+      "notes": [
+        "Produced only after bounded policy evidence resolves the question"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T19:01:08.7929354+00:00"
+    },
+    {
+      "id": "01KY0EEJ1THDEME0CQ60BPRBZD",
+      "name": "ReconciliationPolicyMatrixEvidence",
+      "direction": "produces",
+      "contract_ref_code": "TC-LEDGER-RECONCILIATION-POLICY-MATRIX",
+      "notes": [
+        "Redacted executable policy matrix and invariant result"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T19:01:08.7929354+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY0DT2MJVPM3WT9HW817AVP9",
+      "kind": "acceptance_check",
+      "text": [
+        "A redacted matrix covers exact same-day matches, shifted dates, duplicate amounts, competing candidates, conflicting evidence, already-reconciled facts, and zero-candidate rows from every available account and institution without retaining raw rows or descriptions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MJRPT2WHRX1E2HH8AB",
+      "kind": "acceptance_check",
+      "text": [
+        "Each permitted automatic rule names exact account, currency, signed amount, date/tolerance, uniqueness, conflict guards, and stable reason output; every unproven case is explicitly review-required."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MJ8R7S0MA69GH1J4SB",
+      "kind": "acceptance_check",
+      "text": [
+        "OQ-LEDGER-13 resolves only when the matrix proves a bounded ReconciliationPolicyV1; otherwise the report records the contradiction, the question remains open, this task remains incomplete, and downstream reconciliation tasks stay blocked."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MJERSK5WM2CGQEG6K1",
+      "kind": "expected_output",
+      "text": [
+        "docs/validation/ledger/oq-13-reconciliation-policy.md with redacted policy matrix and explicit excluded cases"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MJRWB7VH2DGK5CE370",
+      "kind": "expected_output",
+      "text": [
+        "OQ-LEDGER-13 resolved with the exact ReconciliationPolicyV1 decision on the only completing path"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MJVGQFS9XE79JZ3KY5",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT invent a date or amount tolerance, runtime configuration, fuzzy description score, or provider-specific field — per DD-LEDGER-RECONCILIATION-CONTRACT and DD-LEDGER-FINANCIAL-REPRESENTATION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MJA2KNE0X27JNZ24HH",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT store raw statement rows, notification text, full identifiers, mailbox/MIME content, credentials, or owner-sensitive descriptions in the repository."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MJ0DWQYB6QPFEHTVX3",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT resolve OQ-LEDGER-13 when any allowed automatic case has multiple compatible or guard candidates; return to lex:design if the bounded policy cannot be proven."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY0DT2MK7XB9QV4C08JGS2FP",
+      "target_ref_code": "OQ-LEDGER-13",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KY07C7PVABDYP1V29H53B8S9",
+      "target_title": "Which provider-neutral compatibility fields, tolerances, and conflict rules are sufficient for an automatic deterministic match between agent-capture and statement-row evidence?",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MK9FEBF8MB5BK225MS",
+      "target_ref_code": "NFR-LEDGER-RECONCILIATION-SAFETY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KY0A32623J1HNH608CS19WJ3",
+      "target_title": "Reconcile deterministically and fail closed",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY0DT2MJYKT36WXEKSVTRWDV",
+      "gate_type": "human-review",
+      "description": [
+        "Owner confirms the redacted matrix represents the private capture and statement cases."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MK8RGRFCWN233KZV6G",
+      "gate_type": "self-review",
+      "description": [
+        "Repository diff contains no raw finance or transport payload and every excluded case fails closed."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY0DT2MJ7Y274D39A4TNZBTB",
+      "phase": "after",
+      "command": "test -s docs/validation/ledger/oq-13-reconciliation-policy.md && lex open-question show OQ-LEDGER-13 --json | jq -e '.status == \"resolved\" and (.decision | length > 0)'",
+      "expected_result": "exit 0; redacted matrix is non-empty and OQ-LEDGER-13 contains a non-empty resolved decision",
+      "required": 1,
+      "timeout_seconds": 120,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ]
+}

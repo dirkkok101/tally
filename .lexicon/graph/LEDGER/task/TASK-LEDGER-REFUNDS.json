@@ -6,10 +6,10 @@
   "slug": "REFUNDS",
   "title": "Implement refund and reversal confirmation",
   "description": [
-    "Deliver explicit full/partial refund confirmation using the entire credit and cumulative active-refund limits."
+    "Deliver explicit full/partial refund confirmation using the entire credit, cumulative active-refund limits, and independent current category/pool attribution."
   ],
   "objective": [
-    "Create attributable refund relationships that safely offset the original transaction category in the credit's own Effective Date period."
+    "Create attributable refund relationships that safely offset the original transaction's current category and spend pool in the credit's own Effective Date period."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -145,54 +145,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT0SME3W7FQC550HZKMYKN2",
+      "id": "01KY0E86BTYV12NCA62FVHYBJE",
       "kind": "acceptance_check",
       "text": [
         "Active same-account ZAR opposite-sign original/credit plus reason creates one active attributable refund using the credit's entire magnitude."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:40.2179735+00:00"
     },
     {
-      "id": "01KXT0SME3C7X88XNYC5H219RG",
+      "id": "01KY0E86BV70NY77P5959EKP6Z",
       "kind": "acceptance_check",
       "text": [
         "Multiple partial credits may link to one original only while cumulative active magnitude is at most the original."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:40.2179735+00:00"
     },
     {
-      "id": "01KXT0SME33SVA428W28HCWDY8",
+      "id": "01KY0E86BV2HN295DN610042Q9",
       "kind": "acceptance_check",
       "text": [
         "Different account/currency, same sign, inactive participant, over-refund, transfer role, refund-credit reuse, or refund-credit-as-original returns a stable error and creates no link."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:40.2179735+00:00"
     },
     {
-      "id": "01KXT0SME3SVA9FKEXR950898F",
+      "id": "01KY0E86BVMWW15G37TR5S95VJ",
       "kind": "acceptance_check",
       "text": [
-        "Refund detail retains explicit original/credit roles and exact amount without changing source facts."
+        "Refund detail retains explicit original/credit roles and exact amount; its spend offset follows the original's independently current category and pool without changing source facts or the credit's own stored assignments."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:40.2179735+00:00"
     },
     {
-      "id": "01KXT0SME3JGDZRRC7BHR2E939",
+      "id": "01KY0E86BVYR5CXJ87FSVM94MS",
       "kind": "acceptance_check",
       "text": [
-        "Identical replay returns the first relationship and concurrent credit reuse yields one active role."
+        "Identical replay returns the first relationship; concurrent credit reuse yields one active role; later category or pool correction deterministically moves the linked offset without rewriting relationship history."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:40.2179735+00:00"
     },
     {
       "id": "01KXT0SME32E85YVM1RAV389YW",
@@ -215,24 +215,24 @@
       "created_at": "2026-07-18T07:07:05.0252128+00:00"
     },
     {
-      "id": "01KXT0SME36C2BT07CH1QPGSTY",
+      "id": "01KY0E86BVB7FY1TM9DBASK18W",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT infer refunds from description/date, split one credit across originals, mutate category/source facts, or permit transfer/refund role overlap — per DD-LEDGER-IMMUTABLE-HISTORY."
+        "Do NOT infer a pool from account, instrument, cardholder, category, or evidence."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:40.2179735+00:00"
     },
     {
-      "id": "01KXT0SME328M84RJPN95JPWCZ",
+      "id": "01KY0E86BVNPJD8BQC435HTYVD",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT implement before OQ-LEDGER-5 resolves consistently."
+        "Do NOT rewrite either transaction or relationship when a current category/pool assignment changes."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:40.2179735+00:00"
     }
   ],
   "references": [

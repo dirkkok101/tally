@@ -4,12 +4,12 @@
   "sub_plan_id": "01KXT06AV2YBFA37A3CEQMT346",
   "ref_code": "TASK-LEDGER-AGENT-SKILLS",
   "slug": "AGENT-SKILLS",
-  "title": "Implement version-matched bundled agent skills",
+  "title": "Implement version-matched integration guidance",
   "description": [
-    "Embed Codex and Claude Code skill bundles/manifests and expose list/check/idempotent install through public operation modules."
+    "Embed optional provider-neutral, version-matched integration guidance and supported agent-host bundles; expose list/check/idempotent explicit install without making a skill authoritative or required."
   ],
   "objective": [
-    "Install only executable-matched skills that teach discoverable public commands and reject incompatibility before any host-file mutation."
+    "Keep the executable schema sufficient for every caller while optional guidance teaches only public operations and rejects incompatibility before host-file mutation."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -56,153 +56,165 @@
   ],
   "files": [
     {
-      "id": "01KXT0W0YZ6K4HTAB985PP3FS8",
-      "path": "src/Tally/Skills/skill-manifest.json",
+      "id": "01KY0E8AW097836F01YCTMHK9W",
+      "path": "src/Tally/Guidance/guidance-manifest.json",
       "action": "create",
-      "role": "manifest",
+      "role": "provider-neutral compatibility manifest",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     },
     {
-      "id": "01KXT0W0YZ9SCV3AV30W7CTTQD",
-      "path": "src/Tally/Skills/Codex/SKILL.md",
+      "id": "01KY0E8AW047N5S4SGP52PYJVR",
+      "path": "src/Tally/Guidance/Codex/SKILL.md",
       "action": "create",
-      "role": "Codex bundle",
+      "role": "optional Codex host bundle",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     },
     {
-      "id": "01KXT0W0YZ10M9WM5TQSE5P8J8",
-      "path": "src/Tally/Skills/ClaudeCode/SKILL.md",
+      "id": "01KY0E8AW0RA0Q5XH52QQTQ4DM",
+      "path": "src/Tally/Guidance/ClaudeCode/SKILL.md",
       "action": "create",
-      "role": "Claude Code bundle",
+      "role": "optional Claude Code host bundle",
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     },
     {
-      "id": "01KXT0W0YZJ7B5WPN1EX7M7ZP8",
-      "path": "src/Tally/Contracts/System/SkillContracts.cs",
+      "id": "01KY0E8AW02MG01V0GYCYDJXF1",
+      "path": "src/Tally/Contracts/System/GuidanceContracts.cs",
       "action": "create",
-      "role": "implementation",
+      "role": "public guidance contracts",
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     },
     {
-      "id": "01KXT0W0YZCKSM84MZ8TP4HEVN",
-      "path": "src/Tally/Features/System/Skills/SkillService.cs",
+      "id": "01KY0E8AW0ESFG9QKEE4V81CC1",
+      "path": "src/Tally/Features/System/Guidance/GuidanceService.cs",
       "action": "create",
-      "role": "implementation",
+      "role": "explicit host publication",
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     },
     {
-      "id": "01KXT0W0YZBJXXDWJCJKQQ11CD",
-      "path": "src/Tally/Features/System/Skills/SkillOperationModule.cs",
+      "id": "01KY0E8AW0XBEBXBZMR4129DZQ",
+      "path": "src/Tally/Features/System/Guidance/GuidanceOperationModule.cs",
       "action": "create",
-      "role": "implementation",
+      "role": "three guidance descriptors",
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     },
     {
-      "id": "01KXT0W0YZ3A1STP461P9P2DY2",
-      "path": "tests/Tally.Tests/Features/System/Skills/SkillCompatibilityTests.cs",
+      "id": "01KY0E8AW10TGHFN841Z91QCHN",
+      "path": "tests/Tally.Tests/Features/System/Guidance/GuidanceCompatibilityTests.cs",
       "action": "test",
-      "role": "implementation",
+      "role": "schema authority and optional compatibility",
       "required": 1,
       "sort_order": 6,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     }
   ],
   "interfaces": [
     {
-      "id": "01KXT0W0YZ2S1Q5FGXEDKA8J1C",
-      "name": "SkillOperationModule",
+      "id": "01KY0E8AW1Q3MT5PT5KK138PW8",
+      "name": "GuidanceOperationModule",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-SYSTEM-SKILL-CONTRACTS",
+      "notes": [
+        "list/check/install descriptors"
+      ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     },
     {
-      "id": "01KXT0W0YZ65K0WYD9ABTKJM07",
-      "name": "SkillService",
+      "id": "01KY0E8AW1MXF238AS1T4G4ZVC",
+      "name": "GuidanceService",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-SYSTEM-SKILL-CONTRACTS",
+      "notes": [
+        "optional host publication"
+      ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     },
     {
-      "id": "01KXT0W0YZY7T3EENXAWAAZE12",
+      "id": "01KY0E8AW175TWTE2P6RM2MNXR",
       "name": "OperationRegistry",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "authoritative public contract"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     },
     {
-      "id": "01KXT0W0YZMYRHCF4EEYJ7HWGP",
+      "id": "01KY0E8AW1CBXWE5MAY457PKTP",
       "name": "ArtifactReconciler",
       "direction": "consumes",
       "contract_ref_code": "DD-LEDGER-IDEMPOTENT-MUTATIONS",
+      "notes": [
+        "atomic optional publication"
+      ],
       "sort_order": 3,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KXT0W0YZKNC9D87XJ4A5CHKS",
+      "id": "01KY0E8AVZ67WR2H24MXD6M2EY",
       "kind": "acceptance_check",
       "text": [
-        "Embedded manifest declares provider, bundle checksum, operation IDs, executable range, and contract range and is generated/validated against OperationRegistry."
+        "The executable's help and schema are sufficient for every workflow with no installed guidance, private store access, or provider adapter."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     },
     {
-      "id": "01KXT0W0YZCDYRBQJ24NDGJP6T",
+      "id": "01KY0E8AW00EVHHTC68TPA415J",
       "kind": "acceptance_check",
       "text": [
-        "skill list/check are read-only and classify compatible/missing/outdated/newer/invalid for codex|claude-code and project|user scopes."
+        "Embedded manifest declares host format, bundle checksum, operation IDs, executable range, and contract range and is generated/validated against OperationRegistry."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     },
     {
-      "id": "01KXT0W0YZSE53RYQ14843D475",
+      "id": "01KY0E8AW05AE6X5G322K9BEDP",
       "kind": "acceptance_check",
       "text": [
-        "skill install fails before write for unsupported provider/incompatible contract/unsafe path/invalid manifest; compatible install publishes only documented provider scope then verifies checksum/version."
+        "guidance list/check are read-only and classify compatible, missing, outdated, newer, or invalid bundles for supported explicit scopes."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     },
     {
-      "id": "01KXT0W0YZ1S52GSE2YET885Z3",
+      "id": "01KY0E8AW07S2N7AZHY596AKF9",
       "kind": "acceptance_check",
       "text": [
-        "Identical install replay returns original path/version/checksum with no second effect; crash after publication reconciles matching manifest."
+        "guidance install fails before write for unsupported host/incompatible contract/unsafe path/invalid manifest; compatible install publishes only the documented host scope then verifies checksum/version."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     },
     {
-      "id": "01KXT0W0YZA24W0ZWSRK5BGDRR",
+      "id": "01KY0E8AW0TA8AXKBEXMM3B453",
       "kind": "acceptance_check",
       "text": [
-        "Bundled skills use only tally help/schema/public operations, include idempotency and safe-error workflows, and never teach private SQLite/file access."
+        "Identical install replay returns original path/version/checksum; crash after publication reconciles a matching manifest; bundled content uses only public provider-neutral operations and never teaches mailbox, MIME, WhatsApp, delivery, schedule, recipient, acknowledgement, private SQLite, or file access."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     },
     {
       "id": "01KXT0W0YZ9YC914D5NC8708WW",
@@ -245,81 +257,81 @@
       "created_at": "2026-07-18T07:08:23.3874370+00:00"
     },
     {
-      "id": "01KXT0W0YZHY66MP8JV5PQ91FP",
+      "id": "01KY0E8AW0MCF096MSVQ2PANXM",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT use repo-only skills, remotely fetch latest bundles, install incompatible content, bypass CLI via SQLite, or create a general plugin runtime — rejected per DD-LEDGER-SKILL-COMPATIBILITY."
+        "Do NOT make Codex, Claude Code, Hermes, or any skill a runtime dependency or authority."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     },
     {
-      "id": "01KXT0W0YZ3KST52P2SZ7AH246",
+      "id": "01KY0E8AW090SC6X5G7ZNCKDAA",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT duplicate descriptor metadata manually; manifest parity comes from OperationRegistry."
+        "Do NOT let guidance add operations, relax validation, or introduce provider/transport fields."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     }
   ],
   "references": [
     {
-      "id": "01KXT0W0YZ4NMNGYTCGKB4YT5F",
+      "id": "01KY0EP1HP15A23KJ4T2THQ0ZH",
       "target_ref_code": "NFR-LEDGER-AGENT-CONTRACT-STABILITY",
       "target_entity_type": "nfr",
       "target_entity_id": "01KXSQFY9C8649APJ7XN79GBZ3",
-      "target_title": "Keep the agent contract stable",
+      "target_title": "Keep the external-orchestrator contract stable",
       "relationship": "satisfies",
       "required": 1,
-      "sort_order": 0,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "sort_order": 8,
+      "created_at": "2026-07-20T19:05:14.0390196+00:00"
     },
     {
-      "id": "01KXT0W0YZPFQTG79BW7H827NT",
+      "id": "01KY0EMV1WVD9493K2RDYNYJS5",
       "target_ref_code": "DM-LEDGER-SYSTEM-SKILL-CONTRACTS",
       "target_entity_type": "data_model",
       "target_entity_id": "01KXSYGG1EGBHD7GW145CK4G5M",
-      "target_title": "SystemSkillOperationContracts",
+      "target_title": "SystemIntegrationGuidanceContracts",
       "relationship": "touches",
       "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "sort_order": 5,
+      "created_at": "2026-07-20T19:04:34.6208527+00:00"
     },
     {
-      "id": "01KXT0W0YZ9JDN451BN0RVYW1Q",
+      "id": "01KY0ENVXWWKCQ3FFRMGNZGC11",
       "target_ref_code": "FA-LEDGER-CONTRACT-SKILLS",
       "target_entity_type": "feature_area",
       "target_entity_id": "01KXSWZ4J0VXGSGZ2V5JDGK17C",
-      "target_title": "Contract and Skills",
+      "target_title": "Contract and Integration Guidance",
       "relationship": "touches",
       "required": 0,
-      "sort_order": 2,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "sort_order": 7,
+      "created_at": "2026-07-20T19:05:08.2881486+00:00"
     },
     {
-      "id": "01KXT0W0YZSKPMJKVHB0A16B9V",
+      "id": "01KY0EMW3J2HKY4KEK5RC005AJ",
       "target_ref_code": "TC-LEDGER-SKILL-COMPATIBILITY-CONTRACT",
       "target_entity_type": "test_case",
       "target_entity_id": "01KXSQK7RAE1THD3HDQMYPAC53",
-      "target_title": "Verify distribute version-matched agent skills contract",
+      "target_title": "Verify version-matched integration guidance",
       "relationship": "verifies",
       "required": 1,
-      "sort_order": 3,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "sort_order": 6,
+      "created_at": "2026-07-20T19:04:35.6992531+00:00"
     },
     {
-      "id": "01KXT0W0YZQJ0D63F11BS9NZAM",
+      "id": "01KY0EP437W0NRTY6VC4MH4V3J",
       "target_ref_code": "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE",
       "target_entity_type": "test_case",
       "target_entity_id": "01KXSXG8TR927NTWCDM2MBGVTV",
-      "target_title": "Verify every agent operation contract",
+      "target_title": "Verify every external-orchestrator operation contract",
       "relationship": "verifies",
       "required": 1,
-      "sort_order": 4,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "sort_order": 9,
+      "created_at": "2026-07-20T19:05:16.6486455+00:00"
     }
   ],
   "requirements": [
@@ -331,36 +343,36 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT0W0YZ9G3HSVM70AJW739W",
+      "id": "01KY0E8AW1KE2KY5GB7S3VZJTR",
       "gate_type": "test-evidence",
       "description": [
-        "Show both provider bundles match registry and incompatibility fails before mutation."
+        "Show workflows require no bundle, each optional bundle matches the registry, and incompatibility fails before mutation."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     },
     {
-      "id": "01KXT0W0YZDHC5QM61V4EX1TTJ",
+      "id": "01KY0E8AW1QF4V3A5NCW1XT7DR",
       "gate_type": "self-review",
       "description": [
-        "Search skills for SQLite/table/file instructions; find none."
+        "Search guidance and public schemas for private SQLite/table instructions or transport/provider vocabulary; find none."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     }
   ],
   "verification_steps": [
     {
-      "id": "01KXT0W0YZ1NZQ2GPT45RRENMK",
+      "id": "01KY0E8AW1ZMTSHJZ10N5YB0WM",
       "phase": "after",
-      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Features.System.Skills.SkillCompatibilityTests --no-restore",
-      "expected_result": "exit 0; at least 14 parity/compatibility/path/permission/crash/replay cases run and 0 fail",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~GuidanceCompatibilityTests --no-restore",
+      "expected_result": "exit 0; at least 16 schema-authority, compatibility, provider-neutral content, path, permission, crash, and replay cases run and 0 fail",
       "required": 1,
       "timeout_seconds": 420,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.8305289+00:00"
     }
   ]
 }

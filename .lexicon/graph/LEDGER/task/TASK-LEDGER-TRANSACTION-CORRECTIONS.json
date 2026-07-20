@@ -6,10 +6,10 @@
   "slug": "TRANSACTION-CORRECTIONS",
   "title": "Implement transaction void and supersession",
   "description": [
-    "Deliver attributable void/supersede behavior that preserves source facts and atomically retires every active financial relationship."
+    "Deliver attributable void/supersede behavior that preserves source facts and evidence/decision history while atomically retiring active financial relationships."
   ],
   "objective": [
-    "Ensure default active state counts only the valid transaction outcome while complete correction and retired-link history remains queryable."
+    "Ensure default active state counts only the valid transaction outcome while evidence, reconciliation, dimensional, correction, and retired-link history remains complete and current reconciliation exceptions are explicit."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -32,6 +32,16 @@
       ],
       "sort_order": 2,
       "created_at": "2026-07-18T07:16:35.3212549+00:00"
+    },
+    {
+      "id": "01KY0ECND0D7PMBAKKYQT24RS3",
+      "target": "TASK-LEDGER-RECONCILIATION-DECISIONS",
+      "dependency_type": "compile",
+      "reason": [
+        "Corrections consume ReconciliationStateReducer to retain decisions and derive current exceptions."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-20T19:00:06.6892742+00:00"
     },
     {
       "id": "01KXT162Z50VJVB0GDMQJK1RF0",
@@ -122,104 +132,133 @@
   ],
   "interfaces": [
     {
-      "id": "01KXT19D735W6A4ZERE2KT0N4H",
+      "id": "01KY0E86Z8KCF35B49PWHMZB7Y",
       "name": "TransactionOperationModule",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "notes": [
+        "void and supersede descriptors"
+      ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:15:41.9227425+00:00"
+      "created_at": "2026-07-20T18:57:40.8370798+00:00"
     },
     {
-      "id": "01KXT19D74YKFPD9MM63715YNQ",
+      "id": "01KY0E86Z8X0D5YPSNYJC9JWE7",
       "name": "TransactionBaseOperationModule",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "notes": [
+        "record/get composition"
+      ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:15:41.9227425+00:00"
+      "created_at": "2026-07-20T18:57:40.8370798+00:00"
     },
     {
-      "id": "01KXT19D74NKV7SR5QFRWX5G11",
+      "id": "01KY0E86Z8MPWD1WY79F84S65Y",
       "name": "TransactionStore.VoidAsync",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
+      "notes": [
+        "atomic void history"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:15:41.9227425+00:00"
+      "created_at": "2026-07-20T18:57:40.8370798+00:00"
     },
     {
-      "id": "01KXT19D74JDYWKGED4Q3RGNH5",
+      "id": "01KY0E86Z8VM26H7NVM153ACMH",
       "name": "TransactionStore.SupersedeAsync",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
+      "notes": [
+        "independent replacement"
+      ],
       "sort_order": 3,
-      "created_at": "2026-07-18T07:15:41.9227425+00:00"
+      "created_at": "2026-07-20T18:57:40.8370798+00:00"
     },
     {
-      "id": "01KXT19D74VESZ956JGNPT1XN4",
+      "id": "01KY0E86Z87M8BN3VRC1Y9MR8Y",
       "name": "RelationshipStore.RetireForTransactionAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "notes": [
+        "retire active financial links"
+      ],
       "sort_order": 4,
-      "created_at": "2026-07-18T07:15:41.9227425+00:00"
+      "created_at": "2026-07-20T18:57:40.8370798+00:00"
     },
     {
-      "id": "01KXT19D74GEHF5Q59A0H04XHV",
+      "id": "01KY0E86Z82D6Q37REWDENRYVK",
+      "name": "ReconciliationStateReducer",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "notes": [
+        "preserve history and expose current exception"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-20T18:57:40.8370798+00:00"
+    },
+    {
+      "id": "01KY0E86Z8C83KJKQN9P2WVXCQ",
       "name": "LedgerMutationExecutor.ExecuteAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
-      "sort_order": 5,
-      "created_at": "2026-07-18T07:15:41.9227425+00:00"
+      "notes": [
+        "atomic replay"
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-20T18:57:40.8370798+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KXT0SME8JCQ21CNABZ023JQH",
+      "id": "01KY0E86Z5A2Z1PN6RB0F88BX8",
       "kind": "acceptance_check",
       "text": [
-        "Void active transaction with reason appends attributable event, marks inactive, retires every active transfer/refund atomically, and default actuals exclude it."
+        "Void appends an attributable lifecycle event, marks the transaction inactive, retires every active transfer/refund atomically, preserves evidence/reconciliation decision history, and exposes affected confirmations as current reconciliation exceptions."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:40.8370798+00:00"
     },
     {
-      "id": "01KXT0SME8Y7DY03N8FS2AHE3W",
+      "id": "01KY0E86Z6PWG0N1TM95HC1FV6",
       "kind": "acceptance_check",
       "text": [
-        "Supersede validates and creates one independent replacement, appends linkage/event, inactivates original, retires active relationships, and never copies relationships automatically."
+        "Supersede validates and creates one independent replacement with explicit new evidence and requested attribution only; it never copies relationships, confirming evidence, category, pool, instrument, or cardholder state automatically."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:40.8370798+00:00"
     },
     {
-      "id": "01KXT0SME8BWMSS4FB212A5BAY",
+      "id": "01KY0E86Z6HE4JVQ8VQJF7F84R",
       "kind": "acceptance_check",
       "text": [
-        "Any replacement validation or relationship-retirement failure leaves original and all links unchanged and creates no replacement/idempotency outcome."
+        "Any replacement validation, relationship retirement, exception projection, or write failure leaves original, links, evidence decisions, and current-state projections unchanged and creates no replacement/idempotency outcome."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:40.8370798+00:00"
     },
     {
-      "id": "01KXT0SME86F7DGB0KVQRTPF9M",
+      "id": "01KY0E86Z612RS53VPQQ4ZJQNQ",
       "kind": "acceptance_check",
       "text": [
-        "History detail returns original/replacement facts, reason, actor/time, allocation history, and retired relationship IDs."
+        "History returns original/replacement facts, reason, actor/time, assignment/attribution history, retained evidence/decision history, retired relationship IDs, and the explicit current reconciliation consequence."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:40.8370798+00:00"
     },
     {
-      "id": "01KXT0SME8F016ET88C42RPH2M",
+      "id": "01KY0E86Z765F1421Q7FFS8BRF",
       "kind": "acceptance_check",
       "text": [
-        "Identical correction replay returns original outcome; incompatible second correction returns stable lifecycle/conflict."
+        "Identical correction replay returns the original outcome; an incompatible second correction returns stable lifecycle/conflict."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:40.8370798+00:00"
     },
     {
       "id": "01KXT0SME88PK0FT1Q3ZDNKSAB",
@@ -252,24 +291,24 @@
       "created_at": "2026-07-18T07:07:05.0252128+00:00"
     },
     {
-      "id": "01KXT0SME8H928MXW01ZK0W2VB",
+      "id": "01KY0E86Z7J9C1MDNQXYA602YC",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT edit/delete source facts, copy relationships to replacement, partially retire links, or implement general event sourcing — rejected per DD-LEDGER-IMMUTABLE-HISTORY."
+        "Do NOT move or silently reconfirm evidence, reconciliation decisions, category, pool, payment attribution, or relationships onto a replacement."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:40.8370798+00:00"
     },
     {
-      "id": "01KXT0SME8ADQK0WS3P4N6EBWK",
+      "id": "01KY0E86Z70WPX1ZQFPHS5WDS6",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT implement a correction path that bypasses RelationshipStore.RetireForTransactionAsync."
+        "Do NOT delete a decision made against the original; retain it historically and derive a current exception or unresolved state."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:40.8370798+00:00"
     }
   ],
   "references": [

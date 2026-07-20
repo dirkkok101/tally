@@ -1,0 +1,276 @@
+{
+  "id": "01KY0DT2MFMYRHC5GE42T8XXNR",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE",
+  "slug": "GATE-INT-RECONCILIATION-BUNDLE",
+  "title": "Compose the reconciliation operation bundle",
+  "description": [
+    "Integration gate with no Implements link: compose evidence-aware candidate, apply, decision, and coverage modules and prove their public seam before actuals/recovery consumers."
+  ],
+  "objective": [
+    "Expose one explicit ReconciliationOperationBundle with consistent schemas, errors, atomicity, and current-state semantics."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 4,
+  "created_at": "2026-07-20T18:49:57.6488706+00:00",
+  "decisions": [
+    {
+      "id": "01KY0DT2MY8PW0H5ZRAYX2TWWW",
+      "target": "DD-LEDGER-CLI-OPERATION-CONTRACT",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MYG75C92SB3J1JT2BY",
+      "target": "DD-LEDGER-RECONCILIATION-CONTRACT",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KY0DT2MZAD662GSCKTDHZG74",
+      "target": "TASK-LEDGER-RECONCILIATION-APPLY",
+      "dependency_type": "compile",
+      "reason": [
+        "Bundle consumes ReconciliationApplyOperationModule."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MZNGC8Q5C9S22WM7T8",
+      "target": "TASK-LEDGER-RECONCILIATION-COVERAGE",
+      "dependency_type": "compile",
+      "reason": [
+        "Bundle consumes ReconciliationCoverageOperationModule."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MZKM1BPVQ07DJHG6V4",
+      "target": "TASK-LEDGER-RECONCILIATION-DECISIONS",
+      "dependency_type": "compile",
+      "reason": [
+        "Bundle consumes ReconciliationDecisionOperationModule."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MZDXBSYXEG2A1XXWFY",
+      "target": "TASK-LEDGER-RECONCILIATION-PROJECTION",
+      "dependency_type": "compile",
+      "reason": [
+        "Bundle consumes ReconciliationProjectionOperationModule."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY0DT2MYVPJQG0TS8WV5HDF4",
+      "path": "src/Tally/Features/Ledger/Reconciliation/ReconciliationOperationBundle.cs",
+      "action": "create",
+      "role": "explicit composition",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MY4X9WE0QZ6N72ABWX",
+      "path": "tests/Tally.Tests/Integration/ReconciliationOperationBundleTests.cs",
+      "action": "test",
+      "role": "composed seam verification",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY0DT2MYEXFCBFT2VWQFVZAP",
+      "name": "ReconciliationProjectionOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MYXD9VGRRCWA9M1CS3",
+      "name": "ReconciliationApplyOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MYCYGPWQF62KTW826D",
+      "name": "ReconciliationDecisionOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MY3C79NZEEWF0VWF7E",
+      "name": "ReconciliationCoverageOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MZG9M9DTH4DN8ZD4QX",
+      "name": "ReconciliationOperationBundle",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "sort_order": 4,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY0DT2MYY2F07X3RGK9TFSHB",
+      "kind": "acceptance_check",
+      "text": [
+        "The bundle exposes evidence/reconciliation operation descriptors once with concrete source-generated request/result/error types and explicit DI; schema inventory contains no aliases or open payloads."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MYZ7T3TPPB514PC2DM",
+      "kind": "acceptance_check",
+      "text": [
+        "An end-to-end real-store sequence registers evidence, projects, applies match/statement-only/ambiguity, corrects an owner decision, completes coverage, and returns exact state/history without direct store access."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MYKZVR7SAT6MEHF3E1",
+      "kind": "acceptance_check",
+      "text": [
+        "Crash/retry and provider-neutral schema suites exercise the composed handlers and report nonzero cases with no duplicate canonical effect."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MYZ6389W2PEDQBRBCD",
+      "kind": "expected_output",
+      "text": [
+        "ReconciliationOperationBundle and composed integration tests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MY24R8VHN839CVQJM5",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add reflection discovery, a generic reconciliation gateway, minimal overloaded reconcile commands, or INGEST batch behavior — rejected by the governing decisions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MYSQJMRK3Q2GTFE41K",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT call one operation handler directly from another feature; compose through named stores/policies and the public operation modules."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MYZ618CFFEQEFB2JH0",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT weaken conflict/review-required outcomes to make the integration test green."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY0DT2MZA7JQF072P4KNYTNJ",
+      "target_ref_code": "FA-LEDGER-RECONCILIATION",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KY0BX3C2VQF8A0QV3K3FDJV5",
+      "target_title": "Evidence Reconciliation and Coverage",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MZNBN7B118ZMVQMCR4",
+      "target_ref_code": "DIAG-LEDGER-RECONCILIATION-SEQUENCE",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KY0BX6Q9F26P1VB763EM5FV1",
+      "target_title": "Match-first statement reconciliation sequence",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MZN85MBCVAFQ937FEX",
+      "target_ref_code": "DIAG-LEDGER-RECONCILIATION-STATE",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KY0BX77NCQD92JX4PGQ6VSGK",
+      "target_title": "Provider-neutral reconciliation lifecycle",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MZ9M45NHWSQBDCHJCH",
+      "target_ref_code": "TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KY0BYPTCY9Z728KVQ4T3GV8C",
+      "target_title": "Prove reconciliation effects are crash-atomic and replay-safe",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY0DT2MZX15FFDW9PEWX4QVH",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach composed operation inventory and the full match-first lifecycle evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY0DT2MZ8R4H6ZY7ZGCKT02D",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Integration.ReconciliationOperationBundleTests --no-restore",
+      "expected_result": "exit 0; at least 20 composed reconciliation, correction, coverage, crash, and schema cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ]
+}

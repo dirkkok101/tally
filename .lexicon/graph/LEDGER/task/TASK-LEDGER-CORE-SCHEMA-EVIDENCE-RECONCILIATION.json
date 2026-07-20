@@ -1,0 +1,244 @@
+{
+  "id": "01KY0DT2MBS8H6K239SAJWEBGJ",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT069TD553802AT505MG72F",
+  "ref_code": "TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION",
+  "slug": "CORE-SCHEMA-EVIDENCE-RECONCILIATION",
+  "title": "Implement the V001 evidence and reconciliation schema fragment",
+  "description": [
+    "Shared-schema task with no Implements link: create the constraints required by evidence, reconciliation, decisions, coverage, and crash-atomic replay slices."
+  ],
+  "objective": [
+    "Register one real-SQLite V001 fragment whose constraints preserve provider-neutral evidence identity, one active confirmation, append-only decisions, and complete statement coverage."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 24,
+  "created_at": "2026-07-20T18:49:57.6488706+00:00",
+  "decisions": [
+    {
+      "id": "01KY0DT2MMVEV3DR07XNVJ14QD",
+      "target": "DD-LEDGER-EMBEDDED-STORAGE",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MMSE03KSE7WDAM52VC",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MM0NHZB8S0JJHHA6XP",
+      "target": "DD-LEDGER-RECONCILIATION-CONTRACT",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KY0DT2MMADAEV1CH4H4STEHZ",
+      "target": "TASK-LEDGER-CORE-STORAGE",
+      "dependency_type": "compile",
+      "reason": [
+        "The fragment registers with LedgerSchemaFragmentRegistry and is exercised through LedgerDb."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY0DT2MMX095Q4J24P8BN128",
+      "path": "src/Tally/Infrastructure/Storage/Migrations/V001/V001EvidenceReconciliationSchema.cs",
+      "action": "create",
+      "role": "schema fragment",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MM0JX5GWH4NN4EN8B4",
+      "path": "tests/Tally.Tests/Infrastructure/Storage/LedgerEvidenceReconciliationSchemaTests.cs",
+      "action": "test",
+      "role": "real SQLite schema verification",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY0DT2MMYZ8247QJ866MCD8K",
+      "name": "V001EvidenceReconciliationSchema",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MMMNRZ9VY68DA0D1V0",
+      "name": "LedgerSchemaFragmentRegistry",
+      "direction": "consumes",
+      "contract_ref_code": "DD-LEDGER-EMBEDDED-STORAGE",
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MMFS6RF4CJFQGQX5N9",
+      "name": "LedgerDb",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY0DT2MMV5GSY37Q81VTSS2X",
+      "kind": "acceptance_check",
+      "text": [
+        "A fresh real SQLite generation contains evidence record/observation/link, reconciliation decision/current projection, statement scope/coverage/exception, and required unique/index/foreign-key structures."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MMQVXJRV62VKTA2V2X",
+      "kind": "acceptance_check",
+      "text": [
+        "Constraints reject duplicate logical evidence with changed content, multiple active confirming targets, broken decision predecessors, mutable-history replacement, and coverage entries outside their scope."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MM260DAZBR4A0CQ32F",
+      "kind": "acceptance_check",
+      "text": [
+        "V001 composition remains deterministic and idempotent and every table participates in integrity/count manifest discovery."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MMN5FYST9JZFAQWPDS",
+      "kind": "expected_output",
+      "text": [
+        "V001EvidenceReconciliationSchema"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MMWCYCBEAF86HBKVQ3",
+      "kind": "expected_output",
+      "text": [
+        "Real-SQLite constraint tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MM3TTC7CPA1N2XRZAZ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT store raw source payloads, arbitrary metadata JSON, transport identifiers, or mutable reconciliation flags — per DD-LEDGER-RECONCILIATION-CONTRACT and DD-LEDGER-IMMUTABLE-HISTORY."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MMNADCV6NQGRP9AW0G",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT introduce EF Core, a repository abstraction, or a second database — rejected per DD-LEDGER-EMBEDDED-STORAGE."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MM6D0XZ0H4HQ7VJFHZ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT implement feature policy in migration SQL beyond structural constraints."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY0DT2MM3G0NQFAQ1MB9JVNT",
+      "target_ref_code": "NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFXNVGXH9FYFN6KF8KSE9",
+      "target_title": "Make mutations atomic and durable",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MM2TMCEPVQ1SKRFBT2",
+      "target_ref_code": "DM-LEDGER-EVIDENCE-RECORD-LINK",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KY0BTQ6J2YPR81ZERF5RK3YW",
+      "target_title": "EvidenceRecordObservationAndLink",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MM3DAZEBDR94KYRX56",
+      "target_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KY0BTQPT00M98Z8NRSF7Y2XP",
+      "target_title": "ReconciliationProjectionDecisionAndCoverage",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY0DT2MM2YDDY4BPMR11ABNA",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach table/index/constraint inventory and negative constraint results."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MM410MG696HN23EY80",
+      "gate_type": "self-review",
+      "description": [
+        "Schema contains only allowlisted provider-neutral evidence fields."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY0DT2MM5RZZM9WJA476S8HE",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Infrastructure.Storage.LedgerEvidenceReconciliationSchemaTests --no-restore",
+      "expected_result": "exit 0; at least 14 real-SQLite schema and constraint cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ]
+}

@@ -24,12 +24,9 @@ Provide deterministic value types that reject lossy inputs and round-trip accept
 |---|---|---|---|
 | DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-TRANSACTION-FACT: TransactionFact | `data_model` | `touches` | `true` |
-| FR-LEDGER-ACTUALS-QUERY: Query and reconcile Ledger actuals | `requirement` | `implements` | `true` |
+| FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals | `requirement` | `implements` | `true` |
 | FR-LEDGER-TRANSACTION-RECORDING: Record canonical transactions | `requirement` | `implements` | `true` |
 | NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic | `nfr` | `satisfies` | `true` |
-| OQ-LEDGER-1: Validate the active ZAR-only first-release assumption against all three owned accounts. | `open_question` | `blocked-by` | `true` |
-| OQ-LEDGER-2: Validate the active signed-account-delta convention against statement samples from both banks. | `open_question` | `blocked-by` | `true` |
-| OQ-LEDGER-3: Validate transaction date as the default Effective Date and identify whether either bank supplies a distinct posting date. | `open_question` | `blocked-by` | `true` |
 | TC-LEDGER-EXACT-MONEY-CONFORMANCE: Verify exact money and actuals formulas | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -37,9 +34,6 @@ Provide deterministic value types that reject lossy inputs and round-trip accept
 | Depends On | Type | Reason |
 |---|---|---|
 | [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md) | `compile` | Value types compile against common validation/result contracts. |
-| [TASK-LEDGER-GATE-EVIDENCE-CURRENCY](../tasks/gate-evidence-currency.md) | `compile` | Money currency semantics cannot be implemented before OQ-LEDGER-1 resolves. |
-| [TASK-LEDGER-GATE-EVIDENCE-SIGNS](../tasks/gate-evidence-signs.md) | `compile` | Signed amount semantics cannot be implemented before OQ-LEDGER-2 resolves. |
-| [TASK-LEDGER-GATE-EVIDENCE-DATES](../tasks/gate-evidence-dates.md) | `compile` | Effective Date semantics cannot be implemented before OQ-LEDGER-3 resolves. |
 
 ## Recipe
 
@@ -47,14 +41,13 @@ Provide deterministic value types that reject lossy inputs and round-trip accept
 
 - Canonical -123.45 parses once to Int64 minor units and formats identically without floating point.
 - JSON numbers, exponents, negative zero, zero transaction amounts, excessive scale, unsupported currency, and overflow return stable field errors.
-- Signed amount follows the resolved owned-account delta rule.
-- TransactionDate/PostingDate round-trip as yyyy-MM-dd and EffectiveDate follows resolved precedence without timezone fabrication.
+- Signed amount follows the resolved owner economic-position delta rule across asset and liability accounts.
+- TransactionDate and optional PostingDate round-trip as yyyy-MM-dd; EffectiveDate is TransactionDate and no timezone is fabricated.
 - Identifiers are 26-character ULIDs and total accumulation detects overflow.
 
 ### Failure Criteria
 
 - Do NOT use REAL/double/float/JSON numeric money, decimal-text persistence, or a speculative currency table — rejected per DD-LEDGER-FINANCIAL-REPRESENTATION.
-- Do NOT implement before OQ-LEDGER-1..3 resolve without invalidating the decision.
 
 ### Expected Outputs
 
@@ -110,15 +103,9 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `blocked-by` -> OQ-LEDGER-1: Validate the active ZAR-only first-release assumption against all three owned accounts.
-- `blocked-by` -> OQ-LEDGER-2: Validate the active signed-account-delta convention against statement samples from both banks.
-- `blocked-by` -> OQ-LEDGER-3: Validate transaction date as the default Effective Date and identify whether either bank supplies a distinct posting date.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md): Value types compile against common validation/result contracts.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CURRENCY](../tasks/gate-evidence-currency.md): Money currency semantics cannot be implemented before OQ-LEDGER-1 resolves.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-DATES](../tasks/gate-evidence-dates.md): Effective Date semantics cannot be implemented before OQ-LEDGER-3 resolves.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-SIGNS](../tasks/gate-evidence-signs.md): Signed amount semantics cannot be implemented before OQ-LEDGER-2 resolves.
 - `governed-by` -> DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates
-- `implements` -> FR-LEDGER-ACTUALS-QUERY: Query and reconcile Ledger actuals
+- `implements` -> FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals
 - `implements` -> FR-LEDGER-TRANSACTION-RECORDING: Record canonical transactions
 - `satisfies` -> NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic
 - `touches` -> DM-LEDGER-TRANSACTION-FACT: TransactionFact

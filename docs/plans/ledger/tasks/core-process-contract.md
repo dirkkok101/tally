@@ -12,11 +12,11 @@
 
 ## Summary
 
-Create the .NET 10 Native-AOT solution and descriptor-driven process boundary every Ledger slice registers with.
+Create the .NET 10 Native-AOT solution and provider-neutral descriptor-driven process boundary every Ledger slice registers with.
 
 ## Objective
 
-Produce a publishable tally executable whose explicit registry drives dispatch, help, schema, structured streams, errors, exits, and version reporting.
+Produce one offline tally executable whose explicit 72-operation registry drives dispatch, help, schema, structured streams, errors, exits, compatibility, and version reporting for any external caller.
 
 ## References
 
@@ -26,8 +26,8 @@ Produce a publishable tally executable whose explicit registry drives dispatch, 
 | ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning | `adr` | `governed-by` | `false` |
 | ADR-CORE-0024: Vertical Slice Architecture | `adr` | `governed-by` | `false` |
 | ADR-CORE-0025: Error Handling Strategy | `adr` | `governed-by` | `false` |
-| DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process vertical slices with selective ports | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit resource commands from one operation registry | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry | `design_decision` | `governed-by` | `true` |
 | DIAG-LEDGER-COMPONENTS: LEDGER component architecture | `design_diagram` | `references` | `false` |
 | DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope | `data_model` | `touches` | `true` |
 | FA-LEDGER-CONTRACT-SKILLS: Contract and Skills | `feature_area` | `touches` | `false` |
@@ -48,17 +48,17 @@ No task dependencies recorded.
 ### Acceptance Checks
 
 - Release linux-x64 publish contains one native tally executable and adjacent SQLite native library; invocations start no daemon/listener and leave no child process.
-- tally schema list/show, tally version, and help return deterministic descriptor-derived operation, request, result, error, exit, compatibility, and example metadata without store access.
-- Valid JSON through explicit --input - or @file writes exactly one result envelope to stdout; malformed JSON, unknown fields, and unknown operations fail before mutation with documented error/exit.
-- Expected and sanitized unexpected failures keep diagnostics on stderr with metadata/correlation only and never serialize financial payloads or stack traces.
-- Every asynchronous process/handler boundary propagates CancellationToken and registration is explicit.
+- tally schema list/show, tally version, and help return deterministic descriptor-derived operation, request, result, error, exit, compatibility, and example metadata without store access or an installed skill.
+- Valid JSON through explicit --input - or @file writes exactly one result envelope to stdout; malformed JSON, unknown fields, unknown operations, and provider or delivery fields fail before mutation with documented error/exit.
+- Expected and sanitized unexpected failures keep diagnostics on stderr with metadata/correlation only and never serialize financial payloads, evidence payloads, full identifiers, or stack traces.
+- Every asynchronous process/handler boundary propagates CancellationToken; registration is explicit; the final inventory gate proves exactly 72 provider-neutral operations.
 
 ### Failure Criteria
 
-- Do NOT add FastEndpoints, Controllers, Minimal APIs, Aspire, PostgreSQL, EF Core, a daemon/listener, mediator, event bus, generic repository, reflection scanning, or plugin runtime — per DD-LEDGER-APPLICATION-ARCHITECTURE.
-- Do NOT expose generic invoke/save/update/delete/SQL/database operations or v1 aliases — rejected per DD-LEDGER-CLI-OPERATION-CONTRACT.
-- Do NOT throw expected domain outcomes; use CommandResult<T> and stable exit categories.
-- Do NOT place finance policy in TallyProcess or OperationRegistry.
+- Do NOT add FastEndpoints, Controllers, Minimal APIs, Aspire, PostgreSQL, EF Core, a daemon/listener, mediator, event bus, generic repository, reflection scanning, or plugin runtime - per DD-LEDGER-APPLICATION-ARCHITECTURE.
+- Do NOT add Hermes, AgentMail, WhatsApp, provider transport, recipient, schedule, delivery, acknowledgement, or orchestration behavior - per ADR-CORE-0030.
+- Do NOT expose generic invoke/save/update/delete/SQL/database operations or aliases - rejected per DD-LEDGER-CLI-OPERATION-CONTRACT.
+- Do NOT throw expected domain outcomes or place finance policy in TallyProcess or OperationRegistry.
 
 ### Expected Outputs
 
@@ -74,7 +74,7 @@ No task dependencies recorded.
 
 ### Notes
 
-None recorded.
+- The registry is authoritative; optional guidance is derived and cannot broaden the public contract.
 
 ### File Contracts
 
@@ -132,8 +132,8 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `governed-by` -> ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning
 - `governed-by` -> ADR-CORE-0024: Vertical Slice Architecture
 - `governed-by` -> ADR-CORE-0025: Error Handling Strategy
-- `governed-by` -> DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process vertical slices with selective ports
-- `governed-by` -> DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit resource commands from one operation registry
+- `governed-by` -> DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports
+- `governed-by` -> DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry
 - `implements` -> FR-LEDGER-CONTRACT-DISCOVERY: Discover the Ledger command contract
 - `implements` -> FR-LEDGER-STRUCTURED-INVOCATION: Invoke Ledger operations non-interactively
 - `references` -> DIAG-LEDGER-COMPONENTS: LEDGER component architecture

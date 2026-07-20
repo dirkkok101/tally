@@ -12,17 +12,17 @@
 
 ## Summary
 
-Deliver explicit full/partial refund confirmation using the entire credit and cumulative active-refund limits.
+Deliver explicit full/partial refund confirmation using the entire credit, cumulative active-refund limits, and independent current category/pool attribution.
 
 ## Objective
 
-Create attributable refund relationships that safely offset the original transaction category in the credit's own Effective Date period.
+Create attributable refund relationships that safely offset the original transaction's current category and spend pool in the credit's own Effective Date period.
 
 ## References
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | `true` |
 | FR-LEDGER-REFUND-CONFIRMATION: Confirm refunds and reversals | `requirement` | `implements` | `true` |
 | NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | `true` |
@@ -44,13 +44,13 @@ Create attributable refund relationships that safely offset the original transac
 - Active same-account ZAR opposite-sign original/credit plus reason creates one active attributable refund using the credit's entire magnitude.
 - Multiple partial credits may link to one original only while cumulative active magnitude is at most the original.
 - Different account/currency, same sign, inactive participant, over-refund, transfer role, refund-credit reuse, or refund-credit-as-original returns a stable error and creates no link.
-- Refund detail retains explicit original/credit roles and exact amount without changing source facts.
-- Identical replay returns the first relationship and concurrent credit reuse yields one active role.
+- Refund detail retains explicit original/credit roles and exact amount; its spend offset follows the original's independently current category and pool without changing source facts or the credit's own stored assignments.
+- Identical replay returns the first relationship; concurrent credit reuse yields one active role; later category or pool correction deterministically moves the linked offset without rewriting relationship history.
 
 ### Failure Criteria
 
-- Do NOT infer refunds from description/date, split one credit across originals, mutate category/source facts, or permit transfer/refund role overlap — per DD-LEDGER-IMMUTABLE-HISTORY.
-- Do NOT implement before OQ-LEDGER-5 resolves consistently.
+- Do NOT infer a pool from account, instrument, cardholder, category, or evidence.
+- Do NOT rewrite either transaction or relationship when a current category/pool assignment changes.
 
 ### Expected Outputs
 
@@ -110,7 +110,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Consumer requires TransactionStore from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSFERS](../tasks/transfers.md): Refunds consume the RelationshipStore and active-role model created with transfers.
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history
+- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `implements` -> FR-LEDGER-REFUND-CONFIRMATION: Confirm refunds and reversals
 - `satisfies` -> NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history
 - `touches` -> DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts

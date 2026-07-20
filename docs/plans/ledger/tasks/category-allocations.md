@@ -22,7 +22,7 @@ Apply and correct attributable category decisions without rewriting transaction 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts | `data_model` | `touches` | `true` |
 | FR-LEDGER-CATEGORY-ASSIGNMENT: Assign and correct transaction categories | `requirement` | `implements` | `true` |
 | NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | `true` |
@@ -111,7 +111,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-LEDGER-CATEGORIES](../tasks/categories.md): Allocations require active category identity and lifecycle policy.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Allocations require TransactionStore and transaction identity.
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history
+- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `implements` -> FR-LEDGER-CATEGORY-ASSIGNMENT: Assign and correct transaction categories
 - `satisfies` -> NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history
 - `touches` -> DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts

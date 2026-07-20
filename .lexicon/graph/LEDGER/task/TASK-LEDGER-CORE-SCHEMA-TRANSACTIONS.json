@@ -6,10 +6,10 @@
   "slug": "CORE-SCHEMA-TRANSACTIONS",
   "title": "Implement the V001 transaction schema fragment",
   "description": [
-    "Schema foundation intentionally has no Implements link: translate immutable transaction facts, lifecycle events, and category-allocation history into one independently verified V001 fragment."
+    "Schema foundation intentionally has no Implements link: translate immutable transaction facts, lifecycle events, category-allocation, payment-attribution, and spend-pool-assignment history into one independently verified V001 fragment."
   ],
   "objective": [
-    "Create exact immutable transaction, correction-lifecycle, and category-allocation tables, constraints, indexes, and active-allocation uniqueness without implementing handlers."
+    "Create exact immutable transaction and correction-history tables plus independent current/historical category, payment, and pool dimensions without implementing handlers."
   ],
   "planning_state": "planned",
   "priority": 0,
@@ -92,34 +92,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT2XZDCGHJNEFJNXF9JRD12",
+      "id": "01KY0E29W6EEFY0QZKC3GGZZFE",
       "kind": "acceptance_check",
       "text": [
-        "V001TransactionSchema creates every linked field, enum/date/money check, account/category RESTRICT foreign key, source-reference uniqueness rule, lifecycle terminal rule, and one-active-allocation constraint."
+        "V001TransactionSchema creates every linked fact, lifecycle, category allocation, instrument/cardholder attribution, and pool assignment field with enum/date/money checks, RESTRICT foreign keys, terminal lifecycle rules, and one-current-record constraints."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+      "created_at": "2026-07-20T18:54:27.2058846+00:00"
     },
     {
-      "id": "01KXT2XZDCVQR14NT1J53DR1S7",
+      "id": "01KY0E29W7PW0NMCQWWAE7R5W9",
       "kind": "acceptance_check",
       "text": [
-        "signedAmountMinor is nonzero Int64, currency is literal ZAR, facts are insert-only by contract, and supersession/allocation history retains attributable linkage."
+        "signedAmountMinor is nonzero Int64, currency is literal ZAR, facts are insert-only by contract, initial payment attribution is explicitly unknown, and initial pool assignment is explicitly unassigned."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+      "created_at": "2026-07-20T18:54:27.2058846+00:00"
     },
     {
-      "id": "01KXT2XZDCFMNKESM0B89WR0QS",
+      "id": "01KY0E29W7TNPSCJB2ZYQH3C2P",
       "kind": "acceptance_check",
       "text": [
-        "Applying the fragment twice in one migration plan is rejected before SQL; an injected statement failure rolls back every transaction, lifecycle, and allocation table/index."
+        "Source identity is not embedded as transport provenance or a single sourceReference; generic evidence and reconciliation schema is owned by V001EvidenceReconciliationSchema."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+      "created_at": "2026-07-20T18:54:27.2058846+00:00"
+    },
+    {
+      "id": "01KY0E29W7TYGZ44MTJV0KMPJH",
+      "kind": "acceptance_check",
+      "text": [
+        "Applying the fragment twice in one migration plan is rejected before SQL; an injected statement failure rolls back every transaction, lifecycle, and dimensional-history table/index."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:54:27.2058846+00:00"
     },
     {
       "id": "01KXT2XZDD6DXM4092XM58GCBT",
@@ -152,24 +162,24 @@
       "created_at": "2026-07-18T07:44:24.4911988+00:00"
     },
     {
-      "id": "01KXT2XZDC14J9JXN1RMS0G2AM",
+      "id": "01KY0E29W78YH0ENQZGPEYHXF0",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT create catalogue, relationship, snapshot, recovery, or idempotency tables in this fragment."
+        "Do NOT infer payment attribution or pool from account, category, description, evidence provider, or one another."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+      "created_at": "2026-07-20T18:54:27.2058846+00:00"
     },
     {
-      "id": "01KXT2XZDD0JVSX42HYVDVR3R2",
+      "id": "01KY0E29W7NNZQJ0G6Y9BEYGDW",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT use SQLite REAL money, mutable fact columns, category columns on transaction facts, EF Core, or mocked SQLite tests."
+        "Do NOT place evidence or reconciliation records in this fragment."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+      "created_at": "2026-07-20T18:54:27.2058846+00:00"
     }
   ],
   "references": [

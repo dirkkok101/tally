@@ -12,11 +12,11 @@
 
 ## Summary
 
-Deliver status plus isolated prepare/activate evolution with preflight, recovery point, complete validation, and atomic generation switch.
+Deliver storage status plus isolated prepare/activate evolution with preflight, recovery point, complete-state validation, and atomic generation switch.
 
 ## Objective
 
-Upgrade supported storage exactly once while every failure leaves the original verified generation authoritative.
+Upgrade supported storage exactly once while every failure leaves the original fully verified provider-neutral generation authoritative.
 
 ## References
 
@@ -42,11 +42,11 @@ Upgrade supported storage exactly once while every failure leaves the original v
 
 ### Acceptance Checks
 
-- storage.status returns contract/storage versions, current generation/fingerprint, permissions, integrity, and host-protection evidence without financial payload.
+- storage.status returns contract/storage/reconciliation-policy versions, current generation/fingerprint, permissions, integrity, and host-protection evidence without financial or evidence payload.
 - evolution.prepare validates source integrity, compatibility, permissions, free space, protection, and recovery requirements before transformation.
-- A verified recovery point exists before isolated candidate transformation; candidate validation compares version, all durable state/history, relationships, idempotency, counts, integrity, and exact declared totals.
-- evolution.activate requires expected current fingerprint and explicit authorization, revalidates under lock, atomically switches once, and retains recovery generation.
-- Any preflight/conversion/validation/activation failure leaves original current and reports stable version/integrity/host error.
+- A verified recovery point exists before isolated transformation; candidate validation compares every durable fact/history/dimension/evidence/reconciliation/relationship/replay type, count, integrity rule, and exact declared total/cell.
+- evolution.activate requires expected current fingerprint and explicit authorization, revalidates under lock, atomically switches once, and retains the recovery generation.
+- Any preflight, conversion, privacy, validation, or activation failure leaves original current and reports a stable version/integrity/host error.
 
 ### Failure Criteria
 

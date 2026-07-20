@@ -12,11 +12,11 @@
 
 ## Summary
 
-Deliver separate-target candidate restore, complete validation, explicit authorized atomic activation, and retained prior generation.
+Deliver separate-target candidate restore, complete-state validation, explicit authorized atomic activation, and retained prior generation.
 
 ## Objective
 
-Recover from a verified backup without changing CURRENT until a candidate is fully revalidated against the expected authoritative fingerprint.
+Recover from a Verified Ledger Backup without changing CURRENT until every durable type, history, privacy rule, replay outcome, relationship/reconciliation rule, count, and exact total is revalidated against the expected fingerprint.
 
 ## References
 
@@ -40,11 +40,11 @@ Recover from a verified backup without changing CURRENT until a candidate is ful
 
 ### Acceptance Checks
 
-- restore.prepare restores compatible verified backup into a distinct generation and returns candidate/source fingerprints and complete verification without changing CURRENT.
-- Candidate validation matches every durable type/history, relationship rule, idempotency outcome, count, integrity result, and exact total from verified backup.
-- Any compatibility/integrity/permission/space/validation failure leaves current generation authoritative and exposes no partial candidate as current.
-- restore.activate requires candidateId, expectedCurrentFingerprint, authorizeReplacement=true; under exclusive lock it revalidates, flushes, atomically replaces CURRENT, fsyncs directory, and retains previous generation.
-- Crash before pointer replacement leaves old current; after successful replacement candidate is current with original idempotent outcome recoverable on retry.
+- restore.prepare restores a compatible verified backup into a distinct private generation and returns candidate/source normalized fingerprints plus complete verification without changing CURRENT.
+- Candidate validation matches every durable type/history, evidence privacy rule, reconciliation/relationship invariant, request/logical replay outcome, count, and exact named/dimensional total from the verified backup.
+- Any compatibility, integrity, permission, space, privacy, or complete-state failure leaves the current generation authoritative and exposes no partial candidate as current.
+- restore.activate requires candidateId, expectedCurrentFingerprint, authorizeReplacement=true; under exclusive lock it revalidates, flushes, atomically replaces CURRENT, fsyncs the directory, and retains the previous generation.
+- Crash before pointer replacement leaves old current; after successful replacement the candidate is current with original request and logical replay outcomes recoverable on retry.
 
 ### Failure Criteria
 

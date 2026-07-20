@@ -6,10 +6,10 @@
   "slug": "GATE-SECURITY",
   "title": "Validate local financial-data security",
   "description": [
-    "Security validation task intentionally has no Implements link: consolidate permissions, host-protection, input, logging, diagnostics, backup, skill-path, and malicious-value checks."
+    "Security validation task intentionally has no Implements link: consolidate owner-only permissions, host protection, input/schema privacy, logging, diagnostics, backup, optional-guidance path, and malicious-value checks."
   ],
   "objective": [
-    "Prove every supported local artifact and process surface protects personal financial data and fails closed without custom cryptography."
+    "Prove every supported local artifact and public process surface protects financial/evidence data, remains provider-neutral, and fails closed without custom cryptography."
   ],
   "planning_state": "planned",
   "priority": 0,
@@ -131,54 +131,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT0Y3KWYXBE3A2N4JB6MR2E",
+      "id": "01KY0E8DSAT0HKBHXC147Q1RJ7",
       "kind": "acceptance_check",
       "text": [
-        "Supported-host tests assert 0700 data roots and 0600 DB/WAL/SHM/candidate/manifest/backup/skill artifacts after create, crash, restore, and evolution paths."
+        "Supported-host tests assert 0700 data roots and 0600 DB/WAL/SHM/candidate/manifest/backup/optional-guidance artifacts after create, crash, restore, and evolution paths."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+      "created_at": "2026-07-20T18:57:47.8180077+00:00"
     },
     {
-      "id": "01KXT0Y3KWHPC64EWD6TS3CJJB",
+      "id": "01KY0E8DSB3EX412FRAJE48XZP",
       "kind": "acceptance_check",
       "text": [
-        "Host-protection check rejects absent/invalid evidence before declaring production conformance; no custom crypto/key derivation/encryption algorithm exists."
+        "Host-protection check rejects absent/invalid evidence before production conformance; no custom crypto, key derivation, or encryption algorithm exists."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+      "created_at": "2026-07-20T18:57:47.8180077+00:00"
     },
     {
-      "id": "01KXT0Y3KW4Y16ZSCHTTM4MYZX",
+      "id": "01KY0E8DSBAHVVM560C9VDGJ8M",
       "kind": "acceptance_check",
       "text": [
-        "Canary descriptions, credentials, full identifiers, JSON payloads, SQL, paths, exception text, and stack traces never appear in logs, stderr, expected errors, or correlation diagnostics."
+        "Canary descriptions, raw evidence/provider payloads, credentials, full account/payment identifiers, serialized bodies, SQL, unsafe paths, exception text, and stack traces never appear in logs, stderr, expected errors, or diagnostics."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+      "created_at": "2026-07-20T18:57:47.8180077+00:00"
     },
     {
-      "id": "01KXT0Y3KX8SHTC3G9Y3W79P9Z",
+      "id": "01KY0E8DSBKRP2Y3EZEX9NGMKE",
       "kind": "acceptance_check",
       "text": [
-        "Malformed/oversized/unknown JSON fields, unsafe artifact/skill paths, symlink/path traversal, permissions, full disk, lock, and corrupt store fail before partial mutation."
+        "Malformed/oversized/unknown JSON, mailbox/MIME/message/recipient/schedule/delivery/acknowledgement fields, open evidence metadata, unsafe artifact/guidance paths, symlinks, traversal, permissions, full disk, locks, and corrupt stores fail before partial mutation."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+      "created_at": "2026-07-20T18:57:47.8180077+00:00"
     },
     {
-      "id": "01KXT0Y3KXH0D2E8MYC51H0ZAP",
+      "id": "01KY0E8DSBCAV23R7X2PTQQKQ9",
       "kind": "acceptance_check",
       "text": [
-        "Published process runs offline with the owner OS identity trust boundary and opens no listener."
+        "Published process runs offline under the owner OS identity, opens no listener, and contains no direct Hermes, AgentMail, WhatsApp, or other provider integration."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+      "created_at": "2026-07-20T18:57:47.8180077+00:00"
     },
     {
       "id": "01KXT0Y3KXXK0ZEJRVTH9X4W0R",

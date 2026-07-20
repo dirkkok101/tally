@@ -12,11 +12,11 @@
 
 ## Summary
 
-Verification-only task intentionally has no Implements link: trace UC-LEDGER-007 main scenario and every failure path through the published CLI.
+Verification-only task with no Implements link: trace revised UC-LEDGER-007 through Release backup and restore operations.
 
 ## Objective
 
-Prove UC-LEDGER-007 through observable process results and durable-state invariants.
+Prove backup verification and owner-authorized restore preserve every durable provider-neutral state type, replay outcome, rule, count, and exact total.
 
 ## References
 
@@ -40,15 +40,14 @@ Prove UC-LEDGER-007 through observable process results and durable-state invaria
 
 ### Acceptance Checks
 
-- Create produces one owner-only complete-state backup; independent verify confirms versions, integrity, every durable type/history, relationships, idempotency, counts, and exact totals without live mutation.
-- Prepare restores/validates a separate candidate; only explicit authorized activation against expected fingerprint switches CURRENT and retains prior generation.
-- Unsafe destination/full disk/corrupt/incompatible/incomplete/unavailable protection/unauthorized/mismatched candidate paths preserve the authoritative Ledger.
-- Identical create/activate retries reproduce original artifacts/generation outcomes without second effects.
+- Backup create publishes one 0600 artifact only after independent verification of facts/histories, dimensions, evidence/reconciliation, relationships, request/logical replay outcomes, per-type counts, privacy rules, and exact named/dimensional totals.
+- Restore prepare uses a separate private generation and reproduces the normalized complete-state report; incompatible, corrupt, incomplete, privacy-invalid, or permission-invalid artifacts never affect CURRENT.
+- Activation requires explicit authorization and expected current fingerprint, revalidates under lock, switches atomically, retains the previous generation, and remains replay-safe across crash boundaries.
 
 ### Failure Criteria
 
-- Do NOT verify by comparing only file bytes or activate directly over the live DB.
-- Do NOT omit any UC-LEDGER-007 complete-state or authorization failure.
+- Do NOT omit any durable evidence, reconciliation, payment, pool, or logical-effect class from source/candidate comparison.
+- Do NOT expose a candidate as current before complete revalidation and authorization.
 
 ### Expected Outputs
 
@@ -74,8 +73,8 @@ Prove UC-LEDGER-007 through observable process results and durable-state invaria
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 38 wired operations |
-| VerifiedUC007 | `produces` | UC-LEDGER-007 |  |
+| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 72 provider-neutral operations |
+| VerifiedUC007 | `produces` | UC-LEDGER-007 | complete-state backup and restore workflow |
 
 ### Verification
 

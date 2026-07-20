@@ -6,10 +6,10 @@
   "slug": "VERIFY-UC-002",
   "title": "TransactionWorkflow",
   "description": [
-    "Verification-only task intentionally has no Implements link: trace UC-LEDGER-002 main scenario and every failure path through the published CLI."
+    "Verification-only task with no Implements link: trace revised UC-LEDGER-002 through the Release published CLI and real SQLite state."
   ],
   "objective": [
-    "Prove UC-LEDGER-002 through observable process results and durable-state invariants."
+    "Prove one canonical transaction plus generic initial evidence is atomic, privacy-safe, replay-safe, and returned with explicit unknown/unassigned dimensions and reconciliation state."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -40,33 +40,36 @@
   ],
   "interfaces": [
     {
-      "id": "01KXT19F906P3KQGYYRDP8D2SE",
+      "id": "01KY0EAY8FCW6FG9CNZVQFH22F",
       "name": "PublishedTallyFixture",
       "direction": "consumes",
       "notes": [
         "Release published-process E2E fixture"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:15:44.0322442+00:00"
+      "created_at": "2026-07-20T18:59:10.2224869+00:00"
     },
     {
-      "id": "01KXT19F912G0X3QXPBSFWB7EN",
+      "id": "01KY0EAY8F2KD7SJ1SCRKHP8JK",
       "name": "CompletePublicContract",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "Exactly 38 wired operations"
+        "Exactly 72 provider-neutral operations"
       ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:15:44.0322442+00:00"
+      "created_at": "2026-07-20T18:59:10.2224869+00:00"
     },
     {
-      "id": "01KXT19F91SBDXA9FYDQ07PJD2",
+      "id": "01KY0EAY8FGYC6N3CCWK9VEWZ5",
       "name": "VerifiedUC002",
       "direction": "produces",
       "contract_ref_code": "UC-LEDGER-002",
+      "notes": [
+        "canonical transaction and initial evidence workflow"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:15:44.0322442+00:00"
+      "created_at": "2026-07-20T18:59:10.2224869+00:00"
     }
   ],
   "links": [
@@ -80,34 +83,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT0ZW3GZ6S1XVGJVVBHDNFA",
+      "id": "01KY0EAY8E0KVFX8V989NWCDY0",
       "kind": "acceptance_check",
       "text": [
-        "A discovered record schema accepts exact signed ZAR/date/provenance facts for an active account and get round-trips them byte-for-byte logically."
+        "A discovered record schema accepts exact signed ZAR/date facts, generic evidence allowlist fields, optional stable payment IDs, and idempotency identity for an active account; get round-trips facts, evidence link, current reconciliation state, payment attribution, and pool exactly."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-20T18:59:10.2224869+00:00"
     },
     {
-      "id": "01KXT0ZW3GXS9KSDY1BP5WMW4F",
+      "id": "01KY0EAY8FT0068T9ADYD5MDG7",
       "kind": "acceptance_check",
       "text": [
-        "Invalid amount/currency/date/provenance/key and missing/archived account return their stable errors and create no transaction."
+        "Provider/raw payload, full identifier, invalid fact/evidence/attribution/key, and missing/archived account failures create no transaction, evidence, link, assignment, or replay row."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-20T18:59:10.2224869+00:00"
     },
     {
-      "id": "01KXT0ZW3G52J70YVGPY7Z4N5G",
+      "id": "01KY0EAY8F17A62N17RMT6B0XP",
       "kind": "acceptance_check",
       "text": [
-        "Identical replay returns the same transaction; conflicting replay preserves original; injected storage failure commits all rows or none."
+        "Identical request or cross-key logical evidence replay returns the existing result; conflict preserves the original; crash injection proves transaction, evidence link, unknown/unassigned defaults, and replay outcome commit together or none."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-20T18:59:10.2224869+00:00"
     },
     {
       "id": "01KXT0ZW3GCRZJ1FJF8NB5CM3S",
@@ -130,24 +133,24 @@
       "created_at": "2026-07-18T07:10:29.4870620+00:00"
     },
     {
-      "id": "01KXT0ZW3GJ5JMF4BRDSQ7RS5A",
+      "id": "01KY0EAY8FACH5CM10GP78YM2J",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT compare floating-point representations or bypass the public process contract."
+        "Do NOT use transport provenance, a single sourceReference authority, provider payloads, or inferred payment/pool/category state in the fixture."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-20T18:59:10.2224869+00:00"
     },
     {
-      "id": "01KXT0ZW3GVRNFRGYNPEQWMV4K",
+      "id": "01KY0EAY8FDFZMWX44BAN74F3F",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT omit UC-LEDGER-002 storage and replay failures."
+        "Do NOT accept aggregate-only atomicity evidence; inspect every durable row class."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-20T18:59:10.2224869+00:00"
     },
     {
       "id": "01KXT0ZW3GEZK9KN06VCTDSQTR",

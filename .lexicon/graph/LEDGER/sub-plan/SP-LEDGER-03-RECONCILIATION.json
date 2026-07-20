@@ -1,0 +1,11 @@
+{
+  "id": "01KY0D0QYX4CJZKSVH3MMGT6BK",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "ref_code": "SP-LEDGER-03-RECONCILIATION",
+  "title": "Match-first reconciliation and coverage",
+  "description": [
+    "Deliver versioned candidate policy, atomic dispositions, decision corrections, and statement-scope coverage after the evidence gates."
+  ],
+  "sort_order": 3,
+  "created_at": "2026-07-20T18:36:07.5189706+00:00"
+}

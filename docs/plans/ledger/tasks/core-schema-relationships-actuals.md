@@ -12,19 +12,19 @@
 
 ## Summary
 
-Schema foundation intentionally has no Implements link: translate financial relationships/lifecycle and ephemeral actuals snapshots into one independently verified V001 fragment.
+Schema foundation intentionally has no Implements link: translate financial relationship/lifecycle and ephemeral multi-dimensional actuals snapshots into one independently verified V001 fragment.
 
 ## Objective
 
-Create exact transfer/refund relationship, relationship-lifecycle, and expiry-bound query-snapshot tables, constraints, indexes, and role uniqueness without implementing financial rules.
+Create exact transfer/refund relationship, relationship-lifecycle, and expiry-bound query-snapshot tables supporting category, pool, instrument, cardholder, evidence, and reconciliation filters without implementing financial rules.
 
 ## References
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-SNAPSHOT-ACTUALS: Materialized cross-process query snapshots | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-SNAPSHOT-ACTUALS: Materialized coherent snapshots for dimensional actuals | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-FINANCIAL-RELATIONSHIP: FinancialRelationshipAndLifecycle | `data_model` | `touches` | `true` |
 | DM-LEDGER-QUERY-SNAPSHOT: QuerySnapshot | `data_model` | `touches` | `true` |
 
@@ -38,9 +38,10 @@ Create exact transfer/refund relationship, relationship-lifecycle, and expiry-bo
 
 ### Acceptance Checks
 
-- V001RelationshipActualsSchema creates every linked relationship, role, lifecycle, snapshot, item, filter-hash, version, expiry, exact-total, and ordering field with required foreign keys and checks.
-- Active relationship roles are unique per transaction, source and target differ, lifecycle replacement links are RESTRICT, and snapshot items use snapshotId plus ordinal.
-- Query snapshots are explicitly marked ephemeral for exclusion from Durable Ledger State; applying the fragment twice or injecting a statement failure leaves no partial tables/indexes.
+- V001RelationshipActualsSchema creates every linked relationship, role, lifecycle, snapshot, item, canonical filter, version, expiry, exact named-total, dimension bucket, and ordering field with required foreign keys and checks.
+- Active relationship roles are unique per transaction, source and target differ, lifecycle replacement links are RESTRICT, and refund projections can follow the original current category and pool.
+- Snapshot items preserve exact pool/category cells plus explicit uncategorized, unassigned, unknown-attribution, and reconciliation-state membership while using snapshotId plus ordinal.
+- Query snapshots are explicitly ephemeral and excluded from Durable Ledger State; applying the fragment twice or injecting a statement failure leaves no partial tables/indexes.
 
 ### Failure Criteria
 
@@ -98,8 +99,8 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 
 - `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumes LedgerDb and LedgerSchemaFragmentRegistry.
 - `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history
-- `governed-by` -> DD-LEDGER-SNAPSHOT-ACTUALS: Materialized cross-process query snapshots
+- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
+- `governed-by` -> DD-LEDGER-SNAPSHOT-ACTUALS: Materialized coherent snapshots for dimensional actuals
 - `touches` -> DM-LEDGER-FINANCIAL-RELATIONSHIP: FinancialRelationshipAndLifecycle
 - `touches` -> DM-LEDGER-QUERY-SNAPSHOT: QuerySnapshot
 

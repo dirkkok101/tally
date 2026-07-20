@@ -1,0 +1,261 @@
+{
+  "id": "01KY0DT2MDKPT611BTCBVADFFV",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06A6E7WPPCP8KDAKCJ1H4",
+  "ref_code": "TASK-LEDGER-EVIDENCE-LINKING",
+  "slug": "EVIDENCE-LINKING",
+  "title": "Implement supporting evidence linkage",
+  "description": [
+    "Deliver the explicit non-confirming link operation after canonical transaction and evidence registry behavior exist."
+  ],
+  "objective": [
+    "Append or replay a supporting evidence link to an active transaction without changing reconciliation state or creating a duplicate fact."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 50,
+  "created_at": "2026-07-20T18:49:57.6488706+00:00",
+  "decisions": [
+    {
+      "id": "01KY0DT2MSR6RPJGCHD89ZVMJ1",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MS2FPT3KS6PC91H0YM",
+      "target": "DD-LEDGER-RECONCILIATION-CONTRACT",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KY0DT2MSGYZFJWY4K4WX6HN0",
+      "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
+      "dependency_type": "compile",
+      "reason": [
+        "Linking is an idempotent public mutation."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MSABX3QHY59M1CAXMN",
+      "target": "TASK-LEDGER-EVIDENCE-REGISTRY",
+      "dependency_type": "compile",
+      "reason": [
+        "Linking consumes EvidenceStore and registered evidence identity."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MSEVX9DQPMAR0CFWQN",
+      "target": "TASK-LEDGER-TRANSACTIONS-RECORD-GET",
+      "dependency_type": "compile",
+      "reason": [
+        "Linking validates canonical transaction state through TransactionStore."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY0DT2MS7AKTFHMJ1E1FMW6X",
+      "path": "src/Tally/Contracts/Ledger/Evidence/EvidenceLinkContracts.cs",
+      "action": "create",
+      "role": "public contract",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MSXQPP1A12MJ9C1Q7T",
+      "path": "src/Tally/Features/Ledger/Evidence/EvidenceLinkHandlers.cs",
+      "action": "create",
+      "role": "command",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MS5GHZCATW2GJDQTQF",
+      "path": "src/Tally/Features/Ledger/Evidence/EvidenceLinkOperationModule.cs",
+      "action": "create",
+      "role": "explicit descriptor and DI",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MS3VT66V1DX5XRH82Z",
+      "path": "tests/Tally.Tests/Ledger/EvidenceLinkOperationTests.cs",
+      "action": "test",
+      "role": "contract and persistence tests",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY0DT2MS9P89D05S5SFTTBTY",
+      "name": "EvidenceLinkOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MSEFVN8MS0AYQMPWD7",
+      "name": "EvidenceStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECORD-LINK",
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MSN1YZS0VCWG0P66FJ",
+      "name": "TransactionStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-FACT",
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MS89NTECGNGAPF0HMN",
+      "name": "LedgerMutationExecutor.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY0DT2MSNRZXMKZRXNX3159Q",
+      "kind": "acceptance_check",
+      "text": [
+        "link-supporting validates active transaction, evidence identity, compatibility, reason, and idempotency before appending one attributable supporting link."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MS1D6PZW6F3KK1B524",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical link replay returns the original result; inactive/missing transaction, incompatible evidence, active link conflict, or changed replay returns a stable error and preserves prior state."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MS1HE22J31GJQ44V22",
+      "kind": "acceptance_check",
+      "text": [
+        "Supporting linkage never creates confirming statement state, changes amounts/dimensions, or moves a link across supersession."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MS58J34238761GT376",
+      "kind": "expected_output",
+      "text": [
+        "Evidence link contract, handler, operation module, and transactional linkage tests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MS1MX97FC45R3QFJAF",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use a supporting link as a reconciliation decision or allow one evidence item to be silently moved — rejected per DD-LEDGER-RECONCILIATION-CONTRACT."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MS54CYZZE95RJFH79R",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT overwrite evidence/link history — rejected per DD-LEDGER-IMMUTABLE-HISTORY."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MSX88SHAAQDMSJ46JV",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT access provider payloads or private INGEST state."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY0DT2MSX5N6DAJYZBPH8X57",
+      "target_ref_code": "DM-LEDGER-EVIDENCE-RECORD-LINK",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KY0BTQ6J2YPR81ZERF5RK3YW",
+      "target_title": "EvidenceRecordObservationAndLink",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MSN8E0XFJSHBMW4K55",
+      "target_ref_code": "TC-LEDGER-EVIDENCE-REGISTRATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KY0A4W77PF27T99QGA02E43E",
+      "target_title": "Verify generic evidence registration and linkage",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KY0DT2MSANV7QJFEJ8Z8RNQN",
+      "target": "FR-LEDGER-EVIDENCE-REGISTRATION",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY0DT2MST7D8G1YHYX18RZFP",
+      "gate_type": "test-evidence",
+      "description": [
+        "Evidence shows supporting links never alter reconciliation or finance totals."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY0DT2MS2WKM30DPQ9S1NTS4",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Ledger.EvidenceLinkOperationTests --no-restore",
+      "expected_result": "exit 0; at least 12 supporting-link, conflict, lifecycle, no-state-change, and replay cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ]
+}

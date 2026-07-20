@@ -2,9 +2,9 @@
   "id": "01KXT069GD3347N15180MYTNVK",
   "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
   "ref_code": "SP-LEDGER-00-EVIDENCE-GATES",
-  "title": "Remaining owner evidence gates",
+  "title": "Pre-implementation evidence gates",
   "description": [
-    "OQ-LEDGER-1 through OQ-LEDGER-4 are resolved from all-account statement evidence and their validation tasks are removed. Resolve OQ-LEDGER-5 and OQ-LEDGER-6 before dependent relationship, actuals, and category implementation."
+    "Resolve the four owner-evidence questions before their dependent financial policies are implemented."
   ],
   "sort_order": 0,
   "created_at": "2026-07-18T06:56:31.2464443+00:00",

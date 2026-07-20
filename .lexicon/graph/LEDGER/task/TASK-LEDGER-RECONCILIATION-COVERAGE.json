@@ -1,0 +1,308 @@
+{
+  "id": "01KY0DT2METEWQQ12JX5EXP8G8",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KY0D0QYX4CJZKSVH3MMGT6BK",
+  "ref_code": "TASK-LEDGER-RECONCILIATION-COVERAGE",
+  "slug": "RECONCILIATION-COVERAGE",
+  "title": "Implement statement coverage and exceptions",
+  "description": [
+    "Deliver idempotent completed statement scopes, exact outcome accounting, prior-record absence classification, and historical exception correction."
+  ],
+  "objective": [
+    "Return a reconciliation batch summary in which every accepted row and every eligible prior transaction has exactly one explicit outcome."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 40,
+  "created_at": "2026-07-20T18:49:57.6488706+00:00",
+  "decisions": [
+    {
+      "id": "01KY0DT2MXXP2N85ZQ7YA2M2RE",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MX1A1RJTBRED158BY6",
+      "target": "DD-LEDGER-RECONCILIATION-CONTRACT",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KY0DT2MYS1MGWX303J2SH2Q6",
+      "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
+      "dependency_type": "compile",
+      "reason": [
+        "Coverage completion is an idempotent durable mutation."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MYZG0G70YE556XSWC8",
+      "target": "TASK-LEDGER-RECONCILIATION-DECISIONS",
+      "dependency_type": "compile",
+      "reason": [
+        "Coverage derives current and historical outcome classes through ReconciliationStateReducer."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0EEDR1Y6Y17371HT91A38Z",
+      "target": "TASK-LEDGER-TRANSACTIONS-RECORD-GET",
+      "dependency_type": "compile",
+      "reason": [
+        "Coverage consumes TransactionStore to establish exact active transaction membership."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T19:01:04.3859792+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY0DT2MYNM08DN61ESNMNA6Y",
+      "path": "src/Tally/Contracts/Ledger/Reconciliation/ReconciliationCoverageContracts.cs",
+      "action": "create",
+      "role": "public contracts",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MY9P11Z50PMVBY98ZE",
+      "path": "src/Tally/Domain/Ledger/Reconciliation/StatementCoveragePolicy.cs",
+      "action": "create",
+      "role": "scope and exact membership rules",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MYT8TVSN25G2VWG09R",
+      "path": "src/Tally/Features/Ledger/Reconciliation/ReconciliationCoverageHandlers.cs",
+      "action": "create",
+      "role": "command and query",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MYF7EWJTA3ZWPKMAT4",
+      "path": "src/Tally/Infrastructure/Storage/Reconciliation/ReconciliationCoverageStore.cs",
+      "action": "create",
+      "role": "SQLite scope/history",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MYHZVDER2E6HAPFAMY",
+      "path": "src/Tally/Features/Ledger/Reconciliation/ReconciliationCoverageOperationModule.cs",
+      "action": "create",
+      "role": "explicit descriptors and DI",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MYAAT9R2ZACTCPQSHN",
+      "path": "tests/Tally.Tests/Ledger/ReconciliationCoverageOperationTests.cs",
+      "action": "test",
+      "role": "contract and persistence tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY0DT2MYFRSFHWM5X3HXK64Y",
+      "name": "StatementCoveragePolicy",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MYQYRCGNYBKKX4JYMW",
+      "name": "ReconciliationCoverageStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MYJ41Z8HCBE94YT416",
+      "name": "ReconciliationCoverageOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MY5CNQ9BCC1YXQDHRP",
+      "name": "ReconciliationStateReducer",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MYFZX1V9479610ESYP",
+      "name": "TransactionStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-FACT",
+      "sort_order": 4,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY0DT2MXBW5RTCSXKD9WR997",
+      "kind": "acceptance_check",
+      "text": [
+        "coverage.complete requires an approved complete account/date scope, manifest opaque reference, expected evidence set, policy/version, and idempotency identity; incomplete or invalid scope cannot classify absence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MXEWKKJHKSKP8BY9VS",
+      "kind": "acceptance_check",
+      "text": [
+        "Completion transactionally proves every accepted statement row has one durable outcome and every eligible prior transaction is reconciled or classified recorded_absent_from_statement, ambiguous, or explicit exception exactly once."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MXJJVJNDE459ZFTQNC",
+      "kind": "acceptance_check",
+      "text": [
+        "Result counts equal returned membership by class and include stable identifiers/reasons; identical replay returns the original summary while changed scope/evidence conflicts."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MX79QW7X3XB87K749K",
+      "kind": "acceptance_check",
+      "text": [
+        "Later decisions retain the completed historical exception and expose the new current outcome through coverage.get without rewriting the scope."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MY6X8N5NMM7ZHKS3DA",
+      "kind": "expected_output",
+      "text": [
+        "Coverage contracts/policy/store/handlers/module and exact membership/count tests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MXH7B40F99KS2BNKA1",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT let Ledger own INGEST manifests, approvals, receipts, or batch retries; accept only opaque references and typed scope facts per DD-LEDGER-RECONCILIATION-CONTRACT."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MXHV34X28AYRCNDJ06",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT infer absence from an incomplete statement or silently exclude transactions outside an explicit scope rule."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MXB64MQQ5ZVS46ZGGB",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT overwrite prior coverage or exception history."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY0DT2MYNZTFWYNNQ0Y12F49",
+      "target_ref_code": "NFR-LEDGER-RECONCILIATION-SAFETY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KY0A32623J1HNH608CS19WJ3",
+      "target_title": "Reconcile deterministically and fail closed",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MYTNDRVVA5JN553ZHJ",
+      "target_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KY0BTQPT00M98Z8NRSF7Y2XP",
+      "target_title": "ReconciliationProjectionDecisionAndCoverage",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MYFQR9N9ZFKK592HFV",
+      "target_ref_code": "TC-LEDGER-RECONCILIATION-COVERAGE-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KY0A4YF6E3R9812TW75FS941",
+      "target_title": "Verify statement coverage and exception accounting",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KY0DT2MX8GN40YM258TPAJYD",
+      "target": "FR-LEDGER-RECONCILIATION-COVERAGE",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY0DT2MY3BZE77D1MVDFP5ZJ",
+      "gate_type": "test-evidence",
+      "description": [
+        "Evidence proves exact one-class membership and no false absence from incomplete scopes."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY0DT2MY9201M37R8M1116SE",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Ledger.ReconciliationCoverageOperationTests --no-restore",
+      "expected_result": "exit 0; at least 22 complete/incomplete scope, exact class, absence, replay, and history cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ]
+}

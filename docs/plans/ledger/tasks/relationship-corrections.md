@@ -22,7 +22,7 @@ Retire or replace one active financial relationship atomically after fully reval
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | `true` |
 | FR-LEDGER-RELATIONSHIP-CORRECTION: Revoke or replace financial relationships | `requirement` | `implements` | `true` |
 | OQ-LEDGER-5: Validate the proposed transfer, refund/reversal, and cash-withdrawal spend policies with representative transactions. | `open_question` | `blocked-by` | `true` |
@@ -112,7 +112,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-REFUNDS](../tasks/refunds.md): Correction must revalidate both transfer and refund policies and modify the shared RelationshipStore after both exist.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSFERS](../tasks/transfers.md): Consumer requires TransferPolicy from its producing task; direct compile edge enforces the declared interface contract.
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history
+- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `implements` -> FR-LEDGER-RELATIONSHIP-CORRECTION: Revoke or replace financial relationships
 - `touches` -> DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts
 - `verifies` -> TC-LEDGER-RELATIONSHIP-CORRECTION-CONTRACT: Verify revoke or replace financial relationships contract

@@ -70,8 +70,8 @@ Prove UC-LEDGER-001 through observable process results and durable-state invaria
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 38 wired operations |
-| VerifiedUC001 | `produces` | UC-LEDGER-001 |  |
+| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 72 provider-neutral operations |
+| VerifiedUC001 | `produces` | UC-LEDGER-001 | workflow verification |
 
 ### Verification
 

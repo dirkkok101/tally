@@ -6,10 +6,10 @@
   "slug": "TRANSACTIONS-RECORD-GET",
   "title": "Implement immutable transaction record and get",
   "description": [
-    "Deliver ledger.transaction.record/get over exact source facts, validated provenance, account state, idempotency, and real SQLite."
+    "Deliver ledger.transaction.record/get over exact source facts, generic initial evidence, account state, explicit unknown attribution/unassigned pool, idempotency, and real SQLite."
   ],
   "objective": [
-    "Record one immutable Canonical Transaction and round-trip every accepted source fact without precision or provenance loss."
+    "Atomically record at most one immutable Canonical Transaction and its privacy-safe initial EvidenceRecord while round-tripping every accepted fact and link exactly."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -57,6 +57,16 @@
       ],
       "sort_order": 2,
       "created_at": "2026-07-18T07:16:36.9987953+00:00"
+    },
+    {
+      "id": "01KY0ECDKR8WSRY21XDFPAA7YB",
+      "target": "TASK-LEDGER-EVIDENCE-REGISTRY",
+      "dependency_type": "compile",
+      "reason": [
+        "Atomic transaction capture consumes EvidenceStore.RegisterInitialAsync."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:59:58.7129554+00:00"
     }
   ],
   "files": [
@@ -126,104 +136,133 @@
   ],
   "interfaces": [
     {
-      "id": "01KXT19BTET2VZZKKC0GY82YC3",
+      "id": "01KY0E33A9S1BS243NV598KTC3",
       "name": "TransactionBaseOperationModule",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "notes": [
+        "record and get descriptors"
+      ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:15:40.4945507+00:00"
+      "created_at": "2026-07-20T18:54:53.2552271+00:00"
     },
     {
-      "id": "01KXT19BTFMYT59GYTJZN7HCFC",
+      "id": "01KY0E33A9QPKC3DWJT9GCECZW",
       "name": "TransactionStore",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-TRANSACTION-FACT",
+      "notes": [
+        "atomic transaction/default-dimension writes"
+      ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:15:40.4945507+00:00"
+      "created_at": "2026-07-20T18:54:53.2552271+00:00"
     },
     {
-      "id": "01KXT19BTFW0TC5JJ8T2Z737CZ",
+      "id": "01KY0E33A9XASMKT4KGEZ71XSM",
       "name": "TransactionDetail",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "notes": [
+        "facts and linked current state"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:15:40.4945507+00:00"
+      "created_at": "2026-07-20T18:54:53.2552271+00:00"
     },
     {
-      "id": "01KXT19BTF2YYGRWMKAD8FBY6Q",
+      "id": "01KY0E33A95ZZHPDMQ9NP2MMFV",
       "name": "AccountStore",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-ACCOUNT",
+      "notes": [
+        "account authority"
+      ],
       "sort_order": 3,
-      "created_at": "2026-07-18T07:15:40.4945507+00:00"
+      "created_at": "2026-07-20T18:54:53.2552271+00:00"
     },
     {
-      "id": "01KXT19BTF6SGWPMBXPWFSPAF0",
+      "id": "01KY0E33A9GRYQK5JK1SXNAG55",
       "name": "Money",
       "direction": "consumes",
       "contract_ref_code": "DD-LEDGER-FINANCIAL-REPRESENTATION",
+      "notes": [
+        "exact values"
+      ],
       "sort_order": 4,
-      "created_at": "2026-07-18T07:15:40.4945507+00:00"
+      "created_at": "2026-07-20T18:54:53.2552271+00:00"
     },
     {
-      "id": "01KXT19BTFJ5F1NADZFSXXFW5V",
+      "id": "01KY0E33A9NHKB8B3P9VM3M7NH",
+      "name": "EvidenceStore.RegisterInitialAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECORD-LINK",
+      "notes": [
+        "transaction-scoped evidence primitive"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-20T18:54:53.2552271+00:00"
+    },
+    {
+      "id": "01KY0E33A9HZ3CYQ86SYEEC8SG",
       "name": "LedgerMutationExecutor.ExecuteAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
-      "sort_order": 5,
-      "created_at": "2026-07-18T07:15:40.4945507+00:00"
+      "notes": [
+        "atomic replay"
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-20T18:54:53.2552271+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KXTFPV10B4CR7Y4EXE6Q3KR6",
+      "id": "01KY0E33A7CZYW16GMN7B2K18K",
       "kind": "acceptance_check",
       "text": [
-        "Valid active asset or liability account, canonical nonzero owner-economic signedAmount, ZAR, required dates/description/provenance, optional source reference, actor, and key create one immutable TransactionDetail."
+        "Valid active asset or liability account, canonical nonzero owner-economic signedAmount, ZAR, required dates/description, closed generic evidence kind, opaque external reference, privacy-safe observation, actor, optional stable payment IDs, and key create one immutable TransactionDetail and one linked EvidenceRecord."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T11:27:42.1123516+00:00"
+      "created_at": "2026-07-20T18:54:53.2552271+00:00"
     },
     {
-      "id": "01KXTFPV11BZ0AHBBNAZ2KV862",
+      "id": "01KY0E33A87NB1JYA0NZQSBTKD",
       "kind": "acceptance_check",
       "text": [
-        "TransactionDate and distinct PostingDate round-trip independently; EffectiveDate is TransactionDate."
+        "TransactionDate and distinct PostingDate round-trip independently; EffectiveDate is TransactionDate; missing payment identities remain explicitly unknown and pool remains explicitly unassigned."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T11:27:42.1123516+00:00"
+      "created_at": "2026-07-20T18:54:53.2552271+00:00"
     },
     {
-      "id": "01KXTFPV112JMCB8GSCSP1PGZ9",
+      "id": "01KY0E33A8WD5KXNC9XRDMS0QE",
       "kind": "acceptance_check",
       "text": [
-        "Missing/zero/malformed/unsupported input or archived/missing account returns the documented stable error and creates no transaction/idempotency row."
+        "Missing/zero/malformed/unsupported input, archived/missing account, incompatible attribution, or forbidden evidence field returns the documented stable error and creates no transaction, evidence link, assignment, or idempotency row."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T11:27:42.1123516+00:00"
+      "created_at": "2026-07-20T18:54:53.2552271+00:00"
     },
     {
-      "id": "01KXTFPV114PJ7WR8J1R60K49X",
+      "id": "01KY0E33A8KDXW0CS8PVC6G4AP",
       "kind": "acceptance_check",
       "text": [
-        "Get returns unchanged source facts; includeHistory exposes empty/available lifecycle, allocation, and relationship collections without mutating."
+        "Get returns unchanged facts plus safe evidence links, current reconciliation state, payment attribution, pool assignment, and requested history without mutating."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T11:27:42.1123516+00:00"
+      "created_at": "2026-07-20T18:54:53.2552271+00:00"
     },
     {
-      "id": "01KXTFPV11257Z5H7F2HY9BK22",
+      "id": "01KY0E33A8575GD7CCDDDRDB0V",
       "kind": "acceptance_check",
       "text": [
-        "Provenance kind is exactly manual_agent|statement_import|other in wire/domain/SQL with no semantic translation; sourceReference uniqueness is enforced per account/provenance."
+        "Identical request or logical evidence replay returns the existing transaction; conflicting key or evidence identity preserves the original; crash injection commits transaction, initial evidence, link, defaults, and replay outcome together or none."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T11:27:42.1123516+00:00"
+      "created_at": "2026-07-20T18:54:53.2552271+00:00"
     },
     {
       "id": "01KXT0P36VQSW2T247BEEFXE6M",
@@ -246,24 +285,34 @@
       "created_at": "2026-07-18T07:05:09.0800297+00:00"
     },
     {
-      "id": "01KXTFPV115GXZNFE206HGK5VE",
+      "id": "01KY0E33A917ZK83Q3VCVD48R9",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT update transaction source facts, embed category/relationship columns, use floating point, infer provenance, or silently normalize bank dates — per governing decisions."
+        "Do NOT update source facts, embed provider provenance, store raw evidence payloads, use a single sourceReference authority, use floating point, or silently normalize bank dates."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T11:27:42.1123516+00:00"
+      "created_at": "2026-07-20T18:54:53.2552271+00:00"
     },
     {
-      "id": "01KXTFPV11V876QNP8BKP65YX5",
+      "id": "01KY0E33A97RK2522XG6JNQFEV",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT accept credentials or expose unmasked account identifiers in results/diagnostics."
+        "Do NOT infer payment instrument, cardholder, spend pool, category, or reconciliation confirmation."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T11:27:42.1123516+00:00"
+      "created_at": "2026-07-20T18:54:53.2552271+00:00"
+    },
+    {
+      "id": "01KY0E33A9XSAVZC59XPKSGN4C",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept credentials or expose unmasked account/payment identifiers in results or diagnostics."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:54:53.2552271+00:00"
     }
   ],
   "references": [
@@ -299,36 +348,46 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT0P36V7PTEHVGGK883CPA7",
+      "id": "01KY0E33A9483AKKT39NGWGK9Z",
       "gate_type": "test-evidence",
       "description": [
-        "Show exact round-trip, distinct dates, enum parity, account restrictions, and idempotency."
+        "Show exact round-trip, generic evidence linkage, explicit unknown/unassigned dimensions, account restrictions, cross-key replay, and atomicity."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-20T18:54:53.2552271+00:00"
     },
     {
-      "id": "01KXT0P36V4PMVHHMFWMHN4G1G",
+      "id": "01KY0E33A94H4MKR35V1J8GHKB",
       "gate_type": "self-review",
       "description": [
-        "Diff contains no mutable source-fact update and no second provenance vocabulary."
+        "Diff contains no mutable source-fact update, provider vocabulary, raw evidence payload, or inferred dimension."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-20T18:54:53.2552271+00:00"
     }
   ],
   "verification_steps": [
     {
-      "id": "01KXT0P36V5G0YFHQ1T0DHK2QA",
+      "id": "01KY0E33A92AQC3JS2DMYEF061",
       "phase": "after",
-      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~TransactionRecordingTests|FullyQualifiedName~TransactionStoreTests' --no-restore",
-      "expected_result": "exit 0; at least 16 exactness/date/provenance/account/replay cases run and 0 fail",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~TransactionRecordingTests --no-restore",
+      "expected_result": "exit 0; at least 14 exactness, date, evidence privacy, default dimension, account, and logical replay cases run and 0 fail",
       "required": 1,
-      "timeout_seconds": 240,
+      "timeout_seconds": 300,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-20T18:54:53.2552271+00:00"
+    },
+    {
+      "id": "01KY0E33A9TG46BF6F41KW4KZR",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~TransactionStoreTests --no-restore",
+      "expected_result": "exit 0; at least 10 real-SQLite uniqueness, atomicity, and crash cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:54:53.2552271+00:00"
     }
   ]
 }

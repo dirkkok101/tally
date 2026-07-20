@@ -6,10 +6,10 @@
   "slug": "VERIFY-UC-007",
   "title": "BackupRecoveryWorkflow",
   "description": [
-    "Verification-only task intentionally has no Implements link: trace UC-LEDGER-007 main scenario and every failure path through the published CLI."
+    "Verification-only task with no Implements link: trace revised UC-LEDGER-007 through Release backup and restore operations."
   ],
   "objective": [
-    "Prove UC-LEDGER-007 through observable process results and durable-state invariants."
+    "Prove backup verification and owner-authorized restore preserve every durable provider-neutral state type, replay outcome, rule, count, and exact total."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -40,33 +40,36 @@
   ],
   "interfaces": [
     {
-      "id": "01KXT19JRSJYC7WR4FN88X2GEM",
+      "id": "01KY0EB012F92GCT73M28Y1G7J",
       "name": "PublishedTallyFixture",
       "direction": "consumes",
       "notes": [
         "Release published-process E2E fixture"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:15:47.6088492+00:00"
+      "created_at": "2026-07-20T18:59:12.0334092+00:00"
     },
     {
-      "id": "01KXT19JRTT708AZ3W3JSH66WX",
+      "id": "01KY0EB012PF0FZDP8B08FMXQE",
       "name": "CompletePublicContract",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "Exactly 38 wired operations"
+        "Exactly 72 provider-neutral operations"
       ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:15:47.6088492+00:00"
+      "created_at": "2026-07-20T18:59:12.0334092+00:00"
     },
     {
-      "id": "01KXT19JRT38FN6F3PYV8W5XAX",
+      "id": "01KY0EB012KE0FVTVZSRF7HT35",
       "name": "VerifiedUC007",
       "direction": "produces",
       "contract_ref_code": "UC-LEDGER-007",
+      "notes": [
+        "complete-state backup and restore workflow"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:15:47.6088492+00:00"
+      "created_at": "2026-07-20T18:59:12.0334092+00:00"
     }
   ],
   "links": [
@@ -80,44 +83,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT8HKZNHFM5VWDGBZCHGBG5",
+      "id": "01KY0EB011R93D3GVJ7DXMPEKB",
       "kind": "acceptance_check",
       "text": [
-        "Create produces one owner-only Verified Ledger Backup; independent verify confirms versions, integrity, every durable type/history, relationships, idempotency, counts, and exact totals without live mutation."
+        "Backup create publishes one 0600 artifact only after independent verification of facts/histories, dimensions, evidence/reconciliation, relationships, request/logical replay outcomes, per-type counts, privacy rules, and exact named/dimensional totals."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T09:22:31.0288043+00:00"
+      "created_at": "2026-07-20T18:59:12.0334092+00:00"
     },
     {
-      "id": "01KXT8HKZPYAXX7T9AE3SJZ2N7",
+      "id": "01KY0EB012RGH68RFFNBF7PYP4",
       "kind": "acceptance_check",
       "text": [
-        "Prepare restores/validates a separate candidate; only explicit authorized activation against expected fingerprint switches CURRENT and retains prior generation."
+        "Restore prepare uses a separate private generation and reproduces the normalized complete-state report; incompatible, corrupt, incomplete, privacy-invalid, or permission-invalid artifacts never affect CURRENT."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T09:22:31.0288043+00:00"
+      "created_at": "2026-07-20T18:59:12.0334092+00:00"
     },
     {
-      "id": "01KXT8HKZPAEQN0PX0EVJBHYHM",
+      "id": "01KY0EB012HNY90FFF0V3CF4K4",
       "kind": "acceptance_check",
       "text": [
-        "Unsafe destination/full disk/corrupt/incompatible/incomplete/unavailable protection/unauthorized/mismatched candidate paths preserve the authoritative Ledger."
+        "Activation requires explicit authorization and expected current fingerprint, revalidates under lock, switches atomically, retains the previous generation, and remains replay-safe across crash boundaries."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T09:22:31.0288043+00:00"
-    },
-    {
-      "id": "01KXT8HKZPN6THJGS7H7Y87JM8",
-      "kind": "acceptance_check",
-      "text": [
-        "Identical create/activate retries reproduce original artifacts/generation outcomes without second effects."
-      ],
-      "required": 1,
-      "sort_order": 3,
-      "created_at": "2026-07-18T09:22:31.0288043+00:00"
+      "created_at": "2026-07-20T18:59:12.0334092+00:00"
     },
     {
       "id": "01KXT126TAXDFFWPD66DR4S464",
@@ -140,24 +133,24 @@
       "created_at": "2026-07-18T07:11:45.9941647+00:00"
     },
     {
-      "id": "01KXT126TASP7BKT64E780DW64",
+      "id": "01KY0EB012D96SCKRM30JZ6SPY",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT verify by comparing only file bytes or activate directly over the live DB."
+        "Do NOT omit any durable evidence, reconciliation, payment, pool, or logical-effect class from source/candidate comparison."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-20T18:59:12.0334092+00:00"
     },
     {
-      "id": "01KXT126TACDP4VYJ29QRAPMZA",
+      "id": "01KY0EB012AJEMZKDSWT5JVCJS",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT omit any UC-LEDGER-007 complete-state or authorization failure."
+        "Do NOT expose a candidate as current before complete revalidation and authorization."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-20T18:59:12.0334092+00:00"
     },
     {
       "id": "01KXT126TANQHVFC7ZPNXFB7FM",

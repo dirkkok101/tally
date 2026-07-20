@@ -1,0 +1,190 @@
+{
+  "id": "01KY0DT2MF89NTE2DG7YFEEGQ9",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-VERIFY-UC-014",
+  "slug": "VERIFY-UC-014",
+  "title": "StatementReconciliationWorkflow",
+  "description": [
+    "Verification-only task with no Implements link: trace UC-LEDGER-014 through the Release published CLI."
+  ],
+  "objective": [
+    "Prove match-first statement reconciliation creates at most one canonical transaction effect and never guesses ambiguity."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 160,
+  "created_at": "2026-07-20T18:49:57.6488706+00:00",
+  "dependencies": [
+    {
+      "id": "01KY0DT2N0C0MTSANFQW3DXTB2",
+      "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Use-case verification invokes the fully wired published public contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY0DT2N0991FKPR957VCJG4G",
+      "path": "tests/Tally.Tests/EndToEnd/UC014StatementReconciliationWorkflowTests.cs",
+      "action": "test",
+      "role": "published-process verification",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY0DT2N0DBANN30T1WXPPAWE",
+      "name": "PublishedTallyFixture",
+      "direction": "consumes",
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N01A7GYSSKRV2FTXKJ",
+      "name": "CompletePublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "72 provider-neutral operations"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N0ZWGD1872XG4ZY3PZ",
+      "name": "VerifiedUC014",
+      "direction": "produces",
+      "contract_ref_code": "UC-LEDGER-014",
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY0DT2N02ZQTB73PD2SAF7VA",
+      "kind": "acceptance_check",
+      "text": [
+        "A strong unique row confirms an existing transaction without creating another; an approved zero/guard-free row creates one statement-only fact with unknown attribution and unassigned pool; multiple candidates remain ambiguous without confirmation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N08997PBSM01SSTXWA",
+      "kind": "acceptance_check",
+      "text": [
+        "Replay, unsupported policy, missing basis, candidate conflict/inactivity, other-link conflict, statement-only failure, and changed idempotency outcome cover every UC-LEDGER-014 failure path."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N06A1VYVDNVGT4CFA1",
+      "kind": "acceptance_check",
+      "text": [
+        "Process output exposes policy/basis/state/history and durable inspection proves at most one canonical effect."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N09AWM9FV1ZKYSACF9",
+      "kind": "expected_output",
+      "text": [
+        "UC014StatementReconciliationWorkflowTests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N0WTSMDK4WKCTVAAS7",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT bypass the public CLI or substitute an unvalidated test policy."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N064939SKS3H5T3W76",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept a test that applies ambiguity or omits statement-only atomic initialization."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY0DT2N0TVM9EYE6R0C1G6P1",
+      "target_ref_code": "UC-LEDGER-014",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KY07G0Y14C1AME6KD5MXYS67",
+      "target_title": "Reconcile statement evidence to a canonical transaction",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N09S7KNVN9AKQBJ5AM",
+      "target_ref_code": "FR-LEDGER-STATEMENT-RECONCILIATION",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KY09SNNG25N20YWX3J86S4RY",
+      "target_title": "Apply statement reconciliation outcomes",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N08FEBTS8PMHFY5S9D",
+      "target_ref_code": "TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KY0A4XADY5ZV5Z0N020JPQTP",
+      "target_title": "Verify match-first statement reconciliation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY0DT2N0BN4EX1ZK302T3HCM",
+      "gate_type": "test-evidence",
+      "description": [
+        "Evidence proves one canonical effect across every statement disposition and replay."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY0DT2N0PG8X3WETCM19SHVP",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.EndToEnd.UC014StatementReconciliationWorkflowTests --no-restore",
+      "expected_result": "exit 0; at least 14 match, statement-only, ambiguity, conflict, crash, and replay scenarios run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 720,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ]
+}

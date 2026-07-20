@@ -6,10 +6,10 @@
   "slug": "STORAGE-EVOLUTION",
   "title": "Implement safe storage evolution and status",
   "description": [
-    "Deliver status plus isolated prepare/activate evolution with preflight, recovery point, complete validation, and atomic generation switch."
+    "Deliver storage status plus isolated prepare/activate evolution with preflight, recovery point, complete-state validation, and atomic generation switch."
   ],
   "objective": [
-    "Upgrade supported storage exactly once while every failure leaves the original verified generation authoritative."
+    "Upgrade supported storage exactly once while every failure leaves the original fully verified provider-neutral generation authoritative."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -167,54 +167,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT0W0YYJCYYKR488R5BPRSK",
+      "id": "01KY0E8A99K2MEMBZCJP0AAQ9E",
       "kind": "acceptance_check",
       "text": [
-        "storage.status returns contract/storage versions, current generation/fingerprint, permissions, integrity, and host-protection evidence without financial payload."
+        "storage.status returns contract/storage/reconciliation-policy versions, current generation/fingerprint, permissions, integrity, and host-protection evidence without financial or evidence payload."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.2328650+00:00"
     },
     {
-      "id": "01KXT0W0YY4FM5ZFRR6K05TCFX",
+      "id": "01KY0E8A990WKNAJ18ZRT92FA7",
       "kind": "acceptance_check",
       "text": [
         "evolution.prepare validates source integrity, compatibility, permissions, free space, protection, and recovery requirements before transformation."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.2328650+00:00"
     },
     {
-      "id": "01KXT0W0YYAWSSQYFY9XBFMKDK",
+      "id": "01KY0E8A99WHJ6ZCWJRXHACTRN",
       "kind": "acceptance_check",
       "text": [
-        "A verified recovery point exists before isolated candidate transformation; candidate validation compares version, all durable state/history, relationships, idempotency, counts, integrity, and exact declared totals."
+        "A verified recovery point exists before isolated transformation; candidate validation compares every durable fact/history/dimension/evidence/reconciliation/relationship/replay type, count, integrity rule, and exact declared total/cell."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.2328650+00:00"
     },
     {
-      "id": "01KXT0W0YY05TZPHFJXFFXNPP8",
+      "id": "01KY0E8A99DNGRDTD8NTX2HSYM",
       "kind": "acceptance_check",
       "text": [
-        "evolution.activate requires expected current fingerprint and explicit authorization, revalidates under lock, atomically switches once, and retains recovery generation."
+        "evolution.activate requires expected current fingerprint and explicit authorization, revalidates under lock, atomically switches once, and retains the recovery generation."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.2328650+00:00"
     },
     {
-      "id": "01KXT0W0YY4Z84CPW46AWBYYAQ",
+      "id": "01KY0E8A9AJD29AK0DYJH48Q9Q",
       "kind": "acceptance_check",
       "text": [
-        "Any preflight/conversion/validation/activation failure leaves original current and reports stable version/integrity/host error."
+        "Any preflight, conversion, privacy, validation, or activation failure leaves original current and reports a stable version/integrity/host error."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-20T18:57:44.2328650+00:00"
     },
     {
       "id": "01KXT0W0YYV8T7D7VFRJ6RMK63",

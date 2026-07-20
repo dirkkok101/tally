@@ -1,0 +1,298 @@
+{
+  "id": "01KY0DT2MC9P9NFCCFDVP9BB2N",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06A6E7WPPCP8KDAKCJ1H4",
+  "ref_code": "TASK-LEDGER-PAYMENT-ATTRIBUTION",
+  "slug": "PAYMENT-ATTRIBUTION",
+  "title": "Implement transaction payment attribution",
+  "description": [
+    "Deliver independent instrument/cardholder assignment and correction over atomically initialized unknown states."
+  ],
+  "objective": [
+    "Assign or correct payment instrument and cardholder independently while preserving explicit unknown state and attributable history."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 45,
+  "created_at": "2026-07-20T18:49:57.6488706+00:00",
+  "decisions": [
+    {
+      "id": "01KY0DT2MN5MD2PVTXMM04WWE6",
+      "target": "DD-LEDGER-DIMENSIONAL-ATTRIBUTION",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MNTR7T8M22MWNR4VNA",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KY0DT2MPBGJHK2E1FZR26YN4",
+      "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
+      "dependency_type": "compile",
+      "reason": [
+        "Assignment and correction consume LedgerMutationExecutor.ExecuteAsync."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPPVJTJBVTXTE07SY2",
+      "target": "TASK-LEDGER-PAYMENT-IDENTITIES",
+      "dependency_type": "compile",
+      "reason": [
+        "Attribution validates local instrument and cardholder identities through PaymentIdentityStore."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPVN04N8X8ZSNGMCN9",
+      "target": "TASK-LEDGER-TRANSACTIONS-RECORD-GET",
+      "dependency_type": "compile",
+      "reason": [
+        "Attribution consumes TransactionStore and its atomically initialized unknown projection."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY0DT2MNBBX3202BRH3EBK64",
+      "path": "src/Tally/Contracts/Ledger/Dimensions/PaymentAttributionContracts.cs",
+      "action": "create",
+      "role": "public contracts",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MN7QYGRGAJA4SJP2EN",
+      "path": "src/Tally/Domain/Ledger/Dimensions/PaymentAttributionPolicy.cs",
+      "action": "create",
+      "role": "domain transitions",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPDZZ0QCE8QTBDHKWB",
+      "path": "src/Tally/Features/Ledger/Dimensions/PaymentAttributionHandlers.cs",
+      "action": "create",
+      "role": "commands",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPJ5Y8PNA31XFEHSV6",
+      "path": "src/Tally/Infrastructure/Storage/Dimensions/PaymentAttributionStore.cs",
+      "action": "create",
+      "role": "SQLite history",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPRFJ028Y2R2SCSWMS",
+      "path": "src/Tally/Features/Ledger/Dimensions/PaymentAttributionOperationModule.cs",
+      "action": "create",
+      "role": "explicit descriptors and DI",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPA1563W92TWTQDMHJ",
+      "path": "tests/Tally.Tests/Ledger/PaymentAttributionOperationTests.cs",
+      "action": "test",
+      "role": "contract and persistence tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY0DT2MPR5PCFTW5NCN6HN5S",
+      "name": "PaymentAttributionStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-PAYMENT-ATTRIBUTION",
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MP8ER8QQY6C4YAMN5Q",
+      "name": "PaymentAttributionOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS",
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPGS700TNQ78XHBP4T",
+      "name": "TransactionStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-FACT",
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MP6QNGVMPJASSKR252",
+      "name": "PaymentIdentityStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-PAYMENT-ATTRIBUTION",
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPCW4VMTH0V2105044",
+      "name": "LedgerMutationExecutor.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
+      "sort_order": 4,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY0DT2MNMMVNF74N551EKXSD",
+      "kind": "acceptance_check",
+      "text": [
+        "Every transaction exposes independent instrument and cardholder projections initialized as unknown; assign/correct can set either dimension known or unknown without changing account, category, pool, evidence, or reconciliation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MN1GD853T9JV79CFF2",
+      "kind": "acceptance_check",
+      "text": [
+        "Missing/inactive transaction, absent/archived/incompatible identity, same-as-active correction, stale prior state, or conflicting replay returns the declared stable outcome and preserves current attribution."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MNMM4WGCKYF6ZS54DR",
+      "kind": "acceptance_check",
+      "text": [
+        "Successful correction appends actor, reason, trusted time, and predecessor history; get/history returns the exact active projection and chain."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MNE3Y95P1VJMFQGPDY",
+      "kind": "expected_output",
+      "text": [
+        "Payment attribution contracts, policy, store, handlers, operation module, and real-SQLite tests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MNCDJRJ3ZMCVQQP870",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT infer attribution from account, pool, category, description, evidence kind, or provider wording — rejected per DD-LEDGER-DIMENSIONAL-ATTRIBUTION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MNXJS8XNM2HQJ9VHE2",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT overwrite attribution rows or inherit attribution across supersession — rejected per DD-LEDGER-IMMUTABLE-HISTORY."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MN8VJYAP402ZNSFA4D",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept full provider identifiers."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY0DT2MPMNNZJBGFPSJW1M7Z",
+      "target_ref_code": "DM-LEDGER-PAYMENT-ATTRIBUTION",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KY0BTRE9PBBFAS2M7GP801QM",
+      "target_title": "PaymentInstrumentCardholderAndAttribution",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPA2F8QWE82RA5WJYA",
+      "target_ref_code": "DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KY0BTVZY98NRVEK3TRX5A0D0",
+      "target_title": "PaymentAttributionAndPoolOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MP25P27ET3QKASRMS6",
+      "target_ref_code": "TC-LEDGER-PAYMENT-ATTRIBUTION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KY0A4Z0QPEYR22E7YJP5THJW",
+      "target_title": "Verify payment instrument and cardholder attribution",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KY0DT2MNAT0877E2DP6A9MKE",
+      "target": "FR-LEDGER-PAYMENT-ATTRIBUTION",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY0DT2MP8YGMDS5BT9ZR4QDT",
+      "gate_type": "test-evidence",
+      "description": [
+        "Tests prove both dimensions remain independent and history is append-only."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY0DT2MP44YQEPNCXY11AE5N",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Ledger.PaymentAttributionOperationTests --no-restore",
+      "expected_result": "exit 0; at least 16 initialization, assignment, correction, independence, and replay cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ]
+}

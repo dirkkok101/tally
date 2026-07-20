@@ -1,0 +1,190 @@
+{
+  "id": "01KY0DT2MFSPCQ5JRSKZ235E2R",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-VERIFY-UC-016",
+  "slug": "VERIFY-UC-016",
+  "title": "StatementCoverageWorkflow",
+  "description": [
+    "Verification-only task with no Implements link: trace UC-LEDGER-016 through the Release published CLI."
+  ],
+  "objective": [
+    "Prove complete statement scopes account exactly for accepted evidence and eligible prior transactions while incomplete scopes cannot create false absence."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 180,
+  "created_at": "2026-07-20T18:49:57.6488706+00:00",
+  "dependencies": [
+    {
+      "id": "01KY0DT2N1FP3A3651V48R36R3",
+      "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Use-case verification invokes the fully wired published public contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY0DT2N1EJVQ5HA5XNMAHA6T",
+      "path": "tests/Tally.Tests/EndToEnd/UC016StatementCoverageWorkflowTests.cs",
+      "action": "test",
+      "role": "published-process verification",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY0DT2N1SJQPG8PQ70APY8YK",
+      "name": "PublishedTallyFixture",
+      "direction": "consumes",
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N1CETP27G5F0CP6VGR",
+      "name": "CompletePublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "72 provider-neutral operations"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N1YSNVWMEV60SDTBCB",
+      "name": "VerifiedUC016",
+      "direction": "produces",
+      "contract_ref_code": "UC-LEDGER-016",
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY0DT2N167TRFWZQKX32A587",
+      "kind": "acceptance_check",
+      "text": [
+        "A complete approved scope returns counts and stable membership for reconciled, statement-only, recorded-absent, ambiguous, owner-confirmed, and exception outcomes with every eligible item represented once."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N13WVM7TXR8CN12NBD",
+      "kind": "acceptance_check",
+      "text": [
+        "Incomplete/unapproved/invalid scope, integrity failure, duplicate class membership, omitted scope rule, replay conflict, and later decision change cover every UC-LEDGER-016 failure/history path."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N1CTP2JD8SK61MQ1RR",
+      "kind": "acceptance_check",
+      "text": [
+        "Later evidence preserves the historical scoped exception while coverage.get exposes the new current outcome."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N1WCNCX4YEZS8E5EKE",
+      "kind": "expected_output",
+      "text": [
+        "UC016StatementCoverageWorkflowTests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N1F5G5E0127XEDZV6W",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT construct coverage from INGEST private state or declare absence from an incomplete scope."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N1R8XEZVRJ9DDANBP1",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT compare counts without verifying exact stable membership."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY0DT2N1C43KNQFRPCV23SKF",
+      "target_ref_code": "UC-LEDGER-016",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KY07G28VE62PYDS9ENE96A1C",
+      "target_title": "Review statement coverage exceptions",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N13A5HJZ64CWH39E60",
+      "target_ref_code": "FR-LEDGER-RECONCILIATION-COVERAGE",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KY09SPSFJPG60WKJ26MAYG1V",
+      "target_title": "Report statement coverage and exceptions",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N1M66GZRNPAEZHX8ZA",
+      "target_ref_code": "TC-LEDGER-RECONCILIATION-COVERAGE-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KY0A4YF6E3R9812TW75FS941",
+      "target_title": "Verify statement coverage and exception accounting",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY0DT2N1CYV2B6JJQ8C94V2J",
+      "gate_type": "test-evidence",
+      "description": [
+        "Evidence proves exact one-class membership and incomplete-scope rejection."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY0DT2N1F4VVST7NP0EEWRQV",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.EndToEnd.UC016StatementCoverageWorkflowTests --no-restore",
+      "expected_result": "exit 0; at least 12 scope, exact-membership, false-absence, replay, and historical-correction scenarios run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 720,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ]
+}

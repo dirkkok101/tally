@@ -12,17 +12,17 @@
 
 ## Summary
 
-Deliver attributable void/supersede behavior that preserves source facts and atomically retires every active financial relationship.
+Deliver attributable void/supersede behavior that preserves source facts and evidence/decision history while atomically retiring active financial relationships.
 
 ## Objective
 
-Ensure default active state counts only the valid transaction outcome while complete correction and retired-link history remains queryable.
+Ensure default active state counts only the valid transaction outcome while evidence, reconciliation, dimensional, correction, and retired-link history remains complete and current reconciliation exceptions are explicit.
 
 ## References
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts | `data_model` | `touches` | `true` |
 | FR-LEDGER-TRANSACTION-CORRECTION: Void or supersede erroneous transactions | `requirement` | `implements` | `true` |
 | TC-LEDGER-TRANSACTION-CORRECTION-CONTRACT: Verify void or supersede erroneous transactions contract | `test_case` | `verifies` | `true` |
@@ -35,21 +35,22 @@ Ensure default active state counts only the valid transaction outcome while comp
 | [TASK-LEDGER-REFUNDS](../tasks/refunds.md) | `compile` | Transaction correction must retire both transfer and refund roles. |
 | [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
 | [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md) | `compile` | Consumer requires TransactionBaseOperationModule from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md) | `compile` | Corrections consume ReconciliationStateReducer to retain decisions and derive current exceptions. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- Void active transaction with reason appends attributable event, marks inactive, retires every active transfer/refund atomically, and default actuals exclude it.
-- Supersede validates and creates one independent replacement, appends linkage/event, inactivates original, retires active relationships, and never copies relationships automatically.
-- Any replacement validation or relationship-retirement failure leaves original and all links unchanged and creates no replacement/idempotency outcome.
-- History detail returns original/replacement facts, reason, actor/time, allocation history, and retired relationship IDs.
-- Identical correction replay returns original outcome; incompatible second correction returns stable lifecycle/conflict.
+- Void appends an attributable lifecycle event, marks the transaction inactive, retires every active transfer/refund atomically, preserves evidence/reconciliation decision history, and exposes affected confirmations as current reconciliation exceptions.
+- Supersede validates and creates one independent replacement with explicit new evidence and requested attribution only; it never copies relationships, confirming evidence, category, pool, instrument, or cardholder state automatically.
+- Any replacement validation, relationship retirement, exception projection, or write failure leaves original, links, evidence decisions, and current-state projections unchanged and creates no replacement/idempotency outcome.
+- History returns original/replacement facts, reason, actor/time, assignment/attribution history, retained evidence/decision history, retired relationship IDs, and the explicit current reconciliation consequence.
+- Identical correction replay returns the original outcome; an incompatible second correction returns stable lifecycle/conflict.
 
 ### Failure Criteria
 
-- Do NOT edit/delete source facts, copy relationships to replacement, partially retire links, or implement general event sourcing — rejected per DD-LEDGER-IMMUTABLE-HISTORY.
-- Do NOT implement a correction path that bypasses RelationshipStore.RetireForTransactionAsync.
+- Do NOT move or silently reconfirm evidence, reconciliation decisions, category, pool, payment attribution, or relationships onto a replacement.
+- Do NOT delete a decision made against the original; retain it historically and derive a current exception or unresolved state.
 
 ### Expected Outputs
 
@@ -80,12 +81,13 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| TransactionOperationModule | `produces` | DM-LEDGER-TRANSACTION-CONTRACTS |  |
-| TransactionBaseOperationModule | `consumes` | DM-LEDGER-TRANSACTION-CONTRACTS |  |
-| TransactionStore.VoidAsync | `produces` | DM-LEDGER-TRANSACTION-HISTORY |  |
-| TransactionStore.SupersedeAsync | `produces` | DM-LEDGER-TRANSACTION-HISTORY |  |
-| RelationshipStore.RetireForTransactionAsync | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP |  |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD |  |
+| TransactionOperationModule | `produces` | DM-LEDGER-TRANSACTION-CONTRACTS | void and supersede descriptors |
+| TransactionBaseOperationModule | `consumes` | DM-LEDGER-TRANSACTION-CONTRACTS | record/get composition |
+| TransactionStore.VoidAsync | `produces` | DM-LEDGER-TRANSACTION-HISTORY | atomic void history |
+| TransactionStore.SupersedeAsync | `produces` | DM-LEDGER-TRANSACTION-HISTORY | independent replacement |
+| RelationshipStore.RetireForTransactionAsync | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP | retire active financial links |
+| ReconciliationStateReducer | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY | preserve history and expose current exception |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD | atomic replay |
 
 ### Verification
 
@@ -109,10 +111,11 @@ No bead references recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md): Corrections consume ReconciliationStateReducer to retain decisions and derive current exceptions.
 - `depends-on:compile` -> [TASK-LEDGER-REFUNDS](../tasks/refunds.md): Transaction correction must retire both transfer and refund roles.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Consumer requires TransactionBaseOperationModule from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSFERS](../tasks/transfers.md): Transaction correction consumes RelationshipStore.RetireForTransactionAsync.
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history
+- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `implements` -> FR-LEDGER-TRANSACTION-CORRECTION: Void or supersede erroneous transactions
 - `touches` -> DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts
 - `verifies` -> TC-LEDGER-TRANSACTION-CORRECTION-CONTRACT: Verify void or supersede erroneous transactions contract

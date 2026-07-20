@@ -6,10 +6,10 @@
   "slug": "ACTUALS-SNAPSHOT",
   "title": "Implement atomic snapshot actuals pagination",
   "description": [
-    "Expose ledger.actuals.query with one BEGIN IMMEDIATE first-page snapshot transaction and read-only cursor pages."
+    "Expose ledger.actuals.query with one BEGIN IMMEDIATE first-page snapshot transaction over exact multi-dimensional current state and read-only cursor pages."
   ],
   "objective": [
-    "Return stable cross-process pages and full-set totals despite later writes, without cursor exposure before snapshot commit."
+    "Return stable cross-process pages, exact full-set totals, and pool/category matrices despite later writes, without exposing a cursor before snapshot commit."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -133,54 +133,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT0SMEAESN5XXFR3QQNKSGR",
+      "id": "01KY0E882B8F9ZMSYQC9NCVJKW",
       "kind": "acceptance_check",
       "text": [
-        "First-page request accepts filters+pageSize only, acquires single-writer lock, and in one BEGIN IMMEDIATE reads active state, computes all items/totals, inserts snapshot/items, commits, then emits first page/cursor/expiry."
+        "First-page request accepts canonical filters plus pageSize, acquires the writer lock, and in one BEGIN IMMEDIATE reads active facts, dimensions, evidence/reconciliation and relationships; computes items/totals/cells; inserts snapshot/items; commits; then emits page/cursor/expiry."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:41.9632927+00:00"
     },
     {
-      "id": "01KXT0SMEAEEDP4F8B8WVFT44M",
+      "id": "01KY0E882CPWM0W2AYNRXPD4Y9",
       "kind": "acceptance_check",
       "text": [
         "Busy before acquisition returns LEDGER-SNAPSHOT-BUSY; cancellation/crash/write failure before commit returns no cursor and leaves no partial usable snapshot."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:41.9632927+00:00"
     },
     {
-      "id": "01KXT0SMEAMK36X7VETCHWCKMC",
+      "id": "01KY0E882C94HGN0KP9YNRJ78G",
       "kind": "acceptance_check",
       "text": [
-        "Later request accepts cursor only on a read-only connection and returns fixed ordinal projections/totals despite unrelated corrections after first page."
+        "Later cursor-only requests read fixed ordinal projections, named totals, and dimensional cells despite unrelated writes or corrections after first page."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:41.9632927+00:00"
     },
     {
-      "id": "01KXT0SMEAZ8W5G0GBZ24QTMRQ",
+      "id": "01KY0E882CS6EBBEB977NRDX3N",
       "kind": "acceptance_check",
       "text": [
         "Changed filters, malformed/expired/incompatible/stale-generation cursor returns its documented stable error and no partial page."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:41.9632927+00:00"
     },
     {
-      "id": "01KXT0SMEA9ZNPKK3ZF23Z39Q7",
+      "id": "01KY0E882CGJWKKB18RPH9VQVQ",
       "kind": "acceptance_check",
       "text": [
-        "All pages contain each selected transaction exactly once in EffectiveDate/ULID order; snapshot rows are opportunistically cleaned and excluded from backup."
+        "All pages contain each selected transaction exactly once in EffectiveDate/ULID order; snapshots retain explicit unknown/unassigned buckets, are opportunistically cleaned, and are excluded from backup."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:41.9632927+00:00"
     },
     {
       "id": "01KXT0SMEAH8Y3D95Q7G1ARMAJ",

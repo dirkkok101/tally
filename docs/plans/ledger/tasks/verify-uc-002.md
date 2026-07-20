@@ -12,11 +12,11 @@
 
 ## Summary
 
-Verification-only task intentionally has no Implements link: trace UC-LEDGER-002 main scenario and every failure path through the published CLI.
+Verification-only task with no Implements link: trace revised UC-LEDGER-002 through the Release published CLI and real SQLite state.
 
 ## Objective
 
-Prove UC-LEDGER-002 through observable process results and durable-state invariants.
+Prove one canonical transaction plus generic initial evidence is atomic, privacy-safe, replay-safe, and returned with explicit unknown/unassigned dimensions and reconciliation state.
 
 ## References
 
@@ -39,14 +39,14 @@ Prove UC-LEDGER-002 through observable process results and durable-state invaria
 
 ### Acceptance Checks
 
-- A discovered record schema accepts exact signed ZAR/date/provenance facts for an active account and get round-trips them byte-for-byte logically.
-- Invalid amount/currency/date/provenance/key and missing/archived account return their stable errors and create no transaction.
-- Identical replay returns the same transaction; conflicting replay preserves original; injected storage failure commits all rows or none.
+- A discovered record schema accepts exact signed ZAR/date facts, generic evidence allowlist fields, optional stable payment IDs, and idempotency identity for an active account; get round-trips facts, evidence link, current reconciliation state, payment attribution, and pool exactly.
+- Provider/raw payload, full identifier, invalid fact/evidence/attribution/key, and missing/archived account failures create no transaction, evidence, link, assignment, or replay row.
+- Identical request or cross-key logical evidence replay returns the existing result; conflict preserves the original; crash injection proves transaction, evidence link, unknown/unassigned defaults, and replay outcome commit together or none.
 
 ### Failure Criteria
 
-- Do NOT compare floating-point representations or bypass the public process contract.
-- Do NOT omit UC-LEDGER-002 storage and replay failures.
+- Do NOT use transport provenance, a single sourceReference authority, provider payloads, or inferred payment/pool/category state in the fixture.
+- Do NOT accept aggregate-only atomicity evidence; inspect every durable row class.
 
 ### Expected Outputs
 
@@ -71,8 +71,8 @@ Prove UC-LEDGER-002 through observable process results and durable-state invaria
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 38 wired operations |
-| VerifiedUC002 | `produces` | UC-LEDGER-002 |  |
+| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 72 provider-neutral operations |
+| VerifiedUC002 | `produces` | UC-LEDGER-002 | canonical transaction and initial evidence workflow |
 
 ### Verification
 

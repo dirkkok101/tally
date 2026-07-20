@@ -4,12 +4,12 @@
   "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
   "ref_code": "TASK-LEDGER-GATE-INT-CATALOGUE-TRANSACTION-BUNDLE",
   "slug": "GATE-INT-CATALOGUE-TRANSACTION-BUNDLE",
-  "title": "Compose the catalogue and transaction operation bundle",
+  "title": "Compose the financial-dimension, transaction, and evidence bundle",
   "description": [
-    "Convergence gate intentionally has no Implements link: compose the completed account, category, transaction, and allocation modules without changing their contracts."
+    "Convergence gate intentionally has no Implements link: compose account, category, payment identity/attribution, spend-pool, transaction, allocation, and evidence modules without changing their contracts."
   ],
   "objective": [
-    "Produce one deterministic 17-operation bundle for all catalogue and transaction commands, rejecting missing, duplicate, or version-incompatible descriptors before dispatch."
+    "Produce one deterministic 42-operation bundle for financial dimensions, canonical transaction lifecycle, and generic evidence, rejecting missing, duplicate, or incompatible descriptors before dispatch."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -47,6 +47,66 @@
       "created_at": "2026-07-18T07:29:01.9775135+00:00"
     },
     {
+      "id": "01KY0ECM8EGAN7FMQGDHJ9N95B",
+      "target": "TASK-LEDGER-EVIDENCE-LINKING",
+      "dependency_type": "compile",
+      "reason": [
+        "The 42-operation bundle consumes supporting evidence linkage."
+      ],
+      "sort_order": 9,
+      "created_at": "2026-07-20T19:00:05.5198485+00:00"
+    },
+    {
+      "id": "01KY0ECK5W00W9R6R5QHFD6QC7",
+      "target": "TASK-LEDGER-EVIDENCE-REGISTRY",
+      "dependency_type": "compile",
+      "reason": [
+        "The 42-operation bundle consumes evidence registration operations."
+      ],
+      "sort_order": 8,
+      "created_at": "2026-07-20T19:00:04.4138503+00:00"
+    },
+    {
+      "id": "01KY0ECFK1FTDARHGMC22DSM4D",
+      "target": "TASK-LEDGER-PAYMENT-ATTRIBUTION",
+      "dependency_type": "compile",
+      "reason": [
+        "The 42-operation bundle consumes payment-attribution operations."
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-20T19:00:00.7377629+00:00"
+    },
+    {
+      "id": "01KY0ECEK6JA2K97W0QRVY7B3T",
+      "target": "TASK-LEDGER-PAYMENT-IDENTITIES",
+      "dependency_type": "compile",
+      "reason": [
+        "The 42-operation bundle consumes payment-instrument and cardholder modules."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-20T18:59:59.7195960+00:00"
+    },
+    {
+      "id": "01KY0ECHZ5QTTRPEZGKF8DYT6Z",
+      "target": "TASK-LEDGER-POOL-ASSIGNMENTS",
+      "dependency_type": "compile",
+      "reason": [
+        "The 42-operation bundle consumes pool-assignment operations."
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-20T19:00:03.1744659+00:00"
+    },
+    {
+      "id": "01KY0ECGMSY64MKC46EGF8QVYG",
+      "target": "TASK-LEDGER-SPEND-POOLS",
+      "dependency_type": "compile",
+      "reason": [
+        "The 42-operation bundle consumes spend-pool catalogue operations."
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-20T19:00:01.8181575+00:00"
+    },
+    {
       "id": "01KXT21TGVQDHY99FJKVAFA394",
       "target": "TASK-LEDGER-TRANSACTION-CORRECTIONS",
       "dependency_type": "compile",
@@ -79,86 +139,167 @@
   ],
   "interfaces": [
     {
-      "id": "01KXT21TGTP1JYWWWM52ZMQBGV",
+      "id": "01KY0E8BETJ227D6E97K7CWTRV",
       "name": "CatalogueTransactionOperationBundle",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "42-operation dimension/transaction/evidence bundle"
+      ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T18:57:45.4333516+00:00"
     },
     {
-      "id": "01KXT21TGT5K9CWZG9AK526P5T",
+      "id": "01KY0E8BEVWWGCW3ZB9B5BPKE3",
       "name": "AccountOperationModule",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
+      "notes": [
+        "5 operations"
+      ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T18:57:45.4333516+00:00"
     },
     {
-      "id": "01KXT21TGTR9157Z08MSH5ME4Q",
+      "id": "01KY0E8BEVQ9FBQBA48CFR5CXM",
       "name": "CategoryOperationModule",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
+      "notes": [
+        "6 operations"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T18:57:45.4333516+00:00"
     },
     {
-      "id": "01KXT21TGTQ7Q606Q4MP4968C3",
+      "id": "01KY0E8BEV0FWVZXWSFK1WEABF",
+      "name": "PaymentIdentityOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS",
+      "notes": [
+        "12 instrument/cardholder operations"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:57:45.4333516+00:00"
+    },
+    {
+      "id": "01KY0E8BEV5CCYTXTF8X9NYHH0",
+      "name": "PaymentAttributionOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS",
+      "notes": [
+        "2 operations"
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-20T18:57:45.4333516+00:00"
+    },
+    {
+      "id": "01KY0E8BEV5QXHP48M75JE64NQ",
+      "name": "SpendPoolOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS",
+      "notes": [
+        "6 operations"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-20T18:57:45.4333516+00:00"
+    },
+    {
+      "id": "01KY0E8BEVTM96K7GTRV9JWK00",
+      "name": "PoolAssignmentOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS",
+      "notes": [
+        "2 operations"
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-20T18:57:45.4333516+00:00"
+    },
+    {
+      "id": "01KY0E8BEV7G0371JNATNHTZ02",
       "name": "CategoryAllocationOperationModule",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
-      "sort_order": 3,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "notes": [
+        "2 operations"
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-20T18:57:45.4333516+00:00"
     },
     {
-      "id": "01KXT21TGTYQFAEWP09M0W6GF3",
+      "id": "01KY0E8BEVZKAAKJYPGNXMJ48A",
       "name": "TransactionOperationModule",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
-      "sort_order": 4,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "notes": [
+        "4 operations"
+      ],
+      "sort_order": 8,
+      "created_at": "2026-07-20T18:57:45.4333516+00:00"
+    },
+    {
+      "id": "01KY0E8BEVMS32R1HZVMEZXKTR",
+      "name": "EvidenceRegistryOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "notes": [
+        "2 operations"
+      ],
+      "sort_order": 9,
+      "created_at": "2026-07-20T18:57:45.4333516+00:00"
+    },
+    {
+      "id": "01KY0E8BEV4H70N0F07T061KX8",
+      "name": "EvidenceLinkOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "notes": [
+        "1 operation"
+      ],
+      "sort_order": 10,
+      "created_at": "2026-07-20T18:57:45.4333516+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KXT21TGSA8SDYJY2HH6QN31V",
+      "id": "01KY0E8BES3V0FJ2Q20EPS2P4S",
       "kind": "acceptance_check",
       "text": [
-        "The bundle contains exactly 17 unique descriptors: 11 account/category operations and 6 transaction/allocation/correction operations defined by the consumed modules."
+        "The bundle contains exactly 42 unique descriptors: 5 account, 6 category, 6 payment-instrument, 6 cardholder, 6 pool, 4 transaction, 2 category allocation, 2 payment attribution, 2 pool assignment, and 3 evidence operations."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T18:57:45.4333516+00:00"
     },
     {
-      "id": "01KXT21TGSHNBMBK3AV0X9000T",
+      "id": "01KY0E8BETR82V0AG9EMCQWDDG",
       "kind": "acceptance_check",
       "text": [
-        "Descriptor order is operationId ordinal; every CLI path, operationId, kind, contract range, schema, error, and exit entry is retained unchanged from its source module."
+        "Descriptor order is operationId ordinal; every path, ID, kind, contract range, source-generated schema, error, exit, privacy rule, and idempotency classification is retained unchanged."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T18:57:45.4333516+00:00"
     },
     {
-      "id": "01KXT21TGTP9MAN5QKWAHPK39R",
+      "id": "01KY0E8BETH6Y7BSBKYYVNG9P5",
       "kind": "acceptance_check",
       "text": [
-        "A missing module, duplicate operationId, duplicate CLI path, or incompatible contract range returns a deterministic composition failure before any handler can dispatch."
+        "A missing module, duplicate operationId/path, incompatible contract range, provider-specific field, or open evidence metadata fails composition before dispatch."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T18:57:45.4333516+00:00"
     },
     {
-      "id": "01KXT21TGTSDFHDNRYCEK4JTKX",
+      "id": "01KY0E8BETB8FR6SKMWYMQ30A6",
       "kind": "acceptance_check",
       "text": [
-        "Focused tests compare the complete bundle inventory with all four source modules and prove no descriptor is added, dropped, or rewritten."
+        "Focused tests compare the complete 42-operation inventory with every source module and prove no descriptor is added, dropped, aliased, or rewritten."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T18:57:45.4333516+00:00"
     },
     {
       "id": "01KXT21TGTR57HC0HDXTJ60FE8",
@@ -171,24 +312,24 @@
       "created_at": "2026-07-18T07:29:01.9775135+00:00"
     },
     {
-      "id": "01KXT21TGT4FC4ETBJ7RBKSNKP",
+      "id": "01KY0EK6DM02Q5FV4DZ473PK5K",
       "kind": "expected_output",
       "text": [
-        "CatalogueTransactionOperationBundle"
+        "CatalogueTransactionOperationBundle with exactly 42 descriptors"
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T19:03:40.7238034+00:00"
     },
     {
-      "id": "01KXT21TGTM9MQWG61B3ZMVM7Y",
+      "id": "01KY0EK6DN6HX88K63CC72N3DR",
       "kind": "expected_output",
       "text": [
-        "Exact-set composition tests"
+        "Exact-set and provider-neutral composition tests"
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T19:03:40.7238034+00:00"
     },
     {
       "id": "01KXT21TGTQ1KAA8M34AGYM6PX",
@@ -213,36 +354,36 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT21TGTX9ZTZXDB493MDBFZ",
+      "id": "01KY0EK6DNSBW88E90WVMTW3MZ",
       "gate_type": "test-evidence",
       "description": [
-        "Show exact 17-ID set equality and each rejected composition state."
+        "Show exact 42-ID set equality, operation subtotals, and every rejected composition state."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T19:03:40.7238034+00:00"
     },
     {
-      "id": "01KXT21TGTQT558GKVZHHAAED4",
+      "id": "01KY0EK6DNZ7JZAGWSVN6DNDSJ",
       "gate_type": "self-review",
       "description": [
-        "No domain handler or duplicate descriptor schema is introduced."
+        "No domain handler, provider adapter, open evidence schema, or duplicate descriptor is introduced."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T19:03:40.7238034+00:00"
     }
   ],
   "verification_steps": [
     {
-      "id": "01KXT21TGTPZEV9SKN6P8Z82C3",
+      "id": "01KY0EK6DN0CY9VR2X3HYMX4ED",
       "phase": "after",
-      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Composition.Ledger.CatalogueTransactionOperationBundleTests --no-restore",
-      "expected_result": "exit 0; at least 8 exact-inventory/duplicate/missing/version cases run and 0 fail",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~CatalogueTransactionOperationBundleTests --no-restore",
+      "expected_result": "exit 0; at least 14 exact-inventory, provider-neutrality, duplicate, missing, and version cases run; exactly 42 operation IDs are reported; 0 fail",
       "required": 1,
-      "timeout_seconds": 180,
+      "timeout_seconds": 300,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T19:03:40.7238034+00:00"
     }
   ]
 }

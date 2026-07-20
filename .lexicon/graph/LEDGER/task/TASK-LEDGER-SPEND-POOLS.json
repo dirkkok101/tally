@@ -1,0 +1,290 @@
+{
+  "id": "01KY0DT2MCBARX94A9C5XD4HTG",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06A6E7WPPCP8KDAKCJ1H4",
+  "ref_code": "TASK-LEDGER-SPEND-POOLS",
+  "slug": "SPEND-POOLS",
+  "title": "Implement spend-pool catalogue operations",
+  "description": [
+    "Deliver the first-class provider-neutral pool catalogue independently from accounts, payment identities, and categories."
+  ],
+  "objective": [
+    "Create, inspect, list, rename, archive, and reactivate spend pools with stable identity and historical RESTRICT behavior."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 26,
+  "created_at": "2026-07-20T18:49:57.6488706+00:00",
+  "decisions": [
+    {
+      "id": "01KY0DT2MP81P6CGX98ZQ31RQE",
+      "target": "DD-LEDGER-DIMENSIONAL-ATTRIBUTION",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MP3STA7HHHFYS7JJJ5",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KY0DT2MQM0A84X66XNE3M3G8",
+      "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
+      "dependency_type": "compile",
+      "reason": [
+        "Every catalogue mutation consumes LedgerMutationExecutor.ExecuteAsync."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MQAP98J1AYS94305WV",
+      "target": "TASK-LEDGER-GATE-EVIDENCE-POOL-CARDINALITY",
+      "dependency_type": "compile",
+      "reason": [
+        "Pool implementation is forbidden until OQ-LEDGER-15 validates one-active-pool cardinality."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MQ1RTXFB1NSD6B1PN2",
+      "target": "TASK-LEDGER-GATE-INT-CORE",
+      "dependency_type": "compile",
+      "reason": [
+        "The catalogue uses the proven process and SQLite seam."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY0DT2MPMPQDQP7QK7D0CTJ0",
+      "path": "src/Tally/Contracts/Ledger/Dimensions/SpendPoolContracts.cs",
+      "action": "create",
+      "role": "public contracts",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPG6W7VGZ88Z811MPW",
+      "path": "src/Tally/Domain/Ledger/Dimensions/SpendPool.cs",
+      "action": "create",
+      "role": "domain lifecycle",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MP8EWWY7KXYW9SFW3N",
+      "path": "src/Tally/Features/Ledger/Dimensions/SpendPoolHandlers.cs",
+      "action": "create",
+      "role": "commands and queries",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPEE0AZWKXNB0ZW9BK",
+      "path": "src/Tally/Infrastructure/Storage/Dimensions/SpendPoolStore.cs",
+      "action": "create",
+      "role": "SQLite store",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPFQKN31Y1PDXSF29M",
+      "path": "src/Tally/Features/Ledger/Dimensions/SpendPoolOperationModule.cs",
+      "action": "create",
+      "role": "explicit descriptors and DI",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPRTQA0CZQ1KF6YPAD",
+      "path": "tests/Tally.Tests/Ledger/SpendPoolOperationTests.cs",
+      "action": "test",
+      "role": "contract and persistence tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY0DT2MPT5ACZGS7FD4EKCHE",
+      "name": "SpendPoolStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-SPEND-POOL-ASSIGNMENT",
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPBN3JJR9MPTWH4VM9",
+      "name": "SpendPoolOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS",
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPTFVXR2NKP52BRHR2",
+      "name": "LedgerMutationExecutor.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPXSZJM5GETXYTPMQ5",
+      "name": "OQ-LEDGER-15Resolution",
+      "direction": "consumes",
+      "contract_ref_code": "OQ-LEDGER-15",
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY0DT2MPD1Z4V186PYVX0EQ3",
+      "kind": "acceptance_check",
+      "text": [
+        "Create/list/get/rename/archive/reactivate expose stable local pool ULIDs, owner labels, active state, assignment counts, actor, reason, and history without mutating any other dimension."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPVG0TPG08V6SYH628",
+      "kind": "acceptance_check",
+      "text": [
+        "Duplicate active labels, missing identities, archived assignment targets, and conflicting replay return stable errors; identical replay returns the original result."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MP460TKWMYSSE85D3K",
+      "kind": "acceptance_check",
+      "text": [
+        "Archival preserves historical transaction assignments and exact query labels while blocking new assignments until reactivation."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPMPSHBTVB6HZS1RPA",
+      "kind": "expected_output",
+      "text": [
+        "Spend-pool contracts, lifecycle, store, handlers, operation module, and focused tests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPZ9AJWVJAKRSTADKS",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT encode pools as categories or derive them from account, instrument, cardholder, or description — rejected per DD-LEDGER-DIMENSIONAL-ATTRIBUTION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPJB3HBBV9JPZKDSQ8",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT physically delete referenced pools or rewrite lifecycle history — rejected per DD-LEDGER-IMMUTABLE-HISTORY."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MPGZXDQ42NHAVRNPJ3",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add budget amounts or performance policy to LEDGER."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY0DT2MPGY0JCPE2HPQ03935",
+      "target_ref_code": "DM-LEDGER-SPEND-POOL-ASSIGNMENT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KY0BTSBRPW49WGWJSS2KA9HW",
+      "target_title": "SpendPoolAndAssignment",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MQ8EYWTQSWYEPQPPA8",
+      "target_ref_code": "DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KY0BTVZY98NRVEK3TRX5A0D0",
+      "target_title": "PaymentAttributionAndPoolOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MQJ4RAV9GQCQ785FGF",
+      "target_ref_code": "TC-LEDGER-SPEND-POOL-CATALOGUE-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KY0A4ZJSMGJ9YEGGQAYG92J3",
+      "target_title": "Verify spend-pool catalogue lifecycle",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KY0DT2MP6JZJDQND0FFGXQSR",
+      "target": "FR-LEDGER-SPEND-POOL-CATALOGUE",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY0DT2MPE0VVFEWY4KHXEM28",
+      "gate_type": "test-evidence",
+      "description": [
+        "Tests prove pool lifecycle does not mutate other dimensions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY0DT2MPNC0W20HB4NEMV12W",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Ledger.SpendPoolOperationTests --no-restore",
+      "expected_result": "exit 0; at least 15 catalogue, archive, RESTRICT, independence, and replay cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ]
+}

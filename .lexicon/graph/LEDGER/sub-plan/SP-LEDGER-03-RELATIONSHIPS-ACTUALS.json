@@ -2,10 +2,10 @@
   "id": "01KXT06AGT9EPMYN1DCHN46ZV9",
   "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
   "ref_code": "SP-LEDGER-03-RELATIONSHIPS-ACTUALS",
-  "title": "Relationships and actuals",
+  "title": "Relationships and dimensional actuals",
   "description": [
-    "Deliver transfer/refund lifecycle, corrections, exact totals, and snapshots."
+    "Deliver transfer/refund lifecycle, correction composition, exact pool/category actuals, and snapshot pagination."
   ],
-  "sort_order": 3,
+  "sort_order": 4,
   "created_at": "2026-07-18T06:56:32.2833468+00:00"
 }

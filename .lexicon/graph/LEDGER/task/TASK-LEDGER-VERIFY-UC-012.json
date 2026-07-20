@@ -6,10 +6,10 @@
   "slug": "VERIFY-UC-012",
   "title": "StorageEvolutionWorkflow",
   "description": [
-    "Verification-only task intentionally has no Implements link: trace UC-LEDGER-012 main scenario and every failure path through the published CLI."
+    "Verification-only task with no Implements link: trace revised UC-LEDGER-012 through Release storage status and evolution operations."
   ],
   "objective": [
-    "Prove UC-LEDGER-012 through observable process results and durable-state invariants."
+    "Prove isolated storage evolution preserves complete provider-neutral durable state and only activates a verified candidate after explicit authorization."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -40,33 +40,36 @@
   ],
   "interfaces": [
     {
-      "id": "01KXT19PB6Y1RK89KHHHK4Q9T5",
+      "id": "01KY0EB1QKE7SN9K3RR7THSGDR",
       "name": "PublishedTallyFixture",
       "direction": "consumes",
       "notes": [
         "Release published-process E2E fixture"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:15:51.2697399+00:00"
+      "created_at": "2026-07-20T18:59:13.7784940+00:00"
     },
     {
-      "id": "01KXT19PB6596MD5Z2FYJGVV5J",
+      "id": "01KY0EB1QK4XMXMC27X5A57SY9",
       "name": "CompletePublicContract",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "Exactly 38 wired operations"
+        "Exactly 72 provider-neutral operations"
       ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:15:51.2697399+00:00"
+      "created_at": "2026-07-20T18:59:13.7784940+00:00"
     },
     {
-      "id": "01KXT19PB6VHGDPRD4HRYFX7C0",
+      "id": "01KY0EB1QKEGSF1Y9GQX4JXD8K",
       "name": "VerifiedUC012",
       "direction": "produces",
       "contract_ref_code": "UC-LEDGER-012",
+      "notes": [
+        "complete-state evolution workflow"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:15:51.2697399+00:00"
+      "created_at": "2026-07-20T18:59:13.7784940+00:00"
     }
   ],
   "links": [
@@ -80,44 +83,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT126TFBHG7PX01CWYGK10G",
+      "id": "01KY0EB1QJ3923W0M0V6DRFBEA",
       "kind": "acceptance_check",
       "text": [
-        "Preflight validates source integrity/version, target compatibility, permissions, space, and host protection before transformation."
+        "Preflight validates source integrity, versions, reconciliation policy, permissions, space, host protection, and creates an independently verified complete-state recovery point before transformation."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-20T18:59:13.7784940+00:00"
     },
     {
-      "id": "01KXT126TFBYA85YH0XS7H8G86",
+      "id": "01KY0EB1QKP3EK4X3H0MMXPP4C",
       "kind": "acceptance_check",
       "text": [
-        "Verified recovery exists before isolated candidate transformation; validation proves complete state, relationships, idempotency, counts, integrity, exact totals, and declared version."
+        "The isolated candidate comparison covers every fact/history/dimension/evidence/reconciliation/relationship/request-and-logical-replay type, per-type count, privacy rule, integrity result, and exact named/dimensional total."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-20T18:59:13.7784940+00:00"
     },
     {
-      "id": "01KXT126TFBYAW53KHDC9KZNJA",
+      "id": "01KY0EB1QKGJ4638Q0ZV8V91MJ",
       "kind": "acceptance_check",
       "text": [
-        "Explicit authorized activation switches once and retains recovery; unsupported/corrupt/unsafe/full/interrupted/mismatched/unauthorized paths leave original current."
+        "Unsupported, corrupt, incomplete, privacy-invalid, interrupted, unauthorized, or mismatching candidates never replace CURRENT; authorized activation is atomic, retains recovery generation, and is recoverable after post-activation failure."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
-    },
-    {
-      "id": "01KXT126TFPMT85K5JP65X85PD",
-      "kind": "acceptance_check",
-      "text": [
-        "Post-activation validation and idempotent retry report the same completed transition."
-      ],
-      "required": 1,
-      "sort_order": 3,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-20T18:59:13.7784940+00:00"
     },
     {
       "id": "01KXT126TFEG5ERWBJR2Y70X73",
@@ -140,24 +133,24 @@
       "created_at": "2026-07-18T07:11:45.9941647+00:00"
     },
     {
-      "id": "01KXT126TFRKKMD35B1KNEDF39",
+      "id": "01KY0EB1QK535CF5X2CJ2W9A0B",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT migrate live state in place or activate before complete validation/authorization."
+        "Do NOT compare only schema version, row totals, or aggregate money."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-20T18:59:13.7784940+00:00"
     },
     {
-      "id": "01KXT126TFJ4CZJDYAEV0V343X",
+      "id": "01KY0EB1QKZP0849SRMR7N64GD",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT omit any UC-LEDGER-012 preflight, recovery, interruption, or post-activation path."
+        "Do NOT transform the authoritative generation in place."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-20T18:59:13.7784940+00:00"
     },
     {
       "id": "01KXT126TFNWH9ASH1HHV7YM79",

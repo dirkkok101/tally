@@ -4,12 +4,12 @@
   "sub_plan_id": "01KXT069TD553802AT505MG72F",
   "ref_code": "TASK-LEDGER-CORE-SCHEMA-CATALOGUE",
   "slug": "CORE-SCHEMA-CATALOGUE",
-  "title": "Implement the V001 catalogue schema fragment",
+  "title": "Implement the V001 financial-dimension catalogue schema fragment",
   "description": [
-    "Schema foundation intentionally has no Implements link: translate the approved account, category, and catalogue-lifecycle models into one independently verified V001 fragment."
+    "Schema foundation intentionally has no Implements link: translate the approved account, category, payment-instrument, cardholder, spend-pool, and catalogue-lifecycle models into one independently verified V001 fragment."
   ],
   "objective": [
-    "Create exact account, Spend Category, and attributable catalogue-lifecycle tables, constraints, indexes, and active-name uniqueness without implementing catalogue behavior."
+    "Create exact provider-neutral financial-dimension tables, constraints, indexes, lifecycle history, and active uniqueness without implementing catalogue behavior."
   ],
   "planning_state": "planned",
   "priority": 0,
@@ -87,34 +87,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT2XZDBX7QY8GHR9EZQ9V9A",
+      "id": "01KY0E298GKGBQ0WC8BCP6MTWH",
       "kind": "acceptance_check",
       "text": [
-        "V001CatalogueSchema creates every field, enum check, lifecycle foreign key, RESTRICT rule, status timestamp rule, and active uniqueness constraint in the three linked models."
+        "V001CatalogueSchema creates every field, closed enum check, lifecycle foreign key, RESTRICT rule, status/timestamp rule, and active uniqueness constraint from Account, SpendCategory, PaymentInstrumentCardholderAndAttribution identity records, SpendPoolAndAssignment pool records, and FinancialDimensionCatalogueLifecycleEvents."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+      "created_at": "2026-07-20T18:54:26.5760607+00:00"
     },
     {
-      "id": "01KXT2XZDBFJY3T50XYA0KQJB0",
+      "id": "01KY0E298H2G8XKR77B0VEXS22",
       "kind": "acceptance_check",
       "text": [
-        "Account active masked identity is unique within institution; category active normalized name is unique; archive history remains attributable and append-only."
+        "Active masked account identity is unique within institution; category and pool active normalized names are unique; privacy-safe instrument/cardholder identities never retain a full identifier or provider payload."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+      "created_at": "2026-07-20T18:54:26.5760607+00:00"
     },
     {
-      "id": "01KXT2XZDB710XDYEKWT6CRA9F",
+      "id": "01KY0E298HKW3ZPJ6JZSAPCVVN",
       "kind": "acceptance_check",
       "text": [
-        "Applying the fragment twice in one migration plan is rejected before SQL; an injected statement failure rolls back every catalogue table and index."
+        "Archive/reactivation history remains attributable and append-only, and referenced dimensions cannot be physically deleted."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+      "created_at": "2026-07-20T18:54:26.5760607+00:00"
+    },
+    {
+      "id": "01KY0E298HC779XMWMXBFQ4RMW",
+      "kind": "acceptance_check",
+      "text": [
+        "Applying the fragment twice in one migration plan is rejected before SQL; an injected statement failure rolls back every dimension table and index."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:54:26.5760607+00:00"
     },
     {
       "id": "01KXT2XZDB69G0XCEV0VTWH4XR",
@@ -147,24 +157,24 @@
       "created_at": "2026-07-18T07:44:24.4911988+00:00"
     },
     {
-      "id": "01KXT2XZDBBY2WMZZ8MMXA57BJ",
+      "id": "01KY0E298H21H2BS3DQH7GHG1B",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT create transaction, allocation, relationship, snapshot, recovery, or idempotency tables in this fragment."
+        "Do NOT conflate account, instrument, cardholder, spend pool, or category; each is an independent stable dimension."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+      "created_at": "2026-07-20T18:54:26.5760607+00:00"
     },
     {
-      "id": "01KXT2XZDB0XRQXMEAF328T50N",
+      "id": "01KY0E298HBTWNB5DH7GGATJGV",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT add hard delete, account reactivation, category hierarchy, full account numbers, EF Core, or mocked SQLite tests."
+        "Do NOT persist provider-specific identity payloads or full payment identifiers."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+      "created_at": "2026-07-20T18:54:26.5760607+00:00"
     }
   ],
   "references": [

@@ -12,11 +12,11 @@
 
 ## Summary
 
-Verification-only task intentionally has no Implements link: trace UC-LEDGER-012 main scenario and every failure path through the published CLI.
+Verification-only task with no Implements link: trace revised UC-LEDGER-012 through Release storage status and evolution operations.
 
 ## Objective
 
-Prove UC-LEDGER-012 through observable process results and durable-state invariants.
+Prove isolated storage evolution preserves complete provider-neutral durable state and only activates a verified candidate after explicit authorization.
 
 ## References
 
@@ -39,15 +39,14 @@ Prove UC-LEDGER-012 through observable process results and durable-state invaria
 
 ### Acceptance Checks
 
-- Preflight validates source integrity/version, target compatibility, permissions, space, and host protection before transformation.
-- Verified recovery exists before isolated candidate transformation; validation proves complete state, relationships, idempotency, counts, integrity, exact totals, and declared version.
-- Explicit authorized activation switches once and retains recovery; unsupported/corrupt/unsafe/full/interrupted/mismatched/unauthorized paths leave original current.
-- Post-activation validation and idempotent retry report the same completed transition.
+- Preflight validates source integrity, versions, reconciliation policy, permissions, space, host protection, and creates an independently verified complete-state recovery point before transformation.
+- The isolated candidate comparison covers every fact/history/dimension/evidence/reconciliation/relationship/request-and-logical-replay type, per-type count, privacy rule, integrity result, and exact named/dimensional total.
+- Unsupported, corrupt, incomplete, privacy-invalid, interrupted, unauthorized, or mismatching candidates never replace CURRENT; authorized activation is atomic, retains recovery generation, and is recoverable after post-activation failure.
 
 ### Failure Criteria
 
-- Do NOT migrate live state in place or activate before complete validation/authorization.
-- Do NOT omit any UC-LEDGER-012 preflight, recovery, interruption, or post-activation path.
+- Do NOT compare only schema version, row totals, or aggregate money.
+- Do NOT transform the authoritative generation in place.
 
 ### Expected Outputs
 
@@ -73,8 +72,8 @@ Prove UC-LEDGER-012 through observable process results and durable-state invaria
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 38 wired operations |
-| VerifiedUC012 | `produces` | UC-LEDGER-012 |  |
+| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 72 provider-neutral operations |
+| VerifiedUC012 | `produces` | UC-LEDGER-012 | complete-state evolution workflow |
 
 ### Verification
 

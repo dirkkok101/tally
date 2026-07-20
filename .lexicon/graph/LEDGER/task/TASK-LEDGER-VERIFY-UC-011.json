@@ -40,33 +40,36 @@
   ],
   "interfaces": [
     {
-      "id": "01KXT19NM1PRQ0RCYHTFZXTE2D",
+      "id": "01KY0EAXKMV80ES0326MB7HZQ6",
       "name": "PublishedTallyFixture",
       "direction": "consumes",
       "notes": [
         "Release published-process E2E fixture"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:15:50.5290107+00:00"
+      "created_at": "2026-07-20T18:59:09.5557642+00:00"
     },
     {
-      "id": "01KXT19NM2AR8RQN2GAPD3EQAE",
+      "id": "01KY0EAXKNJZKR298AD1REQT2Y",
       "name": "CompletePublicContract",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "Exactly 38 wired operations"
+        "Exactly 72 provider-neutral operations"
       ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:15:50.5290107+00:00"
+      "created_at": "2026-07-20T18:59:09.5557642+00:00"
     },
     {
-      "id": "01KXT19NM28C6DB361H0GA5DRV",
+      "id": "01KY0EAXKNEDMSQQ9PVNZTHCBE",
       "name": "VerifiedUC011",
       "direction": "produces",
       "contract_ref_code": "UC-LEDGER-011",
+      "notes": [
+        "workflow verification"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:15:50.5290107+00:00"
+      "created_at": "2026-07-20T18:59:09.5557642+00:00"
     }
   ],
   "links": [

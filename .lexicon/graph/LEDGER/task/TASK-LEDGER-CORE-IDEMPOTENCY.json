@@ -6,10 +6,10 @@
   "slug": "CORE-IDEMPOTENCY",
   "title": "Implement transactional mutation idempotency",
   "description": [
-    "Build the common mutation executor, canonical request hashing, stored outcomes, and artifact reconciliation for every public write."
+    "Build the common mutation executor, canonical request hashing, stored outcomes, logical-effect identity, and artifact reconciliation for every public write."
   ],
   "objective": [
-    "Guarantee identical replay returns the original result while changed replay, invalid input, busy failure, and crash boundaries preserve one effect."
+    "Guarantee identical request and cross-key logical replay return the original effect while changed replay, invalid input, busy failure, and crash boundaries preserve exactly one effect."
   ],
   "planning_state": "planned",
   "priority": 0,
@@ -160,64 +160,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT0KHY7BHV701MMX1X63HTY",
+      "id": "01KY0E2B3P40NZTF1TDNEE992R",
       "kind": "acceptance_check",
       "text": [
-        "Identity is contract version + operation ID + caller key; hash includes normalized input and actor."
+        "Request identity is contract version + operation ID + caller key; hash includes normalized input and actor."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-20T18:54:28.4695935+00:00"
     },
     {
-      "id": "01KXT0KHY7XXTJXZ6ZKZWQN7M9",
+      "id": "01KY0E2B3QBH867H613NZAECK3",
       "kind": "acceptance_check",
       "text": [
-        "Identical replay returns the stored result/entity/artifact with no volatile replay field and no second effect."
+        "Identical request replay returns the stored result/entity/artifact with no volatile replay field and no second effect; changed operation/version/actor/payload returns LEDGER-IDEMPOTENCY-001 and preserves the first outcome."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-20T18:54:28.4695935+00:00"
     },
     {
-      "id": "01KXT0KHY7VFXN1S4QCZ3DHA06",
+      "id": "01KY0E2B3Q35J2V7YT4JTN4WQM",
       "kind": "acceptance_check",
       "text": [
-        "Changed operation/version/actor/payload always returns LEDGER-IDEMPOTENCY-001 and preserves the first outcome."
+        "Evidence registration and reconciliation decisions also claim closed logical-effect identities, so identical evidence or decision submitted under another caller key returns the existing outcome and conflicting semantic input fails closed."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-20T18:54:28.4695935+00:00"
     },
     {
-      "id": "01KXT0KHY7PVZE80YBSR2GT4S4",
+      "id": "01KY0E2B3Q571R4FZH8PT87HJK",
       "kind": "acceptance_check",
       "text": [
-        "Validation and busy/resource failures occur before key consumption."
+        "Validation and busy/resource failures occur before key or logical identity consumption; domain changes, histories, links, stored result, request identity, and logical identity commit in one transaction."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-20T18:54:28.4695935+00:00"
     },
     {
-      "id": "01KXT0KHY7KHA13G4ZJ5HWENZC",
-      "kind": "acceptance_check",
-      "text": [
-        "Domain changes, events, stored result, and IdempotencyRecord commit in one transaction; pre-commit crash leaves none."
-      ],
-      "required": 1,
-      "sort_order": 4,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
-    },
-    {
-      "id": "01KXT0KHY7EQVN762TN5KY85SC",
+      "id": "01KY0E2B3QZN4JDFD3XR1AWFEZ",
       "kind": "acceptance_check",
       "text": [
         "Artifact publication uses deterministic identity, private staging, checksum, flush, atomic publication, and retry reconciliation."
       ],
       "required": 1,
-      "sort_order": 5,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "sort_order": 4,
+      "created_at": "2026-07-20T18:54:28.4695935+00:00"
     },
     {
       "id": "01KXT0KHY7Z12690ZQ1XTK7MH9",
@@ -260,34 +250,24 @@
       "created_at": "2026-07-18T07:03:45.8586325+00:00"
     },
     {
-      "id": "01KXT0KHY7HEXF86Y2HHSFQ2PW",
+      "id": "01KY0E2B3QP685BFC08J2KHDD4",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT rely on caller retries or database-only idempotency for files — rejected per DD-LEDGER-IDEMPOTENT-MUTATIONS."
+        "Do NOT scope evidence or reconciliation idempotency only to a caller-provided key."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-20T18:54:28.4695935+00:00"
     },
     {
-      "id": "01KXT0KHY70G30D69FKKBM0HA4",
+      "id": "01KY0E2B3QVSWDB9XWE40962YN",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT store correlation IDs, durations, or replay flags in successful outcomes."
+        "Do NOT consume identities on validation/busy failure or persist a partial logical effect."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
-    },
-    {
-      "id": "01KXT0KHY7HFNSR1WSAF065Z0D",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT reserve keys for invalid/busy requests."
-      ],
-      "required": 1,
-      "sort_order": 2,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-20T18:54:28.4695935+00:00"
     }
   ],
   "references": [

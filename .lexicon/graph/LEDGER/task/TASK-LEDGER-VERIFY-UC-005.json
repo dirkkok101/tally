@@ -6,10 +6,10 @@
   "slug": "VERIFY-UC-005",
   "title": "ActualsWorkflow",
   "description": [
-    "Verification-only task intentionally has no Implements link: trace UC-LEDGER-005 main scenario and every failure path through the published CLI."
+    "Verification-only task with no Implements link: trace revised UC-LEDGER-005 through the Release published CLI."
   ],
   "objective": [
-    "Prove UC-LEDGER-005 through observable process results and durable-state invariants."
+    "Prove exact snapshot-bound actuals membership and named totals across category, pool, payment, relationship, evidence, and reconciliation filters."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -40,33 +40,36 @@
   ],
   "interfaces": [
     {
-      "id": "01KXT19HB6T6APZPCSDYR6C674",
+      "id": "01KY0EAYVKJWJA1PD1KPDTAHMB",
       "name": "PublishedTallyFixture",
       "direction": "consumes",
       "notes": [
         "Release published-process E2E fixture"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:15:46.1495705+00:00"
+      "created_at": "2026-07-20T18:59:10.8336304+00:00"
     },
     {
-      "id": "01KXT19HB6B3A297WQ0RXM5AE7",
+      "id": "01KY0EAYVK4JQKM8VNZDXMM998",
       "name": "CompletePublicContract",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "Exactly 38 wired operations"
+        "Exactly 72 provider-neutral operations"
       ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:15:46.1495705+00:00"
+      "created_at": "2026-07-20T18:59:10.8336304+00:00"
     },
     {
-      "id": "01KXT19HB64AGKM9XS05BYD9CK",
+      "id": "01KY0EAYVKCN6DM3WJBR4EMF3M",
       "name": "VerifiedUC005",
       "direction": "produces",
       "contract_ref_code": "UC-LEDGER-005",
+      "notes": [
+        "multi-dimensional actuals workflow"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:15:46.1495705+00:00"
+      "created_at": "2026-07-20T18:59:10.8336304+00:00"
     }
   ],
   "links": [
@@ -80,44 +83,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT0ZW3JZ3H3E8XD1MEP1AHH",
+      "id": "01KY0EAYVJD3T0HWMTCB90SNF5",
       "kind": "acceptance_check",
       "text": [
-        "Explicit filters produce exact deterministic membership plus Net Account Movement, External Spend, and Budget Actual reconciled to snapshot rows."
+        "Explicit filter combinations select active canonical transactions under EffectiveDate, category/pool, instrument/cardholder, relationship, evidence, reconciliation, and correction rules; invalid combinations fail before snapshot creation."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-20T18:59:10.8336304+00:00"
     },
     {
-      "id": "01KXT0ZW3JXCK44WNX1MERKCCG",
+      "id": "01KY0EAYVKYC3RSH85QF67TR55",
       "kind": "acceptance_check",
       "text": [
-        "Multi-page results retain first-page membership/totals after writes; all IDs appear once; unavailable/expired/altered cursor fails explicitly."
+        "One committed snapshot returns deterministic pages and unchanged full-set Net Account Movement, External Spend, Budget Actual, pool, category, and pool-by-category totals despite later writes; expired/unavailable cursor fails explicitly."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-20T18:59:10.8336304+00:00"
     },
     {
-      "id": "01KXT0ZW3JDF8NJSNHWF7ZDVY0",
+      "id": "01KY0EAYVK1QR7DDX53T4ZT4DZ",
       "kind": "acceptance_check",
       "text": [
-        "Invalid filters and integrity failure return no aggregate; empty selection succeeds with exact zeros."
+        "Every all-up result equals exact selected membership and grouped cells including uncategorized and unassigned; refunds, transfers, reversals, and corrections obey the governing formulas and integrity mismatch fails closed."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
-    },
-    {
-      "id": "01KXT0ZW3JZK5YDJ5FQ5TC3JGG",
-      "kind": "acceptance_check",
-      "text": [
-        "Cash, transfers, fees, refunds, category corrections, inactive transactions, and retired relationships exercise every defined formula."
-      ],
-      "required": 1,
-      "sort_order": 3,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-20T18:59:10.8336304+00:00"
     },
     {
       "id": "01KXT0ZW3J0YVSTR1CX0AYVHCR",
@@ -140,24 +133,24 @@
       "created_at": "2026-07-18T07:10:29.4870620+00:00"
     },
     {
-      "id": "01KXT0ZW3J7EF7N6JHP0X4F6DX",
+      "id": "01KY0EAYVKE0SVAAZGKMY4NXED",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT accept live offset pagination or recalculate later pages against current state."
+        "Do NOT verify only aggregate totals; prove exact membership and every requested pool/category cell."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-20T18:59:10.8336304+00:00"
     },
     {
-      "id": "01KXT0ZW3J57MSFBR45GXX0PFG",
+      "id": "01KY0EAYVKSM1KYKJD1JF8NZ4J",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT omit exact aggregate reconciliation or integrity failure."
+        "Do NOT duplicate formulas in the test fixture; reconcile published items independently."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-20T18:59:10.8336304+00:00"
     },
     {
       "id": "01KXT0ZW3J18G9H76CTQZEY7YX",

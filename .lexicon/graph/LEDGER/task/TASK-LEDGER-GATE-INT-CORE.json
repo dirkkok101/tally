@@ -6,10 +6,10 @@
   "slug": "GATE-INT-CORE",
   "title": "Prove the process-to-storage core seam",
   "description": [
-    "Integration-only task intentionally has no Implements link: compose all independently reviewed V001 fragments and prove the published process-to-complete-store core seam."
+    "Integration-only task intentionally has no Implements link: compose every independently reviewed V001 fragment and prove the published process-to-complete-store core seam."
   ],
   "objective": [
-    "Compose and prove the complete V001 schema plus the selected offline process, exact-value, real-SQLite, and idempotent mutation architecture on linux-x64."
+    "Compose and prove the complete V001 schema plus provider-neutral process, exact-value, real-SQLite, privacy, and idempotent mutation architecture on linux-x64."
   ],
   "planning_state": "planned",
   "priority": 0,
@@ -55,6 +55,16 @@
       ],
       "sort_order": 4,
       "created_at": "2026-07-18T07:45:14.1258622+00:00"
+    },
+    {
+      "id": "01KY0ECCKT3XXAB3WCJWFXFMV0",
+      "target": "TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION",
+      "dependency_type": "compile",
+      "reason": [
+        "CompleteV001Schema consumes the evidence and reconciliation fragment."
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-20T18:59:57.6916872+00:00"
     },
     {
       "id": "01KXT2ZGY74A06M48YN7VSY3MY",
@@ -136,135 +146,174 @@
   ],
   "interfaces": [
     {
-      "id": "01KXT2Z0TFVX1RJVAJEGRMNPKA",
+      "id": "01KY0E2BQYYBQ3K51C75QRBRTS",
       "name": "TallyProcess.RunAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "provider-neutral process boundary"
+      ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-20T18:54:29.1150269+00:00"
     },
     {
-      "id": "01KXT2Z0TFBMDGENQSD8REKNQS",
+      "id": "01KY0E2BQYZMXHZMZB1R56BBCJ",
       "name": "LedgerDb",
       "direction": "consumes",
-      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "notes": [
+        "raw SQLite runtime"
+      ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-20T18:54:29.1150269+00:00"
     },
     {
-      "id": "01KXT2Z0TFNNYBG6CVGDMA6627",
+      "id": "01KY0E2BQYP7EV6BC00D5N9XZT",
       "name": "V001StorageSchema",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "notes": [
+        "storage metadata fragment"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-20T18:54:29.1150269+00:00"
     },
     {
-      "id": "01KXT2Z0TFBB7AQ20PWNZDGPTX",
+      "id": "01KY0E2BQY94ZR8BY6DN99ZX8F",
       "name": "V001CatalogueSchema",
       "direction": "consumes",
-      "contract_ref_code": "DM-LEDGER-ACCOUNT",
+      "contract_ref_code": "DM-LEDGER-CATALOGUE-LIFECYCLE",
+      "notes": [
+        "financial-dimension fragment"
+      ],
       "sort_order": 3,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-20T18:54:29.1150269+00:00"
     },
     {
-      "id": "01KXT2Z0TF8QT2X6BJBZN4PPMQ",
+      "id": "01KY0E2BQYEA2PSNHFMWNSWFTN",
       "name": "V001TransactionSchema",
       "direction": "consumes",
-      "contract_ref_code": "DM-LEDGER-TRANSACTION-FACT",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
+      "notes": [
+        "transaction and dimensional-history fragment"
+      ],
       "sort_order": 4,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-20T18:54:29.1150269+00:00"
     },
     {
-      "id": "01KXT2Z0TF548PQ9SMSSF9T9RB",
+      "id": "01KY0E2BQY3J1DNGJC1X6HPB40",
+      "name": "V001EvidenceReconciliationSchema",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "notes": [
+        "evidence and reconciliation fragment"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-20T18:54:29.1150269+00:00"
+    },
+    {
+      "id": "01KY0E2BQY1MWN5KEXX4GVJVD3",
       "name": "V001RelationshipActualsSchema",
       "direction": "consumes",
-      "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
-      "sort_order": 5,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "notes": [
+        "relationship and snapshot fragment"
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-20T18:54:29.1150269+00:00"
     },
     {
-      "id": "01KXT2Z0TFC8GTN7JTXK7HARYA",
+      "id": "01KY0E2BQYW3WY9TTWX8FQ09Y8",
       "name": "Money",
       "direction": "consumes",
       "contract_ref_code": "DD-LEDGER-FINANCIAL-REPRESENTATION",
-      "sort_order": 6,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "notes": [
+        "exact values"
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-20T18:54:29.1150269+00:00"
     },
     {
-      "id": "01KXT2Z0TF9X0KRK26E0ETV3SH",
+      "id": "01KY0E2BQYD06V9QR7YA0CZES2",
       "name": "LedgerMutationExecutor.ExecuteAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
-      "sort_order": 7,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "notes": [
+        "request and logical replay"
+      ],
+      "sort_order": 8,
+      "created_at": "2026-07-20T18:54:29.1150269+00:00"
     },
     {
-      "id": "01KXT2Z0TF2QHE2X0AVYZ0ENQ7",
+      "id": "01KY0E2BQYPVRT77HAZ5BGFN6E",
       "name": "CompleteV001Schema",
       "direction": "produces",
-      "contract_ref_code": "DD-LEDGER-EMBEDDED-STORAGE",
-      "sort_order": 8,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "notes": [
+        "five-fragment V001 schema"
+      ],
+      "sort_order": 9,
+      "created_at": "2026-07-20T18:54:29.1150269+00:00"
     },
     {
-      "id": "01KXT2Z0TFCCE7A91D5V92KC3N",
+      "id": "01KY0E2BQYRKYMP2E543EMM5F6",
       "name": "VerifiedCoreRuntimeStorageSeam",
       "direction": "produces",
-      "sort_order": 9,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "notes": [
+        "integration evidence"
+      ],
+      "sort_order": 10,
+      "created_at": "2026-07-20T18:54:29.1150269+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KXT2Z0TDTX4RDQHMW1Y8EVW9",
+      "id": "01KY0E2BQVR8R6NQGPHM3ZJ5RQ",
       "kind": "acceptance_check",
       "text": [
-        "CompleteV001Schema explicitly registers exactly V001StorageSchema, V001CatalogueSchema, V001TransactionSchema, and V001RelationshipActualsSchema in dependency-safe order and applies them in one transaction."
+        "CompleteV001Schema explicitly registers V001StorageSchema, V001CatalogueSchema, V001TransactionSchema, V001EvidenceReconciliationSchema, and V001RelationshipActualsSchema in dependency-safe order and applies them in one transaction."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-20T18:54:29.1150269+00:00"
     },
     {
-      "id": "01KXT2Z0TE92R04AT9Z1EPADV7",
+      "id": "01KY0E2BQWKZBS7M0WQGBT0HEE",
       "kind": "acceptance_check",
       "text": [
-        "Complete-schema tests compare every table, column, index, foreign key, check, uniqueness rule, ephemeral marker, and user_version with the linked fragment contracts; a missing/duplicate fragment or injected SQL failure leaves no partial schema."
+        "Complete-schema tests compare every table, column, index, foreign key, check, uniqueness rule, privacy allowlist, ephemeral marker, and user_version with linked fragment contracts; missing/duplicate fragments or injected SQL failure leave no partial schema."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-20T18:54:29.1150269+00:00"
     },
     {
-      "id": "01KXT2Z0TEAZ2A0HTTPKBV8ZW1",
+      "id": "01KY0E2BQWBYHXJCQWKE0ECQCX",
       "kind": "acceptance_check",
       "text": [
-        "Published tally initializes a private complete generation, executes a typed idempotent probe through TallyProcess, emits one stdout envelope, and leaves no process or network listener."
+        "Published tally initializes a private complete generation, executes a typed idempotent probe through TallyProcess, emits one stdout envelope, and leaves no child process or network listener."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-20T18:54:29.1150269+00:00"
     },
     {
-      "id": "01KXT2Z0TEDCNT83P2PF9R5KB3",
+      "id": "01KY0E2BQWYTP1V5TNWX0BJYZ8",
       "kind": "acceptance_check",
       "text": [
-        "Identical replay returns the original result; a pre-commit crash leaves zero domain/idempotency rows; changed replay returns stable conflict."
+        "Identical request and logical replay return the original effect; a pre-commit crash leaves zero domain/idempotency/logical-effect rows; changed replay returns stable conflict."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-20T18:54:29.1150269+00:00"
     },
     {
-      "id": "01KXT2Z0TE18Z9FGQ3DFYYWT92",
+      "id": "01KY0E2BQXJ7BDXDXQC8FG2C9K",
       "kind": "acceptance_check",
       "text": [
-        "Money/date round-trip is exact, integrity is ok, foreign-key violations are zero, artifact modes are 0700/0600, and diagnostic canaries never appear."
+        "Money/date round-trip is exact, integrity is ok, foreign-key violations are zero, artifact modes are 0700/0600, and provider/raw-payload diagnostic canaries never appear."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-20T18:54:29.1150269+00:00"
     },
     {
       "id": "01KXT2Z0TFC4873W845FJ42PYT",
@@ -349,17 +398,6 @@
   ],
   "references": [
     {
-      "id": "01KXT0KHY8B5K7RRT5WQM97X3G",
-      "target_ref_code": "NFR-LEDGER-SELF-CONTAINED-LOCAL-OPERATION",
-      "target_entity_type": "nfr",
-      "target_entity_id": "01KXSQFZ7CYGE4ER8E0BE86W0E",
-      "target_title": "Operate as a self-contained local executable",
-      "relationship": "satisfies",
-      "required": 1,
-      "sort_order": 0,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
-    },
-    {
       "id": "01KXT0KHY828KMA31M2YXFZ3TP",
       "target_ref_code": "NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS",
       "target_entity_type": "nfr",
@@ -368,17 +406,6 @@
       "relationship": "satisfies",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
-    },
-    {
-      "id": "01KXT0KHY8TAVQV2DR98QN0RXD",
-      "target_ref_code": "NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC",
-      "target_entity_type": "nfr",
-      "target_entity_id": "01KXSQFXBTBZ6YXSZEFF4WWRCX",
-      "target_title": "Preserve exact financial arithmetic",
-      "relationship": "satisfies",
-      "required": 1,
-      "sort_order": 2,
       "created_at": "2026-07-18T07:03:45.8586325+00:00"
     },
     {

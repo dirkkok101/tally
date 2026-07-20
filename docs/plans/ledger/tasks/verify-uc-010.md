@@ -12,11 +12,11 @@
 
 ## Summary
 
-Verification-only task intentionally has no Implements link: trace UC-LEDGER-010 main scenario and every failure path through the published CLI.
+Verification-only task with no Implements link: trace revised UC-LEDGER-010 through Release refund operations and dimensional actuals.
 
 ## Objective
 
-Prove UC-LEDGER-010 through observable process results and durable-state invariants.
+Prove a valid full/partial refund offsets the original's current category and spend pool in the credit period while preserving facts and exact history.
 
 ## References
 
@@ -38,15 +38,14 @@ Prove UC-LEDGER-010 through observable process results and durable-state invaria
 
 ### Acceptance Checks
 
-- Valid same-account/currency opposite-sign active original/credit creates one full-credit relationship and offsets current original category in credit EffectiveDate period.
-- Multiple partial credits remain within cumulative original magnitude and later category correction moves their category offset.
-- Account/currency/sign/lifecycle/over-refund/transfer/reuse/refund-as-original violations return stable no-link outcomes; failed write is atomic.
-- Identical replay returns one relationship and a refund-heavy selected period may produce negative Budget Actual.
+- A valid opposite-sign same-account credit creates one active attributable relationship and reduces External Spend under the original current category and pool in the credit EffectiveDate period.
+- Later category or pool correction moves the linked offset deterministically without rewriting either transaction or relationship; exact all-up, pool, category, and cell totals remain conserved.
+- Account/currency/sign/lifecycle/role/cardinality/cumulative-magnitude errors, replay conflict, concurrent credit reuse, and write failure leave prior state unchanged.
 
 ### Failure Criteria
 
-- Do NOT infer refunds, split one credit, or use original date/category history instead of current category and credit date.
-- Do NOT omit UC-LEDGER-010 role/cardinality failures.
+- Do NOT classify the refund from its own stored category/pool or infer a pool from another dimension.
+- Do NOT omit later-period and negative-period cases.
 
 ### Expected Outputs
 
@@ -72,8 +71,8 @@ Prove UC-LEDGER-010 through observable process results and durable-state invaria
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 38 wired operations |
-| VerifiedUC010 | `produces` | UC-LEDGER-010 |  |
+| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 72 provider-neutral operations |
+| VerifiedUC010 | `produces` | UC-LEDGER-010 | pool/category-aware refund workflow |
 
 ### Verification
 

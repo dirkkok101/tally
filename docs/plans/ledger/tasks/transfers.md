@@ -22,7 +22,7 @@ Create one attributable active transfer only when distinct owned-account legs sa
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | `true` |
 | FR-LEDGER-TRANSFER-CONFIRMATION: Confirm owned-account transfers | `requirement` | `implements` | `true` |
 | NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | `true` |
@@ -113,7 +113,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-RELATIONSHIPS](../tasks/gate-evidence-relationships.md): Relationship policy cannot start until OQ-LEDGER-5 resolves.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Transfer confirmation requires immutable transaction legs.
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history
+- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `implements` -> FR-LEDGER-TRANSFER-CONFIRMATION: Confirm owned-account transfers
 - `satisfies` -> NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history
 - `touches` -> DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts

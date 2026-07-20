@@ -1,0 +1,272 @@
+{
+  "id": "01KY0DT2MB6ZN4Y8HW8Q71VHX2",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06A6E7WPPCP8KDAKCJ1H4",
+  "ref_code": "TASK-LEDGER-PAYMENT-IDENTITIES",
+  "slug": "PAYMENT-IDENTITIES",
+  "title": "Implement payment-instrument and cardholder catalogues",
+  "description": [
+    "Deliver stable local privacy-safe identity operations independently from transaction attribution."
+  ],
+  "objective": [
+    "Create, inspect, list, rename, archive, and reactivate payment instruments and cardholders using local ULIDs and attributable lifecycle history."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 25,
+  "created_at": "2026-07-20T18:49:57.6488706+00:00",
+  "decisions": [
+    {
+      "id": "01KY0DT2MMWCBH0W71JXFPZK0N",
+      "target": "DD-LEDGER-DIMENSIONAL-ATTRIBUTION",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MMNKAEV0JC54GWK19J",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KY0DT2MNG7HS105WNVNHYZT3",
+      "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
+      "dependency_type": "compile",
+      "reason": [
+        "Every catalogue mutation consumes LedgerMutationExecutor.ExecuteAsync."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MN9MAH91VAJFC50GAN",
+      "target": "TASK-LEDGER-GATE-INT-CORE",
+      "dependency_type": "compile",
+      "reason": [
+        "The catalogue uses the proven process, SQLite, exact IDs, and mutation executor."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY0DT2MN3NZYB8PFJB8BRDGW",
+      "path": "src/Tally/Contracts/Ledger/Dimensions/PaymentIdentityContracts.cs",
+      "action": "create",
+      "role": "public contracts",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MN1NFP2F3EVJHQ90NJ",
+      "path": "src/Tally/Domain/Ledger/Dimensions/PaymentIdentity.cs",
+      "action": "create",
+      "role": "domain lifecycle",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MNWYT88T4RYD9CGD0K",
+      "path": "src/Tally/Features/Ledger/Dimensions/PaymentIdentityHandlers.cs",
+      "action": "create",
+      "role": "commands and queries",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MNJ7YCPMMMYKY7RC83",
+      "path": "src/Tally/Infrastructure/Storage/Dimensions/PaymentIdentityStore.cs",
+      "action": "create",
+      "role": "SQLite store",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MNT1MS1TJGE3D1D7BT",
+      "path": "src/Tally/Features/Ledger/Dimensions/PaymentIdentityOperationModule.cs",
+      "action": "create",
+      "role": "explicit descriptors and DI",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MN86R0JY27N020AB9J",
+      "path": "tests/Tally.Tests/Ledger/PaymentIdentityOperationTests.cs",
+      "action": "test",
+      "role": "contract and persistence tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY0DT2MN6Y0VMSC0FQ7B6T3T",
+      "name": "PaymentIdentityStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-PAYMENT-ATTRIBUTION",
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MNWSGTYZ65NW4FJ4J5",
+      "name": "PaymentIdentityOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS",
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MNQABDZG2GRGPPRJE8",
+      "name": "LedgerMutationExecutor.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY0DT2MMJXS8PG1BD50S7GTW",
+      "kind": "acceptance_check",
+      "text": [
+        "Create returns stable local ULIDs for instruments and cardholders, accepts owner labels and optional masked suffix/account association only, and rejects full identifiers or provider payloads before mutation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MNH508PVJB9C7PE55Q",
+      "kind": "acceptance_check",
+      "text": [
+        "Get/list/rename/archive/reactivate return attributable lifecycle history; archived identities retain historical references and reject new attribution until reactivated."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MN3SAZ7JMYFNM1XM51",
+      "kind": "acceptance_check",
+      "text": [
+        "Duplicate active identity and conflicting idempotency requests return stable conflicts while identical replay returns the original result."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MNEJF2DSB04R1ZXBMJ",
+      "kind": "expected_output",
+      "text": [
+        "Payment identity contracts, policies, stores, handlers, operation modules, and focused tests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MNNB76FYB19YEJGGXM",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use provider IDs as primary identity, retain full card/account numbers, or infer cardholder from wording — rejected per DD-LEDGER-DIMENSIONAL-ATTRIBUTION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MN8A210XF95ZEE8XJV",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT physically delete referenced identities or overwrite labels/history — rejected per DD-LEDGER-IMMUTABLE-HISTORY."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MNXSAFZTB416VDEQET",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add a provider adapter or transport vocabulary to contracts."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY0DT2MNHHN9NF6ER162Q205",
+      "target_ref_code": "DM-LEDGER-PAYMENT-ATTRIBUTION",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KY0BTRE9PBBFAS2M7GP801QM",
+      "target_title": "PaymentInstrumentCardholderAndAttribution",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MNW8WGDSSQN6MHGGSZ",
+      "target_ref_code": "DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KY0BTVZY98NRVEK3TRX5A0D0",
+      "target_title": "PaymentAttributionAndPoolOperationContracts",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MN6G33MWTF1JZ8SYPY",
+      "target_ref_code": "TC-LEDGER-PAYMENT-ATTRIBUTION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KY0A4Z0QPEYR22E7YJP5THJW",
+      "target_title": "Verify payment instrument and cardholder attribution",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KY0DT2MM8JN00HW29JP3J9MS",
+      "target": "FR-LEDGER-PAYMENT-ATTRIBUTION",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY0DT2MNSDZCDXG5APN39DB7",
+      "gate_type": "test-evidence",
+      "description": [
+        "Tests prove local identity, masked-only input, archival history, and idempotency."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY0DT2MN12VS2Z99EFMVJQX8",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Ledger.PaymentIdentityOperationTests --no-restore",
+      "expected_result": "exit 0; at least 18 catalogue, privacy, lifecycle, and replay cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ]
+}

@@ -6,10 +6,10 @@
   "slug": "VERIFY-UC-010",
   "title": "RefundWorkflow",
   "description": [
-    "Verification-only task intentionally has no Implements link: trace UC-LEDGER-010 main scenario and every failure path through the published CLI."
+    "Verification-only task with no Implements link: trace revised UC-LEDGER-010 through Release refund operations and dimensional actuals."
   ],
   "objective": [
-    "Prove UC-LEDGER-010 through observable process results and durable-state invariants."
+    "Prove a valid full/partial refund offsets the original's current category and spend pool in the credit period while preserving facts and exact history."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -40,33 +40,36 @@
   ],
   "interfaces": [
     {
-      "id": "01KXT19MXDFF08BNHRDQHSG5T1",
+      "id": "01KY0EB14GGGJZF8TBTN1PMV2K",
       "name": "PublishedTallyFixture",
       "direction": "consumes",
       "notes": [
         "Release published-process E2E fixture"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:15:49.8048473+00:00"
+      "created_at": "2026-07-20T18:59:13.1670229+00:00"
     },
     {
-      "id": "01KXT19MXDSWYT5G3JH1K2NDMN",
+      "id": "01KY0EB14GBCAREB3J39Q0VR3G",
       "name": "CompletePublicContract",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "Exactly 38 wired operations"
+        "Exactly 72 provider-neutral operations"
       ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:15:49.8048473+00:00"
+      "created_at": "2026-07-20T18:59:13.1670229+00:00"
     },
     {
-      "id": "01KXT19MXDX8CDSKJ4VARMZ9GC",
+      "id": "01KY0EB14G63ES4J5FECE9FEVK",
       "name": "VerifiedUC010",
       "direction": "produces",
       "contract_ref_code": "UC-LEDGER-010",
+      "notes": [
+        "pool/category-aware refund workflow"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:15:49.8048473+00:00"
+      "created_at": "2026-07-20T18:59:13.1670229+00:00"
     }
   ],
   "links": [
@@ -80,44 +83,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT8HM7SJM53AVN3XVSE9590",
+      "id": "01KY0EB14FKZ851KESTRMCC2WE",
       "kind": "acceptance_check",
       "text": [
-        "Valid same-account/currency opposite-sign active original/credit creates one full-credit relationship and offsets current original category in credit Effective Date period."
+        "A valid opposite-sign same-account credit creates one active attributable relationship and reduces External Spend under the original current category and pool in the credit EffectiveDate period."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T09:22:31.2894467+00:00"
+      "created_at": "2026-07-20T18:59:13.1670229+00:00"
     },
     {
-      "id": "01KXT8HM7THZZ578ZRC8R0J923",
+      "id": "01KY0EB14GW9X6ES3AV5ZAR42X",
       "kind": "acceptance_check",
       "text": [
-        "Multiple partial credits remain within cumulative original magnitude and later category correction moves their category offset."
+        "Later category or pool correction moves the linked offset deterministically without rewriting either transaction or relationship; exact all-up, pool, category, and cell totals remain conserved."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T09:22:31.2894467+00:00"
+      "created_at": "2026-07-20T18:59:13.1670229+00:00"
     },
     {
-      "id": "01KXT8HM7TASFESWAF9VA02WKN",
+      "id": "01KY0EB14GSHXG5D7TGTKRE5A3",
       "kind": "acceptance_check",
       "text": [
-        "Account/currency/sign/lifecycle/over-refund/transfer/reuse/refund-as-original violations return stable no-link outcomes; failed write is atomic."
+        "Account/currency/sign/lifecycle/role/cardinality/cumulative-magnitude errors, replay conflict, concurrent credit reuse, and write failure leave prior state unchanged."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T09:22:31.2894467+00:00"
-    },
-    {
-      "id": "01KXT8HM7TDZE1M7D5ER3AY7P6",
-      "kind": "acceptance_check",
-      "text": [
-        "Identical replay returns one relationship and a refund-heavy selected period may produce negative Budget Actual."
-      ],
-      "required": 1,
-      "sort_order": 3,
-      "created_at": "2026-07-18T09:22:31.2894467+00:00"
+      "created_at": "2026-07-20T18:59:13.1670229+00:00"
     },
     {
       "id": "01KXT126TEZNR7MNRW1ZDW8HBT",
@@ -140,24 +133,24 @@
       "created_at": "2026-07-18T07:11:45.9941647+00:00"
     },
     {
-      "id": "01KXT126TDJ8EZGR8BE7EX8EFD",
+      "id": "01KY0EB14GB1JVRZKW6AK6XS8G",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT infer refunds, split one credit, or use original date/category history instead of current category and credit date."
+        "Do NOT classify the refund from its own stored category/pool or infer a pool from another dimension."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-20T18:59:13.1670229+00:00"
     },
     {
-      "id": "01KXT126TD6V0DQ2TJ1EEAW044",
+      "id": "01KY0EB14G5G0YEDAX2QNB1G2K",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT omit UC-LEDGER-010 role/cardinality failures."
+        "Do NOT omit later-period and negative-period cases."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-20T18:59:13.1670229+00:00"
     },
     {
       "id": "01KXT126TEHXRX9M85VF00AY0X",

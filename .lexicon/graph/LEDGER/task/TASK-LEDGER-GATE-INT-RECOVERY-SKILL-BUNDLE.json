@@ -4,12 +4,12 @@
   "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
   "ref_code": "TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE",
   "slug": "GATE-INT-RECOVERY-SKILL-BUNDLE",
-  "title": "Compose the recovery and system operation bundle",
+  "title": "Compose the recovery and integration-guidance bundle",
   "description": [
-    "Convergence gate intentionally has no Implements link: compose completed backup, restore, storage-evolution, schema/version, and skill modules without changing their contracts."
+    "Convergence gate intentionally has no Implements link: compose backup, restore, storage-evolution, schema/version, and optional guidance modules without changing their contracts."
   ],
   "objective": [
-    "Produce one deterministic 13-operation bundle for recovery and system capabilities, rejecting missing, duplicate, or version-incompatible descriptors before dispatch."
+    "Produce one deterministic 13-operation recovery/system/guidance bundle, rejecting missing, duplicate, incompatible, provider-leaking, or skill-authoritative descriptors before dispatch."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -17,14 +17,14 @@
   "created_at": "2026-07-18T07:29:01.9775135+00:00",
   "dependencies": [
     {
-      "id": "01KXT21TGXZRERZG2D7GQ9NF40",
+      "id": "01KY0EKK43BTH9HK2VMMYVEERV",
       "target": "TASK-LEDGER-AGENT-SKILLS",
       "dependency_type": "compile",
       "reason": [
-        "Consumes SkillOperationModule."
+        "Consumes GuidanceOperationModule while preserving schema authority."
       ],
       "sort_order": 3,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T19:03:53.7323879+00:00"
     },
     {
       "id": "01KXT21TGXRAEQRC4M91WFSVE8",
@@ -59,106 +59,121 @@
   ],
   "files": [
     {
-      "id": "01KXT21TGXAQFAYPYNWG2ZPFC0",
-      "path": "src/Tally/Composition/Ledger/RecoverySkillOperationBundle.cs",
+      "id": "01KY0EK713JVFHS40YCNMAQ7BM",
+      "path": "src/Tally/Composition/Ledger/RecoveryGuidanceOperationBundle.cs",
       "action": "create",
       "role": "integration composition",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T19:03:41.3453497+00:00"
     },
     {
-      "id": "01KXT21TGXD6R2QDXJJA7QTVYS",
-      "path": "tests/Tally.Tests/Composition/Ledger/RecoverySkillOperationBundleTests.cs",
+      "id": "01KY0EK713AETNTR4J5PZFBG0G",
+      "path": "tests/Tally.Tests/Composition/Ledger/RecoveryGuidanceOperationBundleTests.cs",
       "action": "test",
       "role": "integration",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T19:03:41.3453497+00:00"
     }
   ],
   "interfaces": [
     {
-      "id": "01KXT21TGX7BBDZE1G36G5H08X",
-      "name": "RecoverySkillOperationBundle",
+      "id": "01KY0E8CNNCJNAHZ9B0RTG1V8W",
+      "name": "RecoveryGuidanceOperationBundle",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "13-operation recovery/system/guidance bundle"
+      ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T18:57:46.6766552+00:00"
     },
     {
-      "id": "01KXT21TGX6HGMJXDWC03CSCKW",
+      "id": "01KY0E8CNP7K1S40SEX63HCVA6",
       "name": "BackupOperationModule",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "notes": [
+        "2 operations"
+      ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T18:57:46.6766552+00:00"
     },
     {
-      "id": "01KXT21TGXM6940TQ4N32YFDY6",
+      "id": "01KY0E8CNPEZEW96FSA8ZYSGGZ",
       "name": "RestoreOperationModule",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "notes": [
+        "2 operations"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T18:57:46.6766552+00:00"
     },
     {
-      "id": "01KXT21TGXWMHCTHGB24PG4N8R",
+      "id": "01KY0E8CNPF5GSFN58FASD2MMV",
       "name": "StorageEvolutionOperationModule",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "notes": [
+        "3 operations"
+      ],
       "sort_order": 3,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T18:57:46.6766552+00:00"
     },
     {
-      "id": "01KXT21TGXBNTF1XH3A5C10P2M",
-      "name": "SkillOperationModule",
+      "id": "01KY0E8CNPB3Z321TBVKBG9E13",
+      "name": "GuidanceOperationModule",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-SYSTEM-SKILL-CONTRACTS",
+      "notes": [
+        "3 optional guidance operations"
+      ],
       "sort_order": 4,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T18:57:46.6766552+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KXT21TGWAK7YCEY74V9C8BQR",
+      "id": "01KY0E8CNNYK8P3XFWHWRXEDBZ",
       "kind": "acceptance_check",
       "text": [
-        "The bundle contains exactly 13 unique descriptors: 7 recovery/storage operations and 6 schema/version/skill operations defined by the consumed modules."
+        "The bundle contains exactly 13 unique descriptors: 7 recovery/storage, 3 schema/version, and 3 optional guidance operations defined by consumed modules."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T18:57:46.6766552+00:00"
     },
     {
-      "id": "01KXT21TGWG9JX0GB6FCJSZ1VJ",
+      "id": "01KY0E8CNNRE3B06CQVXR3DS9K",
       "kind": "acceptance_check",
       "text": [
-        "Descriptor order is operationId ordinal and every source descriptor field is retained byte-for-byte after canonical serialization."
+        "Descriptor order is operationId ordinal and every source field is retained byte-for-byte; discovery and invocation remain complete when no guidance bundle is installed."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T18:57:46.6766552+00:00"
     },
     {
-      "id": "01KXT21TGWGJ560YVDBEQY8J4S",
+      "id": "01KY0E8CNNA36A4QWYB45HWRAE",
       "kind": "acceptance_check",
       "text": [
-        "A missing module, duplicate operationId, duplicate CLI path, or incompatible contract range returns a deterministic composition failure before dispatch."
+        "A missing module, duplicate operationId/path, incompatible range, provider/transport field, or guidance-only capability fails composition before dispatch."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T18:57:46.6766552+00:00"
     },
     {
-      "id": "01KXT21TGW0MHNAYH8S5P9MS5F",
+      "id": "01KY0E8CNNCQB1FV3D7GA0MV0P",
       "kind": "acceptance_check",
       "text": [
-        "Focused tests compare the complete bundle inventory with all source modules and prove no descriptor is added, dropped, or rewritten."
+        "Focused tests compare the 13-operation inventory with all source modules and prove no descriptor is added, dropped, aliased, or rewritten."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T18:57:46.6766552+00:00"
     },
     {
       "id": "01KXT21TGW61C100SBMCHZ9EH2",
@@ -171,24 +186,24 @@
       "created_at": "2026-07-18T07:29:01.9775135+00:00"
     },
     {
-      "id": "01KXT21TGWQDDQG3V6XJBTYVMB",
+      "id": "01KY0EK711Q797W79PXA32TNMW",
       "kind": "expected_output",
       "text": [
-        "RecoverySkillOperationBundle"
+        "RecoveryGuidanceOperationBundle with exactly 13 descriptors"
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T19:03:41.3453497+00:00"
     },
     {
-      "id": "01KXT21TGWM41WH54VQAPDS31F",
+      "id": "01KY0EK7125WZ3PHNBH335589T",
       "kind": "expected_output",
       "text": [
-        "Exact-set composition tests"
+        "Exact-set, schema-authority, and optional-guidance composition tests"
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T19:03:41.3453497+00:00"
     },
     {
       "id": "01KXT21TGWFQD8Z3XM7NCGNZ4E",
@@ -213,36 +228,36 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT21TGXZW94JTSRNKTHKK0H",
+      "id": "01KY0EK7131ZS7ABXYR8739MAM",
       "gate_type": "test-evidence",
       "description": [
-        "Show exact 13-ID set equality and each rejected composition state."
+        "Show exact 13-ID set equality, discovery without installed guidance, and every rejected composition state."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T19:03:41.3453497+00:00"
     },
     {
-      "id": "01KXT21TGX5V4R3HJMX8BVEBSA",
+      "id": "01KY0EK7137X0N0FABX3AG5N8P",
       "gate_type": "self-review",
       "description": [
-        "No recovery action, skill installation, reflection, or descriptor copy is introduced."
+        "No recovery action, mandatory skill, provider adapter, reflection, or descriptor copy is introduced."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T19:03:41.3453497+00:00"
     }
   ],
   "verification_steps": [
     {
-      "id": "01KXT21TGXPZHEQQCV5M1H0GAE",
+      "id": "01KY0EK713Z8FGQ39KDARQB89H",
       "phase": "after",
-      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Composition.Ledger.RecoverySkillOperationBundleTests --no-restore",
-      "expected_result": "exit 0; at least 8 exact-inventory/duplicate/missing/version cases run and 0 fail",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~RecoveryGuidanceOperationBundleTests --no-restore",
+      "expected_result": "exit 0; at least 12 exact-inventory, schema-authority, provider-neutrality, duplicate, missing, and version cases run; exactly 13 operation IDs are reported; 0 fail",
       "required": 1,
-      "timeout_seconds": 180,
+      "timeout_seconds": 300,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-20T19:03:41.3453497+00:00"
     }
   ]
 }

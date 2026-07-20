@@ -6,10 +6,10 @@
   "slug": "CORE-SCHEMA-RELATIONSHIPS-ACTUALS",
   "title": "Implement the V001 relationship and actuals schema fragment",
   "description": [
-    "Schema foundation intentionally has no Implements link: translate financial relationships/lifecycle and ephemeral actuals snapshots into one independently verified V001 fragment."
+    "Schema foundation intentionally has no Implements link: translate financial relationship/lifecycle and ephemeral multi-dimensional actuals snapshots into one independently verified V001 fragment."
   ],
   "objective": [
-    "Create exact transfer/refund relationship, relationship-lifecycle, and expiry-bound query-snapshot tables, constraints, indexes, and role uniqueness without implementing financial rules."
+    "Create exact transfer/refund relationship, relationship-lifecycle, and expiry-bound query-snapshot tables supporting category, pool, instrument, cardholder, evidence, and reconciliation filters without implementing financial rules."
   ],
   "planning_state": "planned",
   "priority": 0,
@@ -92,34 +92,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT2XZDD3YESCF7NWMS38VQ1",
+      "id": "01KY0E2AFB0TZHG741KS9ETM2C",
       "kind": "acceptance_check",
       "text": [
-        "V001RelationshipActualsSchema creates every linked relationship, role, lifecycle, snapshot, item, filter-hash, version, expiry, exact-total, and ordering field with required foreign keys and checks."
+        "V001RelationshipActualsSchema creates every linked relationship, role, lifecycle, snapshot, item, canonical filter, version, expiry, exact named-total, dimension bucket, and ordering field with required foreign keys and checks."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+      "created_at": "2026-07-20T18:54:27.8187664+00:00"
     },
     {
-      "id": "01KXT2XZDD5Q14ENM315BNDT3S",
+      "id": "01KY0E2AFBJ0BQZAHVSCSXE23E",
       "kind": "acceptance_check",
       "text": [
-        "Active relationship roles are unique per transaction, source and target differ, lifecycle replacement links are RESTRICT, and snapshot items use snapshotId plus ordinal."
+        "Active relationship roles are unique per transaction, source and target differ, lifecycle replacement links are RESTRICT, and refund projections can follow the original current category and pool."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+      "created_at": "2026-07-20T18:54:27.8187664+00:00"
     },
     {
-      "id": "01KXT2XZDDZNGK4R8ZQ4M0YV2F",
+      "id": "01KY0E2AFBPQH6J8PV50676JA1",
       "kind": "acceptance_check",
       "text": [
-        "Query snapshots are explicitly marked ephemeral for exclusion from Durable Ledger State; applying the fragment twice or injecting a statement failure leaves no partial tables/indexes."
+        "Snapshot items preserve exact pool/category cells plus explicit uncategorized, unassigned, unknown-attribution, and reconciliation-state membership while using snapshotId plus ordinal."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+      "created_at": "2026-07-20T18:54:27.8187664+00:00"
+    },
+    {
+      "id": "01KY0E2AFBWASM7PGFFSCFX5H4",
+      "kind": "acceptance_check",
+      "text": [
+        "Query snapshots are explicitly ephemeral and excluded from Durable Ledger State; applying the fragment twice or injecting a statement failure leaves no partial tables/indexes."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:54:27.8187664+00:00"
     },
     {
       "id": "01KXT2XZDD0GHX9RWWGK4WEDTX",

@@ -12,11 +12,11 @@
 
 ## Summary
 
-Verification-only task intentionally has no Implements link: trace UC-LEDGER-009 main scenario and every failure path through the published CLI.
+Verification-only task with no Implements link: trace revised UC-LEDGER-009 through Release void/supersede operations.
 
 ## Objective
 
-Prove UC-LEDGER-009 through observable process results and durable-state invariants.
+Prove transaction correction preserves immutable facts, evidence and reconciliation history, retires financial relationships atomically, and never moves dimensions or confirmations silently.
 
 ## References
 
@@ -39,14 +39,14 @@ Prove UC-LEDGER-009 through observable process results and durable-state invaria
 
 ### Acceptance Checks
 
-- Void/supersede with reason preserves original facts, appends attributable history, retires all active relationships atomically, and default actuals count only valid outcome.
-- Supersession creates an independent replacement and copies no financial relationship; history exposes original/replacement/retired links/actor/reason.
-- Not found, absent reason/key, repeated/incompatible correction, relationship retirement failure, and invalid replacement produce documented all-or-nothing outcomes.
+- Void retains evidence/decision history, retires active transfer/refund links, excludes the fact from active actuals, and exposes any affected confirmation as an explicit current exception or unresolved state.
+- Supersede creates an independent replacement with only explicit new evidence/attribution and no silently copied relationship, confirmation, category, pool, instrument, or cardholder state.
+- Missing reason/key, incompatible lifecycle, invalid replacement, relationship/reconciliation coherence failure, changed replay, and injected crash cover every failure path with all-or-none state.
 
 ### Failure Criteria
 
-- Do NOT mutate/delete original facts or silently transfer relationships.
-- Do NOT omit UC-LEDGER-009 rollback and history-inclusive paths.
+- Do NOT delete historical evidence/decisions or silently reconfirm the replacement.
+- Do NOT verify only active actuals; inspect retained old state and explicit current exception.
 
 ### Expected Outputs
 
@@ -72,8 +72,8 @@ Prove UC-LEDGER-009 through observable process results and durable-state invaria
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 38 wired operations |
-| VerifiedUC009 | `produces` | UC-LEDGER-009 |  |
+| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 72 provider-neutral operations |
+| VerifiedUC009 | `produces` | UC-LEDGER-009 | evidence-aware correction workflow |
 
 ### Verification
 

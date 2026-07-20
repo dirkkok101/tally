@@ -9,7 +9,7 @@
     "Foundation task intentionally has no Implements link: establish raw-SQLite runtime, storage/idempotency metadata, migration composition, permissions, and generation primitives; domain schema arrives through separately reviewed V001 fragments."
   ],
   "objective": [
-    "Provide a real-store-tested LedgerDb, schema-fragment registry, storage metadata schema, generation activation primitives, and owner-only artifact policy."
+    "Provide a real-store-tested LedgerDb, schema-fragment registry, storage metadata schema, generation activation primitives, and owner-only artifact policy for complete provider-neutral Durable Ledger State."
   ],
   "planning_state": "planned",
   "priority": 0,
@@ -172,54 +172,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT2VQE7G2JF4EDMWYN59G15",
+      "id": "01KY0E28NARM3KFY8GRRZJ6FKC",
       "kind": "acceptance_check",
       "text": [
         "New data roots are 0700 and databases, WAL, SHM, candidates, manifests, pointers, and backups are 0600."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+      "created_at": "2026-07-20T18:54:25.9621791+00:00"
     },
     {
-      "id": "01KXT2VQE8J8ABRGWSA9YP3WG1",
+      "id": "01KY0E28NBGSA0VHZKHJ3TPZZR",
       "kind": "acceptance_check",
       "text": [
         "Supported connections enable foreign_keys, WAL, busy timeout, synchronous FULL financial writes, and reject a newer user_version before mutation."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+      "created_at": "2026-07-20T18:54:25.9621791+00:00"
     },
     {
-      "id": "01KXT2VQE8YA0MX0R09YR17CN7",
+      "id": "01KY0E28NBNQ4J4P0YXWE8R1H3",
       "kind": "acceptance_check",
       "text": [
-        "V001StorageSchema creates only store generation, artifact manifest, idempotency record, and migration metadata from their linked models; the registry accepts explicit uniquely named V001 fragments and applies the eventual complete set in one transaction."
+        "V001StorageSchema creates only generation, artifact-manifest, idempotency, logical-effect, and migration metadata; the registry accepts explicit uniquely named V001 fragments and applies the complete set atomically."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+      "created_at": "2026-07-20T18:54:25.9621791+00:00"
     },
     {
-      "id": "01KXT2VQE8VJ2AJ66FXYKWHM9W",
+      "id": "01KY0E28NB0S82Y1Q02KDSE5D8",
       "kind": "acceptance_check",
       "text": [
         "StoreGenerationManager accepts only an owner-only CURRENT pointer to a verified generation and atomically replaces it while retaining the prior generation."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+      "created_at": "2026-07-20T18:54:25.9621791+00:00"
     },
     {
-      "id": "01KXT2VQE8HXPXMMHG4QNA1WJV",
+      "id": "01KY0E28NB4XG1W0YKR6DJ2XZ5",
       "kind": "acceptance_check",
       "text": [
-        "A duplicate/missing fragment, migration, lock, permission, or integrity failure exposes no partial schema or unverified current generation."
+        "A duplicate/missing fragment, migration, lock, permission, integrity, or flush failure exposes no partial schema or unverified current generation."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T07:43:10.7906767+00:00"
+      "created_at": "2026-07-20T18:54:25.9621791+00:00"
     },
     {
       "id": "01KXT2VQE8QKZTS2F6R17D3TSZ",
@@ -310,6 +310,16 @@
       "required": 1,
       "sort_order": 1,
       "created_at": "2026-07-18T07:43:10.7906767+00:00"
+    },
+    {
+      "id": "01KY0E28NBB2JNRGVFEPNHN6HT",
+      "kind": "note",
+      "text": [
+        "Complete durable-state verification is implemented later and must enumerate evidence, reconciliation, attribution, pool, relationship, history, and idempotency state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:54:25.9621791+00:00"
     }
   ],
   "references": [

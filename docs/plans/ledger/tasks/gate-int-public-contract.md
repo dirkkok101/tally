@@ -12,11 +12,11 @@
 
 ## Summary
 
-Integration gate intentionally has no Implements link: explicitly compose every feature operation module and prove the released descriptor/process inventory.
+Integration gate intentionally has no Implements link: explicitly compose every provider-neutral feature bundle and prove the released descriptor/process inventory.
 
 ## Objective
 
-Expose exactly the 38 designed public operations through one registry with deterministic schemas, stable errors/exits, idempotency classification, and published-binary behavior.
+Expose exactly the 72 designed public operations through one registry with deterministic schemas, stable errors/exits, idempotency classification, privacy constraints, and published-binary behavior.
 
 ## References
 
@@ -33,18 +33,19 @@ Expose exactly the 38 designed public operations through one registry with deter
 |---|---|---|
 | [TASK-LEDGER-GATE-INT-CATALOGUE-TRANSACTION-BUNDLE](../tasks/gate-int-catalogue-transaction-bundle.md) | `compile` | Consumes CatalogueTransactionOperationBundle. |
 | [TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE](../tasks/gate-int-relationship-actuals-bundle.md) | `compile` | Consumes RelationshipActualsOperationBundle. |
-| [TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE](../tasks/gate-int-recovery-skill-bundle.md) | `compile` | Consumes RecoverySkillOperationBundle. |
 | [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md) | `compile` | Consumes OperationRegistry. |
+| [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](../tasks/gate-int-reconciliation-bundle.md) | `compile` | The 72-operation public contract consumes the 9-operation reconciliation bundle. |
+| [TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE](../tasks/gate-int-recovery-skill-bundle.md) | `compile` | Consumes RecoveryGuidanceOperationBundle. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- LedgerServices explicitly registers every operation module and OperationRegistry contains exactly the 38 design operation IDs/paths with no aliases, duplicate IDs/paths, generic invoke/CRUD/SQL/database operations, reflection scan, or private storage schema.
-- Every descriptor has concrete request/result schema, complete stable errors/exits, help/example, supported versions, handler, and mutation idempotency requirement matching the five operation-contract data models.
-- Published tally schema list/show and representative success/error invocation write one stdout object, safe stderr metadata, and documented exits; schema inventory is deterministic across runs.
-- Every public mutation routes through LedgerMutationExecutor; actuals first page is the only internal ephemeral cache write without a public idempotency key.
-- Native-AOT publish and offline process inventory complete without dynamic-code warnings, network listeners, orphan processes, or missing source-generated JSON types.
+- LedgerServices explicitly registers every module and OperationRegistry contains exactly 72 design operation IDs/paths: 42 financial-dimension/transaction/evidence, 9 reconciliation, 8 relationship/actuals, and 13 recovery/system/guidance; there are no aliases, generic invoke/CRUD/SQL/database operations, reflection scans, or private schemas.
+- Every descriptor has a concrete source-generated request/result schema, complete stable errors/exits, help/example, supported versions, handler, closed provider-neutral vocabulary, and correct read/write idempotency requirement.
+- Published tally schema list/show and representative success/error/review-required invocation write one stdout object, safe stderr metadata, and documented exits; schema inventory is deterministic across runs.
+- Every public mutation routes through LedgerMutationExecutor and logical-effect enforcement where required; actuals first page is the only internal ephemeral cache write without a public idempotency key.
+- Native-AOT publish and offline inventory complete without dynamic-code warnings, network listeners, child processes, missing JSON types, provider transport fields, or raw evidence payload fields.
 
 ### Failure Criteria
 
@@ -54,7 +55,7 @@ Expose exactly the 38 designed public operations through one registry with deter
 ### Expected Outputs
 
 - Explicit root module composition
-- 38-operation schema snapshot
+- 72-operation provider-neutral schema snapshot
 - PublicContractInventoryTests and PublishedLedgerContractTests
 
 ### Constraints
@@ -80,25 +81,26 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CatalogueTransactionOperationBundle | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR |  |
-| RelationshipActualsOperationBundle | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR |  |
-| RecoverySkillOperationBundle | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR |  |
-| OperationRegistry | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR |  |
-| PublishedTallyFixture | `produces` |  | Release-published process E2E fixture |
-| CompletePublicContract | `produces` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 38 explicitly wired operations |
+| CatalogueTransactionOperationBundle | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | 42 operations |
+| ReconciliationOperationBundle | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS | 9 operations |
+| RelationshipActualsOperationBundle | `consumes` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS | 8 operations |
+| RecoveryGuidanceOperationBundle | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | 13 operations |
+| OperationRegistry | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | explicit registry |
+| PublishedTallyFixture | `produces` |  | Release process fixture |
+| CompletePublicContract | `produces` | DM-LEDGER-OPERATION-DESCRIPTOR | exactly 72 provider-neutral operations |
 
 ### Verification
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~PublicContractInventoryTests\|FullyQualifiedName~PublishedLedgerContractTests' --no-restore` | exit 0; at least 40 inventory/process cases run, exactly 38 operations are reported, and 0 tests fail | `true` | 900 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~PublicContractIntegrationTests --no-restore` | exit 0; at least 76 inventory, schema, provider-neutrality, process, and idempotency-routing cases run; exactly 72 operations are reported; 0 tests fail | `true` | 900 |
 
 ### Review Gates
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Attach the exact 38-operation inventory and published success/error stream evidence. | `true` |
-| `branch-review` | Reviewer compares every descriptor with its operation-contract data model. | `true` |
+| `test-evidence` | Attach exact 72-operation inventory, bundle subtotals, schema scan, and published success/error/review stream evidence. | `true` |
+| `self-review` | Compare every operation-table row in MD-LEDGER-MASTER with exactly one registry descriptor. | `true` |
 
 ## Bead References
 
@@ -110,7 +112,8 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 
 - `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md): Consumes OperationRegistry.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CATALOGUE-TRANSACTION-BUNDLE](../tasks/gate-int-catalogue-transaction-bundle.md): Consumes CatalogueTransactionOperationBundle.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE](../tasks/gate-int-recovery-skill-bundle.md): Consumes RecoverySkillOperationBundle.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](../tasks/gate-int-reconciliation-bundle.md): The 72-operation public contract consumes the 9-operation reconciliation bundle.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE](../tasks/gate-int-recovery-skill-bundle.md): Consumes RecoveryGuidanceOperationBundle.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE](../tasks/gate-int-relationship-actuals-bundle.md): Consumes RelationshipActualsOperationBundle.
 - `satisfies` -> NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the agent contract stable
 - `touches` -> DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope

@@ -1,0 +1,336 @@
+{
+  "id": "01KY0DT2MDFAMZ1DDRSKM9M14V",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KY0D0QYX4CJZKSVH3MMGT6BK",
+  "ref_code": "TASK-LEDGER-RECONCILIATION-PROJECTION",
+  "slug": "RECONCILIATION-PROJECTION",
+  "title": "Implement deterministic reconciliation candidate projection",
+  "description": [
+    "Deliver the read-only, versioned candidate and guard-candidate projection proven by OQ-LEDGER-13."
+  ],
+  "objective": [
+    "Return deterministic compatible candidates, conflicts, rejection reasons, policy version, and advisory token without mutating Ledger state."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 10,
+  "created_at": "2026-07-20T18:49:57.6488706+00:00",
+  "decisions": [
+    {
+      "id": "01KY0DT2MTRWNT668G1BP3DERP",
+      "target": "DD-LEDGER-FINANCIAL-REPRESENTATION",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MT8Z3BBPK206M452E9",
+      "target": "DD-LEDGER-RECONCILIATION-CONTRACT",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KY0DT2MVY3N3JKAGG92P20BN",
+      "target": "TASK-LEDGER-EVIDENCE-REGISTRY",
+      "dependency_type": "compile",
+      "reason": [
+        "Projection reads normalized evidence through EvidenceStore."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MTJ33SE2Z3AZ9S8Q3E",
+      "target": "TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY",
+      "dependency_type": "compile",
+      "reason": [
+        "The policy must be empirically resolved before its code exists."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MVC379ZAWSY1J04TDZ",
+      "target": "TASK-LEDGER-TRANSACTIONS-RECORD-GET",
+      "dependency_type": "compile",
+      "reason": [
+        "Projection reads canonical active transaction facts through TransactionStore."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY0DT2MTA2RNS8CD8975EXJW",
+      "path": "src/Tally/Contracts/Ledger/Reconciliation/ReconciliationProjectionContracts.cs",
+      "action": "create",
+      "role": "public contracts",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MTVCGVVTS1BE23AAEG",
+      "path": "src/Tally/Domain/Ledger/Reconciliation/ReconciliationPolicyV1.cs",
+      "action": "create",
+      "role": "versioned deterministic policy",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MT4ZFR38RX54F88M5C",
+      "path": "src/Tally/Features/Ledger/Reconciliation/ReconciliationProjectionHandler.cs",
+      "action": "create",
+      "role": "query handler",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MT622VXCVBG86ATHXC",
+      "path": "src/Tally/Infrastructure/Storage/Reconciliation/ReconciliationProjectionStore.cs",
+      "action": "create",
+      "role": "read projection",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MTH2TK1A719NBNS5B4",
+      "path": "src/Tally/Features/Ledger/Reconciliation/ReconciliationProjectionOperationModule.cs",
+      "action": "create",
+      "role": "explicit descriptor and DI",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MTX0NCER960K7M619R",
+      "path": "tests/Tally.Tests/Ledger/ReconciliationPolicyMatrixTests.cs",
+      "action": "test",
+      "role": "policy tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MT0R4W61Q67KXXGWB6",
+      "path": "tests/Tally.Tests/Ledger/ReconciliationProjectionTests.cs",
+      "action": "test",
+      "role": "real-SQLite query tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY0DT2MTY2AWCTD6F38X7H07",
+      "name": "ReconciliationPolicyV1",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MTGD1M5MD9R4T02B0A",
+      "name": "ReconciliationProjectionStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MTZB82SZ5EZ73B6RGD",
+      "name": "ReconciliationProjectionOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MTB618XBEEGQ4TB14E",
+      "name": "EvidenceStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECORD-LINK",
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MTQCK0D9M3KX3PVVWM",
+      "name": "TransactionStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-FACT",
+      "sort_order": 4,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MTAJ6WFYXBTH4DJ8KQ",
+      "name": "OQ-LEDGER-13Resolution",
+      "direction": "consumes",
+      "contract_ref_code": "OQ-LEDGER-13",
+      "sort_order": 5,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY0DT2MTYP3MQDVKCYWE88MT",
+      "kind": "acceptance_check",
+      "text": [
+        "For each resolved ReconciliationPolicyV1 fixture the query returns the same ordered compatible/guard candidates, exact basis and rejection codes regardless of row insertion or candidate enumeration order."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MTR93D2NFRPPKVB781",
+      "kind": "acceptance_check",
+      "text": [
+        "Inactive, reconciled, wrong-account/currency/amount/date, and conflicting-evidence transactions are excluded with stable reasons; zero, one, and multiple candidate classifications are explicit."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MT1XAACZDTPVJ86VAZ",
+      "kind": "acceptance_check",
+      "text": [
+        "Projection returns an advisory token and policy ID/version but creates no evidence link, decision, state, transaction, idempotency, or snapshot row."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MTA93EB6FRRN7QBB8G",
+      "kind": "expected_output",
+      "text": [
+        "ReconciliationPolicyV1, projection contracts/store/handler/module, policy matrix and integration tests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MTY5PFPXT10AQT3285",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add fuzzy text matching, runtime tolerance configuration, provider fields, or hidden tie-breaking — rejected per DD-LEDGER-RECONCILIATION-CONTRACT."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MT7VVGMR7GRX3QNYJX",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT let a projection token authorize a later write without transactional revalidation."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MT722V85RW7NGVPZZB",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT mutate durable or ephemeral Ledger state from the candidates query."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY0DT2MTPE4DPW4GC0H3305A",
+      "target_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KY0BTQPT00M98Z8NRSF7Y2XP",
+      "target_title": "ReconciliationProjectionDecisionAndCoverage",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MTAN4T8BZ7ATTC0NCW",
+      "target_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KY0BTTT9FVNN9897X5WAR9GQ",
+      "target_title": "EvidenceReconciliationOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MTV92RWJ2DN09JXVP1",
+      "target_ref_code": "TC-LEDGER-RECONCILIATION-PROJECTION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KY0A4WS4V8BEE4WCVWW1K267",
+      "target_title": "Verify deterministic reconciliation candidate projection",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MT15XQDXKE9ED1DV27",
+      "target_ref_code": "TC-LEDGER-RECONCILIATION-POLICY-MATRIX",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KY0BY9W4HESV0R3NBYPD8Q3W",
+      "target_title": "Prove deterministic reconciliation policy and ambiguity guards",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KY0DT2MT18HXJM47Y7JW46AH",
+      "target": "FR-LEDGER-RECONCILIATION-PROJECTION",
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY0DT2MT90E587G9BEB6EWPW",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach the policy matrix and proof that projection performs zero writes."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MT9VVPC6E9W0RP12VW",
+      "gate_type": "self-review",
+      "description": [
+        "Every automatic rule is present in the resolved OQ-LEDGER-13 decision."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY0DT2MT9ESM1CA224Z1SV7R",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~Tally.Tests.Ledger.ReconciliationPolicyMatrixTests|FullyQualifiedName~Tally.Tests.Ledger.ReconciliationProjectionTests' --no-restore",
+      "expected_result": "exit 0; at least 28 deterministic matrix and real-SQLite projection cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ]
+}

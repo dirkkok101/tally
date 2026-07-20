@@ -2,10 +2,10 @@
   "id": "01KXT06AV2YBFA37A3CEQMT346",
   "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
   "ref_code": "SP-LEDGER-04-RECOVERY-SKILLS",
-  "title": "Recovery and skills",
+  "title": "Recovery and integration guidance",
   "description": [
-    "Deliver backup, activation, evolution, and bundled agent skills."
+    "Verify every durable state type, publish backups and candidate activation, evolve storage safely, and expose optional provider-neutral guidance."
   ],
-  "sort_order": 4,
+  "sort_order": 5,
   "created_at": "2026-07-18T06:56:32.6115736+00:00"
 }

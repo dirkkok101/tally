@@ -6,10 +6,10 @@
   "slug": "BACKUP-VERIFY",
   "title": "Create and independently verify Ledger backups",
   "description": [
-    "Implement the versioned backup operations on the shared DurableLedgerVerifier; publication remains impossible until complete-state verification succeeds."
+    "Implement versioned backup operations on the complete DurableLedgerVerifier; publication remains impossible until every provider-neutral durable-state type and exact derived result verifies."
   ],
   "objective": [
-    "Publish exactly one owner-only versioned backup artifact after checksum, compatibility, complete Durable Ledger State, relationship, idempotency, count, and exact-total verification succeeds."
+    "Publish exactly one owner-only versioned backup artifact after checksum, compatibility, complete-state, privacy, replay, count, relationship/reconciliation, and exact-total verification succeeds."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -141,54 +141,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT25YEXGSD8MSZXDBD1CZQM",
+      "id": "01KY0E895C3Y0SHEAYKF3HNN2W",
       "kind": "acceptance_check",
       "text": [
-        "backup.create under the writer lock uses SQLite online backup to private staging, invokes DurableLedgerVerifier, writes the verified checksum/version/fingerprint/counts/totals manifest, flushes, and atomically publishes a non-existing 0600 target without changing live state."
+        "backup.create under the writer lock uses SQLite online backup to private staging, invokes DurableLedgerVerifier, writes its normalized fingerprint/counts/totals/schema/storage/reconciliation-policy manifest, flushes, and atomically publishes a non-existing 0600 target without changing live state."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+      "created_at": "2026-07-20T18:57:43.0843137+00:00"
     },
     {
-      "id": "01KXT25YEYVE2PZAR620BX0MA3",
+      "id": "01KY0E895DM9TB1D1W9A4JNRTQ",
       "kind": "acceptance_check",
       "text": [
-        "backup.verify independently checks the artifact checksum and compatibility, then returns the complete report produced by DurableLedgerVerifier."
+        "backup.verify independently checks artifact checksum and compatibility, then returns the same complete normalized report produced by DurableLedgerVerifier."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+      "created_at": "2026-07-20T18:57:43.0843137+00:00"
     },
     {
-      "id": "01KXT25YEYC6TY7HERQZ1NKJ8D",
+      "id": "01KY0E895DRVFNGB8H75B9ZNDM",
       "kind": "acceptance_check",
       "text": [
-        "A corrupt, incomplete, unsupported, inaccessible, unsafe, or existing artifact path returns the specified stable error and mutates neither artifact nor live store."
+        "A corrupt, incomplete, unsupported, privacy-invalid, inaccessible, unsafe, or existing artifact path returns the stable error and mutates neither artifact nor live store."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+      "created_at": "2026-07-20T18:57:43.0843137+00:00"
     },
     {
-      "id": "01KXT25YEYF7MN6SHDWFDT1931",
+      "id": "01KY0E895DK119ZC83EV9EB6Z4",
       "kind": "acceptance_check",
       "text": [
-        "Diagnostics expose no descriptions, credentials, or unmasked identifiers; owner-only permissions and host-protection posture are preserved."
+        "Diagnostics expose no descriptions, raw evidence, credentials, or full identifiers; owner-only permissions and host-protection posture are preserved."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+      "created_at": "2026-07-20T18:57:43.0843137+00:00"
     },
     {
-      "id": "01KXT25YEYYJ08K25X5HT0M135",
+      "id": "01KY0E895DM29G3NVG8GMQZYHQ",
       "kind": "acceptance_check",
       "text": [
-        "Identical create replay reconciles the published manifest and returns the original artifact result; a changed request conflicts."
+        "Identical create replay reconciles the published manifest and returns the original artifact result; changed request conflicts."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+      "created_at": "2026-07-20T18:57:43.0843137+00:00"
     },
     {
       "id": "01KXT25YEY19SQ3XPXG1ME1RDB",

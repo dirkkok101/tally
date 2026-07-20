@@ -12,11 +12,11 @@
 
 ## Summary
 
-Convergence gate intentionally has no Implements link: compose the completed transfer, refund, relationship-lifecycle, and actuals modules without changing their contracts.
+Convergence gate intentionally has no Implements link: compose transfer, refund, relationship-lifecycle, and exact multi-dimensional actuals modules without changing their contracts.
 
 ## Objective
 
-Produce one deterministic 8-operation bundle for relationships and actuals, rejecting missing, duplicate, or version-incompatible descriptors before dispatch.
+Produce one deterministic 8-operation relationship/actuals bundle whose results remain exact by pool and category after reconciliation, refunds, reversals, transfers, and corrections.
 
 ## References
 
@@ -35,10 +35,10 @@ No graph references recorded.
 
 ### Acceptance Checks
 
-- The bundle contains exactly the 8 unique transfer, refund, relationship, and actuals descriptors defined by the four consumed modules.
-- Descriptor order is operationId ordinal and every source descriptor field is retained byte-for-byte after canonical serialization.
-- A missing module, duplicate operationId, duplicate CLI path, or incompatible contract range returns a deterministic composition failure before dispatch.
-- Focused tests compare the complete bundle inventory with all source modules and prove no descriptor is added, dropped, or rewritten.
+- The bundle contains exactly 8 unique transfer, refund, relationship, and actuals descriptors defined by the consumed modules.
+- Descriptor order is operationId ordinal and every source descriptor field, dimensional filter, explicit unknown/unassigned bucket, and error is retained byte-for-byte after canonical serialization.
+- A missing module, duplicate operationId/path, incompatible contract range, or loss of pool/category/reconciliation schema fails before dispatch.
+- Focused real-store tests prove exact all-up, pool, category, and pool-by-category conservation through refund, transfer, relationship replacement, transaction correction, and reconciliation-state changes.
 
 ### Failure Criteria
 

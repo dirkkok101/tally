@@ -12,18 +12,18 @@
 
 ## Summary
 
-Implement the versioned backup operations on the shared DurableLedgerVerifier; publication remains impossible until complete-state verification succeeds.
+Implement versioned backup operations on the complete DurableLedgerVerifier; publication remains impossible until every provider-neutral durable-state type and exact derived result verifies.
 
 ## Objective
 
-Publish exactly one owner-only versioned backup artifact after checksum, compatibility, complete Durable Ledger State, relationship, idempotency, count, and exact-total verification succeeds.
+Publish exactly one owner-only versioned backup artifact after checksum, compatibility, complete-state, privacy, replay, count, relationship/reconciliation, and exact-total verification succeeds.
 
 ## References
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional idempotency with artifact reconciliation | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts | `data_model` | `touches` | `true` |
 | FR-LEDGER-BACKUP-VERIFICATION: Create and verify Ledger backups | `requirement` | `implements` | `true` |
 | NFR-LEDGER-LOCAL-DATA-PROTECTION: Protect local financial data | `nfr` | `satisfies` | `true` |
@@ -41,11 +41,11 @@ Publish exactly one owner-only versioned backup artifact after checksum, compati
 
 ### Acceptance Checks
 
-- backup.create under the writer lock uses SQLite online backup to private staging, invokes DurableLedgerVerifier, writes the verified checksum/version/fingerprint/counts/totals manifest, flushes, and atomically publishes a non-existing 0600 target without changing live state.
-- backup.verify independently checks the artifact checksum and compatibility, then returns the complete report produced by DurableLedgerVerifier.
-- A corrupt, incomplete, unsupported, inaccessible, unsafe, or existing artifact path returns the specified stable error and mutates neither artifact nor live store.
-- Diagnostics expose no descriptions, credentials, or unmasked identifiers; owner-only permissions and host-protection posture are preserved.
-- Identical create replay reconciles the published manifest and returns the original artifact result; a changed request conflicts.
+- backup.create under the writer lock uses SQLite online backup to private staging, invokes DurableLedgerVerifier, writes its normalized fingerprint/counts/totals/schema/storage/reconciliation-policy manifest, flushes, and atomically publishes a non-existing 0600 target without changing live state.
+- backup.verify independently checks artifact checksum and compatibility, then returns the same complete normalized report produced by DurableLedgerVerifier.
+- A corrupt, incomplete, unsupported, privacy-invalid, inaccessible, unsafe, or existing artifact path returns the stable error and mutates neither artifact nor live store.
+- Diagnostics expose no descriptions, raw evidence, credentials, or full identifiers; owner-only permissions and host-protection posture are preserved.
+- Identical create replay reconciles the published manifest and returns the original artifact result; changed request conflicts.
 
 ### Failure Criteria
 
@@ -110,7 +110,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumes IHostArtifactProtection.
 - `depends-on:compile` -> [TASK-LEDGER-DURABLE-STATE-VERIFIER](../tasks/durable-state-verifier.md): Consumes DurableLedgerVerifier.
 - `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
-- `governed-by` -> DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional idempotency with artifact reconciliation
+- `governed-by` -> DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency
 - `implements` -> FR-LEDGER-BACKUP-VERIFICATION: Create and verify Ledger backups
 - `satisfies` -> NFR-LEDGER-LOCAL-DATA-PROTECTION: Protect local financial data
 - `touches` -> DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts

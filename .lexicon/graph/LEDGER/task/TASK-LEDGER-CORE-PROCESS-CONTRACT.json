@@ -6,10 +6,10 @@
   "slug": "CORE-PROCESS-CONTRACT",
   "title": "Build the self-contained process and operation contract",
   "description": [
-    "Create the .NET 10 Native-AOT solution and descriptor-driven process boundary every Ledger slice registers with."
+    "Create the .NET 10 Native-AOT solution and provider-neutral descriptor-driven process boundary every Ledger slice registers with."
   ],
   "objective": [
-    "Produce a publishable tally executable whose explicit registry drives dispatch, help, schema, structured streams, errors, exits, and version reporting."
+    "Produce one offline tally executable whose explicit 72-operation registry drives dispatch, help, schema, structured streams, errors, exits, compatibility, and version reporting for any external caller."
   ],
   "planning_state": "planned",
   "priority": 0,
@@ -205,54 +205,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT0KHY3B5RVFM3A8966VQ28",
+      "id": "01KY0E281XPZ57ZYBRPRPH92J3",
       "kind": "acceptance_check",
       "text": [
         "Release linux-x64 publish contains one native tally executable and adjacent SQLite native library; invocations start no daemon/listener and leave no child process."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-20T18:54:25.3409724+00:00"
     },
     {
-      "id": "01KXT0KHY3E856QB9J54TTJ2TT",
+      "id": "01KY0E281YVH24KPTBTR9RG4F7",
       "kind": "acceptance_check",
       "text": [
-        "tally schema list/show, tally version, and help return deterministic descriptor-derived operation, request, result, error, exit, compatibility, and example metadata without store access."
+        "tally schema list/show, tally version, and help return deterministic descriptor-derived operation, request, result, error, exit, compatibility, and example metadata without store access or an installed skill."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-20T18:54:25.3409724+00:00"
     },
     {
-      "id": "01KXT0KHY3WWNCP3DP79M0ZKD7",
+      "id": "01KY0E281YYTP1VMZSFZ29S64Y",
       "kind": "acceptance_check",
       "text": [
-        "Valid JSON through explicit --input - or @file writes exactly one result envelope to stdout; malformed JSON, unknown fields, and unknown operations fail before mutation with documented error/exit."
+        "Valid JSON through explicit --input - or @file writes exactly one result envelope to stdout; malformed JSON, unknown fields, unknown operations, and provider or delivery fields fail before mutation with documented error/exit."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-20T18:54:25.3409724+00:00"
     },
     {
-      "id": "01KXT0KHY37WRAH8XNF703G7ZM",
+      "id": "01KY0E281YPFAVA4FGDD8ETCWD",
       "kind": "acceptance_check",
       "text": [
-        "Expected and sanitized unexpected failures keep diagnostics on stderr with metadata/correlation only and never serialize financial payloads or stack traces."
+        "Expected and sanitized unexpected failures keep diagnostics on stderr with metadata/correlation only and never serialize financial payloads, evidence payloads, full identifiers, or stack traces."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-20T18:54:25.3409724+00:00"
     },
     {
-      "id": "01KXT0KHY3JF2SBSZMV0K6HC04",
+      "id": "01KY0E281YA0VHYJKPJ8TPMSBK",
       "kind": "acceptance_check",
       "text": [
-        "Every asynchronous process/handler boundary propagates CancellationToken and registration is explicit."
+        "Every asynchronous process/handler boundary propagates CancellationToken; registration is explicit; the final inventory gate proves exactly 72 provider-neutral operations."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-20T18:54:25.3409724+00:00"
     },
     {
       "id": "01KXT0KHY3R5DDST32R0HYGZ5V",
@@ -315,44 +315,54 @@
       "created_at": "2026-07-18T07:03:45.8586325+00:00"
     },
     {
-      "id": "01KXT0KHY3GDQ98QWQJTTNKCG9",
+      "id": "01KY0E281Y7QP492JV0F909W0S",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT add FastEndpoints, Controllers, Minimal APIs, Aspire, PostgreSQL, EF Core, a daemon/listener, mediator, event bus, generic repository, reflection scanning, or plugin runtime — per DD-LEDGER-APPLICATION-ARCHITECTURE."
+        "Do NOT add FastEndpoints, Controllers, Minimal APIs, Aspire, PostgreSQL, EF Core, a daemon/listener, mediator, event bus, generic repository, reflection scanning, or plugin runtime - per DD-LEDGER-APPLICATION-ARCHITECTURE."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-20T18:54:25.3409724+00:00"
     },
     {
-      "id": "01KXT0KHY3VR4TTKVPHVKHQHDB",
+      "id": "01KY0E281Y23KJFCPBR0TR5P10",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT expose generic invoke/save/update/delete/SQL/database operations or v1 aliases — rejected per DD-LEDGER-CLI-OPERATION-CONTRACT."
+        "Do NOT add Hermes, AgentMail, WhatsApp, provider transport, recipient, schedule, delivery, acknowledgement, or orchestration behavior - per ADR-CORE-0030."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-20T18:54:25.3409724+00:00"
     },
     {
-      "id": "01KXT0KHY3W4RR32434CTW6DFZ",
+      "id": "01KY0E281YYWM5XEE3A0974Q0K",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT throw expected domain outcomes; use CommandResult<T> and stable exit categories."
+        "Do NOT expose generic invoke/save/update/delete/SQL/database operations or aliases - rejected per DD-LEDGER-CLI-OPERATION-CONTRACT."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-20T18:54:25.3409724+00:00"
     },
     {
-      "id": "01KXT0KHY3WQNYKE2PWCNJHX4P",
+      "id": "01KY0E281YTPCYS5GWGZA6BKS0",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT place finance policy in TallyProcess or OperationRegistry."
+        "Do NOT throw expected domain outcomes or place finance policy in TallyProcess or OperationRegistry."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-20T18:54:25.3409724+00:00"
+    },
+    {
+      "id": "01KY0E281Y3H5QWZN36DYVMCQ8",
+      "kind": "note",
+      "text": [
+        "The registry is authoritative; optional guidance is derived and cannot broaden the public contract."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:54:25.3409724+00:00"
     }
   ],
   "references": [

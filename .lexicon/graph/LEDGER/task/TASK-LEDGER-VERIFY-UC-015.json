@@ -1,0 +1,190 @@
+{
+  "id": "01KY0DT2MF980DGHP5CXDQSB22",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-VERIFY-UC-015",
+  "slug": "VERIFY-UC-015",
+  "title": "ReconciliationDecisionWorkflow",
+  "description": [
+    "Verification-only task with no Implements link: trace UC-LEDGER-015 through the Release published CLI."
+  ],
+  "objective": [
+    "Prove explicit owner decisions resolve or correct reconciliation without deleting history or duplicating actuals."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 170,
+  "created_at": "2026-07-20T18:49:57.6488706+00:00",
+  "dependencies": [
+    {
+      "id": "01KY0DT2N1T26Y4P33EJ5W7AV3",
+      "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Use-case verification invokes the fully wired published public contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY0DT2N12K4KBFZEND8NFT31",
+      "path": "tests/Tally.Tests/EndToEnd/UC015ReconciliationDecisionWorkflowTests.cs",
+      "action": "test",
+      "role": "published-process verification",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY0DT2N14XYN0ZJ91EJT0BJH",
+      "name": "PublishedTallyFixture",
+      "direction": "consumes",
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N1FEPQ7AT0NGV1S7Y8",
+      "name": "CompletePublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "72 provider-neutral operations"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N1F8CEHJJN5F1780HE",
+      "name": "VerifiedUC015",
+      "direction": "produces",
+      "contract_ref_code": "UC-LEDGER-015",
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY0DT2N0X3VAJK1M3ZZRFDB6",
+      "kind": "acceptance_check",
+      "text": [
+        "The published workflow confirms one compatible candidate, rejects all candidates, revokes a match, replaces it, and returns immutable history plus one active confirming target."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N04P8T93RJKKGC2K88",
+      "kind": "acceptance_check",
+      "text": [
+        "Missing evidence/candidate/intent/reason/key, incompatible or inactive target, other-link conflict, identical replay, changed replay, stale predecessor, and injected atomic failure cover every UC-LEDGER-015 failure path."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N11BVK70228VMKHC3K",
+      "kind": "acceptance_check",
+      "text": [
+        "Actuals contain no duplicate canonical outcome before or after correction."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N1KHENAA8129NGMW94",
+      "kind": "expected_output",
+      "text": [
+        "UC015ReconciliationDecisionWorkflowTests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N1ZWCCRE8GFGDKC7TQ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT simulate owner intent implicitly or edit decision/link rows in test setup after the workflow begins."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N1MFCJFS9412WWZ0NC",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT omit stale-predecessor and one-active-confirmation assertions."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY0DT2N19PT090G5CV3BG31B",
+      "target_ref_code": "UC-LEDGER-015",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KY07G1KFPCPMJ0VJ9DPCZQPB",
+      "target_title": "Resolve or correct a reconciliation decision",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N18KHA8GYN9R4A0A1E",
+      "target_ref_code": "FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KY09SP7CGPEJNY9GPCF3A6XG",
+      "target_title": "Resolve and correct reconciliation decisions",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N1XJNM416KP8VZ5B88",
+      "target_ref_code": "TC-LEDGER-RECONCILIATION-DECISION-LIFECYCLE-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KY0A4XWJNT3RDXNK4Z6Z2HXE",
+      "target_title": "Verify owner reconciliation decisions and corrections",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY0DT2N11QXF614G3D0V97A4",
+      "gate_type": "test-evidence",
+      "description": [
+        "Evidence maps every UC-LEDGER-015 path and proves immutable decision/link history."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY0DT2N1PXKAJ73AWVDH5DXR",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.EndToEnd.UC015ReconciliationDecisionWorkflowTests --no-restore",
+      "expected_result": "exit 0; at least 13 owner-decision, correction, conflict, replay, and atomicity scenarios run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 720,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ]
+}

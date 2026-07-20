@@ -12,19 +12,17 @@
 
 ## Summary
 
-Integration-only task intentionally has no Implements link: compose all independently reviewed V001 fragments and prove the published process-to-complete-store core seam.
+Integration-only task intentionally has no Implements link: compose every independently reviewed V001 fragment and prove the published process-to-complete-store core seam.
 
 ## Objective
 
-Compose and prove the complete V001 schema plus the selected offline process, exact-value, real-SQLite, and idempotent mutation architecture on linux-x64.
+Compose and prove the complete V001 schema plus provider-neutral process, exact-value, real-SQLite, privacy, and idempotent mutation architecture on linux-x64.
 
 ## References
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable | `nfr` | `satisfies` | `true` |
-| NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic | `nfr` | `satisfies` | `true` |
-| NFR-LEDGER-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local executable | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-ATOMIC-CRASH-RECOVERY: Prove mutation crash atomicity and idempotency | `test_case` | `verifies` | `true` |
 | TC-LEDGER-OFFLINE-SELF-CONTAINED: Verify offline self-contained operation | `test_case` | `verifies` | `true` |
 
@@ -39,16 +37,17 @@ Compose and prove the complete V001 schema plus the selected offline process, ex
 | [TASK-LEDGER-CORE-SCHEMA-CATALOGUE](../tasks/core-schema-catalogue.md) | `compile` | Consumes V001CatalogueSchema. |
 | [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](../tasks/core-schema-transactions.md) | `compile` | Consumes V001TransactionSchema. |
 | [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](../tasks/core-schema-relationships-actuals.md) | `compile` | Consumes V001RelationshipActualsSchema. |
+| [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](../tasks/core-schema-evidence-reconciliation.md) | `compile` | CompleteV001Schema consumes the evidence and reconciliation fragment. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- CompleteV001Schema explicitly registers exactly V001StorageSchema, V001CatalogueSchema, V001TransactionSchema, and V001RelationshipActualsSchema in dependency-safe order and applies them in one transaction.
-- Complete-schema tests compare every table, column, index, foreign key, check, uniqueness rule, ephemeral marker, and user_version with the linked fragment contracts; a missing/duplicate fragment or injected SQL failure leaves no partial schema.
-- Published tally initializes a private complete generation, executes a typed idempotent probe through TallyProcess, emits one stdout envelope, and leaves no process or network listener.
-- Identical replay returns the original result; a pre-commit crash leaves zero domain/idempotency rows; changed replay returns stable conflict.
-- Money/date round-trip is exact, integrity is ok, foreign-key violations are zero, artifact modes are 0700/0600, and diagnostic canaries never appear.
+- CompleteV001Schema explicitly registers V001StorageSchema, V001CatalogueSchema, V001TransactionSchema, V001EvidenceReconciliationSchema, and V001RelationshipActualsSchema in dependency-safe order and applies them in one transaction.
+- Complete-schema tests compare every table, column, index, foreign key, check, uniqueness rule, privacy allowlist, ephemeral marker, and user_version with linked fragment contracts; missing/duplicate fragments or injected SQL failure leave no partial schema.
+- Published tally initializes a private complete generation, executes a typed idempotent probe through TallyProcess, emits one stdout envelope, and leaves no child process or network listener.
+- Identical request and logical replay return the original effect; a pre-commit crash leaves zero domain/idempotency/logical-effect rows; changed replay returns stable conflict.
+- Money/date round-trip is exact, integrity is ok, foreign-key violations are zero, artifact modes are 0700/0600, and provider/raw-payload diagnostic canaries never appear.
 
 ### Failure Criteria
 
@@ -85,16 +84,17 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| TallyProcess.RunAsync | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR |  |
-| LedgerDb | `consumes` | DM-LEDGER-STORE-GENERATION |  |
-| V001StorageSchema | `consumes` | DM-LEDGER-STORE-GENERATION |  |
-| V001CatalogueSchema | `consumes` | DM-LEDGER-ACCOUNT |  |
-| V001TransactionSchema | `consumes` | DM-LEDGER-TRANSACTION-FACT |  |
-| V001RelationshipActualsSchema | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP |  |
-| Money | `consumes` | DD-LEDGER-FINANCIAL-REPRESENTATION |  |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD |  |
-| CompleteV001Schema | `produces` | DD-LEDGER-EMBEDDED-STORAGE |  |
-| VerifiedCoreRuntimeStorageSeam | `produces` |  |  |
+| TallyProcess.RunAsync | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | provider-neutral process boundary |
+| LedgerDb | `consumes` |  | raw SQLite runtime |
+| V001StorageSchema | `consumes` | DM-LEDGER-STORE-GENERATION | storage metadata fragment |
+| V001CatalogueSchema | `consumes` | DM-LEDGER-CATALOGUE-LIFECYCLE | financial-dimension fragment |
+| V001TransactionSchema | `consumes` | DM-LEDGER-TRANSACTION-HISTORY | transaction and dimensional-history fragment |
+| V001EvidenceReconciliationSchema | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY | evidence and reconciliation fragment |
+| V001RelationshipActualsSchema | `consumes` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS | relationship and snapshot fragment |
+| Money | `consumes` | DD-LEDGER-FINANCIAL-REPRESENTATION | exact values |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD | request and logical replay |
+| CompleteV001Schema | `produces` |  | five-fragment V001 schema |
+| VerifiedCoreRuntimeStorageSeam | `produces` |  | integration evidence |
 
 ### Verification
 
@@ -121,12 +121,11 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-LEDGER-CORE-MONEY-DATES](../tasks/core-money-dates.md): Core gate proves exact values through SQLite.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md): Consumer requires TallyProcess.RunAsync from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-CATALOGUE](../tasks/core-schema-catalogue.md): Consumes V001CatalogueSchema.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](../tasks/core-schema-evidence-reconciliation.md): CompleteV001Schema consumes the evidence and reconciliation fragment.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](../tasks/core-schema-relationships-actuals.md): Consumes V001RelationshipActualsSchema.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](../tasks/core-schema-transactions.md): Consumes V001TransactionSchema.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Core gate exercises the real store and generation policy.
 - `satisfies` -> NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable
-- `satisfies` -> NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic
-- `satisfies` -> NFR-LEDGER-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local executable
 - `verifies` -> TC-LEDGER-ATOMIC-CRASH-RECOVERY: Prove mutation crash atomicity and idempotency
 - `verifies` -> TC-LEDGER-OFFLINE-SELF-CONTAINED: Verify offline self-contained operation
 

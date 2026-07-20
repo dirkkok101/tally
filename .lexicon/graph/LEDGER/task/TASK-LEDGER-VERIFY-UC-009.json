@@ -6,10 +6,10 @@
   "slug": "VERIFY-UC-009",
   "title": "TransactionCorrectionWorkflow",
   "description": [
-    "Verification-only task intentionally has no Implements link: trace UC-LEDGER-009 main scenario and every failure path through the published CLI."
+    "Verification-only task with no Implements link: trace revised UC-LEDGER-009 through Release void/supersede operations."
   ],
   "objective": [
-    "Prove UC-LEDGER-009 through observable process results and durable-state invariants."
+    "Prove transaction correction preserves immutable facts, evidence and reconciliation history, retires financial relationships atomically, and never moves dimensions or confirmations silently."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -40,33 +40,36 @@
   ],
   "interfaces": [
     {
-      "id": "01KXT19M7S6B6DH2Y8S4WBDKXP",
+      "id": "01KY0EB0K10JJHE7CDA2DZVNNE",
       "name": "PublishedTallyFixture",
       "direction": "consumes",
       "notes": [
         "Release published-process E2E fixture"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:15:49.1136294+00:00"
+      "created_at": "2026-07-20T18:59:12.6084936+00:00"
     },
     {
-      "id": "01KXT19M7TDEGP2C9CHAD94PVF",
+      "id": "01KY0EB0K1BJBW1P563QAAVA10",
       "name": "CompletePublicContract",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "Exactly 38 wired operations"
+        "Exactly 72 provider-neutral operations"
       ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:15:49.1136294+00:00"
+      "created_at": "2026-07-20T18:59:12.6084936+00:00"
     },
     {
-      "id": "01KXT19M7TM6DR843GSBQ54SDV",
+      "id": "01KY0EB0K1KKEHBCHSR552HMRP",
       "name": "VerifiedUC009",
       "direction": "produces",
       "contract_ref_code": "UC-LEDGER-009",
+      "notes": [
+        "evidence-aware correction workflow"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:15:49.1136294+00:00"
+      "created_at": "2026-07-20T18:59:12.6084936+00:00"
     }
   ],
   "links": [
@@ -80,34 +83,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT126TC6D11WCNYCRHH2GGX",
+      "id": "01KY0EB0K0RX258P5KBD62TM33",
       "kind": "acceptance_check",
       "text": [
-        "Void/supersede with reason preserves original facts, appends attributable history, retires all active relationships atomically, and default actuals count only valid outcome."
+        "Void retains evidence/decision history, retires active transfer/refund links, excludes the fact from active actuals, and exposes any affected confirmation as an explicit current exception or unresolved state."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-20T18:59:12.6084936+00:00"
     },
     {
-      "id": "01KXT126TCG3QDF20TB376W7DP",
+      "id": "01KY0EB0K1XNYJGYTE8EG636JT",
       "kind": "acceptance_check",
       "text": [
-        "Supersession creates an independent replacement and copies no financial relationship; history exposes original/replacement/retired links/actor/reason."
+        "Supersede creates an independent replacement with only explicit new evidence/attribution and no silently copied relationship, confirmation, category, pool, instrument, or cardholder state."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-20T18:59:12.6084936+00:00"
     },
     {
-      "id": "01KXT126TC4S60JXGX8JHW7EE3",
+      "id": "01KY0EB0K1VZB0736R877R2W67",
       "kind": "acceptance_check",
       "text": [
-        "Not found, absent reason/key, repeated/incompatible correction, relationship retirement failure, and invalid replacement produce documented all-or-nothing outcomes."
+        "Missing reason/key, incompatible lifecycle, invalid replacement, relationship/reconciliation coherence failure, changed replay, and injected crash cover every failure path with all-or-none state."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-20T18:59:12.6084936+00:00"
     },
     {
       "id": "01KXT126TC0WRXW16N0SAP65AM",
@@ -130,24 +133,24 @@
       "created_at": "2026-07-18T07:11:45.9941647+00:00"
     },
     {
-      "id": "01KXT126TCP0GMRC1PBNRFXMNM",
+      "id": "01KY0EB0K1RN1DA55PPSWTH37R",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT mutate/delete original facts or silently transfer relationships."
+        "Do NOT delete historical evidence/decisions or silently reconfirm the replacement."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-20T18:59:12.6084936+00:00"
     },
     {
-      "id": "01KXT126TC8W0HCH3ADFQ6PN9W",
+      "id": "01KY0EB0K1DAG20P7PG9R321FX",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT omit UC-LEDGER-009 rollback and history-inclusive paths."
+        "Do NOT verify only active actuals; inspect retained old state and explicit current exception."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-20T18:59:12.6084936+00:00"
     },
     {
       "id": "01KXT126TDDD0535AT9Z8E2JRV",

@@ -12,11 +12,11 @@
 
 ## Summary
 
-Security validation task intentionally has no Implements link: consolidate permissions, host-protection, input, logging, diagnostics, backup, skill-path, and malicious-value checks.
+Security validation task intentionally has no Implements link: consolidate owner-only permissions, host protection, input/schema privacy, logging, diagnostics, backup, optional-guidance path, and malicious-value checks.
 
 ## Objective
 
-Prove every supported local artifact and process surface protects personal financial data and fails closed without custom cryptography.
+Prove every supported local artifact and public process surface protects financial/evidence data, remains provider-neutral, and fails closed without custom cryptography.
 
 ## References
 
@@ -41,11 +41,11 @@ Prove every supported local artifact and process surface protects personal finan
 
 ### Acceptance Checks
 
-- Supported-host tests assert 0700 data roots and 0600 DB/WAL/SHM/candidate/manifest/backup/skill artifacts after create, crash, restore, and evolution paths.
-- Host-protection check rejects absent/invalid evidence before declaring production conformance; no custom crypto/key derivation/encryption algorithm exists.
-- Canary descriptions, credentials, full identifiers, JSON payloads, SQL, paths, exception text, and stack traces never appear in logs, stderr, expected errors, or correlation diagnostics.
-- Malformed/oversized/unknown JSON fields, unsafe artifact/skill paths, symlink/path traversal, permissions, full disk, lock, and corrupt store fail before partial mutation.
-- Published process runs offline with the owner OS identity trust boundary and opens no listener.
+- Supported-host tests assert 0700 data roots and 0600 DB/WAL/SHM/candidate/manifest/backup/optional-guidance artifacts after create, crash, restore, and evolution paths.
+- Host-protection check rejects absent/invalid evidence before production conformance; no custom crypto, key derivation, or encryption algorithm exists.
+- Canary descriptions, raw evidence/provider payloads, credentials, full account/payment identifiers, serialized bodies, SQL, unsafe paths, exception text, and stack traces never appear in logs, stderr, expected errors, or diagnostics.
+- Malformed/oversized/unknown JSON, mailbox/MIME/message/recipient/schedule/delivery/acknowledgement fields, open evidence metadata, unsafe artifact/guidance paths, symlinks, traversal, permissions, full disk, locks, and corrupt stores fail before partial mutation.
+- Published process runs offline under the owner OS identity, opens no listener, and contains no direct Hermes, AgentMail, WhatsApp, or other provider integration.
 
 ### Failure Criteria
 

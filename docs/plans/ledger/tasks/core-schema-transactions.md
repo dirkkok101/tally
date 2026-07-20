@@ -12,11 +12,11 @@
 
 ## Summary
 
-Schema foundation intentionally has no Implements link: translate immutable transaction facts, lifecycle events, and category-allocation history into one independently verified V001 fragment.
+Schema foundation intentionally has no Implements link: translate immutable transaction facts, lifecycle events, category-allocation, payment-attribution, and spend-pool-assignment history into one independently verified V001 fragment.
 
 ## Objective
 
-Create exact immutable transaction, correction-lifecycle, and category-allocation tables, constraints, indexes, and active-allocation uniqueness without implementing handlers.
+Create exact immutable transaction and correction-history tables plus independent current/historical category, payment, and pool dimensions without implementing handlers.
 
 ## References
 
@@ -24,7 +24,7 @@ Create exact immutable transaction, correction-lifecycle, and category-allocatio
 |---|---|---|---|
 | DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-TRANSACTION-FACT: TransactionFact | `data_model` | `touches` | `true` |
 | DM-LEDGER-TRANSACTION-HISTORY: TransactionLifecycleAndAllocation | `data_model` | `touches` | `true` |
 
@@ -38,14 +38,15 @@ Create exact immutable transaction, correction-lifecycle, and category-allocatio
 
 ### Acceptance Checks
 
-- V001TransactionSchema creates every linked field, enum/date/money check, account/category RESTRICT foreign key, source-reference uniqueness rule, lifecycle terminal rule, and one-active-allocation constraint.
-- signedAmountMinor is nonzero Int64, currency is literal ZAR, facts are insert-only by contract, and supersession/allocation history retains attributable linkage.
-- Applying the fragment twice in one migration plan is rejected before SQL; an injected statement failure rolls back every transaction, lifecycle, and allocation table/index.
+- V001TransactionSchema creates every linked fact, lifecycle, category allocation, instrument/cardholder attribution, and pool assignment field with enum/date/money checks, RESTRICT foreign keys, terminal lifecycle rules, and one-current-record constraints.
+- signedAmountMinor is nonzero Int64, currency is literal ZAR, facts are insert-only by contract, initial payment attribution is explicitly unknown, and initial pool assignment is explicitly unassigned.
+- Source identity is not embedded as transport provenance or a single sourceReference; generic evidence and reconciliation schema is owned by V001EvidenceReconciliationSchema.
+- Applying the fragment twice in one migration plan is rejected before SQL; an injected statement failure rolls back every transaction, lifecycle, and dimensional-history table/index.
 
 ### Failure Criteria
 
-- Do NOT create catalogue, relationship, snapshot, recovery, or idempotency tables in this fragment.
-- Do NOT use SQLite REAL money, mutable fact columns, category columns on transaction facts, EF Core, or mocked SQLite tests.
+- Do NOT infer payment attribution or pool from account, category, description, evidence provider, or one another.
+- Do NOT place evidence or reconciliation records in this fragment.
 
 ### Expected Outputs
 
@@ -99,7 +100,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumes LedgerDb and LedgerSchemaFragmentRegistry.
 - `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
 - `governed-by` -> DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history
+- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `touches` -> DM-LEDGER-TRANSACTION-FACT: TransactionFact
 - `touches` -> DM-LEDGER-TRANSACTION-HISTORY: TransactionLifecycleAndAllocation
 

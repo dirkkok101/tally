@@ -12,18 +12,18 @@
 
 ## Summary
 
-Build the common mutation executor, canonical request hashing, stored outcomes, and artifact reconciliation for every public write.
+Build the common mutation executor, canonical request hashing, stored outcomes, logical-effect identity, and artifact reconciliation for every public write.
 
 ## Objective
 
-Guarantee identical replay returns the original result while changed replay, invalid input, busy failure, and crash boundaries preserve one effect.
+Guarantee identical request and cross-key logical replay return the original effect while changed replay, invalid input, busy failure, and crash boundaries preserve exactly one effect.
 
 ## References
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | ADR-CORE-0010: CommandResult Pattern for Commands | `adr` | `governed-by` | `false` |
-| DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional idempotency with artifact reconciliation | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | `true` |
 | DIAG-LEDGER-MUTATION-SEQUENCE: Idempotent Ledger mutation sequence | `design_diagram` | `references` | `false` |
 | DM-LEDGER-IDEMPOTENCY-RECORD: IdempotencyRecord | `data_model` | `touches` | `true` |
 | FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent | `requirement` | `implements` | `true` |
@@ -42,18 +42,16 @@ Guarantee identical replay returns the original result while changed replay, inv
 
 ### Acceptance Checks
 
-- Identity is contract version + operation ID + caller key; hash includes normalized input and actor.
-- Identical replay returns the stored result/entity/artifact with no volatile replay field and no second effect.
-- Changed operation/version/actor/payload always returns LEDGER-IDEMPOTENCY-001 and preserves the first outcome.
-- Validation and busy/resource failures occur before key consumption.
-- Domain changes, events, stored result, and IdempotencyRecord commit in one transaction; pre-commit crash leaves none.
+- Request identity is contract version + operation ID + caller key; hash includes normalized input and actor.
+- Identical request replay returns the stored result/entity/artifact with no volatile replay field and no second effect; changed operation/version/actor/payload returns LEDGER-IDEMPOTENCY-001 and preserves the first outcome.
+- Evidence registration and reconciliation decisions also claim closed logical-effect identities, so identical evidence or decision submitted under another caller key returns the existing outcome and conflicting semantic input fails closed.
+- Validation and busy/resource failures occur before key or logical identity consumption; domain changes, histories, links, stored result, request identity, and logical identity commit in one transaction.
 - Artifact publication uses deterministic identity, private staging, checksum, flush, atomic publication, and retry reconciliation.
 
 ### Failure Criteria
 
-- Do NOT rely on caller retries or database-only idempotency for files — rejected per DD-LEDGER-IDEMPOTENT-MUTATIONS.
-- Do NOT store correlation IDs, durations, or replay flags in successful outcomes.
-- Do NOT reserve keys for invalid/busy requests.
+- Do NOT scope evidence or reconciliation idempotency only to a caller-provided key.
+- Do NOT consume identities on validation/busy failure or persist a partial logical effect.
 
 ### Expected Outputs
 
@@ -117,7 +115,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md): Mutation executor consumes CommandResult and process contract primitives.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): IdempotencyStore requires the initialized SQLite schema and LedgerDb.
 - `governed-by` -> ADR-CORE-0010: CommandResult Pattern for Commands
-- `governed-by` -> DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional idempotency with artifact reconciliation
+- `governed-by` -> DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency
 - `implements` -> FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent
 - `references` -> DIAG-LEDGER-MUTATION-SEQUENCE: Idempotent Ledger mutation sequence
 - `satisfies` -> NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable

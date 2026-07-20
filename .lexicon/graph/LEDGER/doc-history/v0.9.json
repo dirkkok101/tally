@@ -1,0 +1,9 @@
+{
+  "id": "01KY0F42SRBQKQJ7ZWNHPHZ6E7",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.9",
+  "changes": [
+    "Reactivated in-place PLAN-LEDGER-V1 as a provider-neutral greenfield implementation plan: 63 executable tasks across 7 sub-plans and 172 acyclic compile dependencies. The plan adds OQ-LEDGER-13 reconciliation-policy and OQ-LEDGER-15 spend-pool-cardinality evidence gates; a fifth V001 evidence/reconciliation schema fragment; generic evidence registration/linkage; canonical payment-instrument/cardholder and spend-pool dimensions; match-first reconciliation projection, atomic application, append-only decision correction, and statement coverage; exact pool/category actuals; complete-state recovery; optional schema-subordinate integration guidance; four bundle gates totaling exactly 72 public operations; 18 published use-case verifiers; provider-neutral security and module gates. Two quality passes cover 257/257 required references with zero blocking audit findings; every task has files, interfaces, verification, review gates, and a zero-context payload at or below 2500 tokens. OQ-LEDGER-5, OQ-LEDGER-6, OQ-LEDGER-13, and OQ-LEDGER-15 remain explicit first-execution compile gates. No beads or implementation code were created."
+  ],
+  "created_at": "2026-07-20T19:12:54.0732331+00:00"
+}

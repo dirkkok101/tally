@@ -12,11 +12,11 @@
 
 ## Summary
 
-Verification-only task intentionally has no Implements link: trace UC-LEDGER-005 main scenario and every failure path through the published CLI.
+Verification-only task with no Implements link: trace revised UC-LEDGER-005 through the Release published CLI.
 
 ## Objective
 
-Prove UC-LEDGER-005 through observable process results and durable-state invariants.
+Prove exact snapshot-bound actuals membership and named totals across category, pool, payment, relationship, evidence, and reconciliation filters.
 
 ## References
 
@@ -39,15 +39,14 @@ Prove UC-LEDGER-005 through observable process results and durable-state invaria
 
 ### Acceptance Checks
 
-- Explicit filters produce exact deterministic membership plus Net Account Movement, External Spend, and Budget Actual reconciled to snapshot rows.
-- Multi-page results retain first-page membership/totals after writes; all IDs appear once; unavailable/expired/altered cursor fails explicitly.
-- Invalid filters and integrity failure return no aggregate; empty selection succeeds with exact zeros.
-- Cash, transfers, fees, refunds, category corrections, inactive transactions, and retired relationships exercise every defined formula.
+- Explicit filter combinations select active canonical transactions under EffectiveDate, category/pool, instrument/cardholder, relationship, evidence, reconciliation, and correction rules; invalid combinations fail before snapshot creation.
+- One committed snapshot returns deterministic pages and unchanged full-set Net Account Movement, External Spend, Budget Actual, pool, category, and pool-by-category totals despite later writes; expired/unavailable cursor fails explicitly.
+- Every all-up result equals exact selected membership and grouped cells including uncategorized and unassigned; refunds, transfers, reversals, and corrections obey the governing formulas and integrity mismatch fails closed.
 
 ### Failure Criteria
 
-- Do NOT accept live offset pagination or recalculate later pages against current state.
-- Do NOT omit exact aggregate reconciliation or integrity failure.
+- Do NOT verify only aggregate totals; prove exact membership and every requested pool/category cell.
+- Do NOT duplicate formulas in the test fixture; reconcile published items independently.
 
 ### Expected Outputs
 
@@ -72,8 +71,8 @@ Prove UC-LEDGER-005 through observable process results and durable-state invaria
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 38 wired operations |
-| VerifiedUC005 | `produces` | UC-LEDGER-005 |  |
+| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 72 provider-neutral operations |
+| VerifiedUC005 | `produces` | UC-LEDGER-005 | multi-dimensional actuals workflow |
 
 ### Verification
 

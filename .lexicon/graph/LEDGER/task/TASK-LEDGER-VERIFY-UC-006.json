@@ -4,12 +4,12 @@
   "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
   "ref_code": "TASK-LEDGER-VERIFY-UC-006",
   "slug": "VERIFY-UC-006",
-  "title": "AgentContractWorkflow",
+  "title": "ExternalOrchestratorContractWorkflow",
   "description": [
-    "Verification-only task intentionally has no Implements link: trace UC-LEDGER-006 main scenario and every failure path through the published CLI."
+    "Verification-only task with no Implements link: trace revised UC-LEDGER-006 through the Release published provider-neutral CLI."
   ],
   "objective": [
-    "Prove UC-LEDGER-006 through observable process results and durable-state invariants."
+    "Prove Hermes, another orchestrator, or a direct caller can discover and invoke all capabilities from schemas alone, with stable replay and no transport coupling or mandatory skill."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -29,44 +29,47 @@
   ],
   "files": [
     {
-      "id": "01KXT0ZW3K738DXGDMG8XCFDVD",
-      "path": "tests/Tally.Tests/EndToEnd/UC006AgentContractWorkflowTests.cs",
+      "id": "01KY0EK85CYHAE71REFB5TRW1W",
+      "path": "tests/Tally.Tests/EndToEnd/UC006ExternalOrchestratorContractWorkflowTests.cs",
       "action": "test",
-      "role": "verification",
+      "role": "published-process verification",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-20T19:03:42.5078713+00:00"
     }
   ],
   "interfaces": [
     {
-      "id": "01KXT19J2CWWFD3A4J4PHD9ZES",
+      "id": "01KY0EAZDY59PXCPS4W8BJA0BZ",
       "name": "PublishedTallyFixture",
       "direction": "consumes",
       "notes": [
         "Release published-process E2E fixture"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:15:46.8922933+00:00"
+      "created_at": "2026-07-20T18:59:11.4215965+00:00"
     },
     {
-      "id": "01KXT19J2D66HJRJYQV3SVCMD5",
+      "id": "01KY0EAZDY1TTDESNPRC7H1PR9",
       "name": "CompletePublicContract",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "Exactly 38 wired operations"
+        "Exactly 72 provider-neutral operations"
       ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:15:46.8922933+00:00"
+      "created_at": "2026-07-20T18:59:11.4215965+00:00"
     },
     {
-      "id": "01KXT19J2D89JE1J9DBBYZ5V6B",
+      "id": "01KY0EAZDZT57G4C1VCAA57H7M",
       "name": "VerifiedUC006",
       "direction": "produces",
       "contract_ref_code": "UC-LEDGER-006",
+      "notes": [
+        "external-orchestrator contract workflow"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:15:46.8922933+00:00"
+      "created_at": "2026-07-20T18:59:11.4215965+00:00"
     }
   ],
   "links": [
@@ -80,34 +83,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT0ZW3KCVTWBRG2VCN6RMW4",
+      "id": "01KY0EAZDXZ71AC88TS3CJ0VD5",
       "kind": "acceptance_check",
       "text": [
-        "A fresh agent discovers version/help/schema, checks compatible embedded skill, constructs JSON input, observes one stdout result/safe stderr/stable exit, and safely retries a lost result."
+        "The Release binary discovers version, help, compatibility, and exactly 72 provider-neutral operation schemas deterministically without store access or installed guidance."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-20T18:59:11.4215965+00:00"
     },
     {
-      "id": "01KXT0ZW3KGPWKGEG92MY4TK3M",
+      "id": "01KY0EAZDYVXVS6WE4JJ4JKPF9",
       "kind": "acceptance_check",
       "text": [
-        "Unknown command/schema, incompatible skill, malformed/unknown input, expected domain error, and changed replay fail before unintended mutation."
+        "Valid structured input produces one stdout result and documented exit; domain/review/incompatibility errors are structured and safe; lost output is recovered by identical retry while changed replay conflicts."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-20T18:59:11.4215965+00:00"
     },
     {
-      "id": "01KXT0ZW3K5FPDFB4RH6Z132BK",
+      "id": "01KY0EAZDY9Z3BZ4WEBDBE9EX2",
       "kind": "acceptance_check",
       "text": [
-        "Both provider bundles use only the 38 public descriptors and their declared compatibility/checksums match the executable."
+        "Mailbox, MIME, message, recipient, schedule, delivery, acknowledgement, WhatsApp, AgentMail, raw evidence, and private database fields are absent from schemas and rejected before mutation."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-20T18:59:11.4215965+00:00"
+    },
+    {
+      "id": "01KY0EAZDYK4QPGB6CCDFA8CB4",
+      "kind": "acceptance_check",
+      "text": [
+        "Optional guidance matches the registry but removing it leaves every public workflow discoverable and invocable."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:59:11.4215965+00:00"
     },
     {
       "id": "01KXT0ZW3KH2QFTPSY16C5RHSS",
@@ -120,34 +133,34 @@
       "created_at": "2026-07-18T07:10:29.4870620+00:00"
     },
     {
-      "id": "01KXT0ZW3KVCXF127RDSAMSP1Y",
+      "id": "01KY0EK85C6T5FXTVNSA79GG1X",
       "kind": "expected_output",
       "text": [
-        "UC006AgentContractWorkflowTests with main/failure paths"
+        "UC006ExternalOrchestratorContractWorkflowTests with main and failure paths"
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-20T19:03:42.5078713+00:00"
     },
     {
-      "id": "01KXT0ZW3K6GG2JH2V1RGQWW0T",
+      "id": "01KY0EAZDYCKTMEXQXWZJBYA8J",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT use private storage access, conversation context, or handler calls in the workflow."
+        "Do NOT instantiate Hermes or any provider adapter inside Tally tests."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-20T18:59:11.4215965+00:00"
     },
     {
-      "id": "01KXT0ZW3K06PDFWSWT34QRZ0D",
+      "id": "01KY0EAZDYXQVATP7AKDQNJM3W",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT omit stream separation, exits, compatibility-before-write, or changed replay."
+        "Do NOT treat optional guidance as an operation authority or test prerequisite."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-20T18:59:11.4215965+00:00"
     },
     {
       "id": "01KXT0ZW3KNYP55Z3MS17JBWP8",
@@ -162,26 +175,26 @@
   ],
   "references": [
     {
-      "id": "01KXT0ZW3KPQ07H8WGP2ESXRGW",
+      "id": "01KY0EPA8M3JZ49KBSSKCPHS8F",
       "target_ref_code": "UC-LEDGER-006",
       "target_entity_type": "use_case",
       "target_entity_id": "01KXRHVEYC171ENABXY4BWGX0C",
-      "target_title": "Discover and invoke the agent command contract",
+      "target_title": "Discover and invoke the external-orchestrator contract",
       "relationship": "covers",
       "required": 1,
-      "sort_order": 0,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "sort_order": 10,
+      "created_at": "2026-07-20T19:05:22.9650406+00:00"
     },
     {
-      "id": "01KXT0ZW3MH37RTKE670K5R4N1",
+      "id": "01KY0EMX49GPXKKZGJFGMM6NXR",
       "target_ref_code": "DM-LEDGER-SYSTEM-SKILL-CONTRACTS",
       "target_entity_type": "data_model",
       "target_entity_id": "01KXSYGG1EGBHD7GW145CK4G5M",
-      "target_title": "SystemSkillOperationContracts",
+      "target_title": "SystemIntegrationGuidanceContracts",
       "relationship": "touches",
       "required": 0,
-      "sort_order": 7,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "sort_order": 6,
+      "created_at": "2026-07-20T19:04:36.7461391+00:00"
     },
     {
       "id": "01KXT0ZW3MYXZKBHF0WHM5RJ50",
@@ -206,17 +219,6 @@
       "created_at": "2026-07-18T07:10:29.4870620+00:00"
     },
     {
-      "id": "01KXT0ZW3MCYWP5Y0VTTH15X89",
-      "target_ref_code": "FR-LEDGER-SKILL-COMPATIBILITY",
-      "target_entity_type": "requirement",
-      "target_entity_id": "01KXSQDTAGKNX8F1FK1JK3N189",
-      "target_title": "Distribute version-matched agent skills",
-      "relationship": "verifies",
-      "required": 1,
-      "sort_order": 3,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
-    },
-    {
       "id": "01KXT0ZW3MGRX3MWPA85SZ9GVH",
       "target_ref_code": "FR-LEDGER-IDEMPOTENT-WRITES",
       "target_entity_type": "requirement",
@@ -228,26 +230,37 @@
       "created_at": "2026-07-18T07:10:29.4870620+00:00"
     },
     {
-      "id": "01KXT0ZW3MHMB2B1A42GV0FKD8",
-      "target_ref_code": "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE",
-      "target_entity_type": "test_case",
-      "target_entity_id": "01KXSXG8TR927NTWCDM2MBGVTV",
-      "target_title": "Verify every agent operation contract",
+      "id": "01KY0EMZBBEXS575RANGNE4EMK",
+      "target_ref_code": "FR-LEDGER-SKILL-COMPATIBILITY",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXSQDTAGKNX8F1FK1JK3N189",
+      "target_title": "Expose version-matched integration guidance",
       "relationship": "verifies",
       "required": 1,
-      "sort_order": 5,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "sort_order": 7,
+      "created_at": "2026-07-20T19:04:39.0202470+00:00"
     },
     {
-      "id": "01KXT0ZW3MNRA0Y2442NKQH6ET",
+      "id": "01KY0EN0E8R7BXMF9KR4SBD1CQ",
       "target_ref_code": "TC-LEDGER-SKILL-COMPATIBILITY-CONTRACT",
       "target_entity_type": "test_case",
       "target_entity_id": "01KXSQK7RAE1THD3HDQMYPAC53",
-      "target_title": "Verify distribute version-matched agent skills contract",
+      "target_title": "Verify version-matched integration guidance",
       "relationship": "verifies",
       "required": 1,
-      "sort_order": 6,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "sort_order": 8,
+      "created_at": "2026-07-20T19:04:40.1369479+00:00"
+    },
+    {
+      "id": "01KY0EP762CKP8PC7Y0YGH9W5R",
+      "target_ref_code": "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSXG8TR927NTWCDM2MBGVTV",
+      "target_title": "Verify every external-orchestrator operation contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 9,
+      "created_at": "2026-07-20T19:05:19.8128471+00:00"
     }
   ],
   "review_gates": [
@@ -274,14 +287,14 @@
   ],
   "verification_steps": [
     {
-      "id": "01KXT0ZW3KG4NQ9ZEEF5WT6H8K",
+      "id": "01KY0EK85DV380CWB48YCFEGGP",
       "phase": "after",
-      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.EndToEnd.UC006AgentContractWorkflowTests --no-restore",
-      "expected_result": "exit 0; at least 10 main/failure-path scenarios run and 0 fail",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~UC006ExternalOrchestratorContractWorkflowTests --no-restore",
+      "expected_result": "exit 0; at least 16 discovery, schema-only invocation, structured outcome, replay, provider-rejection, and optional-guidance cases run; exactly 72 operations discovered; 0 fail",
       "required": 1,
-      "timeout_seconds": 420,
+      "timeout_seconds": 720,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-20T19:03:42.5078713+00:00"
     }
   ]
 }

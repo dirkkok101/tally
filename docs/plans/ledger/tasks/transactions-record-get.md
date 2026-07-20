@@ -12,23 +12,20 @@
 
 ## Summary
 
-Deliver ledger.transaction.record/get over exact source facts, validated provenance, account state, idempotency, and real SQLite.
+Deliver ledger.transaction.record/get over exact source facts, generic initial evidence, account state, explicit unknown attribution/unassigned pool, idempotency, and real SQLite.
 
 ## Objective
 
-Record one immutable canonical account movement and round-trip every accepted source fact without precision or provenance loss.
+Atomically record at most one immutable Canonical Transaction and its privacy-safe initial EvidenceRecord while round-tripping every accepted fact and link exactly.
 
 ## References
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts | `data_model` | `touches` | `true` |
 | FR-LEDGER-TRANSACTION-RECORDING: Record canonical transactions | `requirement` | `implements` | `true` |
-| OQ-LEDGER-1: Validate the active ZAR-only first-release assumption against all three owned accounts. | `open_question` | `blocked-by` | `true` |
-| OQ-LEDGER-2: Validate the active signed-account-delta convention against statement samples from both banks. | `open_question` | `blocked-by` | `true` |
-| OQ-LEDGER-3: Validate transaction date as the default Effective Date and identify whether either bank supplies a distinct posting date. | `open_question` | `blocked-by` | `true` |
 | TC-LEDGER-TRANSACTION-RECORDING-CONTRACT: Verify record canonical transactions contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -38,22 +35,23 @@ Record one immutable canonical account movement and round-trip every accepted so
 | [TASK-LEDGER-ACCOUNTS](../tasks/accounts.md) | `compile` | Transactions require AccountStore and archived-account policy. |
 | [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
 | [TASK-LEDGER-CORE-MONEY-DATES](../tasks/core-money-dates.md) | `compile` | Consumer requires Money from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md) | `compile` | Atomic transaction capture consumes EvidenceStore.RegisterInitialAsync. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- Valid active account, canonical nonzero signedAmount, ZAR, required dates/description/provenance, optional source reference, actor, and key create one immutable TransactionDetail.
-- TransactionDate and distinct PostingDate round-trip independently; EffectiveDate follows the resolved rule.
-- Missing/zero/malformed/unsupported input or archived/missing account returns the documented stable error and creates no transaction/idempotency row.
-- Get returns unchanged source facts; includeHistory exposes empty/available lifecycle, allocation, and relationship collections without mutating.
-- Provenance kind is exactly manual_agent|statement_import|other in wire/domain/SQL with no semantic translation; sourceReference uniqueness is enforced per account/provenance.
+- Valid active asset or liability account, canonical nonzero owner-economic signedAmount, ZAR, required dates/description, closed generic evidence kind, opaque external reference, privacy-safe observation, actor, optional stable payment IDs, and key create one immutable TransactionDetail and one linked EvidenceRecord.
+- TransactionDate and distinct PostingDate round-trip independently; EffectiveDate is TransactionDate; missing payment identities remain explicitly unknown and pool remains explicitly unassigned.
+- Missing/zero/malformed/unsupported input, archived/missing account, incompatible attribution, or forbidden evidence field returns the documented stable error and creates no transaction, evidence link, assignment, or idempotency row.
+- Get returns unchanged facts plus safe evidence links, current reconciliation state, payment attribution, pool assignment, and requested history without mutating.
+- Identical request or logical evidence replay returns the existing transaction; conflicting key or evidence identity preserves the original; crash injection commits transaction, initial evidence, link, defaults, and replay outcome together or none.
 
 ### Failure Criteria
 
-- Do NOT update transaction source facts, embed category/relationship columns, use floating point, infer provenance, or silently normalize bank dates — per governing decisions.
-- Do NOT accept credentials or expose unmasked account identifiers in results/diagnostics.
-- Do NOT implement before OQ-LEDGER-1..3 are resolved consistently.
+- Do NOT update source facts, embed provider provenance, store raw evidence payloads, use a single sourceReference authority, use floating point, or silently normalize bank dates.
+- Do NOT infer payment instrument, cardholder, spend pool, category, or reconciliation confirmation.
+- Do NOT accept credentials or expose unmasked account/payment identifiers in results or diagnostics.
 
 ### Expected Outputs
 
@@ -84,25 +82,27 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| TransactionBaseOperationModule | `produces` | DM-LEDGER-TRANSACTION-CONTRACTS |  |
-| TransactionStore | `produces` | DM-LEDGER-TRANSACTION-FACT |  |
-| TransactionDetail | `produces` | DM-LEDGER-TRANSACTION-CONTRACTS |  |
-| AccountStore | `consumes` | DM-LEDGER-ACCOUNT |  |
-| Money | `consumes` | DD-LEDGER-FINANCIAL-REPRESENTATION |  |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD |  |
+| TransactionBaseOperationModule | `produces` | DM-LEDGER-TRANSACTION-CONTRACTS | record and get descriptors |
+| TransactionStore | `produces` | DM-LEDGER-TRANSACTION-FACT | atomic transaction/default-dimension writes |
+| TransactionDetail | `produces` | DM-LEDGER-TRANSACTION-CONTRACTS | facts and linked current state |
+| AccountStore | `consumes` | DM-LEDGER-ACCOUNT | account authority |
+| Money | `consumes` | DD-LEDGER-FINANCIAL-REPRESENTATION | exact values |
+| EvidenceStore.RegisterInitialAsync | `consumes` | DM-LEDGER-EVIDENCE-RECORD-LINK | transaction-scoped evidence primitive |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD | atomic replay |
 
 ### Verification
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~TransactionRecordingTests\|FullyQualifiedName~TransactionStoreTests' --no-restore` | exit 0; at least 16 exactness/date/provenance/account/replay cases run and 0 fail | `true` | 240 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~TransactionRecordingTests --no-restore` | exit 0; at least 14 exactness, date, evidence privacy, default dimension, account, and logical replay cases run and 0 fail | `true` | 300 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~TransactionStoreTests --no-restore` | exit 0; at least 10 real-SQLite uniqueness, atomicity, and crash cases run and 0 fail | `true` | 300 |
 
 ### Review Gates
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Show exact round-trip, distinct dates, enum parity, account restrictions, and idempotency. | `true` |
-| `self-review` | Diff contains no mutable source-fact update and no second provenance vocabulary. | `true` |
+| `test-evidence` | Show exact round-trip, generic evidence linkage, explicit unknown/unassigned dimensions, account restrictions, cross-key replay, and atomicity. | `true` |
+| `self-review` | Diff contains no mutable source-fact update, provider vocabulary, raw evidence payload, or inferred dimension. | `true` |
 
 ## Bead References
 
@@ -112,14 +112,12 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `blocked-by` -> OQ-LEDGER-1: Validate the active ZAR-only first-release assumption against all three owned accounts.
-- `blocked-by` -> OQ-LEDGER-2: Validate the active signed-account-delta convention against statement samples from both banks.
-- `blocked-by` -> OQ-LEDGER-3: Validate transaction date as the default Effective Date and identify whether either bank supplies a distinct posting date.
 - `depends-on:compile` -> [TASK-LEDGER-ACCOUNTS](../tasks/accounts.md): Transactions require AccountStore and archived-account policy.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-MONEY-DATES](../tasks/core-money-dates.md): Consumer requires Money from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md): Atomic transaction capture consumes EvidenceStore.RegisterInitialAsync.
 - `governed-by` -> DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history
+- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `implements` -> FR-LEDGER-TRANSACTION-RECORDING: Record canonical transactions
 - `touches` -> DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts
 - `verifies` -> TC-LEDGER-TRANSACTION-RECORDING-CONTRACT: Verify record canonical transactions contract

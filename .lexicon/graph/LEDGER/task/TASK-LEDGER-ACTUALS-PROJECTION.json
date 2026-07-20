@@ -6,10 +6,10 @@
   "slug": "ACTUALS-PROJECTION",
   "title": "Implement exact actuals projection and totals",
   "description": [
-    "Build filter canonicalization, active-state projection, deterministic ordering, and exact Net Account Movement, External Spend, and Budget Actual formulas."
+    "Build one canonical active-state projection with deterministic ordering and exact named totals across every independent dimension."
   ],
   "objective": [
-    "Compute reconcilable transaction membership and named totals over active transaction/allocation/relationship state without duplicating rules downstream."
+    "Return authoritative membership and Net Account Movement, External Spend, and Budget Actual matrices for all downstream modules."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -47,6 +47,36 @@
       ],
       "sort_order": 3,
       "created_at": "2026-07-18T07:16:17.9691615+00:00"
+    },
+    {
+      "id": "01KY0ECPGA549PNVMQ5Z7DBF1B",
+      "target": "TASK-LEDGER-PAYMENT-ATTRIBUTION",
+      "dependency_type": "compile",
+      "reason": [
+        "Actuals filters consume current instrument/cardholder attribution."
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-20T19:00:07.8190463+00:00"
+    },
+    {
+      "id": "01KY0ECQK3C4NJRTMQN685NGVE",
+      "target": "TASK-LEDGER-POOL-ASSIGNMENTS",
+      "dependency_type": "compile",
+      "reason": [
+        "Actuals totals consume current explicit pool assignments."
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-20T19:00:08.9324204+00:00"
+    },
+    {
+      "id": "01KY0ECRNATXSDQE0KH6DEN2F8",
+      "target": "TASK-LEDGER-RECONCILIATION-COVERAGE",
+      "dependency_type": "compile",
+      "reason": [
+        "Actuals filters consume current evidence/reconciliation coverage state."
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-20T19:00:10.0267965+00:00"
     },
     {
       "id": "01KXT163ZY54MZE9EJS2FTC8FS",
@@ -137,113 +167,145 @@
   ],
   "interfaces": [
     {
-      "id": "01KXT0SME909J315FJRQ9V08RV",
+      "id": "01KY0E87GE813K7X0W54H3P8KA",
       "name": "ActualsFilter",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "notes": [
+        "canonical multi-dimensional filters"
+      ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:41.3891091+00:00"
     },
     {
-      "id": "01KXT0SME96S8N6KENP1N3S1PN",
+      "id": "01KY0E87GERNF5PWA9Q1FWGSFT",
       "name": "ActualsCalculator.Calculate",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "notes": [
+        "exact named totals and cells"
+      ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:41.3891091+00:00"
     },
     {
-      "id": "01KXT0SME947EREXCPRZW4C7JZ",
+      "id": "01KY0E87GE6PJ6NJ4CDN8G8TXT",
       "name": "ActualsProjectionStore",
       "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-QUERY-SNAPSHOT",
+      "notes": [
+        "current membership projection"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:41.3891091+00:00"
     },
     {
-      "id": "01KXT0SME9BKG3QRSG8YTM9EQT",
+      "id": "01KY0E87GE2G4XBQTTH3PR3VJR",
       "name": "Money",
       "direction": "consumes",
       "contract_ref_code": "DD-LEDGER-FINANCIAL-REPRESENTATION",
+      "notes": [
+        "exact values"
+      ],
       "sort_order": 3,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:41.3891091+00:00"
     },
     {
-      "id": "01KXT0SME90KFEMZ50QAECY0T2",
+      "id": "01KY0E87GESYQPPM2H8ZF1T47K",
       "name": "RelationshipStore",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "notes": [
+        "transfer/refund state"
+      ],
       "sort_order": 4,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:41.3891091+00:00"
     },
     {
-      "id": "01KXT0SME9XS3FDNEQKN6RTV51",
+      "id": "01KY0E87GEB6CW6529Y09Z3T7A",
       "name": "CategoryAllocationStore",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
+      "notes": [
+        "current category"
+      ],
       "sort_order": 5,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:41.3891091+00:00"
+    },
+    {
+      "id": "01KY0E87GEZ4ACVE9SPTNFGFZH",
+      "name": "PoolAssignmentStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-SPEND-POOL-ASSIGNMENT",
+      "notes": [
+        "current pool"
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-20T18:57:41.3891091+00:00"
+    },
+    {
+      "id": "01KY0E87GEW8PRSKR3HQGSD60M",
+      "name": "PaymentAttributionStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-PAYMENT-ATTRIBUTION",
+      "notes": [
+        "instrument/cardholder filters"
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-20T18:57:41.3891091+00:00"
+    },
+    {
+      "id": "01KY0E87GEH1XNF4488FMZJAS7",
+      "name": "ReconciliationCoverageStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "notes": [
+        "evidence/reconciliation filters"
+      ],
+      "sort_order": 8,
+      "created_at": "2026-07-20T18:57:41.3891091+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KXT0SME9WANMYVQKQT2XBX9S",
+      "id": "01KY0EWY1A7NZ0TKJBZ7WPF9AB",
       "kind": "acceptance_check",
       "text": [
-        "All supplied account/date/category/transfer/refund/relationship/categorization/lifecycle filters combine with AND semantics; invalid combinations return field errors."
+        "Account/date/category/pool/instrument/cardholder/relationship/lifecycle/evidence/reconciliation filters combine with AND semantics; invalid combinations fail and empty matches return exact zero with explicit unknown/unassigned buckets."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T19:08:59.8178184+00:00"
     },
     {
-      "id": "01KXT0SME9XFNP9XZE9CEEJ33W",
+      "id": "01KY0EWY1BN4Z9SH52XGYHTJ1M",
       "kind": "acceptance_check",
       "text": [
-        "Default projection excludes inactive transactions/retired relationships; empty matches return success with empty items and exact zero totals."
+        "Net Account Movement is signed selected sum; External Spend includes qualifying outflows and separate fees, subtracts active refunds, and excludes transfer principal/unrelated inflows."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T19:08:59.8178184+00:00"
     },
     {
-      "id": "01KXT0SME9RR7V02PE11TTNH2R",
+      "id": "01KY0EWY1BV5NDN4R0GKA6M19Q",
       "kind": "acceptance_check",
       "text": [
-        "Net Account Movement is exact signed selected sum; External Spend includes qualifying outflow magnitudes, subtracts in-set active refunds, excludes transfer principal/unrelated inflows, and includes separate fees/unlinked cash."
+        "Budget Actual uses current category and pool; refunds offset the original in the credit period; every all-up total equals pool, category, and pool-by-category cells including unassigned/uncategorized."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T19:08:59.8178184+00:00"
     },
     {
-      "id": "01KXT0SME936VG9A3KY38B9QKW",
+      "id": "01KY0EWY1BCNDD2ER3PAWD19J0",
       "kind": "acceptance_check",
       "text": [
-        "Budget Actual applies External Spend to current active category allocation; refund uses its own EffectiveDate and original's current category and may make a period negative."
+        "Payment/evidence/reconciliation filters change membership only; identical state/filter is deterministic; 100000 active transactions meet the under-2-second p95 profile."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
-    },
-    {
-      "id": "01KXT0SME9T5WSKBJ1Q2VFRT6N",
-      "kind": "acceptance_check",
-      "text": [
-        "Ordering is EffectiveDate descending then transaction ULID descending and identical state/filter yields identical projection/totals."
-      ],
-      "required": 1,
-      "sort_order": 4,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
-    },
-    {
-      "id": "01KXT0SME9D2MPCPJEGWVPGJFJ",
-      "kind": "acceptance_check",
-      "text": [
-        "At 100000 active transactions, first complete projection/totals meets the designed under-2-second p95 target on the supported benchmark profile."
-      ],
-      "required": 1,
-      "sort_order": 5,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T19:08:59.8178184+00:00"
     },
     {
       "id": "01KXT0SME9NNV3T4TMHWK2V8BH",
@@ -276,49 +338,27 @@
       "created_at": "2026-07-18T07:07:05.0252128+00:00"
     },
     {
-      "id": "01KXT0SME9T9C4NQNE6FTP7QMX",
+      "id": "01KY0E87GEVT9A1CSB22G79NCK",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT use floating point, infer relationships, count retired/inactive state by default, offset refunds outside selected membership, or move budget amounts/pacing into LEDGER."
+        "Do NOT infer one financial dimension from another or silently omit unknown/unassigned membership."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:41.3891091+00:00"
     },
     {
-      "id": "01KXT0SME9PYDHFZZV9XB6XB8S",
+      "id": "01KY0E87GEJ6DFG379M0AM7WPG",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT expose a live offset-paginated public command from this task; snapshot publication belongs to the next task."
+        "Do NOT duplicate these formulas in BUDGET, INSIGHTS, INGEST, or Hermes."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-20T18:57:41.3891091+00:00"
     }
   ],
   "references": [
-    {
-      "id": "01KXT0SMEAFDS5RKQ350DRWKQJ",
-      "target_ref_code": "OQ-LEDGER-5",
-      "target_entity_type": "open_question",
-      "target_entity_id": "01KXR55HWRSWNEKE7H763R8173",
-      "target_title": "Validate the proposed transfer, refund/reversal, and cash-withdrawal spend policies with representative transactions.",
-      "relationship": "blocked-by",
-      "required": 1,
-      "sort_order": 6,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
-    },
-    {
-      "id": "01KXT0SMEADK19DC3WX98X1MK4",
-      "target_ref_code": "OQ-LEDGER-6",
-      "target_entity_type": "open_question",
-      "target_entity_id": "01KXR55J26NDF2WS6NRR6C23VX",
-      "target_title": "Validate flat, archivable categories with one active category allocation per transaction for the first release.",
-      "relationship": "blocked-by",
-      "required": 1,
-      "sort_order": 7,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
-    },
     {
       "id": "01KXT0SMEAJ7D5G7Q6E4ZRBPWQ",
       "target_ref_code": "NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE",

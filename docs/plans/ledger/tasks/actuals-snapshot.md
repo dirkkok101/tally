@@ -12,21 +12,21 @@
 
 ## Summary
 
-Expose ledger.actuals.query with one BEGIN IMMEDIATE first-page snapshot transaction and read-only cursor pages.
+Expose ledger.actuals.query with one BEGIN IMMEDIATE first-page snapshot transaction over exact multi-dimensional current state and read-only cursor pages.
 
 ## Objective
 
-Return stable cross-process pages and full-set totals despite later writes, without cursor exposure before snapshot commit.
+Return stable cross-process pages, exact full-set totals, and pool/category matrices despite later writes, without exposing a cursor before snapshot commit.
 
 ## References
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-SNAPSHOT-ACTUALS: Materialized cross-process query snapshots | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-SNAPSHOT-ACTUALS: Materialized coherent snapshots for dimensional actuals | `design_decision` | `governed-by` | `true` |
 | DIAG-LEDGER-ACTUALS-SNAPSHOT-SEQUENCE: Cross-process actuals snapshot pagination | `design_diagram` | `references` | `false` |
 | DM-LEDGER-QUERY-SNAPSHOT: QuerySnapshot | `data_model` | `touches` | `true` |
 | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | `true` |
-| FR-LEDGER-ACTUALS-QUERY: Query and reconcile Ledger actuals | `requirement` | `implements` | `true` |
+| FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals | `requirement` | `implements` | `true` |
 | FR-LEDGER-SNAPSHOT-PAGINATION: Preserve query snapshots across pages | `requirement` | `implements` | `true` |
 | NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the agent contract stable | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-SNAPSHOT-PAGINATION-CONTRACT: Verify preserve query snapshots across pages contract | `test_case` | `verifies` | `true` |
@@ -41,11 +41,11 @@ Return stable cross-process pages and full-set totals despite later writes, with
 
 ### Acceptance Checks
 
-- First-page request accepts filters+pageSize only, acquires single-writer lock, and in one BEGIN IMMEDIATE reads active state, computes all items/totals, inserts snapshot/items, commits, then emits first page/cursor/expiry.
+- First-page request accepts canonical filters plus pageSize, acquires the writer lock, and in one BEGIN IMMEDIATE reads active facts, dimensions, evidence/reconciliation and relationships; computes items/totals/cells; inserts snapshot/items; commits; then emits page/cursor/expiry.
 - Busy before acquisition returns LEDGER-SNAPSHOT-BUSY; cancellation/crash/write failure before commit returns no cursor and leaves no partial usable snapshot.
-- Later request accepts cursor only on a read-only connection and returns fixed ordinal projections/totals despite unrelated corrections after first page.
+- Later cursor-only requests read fixed ordinal projections, named totals, and dimensional cells despite unrelated writes or corrections after first page.
 - Changed filters, malformed/expired/incompatible/stale-generation cursor returns its documented stable error and no partial page.
-- All pages contain each selected transaction exactly once in EffectiveDate/ULID order; snapshot rows are opportunistically cleaned and excluded from backup.
+- All pages contain each selected transaction exactly once in EffectiveDate/ULID order; snapshots retain explicit unknown/unassigned buckets, are opportunistically cleaned, and are excluded from backup.
 
 ### Failure Criteria
 
@@ -109,8 +109,8 @@ No bead references recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `depends-on:compile` -> [TASK-LEDGER-ACTUALS-PROJECTION](../tasks/actuals-projection.md): Snapshot handler materializes the exact projection and totals.
-- `governed-by` -> DD-LEDGER-SNAPSHOT-ACTUALS: Materialized cross-process query snapshots
-- `implements` -> FR-LEDGER-ACTUALS-QUERY: Query and reconcile Ledger actuals
+- `governed-by` -> DD-LEDGER-SNAPSHOT-ACTUALS: Materialized coherent snapshots for dimensional actuals
+- `implements` -> FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals
 - `implements` -> FR-LEDGER-SNAPSHOT-PAGINATION: Preserve query snapshots across pages
 - `references` -> DIAG-LEDGER-ACTUALS-SNAPSHOT-SEQUENCE: Cross-process actuals snapshot pagination
 - `satisfies` -> NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the agent contract stable

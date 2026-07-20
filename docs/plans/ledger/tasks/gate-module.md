@@ -12,11 +12,11 @@
 
 ## Summary
 
-Exactly-one module completion gate intentionally has no Implements link: converge all feature, security, use-case, build, graph, publish, and offline checks.
+Exactly-one module completion gate intentionally has no Implements link: converge every feature, security, use-case, build, graph, publish, provider-neutrality, and offline check.
 
 ## Objective
 
-Prove the completed LEDGER implementation is release-buildable, fully tested, graph-conformant, Native-AOT publishable, offline, and ready for review.
+Prove LEDGER is release-buildable, fully tested, graph-conformant, Native-AOT publishable, recovery-complete, channel-neutral, and ready for work review.
 
 ## References
 
@@ -27,29 +27,35 @@ No graph references recorded.
 | Depends On | Type | Reason |
 |---|---|---|
 | [TASK-LEDGER-GATE-SECURITY](../tasks/gate-security.md) | `compile` | Module completion requires the consolidated security gate. |
-| [TASK-LEDGER-VERIFY-UC-001](../tasks/verify-uc-001.md) | `compile` | Module completion requires every designed use case and failure path to be verified. |
-| [TASK-LEDGER-VERIFY-UC-002](../tasks/verify-uc-002.md) | `compile` | Module completion requires every designed use case and failure path to be verified. |
-| [TASK-LEDGER-VERIFY-UC-003](../tasks/verify-uc-003.md) | `compile` | Module completion requires every designed use case and failure path to be verified. |
-| [TASK-LEDGER-VERIFY-UC-004](../tasks/verify-uc-004.md) | `compile` | Module completion requires every designed use case and failure path to be verified. |
-| [TASK-LEDGER-VERIFY-UC-005](../tasks/verify-uc-005.md) | `compile` | Module completion requires every designed use case and failure path to be verified. |
-| [TASK-LEDGER-VERIFY-UC-006](../tasks/verify-uc-006.md) | `compile` | Module completion requires every designed use case and failure path to be verified. |
-| [TASK-LEDGER-VERIFY-UC-007](../tasks/verify-uc-007.md) | `compile` | Module completion requires every designed use case and failure path to be verified. |
-| [TASK-LEDGER-VERIFY-UC-008](../tasks/verify-uc-008.md) | `compile` | Module completion requires every designed use case and failure path to be verified. |
-| [TASK-LEDGER-VERIFY-UC-009](../tasks/verify-uc-009.md) | `compile` | Module completion requires every designed use case and failure path to be verified. |
-| [TASK-LEDGER-VERIFY-UC-010](../tasks/verify-uc-010.md) | `compile` | Module completion requires every designed use case and failure path to be verified. |
-| [TASK-LEDGER-VERIFY-UC-011](../tasks/verify-uc-011.md) | `compile` | Module completion requires every designed use case and failure path to be verified. |
-| [TASK-LEDGER-VERIFY-UC-012](../tasks/verify-uc-012.md) | `compile` | Module completion requires every designed use case and failure path to be verified. |
 | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Consumer requires CompletePublicContract from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-VERIFY-UC-001](../tasks/verify-uc-001.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-002](../tasks/verify-uc-002.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-003](../tasks/verify-uc-003.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-004](../tasks/verify-uc-004.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-005](../tasks/verify-uc-005.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-006](../tasks/verify-uc-006.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-007](../tasks/verify-uc-007.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-008](../tasks/verify-uc-008.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-009](../tasks/verify-uc-009.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-010](../tasks/verify-uc-010.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-011](../tasks/verify-uc-011.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-012](../tasks/verify-uc-012.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-013](../tasks/verify-uc-013.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-014](../tasks/verify-uc-014.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-015](../tasks/verify-uc-015.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-016](../tasks/verify-uc-016.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-017](../tasks/verify-uc-017.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-018](../tasks/verify-uc-018.md) | `compile` | Requires UC proof. |
 
 ## Recipe
 
 ### Acceptance Checks
 
 - dotnet restore/build/format and the full xUnit suite exit 0 with zero warnings/failures; test output reports a nonzero count for every planned test class.
-- Release linux-x64 Native-AOT publish exits 0 and the published binary completes the 38-operation offline contract inventory with no orphan process/listener.
-- Core and security scripts exit 0; personal-scale test reports p95 targets; verified recovery drill reproduces every durable state type and exact totals.
-- lex coverage reports 17/17 active FRs covered, no gaps/orphan tests; lex check --fast reports 0 errors/warnings; plan coverage remains gate-clean.
-- git diff --check is empty and the verification report lists every command/result and any intentionally non-code-covered file.
+- Release linux-x64 Native-AOT publish exits 0 and the binary completes the exact 72-operation offline contract inventory with no child process, listener, provider integration, or raw-payload schema.
+- Core/security/provider-neutral scripts exit 0; personal-scale p95 target passes; recovery drill reproduces every fact, history, dimension, evidence, reconciliation, relationship, replay outcome, count, and exact named/dimensional total.
+- lex coverage reports 25/25 active FRs covered with no gaps or orphan tests; lex check --fast reports 0 errors/warnings; plan coverage and audit remain gate-clean; all 18 use-case workflow verifiers pass.
+- git diff --check is empty and the verification report lists every command/result plus any intentionally non-code-covered file.
 
 ### Failure Criteria
 
@@ -67,7 +73,7 @@ No graph references recorded.
 
 ### Notes
 
-- This is the sole module-completion gate; per-task tests remain mandatory and are not replaced.
+None recorded.
 
 ### File Contracts
 
@@ -80,34 +86,22 @@ No graph references recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR |  |
-| VerifiedLocalSecurityGate | `consumes` | NFR-LEDGER-LOCAL-DATA-PROTECTION |  |
-| VerifiedUC001 | `consumes` | UC-LEDGER-001 |  |
-| VerifiedUC002 | `consumes` | UC-LEDGER-002 |  |
-| VerifiedUC003 | `consumes` | UC-LEDGER-003 |  |
-| VerifiedUC004 | `consumes` | UC-LEDGER-004 |  |
-| VerifiedUC005 | `consumes` | UC-LEDGER-005 |  |
-| VerifiedUC006 | `consumes` | UC-LEDGER-006 |  |
-| VerifiedUC007 | `consumes` | UC-LEDGER-007 |  |
-| VerifiedUC008 | `consumes` | UC-LEDGER-008 |  |
-| VerifiedUC009 | `consumes` | UC-LEDGER-009 |  |
-| VerifiedUC010 | `consumes` | UC-LEDGER-010 |  |
-| VerifiedUC011 | `consumes` | UC-LEDGER-011 |  |
-| VerifiedUC012 | `consumes` | UC-LEDGER-012 |  |
-| VerifiedLedgerV1Module | `produces` |  |  |
+| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | 72-operation contract |
+| VerifiedLocalSecurityGate | `consumes` |  | local privacy and provider-neutrality |
+| VerifiedLedgerV1Module | `produces` |  | module completion evidence after all 18 dependency proofs |
 
 ### Verification
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `bash scripts/verify-ledger-module.sh` | exit 0; restore/build/format/full tests/AOT publish/core/security/performance/recovery/Lex/diff checks all report success, every suite reports nonzero tests, and 0 failures/warnings remain | `true` | 1800 |
+| `after` | `bash scripts/verify-ledger-module.sh` | exit 0; restore/build/format/full tests/AOT publish/72-operation/core/security/provider-neutrality/performance/recovery/Lex/diff checks all succeed; every suite reports nonzero tests; 0 failures/warnings remain | `true` | 2400 |
 
 ### Review Gates
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Verification report contains raw command summaries and exact counts/timings for every gate. | `true` |
-| `branch-review` | Fresh reviewer confirms graph, implementation, tests, and published behavior agree. | `true` |
+| `test-evidence` | Verification report contains command summaries and exact counts/timings for every gate, all 18 workflows, and all 25 requirements. | `true` |
+| `branch-review` | Fresh reviewer confirms graph, implementation, tests, complete-state recovery, and published provider-neutral behavior agree. | `true` |
 
 ## Bead References
 
@@ -119,18 +113,24 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Consumer requires CompletePublicContract from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-SECURITY](../tasks/gate-security.md): Module completion requires the consolidated security gate.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-001](../tasks/verify-uc-001.md): Module completion requires every designed use case and failure path to be verified.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-002](../tasks/verify-uc-002.md): Module completion requires every designed use case and failure path to be verified.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-003](../tasks/verify-uc-003.md): Module completion requires every designed use case and failure path to be verified.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-004](../tasks/verify-uc-004.md): Module completion requires every designed use case and failure path to be verified.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-005](../tasks/verify-uc-005.md): Module completion requires every designed use case and failure path to be verified.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-006](../tasks/verify-uc-006.md): Module completion requires every designed use case and failure path to be verified.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-007](../tasks/verify-uc-007.md): Module completion requires every designed use case and failure path to be verified.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-008](../tasks/verify-uc-008.md): Module completion requires every designed use case and failure path to be verified.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-009](../tasks/verify-uc-009.md): Module completion requires every designed use case and failure path to be verified.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-010](../tasks/verify-uc-010.md): Module completion requires every designed use case and failure path to be verified.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-011](../tasks/verify-uc-011.md): Module completion requires every designed use case and failure path to be verified.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-012](../tasks/verify-uc-012.md): Module completion requires every designed use case and failure path to be verified.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-001](../tasks/verify-uc-001.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-002](../tasks/verify-uc-002.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-003](../tasks/verify-uc-003.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-004](../tasks/verify-uc-004.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-005](../tasks/verify-uc-005.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-006](../tasks/verify-uc-006.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-007](../tasks/verify-uc-007.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-008](../tasks/verify-uc-008.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-009](../tasks/verify-uc-009.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-010](../tasks/verify-uc-010.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-011](../tasks/verify-uc-011.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-012](../tasks/verify-uc-012.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-013](../tasks/verify-uc-013.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-014](../tasks/verify-uc-014.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-015](../tasks/verify-uc-015.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-016](../tasks/verify-uc-016.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-017](../tasks/verify-uc-017.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-018](../tasks/verify-uc-018.md): Requires UC proof.
 
 ## Navigation
 

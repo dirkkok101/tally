@@ -1,0 +1,212 @@
+{
+  "id": "01KY0DT2MGC30NGH8AQSHTE4R1",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-VERIFY-UC-018",
+  "slug": "VERIFY-UC-018",
+  "title": "SpendPoolWorkflow",
+  "description": [
+    "Verification-only task with no Implements link: trace UC-LEDGER-018 through the Release published CLI."
+  ],
+  "objective": [
+    "Prove spend-pool lifecycle, assignment, unassigned behavior, and exact pool/category conservation across finance corrections."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 195,
+  "created_at": "2026-07-20T18:49:57.6488706+00:00",
+  "dependencies": [
+    {
+      "id": "01KY0DT2N3YXC6C2T6P42J152M",
+      "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Use-case verification invokes the fully wired published public contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY0DT2N2XSTEYEF7VM78KMA8",
+      "path": "tests/Tally.Tests/EndToEnd/UC018SpendPoolWorkflowTests.cs",
+      "action": "test",
+      "role": "published-process verification",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY0DT2N2H3SH6F81KK9K95H2",
+      "name": "PublishedTallyFixture",
+      "direction": "consumes",
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N297XYC2DHCWXZHBXN",
+      "name": "CompletePublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "72 provider-neutral operations"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N23DGATG5XDMZQ6BAK",
+      "name": "VerifiedUC018",
+      "direction": "produces",
+      "contract_ref_code": "UC-LEDGER-018",
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY0DT2N2M69R1EFM3NB2FG2D",
+      "kind": "acceptance_check",
+      "text": [
+        "The published workflow creates/archives/reactivates pools, assigns/corrects active transactions, preserves explicit unassigned state, and queries exact pool, category, and pool-by-category totals."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N2QJPGAXCYBCQ3203F",
+      "kind": "acceptance_check",
+      "text": [
+        "Pool conflict/archive, identical/changed replay, inactive transaction, stale assignment, write failure, and unassigned query cover every UC-LEDGER-018 failure path."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N2ZTJX6H1D5WDQZNJR",
+      "kind": "acceptance_check",
+      "text": [
+        "Refunds offset the original current pool/category in their own period, transfers contribute zero spend, and void/supersession/correction histories preserve exact all-up equals grouped totals."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N2JX9NQHYZ1D7NV2WD",
+      "kind": "expected_output",
+      "text": [
+        "UC018SpendPoolWorkflowTests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N2RQN036SDACACB5PB",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT infer pool from any other dimension or hide unassigned transactions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N2HKNHM5MTR5NWZMVT",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept totals that reconcile only in aggregate but fail per pool/category cell."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY0DT2N2K5QWG0ZYZJK4JNM6",
+      "target_ref_code": "UC-LEDGER-018",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KY07G3NF0XNB78FQ87RWAJZC",
+      "target_title": "Maintain spend pools and transaction pool assignment",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N37CCBJQ5AG6B76AHZ",
+      "target_ref_code": "FR-LEDGER-SPEND-POOL-CATALOGUE",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KY09SQTXB94THKZNDAR42EGV",
+      "target_title": "Maintain the spend-pool catalogue",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N37511C6BVW87VPPM9",
+      "target_ref_code": "FR-LEDGER-POOL-ASSIGNMENT",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KY09SRBX6M5ZVRR6YSRRPFQH",
+      "target_title": "Assign and correct transaction spend pools",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N3VXMHSM6TEHVWN79E",
+      "target_ref_code": "TC-LEDGER-POOL-ASSIGNMENT-ACTUALS-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KY0A504XXFPYF1YY9AJDGZS1",
+      "target_title": "Verify pool assignment and exact grouped actuals",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N3EC3JS80DRN0G0324",
+      "target_ref_code": "TC-LEDGER-DIMENSIONAL-ACTUALS-PROPERTY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KY0BYAP4E4Z749W3JRAZTGNH",
+      "target_title": "Prove exact pool and category actuals across corrections",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY0DT2N2PJPCZJQ02X667654",
+      "gate_type": "test-evidence",
+      "description": [
+        "Evidence proves exact conservation for every pool/category cell and explicit unassigned membership."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY0DT2N2MTCC63W2JYM2QYHY",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.EndToEnd.UC018SpendPoolWorkflowTests --no-restore",
+      "expected_result": "exit 0; at least 15 pool lifecycle, assignment, unassigned, refund, transfer, correction, replay, and exact-total scenarios run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 720,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ]
+}

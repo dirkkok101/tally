@@ -1,0 +1,190 @@
+{
+  "id": "01KY0DT2MFK2FK2ZS68HGW1GSB",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06B5N11DPFN2347XT7G32",
+  "ref_code": "TASK-LEDGER-VERIFY-UC-013",
+  "slug": "VERIFY-UC-013",
+  "title": "EvidenceLinkWorkflow",
+  "description": [
+    "Verification-only task with no Implements link: trace UC-LEDGER-013 through the Release published CLI."
+  ],
+  "objective": [
+    "Prove additional generic evidence registration and supporting linkage main/failure paths without provider payload retention or reconciliation mutation."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 150,
+  "created_at": "2026-07-20T18:49:57.6488706+00:00",
+  "dependencies": [
+    {
+      "id": "01KY0DT2N0NPACSNNBVES9EYY7",
+      "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Use-case verification invokes the fully wired published public contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY0DT2MZ76PE3PKXYBKNGVW8",
+      "path": "tests/Tally.Tests/EndToEnd/UC013EvidenceLinkWorkflowTests.cs",
+      "action": "test",
+      "role": "published-process verification",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY0DT2MZ6KHCHEYV5QPQ7GBH",
+      "name": "PublishedTallyFixture",
+      "direction": "consumes",
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MZWXE70JRF9QAK6A09",
+      "name": "CompletePublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "72 provider-neutral operations"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MZ16KDHV7PRZGY3KH2",
+      "name": "VerifiedUC013",
+      "direction": "produces",
+      "contract_ref_code": "UC-LEDGER-013",
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY0DT2MZYSWFEFK5C4E5WTNY",
+      "kind": "acceptance_check",
+      "text": [
+        "The published workflow registers and links multiple evidence records to one active transaction, retrieves safe history, and leaves reconciliation state and exact actuals unchanged."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MZAPW1SDA9FWZ0RZ0B",
+      "kind": "acceptance_check",
+      "text": [
+        "Forbidden payload, insufficient identity, inactive transaction, incompatible facts, other-transaction conflict, identical replay, changed replay, and injected atomic failure match every UC-LEDGER-013 failure path."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MZG7SDHCFNYVR12S95",
+      "kind": "acceptance_check",
+      "text": [
+        "Persisted canary inspection finds no source payload or full identifier and one logical effect per evidence item."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MZ92PWR3893TEZP1FD",
+      "kind": "expected_output",
+      "text": [
+        "UC013EvidenceLinkWorkflowTests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MZES5GXNWGT45Z92T4",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT call handlers or SQLite directly except read-only postcondition inspection."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2MZMTPHKBJ8MG6JX2DS",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT omit cross-key logical replay or the no-reconciliation-state-change assertion."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY0DT2N0W4F5C459T7B29JG4",
+      "target_ref_code": "UC-LEDGER-013",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KY07G07RGC52D5KC3AKSE8AR",
+      "target_title": "Register and link additional transaction evidence",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N0SENPSDCKE71V7WWN",
+      "target_ref_code": "FR-LEDGER-EVIDENCE-REGISTRATION",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KY09SMHHRGKTD2W28KBN4N6R",
+      "target_title": "Register and link generic evidence",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY0DT2N0XMKGAMH18ZKZ23K2",
+      "target_ref_code": "TC-LEDGER-EVIDENCE-REGISTRATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KY0A4W77PF27T99QGA02E43E",
+      "target_title": "Verify generic evidence registration and linkage",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY0DT2MZT21YAYGGPG2C260K",
+      "gate_type": "test-evidence",
+      "description": [
+        "Evidence maps every UC-LEDGER-013 path to process and durable-state assertions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY0DT2MZK30DXWY7V2RKDFMB",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.EndToEnd.UC013EvidenceLinkWorkflowTests --no-restore",
+      "expected_result": "exit 0; at least 11 main/failure-path scenarios run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    }
+  ]
+}
