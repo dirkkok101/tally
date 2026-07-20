@@ -9,9 +9,9 @@
   "scenario": "happy",
   "automation": "automated",
   "status": "planned",
-  "preconditions": "Version-compatible and incompatible INSIGHTS consumers can inspect projection schemas, exact values, provenance, absent analytics fields, and available authorities.",
-  "steps": "Invoke the relevant Public Budget Operations and exercise every acceptance criterion of FR-BUDGET-INSIGHTS-PROJECTION, including its validation, lifecycle, compatibility, authority, replay, and unavailable paths where applicable.",
-  "expected": "Every acceptance criterion of FR-BUDGET-INSIGHTS-PROJECTION holds; all documented errors are stable; every rejected or failed mutation leaves the required prior state unchanged; no prohibited side effect occurs.",
+  "preconditions": "Version-compatible and incompatible INSIGHTS consumers can inspect the three-operation read capability and a controllable public LEDGER producer can force corrections before and after composite snapshot capture.",
+  "steps": "Invoke the existing plan and position reads and budget.insights.evidence.get. Exercise every acceptance criterion of FR-BUDGET-INSIGHTS-PROJECTION, including schema parity, one-snapshot member and position reconciliation, pre-capture and post-capture corrections, limits, compatibility, authority, and failure paths.",
+  "expected": "Existing reads preserve exact parity. Every composite success binds one plan revision, exact Budget Position, and dated members to one LEDGER snapshot and one canonical calculation; every unprovable or over-limit result fails before partial output. All errors are stable, no mutation or private access occurs, and no consumer state is created.",
   "owner": "BUDGET implementation",
   "created_at": "2026-07-19T15:23:16.5306833+00:00",
   "links": [

@@ -2,21 +2,21 @@
   "id": "01KXXJD6KANRW1K8DP7RC8G2V4",
   "module_id": "01KXR4WNPW86216H643PZ6KA36",
   "ref_code": "DD-BUDGET-CLI-OPERATION-CONTRACT",
-  "title": "Five explicit BUDGET operations from one registry",
+  "title": "Six explicit BUDGET operations from one registry",
   "description": [
     "Make every v1 plan and position capability discoverable without HTTP, generic CRUD, or hidden actions."
   ],
   "decision": [
-    "Expose budget.plan.draft.create, budget.plan.revision.get, budget.plan.revision.list, budget.plan.revision.activate, and budget.position.get under tally budget. Reuse system.schema.list/show for Discover Contract. One explicitly registered descriptor registry generates dispatch, help, machine schemas, compatibility metadata, limits, errors, authority, mutability, idempotency metadata, and process envelopes. Complex input uses explicit stdin or file JSON and every invocation emits one business envelope."
+    "Expose budget.plan.draft.create, budget.plan.revision.get, budget.plan.revision.list, budget.plan.revision.activate, budget.position.get, and the read-only budget.insights.evidence.get under tally budget. Reuse system.schema.list/show for Discover Contract. One explicitly registered descriptor registry generates dispatch, help, machine schemas, compatibility metadata, limits, errors, authority, mutability, idempotency metadata, and process envelopes. Complex input uses explicit stdin or file JSON and every invocation emits one business envelope."
   ],
   "rationale": [
-    "The chosen surface preserves the canonical product verbs and makes mutation versus query semantics inspectable. A generic invoke, save, edit, delete, copy, rollover, reopen, or rebalance operation would weaken immutable lifecycle and caller safety. Separate help, schema, and dispatch sources would drift."
+    "Each lifecycle or read intent needs a stable schema and authority surface. The A3 spike established that coherent INSIGHTS evidence is a distinct producer intent: it must bind the canonical position and dated members inside one BUDGET operation and cannot be represented by two safe independent calls. Shared discovery remains separate, and no generic execute or HTTP facade is introduced."
   ],
   "alternatives": [
-    "A: generic budget.plan.execute with an action field, rejected as a shallow facade. B: HTTP Save/Get/Grid/Delete endpoints, rejected because the module has no network or UI. C: five explicit operations plus shared registry discovery, chosen."
+    "A: generic budget.plan.execute with an action field, rejected as a shallow facade. B: HTTP Save/Get/Grid/Delete endpoints, rejected because the module has no network or UI. C: six explicit operations plus shared registry discovery, chosen after the coherent evidence operation earned its own contract."
   ],
   "consequences": [
-    "Operation IDs, paths, schemas, stable errors, exit categories, and replay behavior are compatibility commitments. Create Draft and Activate require idempotency keys, trusted owner context, actor attribution, and reason. Reads do not accept mutation authority. Unknown fields and incompatible versions fail before financial reads or writes."
+    "The descriptor registry, help, schema snapshots, published-binary tests, limits, authority metadata, and performance matrix cover all six operations. budget.insights.evidence.get is read-only, BUDGET-owned, bounded, and visible to compatible consumers; it grants no mutation or analytical authority."
   ],
   "status_notes": [
     "No Lex endpoint entities are created because the released surface is a local operation registry, not HTTP; the operation contract data model is authoritative."

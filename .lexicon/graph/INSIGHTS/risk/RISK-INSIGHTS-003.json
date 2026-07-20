@@ -3,12 +3,21 @@
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "ref_code": "RISK-INSIGHTS-003",
   "description": [
-    "The released BUDGET read capability or public LEDGER operations may not expose the time-granular, snapshot-compatible evidence needed for daily and weekly analysis."
+    "The production BUDGET and LEDGER implementation may fail to preserve the snapshot-bound composite evidence contract proven by the A3 protocol spike."
   ],
-  "likelihood": "Medium",
+  "likelihood": "Low",
   "impact": "High",
   "mitigation": [
-    "Resolve the minimum read contract in discovery with a focused upstream contract spike; expand only the authoritative public producer contract and trigger the monitored stop condition before private access or duplication."
+    "Implement budget.insights.evidence.get as governed by DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: one immutable plan revision, one complete public LEDGER snapshot, one canonical BudgetPositionCalculator path, bounded dated members, shared binding provenance, and forced concurrent-correction conformance. Fail closed before private access, duplicate calculation, or partial output."
   ],
-  "created_at": "2026-07-20T07:28:29.4858389+00:00"
+  "created_at": "2026-07-20T07:28:29.4858389+00:00",
+  "links": [
+    {
+      "id": "01KXZCNGSKZFB2XY27WF4VYZTH",
+      "target_type": "design_decision",
+      "target": "DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+      "rel": "see-also",
+      "created_at": "2026-07-20T09:10:45.3005725+00:00"
+    }
+  ]
 }

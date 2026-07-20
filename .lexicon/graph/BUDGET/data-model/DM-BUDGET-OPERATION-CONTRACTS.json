@@ -4,19 +4,19 @@
   "ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
   "name": "BudgetOperationContracts",
   "description": [
-    "Concrete versioned request, result, authority, idempotency, limit, and stable error contracts for the five public BUDGET operations plus shared contract discovery."
+    "Concrete versioned request, result, authority, idempotency, limit, and stable error contracts for the six public BUDGET operations plus shared contract discovery."
   ],
   "schema_def": [
-    "All operations use the common Tally envelope, source-generated JSON, unknown-field rejection, canonical Money strings, DateOnly period boundaries, opaque ULIDs, one stdout business result, and metadata-only stderr. The required common envelope actor supplies attribution; actor is not duplicated inside operation input. Trusted OS owner/delegated authority is captured by the host context, not accepted as caller JSON.",
+    "All operations use the common Public Budget Operation envelope, owner or delegated authority metadata, versioned request/result/error fingerprints, deterministic limits, stable exit categories, and metadata-only diagnostics.",
     "",
-    "budget.plan.draft.create input {period:{year,month,currencyCode:ZAR}, entries:[{categoryId,plannedAmount}], reason}; mutation key required; result BudgetPlanRevisionMutationResult containing immutable revision payload and exact DraftCreated event snapshot, with no live period/category/status enrichment.",
+    "budget.plan.draft.create input {period, entries[], reason}; mutating, actor and idempotency required; result immutable Draft revision.",
     "budget.plan.revision.get input {revisionId}; result BudgetPlanRevisionDetail containing immutable revision payload plus current supplemental CategoryLifecycleEvidence.",
-    "budget.plan.revision.list input {period:{year,month,currencyCode:ZAR}}; result {periodState, planState, planId?, activeRevisionId?, revisions:BudgetPlanRevisionSummary[]} ordered createdAt then revisionId; summary contains identity, number, status, actor/reason, creation and activation/supersession provenance, but no entries or live category evidence.",
-    "budget.plan.revision.activate input {revisionId, reason}; trusted owner/delegated host context and mutation key required; result BudgetPlanRevisionMutationResult containing immutable payload plus exact activation and prior-supersession event snapshots, not later live status.",
+    "budget.plan.revision.list input {period?, status?, limit}; result bounded metadata-first revision history.",
+    "budget.plan.revision.activate input {revisionId, reason}; mutating, actor and idempotency required; result activated revision and supersession evidence.",
     "budget.position.get input {period:{year,month,currencyCode:ZAR}, revisionId?}; selected revision must belong to the supplied period/currency or BUDGET-REVISION-PERIOD-MISMATCH is returned before LEDGER; result BudgetPosition or explicit NoActiveBudgetPlanRevision.",
-    "system.schema.list/show discover descriptors without owner data.",
+    "budget.insights.evidence.get input {budgetPeriod, revisionId?, memberLimit}; read-only; result BudgetInsightEvidence containing one immutable revision detail, canonical BudgetPosition, bounded dated actual members, shared LEDGER snapshot identity and generation, calculation schema, and binding fingerprint. The position and members reuse one complete public LEDGER actuals snapshot. An unprovable binding returns BUDGET-SOURCE-STATE-CHANGED and a limit breach returns BUDGET-RESOURCE-LIMIT before partial output.",
     "",
-    "Stable module errors include validation, revision-period-mismatch, period-closed, plan/revision-not-found, no-active-revision, category-invalid/inactive/stale, authority-required, lifecycle-invalid, idempotency-conflict, busy, LEDGER-incompatible/unavailable/snapshot-invalid, integrity, host-resource, and sanitized internal categories mapped to shared exit classes. There is no status, Save, edit, delete, copy, rollover, reopen, or rebalance operation."
+    "Unknown fields, unsupported versions, invalid periods, unsafe amounts, authority failures, incompatibility, integrity failures, downstream failures, and resource limits are stable typed outcomes. No operation starts a daemon, uses network access, reads private LEDGER storage, emits financial payloads outside its business result, or grants INSIGHTS mutation authority."
   ],
   "created_at": "2026-07-19T16:12:35.7392724+00:00",
   "links": [

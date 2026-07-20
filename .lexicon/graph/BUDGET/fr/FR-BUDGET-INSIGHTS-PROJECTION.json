@@ -5,7 +5,7 @@
   "ref_code": "FR-BUDGET-INSIGHTS-PROJECTION",
   "title": "Expose a read-only INSIGHTS projection",
   "description": [
-    "Publish the exact plan and Budget Position contract that INSIGHTS may consume while retaining BUDGET ownership of plan mutations. Implements G7 and supports UC-BUDGET-003."
+    "Publish the exact plan, Budget Position, and snapshot-bound dated actual evidence contract that INSIGHTS may consume while retaining BUDGET ownership of plan mutations and position calculation. Implements G7 and supports UC-BUDGET-003."
   ],
   "rationale": [
     "INSIGHTS needs trustworthy raw inputs, but interpretation and report persistence must remain downstream."
@@ -25,7 +25,11 @@
     "Given the INSIGHTS projection schema, when it is inspected, then pace, forecast, trend, anomaly, recommendation, narrative, alert, and durable report-snapshot fields are absent.",
     "Given an INSIGHTS caller, when available BUDGET capabilities are enumerated, then no Create Draft, Activate Plan Revision, or other mutation authority is granted through the consumer projection.",
     "Given an unsupported BUDGET projection version, when INSIGHTS requests data, then BUDGET returns a stable compatibility failure and no partial projection.",
-    "Given INSIGHTS stores or interprets a returned projection, when BUDGET state is inspected, then no report, recommendation, or consumer-specific state was created."
+    "Given INSIGHTS stores or interprets a returned projection, when BUDGET state is inspected, then no report, recommendation, or consumer-specific state was created.",
+    "Given a version-compatible INSIGHTS consumer, when capabilities are enumerated, then budget.plan.revision.get, budget.position.get, and budget.insights.evidence.get are the complete allowed read set and no mutation operation is present.",
+    "Given a valid budget.insights.evidence.get request, when BUDGET produces evidence, then one immutable plan revision and one complete public LEDGER actuals snapshot supply both the canonical Budget Position calculation and every returned dated actual member, with identical snapshot identity, generation fingerprint, exact totals, and one binding fingerprint.",
+    "Given a LEDGER correction concurrent with budget.insights.evidence.get, when the producer captured the snapshot before or after the correction, then the result is wholly pre-correction or wholly post-correction; if one binding cannot be proven, Source State Changed is returned with no partial projection.",
+    "Given a member-count or output-size limit breach, when budget.insights.evidence.get is validated, then a stable resource failure is returned before financial output and no alternate private read, cursor handoff, duplicate calculation, or consumer state is created."
   ],
   "status": "active",
   "created_at": "2026-07-19T15:19:03.7515874+00:00",

@@ -1,0 +1,9 @@
+{
+  "id": "01KXZCXGR4G9281TPF1GAEVTSJ",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "version": "0.6",
+  "changes": [
+    "INSIGHTS A3 spike refinement: added the read-only budget.insights.evidence.get operation as the sixth public BUDGET descriptor; one immutable plan revision and one complete public LEDGER snapshot now supply both the canonical Budget Position and bounded dated members. Updated the operation/data contracts, accepted design, master narrative, INSIGHTS dependency, conformance and performance criteria, and TASK-BUDGET-INSIGHTS-READ-PROJECTION dependencies and recipe; PLAN-BUDGET-V1 retains complete coverage with zero blocking audit findings."
+  ],
+  "created_at": "2026-07-20T09:15:07.3968669+00:00"
+}

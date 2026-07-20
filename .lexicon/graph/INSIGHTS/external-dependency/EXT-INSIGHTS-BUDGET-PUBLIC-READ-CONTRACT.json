@@ -4,7 +4,7 @@
   "ref_code": "EXT-INSIGHTS-BUDGET-PUBLIC-READ-CONTRACT",
   "name": "BUDGET Public Read Contract",
   "description": [
-    "Inbound hard dependency. INSIGHTS consumes version-compatible immutable Budget Plan Revision detail and exact Budget Position values and provenance through the released BUDGET read capability. The current descriptor exposes only budget.plan.revision.get and budget.position.get and grants no mutation or analytics authority."
+    "Inbound hard dependency. INSIGHTS consumes version-compatible immutable Budget Plan Revision detail, exact Budget Position, and bounded dated ActualsItem members through budget.insights.evidence.get. BUDGET must reuse one complete public LEDGER snapshot for both its canonical position calculation and the returned members, expose shared snapshot and binding provenance, fail closed on an unprovable binding, and grant no mutation or analytics authority."
   ],
   "type": "api",
   "owner": "BUDGET",

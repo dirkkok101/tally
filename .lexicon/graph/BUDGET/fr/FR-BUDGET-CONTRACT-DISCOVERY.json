@@ -20,7 +20,7 @@
     "delegated planning remains safe and self-documenting"
   ],
   "acceptance_criteria": [
-    "Given the self-contained Tally executable, when an agent requests top-level or BUDGET help non-interactively, then Create Draft, Get Plan Revision, List Plan Revisions, Activate Plan Revision, Get Budget Position, and Discover Contract are described without starting a daemon or mutation.",
+    "Given the self-contained Tally executable, when an agent requests top-level or BUDGET help non-interactively, then Create Draft, Get Plan Revision, List Plan Revisions, Activate Plan Revision, Get Budget Position, Get Insight Evidence, and Discover Contract are described without starting a daemon, reading owner data, or performing a mutation.",
     "Given any Public Budget Operation, when its machine schema is requested, then BUDGET returns versioned request, result, expected error, exit, authority, mutability, idempotency, limit, and compatibility metadata.",
     "Given a schema request for the same contract version, when it is repeated, then its semantic content and deterministic ordering are identical.",
     "Given a requested operation is not in the public BUDGET contract, when discovery or invocation is attempted, then BUDGET returns a stable unknown-operation error and exposes no private storage or implementation detail.",

@@ -4,7 +4,7 @@
   "ref_code": "EXT-INSIGHTS-LEDGER-ACTUALS-CONTRACT",
   "name": "LEDGER Actuals Contract",
   "description": [
-    "Inbound hard dependency. INSIGHTS needs date-granular exact Budget Actual membership, stable category identity, current correction semantics, deterministic ordering, and complete snapshot provenance through public LEDGER operations. Existing actuals snapshots are coherent within one query but are not yet proven to share the same corrected state as a separately generated Budget Position."
+    "Transitive hard producer dependency. BUDGET invokes the released public LEDGER actuals contract once and reuses that complete immutable snapshot for both canonical Budget Position calculation and the dated members returned to INSIGHTS. INSIGHTS validates cited LEDGER contract, snapshot, generation, category, and correction provenance but does not issue an independent ledger.actuals.query, consume a cursor, or access private LEDGER state."
   ],
   "type": "api",
   "owner": "LEDGER",

@@ -9,7 +9,7 @@
     "Validation and wiring gate with no implements refs; compose all handlers into the registry and prove the published process surface."
   ],
   "objective": [
-    "The Native-AOT Tally executable discovers and invokes exactly five BUDGET operations plus shared schema discovery with stable contracts and no hidden reads."
+    "The Native-AOT Tally executable discovers and invokes exactly six BUDGET operations plus shared schema discovery with stable contracts and no hidden reads."
   ],
   "planning_state": "planned",
   "priority": 0,
@@ -204,54 +204,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXXMKGSQZV120XBBJWC1GBEH",
+      "id": "01KXZCVXZ7PPH4KFNY4SZEYGFC",
       "kind": "acceptance_check",
       "text": [
-        "BudgetExtensions explicitly registers contract, state, Ledger client, plan, position, and projection components; Program adds it without reflection scanning."
+        "BudgetExtensions explicitly registers contract, state, Ledger client, plan, position, coherent evidence, and projection components; Program adds it without reflection scanning."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+      "created_at": "2026-07-20T09:14:15.3996250+00:00"
     },
     {
-      "id": "01KXXMKGSQTA6Y1STKGM4DH8W6",
+      "id": "01KXZCVXZ80HN3174R20VC71X4",
       "kind": "acceptance_check",
       "text": [
-        "Published schema inventory contains exactly five BUDGET descriptors with byte-stable semantics, concrete handlers, and shared system.schema.list/show; no alias, HTTP, background operation, or data read during discovery."
+        "Published schema inventory contains exactly six BUDGET descriptors with byte-stable semantics, concrete handlers, and shared system.schema.list/show; no alias, HTTP, background operation, or data read during discovery."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+      "created_at": "2026-07-20T09:14:15.3996250+00:00"
     },
     {
-      "id": "01KXXMKGSQXD3V5Y7W09T2AET5",
+      "id": "01KXZCVXZ8EBQXK4AGMR195NKD",
       "kind": "acceptance_check",
       "text": [
         "Each valid invocation emits one versioned business result; malformed, unknown-field, not-found, conflict, closed, stale, compatibility, Ledger, resource, and sanitized internal failures emit one stable error/exit."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+      "created_at": "2026-07-20T09:14:15.3996250+00:00"
     },
     {
-      "id": "01KXXMKGSQWBGYNDX2PQ90CZDT",
+      "id": "01KXZCVXZ8CXRGCWE31K1WKHQ8",
       "kind": "acceptance_check",
       "text": [
-        "Mutations reject actor, authority, reason, and idempotency omissions before effects; incompatible BUDGET/Ledger/INSIGHTS versions fail before mutation or partial financial output."
+        "Mutations reject actor, authority, reason, and idempotency omissions before effects; incompatible BUDGET, LEDGER, or INSIGHTS versions and unprovable evidence bindings fail before mutation or partial financial output."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+      "created_at": "2026-07-20T09:14:15.3996250+00:00"
     },
     {
-      "id": "01KXXMKGSQ9CZCDCDPE941BPET",
+      "id": "01KXZCVXZ8ZX7JE19YA9F5R9VR",
       "kind": "acceptance_check",
       "text": [
         "linux-x64 Native-AOT publish succeeds with source-generated JSON and zero build, trim, reflection, dynamic-code, or descriptor gaps."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+      "created_at": "2026-07-20T09:14:15.3996250+00:00"
     },
     {
       "id": "01KXXMKGSQ1E24QNWZ6RZCQS9N",
@@ -396,14 +396,14 @@
   ],
   "verification_steps": [
     {
-      "id": "01KXXMKGSRA1E6M6SE78RHM1T0",
+      "id": "01KXZCVXZ8XG4D7CA3W4ET7FDN",
       "phase": "after",
       "command": "bash scripts/verify-budget-contract.sh",
-      "expected_result": "exit 0; exactly 5 BUDGET descriptors/handlers and 2 INSIGHTS reads are inventoried, both contract classes discover nonzero cases, version/error partitions run, Native-AOT publish succeeds, and 0 tests or warning checks fail",
+      "expected_result": "exit 0; exactly 6 BUDGET descriptors and handlers and 3 INSIGHTS capability reads are inventoried, contract classes discover nonzero cases, version/error and coherent-evidence partitions run, Native-AOT publish succeeds, and 0 tests or warning checks fail",
       "required": 1,
       "timeout_seconds": 1200,
       "sort_order": 0,
-      "created_at": "2026-07-19T16:50:59.5105332+00:00"
+      "created_at": "2026-07-20T09:14:15.3996250+00:00"
     }
   ]
 }

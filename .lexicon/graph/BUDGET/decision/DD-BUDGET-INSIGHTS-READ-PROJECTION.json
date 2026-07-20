@@ -4,22 +4,22 @@
   "ref_code": "DD-BUDGET-INSIGHTS-READ-PROJECTION",
   "title": "Reuse exact owner reads through a mutation-free INSIGHTS capability set",
   "description": [
-    "Give INSIGHTS stable raw plan and position inputs without granting plan mutation or copying projection logic."
+    "Give INSIGHTS stable raw plan, exact position, and dated actual evidence without granting plan mutation, copying projection logic, or permitting mixed corrected states."
   ],
   "decision": [
-    "Publish BudgetPlanRevisionDetail and BudgetPosition as the shared owner/INSIGHTS read DTOs. Publish a versioned BudgetReadCapabilityDescriptor containing only budget.plan.revision.get and budget.position.get. A future concrete INSIGHTS client invokes those released descriptors through the shared operation executor. No BUDGET-specific transport port, mutation descriptor, handler, idempotency key, report state, or analytics field crosses this boundary."
+    "Publish BudgetPlanRevisionDetail and BudgetPosition as the shared owner and INSIGHTS read DTOs. Publish a versioned BudgetReadCapabilityDescriptor containing budget.plan.revision.get, budget.position.get, and the read-only budget.insights.evidence.get operation. The composite operation binds one immutable plan revision, invokes the released LEDGER actuals query once, reuses that complete materialized snapshot for the canonical BudgetPositionCalculator, and returns the plan detail, exact BudgetPosition, bounded dated ActualsItem members, shared snapshot provenance, calculation schema version, and evidence-binding fingerprint. A future concrete INSIGHTS client invokes only these released descriptors through the shared operation executor. No mutation descriptor, private storage, second LEDGER read by INSIGHTS, duplicated calculator, transport port, report state, analytics field, or consumer state crosses this boundary."
   ],
   "rationale": [
-    "A second INSIGHTS projection would drift from what the owner reconciles. Giving a generic executor view without an allowed-operation contract obscures the no-mutation promise. The capability descriptor provides an auditable architectural boundary while reusing the exact deep read result."
+    "A second INSIGHTS projection or calculation would drift from what the owner reconciles, while exposing every BUDGET descriptor would make mutation authority ambiguous. The 2026-07-20 A3 spike proved that the prior independent position and actuals reads can mix corrected generations: 1000 of 1000 forced controls mixed. Reusing BUDGET's one already materialized public LEDGER snapshot for both the canonical position and returned dated members produced 2000 of 2000 coherent pre or post results with zero reconciliation failures. The capability descriptor remains the auditable mutation-free boundary."
   ],
   "alternatives": [
-    "A: duplicate INSIGHTS DTOs and calculation, rejected for parity drift. B: expose every BUDGET descriptor, rejected because mutation authority becomes ambiguous. C: same exact read DTOs plus an explicit read-only capability set, chosen."
+    "A: duplicate INSIGHTS DTOs and calculation, rejected for parity drift. B: keep independent budget.position.get and ledger.actuals.query calls, rejected by the A3 correction-race control. C: expose a consumed LEDGER cursor to INSIGHTS, rejected for expiry and cross-owner cursor coupling. D: keep exact owner reads and add one BUDGET-owned composite evidence read over the same materialized snapshot, chosen."
   ],
   "consequences": [
-    "Consumer compatibility tests prove schema identity, provenance completeness, forbidden analytics fields, and absence of mutation operations. INSIGHTS owns any stored report or interpretation. The consumer dependency remains assumed until its later PRD/design and contract test validate the pairing."
+    "Consumer compatibility tests prove schema identity, provenance completeness, single-snapshot member and position reconciliation, forced concurrent-correction behavior, resource bounds, forbidden analytics fields, and absence of mutation operations. The existing plan and position reads remain unchanged. INSIGHTS owns reports and interpretation and treats LEDGER as cited transitive provenance. The consumer dependency remains assumed until production conformance validates the pairing."
   ],
   "status_notes": [
-    "Accepted. This is a source contract, not a UI or network API."
+    "Accepted and refined by the 2026-07-20 INSIGHTS A3 spike; DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE records the consumer decision."
   ],
   "status": "accepted",
   "metadata": "{\"expected_paths\":[\"src/Tally/Contracts/Budget/Plans/**\",\"src/Tally/Contracts/Budget/Position/**\",\"src/Tally/Contracts/Budget/Projection/**\",\"tests/Tally.Tests/Budget/InsightsContract/**\"]}",

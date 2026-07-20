@@ -7,13 +7,13 @@
     "Choose the BUDGET module boundary, class organization, and interface economy inside the existing local Tally executable."
   ],
   "decision": [
-    "Use five typed caller-oriented BUDGET operations plus shared schema discovery. Map each operation to one vertical slice with concrete domain policies, raw-SQLite storage, source-generated contracts, explicit DI, TimeProvider, pure mappers, and the existing concrete LedgerContractClient over the shared public operation executor. Keep only the existing generic command/query handler interfaces; add no repository, store, calculator, clock, mapper, mediator, event, or transport interface."
+    "Use six typed caller-oriented BUDGET operations plus shared schema discovery. Map each operation to one vertical slice with concrete domain policies, raw-SQLite storage, source-generated contracts, explicit DI, TimeProvider, pure mappers, and the existing concrete LedgerContractClient over the shared public operation executor. The sixth operation is the read-only snapshot-bound INSIGHTS evidence composition validated by A3. Keep only the existing generic command/query handler interfaces; add no repository, store, calculator, clock, mapper, mediator, event, or transport interface."
   ],
   "rationale": [
     "The interface is the complete test surface and hides period, lifecycle, replay, bucketing, and provenance complexity. Removing BUDGET would smear those rules across Agent Host and INSIGHTS callers. The LEDGER executor seam is real because CLI, INGEST, CLASSIFY, and BUDGET consume it; storage and calculator substitutions are hypothetical and real SQLite plus pure tests are stronger."
   ],
   "alternatives": [
-    "A: three-entry plan/position/contract facade, rejected because action discriminators expose hidden invariants to every caller. B: five explicit capabilities, chosen for schema and error clarity. C: full ports and adapters, rejected except for the already shared LEDGER executor because all new ports would have one production implementation."
+    "A: three-entry plan/position/contract facade, rejected because action discriminators expose hidden invariants to every caller. B: six explicit capabilities, chosen for schema and error clarity after the A3 spike earned the coherent evidence read. C: full ports and adapters, rejected except for the already shared LEDGER executor because all new ports would have one production implementation."
   ],
   "consequences": [
     "CreateBudgetDraftCommand, GetBudgetPlanRevisionQuery, ListBudgetPlanRevisionsQuery, ActivateBudgetPlanRevisionCommand, and GetBudgetPositionQuery become stable class-level obligations. BudgetContractMapper and BudgetRowMapper are concrete pure transformers. Expected failures use result values; CancellationToken crosses every async boundary. No FastEndpoints, HTTP, EF, daemon, or background work is introduced."

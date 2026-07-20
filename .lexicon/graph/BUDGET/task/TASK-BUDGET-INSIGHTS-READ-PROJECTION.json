@@ -6,10 +6,10 @@
   "slug": "INSIGHTS-READ-PROJECTION",
   "title": "Publish the read-only INSIGHTS budget projection",
   "description": [
-    "Bind the exact owner revision and position reads to a versioned capability set with no mutation authority or consumer state."
+    "Bind exact owner revision and position reads plus one snapshot-bound dated-actual evidence read to a versioned capability set with no mutation authority or consumer state."
   ],
   "objective": [
-    "INSIGHTS can consume the same exact BUDGET results and provenance without receiving plan-write capability or causing BUDGET-side reports."
+    "INSIGHTS can consume one coherent plan, exact Budget Position, and dated actual member result from the same public LEDGER snapshot without plan-write capability, a second LEDGER read, duplicated position calculation, or BUDGET-side reports."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -25,6 +25,11 @@
       "id": "01KXXMH1N7V708YKJTMWZEKZH5",
       "target": "DD-BUDGET-INSIGHTS-READ-PROJECTION",
       "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXZCF1D94RDP4JP6QK93N3FG",
+      "target": "DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
     }
   ],
   "dependencies": [
@@ -39,6 +44,16 @@
       "created_at": "2026-07-19T17:02:24.9442693+00:00"
     },
     {
+      "id": "01KXZCPA89A1YFM6HDPWRSGDQV",
+      "target": "TASK-BUDGET-LEDGER-BUDGET-CLIENT",
+      "dependency_type": "compile",
+      "reason": [
+        "The composite evidence operation must reuse the released single-snapshot LEDGER actuals client."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-20T09:11:11.3706185+00:00"
+    },
+    {
       "id": "01KXXMH1N7TZMNDHGM6N82RFW7",
       "target": "TASK-BUDGET-PLAN-READS",
       "dependency_type": "compile",
@@ -47,6 +62,16 @@
       ],
       "sort_order": 1,
       "created_at": "2026-07-19T16:49:38.4689007+00:00"
+    },
+    {
+      "id": "01KXZCPB5W8V4Z7Q52Z2S66PPH",
+      "target": "TASK-BUDGET-POSITION-CALCULATOR",
+      "dependency_type": "compile",
+      "reason": [
+        "The composite evidence operation must reuse the canonical Budget Position calculator over the same materialized members."
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-20T09:11:12.3168689+00:00"
     },
     {
       "id": "01KXXMH1N7D3TMGX277P2H092H",
@@ -61,165 +86,237 @@
   ],
   "files": [
     {
-      "id": "01KXXMY74SZRWDTSWRWRWHWPKE",
+      "id": "01KXZCF1DBYQDAB93CM7200M1G",
       "path": "src/Tally/Contracts/Budget/Projection/BudgetReadCapabilityDescriptor.cs",
       "action": "create",
-      "role": "read-only consumer contract",
+      "role": "read-only consumer capability",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T16:56:50.0730603+00:00"
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
     },
     {
-      "id": "01KXXMY74TK7E53P48WVN1TQ7S",
+      "id": "01KXZCF1DBBSMVT1K2RA3J8RHP",
+      "path": "src/Tally/Contracts/Budget/Insights/BudgetInsightEvidence.cs",
+      "action": "create",
+      "role": "coherent plan position and dated-member result",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
+    },
+    {
+      "id": "01KXZCF1DBJ7M435PAPV7KQGXY",
       "path": "src/Tally/Features/Budget/Projection/BudgetReadProjectionModule.cs",
       "action": "create",
       "role": "read-only descriptor binding",
       "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-19T16:56:50.0730603+00:00"
+      "sort_order": 2,
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
     },
     {
-      "id": "01KXXMY74TN6145B4EF70NQB7B",
+      "id": "01KXZCF1DB39VAF4P54SRGNAT7",
+      "path": "src/Tally/Features/Budget/Projection/GetBudgetInsightEvidenceQuery.cs",
+      "action": "create",
+      "role": "single-snapshot producer composition",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
+    },
+    {
+      "id": "01KXZCF1DB8Z3QAGMWJA6J59D1",
       "path": "tests/Tally.Tests/Budget/InsightsContract/BudgetInsightsContractTests.cs",
       "action": "test",
-      "role": "read parity and mutation exclusion",
+      "role": "read parity coherence and mutation exclusion",
       "required": 1,
-      "sort_order": 2,
-      "created_at": "2026-07-19T16:56:50.0730603+00:00"
+      "sort_order": 4,
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
     }
   ],
   "interfaces": [
     {
-      "id": "01KXXNACCVNJHHCZBEKMHQC4EH",
+      "id": "01KXZCNG99YBQ3J1GF6P1RWS18",
       "name": "BudgetReadCapabilityDescriptor",
       "direction": "produces",
       "contract_ref_code": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
       "sort_order": 0,
-      "created_at": "2026-07-19T17:03:28.6674830+00:00"
+      "created_at": "2026-07-20T09:10:44.7765525+00:00"
     },
     {
-      "id": "01KXXNACCWDQF9KZBNCSFB54MT",
+      "id": "01KXZCNG99PHE3EYVHWGRG2HRD",
       "name": "GetBudgetPlanRevisionQuery.HandleAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-BUDGET-REVISION-ENTRY",
       "sort_order": 1,
-      "created_at": "2026-07-19T17:03:28.6674830+00:00"
+      "created_at": "2026-07-20T09:10:44.7765525+00:00"
     },
     {
-      "id": "01KXXNACCWG5T9PYZ3AD16D7R2",
+      "id": "01KXZCNG99RY3BBNDQCHQRQ7Q6",
       "name": "GetBudgetPositionQuery.HandleAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-BUDGET-POSITION-PROJECTION",
       "sort_order": 2,
-      "created_at": "2026-07-19T17:03:28.6674830+00:00"
+      "created_at": "2026-07-20T09:10:44.7765525+00:00"
     },
     {
-      "id": "01KXXNACCW82CXR65BE5WM81P8",
+      "id": "01KXZCNG99PAGRWCAARN9M6M3E",
+      "name": "GetBudgetInsightEvidenceQuery.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
+      "sort_order": 3,
+      "created_at": "2026-07-20T09:10:44.7765525+00:00"
+    },
+    {
+      "id": "01KXZCNG99YQFYFRX9CPG6T33F",
+      "name": "LedgerContractClient.QueryBudgetActualsAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "sort_order": 4,
+      "created_at": "2026-07-20T09:10:44.7765525+00:00"
+    },
+    {
+      "id": "01KXZCNG99DYYAN932039PJYAE",
+      "name": "BudgetPositionCalculator.Calculate",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "sort_order": 5,
+      "created_at": "2026-07-20T09:10:44.7765525+00:00"
+    },
+    {
+      "id": "01KXZCNG9AT9MS5KHTRF4ES0R8",
       "name": "BudgetOperationModule",
       "direction": "consumes",
       "contract_ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
-      "sort_order": 3,
-      "created_at": "2026-07-19T17:03:28.6674830+00:00"
+      "sort_order": 6,
+      "created_at": "2026-07-20T09:10:44.7765525+00:00"
     },
     {
-      "id": "01KXXNACCWCXJGSXCRP5AMX0BB",
+      "id": "01KXZCNG9AA6MX3MMZ0ZNE1E71",
       "name": "BudgetReadProjectionModule",
       "direction": "produces",
       "contract_ref_code": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
-      "sort_order": 4,
-      "created_at": "2026-07-19T17:03:28.6674830+00:00"
+      "sort_order": 7,
+      "created_at": "2026-07-20T09:10:44.7765525+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KXXMH1N7HCVZ50Y3CG22EAN9",
+      "id": "01KXZCF1DAVY5AT0969DPQNBWK",
       "kind": "acceptance_check",
       "text": [
-        "The capability contains exactly budget.plan.revision.get and budget.position.get with the same request/result schema fingerprints, compatibility range, stable errors, and limits as owner reads."
+        "The capability contains exactly budget.plan.revision.get, budget.position.get, and budget.insights.evidence.get with versioned request/result fingerprints, compatibility ranges, stable errors, and limits."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
     },
     {
-      "id": "01KXXMH1N7SZXW28NJ9C7BDV1F",
+      "id": "01KXZCF1DA8V23AWV4R7MVPF2W",
       "kind": "acceptance_check",
       "text": [
-        "Compatible invocation returns byte-equivalent domain content and provenance through the existing read handlers; unsupported versions fail before partial projection."
+        "The composite operation captures one immutable plan revision, invokes the released LEDGER actuals query once, and supplies that same complete materialized member set to the canonical BudgetPositionCalculator and the returned datedActualMembers."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
     },
     {
-      "id": "01KXXMH1N7W09H3MHT19WJ8X1M",
+      "id": "01KXZCF1DA853K4125DW0SEKK2",
       "kind": "acceptance_check",
       "text": [
-        "Plan identity, revision/status, entries/totals, lifecycle evidence, bucket values, variance, and Ledger snapshot provenance remain present."
+        "The composite result exposes matching plan identity, Budget Position, dated member identity and Effective Date, exact values, category and lifecycle evidence, calculation schema, LEDGER snapshot identity and generation fingerprint, and evidence-binding fingerprint."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
     },
     {
-      "id": "01KXXMH1N7FHSSMZ834YPTKTSY",
+      "id": "01KXZCF1DAQKZES3VXKMSQV1PP",
       "kind": "acceptance_check",
       "text": [
-        "Draft creation, activation, mutation authority, idempotency, pace, forecast, trend, anomaly, recommendation, narrative, alert, transport, report persistence, and consumer state are absent."
+        "Forced corrections before and after producer snapshot capture return wholly post-correction or wholly pre-correction results; an unprovable binding returns Source State Changed with no partial output."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
     },
     {
-      "id": "01KXXMH1N78BQAB0VYR16SA2E6",
+      "id": "01KXZCF1DAT2J3DC0XB0F0HP3C",
       "kind": "acceptance_check",
       "text": [
-        "After a consumer read, budget.db contains no report, recommendation, projection, or consumer-specific record."
+        "Compatible existing plan and position reads remain unchanged; unsupported versions and one-over-limit evidence requests fail before financial output."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
     },
     {
-      "id": "01KXXMH1N7SV9X889JAKCSPQAZ",
+      "id": "01KXZCF1DAWF4QYZCPTEQ8BQVE",
+      "kind": "acceptance_check",
+      "text": [
+        "Draft creation, activation, mutation authority, idempotency, private access, an INSIGHTS-led second actuals query, duplicate calculation, pace, forecast, trend, anomaly, recommendation, narrative, alert, report persistence, and consumer state are absent."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
+    },
+    {
+      "id": "01KXZCF1DBKTB74VMV82K15D4F",
+      "kind": "acceptance_check",
+      "text": [
+        "After any consumer read, budget.db contains no report, recommendation, materialized analytical replica, or consumer-specific record."
+      ],
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
+    },
+    {
+      "id": "01KXZCF1DB48DAFQDBPQAVSG2Z",
       "kind": "expected_output",
       "text": [
-        "BudgetReadProjectionModule"
+        "BudgetReadCapabilityDescriptor with three read operations"
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
     },
     {
-      "id": "01KXXMH1N7P5DB0NQJ5YZW1D85",
+      "id": "01KXZCF1DBM0P1XKDD6T10TRJZ",
       "kind": "expected_output",
       "text": [
-        "INSIGHTS compatibility and mutation-exclusion tests"
+        "BudgetInsightEvidence contract and BUDGET-owned composite query"
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
     },
     {
-      "id": "01KXXMH1N7HQ7CJPY3V628VGMK",
+      "id": "01KXZCF1DBQXKP6770WMMQF7Z7",
+      "kind": "expected_output",
+      "text": [
+        "INSIGHTS compatibility, correction-race, reconciliation, resource-limit, and mutation-exclusion tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
+    },
+    {
+      "id": "01KXZCF1DBB70YZJ57ZD3J05WY",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT create separate calculation or read implementations, expose mutations, add an INSIGHTS transport/client, or persist downstream state."
+        "Do NOT create a separate Budget Position calculation, expose mutations, hand a consumed or expiring LEDGER cursor to INSIGHTS, let INSIGHTS query LEDGER independently for the report, add an INSIGHTS transport port, or persist downstream state."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
     },
     {
-      "id": "01KXXMH1N72T45E66CW7EFEB9C",
+      "id": "01KXZCF1DBP2FD72HQQRQMP53K",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT weaken compatibility, strip provenance, or add interpretation fields."
+        "Do NOT weaken compatibility, strip provenance, return mixed snapshot generations, silently truncate members, or add interpretation fields."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
     }
   ],
   "references": [
@@ -288,26 +385,26 @@
   ],
   "review_gates": [
     {
-      "id": "01KXXMH1N701C2RMBM4CJ1X6MV",
+      "id": "01KXZCF1DCJF6S3VHGZJ9CMN3A",
       "gate_type": "branch-review",
       "description": [
-        "Review the capability inventory and schema fingerprints against the two owner reads."
+        "Review the three-operation capability, single-snapshot evidence binding, and schema fingerprints against the owner reads and DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
     }
   ],
   "verification_steps": [
     {
-      "id": "01KXXMH1N71N8PDZPNRCAGR5T8",
+      "id": "01KXZCF1DCX0SCQN0K3M1SF52E",
       "phase": "after",
       "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetInsightsContractTests",
-      "expected_result": "exit 0; at least 16 exact-capability, schema parity, read-result parity, compatibility, mutation exclusion, analytics exclusion, and no-consumer-state cases are discovered and 0 fail",
+      "expected_result": "exit 0; exact-capability, schema parity, single-snapshot correction-race, reconciliation, limits, compatibility, mutation exclusion, analytics exclusion, and no-consumer-state cases are discovered and 0 fail",
       "required": 1,
       "timeout_seconds": 360,
       "sort_order": 0,
-      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+      "created_at": "2026-07-20T09:07:12.9369874+00:00"
     }
   ]
 }

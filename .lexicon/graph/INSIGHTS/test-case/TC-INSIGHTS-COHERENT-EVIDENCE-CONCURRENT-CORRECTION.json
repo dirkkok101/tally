@@ -9,9 +9,9 @@
   "scenario": "unhappy",
   "automation": "automated",
   "status": "planned",
-  "preconditions": "Version-compatible BUDGET and LEDGER producer doubles or implementations can pause between plan, position, and dated-actual evidence reads.",
-  "steps": "Generate once without writes, then inject a correction at every cross-read boundary, cursor expiry, duplicate and missing ordinals, stale generation, unknown category, total mismatch, no-plan, and no-active-revision cases.",
-  "expected": "Stable coherent evidence reconciles exactly; every mixed or incomplete state returns the named failure with no report or retention; plan absence states remain explicit.",
+  "preconditions": "A version-compatible budget.insights.evidence.get producer backed by controllable public LEDGER snapshot state can pause immediately before and after its single snapshot capture.",
+  "steps": "Invoke the composite without writes; then inject a correction before capture and after capture across repeated runs. Inspect that one immutable plan revision and one complete LEDGER snapshot supply the canonical Budget Position and every dated member. Also exercise one-over-limit, incompatible contract, cursor or materialization failure, missing or duplicate member, stale generation, unknown category, reconciliation mismatch, no-plan, and no-active-revision cases.",
+  "expected": "Every success is wholly pre-correction or wholly post-correction with identical snapshot identity and generation across position and dated members and exact reconciliation. Every unprovable, mixed, incomplete, incompatible, or over-limit binding returns its stable named failure with no report or retention. INSIGHTS performs no independent LEDGER query or Budget Position calculation, and plan absence states remain explicit.",
   "owner": "INSIGHTS implementation",
   "created_at": "2026-07-20T08:31:01.5372114+00:00",
   "links": [

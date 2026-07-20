@@ -1,0 +1,99 @@
+{
+  "id": "01KXZCBCCYF4ZKH15ZJZQN3KPW",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+  "title": "Consume one BUDGET-owned coherent evidence operation",
+  "description": [
+    "Bind every Insight Report to one public producer result whose exact Budget Position and dated actual members share the same immutable LEDGER snapshot and plan revision."
+  ],
+  "decision": [
+    "INSIGHTS report generation consumes one versioned read-only budget.insights.evidence.get operation. BUDGET owns the operation, captures one immutable Budget Plan Revision, reuses the one complete public LEDGER actuals snapshot already materialized for its canonical BudgetPositionCalculator, and returns the plan detail, exact Budget Position, bounded dated ActualsItem members, shared snapshot identity and generation fingerprint, calculation schema version, and binding fingerprint. INSIGHTS does not issue a second ledger.actuals.query and does not calculate Budget Position. A correction committed before BUDGET captures the snapshot yields a fully post-correction result; a correction after capture yields a fully pre-correction result. Failure to prove one binding returns Source State Changed and no evidence result."
+  ],
+  "rationale": [
+    "Spike result on 2026-07-20 using a disposable .NET 10 concurrent harness: 1000 of 1000 forced independent budget-position then ledger-actuals reads mixed generations; the composite producer returned 1000 of 1000 fully pre-correction results and 1000 of 1000 fully post-correction results, with 0 mixed generations and 0 member-to-position reconciliation failures. The candidate used public DTO-shaped values, one BUDGET-owned calculator, no INSIGHTS calculation, no private access, no daemon, and no replica."
+  ],
+  "alternatives": [
+    "A: keep independent budget.position.get and ledger.actuals.query calls, rejected because a correction between calls produced mixed evidence in every forced control. B: expose an opaque LEDGER cursor from BUDGET for INSIGHTS to resume, rejected because it adds expiry and cross-owner cursor coupling after BUDGET already materialized the complete snapshot. C: return the already materialized dated members with the canonical position in one BUDGET-owned read, chosen as the smallest coherent seam."
+  ],
+  "consequences": [
+    "The BUDGET read capability gains one bounded read-only composite operation while retaining its existing plan and position reads. The composite response may be larger and must obey deterministic member and output limits. BUDGET contract, design, plan, and conformance tests must prove a single snapshot/calculator path and concurrent-correction behavior. INSIGHTS treats LEDGER as cited transitive provenance rather than issuing an independent actuals query. No upstream mutation or durable analytical state is introduced."
+  ],
+  "status_notes": [
+    "Accepted by the A3 feasibility spike; this proves the protocol shape, not its production implementation."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Contracts/Budget/Insights/**\",\"src/Tally/Features/Budget/Projection/**\",\"src/Tally/Features/Insights/Evidence/**\",\"tests/Tally.Tests/Insights/Evidence/**\"]}",
+  "created_at": "2026-07-20T09:05:13.1196076+00:00",
+  "links": [
+    {
+      "id": "01KXZCC37RQ9EBN39JA176HVAV",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-EXACT-POSITION-CALCULATION",
+      "rel": "references",
+      "created_at": "2026-07-20T09:05:36.5051013+00:00"
+    },
+    {
+      "id": "01KXZCC23112QSV15Q0D0XYA0A",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-INSIGHTS-READ-PROJECTION",
+      "rel": "references",
+      "created_at": "2026-07-20T09:05:35.3303489+00:00"
+    },
+    {
+      "id": "01KXZCC472NK06ES2K3352XQ8A",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-SNAPSHOT-ACTUALS",
+      "rel": "references",
+      "created_at": "2026-07-20T09:05:37.5076465+00:00"
+    },
+    {
+      "id": "01KXZCJNFEXBDBV11TV2S4RZTW",
+      "target_type": "data_model",
+      "target": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
+      "rel": "references",
+      "created_at": "2026-07-20T09:09:11.7917036+00:00"
+    },
+    {
+      "id": "01KXZCC11WAS1T4ZM8855WDEWY",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+      "rel": "implements",
+      "created_at": "2026-07-20T09:05:34.2694722+00:00"
+    },
+    {
+      "id": "01KXZCBYTE4TXV4QFEGVGH58Y1",
+      "target_type": "open_question",
+      "target": "OQ-INSIGHTS-11",
+      "rel": "motivated-by",
+      "created_at": "2026-07-20T09:05:31.9836781+00:00"
+    },
+    {
+      "id": "01KXZCBZXR1QKFTY9Z57G71HKE",
+      "target_type": "open_question",
+      "target": "OQ-INSIGHTS-3",
+      "rel": "motivated-by",
+      "created_at": "2026-07-20T09:05:33.1130099+00:00"
+    },
+    {
+      "id": "01KXZCC59WN77J9MYGJ3F1S5NZ",
+      "target_type": "task",
+      "target": "TASK-BUDGET-INSIGHTS-READ-PROJECTION",
+      "rel": "references",
+      "created_at": "2026-07-20T09:05:38.6207455+00:00"
+    },
+    {
+      "id": "01KXZCJPAGQTF5X5S2NDR57QHC",
+      "target_type": "test_case",
+      "target": "TC-BUDGET-INSIGHTS-PROJECTION-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:09:12.6568186+00:00"
+    },
+    {
+      "id": "01KXZCJQ9F1JC46F2G1XEZK3VK",
+      "target_type": "test_case",
+      "target": "TC-INSIGHTS-COHERENT-EVIDENCE-CONCURRENT-CORRECTION",
+      "rel": "validated-by",
+      "created_at": "2026-07-20T09:09:13.6486014+00:00"
+    }
+  ]
+}

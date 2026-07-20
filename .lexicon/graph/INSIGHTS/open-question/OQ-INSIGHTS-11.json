@@ -1,0 +1,14 @@
+{
+  "id": "01KXZBTVRX8WEHGEG8QYF19H7F",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "OQ-INSIGHTS-11",
+  "question": "Can one bounded budget.insights.evidence.get operation reuse BUDGET's single materialized LEDGER actuals snapshot to return the bound immutable plan revision, exact Budget Position, and dated actual members with zero mixed-state or reconciliation failures across 1000 forced concurrent corrections?",
+  "context": [
+    "Anchors A3. Pass: the composite producer returns only fully pre-correction or fully post-correction evidence in 1000 forced races, with matching snapshot identity and exact member-to-position reconciliation; INSIGHTS receives public DTOs only and performs no Budget Position calculation. Control: the current independent budget.position.get plus ledger.actuals.query calls must demonstrate the mixed-state risk. Fail: any composite result mixes generations, does not reconcile, needs private storage, duplicates the calculator downstream, or adds a daemon or replica."
+  ],
+  "status": "resolved",
+  "decision": [
+    "Yes. A single BUDGET-owned budget.insights.evidence.get operation can bind one immutable Budget Plan Revision, the exact Budget Position, and bounded dated ActualsItem members by reusing the same complete public LEDGER snapshot already materialized for BUDGET calculation. In the 2026-07-20 disposable .NET 10 harness, independent calls mixed generations in 1000/1000 forced races; the composite returned 1000/1000 coherent pre-correction and 1000/1000 coherent post-correction results, with 0 mixed and 0 reconciliation failures. INSIGHTS must not make a second LEDGER actuals call or calculate Budget Position. This validates A3 and is governed by DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE."
+  ],
+  "created_at": "2026-07-20T08:56:11.8065218+00:00"
+}

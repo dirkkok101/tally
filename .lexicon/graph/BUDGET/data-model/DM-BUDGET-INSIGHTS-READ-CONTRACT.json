@@ -4,16 +4,22 @@
   "ref_code": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
   "name": "BudgetReadCapabilityDescriptor",
   "description": [
-    "Versioned read-only consumer view that reuses exact BUDGET read DTOs and cannot grant plan mutation."
+    "Versioned read-only consumer view that reuses exact BUDGET and public LEDGER DTOs, binds one coherent analytical evidence result, and cannot grant plan mutation."
   ],
   "schema_def": [
     "budget_read_capability_descriptor",
     "- contractVersion",
-    "- allowedOperations: exactly [budget.plan.revision.get, budget.position.get]",
+    "- allowedOperations: exactly [budget.plan.revision.get, budget.position.get, budget.insights.evidence.get]",
     "- request/result schema fingerprints",
     "- compatibility range",
     "- errors and limits",
-    "Constraints: no budget.plan.draft.create, budget.plan.revision.activate, mutation handler, idempotency key, authority grant, analytics field, transport implementation, report persistence, or consumer state. Unsupported versions fail before partial projection."
+    "",
+    "budget.insights.evidence.get",
+    "- input: {budgetPeriod, revisionId?, memberLimit, contractVersion}",
+    "- result: {planRevisionDetail, budgetPosition, datedActualMembers[], ledgerSnapshotId, ledgerStoreGenerationFingerprint, calculationSchemaVersion, evidenceBindingFingerprint}",
+    "- invariants: BUDGET captures one immutable plan revision; one released LEDGER actuals query supplies the complete member set; the canonical BudgetPositionCalculator and datedActualMembers consume that same set; BudgetPosition ledger provenance equals the member-set provenance; every member includes stable transaction identity, Effective Date, exact signed Budget Actual, current category identity or Uncategorized, and required lifecycle provenance; over-limit or unprovable binding returns a stable failure before partial output",
+    "",
+    "Constraints: no budget.plan.draft.create, budget.plan.revision.activate, mutation handler, idempotency key, private storage, second INSIGHTS-led LEDGER query, duplicate position calculation, authority grant, analytics field, transport implementation, report persistence, or consumer state. Unsupported versions fail before financial processing."
   ],
   "created_at": "2026-07-19T16:12:35.7392724+00:00",
   "links": [

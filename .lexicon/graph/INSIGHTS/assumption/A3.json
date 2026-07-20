@@ -4,8 +4,8 @@
   "ref_code": "A3",
   "title": "A coherent public producer extension is feasible",
   "description": [
-    "BUDGET and LEDGER can expose a bounded versioned public read shape or shared authoritative state token that binds plan revision, exact Budget Position, and dated actual evidence without private access, duplicated position calculation, daemon, or second source of truth; validate through a pre-design spike."
+    "Validated by the 2026-07-20 disposable .NET 10 A3 spike. Across 1000 forced correction races, the current independent budget.position.get then ledger.actuals.query control mixed producer generations 1000 times. A BUDGET-owned composite read that captured one immutable LEDGER actuals snapshot and reused it for both the canonical BudgetPositionCalculator and returned dated members produced 1000 coherent pre-correction and 1000 coherent post-correction results, with zero mixed generations and zero reconciliation failures. The viable public shape is budget.insights.evidence.get as recorded by DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE; it needs no private INSIGHTS access, duplicate position calculation, daemon, or second source of truth. Production conformance remains an implementation gate."
   ],
-  "status": "active",
+  "status": "validated",
   "created_at": "2026-07-20T08:06:17.4155941+00:00"
 }
