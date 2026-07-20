@@ -4,7 +4,7 @@
   "ref_code": "C7",
   "title": "Fail closed on insufficient evidence",
   "description": [
-    "Absence, stale compatibility, incomplete pagination, snapshot mismatch, sparse evidence, invalid category history, undefined calculation, or an unmet sufficiency rule returns an explicit unavailable or insufficient-evidence state; INSIGHTS never fabricates zero, confidence, a baseline, or a partial report."
+    "Absence, stale compatibility, incomplete pagination, snapshot mismatch, invalid category history, undefined calculation, or an unmet sufficiency rule returns an explicit unavailable or insufficient-evidence state; INSIGHTS never fabricates zero, confidence, or a baseline. A coherence, compatibility, integrity, or exact-arithmetic failure returns no Insight Report. Metric-local insufficient evidence yields a complete report that accounts for the metric with its named state while preserving other supported exact metrics and signals."
   ],
   "type": "business",
   "created_at": "2026-07-20T07:27:16.8412056+00:00"

@@ -1,0 +1,11 @@
+{
+  "id": "01KXZ8ZGJAEE8PEX3X1BKHK52V",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "A5",
+  "title": "Deterministic explanations are sufficient for v1",
+  "description": [
+    "Compact template-based explanations bound to structured metrics and states will make reports understandable without free-form narrative, LLM processing, or CHANNELS-owned presentation; validate with the candidate report evaluation."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T08:06:18.4436518+00:00"
+}

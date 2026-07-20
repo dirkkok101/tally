@@ -3,7 +3,8 @@
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "term": "Pace Signal",
   "definition": [
-    "A deterministic plan-relative statement about actual spend through the As-of Instant under a named formula and evidence state; it is not a recommendation or enforcement action."
+    "A deterministic plan-relative state about exact actual spend through the As-of Instant under a named formula and Evidence Sufficiency result; it is not a recommendation or enforcement action. Avoid: on track without cited evidence."
   ],
+  "source": "discovery",
   "created_at": "2026-07-20T07:28:39.6962337+00:00"
 }

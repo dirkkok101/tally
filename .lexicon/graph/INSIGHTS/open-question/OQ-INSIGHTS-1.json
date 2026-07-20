@@ -6,7 +6,10 @@
   "context": [
     "This determines the smallest useful report, the do-less comparison, and the acceptance evidence; discovery should walk real current decisions without storing private values in the graph."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "The first report must improve three named owner decisions already present in the module problem: whether current monthly spending is on track, what changed versus an explicit comparable window, and which category or total warrants inspection. Candidate shape is one month-to-date report with exact daily, weekly, and monthly window sections, explicit unavailable states, and a bounded Attention Item section; private values stay outside Lex."
+  ],
   "owner": "INSIGHTS discovery",
   "created_at": "2026-07-20T07:28:32.4979653+00:00"
 }

@@ -1,0 +1,10 @@
+{
+  "id": "01KXZ926T0BPY98PXVY2BNVXRN",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "metric": "Deterministic report reproducibility",
+  "current": "No INSIGHTS report generator exists.",
+  "target": "100% of repeated generations with identical bound source identities, request values, and policy versions produce semantically identical ordered reports and fingerprints.",
+  "by_when": "Before v1 release",
+  "measured": 0,
+  "created_at": "2026-07-20T08:07:46.7535335+00:00"
+}

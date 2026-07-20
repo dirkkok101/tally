@@ -6,7 +6,10 @@
   "context": [
     "Free-form generated narrative is excluded; discovery should define whether a compact channel-neutral explanation adds value without duplicating presentation."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "V1 may return compact deterministic template-based explanation fields bound to cited structured metrics, signals, states, and limitations. Free-form narrative, persuasion, translation, layout, conversational wording, and delivery copy remain excluded or CHANNELS-owned."
+  ],
   "owner": "INSIGHTS discovery",
   "created_at": "2026-07-20T07:28:36.5997433+00:00"
 }

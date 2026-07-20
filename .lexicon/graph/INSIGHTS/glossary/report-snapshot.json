@@ -3,7 +3,8 @@
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "term": "Report Snapshot",
   "definition": [
-    "An immutable owner-only retained Insight Report preserving exactly what was generated and shown with stable identity, content fingerprint, source provenance, and creation evidence."
+    "An immutable owner-only retained Insight Report preserving exactly what was generated and shown with stable identity, content fingerprint, Source Provenance, and creation evidence. Avoid: cache, current report, or saved view."
   ],
+  "source": "discovery",
   "created_at": "2026-07-20T07:28:38.1262954+00:00"
 }

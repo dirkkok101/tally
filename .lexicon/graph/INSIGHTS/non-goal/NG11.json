@@ -1,0 +1,12 @@
+{
+  "id": "01KXZ923CNHNNXP1ZZZTHNGVGV",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "NG11",
+  "text": [
+    "Provide an owner-authored formula, threshold, query, scripting, or plugin language in v1."
+  ],
+  "rationale": [
+    "Released built-in analytical policies keep results bounded, reviewable, deterministic, and security-testable; custom analytical programming is separate scope."
+  ],
+  "created_at": "2026-07-20T08:07:43.2539187+00:00"
+}

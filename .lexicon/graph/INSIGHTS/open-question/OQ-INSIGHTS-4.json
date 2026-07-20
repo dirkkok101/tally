@@ -4,9 +4,9 @@
   "ref_code": "OQ-INSIGHTS-4",
   "question": "Which Forecast formulas and minimum evidence rules are valid for fixed recurring spend, irregular discretionary spend, refunds, zero-budget categories, and a partially elapsed Budget Period?",
   "context": [
-    "A single naive run-rate creates false precision; unsupported category or period shapes must return explicit insufficiency rather than a forecast."
+    "A pre-design privacy-safe spike must compare candidate deterministic rules for recurring, irregular, refund-heavy, zero-budget, and partial-period evidence. The evidence threshold is an explicit formula catalogue, minimum horizon/coverage rule per supported shape, counterexamples, and no predictive output for unsupported shapes; otherwise remove Forecast from v1."
   ],
   "status": "open",
-  "owner": "INSIGHTS discovery",
+  "owner": "INSIGHTS pre-design spike",
   "created_at": "2026-07-20T07:28:34.0698114+00:00"
 }

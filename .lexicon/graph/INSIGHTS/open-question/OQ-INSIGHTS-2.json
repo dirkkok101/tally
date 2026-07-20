@@ -4,9 +4,9 @@
   "ref_code": "OQ-INSIGHTS-2",
   "question": "What are the exact daily, weekly, and monthly Analysis Window semantics, timezone, week start, partial-period behavior, and relationship between calendar-aligned and rolling comparisons?",
   "context": [
-    "Different window definitions can reverse pace and trend interpretations; every calculation must use one explicit versioned rule."
+    "PRD must choose one explicit v1 rule and validate assumption A6. Discovery recommends fixed Africa/Johannesburg local-date semantics, Monday-start calendar weeks clipped to the Budget Period, calendar days, and month-to-date through the As-of local date; rolling comparisons remain out unless representative evidence proves necessary. DST, leap day, future As-of, and partial-day behavior require acceptance examples."
   ],
   "status": "open",
-  "owner": "INSIGHTS discovery",
+  "owner": "INSIGHTS PRD",
   "created_at": "2026-07-20T07:28:33.0168095+00:00"
 }

@@ -3,7 +3,8 @@
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "term": "Anomaly",
   "definition": [
-    "An evidence-backed deviation from a named historical or plan-relative baseline that crosses a versioned rule; it is never inferred from an implicit or incomparable baseline."
+    "An evidence-backed deviation from a named historical or plan-relative baseline that crosses a versioned rule; it is never inferred from an implicit or incomparable baseline. Avoid: unusual or suspicious without the cited baseline and threshold."
   ],
+  "source": "discovery",
   "created_at": "2026-07-20T07:28:41.2811154+00:00"
 }

@@ -4,9 +4,9 @@
   "ref_code": "OQ-INSIGHTS-7",
   "question": "Which generated reports are retained by default, how long are Report Snapshots kept, what deletion or cleanup is allowed, and what backup/restore guarantees are required?",
   "context": [
-    "Retention affects privacy, storage complexity, historical comparison, recovery, and the difference between ephemeral generation and durable owner evidence."
+    "Discovery fixes the default boundary: generation is ephemeral and retention is explicit; retained snapshots are immutable and included in verified backup. PRD must choose retention duration and exact dependency-safe deletion semantics for originals and Restatements, with no silent cleanup or provenance rewrite."
   ],
   "status": "open",
-  "owner": "INSIGHTS discovery",
+  "owner": "INSIGHTS PRD",
   "created_at": "2026-07-20T07:28:35.6149856+00:00"
 }

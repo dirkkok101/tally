@@ -3,7 +3,8 @@
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "term": "Attention Item",
   "definition": [
-    "A bounded deterministically ordered report item created when one cited metric or signal crosses an explicit threshold and severity rule; it conveys evidence, not prescribed action."
+    "A bounded deterministically ordered report item created when one cited supported metric or signal crosses an explicit threshold and severity rule; it conveys evidence, not prescribed action. Avoid: alert, notification, or recommendation."
   ],
+  "source": "discovery",
   "created_at": "2026-07-20T07:28:41.7861310+00:00"
 }

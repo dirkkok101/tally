@@ -3,7 +3,8 @@
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "term": "Insight Report",
   "definition": [
-    "One deterministic analytical result for an explicit Budget Period, As-of Instant, Analysis Window set, source snapshots, and formula/threshold versions; it contains exact metrics, evidence states, signals, Attention Items, and provenance."
+    "One deterministic analytical result for an explicit Budget Period, As-of Instant, Analysis Window set, coherent source evidence, and formula/threshold versions; it contains exact metrics, evidence states, signals, Attention Items, and Source Provenance. Avoid: dashboard or report when the immutable analytical result is meant."
   ],
+  "source": "discovery",
   "created_at": "2026-07-20T07:28:37.5873313+00:00"
 }

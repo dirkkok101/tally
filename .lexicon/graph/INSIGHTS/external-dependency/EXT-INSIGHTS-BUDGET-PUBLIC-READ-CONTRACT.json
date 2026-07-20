@@ -1,0 +1,29 @@
+{
+  "id": "01KXZ923W2C7C1A0DR6D0942GV",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "EXT-INSIGHTS-BUDGET-PUBLIC-READ-CONTRACT",
+  "name": "BUDGET Public Read Contract",
+  "description": [
+    "Inbound hard dependency. INSIGHTS consumes version-compatible immutable Budget Plan Revision detail and exact Budget Position values and provenance through the released BUDGET read capability. The current descriptor exposes only budget.plan.revision.get and budget.position.get and grants no mutation or analytics authority."
+  ],
+  "type": "api",
+  "owner": "BUDGET",
+  "metadata": "{\"gate_type\":\"api\",\"validation_basis\":\"client_contract\",\"validation_status\":\"assumed\"}",
+  "created_at": "2026-07-20T08:07:43.7473571+00:00",
+  "links": [
+    {
+      "id": "01KXZ98DJABMN5YPGATGYMSER3",
+      "target_type": "data_model",
+      "target": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
+      "rel": "references",
+      "created_at": "2026-07-20T08:11:10.2833170+00:00"
+    },
+    {
+      "id": "01KXZ98CMF6V0DQZZ4XRYQ9RNH",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-INSIGHTS-PROJECTION",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:11:09.3285618+00:00"
+    }
+  ]
+}

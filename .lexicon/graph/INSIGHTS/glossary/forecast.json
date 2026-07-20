@@ -3,7 +3,8 @@
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "term": "Forecast",
   "definition": [
-    "A bounded estimate of an end-of-period exact value produced only under a named versioned formula and satisfied Evidence Sufficiency rule, with inputs and limitations exposed."
+    "A bounded estimate of an end-of-period exact value produced only under a named versioned formula and satisfied Evidence Sufficiency rule, with inputs and limitations exposed. Avoid: prediction or expected spend without those qualifiers."
   ],
+  "source": "discovery",
   "created_at": "2026-07-20T07:28:40.1943508+00:00"
 }

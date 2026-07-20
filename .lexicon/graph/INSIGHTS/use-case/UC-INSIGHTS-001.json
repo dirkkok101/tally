@@ -1,0 +1,42 @@
+{
+  "id": "01KXZ8ZBG66YQJT03WK8AEP69T",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "UC-INSIGHTS-001",
+  "title": "Generate an on-demand Insight Report",
+  "preconditions": "Tally is running inside the sole-owner local trust boundary; the INSIGHTS schema and compatible public BUDGET/LEDGER read capabilities are available; the request names its period, As-of Instant, Analysis Window policy, and whether retention is requested.",
+  "postconditions": "No upstream financial or plan state changed. No durable INSIGHTS state changed for an ephemeral request. An explicit retained request created exactly one immutable attributable Report Snapshot or returned the prior logical result for an identical retry.",
+  "main_flow": "1. The caller discovers and validates the versioned INSIGHTS request schema and limits. 2. INSIGHTS validates input, freezes the trusted As-of Instant, and resolves compatible read capabilities before requesting financial data. 3. INSIGHTS obtains one mutually coherent immutable plan revision, exact Budget Position, and dated actual-evidence set through public producer contracts. 4. INSIGHTS accounts for every total and category bucket, including Unbudgeted and Uncategorized Spend. 5. It computes exact metrics, then independently evaluates Pace, Forecast, Trend, Anomaly, and Attention Item sufficiency under named formula and threshold versions. 6. It returns one deterministically ordered Insight Report containing exact results, explicit unavailable states, limitations, and complete Source Provenance. 7. Only when the request explicitly asks to retain does INSIGHTS atomically append the immutable Report Snapshot.",
+  "alt_flows": [
+    "Invalid period, As-of Instant, timezone, window, or limit returns validation failure before financial reads or persistence.",
+    "No Budget Plan or no Active Budget Plan Revision returns its explicit unavailable state rather than zero or Not Found ambiguity.",
+    "Incompatible producer contract, expired or incomplete cursor, or snapshot-coherence failure returns no report and no retained state.",
+    "Sparse or incomparable evidence suppresses only the affected derived signal and returns its exact insufficiency reason; exact supported metrics remain visible.",
+    "Overflow, undefined division, or internal integrity failure returns no partial report.",
+    "Retention failure returns no successful retained result and leaves prior retained state unchanged."
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The Personal Finance Owner explicitly requests analysis for one Budget Period and As-of Instant, directly or through the AI Agent Host.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-20T08:06:13.2547998+00:00",
+  "links": [
+    {
+      "id": "01KXZ986YSPP2SNXRG44FTEGY6",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-AI-AGENT-HOST",
+      "rel": "references",
+      "created_at": "2026-07-20T08:11:03.5141894+00:00"
+    },
+    {
+      "id": "01KXZ984X4J7YGP84CM1TJDPJA",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-BUDGET-PUBLIC-READ-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:11:01.4132963+00:00"
+    },
+    {
+      "id": "01KXZ985XK51JN0CTRTTS54K5S",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-LEDGER-ACTUALS-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:11:02.4527066+00:00"
+    }
+  ]
+}

@@ -6,7 +6,10 @@
   "context": [
     "Private storage access or replicated upstream truth triggers a monitored stop condition; discovery should use a focused contract spike before PRD."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "The current operations are individually trustworthy but not sufficient to prove one coherent report: Budget Position exposes aggregate positions from one internal LEDGER snapshot, while a separate date-granular ledger.actuals.query can observe a correction committed between calls and no shared mutation-state token is documented. PRD must require a bounded authoritative public producer contract or shared state-version mechanism that binds plan revision, exact Budget Position, and dated actual evidence. Assumption A3 must be validated before design; private reads or duplicated BUDGET calculation trigger the kill criterion."
+  ],
   "owner": "INSIGHTS discovery",
   "created_at": "2026-07-20T07:28:33.5483406+00:00"
 }

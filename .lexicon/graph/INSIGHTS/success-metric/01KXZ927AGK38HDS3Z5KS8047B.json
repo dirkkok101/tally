@@ -1,0 +1,10 @@
+{
+  "id": "01KXZ927AGK38HDS3Z5KS8047B",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "metric": "Report evidence and provenance completeness",
+  "current": "Raw BUDGET and LEDGER results expose source provenance, but no INSIGHTS report contract binds it to every derived output.",
+  "target": "100% of metrics, signals, unavailable states, Attention Items, retained snapshots, and restatement differences cite every required window, source identity, policy version, sufficiency outcome, and limitation.",
+  "by_when": "Before v1 release",
+  "measured": 0,
+  "created_at": "2026-07-20T08:07:47.2812099+00:00"
+}

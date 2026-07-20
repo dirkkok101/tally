@@ -1,0 +1,10 @@
+{
+  "id": "01KXZ928T9XGJGB38FBTC07HZ9",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "metric": "Immutable restatement and recovery integrity",
+  "current": "No retained INSIGHTS state exists.",
+  "target": "100% of retry, correction, restatement, deletion, backup, restore, corruption, migration, cancellation, and crash tests preserve original Report Snapshots, create no duplicate logical identities, and leave the prior authoritative store unchanged on failure.",
+  "by_when": "Before v1 release",
+  "measured": 0,
+  "created_at": "2026-07-20T08:07:48.8104449+00:00"
+}

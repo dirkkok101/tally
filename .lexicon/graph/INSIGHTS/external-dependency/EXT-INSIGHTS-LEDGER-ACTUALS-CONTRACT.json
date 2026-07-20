@@ -1,0 +1,29 @@
+{
+  "id": "01KXZ924C935E331SMQJK5WGBM",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "EXT-INSIGHTS-LEDGER-ACTUALS-CONTRACT",
+  "name": "LEDGER Actuals Contract",
+  "description": [
+    "Inbound hard dependency. INSIGHTS needs date-granular exact Budget Actual membership, stable category identity, current correction semantics, deterministic ordering, and complete snapshot provenance through public LEDGER operations. Existing actuals snapshots are coherent within one query but are not yet proven to share the same corrected state as a separately generated Budget Position."
+  ],
+  "type": "api",
+  "owner": "LEDGER",
+  "metadata": "{\"gate_type\":\"api\",\"validation_basis\":\"client_contract\",\"validation_status\":\"assumed\"}",
+  "created_at": "2026-07-20T08:07:44.2657935+00:00",
+  "links": [
+    {
+      "id": "01KXZ98FEZK05ZPMAV11QMGQ4P",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-SNAPSHOT-ACTUALS",
+      "rel": "references",
+      "created_at": "2026-07-20T08:11:12.2246509+00:00"
+    },
+    {
+      "id": "01KXZ98EF5MFKKG0SXPEKCNX13",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACTUALS-QUERY",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:11:11.2066319+00:00"
+    }
+  ]
+}

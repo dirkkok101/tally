@@ -1,0 +1,11 @@
+{
+  "id": "01KXZ921DE1WFM6NC7CGWFBYSH",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "C15",
+  "title": "Mutually coherent upstream evidence",
+  "description": [
+    "One Insight Report binds one version-compatible immutable Budget Plan Revision, exact Budget Position, and dated LEDGER actual-membership set representing one provably coherent corrected financial state. Independent snapshots without a shared authoritative state token or producer binding are insufficient; any cross-read mismatch yields no report or retained state."
+  ],
+  "type": "technical",
+  "created_at": "2026-07-20T08:07:41.2309383+00:00"
+}

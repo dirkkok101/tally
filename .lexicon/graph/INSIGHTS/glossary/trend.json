@@ -3,7 +3,8 @@
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "term": "Trend",
   "definition": [
-    "A deterministic comparison of comparable metrics across two or more explicit Analysis Windows and stable identities, or an unavailable state when comparability is not proven."
+    "A deterministic comparison of comparable metrics across two or more explicit Analysis Windows and stable identities, or an unavailable state when comparability is not proven. Avoid: trend based only on display-name similarity or one uncited change."
   ],
+  "source": "discovery",
   "created_at": "2026-07-20T07:28:40.7430101+00:00"
 }

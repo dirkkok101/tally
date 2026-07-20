@@ -1,0 +1,10 @@
+{
+  "id": "01KXZ928A9QE7S4MPVM9PYV6M0",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "metric": "Local financial-data protection",
+  "current": "INSIGHTS has no runtime or retained artifacts; upstream modules establish the owner-only pattern.",
+  "target": "100% of INSIGHTS artifacts pass owner-only permission checks and zero seeded financial canaries appear in arguments, non-data stdout, stderr, logs, telemetry, crash output, Git, or shared temporary files across success and failure workflows.",
+  "by_when": "Before v1 release",
+  "measured": 0,
+  "created_at": "2026-07-20T08:07:48.2983640+00:00"
+}

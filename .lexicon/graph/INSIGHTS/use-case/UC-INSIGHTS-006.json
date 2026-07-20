@@ -1,0 +1,26 @@
+{
+  "id": "01KXZ8ZE0KS877ZYMAZCC3E9YZ",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "UC-INSIGHTS-006",
+  "title": "Discover and invoke the structured INSIGHTS contract",
+  "preconditions": "The local Tally executable is available inside the trusted host account.",
+  "postconditions": "The caller can automate the operation without prompts, parsing prose, receiving hidden authority, or exposing financial values in process arguments.",
+  "main_flow": "1. The caller requests help, status, operation descriptors, or source-generated schemas without financial input. 2. INSIGHTS returns versioned operation names, mutability, authorities, schemas, limits, stable errors, exit categories, and compatibility ranges. 3. The caller sends structured input through stdin or an approved owner-only file. 4. INSIGHTS validates compatibility and boundaries, executes exactly one operation, emits exactly one structured business result on stdout, and confines metadata-only diagnostics to stderr.",
+  "alt_flows": [
+    "Unknown operation or invalid schema returns stable validation failure.",
+    "Unsupported contract version returns compatibility failure before financial processing.",
+    "Interactive prompt, extra stdout payload, payload-bearing stderr, network access, or hidden mutation authority is a contract failure.",
+    "Cancellation or internal failure returns the documented exit category and no partial business result."
+  ],
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner or AI Agent Host asks what INSIGHTS can do or invokes an INSIGHTS operation non-interactively.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-20T08:06:15.8279131+00:00",
+  "links": [
+    {
+      "id": "01KXZ98BPM55AWJ7P6E3EZDPWG",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-AI-AGENT-HOST",
+      "rel": "references",
+      "created_at": "2026-07-20T08:11:08.3737197+00:00"
+    }
+  ]
+}

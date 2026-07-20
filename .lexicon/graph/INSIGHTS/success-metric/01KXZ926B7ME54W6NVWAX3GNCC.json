@@ -1,0 +1,10 @@
+{
+  "id": "01KXZ926B7ME54W6NVWAX3GNCC",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "metric": "Candidate report improves a named owner decision",
+  "current": "The owner manually interprets raw Budget Positions and statement history; no reproducible candidate Insight Report has been accepted.",
+  "target": "The Personal Finance Owner accepts at least one privacy-safe candidate report as materially improving whether spending is on track, what changed, or which category to inspect over raw Budget Position inspection.",
+  "by_when": "Before INSIGHTS plan approval",
+  "measured": 0,
+  "created_at": "2026-07-20T08:07:46.2808645+00:00"
+}

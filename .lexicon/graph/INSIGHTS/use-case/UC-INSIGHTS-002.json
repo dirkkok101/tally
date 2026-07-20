@@ -1,0 +1,17 @@
+{
+  "id": "01KXZ8ZC00ZVC2TWSFTM7VB6GQ",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "UC-INSIGHTS-002",
+  "title": "Inspect report evidence and explanations",
+  "preconditions": "The caller has the returned Insight Report or stable retained report identity and uses a version-compatible structured read operation.",
+  "postconditions": "Inspection is read-only; the inspected report, upstream state, and retained history are unchanged.",
+  "main_flow": "1. INSIGHTS validates the requested report or item selector. 2. For a retained report it verifies store integrity and loads exactly the immutable cited content. 3. It returns the selected exact value or state together with its formula or threshold version, Analysis Window, As-of Instant, evidence horizon, baseline, coverage, limitations, and Source Provenance. 4. Any explanatory text is deterministic, channel-neutral, and bound to the cited structured state.",
+  "alt_flows": [
+    "Unknown retained report identity returns Not Found without leaking other report data.",
+    "Unknown metric or signal selector returns validation failure.",
+    "Corrupted retained content or fingerprint mismatch returns integrity failure and no financial payload.",
+    "An unsupported report schema returns compatibility failure without partial interpretation."
+  ],
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner asks to inspect an ephemeral result or one retained Report Snapshot and understand a metric, signal, Attention Item, or unavailable state.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-20T08:06:13.7608925+00:00"
+}

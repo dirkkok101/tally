@@ -1,0 +1,11 @@
+{
+  "id": "01KXZ8ZFJ6MKCE3EWS5YKMSCFP",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "A3",
+  "title": "A coherent public producer extension is feasible",
+  "description": [
+    "BUDGET and LEDGER can expose a bounded versioned public read shape or shared authoritative state token that binds plan revision, exact Budget Position, and dated actual evidence without private access, duplicated position calculation, daemon, or second source of truth; validate through a pre-design spike."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T08:06:17.4155941+00:00"
+}

@@ -4,9 +4,9 @@
   "ref_code": "OQ-INSIGHTS-5",
   "question": "What historical baseline makes a Trend or Anomaly comparable across Budget Plan Revision changes, category rename/archive/reactivation, corrections, and incomplete classification?",
   "context": [
-    "Discovery must decide whether comparison is by stable category identity, total, plan-relative ratio, or another bounded measure and when it becomes unavailable."
+    "A pre-design privacy-safe spike must prove comparability by stable category identity and explicit window/policy versions across corrections and plan revisions. Rename alone must not break comparison; archive/reactivation, identity replacement, coverage gaps, or policy changes must yield a named unavailable state unless the comparison rule proves validity."
   ],
   "status": "open",
-  "owner": "INSIGHTS discovery",
+  "owner": "INSIGHTS pre-design spike",
   "created_at": "2026-07-20T07:28:34.6126566+00:00"
 }

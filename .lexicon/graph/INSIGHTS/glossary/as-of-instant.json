@@ -3,7 +3,8 @@
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "term": "As-of Instant",
   "definition": [
-    "The explicit trusted timestamp frozen before source reads that bounds which corrected facts and elapsed-period time a report may analyze."
+    "The explicit trusted timestamp frozen before source reads that bounds elapsed-period time and the report request. Avoid: now or today without the frozen timestamp and timezone."
   ],
+  "source": "discovery",
   "created_at": "2026-07-20T07:28:38.6588149+00:00"
 }

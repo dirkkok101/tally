@@ -6,7 +6,10 @@
   "context": [
     "The answer must preserve the immutable original report, avoid implicit background work, and make correction provenance understandable."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "Restatement is explicit-invocation only. A requested Restatement returns a deterministic difference summary as part of that same operation; INSIGHTS performs no background correction scan, automatic report generation, or unsolicited preview. The original snapshot is never changed."
+  ],
   "owner": "INSIGHTS discovery",
   "created_at": "2026-07-20T07:28:36.0962261+00:00"
 }

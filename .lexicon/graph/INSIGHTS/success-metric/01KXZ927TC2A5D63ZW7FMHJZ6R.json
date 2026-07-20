@@ -1,0 +1,10 @@
+{
+  "id": "01KXZ927TC2A5D63ZW7FMHJZ6R",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "metric": "False high-severity Attention Items",
+  "current": "No threshold policy or representative evaluation result exists.",
+  "target": "Zero false high-severity Attention Items across the approved owner-only time-separated corpus, including sparse periods, corrections, refunds, category lifecycle changes, and classification gaps.",
+  "by_when": "Before INSIGHTS plan approval",
+  "measured": 0,
+  "created_at": "2026-07-20T08:07:47.7890035+00:00"
+}

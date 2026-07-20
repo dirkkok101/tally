@@ -4,9 +4,9 @@
   "ref_code": "OQ-INSIGHTS-6",
   "question": "Which exact thresholds, severities, maximum count, and deterministic tie-breakers should govern Attention Items without becoming prescriptive advice or notification policy?",
   "context": [
-    "This controls usefulness and alert fatigue while keeping CHANNELS responsible for whether and how an item is delivered."
+    "PRD must define a small built-in threshold catalogue, severity vocabulary, hard maximum count, and stable tie-breakers. A pre-plan owner-only evaluation must show zero false high-severity items; any unsupported threshold or delivery behavior is excluded or belongs to CHANNELS."
   ],
   "status": "open",
-  "owner": "INSIGHTS discovery",
+  "owner": "INSIGHTS PRD and pre-plan evidence",
   "created_at": "2026-07-20T07:28:35.1140532+00:00"
 }

@@ -3,7 +3,8 @@
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "term": "Restatement",
   "definition": [
-    "A new Insight Report linked to an earlier Report Snapshot and generated from later corrected source evidence or formula versions; it never overwrites the original."
+    "A new Insight Report explicitly linked to an earlier Report Snapshot and generated from later corrected source evidence or selected policy versions; it never overwrites the original. Avoid: edit, refresh, or replacement."
   ],
+  "source": "discovery",
   "created_at": "2026-07-20T07:28:42.8376885+00:00"
 }
