@@ -1,0 +1,50 @@
+{
+  "id": "01KY09SRBX6M5ZVRR6YSRRPFQH",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "type": "functional",
+  "ref_code": "FR-LEDGER-POOL-ASSIGNMENT",
+  "title": "Assign and correct transaction spend pools",
+  "description": [
+    "Maintain at most one active spend-pool assignment per active spend transaction, with explicit unassigned state and attributable correction history independent of category. Implements G12 and UC-LEDGER-018 under C22 and C23."
+  ],
+  "rationale": [
+    "Pool actuals must remain exact through refunds, transfers, corrections, and reassignment without rewriting source transactions or category history."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "assign or correct a transaction's spend pool"
+  ],
+  "story_so_that": [
+    "pool and pool-by-category actuals remain exact and independently explainable"
+  ],
+  "acceptance_criteria": [
+    "Given an active spend transaction, active spend pool, reason, actor context, and idempotency identity, when the pool is assigned, then exactly one current pool assignment is recorded independently from category, account, payment instrument, and cardholder.",
+    "Given a current pool assignment and an active replacement pool or explicit unassigned state, when it is corrected with a reason, then the prior assignment is retired, the new state becomes current, and both remain attributable in history.",
+    "Given an inactive transaction, archived pool, or missing correction reason, when assignment is attempted, then the Ledger returns a stable validation error and changes no pool history or actuals.",
+    "Given a confirmed transfer, when pool actuals are queried, then its principal contributes exactly zero to every pool even if either leg has historical pool attribution.",
+    "Given an active linked refund or reversal, when pool and pool-by-category actuals are queried, then its magnitude offsets the original transaction's current pool and category in the refund's own Effective Date period; unassigned originals offset the explicit unassigned-pool bucket."
+  ],
+  "security_criteria": [
+    "Assignments use stable local identities only and must not infer or expose provider, recipient, account credential, or full instrument data."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T17:39:52.8306459+00:00",
+  "links": [
+    {
+      "id": "01KY09SRBZRDRCQNZMV3HFWRMZ",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-018",
+      "rel": "implements",
+      "created_at": "2026-07-20T17:39:52.8313201+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KY09SRC1T9YSHV1HFZMR0QSB",
+      "target": "P1",
+      "created_at": "2026-07-20T17:39:52.8306459+00:00"
+    }
+  ]
+}

@@ -4,14 +4,14 @@
   "ref_code": "NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS",
   "title": "Make mutations atomic and durable",
   "description": [
-    "Each successful Ledger mutation is durable as one logical change; validation, storage, crash, integrity, and resource failures fail closed without partial domain state."
+    "Each successful Ledger mutation is durable as one logical change; validation, storage, crash, integrity, and resource failures fail closed without partial canonical, evidence, reconciliation, attribution, financial, or recovery state."
   ],
   "category": "reliability",
-  "target": "For every injected failure point, restart inspection observes either the complete committed mutation exactly once or the unchanged pre-operation state, with zero partial entities or relationships.",
-  "load_condition": "All public writes, including multi-entity corrections, relationship replacement, restore activation, and storage evolution.",
-  "measurement": "Automated fault-injection and restart tests at each persistence boundary, followed by integrity, count, relationship, and exact-total checks.",
+  "target": "For every injected failure point, restart inspection observes either the complete committed mutation exactly once or the unchanged pre-operation state, with zero partial transactions, evidence links, reconciliation decisions, assignments, relationships, scopes, or artifacts.",
+  "load_condition": "All public writes, including evidence registration and linking, reconciliation application and correction, payment and pool attribution, transaction and relationship correction, restore activation, and storage evolution.",
+  "measurement": "Automated fault-injection and restart tests at each persistence boundary, followed by integrity, uniqueness, cardinality, history, idempotency, and exact pool/category total checks.",
   "rationale": [
-    "Partial writes can silently corrupt financial meaning and recovery. Supports G2, G4, G7, and G8."
+    "Partial writes can create duplicate actuals or unsupported reconciliation meaning and can silently corrupt recovery. Supports G2, G4, G7-G12."
   ],
   "priority": 0,
   "created_at": "2026-07-18T04:24:29.6278802+00:00",

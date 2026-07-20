@@ -23,7 +23,8 @@
     "Given an active transaction and active category, when the owner assigns the category, then exactly one active allocation is returned and the transaction source facts remain unchanged.",
     "Given a categorized active transaction, an active replacement category, and a reason, when the owner corrects the allocation, then the prior allocation is retired, the replacement becomes active, and both remain attributable in history.",
     "Given an inactive transaction or archived category, when an assignment or correction is attempted, then the Ledger returns a stable validation error and changes no allocation.",
-    "Given a category rename, when historical and active assignments are queried, then they retain the same category identifier and resolve to the current display name."
+    "Given a category rename, when historical and active assignments are queried, then they retain the same category identifier and resolve to the current display name.",
+    "Given a category assignment or correction, when it is applied, then account, payment-instrument, cardholder, spend-pool, evidence, and reconciliation state remain unchanged unless changed through their own explicit operations."
   ],
   "status": "active",
   "created_at": "2026-07-18T04:22:18.1335190+00:00",

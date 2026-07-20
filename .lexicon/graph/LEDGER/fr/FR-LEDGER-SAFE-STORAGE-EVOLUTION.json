@@ -5,7 +5,7 @@
   "ref_code": "FR-LEDGER-SAFE-STORAGE-EVOLUTION",
   "title": "Upgrade or migrate Ledger storage safely",
   "description": [
-    "Preflight, back up, build, validate, and atomically activate supported storage upgrades or migrations. Implements G8 and UC-LEDGER-012."
+    "Preflight, recover, build, validate, and atomically activate supported storage evolution while preserving complete provider-neutral Durable Ledger State. Implements G8 and UC-LEDGER-012."
   ],
   "rationale": [
     "The embedded store must evolve over years without partial upgrades or private manual edits."
@@ -20,9 +20,9 @@
     "new releases cannot silently corrupt financial history"
   ],
   "acceptance_criteria": [
-    "Given a supported source Ledger, when an upgrade or migration is requested, then compatibility, permissions, available space, and required recovery conditions are checked before source mutation.",
-    "Given successful preflight, when evolution begins, then a verified backup or equivalent verified recovery point is established before candidate activation.",
-    "Given a completed candidate, when validation runs, then target storage version, every Durable Ledger State type, idempotency outcome, per-type count, relationship/cardinality rule, integrity result, and exact derived total must match the source and declared migration outcome before activation.",
+    "Given a supported source Ledger, when an upgrade or migration is requested, then compatibility, integrity, permissions, available space, and required recovery conditions are checked before source mutation.",
+    "Given successful preflight, when evolution begins, then an independently verified complete-state recovery point is established before candidate activation.",
+    "Given a completed candidate, when validation runs, then target storage version, every Durable Ledger State type, evidence and reconciliation link, category and pool history, attribution, financial relationship, idempotency outcome, per-type count, cardinality rule, integrity result, and exact pool/category total matches the source and declared migration outcome before activation.",
     "Given successful candidate validation, when activation occurs, then it is atomic and the new version becomes authoritative exactly once.",
     "Given any preflight, conversion, validation, or activation failure, when the operation ends, then the original Ledger remains authoritative and no partially evolved store is exposed."
   ],

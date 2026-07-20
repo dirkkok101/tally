@@ -3,9 +3,9 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "type": "functional",
   "ref_code": "FR-LEDGER-ACTUALS-QUERY",
-  "title": "Query and reconcile Ledger actuals",
+  "title": "Query exact Ledger actuals",
   "description": [
-    "Return exact transaction membership and aggregates for canonical Ledger facts. Implements G6 and UC-LEDGER-005 for downstream BUDGET and INSIGHTS consumers."
+    "Return exact transaction membership and named aggregates across category, pool, attribution, evidence, and reconciliation dimensions for downstream BUDGET and INSIGHTS consumers. Implements G6, G10-G12, and UC-LEDGER-005."
   ],
   "rationale": [
     "Analysis is trustworthy only when every total can be traced to the exact selected transactions under explicit active-state semantics."
@@ -20,14 +20,14 @@
     "the owner and downstream modules can reconcile every spend result"
   ],
   "acceptance_criteria": [
-    "Given explicit filters for account, inclusive date range, category, transfer state, refund state, relationship state, categorization state, and transaction lifecycle state, when actuals are queried, then only transactions matching every supplied filter are returned.",
-    "Given no lifecycle-state override, when actuals are queried, then voided and superseded transactions and retired relationships do not affect default totals.",
+    "Given explicit filters for account, inclusive date range, category, spend pool, payment instrument, cardholder, evidence kind, reconciliation state, transfer state, refund state, categorization state, pool-assignment state, and transaction lifecycle state, when actuals are queried, then only transactions matching every supplied filter are returned.",
+    "Given no lifecycle-state override, when actuals are queried, then each active canonical transaction contributes at most once and voided or superseded transactions and retired relationships or assignments do not affect default totals.",
     "Given any selected transaction set, when Net Account Movement is returned, then it equals the exact base-10 sum of each selected active transaction's Signed Account Amount, with inflows positive and outflows negative.",
-    "Given no matching transactions, when actuals are queried, then the Ledger returns a successful empty collection with zero exact totals rather than a not-found error.",
-    "Given unchanged Ledger state and identical filters, when the query is repeated, then membership, ordering, and exact aggregates are identical.",
-    "Given an active cash-withdrawal outflow that is not part of an active owned-account transfer, when external-spend actuals are queried, then the withdrawal is included under its active category or uncategorized state.",
-    "Given a selected transaction set, when External Spend is returned, then it adds the positive magnitudes of qualifying active outflows in the set, subtracts active linked refund/reversal magnitudes in the set, excludes active owned-transfer principal legs and unrelated inflows, and includes separately recorded fees and unlinked cash withdrawals.",
-    "Given a Spend Category filter, when Budget Actual is returned, then it applies the External Spend formula to the current active category allocation, each refund uses its own Effective Date and the original's current category, and a refund-heavy period may return a negative net spend amount."
+    "Given a selected transaction set, when External Spend is returned, then it adds positive magnitudes of qualifying active outflows, subtracts active linked refund or reversal magnitudes in their own Effective Date periods, excludes active owned-transfer principal and unrelated inflows, and includes separately recorded fees and unlinked cash withdrawals.",
+    "Given pool and category grouping is requested, when Budget Actual is returned, then each qualifying active transaction contributes to exactly one pool or the explicit unassigned-pool bucket and one category or uncategorized bucket, and group totals reconcile exactly to the selected External Spend total.",
+    "Given an active linked refund or reversal, when grouped actuals are queried, then it offsets the original transaction's current pool and category, including explicit unassigned buckets, without inheriting account, instrument, or cardholder as a pool rule.",
+    "Given no matching transactions, when actuals are queried, then the Ledger returns a successful empty collection and zero exact totals rather than a not-found error.",
+    "Given unchanged Ledger state and identical filters, when the query is repeated, then membership, ordering, reconciliation and attribution state, and exact aggregates are identical."
   ],
   "status": "active",
   "created_at": "2026-07-18T04:22:52.2328224+00:00",

@@ -4,14 +4,14 @@
   "ref_code": "NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE",
   "title": "Respond at personal-ledger scale",
   "description": [
-    "Interactive agent operations remain responsive for the initial three-account personal dataset without a daemon, remote cache, or external database."
+    "Interactive external-orchestrator operations remain responsive for the personal dataset without a daemon, remote cache, or external database."
   ],
   "category": "performance",
-  "target": "At 100000 active transactions, first-page filtered actuals and full-set aggregates complete within 2 seconds at p95, and ordinary single-entity writes complete within 1 second at p95, excluding backup, restore, and migration.",
-  "load_condition": "Three accounts, 100000 active transactions plus retained correction and relationship history, one OS identity, one writer, and no concurrent load on the supported reference workstation.",
-  "measurement": "Thirty warmed repetitions per representative query and write scenario using monotonic elapsed time; report p50 and p95.",
+  "target": "At 100000 active transactions plus retained evidence and history, first-page filtered actuals with full pool/category aggregates and reconciliation candidate or completed-scope projections complete within 2 seconds at p95; ordinary single-entity writes complete within 1 second at p95, excluding backup, restore, and migration.",
+  "load_condition": "Three accounts, 100000 active transactions, two spend pools, representative category, payment-attribution, evidence, reconciliation, correction, and relationship history, one OS identity, one writer, and no concurrent load on the supported reference workstation.",
+  "measurement": "Thirty warmed repetitions per representative actuals, reconciliation-candidate, coverage, and ordinary write scenario using monotonic elapsed time; report p50 and p95.",
   "rationale": [
-    "This gives design a measurable local baseline without adopting service infrastructure prematurely."
+    "This gives design a measurable local baseline for the expanded Ledger while preserving the accepted complexity budget."
   ],
   "priority": 2,
   "created_at": "2026-07-18T04:24:30.8859885+00:00",

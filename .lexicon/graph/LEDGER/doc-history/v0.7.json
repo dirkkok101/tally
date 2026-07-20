@@ -1,0 +1,9 @@
+{
+  "id": "01KY0AHQ9HQ3RJX8YYS7NKX9G5",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.7",
+  "changes": [
+    "PRD complete: 25 FRs, 9 measurable NFRs, 18 UCs, and 33 planned test intents. The revision formalizes provider-neutral generic evidence, deterministic match-first statement reconciliation, explicit ambiguity and coverage exceptions, append-only decision correction, canonical payment-instrument/cardholder attribution, first-class spend pools, exact pool/category actuals, Hermes-neutral CLI contracts, and complete recovery of the expanded Durable Ledger State. Fresh-context review resolved replay, conflict, rejection, and correction-state ambiguity; existing design and PLAN-LEDGER-V1 remain stale pending revision."
+  ],
+  "created_at": "2026-07-20T17:52:58.1618049+00:00"
+}

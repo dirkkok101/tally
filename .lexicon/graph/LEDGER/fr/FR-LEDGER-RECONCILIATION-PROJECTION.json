@@ -1,0 +1,50 @@
+{
+  "id": "01KY09SN4S600QSSJXXJZYWA5Y",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "type": "functional",
+  "ref_code": "FR-LEDGER-RECONCILIATION-PROJECTION",
+  "title": "Project reconciliation candidates",
+  "description": [
+    "Return a deterministic provider-neutral candidate projection for approved statement evidence without mutating Ledger state. Implements G10 and UC-LEDGER-014 under A14 and C20."
+  ],
+  "rationale": [
+    "INGEST needs a stable match-first contract, while LEDGER must expose and validate candidate facts rather than guess from provider wording."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "inspect compatible unreconciled candidates for statement evidence"
+  ],
+  "story_so_that": [
+    "strong, absent, and ambiguous outcomes can be distinguished before any match is applied"
+  ],
+  "acceptance_criteria": [
+    "Given approved statement-row evidence, canonical candidate facts, an owned account, and a statement scope, when reconciliation candidates are requested, then the Ledger returns only active compatible unreconciled transactions with stable identifiers and explicit compatibility or exclusion reason codes.",
+    "Given zero, one, or multiple compatible candidates, when the projection is returned, then it classifies the outcome as no-candidate, unique-candidate, or ambiguous respectively without registering a reconciliation decision, linking evidence, or creating a transaction.",
+    "Given a voided or superseded transaction, mismatched account or currency, incompatible sign or amount semantics, or conflicting active statement evidence, when projection runs, then that transaction cannot be returned as a deterministic match candidate.",
+    "Given unchanged Ledger state, identical candidate facts, scope, and deterministic-policy identity, when projection is repeated, then candidate membership, ordering, facts, and reason codes are identical.",
+    "Given provider-specific transport, sender, mailbox, MIME, recipient, schedule, or delivery fields, when projection input is validated, then the Ledger rejects them before any state access or mutation."
+  ],
+  "security_criteria": [
+    "The projection returns only the privacy-safe canonical and evidence metadata required to explain compatibility; it never returns provider payloads or full account or instrument identifiers."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T17:39:49.5305264+00:00",
+  "links": [
+    {
+      "id": "01KY09SN4V6RQ2SPTMD1NYS91V",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-014",
+      "rel": "implements",
+      "created_at": "2026-07-20T17:39:49.5312122+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KY09SN4XH98W0K00TD8KD8ST",
+      "target": "P1",
+      "created_at": "2026-07-20T17:39:49.5305264+00:00"
+    }
+  ]
+}

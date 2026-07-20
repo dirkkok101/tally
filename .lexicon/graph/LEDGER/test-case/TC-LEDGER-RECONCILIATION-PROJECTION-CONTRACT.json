@@ -1,0 +1,33 @@
+{
+  "id": "01KY0A4WS4V8BEE4WCVWW1K267",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "TC-LEDGER-RECONCILIATION-PROJECTION-CONTRACT",
+  "slug": "reconciliation-projection-contract",
+  "title": "Verify deterministic reconciliation candidate projection",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Representative active, reconciled, voided, superseded, account-mismatched, amount-mismatched, and conflicting-evidence transactions plus approved statement-row facts and deterministic-policy identities.",
+  "steps": "Request candidate projections for zero, one, multiple, excluded, repeated, and provider-field inputs; compare candidates, order, reason codes, and state before and after.",
+  "expected": "Only compatible active unreconciled candidates appear; outcome classification and reasons are deterministic; excluded cases are explained; no projection mutates evidence, decisions, or transactions.",
+  "owner": "LEDGER",
+  "created_at": "2026-07-20T17:45:57.7976935+00:00",
+  "links": [
+    {
+      "id": "01KY0A5ZXYZSJK7C3JDMRN8ADV",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-RECONCILIATION-PROJECTION",
+      "rel": "verifies",
+      "created_at": "2026-07-20T17:46:33.7915062+00:00"
+    },
+    {
+      "id": "01KY0A672YNNE2HTBZ60GSXCHF",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-014",
+      "rel": "verifies",
+      "created_at": "2026-07-20T17:46:41.1194767+00:00"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "01KY0A4ZJSMGJ9YEGGQAYG92J3",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "TC-LEDGER-SPEND-POOL-CATALOGUE-CONTRACT",
+  "slug": "spend-pool-catalogue-contract",
+  "title": "Verify spend-pool catalogue lifecycle",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A fresh Ledger plus unique, duplicate, referenced, archived, and reactivation pool inputs and independent account, instrument, cardholder, and category records.",
+  "steps": "Exercise every acceptance criterion of FR-LEDGER-SPEND-POOL-CATALOGUE through the public CLI and inspect stable identities, lifecycle filters, assignment counts, and all independent dimensions.",
+  "expected": "Pool create, rename, archive, reactivate, and list behavior is stable and attributable; references survive lifecycle changes; no other dimension is inferred or mutated.",
+  "owner": "LEDGER",
+  "created_at": "2026-07-20T17:46:00.6666247+00:00",
+  "links": [
+    {
+      "id": "01KY0A4ZJV8CA5JXC3WDX817MV",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SPEND-POOL-CATALOGUE",
+      "rel": "verifies",
+      "created_at": "2026-07-20T17:46:00.6678376+00:00"
+    },
+    {
+      "id": "01KY0A6C9M5T6J7B8V67RMSDBQ",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-018",
+      "rel": "verifies",
+      "created_at": "2026-07-20T17:46:46.4537370+00:00"
+    }
+  ]
+}

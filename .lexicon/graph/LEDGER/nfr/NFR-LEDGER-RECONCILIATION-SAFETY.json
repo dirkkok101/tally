@@ -1,0 +1,18 @@
+{
+  "id": "01KY0A32623J1HNH608CS19WJ3",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "NFR-LEDGER-RECONCILIATION-SAFETY",
+  "title": "Reconcile deterministically and fail closed",
+  "description": [
+    "Automatic reconciliation applies only a documented, independently validated unique strong match; ambiguous or conflicting evidence remains unapplied until explicit owner intent."
+  ],
+  "category": "data_integrity",
+  "target": "100% of automatic reconciliation cases with one supported unique strong candidate create exactly one link and zero new canonical transactions; 100% of zero-candidate approved cases create exactly one statement-only transaction; 0 ambiguous, conflicting, stale, or unsupported-policy cases apply a link or create a transaction; 100% of owner-confirmed decisions retain explicit actor, reason, and history.",
+  "load_condition": "All deterministic policies across matched, zero-candidate, multiple-candidate, conflicting-evidence, stale-projection, replay, void, supersession, and owner-correction cases.",
+  "measurement": "Automated decision-table conformance and property tests compare candidate projections, submitted basis, canonical transaction counts, active evidence cardinality, decision history, and exact actuals before and after each case.",
+  "rationale": [
+    "This is the hard safety gate that prevents statement import from duplicating or guessing financial facts. Supports G10 under C20 and C23."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-20T17:44:57.7948692+00:00"
+}

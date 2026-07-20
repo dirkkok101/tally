@@ -9,9 +9,9 @@
   "scenario": "edge",
   "automation": "automated",
   "status": "planned",
-  "preconditions": "Representative active transactions, allocations, transfer, refund, and archived category/account references.",
-  "steps": "Void, supersede, correct category, revoke and replace relationships; query history-inclusive projections and backup state.",
-  "expected": "Every lifecycle event retains subject, prior/resulting state, reason, actor, trusted time, and replacement reference where applicable; facts remain immutable and references valid.",
+  "preconditions": "Representative active transactions, evidence links, deterministic and owner reconciliation decisions, category and pool allocations, payment attribution, transfer and refund relationships, archived identities, and correction cases.",
+  "steps": "Void and supersede transactions; correct evidence decisions, category, pool, payment attribution, and financial relationships; query history-inclusive projections and backup state.",
+  "expected": "Every lifecycle event retains stable subjects, prior and resulting state, policy or actor, reason or basis, trusted time, and replacement reference where applicable; prior facts remain immutable; no evidence or attribution moves silently; current exact actuals reconstruct from active history.",
   "owner": "LEDGER implementation",
   "created_at": "2026-07-18T06:09:33.1628155+00:00",
   "links": [

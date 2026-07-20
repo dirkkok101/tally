@@ -24,7 +24,8 @@
     "Given an active confirmed transfer, when default external-spend actuals are queried, then the paired principal contributes exactly zero while both transaction legs remain queryable.",
     "Given qualifying legs with different supplied dates, when the owner explicitly confirms the relationship, then the date difference alone does not prevent confirmation.",
     "Given same-account legs, same-sign legs, unequal principal magnitudes, different currencies, inactive legs, or either leg already participating in any active transfer or refund relationship, when transfer confirmation is attempted, then the Ledger returns a stable validation error and creates no relationship.",
-    "Given a bank fee recorded separately from the equal-and-opposite principal legs, when the transfer is confirmed, then the fee remains an unlinked transaction and retains its own spend treatment."
+    "Given a bank fee recorded separately from the equal-and-opposite principal legs, when the transfer is confirmed, then the fee remains an unlinked transaction and retains its own spend treatment.",
+    "Given a confirmed transfer whose legs have category or spend-pool assignments, when pool, category, or pool-by-category actuals are queried, then principal contributes exactly zero to every bucket while attribution remains queryable."
   ],
   "status": "active",
   "created_at": "2026-07-18T04:22:52.2328224+00:00",

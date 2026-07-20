@@ -2,16 +2,16 @@
   "id": "01KXSQFY9C8649APJ7XN79GBZ3",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "NFR-LEDGER-AGENT-CONTRACT-STABILITY",
-  "title": "Keep the agent contract stable",
+  "title": "Keep the external-orchestrator contract stable",
   "description": [
-    "The public process contract is the only supported automation boundary and evolves through explicit contract versions matched by bundled skills."
+    "The versioned public process contract is the only supported automation boundary and remains provider-neutral for Hermes, other orchestrators, and optional agent skills."
   ],
   "category": "architecture",
-  "target": "100% of public Ledger operations expose deterministic schemas, structured expected errors, documented exits, and compatibility metadata; 100% of incompatible skill tests fail before mutation.",
-  "load_condition": "Every public operation and every bundled supported-agent skill across compatible and incompatible version pairs.",
-  "measurement": "Generated contract inventory plus automated schema snapshot, error/exit, stream-separation, and skill compatibility tests.",
+  "target": "100% of public Ledger operations expose deterministic provider-neutral schemas, structured expected errors, documented exits, idempotency semantics, and compatibility metadata; zero schemas contain mailbox, MIME, messaging, recipient, schedule, delivery, or provider-specific fields; 100% of incompatible-version tests fail before mutation.",
+  "load_condition": "Every public operation across compatible and incompatible contract versions, exercised by a schema-driven external-orchestrator client and any bundled optional agent skills.",
+  "measurement": "Generated contract inventory plus automated schema snapshots, forbidden-field scans, error and exit tests, stream-separation tests, replay tests, and compatibility tests.",
   "rationale": [
-    "Agents must not depend on prose, private storage, or implementation APIs. Supports G5 and G7."
+    "Hermes and other callers must rely on typed public contracts rather than prose, provider assumptions, private storage, or implementation APIs. Supports G5 and G7."
   ],
   "priority": 0,
   "created_at": "2026-07-18T04:24:30.2531353+00:00",

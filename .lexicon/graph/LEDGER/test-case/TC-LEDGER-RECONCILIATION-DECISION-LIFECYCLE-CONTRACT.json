@@ -1,0 +1,40 @@
+{
+  "id": "01KY0A4XWJNT3RDXNK4Z6Z2HXE",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "TC-LEDGER-RECONCILIATION-DECISION-LIFECYCLE-CONTRACT",
+  "slug": "reconciliation-decision-lifecycle-contract",
+  "title": "Verify owner reconciliation decisions and corrections",
+  "level": "integration",
+  "surface": "persistence",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Ambiguous evidence, compatible and incompatible candidates, active deterministic and owner decisions, void and supersession cases, and explicit owner actor and reasons.",
+  "steps": "Confirm one candidate, reject all, revoke and replace prior decisions, attempt invalid changes, void or supersede matched transactions, and inspect active links plus complete history after each operation.",
+  "expected": "Only explicit valid intent changes the active link; prior decisions remain immutable and attributable; invalid requests fail closed; corrections or transaction lifecycle changes expose unresolved or exception states without silent evidence movement.",
+  "owner": "LEDGER",
+  "created_at": "2026-07-20T17:45:58.9316573+00:00",
+  "links": [
+    {
+      "id": "01KY0A61YY2RPMAA08TZ7PE8A2",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE",
+      "rel": "verifies",
+      "created_at": "2026-07-20T17:46:35.8716362+00:00"
+    },
+    {
+      "id": "01KY0A6FGQ8A9NQA8AE56F1Y6G",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-RECONCILIATION-SAFETY",
+      "rel": "verifies",
+      "created_at": "2026-07-20T17:46:49.7525457+00:00"
+    },
+    {
+      "id": "01KY0A6974VNVD33BZHJ90AWSH",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-015",
+      "rel": "verifies",
+      "created_at": "2026-07-20T17:46:43.3015930+00:00"
+    }
+  ]
+}

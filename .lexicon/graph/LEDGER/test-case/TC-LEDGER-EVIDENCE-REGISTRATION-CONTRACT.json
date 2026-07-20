@@ -1,0 +1,40 @@
+{
+  "id": "01KY0A4W77PF27T99QGA02E43E",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "TC-LEDGER-EVIDENCE-REGISTRATION-CONTRACT",
+  "slug": "evidence-registration-contract",
+  "title": "Verify generic evidence registration and linkage",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A fresh Ledger with active and inactive transactions plus valid, duplicate, conflicting, cross-transaction, and forbidden-payload evidence requests.",
+  "steps": "Exercise every acceptance criterion of FR-LEDGER-EVIDENCE-REGISTRATION through the public CLI, including same-request replay and logical-evidence replay under another request identity.",
+  "expected": "One privacy-safe Evidence Record and active link exist per logical effect; multiple evidence records may support one transaction; conflicts and forbidden payloads fail without mutation; evidence alone does not change reconciliation state.",
+  "owner": "LEDGER",
+  "created_at": "2026-07-20T17:45:57.2246839+00:00",
+  "links": [
+    {
+      "id": "01KY0A4W79PN1QKNJBMGNSXJ2S",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-EVIDENCE-REGISTRATION",
+      "rel": "verifies",
+      "created_at": "2026-07-20T17:45:57.2256668+00:00"
+    },
+    {
+      "id": "01KY0A6HK2BTMXTG4RRGKBKYY4",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-LOCAL-DATA-PROTECTION",
+      "rel": "verifies",
+      "created_at": "2026-07-20T17:46:51.8752644+00:00"
+    },
+    {
+      "id": "01KY0A6612MHKQWJAJ7F48WK9B",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-013",
+      "rel": "verifies",
+      "created_at": "2026-07-20T17:46:40.0356978+00:00"
+    }
+  ]
+}

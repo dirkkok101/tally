@@ -24,7 +24,8 @@
     "Given an existing category, when the owner renames it, then its stable identifier and historical transaction assignments remain unchanged.",
     "Given a category referenced by transactions, when the owner archives it, then historical assignments remain queryable and no existing transaction fact is rewritten.",
     "Given an archived category, when a new assignment or correction targets it, then the Ledger rejects the request before mutation until the category is reactivated.",
-    "Given an archived category, when the owner reactivates it, then the same stable category identifier becomes active and may receive new assignments and corrections."
+    "Given an archived category, when the owner reactivates it, then the same stable category identifier becomes active and may receive new assignments and corrections.",
+    "Given spend categories and spend pools, when either catalogue is maintained, then its identity, lifecycle, and naming remain independent and no value silently creates or selects a value in the other catalogue."
   ],
   "status": "active",
   "created_at": "2026-07-18T04:22:18.1335190+00:00",

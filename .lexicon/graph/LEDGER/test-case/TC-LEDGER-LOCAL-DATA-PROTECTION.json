@@ -9,9 +9,9 @@
   "scenario": "security",
   "automation": "automated",
   "status": "planned",
-  "preconditions": "Published executable on a supported encrypted-volume host plus canary descriptions, identifiers, credentials, and payloads.",
-  "steps": "Run normal, failure, backup, restore, evolution, and skill flows; inspect modes for data root and every artifact; scan stdout exclusions, stderr, logs, and manifests for canaries.",
-  "expected": "Data root is 0700; all financial artifacts are 0600; host protection gate is validated; no non-data-return output contains protected canaries or serialized payloads.",
+  "preconditions": "Published executable on a supported protected-volume host plus canary descriptions, raw evidence and provider payloads, mailbox and messaging content, identifiers, credentials, and structured financial payloads.",
+  "steps": "Run normal, failure, evidence, reconciliation, attribution, pool, backup, restore, evolution, external-orchestrator, and optional-skill flows; inspect artifact modes, process arguments, explicit data-return boundaries, stderr, logs, and manifests for canaries.",
+  "expected": "Data root and financial artifacts are owner-only; the maintained host-protection gate is validated; forbidden raw evidence, provider, credential, unmasked identifier, and payload canaries appear in no process argument or non-data-return output.",
   "owner": "LEDGER implementation",
   "created_at": "2026-07-18T06:09:33.8544894+00:00",
   "links": [

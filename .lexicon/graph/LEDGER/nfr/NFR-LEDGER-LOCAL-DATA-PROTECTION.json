@@ -4,14 +4,14 @@
   "ref_code": "NFR-LEDGER-LOCAL-DATA-PROTECTION",
   "title": "Protect local financial data",
   "description": [
-    "Ledger stores, backups, temporary candidates, logs, diagnostics, and non-data-return output must preserve the accepted sole-owner local trust boundary without custom cryptography; explicit requested data results remain permitted."
+    "Ledger stores, backups, temporary candidates, evidence metadata, attribution, logs, diagnostics, and non-data-return output preserve the sole-owner local trust boundary without custom cryptography; explicit requested data results remain permitted."
   ],
   "category": "security",
-  "target": "100% of created financial artifacts have owner-only host access; zero diagnostics, logs, or non-data-return outputs contain credentials, unmasked account identifiers, transaction descriptions, or serialized financial payloads; the selected maintained at-rest protection passes OQ-LEDGER-8 before planning.",
-  "load_condition": "Normal operation, errors, backup, restore, upgrade, migration, and skill invocation on each supported host.",
-  "measurement": "Permission inspection, secret and payload canary scans, negative-path tests, and the required storage security spike.",
+  "target": "100% of created financial artifacts have owner-only host access; zero diagnostics, logs, process arguments, or non-data-return outputs contain credentials, raw provider or document payloads, mailbox or messaging content, unmasked account or instrument identifiers, transaction descriptions, or serialized financial payloads; the selected maintained at-rest protection passes OQ-LEDGER-8 before planning.",
+  "load_condition": "Normal operation, errors, evidence and reconciliation workflows, backup, restore, storage evolution, external-orchestrator invocation, and optional skill invocation on each supported host.",
+  "measurement": "Permission inspection, forbidden-field contract scans, secret and payload canary scans, negative-path tests, artifact inspection, and the required storage security spike.",
   "rationale": [
-    "Personal financial history is sensitive even though the present household-only use is outside application auth, tenancy, and hosted compliance scope. Supports G1, G5, and G8."
+    "Evidence and payment attribution expand sensitive local state but do not change the accepted owner-only, provider-neutral boundary. Supports G1, G5, G8, G9, and G11."
   ],
   "priority": 0,
   "created_at": "2026-07-18T04:24:29.9611029+00:00",

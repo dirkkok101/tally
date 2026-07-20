@@ -1,0 +1,50 @@
+{
+  "id": "01KY09SPSFJPG60WKJ26MAYG1V",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "type": "functional",
+  "ref_code": "FR-LEDGER-RECONCILIATION-COVERAGE",
+  "title": "Report statement coverage and exceptions",
+  "description": [
+    "Complete an approved account-period statement scope and return exact reconciliation outcomes, recorded-absent transactions, ambiguities, and exceptions. Implements G10 and UC-LEDGER-016 under C19."
+  ],
+  "rationale": [
+    "A completed statement must account for prior recorded transactions as well as its own rows, while incomplete statements must not create false absence exceptions."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "review exact statement reconciliation coverage"
+  ],
+  "story_so_that": [
+    "missing, ambiguous, and exceptional outcomes are visible instead of silently ignored"
+  ],
+  "acceptance_criteria": [
+    "Given an approved complete statement scope with owned account, inclusive period, batch identity, and durable outcome for every accepted row, when coverage is completed, then every eligible active prior recorded transaction is classified exactly once as reconciled or recorded-absent-from-statement.",
+    "Given a statement scope that is incomplete, unapproved, missing row outcomes, or incompatible with its account and period, when completion is requested, then the Ledger rejects it and creates no recorded-absent exception.",
+    "Given a completed scope containing matched, statement-only, absent, ambiguous, and other exception outcomes, when its summary is queried, then exact counts and stable identifiers for each class reconcile to the unique accepted evidence and eligible transaction sets.",
+    "Given an eligible prior transaction with no active confirming statement evidence in the completed scope, when coverage is queried, then it appears as a recorded-absent-from-statement exception with the scope and stable reason.",
+    "Given a later valid match or owner decision changes a covered outcome, when current coverage is queried, then the current classification changes without deleting the original scope, exception, or decision history."
+  ],
+  "security_criteria": [
+    "Coverage results expose stable identifiers and privacy-safe summaries only; raw statement rows and provider payloads are never retained or emitted."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T17:39:51.2166745+00:00",
+  "links": [
+    {
+      "id": "01KY09SPSHXA7XEBEHD9M3AJT7",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-016",
+      "rel": "implements",
+      "created_at": "2026-07-20T17:39:51.2172093+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KY09SPSKPKJTQSAKD9C4V3DJ",
+      "target": "P1",
+      "created_at": "2026-07-20T17:39:51.2166745+00:00"
+    }
+  ]
+}

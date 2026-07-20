@@ -1,0 +1,50 @@
+{
+  "id": "01KY09SQA4QP9SP451HPTN5F8D",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "type": "functional",
+  "ref_code": "FR-LEDGER-PAYMENT-ATTRIBUTION",
+  "title": "Maintain payment instrument and cardholder attribution",
+  "description": [
+    "Maintain privacy-safe payment-instrument and cardholder identities and attributable transaction assignments as dimensions distinct from account, pool, and category. Implements G11 and UC-LEDGER-017 under C21."
+  ],
+  "rationale": [
+    "Supplementary-card identity can affect reporting and pool decisions, but provider wording and full card identifiers must remain outside canonical Ledger semantics."
+  ],
+  "priority": 1,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "attribute transactions to stable payment instruments and cardholders"
+  ],
+  "story_so_that": [
+    "pool assignment, reconciliation, and reporting can use explicit provider-neutral identities"
+  ],
+  "acceptance_criteria": [
+    "Given a privacy-safe unique label and optional masked identifier, when a payment instrument or cardholder is created, then one active provider-neutral identity is returned and no full card number, credential, or provider payload is stored.",
+    "Given an active transaction, active payment-instrument or cardholder identity, reason, actor context, and idempotency identity, when attribution is assigned, then at most one current identity per dimension is recorded without changing account, category, pool, evidence, or source facts.",
+    "Given an existing attribution and a valid replacement or explicit unknown state, when it is corrected, then the prior attribution is retired, the replacement or unknown state becomes current, and both remain attributable in history.",
+    "Given an archived identity, incompatible declared account association, inactive transaction, or missing correction reason, when attribution is attempted, then the Ledger returns a stable validation error and changes no attribution.",
+    "Given an identity is renamed or archived, when current and historical transactions are queried, then stable references remain resolvable and archival prevents only new assignments."
+  ],
+  "security_criteria": [
+    "Only privacy-safe labels and masked identifiers may be stored or returned; full PANs, credentials, and provider-specific message content are forbidden."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T17:39:51.7497710+00:00",
+  "links": [
+    {
+      "id": "01KY09SQA688PC9PF6X3Z2PYEY",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-017",
+      "rel": "implements",
+      "created_at": "2026-07-20T17:39:51.7503564+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KY09SQA7V7Z103Q6ZBKF86NC",
+      "target": "P1",
+      "created_at": "2026-07-20T17:39:51.7497710+00:00"
+    }
+  ]
+}

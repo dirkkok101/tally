@@ -1,0 +1,40 @@
+{
+  "id": "01KY0A4XADY5ZV5Z0N020JPQTP",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT",
+  "slug": "statement-reconciliation-contract",
+  "title": "Verify match-first statement reconciliation",
+  "level": "integration",
+  "surface": "persistence",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Approved statement evidence covering unique strong match, zero candidate, multiple candidates, conflicting evidence, stale projection, unsupported policy, and replay cases.",
+  "steps": "Apply each reconciliation case through the public CLI; inspect canonical transaction count, evidence links, decisions, current states, errors, and exact actuals before and after; replay successful logical inputs.",
+  "expected": "A unique valid match links the existing transaction only; an approved zero-candidate case creates one statement-only transaction; ambiguous, stale, conflicting, or unsupported cases apply nothing; replay creates no duplicate effect.",
+  "owner": "LEDGER",
+  "created_at": "2026-07-20T17:45:58.3497514+00:00",
+  "links": [
+    {
+      "id": "01KY0A60XZZ0GSD06M391EH36E",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-STATEMENT-RECONCILIATION",
+      "rel": "verifies",
+      "created_at": "2026-07-20T17:46:34.8167671+00:00"
+    },
+    {
+      "id": "01KY0A6EDJ0NPQ47WXTEPSB86Y",
+      "target_type": "nfr",
+      "target": "NFR-LEDGER-RECONCILIATION-SAFETY",
+      "rel": "verifies",
+      "created_at": "2026-07-20T17:46:48.6275551+00:00"
+    },
+    {
+      "id": "01KY0A68555JWFQCXM4MZND383",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-014",
+      "rel": "verifies",
+      "created_at": "2026-07-20T17:46:42.2145978+00:00"
+    }
+  ]
+}

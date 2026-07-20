@@ -5,7 +5,7 @@
   "ref_code": "FR-LEDGER-BACKUP-VERIFICATION",
   "title": "Create and verify Ledger backups",
   "description": [
-    "Create consistent, version-identifiable backups and verify them independently without mutating the live Ledger. Implements G8 and UC-LEDGER-007."
+    "Create and independently verify version-identifiable backups containing the complete provider-neutral Durable Ledger State without mutating the live Ledger. Implements G8 and UC-LEDGER-007 under C5."
   ],
   "rationale": [
     "Long-lived personal financial history needs a recovery artifact whose integrity can be proven before a restore is needed."
@@ -21,9 +21,9 @@
   ],
   "acceptance_criteria": [
     "Given a healthy Ledger, when the owner creates a backup, then one version-identifiable consistent artifact containing the complete Durable Ledger State is produced with owner-only host permissions and the live Ledger is unchanged.",
-    "Given a backup artifact, when it is verified independently of the live Ledger, then compatibility, integrity, storage metadata, accounts, categories, transactions, correction chains, allocation history, active and retired relationships, idempotency records/outcomes, per-type counts, relationship/cardinality rules, and exact derived totals must all validate before success is reported.",
+    "Given a backup artifact, when it is verified independently, then compatibility, integrity, storage metadata, accounts, categories, spend pools, transactions and correction chains, category and pool history, payment-instrument and cardholder attribution, evidence records and links, reconciliation scopes, decisions and exceptions, financial relationships, idempotency outcomes, per-type counts, cardinality rules, and exact pool/category totals all validate before success.",
     "Given a corrupt, incomplete, unsupported, or permission-inaccessible artifact, when verification is attempted, then a stable failure is returned and neither the artifact nor live Ledger is mutated.",
-    "Given backup or verification output and diagnostics, when inspected, then no credential, unmasked account identifier, or transaction description is emitted."
+    "Given backup or verification output and diagnostics, when inspected, then no credential, raw evidence or provider payload, unmasked account or instrument identifier, or transaction description is emitted."
   ],
   "security_criteria": [
     "Backup artifacts must inherit owner-only access and must not weaken the accepted at-rest protection posture."

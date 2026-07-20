@@ -3,12 +3,12 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "RISK-LEDGER-004",
   "description": [
-    "CLI JSON schemas, exit codes, or command names could drift from the bundled AI skills and silently break agent workflows."
+    "CLI JSON schemas, exit codes, command names, or compatibility metadata could drift from Hermes, another schema-driven external orchestrator, or optional bundled agent guidance and silently break financial workflows."
   ],
   "likelihood": "Medium",
   "impact": "High",
   "mitigation": [
-    "Generate help/schemas from the executable contract, test stdout/stderr/error/exit invariants, bundle version-matched skills, and fail incompatible skills before mutation."
+    "Generate help and schemas from one provider-neutral executable contract, test stdout, stderr, error, exit, forbidden-field, and replay invariants, version optional guidance with the contract, and fail incompatible callers before mutation."
   ],
   "created_at": "2026-07-17T13:44:36.2434410+00:00"
 }

@@ -9,9 +9,9 @@
   "scenario": "edge",
   "automation": "automated",
   "status": "planned",
-  "preconditions": "Canonical boundary examples including one cent, large values, refunds in later periods, transfers, inflows, invalid scales, and overflow.",
-  "steps": "Round-trip all valid strings through Money and persistence representation; reject invalid strings; compute Net Account Movement, External Spend, and Budget Actual over policy matrices.",
-  "expected": "No floating-point path; exact minor-unit equality for every valid case; formulas match the NFR target including negative later-period net spend and transfer exclusions.",
+  "preconditions": "Canonical boundary examples including one cent, large values, matched notification plus statement evidence, statement-only rows, ambiguity, two pools, unassigned buckets, categories, later-period refunds, transfers, corrections, invalid scales, and overflow.",
+  "steps": "Round-trip valid money through persistence; reject invalid values; execute reconciliation cases; compute Net Account Movement, External Spend, Budget Actual, pool totals, category totals, and pool-by-category cells over the complete policy matrix.",
+  "expected": "No floating-point path or duplicate canonical effect exists; exact minor-unit equality holds; every row, column, and selected-set total reconciles; refunds, transfers, corrections, statement-only, and unassigned outcomes follow the NFR target.",
   "owner": "LEDGER implementation",
   "created_at": "2026-07-18T06:09:33.5473514+00:00",
   "links": [

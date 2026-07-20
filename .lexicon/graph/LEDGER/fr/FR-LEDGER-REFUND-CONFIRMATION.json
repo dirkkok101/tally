@@ -21,7 +21,7 @@
   ],
   "acceptance_criteria": [
     "Given active same-account ZAR transactions with opposite signs, when the owner explicitly confirms one transaction as a refund or reversal of the other with a reason, then one active attributable refund relationship is created without inferring the relationship from description or date alone.",
-    "Given an active refund relationship, when category actuals are queried, then the refund offsets the original transaction's current active category allocation.",
+    "Given an active refund relationship, when pool and category actuals are queried, then the refund offsets the original transaction's current active pool and category in the refund's own Effective Date period, including explicit unassigned buckets.",
     "Given one or more active partial refunds, when another refund is proposed, then confirmation succeeds only if cumulative active refunded magnitude does not exceed the original transaction magnitude.",
     "Given same-sign, different-account, different-currency, inactive, over-refund, transfer-linked, refund-credit-as-original, or refund-credit-reuse participants, when confirmation is attempted, then the Ledger returns a stable validation error and creates no relationship.",
     "Given a valid refund credit, when it is confirmed, then its entire magnitude participates in exactly one active refund relationship to one original; an original may have multiple active refund credits only while their cumulative magnitude remains at most the original magnitude."

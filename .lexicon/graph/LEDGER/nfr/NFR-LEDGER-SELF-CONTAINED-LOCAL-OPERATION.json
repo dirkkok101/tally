@@ -4,14 +4,14 @@
   "ref_code": "NFR-LEDGER-SELF-CONTAINED-LOCAL-OPERATION",
   "title": "Operate as a self-contained local executable",
   "description": [
-    "Ledger commands run in-process from one distributable executable and one local embedded store, with no required daemon, listening network service, hosted dependency, or external database."
+    "Ledger commands run in-process from one distributable executable and one local embedded store, with no required daemon, listening network service, provider SDK, channel adapter, hosted dependency, or external database."
   ],
   "category": "operability",
-  "target": "100% of Ledger acceptance workflows complete with network access disabled and no Tally background process before or after invocation.",
-  "load_condition": "Fresh installation, normal commands, errors, backup, restore to a separate target, and storage upgrade on each supported host.",
-  "measurement": "Black-box process and network observation during the complete acceptance workflow, followed by orphan-process inspection.",
+  "target": "100% of Ledger acceptance workflows, including evidence, reconciliation, payment attribution, pool, actuals, and recovery paths, complete with network access disabled and no Tally background process before or after invocation.",
+  "load_condition": "Fresh installation, normal commands, expected errors, evidence and reconciliation workflows, backup, restore to a separate target, and storage upgrade on each supported host.",
+  "measurement": "Black-box process and network observation during the complete acceptance workflow, forbidden dependency inspection, and orphan-process inspection.",
   "rationale": [
-    "This preserves the selected local-first complexity budget while CHANNELS owns any future service or web architecture."
+    "This preserves the selected local-first provider-neutral boundary while Hermes owns transport and orchestration."
   ],
   "priority": 0,
   "created_at": "2026-07-18T04:24:31.2138401+00:00",

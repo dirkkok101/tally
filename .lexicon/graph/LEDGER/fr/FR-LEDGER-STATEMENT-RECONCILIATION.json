@@ -1,0 +1,52 @@
+{
+  "id": "01KY09SNNG25N20YWX3J86S4RY",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "type": "functional",
+  "ref_code": "FR-LEDGER-STATEMENT-RECONCILIATION",
+  "title": "Apply statement reconciliation outcomes",
+  "description": [
+    "Apply one validated deterministic match, create one approved statement-only transaction for a zero-candidate outcome, or preserve ambiguity without an applied financial effect. Implements G10 and UC-LEDGER-014 under C19 and C20."
+  ],
+  "rationale": [
+    "A statement row must confirm an existing transaction where possible and must never create a duplicate merely because the row is imported later."
+  ],
+  "priority": 0,
+  "complexity": "XL",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "reconcile approved statement rows against canonical transactions"
+  ],
+  "story_so_that": [
+    "monthly statements confirm prior records without duplicate actuals or guessed matches"
+  ],
+  "acceptance_criteria": [
+    "Given one unique compatible unreconciled transaction, registered statement evidence, a supported deterministic-policy identity, exact match basis, and idempotency identity, when reconciliation is applied, then the statement evidence is linked to that existing transaction, one deterministic decision is appended, and its current state becomes statement-reconciled without creating another canonical transaction.",
+    "Given no compatible prior transaction, registered statement evidence, approved canonical facts, and explicit authorization to create a statement-only outcome, when reconciliation is applied, then exactly one statement-only canonical transaction is created and linked to the evidence atomically.",
+    "Given multiple compatible candidates, when reconciliation is requested, then one ambiguous current outcome records the stable evidence and candidate identities while no evidence link or canonical transaction is created.",
+    "Given accepted evidence conflicts with immutable canonical facts or an existing active confirmation, when reconciliation is requested, then one reconciliation-exception outcome with stable reasons is appended and no active decision, evidence link, or canonical transaction is created.",
+    "Given an unsupported deterministic policy or a candidate that fails independent compatibility or lifecycle validation, when reconciliation is requested, then a stable validation error is returned and no decision, evidence link, or canonical transaction is created.",
+    "Given a deterministic match request whose supplied candidate set, policy identity, or match basis differs from the current Ledger projection, when it is applied, then the Ledger rejects the stale request without mutation.",
+    "Given the same logical statement evidence and reconciliation request is replayed, when it is submitted again, then the original transaction and decision result are returned with zero duplicate canonical, evidence, link, or decision effects."
+  ],
+  "security_criteria": [
+    "Reconciliation accepts provider-neutral approved facts and opaque evidence references only; it does not parse statements or receive mailbox, document, or messaging payloads."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T17:39:50.0659638+00:00",
+  "links": [
+    {
+      "id": "01KY09SNNJTWHK7HVTFNBD24M5",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-014",
+      "rel": "implements",
+      "created_at": "2026-07-20T17:39:50.0667931+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KY09SNNN3H934D1M3XCW4HHJ",
+      "target": "P1",
+      "created_at": "2026-07-20T17:39:50.0659638+00:00"
+    }
+  ]
+}

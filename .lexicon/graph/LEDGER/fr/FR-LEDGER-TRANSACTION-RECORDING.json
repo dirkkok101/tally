@@ -5,7 +5,7 @@
   "ref_code": "FR-LEDGER-TRANSACTION-RECORDING",
   "title": "Record canonical transactions",
   "description": [
-    "Record exact immutable source facts and provenance for a transaction on an active owned account. Implements G2 and UC-LEDGER-002 under A1-A4 and A12."
+    "Record one canonical transaction from exact provider-neutral facts and an initial generic Evidence Record on an active owned account. Implements G2, G9, and UC-LEDGER-002 under A1-A4, A12, and C18."
   ],
   "rationale": [
     "Trustworthy actuals require precise signed amounts, dates, source identity, and provenance rather than normalized or silently edited values."
@@ -20,11 +20,14 @@
     "the original financial fact can always be reproduced and reconciled"
   ],
   "acceptance_criteria": [
-    "Given an active account and valid original description, exact base-10 signed amount, ZAR currency, transaction date, source reference, provenance, and idempotency identity, when the transaction is recorded, then the Ledger returns one stable transaction containing those values without precision loss.",
+    "Given an active account, valid original description, exact base-10 signed amount, ZAR currency, transaction date, privacy-safe initial evidence, and idempotency identity, when recording succeeds, then one stable canonical transaction and one linked Evidence Record are created atomically without precision loss.",
     "Given a transaction with a distinct supplied posting date, when it is recorded, then both transaction date and posting date round-trip without substituting one for the other.",
-    "Given any missing required fact, unsupported currency, zero amount, malformed date, or archived account, when recording is attempted, then the Ledger returns a stable validation error and creates no transaction.",
-    "Given a recorded transaction, when it is read later, then its account identity, original description, signed amount, currency, supplied dates, source reference, provenance, and stable identifier are unchanged.",
-    "Given a movement on an active owned asset or liability account, when its signed amount is recorded, then a positive value means the owner economic position improved and a negative value means it worsened: asset increases and liability reductions are positive; asset decreases and liability increases are negative."
+    "Given any missing required fact, unsupported currency, zero amount, malformed date, archived account, unsupported evidence kind, or forbidden provider payload, when recording is attempted, then a stable validation error is returned and neither transaction nor evidence is created.",
+    "Given a recorded transaction, when it is read later, then its account identity, original description, signed amount, currency, supplied dates, stable identifier, evidence links, current reconciliation state, and explicit unknown attribution states round-trip without silently inferring category, pool, instrument, or cardholder.",
+    "Given a movement on an active owned asset or liability account, when its signed amount is recorded, then a positive value means the owner's economic position improved and a negative value means it worsened: asset increases and liability reductions are positive; asset decreases and liability increases are negative.",
+    "Given the same logical initial evidence and semantically identical canonical transaction facts are submitted through another request identity, when recording is attempted, then the original transaction and evidence result is returned and no duplicate effect is created.",
+    "Given the same logical initial evidence is submitted with materially different canonical transaction facts, when recording is attempted, then a stable conflict is returned and the existing transaction and evidence remain unchanged.",
+    "Given a canonical transaction created through the ordinary recording operation, when its initial state is returned, then its reconciliation state is recorded-but-unreconciled until a valid deterministic or owner-approved reconciliation decision changes it."
   ],
   "security_criteria": [
     "Returned and diagnostic data must not expose unmasked account identifiers or credentials."

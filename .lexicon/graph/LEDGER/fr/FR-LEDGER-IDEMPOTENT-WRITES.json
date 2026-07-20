@@ -5,7 +5,7 @@
   "ref_code": "FR-LEDGER-IDEMPOTENT-WRITES",
   "title": "Make public writes idempotent",
   "description": [
-    "Apply deterministic idempotency semantics to every public Ledger mutation, including account/category maintenance, transaction and relationship changes, backup creation, restore activation, and storage evolution. Implements G7 across every mutation use case."
+    "Apply deterministic idempotency semantics to every public Ledger mutation, including evidence, reconciliation, attribution, catalogue, transaction, relationship, recovery, and storage operations. Implements G7 under C9."
   ],
   "rationale": [
     "An agent may retry after losing command output; retry safety must not depend on knowing whether the first write committed."
@@ -20,10 +20,10 @@
     "agent interruptions cannot duplicate or conflict with financial history"
   ],
   "acceptance_criteria": [
-    "Given any previously successful public mutation, when the same idempotency identity, operation, contract version, and semantically identical request are submitted again, then the original structured result is returned and no second domain or artifact effect occurs.",
-    "Given a previously successful idempotency identity, when it is reused for another operation, contract version, or materially different request, then the Ledger returns the same module-scoped conflict code on every retry and preserves the original effect.",
+    "Given any previously successful public mutation, when the same idempotency identity, operation, contract version, and semantically identical request are submitted again, then the original structured result is returned and no second domain, decision, link, or artifact effect occurs.",
+    "Given a previously successful idempotency identity, when it is reused for another operation, contract version, or materially different request, then the same module-scoped conflict code is returned on every retry and the original effect is preserved.",
     "Given an invalid mutation request, when validation fails, then no domain or artifact effect occurs and the supplied idempotency identity remains available for a corrected request.",
-    "Given two sequential identical retries, when their structured results are compared, then they identify the same resulting entity and outcome.",
+    "Given evidence registration or linking, reconciliation application or correction, payment attribution, pool assignment, or pool maintenance, when its logical identity is replayed through another request identity, then the domain uniqueness rule prevents a duplicate effect independently of request replay.",
     "Given any public mutation without a valid caller-visible idempotency identity, when invocation is attempted, then the Ledger rejects it before mutation with a stable validation error."
   ],
   "status": "active",

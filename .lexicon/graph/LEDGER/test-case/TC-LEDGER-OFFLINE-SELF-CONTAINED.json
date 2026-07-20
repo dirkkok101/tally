@@ -9,9 +9,9 @@
   "scenario": "edge",
   "automation": "automated",
   "status": "planned",
-  "preconditions": "Fresh release installation with network denied and process observation enabled.",
-  "steps": "Complete account/category/transaction/relationship/actuals/backup/restore/evolution/schema/skill acceptance workflows; inspect listening sockets and processes before, during, and after.",
-  "expected": "All Ledger workflows succeed without network, daemon, external database, or hosted dependency; no Tally process remains after invocation.",
+  "preconditions": "Fresh release installation with network denied and process, socket, dependency, and provider-adapter observation enabled.",
+  "steps": "Complete account, category, pool, transaction, evidence, reconciliation, attribution, relationship, actuals, backup, restore, evolution, schema-driven orchestrator, and optional-guidance acceptance workflows; inspect processes and sockets before, during, and after.",
+  "expected": "All Ledger workflows succeed without network, daemon, provider SDK, channel adapter, external database, hosted dependency, or required agent skill; no Tally process remains after invocation.",
   "owner": "LEDGER implementation",
   "created_at": "2026-07-18T06:09:34.4838002+00:00",
   "links": [

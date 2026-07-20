@@ -4,14 +4,14 @@
   "ref_code": "NFR-LEDGER-ATTRIBUTABLE-HISTORY",
   "title": "Retain attributable correction history",
   "description": [
-    "Transaction corrections, category corrections, transfer/refund confirmation, revocation, and replacement remain explainable without mutating or deleting their prior facts."
+    "Transaction corrections, category and pool corrections, payment attribution, evidence links, reconciliation decisions and exceptions, and financial relationships remain explainable without mutating or deleting prior facts."
   ],
   "category": "data_integrity",
-  "target": "100% of lifecycle conformance events retain stable subject references, event type, reason, actor context, timestamp, prior and resulting state, and replacement reference where applicable.",
-  "load_condition": "All correction and relationship lifecycle paths, including cascading relationship retirement during transaction void or supersession.",
-  "measurement": "Automated history reconstruction tests that compare active actuals with the complete retained event chain.",
+  "target": "100% of lifecycle events retain stable subject and evidence references, event or decision type, deterministic policy or owner actor as applicable, reason or match basis, trusted timestamp, prior and resulting state, and replacement or superseded-decision reference where applicable.",
+  "load_condition": "All correction, evidence-link, reconciliation, attribution, assignment, scope-exception, and financial-relationship lifecycle paths, including cascading effects of transaction void or supersession.",
+  "measurement": "Automated history reconstruction tests compare current evidence links, reconciliation state, assignments, relationships, and exact actuals with the complete retained event chain.",
   "rationale": [
-    "Attribution makes financial corrections auditable and prevents silent rewriting. Supports G2, G3, G4, and G6."
+    "Attribution prevents silent rewriting and makes evidence, matches, and exact financial corrections auditable. Supports G2-G4 and G9-G12."
   ],
   "priority": 0,
   "created_at": "2026-07-18T04:24:31.5537724+00:00",

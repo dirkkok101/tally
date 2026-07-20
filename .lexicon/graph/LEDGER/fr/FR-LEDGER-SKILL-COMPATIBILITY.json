@@ -3,9 +3,9 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "type": "functional",
   "ref_code": "FR-LEDGER-SKILL-COMPATIBILITY",
-  "title": "Distribute version-matched agent skills",
+  "title": "Expose version-matched integration guidance",
   "description": [
-    "Ship deployable agent skills that use only the public CLI contract and declare their supported contract version. Implements G5 and UC-LEDGER-006 under C7."
+    "Expose version-matched provider-neutral integration guidance and optional agent skills that use only the public CLI contract. Implements G5 and UC-LEDGER-006 under C7 without making any agent host a runtime dependency."
   ],
   "rationale": [
     "Bundled automation is part of the product contract and must not drift into private storage coupling."
@@ -20,10 +20,11 @@
     "AI agents can use Ledger commands safely without bespoke prompting"
   ],
   "acceptance_criteria": [
-    "Given a supported agent host, when the Ledger skill is installed through the executable's documented installer, then its instructions and declared CLI contract version are available without copying private database files or implementation APIs.",
-    "Given a skill and executable with compatible declared contract versions, when a Ledger workflow is invoked, then the skill uses only discoverable public operations and schemas.",
-    "Given an incompatible skill contract version, when execution is attempted, then compatibility fails before any Ledger mutation and returns a stable module-scoped error.",
-    "Given a breaking public contract change, when a release is produced, then the contract version changes and its bundled skills declare compatibility with that version."
+    "Given only the executable and its discovered schemas, when Hermes or another external orchestrator integrates with Ledger, then every public workflow is usable without installing an agent-specific skill or accessing private storage.",
+    "Given a supported optional agent host, when Ledger integration guidance or a skill is installed, then its instructions and declared contract version are available without copying private database files, implementation APIs, or provider-specific transport semantics.",
+    "Given guidance or a skill and executable with compatible declared contract versions, when a Ledger workflow is invoked, then only discoverable provider-neutral public operations and schemas are used.",
+    "Given an incompatible declared contract version, when execution is attempted, then compatibility fails before any Ledger mutation and returns a stable module-scoped error.",
+    "Given a breaking public contract change, when a release is produced, then the contract version changes and all bundled guidance or skills declare compatibility with that version."
   ],
   "status": "active",
   "created_at": "2026-07-18T04:23:20.6536049+00:00",

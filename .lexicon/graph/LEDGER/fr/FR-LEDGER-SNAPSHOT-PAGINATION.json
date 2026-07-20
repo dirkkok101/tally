@@ -5,7 +5,7 @@
   "ref_code": "FR-LEDGER-SNAPSHOT-PAGINATION",
   "title": "Preserve query snapshots across pages",
   "description": [
-    "Bind paginated actuals to the membership and totals established by the first page. Implements G6 and UC-LEDGER-005 under C15."
+    "Bind paginated actuals to the transaction membership, evidence and reconciliation state, attribution, and exact grouped totals established by the first page. Implements G6 and UC-LEDGER-005 under C15."
   ],
   "rationale": [
     "An agent must not reconcile pages drawn from different Ledger states."
@@ -20,10 +20,10 @@
     "later changes cannot corrupt reconciliation"
   ],
   "acceptance_criteria": [
-    "Given a filtered actuals query requiring multiple pages, when the first page is requested, then the result includes a snapshot-bound opaque cursor, deterministic ordering, and totals for the full selected set.",
-    "Given a valid cursor, when a later page is requested after unrelated Ledger mutations, then page membership and full-set totals remain those of the first-page snapshot.",
-    "Given a cursor with altered filters, invalid encoding, unsupported version, or expired snapshot, when a page is requested, then the Ledger returns a stable cursor error and no partial page.",
-    "Given all pages from one snapshot, when their stable transaction identifiers are combined, then each selected transaction appears exactly once."
+    "Given a filtered actuals query requiring multiple pages, when the first page is requested, then the result includes a snapshot-bound opaque cursor, deterministic ordering, evidence and reconciliation state, current category, pool, instrument and cardholder attribution, and totals for the full selected set.",
+    "Given a valid cursor, when a later page is requested after unrelated Ledger mutations, then membership, state, attribution, and pool, category, and pool-by-category totals remain those of the first-page snapshot.",
+    "Given a cursor with altered filters, invalid encoding, unsupported version, or expired snapshot, when a page is requested, then a stable cursor error is returned and no partial page or live-state fallback is exposed.",
+    "Given all pages from one snapshot, when their stable transaction identifiers are combined, then each selected canonical transaction appears exactly once and page aggregates reconcile to the first-page full-set totals."
   ],
   "status": "active",
   "created_at": "2026-07-18T04:22:52.2328224+00:00",

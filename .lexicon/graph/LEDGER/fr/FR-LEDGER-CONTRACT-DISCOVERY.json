@@ -5,7 +5,7 @@
   "ref_code": "FR-LEDGER-CONTRACT-DISCOVERY",
   "title": "Discover the Ledger command contract",
   "description": [
-    "Expose self-documenting human help and versioned machine-readable schemas for every public Ledger operation. Implements G5 and UC-LEDGER-006."
+    "Expose self-documenting help and versioned machine-readable schemas for every provider-neutral public Ledger operation. Implements G5 and UC-LEDGER-006 under C2, C6, and C14."
   ],
   "rationale": [
     "AI agents need to discover capabilities and validation rules without private database knowledge or undocumented prompts."
@@ -20,10 +20,11 @@
     "automation remains safe and self-documenting"
   ],
   "acceptance_criteria": [
-    "Given the self-contained executable, when an agent requests top-level or Ledger help non-interactively, then available public operations, required inputs, output modes, and examples are returned without starting a daemon or mutation.",
-    "Given any public Ledger operation, when its machine schema is requested, then the Ledger returns a versioned schema describing request fields, result shape, expected module-scoped errors, and exit codes.",
-    "Given a schema request, when it is repeated for the same contract version, then its semantic content is deterministic.",
-    "Given an operation not in the public contract, when it is requested, then the Ledger returns a stable unknown-operation error and no internal storage detail."
+    "Given the self-contained executable, when a caller requests top-level or Ledger help non-interactively, then available provider-neutral public operations, required inputs, output modes, compatibility metadata, and examples are returned without starting a daemon or mutation.",
+    "Given any public Ledger operation, when its machine schema is requested, then a versioned schema describes request fields, result shape, expected module-scoped errors, exit codes, idempotency requirements, and explicit ambiguity or review outcomes where applicable.",
+    "Given a schema request is repeated for the same contract version, when results are compared, then their semantic content is deterministic.",
+    "Given an operation or field outside the public contract, including provider transport, mailbox, MIME, recipient, schedule, delivery, or acknowledgement concerns, when it is requested, then a stable unknown-operation or validation error is returned with no internal storage detail and no mutation.",
+    "Given Hermes or another external orchestrator uses the published schema, when it invokes Ledger, then no provider-specific adapter, private database access, or bundled agent skill is required."
   ],
   "status": "active",
   "created_at": "2026-07-18T04:22:52.2328224+00:00",

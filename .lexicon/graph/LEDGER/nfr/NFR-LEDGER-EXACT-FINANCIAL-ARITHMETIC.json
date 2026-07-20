@@ -4,14 +4,14 @@
   "ref_code": "NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC",
   "title": "Preserve exact financial arithmetic",
   "description": [
-    "All stored and derived monetary values use exact base-10 semantics with no binary floating-point rounding in persisted facts or aggregates."
+    "All stored and derived monetary values use exact base-10 semantics; canonical reconciliation preserves one transaction effect and pool/category aggregates never use binary floating-point."
   ],
   "category": "data_integrity",
-  "target": "100% of conformance examples round-trip Signed Account Amount exactly; Net Account Movement equals the exact signed selected sum; External Spend equals positive qualifying outflow magnitudes minus active in-set refund magnitudes with transfer principal and unrelated inflows excluded; Budget Actual applies that formula to the active category allocation.",
-  "load_condition": "All supported transaction, transfer, refund, correction, and query paths.",
-  "measurement": "Automated conformance tests use boundary decimals, mixed signs, cross-period refunds, partial refunds, transfers, fees, cash withdrawals, corrections, empty sets, and repeated aggregation to check each named formula independently.",
+  "target": "100% of conformance examples round-trip Signed Account Amount exactly; Net Account Movement equals the exact selected signed sum; External Spend follows the accepted transfer/refund formula; every active spend contributes to exactly one pool or unassigned bucket and one category or uncategorized bucket; all pool-by-category cells reconcile exactly to their row, column, and selected-set totals with no duplicate effect after reconciliation.",
+  "load_condition": "All supported transaction, statement-only, evidence reconciliation, transfer, refund, correction, category, pool, attribution, and query paths.",
+  "measurement": "Automated conformance tests use boundary decimals, matched notification plus statement evidence, statement-only rows, ambiguous outcomes, mixed signs, cross-period and partial refunds, transfers, fees, cash withdrawals, unassigned states, corrections, empty sets, and repeated aggregation.",
   "rationale": [
-    "Rounding or semantic drift would make all later budgets and insights untrustworthy. Supports G2, G4, and G6."
+    "Rounding, duplicate statement effects, or dimensional drift would make BUDGET and INSIGHTS untrustworthy. Supports G2, G4, G6, G10, and G12."
   ],
   "priority": 0,
   "created_at": "2026-07-18T04:24:29.3077997+00:00",

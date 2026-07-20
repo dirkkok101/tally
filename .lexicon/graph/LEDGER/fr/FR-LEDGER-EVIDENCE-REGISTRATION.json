@@ -1,0 +1,51 @@
+{
+  "id": "01KY09SMHHRGKTD2W28KBN4N6R",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "type": "functional",
+  "ref_code": "FR-LEDGER-EVIDENCE-REGISTRATION",
+  "title": "Register and link generic evidence",
+  "description": [
+    "Register privacy-conscious provider-neutral Evidence Records and link multiple records to canonical transactions without treating evidence presence as a reconciliation decision. Implements G9 and UC-LEDGER-013 under C18, C20, and C23."
+  ],
+  "rationale": [
+    "Daily captures, statement rows, receipts, external documents, and owner assertions must support one canonical transaction without importing provider payloads or silently changing financial meaning."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "attach independently identifiable evidence to a canonical transaction"
+  ],
+  "story_so_that": [
+    "each transaction can be substantiated and reconciled without duplication or provider coupling"
+  ],
+  "acceptance_criteria": [
+    "Given a supported generic evidence kind, logical evidence identity, opaque external reference, privacy-safe metadata or fingerprint, and idempotency identity, when evidence is registered, then one stable Evidence Record is returned without storing raw provider, mailbox, MIME, messaging, document, or delivery payloads.",
+    "Given a registered Evidence Record, an active canonical transaction, actor context, and reason, when the evidence is linked, then one attributable active link is appended and the transaction may retain multiple independently queryable evidence records.",
+    "Given the same logical evidence registration or link is replayed with semantically identical input, when it is submitted again, then the original result is returned and no second evidence record or link is created.",
+    "Given an existing logical evidence identity or active confirmation link, when conflicting metadata is supplied or a direct link to a second canonical transaction is requested, then the Ledger returns a stable conflict and preserves the existing state.",
+    "Given newly registered or linked evidence with no valid reconciliation decision, when current state is queried, then evidence presence alone does not mark the transaction statement-reconciled or owner-confirmed.",
+    "Given statement-row evidence with no valid reconciliation decision, when a caller requests a confirming transaction link directly, then the Ledger rejects the link and preserves the evidence as unconfirmed."
+  ],
+  "security_criteria": [
+    "Evidence input and output may contain only provider-neutral kinds, privacy-safe metadata or fingerprints, and opaque external references; full provider payloads and unmasked financial identifiers are rejected."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T17:39:48.9138945+00:00",
+  "links": [
+    {
+      "id": "01KY09SMHJD47V8F297SWX5N9Z",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-013",
+      "rel": "implements",
+      "created_at": "2026-07-20T17:39:48.9148225+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KY09SMHN0W6W1R0YJRWGYMBY",
+      "target": "P1",
+      "created_at": "2026-07-20T17:39:48.9138945+00:00"
+    }
+  ]
+}

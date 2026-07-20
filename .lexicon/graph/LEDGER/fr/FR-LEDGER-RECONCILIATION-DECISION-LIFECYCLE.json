@@ -1,0 +1,50 @@
+{
+  "id": "01KY09SP7CGPEJNY9GPCF3A6XG",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "type": "functional",
+  "ref_code": "FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE",
+  "title": "Resolve and correct reconciliation decisions",
+  "description": [
+    "Record deterministic and explicitly owner-approved reconciliation decisions as attributable append-only lifecycle history. Implements G10 and UC-LEDGER-015 under C19, C20, and C23."
+  ],
+  "rationale": [
+    "Ambiguous and incorrect matches must be resolved or corrected explicitly while retaining the basis and history of every prior decision."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "confirm, reject, revoke, or replace a reconciliation decision"
+  ],
+  "story_so_that": [
+    "the current match is correct and every prior decision remains explainable"
+  ],
+  "acceptance_criteria": [
+    "Given ambiguous statement evidence, compatible candidates, an explicit owner selection, reason, actor context, and idempotency identity, when the owner confirms one candidate, then one owner-confirmed decision and active evidence link are created atomically and no other candidate is changed.",
+    "Given ambiguous or unmatched evidence and an explicit owner rejection of all candidates with a reason, when the decision is recorded, then one attributable rejected decision is appended without linking the evidence or creating a canonical transaction.",
+    "Given an active reconciliation decision and a valid correction request, when the owner revokes it or replaces it with one compatible candidate, then the prior decision remains immutable, the active evidence link changes atomically, and the current state reflects only the new decision.",
+    "Given an inactive or incompatible candidate, an evidence record already actively confirming another transaction, or a correction without explicit reason and actor context, when a decision is attempted, then the Ledger returns a stable validation or conflict error and changes no link or decision.",
+    "Given a transaction is voided or superseded, when it has reconciliation history, then no evidence or confirmation silently moves to the replacement and one reconciliation-exception current outcome remains until another valid decision is recorded."
+  ],
+  "security_criteria": [
+    "Decision history records only provider-neutral match basis, actor context, reasons, stable identities, and privacy-safe evidence metadata."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T17:39:50.6373979+00:00",
+  "links": [
+    {
+      "id": "01KY09SP7EHKA4BQC0GTY8GS4E",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-015",
+      "rel": "implements",
+      "created_at": "2026-07-20T17:39:50.6385202+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KY09SP7GZ8441CCPBC704Q43",
+      "target": "P1",
+      "created_at": "2026-07-20T17:39:50.6373979+00:00"
+    }
+  ]
+}

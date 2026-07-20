@@ -23,7 +23,8 @@
     "Given a valid unique institution name, owner label, supported asset or liability account type, ZAR currency, display label, and masked distinguishing identifier, when the owner creates an account, then the Ledger returns one active account with a stable identifier and stores no online-banking credential or full account number.",
     "Given an existing account, when the owner renames its display label, then its stable identifier and previously recorded transaction references remain unchanged.",
     "Given an account referenced by transactions, when the owner archives it, then its history remains queryable and the Ledger rejects new transactions against it with a stable validation error.",
-    "Given active and archived accounts, when the owner lists accounts with an explicit lifecycle-state filter, then each matching account is returned once with its stable identifier and masked identity fields."
+    "Given active and archived accounts, when the owner lists accounts with an explicit lifecycle-state filter, then each matching account is returned once with its stable identifier and masked identity fields.",
+    "Given an owned account, payment instruments, cardholders, spend pools, and categories, when account maintenance occurs, then no account value silently creates, selects, or changes another dimension."
   ],
   "security_criteria": [
     "Never store online-banking credentials or unmasked full account numbers."
