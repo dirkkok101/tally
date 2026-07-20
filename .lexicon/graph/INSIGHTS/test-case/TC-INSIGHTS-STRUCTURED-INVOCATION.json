@@ -1,0 +1,40 @@
+{
+  "id": "01KXZACRAC5XK9E3VJYBRWWJP9",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "TC-INSIGHTS-STRUCTURED-INVOCATION",
+  "slug": "STRUCTURED-INVOCATION",
+  "title": "Verify structured INSIGHTS invocation",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Every Public INSIGHTS Operation is registered and callable through the shared Tally executor.",
+  "steps": "Invoke each operation with valid input, malformed JSON, unknown fields, missing authority, incompatible versions, expected business failures, interrupted result delivery, and canary payloads.",
+  "expected": "Every invocation returns exactly one documented envelope and exit category; validation and compatibility happen before processing; stdout, stderr, diagnostics, and retry behavior satisfy FR-INSIGHTS-STRUCTURED-INVOCATION.",
+  "owner": "INSIGHTS implementation",
+  "created_at": "2026-07-20T08:31:00.9419421+00:00",
+  "links": [
+    {
+      "id": "01KXZAFH4SJ7PC67TT7Y2SGR68",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-AI-AGENT-HOST",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:31.8983196+00:00"
+    },
+    {
+      "id": "01KXZACRAFRF59DB8N7WGB3Q4D",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-STRUCTURED-INVOCATION",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:31:00.9430652+00:00"
+    },
+    {
+      "id": "01KXZAFG4RTRP7B0WDAZTMXMYQ",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-006",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:30.8731614+00:00"
+    }
+  ]
+}

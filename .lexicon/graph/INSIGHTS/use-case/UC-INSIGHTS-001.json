@@ -3,18 +3,18 @@
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "ref_code": "UC-INSIGHTS-001",
   "title": "Generate an on-demand Insight Report",
-  "preconditions": "Tally is running inside the sole-owner local trust boundary; the INSIGHTS schema and compatible public BUDGET/LEDGER read capabilities are available; the request names its period, As-of Instant, Analysis Window policy, and whether retention is requested.",
-  "postconditions": "No upstream financial or plan state changed. No durable INSIGHTS state changed for an ephemeral request. An explicit retained request created exactly one immutable attributable Report Snapshot or returned the prior logical result for an identical retry.",
-  "main_flow": "1. The caller discovers and validates the versioned INSIGHTS request schema and limits. 2. INSIGHTS validates input, freezes the trusted As-of Instant, and resolves compatible read capabilities before requesting financial data. 3. INSIGHTS obtains one mutually coherent immutable plan revision, exact Budget Position, and dated actual-evidence set through public producer contracts. 4. INSIGHTS accounts for every total and category bucket, including Unbudgeted and Uncategorized Spend. 5. It computes exact metrics, then independently evaluates Pace, Forecast, Trend, Anomaly, and Attention Item sufficiency under named formula and threshold versions. 6. It returns one deterministically ordered Insight Report containing exact results, explicit unavailable states, limitations, and complete Source Provenance. 7. Only when the request explicitly asks to retain does INSIGHTS atomically append the immutable Report Snapshot.",
+  "preconditions": "Tally is running inside the sole-owner local trust boundary; the INSIGHTS schema and compatible public BUDGET/LEDGER read capabilities are available; the request names its Budget Period, requested released policy versions, and bounded output choices.",
+  "postconditions": "No upstream financial or plan state changed. The Generate operation changed no durable INSIGHTS state. A report was returned only from complete coherent evidence, with metric-local insufficiency represented inside the complete result.",
+  "main_flow": "1. The caller discovers and validates the versioned INSIGHTS request schema and limits. 2. INSIGHTS validates input and freezes the trusted operation-start As-of Instant in Africa/Johannesburg before requesting financial data. 3. INSIGHTS obtains one mutually coherent plan state, exact Budget Position when a plan exists, and dated actual-evidence set through public producer contracts. 4. INSIGHTS accounts for every exact day, Monday-week, and month-to-date total and category bucket, including Unbudgeted and Uncategorized Spend. 5. It computes the released Linear Pace Baseline and independently evaluates each activated signal policy under its named Evidence Sufficiency rule. 6. It returns one deterministically ordered ephemeral Insight Report containing exact results, explicit unavailable states, limitations, and complete Source Provenance. 7. Retention requires a separate explicit retained-generation operation.",
   "alt_flows": [
-    "Invalid period, As-of Instant, timezone, window, or limit returns validation failure before financial reads or persistence.",
+    "Invalid Budget Period, requested policy version, output choice, or limit returns validation failure before financial reads or persistence.",
+    "Failure to resolve the trusted operation-start time or the fixed Africa/Johannesburg calendar policy returns no report.",
     "No Budget Plan or no Active Budget Plan Revision returns its explicit unavailable state rather than zero or Not Found ambiguity.",
     "Incompatible producer contract, expired or incomplete cursor, or snapshot-coherence failure returns no report and no retained state.",
     "Sparse or incomparable evidence suppresses only the affected derived signal and returns its exact insufficiency reason; exact supported metrics remain visible.",
-    "Overflow, undefined division, or internal integrity failure returns no partial report.",
-    "Retention failure returns no successful retained result and leaves prior retained state unchanged."
+    "Overflow, undefined division, or internal integrity failure returns no partial report."
   ],
-  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The Personal Finance Owner explicitly requests analysis for one Budget Period and As-of Instant, directly or through the AI Agent Host.\",\"status\":\"draft\"}",
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The Personal Finance Owner explicitly requests analysis for one Budget Period, directly or through the AI Agent Host.\",\"status\":\"draft\"}",
   "created_at": "2026-07-20T08:06:13.2547998+00:00",
   "links": [
     {

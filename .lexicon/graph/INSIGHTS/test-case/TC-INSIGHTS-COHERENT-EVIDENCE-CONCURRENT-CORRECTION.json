@@ -1,0 +1,47 @@
+{
+  "id": "01KXZACRX0WCYCBX7ND8R2XB0V",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "TC-INSIGHTS-COHERENT-EVIDENCE-CONCURRENT-CORRECTION",
+  "slug": "COHERENT-EVIDENCE-CONCURRENT-CORRECTION",
+  "title": "Reject mixed producer states during concurrent correction",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "unhappy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Version-compatible BUDGET and LEDGER producer doubles or implementations can pause between plan, position, and dated-actual evidence reads.",
+  "steps": "Generate once without writes, then inject a correction at every cross-read boundary, cursor expiry, duplicate and missing ordinals, stale generation, unknown category, total mismatch, no-plan, and no-active-revision cases.",
+  "expected": "Stable coherent evidence reconciles exactly; every mixed or incomplete state returns the named failure with no report or retention; plan absence states remain explicit.",
+  "owner": "INSIGHTS implementation",
+  "created_at": "2026-07-20T08:31:01.5372114+00:00",
+  "links": [
+    {
+      "id": "01KXZAFM4R61RW9EP9FRWWPPVP",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-BUDGET-PUBLIC-READ-CONTRACT",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:34.9690483+00:00"
+    },
+    {
+      "id": "01KXZAFN46SZKWY4VMMDF57XR3",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-LEDGER-ACTUALS-CONTRACT",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:35.9749753+00:00"
+    },
+    {
+      "id": "01KXZAFJ64CFNMX5AH3XSMWH05",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:32.9654429+00:00"
+    },
+    {
+      "id": "01KXZAFK5R1FWFBJTYPKQCD6AY",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-001",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:33.9769679+00:00"
+    }
+  ]
+}

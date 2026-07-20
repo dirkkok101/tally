@@ -1,0 +1,27 @@
+{
+  "id": "01KXZA5T5ZP1H2VJ6K77SJ2QQ1",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "NFR-INSIGHTS-VERIFIED-RECOVERABILITY",
+  "title": "Verify backup and restore independently",
+  "description": [
+    "Prove that every supported durable INSIGHTS state can be backed up, verified, restored to a separate target, migrated, and activated without risking the current store."
+  ],
+  "category": "reliability",
+  "target": "100% of supported backup and storage-version paths pass independent manifest, fingerprint, count, link, content, idempotency, deletion-state, permission, and integrity verification; 100% of corruption, omission, incompatibility, permission, space, cancellation, and activation faults leave the prior authoritative store unchanged.",
+  "load_condition": "Empty, populated, maximum-retention, Restatement-chain, deletion, retry, prior-version, corrupted, truncated, wrong-owner, insufficient-space, and interrupted backup/restore candidates.",
+  "measurement": "Automated backup-verify-restore and supported-version migration drills into separate targets, full normalized state comparisons, negative candidates, atomic activation fault injection, and post-restore operation replay.",
+  "rationale": [
+    "A backup claim without independent restore proof would provide false confidence for retained financial evidence."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-20T08:27:13.4717779+00:00",
+  "links": [
+    {
+      "id": "01KXZAC13Q8CG46PK949AHKWY7",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-BACKUP-VERIFY-RESTORE",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:37.1772475+00:00"
+    }
+  ]
+}

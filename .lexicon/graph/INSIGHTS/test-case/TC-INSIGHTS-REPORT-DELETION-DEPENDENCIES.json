@@ -1,0 +1,33 @@
+{
+  "id": "01KXZACZPR9HW67RYRW1D0C9YT",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "TC-INSIGHTS-REPORT-DELETION-DEPENDENCIES",
+  "slug": "REPORT-DELETION-DEPENDENCIES",
+  "title": "Verify dependency-safe report deletion",
+  "level": "integration",
+  "surface": "persistence",
+  "scenario": "unhappy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "History contains an original, multiple linked Restatements, a leaf, an unknown identity, and a prior backup.",
+  "steps": "Attempt original deletion, delete leaves to root, retry each key, reuse a key with changed target, inspect Deletion Events, advance time without delete, and inspect the prior backup.",
+  "expected": "Referenced targets are RESTRICTed; leaves delete atomically with one metadata-only event; retries are stable; no automatic cleanup occurs; existing backup remains unchanged.",
+  "owner": "INSIGHTS implementation",
+  "created_at": "2026-07-20T08:31:08.5049178+00:00",
+  "links": [
+    {
+      "id": "01KXZAGB9RDQYMGJGM1JF32TP3",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-DELETION",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:58.6815810+00:00"
+    },
+    {
+      "id": "01KXZAGC860ZBJVF97ZW6Y4M9B",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-005",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:59.6555118+00:00"
+    }
+  ]
+}

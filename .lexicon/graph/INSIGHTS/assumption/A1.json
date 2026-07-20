@@ -4,7 +4,7 @@
   "ref_code": "A1",
   "title": "Representative evidence supports bounded useful signals",
   "description": [
-    "A privacy-safe, time-separated owner-only evidence set will contain enough comparable periods to validate at least one Forecast, Trend, or Anomaly rule without false confidence; this remains active until the OQ-INSIGHTS-4/5/10 spike evidence passes."
+    "A privacy-safe, time-separated owner-only evidence set will contain enough comparable periods to validate at least one Forecast, Trend, or Anomaly rule without false confidence. This assumption remains active while those requirements are deferred and must be validated before any affected signal is activated."
   ],
   "status": "active",
   "created_at": "2026-07-20T08:06:16.4042860+00:00"

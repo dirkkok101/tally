@@ -1,0 +1,33 @@
+{
+  "id": "01KXZACT4JXFVPNWGCZW1WXSM4",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "TC-INSIGHTS-EXACT-METRICS-CONFORMANCE",
+  "slug": "EXACT-METRICS-CONFORMANCE",
+  "title": "Verify exact window metric reconciliation",
+  "level": "unit",
+  "surface": "service",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Coherent fixtures cover Budgeted, Zero Budget, Unbudgeted, Uncategorized, no-plan, no-actual, positive, zero, negative refund, maximum, and overflow values.",
+  "steps": "Calculate all requested day, week, and month-to-date totals and category buckets; permute member order; reconcile against cited Budget Position; inject overflow and mismatch.",
+  "expected": "Every item is accounted for once, signed exact totals and zero semantics hold, ordering is stable, and overflow or mismatch produces no partial report.",
+  "owner": "INSIGHTS implementation",
+  "created_at": "2026-07-20T08:31:02.8036415+00:00",
+  "links": [
+    {
+      "id": "01KXZAFQC9RD057REWEDYFGTKJ",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-EXACT-WINDOW-METRICS",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:38.2824422+00:00"
+    },
+    {
+      "id": "01KXZAFR8TBRVH5Q1HN1E99XZG",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-001",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:39.1955059+00:00"
+    }
+  ]
+}

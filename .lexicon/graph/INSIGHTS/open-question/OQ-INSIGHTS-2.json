@@ -6,7 +6,10 @@
   "context": [
     "PRD must choose one explicit v1 rule and validate assumption A6. Discovery recommends fixed Africa/Johannesburg local-date semantics, Monday-start calendar weeks clipped to the Budget Period, calendar days, and month-to-date through the As-of local date; rolling comparisons remain out unless representative evidence proves necessary. DST, leap day, future As-of, and partial-day behavior require acceptance examples."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "V1 freezes the As-of Instant from the trusted TimeProvider at operation start; it is returned in provenance and is not caller-controlled. Analysis uses fixed Africa/Johannesburg local dates. Day means the one calendar date containing the As-of Instant clipped to the Budget Period; week means Monday through Sunday clipped to the Budget Period; month means Budget Period start through the earlier of the As-of local date or period end, inclusive. A completed historical Budget Period uses the full month; a future period returns Not Started for elapsed-time metrics. Rolling windows are unsupported in v1. Effective Date controls membership, and As-of does not claim to reconstruct source state before later corrections."
+  ],
   "owner": "INSIGHTS PRD",
   "created_at": "2026-07-20T07:28:33.0168095+00:00"
 }

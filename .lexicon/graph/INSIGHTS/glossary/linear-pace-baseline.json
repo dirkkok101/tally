@@ -1,0 +1,10 @@
+{
+  "id": "01KXZ9XZ36H5CWFAZWR4HQCWGV",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "term": "Linear Pace Baseline",
+  "definition": [
+    "The exact rational share of a monthly planned amount through the As-of local date: planned minor units multiplied by elapsed calendar days and divided by total Budget Period days. It is a transparent comparison baseline, not a prediction, recommendation, daily sub-budget, or claim that spending is uniformly distributed."
+  ],
+  "source": "prd",
+  "created_at": "2026-07-20T08:22:56.3593422+00:00"
+}

@@ -1,0 +1,67 @@
+{
+  "id": "01KXZA409QSF6NYF2Q9MWHJ4DV",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "type": "functional",
+  "ref_code": "FR-INSIGHTS-REPORT-RETENTION",
+  "title": "Retain an immutable Report Snapshot explicitly",
+  "description": [
+    "Generate and atomically retain one complete report only through an explicit owner-attributed idempotent retained-generation request. Goal trace: G4 and G7."
+  ],
+  "rationale": [
+    "Retention must preserve exactly what was shown without accepting a tampered client report or silently writing during ordinary generation."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "explicitly preserve a report as immutable owner evidence"
+  ],
+  "story_so_that": [
+    "I can later inspect exactly what Tally reported"
+  ],
+  "acceptance_criteria": [
+    "Given an ordinary Generate request, when it succeeds, then no Report Snapshot, idempotency outcome, or retained payload is created.",
+    "Given a valid Retain request with analysis inputs, actor, reason, and idempotency identity, when it succeeds, then INSIGHTS generates one complete report and atomically appends one immutable Report Snapshot.",
+    "Given a Retain request, when input is validated, then no arbitrary caller-authored report payload is accepted as the stored result.",
+    "Given a retained snapshot, when its identity is inspected, then actor, reason, trusted creation time, analysis request fingerprint, source and policy versions, content fingerprint, and report schema version are present.",
+    "Given the same idempotency identity and semantically identical normalized request, when Retain is retried, then the prior logical Report Snapshot is returned and no duplicate is created.",
+    "Given the same idempotency identity with different normalized input, when Retain is attempted, then conflict is returned and retained history is unchanged.",
+    "Given validation, generation, persistence, cancellation, or crash failure, when Retain ends, then no partial Report Snapshot or successful idempotency outcome exists.",
+    "Given later source corrections or policy changes, when a retained snapshot is read, then its stored content and fingerprint remain unchanged."
+  ],
+  "security_criteria": [
+    "Only bounded derived report content and required stable evidence references are retained; raw merchant descriptions and canonical transaction payloads are excluded."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T08:26:14.1918276+00:00",
+  "links": [
+    {
+      "id": "01KXZAAG7Y0X7P3W2T07GAB854",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:29:47.1350307+00:00"
+    },
+    {
+      "id": "01KXZAB2C2D93561T8HF0VGWXJ",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-GENERATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:05.6990294+00:00"
+    },
+    {
+      "id": "01KXZAA5Z6WGQ4M6KMFBP4YVGF",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-003",
+      "rel": "implements",
+      "created_at": "2026-07-20T08:29:36.6151080+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXZA5PW9XY4N0W90X1GF5VJG",
+      "target": "P1",
+      "created_at": "2026-07-20T08:27:10.0883446+00:00"
+    }
+  ]
+}

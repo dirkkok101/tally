@@ -1,0 +1,61 @@
+{
+  "id": "01KXZACXWG9YYW4WPPEKFFY86D",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "TC-INSIGHTS-REPORT-RETENTION-FAILURE-ATOMICITY",
+  "slug": "REPORT-RETENTION-FAILURE-ATOMICITY",
+  "title": "Verify retained-state write failure atomicity",
+  "level": "integration",
+  "surface": "persistence",
+  "scenario": "unhappy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Fault injection is available before and after each Retain, Restate, Delete, idempotency, link, event, migration, and commit write.",
+  "steps": "Inject cancellation, crash, busy, disk-full, permission, and result-delivery failures at every boundary; restart and replay identical and conflicting requests.",
+  "expected": "Each operation is complete exactly once or absent; no partial reports, dangling links, duplicate outcomes, missing events, or consumed failed identities remain.",
+  "owner": "INSIGHTS implementation",
+  "created_at": "2026-07-20T08:31:06.6417878+00:00",
+  "links": [
+    {
+      "id": "01KXZAG42ADQVWTSD8G7T9QF5C",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-DELETION",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:51.2750043+00:00"
+    },
+    {
+      "id": "01KXZAG348PE1HXKPMT343RGXC",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RESTATEMENT",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:50.3135480+00:00"
+    },
+    {
+      "id": "01KXZAG28CWSDK403DKTWE201G",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RETENTION",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:49.4269982+00:00"
+    },
+    {
+      "id": "01KXZAG6WGEDP5JZ7PJYB66BNW",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:54.1611047+00:00"
+    },
+    {
+      "id": "01KXZAG4ZJRTVYSRKS6RKXHS21",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-003",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:52.2118229+00:00"
+    },
+    {
+      "id": "01KXZAG5Z0YZSB77XQEDKN649D",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-004",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:53.2172520+00:00"
+    }
+  ]
+}

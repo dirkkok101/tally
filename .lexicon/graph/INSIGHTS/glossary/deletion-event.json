@@ -1,0 +1,10 @@
+{
+  "id": "01KXZ9XZKGW8R452SAZZC9GFEM",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "term": "Deletion Event",
+  "definition": [
+    "A metadata-only attributable record that one retained Report Snapshot payload was explicitly removed, including stable identity, actor, reason, trusted time, idempotency outcome, and dependency result but no financial values or report content. Avoid: tombstone when it could imply the payload is still retained."
+  ],
+  "source": "prd",
+  "created_at": "2026-07-20T08:22:56.8815271+00:00"
+}

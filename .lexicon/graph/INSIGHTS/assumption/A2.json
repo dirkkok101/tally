@@ -4,7 +4,7 @@
   "ref_code": "A2",
   "title": "Attention Items improve named owner decisions",
   "description": [
-    "A small deterministic set of evidence-backed Attention Items will help the owner decide whether spending is on track, what changed, or which category to inspect without producing false high-severity items; validate before planning against OQ-INSIGHTS-6/10."
+    "A small deterministic set of evidence-backed Attention Items can help the owner decide whether spending is on track, what changed, or which category to inspect without false high-severity items. Validate OQ-INSIGHTS-6 and OQ-INSIGHTS-10 before FR-INSIGHTS-ATTENTION-ITEMS is activated; it does not block the active core report."
   ],
   "status": "active",
   "created_at": "2026-07-20T08:06:16.9035505+00:00"

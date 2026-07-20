@@ -1,0 +1,48 @@
+{
+  "id": "01KXZA409NPKFFC1PYE925N31F",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "type": "functional",
+  "ref_code": "FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING",
+  "title": "Account for every evidence state",
+  "description": [
+    "Represent supported, unavailable, insufficient, and deferred analytical outcomes explicitly at metric or signal scope while distinguishing whole-report failures. Goal trace: G2 and G3."
+  ],
+  "rationale": [
+    "Zeros, omitted fields, and generic failures would conceal why an insight is absent or unsafe."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "see why every requested metric or signal is present or absent"
+  ],
+  "story_so_that": [
+    "missing evidence cannot become invented confidence"
+  ],
+  "acceptance_criteria": [
+    "Given a requested metric or signal kind, when a complete report is returned, then exactly one Supported, Unavailable, Insufficient Evidence, Not Started, or Deferred state accounts for it.",
+    "Given No Budget Plan, No Active Budget Plan Revision, Unsupported Policy, Insufficient Horizon, Incomplete Coverage, Incomparable Baseline, or Not Started, when the state is returned, then the reason is a stable typed value with cited evidence and policy version.",
+    "Given an unavailable or insufficient derived signal, when exact metrics remain supported, then the complete report preserves those exact metrics and records the signal-local state.",
+    "Given a signal-local unavailable state, when amounts are inspected, then zero, baseline, confidence, or severity values are absent unless zero is the exact supported observed metric.",
+    "Given cross-source incoherence, contract incompatibility, integrity failure, exact-arithmetic failure, or incomplete pagination, when generation is attempted, then no Insight Report is returned.",
+    "Given multiple requested kinds, when report accounting is inspected, then every kind appears exactly once in deterministic catalogue order and no unsupported kind disappears silently."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T08:26:14.1918276+00:00",
+  "links": [
+    {
+      "id": "01KXZA9ZN2B8GSS1WKS9TD6FXW",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-001",
+      "rel": "implements",
+      "created_at": "2026-07-20T08:29:30.1474556+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXZA5HZV26452K9TDB17NB1T",
+      "target": "P1",
+      "created_at": "2026-07-20T08:27:05.0825181+00:00"
+    }
+  ]
+}

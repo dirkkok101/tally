@@ -6,7 +6,10 @@
   "context": [
     "Before planning, build an ignored owner-only time-separated evaluation manifest over representative corrected LEDGER/BUDGET states without copying values, filenames, or report payloads into Git, Lex, logs, or ordinary output. It must cover sparse/zero periods, refunds, front-loaded and recurring spend, plan changes, archived categories, Uncategorized and Unbudgeted spend, corrections, and seeded disclosure canaries."
   ],
-  "status": "open",
+  "status": "deferred",
+  "decision": [
+    "Before plan approval, create an ignored owner-only, time-separated evaluation manifest over representative corrected BUDGET/LEDGER states. It must cover sparse and zero periods, recurring and front-loaded spend, refunds, plan changes, category lifecycle changes, classification gaps, corrections, and disclosure canaries. No filename, value, report payload, or expected row enters Git, Lex, logs, or ordinary output."
+  ],
   "owner": "INSIGHTS pre-plan evidence",
   "created_at": "2026-07-20T07:28:37.0885344+00:00"
 }

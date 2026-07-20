@@ -1,0 +1,59 @@
+{
+  "id": "01KXZA409FG4PQEWMWDAZKXYGF",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "type": "functional",
+  "ref_code": "FR-INSIGHTS-CONTRACT-DISCOVERY",
+  "title": "Discover the INSIGHTS operation contract",
+  "description": [
+    "Publish the complete versioned Public INSIGHTS Operation and released analytical-policy catalogue without requiring financial input. Goal trace: G6."
+  ],
+  "rationale": [
+    "The owner and AI Agent Host must know exact capability, authority, mutability, compatibility, and limits before any financial read or retained-state write."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "discover every supported INSIGHTS operation and policy before invocation"
+  ],
+  "story_so_that": [
+    "agents never guess schemas, authority, compatibility, or analytical support"
+  ],
+  "acceptance_criteria": [
+    "Given a compatible caller with no financial input, when operation discovery is requested, then every Public INSIGHTS Operation is returned in canonical verb order with stable operation identity and contract version.",
+    "Given one discovered operation, when its descriptor is inspected, then request and result schema fingerprints, mutability, authority, idempotency requirement, limits, stable error types, exit categories, and compatibility range are explicit.",
+    "Given policy discovery, when the catalogue is returned, then every released Analysis Window, formula, Evidence Sufficiency, severity, explanation, and ordering policy has stable kind, version, status, and fingerprint metadata.",
+    "Given a formally deferred Forecast, Trend, Anomaly, or Attention Item policy, when policy discovery is requested, then it is marked unsupported and no executable formula or threshold is advertised.",
+    "Given INSIGHTS authority metadata, when it is inspected, then no LEDGER, CLASSIFY, or BUDGET mutation operation is present.",
+    "Given an unsupported INSIGHTS contract version, when discovery is requested, then one stable compatibility failure is returned without reading financial data.",
+    "Given discovery, help, or schema output, when all fields are inspected, then no report payload, amount, merchant text, private path, permission seed, role template, menu seed, translation key, or frontend key model is present."
+  ],
+  "security_criteria": [
+    "Discovery surfaces contract metadata only and never grants upstream mutation or emits private financial content."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T08:26:14.1918276+00:00",
+  "links": [
+    {
+      "id": "01KXZAAAPASHFS0FD013BWTZ7C",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-AI-AGENT-HOST",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:29:41.4519159+00:00"
+    },
+    {
+      "id": "01KXZA9T6CVZ08GZMDS2H4ZN6J",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-006",
+      "rel": "implements",
+      "created_at": "2026-07-20T08:29:24.5576615+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXZA5HG05YD6JXFECTM796SP",
+      "target": "P1",
+      "created_at": "2026-07-20T08:27:04.5747531+00:00"
+    }
+  ]
+}

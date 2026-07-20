@@ -1,0 +1,66 @@
+{
+  "id": "01KXZA409HQW1925GPTPZD1MVB",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "type": "functional",
+  "ref_code": "FR-INSIGHTS-STRUCTURED-INVOCATION",
+  "title": "Invoke INSIGHTS operations non-interactively",
+  "description": [
+    "Provide deterministic structured process input, output, diagnostics, compatibility, authority, and retry behavior for every Public INSIGHTS Operation. Goal trace: G6 and G7."
+  ],
+  "rationale": [
+    "Agents must distinguish a report, an explicit unavailable state, a retained-state outcome, and a failure without parsing prose or inspecting private storage."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "invoke INSIGHTS through a stable structured contract"
+  ],
+  "story_so_that": [
+    "success, failure, authority, and durable state are machine-verifiable"
+  ],
+  "acceptance_criteria": [
+    "Given valid structured input through stdin or an approved owner-only file, when a public operation succeeds, then exactly one versioned structured business-result envelope is written to stdout and the process exits with the documented success category.",
+    "Given an expected validation, Not Found, Deleted, conflict, unavailable, insufficient-evidence, compatibility, integrity, resource, or downstream failure, when invocation completes, then exactly one module-scoped machine-readable error or state envelope is returned with the documented exit category.",
+    "Given malformed input or a schema-forbidden unknown field, when invocation is attempted, then validation fails before any financial read or retained-state write.",
+    "Given an unsupported INSIGHTS, BUDGET, or LEDGER contract version, when invocation is attempted, then compatibility fails before financial processing.",
+    "Given Retain, Restate, Delete, Backup, or Restore without required P1 actor attribution or idempotency identity, when invocation is attempted, then authority validation fails before retained-state change.",
+    "Given any operation, when it runs, then it requires no interactive prompt, network call, daemon, watcher, scheduler, service, or background Tally process.",
+    "Given success or expected failure, when stderr, logs, telemetry, crash output, process arguments, and shared temporary locations are inspected, then they contain metadata only and no serialized financial request, report, or response body."
+  ],
+  "security_criteria": [
+    "Financial input never appears in process arguments and only an explicitly requested business result may contain report data on stdout."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T08:26:14.1918276+00:00",
+  "links": [
+    {
+      "id": "01KXZAABKMK4C36GNKXTJ590BY",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-AI-AGENT-HOST",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:29:42.3896840+00:00"
+    },
+    {
+      "id": "01KXZAAPFT8J0NBSKCQF84656C",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-CONTRACT-DISCOVERY",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:29:53.5314605+00:00"
+    },
+    {
+      "id": "01KXZA9V2SWMPCMN7W140Q6S5J",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-006",
+      "rel": "implements",
+      "created_at": "2026-07-20T08:29:25.4660839+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXZA5QC3B2PNGHFAV5HVTQW2",
+      "target": "P1",
+      "created_at": "2026-07-20T08:27:10.5944867+00:00"
+    }
+  ]
+}

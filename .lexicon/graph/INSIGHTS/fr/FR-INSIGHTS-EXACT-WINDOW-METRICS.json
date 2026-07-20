@@ -1,0 +1,64 @@
+{
+  "id": "01KXZA409K5THF8V6ER99EGDYF",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "type": "functional",
+  "ref_code": "FR-INSIGHTS-EXACT-WINDOW-METRICS",
+  "title": "Calculate exact window metrics",
+  "description": [
+    "Account for exact recorded spend across the selected day, week, and month-to-date windows without hiding plan absence, category gaps, refunds, or zero results. Goal trace: G1 and G2."
+  ],
+  "rationale": [
+    "Derived insight is credible only when every displayed value reconciles to authoritative exact inputs."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "see exact recorded spending for each explicit window and category bucket"
+  ],
+  "story_so_that": [
+    "every interpretation can be reconciled to BUDGET and LEDGER"
+  ],
+  "acceptance_criteria": [
+    "Given a complete coherent evidence set, when exact metrics are calculated, then one total actual metric is returned for each requested day, week, and month-to-date window.",
+    "Given a requested category breakdown, when exact metrics are calculated, then every stable category present in plan or actual evidence is accounted for in deterministic category-identity order.",
+    "Given plan entries with zero amount, actual categories omitted from the plan, or uncategorized actuals, when metrics are returned, then Zero Budget, Unbudgeted, and Uncategorized remain distinct explicit buckets.",
+    "Given refunds or reversals that make a window or category net actual negative, when metrics are returned, then the signed exact value is preserved and is not clamped to zero.",
+    "Given no matching recorded actuals in a started window, when metrics are returned, then the exact value is zero with a successful evidence state rather than Not Found.",
+    "Given no Budget Plan, when exact actual metrics are available, then they are returned with No Budget Plan on every plan-relative field.",
+    "Given exact category and bucket values, when totals are returned, then total actual equals the checked exact sum of Budgeted, Zero Budget, Unbudgeted, and Uncategorized values.",
+    "Given any Int64 overflow, undefined exact operation, or reconciliation failure, when metrics are calculated, then the entire report fails with no partial financial output."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T08:26:14.1918276+00:00",
+  "links": [
+    {
+      "id": "01KXZAAQAPG8B2K3PFYSW25A79",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:29:54.3917856+00:00"
+    },
+    {
+      "id": "01KXZAAR9SE10CRTQZY04VWH3K",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-TRUSTED-ANALYSIS-WINDOWS",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:29:55.3862240+00:00"
+    },
+    {
+      "id": "01KXZA9XTE9H3VRTGWMV4WWSNB",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-001",
+      "rel": "implements",
+      "created_at": "2026-07-20T08:29:28.2708399+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXZA5JGHKBCS05E2B2H75J64",
+      "target": "P1",
+      "created_at": "2026-07-20T08:27:05.6156459+00:00"
+    }
+  ]
+}

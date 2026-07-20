@@ -8,8 +8,17 @@
   ],
   "status": "resolved",
   "decision": [
-    "The first report must improve three named owner decisions already present in the module problem: whether current monthly spending is on track, what changed versus an explicit comparable window, and which category or total warrants inspection. Candidate shape is one month-to-date report with exact daily, weekly, and monthly window sections, explicit unavailable states, and a bounded Attention Item section; private values stay outside Lex."
+    "The first report must improve three named owner decisions already present in the module problem: whether current monthly spending is on track, what changed versus an explicit comparable window, and which category or total warrants inspection. The active candidate shape is one month-to-date report with exact daily, weekly, and monthly window sections plus explicit unavailable or deferred states. An Attention Item section is included only if FR-INSIGHTS-ATTENTION-ITEMS is later activated after its evidence gate. Private values stay outside Lex."
   ],
   "owner": "INSIGHTS discovery",
-  "created_at": "2026-07-20T07:28:32.4979653+00:00"
+  "created_at": "2026-07-20T07:28:32.4979653+00:00",
+  "links": [
+    {
+      "id": "01KXZAZEB4MVCT76YVTEQDJ7H2",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-ATTENTION-ITEMS",
+      "rel": "see-also",
+      "created_at": "2026-07-20T08:41:13.3176351+00:00"
+    }
+  ]
 }

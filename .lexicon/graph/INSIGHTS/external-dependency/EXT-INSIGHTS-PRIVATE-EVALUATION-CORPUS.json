@@ -1,0 +1,13 @@
+{
+  "id": "01KXZA7TQ1S427JMSTX4091WNQ",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "EXT-INSIGHTS-PRIVATE-EVALUATION-CORPUS",
+  "name": "Private Insight Evaluation Corpus",
+  "description": [
+    "Owner-controlled ignored time-separated evidence used only to validate candidate report, formula, sufficiency, explanation, threshold, severity, and ordering policies. The durable graph and validation output retain fingerprints and aggregate outcomes only; filenames, amounts, merchant text, report payloads, and expected rows remain private."
+  ],
+  "type": "data",
+  "owner": "Personal Finance Owner",
+  "metadata": "{\"gate_type\":\"data\",\"validation_basis\":\"source_and_client\",\"validation_status\":\"assumed\"}",
+  "created_at": "2026-07-20T08:28:19.5539776+00:00"
+}

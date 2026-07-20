@@ -1,0 +1,67 @@
+{
+  "id": "01KXZA409S2KR6KG2Y3KEM1XW7",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "type": "functional",
+  "ref_code": "FR-INSIGHTS-REPORT-HISTORY",
+  "title": "Inspect retained report history and status",
+  "description": [
+    "Read one immutable snapshot, list bounded metadata-first history, and inspect metadata-only store status without changing retained content. Goal trace: G4, G6, and G7."
+  ],
+  "rationale": [
+    "The owner and recovery tooling need deterministic history visibility without dumping every financial report by default."
+  ],
+  "priority": 1,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "find retained reports and inspect local report-store health"
+  ],
+  "story_so_that": [
+    "history and recovery state remain manageable without over-disclosure"
+  ],
+  "acceptance_criteria": [
+    "Given a known retained identity, when Get is requested, then the exact immutable Report Snapshot and its complete provenance are returned.",
+    "Given an unknown retained identity, when Get is requested, then Not Found is returned without other report metadata.",
+    "Given a deleted retained identity, when Get is requested, then Deleted and metadata-only Deletion Event evidence are returned without report content.",
+    "Given a bounded List request, when it succeeds, then stable report identity, predecessor identity, Budget Period, trusted creation time, actor, policy versions, content fingerprint, and deletion state are returned without financial payload.",
+    "Given retained history, when List ordering is inspected, then it is trusted creation time descending followed by stable report identity descending.",
+    "Given a List request over the released count or output limit, when it is validated, then resource failure is returned rather than silent truncation.",
+    "Given Status, when it is requested, then store version, integrity state, retained count, deleted count, latest successful backup/verification evidence, and supported policy versions are returned without amounts, merchant text, report bodies, or private paths.",
+    "Given Get, List, or Status success or failure, when retained history is inspected afterwards, then no Report Snapshot, Deletion Event, or idempotency outcome changed."
+  ],
+  "security_criteria": [
+    "List and Status are metadata-only; report payload requires an explicit Get for one stable identity."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T08:26:14.1918276+00:00",
+  "links": [
+    {
+      "id": "01KXZAAJ1AJBDDPVSH6C77NS2X",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:29:48.9718453+00:00"
+    },
+    {
+      "id": "01KXZAB58A094ACGHFK2RGFK49",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RETENTION",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:08.6515846+00:00"
+    },
+    {
+      "id": "01KXZAA6WZGJ2EFYRW0SPFC92P",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-003",
+      "rel": "implements",
+      "created_at": "2026-07-20T08:29:37.5689347+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXZA5NXZR837360AS0WFGMXY",
+      "target": "P1",
+      "created_at": "2026-07-20T08:27:09.1182167+00:00"
+    }
+  ]
+}

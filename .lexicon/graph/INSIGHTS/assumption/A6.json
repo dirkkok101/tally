@@ -4,8 +4,8 @@
   "ref_code": "A6",
   "title": "South African calendar semantics match the owner workflow",
   "description": [
-    "Africa/Johannesburg local dates with Monday-start calendar weeks clipped to the monthly Budget Period will match the owner's daily, weekly, and monthly decisions; validate explicitly in OQ-INSIGHTS-2 during PRD and replace the fixed policy if the owner rejects it."
+    "Africa/Johannesburg local dates with Monday-start calendar weeks clipped to the monthly Budget Period match the owner workflow. OQ-INSIGHTS-2 resolved the policy: INSIGHTS freezes a trusted operation-start As-of Instant, uses inclusive calendar dates, treats historical periods as complete and future periods as Not Started, and rejects rolling windows in v1."
   ],
-  "status": "active",
+  "status": "validated",
   "created_at": "2026-07-20T08:11:54.7588571+00:00"
 }

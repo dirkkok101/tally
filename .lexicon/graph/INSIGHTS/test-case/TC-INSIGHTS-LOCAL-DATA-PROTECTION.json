@@ -1,0 +1,47 @@
+{
+  "id": "01KXZADYQPW1VE6P039M2RSKNW",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "TC-INSIGHTS-LOCAL-DATA-PROTECTION",
+  "slug": "LOCAL-DATA-PROTECTION",
+  "title": "Verify local insight privacy boundaries",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "unhappy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Seeded canaries exist in every sensitive request, report, private manifest, merchant description, path, backup, and error condition.",
+  "steps": "Run all success, failure, crash, retry, delete, validation, backup, verify, restore, and migration flows; inspect modes, ownership, process table, outputs, diagnostics, logs, crash and temp artifacts, and Git state.",
+  "expected": "Every artifact is owner-only and zero seeded canaries appear outside explicitly requested business results or the approved ignored private evidence.",
+  "owner": "INSIGHTS implementation",
+  "created_at": "2026-07-20T08:31:40.2796055+00:00",
+  "links": [
+    {
+      "id": "01KXZAGT9C94EHB5EP98WSMPJZ",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-HOST-OS-SECURITY",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:33:14.0293409+00:00"
+    },
+    {
+      "id": "01KXZAKMG09RVGCMYCW94AQYV9",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RETENTION",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:34:46.4012911+00:00"
+    },
+    {
+      "id": "01KXZAKKJTRY9ZYV4MSZWEBFBG",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-STRUCTURED-INVOCATION",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:34:45.4677809+00:00"
+    },
+    {
+      "id": "01KXZAGSDC6KDH80QFGRRFDY7B",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-LOCAL-DATA-PROTECTION",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:33:13.1331958+00:00"
+    }
+  ]
+}

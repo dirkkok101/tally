@@ -1,0 +1,9 @@
+{
+  "id": "01KXZB165XHKCR6C1XJRX229RR",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "version": "0.3",
+  "changes": [
+    "PRD complete: formalized 15 active and 4 deferred FRs, 7 NFRs, 6 P1 use cases, and 23 planned verification intents; fixed trusted operation-start time, exact calendar and Linear Pace rules, coherent public evidence, explicit Generate/Retain/Restate/Delete/recovery semantics, contract and CHANNELS ownership boundaries, private policy gates, and fresh graph-only review findings."
+  ],
+  "created_at": "2026-07-20T08:42:10.4946720+00:00"
+}

@@ -1,0 +1,33 @@
+{
+  "id": "01KXZACX869A891JVD66T4QQHA",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "TC-INSIGHTS-REPORT-RETENTION-IDEMPOTENCY",
+  "slug": "REPORT-RETENTION-IDEMPOTENCY",
+  "title": "Verify retained generation and idempotent replay",
+  "level": "integration",
+  "surface": "persistence",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Owner-only retained storage is empty and coherent producer evidence is fixed.",
+  "steps": "Run ordinary Generate, then Retain with actor, reason, and key; retry identical input; reuse the key with changed input; correct producer state after retention and read the snapshot.",
+  "expected": "Generate writes nothing; Retain stores exactly one immutable complete snapshot; identical retry returns it; changed input conflicts; later corrections do not change stored content.",
+  "owner": "INSIGHTS implementation",
+  "created_at": "2026-07-20T08:31:05.9908480+00:00",
+  "links": [
+    {
+      "id": "01KXZAG0FR73E5HASFM8W5NJ1J",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RETENTION",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:47.6094328+00:00"
+    },
+    {
+      "id": "01KXZAG1BGDSTGYE1Y8YYVT4RQ",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-003",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:48.4968975+00:00"
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "id": "01KXZA5RSRC447VXQSBG2EC3FQ",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+  "title": "Preserve deterministic analytical integrity",
+  "description": [
+    "Keep exact financial arithmetic, exhaustive evidence accounting, formula evaluation, ordering, and fingerprints reproducible across every supported report workflow."
+  ],
+  "category": "data_integrity",
+  "target": "100% of repeated generations, retained generations, explanations, and Restatements with identical trusted As-of Instant, normalized requests, coherent source identities, and policy versions return semantically identical ordered content and fingerprints; 100% of requested windows, categories, metrics, and signal kinds are accounted for exactly once; zero floating-point financial calculations, silent omissions, reconciliation mismatches, or partial reports occur.",
+  "load_condition": "Exact zero, positive, negative, refund-heavy, zero-plan, no-plan, not-started, overflow, maximum category, correction, retry, and policy-version cases across Generate, Retain, Restate, Get, and validation.",
+  "measurement": "Golden conformance examples, input-order permutation tests, repeat-run semantic comparisons, property tests for exact sums and rational comparison, overflow and undefined-operation cases, and full report-accounting assertions.",
+  "rationale": [
+    "Reproducibility and exact reconciliation are the trust basis for every retained or delivered insight."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-20T08:27:12.0573538+00:00",
+  "links": [
+    {
+      "id": "01KXZABHP76FCS7XSHCS0FATCG",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:21.3840932+00:00"
+    },
+    {
+      "id": "01KXZABNPT5HE8KND63ZTD49B9",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:25.4987530+00:00"
+    },
+    {
+      "id": "01KXZABKQM170EPR3Z1FRWM7EV",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-EXACT-WINDOW-METRICS",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:23.4770414+00:00"
+    },
+    {
+      "id": "01KXZABMQZEK58RMPP4ZNCY5AC",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-LINEAR-PACE",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:24.5117962+00:00"
+    },
+    {
+      "id": "01KXZABPN3Q6TRTK3NC2SKMG9G",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-GENERATION",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:26.4679816+00:00"
+    },
+    {
+      "id": "01KXZABQMYFKZ1R7PDRN3AGZGD",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RESTATEMENT",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:27.4872323+00:00"
+    },
+    {
+      "id": "01KXZABJSTP40NTSC39MCTKHJC",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-TRUSTED-ANALYSIS-WINDOWS",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:22.5229298+00:00"
+    }
+  ]
+}

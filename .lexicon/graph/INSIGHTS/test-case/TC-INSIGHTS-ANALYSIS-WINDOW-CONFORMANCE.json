@@ -1,0 +1,33 @@
+{
+  "id": "01KXZACSJ4MMT9C1TWDRNXNJXD",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "TC-INSIGHTS-ANALYSIS-WINDOW-CONFORMANCE",
+  "slug": "ANALYSIS-WINDOW-CONFORMANCE",
+  "title": "Verify trusted calendar window semantics",
+  "level": "unit",
+  "surface": "service",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A controllable TimeProvider and representative leap-year, month-boundary, Monday/Sunday, historical, current, and future periods are available.",
+  "steps": "Freeze instants around local midnight and period boundaries; derive day, Monday-week, and month-to-date windows; exercise leap day, historical period, future period, host locale changes, and rolling-window input.",
+  "expected": "Africa/Johannesburg calendar bounds, clipping, Not Started, full historical month, Effective Date membership, and Unsupported Analysis Window exactly match FR-INSIGHTS-TRUSTED-ANALYSIS-WINDOWS.",
+  "owner": "INSIGHTS implementation",
+  "created_at": "2026-07-20T08:31:02.2130532+00:00",
+  "links": [
+    {
+      "id": "01KXZACSJ5GKZ5NFQ79YYRZ3KQ",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-TRUSTED-ANALYSIS-WINDOWS",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:31:02.2139165+00:00"
+    },
+    {
+      "id": "01KXZAFPECHHPXJAC1SB0X5JYA",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-001",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:37.3254293+00:00"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "id": "01KXZA409YGJ765EXXVZH94859",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "type": "functional",
+  "ref_code": "FR-INSIGHTS-ATTENTION-ITEMS",
+  "title": "Surface bounded Attention Items",
+  "description": [
+    "Deferred until private evidence establishes numeric thresholds with zero false high-severity outcomes. Goal trace: G5."
+  ],
+  "rationale": [
+    "Unvalidated severities or an unbounded list would create alert fatigue and imply advice unsupported by evidence."
+  ],
+  "priority": 1,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "see a small ordered set of evidence-backed items worth inspecting"
+  ],
+  "story_so_that": [
+    "important exceptions are visible without becoming prescriptive notifications"
+  ],
+  "acceptance_criteria": [
+    "Given an activated Attention policy and a supported metric or signal crossing its released threshold, when Attention Items are generated, then each item cites exactly one source result, threshold, low/medium/high severity, evidence state, and policy version.",
+    "Given unavailable, insufficient, deferred, stale, or incoherent source evidence, when Attention Items are generated, then no item is created from that source.",
+    "Given more than five eligible items, when output is ordered, then exactly five are returned by severity descending, released signal-kind rank, totals before categories, stable category identity, then metric code.",
+    "Given an Attention Item, when its meaning is inspected, then it requests inspection only and contains no prescribed financial action, notification policy, or delivery instruction."
+  ],
+  "status": "deferred",
+  "created_at": "2026-07-20T08:26:14.1918276+00:00",
+  "links": [
+    {
+      "id": "01KXZABGSB44H3GNAJ6M46HP58",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:20.4605025+00:00"
+    },
+    {
+      "id": "01KXZABCTWJV5DCJQWHH3E69B4",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:16.4130471+00:00"
+    },
+    {
+      "id": "01KXZAA43ZAGECZMWAW8XFGYPP",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-001",
+      "rel": "implements",
+      "created_at": "2026-07-20T08:29:34.7202214+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXZA5FWJG85YEZ5BFGJJ0BPB",
+      "target": "P1",
+      "created_at": "2026-07-20T08:27:02.9290394+00:00"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "01KXZ9XYJVHN70K9NW4C6A4MB4",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "term": "Public INSIGHTS Operation",
+  "definition": [
+    "One versioned discoverable non-interactive operation using the canonical INSIGHTS verb vocabulary with explicit request, result, error, exit, mutability, authority, idempotency, compatibility, and limit metadata. Avoid: endpoint or command when the transport-neutral contract is meant."
+  ],
+  "source": "prd",
+  "created_at": "2026-07-20T08:22:55.8359952+00:00"
+}

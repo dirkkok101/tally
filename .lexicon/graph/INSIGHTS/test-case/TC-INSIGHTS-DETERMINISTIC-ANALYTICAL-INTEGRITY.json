@@ -1,0 +1,54 @@
+{
+  "id": "01KXZAD1DBHQ5GP3VMCGCV2PQX",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "TC-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+  "slug": "DETERMINISTIC-ANALYTICAL-INTEGRITY",
+  "title": "Verify deterministic analytical integrity",
+  "level": "integration",
+  "surface": "service",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Golden and generated fixtures cover all exact values, orders, states, windows, reports, and retained workflows at released limits.",
+  "steps": "Repeat and permute every calculation and report workflow, compare normalized results and fingerprints, assert exhaustive accounting, and exercise overflow, undefined, and reconciliation failures.",
+  "expected": "All NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY targets hold with zero floating-point financial calculation, silent omission, or partial report.",
+  "owner": "INSIGHTS implementation",
+  "created_at": "2026-07-20T08:31:10.2520797+00:00",
+  "links": [
+    {
+      "id": "01KXZAGNRCYHRK39JC0DB53W64",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-EXACT-WINDOW-METRICS",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:33:09.3891257+00:00"
+    },
+    {
+      "id": "01KXZAGPM0X6FXR2H5CE56S08X",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-LINEAR-PACE",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:33:10.2734673+00:00"
+    },
+    {
+      "id": "01KXZAGQGFJT7V9ZRRE7Y42Z6T",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-GENERATION",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:33:11.1845721+00:00"
+    },
+    {
+      "id": "01KXZAGRFNA7FYM9YB68FVJJYC",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RESTATEMENT",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:33:12.1822371+00:00"
+    },
+    {
+      "id": "01KXZAD1DCKTDF8Z6D4AQXB7Y9",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+      "rel": "see-also",
+      "created_at": "2026-07-20T08:31:10.2529438+00:00"
+    }
+  ]
+}

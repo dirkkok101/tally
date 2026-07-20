@@ -1,0 +1,68 @@
+{
+  "id": "01KXZA409JTRCEY63Z5P63ZV5X",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "type": "functional",
+  "ref_code": "FR-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+  "title": "Bind one coherent public evidence set",
+  "description": [
+    "Obtain the plan state, exact Budget Position when present, and date-granular corrected actual membership through versioned public producer contracts representing one provably coherent state. Goal trace: G1, G2, and G7."
+  ],
+  "rationale": [
+    "Individually valid BUDGET and LEDGER reads can still create a false report if a correction lands between them."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "every report to use one reconcilable plan and actual evidence set"
+  ],
+  "story_so_that": [
+    "corrections cannot silently mix financial states"
+  ],
+  "acceptance_criteria": [
+    "Given a valid Budget Period with a selected plan revision, when evidence is bound, then the immutable plan identity, revision status, exact entries, exact totals, category lifecycle evidence, and contract provenance come from the released BUDGET read contract.",
+    "Given a valid Budget Period with no Budget Plan, when evidence is bound, then No Budget Plan is explicit and no invented plan, zero plan, or Not Found result is substituted.",
+    "Given a valid Budget Period with a plan but no Active revision and no explicit revision selector, when evidence is bound, then No Active Budget Plan Revision is explicit and no revision is inferred.",
+    "Given date-granular actual evidence, when it is consumed, then every page belongs to one public snapshot or authoritative state binding and every ordinal is present exactly once.",
+    "Given a complete evidence set with a Budget Position, when actual members are reconciled, then each member is assigned exactly once to Budgeted, Zero Budget, Unbudgeted, or Uncategorized and every exact bucket and total equals the cited Budget Position.",
+    "Given a correction or producer write concurrent with evidence acquisition, when one coherent state cannot be proven, then generation returns Source State Changed and emits no Insight Report or Report Snapshot.",
+    "Given cursor expiry, missing or duplicate ordinal, incompatible version, stale generation, unknown category identity, or reconciliation mismatch, when evidence binding fails, then no partial report or retained state is produced.",
+    "Given CLASSIFY coverage is incomplete, when evidence is bound, then current LEDGER category allocation is used and Uncategorized Spend remains explicit without a direct CLASSIFY call.",
+    "Given evidence acquisition, when dependency boundaries are inspected, then INSIGHTS invoked only released public operations, performed no upstream mutation, read no private store, and did not reproduce BUDGET position calculation."
+  ],
+  "security_criteria": [
+    "Compatibility and authority checks complete before financial reads; private producer storage and handlers are forbidden."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T08:26:14.1918276+00:00",
+  "links": [
+    {
+      "id": "01KXZAACHWG918753H1QT3JYWM",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-BUDGET-PUBLIC-READ-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:29:43.3576733+00:00"
+    },
+    {
+      "id": "01KXZAADFN291QED9AC98VA6PP",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-LEDGER-ACTUALS-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:29:44.3106379+00:00"
+    },
+    {
+      "id": "01KXZA9W19Q8E1M2BCB9XBSXY3",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-001",
+      "rel": "implements",
+      "created_at": "2026-07-20T08:29:26.4429199+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXZA5GYHQ51QDJSM1DB74KET",
+      "target": "P1",
+      "created_at": "2026-07-20T08:27:04.0159237+00:00"
+    }
+  ]
+}

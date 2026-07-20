@@ -1,0 +1,41 @@
+{
+  "id": "01KXZA5SPVJZQGB9NCQK3SMG8F",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE",
+  "title": "Make retained report changes atomic and durable",
+  "description": [
+    "Commit retained generation, Restatement, deletion, idempotency, lifecycle evidence, and storage evolution as complete attributable outcomes or not at all."
+  ],
+  "category": "reliability",
+  "target": "For 100% of injected failure, cancellation, and crash points, restart inspection observes either the complete Retain, Restate, Delete, or migration outcome exactly once or the unchanged pre-operation state; zero partial report payloads, dangling Restatement links, duplicate logical identities, missing Deletion Events, or consumed failed-request identities occur.",
+  "load_condition": "Every retained-state write at each boundary before validation, producer reads, report calculation, transaction start, each durable write, commit, result delivery, restart, and retry.",
+  "measurement": "Deterministic fault injection, process termination, disk-full and busy cases, restart integrity inspection, idempotent replay, changed-input conflict, and complete-state fingerprint comparisons.",
+  "rationale": [
+    "An immutable report history is useful only when interruptions cannot produce ambiguous or half-written evidence."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-20T08:27:12.9882559+00:00",
+  "links": [
+    {
+      "id": "01KXZAC071DVG8AHAP44N4TJWM",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-DELETION",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:36.2579390+00:00"
+    },
+    {
+      "id": "01KXZABZ9E32QGJRHG62RWS56S",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RESTATEMENT",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:35.3115867+00:00"
+    },
+    {
+      "id": "01KXZABYC67795WWSXYVV59TM4",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RETENTION",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:34.3750155+00:00"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "id": "01KXZA5V2M10XNEPKY64M90YVX",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "NFR-INSIGHTS-SELF-CONTAINED-LOCAL-OPERATION",
+  "title": "Operate as a self-contained local analytics module",
+  "description": [
+    "Complete every supported INSIGHTS workflow inside the existing Tally process without a network or background lifecycle."
+  ],
+  "category": "operability",
+  "target": "100% of INSIGHTS acceptance workflows complete with network access disabled, non-interactively, and with no INSIGHTS or Tally daemon, watcher, scheduler, service, listener, queue, cloud model, or background process running before, during, or after invocation.",
+  "load_condition": "Discovery, Generate, Retain, Restate, Explain, Get, List, Status, Delete, private policy validation, Backup, Verify, Restore, expected failure, cancellation, and crash-recovery workflows.",
+  "measurement": "Network-namespace or firewall isolation, socket and process inspection, child-process tracking, repeated one-shot invocation, and post-operation resource cleanup assertions.",
+  "rationale": [
+    "Explicit local operation preserves privacy, deployment simplicity, and the accepted complexity boundary."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-20T08:27:14.3888043+00:00",
+  "links": [
+    {
+      "id": "01KXZAC7HH2BJE8AXWA1PMDSMC",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-BACKUP-VERIFY-RESTORE",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:43.7625843+00:00"
+    },
+    {
+      "id": "01KXZAC6J1YM943AR85R5K13NX",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-GENERATION",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:42.7542088+00:00"
+    },
+    {
+      "id": "01KXZAC5MR0FP7B1RZ7BG1Z3ME",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-STRUCTURED-INVOCATION",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:41.8172859+00:00"
+    }
+  ]
+}

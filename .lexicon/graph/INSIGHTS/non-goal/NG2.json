@@ -3,10 +3,10 @@
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "ref_code": "NG2",
   "text": [
-    "Own web screens, messaging conversations, push notifications, email, scheduled delivery, or other human-facing channels."
+    "Own web pages, browser workflows, messaging conversations, navigation, notifications, email, scheduled delivery, or any other human-facing channel."
   ],
   "rationale": [
-    "CHANNELS owns presentation and delivery after the Insight Report contract is stable."
+    "INSIGHTS is a contract-only source module. The future CHANNELS PRD/design owns pages, routes, navigation and menu seeds, translations, accessibility, frontend key models, conversation, notification policy, scheduling, and delivery after the structured Insight Report contract is stable."
   ],
   "created_at": "2026-07-20T07:26:30.3584970+00:00"
 }

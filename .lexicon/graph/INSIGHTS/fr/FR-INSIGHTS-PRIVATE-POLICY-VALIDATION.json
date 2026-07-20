@@ -1,0 +1,62 @@
+{
+  "id": "01KXZA409VFXKS7GNZB1Q7AC1F",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "type": "functional",
+  "ref_code": "FR-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+  "title": "Validate analytical policies against private evidence",
+  "description": [
+    "Evaluate candidate formula, sufficiency, explanation, threshold, severity, and ordering policies over ignored owner-only time-separated evidence before activation or plan approval. Goal trace: G3, G5, and G7."
+  ],
+  "rationale": [
+    "A deterministic analytical rule can still be consistently misleading; evidence, not plausibility, earns release scope."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "validate candidate insights against representative private periods and counterexamples"
+  ],
+  "story_so_that": [
+    "unsupported or falsely severe signals cannot enter the released catalogue"
+  ],
+  "acceptance_criteria": [
+    "Given a candidate policy set and owner-only evaluation manifest, when validation starts, then candidate versions, expected-state fingerprint, corpus fingerprint, producer contract versions, window policy, and evaluation-tool version are recorded.",
+    "Given a completed validation run, when its result is returned, then every manifest case is accounted for as supported, unavailable, insufficient, correct signal, incorrect signal, correct severity, false severity, or disclosure-canary outcome.",
+    "Given sparse, zero, recurring, front-loaded, irregular, refund-heavy, plan-change, category-lifecycle, classification-gap, and correction cases, when required corpus coverage is checked, then every required shape is present or validation fails before policy activation.",
+    "Given any false high-severity Attention Item, when candidate activation is evaluated, then the Attention policy is rejected.",
+    "Given a candidate Forecast, Trend, or Anomaly without a deterministic formula, explicit comparable baseline, minimum evidence rule, limitations, and named unavailable state, when activation is evaluated, then that signal policy is rejected.",
+    "Given a candidate report shape that the owner does not accept as improving a named decision over raw Budget Position inspection, when the plan gate is evaluated, then the do-less kill criterion is reported as triggered.",
+    "Given an unavailable private manifest, when existing released policies are used, then ordinary report generation may continue with their unchanged versions.",
+    "Given an unavailable private manifest, when a new or changed analytical policy is proposed for release, then activation is blocked.",
+    "Given a validation result, when it is persisted or exported, then only fingerprints, structural case identifiers, aggregate outcomes, and canary status are present; filenames, financial values, merchant text, report payloads, and expected rows are absent.",
+    "Given the public INSIGHTS capability set, when it is enumerated, then no owner-facing policy create, edit, activate, retire, scripting, or plugin operation is present; candidate validation is a release evidence gate for built-in policies."
+  ],
+  "security_criteria": [
+    "Private evidence stays ignored, owner-only, and absent from Git, Lex, process arguments, diagnostics, and ordinary validation output."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T08:26:14.1918276+00:00",
+  "links": [
+    {
+      "id": "01KXZAANM1NJH5CPK9V2EWY3YW",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:29:52.6423139+00:00"
+    },
+    {
+      "id": "01KXZAAMREJNC1SX3FQ41SV8P6",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-PRIVATE-EVALUATION-CORPUS",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:29:51.7595043+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXZA5M0M3R5XRCG32D0NBZ23",
+      "target": "P1",
+      "created_at": "2026-07-20T08:27:07.1545267+00:00"
+    }
+  ]
+}

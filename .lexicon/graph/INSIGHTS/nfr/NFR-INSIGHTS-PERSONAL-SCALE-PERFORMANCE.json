@@ -1,0 +1,55 @@
+{
+  "id": "01KXZA5VJ37P678P4GPXDKN85M",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "NFR-INSIGHTS-PERSONAL-SCALE-PERFORMANCE",
+  "title": "Respond at personal-finance scale",
+  "description": [
+    "Bound report generation, retained-history reads, policy validation, and recovery on the supported release host without changing correctness under load."
+  ],
+  "category": "performance",
+  "target": "On the supported release host with 100000 active LEDGER transactions, 1000 category positions, 1000 retained Report Snapshots, and every active v1 policy, Generate and Retain each complete within 5 seconds at p95 and 256 MiB peak resident memory; Restate completes within 6 seconds at p95; Get, Status, Delete, and a 1000-item metadata List each complete within 1 second at p95; one-over-limit requests fail before financial output or retained-state change.",
+  "load_condition": "Cold and warm one-shot invocations over sparse, maximum-page, maximum-category, maximum-history, correction, refund-heavy, and one-over-limit datasets on the documented supported release host.",
+  "measurement": "Repeatable release-mode performance fixtures record end-to-end wall time, peak resident memory, producer time, calculation time, persistence time, and output size with p95 summaries and correctness assertions.",
+  "rationale": [
+    "On-demand local analytics must remain convenient without introducing a daemon, replica, or correctness shortcut."
+  ],
+  "priority": 1,
+  "created_at": "2026-07-20T08:27:14.8840589+00:00",
+  "links": [
+    {
+      "id": "01KXZACC5481S6JZB9NP2KEJAJ",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:48.4857355+00:00"
+    },
+    {
+      "id": "01KXZAC8DZDDQCCASWJ9VJ3ZBE",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-GENERATION",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:44.6725785+00:00"
+    },
+    {
+      "id": "01KXZACB5S2D3Z80ZV98H1SB5C",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-HISTORY",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:47.4817798+00:00"
+    },
+    {
+      "id": "01KXZACA7Z6E7FHWQZ2NXHAK76",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RESTATEMENT",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:46.5283048+00:00"
+    },
+    {
+      "id": "01KXZAC9B7A0VSYN3WFZHGXXJ2",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RETENTION",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:45.6085503+00:00"
+    }
+  ]
+}

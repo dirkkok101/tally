@@ -1,0 +1,95 @@
+{
+  "id": "01KXZA409PZBH3ASAB4H429F9H",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "type": "functional",
+  "ref_code": "FR-INSIGHTS-REPORT-GENERATION",
+  "title": "Generate one deterministic Insight Report",
+  "description": [
+    "Assemble exact metrics, released signal states, explanations, limits, and Source Provenance into one bounded ephemeral analytical result. Goal trace: G1, G2, and G6."
+  ],
+  "rationale": [
+    "The report is the stable channel-neutral evidence contract that prevents each agent or future UI from reinterpreting raw values differently."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "receive one complete reproducible analytical result"
+  ],
+  "story_so_that": [
+    "current decisions and future channels use the same evidence"
+  ],
+  "acceptance_criteria": [
+    "Given a valid generation request and coherent evidence, when generation succeeds, then exactly one ephemeral Insight Report is returned and no durable INSIGHTS state changes.",
+    "Given omitted optional policy selectors, when generation succeeds, then the released default window, formula, Evidence Sufficiency, explanation, and ordering versions are explicit in the result.",
+    "Given one report, when its content is inspected, then report identity, Budget Period, trusted As-of Instant, exact windows, plan state, exact metrics, every requested signal state, limitations, and Source Provenance are present.",
+    "Given identical trusted As-of Instant, normalized request values, coherent source identities, and policy versions, when generation is repeated, then semantically identical ordered content and the same content fingerprint are returned.",
+    "Given categories, metrics, states, and explanations, when report ordering is inspected, then it follows the released deterministic ordering policy and never depends on localized display text.",
+    "Given one report, when Source Provenance is inspected, then all producer contract versions, authoritative state or snapshot identities, plan revision, category contract, report schema, policy versions, and content fingerprints are present.",
+    "Given a requested horizon, category count, metric count, or output size over a released limit, when validation occurs, then resource failure is returned before producer reads or report output.",
+    "Given a successful report, when its claims are inspected, then it describes recorded Tally evidence and does not claim complete bank activity, financial advice, enforcement, or historical source reconstruction."
+  ],
+  "security_criteria": [
+    "Report payload is emitted only as the explicitly requested business result and is never copied to diagnostics or tracked artifacts."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T08:26:14.1918276+00:00",
+  "links": [
+    {
+      "id": "01KXZAAECCBYYXDC1ZH6EVKTST",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-CHANNELS-CONSUMER-CONTRACT",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:29:45.2293538+00:00"
+    },
+    {
+      "id": "01KXZAAV0M4ZYS1GMGAA8CKTAB",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:29:58.1651155+00:00"
+    },
+    {
+      "id": "01KXZAAYXQ6NZMEZK1V9KRE53Z",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:02.1689075+00:00"
+    },
+    {
+      "id": "01KXZAAWT255X9WBAS29DS6CHX",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-EXACT-WINDOW-METRICS",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:00.0037403+00:00"
+    },
+    {
+      "id": "01KXZAAXPV6YSE6J3J80WVZ40C",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-LINEAR-PACE",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:00.9238965+00:00"
+    },
+    {
+      "id": "01KXZAAVX9M8VX3DPWE7BQNDDD",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-TRUSTED-ANALYSIS-WINDOWS",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:29:59.0824827+00:00"
+    },
+    {
+      "id": "01KXZAA0JQ1J5CNWKF3527A48E",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-001",
+      "rel": "implements",
+      "created_at": "2026-07-20T08:29:31.0960203+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXZA5NET8DSTMC1ETD78AYFY",
+      "target": "P1",
+      "created_at": "2026-07-20T08:27:08.6329248+00:00"
+    }
+  ]
+}

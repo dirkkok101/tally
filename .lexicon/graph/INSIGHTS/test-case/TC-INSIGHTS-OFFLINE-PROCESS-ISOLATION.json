@@ -1,0 +1,40 @@
+{
+  "id": "01KXZADZ9QXPRMXPS4FWXPEJDM",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "TC-INSIGHTS-OFFLINE-PROCESS-ISOLATION",
+  "slug": "OFFLINE-PROCESS-ISOLATION",
+  "title": "Verify self-contained offline operation",
+  "level": "integration",
+  "surface": "service",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "All INSIGHTS workflows can run under network isolation with process and socket inspection.",
+  "steps": "Run discovery, report, retention, restatement, history, deletion, policy validation, recovery, failure, cancellation, and restart workflows while blocking network and tracking processes, listeners, children, and cleanup.",
+  "expected": "All accepted workflows complete without network, daemon, watcher, scheduler, service, listener, queue, cloud model, or lingering background process.",
+  "owner": "INSIGHTS implementation",
+  "created_at": "2026-07-20T08:31:40.8561005+00:00",
+  "links": [
+    {
+      "id": "01KXZAKP8XKX79ZBRF94VDEWPE",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-GENERATION",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:34:48.2227607+00:00"
+    },
+    {
+      "id": "01KXZAKNC4K80BRECTEM70Q2JW",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-STRUCTURED-INVOCATION",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:34:47.3015626+00:00"
+    },
+    {
+      "id": "01KXZAH0N953YSRXG3H64W6Y50",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-SELF-CONTAINED-LOCAL-OPERATION",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:33:20.5543161+00:00"
+    }
+  ]
+}

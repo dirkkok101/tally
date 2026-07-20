@@ -4,9 +4,12 @@
   "ref_code": "OQ-INSIGHTS-6",
   "question": "Which exact thresholds, severities, maximum count, and deterministic tie-breakers should govern Attention Items without becoming prescriptive advice or notification policy?",
   "context": [
-    "PRD must define a small built-in threshold catalogue, severity vocabulary, hard maximum count, and stable tie-breakers. A pre-plan owner-only evaluation must show zero false high-severity items; any unsupported threshold or delivery behavior is excluded or belongs to CHANNELS."
+    "Before Attention Item activation, a privacy-safe spike must establish numeric thresholds and demonstrate zero false high-severity outcomes. The PRD fixes the low, medium, and high vocabulary, hard maximum count, stable tie-breakers, and CHANNELS delivery boundary; unsupported threshold or delivery behavior remains excluded."
   ],
-  "status": "open",
-  "owner": "INSIGHTS PRD and pre-plan evidence",
+  "status": "deferred",
+  "decision": [
+    "Attention Items remain formally deferred until private evidence establishes numeric thresholds with zero false high-severity results. Any activated v1 policy must use low, medium, and high severity, cap output at five items, and order by severity descending, released signal-kind rank, stable category identity with totals first, then metric code. CHANNELS alone owns notification behavior."
+  ],
+  "owner": "INSIGHTS signal-activation spike",
   "created_at": "2026-07-20T07:28:35.1140532+00:00"
 }

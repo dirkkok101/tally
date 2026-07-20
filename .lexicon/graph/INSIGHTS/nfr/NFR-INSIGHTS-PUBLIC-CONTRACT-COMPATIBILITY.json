@@ -1,0 +1,48 @@
+{
+  "id": "01KXZA5TKTWSD74DJH9EVESW4Q",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "NFR-INSIGHTS-PUBLIC-CONTRACT-COMPATIBILITY",
+  "title": "Preserve public contract and authority boundaries",
+  "description": [
+    "Keep INSIGHTS versioned, channel-neutral, mutation-free toward upstream modules, and dependent only on released BUDGET/LEDGER producer contracts while exposing one stable consumer contract to agents and CHANNELS."
+  ],
+  "category": "architecture",
+  "target": "100% of Public INSIGHTS Operations publish deterministic versioned request, result, error, exit, mutability, authority, idempotency, policy, limit, and compatibility metadata; zero private BUDGET/LEDGER storage, handler, repository, or duplicated Budget Position references; every unsupported producer, INSIGHTS, or CHANNELS pairing fails before financial output or retained-state change.",
+  "load_condition": "Every public operation and every supported, one-version-older, one-version-newer, malformed, authority-expanded, and missing-capability producer or consumer pairing.",
+  "measurement": "Schema and policy snapshots, compatibility matrices, dependency-boundary compilation tests, forbidden-reference scans, authority-set comparisons, concurrent-correction producer contract tests, and Agent Host/CHANNELS consumer parity tests.",
+  "rationale": [
+    "The module boundary fails if downstream design bypasses authoritative producers or lets a future channel redefine analytics."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-20T08:27:13.9152400+00:00",
+  "links": [
+    {
+      "id": "01KXZAC3VA6RCQFE75HM0JG9RV",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:39.9790630+00:00"
+    },
+    {
+      "id": "01KXZAC214TM264MTHTMNMPJ6G",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-CONTRACT-DISCOVERY",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:38.1172994+00:00"
+    },
+    {
+      "id": "01KXZAC4Q52X035SKBAM2D8QCA",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-GENERATION",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:40.8700911+00:00"
+    },
+    {
+      "id": "01KXZAC2WMFK60B9DS90G6J5Z9",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-STRUCTURED-INVOCATION",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:38.9969685+00:00"
+    }
+  ]
+}

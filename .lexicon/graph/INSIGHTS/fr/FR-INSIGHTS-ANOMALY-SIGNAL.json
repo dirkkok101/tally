@@ -1,0 +1,59 @@
+{
+  "id": "01KXZA409Y8H37CF9XWQJGYBZP",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "type": "functional",
+  "ref_code": "FR-INSIGHTS-ANOMALY-SIGNAL",
+  "title": "Produce an evidence-backed Anomaly signal",
+  "description": [
+    "Deferred until private evidence establishes a named historical or plan-relative baseline and versioned deviation rule with acceptable false-positive behavior. Goal trace: G3."
+  ],
+  "rationale": [
+    "Calling spend anomalous without a validated baseline and threshold is persuasive narrative, not evidence."
+  ],
+  "priority": 1,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "see deviations only against a validated explicit baseline"
+  ],
+  "story_so_that": [
+    "ordinary variation is not mislabeled as an exception"
+  ],
+  "acceptance_criteria": [
+    "Given a released Anomaly policy and evidence satisfying its baseline and coverage rules, when Anomaly is evaluated, then observed value, baseline, deviation, threshold, policy version, evidence horizon, and limitations are returned.",
+    "Given no comparable baseline or an unmet evidence rule, when Anomaly is requested, then Incomparable Baseline or Insufficient Evidence is returned and no anomaly severity is emitted.",
+    "Given identical evidence and policy versions, when Anomaly is repeated, then semantically identical threshold outcome and ordering are returned."
+  ],
+  "status": "deferred",
+  "created_at": "2026-07-20T08:26:14.1918276+00:00",
+  "links": [
+    {
+      "id": "01KXZABFV2SDRG20SGT8ZZAX9G",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:19.4914704+00:00"
+    },
+    {
+      "id": "01KXZABBV13NQAVA6QB1A8ZSH6",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:15.3940506+00:00"
+    },
+    {
+      "id": "01KXZAA36QTCJVAAS5WRHPSP11",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-001",
+      "rel": "implements",
+      "created_at": "2026-07-20T08:29:33.7840826+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXZA5FBFXWWRGRP3NCF21G0W",
+      "target": "P1",
+      "created_at": "2026-07-20T08:27:02.3818643+00:00"
+    }
+  ]
+}

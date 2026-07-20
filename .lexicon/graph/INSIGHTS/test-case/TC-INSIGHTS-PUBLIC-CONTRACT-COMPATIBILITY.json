@@ -1,0 +1,61 @@
+{
+  "id": "01KXZAD28SEF58N0ED3FTB5QT6",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "TC-INSIGHTS-PUBLIC-CONTRACT-COMPATIBILITY",
+  "slug": "PUBLIC-CONTRACT-COMPATIBILITY",
+  "title": "Verify public producer and consumer compatibility",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "unhappy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Supported and one-version-incompatible INSIGHTS, BUDGET, LEDGER, Agent Host, and CHANNELS contract fixtures are available.",
+  "steps": "Exercise every pairing, missing capability, authority expansion, schema drift, malformed policy catalogue, private-reference compile check, and duplicate-position implementation scan.",
+  "expected": "Supported pairs preserve exact schemas and authority; every incompatible or forbidden boundary fails before financial output or retained-state change.",
+  "owner": "INSIGHTS implementation",
+  "created_at": "2026-07-20T08:31:11.1308163+00:00",
+  "links": [
+    {
+      "id": "01KXZAGW2BRXJG9DMMF07RVPFK",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-AI-AGENT-HOST",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:33:15.8519576+00:00"
+    },
+    {
+      "id": "01KXZAGWZ3SC873SD77CYA4YYP",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-BUDGET-PUBLIC-READ-CONTRACT",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:33:16.7726940+00:00"
+    },
+    {
+      "id": "01KXZAGYW4Y620YT81YD7R848F",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-CHANNELS-CONSUMER-CONTRACT",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:33:18.7258367+00:00"
+    },
+    {
+      "id": "01KXZAGXXKP9K2T4N902D323A3",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-LEDGER-ACTUALS-CONTRACT",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:33:17.7481840+00:00"
+    },
+    {
+      "id": "01KXZAGV5JSM3KTG45MQM03CW8",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:33:14.9312139+00:00"
+    },
+    {
+      "id": "01KXZAGZRA12CRCYBCG674SV96",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-006",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:33:19.6267507+00:00"
+    }
+  ]
+}

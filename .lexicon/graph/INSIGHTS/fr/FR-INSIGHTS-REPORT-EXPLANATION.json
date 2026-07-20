@@ -1,0 +1,73 @@
+{
+  "id": "01KXZA409QAAC0N7KFQWFC2XE9",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "type": "functional",
+  "ref_code": "FR-INSIGHTS-REPORT-EXPLANATION",
+  "title": "Explain report evidence deterministically",
+  "description": [
+    "Expose the exact formula, threshold, baseline, coverage, limitation, and producer provenance for every supported result or explicit state. Goal trace: G2 and G6."
+  ],
+  "rationale": [
+    "A financial signal without inspectable evidence is not trustworthy enough to retain or deliver through another channel."
+  ],
+  "priority": 1,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "inspect why a metric, pace state, or unavailable state appears"
+  ],
+  "story_so_that": [
+    "I can reconcile and challenge the report without reverse-engineering it"
+  ],
+  "acceptance_criteria": [
+    "Given a supported exact metric, when its explanation is inspected, then exact value, window bounds, category or total identity, source evidence references, and arithmetic rule are returned.",
+    "Given a supported Linear Pace state, when its explanation is inspected, then formula version, elapsed and total days, exact plan and actual inputs, exact comparison result, and uniform-distribution limitation are returned.",
+    "Given an unavailable, insufficient, not-started, or deferred state, when its explanation is inspected, then the typed reason, evaluated evidence, unmet rule, and permitted next action are returned without an invented result.",
+    "Given a retained Report Snapshot identity, when Get or Explain is requested, then the exact immutable stored explanation and provenance are returned rather than recomputing current evidence.",
+    "Given an unknown retained identity, when Get or Explain is requested, then Not Found is returned without leaking other report metadata.",
+    "Given a deleted retained identity with a Deletion Event, when Get or Explain is requested, then Deleted is returned with metadata-only deletion evidence and no prior report payload.",
+    "Given explanatory text, when it is compared across identical structured states and policy versions, then it is semantically identical, template-based, channel-neutral, and contains no persuasion, recommendation, translation, or delivery wording."
+  ],
+  "security_criteria": [
+    "Explanation returns only the selected report evidence and never expands into uncited raw merchant descriptions or unrelated transactions."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T08:26:14.1918276+00:00",
+  "links": [
+    {
+      "id": "01KXZAAFA4MMV9EJ8K3V1WNYS0",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-CHANNELS-CONSUMER-CONTRACT",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:29:46.1814973+00:00"
+    },
+    {
+      "id": "01KXZAB18JN5JQ3Y3D3Y1GG8K1",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:04.5632278+00:00"
+    },
+    {
+      "id": "01KXZAB03E78FZQRK1RJQ87KXD",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-GENERATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:03.3754500+00:00"
+    },
+    {
+      "id": "01KXZAA51PZMQDA6QKN37W5ZPD",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-002",
+      "rel": "implements",
+      "created_at": "2026-07-20T08:29:35.6712302+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXZA5MZ88QHAAHEZ9XJTF1ZN",
+      "target": "P1",
+      "created_at": "2026-07-20T08:27:08.1351905+00:00"
+    }
+  ]
+}

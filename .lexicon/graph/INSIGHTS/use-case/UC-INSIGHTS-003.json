@@ -3,9 +3,9 @@
   "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
   "ref_code": "UC-INSIGHTS-003",
   "title": "Retain and retrieve a Report Snapshot",
-  "preconditions": "A complete coherent Insight Report exists for retention, or the caller provides a stable retained identity or bounded list filter; owner-only storage protections and compatibility checks pass.",
-  "postconditions": "Exactly one immutable snapshot exists for one successful logical retention request; retrieval and listing do not change it.",
-  "main_flow": "1. INSIGHTS validates actor attribution, retention request identity, report completeness, provenance, content fingerprint, permissions, and limits. 2. It atomically appends one immutable Report Snapshot containing the bounded report and required provenance, not canonical upstream rows. 3. An identical retry returns the prior logical snapshot; a changed logical request under the same identity conflicts. 4. Get returns one exact immutable snapshot; list returns bounded metadata-first history in deterministic order, with report payload included only when explicitly requested.",
+  "preconditions": "The retained-generation request names the same bounded analysis inputs as Generate plus actor attribution, reason, and idempotency identity; or the read caller provides a stable retained identity or bounded list filter. Owner-only storage protections and compatibility checks pass.",
+  "postconditions": "Exactly one immutable snapshot exists for one successful logical retained-generation request; retrieval and listing do not change it.",
+  "main_flow": "1. INSIGHTS validates the analysis request, actor, reason, idempotency identity, permissions, policy versions, and limits. 2. It generates a complete coherent Insight Report and atomically appends one immutable Report Snapshot; it never accepts an arbitrary caller-authored report payload. 3. An identical retry returns the prior logical snapshot and changed normalized input under the same identity conflicts. 4. Get returns one exact immutable snapshot. 5. List returns bounded metadata-first history in deterministic order, with report payload included only by an explicit Get.",
   "alt_flows": [
     "Unsafe storage permissions, incompatible schema, incomplete provenance, invalid fingerprint, or resource limit returns failure before persistence.",
     "The same retention identity with different normalized input returns conflict and creates no duplicate.",
@@ -13,7 +13,7 @@
     "List bounds exceeded returns validation failure rather than truncating silently.",
     "Commit, cancellation, or crash failure leaves no partial snapshot and preserves prior history."
   ],
-  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The owner explicitly chooses to preserve an Insight Report as durable evidence or later retrieves or lists retained reports.\",\"status\":\"draft\"}",
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The owner explicitly requests a retained generation, retrieves one retained Report Snapshot, or lists retained report history.\",\"status\":\"draft\"}",
   "created_at": "2026-07-20T08:06:14.2377829+00:00",
   "links": [
     {

@@ -1,0 +1,40 @@
+{
+  "id": "01KXZACVCMZW64D58CRKEDXCN4",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "TC-INSIGHTS-EVIDENCE-STATE-ACCOUNTING",
+  "slug": "EVIDENCE-STATE-ACCOUNTING",
+  "title": "Verify complete evidence-state accounting",
+  "level": "unit",
+  "surface": "contract",
+  "scenario": "unhappy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "Requests cover every active and deferred metric or signal kind and every typed unavailability reason.",
+  "steps": "Return supported exact metrics alongside unavailable, insufficient, not-started, and deferred signals; inject whole-report coherence, compatibility, integrity, and arithmetic failures.",
+  "expected": "Every requested kind appears exactly once with the correct typed state; signal-local gaps preserve supported metrics; whole-report failures emit no report.",
+  "owner": "INSIGHTS implementation",
+  "created_at": "2026-07-20T08:31:04.0849747+00:00",
+  "links": [
+    {
+      "id": "01KXZAFTETD90H0TJFYMWG6DCE",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:41.4354097+00:00"
+    },
+    {
+      "id": "01KXZAFVEC1MXX6CXDQ8PHGSJT",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-001",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:42.4451408+00:00"
+    },
+    {
+      "id": "01KXZAFWDV4MVBEMKT0VK7WV5T",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-002",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:32:43.4529721+00:00"
+    }
+  ]
+}

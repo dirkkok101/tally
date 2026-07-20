@@ -1,0 +1,59 @@
+{
+  "id": "01KXZA409WRFH053D7B5RQ4CPW",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "type": "functional",
+  "ref_code": "FR-INSIGHTS-TREND-SIGNAL",
+  "title": "Produce a comparable Trend signal",
+  "description": [
+    "Deferred until private evidence establishes exact comparable-window rules across stable category identity, plan revisions, corrections, and coverage changes. Goal trace: G3."
+  ],
+  "rationale": [
+    "A raw difference is not a trustworthy trend when category or evidence identity changed."
+  ],
+  "priority": 1,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "compare explicit windows only when their evidence is genuinely comparable"
+  ],
+  "story_so_that": [
+    "category or correction drift cannot masquerade as behavior change"
+  ],
+  "acceptance_criteria": [
+    "Given a released Trend policy and comparable explicit windows with stable identities, when Trend is evaluated, then both exact metrics, window bounds, comparison operation, policy version, coverage, and limitations are returned.",
+    "Given category rename with unchanged stable identity and otherwise comparable evidence, when Trend is evaluated, then rename alone does not invalidate comparison.",
+    "Given identity replacement, unproven lifecycle continuity, incompatible policy, or materially incomplete coverage, when Trend is requested, then Incomparable Baseline is returned and no direction is emitted."
+  ],
+  "status": "deferred",
+  "created_at": "2026-07-20T08:26:14.1918276+00:00",
+  "links": [
+    {
+      "id": "01KXZABETPAHV7MH5PS2CQQHZ6",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:18.4551532+00:00"
+    },
+    {
+      "id": "01KXZABAXN8ADXZKGF3D3S9P5P",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:14.4545325+00:00"
+    },
+    {
+      "id": "01KXZAA29G46BJ5PE6Q14KGKY5",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-001",
+      "rel": "implements",
+      "created_at": "2026-07-20T08:29:32.8491604+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXZA5QV1J9N06411THHRJQ06",
+      "target": "P1",
+      "created_at": "2026-07-20T08:27:11.0721385+00:00"
+    }
+  ]
+}

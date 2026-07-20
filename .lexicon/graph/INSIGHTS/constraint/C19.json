@@ -1,0 +1,11 @@
+{
+  "id": "01KXZ9XXJVP26HNDKMQECKNGK8",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "C19",
+  "title": "Host-owner authority and seed boundary",
+  "description": [
+    "Resources are Insight Reports, Report Snapshots, released policy metadata, and recovery artifacts. Discover, Generate, Explain, Get, List, Status, and Verify are read authority within the invoking owner host account. Retain, Restate, Delete, Backup, and Restore require explicit P1 actor attribution and idempotency identity. V1 creates no application permission, role-template, navigation/menu, translation, or frontend-key seeds; CHANNELS owns those if a UI is later approved."
+  ],
+  "type": "business",
+  "created_at": "2026-07-20T08:22:54.8117973+00:00"
+}

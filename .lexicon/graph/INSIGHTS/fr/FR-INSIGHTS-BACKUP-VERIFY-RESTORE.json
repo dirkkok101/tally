@@ -1,0 +1,74 @@
+{
+  "id": "01KXZA409T441AH1HPMHGAMZY2",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "type": "functional",
+  "ref_code": "FR-INSIGHTS-BACKUP-VERIFY-RESTORE",
+  "title": "Back up, verify, and restore retained INSIGHTS state",
+  "description": [
+    "Create owner-only point-in-time backups, verify them independently, and restore through a separately verified candidate with atomic activation. Goal trace: G7."
+  ],
+  "rationale": [
+    "Immutable report evidence is durable only if corruption, omission, migration, and failed activation cannot silently lose or replace it."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "recover retained reports and history from independently verified backups"
+  ],
+  "story_so_that": [
+    "local failure does not erase or corrupt what Tally reported"
+  ],
+  "acceptance_criteria": [
+    "Given a valid owner-only backup target, when Backup succeeds, then all durable Report Snapshots, Restatement links, Deletion Events, idempotency outcomes, policy metadata, and storage-version evidence are captured in one attributable point-in-time artifact.",
+    "Given Backup, when its contents are inspected, then ephemeral producer cursors, temporary reports, private evaluation rows, raw merchant text, and unrelated upstream state are absent.",
+    "Given a backup artifact, when Verify succeeds, then cryptographic fingerprint, format and storage compatibility, ownership and permissions, complete counts, link integrity, content fingerprints, idempotency outcomes, and deletion-state consistency are independently checked.",
+    "Given corruption, omission, incompatible version, unsafe ownership or permissions, or failed integrity, when Verify runs, then the exact failure is returned and no active store changes.",
+    "Given a verified compatible backup, when Restore starts, then it builds and validates a separate candidate without modifying the active store.",
+    "Given a complete verified candidate, when Restore activates, then the selected backup state becomes authoritative atomically and the prior store remains available until activation succeeds.",
+    "Given cancellation, crash, insufficient space, permission failure, or migration failure before activation, when recovery completes, then the prior authoritative store is unchanged.",
+    "Given a backup created before a later report deletion, when that backup is explicitly restored, then its exact captured report and deletion state are reinstated and identified in the restore result."
+  ],
+  "security_criteria": [
+    "Backup, candidate, lock, temporary, and restored artifacts remain owner-only and no private path or report payload appears in diagnostics."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T08:26:14.1918276+00:00",
+  "links": [
+    {
+      "id": "01KXZAAKW59TAXE76PJ2HANH2Z",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:29:50.8544312+00:00"
+    },
+    {
+      "id": "01KXZAB93CMBA61XNT3YQG7GN7",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-DELETION",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:12.5890810+00:00"
+    },
+    {
+      "id": "01KXZAB84QTWKK2P3Y7ZBXGX0P",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RETENTION",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:11.6079879+00:00"
+    },
+    {
+      "id": "01KXZAA9R4W157V187QCQAKBHB",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-005",
+      "rel": "implements",
+      "created_at": "2026-07-20T08:29:40.4853245+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXZA5GCM16QHR6SNG6JCRWK6",
+      "target": "P1",
+      "created_at": "2026-07-20T08:27:03.4433566+00:00"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "id": "01KXZA409M0N5Y3AQGNG5J6HAR",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "type": "functional",
+  "ref_code": "FR-INSIGHTS-LINEAR-PACE",
+  "title": "Calculate a transparent linear pace state",
+  "description": [
+    "Compare month-to-date recorded actuals with an exact rational Linear Pace Baseline while exposing its uniform-spend limitation. Goal trace: G2."
+  ],
+  "rationale": [
+    "A simple reproducible baseline can answer whether recorded spend is above or below a linear share without pretending to predict future behavior."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "compare recorded month-to-date spend with one transparent plan-relative baseline"
+  ],
+  "story_so_that": [
+    "pace is reproducible and never mistaken for a forecast"
+  ],
+  "acceptance_criteria": [
+    "Given a started Budget Period with a plan, when a Linear Pace Baseline is calculated, then elapsed calendar days include the As-of local date and total calendar days equal the complete Budget Period length.",
+    "Given a non-zero planned amount, when the baseline is calculated, then it equals planned minor units multiplied by elapsed days divided by total days as an exact rational value with no floating-point arithmetic.",
+    "Given exact recorded actual and the exact rational baseline, when pace is classified, then actual greater than the full planned amount returns Over Plan; otherwise exact comparison with the baseline returns Below Linear Baseline, At Linear Baseline, or Above Linear Baseline.",
+    "Given a zero planned amount with positive recorded actual, when pace is classified, then Over Zero Plan is returned without division.",
+    "Given a zero planned amount with zero or negative recorded actual, when pace is classified, then At Or Below Zero Plan is returned without division.",
+    "Given no plan, no active or explicit revision, a not-started period, or unavailable coherent actual evidence, when pace is requested, then the exact named unavailable state is returned and no baseline is fabricated.",
+    "Given any Linear Pace result, when its explanation is returned, then it states the elapsed-day fraction, formula version, exact inputs, current-day incompleteness possibility, and that the baseline assumes uniform calendar distribution and is not a Forecast.",
+    "Given daily or weekly exact metrics, when pace output is inspected, then no separate daily or weekly sub-budget is invented from the monthly plan."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T08:26:14.1918276+00:00",
+  "links": [
+    {
+      "id": "01KXZAAS7TM4JNQC6BE7C7J6S6",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-EXACT-WINDOW-METRICS",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:29:56.3475775+00:00"
+    },
+    {
+      "id": "01KXZAAT43CYHAYWDBKB2EV4V2",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-TRUSTED-ANALYSIS-WINDOWS",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:29:57.2520913+00:00"
+    },
+    {
+      "id": "01KXZA9YQXMQ7JQRZMQA29WCMA",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-001",
+      "rel": "implements",
+      "created_at": "2026-07-20T08:29:29.2146069+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXZA5KFSN8P1CXNM8PGAWDZD",
+      "target": "P1",
+      "created_at": "2026-07-20T08:27:06.6161674+00:00"
+    }
+  ]
+}

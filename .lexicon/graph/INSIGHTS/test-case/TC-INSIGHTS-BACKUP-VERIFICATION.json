@@ -1,0 +1,47 @@
+{
+  "id": "01KXZADXNMP4N0H4T2FA5RFVH0",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "TC-INSIGHTS-BACKUP-VERIFICATION",
+  "slug": "BACKUP-VERIFICATION",
+  "title": "Verify complete owner-only INSIGHTS backups",
+  "level": "integration",
+  "surface": "persistence",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A representative store contains reports, chains, deletions, idempotency outcomes, policy metadata, and no ephemeral source snapshots.",
+  "steps": "Create a backup, inspect permissions and manifest, independently verify every durable count, link, fingerprint and outcome, then test corrupt, omitted, incompatible, wrong-owner, and payload-leak candidates.",
+  "expected": "The valid artifact is complete, point-in-time, owner-only and independently verified; invalid artifacts fail with no active-store change or private diagnostic.",
+  "owner": "INSIGHTS implementation",
+  "created_at": "2026-07-20T08:31:39.1897480+00:00",
+  "links": [
+    {
+      "id": "01KXZAGFYAWR1SXE89XB9T13YA",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-HOST-OS-SECURITY",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:33:03.4357311+00:00"
+    },
+    {
+      "id": "01KXZAGD4RAQEYXWQQ90W4FPTQ",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-BACKUP-VERIFY-RESTORE",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:33:00.5693566+00:00"
+    },
+    {
+      "id": "01KXZAGEZNJQESXSVGKGTFHF64",
+      "target_type": "nfr",
+      "target": "NFR-INSIGHTS-VERIFIED-RECOVERABILITY",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:33:02.4547142+00:00"
+    },
+    {
+      "id": "01KXZAGE0TTBBMTKRED6W3AS73",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-005",
+      "rel": "verifies",
+      "created_at": "2026-07-20T08:33:01.4675466+00:00"
+    }
+  ]
+}

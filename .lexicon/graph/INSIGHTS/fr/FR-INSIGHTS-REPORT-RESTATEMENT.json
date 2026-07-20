@@ -1,0 +1,74 @@
+{
+  "id": "01KXZA409RF0D6QDDPBWM4X55V",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "type": "functional",
+  "ref_code": "FR-INSIGHTS-REPORT-RESTATEMENT",
+  "title": "Create an explicit linked Restatement",
+  "description": [
+    "Generate a new retained report from current coherent evidence or selected policy versions and compare it with one immutable predecessor without rewriting history. Goal trace: G4."
+  ],
+  "rationale": [
+    "Corrections must change current interpretation while preserving what the owner was shown previously."
+  ],
+  "priority": 0,
+  "complexity": "L",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "restate a retained report after corrections or policy changes"
+  ],
+  "story_so_that": [
+    "I can distinguish corrected understanding from historical evidence"
+  ],
+  "acceptance_criteria": [
+    "Given an existing compatible Report Snapshot and a valid actor-attributed idempotent Restate request, when current coherent evidence is available, then one new Report Snapshot is generated without modifying the predecessor.",
+    "Given a successful Restatement, when its provenance is inspected, then exactly one predecessor identity and the new current source and policy identities are explicit.",
+    "Given predecessor and restated reports, when the difference result is returned, then source-provenance, policy-version, exact-metric, signal-state, explanation, and Attention Item differences are separated and deterministically ordered.",
+    "Given identical predecessor source identities, policy versions, and semantic content, when Restate is requested, then No Change is returned and no new Report Snapshot is created.",
+    "Given any changed producer state or snapshot identity, policy version, report schema version, or semantic report content, when Restate succeeds, then one new linked Report Snapshot is retained even when exact metric values remain equal.",
+    "Given an unknown, deleted, corrupted, or incompatible predecessor, when Restate is requested, then the exact stable failure is returned and no new report is created.",
+    "Given unavailable or incoherent current evidence, when Restate is requested, then no partial Restatement or difference payload is retained.",
+    "Given the same idempotency identity and same normalized Restate request, when retried, then the prior logical outcome is returned without a second Restatement."
+  ],
+  "security_criteria": [
+    "Restatement differences contain bounded report evidence only and never expose unrelated source transactions or merchant text."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T08:26:14.1918276+00:00",
+  "links": [
+    {
+      "id": "01KXZAAH5ZPRTW2FWZ32XT7NYA",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:29:48.0963455+00:00"
+    },
+    {
+      "id": "01KXZAB4ABS60ZPX8AYZAV4QPB",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-GENERATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:07.6923877+00:00"
+    },
+    {
+      "id": "01KXZAB3C5FZV9Q72XV0JVCNHM",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RETENTION",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:06.7262662+00:00"
+    },
+    {
+      "id": "01KXZAA7TWW6PMYVPYMCFG74QE",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-004",
+      "rel": "implements",
+      "created_at": "2026-07-20T08:29:38.5257707+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXZA5PDNSAMPSZT8FP29T2K2",
+      "target": "P1",
+      "created_at": "2026-07-20T08:27:09.6205683+00:00"
+    }
+  ]
+}

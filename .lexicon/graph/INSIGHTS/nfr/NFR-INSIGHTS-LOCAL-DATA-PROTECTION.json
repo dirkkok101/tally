@@ -1,0 +1,62 @@
+{
+  "id": "01KXZA5S8KT5THZE0K6VY1KPVN",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "NFR-INSIGHTS-LOCAL-DATA-PROTECTION",
+  "title": "Protect local insight data",
+  "description": [
+    "Keep requests, reports, private evidence, stores, backups, candidates, temporary artifacts, and diagnostics inside the trusted owner-controlled local boundary."
+  ],
+  "category": "security",
+  "target": "Zero financial payload, merchant-text, report-content, credential, or private-path disclosures in process arguments, ordinary logs, stderr, telemetry, crash output, Git, or shared temporary files; 100% of INSIGHTS directories use owner-only access such as 0700 and files use 0600 where supported; explicit structured business results are the only payload output.",
+  "load_condition": "Success, validation failure, compatibility failure, source mismatch, resource failure, persistence failure, crash, retry, deletion, private policy validation, backup, verify, restore, and migration on every supported host.",
+  "measurement": "Permission and ownership inspection plus seeded-canary scans of process tables, stdout exclusions, stderr, logs, telemetry hooks, crash artifacts, repository status, temp roots, backups, restore candidates, and cleanup state.",
+  "rationale": [
+    "Insight reports concentrate sensitive behavioral and financial interpretation beyond the underlying totals."
+  ],
+  "priority": 0,
+  "created_at": "2026-07-20T08:27:12.5325488+00:00",
+  "links": [
+    {
+      "id": "01KXZABWF3Q5W2PWQK3EAT8TNT",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-BACKUP-VERIFY-RESTORE",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:32.4198641+00:00"
+    },
+    {
+      "id": "01KXZABXETTHWHTT9ZGYHNH6V4",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:33.4355604+00:00"
+    },
+    {
+      "id": "01KXZABVJCYVDYCGNE800GKBHM",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-DELETION",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:31.5018074+00:00"
+    },
+    {
+      "id": "01KXZABTMP7VF5W0TS1F99S76Q",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-HISTORY",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:30.5512153+00:00"
+    },
+    {
+      "id": "01KXZABSQJ5FAGQF1HZTCAJ6XA",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RETENTION",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:29.6197375+00:00"
+    },
+    {
+      "id": "01KXZABRSBJDTMVXA5B8S73NNQ",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-STRUCTURED-INVOCATION",
+      "rel": "supports",
+      "created_at": "2026-07-20T08:30:28.6519084+00:00"
+    }
+  ]
+}

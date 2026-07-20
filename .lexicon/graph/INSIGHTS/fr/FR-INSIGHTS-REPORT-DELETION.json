@@ -1,0 +1,74 @@
+{
+  "id": "01KXZA409SGZDRPRHKD53X5H57",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "type": "functional",
+  "ref_code": "FR-INSIGHTS-REPORT-DELETION",
+  "title": "Delete retained report payloads dependency-safely",
+  "description": [
+    "Explicitly remove one unreferenced retained report payload while preserving a minimal attributable Deletion Event and protecting surviving Restatement chains. Goal trace: G4 and G7."
+  ],
+  "rationale": [
+    "The owner needs privacy cleanup without dangling Restatements, silent expiry, or rewritten surviving provenance."
+  ],
+  "priority": 1,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "remove retained report content deliberately"
+  ],
+  "story_so_that": [
+    "sensitive history can be reduced without corrupting remaining evidence"
+  ],
+  "acceptance_criteria": [
+    "Given a retained leaf Report Snapshot and a valid actor, reason, idempotency identity, and explicit report identity, when Delete succeeds, then its report payload and Restatement link are removed atomically.",
+    "Given successful deletion, when the Deletion Event is inspected, then report identity, actor, reason, trusted time, idempotency outcome, and dependency result are present and no financial value or report content remains.",
+    "Given a Report Snapshot referenced by a surviving Restatement, when Delete is requested, then dependency conflict is returned and no payload or link changes.",
+    "Given a Restatement chain, when the owner deletes reports from leaves to root, then each unreferenced target can be deleted independently and surviving predecessors remain immutable until targeted.",
+    "Given an unknown report identity, when Delete is requested, then Not Found is returned and no Deletion Event is created.",
+    "Given an already deleted report and semantically identical idempotent Delete retry, when retried, then the prior logical deletion result is returned and no second event is created.",
+    "Given no explicit Delete request, when time passes or report limits are approached, then INSIGHTS performs no automatic expiry, cleanup, or payload deletion.",
+    "Given deletion after a backup was created, when the delete result is returned, then it states that existing point-in-time backups are unchanged and an explicit restore may reinstate their captured state."
+  ],
+  "security_criteria": [
+    "Deletion diagnostics and events retain metadata only and never copy deleted report content."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T08:26:14.1918276+00:00",
+  "links": [
+    {
+      "id": "01KXZAAJXN1EAG79FC76J2WKKF",
+      "target_type": "external_dependency",
+      "target": "EXT-INSIGHTS-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:29:49.8779657+00:00"
+    },
+    {
+      "id": "01KXZAB671A0CCGYE0HYJGS1C1",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-HISTORY",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:09.6347783+00:00"
+    },
+    {
+      "id": "01KXZAB76CCSASBC3M8MQK2EXN",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-REPORT-RESTATEMENT",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:10.6376145+00:00"
+    },
+    {
+      "id": "01KXZAA8R0G0APNY8BA5DM4FQT",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-005",
+      "rel": "implements",
+      "created_at": "2026-07-20T08:29:39.4577245+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXZA5MFH19ZBFQCY9XDXX60Z",
+      "target": "P1",
+      "created_at": "2026-07-20T08:27:07.6324780+00:00"
+    }
+  ]
+}

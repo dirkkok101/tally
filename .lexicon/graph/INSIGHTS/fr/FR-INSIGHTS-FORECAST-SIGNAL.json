@@ -1,0 +1,59 @@
+{
+  "id": "01KXZA409WT6ZQMJG5EKNYW5VC",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "type": "functional",
+  "ref_code": "FR-INSIGHTS-FORECAST-SIGNAL",
+  "title": "Produce a bounded Forecast signal",
+  "description": [
+    "Deferred until private evidence establishes supported formula and minimum evidence rules for each accepted spending shape. Goal trace: G3."
+  ],
+  "rationale": [
+    "A generic run-rate over recurring, irregular, refund-heavy, zero-budget, or partial-period spend would create false precision."
+  ],
+  "priority": 1,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "see a bounded end-of-period estimate only when evidence supports it"
+  ],
+  "story_so_that": [
+    "planning assistance never hides uncertainty"
+  ],
+  "acceptance_criteria": [
+    "Given a released Forecast policy and evidence satisfying its formula-specific minimum horizon and coverage, when Forecast is evaluated, then the estimate, exact inputs, formula version, evidence horizon, limitations, and comparison baseline are returned.",
+    "Given an unsupported evidence shape or unmet sufficiency rule, when Forecast is requested, then Insufficient Evidence or Unsupported Policy is returned and no estimate or confidence is emitted.",
+    "Given identical evidence and policy versions, when Forecast is repeated, then semantically identical output is returned without floating-point arithmetic."
+  ],
+  "status": "deferred",
+  "created_at": "2026-07-20T08:26:14.1918276+00:00",
+  "links": [
+    {
+      "id": "01KXZABDT9JMNYAT8SRY18NWDZ",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:17.4186894+00:00"
+    },
+    {
+      "id": "01KXZABA0WFX6GDAB954B6C42M",
+      "target_type": "requirement",
+      "target": "FR-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "rel": "depends-on",
+      "created_at": "2026-07-20T08:30:13.5327263+00:00"
+    },
+    {
+      "id": "01KXZAA1ED0W2M8P1HMYAHKPWN",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-001",
+      "rel": "implements",
+      "created_at": "2026-07-20T08:29:31.9820106+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KXZA5K01T1XHKFRZJCSJ4Q2R",
+      "target": "P1",
+      "created_at": "2026-07-20T08:27:06.1121490+00:00"
+    }
+  ]
+}
