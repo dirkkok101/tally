@@ -1,0 +1,322 @@
+{
+  "id": "01KXZH3RN592P8SDPG26PC4WSQ",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNDFWMH6APFAZFA7PN2J4",
+  "ref_code": "TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS",
+  "slug": "LIFECYCLE-CONTRACT-MODELS",
+  "title": "Define INSIGHTS lifecycle and recovery contracts",
+  "description": [
+    "Create the closed source-generated history, recovery, idempotency, and private-receipt records used after the owner-value gate."
+  ],
+  "objective": [
+    "Every retained-state and recovery data shape is represented by one deterministic Native-AOT-safe contract without persisting upstream truth or private evidence."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 3,
+  "created_at": "2026-07-20T10:28:26.4063089+00:00",
+  "decisions": [
+    {
+      "id": "01KXZH3RN6EGTV7EE51MQ3EJF4",
+      "target": "DD-INSIGHTS-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZH3RN74AKVKR28BQEG5EZS",
+      "path": "src/Tally/Contracts/Insights/History/InsightHistoryContracts.cs",
+      "action": "create",
+      "role": "snapshot restatement deletion and idempotency records",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN7CWGEWY85E36DP21G",
+      "path": "src/Tally/Contracts/Insights/Recovery/InsightRecoveryContracts.cs",
+      "action": "create",
+      "role": "manifest verification restore and status records",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN75794NCMDVXSMDZ8B",
+      "path": "src/Tally/Contracts/Insights/PolicyValidation/PolicyValidationReceipt.cs",
+      "action": "create",
+      "role": "privacy-safe external release evidence",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN704YXY7KVVW42EZV7",
+      "path": "tests/Tally.Tests/Insights/Contract/InsightLifecycleContractModelTests.cs",
+      "action": "test",
+      "role": "closed schema identity ordering and forbidden-field tests",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZH3RN7CW5VPP7SBHWKQ9MR",
+      "name": "InsightHistoryContracts",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE",
+      "notes": [
+        "immutable history and deletion models"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN7Q4QM0PP627CJKR94",
+      "name": "InsightsIdempotencyRecord",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-IDEMPOTENCY",
+      "notes": [
+        "module-wide replay record"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN7ZM7RAYSWBG6ZD7BV",
+      "name": "InsightsRecoveryContracts",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "notes": [
+        "backup verification restore and status contracts"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN7V6WQ7AWXXA2J021B",
+      "name": "PolicyValidationReceipt",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-POLICY-VALIDATION-RECEIPT",
+      "notes": [
+        "external aggregate evidence only"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZH3RN6GFP5B8DYSRZSX6MS",
+      "kind": "acceptance_check",
+      "text": [
+        "The contract assembly exposes closed enums and immutable records for ReportSnapshot, RestatementDifference, DeletionEvent, idempotency, backup, verification, restore, status, and PolicyValidationReceipt."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN6T3Y9NY4F7MAY47SB",
+      "kind": "acceptance_check",
+      "text": [
+        "ReportSnapshot stores the canonical report payload and provenance but never dated actual members, raw merchant descriptions, canonical transactions, or producer cursors."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN68261DJ7MD281K3QT",
+      "kind": "acceptance_check",
+      "text": [
+        "PolicyValidationReceipt contains only structural identifiers, fingerprints, aggregate outcomes, canary status, tool version, and owner acceptance fields and is explicitly external to insights.db."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN6EY5YY7GTVABSSZAK",
+      "kind": "acceptance_check",
+      "text": [
+        "Snapshot, recovery, and replay identities are opaque stable values; collections have deterministic ordering and source-generated serialization produces stable schema fingerprints."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN6VFHXS2958WKYFK8Z",
+      "kind": "acceptance_check",
+      "text": [
+        "Content fingerprints exclude derived reportId and contentFingerprint fields and distinguish every semantic lifecycle or recovery change."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN741903F87X3XNKXQB",
+      "kind": "constraint",
+      "text": [
+        "Use file-scoped namespaces, nullable annotations, immutable records, and no reflection-based serialization."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN7JGEBZ2PVZQRRP8J3",
+      "kind": "expected_output",
+      "text": [
+        "Native-AOT-safe lifecycle and recovery contracts"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN7AQD2V3ANMBR8RH6N",
+      "kind": "expected_output",
+      "text": [
+        "Lifecycle schema and privacy tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN6DYBZY07951QJY6TR",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use string constants for system-owned states or statuses; use closed enums per ADR-CORE-0004."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN6R15SB6M3A6JM3JM6",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add HTTP DTOs, frontend models, EF entities, policy scripts, arbitrary formulas, or caller-authored report payloads."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN6FQVNKDTQE9PN0FSE",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT place dated actual members, raw merchant text, producer cursors, or private evaluation rows in snapshots, recovery receipts, status, or PolicyValidationReceipt."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN7TKEWZM5ZKHRK48QP",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT include reportId or contentFingerprint in the semantic payload that is hashed."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN73Z8V0Z5S5YCBS2KS",
+      "kind": "note",
+      "text": [
+        "This task owns retained-state and recovery records only; analytical records remain in TASK-INSIGHTS-CONTRACT-MODELS."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZH3RN7V5PHKDHA1JK5A9VC",
+      "target_ref_code": "ADR-CORE-0004",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3Y3HMG3XPZHM0SNNAEZ",
+      "target_title": "Enum Over String Constants for System-Owned Status Fields",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN74NCM0AWSHT7PE18X",
+      "target_ref_code": "DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXCDP4YZ72FAYYBJYPHPT",
+      "target_title": "ReportSnapshotRestatementAndDeletion",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN70P6G4PJ3CM85AXB3",
+      "target_ref_code": "DM-INSIGHTS-IDEMPOTENCY",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXCXPZ5ZKHNSRPMHS8FVB",
+      "target_title": "InsightsIdempotencyRecord",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN75WPB5XPKW3642AG0",
+      "target_ref_code": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXDXDFHH54NY7MR3DKTP9",
+      "target_title": "InsightsRecoveryManifestAndReceipts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    },
+    {
+      "id": "01KXZH3RN7WMXR2W818FQDTPWN",
+      "target_ref_code": "DM-INSIGHTS-POLICY-VALIDATION-RECEIPT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXED5GAT7GWR5N0XBEZB2",
+      "target_title": "PolicyValidationReceipt",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZH3RN7XNS6Z8P81NDPS31S",
+      "gate_type": "self-review",
+      "description": [
+        "Compare every lifecycle and recovery field with the four linked data models."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZH3RN7Z8V5ZJY9TVM95F08",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~InsightLifecycleContractModelTests",
+      "expected_result": "exit 0; at least 14 lifecycle schema identity canonical-order private-receipt and forbidden-payload cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:28:26.4063089+00:00"
+    }
+  ]
+}

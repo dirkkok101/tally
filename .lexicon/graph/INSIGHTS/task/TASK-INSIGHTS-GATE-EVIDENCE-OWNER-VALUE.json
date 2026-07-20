@@ -1,0 +1,333 @@
+{
+  "id": "01KXZG1SPDAR8RPKXG40XPF600",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNE48SG87EXFDT7SEM0B0",
+  "ref_code": "TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE",
+  "slug": "GATE-EVIDENCE-OWNER-VALUE",
+  "title": "Prove active report and retention value privately",
+  "description": [
+    "Validation-only monitored kill gate with no Implements ownership; run the real Generate and policy-validation paths over representative owner-only evidence before any INSIGHTS persistence task begins."
+  ],
+  "objective": [
+    "Private aggregate evidence proves exact metrics, Linear Pace, explanations, and optional retention improve at least one named owner decision without false high severity or disclosure, or downstream retained scope stops."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 9,
+  "created_at": "2026-07-20T10:09:53.3580299+00:00",
+  "decisions": [
+    {
+      "id": "01KXZG1SPS3KBK1KQ3AQSRDVDP",
+      "target": "DD-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZG1SPT2439C20Z263C2WD4",
+      "target": "TASK-INSIGHTS-GENERATE-REPORT",
+      "dependency_type": "compile",
+      "reason": [
+        "The kill gate evaluates the real active report path."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPVSHW46RTGVPDW7F0K",
+      "target": "TASK-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "The kill gate consumes the real manifest reader, harness, canaries, and receipt."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZG1SPT21XAK0H491GZ2VSC",
+      "path": ".gitignore",
+      "action": "modify",
+      "role": "exclude local INSIGHTS evaluation artifacts",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPTRBJ81P2MG1JXFD6P",
+      "path": "scripts/verify-insights-private-evidence.sh",
+      "action": "create",
+      "role": "fail-closed owner-value and disclosure runner",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPTSJ23VXD8VENGYZ60",
+      "path": "tests/Tally.Tests/Insights/PrivateEvidence/PrivateInsightValueGateTests.cs",
+      "action": "test",
+      "role": "representativeness, usefulness, explanation, retention, and canary gate",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPTH21EQK5QB2J0J2FW",
+      "path": "docs/verification/insights-private-evidence.md",
+      "action": "document",
+      "role": "aggregate-only evidence report",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZG1SPTPW8N4SKFNG8K0ZW0",
+      "name": "GenerateInsightReportQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-INSIGHT-REPORT",
+      "notes": [
+        "real active report path"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPTEPGQGYSSMCA8HV33",
+      "name": "InsightPolicyValidationHarness.ValidateAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-POLICY-VALIDATION-RECEIPT",
+      "notes": [
+        "real policy gate"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPT3C2NZH6HJPG31YV4",
+      "name": "VerifiedInsightsOwnerValueGate",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-POLICY-VALIDATION-RECEIPT",
+      "notes": [
+        "privacy-safe approval or fail-closed do-less outcome"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZG1SPSBFAAE9WDY9FPCJF7",
+      "kind": "acceptance_check",
+      "text": [
+        "An owner-only manifest supplied through TALLY_INSIGHTS_PRIVATE_EVALUATION_MANIFEST contains every required evidence shape, time-separated cases, disclosure canaries, one named owner decision, a raw BudgetPosition comparison, and explicit owner judgments for report usefulness, explanation sufficiency, and retention privacy cost."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPSBQXQFJEV3N5ZANNE",
+      "kind": "acceptance_check",
+      "text": [
+        "The real Generate path and InsightPolicyValidationHarness account for every case and emit a privacy-safe receipt with zero false high-severity outcomes and all canaries contained."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPT9SPTPWG9WFYBC51J",
+      "kind": "acceptance_check",
+      "text": [
+        "The owner accepts at least one active exact-metric plus Linear-Pace report shape as materially improving the named decision over raw BudgetPosition inspection, accepts deterministic explanations for v1, and accepts optional immutable retention as worth its privacy cost."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPT73ZGJ79CBKA8KB0H",
+      "kind": "acceptance_check",
+      "text": [
+        "The tracked verification report contains only counts, fingerprints, threshold outcomes, policy/schema/tool versions, environment identity, timestamp, and owner acceptance booleans; no private path or financial payload appears."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPTRP4B12YS7GMN4G82",
+      "kind": "acceptance_check",
+      "text": [
+        "A failed or unevidenced usefulness, explanation, retention, privacy, or canary criterion exits nonzero and blocks every task in SP-INSIGHTS-02-RETAINED-HISTORY and SP-INSIGHTS-03-RECOVERY; the do-less path is reported rather than weakened."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPTX42S3SQZZMZ1PYNJ",
+      "kind": "constraint",
+      "text": [
+        "Execution requires TALLY_INSIGHTS_PRIVATE_EVALUATION_MANIFEST to name a 0600 owner file outside tracked paths."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPTPSBZ08TVDKRW0YGD",
+      "kind": "expected_output",
+      "text": [
+        "VerifiedInsightsOwnerValueGate"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPTKMZABJJY0AVB8M4H",
+      "kind": "expected_output",
+      "text": [
+        "Aggregate-only private evidence report"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPTK5EN2Q3JK6PMGKTY",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT continue to retained-state implementation when the monitored owner-value criterion fails or remains unevidenced."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPTXDDFRQYT0QM0TTWJ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT cherry-pick cases, weaken canaries, infer owner acceptance, fabricate representative data, or replace the real compiler with a second evaluator."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPT5KDGNYR2T7DDH1BR",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT commit the private manifest, source names, paths, values, merchant text, expected rows, report bodies, or raw BudgetPosition comparison."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPTPN0ZHR76PGV2YD00",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT activate deferred Forecast, Trend, Anomaly, or Attention scope to manufacture value."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPT8TM87STBDNP6J90Q",
+      "kind": "note",
+      "text": [
+        "This gate intentionally remains loose. A failing outcome stops retained INSIGHTS scope and routes to the do-less design; it is not an implementation defect to patch around."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZG1SPTA4YHP6K65F9MWP4N",
+      "target_ref_code": "OQ-INSIGHTS-10",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KXZ6TG6ZT6GQBNDDBF8RNBFK",
+      "target_title": "What owner-only representative evidence horizon and canaries will prove that INSIGHTS adds value over raw Budget Position inspection without false high-severity signals?",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPT20H0AWF2HJRTBTW8",
+      "target_ref_code": "EXT-INSIGHTS-PRIVATE-EVALUATION-CORPUS",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXZA7TQ1S427JMSTX4091WNQ",
+      "target_title": "Private Insight Evaluation Corpus",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPT4JTVE5GX7JWAV2V7",
+      "target_ref_code": "NFR-INSIGHTS-LOCAL-DATA-PROTECTION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5S8KT5THZE0K6VY1KPVN",
+      "target_title": "Protect local insight data",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPTZGF4RX81W7M5X62Y",
+      "target_ref_code": "DM-INSIGHTS-POLICY-VALIDATION-RECEIPT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXED5GAT7GWR5N0XBEZB2",
+      "target_title": "PolicyValidationReceipt",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPTMM70PPQR4QG3982D",
+      "target_ref_code": "TC-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZAD0SV33FV3NSA0NEGA777",
+      "target_title": "Verify private analytical policy validation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZG1SPT86KW4HGPWF3DZC4G",
+      "gate_type": "human-review",
+      "description": [
+        "The owner confirms representativeness and the three acceptance judgments without disclosing private rows or values."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZG1SPT59S1JFDK47G3ZM5E",
+      "phase": "after",
+      "command": "bash scripts/verify-insights-private-evidence.sh",
+      "expected_result": "exit 0; the runner discovers at least 16 permission, required-shape, time-separation, raw-position comparison, named-decision, report-usefulness, explanation-acceptance, retention-cost, zero-false-high-severity, canary, aggregate-only-output, no-Git, and locality checks and writes one payload-free evidence report",
+      "required": 1,
+      "timeout_seconds": 1200,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ]
+}

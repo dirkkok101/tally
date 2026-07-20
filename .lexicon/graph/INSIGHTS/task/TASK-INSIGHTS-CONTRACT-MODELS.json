@@ -1,0 +1,311 @@
+{
+  "id": "01KXZFS9R8G4SQGA1TK4BJAK5R",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNDFWMH6APFAZFA7PN2J4",
+  "ref_code": "TASK-INSIGHTS-CONTRACT-MODELS",
+  "slug": "CONTRACT-MODELS",
+  "title": "Define INSIGHTS analytical contracts",
+  "description": [
+    "Create the closed source-generated policy, coherent evidence, analytical state, explanation, and report records used before retained-state work begins."
+  ],
+  "objective": [
+    "Every analytical INSIGHTS data shape is represented by one deterministic Native-AOT-safe contract without transport, persistence, or UI behavior."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 0,
+  "created_at": "2026-07-20T10:05:14.8911171+00:00",
+  "decisions": [
+    {
+      "id": "01KXZFS9RBG35RA1240W2ANWTT",
+      "target": "DD-INSIGHTS-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZH4W3M0AYHSPY4FRSKZ5ZS",
+      "path": "src/Tally/Contracts/Insights/Analysis/InsightAnalysisContracts.cs",
+      "action": "create",
+      "role": "policy evidence window metric pace explanation and report records",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    },
+    {
+      "id": "01KXZH4W3MPR0NPJ93P0AAVQ9T",
+      "path": "tests/Tally.Tests/Insights/Contract/InsightAnalyticalContractModelTests.cs",
+      "action": "test",
+      "role": "closed schema exact value ordering fingerprint and forbidden-field tests",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZH4W3M54KZ149J89X1B4J4",
+      "name": "InsightPolicyCatalogueContracts",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-POLICY-CATALOGUE",
+      "notes": [
+        "active and deferred built-in policy descriptors"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    },
+    {
+      "id": "01KXZH4W3MRKA1YA1KRY2KBKE2",
+      "name": "BoundInsightEvidence",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-COHERENT-EVIDENCE",
+      "notes": [
+        "validated ephemeral producer evidence"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    },
+    {
+      "id": "01KXZH4W3M1HT3BAS63JHEFE56",
+      "name": "AnalysisWindowMetricStateAndExplanation",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-ANALYTICAL-EVIDENCE",
+      "notes": [
+        "exact analytical state records"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    },
+    {
+      "id": "01KXZH4W3M5P4E41P1NSZGFKX1",
+      "name": "InsightReport",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-INSIGHT-REPORT",
+      "notes": [
+        "complete bounded analytical result"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZH4W3KZRYSYY5Z9F9DCAJG",
+      "kind": "acceptance_check",
+      "text": [
+        "The contract assembly exposes closed enums and immutable records for policy descriptors, plan states, exact money and rationals, windows, metrics, pace states, evidence states, explanations, provenance, and InsightReport."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    },
+    {
+      "id": "01KXZH4W3MGGVBXQCQ0HDFV5QM",
+      "kind": "acceptance_check",
+      "text": [
+        "Canonical report contracts exclude raw merchant descriptions, canonical transaction payloads, producer cursors, private evaluation rows, and dated actual members; only BoundInsightEvidence may carry dated members as ephemeral compiler input."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    },
+    {
+      "id": "01KXZH4W3M7YZ6Z8F7XJ7TWNV4",
+      "kind": "acceptance_check",
+      "text": [
+        "All money is signed checked Int64 ZAR minor units, rationals have a positive denominator and canonical normalization, IDs are opaque stable values, and every collection documents deterministic ordering."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    },
+    {
+      "id": "01KXZH4W3MCJ6QQR6H255VCZCW",
+      "kind": "acceptance_check",
+      "text": [
+        "The semantic content fingerprint includes every visible metric, state, explanation, provenance item, policy version, and source identity while excluding derived reportId and contentFingerprint fields."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    },
+    {
+      "id": "01KXZH4W3M2N6QDYJ0PN20WYYS",
+      "kind": "acceptance_check",
+      "text": [
+        "Source-generated serialization rejects unknown fields and produces byte-stable schema fingerprints under repeated builds."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    },
+    {
+      "id": "01KXZH4W3MS1ES9X8AZ79V7SA2",
+      "kind": "constraint",
+      "text": [
+        "Use file-scoped namespaces, nullable annotations, immutable records, and no reflection-based serialization."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    },
+    {
+      "id": "01KXZH4W3MYNMFS9KJ2MCBWBT6",
+      "kind": "expected_output",
+      "text": [
+        "Native-AOT-safe analytical contract models"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    },
+    {
+      "id": "01KXZH4W3M234F128WT8Q938XX",
+      "kind": "expected_output",
+      "text": [
+        "Analytical schema and privacy tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    },
+    {
+      "id": "01KXZH4W3MJSFXRP0R0EQABSG3",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use string constants for system-owned states or statuses; use closed enums per ADR-CORE-0004."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    },
+    {
+      "id": "01KXZH4W3MRYPA0QBNBK5GZ4WP",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add HTTP DTOs, frontend models, EF entities, policy scripts, arbitrary formulas, or caller-authored report payloads."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    },
+    {
+      "id": "01KXZH4W3MCVG0ZQS8FP70VYK2",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT place raw merchant text, canonical transactions, producer cursors, or private evaluation rows in any analytical contract."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    },
+    {
+      "id": "01KXZH4W3M4FXSC3AT5TH6M6Q6",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT include reportId or contentFingerprint in the semantic payload that is hashed."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    },
+    {
+      "id": "01KXZH4W3MHC3YN90B2WAMC5S2",
+      "kind": "note",
+      "text": [
+        "Lifecycle, recovery, idempotency, and private-receipt records belong to TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZFS9REHN40NJX4TD5XS84C",
+      "target_ref_code": "ADR-CORE-0004",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3Y3HMG3XPZHM0SNNAEZ",
+      "target_title": "Enum Over String Constants for System-Owned Status Fields",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 8,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9REC0GTGCZFXB7A3EVX",
+      "target_ref_code": "DM-INSIGHTS-POLICY-CATALOGUE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXAB8VDC422EP25HGK077",
+      "target_title": "InsightPolicyCatalogue",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9REVDE46YPR403KXQ5X",
+      "target_ref_code": "DM-INSIGHTS-COHERENT-EVIDENCE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXATZMMM9GD8BZM6RSFVS",
+      "target_title": "BoundInsightEvidence",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9REDRMT3XE48EK9NNX6",
+      "target_ref_code": "DM-INSIGHTS-ANALYTICAL-EVIDENCE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXBCJJEXEN98RRW25V9P5",
+      "target_title": "AnalysisWindowMetricStateAndExplanation",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RE6FX44THSZH49MSVK",
+      "target_ref_code": "DM-INSIGHTS-INSIGHT-REPORT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXBX6VQS16T6NAMEHA3T3",
+      "target_title": "InsightReport",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXZFS9RB9YZW7SQA641B1WQN",
+      "target": "FR-INSIGHTS-CONTRACT-DISCOVERY",
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZH4W3M5DJX6BVDZFSNXFAK",
+      "gate_type": "self-review",
+      "description": [
+        "Compare every analytical field and forbidden field with the four linked data models."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZH4W3MV5B48ZAATK5K963H",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~InsightAnalyticalContractModelTests",
+      "expected_result": "exit 0; at least 16 schema enum exact-value canonical-order fingerprint and forbidden-payload cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:29:02.7068287+00:00"
+    }
+  ]
+}

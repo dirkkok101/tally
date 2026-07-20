@@ -1,0 +1,238 @@
+{
+  "id": "01KXZG1SPATHFRWTGKE9ZDW3RF",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNE48SG87EXFDT7SEM0B0",
+  "ref_code": "TASK-INSIGHTS-ANALYSIS-WINDOWS",
+  "slug": "ANALYSIS-WINDOWS",
+  "title": "Implement trusted Johannesburg analysis windows",
+  "description": [
+    "Derive deterministic inclusive day, Monday-week, and month-to-date windows from one frozen TimeProvider instant and Budget Period."
+  ],
+  "objective": [
+    "AnalysisWindowPolicy returns the exact approved calendar bounds or a named NotStarted or Unsupported state without implicit clocks or locale behavior."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 2,
+  "created_at": "2026-07-20T10:09:53.3580299+00:00",
+  "decisions": [
+    {
+      "id": "01KXZG1SPHW82SGG5QTD1RTA5Q",
+      "target": "DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZG1SPJHY56KAKAGNB657YS",
+      "target": "TASK-INSIGHTS-CONTRACT-MODELS",
+      "dependency_type": "compile",
+      "reason": [
+        "The policy returns AnalysisWindow and named evidence-state contracts."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZG1SPJ6GC3BJRDMS8H78GX",
+      "path": "src/Tally/Domain/Insights/Time/AnalysisWindowPolicy.cs",
+      "action": "create",
+      "role": "trusted calendar policy",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJKMJPGFKM9A7XRVXA",
+      "path": "tests/Tally.Tests/Insights/Time/AnalysisWindowPolicyTests.cs",
+      "action": "test",
+      "role": "timezone, clipping, future, and historical cases",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZG1SPJXMZGKBVA8S0SJQVT",
+      "name": "AnalysisWindowPolicy.Evaluate",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-ANALYTICAL-EVIDENCE",
+      "notes": [
+        "ordered window bounds and named states"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZG1SPH3R3NNG7T3PR1SZ4W",
+      "kind": "acceptance_check",
+      "text": [
+        "The caller freezes TimeProvider.GetUtcNow once before producer reads and AnalysisWindowPolicy converts it with fixed IANA Africa/Johannesburg independent of host locale."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPH5JG7FTRZNCX7TK53",
+      "kind": "acceptance_check",
+      "text": [
+        "Day is the As-of local date intersected with the Budget Period; week is Monday through Sunday clipped to the period; month-to-date is period start through the earlier of local As-of date or period end, inclusive."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJVWJKMZSXWKYQG0NX",
+      "kind": "acceptance_check",
+      "text": [
+        "A completed historical period returns the full period, a future period returns NotStarted with no zero-spend interpretation, and rolling-day or rolling-week requests fail before financial processing."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJ9EHWGMCFZCYRJEHC",
+      "kind": "acceptance_check",
+      "text": [
+        "Window membership uses LEDGER Effective Date and historical generation states that current corrected evidence was used rather than claiming source-state reconstruction."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJC0BK75V6TQ3TZKMC",
+      "kind": "constraint",
+      "text": [
+        "Use DateOnly boundaries and explicit inclusive semantics."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJ0QJ7CERNV0SJSKZA",
+      "kind": "expected_output",
+      "text": [
+        "AnalysisWindowPolicy"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJ6V2DJ7J5C1355MG2",
+      "kind": "expected_output",
+      "text": [
+        "Calendar conformance tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJ2AK4BPGAA91X8WW2",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept a caller-supplied historical As-of Instant — rejected per DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJ755N5RXB4GCNVX2S",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use host locale, posting time, invocation time per member, rolling windows, or inferred daily/weekly sub-budgets."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJEZKNK53KB6FME9K6",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT read TimeProvider more than once for one report or hide NotStarted as an empty successful window."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZG1SPJZVAYQY8SKXSXJKVD",
+      "target_ref_code": "NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5RSRC447VXQSBG2EC3FQ",
+      "target_title": "Preserve deterministic analytical integrity",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJXQZAJGEE5SRNH2N9",
+      "target_ref_code": "DM-INSIGHTS-ANALYTICAL-EVIDENCE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXBCJJEXEN98RRW25V9P5",
+      "target_title": "AnalysisWindowMetricStateAndExplanation",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJCDH4NBJM78KSS6S4",
+      "target_ref_code": "TC-INSIGHTS-ANALYSIS-WINDOW-CONFORMANCE",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACSJ4MMT9C1TWDRNXNJXD",
+      "target_title": "Verify trusted calendar window semantics",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXZG1SPHSMFF2QK8DRBQ5FTF",
+      "target": "FR-INSIGHTS-TRUSTED-ANALYSIS-WINDOWS",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZG1SPJHDF8DCMH821HRWPG",
+      "gate_type": "self-review",
+      "description": [
+        "Compare every boundary example with FR-INSIGHTS-TRUSTED-ANALYSIS-WINDOWS."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZG1SPJ3JTG254Y3ZC6Y1C9",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~AnalysisWindowPolicyTests",
+      "expected_result": "exit 0; at least 18 Johannesburg conversion, month-boundary, Monday-week, clipping, historical, future, rolling-rejection, Effective-Date, and single-clock cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ]
+}

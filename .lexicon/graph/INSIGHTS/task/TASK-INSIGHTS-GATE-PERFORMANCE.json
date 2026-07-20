@@ -1,0 +1,255 @@
+{
+  "id": "01KXZGN7MA2KZJWDF9BY2V258H",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNFYC4GZB47S6T4PBR6MQ",
+  "ref_code": "TASK-INSIGHTS-GATE-PERFORMANCE",
+  "slug": "GATE-PERFORMANCE",
+  "title": "Prove bounded personal-scale INSIGHTS performance",
+  "description": [
+    "Performance convergence gate with no Implements ownership; benchmark all public analytical and retained-state paths at the approved dataset and output limits with exact result checks."
+  ],
+  "objective": [
+    "Generate, Retain, Restate, Get, List, Status, and Delete meet their p95 and memory targets without truncation, approximation, hidden background work, or integrity loss."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 2,
+  "created_at": "2026-07-20T10:20:30.2237501+00:00",
+  "decisions": [
+    {
+      "id": "01KXZGN7MVWMSGBC7F2E8712P6",
+      "target": "DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER",
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MVBJMXY3ZMCB024FKT",
+      "target": "DD-INSIGHTS-STATE-STORE",
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZGN7MWQ8K0ESFAH32GWMYW",
+      "target": "TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Benchmarks invoke the complete published operation surface."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZGN7MVWTPWJNV9ZGCJJQVJ",
+      "path": "tests/Tally.Tests/Insights/Performance/InsightsPersonalScalePerformanceTests.cs",
+      "action": "test",
+      "role": "approved-scale benchmark and exact result assertions",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MV239FVZ8VZG2ZG4NF",
+      "path": "scripts/verify-insights-performance.sh",
+      "action": "create",
+      "role": "Release benchmark, discovery, threshold, and report runner",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MVZKRQPZD4W93M75RR",
+      "path": "docs/verification/insights-performance.md",
+      "action": "document",
+      "role": "safe p50/p95/max/memory/output/environment report",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZGN7MVKE6KP0G1AFZWKK6W",
+      "name": "CompleteInsightsPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "all measured operations"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MVPKFVC1P0TJ9PC960",
+      "name": "InsightsPerformanceGateEvidence",
+      "direction": "produces",
+      "contract_ref_code": "NFR-INSIGHTS-PERSONAL-SCALE-PERFORMANCE",
+      "notes": [
+        "threshold and exact-result proof"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZGN7MVNYCRH5WWXZF8D0QB",
+      "kind": "acceptance_check",
+      "text": [
+        "The fixture contains exactly 100000 active LEDGER transactions through the public BUDGET composite, 1000 category positions, 1000 retained ReportSnapshots, and every active v1 policy without private owner payloads in the report."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MV46W7BS9GGPT6ZC20",
+      "kind": "acceptance_check",
+      "text": [
+        "After warm-up, at least 100 measured invocations per operation record p50, p95, maximum duration, peak resident memory, exact result/fingerprint reconciliation, output size, and environment fingerprint."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MVVBZ172PKXWQNGQJX",
+      "kind": "acceptance_check",
+      "text": [
+        "Generate and Retain each complete within 5 seconds p95 and 256 MiB peak resident memory; Restate completes within 6 seconds p95; Get, Status, Delete, and a 1000-item metadata List each complete within 1 second p95."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MVTA4252D1CM7D3JZQ",
+      "kind": "acceptance_check",
+      "text": [
+        "One-over-limit horizon, member, category, metric, signal, list, or output request fails before financial output, producer over-read, partial report, or retained change."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MVNTND127G2P20G2G7",
+      "kind": "acceptance_check",
+      "text": [
+        "Network remains denied, no backup/migration overlaps, List and Status avoid payload reads, exact arithmetic and fingerprints reconcile, and every benchmark class has nonzero discovery."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MVD0VTJJT0CAEPQD9J",
+      "kind": "constraint",
+      "text": [
+        "Run on the supported release host with Release build and record the exact environment fingerprint."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MV695NPD98DTT9HFW0",
+      "kind": "expected_output",
+      "text": [
+        "InsightsPerformanceGateEvidence"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MVJY0V4VDHRED5M2AH",
+      "kind": "expected_output",
+      "text": [
+        "Payload-free benchmark report"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MVM0X1B1DTYJS6SEX5",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT reduce dataset sizes, measured samples, active policies, category count, or retained history to manufacture a pass."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MVJBSGZM4RM4WWX630",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT cache mutable producer truth, weaken exact arithmetic, skip result checks, silently truncate, deserialize payloads for metadata reads, or run a daemon/background worker."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MVWGQGNX8C7JD344TR",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT include financial fixture content or private paths in benchmark output."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZGN7MVZDTFYKXXBJMZBHYG",
+      "target_ref_code": "NFR-INSIGHTS-PERSONAL-SCALE-PERFORMANCE",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5VJ37P678P4GPXDKN85M",
+      "target_title": "Respond at personal-finance scale",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MV4YYK0373CZPYJER1",
+      "target_ref_code": "TC-INSIGHTS-PERSONAL-SCALE-PERFORMANCE",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZADZV33AJRWTR5FRQPHQPF",
+      "target_title": "Verify personal-scale performance and limits",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZGN7MVV4PVKP0D5EW0RSJC",
+      "gate_type": "test-evidence",
+      "description": [
+        "Review dataset construction, per-operation sample counts, exact reconciliation, p95, memory, and limit evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZGN7MV30Y80WW5Y71YA6QD",
+      "phase": "after",
+      "command": "bash scripts/verify-insights-performance.sh",
+      "expected_result": "exit 0; each measured operation has at least 100 samples, Generate and Retain p95 are <=5s, Restate p95 is <=6s, Get/List/Status/Delete p95 are <=1s, peak RSS for Generate and Retain is <=256 MiB, every result and fingerprint reconciles, all one-over-limit cases fail before output/write, and 0 discovery or benchmark checks fail",
+      "required": 1,
+      "timeout_seconds": 3600,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ]
+}

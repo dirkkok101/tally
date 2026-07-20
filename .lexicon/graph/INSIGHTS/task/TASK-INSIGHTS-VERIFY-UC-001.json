@@ -1,0 +1,284 @@
+{
+  "id": "01KXZGN7MAZWDRTW9X5CHBKSTV",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNFYC4GZB47S6T4PBR6MQ",
+  "ref_code": "TASK-INSIGHTS-VERIFY-UC-001",
+  "slug": "VERIFY-UC-001",
+  "title": "Verify on-demand Insight Report generation",
+  "description": [
+    "Acceptance task for UC-INSIGHTS-001; exercise discovery, validation, frozen time, coherent producer evidence, exact windows and metrics, Linear Pace, state accounting, provenance, and ephemeral output."
+  ],
+  "objective": [
+    "UC-INSIGHTS-001 succeeds end to end only for one complete coherent deterministic report and leaves all upstream and INSIGHTS durable state unchanged."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 3,
+  "created_at": "2026-07-20T10:20:30.2237501+00:00",
+  "decisions": [
+    {
+      "id": "01KXZGN7MW4YTF9K95BYRN1KW9",
+      "target": "DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MWDZB9ZHM6XM0D0VJ6",
+      "target": "DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER",
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MWVFXX0MFSWVXDER7E",
+      "target": "DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY",
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZGN7N0PKCKB6W0G09PBN4V",
+      "target": "TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE",
+      "dependency_type": "compile",
+      "reason": [
+        "UC-001 requires the real coherent producer prerequisite."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N03EQRM5RERX3BT40M",
+      "target": "TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "UC-001 invokes the published Generate surface."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZGN7MZN71E4JC8NS5RCFS8",
+      "path": "tests/Tally.Tests/Insights/UseCases/GenerateInsightReportUseCaseTests.cs",
+      "action": "test",
+      "role": "UC-001 main and failure paths",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZGN7MZQVQED9MAWY19YAY4",
+      "name": "CompleteInsightsPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "published Generate and discovery"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MZ1JWH6DDBGY92XM8Q",
+      "name": "VerifiedBudgetInsightEvidenceContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
+      "notes": [
+        "real coherent upstream seam"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MZ9PJ8SSSH55JNHTK3",
+      "name": "VerifiedInsightsUc001",
+      "direction": "produces",
+      "contract_ref_code": "UC-INSIGHTS-001",
+      "notes": [
+        "complete main/failure proof"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KXZHRXYA4XT18R5Z41ZCY94E",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-001",
+      "rel": "verifies",
+      "created_at": "2026-07-20T10:39:59.9473041+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZGN7MW1J8GEZ8W56HSG1FC",
+      "kind": "acceptance_check",
+      "text": [
+        "A compatible caller discovers Generate and its limits, submits one bounded BudgetPeriod request, and receives one report using a single frozen Johannesburg As-of Instant and one coherent BUDGET result."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MWZ1QV3C74C9QV1C5H",
+      "kind": "acceptance_check",
+      "text": [
+        "The report accounts for exact day, Monday-week, and month-to-date totals and categories, preserves Unbudgeted and Uncategorized, returns exact Linear Pace or its named unavailable state, accounts for every requested kind, and cites complete producer/policy provenance and limitations."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MW8PV0YRZXJJY4Z9M7",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical trusted time, normalized request, evidence identities, and policy versions reproduce semantically identical ordered output and fingerprint."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MZZQ126M4YJT8YYGR1",
+      "kind": "acceptance_check",
+      "text": [
+        "NoBudgetPlan and NoActiveBudgetPlanRevision preserve exact actual metrics and return pace unavailable without an invented plan; current correction races yield wholly pre/post evidence or SourceStateChanged with no report."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MZGEDEW40VW2FV9CYJ",
+      "kind": "acceptance_check",
+      "text": [
+        "Malformed, incompatible, unsupported-window, over-limit, incomplete, incoherent, overflow, integrity, and cancellation paths return one stable failure and change no BUDGET, LEDGER, CLASSIFY, or durable INSIGHTS state."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MZSRRJA2HH9P69FKBF",
+      "kind": "constraint",
+      "text": [
+        "Run against the published registry and real BUDGET contract seam, not private handlers or a test-only second evaluator."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MZKVGRJNQGF9VDNC0V",
+      "kind": "expected_output",
+      "text": [
+        "VerifiedInsightsUc001"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MZG1ZNZ3B07T0GZD8X",
+      "kind": "expected_output",
+      "text": [
+        "UC-001 end-to-end evidence"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MZBPQ9VP866XY0618X",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept a partial report, mixed producer state, implicit clock, rolling window, floating-point pace, hidden signal omission, automatic retention, or upstream mutation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MZ2RH85YEE0B5XJJBT",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT validate only aggregate totals; every named failure partition and all three plan states require nonzero discovery."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZGN7MZT7B8WMPFZK0YG2XA",
+      "target_ref_code": "UC-INSIGHTS-001",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXZ8ZBG66YQJT03WK8AEP69T",
+      "target_title": "Generate an on-demand Insight Report",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MZGJKFCP4GSQY47BKV",
+      "target_ref_code": "TC-INSIGHTS-REPORT-GENERATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACW0Q1M10Z43250V3YPRF",
+      "target_title": "Verify deterministic Insight Report generation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N0WZYP1VMBGX6CMH60",
+      "target_ref_code": "TC-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZAD1DBHQ5GP3VMCGCV2PQX",
+      "target_title": "Verify deterministic analytical integrity",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N01ZG7RWFRGRDSEJYA",
+      "target_ref_code": "TC-INSIGHTS-COHERENT-EVIDENCE-CONCURRENT-CORRECTION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACRX0WCYCBX7ND8R2XB0V",
+      "target_title": "Reject mixed producer states during concurrent correction",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZGN7MZYHFED79YKAQA1A4K",
+      "gate_type": "test-evidence",
+      "description": [
+        "Map every UC-001 main step and fail-closed boundary to a discovered assertion."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZGN7MZKK0DQCTRJHAYYREG",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~GenerateInsightReportUseCaseTests",
+      "expected_result": "exit 0; at least 18 discovery, bound, no-plan, no-active, window, metric, pace, state, provenance, deterministic-replay, concurrent-correction, malformed, incompatible, over-limit, overflow, cancellation, no-retention, and no-upstream-mutation cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ]
+}

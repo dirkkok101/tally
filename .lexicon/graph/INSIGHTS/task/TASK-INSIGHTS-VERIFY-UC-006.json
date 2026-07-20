@@ -1,0 +1,264 @@
+{
+  "id": "01KXZGN7ME170EQNZ1NZXWJ857",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNFYC4GZB47S6T4PBR6MQ",
+  "ref_code": "TASK-INSIGHTS-VERIFY-UC-006",
+  "slug": "VERIFY-UC-006",
+  "title": "Verify structured contract discovery and invocation",
+  "description": [
+    "Acceptance task for UC-INSIGHTS-006; prove metadata-only discovery and deterministic non-interactive process invocation for every public operation."
+  ],
+  "objective": [
+    "UC-INSIGHTS-006 lets Agent Host automate exactly one operation per invocation with stable schemas, envelopes, exits, authority, limits, and no hidden data or process behavior."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 8,
+  "created_at": "2026-07-20T10:20:30.2237501+00:00",
+  "decisions": [
+    {
+      "id": "01KXZGN7N6PKMTV8THE6T7B6V4",
+      "target": "DD-INSIGHTS-CLI-OPERATION-CONTRACT",
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZGN7N66Q1SKXBR3Z38H768",
+      "target": "TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "UC-006 exercises the published process contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N6A39AVVQZ0N8R0PX3",
+      "target": "TASK-INSIGHTS-GATE-SECURITY",
+      "dependency_type": "compile",
+      "reason": [
+        "UC-006 consumes the completed payload and process-isolation evidence."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZGN7N6E4QVN84TPWEZG2Q7",
+      "path": "tests/Tally.Tests/Insights/UseCases/StructuredInsightsContractUseCaseTests.cs",
+      "action": "test",
+      "role": "UC-006 discovery, operation, envelope, exit, privacy, and isolation paths",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZGN7N6RJC3KSYAFAWC70A1",
+      "name": "CompleteInsightsPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "published descriptor and process surface"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N60JKSC5T66H8X2ZRH",
+      "name": "InsightsSecurityGateEvidence",
+      "direction": "consumes",
+      "contract_ref_code": "NFR-INSIGHTS-LOCAL-DATA-PROTECTION",
+      "notes": [
+        "payload and process isolation proof"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N6F1XDQEXKAR56BFPE",
+      "name": "VerifiedInsightsUc006",
+      "direction": "produces",
+      "contract_ref_code": "UC-INSIGHTS-006",
+      "notes": [
+        "discovery/invocation workflow proof"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KXZHS3KCQ7J6A4GKKHYAJ33C",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-006",
+      "rel": "verifies",
+      "created_at": "2026-07-20T10:40:05.7411248+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZGN7N62YTRHSE2GEEMFWXK",
+      "kind": "acceptance_check",
+      "text": [
+        "Help and system.schema discovery require no financial input and return exactly eleven operation descriptors plus released policy metadata with stable schemas, versions, authority, mutability, idempotency, limits, errors, exits, and compatibility."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N6K1WM5AVV6FM7Z7BG",
+      "kind": "acceptance_check",
+      "text": [
+        "For each operation, valid stdin or owner-only file input executes exactly one handler, emits exactly one structured business envelope on stdout, and exits with the documented category without prompts or prose parsing."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N68XEKH7B60QQVHR10",
+      "kind": "acceptance_check",
+      "text": [
+        "Malformed, unknown-field, unsupported version, missing authority/idempotency, NotFound, Deleted, conflict, unavailable, integrity, resource, downstream, and internal paths each emit one stable envelope and no partial financial output or retained change."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N670AZRDA5FG07NM8T",
+      "kind": "acceptance_check",
+      "text": [
+        "Arguments, stderr, logs, crash output, Git, and shared temporary files remain payload-free; network is denied and no daemon, watcher, scheduler, listener, queue, child tally process, or background process exists."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N68FXAWTCQZRY757CA",
+      "kind": "constraint",
+      "text": [
+        "Invoke the published Native-AOT binary for process-boundary assertions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N6B2Q1J9WFF2QQX5CQ",
+      "kind": "expected_output",
+      "text": [
+        "VerifiedInsightsUc006"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N6SGJJTJVA361H4DEZ",
+      "kind": "expected_output",
+      "text": [
+        "UC-006 process contract evidence"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N636JCTYBYD02K9QTR",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add interactive fallback, undocumented alias, prose output, multiple business envelopes, financial arguments, hidden authority, HTTP, or background execution."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N608Z1V14BDNPRPP4R",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept aggregate process totals unless all eleven operations and every exit partition have nonzero discovery."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZGN7N6N9A2NAPBH9NEQ579",
+      "target_ref_code": "UC-INSIGHTS-006",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXZ8ZE0KS877ZYMAZCC3E9YZ",
+      "target_title": "Discover and invoke the structured INSIGHTS contract",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N6EMR70CHQY85KVJPV",
+      "target_ref_code": "TC-INSIGHTS-CONTRACT-DISCOVERY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACQS40QAJWFPDM7KPFSNZ",
+      "target_title": "Verify INSIGHTS contract discovery",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N6EQEWDFEA1TJ183TV",
+      "target_ref_code": "TC-INSIGHTS-STRUCTURED-INVOCATION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACRAC5XK9E3VJYBRWWJP9",
+      "target_title": "Verify structured INSIGHTS invocation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N6X6A9K5BY4JFV0FD9",
+      "target_ref_code": "TC-INSIGHTS-OFFLINE-PROCESS-ISOLATION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZADZ9QXPRMXPS4FWXPEJDM",
+      "target_title": "Verify self-contained offline operation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZGN7N6R4WETY8BJ3P3DA7B",
+      "gate_type": "branch-review",
+      "description": [
+        "Review per-operation and per-exit discovery plus captured stdout/stderr/process evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZGN7N6E3GXSNBCGHCYBVKK",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~StructuredInsightsContractUseCaseTests",
+      "expected_result": "exit 0; exactly 11 operation partitions plus shared discovery are exercised, at least 24 schema, valid-invocation, unknown-field, compatibility, authority, idempotency, stable-exit, single-envelope, stdin/file, no-payload-argument, no-network, no-prompt, and no-background cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 1200,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ]
+}

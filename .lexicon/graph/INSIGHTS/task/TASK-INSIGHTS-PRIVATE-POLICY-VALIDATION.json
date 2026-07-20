@@ -1,0 +1,370 @@
+{
+  "id": "01KXZG1SPDHJZ71XE2AX5BTNAH",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNE48SG87EXFDT7SEM0B0",
+  "ref_code": "TASK-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+  "slug": "PRIVATE-POLICY-VALIDATION",
+  "title": "Validate built-in policies with private owner evidence",
+  "description": [
+    "Implement the internal manifest-driven validation harness and privacy-safe external receipt for active built-in policies and candidate report shape."
+  ],
+  "objective": [
+    "Changed built-in policies can enter the released catalogue only after complete owner-only cases, canaries, aggregate outcomes, and owner acceptance pass without private disclosure."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 8,
+  "created_at": "2026-07-20T10:09:53.3580299+00:00",
+  "decisions": [
+    {
+      "id": "01KXZG1SPRNJ1GCN8X98BEJET0",
+      "target": "DD-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZG1SPSZYYNWCAX7DTH7TFD",
+      "target": "TASK-INSIGHTS-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "The harness validates released catalogue and receipt contracts."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZH5E24DW8VSZQ63H14651G",
+      "target": "TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS",
+      "dependency_type": "compile",
+      "reason": [
+        "The private harness emits the external aggregate PolicyValidationReceipt."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:29:21.0935408+00:00"
+    },
+    {
+      "id": "01KXZG1SPS7Z9HJ5NXR1237JKZ",
+      "target": "TASK-INSIGHTS-REPORT-COMPILER",
+      "dependency_type": "compile",
+      "reason": [
+        "Private cases exercise the real candidate compiler rather than a second evaluator."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZG1SPR0REMJ0GKPN7287FW",
+      "path": "src/Tally/Features/Insights/PolicyValidation/PrivateEvaluationManifestReader.cs",
+      "action": "create",
+      "role": "owner-only manifest boundary",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPRV9QHQQY3TX4Y9449",
+      "path": "src/Tally/Features/Insights/PolicyValidation/InsightPolicyValidationHarness.cs",
+      "action": "create",
+      "role": "complete case and canary evaluator",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPSP923RNVBGJCVV2N0",
+      "path": "src/Tally/Features/Insights/PolicyValidation/PolicyValidationReceiptWriter.cs",
+      "action": "create",
+      "role": "aggregate external receipt writer",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPSB0MHN0W4CSW5ZW1P",
+      "path": "tests/Tally.Tests/Insights/PolicyValidation/InsightPolicyValidationHarnessTests.cs",
+      "action": "test",
+      "role": "shape, false-severity, privacy, and release tests",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZH82S95MCPN6TZJP10FBP1",
+      "name": "InsightReportCompiler.Compile",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-INSIGHT-REPORT",
+      "notes": [
+        "real candidate compiler"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:30:47.8492626+00:00"
+    },
+    {
+      "id": "01KXZH82SAFNKS2HSGVF375K25",
+      "name": "PolicyValidationReceipt",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-POLICY-VALIDATION-RECEIPT",
+      "notes": [
+        "external aggregate release evidence"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:30:47.8492626+00:00"
+    },
+    {
+      "id": "01KXZH82SATR361DEPQDAS5TBH",
+      "name": "InsightPolicyValidationHarness.ValidateAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-POLICY-VALIDATION-RECEIPT",
+      "notes": [
+        "complete private case evaluation"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:30:47.8492626+00:00"
+    },
+    {
+      "id": "01KXZH82SAC91SQC5657ZQJV1M",
+      "name": "PolicyValidationReceiptWriter.WriteAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-POLICY-VALIDATION-RECEIPT",
+      "notes": [
+        "owner-only aggregate receipt writer"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:30:47.8492626+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZG1SPRXP6X14NRG47DAXDD",
+      "kind": "acceptance_check",
+      "text": [
+        "InsightPolicyValidationHarness accepts the private manifest only from TALLY_INSIGHTS_PRIVATE_EVALUATION_MANIFEST, requires an owner-only regular file, and reads cases in memory without printing paths or payloads."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPR5M1AFETM71PR7D6X",
+      "kind": "acceptance_check",
+      "text": [
+        "Validation records candidate policy, report schema, producer contract, window, corpus, expected-state, and tool fingerprints and accounts for every structural case as supported, unavailable, insufficient, correct/incorrect signal, correct/false severity, or disclosure-canary outcome."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPRJDP02ZQ3WMHK5VZW",
+      "kind": "acceptance_check",
+      "text": [
+        "Sparse, zero, recurring, front-loaded, irregular, refund-heavy, plan-change, category-lifecycle, classification-gap, correction, false-severity, and disclosure-canary shapes are required before success."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPRQS8BKW5NS118FXGJ",
+      "kind": "acceptance_check",
+      "text": [
+        "The external PolicyValidationReceipt contains only approved structural IDs, fingerprints, aggregate outcomes, false-high-severity count, canary status, tool version, and owner acceptance; it is never inserted into insights.db."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPRXY592QE076K1JAX9",
+      "kind": "acceptance_check",
+      "text": [
+        "Missing evidence blocks changed policy release but does not disable unchanged released policies; deferred policies remain non-executable."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPRGR4A7DK8NZ0V0VDW",
+      "kind": "constraint",
+      "text": [
+        "Ordinary report generation must not require the private corpus for unchanged released policy versions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPRT5VSX1BX0R062QTY",
+      "kind": "expected_output",
+      "text": [
+        "InsightPolicyValidationHarness"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPR7CAQZQ1XQWC424CT",
+      "kind": "expected_output",
+      "text": [
+        "PrivateEvaluationManifestReader"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPR1R50HVMQ2D11SHFE",
+      "kind": "expected_output",
+      "text": [
+        "PolicyValidationReceiptWriter"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPRFQD0Y51WHV935H4A",
+      "kind": "expected_output",
+      "text": [
+        "Privacy and coverage tests"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPRBDH7S5JHHC30RHB0",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add a public validation, policy CRUD, expression, script, plugin, activation, or retirement operation — rejected per DD-INSIGHTS-PRIVATE-POLICY-VALIDATION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPR51JX0BBTRM1YDK1K",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT commit anonymized private examples or rely on synthetic tests alone — rejected per DD-INSIGHTS-PRIVATE-POLICY-VALIDATION."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPRPBSJEZPS9F79ANHZ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT persist manifest paths, filenames, financial values, merchant text, report payloads, expected rows, corpus rows, or PolicyValidationReceipt in the active store."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPRJ7F5NEWYAPRT2DXZ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT release a changed policy when any case, required shape, disclosure canary, owner acceptance, or zero-false-high-severity gate is absent or failing."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPRT1Z5Q5G6YG6AZK7J",
+      "kind": "note",
+      "text": [
+        "The durable receipt is release/test evidence outside active product state; private cases remain ignored and owner-controlled."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZG1SPSR69BHYPP89AN1KXS",
+      "target_ref_code": "EXT-INSIGHTS-PRIVATE-EVALUATION-CORPUS",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXZA7TQ1S427JMSTX4091WNQ",
+      "target_title": "Private Insight Evaluation Corpus",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPSDDSRHHA0FJBDPMBT",
+      "target_ref_code": "DM-INSIGHTS-POLICY-CATALOGUE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXAB8VDC422EP25HGK077",
+      "target_title": "InsightPolicyCatalogue",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPSH08A4NG3BJNGEFGR",
+      "target_ref_code": "DM-INSIGHTS-POLICY-VALIDATION-RECEIPT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXED5GAT7GWR5N0XBEZB2",
+      "target_title": "PolicyValidationReceipt",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPSSRCF3SDKNBK0HH66",
+      "target_ref_code": "TC-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZAD0SV33FV3NSA0NEGA777",
+      "target_title": "Verify private analytical policy validation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXZG1SPR36NCNA68VJQG819B",
+      "target": "FR-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZG1SPSZFF2NZ4E90QZM82G",
+      "gate_type": "custom",
+      "description": [
+        "Inspect every input, output, failure, and receipt field for private-payload disclosure."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZG1SPS6FKGST4N5B2JN393",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~InsightPolicyValidationHarnessTests",
+      "expected_result": "exit 0; at least 24 permission, manifest, required-shape, complete-accounting, false-high-severity, deferred-policy, changed-policy, unchanged-policy, canary, receipt-field, no-store, no-log, and no-public-operation cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ]
+}

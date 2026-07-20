@@ -1,0 +1,289 @@
+{
+  "id": "01KXZG8114ZM44CQ8ARYX0AVFF",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNERPYEK1S9QW2JMMY1ZR",
+  "ref_code": "TASK-INSIGHTS-REPORT-HISTORY-STATUS",
+  "slug": "REPORT-HISTORY-STATUS",
+  "title": "List metadata history and report store status",
+  "description": [
+    "Implement bounded metadata-only List and Status queries without report payload reads or state changes."
+  ],
+  "objective": [
+    "ListInsightReportsQuery and GetInsightsStatusQuery expose deterministic safe metadata, integrity, counts, durable recovery evidence, and supported policies only."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 4,
+  "created_at": "2026-07-20T10:13:17.4772449+00:00",
+  "decisions": [
+    {
+      "id": "01KXZG811ATEXZN90CT160BHP1",
+      "target": "DD-INSIGHTS-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811AJVVCHPK1PNN624A8",
+      "target": "DD-INSIGHTS-STATE-STORE",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811AJXW0WTPZ60GCGGR0",
+      "target": "DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZG811AN62C31Y411ZX7ZD8",
+      "target": "TASK-INSIGHTS-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Both queries use normalized metadata and integrity primitives."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZG811AM9Z3APJQMCKZ93JB",
+      "path": "src/Tally/Features/Insights/History/List/ListInsightReportsQuery.cs",
+      "action": "create",
+      "role": "bounded metadata list handler",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811AJMYPX1Z6P99T35PN",
+      "path": "src/Tally/Features/Insights/History/Status/GetInsightsStatusQuery.cs",
+      "action": "create",
+      "role": "metadata-only store status handler",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811AYVHBN0T7G2D94GBT",
+      "path": "tests/Tally.Tests/Insights/History/InsightReportHistoryStatusTests.cs",
+      "action": "test",
+      "role": "filters, order, limits, status, and no-payload tests",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZG811AJPEVXPRBNGS7AV08",
+      "name": "InsightsStateStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-STATE-STORE",
+      "notes": [
+        "metadata-only queries"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811AQKVJGKB8DNW1Q9RT",
+      "name": "ListInsightReportsQuery.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "insights.report.list handler"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811A8HZENMHA7RY3EW6E",
+      "name": "GetInsightsStatusQuery.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "notes": [
+        "insights.status.get handler"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZG811A73CDM42S3E2ZGKZT",
+      "kind": "acceptance_check",
+      "text": [
+        "List accepts only documented BudgetPeriod, trusted creation-range, actor, and count filters; one-over-limit input returns ResourceLimit rather than truncating silently."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811ACJAQEHZVY143YX9K",
+      "kind": "acceptance_check",
+      "text": [
+        "List returns snapshot identity, predecessor identity, BudgetPeriod, trusted creation time, actor, policy versions, content fingerprint, and deletion state ordered by creation time descending then stable identity descending, with no report payload or amount."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811AH58063ZVW5FHSDJY",
+      "kind": "acceptance_check",
+      "text": [
+        "Status returns active generation fingerprint, storage version, integrity state, retained count, deleted count, supported policy versions, and latest durable successful Backup or Restore verification without payloads, private paths, or merchant text."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811ARJRAV1SKBD4N58ER",
+      "kind": "acceptance_check",
+      "text": [
+        "Standalone Verify results do not appear in Status and List or Status success and failure change no retained or replay state."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811AJYQJA77EKWXGKM39",
+      "kind": "constraint",
+      "text": [
+        "Queries use normalized metadata columns and short read connections only."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811ATMVVP73M73GK6YAB",
+      "kind": "expected_output",
+      "text": [
+        "ListInsightReportsQuery"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811A3DY27MS5C0EBR7ST",
+      "kind": "expected_output",
+      "text": [
+        "GetInsightsStatusQuery"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811AG8J30NQ87N9H27PR",
+      "kind": "expected_output",
+      "text": [
+        "Metadata-only query tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811A0MMN1AFSFE4JE8NE",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT deserialize report payloads for List or Status, silently truncate, record standalone Verify, or use display text for ordering."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811AT2BPYVFG1Y3V0NR8",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add paging cursors, search infrastructure, HTTP routes, automatic cleanup, or read-side materialized replicas — rejected per DD-INSIGHTS-STATE-STORE."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811AG8WQWT3NH1K0NWQC",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT expose amounts, explanations, private paths, or artifact filenames in metadata queries."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZG811ANXEPM7GRMA6WFE1H",
+      "target_ref_code": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXDXDFHH54NY7MR3DKTP9",
+      "target_title": "InsightsRecoveryManifestAndReceipts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811AZWG50XT09REJYHHV",
+      "target_ref_code": "DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXCDP4YZ72FAYYBJYPHPT",
+      "target_title": "ReportSnapshotRestatementAndDeletion",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811AQZHE28XQ1JPN14MP",
+      "target_ref_code": "TC-INSIGHTS-REPORT-HISTORY-STATUS",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACZ263FWJ2T138ZYP3PZA",
+      "target_title": "Verify metadata-first report history and status",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXZG811AJCQ20XW2TFXRT86J",
+      "target": "FR-INSIGHTS-REPORT-HISTORY",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZG811AR741AZQDVSXQNANQ",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach SQL/read evidence proving List and Status never fetch report_payload."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZG811A74339W5X8HCWG8FY",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~InsightReportHistoryStatusTests",
+      "expected_result": "exit 0; at least 18 filter, deterministic-order, exact-limit, one-over-limit, deleted-metadata, payload-read-canary, integrity, durable-backup, durable-restore, standalone-verify-exclusion, privacy, no-write, and cancellation cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ]
+}

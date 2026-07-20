@@ -1,0 +1,232 @@
+{
+  "id": "01KXZGN7MBZ2V1VPQCAG2RG0F5",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNFYC4GZB47S6T4PBR6MQ",
+  "ref_code": "TASK-INSIGHTS-VERIFY-UC-004",
+  "slug": "VERIFY-UC-004",
+  "title": "Verify Restatement and corrected-report comparison",
+  "description": [
+    "Acceptance task for UC-INSIGHTS-004; prove predecessor immutability, current coherent generation, NoChange, ordered difference, linked append, replay, and failure atomicity."
+  ],
+  "objective": [
+    "UC-INSIGHTS-004 creates exactly one linked child only after a complete meaningful change and otherwise returns NoChange without modifying history."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 6,
+  "created_at": "2026-07-20T10:20:30.2237501+00:00",
+  "decisions": [
+    {
+      "id": "01KXZGN7N135VA8825XKN1KZ95",
+      "target": "DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE",
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZGN7N2J999YGTANWEZGWJQ",
+      "target": "TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "UC-004 invokes the published Restate surface."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZGN7N1RDCDYFPY1ST81P6X",
+      "path": "tests/Tally.Tests/Insights/UseCases/RestateInsightReportUseCaseTests.cs",
+      "action": "test",
+      "role": "UC-004 main, NoChange, difference, replay, and failure paths",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZGN7N1YYRX47MSW6SBSGZH",
+      "name": "CompleteInsightsPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "published Restate and Get"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N1X7Y2VDRRCXQG7V8T",
+      "name": "VerifiedInsightsUc004",
+      "direction": "produces",
+      "contract_ref_code": "UC-INSIGHTS-004",
+      "notes": [
+        "Restatement workflow proof"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KXZHS1C1NVXKH2YSJY46A5TN",
+      "target_type": "use_case",
+      "target": "UC-INSIGHTS-004",
+      "rel": "verifies",
+      "created_at": "2026-07-20T10:40:03.4579967+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZGN7N13MC9DJEJ9GDFM72N",
+      "kind": "acceptance_check",
+      "text": [
+        "A compatible existing predecessor remains byte-semantically unchanged while current evidence is generated through the same coherent workflow and compared by source, policy, schema, exact metric, state, explanation, and attention sections."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N1JZCHXXQWCK4360AX",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical identities, versions, schema, and semantic content return NoChange, create no child snapshot/link, and replay the same outcome without producer access."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N1WAX0F866JE5TXT16",
+      "kind": "acceptance_check",
+      "text": [
+        "A source-, policy-, schema-, or semantic-only change creates one child with one predecessor link and returns deterministic bounded differences even when exact amounts are equal."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N1TVM9FVJSN4M0KG0S",
+      "kind": "acceptance_check",
+      "text": [
+        "Unknown, deleted, corrupt, incompatible, unavailable, incoherent, over-limit, cancellation, write, and crash paths return exact failures with no partial child, link, difference, or duplicate replay outcome."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N1DB0X0KJV2C9ZSGRX",
+      "kind": "constraint",
+      "text": [
+        "All reads and writes use the published Restate contract and real store."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N1VG56W9HE6HQCYYCN",
+      "kind": "expected_output",
+      "text": [
+        "VerifiedInsightsUc004"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N1WT7NHJ9C5Q6QQ9ZC",
+      "kind": "expected_output",
+      "text": [
+        "UC-004 Restatement evidence"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N18NS6V6H3BAE2B595",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT modify the predecessor, compare display text, omit provenance/version changes, auto-restate, store partial differences, or create a child for exact NoChange."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N1QDDQHXBX60MEGVTQ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT validate only value changes; equal-value source, policy, and schema changes are explicit Restatements."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZGN7N2XK1BCYMSZKTP3GPW",
+      "target_ref_code": "UC-INSIGHTS-004",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXZ8ZCZ7R1DHVD1VSWV0SAD6",
+      "target_title": "Restate and compare a corrected report",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N2MRSNC4M0CQY8ZA3B",
+      "target_ref_code": "TC-INSIGHTS-RESTATEMENT-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACYFV33Z62XC3664QDFA1",
+      "target_title": "Verify explicit Restatement and difference semantics",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N2SBYMD2NJGJ4M9G37",
+      "target_ref_code": "TC-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZAD1DBHQ5GP3VMCGCV2PQX",
+      "target_title": "Verify deterministic analytical integrity",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZGN7N1BG4RZ06B16VDEAD5",
+      "gate_type": "branch-review",
+      "description": [
+        "Review predecessor before/after bytes and each semantic difference partition."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZGN7N17P0F59BSZGJ4RET1",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~RestateInsightReportUseCaseTests",
+      "expected_result": "exit 0; at least 18 predecessor-immutable, exact-NoChange, source-only, policy-only, schema-only, equal-value-change, ordered-difference, exact replay, unknown, deleted, corrupt, incompatible, incoherent, cancellation, write/crash atomicity, and no-upstream-mutation cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ]
+}

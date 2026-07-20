@@ -1,0 +1,449 @@
+{
+  "id": "01KXZFS9RAE81TYV7JCCDJZ6MP",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNDFWMH6APFAZFA7PN2J4",
+  "ref_code": "TASK-INSIGHTS-CONTRACT-FOUNDATION",
+  "slug": "CONTRACT-FOUNDATION",
+  "title": "Publish the eleven-operation INSIGHTS contract foundation",
+  "description": [
+    "Create versioned requests, results, stable errors, source-generated JSON metadata, eleven descriptors, and the pure contract mapper over the shared Tally operation abstractions."
+  ],
+  "objective": [
+    "The shared registry can describe every INSIGHTS operation and policy without reading financial or retained data."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 1,
+  "created_at": "2026-07-20T10:05:14.8911171+00:00",
+  "decisions": [
+    {
+      "id": "01KXZFS9RE8G2HFRYV23T57APY",
+      "target": "DD-INSIGHTS-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9REMFYKB6FE7NBGBHK8",
+      "target": "DD-INSIGHTS-CLI-OPERATION-CONTRACT",
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZFS9RGMNQ3PWSR926E34CD",
+      "target": "TASK-INSIGHTS-CONTRACT-MODELS",
+      "dependency_type": "compile",
+      "reason": [
+        "Requests, results, JSON metadata, descriptors, and mapper reference the analytical and lifecycle contract records."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZH5BY7RKY0QS2W01SFZPFM",
+      "target": "TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS",
+      "dependency_type": "compile",
+      "reason": [
+        "The eleven public operations include retained-history recovery status and private-receipt contract types."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:29:18.9203272+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZFS9RF811F20BXJKRXG9N9",
+      "path": "src/Tally/Application/OperationAbstractions.cs",
+      "action": "read",
+      "role": "shared handler and result abstractions",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RFHP3TVX3TFCMFN78H",
+      "path": "src/Tally/Contracts/Insights/Operations/InsightsRequests.cs",
+      "action": "create",
+      "role": "versioned operation requests",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RFFJH341BC7WSKZ32R",
+      "path": "src/Tally/Contracts/Insights/Operations/InsightsResults.cs",
+      "action": "create",
+      "role": "versioned operation results",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RFFGNVD2GT08W2BGTG",
+      "path": "src/Tally/Contracts/Insights/Operations/InsightsErrors.cs",
+      "action": "create",
+      "role": "stable failures and exits",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RFBSZFD8PRX7EG72WN",
+      "path": "src/Tally/Contracts/Insights/InsightsJsonContext.cs",
+      "action": "create",
+      "role": "source-generated JSON metadata",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RF38EX5MGFVZT6RXJ1",
+      "path": "src/Tally/Features/Insights/Contract/InsightsOperationModule.cs",
+      "action": "create",
+      "role": "eleven operation descriptors",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RFHZ44H63PZPJJVN74",
+      "path": "src/Tally/Features/Insights/Contract/InsightsContractMapper.cs",
+      "action": "create",
+      "role": "pure domain-to-contract mapping root",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RF2TGR73PT1WBTJB6C",
+      "path": "tests/Tally.Tests/Insights/Contract/InsightsOperationContractTests.cs",
+      "action": "test",
+      "role": "descriptor, schema, authority, and no-read tests",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZH80JNAM9GK691TX3S5000",
+      "name": "InsightReport",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-INSIGHT-REPORT",
+      "notes": [
+        "Generate operation result contract"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:30:45.5892634+00:00"
+    },
+    {
+      "id": "01KXZH80JP0ZNK6DC0X25PW69M",
+      "name": "InsightHistoryContracts",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE",
+      "notes": [
+        "retain restate delete and history result contracts"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:30:45.5892634+00:00"
+    },
+    {
+      "id": "01KXZH80JPWQGPR376012RZF31",
+      "name": "InsightsRecoveryContracts",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "notes": [
+        "backup verify restore and status result contracts"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:30:45.5892634+00:00"
+    },
+    {
+      "id": "01KXZH80JPE758GB12Y3KHZYKD",
+      "name": "InsightsOperationContracts",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "all eleven versioned requests and results"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:30:45.5892634+00:00"
+    },
+    {
+      "id": "01KXZH80JPQKS6NWQVGDQXJ4EE",
+      "name": "InsightsOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "canonical descriptor inventory"
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:30:45.5892634+00:00"
+    },
+    {
+      "id": "01KXZH80JP173EGB85Y61XFMM9",
+      "name": "InsightsJsonContext",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "Native-AOT serialization metadata"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-20T10:30:45.5892634+00:00"
+    },
+    {
+      "id": "01KXZH80JP0G80V0WF63728FH4",
+      "name": "InsightsContractMapper",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "concrete pure mapper"
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-20T10:30:45.5892634+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZFS9REPH9B1ZS8D54B04QB",
+      "kind": "acceptance_check",
+      "text": [
+        "InsightsOperationModule contains exactly insights.report.generate, insights.report.explain, insights.report.get, insights.report.list, insights.report.retain, insights.report.restate, insights.report.delete, insights.status.get, insights.backup.create, insights.backup.verify, and insights.restore.activate in canonical verb order; Discover remains shared system.schema.list/show."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RE4E66TTJ4FK1FQ32Z",
+      "kind": "acceptance_check",
+      "text": [
+        "Every descriptor publishes deterministic request/result fingerprints, compatibility range, authority, mutability, idempotency requirement, released limits, stable errors, and exit categories without reading a store or producer."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RE8DJE3WZBFY67RVT7",
+      "kind": "acceptance_check",
+      "text": [
+        "Retain, Restate, Delete, Backup, and Restore require actor attribution and idempotency; Generate, Explain, Get, List, Status, and Verify are read-only; unsupported versions and unknown fields fail before financial reads."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9REC057T4YEKDJMAMN4",
+      "kind": "acceptance_check",
+      "text": [
+        "Complex input is accepted only through stdin or an approved owner-only file boundary, exactly one business envelope uses stdout, and diagnostics are metadata-only."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RE5F7CDN7MTZAAW6GP",
+      "kind": "acceptance_check",
+      "text": [
+        "The released policy catalogue marks Forecast, Trend, Anomaly, and Attention as Deferred and exposes no executable formula, threshold, severity, or mutation operation for them."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RFJZNRE5SXYX2PEXKB",
+      "kind": "constraint",
+      "text": [
+        "Reuse OperationRegistry, OperationDescriptor, ICommandHandler, IQueryHandler, CommandResult, and process envelopes from TASK-LEDGER-CORE-PROCESS-CONTRACT."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RFWPTMD895XX2RDR9V",
+      "kind": "expected_output",
+      "text": [
+        "InsightsOperationModule"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RFRZW8M00QQ08AQTB8",
+      "kind": "expected_output",
+      "text": [
+        "InsightsJsonContext"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RF527EBQKG36F0ABG5",
+      "kind": "expected_output",
+      "text": [
+        "InsightsContractMapper"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RFPCHMW59S9V8E5PX0",
+      "kind": "expected_output",
+      "text": [
+        "Operation contract tests"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9REKNW0CB0F0H1F8B5V",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT replace the eleven operations with a generic action-discriminator facade or arbitrary insights.execute — rejected per DD-INSIGHTS-CLI-OPERATION-CONTRACT."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9REJ7HR9QTYTB7D8ECD",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add HTTP or FastEndpoints routes — rejected per DD-INSIGHTS-CLI-OPERATION-CONTRACT."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RE1A2RN1N9ZNDNW27W",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add repository, store, compiler, calculator, clock, mapper, mediator, event, or transport interfaces — rejected per DD-INSIGHTS-APPLICATION-ARCHITECTURE."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RFXDVEMRA76KB9Q0EN",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use reflection scanning, runtime-generated schemas, interactive prompts, financial process arguments, or serialized request/response logging."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RF41QXY6MCX4DBMXNP",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT create Save, Edit, Refresh, Alert, Notify, policy CRUD, permission, role, menu, translation, or frontend-key contracts."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RFDM7K2YVYEGHJDFE6",
+      "kind": "note",
+      "text": [
+        "Final handler registration and Program wiring belong to TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT after every handler exists."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZFS9RGS71NM3NWRG0QEV44",
+      "target_ref_code": "TASK-LEDGER-CORE-PROCESS-CONTRACT",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXT0KHY0G0YQW0FRT8BEWTY9",
+      "target_title": "Build the self-contained process and operation contract",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 13,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RGYFSQCN32BNGVQNTN",
+      "target_ref_code": "ADR-CORE-0021",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3YHHJX75J3BATYF9GWQ",
+      "target_title": "Explicit DI Registration — No Reflection Scanning",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RFEPF2EW5FW51M3RGY",
+      "target_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDX9TBYPKXP6DYASKDX5Z7",
+      "target_title": "InsightsOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RGSDZCCFX1RS2P0ENN",
+      "target_ref_code": "TC-INSIGHTS-CONTRACT-DISCOVERY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACQS40QAJWFPDM7KPFSNZ",
+      "target_title": "Verify INSIGHTS contract discovery",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 14,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXZFS9RECCE7AYABDSB2J6WE",
+      "target": "FR-INSIGHTS-CONTRACT-DISCOVERY",
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RE2GW0T5D73KBY7QK4",
+      "target": "FR-INSIGHTS-STRUCTURED-INVOCATION",
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZFS9RFJCQP1RE7MYR4DDNF",
+      "gate_type": "self-review",
+      "description": [
+        "Inventory exactly eleven operations plus shared discovery and compare every rejected interface and transport alternative."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZFS9RFDJTYV2Q21H02AW4A",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~InsightsOperationContractTests",
+      "expected_result": "exit 0; at least 32 exact-inventory, schema, ordering, compatibility, authority, idempotency, limit, deferred-policy, unknown-field, no-data-read, and forbidden-alias cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    }
+  ]
+}

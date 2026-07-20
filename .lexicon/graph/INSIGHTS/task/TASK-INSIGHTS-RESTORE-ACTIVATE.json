@@ -1,0 +1,342 @@
+{
+  "id": "01KXZGBEMVQ25H6NZQE6W5DPZG",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNFBJJ05B3DTV9XV9Q4SK",
+  "ref_code": "TASK-INSIGHTS-RESTORE-ACTIVATE",
+  "slug": "RESTORE-ACTIVATE",
+  "title": "Restore through a verified generation and atomic activation",
+  "description": [
+    "Implement source verification, separate generation construction, compatible migration, restore outcome recording, revalidation, expected-current locking, and atomic CURRENT replacement."
+  ],
+  "objective": [
+    "RestoreInsightsBackupCommand activates either one complete verified restored generation or leaves the prior authoritative generation unchanged under every fault."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 1,
+  "created_at": "2026-07-20T10:15:09.7240612+00:00",
+  "decisions": [
+    {
+      "id": "01KXZGBEMYQ0T0RPM9PEFN3NXB",
+      "target": "DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION",
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZGBEN0TTA2J1958FWCY94S",
+      "target": "TASK-INSIGHTS-BACKUP-VERIFY",
+      "dependency_type": "compile",
+      "reason": [
+        "Restore reuses the independent artifact verifier."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN0AAF0J6TZTNS80WYG",
+      "target": "TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR",
+      "dependency_type": "compile",
+      "reason": [
+        "Restore records and replays one outcome inside the activated candidate."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN05KWSQP7EWAGWJAK4",
+      "target": "TASK-INSIGHTS-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Restore uses generation layout, migrations, integrity, and writer coordination."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZGBEMZ8T3983Y1P5PV23HW",
+      "path": "src/Tally/Infrastructure/Insights/Storage/Recovery/InsightsRestoreActivator.cs",
+      "action": "create",
+      "role": "candidate migration, validation, lock, pointer, and fsync workflow",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMZYSK7GWV3GM4BKMMY",
+      "path": "src/Tally/Features/Insights/Recovery/Restore/RestoreInsightsBackupCommand.cs",
+      "action": "create",
+      "role": "idempotent Restore handler",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMZ3YH4JSD9FXT583GD",
+      "path": "tests/Tally.Tests/Insights/Recovery/InsightsRestoreActivationTests.cs",
+      "action": "test",
+      "role": "source, migration, expected-current, atomic pointer, restart, and fault tests",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZGBEMZ5568BB0WYJD2V0NT",
+      "name": "InsightsBackupVerifier.VerifyAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "notes": [
+        "source and candidate verification"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMZEB5MQ6RTZFJDRYRF",
+      "name": "InsightsMigrations.ApplyAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-STATE-STORE",
+      "notes": [
+        "compatible candidate migrations"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMZAGAGQK20WMS9SN6M",
+      "name": "InsightsIdempotencyExecutor.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-IDEMPOTENCY",
+      "notes": [
+        "exact replay and Restore outcome"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMZXXDFKE8TVYADJKYW",
+      "name": "InsightsRestoreActivator.ActivateAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "notes": [
+        "verified atomic generation activation"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMZBDKFWSFGSBCA9D8M",
+      "name": "RestoreInsightsBackupCommand.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "insights.restore.activate handler"
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZGBEMY4B74T8TNSA8T5E3F",
+      "kind": "acceptance_check",
+      "text": [
+        "Restore requires source, expected current generation fingerprint, actor, safe path identity, and idempotency and resolves an exact prior outcome before source work."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMYHZKSYGW7PV1R32KB",
+      "kind": "acceptance_check",
+      "text": [
+        "The source is independently verified before a separate new generation is created; only compatible ordered migrations run against the candidate, and complete logical, fingerprint, permission, and integrity verification follows."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMYB4FG06KRZPE9WVZ0",
+      "kind": "acceptance_check",
+      "text": [
+        "The candidate records exactly the current Restore replay outcome and recovery event, is flushed and reverified, then activation acquires the exclusive module writer lock and compares expected current fingerprint before changing authority."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMZHPGFX948TCR60MHJ",
+      "kind": "acceptance_check",
+      "text": [
+        "Successful activation atomically replaces CURRENT and fsyncs its directory; startup observes either the complete old or complete new generation, Status cites durable Restore verification, and the prior generation remains a recovery point."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMZJCV2S6M3DX2KXQDC",
+      "kind": "acceptance_check",
+      "text": [
+        "Corruption, omission, incompatibility, permission, space, cancellation, migration, verification, expected-current drift, pointer replacement, or fsync failure before completed activation leaves the prior authoritative store unchanged and returns an exact stable failure."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMZSHG4YD5HMDHSBMAP",
+      "kind": "constraint",
+      "text": [
+        "Only CURRENT is the authority switch; directory fsync and exclusive writer coordination are mandatory."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMZFRTKQW07659CR1EM",
+      "kind": "expected_output",
+      "text": [
+        "InsightsRestoreActivator"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMZ9P91FGRDKQBTK2WJ",
+      "kind": "expected_output",
+      "text": [
+        "RestoreInsightsBackupCommand"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMZPEZ40E3DFTNS0S2D",
+      "kind": "expected_output",
+      "text": [
+        "Atomic activation fault tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMZDANPBY31J1V1VN6K",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT restore over the live database or rename individual database/WAL files — rejected per DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMZ022C40S3G168S3PT",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT activate before full candidate verification, skip expected-current revalidation, overwrite the prior generation, persist standalone Verify, or add source business data beyond the captured backup."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMZPCSWD4Y25CHK53JY",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT include candidate paths or report payloads in results, diagnostics, logs, or crash output."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZGBEMZ9BE3CHP2CH27ACJ9",
+      "target_ref_code": "NFR-INSIGHTS-VERIFIED-RECOVERABILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5T5ZP1H2VJ6K77SJ2QQ1",
+      "target_title": "Verify backup and restore independently",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMZKZW49QS60HRFYEC1",
+      "target_ref_code": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXDXDFHH54NY7MR3DKTP9",
+      "target_title": "InsightsRecoveryManifestAndReceipts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMZZBCYHCV9SK043SQS",
+      "target_ref_code": "DIAG-INSIGHTS-RECOVERY-WORKFLOW",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KXZDY3A6DGAFVAFHXNV37624",
+      "target_title": "Verified INSIGHTS restore activation",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMZSCFVC6S57JZJG5VB",
+      "target_ref_code": "TC-INSIGHTS-RESTORE-FAILURE-ATOMICITY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZADY6D0SGQFEDTG5ZT0YRT",
+      "target_title": "Verify separate-target restore and atomic activation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXZGBEMYT0PF4VBP8G9P70EP",
+      "target": "FR-INSIGHTS-BACKUP-VERIFY-RESTORE",
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZGBEMZ0BZVTCBYAE9KQHQ6",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach injected-fault and restart evidence for every pre- and post-pointer boundary."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZGBEMZPFXJ5M8P6R24J2KE",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~InsightsRestoreActivationTests",
+      "expected_result": "exit 0; at least 24 exact-replay, source-verification, incompatible-version, migration, candidate-outcome, revalidation, permission, space, cancellation, expected-current-drift, lock, pointer, fsync, restart-old-or-new, prior-generation, Status, and disclosure cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 1200,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ]
+}

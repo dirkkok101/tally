@@ -1,0 +1,11 @@
+{
+  "id": "01KXZFNFBJJ05B3DTV9XV9Q4SK",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "ref_code": "SP-INSIGHTS-03-RECOVERY",
+  "title": "Verified backup and atomic recovery",
+  "description": [
+    "Build and fault-test complete point-in-time backup, independent verification, and generation activation."
+  ],
+  "sort_order": 3,
+  "created_at": "2026-07-20T10:03:09.5553312+00:00"
+}

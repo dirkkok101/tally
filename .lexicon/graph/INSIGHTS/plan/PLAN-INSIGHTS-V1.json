@@ -1,0 +1,20 @@
+{
+  "id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "module_id": "01KXR4WNWDEV5WWPYPB8TQZBC4",
+  "ref_code": "PLAN-INSIGHTS-V1",
+  "title": "Budget Insights v1 implementation",
+  "description": [
+    "Greenfield implementation of MD-INSIGHTS-MASTER. Global constraints: target .NET 10 Native-AOT linux-x64 in the existing self-contained Tally executable; nullable and warnings-as-errors; file-scoped namespaces and primary constructors; every asynchronous boundary forwards CancellationToken. Remain one in-process module with no daemon, scheduler, network service, listener, queue, cloud model, analytics replica, or second financial source of truth. Expose exactly eleven typed INSIGHTS operations plus shared system.schema discovery; no HTTP, FastEndpoints, EF Core, UI, permission, role, menu, translation, plugin, script, arbitrary Execute, Save, Edit, Refresh, Alert, or Notify surface. Consume exactly one version-compatible budget.insights.evidence.get result and never open private BUDGET or LEDGER storage, invoke private handlers, issue a second LEDGER read, duplicate Budget Position calculation, or mutate upstream state. Use checked Int64 ZAR minor units and exact rational arithmetic; freeze TimeProvider before producer reads; use Africa/Johannesburg and LEDGER Effective Date. Persist only bounded derived report payloads and normalized lifecycle metadata in one owner-only raw-SQLite generation store; never retain dated actual members, raw merchant text, canonical transactions, producer cursors, private corpus rows, arbitrary formulas, or PolicyValidationReceipt. Generate is ephemeral; retained history starts only after the owner-value gate passes. Private evaluation uses only TALLY_INSIGHTS_PRIVATE_EVALUATION_MANIFEST and emits aggregate privacy-safe evidence outside insights.db. Every task includes focused non-vacuous tests; final gates prove Native-AOT publication, graph convergence, public compatibility, local privacy, performance, recovery, and all six use cases."
+  ],
+  "status": "active",
+  "created_at": "2026-07-20T10:03:06.9185026+00:00",
+  "links": [
+    {
+      "id": "01KXZHRWYFP17BPTDS0C1TG4TB",
+      "target_type": "module_design",
+      "target": "MD-INSIGHTS-MASTER",
+      "rel": "implements",
+      "created_at": "2026-07-20T10:39:58.9276742+00:00"
+    }
+  ]
+}

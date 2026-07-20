@@ -1,0 +1,311 @@
+{
+  "id": "01KXZG8114EWTV0GW7N8JSYCS7",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNERPYEK1S9QW2JMMY1ZR",
+  "ref_code": "TASK-INSIGHTS-REPORT-DETAIL-READS",
+  "slug": "REPORT-DETAIL-READS",
+  "title": "Read retained report details and explanations",
+  "description": [
+    "Implement payload-verifying Get and Explain queries for one stable retained identity with explicit NotFound and Deleted outcomes."
+  ],
+  "objective": [
+    "GetInsightReportQuery and ExplainInsightReportQuery return only the selected immutable stored evidence without recomputing current producers or mutating history."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 3,
+  "created_at": "2026-07-20T10:13:17.4772449+00:00",
+  "decisions": [
+    {
+      "id": "01KXZG8119CB01NJM7GA9PBE3N",
+      "target": "DD-INSIGHTS-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8119F5V5SNJDA42SXJA6",
+      "target": "DD-INSIGHTS-STATE-STORE",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZG811AMAC4C3YP2VHSDB0F",
+      "target": "TASK-INSIGHTS-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Both queries use verified metadata and payload read primitives."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZG81194N5WJAAYTSQ1BAEA",
+      "path": "src/Tally/Features/Insights/History/Get/GetInsightReportQuery.cs",
+      "action": "create",
+      "role": "one immutable snapshot read",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG81195XM90FGJYG2M6RD8",
+      "path": "src/Tally/Features/Insights/Reports/Explain/ExplainInsightReportQuery.cs",
+      "action": "create",
+      "role": "selected stored explanation read",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG81195FR5JR1PEGMG1CYY",
+      "path": "tests/Tally.Tests/Insights/History/InsightReportDetailReadTests.cs",
+      "action": "test",
+      "role": "known, unknown, deleted, corrupt, and no-recompute cases",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZG8119ZZ7PE6V9QE59MA9Z",
+      "name": "InsightsStateStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-STATE-STORE",
+      "notes": [
+        "verified selected payload and deletion evidence"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8119PDD35S5460S647KK",
+      "name": "GetInsightReportQuery.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "insights.report.get handler"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG81199JB199HEPBZN93EM",
+      "name": "ExplainInsightReportQuery.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "insights.report.explain handler"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZG811940NQTQTF2R285K19",
+      "kind": "acceptance_check",
+      "text": [
+        "Get for a known identity verifies report schema, payload fingerprint, and content fingerprint and returns the exact immutable ReportSnapshot plus complete stored provenance."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8119HM8PDVVNM324BN1T",
+      "kind": "acceptance_check",
+      "text": [
+        "Explain for a known identity returns only the selected exact stored explanation and provenance and never calls BUDGET, LEDGER, TimeProvider, or InsightReportCompiler."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811990ES86ETG0R6FBSZ",
+      "kind": "acceptance_check",
+      "text": [
+        "Unknown identity returns NotFound without other report metadata; deleted identity returns metadata-only Deleted evidence with no former payload or explanation."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8119ZMW5X63YTYF7WZPW",
+      "kind": "acceptance_check",
+      "text": [
+        "Every success and expected failure uses a short read connection and changes no snapshot, deletion event, idempotency outcome, recovery receipt, or status state."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8119WD1KM8KSCRWFQVD1",
+      "kind": "constraint",
+      "text": [
+        "Queries are read-only and forward CancellationToken."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8119S63BGMWCWQQ4KEW8",
+      "kind": "expected_output",
+      "text": [
+        "GetInsightReportQuery"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8119FXERWBT1SMYPDPKF",
+      "kind": "expected_output",
+      "text": [
+        "ExplainInsightReportQuery"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8119Z81GBKQSRFW6HHEP",
+      "kind": "expected_output",
+      "text": [
+        "Detail read contract tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG81190PQ56H5S0EVSPHBV",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT recompute current evidence, return list metadata for unknown IDs, expand raw transactions, or deserialize unrelated report payloads."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8119CQG8SM3V8GSNSCSB",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add a generic repository, HTTP detail endpoint, mutation, cache, or hidden repair on integrity failure — rejected per DD-INSIGHTS-APPLICATION-ARCHITECTURE and DD-INSIGHTS-STATE-STORE."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG81198XFVKF0KAC1F48E0",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT return deleted content from a backup or replay reference."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZG811ATR86P9W7D57408B3",
+      "target_ref_code": "PAT-CORE-API-QUERIES",
+      "target_entity_type": "pattern",
+      "target_entity_id": "01KXR2EKKZEN7RZK6DBBXQACH2",
+      "target_title": "Query Pattern — NxGN Actions",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811A4QKSZ7A66WD9QQN9",
+      "target_ref_code": "DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXCDP4YZ72FAYYBJYPHPT",
+      "target_title": "ReportSnapshotRestatementAndDeletion",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811A6SB91ECKJM6XB40Y",
+      "target_ref_code": "DM-INSIGHTS-INSIGHT-REPORT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXBX6VQS16T6NAMEHA3T3",
+      "target_title": "InsightReport",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811A51B0KSZDJYEQMP9Y",
+      "target_ref_code": "TC-INSIGHTS-REPORT-EXPLANATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACWP7DW17ATAXWRH8FV9Y",
+      "target_title": "Verify deterministic report explanations",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811AQ3PE077PD5CMEZ34",
+      "target_ref_code": "TC-INSIGHTS-REPORT-HISTORY-STATUS",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACZ263FWJ2T138ZYP3PZA",
+      "target_title": "Verify metadata-first report history and status",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXZG8119HVZS4YW9JSY744M9",
+      "target": "FR-INSIGHTS-REPORT-EXPLANATION",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8119SEMATJCTKPYN538N",
+      "target": "FR-INSIGHTS-REPORT-HISTORY",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZG811A2PQCE9YNM2Y5284Y",
+      "gate_type": "self-review",
+      "description": [
+        "Prove one-identity scoping and that current producer evidence cannot affect stored reads."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZG811AR89FQ85PPMCDG855",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~InsightReportDetailReadTests",
+      "expected_result": "exit 0; at least 16 known, unknown, deleted, schema-corrupt, payload-corrupt, selected-explanation, no-recompute, no-leak, no-write, and cancellation cases are discovered across both handlers and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ]
+}

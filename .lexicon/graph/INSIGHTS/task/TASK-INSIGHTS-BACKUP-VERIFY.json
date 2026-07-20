@@ -1,0 +1,386 @@
+{
+  "id": "01KXZGBEMSDJ7Z0T80W0P1DPD7",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNFBJJ05B3DTV9XV9Q4SK",
+  "ref_code": "TASK-INSIGHTS-BACKUP-VERIFY",
+  "slug": "BACKUP-VERIFY",
+  "title": "Create and independently verify complete INSIGHTS backups",
+  "description": [
+    "Implement the replay-safe point-in-time Backup saga and read-only independent Verify operation over owner-only recognized artifacts."
+  ],
+  "objective": [
+    "Backup publishes one complete verified artifact and durable receipt, while standalone Verify proves any candidate without changing active state or Status."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 0,
+  "created_at": "2026-07-20T10:15:09.7240612+00:00",
+  "decisions": [
+    {
+      "id": "01KXZGBEMW0QPK54T9STR4TFSN",
+      "target": "DD-INSIGHTS-STATE-STORE",
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMW6X59ZE8DEPV0FHPC",
+      "target": "DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION",
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZGBEMYBMDCEG82ADE6DJYK",
+      "target": "TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR",
+      "dependency_type": "compile",
+      "reason": [
+        "Backup uses the module replay identity and crash reservation state."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMYDEABQYKBTNP3DX5A",
+      "target": "TASK-INSIGHTS-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Backup reads and verifies the complete store schema and owner-only layout."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZGBEMXA77Y5ZM6NJ37S7N0",
+      "path": "src/Tally/Infrastructure/Insights/Storage/Recovery/InsightsBackupService.cs",
+      "action": "create",
+      "role": "read-consistent candidate and atomic publication saga",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMX4NSNBEPQWS41G8G4",
+      "path": "src/Tally/Infrastructure/Insights/Storage/Recovery/InsightsBackupVerifier.cs",
+      "action": "create",
+      "role": "independent logical, fingerprint, compatibility, and permission verification",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMXKMAQ1E1X01RR2CM7",
+      "path": "src/Tally/Features/Insights/Recovery/Backup/CreateInsightsBackupCommand.cs",
+      "action": "create",
+      "role": "idempotent Backup handler",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMXP3RE88VYVTJGHV90",
+      "path": "src/Tally/Features/Insights/Recovery/Verify/VerifyInsightsBackupQuery.cs",
+      "action": "create",
+      "role": "read-only Verify handler",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMX1HK3SDJ9965TEKKQ",
+      "path": "tests/Tally.Tests/Insights/Recovery/InsightsBackupVerificationTests.cs",
+      "action": "test",
+      "role": "complete, corrupt, crash-replay, permission, and read-only tests",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZGBEMXD1GG5ZXG75S45DQA",
+      "name": "InsightsStoreLayout",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-STATE-STORE",
+      "notes": [
+        "recognized owner-only artifact paths"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMXQPCSXZKQPPAD4F2P",
+      "name": "InsightsStateStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-STATE-STORE",
+      "notes": [
+        "read-consistent snapshot and terminal receipt"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMXRVTMTB126NQYF43G",
+      "name": "InsightsIdempotencyExecutor.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-IDEMPOTENCY",
+      "notes": [
+        "Attempting, crash reconciliation, and terminal outcome"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMXS08F50XREHTKGK27",
+      "name": "InsightsBackupVerifier.VerifyAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "notes": [
+        "independent VerificationReceipt"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMX9W3DZNGJ1M7QEKBH",
+      "name": "CreateInsightsBackupCommand.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "insights.backup.create handler"
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMXGE2T3Y5Q2NM7Y50S",
+      "name": "VerifyInsightsBackupQuery.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "notes": [
+        "insights.backup.verify handler"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZGBEMWMJF44FYQZPZMKFK6",
+      "kind": "acceptance_check",
+      "text": [
+        "Backup requires an owner-only recognized target, actor, safe normalized path identity, and idempotency; it records one Attempting reservation with request fingerprint and deterministic artifact identity before external artifact work."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMW1PXD6CXNBZZ8QNQT",
+      "kind": "acceptance_check",
+      "text": [
+        "A read-consistent candidate captures every snapshot, payload, Restatement link, DeletionEvent, prior terminal idempotency outcome, retained policy fingerprint, storage version, and count while excluding only the current non-terminal Backup reservation and all forbidden ephemeral/private data."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMW7S61EDT5AGCGMEVW",
+      "kind": "acceptance_check",
+      "text": [
+        "InsightsBackupVerifier independently checks storage/version compatibility, owner and permissions, integrity, counts, links, payload/content/table/artifact fingerprints, terminal idempotency outcomes, deletion consistency, and policy metadata before atomic publication."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMWS79N5WA29TKQ1CD6",
+      "kind": "acceptance_check",
+      "text": [
+        "After publication Backup records one terminal receipt; an exact retry after a crash reconciles the already published verified deterministic artifact without duplication, and a completed failure removes its reservation."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMWFV2W73EVVA8NT1Y5",
+      "kind": "acceptance_check",
+      "text": [
+        "VerifyInsightsBackupQuery is read-only: valid and invalid artifacts return exact evidence or failure, change neither active state nor Status, and expose no private path or report payload."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMXMGS1906ABFBRPY54",
+      "kind": "constraint",
+      "text": [
+        "Candidate, manifest, temporary, and published artifacts remain owner-only and fsync boundaries are explicit."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMXW51VHBAABNP2T0F2",
+      "kind": "expected_output",
+      "text": [
+        "InsightsBackupService"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMXG1ZNY45BF1M51HMH",
+      "kind": "expected_output",
+      "text": [
+        "InsightsBackupVerifier"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMX82Q0EZSCNWTGYMGS",
+      "kind": "expected_output",
+      "text": [
+        "CreateInsightsBackupCommand"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMXF5THT4YJD5CM52DP",
+      "kind": "expected_output",
+      "text": [
+        "VerifyInsightsBackupQuery"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMXAFR3YA0Y5EN630ET",
+      "kind": "expected_output",
+      "text": [
+        "Backup and verification tests"
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMWYQHBK0V2YEZYZTR3",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use an unverified SQLite file copy, include the current Attempting reservation as a terminal outcome, publish before verification, or issue a second artifact on exact crash replay."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMXJS7185TNAXKEV6P5",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT persist standalone Verify results, alter CURRENT, modify the source artifact, or expose private paths and payloads — per DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMXB9SFBMXWSG1PFGKW",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept unsafe ownership, permissive modes, omission, corruption, incompatible versions, dangling links, count mismatch, or fingerprint mismatch."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZGBEMYE7R1A6FVQ0HX25Z3",
+      "target_ref_code": "EXT-INSIGHTS-HOST-OS-SECURITY",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXZ925B47ZSCKJPRMAF6NH9W",
+      "target_title": "Host OS Security and Storage",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMY73C5NJTT67G8YP8S",
+      "target_ref_code": "NFR-INSIGHTS-VERIFIED-RECOVERABILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5T5ZP1H2VJ6K77SJ2QQ1",
+      "target_title": "Verify backup and restore independently",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMY67VCD3FVP3X03RDK",
+      "target_ref_code": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXDXDFHH54NY7MR3DKTP9",
+      "target_title": "InsightsRecoveryManifestAndReceipts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEMYBGMDY1KSP753MMGD",
+      "target_ref_code": "TC-INSIGHTS-BACKUP-VERIFICATION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZADXNMP4N0H4T2FA5RFVH0",
+      "target_title": "Verify complete owner-only INSIGHTS backups",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXZGBEMW98EHCB42ETCD51NY",
+      "target": "FR-INSIGHTS-BACKUP-VERIFY-RESTORE",
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZGBEMXQKD7WCSHNKEJVC1F",
+      "gate_type": "branch-review",
+      "description": [
+        "Review the exact artifact-before-receipt crash sequence and standalone Verify state invariants."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZGBEMXYP6MXGGYEPV3PQ12",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~InsightsBackupVerificationTests",
+      "expected_result": "exit 0; at least 24 complete-artifact, prior-terminal-outcome, current-reservation-exclusion, manifest, count, link, payload, fingerprint, deletion, policy, permission, compatibility, corruption, omission, pre-publication crash, post-publication replay, terminal-receipt, failed-reservation-removal, standalone-read-only, Status-unchanged, and disclosure cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ]
+}

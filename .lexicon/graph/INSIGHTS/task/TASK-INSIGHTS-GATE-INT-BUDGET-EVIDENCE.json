@@ -1,0 +1,302 @@
+{
+  "id": "01KXZFS9RB69CX4MH0RPRB1HSB",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNDFWMH6APFAZFA7PN2J4",
+  "ref_code": "TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE",
+  "slug": "GATE-INT-BUDGET-EVIDENCE",
+  "title": "Prove the coherent BUDGET evidence prerequisite",
+  "description": [
+    "Integration prerequisite with no INSIGHTS Implements ownership; prove the released BUDGET composite provides all three plan states from one public LEDGER snapshot before any INSIGHTS client is allowed to consume it."
+  ],
+  "objective": [
+    "A focused contract suite proves budget.insights.evidence.get is coherent, complete, bounded, versioned, and mutation-free for BoundRevision, NoBudgetPlan, and NoActiveBudgetPlanRevision."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 2,
+  "created_at": "2026-07-20T10:05:14.8911171+00:00",
+  "decisions": [
+    {
+      "id": "01KXZFS9RG5CSBG5NKQ32H90YN",
+      "target": "DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZGXRVVD4E7VFYXESQQ96D7",
+      "path": "src/Tally/Cli/OperationRegistry.cs",
+      "action": "read",
+      "role": "released operation registry",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:25:10.0112619+00:00"
+    },
+    {
+      "id": "01KXZGXRVWZM045YBMPDWDE3Z0",
+      "path": "src/Tally/Contracts/Budget/Insights/BudgetInsightEvidence.cs",
+      "action": "read",
+      "role": "public coherent evidence contract",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:25:10.0112619+00:00"
+    },
+    {
+      "id": "01KXZGXRVWDVE1P6PDYF8KWK9C",
+      "path": "tests/Tally.Tests/Insights/BudgetContract/BudgetInsightsPrerequisiteTests.cs",
+      "action": "test",
+      "role": "three-state race limit and authority prerequisite",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:25:10.0112619+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZGXRVWJ2VJYXY3WQE1MY31",
+      "name": "VerifiedBudgetInsightEvidenceContract",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
+      "notes": [
+        "proof that the released registry and public three-state composite satisfy the prerequisite"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:25:10.0112619+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZFS9RGKQBD2JD7WF2ZXC0N",
+      "kind": "acceptance_check",
+      "text": [
+        "OperationRegistry exposes exactly one read-only budget.insights.evidence.get descriptor with a versioned bounded request and the three-state BudgetInsightEvidence result; no BUDGET mutation authority is reachable."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RGG6GF21ARA2P0R60S",
+      "kind": "acceptance_check",
+      "text": [
+        "BoundRevision returns one immutable plan revision, canonical BudgetPosition, calculation schema, complete dated members, exact ledgerBudgetActualTotal, shared snapshot identity, generation fingerprint, producer versions, and one binding fingerprint; every member reconciles exactly once to the returned position."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RG1Z8E9M8AJWV9W89Z",
+      "kind": "acceptance_check",
+      "text": [
+        "NoBudgetPlan and NoActiveBudgetPlanRevision return no plan detail, BudgetPosition, or calculation schema, preserve every dated member exactly once, reconcile their checked sum to ledgerBudgetActualTotal, and prove BudgetPositionCalculator was not invoked."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RGYM943PCE5QFYTEBK",
+      "kind": "acceptance_check",
+      "text": [
+        "Forced corrections before and after producer capture return wholly pre-correction or wholly post-correction evidence; an unprovable binding, missing or duplicate ordinal, stale generation, incompatibility, or one-over-limit request returns a stable failure with no partial financial result."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RGZM4CDFVH2AQY9MSK",
+      "kind": "acceptance_check",
+      "text": [
+        "The test compiles using only public BUDGET and LEDGER contracts plus OperationRegistry; private database, SQL, feature-handler, repository, and domain references are inaccessible."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RGDP3ZBRS33Y2AVRJV",
+      "kind": "constraint",
+      "text": [
+        "This task is an intentional loose execution root; its external blocked-by refs must complete operationally before its tests can pass."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RG3JQ4SB9549J1G24K",
+      "kind": "expected_output",
+      "text": [
+        "VerifiedBudgetInsightEvidenceContract"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RGS5S45ZTD1PMZB4WG",
+      "kind": "expected_output",
+      "text": [
+        "Three-state correction-race evidence"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RGX05SFR4CEP6N4RZW",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT replace the composite with independent budget.position.get and ledger.actuals.query calls — rejected per DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RG89AVHCTJ9VF8BP8V",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT hand an expiring LEDGER cursor through BUDGET — rejected per DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RG1ZN7J2SECZGWGC27",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT open budget.db or ledger.db, call private handlers, reproduce BudgetPositionCalculator, fabricate a zero plan, or accept a partial member set."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RG4AH7QWNTR5M4S4T2",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT mark the external dependency validated unless the real published contract and correction-race cases execute successfully."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RGF5R5Z6JD1NPDC5PT",
+      "kind": "note",
+      "text": [
+        "Failure blocks INSIGHTS and returns upstream to BUDGET; it is not repaired with private access or a second read."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZFS9RHHBKHP8YP7J6ZM6EX",
+      "target_ref_code": "TASK-BUDGET-INSIGHTS-READ-PROJECTION",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXXMH1N4NKTKTHDFA3BX4VBC",
+      "target_title": "Publish the read-only INSIGHTS budget projection",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RH9H6KKKKY35B9VC5Q",
+      "target_ref_code": "TASK-BUDGET-GATE-INT-LEDGER-CONTRACT",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXXMBV0ZN7WKYKW6DFFVE4FK",
+      "target_title": "Prove the Ledger budget prerequisite",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RHA3FAQS1JXGRFYT4B",
+      "target_ref_code": "TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT",
+      "target_entity_type": "task",
+      "target_entity_id": "01KXXMKGSM8597H47XMZYXVNJM",
+      "target_title": "Wire and prove the complete BUDGET contract",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RHA6GNBQ2JTJFK45V5",
+      "target_ref_code": "EXT-INSIGHTS-BUDGET-PUBLIC-READ-CONTRACT",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXZ923W2C7C1A0DR6D0942GV",
+      "target_title": "BUDGET Public Read Contract",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RHNSMB2H55ABKJTBCJ",
+      "target_ref_code": "EXT-INSIGHTS-LEDGER-ACTUALS-CONTRACT",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXZ924C935E331SMQJK5WGBM",
+      "target_title": "LEDGER Actuals Contract",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RHQWFNZ16T7MDMYH7R",
+      "target_ref_code": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD712R35XBQTGT37YQY9S",
+      "target_title": "BudgetReadCapabilityDescriptor",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    },
+    {
+      "id": "01KXZFS9RHEC8TEC8QCGAJJ8XV",
+      "target_ref_code": "TC-INSIGHTS-COHERENT-EVIDENCE-CONCURRENT-CORRECTION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACRX0WCYCBX7ND8R2XB0V",
+      "target_title": "Reject mixed producer states during concurrent correction",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZFS9RHJN2X5VSRYMT5EP9P",
+      "gate_type": "branch-review",
+      "description": [
+        "Review public-only references and exact pre/post correction evidence before client work begins."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZFS9RHWG2SZPYECYT8K8BZ",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetInsightsPrerequisiteTests",
+      "expected_result": "exit 0; at least 16 descriptor, three-plan-state, member-completeness, bound-position, absence-total, calculator-exclusion, correction-race, compatibility, limit, and mutation-exclusion cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:05:14.8911171+00:00"
+    }
+  ]
+}

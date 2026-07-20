@@ -1,0 +1,350 @@
+{
+  "id": "01KXZGN7MAGYPK1M84MQ397YM8",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNFYC4GZB47S6T4PBR6MQ",
+  "ref_code": "TASK-INSIGHTS-GATE-SECURITY",
+  "slug": "GATE-SECURITY",
+  "title": "Prove local INSIGHTS privacy and process isolation",
+  "description": [
+    "Security convergence gate with no Implements ownership; validate owner-only artifacts, payload-minimized storage and output, canary containment, public-only dependencies, and offline single-process execution."
+  ],
+  "objective": [
+    "Every public, private-validation, retained-state, failure, backup, restore, and crash path keeps sensitive content inside the explicitly requested business result and owner-only storage."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 1,
+  "created_at": "2026-07-20T10:20:30.2237501+00:00",
+  "decisions": [
+    {
+      "id": "01KXZGN7MP94BH1WE75Y7673JQ",
+      "target": "DD-INSIGHTS-CLI-OPERATION-CONTRACT",
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MQNHKB81CWN6JDPZZB",
+      "target": "DD-INSIGHTS-PRIVATE-POLICY-VALIDATION",
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MQVC8EBVW12JK7D708",
+      "target": "DD-INSIGHTS-STATE-STORE",
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MQDCK64D4S2F5KDF84",
+      "target": "DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION",
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZGN7MVXXTEXXPD416RTCFD",
+      "target": "TASK-INSIGHTS-GATE-ATOMIC-RECOVERY",
+      "dependency_type": "compile",
+      "reason": [
+        "Security covers all retained and recovery artifact/failure paths."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MTJY0V4WJ4RDKF472N",
+      "target": "TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE",
+      "dependency_type": "compile",
+      "reason": [
+        "Security validates the private manifest and receipt boundary."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MTHR12S4M47Z6X3P8Z",
+      "target": "TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Security validates the published operation and process boundary."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZGN7MQBJS14RPRZJ91ZQ81",
+      "path": "tests/Tally.Tests/Insights/Security/InsightsLocalDataProtectionTests.cs",
+      "action": "test",
+      "role": "canary, permissions, storage, public-boundary, and offline matrix",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MQMWFM3PVNHGN7393X",
+      "path": "scripts/verify-insights-security.sh",
+      "action": "create",
+      "role": "static/runtime forbidden-surface and per-partition runner",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MQZGVSGS989S60MYTA",
+      "path": "docs/verification/insights-security.md",
+      "action": "document",
+      "role": "safe counts, fingerprints, permission, and isolation evidence",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZGN7MQSJJ2VW1ZA7YFPSMN",
+      "name": "CompleteInsightsPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "all public operations"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MTBT2MPPYRTSAJA792",
+      "name": "VerifiedInsightsOwnerValueGate",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-POLICY-VALIDATION-RECEIPT",
+      "notes": [
+        "private evidence containment"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MT6J27PTSJTGRWMKB0",
+      "name": "InsightsAtomicRecoveryEvidence",
+      "direction": "consumes",
+      "contract_ref_code": "NFR-INSIGHTS-VERIFIED-RECOVERABILITY",
+      "notes": [
+        "artifact and crash boundaries"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MT21AZXY13466QPJ83",
+      "name": "InsightsSecurityGateEvidence",
+      "direction": "produces",
+      "contract_ref_code": "NFR-INSIGHTS-LOCAL-DATA-PROTECTION",
+      "notes": [
+        "local privacy and process isolation proof"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZGN7MQW229NRRAM9QA112Z",
+      "kind": "acceptance_check",
+      "text": [
+        "Seeded financial values, merchant strings, report fragments, private paths, credentials, and disclosure canaries appear only in an explicitly requested successful business result and are absent from arguments, environment echoes, stderr, ordinary logs, telemetry, crash output, Git, shared temporary locations, verification docs, and unrelated operation results."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MQ1P9GESEQV05SB32G",
+      "kind": "acceptance_check",
+      "text": [
+        "INSIGHTS directories are 0700 and database, WAL, SHM, CURRENT, lock, candidate, manifest, backup, restore, receipt, and private evaluation files are 0600 where supported; unsafe owner or mode fails before financial processing or activation."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MQEHA469ASK56VWK3G",
+      "kind": "acceptance_check",
+      "text": [
+        "Report storage contains bounded derived payloads and stable provenance only; producer members, canonical transactions, raw merchant descriptions, private evaluation cases, PolicyValidationReceipt, and upstream replicas are absent."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MQ05GQ248F4VP0YNAA",
+      "kind": "acceptance_check",
+      "text": [
+        "Every accepted workflow succeeds with network denied and no daemon, watcher, scheduler, service, listener, queue, cloud model, child tally process, or background Tally process before, during, or after invocation."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MQ4NN9KAE8CC2098GH",
+      "kind": "acceptance_check",
+      "text": [
+        "Static and runtime guards prove INSIGHTS references only public BUDGET/LEDGER contracts and shared operation abstractions and grants no upstream or policy mutation authority."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MQ5ENV8YWKHVF3HEX0",
+      "kind": "acceptance_check",
+      "text": [
+        "Host encrypted-volume support is evidenced as a deployment prerequisite; the report makes no custom encryption claim."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MQ97E3BJ15V95EA5Y8",
+      "kind": "constraint",
+      "text": [
+        "All diagnostics use structured metadata only; never serialize financial DTOs or request/response bodies."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MQBS9T0JBYH6VB93AW",
+      "kind": "expected_output",
+      "text": [
+        "InsightsSecurityGateEvidence"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MQXJT0T3XC3T0NM8SQ",
+      "kind": "expected_output",
+      "text": [
+        "Payload-free security report"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MQWGVCDVX0EVCG14TH",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT weaken canaries, redact after a leak, serialize DTOs into logs, echo private environment/path values, use permissive fallback modes, or claim encryption not supplied by the host."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MQ81KT6F0D38C7KDNQ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT allow private database, SQL, feature-handler, repository, domain, HTTP, network, child-process, or background-service dependencies."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MQJMJA4AE39BKZBZ9J",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept aggregate security totals unless every public operation, private harness, retained mutation, backup, restore, corrupt-input, and crash partition has nonzero discovery."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZGN7MT8QRYRPYWXC22ZZTS",
+      "target_ref_code": "EXT-INSIGHTS-HOST-OS-SECURITY",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXZ925B47ZSCKJPRMAF6NH9W",
+      "target_title": "Host OS Security and Storage",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MT9D8V2H7S7F66BQY1",
+      "target_ref_code": "NFR-INSIGHTS-LOCAL-DATA-PROTECTION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5S8KT5THZE0K6VY1KPVN",
+      "target_title": "Protect local insight data",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MTQYRGH7GSE0CTTA8K",
+      "target_ref_code": "NFR-INSIGHTS-SELF-CONTAINED-LOCAL-OPERATION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5V2M10XNEPKY64M90YVX",
+      "target_title": "Operate as a self-contained local analytics module",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MT79AXX92VF1YF3ANV",
+      "target_ref_code": "TC-INSIGHTS-LOCAL-DATA-PROTECTION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZADYQPW1VE6P039M2RSKNW",
+      "target_title": "Verify local insight privacy boundaries",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MT7C7Z505PXABJWY0W",
+      "target_ref_code": "TC-INSIGHTS-OFFLINE-PROCESS-ISOLATION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZADZ9QXPRMXPS4FWXPEJDM",
+      "target_title": "Verify self-contained offline operation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZGN7MT20CNH2S9BG8M766Q",
+      "gate_type": "branch-review",
+      "description": [
+        "Review canary sinks, mode checks, no-network proof, dependency scans, and the aggregate-only report from a clean host account."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZGN7MT7QM4C3ZDAEQY8FKM",
+      "phase": "after",
+      "command": "bash scripts/verify-insights-security.sh",
+      "expected_result": "exit 0; every named operation, private-evidence, retained-state, backup, restore, corrupt-input, and crash partition discovers nonzero tests, owner-only modes and network denial are proven, seeded canaries occur only in requested business output, forbidden dependency scans are empty, the report is payload-free, and 0 checks fail",
+      "required": 1,
+      "timeout_seconds": 1800,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ]
+}

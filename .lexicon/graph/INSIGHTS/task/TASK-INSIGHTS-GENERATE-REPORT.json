@@ -1,0 +1,305 @@
+{
+  "id": "01KXZG1SPCVZ4WSSMFPWDRMKP8",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNE48SG87EXFDT7SEM0B0",
+  "ref_code": "TASK-INSIGHTS-GENERATE-REPORT",
+  "slug": "GENERATE-REPORT",
+  "title": "Generate one ephemeral Insight Report",
+  "description": [
+    "Implement the read-only Generate vertical slice from validated structured request through one BUDGET call and deterministic compilation."
+  ],
+  "objective": [
+    "GenerateInsightReportQuery returns one bounded complete report from one frozen instant and one coherent producer result while changing no durable state."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 7,
+  "created_at": "2026-07-20T10:09:53.3580299+00:00",
+  "decisions": [
+    {
+      "id": "01KXZG1SPPRJT2ZGW2BEQ74EJP",
+      "target": "DD-INSIGHTS-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPP0MJXDEATJBN9C66R",
+      "target": "DD-INSIGHTS-CLI-OPERATION-CONTRACT",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPPZZ8YGDNGP0A8VE68",
+      "target": "DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZG1SPR4NT1CAZ1SE1NMFQZ",
+      "target": "TASK-INSIGHTS-BUDGET-EVIDENCE-CLIENT",
+      "dependency_type": "compile",
+      "reason": [
+        "Generation consumes the single public BUDGET client."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPRFDMS22FEB6M8EZN4",
+      "target": "TASK-INSIGHTS-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "The query implements a published request/result and stable error contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPRN7MKESERTYBRY0QK",
+      "target": "TASK-INSIGHTS-REPORT-COMPILER",
+      "dependency_type": "compile",
+      "reason": [
+        "Generation delegates all analytical semantics to the compiler."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZG1SPQAGWHV23AY861J8Q2",
+      "path": "src/Tally/Features/Insights/Reports/Generate/GenerateInsightReportQuery.cs",
+      "action": "create",
+      "role": "ephemeral generation handler",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPQVR8J2Q083677SZTR",
+      "path": "tests/Tally.Tests/Insights/Reports/GenerateInsightReportQueryTests.cs",
+      "action": "test",
+      "role": "validation, time, one-call, report, and no-write contract",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZG1SPQGZFRJ7XK60XHPP4E",
+      "name": "BudgetContractClient.GetInsightEvidenceAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
+      "notes": [
+        "one producer result"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPQCH2HZ8MM88SBA0N0",
+      "name": "InsightReportCompiler.Compile",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-INSIGHT-REPORT",
+      "notes": [
+        "pure compilation"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPQ977ZSE3PWF22CPH5",
+      "name": "GenerateInsightReportQuery.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "insights.report.generate handler"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZG1SPP94BS06A4TQ3HQVYE",
+      "kind": "acceptance_check",
+      "text": [
+        "Generate validates unknown fields, versions, requested policies, rolling windows, category/metric/signal counts, horizon, and output bounds before TimeProvider or producer access."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPQZ1TKSBC5D28YR296",
+      "kind": "acceptance_check",
+      "text": [
+        "A valid request freezes TimeProvider.GetUtcNow exactly once before calling BudgetContractClient.GetInsightEvidenceAsync exactly once, binds the result, and compiles one complete InsightReport."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPQMMD83BB6DVXY3AAN",
+      "kind": "acceptance_check",
+      "text": [
+        "Omitted selectors resolve to explicit released default window, formula, sufficiency, explanation, and ordering versions in the result."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPQ6ZTR0Q4Y1CBK3HRD",
+      "kind": "acceptance_check",
+      "text": [
+        "Success writes no ReportSnapshot, idempotency record, recovery metadata, file, or store state; expected failure returns one typed envelope and no partial report."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPQHS28YYT2428067ZT",
+      "kind": "acceptance_check",
+      "text": [
+        "CancellationToken is forwarded through every async call and logs contain only operation identity, correlation reference, duration, safe fingerprints, states, and counts."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPQN0WXWYK4TKYDEPRT",
+      "kind": "constraint",
+      "text": [
+        "Use the concrete BudgetContractClient and InsightReportCompiler; do not add interfaces around either."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPQG3Z5YN7R7S5FQWGB",
+      "kind": "expected_output",
+      "text": [
+        "GenerateInsightReportQuery"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPQW89D77PJ6TY1KFM9",
+      "kind": "expected_output",
+      "text": [
+        "Ephemeral generation contract tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPQT41J9521FGZ8BS87",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT combine actions behind a generic Execute or expose Generate over HTTP — rejected per DD-INSIGHTS-CLI-OPERATION-CONTRACT."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPQWZ1QY4P3KY287D2V",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT embed calculations in the query, call producers more than once, query LEDGER directly, accept a caller clock, or write durable state."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPQX44DFH216AGVMHAV",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT log, diagnose, cache, or persist the structured financial request, producer result, report body, private path, or merchant text."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZG1SPQED9CDFDVR6ST1SHG",
+      "target_ref_code": "NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5RSRC447VXQSBG2EC3FQ",
+      "target_title": "Preserve deterministic analytical integrity",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPQXXVTY3VRJ4QDKV1F",
+      "target_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDX9TBYPKXP6DYASKDX5Z7",
+      "target_title": "InsightsOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPR03EEXQB94SNYNZHB",
+      "target_ref_code": "TC-INSIGHTS-REPORT-GENERATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACW0Q1M10Z43250V3YPRF",
+      "target_title": "Verify deterministic Insight Report generation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXZG1SPP78P25Z6EG2DPFV8D",
+      "target": "FR-INSIGHTS-REPORT-GENERATION",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPPAGTSPWSCVTND553A",
+      "target": "FR-INSIGHTS-STRUCTURED-INVOCATION",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZG1SPQ02ZDZDYFRNY9EB1Z",
+      "gate_type": "branch-review",
+      "description": [
+        "Trace one successful and every pre-read failure path through the public handler boundary."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZG1SPQKZ9S3TYFH8HKBYME",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~GenerateInsightReportQueryTests",
+      "expected_result": "exit 0; at least 18 validation-before-read, single-clock, single-producer-call, defaults, deterministic result, cancellation, stable-failure, no-store-write, no-network, and metadata-only-log cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ]
+}

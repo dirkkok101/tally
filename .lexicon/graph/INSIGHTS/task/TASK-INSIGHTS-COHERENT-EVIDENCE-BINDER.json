@@ -1,0 +1,306 @@
+{
+  "id": "01KXZG1SP9H09A6FVWBF0WSC12",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNE48SG87EXFDT7SEM0B0",
+  "ref_code": "TASK-INSIGHTS-COHERENT-EVIDENCE-BINDER",
+  "slug": "COHERENT-EVIDENCE-BINDER",
+  "title": "Validate one coherent analytical evidence set",
+  "description": [
+    "Convert one public BudgetInsightEvidence result into fail-closed BoundInsightEvidence while preserving producer authority and all three plan states."
+  ],
+  "objective": [
+    "Every accepted evidence set proves compatible versions, complete dated membership, exact totals, one snapshot binding, and state-specific invariants before analysis begins."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 1,
+  "created_at": "2026-07-20T10:09:53.3580299+00:00",
+  "decisions": [
+    {
+      "id": "01KXZG1SPGVQG1MWERMZCRPF1S",
+      "target": "DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPGCG6FP7RN0FEJ8QHJ",
+      "target": "DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZGYH37GFKH093KN96TGQSM",
+      "target": "TASK-INSIGHTS-BUDGET-EVIDENCE-CLIENT",
+      "dependency_type": "compile",
+      "reason": [
+        "The binder accepts the exact composite returned by the public BUDGET contract client."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:25:34.8236758+00:00"
+    },
+    {
+      "id": "01KXZG1SPHBR6GZG1JRNKQPA8Y",
+      "target": "TASK-INSIGHTS-CONTRACT-MODELS",
+      "dependency_type": "compile",
+      "reason": [
+        "The binder produces BoundInsightEvidence and stable state records."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPHGSKN9D8DMF244YSA",
+      "target": "TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE",
+      "dependency_type": "compile",
+      "reason": [
+        "The binder is written only against the proven public producer contract."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZG1SPHX6YWT038KVBNHDSY",
+      "path": "src/Tally/Features/Insights/Evidence/CoherentEvidenceBinder.cs",
+      "action": "create",
+      "role": "three-state evidence validator",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPHFS94G9W865PGB3QH",
+      "path": "tests/Tally.Tests/Insights/Evidence/CoherentEvidenceBinderTests.cs",
+      "action": "test",
+      "role": "binding and failure matrix",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZGXV2D464JT63RHJWRM1TE",
+      "name": "BudgetContractClient.GetInsightEvidenceAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
+      "notes": [
+        "one public producer result"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:25:12.2686865+00:00"
+    },
+    {
+      "id": "01KXZGXV2EN8T9NEGTY26M585Z",
+      "name": "CoherentEvidenceBinder.Bind",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-COHERENT-EVIDENCE",
+      "notes": [
+        "validated ephemeral BoundInsightEvidence"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:25:12.2686865+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZG1SPG18QXZKQD3Q1CMTNW",
+      "kind": "acceptance_check",
+      "text": [
+        "BoundRevision requires plan detail, BudgetPosition, calculation schema, complete unique ordinals, known stable category identities, matching contract versions, shared snapshot and generation evidence, and exact member-to-position bucket and total reconciliation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPG1WJ1WN9MZM7MXJSC",
+      "kind": "acceptance_check",
+      "text": [
+        "NoBudgetPlan and NoActiveBudgetPlanRevision require plan detail, BudgetPosition, and calculation schema to be absent, preserve the complete ordered member set, and reconcile its checked sum exactly to ledgerBudgetActualTotal."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPHEDAGAVS3RJ88WGFD",
+      "kind": "acceptance_check",
+      "text": [
+        "Unknown or duplicate identities, missing ordinals, stale generation, incompatible version, invalid category lifecycle, overflow, mismatched fingerprint, or reconciliation failure returns one whole-report typed failure and no BoundInsightEvidence."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPHYCKSRA04E0GHSV4X",
+      "kind": "acceptance_check",
+      "text": [
+        "CLASSIFY coverage gaps preserve Uncategorized membership and never cause a direct CLASSIFY call or inferred category."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPHXQ1QECH8ZK1NPD0T",
+      "kind": "constraint",
+      "text": [
+        "All sums and ordinals are checked before a financial result is returned."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPH08B8JJCXAS16ADCF",
+      "kind": "expected_output",
+      "text": [
+        "CoherentEvidenceBinder"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPHSY8Z8J66F1Y4ASYK",
+      "kind": "expected_output",
+      "text": [
+        "Three-state reconciliation tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPHNXQ36DHBDACJCTC0",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT query a producer, mutate upstream state, or persist members inside CoherentEvidenceBinder — per DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPHMKVVC7X3F1GCXPF4",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT invoke BudgetPositionCalculator, re-bucket a returned BoundRevision position, fabricate a zero plan, or accept incomplete pagination — per DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPHTH94HC2WSECFAM5N",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT downgrade coherence, compatibility, integrity, completeness, or exact-arithmetic failures into signal-local unavailable states."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPHEC8JF3M7V7WAFH0C",
+      "kind": "note",
+      "text": [
+        "The binder is pure and concrete; it has no interface because it has one production implementation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZG1SPH94YCA986XZ1ZGXB0",
+      "target_ref_code": "NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5RSRC447VXQSBG2EC3FQ",
+      "target_title": "Preserve deterministic analytical integrity",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPH4V6GKZ5Q4T9M9KG8",
+      "target_ref_code": "DM-INSIGHTS-COHERENT-EVIDENCE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXATZMMM9GD8BZM6RSFVS",
+      "target_title": "BoundInsightEvidence",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPHENE4C2QTF926PSW2",
+      "target_ref_code": "FA-INSIGHTS-EVIDENCE-ANALYSIS",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXZDXZ8N60RA8Z0VX65QHQEW",
+      "target_title": "Evidence and Analysis",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPHTBB0TD0NCQBP783M",
+      "target_ref_code": "DIAG-INSIGHTS-GENERATE-SEQUENCE",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KXZDY1T00W50687XJW0Q1C0P",
+      "target_title": "Coherent deterministic report generation",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPH2KTJQZNJ8T3J2MB5",
+      "target_ref_code": "TC-INSIGHTS-COHERENT-EVIDENCE-CONCURRENT-CORRECTION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACRX0WCYCBX7ND8R2XB0V",
+      "target_title": "Reject mixed producer states during concurrent correction",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXZG1SPGV9D4265WMCZY2TZG",
+      "target": "FR-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZG1SPH87ZAX61B2A9EGJ39",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach the exact three-state reconciliation and malformed-evidence case counts."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZG1SPHF7G1E9XPEY6ASV2C",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~CoherentEvidenceBinderTests",
+      "expected_result": "exit 0; at least 20 bound, no-plan, no-active, correction-state, ordinal, category, version, fingerprint, overflow, reconciliation, calculator-exclusion, and no-CLASSIFY-call cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ]
+}

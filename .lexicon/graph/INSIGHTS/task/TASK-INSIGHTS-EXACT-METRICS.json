@@ -1,0 +1,254 @@
+{
+  "id": "01KXZG1SPBK3ZC2G0EQ3F7S0ET",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNE48SG87EXFDT7SEM0B0",
+  "ref_code": "TASK-INSIGHTS-EXACT-METRICS",
+  "slug": "EXACT-METRICS",
+  "title": "Calculate exact window and category metrics",
+  "description": [
+    "Make one deterministic checked pass over complete dated members for total, category, and bucket metrics."
+  ],
+  "objective": [
+    "ExactMetricCalculator accounts for every member exactly once and returns reconciled signed ZAR metrics for each requested window."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 3,
+  "created_at": "2026-07-20T10:09:53.3580299+00:00",
+  "decisions": [
+    {
+      "id": "01KXZG1SPJYBE21YD4KCK9DZC6",
+      "target": "DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJ2J2H646ZN490GTYX",
+      "target": "DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZG1SPKAJC8TMRGX4VBFG07",
+      "target": "TASK-INSIGHTS-CONTRACT-MODELS",
+      "dependency_type": "compile",
+      "reason": [
+        "The calculator consumes evidence and produces exact analytical contracts."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZG1SPJJ9HME7JVAP0C028G",
+      "path": "src/Tally/Domain/Insights/Metrics/ExactMetricCalculator.cs",
+      "action": "create",
+      "role": "single-pass exact metric engine",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJV5BR8YNZWZE4TAV5",
+      "path": "tests/Tally.Tests/Insights/Metrics/ExactMetricCalculatorTests.cs",
+      "action": "test",
+      "role": "bucket, refund, zero, overflow, and reconciliation properties",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZG1SPJK0WY5D0J4JJ5JGMA",
+      "name": "BoundInsightEvidence",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-COHERENT-EVIDENCE",
+      "notes": [
+        "complete validated dated members"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPKG1GX05G2BPN1FFHP",
+      "name": "ExactMetricCalculator.Calculate",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-ANALYTICAL-EVIDENCE",
+      "notes": [
+        "ordered exact MetricResult collection"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZG1SPJ3WS032T2GPZAARG5",
+      "kind": "acceptance_check",
+      "text": [
+        "Each requested started day, week, and month-to-date window returns one exact total and, when requested, categories in stable identity order."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJ0G482GNSCVPTY6W1",
+      "kind": "acceptance_check",
+      "text": [
+        "Budgeted, ZeroBudget, Unbudgeted, and Uncategorized are distinct; NoBudgetPlan preserves exact actuals with NoBudgetPlan on plan-relative fields."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJ0070FKW91FXPSRB9",
+      "kind": "acceptance_check",
+      "text": [
+        "Signed refunds and reversals remain negative, an empty matching set returns exact zero, and total actual equals the checked exact sum of all buckets."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJM7XK8MEEJEQA5K0M",
+      "kind": "acceptance_check",
+      "text": [
+        "Every member contributes exactly once per applicable metric; duplicate accounting, overflow, undefined exact operation, or reconciliation mismatch aborts the whole report."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJS7GMP5S9C74SXFZZ",
+      "kind": "constraint",
+      "text": [
+        "Use checked Int64 minor units and deterministic catalogue/category order."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJP6PGP8NWPQRQ50JK",
+      "kind": "expected_output",
+      "text": [
+        "ExactMetricCalculator"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJ33RJCKES798PSB7B",
+      "kind": "expected_output",
+      "text": [
+        "Exact arithmetic property matrix"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJA6W9J40MRS24KT90",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use floating point, clamp refunds to zero, suppress zero results, merge Uncategorized with Unbudgeted, or invent a plan."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJ6X916802VHQY9CK7",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT expose per-metric public services or move orchestration to callers — rejected per DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPJGYG7CDEX232Y8FQH",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT emit partial metric collections after arithmetic or reconciliation failure."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZG1SPK4F3RG6753NXAVYB1",
+      "target_ref_code": "NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5RSRC447VXQSBG2EC3FQ",
+      "target_title": "Preserve deterministic analytical integrity",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPK4VM5QKJ7J6NAHD1D",
+      "target_ref_code": "DM-INSIGHTS-ANALYTICAL-EVIDENCE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXBCJJEXEN98RRW25V9P5",
+      "target_title": "AnalysisWindowMetricStateAndExplanation",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPKNASSKNQFW4ECT01T",
+      "target_ref_code": "TC-INSIGHTS-EXACT-METRICS-CONFORMANCE",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACT4JXFVPNWGCZW1WXSM4",
+      "target_title": "Verify exact window metric reconciliation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXZG1SPJ6A9KF476053KJCFJ",
+      "target": "FR-INSIGHTS-EXACT-WINDOW-METRICS",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZG1SPK5ENF9N1S8J4Y4NP3",
+      "gate_type": "test-evidence",
+      "description": [
+        "Review property cases proving every member is counted exactly once and all sums reconcile."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZG1SPKDXXCK84CZ0ZTRPD9",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ExactMetricCalculatorTests",
+      "expected_result": "exit 0; at least 24 total, category, four-bucket, no-plan, refund, zero, stable-order, duplicate-accounting, Int64-boundary, overflow, and reconciliation cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ]
+}

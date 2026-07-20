@@ -1,0 +1,427 @@
+{
+  "id": "01KXZGN7MEFAKQFRCVA9ACFP4R",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNFYC4GZB47S6T4PBR6MQ",
+  "ref_code": "TASK-INSIGHTS-GATE-GRAPH-QUALITY",
+  "slug": "GATE-GRAPH-QUALITY",
+  "title": "Converge INSIGHTS graph and verification quality",
+  "description": [
+    "Validation-only graph gate with no Implements ownership; prove traceability, expected paths, dependency evidence, intentional no-endpoint status, non-vacuous suites, plan quality, and forbidden-surface absence."
+  ],
+  "objective": [
+    "One reproducible marker proves the implemented INSIGHTS graph, plan, design paths, external gates, and named verification surfaces are complete and honest."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 9,
+  "created_at": "2026-07-20T10:20:30.2237501+00:00",
+  "dependencies": [
+    {
+      "id": "01KXZGN7N7PV7FSB4DQH9DSDN6",
+      "target": "TASK-INSIGHTS-GATE-ATOMIC-RECOVERY",
+      "dependency_type": "compile",
+      "reason": [
+        "Require retained and recovery atomicity evidence."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7W00DG3NG56B2H6SH",
+      "target": "TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Require complete public contract evidence."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7J1S8THNTNJSMR70K",
+      "target": "TASK-INSIGHTS-GATE-PERFORMANCE",
+      "dependency_type": "compile",
+      "reason": [
+        "Require performance evidence."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7H17MV9JN2GEB2XAF",
+      "target": "TASK-INSIGHTS-GATE-SECURITY",
+      "dependency_type": "compile",
+      "reason": [
+        "Require security evidence."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7KS01KT17BRFSJME3",
+      "target": "TASK-INSIGHTS-VERIFY-UC-001",
+      "dependency_type": "compile",
+      "reason": [
+        "Require UC-001 evidence."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7Z9CEGK25SPMVFRBA",
+      "target": "TASK-INSIGHTS-VERIFY-UC-002",
+      "dependency_type": "compile",
+      "reason": [
+        "Require UC-002 evidence."
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7NCVNN9H8PBDSDQGH",
+      "target": "TASK-INSIGHTS-VERIFY-UC-003",
+      "dependency_type": "compile",
+      "reason": [
+        "Require UC-003 evidence."
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7FCTFZHCJ9246TAVJ",
+      "target": "TASK-INSIGHTS-VERIFY-UC-004",
+      "dependency_type": "compile",
+      "reason": [
+        "Require UC-004 evidence."
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7W1XTACFZMW8MJ871",
+      "target": "TASK-INSIGHTS-VERIFY-UC-005",
+      "dependency_type": "compile",
+      "reason": [
+        "Require UC-005 evidence."
+      ],
+      "sort_order": 8,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7QV1K1BARX32SXV3Y",
+      "target": "TASK-INSIGHTS-VERIFY-UC-006",
+      "dependency_type": "compile",
+      "reason": [
+        "Require UC-006 evidence."
+      ],
+      "sort_order": 9,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZGN7N7W6HWHVESSMWQATM4",
+      "path": ".lexicon/graph/INSIGHTS/module.json",
+      "action": "read",
+      "role": "canonical module graph",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N79JF1001RPW300CHN",
+      "path": "tests/Tally.Tests/Insights/InsightsGraphEvidenceGuardTests.cs",
+      "action": "test",
+      "role": "suite discovery and forbidden-surface guards",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N72JADPBAEBJ2009MY",
+      "path": "scripts/verify-insights-graph.sh",
+      "action": "create",
+      "role": "graph, plan, discovery, and forbidden-surface gate",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N77DP0666X28B905HX",
+      "path": "docs/verification/insights-graph.md",
+      "action": "document",
+      "role": "safe graph and test evidence report",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZGN7N71WRN93FNJ7JZ51DM",
+      "name": "CompleteInsightsPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "published contract evidence"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7RYZAKC86TYBP98QN",
+      "name": "InsightsAtomicRecoveryEvidence",
+      "direction": "consumes",
+      "contract_ref_code": "NFR-INSIGHTS-VERIFIED-RECOVERABILITY",
+      "notes": [
+        "recovery evidence"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N73D53GVSSKXVGN0V5",
+      "name": "InsightsSecurityGateEvidence",
+      "direction": "consumes",
+      "contract_ref_code": "NFR-INSIGHTS-LOCAL-DATA-PROTECTION",
+      "notes": [
+        "security evidence"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N784T4P7MSFXZ482ME",
+      "name": "InsightsPerformanceGateEvidence",
+      "direction": "consumes",
+      "contract_ref_code": "NFR-INSIGHTS-PERSONAL-SCALE-PERFORMANCE",
+      "notes": [
+        "performance evidence"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7TTR3QM7D9SESS11X",
+      "name": "VerifiedInsightsUc001",
+      "direction": "consumes",
+      "contract_ref_code": "UC-INSIGHTS-001",
+      "notes": [
+        "UC-001"
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7BQ7YV7GTS510J315",
+      "name": "VerifiedInsightsUc002",
+      "direction": "consumes",
+      "contract_ref_code": "UC-INSIGHTS-002",
+      "notes": [
+        "UC-002"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7K715XHB0839Z5J0F",
+      "name": "VerifiedInsightsUc003",
+      "direction": "consumes",
+      "contract_ref_code": "UC-INSIGHTS-003",
+      "notes": [
+        "UC-003"
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7DDNG96C5F4A6XR89",
+      "name": "VerifiedInsightsUc004",
+      "direction": "consumes",
+      "contract_ref_code": "UC-INSIGHTS-004",
+      "notes": [
+        "UC-004"
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7H6ZV9QPS0FP68YVC",
+      "name": "VerifiedInsightsUc005",
+      "direction": "consumes",
+      "contract_ref_code": "UC-INSIGHTS-005",
+      "notes": [
+        "UC-005"
+      ],
+      "sort_order": 8,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7YRFR8GVJDN54JJN1",
+      "name": "VerifiedInsightsUc006",
+      "direction": "consumes",
+      "contract_ref_code": "UC-INSIGHTS-006",
+      "notes": [
+        "UC-006"
+      ],
+      "sort_order": 9,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N78JM83Z0PS785W61J",
+      "name": "InsightsGraphQualityEvidence",
+      "direction": "produces",
+      "contract_ref_code": "PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES",
+      "notes": [
+        "graph and plan convergence proof"
+      ],
+      "sort_order": 10,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZGN7N6B2C05MGPRYEYTTNG",
+      "kind": "acceptance_check",
+      "text": [
+        "lex coverage reports all 15 active FRs covered by linked planned or passing tests, all 23 INSIGHTS test cases linked, four deferred FRs inactive, zero orphan tests, and zero gaps."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N6XFPAEKM02JDHW79A",
+      "kind": "acceptance_check",
+      "text": [
+        "lex decision path-check reports all 37 expected implementation paths matched; lex link suggest is empty; the three known detail/write/filter endpoint heuristics are recorded as non-applicable because the accepted boundary is local structured CLI with zero endpoint entities."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N6N5728KY7Y7AM1FV4",
+      "kind": "acceptance_check",
+      "text": [
+        "lex external-dependency check records real evidence-linked validation for BUDGET, transitive LEDGER, Agent Host, Host OS, and private corpus; CHANNELS remains explicitly assumed unless its future consumer exists, with its fixture parity evidence recorded."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N69BPYWHS7NP3523DT",
+      "kind": "acceptance_check",
+      "text": [
+        "Every named contract, analytical, persistence, recovery, security, performance, private-evidence, and UC test class has nonzero discovery before aggregate totals are accepted."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N6PVSE463F89A42YY1",
+      "kind": "acceptance_check",
+      "text": [
+        "Plan coverage has zero gaps, audit has zero blocking findings, no task lacks acceptance checks/files/interfaces/verification, every context stays within 2500 tokens, dependencies are acyclic, and placeholder/forbidden-surface scans are empty."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7EZRN5A3JRRCNS097",
+      "kind": "constraint",
+      "text": [
+        "Graph commands use JSON machine output and exact expected counts; generated Markdown is never the authority."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7HFVS45EVA30FP1BF",
+      "kind": "expected_output",
+      "text": [
+        "InsightsGraphQualityEvidence"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7FHTDJC22XT5PQT1A",
+      "kind": "expected_output",
+      "text": [
+        "Reproducible graph-quality report"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7ATC8YY94222DA88E",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT suppress graph warnings, add HTTP endpoints to silence heuristics, mark assumed dependencies validated without executable evidence, accept zero-discovery totals, or edit graph JSON/derived Markdown as source."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7A2S1VYH479EGZGVW",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT hide deferred FRs, private-value failure, missing expected paths, context over-budget, cycles, placeholders, or forbidden UI/network/EF/policy surfaces."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N7CZC15EYP2G8YW5XR",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT print financial payloads, private paths, corpus rows, report bodies, or fixture content in graph evidence."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N72891YWR7MYJF26T9",
+      "kind": "note",
+      "text": [
+        "This convergence task intentionally remains loose and runs only after all behavioral gates and use cases complete."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZGN7N7QWB1PH7YK9QWXMYC",
+      "gate_type": "branch-review",
+      "description": [
+        "Review graph commands, exact counts, assumed-versus-validated dependencies, and per-class discovery from a clean checkout."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZGN7N7BY40SR8KDQZAAASA",
+      "phase": "after",
+      "command": "bash scripts/verify-insights-graph.sh",
+      "expected_result": "exit 0; coverage is 15 of 15 with 23 linked tests and zero gaps, all 37 design paths match, links are clean, exactly 3 CLI-only endpoint heuristics are matched, external evidence status is exact, every named suite discovers tests, plan coverage/audit/context/dependency checks are clean, forbidden-surface scans are empty, and 0 checks fail",
+      "required": 1,
+      "timeout_seconds": 1800,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ]
+}

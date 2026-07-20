@@ -1,0 +1,387 @@
+{
+  "id": "01KXZGBEMVZKR3QZM2YTCC6SG2",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNFBJJ05B3DTV9XV9Q4SK",
+  "ref_code": "TASK-INSIGHTS-GATE-ATOMIC-RECOVERY",
+  "slug": "GATE-ATOMIC-RECOVERY",
+  "title": "Prove retained-state and recovery failure atomicity",
+  "description": [
+    "Cross-task convergence gate with no Implements ownership; inject cancellation, crash, storage, artifact, migration, and activation faults across every retained mutation and recovery boundary."
+  ],
+  "objective": [
+    "One reproducible fault matrix proves restart observes exactly one complete outcome or the unchanged prior state for Retain, Restate, Delete, Backup, and Restore."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 2,
+  "created_at": "2026-07-20T10:15:09.7240612+00:00",
+  "decisions": [
+    {
+      "id": "01KXZGBEN07R4BA6DNE3VNTG26",
+      "target": "DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE",
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN0TKFMXN5EATANBCA8",
+      "target": "DD-INSIGHTS-STATE-STORE",
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN06W8Z5V5JWD5GFNGS",
+      "target": "DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION",
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZGBEN1NJ7G0B59GMC1JN0W",
+      "target": "TASK-INSIGHTS-BACKUP-VERIFY",
+      "dependency_type": "compile",
+      "reason": [
+        "The gate injects Backup and Verify failures."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN1YZPZR87FF8GHJCQ3",
+      "target": "TASK-INSIGHTS-DELETE-REPORT",
+      "dependency_type": "compile",
+      "reason": [
+        "The gate injects Delete failures."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN11KZV00SEHSFX0GNN",
+      "target": "TASK-INSIGHTS-RESTATE-REPORT",
+      "dependency_type": "compile",
+      "reason": [
+        "The gate injects Restatement failures."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN1HXVNFNQ9FK8Y8CGZ",
+      "target": "TASK-INSIGHTS-RESTORE-ACTIVATE",
+      "dependency_type": "compile",
+      "reason": [
+        "The gate injects candidate and activation failures."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN1HPXV66P3MCYQKQG5",
+      "target": "TASK-INSIGHTS-RETAIN-REPORT",
+      "dependency_type": "compile",
+      "reason": [
+        "The gate injects Retain failures."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZGBEN09TFX5ST7HRG0GX9H",
+      "path": "tests/Tally.Tests/Insights/Recovery/InsightsAtomicRecoveryFaultMatrixTests.cs",
+      "action": "test",
+      "role": "cross-operation injected fault and restart matrix",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN0TQA0MEJZ7NQ7FV2H",
+      "path": "scripts/verify-insights-recovery.sh",
+      "action": "create",
+      "role": "non-vacuous recovery suite and evidence runner",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN02NFBZHPK1MT2Q8V5",
+      "path": "docs/verification/insights-recovery.md",
+      "action": "document",
+      "role": "safe fault-boundary and result report",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZGBEN0EE0YYEBCETDR6Y42",
+      "name": "RetainInsightReportCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "retained-generation fault surface"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN013VF3SWQXYKVC2CD",
+      "name": "RestateInsightReportCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "Restatement fault surface"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN0FRPKE8HV0NN7B8F2",
+      "name": "DeleteInsightReportCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "deletion fault surface"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN0NDP3FMDZ63D9PVCK",
+      "name": "CreateInsightsBackupCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "notes": [
+        "backup saga fault surface"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN02BGJCR0F069TN7ZW",
+      "name": "RestoreInsightsBackupCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "notes": [
+        "restore activation fault surface"
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN1KWP2XNNJ0DF2ZB9T",
+      "name": "InsightsAtomicRecoveryEvidence",
+      "direction": "produces",
+      "contract_ref_code": "NFR-INSIGHTS-VERIFIED-RECOVERABILITY",
+      "notes": [
+        "complete fault-matrix proof"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZGBEN0Q3VTVEK7CYK9K6N4",
+      "kind": "acceptance_check",
+      "text": [
+        "The matrix injects faults before and after snapshot, payload, Restatement link, DeletionEvent, replay reservation/outcome, backup candidate, current-reservation removal, artifact publication, terminal receipt, restore copy, migration, candidate outcome, verification, expected-current check, pointer replacement, and directory fsync boundaries."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN0BERXA66K971G1VHR",
+      "kind": "acceptance_check",
+      "text": [
+        "After each Retain, Restate, or Delete fault and restart, the store contains either the complete logical outcome exactly once or the unchanged pre-operation state with no partial payload, dangling link, missing event, duplicate identity, or consumed failed key."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN0XHEKKETB7E03RNXB",
+      "kind": "acceptance_check",
+      "text": [
+        "After each Backup fault, exact replay either resumes or reconciles the deterministic artifact and leaves at most one published verified artifact and one terminal outcome; completed failure leaves no stale reservation."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN0N9P3CKGH357JPXV4",
+      "kind": "acceptance_check",
+      "text": [
+        "After each Restore fault, startup observes the complete prior or complete verified candidate generation, never a mixed store, and the prior generation remains recoverable."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN03J7DR76YE6H0CBXS",
+      "kind": "acceptance_check",
+      "text": [
+        "The report records only fault labels, safe fingerprints, row/count deltas, exit states, and test totals and contains no financial payload, private path, or report body."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN07YWTR19BPPDS2C0C",
+      "kind": "constraint",
+      "text": [
+        "Tests use real temporary SQLite, real file operations, and process-restart-equivalent store reopening; SQL and filesystem authority switches are not mocked."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN0E5THF4G877WA0F20",
+      "kind": "expected_output",
+      "text": [
+        "InsightsAtomicRecoveryEvidence"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN0BCWH3N93PTX792BZ",
+      "kind": "expected_output",
+      "text": [
+        "Reproducible failure-injection report"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN0WMD52RAW23T480KK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept aggregate test totals without nonzero discovery for every mutation and recovery fault partition."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN0PQZJFRSGV1P3H8EY",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT repair failed state in the test, skip restart inspection, ignore WAL/pointer/fsync boundaries, weaken exact replay, or suppress a mixed/partial outcome."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN03X8306V1CD7EMAXK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT print fixture payloads, report bodies, private paths, or raw database rows in fault evidence."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN08P3XEP3MXF2FCN1D",
+      "kind": "note",
+      "text": [
+        "This gate is intentionally loose and converges behavior already implemented by feature tasks."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZGBEN18PH8BVK92Z58QNG9",
+      "target_ref_code": "NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5SPVJZQGB9NCQK3SMG8F",
+      "target_title": "Make retained report changes atomic and durable",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN1ADHVDDACDZCP9E4K",
+      "target_ref_code": "NFR-INSIGHTS-VERIFIED-RECOVERABILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5T5ZP1H2VJ6K77SJ2QQ1",
+      "target_title": "Verify backup and restore independently",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN1G7JH79F3SPMXT1WS",
+      "target_ref_code": "TC-INSIGHTS-REPORT-RETENTION-FAILURE-ATOMICITY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACXWG9YYW4WPPEKFFY86D",
+      "target_title": "Verify retained-state write failure atomicity",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN10MT1WB0K9X5FBVK8",
+      "target_ref_code": "TC-INSIGHTS-BACKUP-VERIFICATION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZADXNMP4N0H4T2FA5RFVH0",
+      "target_title": "Verify complete owner-only INSIGHTS backups",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    },
+    {
+      "id": "01KXZGBEN1HXGNR3DQKQGS6FYJ",
+      "target_ref_code": "TC-INSIGHTS-RESTORE-FAILURE-ATOMICITY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZADY6D0SGQFEDTG5ZT0YRT",
+      "target_title": "Verify separate-target restore and atomic activation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZGBEN1DJD3MRR9DRX1V1NJ",
+      "gate_type": "branch-review",
+      "description": [
+        "Review per-boundary discovery and old-or-new restart evidence from a clean checkout."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZGBEN1STPYQYYN3QP36XVA",
+      "phase": "after",
+      "command": "bash scripts/verify-insights-recovery.sh",
+      "expected_result": "exit 0; every named Retain, Restate, Delete, Backup, and Restore partition discovers nonzero cases, at least 40 injected fault/restart cases execute, every outcome is complete-old or complete-new exactly once, evidence is payload-free, and 0 checks fail",
+      "required": 1,
+      "timeout_seconds": 1800,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:15:09.7240612+00:00"
+    }
+  ]
+}

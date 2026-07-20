@@ -1,0 +1,263 @@
+{
+  "id": "01KXZGN7MFBBQZQ2STVTRQJ4WM",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNFYC4GZB47S6T4PBR6MQ",
+  "ref_code": "TASK-INSIGHTS-GATE-MODULE",
+  "slug": "GATE-MODULE",
+  "title": "Complete the INSIGHTS v1 module gate",
+  "description": [
+    "Exactly-one final module gate with no Implements ownership; execute clean build, full tests, Native-AOT publication, behavioral gates, graph convergence, private-evidence status, and forbidden-surface checks."
+  ],
+  "objective": [
+    "A clean checkout proves INSIGHTS v1 satisfies the approved design and active PRD with no hidden scope, unverified class, partial state, private disclosure, or graph drift."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 10,
+  "created_at": "2026-07-20T10:20:30.2237501+00:00",
+  "dependencies": [
+    {
+      "id": "01KXZGN7NA4SPNJKQMBSP4FH4E",
+      "target": "TASK-INSIGHTS-GATE-GRAPH-QUALITY",
+      "dependency_type": "compile",
+      "reason": [
+        "The final module gate runs only after all contract, behavioral, nonfunctional, use-case, and graph evidence converges."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZGN7N809NQF96QK6X5Y12P",
+      "path": "tests/Tally.Tests/Insights/InsightsModuleGateTests.cs",
+      "action": "test",
+      "role": "complete inventory and forbidden-surface assertions",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N872EKHE5SSTTPKR2M",
+      "path": "scripts/verify-insights-module.sh",
+      "action": "create",
+      "role": "clean build, tests, publish, focused gates, graph, and privacy convergence",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7NAXAB1PM1HWTW8K2A7",
+      "path": "docs/verification/insights-module.md",
+      "action": "document",
+      "role": "safe final module evidence and environment fingerprint",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZGN7NA6M8Z1F1TBS6ZJXR5",
+      "name": "InsightsGraphQualityEvidence",
+      "direction": "consumes",
+      "contract_ref_code": "PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES",
+      "notes": [
+        "complete graph and behavioral convergence"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7NAJ9V8TG5PV8551CYM",
+      "name": "CompleteInsightsV1",
+      "direction": "produces",
+      "contract_ref_code": "MD-INSIGHTS-MASTER",
+      "notes": [
+        "final module proof"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZGN7N8JR7Q84SWFE3X26M1",
+      "kind": "acceptance_check",
+      "text": [
+        "From a clean checkout, restore, warning-as-error build, full test suite, and linux-x64 self-contained Native-AOT publish complete with zero failures, warnings, trim issues, reflection/dynamic-code gaps, or missing native SQLite artifact."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N8M0SX231KQGB84YHP",
+      "kind": "acceptance_check",
+      "text": [
+        "Every task verification class and every public operation has nonzero discovery; contract, BUDGET seam, private owner-value, recovery, security, performance, six UC, and graph scripts all exit 0 with their exact thresholds."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N8WEZ09MT1PJJMGZMM",
+      "kind": "acceptance_check",
+      "text": [
+        "lex coverage, decision paths, link suggestions, endpoint heuristics, dependency evidence, plan coverage/audit/status, context budgets, graph integrity, and sync match the approved INSIGHTS graph with no unexplained gap or drift."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N85G2PB8ZD14G69GHC",
+      "kind": "acceptance_check",
+      "text": [
+        "Static and runtime scans find zero HTTP/FastEndpoints, EF Core, UI, permissions/seeds, scripts/plugins/formula languages, upstream mutation/private access, second LEDGER read, daemon/network/background, floating financial arithmetic, raw member persistence, private receipt persistence, or payload-bearing diagnostics."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N8XP7N2EX2Z0MWQGX6",
+      "kind": "acceptance_check",
+      "text": [
+        "The owner-value evidence is a successful aggregate-only gate; if it failed, the module gate remains blocked and reports the do-less outcome rather than accepting persistence or shipment."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N8316BG9HP3C1P14B5",
+      "kind": "acceptance_check",
+      "text": [
+        "git status contains no tracked private evidence or generated runtime artifact and every committed verification document contains safe metadata only."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N8B4FR0D3J0H31K75T",
+      "kind": "constraint",
+      "text": [
+        "The final script invokes every focused gate and preserves exact per-class discovery evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N87ZSGKNJTYP316MVX",
+      "kind": "expected_output",
+      "text": [
+        "CompleteInsightsV1"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N8C351V1KCXEY01A4C",
+      "kind": "expected_output",
+      "text": [
+        "Clean-checkout module evidence"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N80NM310HBZEN2K10P",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT skip a focused gate because the aggregate suite is green, accept zero-discovery filters, relax warnings or thresholds, suppress graph findings, or mark the module complete after a failed owner-value gate."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N8FQQXB13ZQSDH1S09",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT stage private manifests, reports, databases, WAL/SHM, backups, paths, statement data, merchant text, expected rows, or financial fixtures."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N8M8R15MXVW2WBRV9K",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add deferred signals, UI, HTTP, hosted services, arbitrary policies, automatic retention/cleanup, or upstream mutation while closing the module."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7N8QB0F95J4XXMKFMW1",
+      "kind": "note",
+      "text": [
+        "Execution completion is recorded in br after bead compilation; this planning_state never represents runtime progress."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZGN7NAST9B8J9F39KC191D",
+      "target_ref_code": "MD-INSIGHTS-MASTER",
+      "target_entity_type": "module_design",
+      "target_entity_id": "01KXZDV4XY2EHRCVNZ4E4FNTDB",
+      "target_title": "Budget Insights technical design",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7NAFNBCJEZSK61828H2",
+      "target_ref_code": "PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES",
+      "target_entity_type": "pattern",
+      "target_entity_id": "01KXR2EKKXYFFP0KNEYZGETEVG",
+      "target_title": "Implementation Plan Quality Gates",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZGN7NA91PTR4S7NQ2E9706",
+      "gate_type": "branch-review",
+      "description": [
+        "Review clean-checkout evidence, owner-value pass, focused gate outputs, graph state, and tracked-file privacy before completion."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZGN7NA1V6JQMHW6E5PD813",
+      "phase": "after",
+      "command": "bash scripts/verify-insights-module.sh",
+      "expected_result": "exit 0; clean restore/build/full tests and linux-x64 Native-AOT publish succeed with 0 warnings/failures, every focused gate exits 0 with nonzero per-class discovery, 15 of 15 active FRs and all 37 design paths are proven, graph/sync are clean, forbidden-surface and tracked-private-artifact scans are empty, and one safe final report is written",
+      "required": 1,
+      "timeout_seconds": 5400,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ]
+}

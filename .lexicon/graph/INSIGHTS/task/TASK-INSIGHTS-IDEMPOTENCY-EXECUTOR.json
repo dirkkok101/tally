@@ -1,0 +1,267 @@
+{
+  "id": "01KXZG81124H60PQ52TMX4B0TY",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNERPYEK1S9QW2JMMY1ZR",
+  "ref_code": "TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR",
+  "slug": "IDEMPOTENCY-EXECUTOR",
+  "title": "Implement module-wide retained-operation replay",
+  "description": [
+    "Create the transactional Attempting and Succeeded replay coordinator consumed by Retain, Restate, Delete, Backup, and Restore."
+  ],
+  "objective": [
+    "InsightsIdempotencyExecutor returns prior logical outcomes for exact retries, rejects changed input, and never consumes failed request identities or leaks deleted content."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 1,
+  "created_at": "2026-07-20T10:13:17.4772449+00:00",
+  "decisions": [
+    {
+      "id": "01KXZG8117R36XDC1KF74DQYBZ",
+      "target": "DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG81177EQE45B7CK38F6S9",
+      "target": "DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZG8118NTV5XH5NMKRWDYFA",
+      "target": "TASK-INSIGHTS-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "The replay executor uses the idempotency table and caller-owned SQLite transactions."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZG8117TG76C5KMD2BXB22N",
+      "path": "src/Tally/Infrastructure/Insights/Storage/Idempotency/InsightsIdempotencyExecutor.cs",
+      "action": "create",
+      "role": "transactional replay coordinator",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8118YGD4838F5TRHFZT4",
+      "path": "tests/Tally.Tests/Insights/Storage/InsightsIdempotencyExecutorTests.cs",
+      "action": "test",
+      "role": "same, conflict, failure, deleted, and recovery reservation tests",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZG8118JDNM5DJJ79V3S54F",
+      "name": "InsightsStateStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-STATE-STORE",
+      "notes": [
+        "transaction and replay rows"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8118H49Y54VTZF0150CH",
+      "name": "InsightsIdempotencyExecutor.ExecuteAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-IDEMPOTENCY",
+      "notes": [
+        "new, replay, conflict, or failed reservation result"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZG81172099TZD84V2TRXQH",
+      "kind": "acceptance_check",
+      "text": [
+        "The unique replay identity is operationId plus contractVersion plus keyDigest; the canonical request fingerprint includes every logical input, actor, reason, target or predecessor, selected policies, expected-current fingerprint, and safe normalized path identity where applicable."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG81178KWAKWWMR3ZB7KJ8",
+      "kind": "acceptance_check",
+      "text": [
+        "A Succeeded record with the same key and fingerprint returns the exact prior logical outcome before TimeProvider, producer, or write access; the same key with a changed fingerprint returns IdempotencyConflict and changes nothing."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8117Q98ZRK48QKBZND7F",
+      "kind": "acceptance_check",
+      "text": [
+        "New write attempts are reserved transactionally; success stores one immutable outcome reference; validation, cancellation, transient, generation, and persistence failure leave no successful outcome and remove any completed-failure reservation."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8117WNJJW9YAXATT21YW",
+      "kind": "acceptance_check",
+      "text": [
+        "If a retained snapshot outcome was later deleted, replay resolves to metadata-only Deleted evidence and never recreates or discloses the removed payload."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8117YSEEAZY0TMEHDW83",
+      "kind": "acceptance_check",
+      "text": [
+        "Backup-specific Attempting reconciliation can retain deterministic artifact identity across a crash while the copied artifact excludes the current non-terminal reservation."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG81172NT2MY5ZXYSETS2K",
+      "kind": "constraint",
+      "text": [
+        "The executor participates in the caller-owned SQLite transaction and has one production implementation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG81179JVW9M6W6RX9B4HN",
+      "kind": "expected_output",
+      "text": [
+        "InsightsIdempotencyExecutor"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8117KQM4X46E0JXBSGXF",
+      "kind": "expected_output",
+      "text": [
+        "Replay conflict and crash-state tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8117MDS34KF2ABR35TBR",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT store full requests, reports, private paths, or caller idempotency keys; persist digests, fingerprints, safe identities, and outcome refs only."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8117B0V5BZ9WH1ETPN1Q",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT treat expected failures as exceptions, consume a failed request identity, create a second logical outcome, or replay deleted content."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8117ZSVFM41X8MS4X41T",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT implement a generic event-sourcing system — rejected per DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8117KHP0VD124HFMR52G",
+      "kind": "note",
+      "text": [
+        "Recovery handlers use the same identity model but own their external artifact saga."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZG8118QZQJE04HXB77S2GZ",
+      "target_ref_code": "NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5SPVJZQGB9NCQK3SMG8F",
+      "target_title": "Make retained report changes atomic and durable",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG81185RDYGTG2VD2AC8NP",
+      "target_ref_code": "DM-INSIGHTS-IDEMPOTENCY",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXCXPZ5ZKHNSRPMHS8FVB",
+      "target_title": "InsightsIdempotencyRecord",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8118CW2VRYMSMNM5E9SP",
+      "target_ref_code": "TC-INSIGHTS-REPORT-RETENTION-IDEMPOTENCY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACX869A891JVD66T4QQHA",
+      "target_title": "Verify retained generation and idempotent replay",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZG8118YTX1DPCQJAM1TS0G",
+      "gate_type": "test-evidence",
+      "description": [
+        "Review transaction boundaries and prove every failure leaves no successful or duplicate outcome."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZG8118ADXKN1452H91JEY1",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~InsightsIdempotencyExecutorTests",
+      "expected_result": "exit 0; at least 18 exact-replay, changed-input conflict, validation failure, cancellation, rollback, crash reservation, deleted-outcome, path-digest, payload-exclusion, and concurrent-key cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ]
+}

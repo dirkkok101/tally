@@ -1,0 +1,436 @@
+{
+  "id": "01KXZGN7M4FG3E0FTVEQ4J75HX",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNFYC4GZB47S6T4PBR6MQ",
+  "ref_code": "TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT",
+  "slug": "GATE-INT-PUBLIC-CONTRACT",
+  "title": "Wire and prove the complete INSIGHTS public contract",
+  "description": [
+    "Converge all handler slices into the released local INSIGHTS registry and Native-AOT consumer contract."
+  ],
+  "objective": [
+    "Publish exactly eleven stable INSIGHTS operations plus shared schema discovery."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 0,
+  "created_at": "2026-07-20T10:20:30.2237501+00:00",
+  "decisions": [
+    {
+      "id": "01KXZGN7MKR34X952BQYG9RV3D",
+      "target": "DD-INSIGHTS-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MK5EZ7W0N2EVHY3QVW",
+      "target": "DD-INSIGHTS-CLI-OPERATION-CONTRACT",
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZGN7MPRZC1MCZ79682RES9",
+      "target": "TASK-INSIGHTS-BACKUP-VERIFY",
+      "dependency_type": "compile",
+      "reason": [
+        "Register Backup and Verify."
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MPK7WG6FWKHHEVAVPC",
+      "target": "TASK-INSIGHTS-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Wiring consumes descriptors and source-generated contracts."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MPH1HXQKV1C3PXMCJE",
+      "target": "TASK-INSIGHTS-DELETE-REPORT",
+      "dependency_type": "compile",
+      "reason": [
+        "Register Delete."
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MPBNCTCY6HHP7FREPZ",
+      "target": "TASK-INSIGHTS-GENERATE-REPORT",
+      "dependency_type": "compile",
+      "reason": [
+        "Register Generate."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MPKF2DYJDNKTK2MT9Z",
+      "target": "TASK-INSIGHTS-REPORT-DETAIL-READS",
+      "dependency_type": "compile",
+      "reason": [
+        "Register Explain and Get."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MPFFC8K1PR7D4E7M0W",
+      "target": "TASK-INSIGHTS-REPORT-HISTORY-STATUS",
+      "dependency_type": "compile",
+      "reason": [
+        "Register List and Status."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MPGMHQBVEGR548XYMP",
+      "target": "TASK-INSIGHTS-RESTATE-REPORT",
+      "dependency_type": "compile",
+      "reason": [
+        "Register Restate."
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MP510W5Z9W7DP7Y6XW",
+      "target": "TASK-INSIGHTS-RESTORE-ACTIVATE",
+      "dependency_type": "compile",
+      "reason": [
+        "Register Restore."
+      ],
+      "sort_order": 8,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MP62879Z1E0BSG9D0F",
+      "target": "TASK-INSIGHTS-RETAIN-REPORT",
+      "dependency_type": "compile",
+      "reason": [
+        "Register Retain."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZGN7MMG13861GSKJP7CJY9",
+      "path": "src/Tally/Bootstrap/Features/InsightsExtensions.cs",
+      "action": "create",
+      "role": "complete explicit INSIGHTS registration",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MM405ATWEKS69D9V8F",
+      "path": "src/Tally/Program.cs",
+      "action": "modify",
+      "role": "INSIGHTS process composition",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MMZT98HD019HA7HNJ4",
+      "path": "tests/Tally.Tests/Insights/Contract/InsightsPublishedContractTests.cs",
+      "action": "test",
+      "role": "descriptor, version, Agent Host, and CHANNELS matrix",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MME2EY5F7PZFJ9THPH",
+      "path": "tests/Tally.Tests/Insights/Process/InsightsProcessContractTests.cs",
+      "action": "test",
+      "role": "stdin/stdout/stderr/exit and no-background process matrix",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MMGJCTJT88QJBFXCBA",
+      "path": "scripts/verify-insights-contract.sh",
+      "action": "create",
+      "role": "named contract suites and Native-AOT publication gate",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZHF22VVR9E18AVA0EDTTHX",
+      "name": "InsightsOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:34:36.5061276+00:00"
+    },
+    {
+      "id": "01KXZHF22W92A903V1SA0YPF58",
+      "name": "GenerateInsightReportQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:34:36.5061276+00:00"
+    },
+    {
+      "id": "01KXZHF22WYET9AVE3NYQ7TJNZ",
+      "name": "ExplainInsightReportQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:34:36.5061276+00:00"
+    },
+    {
+      "id": "01KXZHF22WRTEZKC1H05B9X8H6",
+      "name": "GetInsightReportQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:34:36.5061276+00:00"
+    },
+    {
+      "id": "01KXZHF22WKWWA8TW9N9BZXECW",
+      "name": "ListInsightReportsQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:34:36.5061276+00:00"
+    },
+    {
+      "id": "01KXZHF22WZ2KXA5TXYMZ2RD6K",
+      "name": "RetainInsightReportCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "sort_order": 5,
+      "created_at": "2026-07-20T10:34:36.5061276+00:00"
+    },
+    {
+      "id": "01KXZHF22W5CBAMEZJAHKTECPA",
+      "name": "RestateInsightReportCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "sort_order": 6,
+      "created_at": "2026-07-20T10:34:36.5061276+00:00"
+    },
+    {
+      "id": "01KXZHF22WBMCGCKCE0TGJMWAQ",
+      "name": "DeleteInsightReportCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "sort_order": 7,
+      "created_at": "2026-07-20T10:34:36.5061276+00:00"
+    },
+    {
+      "id": "01KXZHF22WC4D78T0FSXTARH16",
+      "name": "GetInsightsStatusQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "sort_order": 8,
+      "created_at": "2026-07-20T10:34:36.5061276+00:00"
+    },
+    {
+      "id": "01KXZHF22WVM7JVBFZEBGHRP8C",
+      "name": "CreateInsightsBackupCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "sort_order": 9,
+      "created_at": "2026-07-20T10:34:36.5061276+00:00"
+    },
+    {
+      "id": "01KXZHF22W62QJPJX3S6354SA3",
+      "name": "VerifyInsightsBackupQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "sort_order": 10,
+      "created_at": "2026-07-20T10:34:36.5061276+00:00"
+    },
+    {
+      "id": "01KXZHF22WRKEXP3AJ4CFYBPHB",
+      "name": "RestoreInsightsBackupCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "sort_order": 11,
+      "created_at": "2026-07-20T10:34:36.5061276+00:00"
+    },
+    {
+      "id": "01KXZHF22W5F5C89APXDPCJ1D3",
+      "name": "CompleteInsightsPublicContract",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "sort_order": 12,
+      "created_at": "2026-07-20T10:34:36.5061276+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZHNJEYNMMN5BKA8E2E2CZZ",
+      "kind": "acceptance_check",
+      "text": [
+        "InsightsExtensions explicitly registers all eleven descriptors and handlers plus compiler, mapper, state, BUDGET client, recovery, and TimeProvider services; Program composes it without reflection."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:38:09.8865948+00:00"
+    },
+    {
+      "id": "01KXZHNJEZJ6CKK559AJ531QGY",
+      "kind": "acceptance_check",
+      "text": [
+        "system.schema.list/show exposes exactly eleven canonically ordered INSIGHTS descriptors plus active and deferred policy metadata with stable request, result, error, authority, mutability, idempotency, limit, and compatibility schemas and performs no financial read."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:38:09.8865948+00:00"
+    },
+    {
+      "id": "01KXZHNJEZFPWQXP6F30FR3WME",
+      "kind": "acceptance_check",
+      "text": [
+        "Every invocation emits one versioned stdout envelope and documented exit category for success, malformed input, unknown field, NotFound, Deleted, conflict, unavailable, insufficient, incompatibility, integrity, resource, downstream, or sanitized internal failure."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:38:09.8865948+00:00"
+    },
+    {
+      "id": "01KXZHNJEZHNV9ARRVQY0RRARK",
+      "kind": "acceptance_check",
+      "text": [
+        "Complex financial input uses stdin or an owner-only file; values and private paths never enter arguments, stderr, ordinary logs, crash output, Git, or shared temporary files, and no listener or background service starts."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:38:09.8865948+00:00"
+    },
+    {
+      "id": "01KXZHNJEZ87Y2ZYHFKX2HZ6YH",
+      "kind": "acceptance_check",
+      "text": [
+        "Supported and one-version-incompatible Agent Host and CHANNELS fixtures prove identical released semantics and no presentation, delivery, policy, upstream, or retained-state mutation authority."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:38:09.8865948+00:00"
+    },
+    {
+      "id": "01KXZHNJEZV622V8M7ZWEFTJ8H",
+      "kind": "acceptance_check",
+      "text": [
+        "linux-x64 Native-AOT publication reaches every handler through source-generated JSON with zero trim, reflection, dynamic-code, descriptor, or build warnings."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-20T10:38:09.8865948+00:00"
+    },
+    {
+      "id": "01KXZHF22VN95AB90VZJHYMKAR",
+      "kind": "expected_output",
+      "text": [
+        "Complete published INSIGHTS contract evidence"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:34:36.5061276+00:00"
+    },
+    {
+      "id": "01KXZHDVBZZ5X7N76YV5TZPPHR",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use scanning, implicit discovery, a generic execute facade, HTTP/FastEndpoints, aliases, prompts, daemons, schedulers, listeners, or background processes."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:33:56.8609296+00:00"
+    },
+    {
+      "id": "01KXZHDVBZ5BMS90W0KPHJS1C3",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT register deferred formulas, UI services, seeds, or mutation authority for BUDGET, LEDGER, CLASSIFY, policies, or CHANNELS."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:33:56.8609296+00:00"
+    },
+    {
+      "id": "01KXZHDVBZ62MTGV4NSZMFK9ER",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept aggregate totals unless every named descriptor, handler, compatibility partition, and consumer fixture has nonzero discovery."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:33:56.8609296+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZGN7MN0H8YVW7Y5SYJCRBS",
+      "target_ref_code": "ADR-CORE-0021",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3YHHJX75J3BATYF9GWQ",
+      "target_title": "Explicit DI Registration — No Reflection Scanning",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MNB3E21D1Q8SFM4JQC",
+      "target_ref_code": "EXT-INSIGHTS-AI-AGENT-HOST",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXZ924WAV93RZ8M36GH4NHCT",
+      "target_title": "AI Agent Host",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    },
+    {
+      "id": "01KXZGN7MNY99EE7PBSZJRSH2E",
+      "target_ref_code": "EXT-INSIGHTS-CHANNELS-CONSUMER-CONTRACT",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXZ925SR7911AP4H74R3S4SE",
+      "target_title": "CHANNELS Consumer Contract",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZGN7MN3CQ8MX86PGJY43DM",
+      "gate_type": "branch-review",
+      "description": [
+        "Review the published binary surface, exact operation inventory, and both consumer fixtures before use-case gates."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZGN7MNMZGKWN70J8F6QJVC",
+      "phase": "after",
+      "command": "bash scripts/verify-insights-contract.sh",
+      "expected_result": "exit 0; exactly 11 INSIGHTS descriptors and handlers plus shared discovery are inventoried, both contract classes and Agent Host/CHANNELS compatibility partitions discover nonzero cases, all documented result and exit categories execute, linux-x64 Native-AOT publish contains tally and the native SQLite library, and 0 tests or warning checks fail",
+      "required": 1,
+      "timeout_seconds": 1500,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:20:30.2237501+00:00"
+    }
+  ]
+}

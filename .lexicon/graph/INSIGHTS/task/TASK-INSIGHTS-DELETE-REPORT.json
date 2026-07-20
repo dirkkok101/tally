@@ -1,0 +1,307 @@
+{
+  "id": "01KXZG8115EPWZ9YHZCDA1FRDG",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNERPYEK1S9QW2JMMY1ZR",
+  "ref_code": "TASK-INSIGHTS-DELETE-REPORT",
+  "slug": "DELETE-REPORT",
+  "title": "Delete one unreferenced report payload safely",
+  "description": [
+    "Implement explicit replay-safe RESTRICT leaf deletion with one metadata-only DeletionEvent and no automatic cleanup."
+  ],
+  "objective": [
+    "DeleteInsightReportCommand removes only an unreferenced target payload and outgoing link atomically while preserving surviving Restatement chains and attributable deletion evidence."
+  ],
+  "planning_state": "planned",
+  "priority": 1,
+  "sort_order": 6,
+  "created_at": "2026-07-20T10:13:17.4772449+00:00",
+  "decisions": [
+    {
+      "id": "01KXZG811B3MTW11FYD1NPYABW",
+      "target": "DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BYAXX7DYV4JMBSZHX",
+      "target": "DD-INSIGHTS-STATE-STORE",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZG811CJJXTS20KZ7N8R0YD",
+      "target": "TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR",
+      "dependency_type": "compile",
+      "reason": [
+        "Delete retries must resolve without a second event."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811C69PWGVJSRNZSGC1R",
+      "target": "TASK-INSIGHTS-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Delete uses snapshot, link, payload, and event tables."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZG811C2Q4V8XE8NFNBSP1D",
+      "path": "src/Tally/Features/Insights/History/Delete/DeleteInsightReportCommand.cs",
+      "action": "create",
+      "role": "RESTRICT leaf deletion handler",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811CWDB70P136EG1DYHJ",
+      "path": "tests/Tally.Tests/Insights/History/DeleteInsightReportCommandTests.cs",
+      "action": "test",
+      "role": "dependency, replay, event, backup, and no-cleanup tests",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZG811CR0KJ6RD5CEYFFPX4",
+      "name": "InsightsIdempotencyExecutor.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-IDEMPOTENCY",
+      "notes": [
+        "same/conflicting Delete replay"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811CBDXF1VSR00CFJBBB",
+      "name": "InsightsStateStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-STATE-STORE",
+      "notes": [
+        "dependency check and atomic deletion transaction"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811CFCR7TRC1RN67RX1A",
+      "name": "DeleteInsightReportCommand.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "insights.report.delete handler"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZG811BFKF8SHA8WGNX2K52",
+      "kind": "acceptance_check",
+      "text": [
+        "Delete requires explicit snapshot identity, trusted P1 actor, non-blank reason, and idempotency identity; unknown target returns NotFound and creates no event."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BHMBABC15BYW8T5NQ",
+      "kind": "acceptance_check",
+      "text": [
+        "A target referenced by any surviving child returns DependencyConflict and changes no payload, link, event, or replay outcome."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BTGE6ZF4G2NQHYZRV",
+      "kind": "acceptance_check",
+      "text": [
+        "A leaf deletion atomically removes its canonical payload and outgoing predecessor link and appends one DeletionEvent containing identities, actor, reason, trusted time, dependency result, and replay reference but no amount, explanation, or report content."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BN9PBDCG91GH6VC7N",
+      "kind": "acceptance_check",
+      "text": [
+        "Leaves can be deleted toward the root while each surviving predecessor remains immutable; exact retry of an already deleted target returns the prior metadata-only result and creates no second event."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BRA0Z4AHCBEF5BZF5",
+      "kind": "acceptance_check",
+      "text": [
+        "Existing backups remain unchanged and the result states an explicit restore may reinstate their captured state; time and limits never trigger automatic deletion."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811CJT077X7KZDGWMHMK",
+      "kind": "constraint",
+      "text": [
+        "Deletion remains explicit, leaf-only, attributable, idempotent, and metadata-only."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811CGTSKW3E3YY72TKSC",
+      "kind": "expected_output",
+      "text": [
+        "DeleteInsightReportCommand"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811CYYR1404K22TYKBF5",
+      "kind": "expected_output",
+      "text": [
+        "Dependency-safe deletion tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BBF7YNZJ5W5STY6DP",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT cascade-delete referenced predecessors, delete descendants, rewrite chains, return deleted payloads, or create an event for NotFound — per ADR-CORE-0020 and DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BNXB2ZP9QSD9J0MQK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add automatic expiry, retention cleanup, background jobs, or backup mutation."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811C10HNQ5PVH57RSKBD",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT split payload, link, event, and replay changes across transactions or log deleted report content."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZG811CNY9GTG63BGJH56FW",
+      "target_ref_code": "ADR-CORE-0020",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3YGXF1B0J0MC6S0EPAH",
+      "target_title": "RESTRICT-by-Default Delete Taxonomy",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811CS9QGZ0Y2X2SNT7BY",
+      "target_ref_code": "NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5SPVJZQGB9NCQK3SMG8F",
+      "target_title": "Make retained report changes atomic and durable",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811C1Q2JS4F147FTTZSN",
+      "target_ref_code": "DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXCDP4YZ72FAYYBJYPHPT",
+      "target_title": "ReportSnapshotRestatementAndDeletion",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811C5VVHWRW5KM8PP1MM",
+      "target_ref_code": "DIAG-INSIGHTS-REPORT-STATE",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KXZDY29FWXBFAKQBGN2NY8Y4",
+      "target_title": "Report retention and deletion lifecycle",
+      "relationship": "touches",
+      "required": 0,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811CD1V4KMJY8V0CYM1B",
+      "target_ref_code": "TC-INSIGHTS-REPORT-DELETION-DEPENDENCIES",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACZPR9HW67RYRW1D0C9YT",
+      "target_title": "Verify dependency-safe report deletion",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXZG811BQRQ8CX5Z37Q3EM9P",
+      "target": "FR-INSIGHTS-REPORT-DELETION",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZG811CXCVRMHFW1E74QT21",
+      "gate_type": "test-evidence",
+      "description": [
+        "Review row-level before/after evidence for parent, child, link, payload, event, and replay tables."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZG811C293QA1MN9STM0S9H",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~DeleteInsightReportCommandTests",
+      "expected_result": "exit 0; at least 18 unknown, referenced conflict, leaf, chain-order, event-minimization, exact replay, changed replay, cancellation, rollback, existing-backup, no-auto-cleanup, deleted-read, and payload-log cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ]
+}

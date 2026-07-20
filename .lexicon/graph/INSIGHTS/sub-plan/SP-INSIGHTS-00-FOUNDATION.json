@@ -1,0 +1,11 @@
+{
+  "id": "01KXZFNDFWMH6APFAZFA7PN2J4",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "ref_code": "SP-INSIGHTS-00-FOUNDATION",
+  "title": "Contracts and upstream prerequisites",
+  "description": [
+    "Create only the public contract blockers and prove the BUDGET evidence seam before INSIGHTS consumes it."
+  ],
+  "sort_order": 0,
+  "created_at": "2026-07-20T10:03:07.6458849+00:00"
+}

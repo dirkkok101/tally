@@ -1,0 +1,11 @@
+{
+  "id": "01KXZFNFYC4GZB47S6T4PBR6MQ",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "ref_code": "SP-INSIGHTS-04-ACCEPTANCE",
+  "title": "Integration and acceptance gates",
+  "description": [
+    "Converge published contract, security, performance, use-case, graph, and module evidence."
+  ],
+  "sort_order": 4,
+  "created_at": "2026-07-20T10:03:10.1574025+00:00"
+}

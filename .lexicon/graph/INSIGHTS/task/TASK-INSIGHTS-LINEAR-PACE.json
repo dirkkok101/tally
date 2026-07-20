@@ -1,0 +1,248 @@
+{
+  "id": "01KXZG1SPBA6VXWJM9KJRB69D3",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNE48SG87EXFDT7SEM0B0",
+  "ref_code": "TASK-INSIGHTS-LINEAR-PACE",
+  "slug": "LINEAR-PACE",
+  "title": "Implement exact Linear Pace classification",
+  "description": [
+    "Compute the approved month-to-date exact rational baseline and closed pace states with explicit limitations."
+  ],
+  "objective": [
+    "LinearPaceCalculator classifies supported plan evidence exactly, handles zero plans without division, and names every unavailable condition."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 4,
+  "created_at": "2026-07-20T10:09:53.3580299+00:00",
+  "decisions": [
+    {
+      "id": "01KXZG1SPKG84AD87EQCC7D3H2",
+      "target": "DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZG1SPK2WX0ZZDZBZ86C3H7",
+      "target": "TASK-INSIGHTS-CONTRACT-MODELS",
+      "dependency_type": "compile",
+      "reason": [
+        "The calculator returns ExactRational and PaceResult contracts."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZG1SPK3AGCS9GAFTVQ4A30",
+      "path": "src/Tally/Domain/Insights/Pace/LinearPaceCalculator.cs",
+      "action": "create",
+      "role": "exact rational pace policy",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPK5HP13MZMQGA352V1",
+      "path": "tests/Tally.Tests/Insights/Pace/LinearPaceCalculatorTests.cs",
+      "action": "test",
+      "role": "formula, precedence, zero-plan, and unavailable tests",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZG1SPK7GAQKWBT1XNBC6M4",
+      "name": "LinearPaceCalculator.Calculate",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-ANALYTICAL-EVIDENCE",
+      "notes": [
+        "one closed PaceResult"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZG1SPKVYP3XS7Z0MGZE156",
+      "kind": "acceptance_check",
+      "text": [
+        "For a started period with a non-zero plan, the exact baseline is plannedMinorUnits multiplied by elapsed inclusive calendar days divided by total period days with canonical exact rational arithmetic."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPKRFYMVPV7T6PH1P5J",
+      "kind": "acceptance_check",
+      "text": [
+        "Actual greater than the full plan returns OverPlan before baseline comparison; otherwise exact comparison returns BelowLinearBaseline, AtLinearBaseline, or AboveLinearBaseline."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPKYCWD74M9ZS48JT41",
+      "kind": "acceptance_check",
+      "text": [
+        "A zero plan with positive actual returns OverZeroPlan; zero or negative actual returns AtOrBelowZeroPlan without division."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPK5VDGHX476WJ1WF5E",
+      "kind": "acceptance_check",
+      "text": [
+        "NoBudgetPlan, NoActiveBudgetPlanRevision, future period, or unavailable coherent evidence returns the exact named unavailable state with no baseline."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPKY37AQ1KMHTM3K8W5",
+      "kind": "acceptance_check",
+      "text": [
+        "Every result cites exact inputs, elapsed fraction, formula version, current-day incompleteness, uniform-distribution limitation, and explicitly says it is not a Forecast."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPKSCTJ7RYM5YQPYQP0",
+      "kind": "constraint",
+      "text": [
+        "Full-plan overage precedence is evaluated before the exact baseline comparison."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPKR5QGDW1JX8K6HH9H",
+      "kind": "expected_output",
+      "text": [
+        "LinearPaceCalculator"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPKFXBCQSCSC9CRGNJZ",
+      "kind": "expected_output",
+      "text": [
+        "Exact boundary-state tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPKRB41CBAKX73RHGTY",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use decimal rounding or floating point — rejected per DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPKRQ29CSDJQTQSTXDK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT divide a zero plan, infer daily or weekly sub-budgets, accept an implicit clock, or advertise Linear Pace as a Forecast."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPKR5Q4CB2QQC24E7YP",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT return a baseline after overflow, undefined arithmetic, plan absence, future time, or incoherent evidence."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZG1SPK186MW9J2V8ZYYAK6",
+      "target_ref_code": "NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5RSRC447VXQSBG2EC3FQ",
+      "target_title": "Preserve deterministic analytical integrity",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPKSTMYJWNT2QB6WTY1",
+      "target_ref_code": "DM-INSIGHTS-ANALYTICAL-EVIDENCE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXBCJJEXEN98RRW25V9P5",
+      "target_title": "AnalysisWindowMetricStateAndExplanation",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPKX93V647E6C7PVM07",
+      "target_ref_code": "TC-INSIGHTS-LINEAR-PACE-CONFORMANCE",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACTQ9QE7D4BGK5430HJGB",
+      "target_title": "Verify linear pace formula and states",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXZG1SPK1Q1EYB9KZRAMAGZ3",
+      "target": "FR-INSIGHTS-LINEAR-PACE",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZG1SPKECWV7ASBVNFM3Z3M",
+      "gate_type": "self-review",
+      "description": [
+        "Recompute representative boundary cases by exact cross multiplication and compare state precedence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZG1SPKVX6CX7A9QVA3Z48B",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~LinearPaceCalculatorTests",
+      "expected_result": "exit 0; at least 22 exact-rational, boundary, full-plan precedence, zero-plan, refund, no-plan, no-active, future, overflow, limitation, and no-Forecast cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ]
+}

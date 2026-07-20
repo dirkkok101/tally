@@ -1,0 +1,328 @@
+{
+  "id": "01KXZG8113MWFW235M7TGH6KM8",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNERPYEK1S9QW2JMMY1ZR",
+  "ref_code": "TASK-INSIGHTS-RETAIN-REPORT",
+  "slug": "RETAIN-REPORT",
+  "title": "Retain an internally generated immutable report",
+  "description": [
+    "Implement the explicit owner-attributed idempotent Retain slice over the ephemeral Generate path and one atomic store transaction."
+  ],
+  "objective": [
+    "RetainInsightReportCommand appends exactly one complete immutable ReportSnapshot and replay outcome without accepting caller-authored report content."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 2,
+  "created_at": "2026-07-20T10:13:17.4772449+00:00",
+  "decisions": [
+    {
+      "id": "01KXZG8118KPWEDMEH6CDZQH25",
+      "target": "DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8118EYZ3B02KS8QYK5JJ",
+      "target": "DD-INSIGHTS-STATE-STORE",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZG8119AGQSCFQBQADXV96V",
+      "target": "TASK-INSIGHTS-GENERATE-REPORT",
+      "dependency_type": "compile",
+      "reason": [
+        "Retain reuses the complete approved generation path."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG81198AZWVPKFMSEJ4S0J",
+      "target": "TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR",
+      "dependency_type": "compile",
+      "reason": [
+        "Retain must resolve and reserve replay before producer access."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8119X0ZCVNR3XNF7TQ2S",
+      "target": "TASK-INSIGHTS-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Retain writes the snapshot and payload schema."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZG8118Z7GBFAHV7YF4ERGY",
+      "path": "src/Tally/Features/Insights/History/Retain/RetainInsightReportCommand.cs",
+      "action": "create",
+      "role": "idempotent retained-generation handler",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG81189Y39YQW2MYRJP044",
+      "path": "tests/Tally.Tests/Insights/History/RetainInsightReportCommandTests.cs",
+      "action": "test",
+      "role": "authority, replay, atomicity, and immutability tests",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZG8118TZ383MZH43NE3Z5F",
+      "name": "GenerateInsightReportQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-INSIGHT-REPORT",
+      "notes": [
+        "one internally generated complete report"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811810FWA1K4SRVMS343",
+      "name": "InsightsIdempotencyExecutor.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-IDEMPOTENCY",
+      "notes": [
+        "replay before producer reads"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8118YXBJ3X9YM271Q2C1",
+      "name": "InsightsStateStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-STATE-STORE",
+      "notes": [
+        "atomic snapshot and payload append"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8118JF3H9WMPP5DG4RPP",
+      "name": "RetainInsightReportCommand.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "insights.report.retain handler"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZG8118F19RY2NGDJ623QQE",
+      "kind": "acceptance_check",
+      "text": [
+        "Retain requires normalized analysis input, trusted P1 actor, non-blank reason, and idempotency identity and accepts no report payload, reportId, snapshotId, contentFingerprint, or provenance authored by the caller."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8118N4BMHMDV407J7BA6",
+      "kind": "acceptance_check",
+      "text": [
+        "Exact replay resolves before TimeProvider and producer access; a new request invokes the existing Generate path, allocates one opaque ULID snapshotId, and appends snapshot metadata, canonical report payload, fingerprint, actor, reason, and Succeeded outcome in one BEGIN IMMEDIATE transaction."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8118YBE21911DTXEGV0A",
+      "kind": "acceptance_check",
+      "text": [
+        "The retained identity records analysis-request fingerprint, source and policy versions, report schema, content fingerprint, trusted creation time, actor, and reason; later producer or policy change cannot alter it."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8118ZB6Y49F5KCHFYH9Z",
+      "kind": "acceptance_check",
+      "text": [
+        "Changed-input replay conflicts; validation, generation, cancellation, SQLite, disk, or commit failure leaves no partial snapshot, payload, or successful replay outcome."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811811QQTMFBGKWCK7K7",
+      "kind": "acceptance_check",
+      "text": [
+        "Logs and errors contain only safe stable IDs, fingerprints, states, and counts."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8118Y2AMDQEK539MHMY7",
+      "kind": "constraint",
+      "text": [
+        "Reuse GenerateInsightReportQuery and InsightsIdempotencyExecutor; duplicate analytical pipelines are forbidden."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG81188V23AS8DKZ1Q3BT5",
+      "kind": "expected_output",
+      "text": [
+        "RetainInsightReportCommand"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811898GCG5604DVZ0KDX",
+      "kind": "expected_output",
+      "text": [
+        "Atomic retained-generation tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG81181972Z1C4DAXDVXFZ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT retain ordinary Generate results automatically, accept caller-authored report content, update an existing report, or store upstream member rows — rejected per DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8118MSRZF5R9K8YYB6W9",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT split snapshot, payload, and replay writes across transactions or allocate trusted time before exact replay is checked."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8118846HFA0VVY51ZQ31",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add automatic expiry, cleanup, background work, multiple writers, or payload-bearing diagnostics."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZG8118DDEDYFA1JEVC86CB",
+      "target_ref_code": "NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5SPVJZQGB9NCQK3SMG8F",
+      "target_title": "Make retained report changes atomic and durable",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8118A7PQ63V6HQHNG2PM",
+      "target_ref_code": "DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXCDP4YZ72FAYYBJYPHPT",
+      "target_title": "ReportSnapshotRestatementAndDeletion",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8119523E2K2MM0VAPA3P",
+      "target_ref_code": "DM-INSIGHTS-IDEMPOTENCY",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXCXPZ5ZKHNSRPMHS8FVB",
+      "target_title": "InsightsIdempotencyRecord",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8119FW2J5R54YCD58TA4",
+      "target_ref_code": "TC-INSIGHTS-REPORT-RETENTION-IDEMPOTENCY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACX869A891JVD66T4QQHA",
+      "target_title": "Verify retained generation and idempotent replay",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8119B8DR34MG66MERR8D",
+      "target_ref_code": "TC-INSIGHTS-REPORT-RETENTION-FAILURE-ATOMICITY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACXWG9YYW4WPPEKFFY86D",
+      "target_title": "Verify retained-state write failure atomicity",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXZG8118F39WYGRRB3QKMWPH",
+      "target": "FR-INSIGHTS-REPORT-RETENTION",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZG8118Q24S4ET02X3AW4TQ",
+      "gate_type": "branch-review",
+      "description": [
+        "Trace request identity, Generate reuse, and all rows through one transaction and every injected failure."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZG8118X27NAWCW6T1KPT3F",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~RetainInsightReportCommandTests",
+      "expected_result": "exit 0; at least 20 authority, no-caller-payload, replay-before-read, changed-input conflict, immutable identity, producer failure, cancellation, write, commit, crash, later-correction, privacy, and no-auto-retain cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ]
+}

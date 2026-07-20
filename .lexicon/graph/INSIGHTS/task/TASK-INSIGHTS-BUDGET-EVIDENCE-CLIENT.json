@@ -1,0 +1,294 @@
+{
+  "id": "01KXZG1SP60SDYMCDM6PKMFH09",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNE48SG87EXFDT7SEM0B0",
+  "ref_code": "TASK-INSIGHTS-BUDGET-EVIDENCE-CLIENT",
+  "slug": "BUDGET-EVIDENCE-CLIENT",
+  "title": "Consume the public BUDGET insight evidence operation",
+  "description": [
+    "Implement the single concrete public-operation client used by INSIGHTS to acquire one bounded BudgetInsightEvidence result."
+  ],
+  "objective": [
+    "INSIGHTS invokes exactly one compatible budget.insights.evidence.get operation through the shared executor and exposes its typed result without private or mutation access."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 0,
+  "created_at": "2026-07-20T10:09:53.3580299+00:00",
+  "decisions": [
+    {
+      "id": "01KXZG1SPENDV3NMCSNDJ3Y2Y9",
+      "target": "DD-INSIGHTS-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPEKKTC3SNQB8V99PRN",
+      "target": "DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZG1SPGBT3MM3464J4K1DKB",
+      "target": "TASK-INSIGHTS-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "The client returns stable INSIGHTS errors and uses source-generated process contracts."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPGA06R4R8DBFB7G42S",
+      "target": "TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE",
+      "dependency_type": "compile",
+      "reason": [
+        "The public producer seam must be proven before INSIGHTS consumes it."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZG1SPF5FNS9G6ADZQKHBZD",
+      "path": "src/Tally/Application/OperationAbstractions.cs",
+      "action": "read",
+      "role": "shared executor abstraction",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPFT7FMNDS8WZWAP4SD",
+      "path": "src/Tally/Integration/Budget/BudgetContractClient.cs",
+      "action": "create",
+      "role": "single public BUDGET operation client",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPFRENYD1BPNV4J7YFE",
+      "path": "tests/Tally.Tests/Insights/Evidence/BudgetContractClientTests.cs",
+      "action": "test",
+      "role": "descriptor, compatibility, and single-call tests",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZGXSYS86YWZB2BTE6DFPC9",
+      "name": "VerifiedBudgetInsightEvidenceContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
+      "notes": [
+        "proved public prerequisite"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:25:11.1286697+00:00"
+    },
+    {
+      "id": "01KXZGXSYSNA2R5RNFG185RDQ5",
+      "name": "BudgetContractClient.GetInsightEvidenceAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
+      "notes": [
+        "one typed composite result through the released registry"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:25:11.1286697+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZG1SPE08J10KN14EQ3XJEE",
+      "kind": "acceptance_check",
+      "text": [
+        "BudgetContractClient resolves the released budget.insights.evidence.get descriptor from OperationRegistry and invokes it once through the shared public operation executor with CancellationToken."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPF6F2HVMNMVMFDDXXB",
+      "kind": "acceptance_check",
+      "text": [
+        "Supported BoundRevision, NoBudgetPlan, and NoActiveBudgetPlanRevision results deserialize through source-generated contracts without changing their plan-state, member, total, snapshot, generation, version, or binding evidence."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPFECS7CT3FY7QQCYJA",
+      "kind": "acceptance_check",
+      "text": [
+        "Unsupported BUDGET or LEDGER versions, Source State Changed, resource limits, malformed results, and executor failures return stable typed INSIGHTS failures before report output or retained writes."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPFVWZFFRPZ9527YKYA",
+      "kind": "acceptance_check",
+      "text": [
+        "The client exposes no mutation descriptor and performs no retry that could join evidence from separate producer captures."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPF8VD3MQCXZKGDB2ST",
+      "kind": "constraint",
+      "text": [
+        "Consume only the verified descriptor and DTOs established by TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPFQXBBQ3QB0XYWTAK6",
+      "kind": "expected_output",
+      "text": [
+        "BudgetContractClient"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPFAB2Y9DV4GZDFKYY9",
+      "kind": "expected_output",
+      "text": [
+        "Public-operation compatibility tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPF7E7F5KHE59AEH0SE",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add an IBudgetContractClient interface or transport adapter — the concrete client over the existing shared executor is selected per DD-INSIGHTS-APPLICATION-ARCHITECTURE."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPF549YNA1547X1E6YF",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT call budget.position.get plus ledger.actuals.query, resume a cursor, or calculate Budget Position — rejected per DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPF0GJNFYQK5G5DTV8T",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT open BUDGET or LEDGER storage, import private feature handlers or domain types, grant mutation authority, or log request/result payloads."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPFVBCW0DV2A4XHJZ6G",
+      "kind": "note",
+      "text": [
+        "The client transports producer evidence; CoherentEvidenceBinder owns INSIGHTS validation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZG1SPGY630W5VRFB44QK0E",
+      "target_ref_code": "EXT-INSIGHTS-BUDGET-PUBLIC-READ-CONTRACT",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXZ923W2C7C1A0DR6D0942GV",
+      "target_title": "BUDGET Public Read Contract",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPGSJ1QX8F1P5GA76NV",
+      "target_ref_code": "NFR-INSIGHTS-PUBLIC-CONTRACT-COMPATIBILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5TKTWSD74DJH9EVESW4Q",
+      "target_title": "Preserve public contract and authority boundaries",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPGRTMY627EX9CN4CR6",
+      "target_ref_code": "DM-BUDGET-INSIGHTS-READ-CONTRACT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD712R35XBQTGT37YQY9S",
+      "target_title": "BudgetReadCapabilityDescriptor",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPG0KV7XZVHPDYWSF3K",
+      "target_ref_code": "TC-INSIGHTS-PUBLIC-CONTRACT-COMPATIBILITY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZAD28SEF58N0ED3FTB5QT6",
+      "target_title": "Verify public producer and consumer compatibility",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXZG1SPESV0NTGWQK112JQRA",
+      "target": "FR-INSIGHTS-COHERENT-PUBLIC-EVIDENCE",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZG1SPFXKJAA091R8QKX5VR",
+      "gate_type": "self-review",
+      "description": [
+        "Prove the client has one public read dependency and no private, retry, calculation, or mutation path."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZG1SPF19MQS7Y4BPDKFW3P",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetContractClientTests",
+      "expected_result": "exit 0; at least 12 descriptor, three-state deserialization, single-call, cancellation, compatibility, source-change, limit, mutation-exclusion, private-access, and payload-log cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ]
+}

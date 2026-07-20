@@ -1,0 +1,314 @@
+{
+  "id": "01KXZG1SPBSGSJCY8TNDGAFKY3",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNE48SG87EXFDT7SEM0B0",
+  "ref_code": "TASK-INSIGHTS-EVIDENCE-EXPLANATION",
+  "slug": "EVIDENCE-EXPLANATION",
+  "title": "Account for evidence states and render explanations",
+  "description": [
+    "Implement closed state accounting and deterministic channel-neutral explanation templates for every requested metric or signal."
+  ],
+  "objective": [
+    "Every requested catalogue kind has exactly one evidence state and an explanation that cites the evaluated rule, provenance, permitted next action, and limitations."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 5,
+  "created_at": "2026-07-20T10:09:53.3580299+00:00",
+  "decisions": [
+    {
+      "id": "01KXZG1SPKQT7HCMVBKW2TMBD9",
+      "target": "DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZG1SPNX5ZJSSJA164EKPEC",
+      "target": "TASK-INSIGHTS-CONTRACT-MODELS",
+      "dependency_type": "compile",
+      "reason": [
+        "Both policies produce the analytical evidence and explanation contracts."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZG1SPMSDTR7MDCY3PW40C5",
+      "path": "src/Tally/Domain/Insights/Policies/EvidenceStateAccountant.cs",
+      "action": "create",
+      "role": "complete requested-kind accounting",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPM1DSB183XDEM07EQM",
+      "path": "src/Tally/Domain/Insights/Reports/InsightExplanationRenderer.cs",
+      "action": "create",
+      "role": "deterministic channel-neutral templates",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPM9GQ4GR0C0NHG8HAY",
+      "path": "tests/Tally.Tests/Insights/Policies/EvidenceStateAccountantTests.cs",
+      "action": "test",
+      "role": "state accounting and whole-report boundary tests",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPMDBD1TSTPDKVM4MG0",
+      "path": "tests/Tally.Tests/Insights/Reports/InsightExplanationRendererTests.cs",
+      "action": "test",
+      "role": "template, provenance, limitation, and forbidden-wording tests",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZG1SPMD5DHX6Q92FCVVTMT",
+      "name": "EvidenceStateAccountant.Account",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-ANALYTICAL-EVIDENCE",
+      "notes": [
+        "one state per requested kind"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPMAG3G5HS69D23808E",
+      "name": "InsightExplanationRenderer.Render",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-ANALYTICAL-EVIDENCE",
+      "notes": [
+        "deterministic structured and rendered explanation"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZG1SPKFAWZG0ESF0T3TAYC",
+      "kind": "acceptance_check",
+      "text": [
+        "Every requested active or deferred catalogue kind appears exactly once in catalogue order as Supported, Unavailable, InsufficientEvidence, NotStarted, or Deferred with a stable typed reason."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPK0V8TZ3V7P3DJ6Z9N",
+      "kind": "acceptance_check",
+      "text": [
+        "Signal-local unavailability preserves supported exact metrics and omits zero, baseline, confidence, and severity unless zero is an exact observed value."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPK0E44FPVWM2G906JZ",
+      "kind": "acceptance_check",
+      "text": [
+        "Coherence, compatibility, integrity, incomplete evidence, and exact-arithmetic failures remain whole-report failures and cannot be rendered as a report state."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPKFDRDVZM271SWDA6F",
+      "kind": "acceptance_check",
+      "text": [
+        "Supported explanations cite exact value, window, identity, evidence references, arithmetic rule, version, and limitations; unavailable explanations cite evaluated evidence, unmet rule, and permitted next action without inventing a result."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPMJNQ0EQS1GQF7FDZR",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical structured state and template version yield semantically identical channel-neutral text with no persuasion, recommendation, translation, notification, delivery wording, or raw merchant expansion."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPM5MCYNDXNYJH1M8EK",
+      "kind": "constraint",
+      "text": [
+        "Templates consume structured values only and must not inspect raw source descriptions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPMAWJH1JFXZFBRKW4E",
+      "kind": "expected_output",
+      "text": [
+        "EvidenceStateAccountant"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPMP36KNTVKTG4SR6WH",
+      "kind": "expected_output",
+      "text": [
+        "InsightExplanationRenderer"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPM06TSP87RAJ9Q86KH",
+      "kind": "expected_output",
+      "text": [
+        "State and template tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPMX4DSWAT5WZ39ZN0D",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT silently omit unsupported kinds, invent confidence or severity, or collapse whole-report failures into local states."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPMXG6D2G17WJFESE8K",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT make explanations caller-authored, localized, persuasive, advisory, notification-oriented, or dependent on display-text ordering."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPMRQNW3KBPM6R8Y1TV",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT expose one public service per metric or signal — rejected per DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZG1SPM5CD2SQ5W1TK7BRXH",
+      "target_ref_code": "NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5RSRC447VXQSBG2EC3FQ",
+      "target_title": "Preserve deterministic analytical integrity",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPM96HMN4HNGGNYV0KW",
+      "target_ref_code": "DM-INSIGHTS-ANALYTICAL-EVIDENCE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXBCJJEXEN98RRW25V9P5",
+      "target_title": "AnalysisWindowMetricStateAndExplanation",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPM274K3ANEWFABVKY8",
+      "target_ref_code": "FA-INSIGHTS-REPORT-EXPLANATION",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXZDXZRP7QC5XDCP0VCDF1PN",
+      "target_title": "Report and Explanation",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPMD37NAE3DX38MRBRC",
+      "target_ref_code": "TC-INSIGHTS-EVIDENCE-STATE-ACCOUNTING",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACVCMZW64D58CRKEDXCN4",
+      "target_title": "Verify complete evidence-state accounting",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPNBHNFXMEADC64366S",
+      "target_ref_code": "TC-INSIGHTS-REPORT-EXPLANATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACWP7DW17ATAXWRH8FV9Y",
+      "target_title": "Verify deterministic report explanations",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXZG1SPKNCBMNCQC4K1EYYMV",
+      "target": "FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPKG76GEW60J7DTW3H9",
+      "target": "FR-INSIGHTS-REPORT-EXPLANATION",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZG1SPMS44FZNMDBZC8A0HZ",
+      "gate_type": "branch-review",
+      "description": [
+        "Review stable state vocabulary, complete accounting, and channel-neutral copy against the PRD examples."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZG1SPMM5JBPEA5YD4ZD4A0",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter \"FullyQualifiedName~EvidenceStateAccountantTests|FullyQualifiedName~InsightExplanationRendererTests\"",
+      "expected_result": "exit 0; both named classes are discovered with at least 12 cases each, every state and whole-report boundary is exercised, forbidden wording and raw-description canaries are absent, and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ]
+}

@@ -1,0 +1,415 @@
+{
+  "id": "01KXZG1SPCAFWQPX1TTRHGE4S3",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNE48SG87EXFDT7SEM0B0",
+  "ref_code": "TASK-INSIGHTS-REPORT-COMPILER",
+  "slug": "REPORT-COMPILER",
+  "title": "Compile one deterministic immutable Insight Report",
+  "description": [
+    "Orchestrate the pure evidence, window, metric, pace, state, explanation, ordering, provenance, canonicalization, and fingerprint policies without storage or producer access."
+  ],
+  "objective": [
+    "InsightReportCompiler returns one complete bounded deterministic report or one whole-report failure from normalized input, frozen time, validated evidence, and released policies."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 6,
+  "created_at": "2026-07-20T10:09:53.3580299+00:00",
+  "decisions": [
+    {
+      "id": "01KXZG1SPN611XTAK63Q6HZ62F",
+      "target": "DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZG1SPPCRQEGZX6M1KHQ31E",
+      "target": "TASK-INSIGHTS-ANALYSIS-WINDOWS",
+      "dependency_type": "compile",
+      "reason": [
+        "The compiler composes trusted windows."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPPDHWCQMY70ENATVWP",
+      "target": "TASK-INSIGHTS-COHERENT-EVIDENCE-BINDER",
+      "dependency_type": "compile",
+      "reason": [
+        "The compiler accepts only BoundInsightEvidence."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPP0P9CT41JJ5YDVQVD",
+      "target": "TASK-INSIGHTS-EVIDENCE-EXPLANATION",
+      "dependency_type": "compile",
+      "reason": [
+        "The compiler requires complete state accounting and explanations."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPP5KMS77ZG6PXYN38B",
+      "target": "TASK-INSIGHTS-EXACT-METRICS",
+      "dependency_type": "compile",
+      "reason": [
+        "The compiler composes exact metric results."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPP3E35XD3WXS0BCMQV",
+      "target": "TASK-INSIGHTS-LINEAR-PACE",
+      "dependency_type": "compile",
+      "reason": [
+        "The compiler composes the active pace policy."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZG1SPN6TDKDGTMCE7F7N3S",
+      "path": "src/Tally/Features/Insights/Reports/InsightReportCompiler.cs",
+      "action": "create",
+      "role": "deep report orchestration boundary",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPNKB1DV5TFH4B3N9B1",
+      "path": "src/Tally/Domain/Insights/Reports/InsightReportCanonicalizer.cs",
+      "action": "create",
+      "role": "stable ordering, canonical JSON, fingerprint, and report identity",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPNC4XT93599A6X7DG3",
+      "path": "tests/Tally.Tests/Insights/Reports/InsightReportCompilerTests.cs",
+      "action": "test",
+      "role": "complete report, determinism, limits, and whole-report failure tests",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPN9FMYTHP997SARKM1",
+      "path": "tests/Tally.Tests/Insights/Reports/InsightReportCanonicalizerTests.cs",
+      "action": "test",
+      "role": "ordering and non-self-referential hash tests",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZG1SPPEP2YM06JJWEF9XH3",
+      "name": "CoherentEvidenceBinder.Bind",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-COHERENT-EVIDENCE",
+      "notes": [
+        "validated evidence"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPPT0E6N1CJCDAFDTN8",
+      "name": "AnalysisWindowPolicy.Evaluate",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-ANALYTICAL-EVIDENCE",
+      "notes": [
+        "trusted windows"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPPE9CC4DB477QPPS12",
+      "name": "ExactMetricCalculator.Calculate",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-ANALYTICAL-EVIDENCE",
+      "notes": [
+        "exact metrics"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPPN1NZEE3SVP8TQ79W",
+      "name": "LinearPaceCalculator.Calculate",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-ANALYTICAL-EVIDENCE",
+      "notes": [
+        "pace state"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPPTTRQP73QWH8RKXTA",
+      "name": "EvidenceStateAccountant.Account",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-ANALYTICAL-EVIDENCE",
+      "notes": [
+        "complete state inventory"
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPPDFEXZN3TVXJDN9D4",
+      "name": "InsightExplanationRenderer.Render",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-ANALYTICAL-EVIDENCE",
+      "notes": [
+        "template evidence"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPP0ASHQ3H3A4THK8QF",
+      "name": "InsightReportCanonicalizer.Canonicalize",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-INSIGHT-REPORT",
+      "notes": [
+        "ordered canonical report and derived identity"
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPPVBRX88QTC439ET36",
+      "name": "InsightReportCompiler.Compile",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-INSIGHT-REPORT",
+      "notes": [
+        "complete report or whole-report failure"
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZG1SPNZXYKWKZM8670NYV8",
+      "kind": "acceptance_check",
+      "text": [
+        "InsightReportCompiler accepts only normalized request values, one frozen As-of Instant, one BoundInsightEvidence, and released policy descriptors; it performs no producer or storage call."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPNTRWVY6W7EHJK0PNF",
+      "kind": "acceptance_check",
+      "text": [
+        "The complete report contains budget period, trusted time, exact windows, plan state, exact metrics, every requested signal state, deterministic explanations, limitations, and complete source and policy provenance in released order."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPNBN0JNXSSD6A2BGS3",
+      "kind": "acceptance_check",
+      "text": [
+        "Repeated compilation with identical inputs produces semantically identical ordered content, contentFingerprint, and reportId; collection order never depends on localized display text."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPN3E1HSWG5KDSMAFPT",
+      "kind": "acceptance_check",
+      "text": [
+        "InsightReportCanonicalizer serializes the semantic payload without reportId and contentFingerprint, hashes canonical UTF-8 JSON with SHA-256, assigns that hash as contentFingerprint, then derives reportId."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPNC81FPJVE9XN32YKT",
+      "kind": "acceptance_check",
+      "text": [
+        "Any coherence, compatibility, integrity, completeness, exact-arithmetic, canonicalization, or output-limit failure returns no report and no partial financial payload."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPNC95SZ7EWBQ4K1WPW",
+      "kind": "constraint",
+      "text": [
+        "The compiler and all collaborators remain concrete pure classes; no IReportCompiler or policy interfaces are introduced."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPNM73JNGGXMBKDTWBT",
+      "kind": "expected_output",
+      "text": [
+        "InsightReportCompiler"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPN86MWADPFSWHKD00X",
+      "kind": "expected_output",
+      "text": [
+        "InsightReportCanonicalizer"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPNDXZ4PXGA6F9424S7",
+      "kind": "expected_output",
+      "text": [
+        "Determinism and failure-atomicity tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPNM29R3Z1WYMWNZA77",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT embed all calculation inside Generate or expose per-metric orchestration to callers — rejected per DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPNBWEGC3M189QNXR7W",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT read a producer, store state, use reflection serialization, hash derived identity fields into themselves, depend on display text, or emit partial reports."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPN0070EKNKW88K8TP8",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add Forecast, Trend, Anomaly, or Attention formulas while their FRs remain deferred."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZG1SPPKGNYX9AJNNY0S7BK",
+      "target_ref_code": "NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5RSRC447VXQSBG2EC3FQ",
+      "target_title": "Preserve deterministic analytical integrity",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPPRX9DY973HM4AQ58Z",
+      "target_ref_code": "DM-INSIGHTS-INSIGHT-REPORT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXBX6VQS16T6NAMEHA3T3",
+      "target_title": "InsightReport",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPPZ9SVVXE8MRJHAKA0",
+      "target_ref_code": "FA-INSIGHTS-EVIDENCE-ANALYSIS",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXZDXZ8N60RA8Z0VX65QHQEW",
+      "target_title": "Evidence and Analysis",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPP51S1PMW2GKBBV20W",
+      "target_ref_code": "DIAG-INSIGHTS-GENERATE-SEQUENCE",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KXZDY1T00W50687XJW0Q1C0P",
+      "target_title": "Coherent deterministic report generation",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    },
+    {
+      "id": "01KXZG1SPPEG5JR5VSAW4H1XH5",
+      "target_ref_code": "TC-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZAD1DBHQ5GP3VMCGCV2PQX",
+      "target_title": "Verify deterministic analytical integrity",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXZG1SPN7WZAZTCEPZQTZZWW",
+      "target": "FR-INSIGHTS-REPORT-GENERATION",
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZG1SPP297Z28ZG243HAQXH",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach determinism, canonical-byte, limit, and whole-report failure evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZG1SPPE0YV464HNA95Y8TQ",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter \"FullyQualifiedName~InsightReportCompilerTests|FullyQualifiedName~InsightReportCanonicalizerTests\"",
+      "expected_result": "exit 0; both named classes are discovered with at least 14 cases each, identical-input fingerprints are byte-stable, derived identity fields are excluded from their hash, every requested kind is accounted for, all whole-report failures produce no report, and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:09:53.3580299+00:00"
+    }
+  ]
+}

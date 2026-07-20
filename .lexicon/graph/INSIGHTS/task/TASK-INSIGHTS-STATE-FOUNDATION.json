@@ -1,0 +1,444 @@
+{
+  "id": "01KXZG811189QEBW74HW33N53X",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNERPYEK1S9QW2JMMY1ZR",
+  "ref_code": "TASK-INSIGHTS-STATE-FOUNDATION",
+  "slug": "STATE-FOUNDATION",
+  "title": "Build the owner-only INSIGHTS SQLite generation store",
+  "description": [
+    "Persistence foundation with no direct Implements ownership; create one versioned raw-SQLite generation store, schema, SQL, row mapping, transactions, integrity checks, and owner-only layout after the owner-value gate passes."
+  ],
+  "objective": [
+    "InsightsStateStore provides atomic normalized metadata plus canonical report-payload storage without copying upstream truth or private validation evidence."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 0,
+  "created_at": "2026-07-20T10:13:17.4772449+00:00",
+  "decisions": [
+    {
+      "id": "01KXZG8115PKGTJ7B4KVB34B65",
+      "target": "DD-INSIGHTS-STATE-STORE",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZG8117BJ8M73A4K6XHE9TE",
+      "target": "TASK-INSIGHTS-CONTRACT-MODELS",
+      "dependency_type": "compile",
+      "reason": [
+        "The store maps immutable report, history, idempotency, and recovery contracts."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8117FABPZF1KCT1E06SQ",
+      "target": "TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE",
+      "dependency_type": "compile",
+      "reason": [
+        "The monitored owner-value gate must pass before retained INSIGHTS state is built."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZH5CZSMEPHTNFAE3W7YMMK",
+      "target": "TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS",
+      "dependency_type": "compile",
+      "reason": [
+        "The state store maps lifecycle idempotency and recovery contracts."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:29:19.9948231+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZG8116YT38H2RBM9V21F42",
+      "path": "src/Tally/Infrastructure/Insights/Storage/InsightsStoreLayout.cs",
+      "action": "create",
+      "role": "generation paths, CURRENT, permissions, and recognized artifacts",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8116NYMD16YM49E2NENX",
+      "path": "src/Tally/Infrastructure/Insights/Storage/InsightsMigrations.cs",
+      "action": "create",
+      "role": "immutable ordered schema evolution",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8116D4ZTSPMT9GH2Y89F",
+      "path": "src/Tally/Infrastructure/Insights/Storage/InsightsSql.cs",
+      "action": "create",
+      "role": "central explicit SQL statements",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8116D9VGQS1GJMZ6AZJB",
+      "path": "src/Tally/Infrastructure/Insights/Storage/InsightsRowMapper.cs",
+      "action": "create",
+      "role": "pure row and contract mapping",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8116ZD06B3SEVKZ78BZF",
+      "path": "src/Tally/Infrastructure/Insights/Storage/InsightsStateStore.cs",
+      "action": "create",
+      "role": "connections, transactions, integrity, and metadata/payload primitives",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8116FE4Y340A9XRWY7SC",
+      "path": "tests/Tally.Tests/Insights/Storage/InsightsStateStoreTests.cs",
+      "action": "test",
+      "role": "real-SQLite schema, transaction, query, and forbidden-data tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8116270KAAGY1H1YPHYQ",
+      "path": "tests/Tally.Tests/Insights/Storage/InsightsMigrationTests.cs",
+      "action": "test",
+      "role": "version, upgrade, rollback, and integrity tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZH81NG98JGMTB3TCZM54EZ",
+      "name": "VerifiedInsightsOwnerValueGate",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-POLICY-VALIDATION-RECEIPT",
+      "notes": [
+        "persistence kill gate"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:30:46.7038435+00:00"
+    },
+    {
+      "id": "01KXZH81NHZJ3M0AWRMGG5B74A",
+      "name": "InsightHistoryContracts",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE",
+      "notes": [
+        "immutable snapshot restatement and deletion records"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:30:46.7038435+00:00"
+    },
+    {
+      "id": "01KXZH81NHGQ6R5029P7SXQK5E",
+      "name": "InsightsIdempotencyRecord",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-IDEMPOTENCY",
+      "notes": [
+        "transactional replay records"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:30:46.7038435+00:00"
+    },
+    {
+      "id": "01KXZH81NHC82VGX41VJPH2ADA",
+      "name": "InsightsRecoveryContracts",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-RECOVERY-CONTRACTS",
+      "notes": [
+        "recovery receipts and status records"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:30:46.7038435+00:00"
+    },
+    {
+      "id": "01KXZH81NH5GTZT50C30ESVNE1",
+      "name": "InsightsStoreLayout",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-STATE-STORE",
+      "notes": [
+        "owner-only generation layout"
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:30:46.7038435+00:00"
+    },
+    {
+      "id": "01KXZH81NH91MTXMZMNEXB45XC",
+      "name": "InsightsMigrations.ApplyAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-STATE-STORE",
+      "notes": [
+        "compatible immutable migrations"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-20T10:30:46.7038435+00:00"
+    },
+    {
+      "id": "01KXZH81NH5K545D0EV5MWGBB9",
+      "name": "InsightsRowMapper",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-STATE-STORE",
+      "notes": [
+        "concrete pure row mapper"
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-20T10:30:46.7038435+00:00"
+    },
+    {
+      "id": "01KXZH81NH12ZHBACMKFKQHA14",
+      "name": "InsightsStateStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-STATE-STORE",
+      "notes": [
+        "single logical raw-SQLite store"
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-20T10:30:46.7038435+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZG81159QYA1ETXZGMYE4YX",
+      "kind": "acceptance_check",
+      "text": [
+        "One owner-only CURRENT pointer selects one insights.db inside an owner-only generation directory; directories use 0700 and database, WAL, SHM, pointer, lock, manifest, backup, and recognized candidate files use 0600 where supported."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8115JMNPA7XTYG413MSH",
+      "kind": "acceptance_check",
+      "text": [
+        "Immutable ordered migrations create store_metadata, report_snapshot, report_payload, restatement_link, deletion_event, insights_idempotency_record, recovery_receipt, and restore_event with foreign keys, uniqueness, RESTRICT semantics, and PRAGMA user_version."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG81156DVW9GVA711132P3",
+      "kind": "acceptance_check",
+      "text": [
+        "Connections enable foreign_keys, WAL, synchronous FULL, and bounded busy_timeout; writers use BEGIN IMMEDIATE and cancellation-safe rollback; queries use short read connections."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8115AJJ97RAD5YQ4WPJ6",
+      "kind": "acceptance_check",
+      "text": [
+        "InsightsRowMapper is a concrete pure mapper between rows and immutable contracts, List and Status metadata paths do not deserialize payloads, and Get verifies schema plus content fingerprints."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8116GZV5TX3P4R0V0Z6F",
+      "kind": "acceptance_check",
+      "text": [
+        "The database never stores dated actual members, raw merchant text, canonical transactions, producer cursors, private corpus rows, arbitrary formulas, PolicyValidationReceipt, report-list payloads, or upstream replicas; tests use real temporary SQLite and never mock SQL."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8116RSX4M5G0Y204QWSE",
+      "kind": "constraint",
+      "text": [
+        "Raw SQLite only; use explicit SQL and transactions with CancellationToken."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8116DXGG9NBCM57MMZPY",
+      "kind": "expected_output",
+      "text": [
+        "InsightsStateStore"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG81165ZA4XW58ZGQV3WBM",
+      "kind": "expected_output",
+      "text": [
+        "InsightsStoreLayout"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG81164PZK601TACNWHERV",
+      "kind": "expected_output",
+      "text": [
+        "InsightsMigrations"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8116QW295D0FJJ4YCAER",
+      "kind": "expected_output",
+      "text": [
+        "InsightsRowMapper"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8116DGBVSAP9K7M2Q4MJ",
+      "kind": "expected_output",
+      "text": [
+        "Real-SQLite schema and protection tests"
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8116Y3YB46G6GN1W2WQZ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use JSON files, fully normalize analytical report bodies, add EF Core or a hosted database, or place state in BUDGET/LEDGER — rejected per DD-INSIGHTS-STATE-STORE."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG81162D3386NAHF5F7AJY",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add IInsightsStore, generic repository, provider-neutral unit of work, reflection mapping, multiple writers, or automatic cleanup."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8116PH9Q06BF36V2KPF0",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT claim custom encryption; host-managed encrypted-volume evidence remains a release gate."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8116M38E0VP8YH00B9C9",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT implement this task unless TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE completed successfully."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8116TCV7SAVJ5228H6F9",
+      "kind": "note",
+      "text": [
+        "This task is intentionally loose because it provides the shared persistence substrate; feature tasks own behavior."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZG8117VD9G9MSF31KTJN0V",
+      "target_ref_code": "ADR-CORE-0022",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3YJHZFG7A2PEFST47E8",
+      "target_title": "EntityMapper Pure Transformer with Bulk Support",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8116WBF3B0WSCVZV9X5D",
+      "target_ref_code": "NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5SPVJZQGB9NCQK3SMG8F",
+      "target_title": "Make retained report changes atomic and durable",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8117QZ2V479VMEPWE7FV",
+      "target_ref_code": "DM-INSIGHTS-STATE-STORE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXDDZ6S5XXFMGSV4WET64",
+      "target_title": "InsightsStateStore",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG8117JMVPQPWJXTBBZGQ1",
+      "target_ref_code": "TC-INSIGHTS-LOCAL-DATA-PROTECTION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZADYQPW1VE6P039M2RSKNW",
+      "target_title": "Verify local insight privacy boundaries",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZG8116C2MPSAYJ1BT1HGHW",
+      "gate_type": "branch-review",
+      "description": [
+        "Inspect every table, SQL write boundary, permission transition, and never-persisted field against DD-INSIGHTS-STATE-STORE."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZG8116DY4Q060Y9B2MKAMW",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter \"FullyQualifiedName~InsightsStateStoreTests|FullyQualifiedName~InsightsMigrationTests\"",
+      "expected_result": "exit 0; both named classes are discovered with at least 14 cases each, schema and migration versions are exact, injected write failures roll back, metadata reads avoid payloads, fingerprints detect corruption, permissions are owner-only where supported, forbidden data is absent, and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ]
+}

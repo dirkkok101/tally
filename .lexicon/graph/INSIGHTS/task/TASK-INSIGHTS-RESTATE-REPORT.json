@@ -1,0 +1,358 @@
+{
+  "id": "01KXZG811477P43JA5QQW9Y25R",
+  "plan_id": "01KXZFNCS5A01RBT4PM04ZVQ93",
+  "sub_plan_id": "01KXZFNERPYEK1S9QW2JMMY1ZR",
+  "ref_code": "TASK-INSIGHTS-RESTATE-REPORT",
+  "slug": "RESTATE-REPORT",
+  "title": "Append explicit Restatements and deterministic differences",
+  "description": [
+    "Implement replay-safe current-evidence generation, predecessor comparison, NoChange, and atomic linked snapshot creation without rewriting history."
+  ],
+  "objective": [
+    "RestateInsightReportCommand creates one immutable child only when provenance, version, schema, or semantic content changes and returns ordered bounded differences."
+  ],
+  "planning_state": "planned",
+  "priority": 0,
+  "sort_order": 5,
+  "created_at": "2026-07-20T10:13:17.4772449+00:00",
+  "decisions": [
+    {
+      "id": "01KXZG811BHZ3GZZXJ4MC50QFZ",
+      "target": "DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811B6CFB069C9JH76MDZ",
+      "target": "DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KXZG811B5FMSB9TR2BC0JNXQ",
+      "target": "TASK-INSIGHTS-GENERATE-REPORT",
+      "dependency_type": "compile",
+      "reason": [
+        "Restate reuses the approved current report path."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BZZ7AF7S9HYEMFH8F",
+      "target": "TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR",
+      "dependency_type": "compile",
+      "reason": [
+        "Restate resolves replay before current producer access."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811B4HQ1M1ZCFY5WNFDV",
+      "target": "TASK-INSIGHTS-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Restate reads verified predecessors and atomically writes child and link rows."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KXZG811B0THSDG61TNMZ5MK2",
+      "path": "src/Tally/Domain/Insights/Reports/InsightReportDiffer.cs",
+      "action": "create",
+      "role": "deterministic bounded report comparison",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BACDRMA92GJ5Z1JEW",
+      "path": "src/Tally/Features/Insights/History/Restate/RestateInsightReportCommand.cs",
+      "action": "create",
+      "role": "replay-safe linked restatement handler",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BZHVKGTH0SAWKKZ4E",
+      "path": "tests/Tally.Tests/Insights/History/RestateInsightReportCommandTests.cs",
+      "action": "test",
+      "role": "predecessor, difference, NoChange, replay, and atomicity tests",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KXZG811BGDY1T7K288APQ35W",
+      "name": "GenerateInsightReportQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-INSIGHT-REPORT",
+      "notes": [
+        "current complete evidence"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811B2PK46BR6HCFN5NMR",
+      "name": "InsightsIdempotencyExecutor.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-IDEMPOTENCY",
+      "notes": [
+        "replay before producer access"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811B0J34CVZ1DK5F7KSG",
+      "name": "InsightsStateStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INSIGHTS-STATE-STORE",
+      "notes": [
+        "predecessor read and atomic child/link append"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811B43KSPRGCDQYSQDYS",
+      "name": "InsightReportDiffer.Compare",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE",
+      "notes": [
+        "ordered bounded differences"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BHJRVEFW58NP8ZJ1Z",
+      "name": "RestateInsightReportCommand.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INSIGHTS-OPERATION-CONTRACTS",
+      "notes": [
+        "insights.report.restate handler"
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KXZG811BT38MRJVA693HGEZ6",
+      "kind": "acceptance_check",
+      "text": [
+        "Restate requires one compatible existing predecessor plus actor, reason, normalized selectors, and idempotency; unknown, deleted, corrupt, or incompatible predecessors fail before producer access."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BQ95328WE2QBSSD8Y",
+      "kind": "acceptance_check",
+      "text": [
+        "Exact replay resolves before current evidence; a new request generates through the existing Generate path and never changes the predecessor."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BDKT0TH1FHFACF238",
+      "kind": "acceptance_check",
+      "text": [
+        "InsightReportDiffer compares source identities, policy versions, report schema, exact metrics, evidence states, explanations, and deferred attention collection in fixed section and item order."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811B5G2ABMKB4D076Y2J",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical source identities, versions, schema, and semantic content return NoChange and store only the replay outcome; any changed source, version, schema, or content appends one child snapshot and one predecessor link atomically even when visible amounts remain equal."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BCQ0NR9S4S4RAG9AN",
+      "kind": "acceptance_check",
+      "text": [
+        "Current-evidence, comparison, cancellation, or write failure returns no partial difference, snapshot, link, or successful outcome; same-key replay never creates a second Restatement."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BD57583WBZMEX2724",
+      "kind": "constraint",
+      "text": [
+        "One child has exactly one predecessor; a predecessor may have multiple surviving children."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BZR3G4NEW2XR0RM4S",
+      "kind": "expected_output",
+      "text": [
+        "InsightReportDiffer"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BD0QTA5FX00A2YJMP",
+      "kind": "expected_output",
+      "text": [
+        "RestateInsightReportCommand"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BRVY8K12YHS46G69H",
+      "kind": "expected_output",
+      "text": [
+        "Restatement and NoChange tests"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BK093ENVDMTSNBC8E",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT update or silently replace the predecessor, auto-restate after corrections, store arbitrary caller reports, or event-source every calculation — rejected per DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BT6QZ5AXAKKFPMNTE",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT compare display text, omit provenance/version-only changes, expose unrelated transactions, or store a difference without its complete child snapshot."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BBEPNPSHB2Q6JHV4D",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT duplicate the Generate pipeline or call producer operations after an exact replay is found."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KXZG811B1SEY7R5WPS5VG0ZQ",
+      "target_ref_code": "NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXZA5SPVJZQGB9NCQK3SMG8F",
+      "target_title": "Make retained report changes atomic and durable",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811B5FVHM0ZXVEG977R4",
+      "target_ref_code": "DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXZDXCDP4YZ72FAYYBJYPHPT",
+      "target_title": "ReportSnapshotRestatementAndDeletion",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BBMRD4SBCE91DVZQJ",
+      "target_ref_code": "DIAG-INSIGHTS-REPORT-STATE",
+      "target_entity_type": "design_diagram",
+      "target_entity_id": "01KXZDY29FWXBFAKQBGN2NY8Y4",
+      "target_title": "Report retention and deletion lifecycle",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BJJHJ1FVEZESD1FV6",
+      "target_ref_code": "TC-INSIGHTS-RESTATEMENT-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZACYFV33Z62XC3664QDFA1",
+      "target_title": "Verify explicit Restatement and difference semantics",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    },
+    {
+      "id": "01KXZG811BPWVM3THWHZ6MN54W",
+      "target_ref_code": "TC-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXZAD1DBHQ5GP3VMCGCV2PQX",
+      "target_title": "Verify deterministic analytical integrity",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KXZG811AXQ536R2CCPDFNRSH",
+      "target": "FR-INSIGHTS-REPORT-RESTATEMENT",
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KXZG811BPRVW0Z9ZN90PAHR7",
+      "gate_type": "branch-review",
+      "description": [
+        "Review NoChange equality and every difference section against immutable predecessor semantics."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KXZG811B8NMJ1FFBXM4XK21A",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~RestateInsightReportCommandTests",
+      "expected_result": "exit 0; at least 22 unknown, deleted, corrupt, incompatible, replay-before-read, no-change, source-only, policy-only, schema-only, equal-amount semantic-change, ordered-difference, cancellation, write, crash, predecessor-immutability, and duplicate-prevention cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-20T10:13:17.4772449+00:00"
+    }
+  ]
+}
