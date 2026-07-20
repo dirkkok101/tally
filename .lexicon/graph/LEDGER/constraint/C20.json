@@ -1,0 +1,11 @@
+{
+  "id": "01KY07AXKX7KBHGYD2BWKNDM3Y",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "C20",
+  "title": "Deterministic reconciliation safety",
+  "description": [
+    "Automatic reconciliation is permitted only when documented compatible evidence produces one strong deterministic candidate. Zero candidates may create one statement-only transaction through an approved INGEST request; multiple or conflicting candidates remain unapplied and visible. An owner-confirmed match requires explicit intent and evidence. No active evidence record may confirm more than one canonical transaction."
+  ],
+  "type": "business",
+  "created_at": "2026-07-20T16:56:49.5346063+00:00"
+}

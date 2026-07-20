@@ -2,17 +2,26 @@
   "id": "01KXRHVEYC171ENABXY4BWGX0C",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "UC-LEDGER-006",
-  "title": "Discover and invoke the agent command contract",
-  "preconditions": "A compatible Tally executable is on PATH; the Agent Host can start local processes under the owner's OS identity.",
-  "postconditions": "The agent completes the delegated task using only public commands and can distinguish success, expected failure, incompatibility, and retry outcomes without parsing prose.",
-  "main_flow": "1. The agent discovers Tally version, available commands, help, and machine-readable schemas. 2. A bundled skill checks its declared compatibility with the CLI contract version. 3. The agent constructs deterministic non-interactive structured input. 4. Tally validates input before mutation. 5. Tally writes the structured result to stdout, diagnostics to stderr, and sets the documented exit code. 6. If output is lost after a write, the agent safely retries using the same idempotency identity.",
+  "title": "Discover and invoke the external-orchestrator contract",
+  "preconditions": "A compatible Tally executable is on PATH; the caller can start it under the trusted owner OS identity and has no private-store access.",
+  "postconditions": "The caller completes the financial task using only public contracts and can distinguish success, domain failure, incompatibility, ambiguity, and replay without parsing prose or accessing storage.",
+  "main_flow": "1. The caller discovers the Tally version, provider-neutral operations, help, and machine-readable schemas. 2. It checks contract compatibility. 3. It constructs deterministic structured input without mailbox, messaging, recipient, schedule, or delivery fields. 4. Tally validates input and domain authority before mutation. 5. Tally emits structured results on stdout, safe diagnostics on stderr, and a documented exit. 6. If output is lost after commit, the caller retries the same logical request and recovers the original result.",
   "alt_flows": [
-    "1a. Command or schema is unknown -> return discoverable help and a stable usage failure",
-    "2a. Skill and CLI contract versions are incompatible -> fail before performing the finance action",
-    "3a. Input is malformed or contains unknown disallowed fields -> reject before mutation",
-    "5a. An expected domain failure occurs -> return a structured module-scoped error and non-zero stable exit",
-    "6a. Retry payload conflicts with the original identity -> return conflict, never overwrite"
+    "1a. Operation or schema is unknown -> return discoverable help and a stable usage failure",
+    "2a. Contract versions are incompatible -> fail before financial read or mutation",
+    "3a. Input is malformed or includes forbidden provider or delivery fields -> reject before mutation",
+    "5a. A domain failure or review-needed state occurs -> return a structured state and stable exit without guessing",
+    "6a. Retry input conflicts with the original identity -> return conflict and preserve the original"
   ],
-  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner delegates a Ledger task to an AI agent or installs a Tally skill in an AI Agent Host.\",\"status\":\"draft\"}",
-  "created_at": "2026-07-17T17:26:41.8695241+00:00"
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner delegates a Ledger task through Hermes or another compatible external orchestrator, or invokes Tally directly.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-17T17:26:41.8695241+00:00",
+  "links": [
+    {
+      "id": "01KY07RQ7WBS1JH382AT111QC6",
+      "target_type": "architecture_doc",
+      "target": "ARCH-CORE-TALLY-SYSTEM-CONTEXT",
+      "rel": "references",
+      "created_at": "2026-07-20T17:04:21.7578015+00:00"
+    }
+  ]
 }

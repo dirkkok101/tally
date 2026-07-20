@@ -1,0 +1,10 @@
+{
+  "id": "01KY07HZBN2503A7TNP9H3QY37",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "term": "Evidence Record",
+  "definition": [
+    "A durable provider-neutral observation supporting or questioning one economic event, with a stable identity, Evidence Kind, privacy-conscious metadata, opaque external reference, and replay identity. It may be unlinked while ambiguous and one Canonical Transaction may have many. Avoid: raw email, MIME part, statement document payload, or synonym for Canonical Transaction."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-20T17:00:40.6940166+00:00"
+}

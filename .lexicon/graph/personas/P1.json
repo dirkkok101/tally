@@ -5,16 +5,16 @@
   "name": "Personal Finance Owner",
   "role": "Sole owner and decision-maker for household finances",
   "goals": [
-    "When reviewing or planning personal spending, I want one trustworthy view across all owned bank accounts so I can make budget decisions from complete actuals and delegate ledger maintenance safely to an AI agent."
+    "When reviewing or planning personal spending, I want one trustworthy view across all owned accounts, evidence sources, spend pools, and categories so I can delegate maintenance safely and know why each transaction is present."
   ],
   "pain_points": [
-    "Transactions are fragmented across three accounts at two banks; descriptions and categories are inconsistent; manual consolidation is delayed and transfer or duplicate errors are hard to detect."
+    "Daily notifications and later statements can describe the same economic event; transactions are fragmented across three accounts at two banks; account, cardholder, payment instrument, pool, and category can be conflated; manual consolidation has weak provenance and uncertain duplicate handling."
   ],
   "workaround": [
-    "Inspect separate bank statements, manually consolidate selected transactions, infer categories, remove transfers or duplicates, and recalculate totals for each reporting period."
+    "Inspect separate notifications and statements, manually decide whether rows describe the same transaction, consolidate selected transactions, infer account or cardholder context, remove transfers or duplicates, assign categories and spending pools, and recalculate totals."
   ],
   "success": [
-    "The owner can delegate daily ledger maintenance and retrieve totals whose included transactions, category decisions, transfers, and correction history are inspectable and reconcile exactly."
+    "The owner can delegate daily capture and monthly reconciliation, review every ambiguous or missing match, and retrieve exact pool/category totals whose evidence and decision history are inspectable."
   ],
   "tech_level": "high",
   "frequency": "daily",

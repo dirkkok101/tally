@@ -1,0 +1,10 @@
+{
+  "id": "01KXRJ2NAYT7Y1QJERSP3ZV4VS",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "term": "External Orchestrator",
+  "definition": [
+    "A local automation system that invokes versioned Tally public commands under the owner OS identity and consumes structured results. Hermes is the current deployment and owns provider transport, conversation, schedules, recipients, rendering, delivery, and retries. It is a supporting actor, not a human persona. Avoid: treating Hermes, AgentMail, WhatsApp, or delivery behavior as LEDGER semantics."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-17T17:30:37.7916009+00:00"
+}

@@ -3,12 +3,28 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "RISK-LEDGER-005",
   "description": [
-    "Choosing an embedded CLI store now could create avoidable migration work if the web channel and its mandatory PostgreSQL service architecture are selected soon afterward."
+    "Boundary drift could pull provider transport, conversation, scheduling, or delivery into Ledger, or let Hermes reproduce financial rules, creating two sources of truth and avoidable service coupling."
   ],
   "likelihood": "Medium",
   "impact": "High",
   "mitigation": [
-    "Keep finance behavior channel-neutral, make persistence replaceable only through public application contracts, and require CHANNELS to resolve the web horizon before design locks a migration path."
+    "Enforce ADR-CORE-0030 and ARCH-CORE-TALLY-SYSTEM-CONTEXT: Ledger exposes provider-neutral typed contracts only; Hermes owns orchestration and delivery; either system must use public contracts rather than the other system private state."
   ],
-  "created_at": "2026-07-17T13:44:36.4108464+00:00"
+  "created_at": "2026-07-17T13:44:36.4108464+00:00",
+  "links": [
+    {
+      "id": "01KY07R4M9G8YZSQR8A9KQYBBS",
+      "target_type": "adr",
+      "target": "ADR-CORE-0030",
+      "rel": "see-also",
+      "created_at": "2026-07-20T17:04:02.6982732+00:00"
+    },
+    {
+      "id": "01KY07R5TJ4832KHMZV5WYGZXK",
+      "target_type": "architecture_doc",
+      "target": "ARCH-CORE-TALLY-SYSTEM-CONTEXT",
+      "rel": "see-also",
+      "created_at": "2026-07-20T17:04:03.9236847+00:00"
+    }
+  ]
 }

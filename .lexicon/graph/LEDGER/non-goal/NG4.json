@@ -6,7 +6,7 @@
     "Provide web or messaging pages, navigation, menus, translations, application permissions, browser workflows, frontend key models, or any other human delivery surface in LEDGER."
   ],
   "rationale": [
-    "LEDGER is a contract-only local CLI. The named downstream CHANNELS PRD and design own every human UI artifact and workflow; if CHANNELS selects web it must apply PostgreSQL with Entity Framework Core, the latest stable .NET and Angular versions available to that project, and the NxGN UI npm package. No sibling module currently has mockups or frontend artifacts requiring parity."
+    "LEDGER is a provider-neutral contract-only local CLI. Hermes or another external orchestrator owns all screens, conversations, schedules, recipient disclosure, rendering, notification, and delivery. CHANNELS is not a Ledger implementation dependency."
   ],
   "created_at": "2026-07-17T13:41:36.7690735+00:00"
 }

@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "metric": "Idempotent write safety",
   "current": "No agent write contract",
-  "target": "Across every public mutation operation, 100% of semantically identical retries with the same identity create zero duplicate domain or artifact effects; 100% of cross-operation, cross-version, or materially conflicting reuses preserve the original and return a stable conflict.",
+  "target": "Across every public mutation, evidence registration/link, reconciliation decision, attribution change, and artifact operation, 100% of identical retries create zero duplicate effects; every conflicting reuse preserves the original and returns a stable conflict.",
   "by_when": "LEDGER acceptance",
   "measured": 0,
   "created_at": "2026-07-17T17:32:50.6700826+00:00"

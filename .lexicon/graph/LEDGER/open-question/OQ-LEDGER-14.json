@@ -1,0 +1,28 @@
+{
+  "id": "01KY07C89GJ4AQZ7DYRH6YAGFV",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "OQ-LEDGER-14",
+  "question": "Which privacy-safe stable payment-instrument and cardholder identifiers are available across the initial accounts and notification or statement evidence?",
+  "context": [
+    "Validate against private fixtures before design. Full card or account numbers are prohibited; missing attribution must remain explicit, and Hermes may map provider wording only to stable Tally identifiers."
+  ],
+  "status": "open",
+  "owner": "LEDGER design",
+  "created_at": "2026-07-20T16:57:33.2331569+00:00",
+  "links": [
+    {
+      "id": "01KY07R9ADZWTSNANH4R1451VG",
+      "target_type": "risk",
+      "target": "RISK-LEDGER-009",
+      "rel": "motivated-by",
+      "created_at": "2026-07-20T17:04:07.5024933+00:00"
+    },
+    {
+      "id": "01KY07RAEWZ1KKB3KQ011GS74M",
+      "target_type": "risk",
+      "target": "RISK-LEDGER-010",
+      "rel": "motivated-by",
+      "created_at": "2026-07-20T17:04:08.6693632+00:00"
+    }
+  ]
+}

@@ -4,7 +4,7 @@
   "ref_code": "A6",
   "title": "Refunds offset spend and cash withdrawals are spend by default",
   "description": [
-    "Assume an explicitly linked refund/reversal uses its entire active credit magnitude, is on the same owned account and currency as one original outflow, has the opposite sign, and uses its own Effective Date for period membership. One refund credit can serve exactly one original; one original may have multiple refund credits whose cumulative active magnitude cannot exceed the original magnitude. Neither participant may be an active owned-transfer leg, and a transaction cannot simultaneously be a refund credit and refund original. The refund offsets the original transaction's current category; a period may have negative net spend when refunds exceed outflows. An unlinked credit is not a refund. A cash withdrawal remains External Spend unless linked to another tracked account. Validate representative examples in OQ-LEDGER-5."
+    "Assume an explicitly linked refund or reversal uses its entire active credit magnitude, is on the same account and currency as one original outflow, has opposite sign, and uses its own Effective Date. Cumulative active refunds cannot exceed the original. It offsets the original transaction's current spend category and current spend pool; unlinked credits remain ordinary transactions and cash withdrawals remain External Spend unless linked to another tracked account. Validate representative examples in OQ-LEDGER-5."
   ],
   "status": "active",
   "created_at": "2026-07-17T17:29:17.7862385+00:00"

@@ -1,0 +1,28 @@
+{
+  "id": "01KY07G0Y14C1AME6KD5MXYS67",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "UC-LEDGER-014",
+  "title": "Reconcile statement evidence to a canonical transaction",
+  "preconditions": "The statement row was parsed and approved outside LEDGER; the account and statement scope are valid; the caller supplies evidence identity, candidate facts, deterministic-policy identity, and idempotency identity.",
+  "postconditions": "The statement row produces at most one canonical transaction effect; a strong match preserves one existing transaction, a zero-match creates one statement-only transaction, and ambiguity remains unapplied.",
+  "main_flow": "1. Tally registers or reuses the statement evidence and exposes compatible unreconciled candidates through the public reconciliation projection. 2. The caller submits the deterministic outcome and match basis. 3. Tally independently validates candidate compatibility, uniqueness, policy identity, lifecycle, and existing evidence links. 4. For one valid strong match, Tally links statement evidence to the existing transaction and records a deterministic reconciliation decision. 5. For no compatible prior transaction, an approved request atomically creates one statement-only canonical transaction and links the evidence. 6. For multiple or conflicting candidates, Tally records or returns an ambiguous result without linking or creating a transaction. 7. Tally returns the resulting state and durable decision reference.",
+  "alt_flows": [
+    "1a. Statement evidence replay is identical -> return the existing outcome with no duplicate effect",
+    "2a. Policy or match basis is missing or unsupported -> reject automatic application",
+    "3a. Candidate facts conflict, candidate is inactive, or evidence is linked elsewhere -> return exception without mutation",
+    "4a. More than one compatible candidate exists -> return ambiguous and do not guess",
+    "5a. Statement-only creation fails -> commit neither transaction nor evidence link",
+    "6a. Same key requests a different outcome -> return conflict and preserve the original"
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"INGEST submits one accepted statement-row evidence record and its approved statement scope for reconciliation.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-20T16:59:36.7705788+00:00",
+  "links": [
+    {
+      "id": "01KY07RSCV5ZBRZ3Z6M9HZZNKT",
+      "target_type": "architecture_doc",
+      "target": "ARCH-CORE-TALLY-SYSTEM-CONTEXT",
+      "rel": "references",
+      "created_at": "2026-07-20T17:04:23.9643132+00:00"
+    }
+  ]
+}

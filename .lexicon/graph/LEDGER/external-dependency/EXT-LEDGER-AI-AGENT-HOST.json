@@ -2,15 +2,29 @@
   "id": "01KXRJ5P27X5YEVYNB6RXN03HH",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "EXT-LEDGER-AI-AGENT-HOST",
-  "name": "AI Agent Host",
+  "name": "External Orchestrator",
   "description": [
-    "Codex and Claude Code contract assumptions are validated by the installed Lex provider model, the explicit OperationDescriptor design, and three independent agent-interface explorations. Runtime compatibility still fails closed through the executable-owned skill manifest and published-binary contract tests."
+    "Hermes is the current external orchestrator deployment. It invokes released provider-neutral Tally contracts under the owner's OS identity, supplies extracted facts and opaque evidence references, and consumes structured results. It owns AgentMail, WhatsApp, provider payloads, clarification, schedules, recipients, rendering, delivery, and retries; it has no private Ledger storage access or authority to bypass financial rules."
   ],
   "type": "client",
-  "owner": "Personal Finance Owner",
-  "metadata": "{\"gate_type\":\"workflow\",\"validation_basis\":\"source_and_client\",\"validation_status\":\"validated\"}",
+  "owner": "Hermes",
+  "metadata": "{\"gate_type\":\"workflow\",\"validation_basis\":\"client_contract\",\"validation_status\":\"assumed\"}",
   "created_at": "2026-07-17T17:32:16.8407875+00:00",
   "links": [
+    {
+      "id": "01KY07RCSPRJ4B32BPATK2P2F5",
+      "target_type": "adr",
+      "target": "ADR-CORE-0030",
+      "rel": "references",
+      "created_at": "2026-07-20T17:04:11.0629140+00:00"
+    },
+    {
+      "id": "01KY07RDXS7V8HJ9P29GCKR1XN",
+      "target_type": "architecture_doc",
+      "target": "ARCH-CORE-TALLY-SYSTEM-CONTEXT",
+      "rel": "references",
+      "created_at": "2026-07-20T17:04:12.2181313+00:00"
+    },
     {
       "id": "01KXSXHM7MP6JCYF454FS8QXFN",
       "target_type": "test_case",

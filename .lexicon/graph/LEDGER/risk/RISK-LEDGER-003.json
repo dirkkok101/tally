@@ -3,12 +3,35 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "RISK-LEDGER-003",
   "description": [
-    "Transfers, refunds, reversals, cash withdrawals, or split purchases could be modeled as ordinary spend and distort category totals."
+    "Transfers, refunds, reversals, cash withdrawals, category or spend-pool corrections, or split purchases could be modeled inconsistently and distort exact pool/category actuals."
   ],
   "likelihood": "Medium",
   "impact": "High",
   "mitigation": [
-    "Require explicit attributable active/retired transfer and refund relationships; only active transactions/links affect totals; void/supersession atomically retires links; revocation/replacement is reasoned and atomic; preserve all source facts; never infer exclusion from description alone; example-map each special-transaction policy in the PRD."
+    "Require explicit attributable relationship and assignment history; transfers contribute zero; linked refunds follow the original current category and pool; lifecycle changes compose atomically; never infer from description; validate representative examples through OQ-LEDGER-5, OQ-LEDGER-6, and OQ-LEDGER-15."
   ],
-  "created_at": "2026-07-17T13:44:36.0751119+00:00"
+  "created_at": "2026-07-17T13:44:36.0751119+00:00",
+  "links": [
+    {
+      "id": "01KY07R3E3NXBYZH2DF4HBMADM",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-15",
+      "rel": "see-also",
+      "created_at": "2026-07-20T17:04:01.4767141+00:00"
+    },
+    {
+      "id": "01KY07R14VG1N9BNFDEZC13J8Q",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-5",
+      "rel": "see-also",
+      "created_at": "2026-07-20T17:03:59.1325808+00:00"
+    },
+    {
+      "id": "01KY07R28DT7500D06KVCG2W4S",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-6",
+      "rel": "see-also",
+      "created_at": "2026-07-20T17:04:00.2705536+00:00"
+    }
+  ]
 }

@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "metric": "Financial fact and aggregate correctness",
   "current": "Manual cross-statement consolidation with no deterministic reconciliation proof",
-  "target": "100% of accepted test transactions round-trip exact amount/currency/date/provenance; Net Account Movement equals the exact signed selected set; External Spend and Budget Actual equal their separately defined transfer/refund-aware net-spend formulas.",
+  "target": "100% of accepted test transactions round-trip exact financial facts and provider-neutral evidence lineage; one economic event has at most one active canonical transaction; Net Account Movement, External Spend, and Budget Actual equal exact selected-set formulas by spend pool and category.",
   "by_when": "LEDGER acceptance",
   "measured": 0,
   "created_at": "2026-07-17T17:32:50.3760293+00:00"

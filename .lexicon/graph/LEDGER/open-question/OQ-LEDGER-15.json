@@ -1,0 +1,21 @@
+{
+  "id": "01KY07C8Z39KAQA20K0B0VGD8E",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "OQ-LEDGER-15",
+  "question": "Does one active spend pool per transaction cover company-paid and personal-after-tax examples, including corrections, refunds, reversals, and mixed purchases?",
+  "context": [
+    "Pre-design owner evidence gate for A15. If a transaction must split across pools, revise the assumption and later PRD before pool-assignment design; until then unassigned is explicit and no pool is inferred from account, instrument, or cardholder."
+  ],
+  "status": "open",
+  "owner": "LEDGER PRD validation",
+  "created_at": "2026-07-20T16:57:33.9253497+00:00",
+  "links": [
+    {
+      "id": "01KY07RBNQX3034AHGEV5YBEVB",
+      "target_type": "risk",
+      "target": "RISK-LEDGER-009",
+      "rel": "motivated-by",
+      "created_at": "2026-07-20T17:04:09.9122870+00:00"
+    }
+  ]
+}

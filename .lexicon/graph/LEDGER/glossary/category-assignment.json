@@ -3,7 +3,8 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "term": "Category Assignment",
   "definition": [
-    "The attributable relationship between a transaction and a spend category, including whether it was manual, rule-based, suggested, or corrected when that information is available."
+    "The attributable active or historical relationship between a Canonical Transaction and one Spend Category. It is independent from account, Payment Instrument, Cardholder Attribution, Spend Pool, and Pool Assignment. Avoid: using category as ownership or funding source."
   ],
+  "source": "discovery",
   "created_at": "2026-07-17T13:45:16.0958454+00:00"
 }

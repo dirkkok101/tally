@@ -4,7 +4,7 @@
   "ref_code": "C17",
   "title": "Attributable active relationship lifecycle",
   "description": [
-    "Transfer and refund/reversal links have attributable active/retired history and enforce exclusive active roles. Each active transfer leg belongs to exactly one active transfer and no active refund; each active refund credit belongs in full to exactly one original and no active transfer; an original may have multiple active refund credits only while their cumulative magnitude is at most the original magnitude and may not itself be a refund credit or transfer leg. Only active Canonical Transactions may receive a new active link. Voiding or superseding a linked transaction atomically retires its active links; no relationship moves silently to a replacement. Revocation/replacement requires an explicit reason and revalidates role, cardinality, amount, account, currency, sign, and lifecycle rules before atomic activation."
+    "Transfer and refund or reversal links have attributable active and retired history with exclusive roles and amount conservation. Only active facts and relationships affect actuals. A linked refund offsets the original transaction's current category and spend pool in the refund's own Effective Date period. Void, supersession, revocation, or replacement revalidates and updates category and pool actuals atomically."
   ],
   "type": "business",
   "created_at": "2026-07-17T17:52:14.7771400+00:00"

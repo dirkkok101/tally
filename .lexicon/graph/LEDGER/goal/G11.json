@@ -1,0 +1,10 @@
+{
+  "id": "01KY07A6GCX2A1GKG0NP9P49SW",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "G11",
+  "text": [
+    "Maintain optional provider-neutral payment-instrument and cardholder attribution as canonical dimensions when they affect matching, pool assignment, or reporting. Evidence: direct — the accepted system context requires Hermes to map provider wording to stable Tally identities; workflow UC-LEDGER-017."
+  ],
+  "target": "The owner can create, inspect, archive, assign, and correct stable instrument/cardholder attribution without storing full card numbers or deriving it from description; absent attribution remains explicit and historical attribution remains inspectable.",
+  "created_at": "2026-07-20T16:56:25.8687201+00:00"
+}

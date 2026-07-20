@@ -3,8 +3,8 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "term": "Budget Actual",
   "definition": [
-    "The exact External Spend restricted by the current active Spend Category allocation; active linked refund credits use their own Effective Date and follow the original transaction's current category. BUDGET compares this net spend amount, which may be negative for a refund-heavy period, with a monthly amount while LEDGER owns membership and formula."
+    "The exact External Spend restricted by current Spend Category and Spend Pool assignment. Active linked refunds use their own Effective Date and offset the original current category and pool; transfers contribute zero. Results expose uncategorized and unassigned-pool amounts separately. BUDGET compares this Ledger-owned actual with planned amounts."
   ],
-  "source": "prd",
+  "source": "discovery",
   "created_at": "2026-07-17T13:45:16.8269094+00:00"
 }

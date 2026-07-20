@@ -3,8 +3,8 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "G2",
   "text": [
-    "Record canonical transaction facts without losing financial precision or source provenance. Evidence: direct — the owner requires transaction description, amount and date, and trustworthy cross-account actuals; workflows UC-LEDGER-002 and UC-LEDGER-009."
+    "Record at most one canonical transaction for one economic event without losing financial precision or provider-neutral evidence lineage. Evidence: direct — the owner requires notification-derived transactions to be confirmed by later statements without duplicates; workflows UC-LEDGER-002, UC-LEDGER-009, UC-LEDGER-013, UC-LEDGER-014, and UC-LEDGER-015."
   ],
-  "target": "Every accepted transaction round-trips its account, original description, exact base-10 signed amount, currency, required date facts, provenance, idempotency identity, and stable reference; erroneous facts are voided/superseded attributably rather than edited or silently deleted.",
+  "target": "Every accepted transaction round-trips exact account, amount, currency, date, description, lifecycle, and stable identity; it may link multiple idempotently registered evidence records and append-only reconciliation decisions while erroneous facts or links are corrected attributably rather than overwritten.",
   "created_at": "2026-07-17T13:41:21.6514130+00:00"
 }

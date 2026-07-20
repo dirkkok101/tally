@@ -3,8 +3,8 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "G6",
   "text": [
-    "Query and aggregate actual transactions consistently by account, date range, spend category, transfer state, refund state, relationship state, and categorization state. Evidence: direct — the owner requires daily spend tracking and later budget analytics; workflows UC-LEDGER-005, UC-LEDGER-010, and UC-LEDGER-011."
+    "Query and aggregate canonical actuals consistently by account, date range, category, spend pool, payment instrument, cardholder attribution, lifecycle, relationship, evidence, and reconciliation state. Evidence: direct — the owner requires exact pool/category reporting and evidence-backed reconciliation; workflows UC-LEDGER-005, UC-LEDGER-010, UC-LEDGER-011, UC-LEDGER-016, and UC-LEDGER-018."
   ],
-  "target": "Equivalent filters over unchanged active transactions/relationships select the same membership; paginated results remain bound to the first-page snapshot; exact totals reconcile to that set and are consumable by BUDGET and INSIGHTS without duplicated finance logic.",
+  "target": "Equivalent filters over unchanged active state select identical snapshot membership; exact Net Account Movement, External Spend, and Budget Actual totals reconcile by pool and category and remain consumable by BUDGET and INSIGHTS without duplicated finance logic.",
   "created_at": "2026-07-17T13:41:22.4000969+00:00"
 }

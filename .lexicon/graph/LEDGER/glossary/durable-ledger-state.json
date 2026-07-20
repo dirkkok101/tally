@@ -3,8 +3,8 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "term": "Durable Ledger State",
   "definition": [
-    "All authoritative persisted logical state required to preserve behavior after restart or recovery: storage/schema metadata; accounts and categories with lifecycle history; Canonical Transactions and void/supersession chains; category-allocation history; active and retired transfer/refund relationships; and idempotency identities with their original outcomes. Query cursors and derived caches are excluded because they may be rebuilt or expired."
+    "All authoritative state required to preserve behavior after restart or recovery: storage metadata; accounts, payment instruments, cardholders, spend pools, and categories with lifecycle history; Canonical Transactions; Evidence Records and links; Reconciliation Decisions, states, scopes, and exceptions; transaction, allocation, attribution, transfer and refund history; and idempotency outcomes. Rebuildable cursors and caches are excluded."
   ],
-  "source": "prd",
+  "source": "discovery",
   "created_at": "2026-07-18T04:40:09.6664887+00:00"
 }

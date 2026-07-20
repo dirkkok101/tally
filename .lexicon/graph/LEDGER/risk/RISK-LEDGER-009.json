@@ -1,0 +1,14 @@
+{
+  "id": "01KY07CA8EK66FJT829P2K2XF3",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "RISK-LEDGER-009",
+  "description": [
+    "Conflating bank account, payment instrument, cardholder, spend pool, or category could place correct transactions in the wrong budget actuals while aggregate totals still appear plausible."
+  ],
+  "likelihood": "Medium",
+  "impact": "High",
+  "mitigation": [
+    "Model the dimensions independently, preserve explicit unknown and correction history, prohibit inference from provider wording inside Ledger, and reconcile exact actuals across pool/category/refund/transfer/correction examples."
+  ],
+  "created_at": "2026-07-20T16:57:35.2473946+00:00"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "01KY07AZFAB536RSNX85B6VTTB",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "C23",
+  "title": "Reconciliation correction composition",
+  "description": [
+    "Evidence links and reconciliation decisions are corrected only by attributable revoke, reject, or replacement history. Transaction void or supersession never silently moves evidence or confirmation to a replacement. Affected current states become explicit exceptions or unresolved cases until a valid deterministic or owner-approved decision is recorded; active actuals never count duplicate canonical outcomes."
+  ],
+  "type": "business",
+  "created_at": "2026-07-20T16:56:51.4356962+00:00"
+}

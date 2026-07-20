@@ -1,0 +1,14 @@
+{
+  "id": "01KY07C9KYDD558K1T1Z4K10EW",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "RISK-LEDGER-008",
+  "description": [
+    "A weak reconciliation rule could link statement evidence to the wrong notification-derived transaction, hide the true duplicate, and make a false match look authoritative."
+  ],
+  "likelihood": "High",
+  "impact": "High",
+  "mitigation": [
+    "Allow automatic application only for a documented uniquely compatible evidence set; retain match basis and decision history; keep multiple candidates ambiguous; require explicit owner confirmation for non-deterministic cases; verify against private counter-examples."
+  ],
+  "created_at": "2026-07-20T16:57:34.5911061+00:00"
+}

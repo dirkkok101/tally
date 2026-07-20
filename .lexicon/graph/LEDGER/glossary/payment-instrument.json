@@ -1,0 +1,10 @@
+{
+  "id": "01KY07J4CXD4W6YS0G4MMZWMVA",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "term": "Payment Instrument",
+  "definition": [
+    "A stable privacy-safe identity for a card or other means used to execute a transaction, optionally associated with an owned account and Cardholder Attribution. It may affect matching or reporting but is not the account, cardholder, spend pool, or category. Avoid: full card number, provider-specific wording, or account alias."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-20T17:00:45.8545163+00:00"
+}

@@ -5,6 +5,6 @@
   "text": [
     "Represent every owned bank account as a stable local record without storing online-banking credentials. Evidence: direct — the owner has three accounts across two banks and requires account creation; workflow UC-LEDGER-001."
   ],
-  "target": "The owner's three accounts across two banks can be uniquely registered, listed, renamed, archived, and referenced by subsequent commands without changing stable identity.",
+  "target": "The owner's three accounts across two banks can be uniquely registered, listed, renamed, archived, and referenced without changing identity; account identity remains distinct from payment instrument, cardholder, spend pool, and spend category.",
   "created_at": "2026-07-17T13:41:21.4946488+00:00"
 }

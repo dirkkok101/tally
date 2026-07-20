@@ -1,0 +1,9 @@
+{
+  "id": "01KY07X6F5NBXKT33E3M5G2CW8",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.6",
+  "changes": [
+    "Discovery revision: aligned LEDGER with the accepted Hermes boundary; added provider-neutral multi-evidence lineage, append-only reconciliation and correction, deterministic match safety, statement-only and coverage-exception workflows, optional payment-instrument/cardholder attribution, first-class spend pools, exact pool/category conservation, updated privacy/recovery/idempotency boundaries, three pre-mortem risks, three feasibility questions, six use cases, and three acceptance metrics. Existing PRD, design, and plan are intentionally stale pending the revised pipeline."
+  ],
+  "created_at": "2026-07-20T17:06:48.4219956+00:00"
+}

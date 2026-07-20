@@ -1,0 +1,28 @@
+{
+  "id": "01KY07G1KFPCPMJ0VJ9DPCZQPB",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "UC-LEDGER-015",
+  "title": "Resolve or correct a reconciliation decision",
+  "preconditions": "The evidence, candidate transactions, full decision history, and current state are inspectable; the owner supplies an explicit selection or rejection, reason, and idempotency identity.",
+  "postconditions": "Ambiguity is resolved only by explicit owner intent; incorrect matches are corrected attributably; one evidence record confirms at most one active canonical transaction and no duplicate actual remains.",
+  "main_flow": "1. The caller retrieves the evidence, candidates, active link if any, match basis, and history. 2. The owner explicitly confirms one compatible transaction, rejects all candidates, or requests correction of a prior decision. 3. Tally validates evidence uniqueness, transaction lifecycle, compatibility, and correction preconditions. 4. Tally appends an owner-confirmed, rejected, revoked, or replacement decision with actor and reason; prior decisions remain immutable. 5. Any active evidence link is changed atomically with the new decision and never moved silently. 6. Current reconciliation state and exact actuals reflect only the valid active transaction outcome. 7. Tally returns before and after state plus complete history references.",
+  "alt_flows": [
+    "1a. Evidence or candidate is missing -> return not found",
+    "2a. Owner intent, reason, or idempotency identity is absent -> reject without mutation",
+    "3a. Selected transaction is incompatible, inactive, or evidence is confirmed elsewhere -> return conflict",
+    "4a. Same decision already exists -> return the original result",
+    "4b. Conflicting replay or stale prior state -> preserve current decision and return conflict",
+    "5a. Decision and link change cannot commit atomically -> preserve the prior current state"
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"An ambiguous case needs owner confirmation, or an existing reconciliation link or decision is discovered to be wrong.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-20T16:59:37.4561729+00:00",
+  "links": [
+    {
+      "id": "01KY07RTFAYZVB2KHNPP895GT3",
+      "target_type": "architecture_doc",
+      "target": "ARCH-CORE-TALLY-SYSTEM-CONTEXT",
+      "rel": "references",
+      "created_at": "2026-07-20T17:04:25.0677807+00:00"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "01KY07J6QJAECMQWQK7M4K7CF0",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "term": "Pool Assignment",
+  "definition": [
+    "The attributable current or historical relationship between one Canonical Transaction and one Spend Pool, or an explicit unassigned state. Corrections append history; transfers contribute zero and linked refunds follow the original current pool. Avoid: deriving pool silently from account, instrument, cardholder, merchant, or category."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-20T17:00:48.2434460+00:00"
+}

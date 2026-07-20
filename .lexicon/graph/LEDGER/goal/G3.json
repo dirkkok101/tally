@@ -5,6 +5,6 @@
   "text": [
     "Maintain a shared spend-category catalogue and support explicit category assignment and correction without rewriting original transaction facts. Evidence: direct — the owner requires categorized spend across all accounts; workflows UC-LEDGER-003 and UC-LEDGER-008."
   ],
-  "target": "Categories have stable create/list/rename/archive behavior; every categorized transaction has explicit allocation data under the accepted policy; corrections are attributable, archived categories preserve history, and original transaction facts remain unchanged.",
+  "target": "Categories have stable create/list/rename/archive behavior; every categorized transaction has explicit attributable allocation history; category remains independent from account, payment instrument, cardholder, and spend pool; archived categories preserve history.",
   "created_at": "2026-07-17T13:41:21.8697392+00:00"
 }

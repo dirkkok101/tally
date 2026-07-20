@@ -1,0 +1,10 @@
+{
+  "id": "01KY07J1KSXDNJ94WM3H82CS6S",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "term": "Reconciliation Decision",
+  "definition": [
+    "An append-only attributable determination that statement evidence matches one Canonical Transaction, creates a statement-only outcome, remains ambiguous, is owner-confirmed or rejected, or supersedes an earlier decision. It records deterministic policy or explicit owner authority and reason. Avoid: mutable matched flag or silent fuzzy guess."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-20T17:00:43.0020424+00:00"
+}

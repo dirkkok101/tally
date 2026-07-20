@@ -1,0 +1,28 @@
+{
+  "id": "01KY07G2ZPJ1NW36AZRX0NRQPH",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "UC-LEDGER-017",
+  "title": "Maintain payment-instrument and cardholder attribution",
+  "preconditions": "The related owned account exists when applicable; the owner has a privacy-safe label or masked identifier and can distinguish the cardholder without storing a full card number.",
+  "postconditions": "Transactions can carry optional stable instrument/cardholder attribution without provider semantics or full identifiers; corrections are attributable and absence remains explicit.",
+  "main_flow": "1. The caller creates or retrieves stable payment-instrument and cardholder identities. 2. Tally validates privacy-safe identity, distinct dimensions, account compatibility where declared, and archival state. 3. The owner assigns or corrects transaction attribution with reason and idempotency identity. 4. Tally appends attribution history without changing transaction source facts or inferring from description. 5. Queries expose current, unknown, and historical attribution independently from category and spend pool. 6. Archive prevents new assignment while retaining existing history.",
+  "alt_flows": [
+    "1a. Full sensitive identifier or provider payload is supplied -> reject without retention",
+    "2a. Identity conflicts, is archived, or declared account relation is incompatible -> reject assignment",
+    "3a. Same assignment replay occurs -> return original result",
+    "3b. Conflicting reuse or stale attribution state -> return conflict and preserve current state",
+    "4a. Write fails -> retain prior attribution only",
+    "6a. Referenced identity is archived -> preserve history but reject new assignments until reactivated"
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The owner needs stable attribution for a card or other payment instrument because it affects matching, spend-pool assignment, or reporting.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-20T16:59:38.8716567+00:00",
+  "links": [
+    {
+      "id": "01KY07RWN0JKTCP7FRG66BSQZ2",
+      "target_type": "architecture_doc",
+      "target": "ARCH-CORE-TALLY-SYSTEM-CONTEXT",
+      "rel": "references",
+      "created_at": "2026-07-20T17:04:27.2972188+00:00"
+    }
+  ]
+}

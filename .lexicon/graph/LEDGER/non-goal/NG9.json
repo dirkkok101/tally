@@ -1,0 +1,12 @@
+{
+  "id": "01KY07C5P6JGEZYV60SJTZWFSG",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "NG9",
+  "text": [
+    "Poll AgentMail or another mailbox, parse MIME, manage provider cursors or allowlists, acknowledge messages, conduct clarification conversations, schedule work, select recipients, render channel copy, send notifications, or retry delivery."
+  ],
+  "rationale": [
+    "ADR-CORE-0030 assigns provider transport and orchestration to Hermes. Ledger receives provider-neutral facts and opaque evidence references only."
+  ],
+  "created_at": "2026-07-20T16:57:30.5670228+00:00"
+}

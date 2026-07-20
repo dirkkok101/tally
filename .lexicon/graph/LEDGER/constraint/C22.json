@@ -1,0 +1,11 @@
+{
+  "id": "01KY07AYTYAW7CBP1T1X8KGJRK",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "C22",
+  "title": "Exact pool and category actual conservation",
+  "description": [
+    "Every active spend transaction is either assigned to one active spend pool or exposed in an explicit unassigned-pool bucket, independently of category state. Transfers contribute zero external spend to all pools. Linked refunds and reversals offset the original transaction's current pool and category in their own Effective Date period. Corrections and relationship changes update exact pool/category actuals atomically without rewriting history."
+  ],
+  "type": "business",
+  "created_at": "2026-07-20T16:56:50.7833556+00:00"
+}

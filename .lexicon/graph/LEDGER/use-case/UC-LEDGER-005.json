@@ -2,17 +2,17 @@
   "id": "01KXRHVENV2V4KFJYTBVX3927D",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "UC-LEDGER-005",
-  "title": "Query and reconcile ledger actuals",
+  "title": "Query exact ledger actuals",
   "preconditions": "The local Ledger is readable; filter semantics and date/sign conventions are discoverable.",
-  "postconditions": "Repeated equivalent queries over unchanged state return identical membership, ordering, Net Account Movement, External Spend, and Budget Actual values; every page retains first-page membership and full-set aggregates; empty results are explicit successes with zero named aggregates.",
-  "main_flow": "1. The agent submits explicit filters and output contract version. 2. Tally validates the filter combination. 3. Tally selects Canonical Transactions using Effective Date, category-allocation, transfer, refund/reversal, and correction rules. 4. Tally establishes one immutable snapshot containing membership plus separately named Net Account Movement, External Spend, and Budget Actual aggregates, then returns the first page and snapshot-bound cursor when needed. 5. Later pages read the same snapshot even if new writes occur; an unavailable snapshot fails explicitly. 6. The agent reconciles Net Account Movement to the exact signed sum and reconciles External Spend and Budget Actual to their transfer/refund-aware net-spend formulas. 7. BUDGET and INSIGHTS consume the public results rather than duplicate these rules.",
+  "postconditions": "Equivalent unchanged queries return identical membership, attribution, reconciliation state, ordering, and exact totals; empty and unassigned buckets are explicit; pagination retains first-page membership and aggregates.",
+  "main_flow": "1. The caller submits explicit filters and output contract version. 2. Tally validates the filter combination. 3. Tally selects active canonical transactions using Effective Date, category and pool assignment, instrument or cardholder attribution, relationship, correction, evidence, and reconciliation rules. 4. Tally establishes one immutable snapshot containing membership, state, and separately named Net Account Movement, External Spend, and Budget Actual aggregates by requested pool and category. 5. Later pages read the same snapshot even if writes occur; an unavailable snapshot fails explicitly. 6. The caller reconciles every aggregate to the exact selected set, including explicit uncategorized and unassigned-pool buckets. 7. BUDGET and INSIGHTS consume the public result rather than duplicate financial rules.",
   "alt_flows": [
-    "2a. Date range, account, category, relationship, or lifecycle filter is invalid -> reject with structured errors",
-    "3a. The store fails integrity validation -> fail rather than report any aggregate",
-    "4a. Results exceed one response -> return a snapshot-bound deterministic cursor and unchanged full-set aggregates",
-    "5a. The snapshot is expired or unavailable -> fail explicitly; never continue against live membership",
-    "6a. Any named aggregate differs from its exact defined formula over the snapshot membership -> treat as an integrity failure"
+    "2a. A filter or dimension combination is invalid -> reject with structured errors",
+    "3a. The store or relationship history fails integrity validation -> return no aggregate",
+    "4a. Results exceed one response -> return a deterministic snapshot-bound cursor and unchanged full-set totals",
+    "5a. Snapshot is expired or unavailable -> fail explicitly and never continue against live state",
+    "6a. Any pool, category, or named aggregate differs from its exact formula -> treat as an integrity failure"
   ],
-  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The owner needs trustworthy transactions or actual totals for a period, account, category, transfer state, or categorization state.\",\"status\":\"draft\"}",
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The owner needs trustworthy transaction membership or exact actuals for a period, account, category, spend pool, payment instrument, cardholder, lifecycle, relationship, evidence, or reconciliation state.\",\"status\":\"draft\"}",
   "created_at": "2026-07-17T17:26:41.5964425+00:00"
 }

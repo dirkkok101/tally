@@ -1,0 +1,10 @@
+{
+  "id": "01KY07J0X01AXSAQ3R6QETADZA",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "term": "Opaque External Reference",
+  "definition": [
+    "A caller-supplied privacy-safe token used to correlate an Evidence Record with state outside Tally. Ledger compares it only under documented identity rules and does not parse provider semantics from it. Avoid: full card or account number, mailbox payload, recipient address, or provider cursor."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-20T17:00:42.2736192+00:00"
+}

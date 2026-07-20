@@ -1,0 +1,21 @@
+{
+  "id": "01KY07C7PVABDYP1V29H53B8S9",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "OQ-LEDGER-13",
+  "question": "Which provider-neutral compatibility fields, tolerances, and conflict rules are sufficient for an automatic deterministic match between agent-capture and statement-row evidence?",
+  "context": [
+    "Low-confidence feasibility item: run /lex:spike against private representative capture and statement evidence before design. The spike must identify a bounded allowlist of deterministic cases and preserve ambiguous or conflicting cases without mutation."
+  ],
+  "status": "open",
+  "owner": "LEDGER design",
+  "created_at": "2026-07-20T16:57:32.6357871+00:00",
+  "links": [
+    {
+      "id": "01KY07R87JX3GA5A2M9ZNH20BD",
+      "target_type": "risk",
+      "target": "RISK-LEDGER-008",
+      "rel": "motivated-by",
+      "created_at": "2026-07-20T17:04:06.3876928+00:00"
+    }
+  ]
+}

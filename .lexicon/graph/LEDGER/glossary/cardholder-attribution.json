@@ -1,0 +1,10 @@
+{
+  "id": "01KY07J53KH69T4MNZR680YE2K",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "term": "Cardholder Attribution",
+  "definition": [
+    "A stable owner-managed identity indicating the person or role attributed to use of a Payment Instrument or transaction when relevant. It is optional, provider-neutral, and independently correctable. Avoid: recipient, Tally application user, bank account owner, or automatic inference from description."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-20T17:00:46.5804610+00:00"
+}

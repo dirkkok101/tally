@@ -1,0 +1,27 @@
+{
+  "id": "01KY07G28VE62PYDS9ENE96A1C",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "UC-LEDGER-016",
+  "title": "Review statement coverage exceptions",
+  "preconditions": "The statement account, period, completeness, evidence set, and reconciliation batch identity are explicit; all accepted rows have durable outcomes.",
+  "postconditions": "Every eligible prior transaction in a completed statement scope is either reconciled or represented by an explicit exception; incomplete scopes cannot create false absence.",
+  "main_flow": "1. The caller requests the reconciliation coverage projection for the approved account and period. 2. Tally selects prior active recorded transactions eligible for that scope and compares their active statement evidence and decisions. 3. Reconciled and statement-only outcomes are accounted for exactly once. 4. Eligible recorded transactions with no confirming statement evidence are returned as recorded-absent-from-statement exceptions tied to the scope. 5. Existing ambiguities and other reconciliation exceptions are returned separately with stable reasons. 6. A later valid match or owner decision appends history and changes current state without erasing the original exception. 7. Tally returns exact counts and identifiers that reconcile to the scope.",
+  "alt_flows": [
+    "1a. Scope is incomplete, unapproved, or account or period is invalid -> reject absence evaluation",
+    "2a. Snapshot or integrity validation fails -> return no coverage result",
+    "3a. A transaction would be counted in more than one outcome -> fail closed",
+    "4a. Statement coverage legitimately excludes a transaction -> require an explicit scope rule rather than silently omitting it",
+    "6a. Later evidence changes state -> retain the earlier scoped exception in history and expose the current outcome"
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"INGEST completes an approved statement reconciliation scope and needs transactions not accounted for by that statement.\",\"status\":\"draft\"}",
+  "created_at": "2026-07-20T16:59:38.1407005+00:00",
+  "links": [
+    {
+      "id": "01KY07RVGXG590GXF7AXVKV8AZ",
+      "target_type": "architecture_doc",
+      "target": "ARCH-CORE-TALLY-SYSTEM-CONTEXT",
+      "rel": "references",
+      "created_at": "2026-07-20T17:04:26.1418663+00:00"
+    }
+  ]
+}

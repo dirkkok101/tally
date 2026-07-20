@@ -1,0 +1,10 @@
+{
+  "id": "01KY07J05DMMCM1QSBFDE1DHQ6",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "term": "Evidence Kind",
+  "definition": [
+    "A closed provider-neutral purpose classification such as agent capture, statement row, receipt, external document, or owner assertion. It describes what the evidence represents, not which transport supplied it. Avoid: AgentMail, WhatsApp, bank brand, MIME type, or delivery channel as a domain kind."
+  ],
+  "source": "discovery",
+  "created_at": "2026-07-20T17:00:41.5185951+00:00"
+}

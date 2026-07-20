@@ -8,7 +8,7 @@
   "likelihood": "Medium",
   "impact": "Medium",
   "mitigation": [
-    "Use hledger as analogous semantics and a possible interoperability target; proceed custom because its public contract does not satisfy Tally provenance, category allocation, and machine-schema goals through a thin adapter."
+    "Retain hledger as analogous semantics and a possible interoperability target; proceed custom because a thin adapter cannot satisfy provider-neutral multi-evidence lineage, reconciliation decisions, independent attribution and pool actuals, uniform structured contracts, and verified recovery."
   ],
   "created_at": "2026-07-17T13:44:36.5916890+00:00"
 }

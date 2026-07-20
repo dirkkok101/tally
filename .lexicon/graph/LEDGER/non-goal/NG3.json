@@ -6,7 +6,7 @@
     "Define monthly budget amounts or calculate daily, weekly, or monthly budget performance."
   ],
   "rationale": [
-    "BUDGET owns monthly intent and INSIGHTS owns pace analysis and reports."
+    "BUDGET owns planned amounts and positions while INSIGHTS owns analytical reports. LEDGER owns the canonical spend-pool catalogue, transaction pool-assignment history, and exact actual membership needed by both."
   ],
   "created_at": "2026-07-17T13:41:36.5767568+00:00"
 }

@@ -1,0 +1,10 @@
+{
+  "id": "01KY07CCW0PKZJD5XTH8K6K3YK",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "metric": "Exact spend-pool and category actuals",
+  "current": "Actuals are categorized but have no first-class spend-pool dimension",
+  "target": "100% of tested transactions, transfers, refunds, reversals, voids, supersessions, and attribution corrections reconcile exactly by spend pool and category, with explicit unassigned buckets and no double counting",
+  "by_when": "LEDGER acceptance",
+  "measured": 0,
+  "created_at": "2026-07-20T16:57:37.9215286+00:00"
+}

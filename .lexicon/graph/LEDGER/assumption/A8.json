@@ -4,7 +4,7 @@
   "ref_code": "A8",
   "title": "Financial history is retained by default",
   "description": [
-    "Assume canonical transactions, correction events, and referenced account/category identities are retained indefinitely unless a later explicit retention decision says otherwise; archival prevents new use without erasing history."
+    "Assume canonical transactions, evidence metadata and links, reconciliation decisions and exceptions, attribution histories, account/category/pool identities, and correction events are retained by default. Archival prevents new use without erasing history; raw provider and messaging payloads remain outside Ledger."
   ],
   "status": "active",
   "created_at": "2026-07-17T17:29:18.3531386+00:00"

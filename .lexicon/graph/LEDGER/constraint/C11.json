@@ -4,7 +4,7 @@
   "ref_code": "C11",
   "title": "Restricted local artifacts",
   "description": [
-    "New Ledger and backup artifacts default to access by the invoking OS identity only. Logs, diagnostics, process arguments, and ordinary command results must not leak credentials, encryption keys, unmasked bank identifiers, or full financial payloads outside explicit data-return/export commands."
+    "New Ledger and backup artifacts default to access by the invoking OS identity only. Logs, diagnostics, process arguments, and ordinary results must not leak credentials, encryption keys, unmasked bank or instrument identifiers, raw statement rows, mailbox or MIME payloads, messaging content, or full financial payloads outside explicit data-return/export commands."
   ],
   "type": "technical",
   "created_at": "2026-07-17T17:29:43.8848041+00:00"

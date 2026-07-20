@@ -4,7 +4,7 @@
   "ref_code": "C10",
   "title": "Historical referential integrity",
   "description": [
-    "Canonical source facts and attributable correction/transfer events are retained. Accounts and categories referenced by history can be renamed or archived but cannot be physically removed in a way that changes prior transaction meaning."
+    "Canonical facts, evidence metadata and links, reconciliation decisions and exceptions, transaction lifecycle, payment-instrument/cardholder/pool attribution, category allocation, and transfer/refund history are retained attributably. Referenced identities may archive but cannot be removed or rewritten in a way that changes prior meaning."
   ],
   "type": "business",
   "created_at": "2026-07-17T17:29:43.6132575+00:00"

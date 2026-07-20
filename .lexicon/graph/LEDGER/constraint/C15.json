@@ -4,7 +4,7 @@
   "ref_code": "C15",
   "title": "Snapshot-consistent paginated queries",
   "description": [
-    "A multi-page query is bound to the transaction membership and exact total established when its first page is created. Later writes cannot change remaining pages; an unavailable or expired snapshot fails explicitly instead of silently switching to live membership."
+    "A multi-page query is bound to the transaction membership, reconciliation/evidence state, attribution, and exact totals established when its first page is created. Later writes cannot change remaining pages; an unavailable snapshot fails explicitly rather than switching to live state."
   ],
   "type": "technical",
   "created_at": "2026-07-17T17:43:47.3113458+00:00"
