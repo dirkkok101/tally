@@ -15,6 +15,15 @@
   "priority": 0,
   "sort_order": 33,
   "created_at": "2026-07-21T14:30:17.4241144+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY2KX3T5KPH6QH7M0XY8VEJT",
+      "bead_id": "bd-3pa",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T15:14:57.4776162+00:00",
+      "created_at": "2026-07-21T15:14:57.4776162+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KY2HBAJG6DRWEYZVJ92RPBY3",

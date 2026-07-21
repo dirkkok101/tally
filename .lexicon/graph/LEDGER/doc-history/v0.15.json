@@ -1,0 +1,9 @@
+{
+  "id": "01KY2NKEFN9HHJWH12P83TZKSC",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.15",
+  "changes": [
+    "Compiled active PLAN-LEDGER-V1 in update mode: created the 5 missing beads and refreshed all 68 execution contracts after replanning. The graph and tracker now contain 68 verified task-to-bead mappings and exactly 193 dependency edges; 5 beads are closed, 63 remain open, and the closed-aware 7-bead ready frontier matches br. Coverage is 278/278 with zero gaps or blocking audit findings, every context fits within 2500 tokens, and cycles, unresolved interfaces, unordered file collisions, and labels were validated cleanly. Repaired the bd-31r cash-withdrawal gate so it cannot pass while OQ-LEDGER-16 is open or its decision is empty. Two consecutive fresh-context polish passes found no executor-blocking defects. No implementation code was changed."
+  ],
+  "created_at": "2026-07-21T15:44:37.8783187+00:00"
+}

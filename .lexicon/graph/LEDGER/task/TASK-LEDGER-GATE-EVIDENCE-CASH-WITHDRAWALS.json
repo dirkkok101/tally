@@ -15,6 +15,15 @@
   "priority": 0,
   "sort_order": 9,
   "created_at": "2026-07-21T11:41:42.6904485+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY2KX2PXV3W954Q4Q5KV3817",
+      "bead_id": "bd-31r",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T15:14:56.3499832+00:00",
+      "created_at": "2026-07-21T15:14:56.3499832+00:00"
+    }
+  ],
   "files": [
     {
       "id": "01KY27PMX34E9J4K4TD94APDY1",
@@ -215,14 +224,14 @@
   ],
   "verification_steps": [
     {
-      "id": "01KY27PMX5AA9WZ6XTG6EK571H",
+      "id": "01KY2N2GJ3GFMDFRJF8AMK4Q0N",
       "phase": "after",
-      "command": "test -s docs/validation/ledger/oq-16-cash-withdrawal-policy.md && lex open-question show OQ-LEDGER-16 --json",
-      "expected_result": "exit 0; the report exists and command output shows a non-empty resolved decision",
+      "command": "test -s docs/validation/ledger/oq-16-cash-withdrawal-policy.md && jq -e '.status == \"resolved\" and (.decision != null) and (.decision != \"\")' <(lex open-question show OQ-LEDGER-16 --json)",
+      "expected_result": "exit 0; the report exists and OQ-LEDGER-16 is resolved with a non-empty decision",
       "required": 1,
       "timeout_seconds": 120,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+      "created_at": "2026-07-21T15:35:22.9464092+00:00"
     }
   ]
 }
