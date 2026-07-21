@@ -9,7 +9,7 @@
     "Deliver create/get/list/rename/archive account behavior through typed handlers, real SQLite storage, and a self-contained operation module."
   ],
   "objective": [
-    "Maintain stable masked owned asset and liability account identities and attributable lifecycle history without credentials or physical deletion."
+    "Maintain stable masked asset and liability accounts with attributable append-only lifecycle history."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -38,24 +38,24 @@
   ],
   "dependencies": [
     {
-      "id": "01KXT1AFC1E30WSMHJQHKPX7PE",
+      "id": "01KY2H7053Z1C6NJWGQPC6SGPQ",
       "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
       "dependency_type": "compile",
       "reason": [
-        "Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract."
+        "Account mutations consume LedgerMutationExecutor.ExecuteAsync."
       ],
-      "sort_order": 2,
-      "created_at": "2026-07-18T07:16:16.8987907+00:00"
+      "sort_order": 5,
+      "created_at": "2026-07-21T14:27:55.6838699+00:00"
     },
     {
-      "id": "01KXT1AFWJS427KRG8QY4NZBGF",
+      "id": "01KY2H72AN98ZCFRKJQCNYFZDJ",
       "target": "TASK-LEDGER-CORE-STORAGE",
       "dependency_type": "compile",
       "reason": [
-        "Consumer requires LedgerDb from its producing task; direct compile edge enforces the declared interface contract."
+        "Account persistence consumes LedgerDb."
       ],
-      "sort_order": 3,
-      "created_at": "2026-07-18T07:16:17.4275601+00:00"
+      "sort_order": 6,
+      "created_at": "2026-07-21T14:27:57.9101597+00:00"
     },
     {
       "id": "01KY27TD5KVBR98GA7SQGD7037",
@@ -187,54 +187,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXTFPVSQV61PX0VYMZ9804RV",
+      "id": "01KY2HGEYDD2HP6QGF442SD1Y7",
       "kind": "acceptance_check",
       "text": [
-        "Valid unique institution/display/type/masked identifier/ZAR input creates one active asset or liability account with a stable ULID and no credential/full account number."
+        "Valid unique ZAR input creates one active asset or liability account with a stable ULID, masked identifier, and no credential or full account number."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T11:27:42.9031272+00:00"
+      "created_at": "2026-07-21T14:33:05.7414989+00:00"
     },
     {
-      "id": "01KXTFPVSRYGNSRGQ6SQ25FDEZ",
+      "id": "01KY2HGEYFTGZVW8R6873NC1H3",
       "kind": "acceptance_check",
       "text": [
-        "Rename appends an attributable lifecycle event while preserving account ID and transaction references."
+        "Rename and archive append attributable lifecycle events; archived accounts remain queryable and reject new transactions with LEDGER-ACCOUNT-ARCHIVED and no write."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T11:27:42.9031272+00:00"
+      "created_at": "2026-07-21T14:33:05.7414989+00:00"
     },
     {
-      "id": "01KXTFPVSR39QYP5BE8GPCCH4B",
+      "id": "01KY2HGEYF83VYP4A850NTQ8WY",
       "kind": "acceptance_check",
       "text": [
-        "Archive appends history, preserves detail/list visibility, and causes new transaction attempts to return LEDGER-ACCOUNT-ARCHIVED with no write."
+        "Get and list apply history, lifecycle, and institution filters with deterministic ordering and one row per account."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T11:27:42.9031272+00:00"
+      "created_at": "2026-07-21T14:33:05.7414989+00:00"
     },
     {
-      "id": "01KXTFPVSR3D9B89ES6J2FKJNG",
+      "id": "01KY2HGEYF372FV6KWEGHVSW27",
       "kind": "acceptance_check",
       "text": [
-        "Get/list honor includeHistory and lifecycle/institution filters with deterministic ordering and one result per account."
+        "Every mutation uses LedgerMutationExecutor; identical replay returns the original result and changed replay conflicts."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T11:27:42.9031272+00:00"
-    },
-    {
-      "id": "01KXTFPVSR9FDB9EMRG0C7FC9V",
-      "kind": "acceptance_check",
-      "text": [
-        "Every mutation uses LedgerMutationExecutor and returns byte-equivalent logical results on identical replay."
-      ],
-      "required": 1,
-      "sort_order": 4,
-      "created_at": "2026-07-18T11:27:42.9031272+00:00"
+      "created_at": "2026-07-21T14:33:05.7414989+00:00"
     },
     {
       "id": "01KXT0P36RJZMGC2DCW1JJTCNH",
@@ -257,38 +247,27 @@
       "created_at": "2026-07-18T07:05:09.0800297+00:00"
     },
     {
-      "id": "01KXTFPVSR8J1184FTFEHGXTTY",
+      "id": "01KY2HGEYFHZY55KMC981BPVT7",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT hard-delete or update lifecycle history in place; append events and retain RESTRICT references per DD-LEDGER-IMMUTABLE-HISTORY."
+        "Do NOT delete or overwrite account history; retain RESTRICT-linked append-only events per DD-LEDGER-IMMUTABLE-HISTORY."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T11:27:42.9031272+00:00"
+      "created_at": "2026-07-21T14:33:05.7414989+00:00"
     },
     {
-      "id": "01KXTFPVSRB7HBWVN81C6VFHMQ",
+      "id": "01KY2HGEYFM694043GPF507CCN",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT introduce repositories, mediator, HTTP endpoints, credentials, or full account identifiers per DD-LEDGER-APPLICATION-ARCHITECTURE."
+        "Do NOT add repositories, mediator, HTTP, credentials, or full account identifiers per DD-LEDGER-APPLICATION-ARCHITECTURE."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T11:27:42.9031272+00:00"
+      "created_at": "2026-07-21T14:33:05.7414989+00:00"
     }
   ],
   "references": [
-    {
-      "id": "01KXT0P36SH66JVQZQBTKSZBC2",
-      "target_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
-      "target_entity_type": "data_model",
-      "target_entity_id": "01KXSYGEQ3PSBB0XQ74D60EZWK",
-      "target_title": "AccountCategoryOperationContracts",
-      "relationship": "touches",
-      "required": 1,
-      "sort_order": 3,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
-    },
     {
       "id": "01KXT0P36ST6GZAE4S663C94TK",
       "target_ref_code": "TC-LEDGER-ACCOUNT-MAINTENANCE-CONTRACT",

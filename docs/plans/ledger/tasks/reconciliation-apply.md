@@ -27,7 +27,6 @@ Commit one safe base reconciliation outcome without duplicate transactions despi
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | `true` |
 | FR-LEDGER-STATEMENT-RECONCILIATION: Apply statement reconciliation outcomes | `requirement` | `implements` | `true` |
-| NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY: Prove reconciliation effects are crash-atomic and replay-safe | `test_case` | `verifies` | `true` |
 | TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT: Verify match-first statement reconciliation | `test_case` | `verifies` | `true` |
 
@@ -123,7 +122,6 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
 - `implements` -> FR-LEDGER-STATEMENT-RECONCILIATION: Apply statement reconciliation outcomes
-- `satisfies` -> NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed
 - `touches` -> DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage
 - `verifies` -> TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY: Prove reconciliation effects are crash-atomic and replay-safe
 - `verifies` -> TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT: Verify match-first statement reconciliation

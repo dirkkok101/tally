@@ -45,7 +45,7 @@ Apply one attributable category decision and expose exact direct/current-ancesto
 - Correction retires the prior event and appends one replacement with reason/actor; identical replay returns the original result and simultaneous split assignment returns a stable cardinality error.
 - Inactive transaction, archived category, or invalid hierarchy target changes nothing; category rename or reparent preserves the assignment ID and current roll-ups use the current ancestry.
 - Direct membership contains the transaction once at the assigned node; requested ancestor membership contains it once per ancestor and all-up membership never duplicates it.
-- CarryForwardAsync is internal to an authorized statement-correction transaction: it copies the current category to the replacement through one append-only carry_forward event referencing source, replacement, and reconciliation decision; ordinary supersession never invokes it.
+- CarryForwardAsync is internal to an authorized statement-correction transaction: it copies the current category to the replacement through one append-only carry_forward event referencing source, replacement, and Reconciliation Decision; ordinary supersession never invokes it.
 
 ### Failure Criteria
 

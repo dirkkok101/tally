@@ -27,6 +27,7 @@ Expose one nine-operation ReconciliationOperationBundle with consistent schemas,
 | DIAG-LEDGER-RECONCILIATION-SEQUENCE: Match-first statement reconciliation sequence | `design_diagram` | `touches` | `true` |
 | DIAG-LEDGER-RECONCILIATION-STATE: Provider-neutral reconciliation lifecycle | `design_diagram` | `touches` | `true` |
 | FA-LEDGER-RECONCILIATION: Evidence Reconciliation and Coverage | `feature_area` | `touches` | `true` |
+| NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY: Prove reconciliation effects are crash-atomic and replay-safe | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -114,6 +115,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md): The bundle consumes the extended reconciliation.apply correction disposition.
 - `governed-by` -> DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry
 - `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
+- `satisfies` -> NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed
 - `touches` -> DIAG-LEDGER-RECONCILIATION-SEQUENCE: Match-first statement reconciliation sequence
 - `touches` -> DIAG-LEDGER-RECONCILIATION-STATE: Provider-neutral reconciliation lifecycle
 - `touches` -> FA-LEDGER-RECONCILIATION: Evidence Reconciliation and Coverage

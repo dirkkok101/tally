@@ -43,7 +43,7 @@ Assign or correct payment attribution independently and support statement correc
 
 - Every transaction exposes independent instrument and cardholder projections initialized as unknown; public assign/correct sets either dimension known or unknown without changing account, category, pool, evidence, or reconciliation.
 - Missing/inactive transaction, absent/archived/incompatible identity, same-as-active correction, stale prior state, or conflicting replay preserves the current attribution and returns the declared stable outcome.
-- CarryForwardOrUnknownAsync is internal to statement correction: compatible current identity appends carry_forward; incompatible account/identity appends explicit unknown initialization plus review metadata; both reference source, replacement, and reconciliation decision.
+- CarryForwardOrUnknownAsync is internal to statement correction: compatible current identity appends carry_forward; incompatible account/identity appends explicit unknown initialization plus review metadata; both reference source, replacement, and Reconciliation Decision.
 - Get/history returns the active projection and complete initialize/assign/correct/carry_forward chain with actor, reason, trusted time, and predecessor.
 
 ### Failure Criteria

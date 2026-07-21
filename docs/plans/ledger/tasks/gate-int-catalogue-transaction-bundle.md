@@ -41,7 +41,7 @@ No graph references recorded.
 
 ### Acceptance Checks
 
-- The bundle contains exactly 43 unique descriptors: 5 account, 7 category including ledger.category.reparent, 6 Payment Instrument, 6 cardholder, 6 pool, 4 transaction, 2 category assignment, 2 payment attribution, 2 Pool Assignment, and 3 evidence operations.
+- The bundle contains exactly 43 unique descriptors: 5 account, 7 category including ledger.category.reparent, 6 Payment Instrument, 6 cardholder, 6 pool, 4 transaction, 2 Category Assignment, 2 payment attribution, 2 Pool Assignment, and 3 evidence operations.
 - Descriptor order is operationId ordinal; every path, kind, contract range, source-generated schema, hierarchy field, error, privacy rule, and idempotency classification is retained unchanged.
 - Missing module, duplicate ID/path, incompatible version, provider-specific field, open evidence metadata, flat-category contract, or missing reparent fails before dispatch.
 - Focused tests compare the exact 43-ID set and prove no descriptor is added, dropped, aliased, or rewritten.

@@ -1,0 +1,9 @@
+{
+  "id": "01KY2J152HYT7WST81JJ692G4G",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.14",
+  "changes": [
+    "Reactivated PLAN-LEDGER-V1 after executor-context replanning: 68 ready tasks across 7 sub-plans and 193 compile dependencies. Broad account-contract and actuals-performance context now belongs to existing verification gates; statement-authoritative correction is prefactored through a transaction-scoped effect writer and a prerequisite integration gate; V002 storage ordering is compile-hard. Coverage is 278/278 with zero gaps or blocking audit findings, all 68 task contexts fit within 2500 tokens, two clean self-review rounds and a fresh-context buildability review passed, 63 existing bead refs remain verified, and 5 tasks await update-mode bead compilation."
+  ],
+  "created_at": "2026-07-21T14:42:12.6904822+00:00"
+}

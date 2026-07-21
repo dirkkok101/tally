@@ -9,14 +9,14 @@
 
 | Ref | Title | Status | Coverage | Sub-Plans | Tasks |
 |---|---|---|---|---:|---:|
-| Provider-neutral Financial Ledger v1 implementation | Provider-neutral Financial Ledger v1 implementation | `active` | `warn` | 7 | 66 |
+| Provider-neutral Financial Ledger v1 implementation | Provider-neutral Financial Ledger v1 implementation | `active` | `warn` | 7 | 68 |
 
 ## PLAN-LEDGER-V1: Provider-neutral Financial Ledger v1 implementation
 
 - **Ref:** `PLAN-LEDGER-V1`
 - **Status:** `active`
 - **Created:** `2026-07-18T06:56:30.9196068+00:00`
-- **Updated:** `2026-07-21T11:59:41.5539627+00:00`
+- **Updated:** `2026-07-21T14:42:11.7246355+00:00`
 
 ### Description
 
@@ -29,7 +29,7 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | [SP-LEDGER-00-EVIDENCE-GATES](sub-plans/00-evidence-gates.md) | Pre-implementation evidence gates | 0 | 5 |
 | [SP-LEDGER-01-CORE-RUNTIME](sub-plans/01-core-runtime.md) | Core runtime and durable schema | 1 | 10 |
 | [SP-LEDGER-02-CATALOGUE-TRANSACTIONS](sub-plans/02-catalogue-transactions.md) | Catalogues, transactions, evidence, and attribution | 2 | 10 |
-| [SP-LEDGER-03-RECONCILIATION](sub-plans/03-reconciliation.md) | Match-first reconciliation and coverage | 3 | 5 |
+| [SP-LEDGER-03-RECONCILIATION](sub-plans/03-reconciliation.md) | Match-first reconciliation and coverage | 3 | 7 |
 | [SP-LEDGER-03-RELATIONSHIPS-ACTUALS](sub-plans/03-relationships-actuals.md) | Relationships and dimensional actuals | 4 | 6 |
 | [SP-LEDGER-04-RECOVERY-SKILLS](sub-plans/04-recovery-skills.md) | Recovery and integration guidance | 5 | 5 |
 | [SP-LEDGER-05-VERIFICATION](sub-plans/05-verification.md) | Composition and end-to-end verification | 6 | 25 |
@@ -66,6 +66,8 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | [TASK-LEDGER-RECONCILIATION-PROJECTION](tasks/reconciliation-projection.md) | Implement deterministic reconciliation candidate projection | `ready` | 0 | SP-LEDGER-03-RECONCILIATION: Match-first reconciliation and coverage |
 | [TASK-LEDGER-RECONCILIATION-APPLY](tasks/reconciliation-apply.md) | Implement base reconciliation dispositions | `ready` | 0 | SP-LEDGER-03-RECONCILIATION: Match-first reconciliation and coverage |
 | [TASK-LEDGER-RECONCILIATION-DECISIONS](tasks/reconciliation-decisions.md) | Implement Reconciliation Decision correction lifecycle | `ready` | 1 | SP-LEDGER-03-RECONCILIATION: Match-first reconciliation and coverage |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](tasks/reconciliation-statement-correction-effect-writer.md) | Compose statement-correction durable effects | `ready` | 0 | SP-LEDGER-03-RECONCILIATION: Match-first reconciliation and coverage |
+| [TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES](tasks/gate-int-statement-correction-prerequisites.md) | Prove the statement-correction prerequisite seam | `ready` | 0 | SP-LEDGER-03-RECONCILIATION: Match-first reconciliation and coverage |
 | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | Compose statement-authoritative reconciliation correction | `ready` | 0 | SP-LEDGER-03-RECONCILIATION: Match-first reconciliation and coverage |
 | [TASK-LEDGER-RECONCILIATION-COVERAGE](tasks/reconciliation-coverage.md) | Implement statement coverage and exceptions | `ready` | 1 | SP-LEDGER-03-RECONCILIATION: Match-first reconciliation and coverage |
 | [TASK-LEDGER-TRANSFERS](tasks/transfers.md) | Implement owned-account transfer confirmation | `ready` | 1 | SP-LEDGER-03-RELATIONSHIPS-ACTUALS: Relationships and dimensional actuals |
@@ -133,17 +135,12 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](tasks/gate-int-reconciliation-bundle.md) | [TASK-LEDGER-RECONCILIATION-COVERAGE](tasks/reconciliation-coverage.md) | `compile` | Bundle consumes ReconciliationCoverageOperationModule. |
 | [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](tasks/gate-int-reconciliation-bundle.md) | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | `compile` | The bundle consumes the extended reconciliation.apply correction disposition. |
 | [TASK-LEDGER-DURABLE-STATE-VERIFIER](tasks/durable-state-verifier.md) | [TASK-LEDGER-ACTUALS-SNAPSHOT](tasks/actuals-snapshot.md) | `compile` | Complete-state verification uses the final actuals projection while excluding snapshots. |
-| [TASK-LEDGER-DURABLE-STATE-VERIFIER](tasks/durable-state-verifier.md) | [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | `compile` | Consumes ActualsCalculator.Calculate. |
 | [TASK-LEDGER-DURABLE-STATE-VERIFIER](tasks/durable-state-verifier.md) | [TASK-LEDGER-CORE-STORAGE](tasks/core-storage.md) | `compile` | Consumes LedgerDb. |
-| [TASK-LEDGER-DURABLE-STATE-VERIFIER](tasks/durable-state-verifier.md) | [TASK-LEDGER-PAYMENT-ATTRIBUTION](tasks/payment-attribution.md) | `compile` | Complete-state verification enumerates payment attribution history. |
-| [TASK-LEDGER-DURABLE-STATE-VERIFIER](tasks/durable-state-verifier.md) | [TASK-LEDGER-POOL-ASSIGNMENTS](tasks/pool-assignments.md) | `compile` | Complete-state verification enumerates pool assignment history. |
-| [TASK-LEDGER-DURABLE-STATE-VERIFIER](tasks/durable-state-verifier.md) | [TASK-LEDGER-EVIDENCE-LINKING](tasks/evidence-linking.md) | `compile` | Complete-state verification enumerates evidence records and links. |
-| [TASK-LEDGER-DURABLE-STATE-VERIFIER](tasks/durable-state-verifier.md) | [TASK-LEDGER-RECONCILIATION-COVERAGE](tasks/reconciliation-coverage.md) | `compile` | Complete-state verification enumerates reconciliation projections, decisions, links, coverage, and exceptions. |
-| [TASK-LEDGER-DURABLE-STATE-VERIFIER](tasks/durable-state-verifier.md) | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | `compile` | Complete-state verification must validate statement replacement and carry-forward chains. |
+| [TASK-LEDGER-DURABLE-STATE-VERIFIER](tasks/durable-state-verifier.md) | [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | `compile` | Durable state verification consumes ActualsCalculator.Calculate. |
 | [TASK-LEDGER-ACCOUNTS](tasks/accounts.md) | [TASK-LEDGER-GATE-INT-CORE](tasks/gate-int-core.md) | `compile` | Account slice consumes the proven core seam. |
-| [TASK-LEDGER-ACCOUNTS](tasks/accounts.md) | [TASK-LEDGER-CORE-IDEMPOTENCY](tasks/core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
-| [TASK-LEDGER-ACCOUNTS](tasks/accounts.md) | [TASK-LEDGER-CORE-STORAGE](tasks/core-storage.md) | `compile` | Consumer requires LedgerDb from its producing task; direct compile edge enforces the declared interface contract. |
 | [TASK-LEDGER-ACCOUNTS](tasks/accounts.md) | [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](tasks/gate-evidence-cash-withdrawals.md) | `compile` | Account operations must know whether tracked cash is an in-scope account class. |
+| [TASK-LEDGER-ACCOUNTS](tasks/accounts.md) | [TASK-LEDGER-CORE-IDEMPOTENCY](tasks/core-idempotency.md) | `compile` | Account mutations consume LedgerMutationExecutor.ExecuteAsync. |
+| [TASK-LEDGER-ACCOUNTS](tasks/accounts.md) | [TASK-LEDGER-CORE-STORAGE](tasks/core-storage.md) | `compile` | Account persistence consumes LedgerDb. |
 | [TASK-LEDGER-BACKUP-VERIFY](tasks/backup-verify.md) | [TASK-LEDGER-DURABLE-STATE-VERIFIER](tasks/durable-state-verifier.md) | `compile` | Consumes DurableLedgerVerifier. |
 | [TASK-LEDGER-BACKUP-VERIFY](tasks/backup-verify.md) | [TASK-LEDGER-CORE-IDEMPOTENCY](tasks/core-idempotency.md) | `compile` | Consumes ArtifactReconciler. |
 | [TASK-LEDGER-BACKUP-VERIFY](tasks/backup-verify.md) | [TASK-LEDGER-CORE-STORAGE](tasks/core-storage.md) | `compile` | Consumes IHostArtifactProtection. |
@@ -187,7 +184,7 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](tasks/core-schema-reconciliation-authority.md) | [TASK-LEDGER-CORE-SCHEMA-CATALOGUE](tasks/core-schema-catalogue.md) | `compile` | Correction carry-forward references category, payment, and pool catalogue identities. |
 | [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](tasks/core-schema-reconciliation-authority.md) | [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](tasks/core-schema-transactions.md) | `compile` | Statement correction references prior, replacement, and supersession transaction records. |
 | [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](tasks/core-schema-reconciliation-authority.md) | [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](tasks/core-schema-relationships-actuals.md) | `compile` | Statement correction optionally references invariant-preserving relationship and assignment events. |
-| [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](tasks/core-schema-reconciliation-authority.md) | [TASK-LEDGER-CORE-STORAGE](tasks/core-storage.md) | `sequence` | Consumes LedgerSchemaFragmentRegistry for ordered V002 registration. |
+| [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](tasks/core-schema-reconciliation-authority.md) | [TASK-LEDGER-CORE-STORAGE](tasks/core-storage.md) | `compile` | V002StatementAuthoritySchema consumes LedgerSchemaFragmentRegistry and cannot build before the storage foundation. |
 | [TASK-LEDGER-PAYMENT-IDENTITIES](tasks/payment-identities.md) | [TASK-LEDGER-GATE-INT-CORE](tasks/gate-int-core.md) | `compile` | The catalogue uses the proven process, SQLite, exact IDs, and mutation executor. |
 | [TASK-LEDGER-PAYMENT-IDENTITIES](tasks/payment-identities.md) | [TASK-LEDGER-CORE-IDEMPOTENCY](tasks/core-idempotency.md) | `compile` | Every catalogue mutation consumes LedgerMutationExecutor.ExecuteAsync. |
 | [TASK-LEDGER-SPEND-POOLS](tasks/spend-pools.md) | [TASK-LEDGER-GATE-EVIDENCE-POOL-CARDINALITY](tasks/gate-evidence-pool-cardinality.md) | `compile` | Pool implementation is forbidden until OQ-LEDGER-15 validates one-active-pool cardinality. |
@@ -212,14 +209,20 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | [TASK-LEDGER-TRANSACTIONS-RECORD-GET](tasks/transactions-record-get.md) | [TASK-LEDGER-CORE-MONEY-DATES](tasks/core-money-dates.md) | `compile` | Consumer requires Money from its producing task; direct compile edge enforces the declared interface contract. |
 | [TASK-LEDGER-TRANSACTIONS-RECORD-GET](tasks/transactions-record-get.md) | [TASK-LEDGER-EVIDENCE-REGISTRY](tasks/evidence-registry.md) | `compile` | Atomic transaction capture consumes EvidenceStore.RegisterInitialAsync. |
 | [TASK-LEDGER-VERIFY-UC-001](tasks/verify-uc-001.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
-| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | [TASK-LEDGER-RECONCILIATION-DECISIONS](tasks/reconciliation-decisions.md) | `compile` | Decision history and state reduction must exist before the composite appends authority history. |
-| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | [TASK-LEDGER-TRANSACTION-CORRECTIONS](tasks/transaction-corrections.md) | `compile` | Statement correction consumes the ordinary transaction supersession primitive without inheriting ordinary no-carry semantics. |
-| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | [TASK-LEDGER-CATEGORY-ALLOCATIONS](tasks/category-allocations.md) | `compile` | Correction consumes explicit category carry-forward. |
-| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | [TASK-LEDGER-PAYMENT-ATTRIBUTION](tasks/payment-attribution.md) | `compile` | Correction consumes compatible payment carry-forward or explicit unknown initialization. |
-| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | [TASK-LEDGER-POOL-ASSIGNMENTS](tasks/pool-assignments.md) | `compile` | Correction consumes explicit Spend Pool carry-forward. |
-| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](tasks/relationship-corrections.md) | `compile` | Correction consumes invariant-preserving relationship replacement. |
-| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](tasks/core-schema-reconciliation-authority.md) | `compile` | Correction requires durable V002 statement-authority references. |
-| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | [TASK-LEDGER-CORE-IDEMPOTENCY](tasks/core-idempotency.md) | `sequence` | Consumes LedgerMutationExecutor.ExecuteAsync for atomic statement correction. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](tasks/reconciliation-statement-correction-effect-writer.md) | [TASK-LEDGER-RECONCILIATION-APPLY](tasks/reconciliation-apply.md) | `compile` | Effect composition consumes ReconciliationWriteStore. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](tasks/reconciliation-statement-correction-effect-writer.md) | [TASK-LEDGER-RECONCILIATION-DECISIONS](tasks/reconciliation-decisions.md) | `compile` | Effect composition consumes ReconciliationDecisionStore. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](tasks/reconciliation-statement-correction-effect-writer.md) | [TASK-LEDGER-TRANSACTION-CORRECTIONS](tasks/transaction-corrections.md) | `compile` | Effect composition consumes statement supersession. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](tasks/reconciliation-statement-correction-effect-writer.md) | [TASK-LEDGER-CATEGORY-ALLOCATIONS](tasks/category-allocations.md) | `compile` | Effect composition consumes category carry-forward. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](tasks/reconciliation-statement-correction-effect-writer.md) | [TASK-LEDGER-PAYMENT-ATTRIBUTION](tasks/payment-attribution.md) | `compile` | Effect composition consumes payment carry-forward or unknown initialization. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](tasks/reconciliation-statement-correction-effect-writer.md) | [TASK-LEDGER-POOL-ASSIGNMENTS](tasks/pool-assignments.md) | `compile` | Effect composition consumes Spend Pool carry-forward. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](tasks/reconciliation-statement-correction-effect-writer.md) | [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](tasks/relationship-corrections.md) | `compile` | Effect composition consumes relationship replacement. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](tasks/reconciliation-statement-correction-effect-writer.md) | [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](tasks/core-schema-reconciliation-authority.md) | `compile` | Effect composition persists through V002 statement-authority references. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES](tasks/gate-int-statement-correction-prerequisites.md) | [TASK-LEDGER-RECONCILIATION-APPLY](tasks/reconciliation-apply.md) | `compile` | The seam consumes the base apply contracts, write store, and operation module. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES](tasks/gate-int-statement-correction-prerequisites.md) | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](tasks/reconciliation-statement-correction-effect-writer.md) | `compile` | The gate consumes StatementCorrectionEffectWriter.AppendAsync. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | [TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES](tasks/gate-int-statement-correction-prerequisites.md) | `compile` | The correction composite consumes the prerequisite seam only after every producer interface and the V002 schema have been proven together. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | [TASK-LEDGER-CORE-IDEMPOTENCY](tasks/core-idempotency.md) | `compile` | Correction consumes LedgerMutationExecutor.ExecuteAsync. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](tasks/reconciliation-statement-correction-effect-writer.md) | `compile` | The public composite consumes StatementCorrectionEffectWriter.AppendAsync. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | [TASK-LEDGER-RECONCILIATION-APPLY](tasks/reconciliation-apply.md) | `compile` | The public correction extends ReconciliationApplyContracts and ReconciliationApplyOperationModule. |
 | [TASK-LEDGER-AGENT-SKILLS](tasks/agent-skills.md) | [TASK-LEDGER-GATE-INT-CORE](tasks/gate-int-core.md) | `compile` | Skill operations consume the proven registry, process, artifact, and idempotency seams. |
 | [TASK-LEDGER-AGENT-SKILLS](tasks/agent-skills.md) | [TASK-LEDGER-CORE-IDEMPOTENCY](tasks/core-idempotency.md) | `compile` | Consumer requires ArtifactReconciler from its producing task; direct compile edge enforces the declared interface contract. |
 | [TASK-LEDGER-AGENT-SKILLS](tasks/agent-skills.md) | [TASK-LEDGER-CORE-PROCESS-CONTRACT](tasks/core-process-contract.md) | `compile` | Consumer requires OperationRegistry from its producing task; direct compile edge enforces the declared interface contract. |
@@ -245,16 +248,13 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | [TASK-LEDGER-POOL-ASSIGNMENTS](tasks/pool-assignments.md) | [TASK-LEDGER-SPEND-POOLS](tasks/spend-pools.md) | `compile` | Assignment validates pool identity through SpendPoolStore. |
 | [TASK-LEDGER-POOL-ASSIGNMENTS](tasks/pool-assignments.md) | [TASK-LEDGER-TRANSACTIONS-RECORD-GET](tasks/transactions-record-get.md) | `compile` | Assignment consumes TransactionStore and the initialized unassigned projection. |
 | [TASK-LEDGER-POOL-ASSIGNMENTS](tasks/pool-assignments.md) | [TASK-LEDGER-CORE-IDEMPOTENCY](tasks/core-idempotency.md) | `compile` | Assignment and correction use transactional idempotency. |
-| [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | [TASK-LEDGER-CATEGORY-ALLOCATIONS](tasks/category-allocations.md) | `compile` | Budget Actual consumes active category allocation history. |
-| [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](tasks/relationship-corrections.md) | `compile` | Actuals must use final active/retired relationship lifecycle semantics. |
-| [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | [TASK-LEDGER-TRANSACTION-CORRECTIONS](tasks/transaction-corrections.md) | `compile` | Actuals must exclude final void/supersession state. |
 | [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | [TASK-LEDGER-CORE-MONEY-DATES](tasks/core-money-dates.md) | `compile` | Consumer requires Money from its producing task; direct compile edge enforces the declared interface contract. |
-| [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | [TASK-LEDGER-TRANSFERS](tasks/transfers.md) | `compile` | Consumer requires RelationshipStore from its producing task; direct compile edge enforces the declared interface contract. |
-| [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | [TASK-LEDGER-PAYMENT-ATTRIBUTION](tasks/payment-attribution.md) | `compile` | Actuals filters consume current instrument/cardholder attribution. |
-| [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | [TASK-LEDGER-POOL-ASSIGNMENTS](tasks/pool-assignments.md) | `compile` | Actuals totals consume current explicit pool assignments. |
 | [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | [TASK-LEDGER-RECONCILIATION-COVERAGE](tasks/reconciliation-coverage.md) | `compile` | Actuals filters consume current evidence/reconciliation coverage state. |
 | [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](tasks/gate-evidence-cash-withdrawals.md) | `compile` | External Spend and Budget Actual require the resolved cash rule. |
-| [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | `compile` | Actuals must count only the active statement-derived replacement after correction. |
+| [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | [TASK-LEDGER-CATEGORY-ALLOCATIONS](tasks/category-allocations.md) | `compile` | Actuals consumes CategoryAllocationStore for current category membership. |
+| [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | [TASK-LEDGER-PAYMENT-ATTRIBUTION](tasks/payment-attribution.md) | `compile` | Actuals consumes PaymentAttributionStore for instrument and cardholder filters. |
+| [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | [TASK-LEDGER-POOL-ASSIGNMENTS](tasks/pool-assignments.md) | `compile` | Actuals consumes PoolAssignmentStore for current pool membership. |
+| [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | [TASK-LEDGER-TRANSFERS](tasks/transfers.md) | `compile` | Actuals consumes RelationshipStore for transfer and refund state. |
 | [TASK-LEDGER-EVIDENCE-LINKING](tasks/evidence-linking.md) | [TASK-LEDGER-EVIDENCE-REGISTRY](tasks/evidence-registry.md) | `compile` | Linking consumes EvidenceStore and registered evidence identity. |
 | [TASK-LEDGER-EVIDENCE-LINKING](tasks/evidence-linking.md) | [TASK-LEDGER-TRANSACTIONS-RECORD-GET](tasks/transactions-record-get.md) | `compile` | Linking validates canonical transaction state through TransactionStore. |
 | [TASK-LEDGER-EVIDENCE-LINKING](tasks/evidence-linking.md) | [TASK-LEDGER-CORE-IDEMPOTENCY](tasks/core-idempotency.md) | `compile` | Linking is an idempotent public mutation. |
@@ -308,8 +308,8 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 ### Coverage
 
 - **Status:** `warn`
-- **Required refs:** 285
-- **Covered refs:** 285
+- **Required refs:** 278
+- **Covered refs:** 278
 - **Gaps:** 0
 
 #### Covered References
@@ -380,6 +380,7 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-COVERAGE](tasks/reconciliation-coverage.md) | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-DECISIONS](tasks/reconciliation-decisions.md) | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | `true` |
+| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](tasks/reconciliation-statement-correction-effect-writer.md) | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | [TASK-LEDGER-REFUNDS](tasks/refunds.md) | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](tasks/relationship-corrections.md) | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | [TASK-LEDGER-SPEND-POOLS](tasks/spend-pools.md) | `true` |
@@ -393,18 +394,20 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-EVIDENCE-REGISTRY](tasks/evidence-registry.md) | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY](tasks/gate-evidence-reconciliation-policy.md) | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](tasks/gate-int-reconciliation-bundle.md) | `true` |
+| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES](tasks/gate-int-statement-correction-prerequisites.md) | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-APPLY](tasks/reconciliation-apply.md) | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-COVERAGE](tasks/reconciliation-coverage.md) | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-DECISIONS](tasks/reconciliation-decisions.md) | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-PROJECTION](tasks/reconciliation-projection.md) | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | `true` |
+| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](tasks/reconciliation-statement-correction-effect-writer.md) | `true` |
 | DD-LEDGER-SKILL-COMPATIBILITY: Provider-neutral self-describing contract with optional guidance | `design_decision` | `governed-by` | [TASK-LEDGER-AGENT-SKILLS](tasks/agent-skills.md) | `true` |
 | DD-LEDGER-SNAPSHOT-ACTUALS: Materialized coherent snapshots for dimensional actuals | `design_decision` | `governed-by` | [TASK-LEDGER-ACTUALS-SNAPSHOT](tasks/actuals-snapshot.md) | `true` |
 | DD-LEDGER-SNAPSHOT-ACTUALS: Materialized coherent snapshots for dimensional actuals | `design_decision` | `governed-by` | [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](tasks/core-schema-relationships-actuals.md) | `true` |
 | DIAG-LEDGER-RECONCILIATION-SEQUENCE: Match-first statement reconciliation sequence | `design_diagram` | `touches` | [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](tasks/gate-int-reconciliation-bundle.md) | `true` |
 | DIAG-LEDGER-RECONCILIATION-STATE: Provider-neutral reconciliation lifecycle | `design_diagram` | `touches` | [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](tasks/gate-int-reconciliation-bundle.md) | `true` |
 | DM-LEDGER-ACCOUNT: Account | `data_model` | `touches` | [TASK-LEDGER-CORE-SCHEMA-CATALOGUE](tasks/core-schema-catalogue.md) | `true` |
-| DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts | `data_model` | `touches` | [TASK-LEDGER-ACCOUNTS](tasks/accounts.md) | `true` |
+| DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts | `data_model` | `touches` | [TASK-LEDGER-VERIFY-UC-001](tasks/verify-uc-001.md) | `true` |
 | DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts | `data_model` | `touches` | [TASK-LEDGER-PAYMENT-ATTRIBUTION](tasks/payment-attribution.md) | `true` |
 | DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts | `data_model` | `touches` | [TASK-LEDGER-POOL-ASSIGNMENTS](tasks/pool-assignments.md) | `true` |
 | DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts | `data_model` | `touches` | [TASK-LEDGER-SPEND-POOLS](tasks/spend-pools.md) | `true` |
@@ -412,17 +415,13 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts | `data_model` | `touches` | [TASK-LEDGER-EVIDENCE-REGISTRY](tasks/evidence-registry.md) | `true` |
 | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts | `data_model` | `touches` | [TASK-LEDGER-RECONCILIATION-PROJECTION](tasks/reconciliation-projection.md) | `true` |
 | DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink | `data_model` | `touches` | [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](tasks/core-schema-evidence-reconciliation.md) | `true` |
-| DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink | `data_model` | `touches` | [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](tasks/core-schema-reconciliation-authority.md) | `true` |
 | DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink | `data_model` | `touches` | [TASK-LEDGER-EVIDENCE-LINKING](tasks/evidence-linking.md) | `true` |
 | DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink | `data_model` | `touches` | [TASK-LEDGER-EVIDENCE-REGISTRY](tasks/evidence-registry.md) | `true` |
-| DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink | `data_model` | `touches` | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | `true` |
-| DM-LEDGER-FINANCIAL-RELATIONSHIP: FinancialRelationshipAndLifecycle | `data_model` | `touches` | [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](tasks/core-schema-reconciliation-authority.md) | `true` |
 | DM-LEDGER-FINANCIAL-RELATIONSHIP: FinancialRelationshipAndLifecycle | `data_model` | `touches` | [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](tasks/core-schema-relationships-actuals.md) | `true` |
 | DM-LEDGER-IDEMPOTENCY-RECORD: IdempotencyRecord | `data_model` | `touches` | [TASK-LEDGER-CORE-IDEMPOTENCY](tasks/core-idempotency.md) | `true` |
 | DM-LEDGER-IDEMPOTENCY-RECORD: IdempotencyRecord | `data_model` | `touches` | [TASK-LEDGER-CORE-STORAGE](tasks/core-storage.md) | `true` |
 | DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope | `data_model` | `touches` | [TASK-LEDGER-CORE-PROCESS-CONTRACT](tasks/core-process-contract.md) | `true` |
 | DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope | `data_model` | `touches` | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `true` |
-| DM-LEDGER-PAYMENT-ATTRIBUTION: PaymentInstrumentCardholderAndAttribution | `data_model` | `touches` | [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](tasks/core-schema-reconciliation-authority.md) | `true` |
 | DM-LEDGER-PAYMENT-ATTRIBUTION: PaymentInstrumentCardholderAndAttribution | `data_model` | `touches` | [TASK-LEDGER-PAYMENT-ATTRIBUTION](tasks/payment-attribution.md) | `true` |
 | DM-LEDGER-PAYMENT-ATTRIBUTION: PaymentInstrumentCardholderAndAttribution | `data_model` | `touches` | [TASK-LEDGER-PAYMENT-IDENTITIES](tasks/payment-identities.md) | `true` |
 | DM-LEDGER-QUERY-SNAPSHOT: QuerySnapshot | `data_model` | `touches` | [TASK-LEDGER-ACTUALS-SNAPSHOT](tasks/actuals-snapshot.md) | `true` |
@@ -433,7 +432,6 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | [TASK-LEDGER-RECONCILIATION-COVERAGE](tasks/reconciliation-coverage.md) | `true` |
 | DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | [TASK-LEDGER-RECONCILIATION-DECISIONS](tasks/reconciliation-decisions.md) | `true` |
 | DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | [TASK-LEDGER-RECONCILIATION-PROJECTION](tasks/reconciliation-projection.md) | `true` |
-| DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | `true` |
 | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts | `data_model` | `touches` | [TASK-LEDGER-BACKUP-VERIFY](tasks/backup-verify.md) | `true` |
 | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts | `data_model` | `touches` | [TASK-LEDGER-RESTORE-ACTIVATE](tasks/restore-activate.md) | `true` |
 | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts | `data_model` | `touches` | [TASK-LEDGER-STORAGE-EVOLUTION](tasks/storage-evolution.md) | `true` |
@@ -442,7 +440,6 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](tasks/relationship-corrections.md) | `true` |
 | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | [TASK-LEDGER-TRANSFERS](tasks/transfers.md) | `true` |
 | DM-LEDGER-SPEND-CATEGORY: SpendCategory | `data_model` | `touches` | [TASK-LEDGER-CORE-SCHEMA-CATALOGUE](tasks/core-schema-catalogue.md) | `true` |
-| DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment | `data_model` | `touches` | [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](tasks/core-schema-reconciliation-authority.md) | `true` |
 | DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment | `data_model` | `touches` | [TASK-LEDGER-GATE-EVIDENCE-POOL-CARDINALITY](tasks/gate-evidence-pool-cardinality.md) | `true` |
 | DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment | `data_model` | `touches` | [TASK-LEDGER-POOL-ASSIGNMENTS](tasks/pool-assignments.md) | `true` |
 | DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment | `data_model` | `touches` | [TASK-LEDGER-SPEND-POOLS](tasks/spend-pools.md) | `true` |
@@ -487,12 +484,9 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable | `nfr` | `satisfies` | [TASK-LEDGER-CORE-IDEMPOTENCY](tasks/core-idempotency.md) | `true` |
 | NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable | `nfr` | `satisfies` | [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](tasks/core-schema-evidence-reconciliation.md) | `true` |
 | NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable | `nfr` | `satisfies` | [TASK-LEDGER-CORE-STORAGE](tasks/core-storage.md) | `true` |
-| NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable | `nfr` | `satisfies` | [TASK-LEDGER-GATE-INT-CORE](tasks/gate-int-core.md) | `true` |
 | NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable | `nfr` | `satisfies` | [TASK-LEDGER-GATE-SECURITY](tasks/gate-security.md) | `true` |
-| NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable | `nfr` | `satisfies` | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | `true` |
 | NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | [TASK-LEDGER-CATEGORIES](tasks/categories.md) | `true` |
 | NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | [TASK-LEDGER-CATEGORY-ALLOCATIONS](tasks/category-allocations.md) | `true` |
-| NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | `true` |
 | NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | [TASK-LEDGER-REFUNDS](tasks/refunds.md) | `true` |
 | NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | [TASK-LEDGER-TRANSFERS](tasks/transfers.md) | `true` |
 | NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic | `nfr` | `satisfies` | [TASK-LEDGER-CORE-MONEY-DATES](tasks/core-money-dates.md) | `true` |
@@ -501,11 +495,10 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | NFR-LEDGER-LOCAL-DATA-PROTECTION: Protect local financial data | `nfr` | `satisfies` | [TASK-LEDGER-BACKUP-VERIFY](tasks/backup-verify.md) | `true` |
 | NFR-LEDGER-LOCAL-DATA-PROTECTION: Protect local financial data | `nfr` | `satisfies` | [TASK-LEDGER-CORE-STORAGE](tasks/core-storage.md) | `true` |
 | NFR-LEDGER-LOCAL-DATA-PROTECTION: Protect local financial data | `nfr` | `satisfies` | [TASK-LEDGER-GATE-SECURITY](tasks/gate-security.md) | `true` |
-| NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE: Respond at personal-ledger scale | `nfr` | `satisfies` | [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | `true` |
+| NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE: Respond at personal-ledger scale | `nfr` | `satisfies` | [TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE](tasks/gate-int-relationship-actuals-bundle.md) | `true` |
 | NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed | `nfr` | `satisfies` | [TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY](tasks/gate-evidence-reconciliation-policy.md) | `true` |
-| NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed | `nfr` | `satisfies` | [TASK-LEDGER-RECONCILIATION-APPLY](tasks/reconciliation-apply.md) | `true` |
+| NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed | `nfr` | `satisfies` | [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](tasks/gate-int-reconciliation-bundle.md) | `true` |
 | NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed | `nfr` | `satisfies` | [TASK-LEDGER-RECONCILIATION-COVERAGE](tasks/reconciliation-coverage.md) | `true` |
-| NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed | `nfr` | `satisfies` | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | `true` |
 | NFR-LEDGER-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local executable | `nfr` | `satisfies` | [TASK-LEDGER-CORE-PROCESS-CONTRACT](tasks/core-process-contract.md) | `true` |
 | NFR-LEDGER-VERIFIED-RECOVERABILITY: Prove Ledger recoverability | `nfr` | `satisfies` | [TASK-LEDGER-DURABLE-STATE-VERIFIER](tasks/durable-state-verifier.md) | `true` |
 | NFR-LEDGER-VERIFIED-RECOVERABILITY: Prove Ledger recoverability | `nfr` | `satisfies` | [TASK-LEDGER-RESTORE-ACTIVATE](tasks/restore-activate.md) | `true` |
@@ -543,14 +536,13 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | TC-LEDGER-PAYMENT-ATTRIBUTION-CONTRACT: Verify payment instrument and cardholder attribution | `test_case` | `verifies` | [TASK-LEDGER-PAYMENT-ATTRIBUTION](tasks/payment-attribution.md) | `true` |
 | TC-LEDGER-PAYMENT-ATTRIBUTION-CONTRACT: Verify payment instrument and cardholder attribution | `test_case` | `verifies` | [TASK-LEDGER-PAYMENT-IDENTITIES](tasks/payment-identities.md) | `true` |
 | TC-LEDGER-PAYMENT-ATTRIBUTION-CONTRACT: Verify payment instrument and cardholder attribution | `test_case` | `verifies` | [TASK-LEDGER-VERIFY-UC-017](tasks/verify-uc-017.md) | `true` |
-| TC-LEDGER-PERSONAL-SCALE-PERFORMANCE: Measure personal-ledger performance | `test_case` | `verifies` | [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | `true` |
+| TC-LEDGER-PERSONAL-SCALE-PERFORMANCE: Measure personal-ledger performance | `test_case` | `verifies` | [TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE](tasks/gate-int-relationship-actuals-bundle.md) | `true` |
 | TC-LEDGER-POOL-ASSIGNMENT-ACTUALS-CONTRACT: Verify pool assignment and exact grouped actuals | `test_case` | `verifies` | [TASK-LEDGER-POOL-ASSIGNMENTS](tasks/pool-assignments.md) | `true` |
 | TC-LEDGER-POOL-ASSIGNMENT-ACTUALS-CONTRACT: Verify pool assignment and exact grouped actuals | `test_case` | `verifies` | [TASK-LEDGER-VERIFY-UC-018](tasks/verify-uc-018.md) | `true` |
 | TC-LEDGER-RECONCILIATION-COVERAGE-CONTRACT: Verify statement coverage and exception accounting | `test_case` | `verifies` | [TASK-LEDGER-RECONCILIATION-COVERAGE](tasks/reconciliation-coverage.md) | `true` |
 | TC-LEDGER-RECONCILIATION-COVERAGE-CONTRACT: Verify statement coverage and exception accounting | `test_case` | `verifies` | [TASK-LEDGER-VERIFY-UC-016](tasks/verify-uc-016.md) | `true` |
 | TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY: Prove reconciliation effects are crash-atomic and replay-safe | `test_case` | `verifies` | [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](tasks/gate-int-reconciliation-bundle.md) | `true` |
 | TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY: Prove reconciliation effects are crash-atomic and replay-safe | `test_case` | `verifies` | [TASK-LEDGER-RECONCILIATION-APPLY](tasks/reconciliation-apply.md) | `true` |
-| TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY: Prove reconciliation effects are crash-atomic and replay-safe | `test_case` | `verifies` | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | `true` |
 | TC-LEDGER-RECONCILIATION-DECISION-LIFECYCLE-CONTRACT: Verify owner reconciliation decisions and corrections | `test_case` | `verifies` | [TASK-LEDGER-RECONCILIATION-DECISIONS](tasks/reconciliation-decisions.md) | `true` |
 | TC-LEDGER-RECONCILIATION-DECISION-LIFECYCLE-CONTRACT: Verify owner reconciliation decisions and corrections | `test_case` | `verifies` | [TASK-LEDGER-VERIFY-UC-015](tasks/verify-uc-015.md) | `true` |
 | TC-LEDGER-RECONCILIATION-POLICY-MATRIX: Prove deterministic reconciliation policy and ambiguity guards | `test_case` | `verifies` | [TASK-LEDGER-RECONCILIATION-PROJECTION](tasks/reconciliation-projection.md) | `true` |
@@ -568,6 +560,7 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | TC-LEDGER-SNAPSHOT-PAGINATION-CONTRACT: Verify preserve query snapshots across pages contract | `test_case` | `verifies` | [TASK-LEDGER-ACTUALS-SNAPSHOT](tasks/actuals-snapshot.md) | `true` |
 | TC-LEDGER-SNAPSHOT-PAGINATION-CONTRACT: Verify preserve query snapshots across pages contract | `test_case` | `verifies` | [TASK-LEDGER-VERIFY-UC-005](tasks/verify-uc-005.md) | `true` |
 | TC-LEDGER-SPEND-POOL-CATALOGUE-CONTRACT: Verify spend-pool catalogue lifecycle | `test_case` | `verifies` | [TASK-LEDGER-SPEND-POOLS](tasks/spend-pools.md) | `true` |
+| TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT: Verify match-first statement reconciliation | `test_case` | `verifies` | [TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES](tasks/gate-int-statement-correction-prerequisites.md) | `true` |
 | TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT: Verify match-first statement reconciliation | `test_case` | `verifies` | [TASK-LEDGER-RECONCILIATION-APPLY](tasks/reconciliation-apply.md) | `true` |
 | TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT: Verify match-first statement reconciliation | `test_case` | `verifies` | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | `true` |
 | TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT: Verify match-first statement reconciliation | `test_case` | `verifies` | [TASK-LEDGER-VERIFY-UC-014](tasks/verify-uc-014.md) | `true` |
@@ -615,7 +608,6 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | DIAG-LEDGER-COMPONENTS: LEDGER component architecture | `design_diagram` | `references` | [TASK-LEDGER-CORE-PROCESS-CONTRACT](tasks/core-process-contract.md) | `false` |
 | DIAG-LEDGER-LEDGER-ER: LEDGER durable and ephemeral data model | `design_diagram` | `references` | [TASK-LEDGER-CORE-STORAGE](tasks/core-storage.md) | `false` |
 | DIAG-LEDGER-MUTATION-SEQUENCE: Idempotent Ledger mutation sequence | `design_diagram` | `references` | [TASK-LEDGER-CORE-IDEMPOTENCY](tasks/core-idempotency.md) | `false` |
-| DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts | `data_model` | `touches` | [TASK-LEDGER-VERIFY-UC-001](tasks/verify-uc-001.md) | `false` |
 | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts | `data_model` | `touches` | [TASK-LEDGER-VERIFY-UC-008](tasks/verify-uc-008.md) | `false` |
 | DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts | `data_model` | `touches` | [TASK-LEDGER-PAYMENT-IDENTITIES](tasks/payment-identities.md) | `false` |
 | DM-LEDGER-FINANCIAL-RELATIONSHIP: FinancialRelationshipAndLifecycle | `data_model` | `touches` | [TASK-LEDGER-GATE-EVIDENCE-RELATIONSHIPS](tasks/gate-evidence-relationships.md) | `false` |
@@ -660,9 +652,11 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 - [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](tasks/gate-int-reconciliation-bundle.md): Task has no implements refs.
 - [TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE](tasks/gate-int-recovery-skill-bundle.md): Task has no implements refs.
 - [TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE](tasks/gate-int-relationship-actuals-bundle.md): Task has no implements refs.
+- [TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES](tasks/gate-int-statement-correction-prerequisites.md): Task has no implements refs.
 - [TASK-LEDGER-GATE-MODULE](tasks/gate-module.md): Task has no implements refs.
 - [TASK-LEDGER-GATE-SECURITY](tasks/gate-security.md): Task has no implements refs.
 - [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md): Task has no implements refs.
+- [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](tasks/reconciliation-statement-correction-effect-writer.md): Task has no implements refs.
 - [TASK-LEDGER-VERIFY-UC-001](tasks/verify-uc-001.md): Task has no implements refs.
 - [TASK-LEDGER-VERIFY-UC-002](tasks/verify-uc-002.md): Task has no implements refs.
 - [TASK-LEDGER-VERIFY-UC-003](tasks/verify-uc-003.md): Task has no implements refs.
@@ -686,9 +680,11 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 
 - [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](tasks/core-schema-reconciliation-authority.md): Task has no bead refs.
 - [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](tasks/gate-evidence-cash-withdrawals.md): Task has no bead refs.
+- [TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES](tasks/gate-int-statement-correction-prerequisites.md): Task has no bead refs.
 - [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md): Task has no bead refs.
+- [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](tasks/reconciliation-statement-correction-effect-writer.md): Task has no bead refs.
 
 #### Coverage Warnings
 
-- 39 loose task(s) have no implements refs.
-- 3 task(s) have no bead refs.
+- 41 loose task(s) have no implements refs.
+- 5 task(s) have no bead refs.

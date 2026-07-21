@@ -20,7 +20,10 @@ Prove one eight-operation relationship/actuals bundle conserves exact spend acro
 
 ## References
 
-No graph references recorded.
+| Ref | Type | Relationship | Required |
+|---|---|---|---|
+| NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE: Respond at personal-ledger scale | `nfr` | `satisfies` | `true` |
+| TC-LEDGER-PERSONAL-SCALE-PERFORMANCE: Measure personal-ledger performance | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
@@ -37,7 +40,8 @@ No graph references recorded.
 
 - The bundle contains exactly eight unique transfer, refund, relationship, and actuals descriptors; schemas retain exact/subtree category scope, unknown/unassigned buckets, statement-correction state, and cash-policy result.
 - Descriptor order and every source field remain byte-for-byte stable after canonical serialization; missing module, duplicate path, incompatible version, lost hierarchy/reconciliation field, or unresolved cash gate fails before dispatch.
-- Real-store tests prove all-up, category-direct, category-subtree, pool, and matrix conservation through transfer, separate fee, refund, hierarchy move, relationship replacement, ordinary correction, and statement-authoritative replacement.
+- Real-store tests prove all-up, category-direct, category-subtree, pool, and matrix conservation through transfer, fee, refund, hierarchy move, relationship replacement, ordinary correction, and statement correction.
+- The published actuals path processes 100000 transactions with measured p95 below 2000 ms and exact totals unchanged.
 
 ### Failure Criteria
 
@@ -62,7 +66,8 @@ None recorded.
 | Path | Action | Role | Required | Notes |
 |---|---|---|---|---|
 | `src/Tally/Composition/Ledger/RelationshipActualsOperationBundle.cs` | `create` | integration composition | `true` |  |
-| `tests/Tally.Tests/Composition/Ledger/RelationshipActualsOperationBundleTests.cs` | `test` | integration | `true` |  |
+| `tests/Tally.Tests/Composition/Ledger/RelationshipActualsOperationBundleTests.cs` | `test` | integration contract | `true` |  |
+| `tests/Tally.Tests/Performance/ActualsPersonalScaleTests.cs` | `test` | personal-scale benchmark | `true` |  |
 
 ### Interface Contracts
 
@@ -78,7 +83,8 @@ None recorded.
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Composition.Ledger.RelationshipActualsOperationBundleTests --no-restore` | exit 0; at least 8 exact-inventory/duplicate/missing/version cases run and 0 fail | `true` | 180 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Composition.Ledger.RelationshipActualsOperationBundleTests --no-restore` | exit 0; at least 8 exact-inventory, duplicate, missing, version, and conservation cases run and 0 fail | `true` | 180 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Performance.ActualsPersonalScaleTests --no-restore` | exit 0; benchmark reports 100000 transactions, p95 below 2000 ms, exact totals unchanged, and 0 failures | `true` | 600 |
 
 ### Review Gates
 
@@ -102,6 +108,8 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-LEDGER-REFUNDS](../tasks/refunds.md): Consumes RefundOperationModule.
 - `depends-on:compile` -> [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](../tasks/relationship-corrections.md): Consumes RelationshipLifecycleOperationModule.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSFERS](../tasks/transfers.md): Consumes TransferOperationModule.
+- `satisfies` -> NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE: Respond at personal-ledger scale
+- `verifies` -> TC-LEDGER-PERSONAL-SCALE-PERFORMANCE: Measure personal-ledger performance
 
 ## Navigation
 

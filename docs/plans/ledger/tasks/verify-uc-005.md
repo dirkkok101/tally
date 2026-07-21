@@ -42,7 +42,7 @@ Prove exact membership and totals across transfers, refunds, hierarchy, dimensio
 - Published actuals queries prove every filter and explicit unknown/uncategorized/unassigned bucket with deterministic membership and exact Net Account Movement, External Spend, and Budget Actual.
 - Owned-transfer principal contributes zero; separate fees remain spend; refunds offset original current category/pool in refund date; cash follows OQ-LEDGER-16Resolution.
 - Category-direct, subtree, pool, and matrix totals reconcile without double counting before and after hierarchy moves.
-- Statement correction excludes the superseded fact and includes the replacement once; later snapshot pages retain frozen ancestry, reconciliation state, membership, ordering, and totals despite writes.
+- Statement correction excludes the superseded fact and includes the replacement once; later snapshot pages retain frozen ancestry, Reconciliation State, membership, ordering, and totals despite writes.
 
 ### Failure Criteria
 

@@ -44,7 +44,7 @@ Assign and correct transaction pools while preserving exact history and fail-clo
 
 - Every recorded transaction exposes one atomically initialized unassigned pool projection; public assign/correct transitions it to one active pool or back to unassigned with actor, reason, time, and predecessor.
 - Missing/inactive transaction, absent/archived pool, multiple-pool request, stale state, same-as-active correction, and conflicting replay fail without changing current assignment.
-- CarryForwardAsync is internal to statement correction and appends the current assigned or unassigned state to the replacement with source transaction and reconciliation decision references; ordinary supersession never invokes it.
+- CarryForwardAsync is internal to statement correction and appends the current assigned or unassigned state to the replacement with source transaction and Reconciliation Decision references; ordinary supersession never invokes it.
 - Pool changes and carry-forward do not mutate account, category, payment attribution, evidence, or prior reconciliation history.
 
 ### Failure Criteria

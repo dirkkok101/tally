@@ -57,14 +57,14 @@
       "created_at": "2026-07-21T11:42:00.7001216+00:00"
     },
     {
-      "id": "01KY28J634V6Y33JKYYBR768VA",
+      "id": "01KY2HYZV9D0RJNR6PTA979XRB",
       "target": "TASK-LEDGER-CORE-STORAGE",
-      "dependency_type": "sequence",
+      "dependency_type": "compile",
       "reason": [
-        "Consumes LedgerSchemaFragmentRegistry for ordered V002 registration."
+        "V002StatementAuthoritySchema consumes LedgerSchemaFragmentRegistry and cannot build before the storage foundation."
       ],
       "sort_order": 4,
-      "created_at": "2026-07-21T11:56:45.0296465+00:00"
+      "created_at": "2026-07-21T14:41:01.8019716+00:00"
     }
   ],
   "files": [
@@ -275,17 +275,6 @@
       "created_at": "2026-07-21T11:41:50.7129069+00:00"
     },
     {
-      "id": "01KY27PXVGZQZ3TZTTBXRQDP49",
-      "target_ref_code": "DM-LEDGER-EVIDENCE-RECORD-LINK",
-      "target_entity_type": "data_model",
-      "target_entity_id": "01KY0BTQ6J2YPR81ZERF5RK3YW",
-      "target_title": "EvidenceRecordObservationAndLink",
-      "relationship": "touches",
-      "required": 1,
-      "sort_order": 3,
-      "created_at": "2026-07-21T11:41:51.8576207+00:00"
-    },
-    {
       "id": "01KY27PZ20AD4E7DJ6Y9WAXYXQ",
       "target_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
       "target_entity_type": "data_model",
@@ -295,39 +284,6 @@
       "required": 1,
       "sort_order": 4,
       "created_at": "2026-07-21T11:41:53.0888778+00:00"
-    },
-    {
-      "id": "01KY27Q090VG8T6G0PFG832GGN",
-      "target_ref_code": "DM-LEDGER-PAYMENT-ATTRIBUTION",
-      "target_entity_type": "data_model",
-      "target_entity_id": "01KY0BTRE9PBBFAS2M7GP801QM",
-      "target_title": "PaymentInstrumentCardholderAndAttribution",
-      "relationship": "touches",
-      "required": 1,
-      "sort_order": 5,
-      "created_at": "2026-07-21T11:41:54.3375677+00:00"
-    },
-    {
-      "id": "01KY27Q1GVEA2YSF4WX1S0YYK7",
-      "target_ref_code": "DM-LEDGER-SPEND-POOL-ASSIGNMENT",
-      "target_entity_type": "data_model",
-      "target_entity_id": "01KY0BTSBRPW49WGWJSS2KA9HW",
-      "target_title": "SpendPoolAndAssignment",
-      "relationship": "touches",
-      "required": 1,
-      "sort_order": 6,
-      "created_at": "2026-07-21T11:41:55.6123077+00:00"
-    },
-    {
-      "id": "01KY27Q2SJSYK2YYXWPP21YMNK",
-      "target_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
-      "target_entity_type": "data_model",
-      "target_entity_id": "01KXSX0SX8SS7SNVPA6VEMRF06",
-      "target_title": "FinancialRelationshipAndLifecycle",
-      "relationship": "touches",
-      "required": 1,
-      "sort_order": 7,
-      "created_at": "2026-07-21T11:41:56.9152599+00:00"
     }
   ],
   "review_gates": [

@@ -49,7 +49,7 @@ Maintain stable category identities, deterministic ancestry, and append-only par
 
 ### Failure Criteria
 
-- Do NOT implement a flat catalogue, materialized-path overwrite, nested-set rewrite, split category assignment, hard delete, or in-place lifecycle edit — per DD-LEDGER-CATEGORY-HIERARCHY and DD-LEDGER-IMMUTABLE-HISTORY.
+- Do NOT implement a flat catalogue, materialized-path overwrite, nested-set rewrite, split Category Assignment, hard delete, or in-place lifecycle edit — per DD-LEDGER-CATEGORY-HIERARCHY and DD-LEDGER-IMMUTABLE-HISTORY.
 - Do NOT create budget amounts, infer Spend Pool, or implement BUDGET exact-node/subtree overlap policy.
 - Do NOT add HTTP endpoints, generic CRUD save/update/delete commands, or provider wording.
 

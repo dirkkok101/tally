@@ -25,11 +25,7 @@ Represent statement corrections, prior and active transaction identity, dimensio
 | DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink | `data_model` | `touches` | `true` |
-| DM-LEDGER-FINANCIAL-RELATIONSHIP: FinancialRelationshipAndLifecycle | `data_model` | `touches` | `true` |
-| DM-LEDGER-PAYMENT-ATTRIBUTION: PaymentInstrumentCardholderAndAttribution | `data_model` | `touches` | `true` |
 | DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | `true` |
-| DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment | `data_model` | `touches` | `true` |
 
 ## Dependencies
 
@@ -39,13 +35,13 @@ Represent statement corrections, prior and active transaction identity, dimensio
 | [TASK-LEDGER-CORE-SCHEMA-CATALOGUE](../tasks/core-schema-catalogue.md) | `compile` | Correction carry-forward references category, payment, and pool catalogue identities. |
 | [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](../tasks/core-schema-transactions.md) | `compile` | Statement correction references prior, replacement, and supersession transaction records. |
 | [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](../tasks/core-schema-relationships-actuals.md) | `compile` | Statement correction optionally references invariant-preserving relationship and assignment events. |
-| [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `sequence` | Consumes LedgerSchemaFragmentRegistry for ordered V002 registration. |
+| [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | V002StatementAuthoritySchema consumes LedgerSchemaFragmentRegistry and cannot build before the storage foundation. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- V002 migrates a valid V001 store without data loss and expands reconciliation decisions to distinguish confirmed existing, corrected from statement, statement-only, ambiguity, exception, owner confirmation, rejection, revocation, and replacement.
+- V002 migrates a valid V001 store without data loss and expands Reconciliation Decisions to distinguish confirmed existing, corrected from statement, statement-only, ambiguity, exception, owner confirmation, rejection, revocation, and replacement.
 - A statement-correction record references prior and active transaction IDs, supersession, category and pool carry-forward events, payment carry-forward or explicit unknown initialization, optional invariant-preserving relationship replacement events, authority basis, actor, reason, and predecessor decision.
 - Evidence-link history supports retained historical agent evidence and one active confirming statement target; all new state is append-only, RESTRICT-linked, and excluded from arbitrary metadata or raw payloads.
 - Real-SQLite tests prove V001-to-V002 upgrade, fresh composition, invalid reference rejection, immutable history, atomic rollback, and idempotent re-open with observable row and migration-metadata counts.
@@ -109,15 +105,11 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](../tasks/core-schema-evidence-reconciliation.md): V002 upgrades the committed V001 evidence and reconciliation tables.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](../tasks/core-schema-relationships-actuals.md): Statement correction optionally references invariant-preserving relationship and assignment events.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](../tasks/core-schema-transactions.md): Statement correction references prior, replacement, and supersession transaction records.
-- `depends-on:sequence` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumes LedgerSchemaFragmentRegistry for ordered V002 registration.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): V002StatementAuthoritySchema consumes LedgerSchemaFragmentRegistry and cannot build before the storage foundation.
 - `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
-- `touches` -> DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink
-- `touches` -> DM-LEDGER-FINANCIAL-RELATIONSHIP: FinancialRelationshipAndLifecycle
-- `touches` -> DM-LEDGER-PAYMENT-ATTRIBUTION: PaymentInstrumentCardholderAndAttribution
 - `touches` -> DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage
-- `touches` -> DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment
 
 ## Navigation
 

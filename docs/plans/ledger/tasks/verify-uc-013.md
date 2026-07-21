@@ -10,13 +10,9 @@
 - **Sort Order:** `150`
 - **Dialect:** `default`
 
-## Summary
-
-Verification-only task with no Implements link: trace UC-LEDGER-013 through the Release published CLI.
-
 ## Objective
 
-Prove additional generic evidence registration and supporting linkage main/failure paths without provider payload retention or reconciliation mutation.
+Prove UC-LEDGER-013 through the published CLI without retaining provider payloads or mutating reconciliation.
 
 ## References
 
@@ -36,14 +32,12 @@ Prove additional generic evidence registration and supporting linkage main/failu
 
 ### Acceptance Checks
 
-- The published workflow registers and links multiple Evidence Records to one active transaction, retrieves safe history, and leaves Reconciliation State and exact actuals unchanged.
-- Forbidden payload, insufficient identity, inactive transaction, incompatible facts, other-transaction conflict, identical replay, changed replay, and injected atomic failure match every UC-LEDGER-013 failure path.
-- Persisted canary inspection finds no source payload or full identifier and one logical effect per evidence item.
+- The published CLI links multiple generic evidence records to one active transaction, returns privacy-safe history, leaves reconciliation and actuals unchanged, and persists neither source payloads nor full identifiers.
+- Invalid identity, payload, transaction, conflict, replay, and injected-failure paths return specified errors with no partial or duplicate effect.
 
 ### Failure Criteria
 
-- Do NOT call handlers or SQLite directly except read-only postcondition inspection.
-- Do NOT omit cross-key logical replay or the no-Reconciliation State-change assertion.
+- Do NOT bypass the published CLI except read-only inspection or omit cross-key replay and unchanged-reconciliation assertions.
 
 ### Expected Outputs
 
@@ -61,14 +55,14 @@ None recorded.
 
 | Path | Action | Role | Required | Notes |
 |---|---|---|---|---|
-| `tests/Tally.Tests/EndToEnd/UC013EvidenceLinkWorkflowTests.cs` | `test` | published-process verification | `true` |  |
+| `tests/Tally.Tests/EndToEnd/UC013EvidenceLinkWorkflowTests.cs` | `test` |  | `true` |  |
 
 ### Interface Contracts
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  |  |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | 72 provider-neutral operations |
+| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR |  |
 | VerifiedUC013 | `produces` | UC-LEDGER-013 |  |
 
 ### Verification
@@ -81,7 +75,7 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Evidence maps every UC-LEDGER-013 path to process and durable-state assertions. | `true` |
+| `test-evidence` | Map every UC-LEDGER-013 path to observable process and durable-state assertions. | `true` |
 
 ## Bead References
 

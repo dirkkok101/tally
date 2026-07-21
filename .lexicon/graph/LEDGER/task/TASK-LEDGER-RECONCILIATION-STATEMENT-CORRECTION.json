@@ -17,282 +17,150 @@
   "created_at": "2026-07-21T11:45:32.3418525+00:00",
   "dependencies": [
     {
-      "id": "01KY27Y4CB4ETV2E92MJF2FYYW",
-      "target": "TASK-LEDGER-CATEGORY-ALLOCATIONS",
+      "id": "01KY2H7AYDAE9WW5MEWT1MNS2G",
+      "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
       "dependency_type": "compile",
       "reason": [
-        "Correction consumes explicit category carry-forward."
+        "Correction consumes LedgerMutationExecutor.ExecuteAsync."
       ],
       "sort_order": 2,
-      "created_at": "2026-07-21T11:45:47.9160187+00:00"
+      "created_at": "2026-07-21T14:28:06.7341989+00:00"
     },
     {
-      "id": "01KY28J78PRBA9HGYZKBVC57T3",
-      "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
-      "dependency_type": "sequence",
-      "reason": [
-        "Consumes LedgerMutationExecutor.ExecuteAsync for atomic statement correction."
-      ],
-      "sort_order": 7,
-      "created_at": "2026-07-21T11:56:46.2311208+00:00"
-    },
-    {
-      "id": "01KY27Y8Z8FG9EM38BBY79WV15",
-      "target": "TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY",
+      "id": "01KY2H29H5DF89KVXAJ4NY68TC",
+      "target": "TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES",
       "dependency_type": "compile",
       "reason": [
-        "Correction requires durable V002 statement-authority references."
-      ],
-      "sort_order": 6,
-      "created_at": "2026-07-21T11:45:52.6169629+00:00"
-    },
-    {
-      "id": "01KY27Y5GYK1QWKC282PD30454",
-      "target": "TASK-LEDGER-PAYMENT-ATTRIBUTION",
-      "dependency_type": "compile",
-      "reason": [
-        "Correction consumes compatible payment carry-forward or explicit unknown initialization."
-      ],
-      "sort_order": 3,
-      "created_at": "2026-07-21T11:45:49.0871522+00:00"
-    },
-    {
-      "id": "01KY27Y6MDWGMGK09M1DW3FYKH",
-      "target": "TASK-LEDGER-POOL-ASSIGNMENTS",
-      "dependency_type": "compile",
-      "reason": [
-        "Correction consumes explicit Spend Pool carry-forward."
-      ],
-      "sort_order": 4,
-      "created_at": "2026-07-21T11:45:50.2224587+00:00"
-    },
-    {
-      "id": "01KY27Y223RQ8NRVE4E92ZZEC2",
-      "target": "TASK-LEDGER-RECONCILIATION-DECISIONS",
-      "dependency_type": "compile",
-      "reason": [
-        "Decision history and state reduction must exist before the composite appends authority history."
+        "The correction composite consumes the prerequisite seam only after every producer interface and the V002 schema have been proven together."
       ],
       "sort_order": 0,
-      "created_at": "2026-07-21T11:45:45.5402848+00:00"
+      "created_at": "2026-07-21T14:25:21.4460955+00:00"
     },
     {
-      "id": "01KY27Y7TBRDSRNYBTDSC8K4CF",
-      "target": "TASK-LEDGER-RELATIONSHIP-CORRECTIONS",
+      "id": "01KY2HEVB95BZHYJX51CCQF02A",
+      "target": "TASK-LEDGER-RECONCILIATION-APPLY",
       "dependency_type": "compile",
       "reason": [
-        "Correction consumes invariant-preserving relationship replacement."
+        "The public correction extends ReconciliationApplyContracts and ReconciliationApplyOperationModule."
       ],
-      "sort_order": 5,
-      "created_at": "2026-07-21T11:45:51.4361009+00:00"
+      "sort_order": 4,
+      "created_at": "2026-07-21T14:32:12.9063643+00:00"
     },
     {
-      "id": "01KY27Y362K5H0XYMXTQRGA7A0",
-      "target": "TASK-LEDGER-TRANSACTION-CORRECTIONS",
+      "id": "01KY2HET885QFGJVX1KNE9RM3A",
+      "target": "TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER",
       "dependency_type": "compile",
       "reason": [
-        "Statement correction consumes the ordinary transaction supersession primitive without inheriting ordinary no-carry semantics."
+        "The public composite consumes StatementCorrectionEffectWriter.AppendAsync."
       ],
-      "sort_order": 1,
-      "created_at": "2026-07-21T11:45:46.6914389+00:00"
+      "sort_order": 3,
+      "created_at": "2026-07-21T14:32:11.7849377+00:00"
     }
   ],
   "files": [
     {
-      "id": "01KY27XN5Q0F7E9SFBQN4JPXHQ",
+      "id": "01KY2HEWJ56MEBCAHC0VP3N3BP",
       "path": "src/Tally/Contracts/Ledger/Reconciliation/ReconciliationApplyContracts.cs",
       "action": "modify",
       "role": "public correction contract",
       "required": 1,
-      "notes": [
-        "Add typed authoritativeStatementFact and correction result"
-      ],
       "sort_order": 0,
-      "created_at": "2026-07-21T11:45:32.3418525+00:00"
+      "created_at": "2026-07-21T14:32:14.1491524+00:00"
     },
     {
-      "id": "01KY27XN5QDWDVJD4YANDEQDCY",
+      "id": "01KY2HEWJ61SPZPTARG9N3AC1M",
       "path": "src/Tally/Domain/Ledger/Reconciliation/StatementAuthorityPolicy.cs",
       "action": "create",
       "role": "correction policy",
       "required": 1,
-      "notes": [
-        "Validate statement authority and carry-forward eligibility"
-      ],
       "sort_order": 1,
-      "created_at": "2026-07-21T11:45:32.3418525+00:00"
+      "created_at": "2026-07-21T14:32:14.1491524+00:00"
     },
     {
-      "id": "01KY27XN5Q1MN9P0HZ0WJWEYYN",
+      "id": "01KY2HEWJ666HES3TS7PK1PVSJ",
       "path": "src/Tally/Features/Ledger/Reconciliation/StatementAuthoritativeCorrectionCoordinator.cs",
       "action": "create",
       "role": "atomic composite",
       "required": 1,
-      "notes": [
-        "Coordinate replacement and all explicit history effects"
-      ],
       "sort_order": 2,
-      "created_at": "2026-07-21T11:45:32.3418525+00:00"
+      "created_at": "2026-07-21T14:32:14.1491524+00:00"
     },
     {
-      "id": "01KY27XN5Q7G83PWS3CV38ZFSY",
-      "path": "src/Tally/Infrastructure/Storage/Reconciliation/ReconciliationWriteStore.cs",
-      "action": "modify",
-      "role": "decision and link persistence",
-      "required": 1,
-      "notes": [
-        "Persist correction references and historical support"
-      ],
-      "sort_order": 3,
-      "created_at": "2026-07-21T11:45:32.3418525+00:00"
-    },
-    {
-      "id": "01KY27XN5QSGHTW7BY7WEJ2GP5",
+      "id": "01KY2HEWJ6T2V3Z64YZF8JK1QN",
       "path": "src/Tally/Features/Ledger/Reconciliation/ReconciliationApplyOperationModule.cs",
       "action": "modify",
       "role": "public operation extension",
       "required": 1,
-      "notes": [
-        "Expose closed correction disposition"
-      ],
-      "sort_order": 4,
-      "created_at": "2026-07-21T11:45:32.3418525+00:00"
+      "sort_order": 3,
+      "created_at": "2026-07-21T14:32:14.1491524+00:00"
     },
     {
-      "id": "01KY27XN5QSFS80CX5WE1ZT2AM",
+      "id": "01KY2HEWJ7ZKQ39KTWS358GX3J",
       "path": "tests/Tally.Tests/Ledger/StatementAuthoritativeCorrectionTests.cs",
       "action": "test",
       "role": "contract and invariant tests",
       "required": 1,
-      "notes": [
-        "Cover exact, differing, compatible, incompatible, and replay cases"
-      ],
-      "sort_order": 5,
-      "created_at": "2026-07-21T11:45:32.3418525+00:00"
+      "sort_order": 4,
+      "created_at": "2026-07-21T14:32:14.1491524+00:00"
     },
     {
-      "id": "01KY27XN5QZ5PK360ZXTR0YRSZ",
+      "id": "01KY2HEWJ7KS49VC96EQ62WKT2",
       "path": "tests/Tally.Tests/Integration/ReconciliationCrashAtomicityTests.cs",
       "action": "test",
       "role": "crash matrix extension",
       "required": 1,
-      "notes": [
-        "Inject every composite write boundary"
-      ],
-      "sort_order": 6,
-      "created_at": "2026-07-21T11:45:32.3418525+00:00"
+      "sort_order": 5,
+      "created_at": "2026-07-21T14:32:14.1491524+00:00"
     }
   ],
   "interfaces": [
     {
-      "id": "01KY28J8ZE417WY2T24N7CEQ7V",
+      "id": "01KY2HEWJ74908N1X0TQX93W4G",
       "name": "StatementAuthoritativeCorrectionCoordinator",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
-      "notes": [
-        "Atomic statement replacement composite"
-      ],
       "sort_order": 0,
-      "created_at": "2026-07-21T11:56:47.9815326+00:00"
+      "created_at": "2026-07-21T14:32:14.1491524+00:00"
     },
     {
-      "id": "01KY28J8ZFQ77K0RHPEJYZS1EZ",
+      "id": "01KY2HEWJ75ESVHEK6FPRGK4WE",
       "name": "StatementCorrectionOperationExtension",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
-      "notes": [
-        "Registers correct_existing_from_statement beside the base reconciliation module"
-      ],
       "sort_order": 1,
-      "created_at": "2026-07-21T11:56:47.9815326+00:00"
+      "created_at": "2026-07-21T14:32:14.1491524+00:00"
     },
     {
-      "id": "01KY28J8ZFHQWH4PEP8JD0KAD7",
-      "name": "TransactionStore.AppendStatementSupersessionAsync",
+      "id": "01KY2HEWJ79FXP93KJ0VBRASVX",
+      "name": "StatementCorrectionEffectWriter.AppendAsync",
       "direction": "consumes",
-      "contract_ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
-      "notes": [
-        "Create replacement and retire provisional fact"
-      ],
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
       "sort_order": 2,
-      "created_at": "2026-07-21T11:56:47.9815326+00:00"
+      "created_at": "2026-07-21T14:32:14.1491524+00:00"
     },
     {
-      "id": "01KY28J8ZFF8PV4BDS6KEE2GFS",
-      "name": "CategoryAllocationStore.CarryForwardAsync",
+      "id": "01KY2HEWJ7Q8K0ESZS6H7T72XF",
+      "name": "ReconciliationApplyOperationModule",
       "direction": "consumes",
-      "contract_ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
-      "notes": [
-        "Explicit category carry-forward"
-      ],
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
       "sort_order": 3,
-      "created_at": "2026-07-21T11:56:47.9815326+00:00"
+      "created_at": "2026-07-21T14:32:14.1491524+00:00"
     },
     {
-      "id": "01KY28J8ZF93HPPCQ9RJZWRFCQ",
-      "name": "PaymentAttributionStore.CarryForwardOrUnknownAsync",
-      "direction": "consumes",
-      "contract_ref_code": "DM-LEDGER-PAYMENT-ATTRIBUTION",
-      "notes": [
-        "Compatible carry-forward or explicit unknown"
-      ],
-      "sort_order": 4,
-      "created_at": "2026-07-21T11:56:47.9815326+00:00"
-    },
-    {
-      "id": "01KY28J8ZFX0ZGV40J0Y0G84Z6",
-      "name": "PoolAssignmentStore.CarryForwardAsync",
-      "direction": "consumes",
-      "contract_ref_code": "DM-LEDGER-SPEND-POOL-ASSIGNMENT",
-      "notes": [
-        "Explicit pool carry-forward"
-      ],
-      "sort_order": 5,
-      "created_at": "2026-07-21T11:56:47.9815326+00:00"
-    },
-    {
-      "id": "01KY28J8ZFRTXYNE20EA4RSBGW",
-      "name": "RelationshipStore.ReplaceForStatementCorrectionAsync",
-      "direction": "consumes",
-      "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
-      "notes": [
-        "Invariant-preserving replacement or review block"
-      ],
-      "sort_order": 6,
-      "created_at": "2026-07-21T11:56:47.9815326+00:00"
-    },
-    {
-      "id": "01KY28J8ZFHK1RWVVWD3XBY1DD",
-      "name": "ReconciliationDecisionStore",
-      "direction": "consumes",
-      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
-      "notes": [
-        "Append statement-correction decision"
-      ],
-      "sort_order": 7,
-      "created_at": "2026-07-21T11:56:47.9815326+00:00"
-    },
-    {
-      "id": "01KY28J8ZFBA6MNCZ6Q9DXAZP9",
-      "name": "V002StatementAuthoritySchema",
-      "direction": "consumes",
-      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
-      "notes": [
-        "Durable correction references"
-      ],
-      "sort_order": 8,
-      "created_at": "2026-07-21T11:56:47.9815326+00:00"
-    },
-    {
-      "id": "01KY28J8ZFR74XBDPC33ME99K1",
+      "id": "01KY2HEWJ7YQ0PHZ54ETKKZNAX",
       "name": "LedgerMutationExecutor.ExecuteAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
-      "notes": [
-        "Atomic replay boundary"
-      ],
-      "sort_order": 9,
-      "created_at": "2026-07-21T11:56:47.9815326+00:00"
+      "sort_order": 4,
+      "created_at": "2026-07-21T14:32:14.1491524+00:00"
+    },
+    {
+      "id": "01KY2HEWJ71JJHTVHXE60JDAHZ",
+      "name": "VerifiedStatementCorrectionPrerequisites",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 5,
+      "created_at": "2026-07-21T14:32:14.1491524+00:00"
     }
   ],
   "recipe_items": [
@@ -483,61 +351,6 @@
       "created_at": "2026-07-21T11:45:36.3769919+00:00"
     },
     {
-      "id": "01KY27XT5JCPQYQBFEKDXVHD9Y",
-      "target_ref_code": "NFR-LEDGER-RECONCILIATION-SAFETY",
-      "target_entity_type": "nfr",
-      "target_entity_id": "01KY0A32623J1HNH608CS19WJ3",
-      "target_title": "Reconcile deterministically and fail closed",
-      "relationship": "satisfies",
-      "required": 1,
-      "sort_order": 4,
-      "created_at": "2026-07-21T11:45:37.4590906+00:00"
-    },
-    {
-      "id": "01KY27XV8GJ5ENPCYQV4AV46DW",
-      "target_ref_code": "NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS",
-      "target_entity_type": "nfr",
-      "target_entity_id": "01KXSQFXNVGXH9FYFN6KF8KSE9",
-      "target_title": "Make mutations atomic and durable",
-      "relationship": "satisfies",
-      "required": 1,
-      "sort_order": 5,
-      "created_at": "2026-07-21T11:45:38.5777909+00:00"
-    },
-    {
-      "id": "01KY27XWDTK0WP52V8GHMZ0VNS",
-      "target_ref_code": "NFR-LEDGER-ATTRIBUTABLE-HISTORY",
-      "target_entity_type": "nfr",
-      "target_entity_id": "01KXSQFZJ0XVBBX0FPF6FJ7E2Y",
-      "target_title": "Retain attributable correction history",
-      "relationship": "satisfies",
-      "required": 1,
-      "sort_order": 6,
-      "created_at": "2026-07-21T11:45:39.7715558+00:00"
-    },
-    {
-      "id": "01KY27XXH9BFX31FJFD9439TKF",
-      "target_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
-      "target_entity_type": "data_model",
-      "target_entity_id": "01KY0BTQPT00M98Z8NRSF7Y2XP",
-      "target_title": "ReconciliationProjectionDecisionAndCoverage",
-      "relationship": "touches",
-      "required": 1,
-      "sort_order": 7,
-      "created_at": "2026-07-21T11:45:40.9058947+00:00"
-    },
-    {
-      "id": "01KY27XYQ10SZQHPC9KA6DJBCN",
-      "target_ref_code": "DM-LEDGER-EVIDENCE-RECORD-LINK",
-      "target_entity_type": "data_model",
-      "target_entity_id": "01KY0BTQ6J2YPR81ZERF5RK3YW",
-      "target_title": "EvidenceRecordObservationAndLink",
-      "relationship": "touches",
-      "required": 1,
-      "sort_order": 8,
-      "created_at": "2026-07-21T11:45:42.1139532+00:00"
-    },
-    {
       "id": "01KY27XZTVWZ3ZT88B33PC1DCA",
       "target_ref_code": "TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT",
       "target_entity_type": "test_case",
@@ -547,17 +360,6 @@
       "required": 1,
       "sort_order": 9,
       "created_at": "2026-07-21T11:45:43.2606675+00:00"
-    },
-    {
-      "id": "01KY27Y0XDCZZ834TZNMQ0DKA9",
-      "target_ref_code": "TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY",
-      "target_entity_type": "test_case",
-      "target_entity_id": "01KY0BYPTCY9Z728KVQ4T3GV8C",
-      "target_title": "Prove reconciliation effects are crash-atomic and replay-safe",
-      "relationship": "verifies",
-      "required": 1,
-      "sort_order": 10,
-      "created_at": "2026-07-21T11:45:44.3658347+00:00"
     }
   ],
   "review_gates": [

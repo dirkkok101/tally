@@ -32,13 +32,8 @@ Produce one normalized real-SQLite report required before backup publication, re
 | Depends On | Type | Reason |
 |---|---|---|
 | [TASK-LEDGER-ACTUALS-SNAPSHOT](../tasks/actuals-snapshot.md) | `compile` | Complete-state verification uses the final actuals projection while excluding snapshots. |
-| [TASK-LEDGER-ACTUALS-PROJECTION](../tasks/actuals-projection.md) | `compile` | Consumes ActualsCalculator.Calculate. |
 | [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | Consumes LedgerDb. |
-| [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md) | `compile` | Complete-state verification enumerates payment attribution history. |
-| [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md) | `compile` | Complete-state verification enumerates pool assignment history. |
-| [TASK-LEDGER-EVIDENCE-LINKING](../tasks/evidence-linking.md) | `compile` | Complete-state verification enumerates evidence records and links. |
-| [TASK-LEDGER-RECONCILIATION-COVERAGE](../tasks/reconciliation-coverage.md) | `compile` | Complete-state verification enumerates reconciliation projections, decisions, links, coverage, and exceptions. |
-| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md) | `compile` | Complete-state verification must validate statement replacement and carry-forward chains. |
+| [TASK-LEDGER-ACTUALS-PROJECTION](../tasks/actuals-projection.md) | `compile` | Durable state verification consumes ActualsCalculator.Calculate. |
 
 ## Recipe
 
@@ -109,14 +104,9 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3ja` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-ACTUALS-PROJECTION](../tasks/actuals-projection.md): Consumes ActualsCalculator.Calculate.
+- `depends-on:compile` -> [TASK-LEDGER-ACTUALS-PROJECTION](../tasks/actuals-projection.md): Durable state verification consumes ActualsCalculator.Calculate.
 - `depends-on:compile` -> [TASK-LEDGER-ACTUALS-SNAPSHOT](../tasks/actuals-snapshot.md): Complete-state verification uses the final actuals projection while excluding snapshots.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumes LedgerDb.
-- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-LINKING](../tasks/evidence-linking.md): Complete-state verification enumerates evidence records and links.
-- `depends-on:compile` -> [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md): Complete-state verification enumerates payment attribution history.
-- `depends-on:compile` -> [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md): Complete-state verification enumerates pool assignment history.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-COVERAGE](../tasks/reconciliation-coverage.md): Complete-state verification enumerates reconciliation projections, decisions, links, coverage, and exceptions.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md): Complete-state verification must validate statement replacement and carry-forward chains.
 - `governed-by` -> DD-LEDGER-CANDIDATE-ACTIVATION: Verified store generations with atomic pointer activation
 - `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
 - `satisfies` -> NFR-LEDGER-VERIFIED-RECOVERABILITY: Prove Ledger recoverability

@@ -16,7 +16,7 @@ Verification-only task with no Implements link: trace hierarchical UC-LEDGER-003
 
 ## Objective
 
-Prove one category assignment remains attributable and rolls up exactly through the current hierarchy.
+Prove one Category Assignment remains attributable and rolls up exactly through the current hierarchy.
 
 ## References
 

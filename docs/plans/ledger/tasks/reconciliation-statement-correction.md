@@ -25,35 +25,25 @@ Commit one statement-derived replacement and every required history/carry-forwar
 | DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink | `data_model` | `touches` | `true` |
-| DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | `true` |
 | FR-LEDGER-STATEMENT-RECONCILIATION: Apply statement reconciliation outcomes | `requirement` | `implements` | `true` |
-| NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable | `nfr` | `satisfies` | `true` |
-| NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | `true` |
-| NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed | `nfr` | `satisfies` | `true` |
-| TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY: Prove reconciliation effects are crash-atomic and replay-safe | `test_case` | `verifies` | `true` |
 | TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT: Verify match-first statement reconciliation | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md) | `compile` | Decision history and state reduction must exist before the composite appends authority history. |
-| [TASK-LEDGER-TRANSACTION-CORRECTIONS](../tasks/transaction-corrections.md) | `compile` | Statement correction consumes the ordinary transaction supersession primitive without inheriting ordinary no-carry semantics. |
-| [TASK-LEDGER-CATEGORY-ALLOCATIONS](../tasks/category-allocations.md) | `compile` | Correction consumes explicit category carry-forward. |
-| [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md) | `compile` | Correction consumes compatible payment carry-forward or explicit unknown initialization. |
-| [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md) | `compile` | Correction consumes explicit Spend Pool carry-forward. |
-| [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](../tasks/relationship-corrections.md) | `compile` | Correction consumes invariant-preserving relationship replacement. |
-| [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](../tasks/core-schema-reconciliation-authority.md) | `compile` | Correction requires durable V002 statement-authority references. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `sequence` | Consumes LedgerMutationExecutor.ExecuteAsync for atomic statement correction. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES](../tasks/gate-int-statement-correction-prerequisites.md) | `compile` | The correction composite consumes the prerequisite seam only after every producer interface and the V002 schema have been proven together. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Correction consumes LedgerMutationExecutor.ExecuteAsync. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](../tasks/reconciliation-statement-correction-effect-writer.md) | `compile` | The public composite consumes StatementCorrectionEffectWriter.AppendAsync. |
+| [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md) | `compile` | The public correction extends ReconciliationApplyContracts and ReconciliationApplyOperationModule. |
 
 ## Recipe
 
 ### Acceptance Checks
 
 - Given one compatible prior economic event with differing authoritative statement facts and deterministic-policy or explicit owner authority, correct_existing_from_statement revalidates evidence, candidates, policy/authority, facts, active dimensions, and relationships inside one BEGIN IMMEDIATE transaction.
-- A valid correction appends one statement-derived fact, supersession, reconciliation decision, confirming link, category and Spend Pool carry-forward, compatible payment carry-forward or explicit unknown initialization, and any invariant-preserving transfer/refund relationship replacement; exactly one fact remains active.
-- The original agent-capture fact, its supporting evidence, prior assignments, prior attribution, and prior relationship history remain queryable; every new event references the reconciliation decision and source/replacement transaction IDs.
+- A valid correction appends one statement-derived fact, supersession, Reconciliation Decision, confirming link, category and Spend Pool carry-forward, compatible payment carry-forward or explicit unknown initialization, and any invariant-preserving transfer/refund relationship replacement; exactly one fact remains active.
+- The original agent-capture fact, its supporting evidence, prior assignments, prior attribution, and prior relationship history remain queryable; every new event references the Reconciliation Decision and source/replacement transaction IDs.
 - If payment attribution is incompatible, explicit unknown state and review metadata commit; if an active transfer/refund would violate role, account, sign, currency, principal, or refund conservation, the operation returns review-required and commits no replacement or idempotency outcome.
 - Crash injection before and after every replacement, carry-forward, relationship, decision, link, state, and idempotency write yields either the complete outcome once or the unchanged prior state; identical replay returns the original result.
 
@@ -61,7 +51,7 @@ Commit one statement-derived replacement and every required history/carry-forwar
 
 - Do NOT overwrite the notification-derived fact, create a second active spend effect, or move evidence/dimensions/relationships in place — rejected by DD-LEDGER-RECONCILIATION-CONTRACT and DD-LEDGER-IMMUTABLE-HISTORY.
 - Do NOT accept raw email, MIME, statement document, provider payload, message ID semantics, or arbitrary metadata — per ADR-CORE-0030.
-- Do NOT preserve an invalid relationship or silently drop an existing category/Spend Pool assignment; invalid relationship blocks, while category/pool preservation is explicit.
+- Do NOT preserve an invalid relationship or silently drop an existing category/Spend Pool Assignment; invalid relationship blocks, while category/pool preservation is explicit.
 - Do NOT enable automatic correction until OQ-LEDGER-13Resolution permits the exact case; explicit owner-approved correction remains available.
 
 ### Expected Outputs
@@ -82,28 +72,23 @@ Commit one statement-derived replacement and every required history/carry-forwar
 
 | Path | Action | Role | Required | Notes |
 |---|---|---|---|---|
-| `src/Tally/Contracts/Ledger/Reconciliation/ReconciliationApplyContracts.cs` | `modify` | public correction contract | `true` | Add typed authoritativeStatementFact and correction result |
-| `src/Tally/Domain/Ledger/Reconciliation/StatementAuthorityPolicy.cs` | `create` | correction policy | `true` | Validate statement authority and carry-forward eligibility |
-| `src/Tally/Features/Ledger/Reconciliation/StatementAuthoritativeCorrectionCoordinator.cs` | `create` | atomic composite | `true` | Coordinate replacement and all explicit history effects |
-| `src/Tally/Infrastructure/Storage/Reconciliation/ReconciliationWriteStore.cs` | `modify` | decision and link persistence | `true` | Persist correction references and historical support |
-| `src/Tally/Features/Ledger/Reconciliation/ReconciliationApplyOperationModule.cs` | `modify` | public operation extension | `true` | Expose closed correction disposition |
-| `tests/Tally.Tests/Ledger/StatementAuthoritativeCorrectionTests.cs` | `test` | contract and invariant tests | `true` | Cover exact, differing, compatible, incompatible, and replay cases |
-| `tests/Tally.Tests/Integration/ReconciliationCrashAtomicityTests.cs` | `test` | crash matrix extension | `true` | Inject every composite write boundary |
+| `src/Tally/Contracts/Ledger/Reconciliation/ReconciliationApplyContracts.cs` | `modify` | public correction contract | `true` |  |
+| `src/Tally/Domain/Ledger/Reconciliation/StatementAuthorityPolicy.cs` | `create` | correction policy | `true` |  |
+| `src/Tally/Features/Ledger/Reconciliation/StatementAuthoritativeCorrectionCoordinator.cs` | `create` | atomic composite | `true` |  |
+| `src/Tally/Features/Ledger/Reconciliation/ReconciliationApplyOperationModule.cs` | `modify` | public operation extension | `true` |  |
+| `tests/Tally.Tests/Ledger/StatementAuthoritativeCorrectionTests.cs` | `test` | contract and invariant tests | `true` |  |
+| `tests/Tally.Tests/Integration/ReconciliationCrashAtomicityTests.cs` | `test` | crash matrix extension | `true` |  |
 
 ### Interface Contracts
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| StatementAuthoritativeCorrectionCoordinator | `produces` | DM-LEDGER-RECONCILIATION-HISTORY | Atomic statement replacement composite |
-| StatementCorrectionOperationExtension | `produces` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS | Registers correct_existing_from_statement beside the base reconciliation module |
-| TransactionStore.AppendStatementSupersessionAsync | `consumes` | DM-LEDGER-TRANSACTION-HISTORY | Create replacement and retire provisional fact |
-| CategoryAllocationStore.CarryForwardAsync | `consumes` | DM-LEDGER-TRANSACTION-HISTORY | Explicit category carry-forward |
-| PaymentAttributionStore.CarryForwardOrUnknownAsync | `consumes` | DM-LEDGER-PAYMENT-ATTRIBUTION | Compatible carry-forward or explicit unknown |
-| PoolAssignmentStore.CarryForwardAsync | `consumes` | DM-LEDGER-SPEND-POOL-ASSIGNMENT | Explicit pool carry-forward |
-| RelationshipStore.ReplaceForStatementCorrectionAsync | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Invariant-preserving replacement or review block |
-| ReconciliationDecisionStore | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY | Append statement-correction decision |
-| V002StatementAuthoritySchema | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY | Durable correction references |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD | Atomic replay boundary |
+| StatementAuthoritativeCorrectionCoordinator | `produces` | DM-LEDGER-RECONCILIATION-HISTORY |  |
+| StatementCorrectionOperationExtension | `produces` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
+| StatementCorrectionEffectWriter.AppendAsync | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY |  |
+| ReconciliationApplyOperationModule | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD |  |
+| VerifiedStatementCorrectionPrerequisites | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY |  |
 
 ### Verification
 
@@ -126,24 +111,14 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-LEDGER-CATEGORY-ALLOCATIONS](../tasks/category-allocations.md): Correction consumes explicit category carry-forward.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](../tasks/core-schema-reconciliation-authority.md): Correction requires durable V002 statement-authority references.
-- `depends-on:compile` -> [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md): Correction consumes compatible payment carry-forward or explicit unknown initialization.
-- `depends-on:compile` -> [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md): Correction consumes explicit Spend Pool carry-forward.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md): Decision history and state reduction must exist before the composite appends authority history.
-- `depends-on:compile` -> [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](../tasks/relationship-corrections.md): Correction consumes invariant-preserving relationship replacement.
-- `depends-on:compile` -> [TASK-LEDGER-TRANSACTION-CORRECTIONS](../tasks/transaction-corrections.md): Statement correction consumes the ordinary transaction supersession primitive without inheriting ordinary no-carry semantics.
-- `depends-on:sequence` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumes LedgerMutationExecutor.ExecuteAsync for atomic statement correction.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Correction consumes LedgerMutationExecutor.ExecuteAsync.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES](../tasks/gate-int-statement-correction-prerequisites.md): The correction composite consumes the prerequisite seam only after every producer interface and the V002 schema have been proven together.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md): The public correction extends ReconciliationApplyContracts and ReconciliationApplyOperationModule.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](../tasks/reconciliation-statement-correction-effect-writer.md): The public composite consumes StatementCorrectionEffectWriter.AppendAsync.
 - `governed-by` -> DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
 - `implements` -> FR-LEDGER-STATEMENT-RECONCILIATION: Apply statement reconciliation outcomes
-- `satisfies` -> NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable
-- `satisfies` -> NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history
-- `satisfies` -> NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed
-- `touches` -> DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink
-- `touches` -> DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage
-- `verifies` -> TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY: Prove reconciliation effects are crash-atomic and replay-safe
 - `verifies` -> TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT: Verify match-first statement reconciliation
 
 ## Navigation

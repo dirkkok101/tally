@@ -5,11 +5,8 @@
   "ref_code": "TASK-LEDGER-VERIFY-UC-013",
   "slug": "VERIFY-UC-013",
   "title": "EvidenceLinkWorkflow",
-  "description": [
-    "Verification-only task with no Implements link: trace UC-LEDGER-013 through the Release published CLI."
-  ],
   "objective": [
-    "Prove additional generic evidence registration and supporting linkage main/failure paths without provider payload retention or reconciliation mutation."
+    "Prove UC-LEDGER-013 through the published CLI without retaining provider payloads or mutating reconciliation."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -38,41 +35,37 @@
   ],
   "files": [
     {
-      "id": "01KY0DT2MZ76PE3PKXYBKNGVW8",
+      "id": "01KY2J2Y7EMS6AK4G6ZCKBN66F",
       "path": "tests/Tally.Tests/EndToEnd/UC013EvidenceLinkWorkflowTests.cs",
       "action": "test",
-      "role": "published-process verification",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T14:43:11.2124513+00:00"
     }
   ],
   "interfaces": [
     {
-      "id": "01KY0DT2MZ6KHCHEYV5QPQ7GBH",
+      "id": "01KY2J2Y7ESBGMG1CN3THQS4F1",
       "name": "PublishedTallyFixture",
       "direction": "consumes",
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T14:43:11.2124513+00:00"
     },
     {
-      "id": "01KY0DT2MZWXE70JRF9QAK6A09",
+      "id": "01KY2J2Y7EK2NEQ4G666M99F5M",
       "name": "CompletePublicContract",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
-      "notes": [
-        "72 provider-neutral operations"
-      ],
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T14:43:11.2124513+00:00"
     },
     {
-      "id": "01KY0DT2MZ16KDHV7PRZGY3KH2",
+      "id": "01KY2J2Y7EK30DWDW66E6FR2XB",
       "name": "VerifiedUC013",
       "direction": "produces",
       "contract_ref_code": "UC-LEDGER-013",
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T14:43:11.2124513+00:00"
     }
   ],
   "links": [
@@ -86,64 +79,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY1P1H1KHC3PM00MAFN8T4VB",
+      "id": "01KY2J3CRFBPMNXGXGDW4RZVK9",
       "kind": "acceptance_check",
       "text": [
-        "The published workflow registers and links multiple Evidence Records to one active transaction, retrieves safe history, and leaves Reconciliation State and exact actuals unchanged."
+        "The published CLI links multiple generic evidence records to one active transaction, returns privacy-safe history, leaves reconciliation and actuals unchanged, and persists neither source payloads nor full identifiers."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T06:33:04.8192196+00:00"
+      "created_at": "2026-07-21T14:43:26.0951761+00:00"
     },
     {
-      "id": "01KY1P1H1ME2ZZ6N252MTQQXDG",
+      "id": "01KY2J3CRGX229052YD9Q2DFZD",
       "kind": "acceptance_check",
       "text": [
-        "Forbidden payload, insufficient identity, inactive transaction, incompatible facts, other-transaction conflict, identical replay, changed replay, and injected atomic failure match every UC-LEDGER-013 failure path."
+        "Invalid identity, payload, transaction, conflict, replay, and injected-failure paths return specified errors with no partial or duplicate effect."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T06:33:04.8192196+00:00"
+      "created_at": "2026-07-21T14:43:26.0951761+00:00"
     },
     {
-      "id": "01KY1P1H1MWQDB31709ZN4B8EW",
-      "kind": "acceptance_check",
-      "text": [
-        "Persisted canary inspection finds no source payload or full identifier and one logical effect per evidence item."
-      ],
-      "required": 1,
-      "sort_order": 2,
-      "created_at": "2026-07-21T06:33:04.8192196+00:00"
-    },
-    {
-      "id": "01KY0DT2MZ92PWR3893TEZP1FD",
+      "id": "01KY2J3CRHGZHSF6F6DABE1MCB",
       "kind": "expected_output",
       "text": [
         "UC013EvidenceLinkWorkflowTests"
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T14:43:26.0951761+00:00"
     },
     {
-      "id": "01KY1P1FEMY5ET7WYY4DDXSBX0",
+      "id": "01KY2J3CRGQVV6MVT4R3RFB8H8",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT call handlers or SQLite directly except read-only postcondition inspection."
+        "Do NOT bypass the published CLI except read-only inspection or omit cross-key replay and unchanged-reconciliation assertions."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T06:33:03.1880408+00:00"
-    },
-    {
-      "id": "01KY1P1FENP9RPC50XV91C29VA",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT omit cross-key logical replay or the no-Reconciliation State-change assertion."
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-21T06:33:03.1880408+00:00"
+      "created_at": "2026-07-21T14:43:26.0951761+00:00"
     }
   ],
   "references": [
@@ -183,14 +156,14 @@
   ],
   "review_gates": [
     {
-      "id": "01KY0DT2MZT21YAYGGPG2C260K",
+      "id": "01KY2J3CRH7T3V5AG8TB90CY7B",
       "gate_type": "test-evidence",
       "description": [
-        "Evidence maps every UC-LEDGER-013 path to process and durable-state assertions."
+        "Map every UC-LEDGER-013 path to observable process and durable-state assertions."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T14:43:26.0951761+00:00"
     }
   ],
   "verification_steps": [

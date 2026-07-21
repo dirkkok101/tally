@@ -1,0 +1,332 @@
+{
+  "id": "01KY2HBAJETHRHJP77B4864D74",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KY0D0QYX4CJZKSVH3MMGT6BK",
+  "ref_code": "TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER",
+  "slug": "RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER",
+  "title": "Compose statement-correction durable effects",
+  "description": [
+    "Compose all append-only statement-correction writes behind one transaction-scoped facade."
+  ],
+  "objective": [
+    "Append one complete statement-authoritative replacement effect through existing stores inside the caller-owned SQLite transaction."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 33,
+  "created_at": "2026-07-21T14:30:17.4241144+00:00",
+  "decisions": [
+    {
+      "id": "01KY2HBAJG6DRWEYZVJ92RPBY3",
+      "target": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJG1CXX8T7MYY26FX1M",
+      "target": "DD-LEDGER-RECONCILIATION-CONTRACT",
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KY2HBAJJEFGXZ7J0YJGWP7P0",
+      "target": "TASK-LEDGER-CATEGORY-ALLOCATIONS",
+      "dependency_type": "compile",
+      "reason": [
+        "Effect composition consumes category carry-forward."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJJEG0JJ2BS3Q1TP9MV",
+      "target": "TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY",
+      "dependency_type": "compile",
+      "reason": [
+        "Effect composition persists through V002 statement-authority references."
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJJZQVQKHX0N5GS6WN6",
+      "target": "TASK-LEDGER-PAYMENT-ATTRIBUTION",
+      "dependency_type": "compile",
+      "reason": [
+        "Effect composition consumes payment carry-forward or unknown initialization."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJJ5S5W1SKHCBWEMHJ5",
+      "target": "TASK-LEDGER-POOL-ASSIGNMENTS",
+      "dependency_type": "compile",
+      "reason": [
+        "Effect composition consumes Spend Pool carry-forward."
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJHZFCYK8PTPPEMRSNY",
+      "target": "TASK-LEDGER-RECONCILIATION-APPLY",
+      "dependency_type": "compile",
+      "reason": [
+        "Effect composition consumes ReconciliationWriteStore."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJJAFTBV4MF8F1BCYHD",
+      "target": "TASK-LEDGER-RECONCILIATION-DECISIONS",
+      "dependency_type": "compile",
+      "reason": [
+        "Effect composition consumes ReconciliationDecisionStore."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJJE1TDDSTBQR63A77R",
+      "target": "TASK-LEDGER-RELATIONSHIP-CORRECTIONS",
+      "dependency_type": "compile",
+      "reason": [
+        "Effect composition consumes relationship replacement."
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJJZ5Y7JYRR6FQE8HCQ",
+      "target": "TASK-LEDGER-TRANSACTION-CORRECTIONS",
+      "dependency_type": "compile",
+      "reason": [
+        "Effect composition consumes statement supersession."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY2HBAJGNBYFX5CVRBMXMB9G",
+      "path": "src/Tally/Infrastructure/Storage/Reconciliation/StatementCorrectionEffectWriter.cs",
+      "action": "create",
+      "role": "transaction-scoped effect composition",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJH9F13HQ3QSQN7P4TF",
+      "path": "tests/Tally.Tests/Infrastructure/Storage/StatementCorrectionEffectWriterTests.cs",
+      "action": "test",
+      "role": "complete effect and rollback verification",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY2HBAJHV26AG4JM936JRWD0",
+      "name": "StatementCorrectionEffectWriter.AppendAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 0,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJH1DMBT0A8TC448MED",
+      "name": "ReconciliationWriteStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 1,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJHA9XKQX8H1Z7DEQW5",
+      "name": "ReconciliationDecisionStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 2,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJH1YER5AAXCWGGGABT",
+      "name": "TransactionStore.AppendStatementSupersessionAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
+      "sort_order": 3,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJH6TPEVAJ0B7Z9ZB13",
+      "name": "CategoryAllocationStore.CarryForwardAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
+      "sort_order": 4,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJHGDB0GXMGP6X8GK9S",
+      "name": "PaymentAttributionStore.CarryForwardOrUnknownAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-PAYMENT-ATTRIBUTION",
+      "sort_order": 5,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJHP6KGXQ95CM3F5W3W",
+      "name": "PoolAssignmentStore.CarryForwardAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-SPEND-POOL-ASSIGNMENT",
+      "sort_order": 6,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJHMEZS96DN919ZPWA1",
+      "name": "RelationshipStore.ReplaceForStatementCorrectionAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "sort_order": 7,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJH7NQMA4MFCJBJDEG1",
+      "name": "V002StatementAuthoritySchema",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 8,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY2HCAYMJB5D667MC5WBX0VH",
+      "kind": "acceptance_check",
+      "text": [
+        "AppendAsync records exactly one replacement fact and supersession, decision and confirming link, category and pool carry-forward, payment carry-forward or unknown state, and approved relationship replacement."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T14:30:50.5800770+00:00"
+    },
+    {
+      "id": "01KY2HCAYNDE6QF0A11T1822XJ",
+      "kind": "acceptance_check",
+      "text": [
+        "Every row references the prior and active transaction IDs and governing decision; all original facts, evidence, dimensions, and relationships remain queryable."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T14:30:50.5800770+00:00"
+    },
+    {
+      "id": "01KY2HCAYND9XCVPMRNT4DDZBZ",
+      "kind": "acceptance_check",
+      "text": [
+        "Any collaborator rejection or injected failure leaves all correction-effect tables unchanged; identical logical replay returns the existing effect."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-21T14:30:50.5800770+00:00"
+    },
+    {
+      "id": "01KY2HBAJGJ4NY1S52FNPMETYT",
+      "kind": "constraint",
+      "text": [
+        "Use only the exact producer interfaces named below and preserve their stable failure results."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJGB79YDKC8ANY5A7T7",
+      "kind": "expected_output",
+      "text": [
+        "StatementCorrectionEffectWriter"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJGZ74P7N7PET768PD0",
+      "kind": "expected_output",
+      "text": [
+        "StatementCorrectionEffectWriterTests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HCAYNJF3D8F30CYWZYKSA",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT open or commit another transaction; LedgerMutationExecutor owns atomicity."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T14:30:50.5800770+00:00"
+    },
+    {
+      "id": "01KY2HCAYNZZMZ8SPD044H786P",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT duplicate producer stores, overwrite history, move links or dimensions in place, or drop invalid relationships — per DD-LEDGER-IMMUTABLE-HISTORY."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T14:30:50.5800770+00:00"
+    },
+    {
+      "id": "01KY2HCAYNZAHXBW5ESKHAFWQK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT expose INGEST batches, provider payloads, or transport identifiers — per DD-LEDGER-RECONCILIATION-CONTRACT."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-21T14:30:50.5800770+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY2HBAJHT9J58PQWMDAJ0VX7",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show all required rows commit once or every table remains unchanged at each injected failure."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    },
+    {
+      "id": "01KY2HBAJHXJC1QXT34XT56Y3B",
+      "gate_type": "branch-review",
+      "description": [
+        "Confirm the facade composes existing stores and adds no second transaction or duplicate persistence implementation."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY2HBAJHVPSQ6YQKBYSNT15Z",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Infrastructure.Storage.StatementCorrectionEffectWriterTests --no-restore",
+      "expected_result": "exit 0; at least 16 complete-effect, lineage, incompatible-relationship, rollback, and replay cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-21T14:30:17.4241144+00:00"
+    }
+  ]
+}

@@ -22,7 +22,6 @@ Compose and verify the complete current schema, V001 upgrade path, process contr
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-ATOMIC-CRASH-RECOVERY: Prove mutation crash atomicity and idempotency | `test_case` | `verifies` | `true` |
 | TC-LEDGER-OFFLINE-SELF-CONTAINED: Verify offline self-contained operation | `test_case` | `verifies` | `true` |
 
@@ -128,7 +127,6 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](../tasks/core-schema-relationships-actuals.md): Consumes V001RelationshipActualsSchema.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](../tasks/core-schema-transactions.md): Consumes V001TransactionSchema.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Core gate exercises the real store and generation policy.
-- `satisfies` -> NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable
 - `verifies` -> TC-LEDGER-ATOMIC-CRASH-RECOVERY: Prove mutation crash atomicity and idempotency
 - `verifies` -> TC-LEDGER-OFFLINE-SELF-CONTAINED: Verify offline self-contained operation
 

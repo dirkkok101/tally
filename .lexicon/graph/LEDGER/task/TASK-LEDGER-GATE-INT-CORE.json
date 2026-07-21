@@ -415,17 +415,6 @@
   ],
   "references": [
     {
-      "id": "01KXT0KHY828KMA31M2YXFZ3TP",
-      "target_ref_code": "NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS",
-      "target_entity_type": "nfr",
-      "target_entity_id": "01KXSQFXNVGXH9FYFN6KF8KSE9",
-      "target_title": "Make mutations atomic and durable",
-      "relationship": "satisfies",
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
-    },
-    {
       "id": "01KXT0KHY8WS4KQ4T793DHRTVY",
       "target_ref_code": "TC-LEDGER-OFFLINE-SELF-CONTAINED",
       "target_entity_type": "test_case",

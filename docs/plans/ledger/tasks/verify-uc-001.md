@@ -22,7 +22,7 @@ Prove UC-LEDGER-001 through observable process results and durable-state invaria
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts | `data_model` | `touches` | `false` |
+| DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts | `data_model` | `touches` | `true` |
 | FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain owned bank accounts | `requirement` | `verifies` | `true` |
 | FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent | `requirement` | `verifies` | `true` |
 | TC-LEDGER-ACCOUNT-MAINTENANCE-CONTRACT: Verify account maintenance contract | `test_case` | `verifies` | `true` |

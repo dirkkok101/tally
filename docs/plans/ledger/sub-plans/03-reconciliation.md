@@ -18,5 +18,7 @@ Deliver versioned candidate policy, atomic dispositions, decision corrections, a
 | [TASK-LEDGER-RECONCILIATION-PROJECTION](../tasks/reconciliation-projection.md) | Implement deterministic reconciliation candidate projection | `ready` | 0 |
 | [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md) | Implement base reconciliation dispositions | `ready` | 0 |
 | [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md) | Implement Reconciliation Decision correction lifecycle | `ready` | 1 |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](../tasks/reconciliation-statement-correction-effect-writer.md) | Compose statement-correction durable effects | `ready` | 0 |
+| [TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES](../tasks/gate-int-statement-correction-prerequisites.md) | Prove the statement-correction prerequisite seam | `ready` | 0 |
 | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md) | Compose statement-authoritative reconciliation correction | `ready` | 0 |
 | [TASK-LEDGER-RECONCILIATION-COVERAGE](../tasks/reconciliation-coverage.md) | Implement statement coverage and exceptions | `ready` | 1 |

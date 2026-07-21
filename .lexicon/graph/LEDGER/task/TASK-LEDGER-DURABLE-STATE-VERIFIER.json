@@ -38,14 +38,14 @@
   ],
   "dependencies": [
     {
-      "id": "01KXT1ZHVBQ4W0QWTRB74CPX63",
+      "id": "01KY2H78HSGMWZH2GP5TTDTYBB",
       "target": "TASK-LEDGER-ACTUALS-PROJECTION",
       "dependency_type": "compile",
       "reason": [
-        "Consumes ActualsCalculator.Calculate."
+        "Durable state verification consumes ActualsCalculator.Calculate."
       ],
-      "sort_order": 1,
-      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+      "sort_order": 3,
+      "created_at": "2026-07-21T14:28:04.2824425+00:00"
     },
     {
       "id": "01KXT1ZHVBB0N5PZKA3QPCT9M3",
@@ -66,56 +66,6 @@
       ],
       "sort_order": 2,
       "created_at": "2026-07-18T07:27:47.5618899+00:00"
-    },
-    {
-      "id": "01KY0ECVSYZ6SNXVR4C39VRS1N",
-      "target": "TASK-LEDGER-EVIDENCE-LINKING",
-      "dependency_type": "compile",
-      "reason": [
-        "Complete-state verification enumerates evidence records and links."
-      ],
-      "sort_order": 5,
-      "created_at": "2026-07-20T19:00:13.2470936+00:00"
-    },
-    {
-      "id": "01KY0ECSRBCBZ8BJ6XZ7AVS1MC",
-      "target": "TASK-LEDGER-PAYMENT-ATTRIBUTION",
-      "dependency_type": "compile",
-      "reason": [
-        "Complete-state verification enumerates payment attribution history."
-      ],
-      "sort_order": 3,
-      "created_at": "2026-07-20T19:00:11.1482205+00:00"
-    },
-    {
-      "id": "01KY0ECTSJ78ABWS3DPF7H767S",
-      "target": "TASK-LEDGER-POOL-ASSIGNMENTS",
-      "dependency_type": "compile",
-      "reason": [
-        "Complete-state verification enumerates pool assignment history."
-      ],
-      "sort_order": 4,
-      "created_at": "2026-07-20T19:00:12.2108385+00:00"
-    },
-    {
-      "id": "01KY0ECWXPT9TSRKGDTHQ7MFWV",
-      "target": "TASK-LEDGER-RECONCILIATION-COVERAGE",
-      "dependency_type": "compile",
-      "reason": [
-        "Complete-state verification enumerates reconciliation projections, decisions, links, coverage, and exceptions."
-      ],
-      "sort_order": 6,
-      "created_at": "2026-07-20T19:00:14.3915268+00:00"
-    },
-    {
-      "id": "01KY28E863XPN87RTS21793HVR",
-      "target": "TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION",
-      "dependency_type": "compile",
-      "reason": [
-        "Complete-state verification must validate statement replacement and carry-forward chains."
-      ],
-      "sort_order": 7,
-      "created_at": "2026-07-21T11:54:36.0999063+00:00"
     }
   ],
   "files": [

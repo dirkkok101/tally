@@ -68,22 +68,31 @@
   ],
   "files": [
     {
-      "id": "01KXT21TGVQWQ8F3S0N9HT87XE",
+      "id": "01KY2HMR87M8PXSYBTB57D2VBV",
       "path": "src/Tally/Composition/Ledger/RelationshipActualsOperationBundle.cs",
       "action": "create",
       "role": "integration composition",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-21T14:35:26.3425967+00:00"
     },
     {
-      "id": "01KXT21TGVM5ZZDBBVB8N5Y4VF",
+      "id": "01KY2HMR87TWA6HG69EVFW89SW",
       "path": "tests/Tally.Tests/Composition/Ledger/RelationshipActualsOperationBundleTests.cs",
       "action": "test",
-      "role": "integration",
+      "role": "integration contract",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-21T14:35:26.3425967+00:00"
+    },
+    {
+      "id": "01KY2HMR88JBGCD0C800MYN5E6",
+      "path": "tests/Tally.Tests/Performance/ActualsPersonalScaleTests.cs",
+      "action": "test",
+      "role": "personal-scale benchmark",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-21T14:35:26.3425967+00:00"
     }
   ],
   "interfaces": [
@@ -130,34 +139,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY288DVVCQYW5SAF5AGNKEPA",
+      "id": "01KY2HMR86HG5YMDHEBF77Z1SE",
       "kind": "acceptance_check",
       "text": [
         "The bundle contains exactly eight unique transfer, refund, relationship, and actuals descriptors; schemas retain exact/subtree category scope, unknown/unassigned buckets, statement-correction state, and cash-policy result."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:51:25.3069274+00:00"
+      "created_at": "2026-07-21T14:35:26.3425967+00:00"
     },
     {
-      "id": "01KY288DVW83D3VMFKAW3C8G3S",
+      "id": "01KY2HMR879DCKBGYNXHC5AYFA",
       "kind": "acceptance_check",
       "text": [
         "Descriptor order and every source field remain byte-for-byte stable after canonical serialization; missing module, duplicate path, incompatible version, lost hierarchy/reconciliation field, or unresolved cash gate fails before dispatch."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:51:25.3069274+00:00"
+      "created_at": "2026-07-21T14:35:26.3425967+00:00"
     },
     {
-      "id": "01KY288DVW391BTEE2YZN46PKY",
+      "id": "01KY2HMR87K51NXS438YK83DCA",
       "kind": "acceptance_check",
       "text": [
-        "Real-store tests prove all-up, category-direct, category-subtree, pool, and matrix conservation through transfer, separate fee, refund, hierarchy move, relationship replacement, ordinary correction, and statement-authoritative replacement."
+        "Real-store tests prove all-up, category-direct, category-subtree, pool, and matrix conservation through transfer, fee, refund, hierarchy move, relationship replacement, ordinary correction, and statement correction."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:51:25.3069274+00:00"
+      "created_at": "2026-07-21T14:35:26.3425967+00:00"
+    },
+    {
+      "id": "01KY2HMR87QFSTSJW5QBRJNHPY",
+      "kind": "acceptance_check",
+      "text": [
+        "The published actuals path processes 100000 transactions with measured p95 below 2000 ms and exact totals unchanged."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-21T14:35:26.3425967+00:00"
     },
     {
       "id": "01KXT21TGVR4R6J68AVK0VCCVV",
@@ -210,6 +229,30 @@
       "created_at": "2026-07-21T11:51:25.3069274+00:00"
     }
   ],
+  "references": [
+    {
+      "id": "01KY2HMNXX86519JB62SWNS3F9",
+      "target_ref_code": "NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFYX4NQ8JXNGWNYBA7EK5",
+      "target_title": "Respond at personal-ledger scale",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T14:35:23.9660030+00:00"
+    },
+    {
+      "id": "01KY2HMQ28YXZKAE6595C0FE44",
+      "target_ref_code": "TC-LEDGER-PERSONAL-SCALE-PERFORMANCE",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSXGAF3HK64JMBCCXQ9M6S0",
+      "target_title": "Measure personal-ledger performance",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T14:35:25.1290478+00:00"
+    }
+  ],
   "review_gates": [
     {
       "id": "01KY288DVWWCEHBZPYQD0JGR4K",
@@ -234,14 +277,24 @@
   ],
   "verification_steps": [
     {
-      "id": "01KXT21TGW58C2RHV0B5KT0PGH",
+      "id": "01KY2HMR88YW3CKJBVS860A3MZ",
       "phase": "after",
       "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Composition.Ledger.RelationshipActualsOperationBundleTests --no-restore",
-      "expected_result": "exit 0; at least 8 exact-inventory/duplicate/missing/version cases run and 0 fail",
+      "expected_result": "exit 0; at least 8 exact-inventory, duplicate, missing, version, and conservation cases run and 0 fail",
       "required": 1,
       "timeout_seconds": 180,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-21T14:35:26.3425967+00:00"
+    },
+    {
+      "id": "01KY2HMR88VZH9J1ZDEM0K0KGR",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Performance.ActualsPersonalScaleTests --no-restore",
+      "expected_result": "exit 0; benchmark reports 100000 transactions, p95 below 2000 ms, exact totals unchanged, and 0 failures",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 1,
+      "created_at": "2026-07-21T14:35:26.3425967+00:00"
     }
   ]
 }

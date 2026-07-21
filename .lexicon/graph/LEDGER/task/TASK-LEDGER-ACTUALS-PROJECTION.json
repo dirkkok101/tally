@@ -9,7 +9,7 @@
     "Project exact active membership and named totals across current hierarchy, pools, payment attribution, evidence, reconciliation, and financial relationships."
   ],
   "objective": [
-    "Return exact direct/subtree/pool actuals while counting one active economic effect and zero owned-transfer principal."
+    "Return exact dimensional actuals with one active economic effect and zero owned-transfer principal."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -38,14 +38,14 @@
   ],
   "dependencies": [
     {
-      "id": "01KXT163FPTYNZFT4W570JHDQA",
+      "id": "01KY2H7416THGD3WKJ997WXG1T",
       "target": "TASK-LEDGER-CATEGORY-ALLOCATIONS",
       "dependency_type": "compile",
       "reason": [
-        "Budget Actual consumes active category allocation history."
+        "Actuals consumes CategoryAllocationStore for current category membership."
       ],
-      "sort_order": 0,
-      "created_at": "2026-07-18T07:13:53.6549394+00:00"
+      "sort_order": 10,
+      "created_at": "2026-07-21T14:27:59.6553845+00:00"
     },
     {
       "id": "01KXT1AGDG2C613RP3VK82PF01",
@@ -68,24 +68,24 @@
       "created_at": "2026-07-21T11:43:48.0502378+00:00"
     },
     {
-      "id": "01KY0ECPGA549PNVMQ5Z7DBF1B",
+      "id": "01KY2H7553TVA8J67WGF5SJ7KD",
       "target": "TASK-LEDGER-PAYMENT-ATTRIBUTION",
       "dependency_type": "compile",
       "reason": [
-        "Actuals filters consume current instrument/cardholder attribution."
+        "Actuals consumes PaymentAttributionStore for instrument and cardholder filters."
       ],
-      "sort_order": 5,
-      "created_at": "2026-07-20T19:00:07.8190463+00:00"
+      "sort_order": 11,
+      "created_at": "2026-07-21T14:28:00.8040394+00:00"
     },
     {
-      "id": "01KY0ECQK3C4NJRTMQN685NGVE",
+      "id": "01KY2H767ZT24Y1DMG3A0SGFK4",
       "target": "TASK-LEDGER-POOL-ASSIGNMENTS",
       "dependency_type": "compile",
       "reason": [
-        "Actuals totals consume current explicit pool assignments."
+        "Actuals consumes PoolAssignmentStore for current pool membership."
       ],
-      "sort_order": 6,
-      "created_at": "2026-07-20T19:00:08.9324204+00:00"
+      "sort_order": 12,
+      "created_at": "2026-07-21T14:28:01.9209625+00:00"
     },
     {
       "id": "01KY0ECRNATXSDQE0KH6DEN2F8",
@@ -98,44 +98,14 @@
       "created_at": "2026-07-20T19:00:10.0267965+00:00"
     },
     {
-      "id": "01KY28E5SM3R71WPYSV8JZTRGS",
-      "target": "TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION",
-      "dependency_type": "compile",
-      "reason": [
-        "Actuals must count only the active statement-derived replacement after correction."
-      ],
-      "sort_order": 9,
-      "created_at": "2026-07-21T11:54:33.6528484+00:00"
-    },
-    {
-      "id": "01KXT163ZY54MZE9EJS2FTC8FS",
-      "target": "TASK-LEDGER-RELATIONSHIP-CORRECTIONS",
-      "dependency_type": "compile",
-      "reason": [
-        "Actuals must use final active/retired relationship lifecycle semantics."
-      ],
-      "sort_order": 1,
-      "created_at": "2026-07-18T07:13:54.1750269+00:00"
-    },
-    {
-      "id": "01KXT164GQ82Y8WV000TYRBWJ5",
-      "target": "TASK-LEDGER-TRANSACTION-CORRECTIONS",
-      "dependency_type": "compile",
-      "reason": [
-        "Actuals must exclude final void/supersession state."
-      ],
-      "sort_order": 2,
-      "created_at": "2026-07-18T07:13:54.7117801+00:00"
-    },
-    {
-      "id": "01KXT1AGXE2XNYF35ZK8HDFXQ3",
+      "id": "01KY2H77CQJ493RNTN9EHJR27C",
       "target": "TASK-LEDGER-TRANSFERS",
       "dependency_type": "compile",
       "reason": [
-        "Consumer requires RelationshipStore from its producing task; direct compile edge enforces the declared interface contract."
+        "Actuals consumes RelationshipStore for transfer and refund state."
       ],
-      "sort_order": 4,
-      "created_at": "2026-07-18T07:16:18.4791902+00:00"
+      "sort_order": 13,
+      "created_at": "2026-07-21T14:28:03.0971482+00:00"
     }
   ],
   "files": [
@@ -297,54 +267,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY27SAAFNNJ38E4C47Q7QD7F",
+      "id": "01KY2HGFHKZM342344VJQ4E01E",
       "kind": "acceptance_check",
       "text": [
-        "Filters compose account/date, category with exact or subtree scope, pool including unassigned, instrument/cardholder including unknown, evidence, reconciliation, relationship, categorization, and lifecycle state; every supplied filter must match."
+        "Account/date, category exact-or-subtree, pool, instrument/cardholder, evidence, reconciliation, relationship, categorization, and lifecycle filters compose conjunctively with explicit unknown and unassigned buckets."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:43:10.1592386+00:00"
+      "created_at": "2026-07-21T14:33:06.3551836+00:00"
     },
     {
-      "id": "01KY27SAAG4QNDJWV2TFF4YJFW",
+      "id": "01KY2HGFHMTXPS9EXQ4DTKYVHM",
       "kind": "acceptance_check",
       "text": [
-        "Net Account Movement sums signed active facts exactly; External Spend includes qualifying outflows and separate fees, excludes owned-transfer principal, and offsets linked refunds in their own Effective Date against the original current category and pool."
+        "Net Account Movement sums signed active facts; External Spend includes qualifying outflows and fees, excludes owned-transfer principal, and applies linked refunds on their Effective Date to the original current category and pool."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:43:10.1592386+00:00"
+      "created_at": "2026-07-21T14:33:06.3551836+00:00"
     },
     {
-      "id": "01KY27SAAGJTS6N82NY7MX19CS",
+      "id": "01KY2HGFHMNH2AB25M21T1JCXV",
       "kind": "acceptance_check",
       "text": [
-        "Category-direct, category-subtree, pool, and pool-by-category groups reconcile to all-up Budget Actual; current hierarchy moves change subtree membership without rewriting assignments and no transaction is double counted."
+        "Direct category, subtree, pool, and pool-by-category groups reconcile exactly to all-up Budget Actual; hierarchy moves change subtree membership without rewriting assignments or double counting."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:43:10.1592386+00:00"
+      "created_at": "2026-07-21T14:33:06.3551836+00:00"
     },
     {
-      "id": "01KY27SAAGM1BP61K0EBDXE5QZ",
+      "id": "01KY2HGFHM92H0Q16BPM145TKN",
       "kind": "acceptance_check",
       "text": [
-        "A statement-authoritative correction excludes the superseded agent-capture fact and includes the statement-derived replacement exactly once with explicit carried-forward or corrected dimensions."
+        "Statement correction excludes the superseded capture and includes one active statement replacement with explicit carried or corrected dimensions."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T11:43:10.1592386+00:00"
+      "created_at": "2026-07-21T14:33:06.3551836+00:00"
     },
     {
-      "id": "01KY27SAAGF03EA6H8E7XSKVJQ",
+      "id": "01KY2HGFHM9E2NPM8NXWNDCYP5",
       "kind": "acceptance_check",
       "text": [
-        "Cash withdrawals follow OQ-LEDGER-16Resolution only; empty, uncategorized, unassigned, and unknown buckets are explicit and exact."
+        "Cash withdrawals follow OQ-LEDGER-16Resolution; empty and uncategorized results remain explicit and exact."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-21T11:43:10.1592386+00:00"
+      "created_at": "2026-07-21T14:33:06.3551836+00:00"
     },
     {
       "id": "01KXT0SME9NNV3T4TMHWK2V8BH",
@@ -377,34 +347,34 @@
       "created_at": "2026-07-18T07:07:05.0252128+00:00"
     },
     {
-      "id": "01KY27SAAGT7X1G1ZXCVAQK16S",
+      "id": "01KY2HGFHM4MHBTZSRM39Q3ZVE",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT count owned-account transfer principal as spend, derive pool from category/account/cardholder, or silently select cash treatment — per C22 and OQ-LEDGER-16."
+        "Do NOT count transfer principal as spend or infer pool/category/cardholder/cash treatment."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:43:10.1592386+00:00"
+      "created_at": "2026-07-21T14:33:06.3551836+00:00"
     },
     {
-      "id": "01KY27SAAGBPT913H1DYB52WP1",
+      "id": "01KY2HGFHMXPH0EM50B5ZVB2DP",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT aggregate through both direct and ancestor rows into all-up totals or count superseded statement-corrected facts."
+        "Do NOT double count direct and ancestor rows or include superseded facts."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:43:10.1592386+00:00"
+      "created_at": "2026-07-21T14:33:06.3551836+00:00"
     },
     {
-      "id": "01KY27SAAGYCTSA38JZRDXY62B",
+      "id": "01KY2HGFHMNTBGWGV4TQH1AJ77",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT move budget-plan semantics into LEDGER; BUDGET owns exact-node/subtree plan overlap rules."
+        "Do NOT move budget-plan overlap semantics into LEDGER."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:43:10.1592386+00:00"
+      "created_at": "2026-07-21T14:33:06.3551836+00:00"
     }
   ],
   "references": [
@@ -442,17 +412,6 @@
       "created_at": "2026-07-21T11:43:41.3759229+00:00"
     },
     {
-      "id": "01KXT0SMEAJ7D5G7Q6E4ZRBPWQ",
-      "target_ref_code": "NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE",
-      "target_entity_type": "nfr",
-      "target_entity_id": "01KXSQFYX4NQ8JXNGWNYBA7EK5",
-      "target_title": "Respond at personal-ledger scale",
-      "relationship": "satisfies",
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
-    },
-    {
       "id": "01KXT0SMEARWQJ282DCMWN44TC",
       "target_ref_code": "TC-LEDGER-ACTUALS-QUERY-CONTRACT",
       "target_entity_type": "test_case",
@@ -461,17 +420,6 @@
       "relationship": "verifies",
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
-    },
-    {
-      "id": "01KXT0SMEA77F5HTWZDX6TV5C9",
-      "target_ref_code": "TC-LEDGER-PERSONAL-SCALE-PERFORMANCE",
-      "target_entity_type": "test_case",
-      "target_entity_id": "01KXSXGAF3HK64JMBCCXQ9M6S0",
-      "target_title": "Measure personal-ledger performance",
-      "relationship": "verifies",
-      "required": 1,
-      "sort_order": 5,
       "created_at": "2026-07-18T07:07:05.0252128+00:00"
     }
   ],
@@ -506,24 +454,24 @@
   ],
   "verification_steps": [
     {
-      "id": "01KXT0SME9C4RE2KS4JAVGNFC7",
+      "id": "01KY2HN6ECSQM0ME2BNKRK32VE",
       "phase": "after",
-      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~ActualsCalculatorTests|FullyQualifiedName~ActualsProjectionTests' --no-restore",
-      "expected_result": "exit 0; at least 24 formula/filter/integrity cases run and 0 fail",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Domain.Ledger.ActualsCalculatorTests --no-restore",
+      "expected_result": "exit 0; at least 12 formula and conservation cases run and 0 fail",
       "required": 1,
-      "timeout_seconds": 360,
+      "timeout_seconds": 240,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-21T14:35:40.8757555+00:00"
     },
     {
-      "id": "01KXT0SME9QTZCXBTKQ9XDY6YK",
+      "id": "01KY2HN6EDJKBDMR7HPHF34WN8",
       "phase": "after",
-      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ActualsProjectionTests.PersonalScale --no-restore",
-      "expected_result": "exit 0; benchmark test reports 100000 transactions and p95 below 2000 ms",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Infrastructure.Storage.ActualsProjectionTests --no-restore",
+      "expected_result": "exit 0; at least 12 filter and integrity cases run and 0 fail",
       "required": 1,
-      "timeout_seconds": 600,
+      "timeout_seconds": 360,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-21T14:35:40.8757555+00:00"
     }
   ]
 }

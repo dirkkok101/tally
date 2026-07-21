@@ -16,7 +16,7 @@ Deliver create/get/list/rename/archive account behavior through typed handlers, 
 
 ## Objective
 
-Maintain stable masked owned asset and liability account identities and attributable lifecycle history without credentials or physical deletion.
+Maintain stable masked asset and liability accounts with attributable append-only lifecycle history.
 
 ## References
 
@@ -24,7 +24,6 @@ Maintain stable masked owned asset and liability account identities and attribut
 |---|---|---|---|
 | DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts | `data_model` | `touches` | `true` |
 | FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain Owned Bank Accounts | `requirement` | `implements` | `true` |
 | TC-LEDGER-ACCOUNT-MAINTENANCE-CONTRACT: Verify account maintenance contract | `test_case` | `verifies` | `true` |
 
@@ -33,24 +32,23 @@ Maintain stable masked owned asset and liability account identities and attribut
 | Depends On | Type | Reason |
 |---|---|---|
 | [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md) | `compile` | Account slice consumes the proven core seam. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
-| [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | Consumer requires LedgerDb from its producing task; direct compile edge enforces the declared interface contract. |
 | [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](../tasks/gate-evidence-cash-withdrawals.md) | `compile` | Account operations must know whether tracked cash is an in-scope account class. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Account mutations consume LedgerMutationExecutor.ExecuteAsync. |
+| [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | Account persistence consumes LedgerDb. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- Valid unique institution/display/type/masked identifier/ZAR input creates one active asset or liability account with a stable ULID and no credential/full account number.
-- Rename appends an attributable lifecycle event while preserving account ID and transaction references.
-- Archive appends history, preserves detail/list visibility, and causes new transaction attempts to return LEDGER-ACCOUNT-ARCHIVED with no write.
-- Get/list honor includeHistory and lifecycle/institution filters with deterministic ordering and one result per account.
-- Every mutation uses LedgerMutationExecutor and returns byte-equivalent logical results on identical replay.
+- Valid unique ZAR input creates one active asset or liability account with a stable ULID, masked identifier, and no credential or full account number.
+- Rename and archive append attributable lifecycle events; archived accounts remain queryable and reject new transactions with LEDGER-ACCOUNT-ARCHIVED and no write.
+- Get and list apply history, lifecycle, and institution filters with deterministic ordering and one row per account.
+- Every mutation uses LedgerMutationExecutor; identical replay returns the original result and changed replay conflicts.
 
 ### Failure Criteria
 
-- Do NOT hard-delete or update lifecycle history in place; append events and retain RESTRICT references per DD-LEDGER-IMMUTABLE-HISTORY.
-- Do NOT introduce repositories, mediator, HTTP endpoints, credentials, or full account identifiers per DD-LEDGER-APPLICATION-ARCHITECTURE.
+- Do NOT delete or overwrite account history; retain RESTRICT-linked append-only events per DD-LEDGER-IMMUTABLE-HISTORY.
+- Do NOT add repositories, mediator, HTTP, credentials, or full account identifiers per DD-LEDGER-APPLICATION-ARCHITECTURE.
 
 ### Expected Outputs
 
@@ -111,14 +109,13 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-34k` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumer requires LedgerDb from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Account mutations consume LedgerMutationExecutor.ExecuteAsync.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Account persistence consumes LedgerDb.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](../tasks/gate-evidence-cash-withdrawals.md): Account operations must know whether tracked cash is an in-scope account class.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md): Account slice consumes the proven core seam.
 - `governed-by` -> DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `implements` -> FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain Owned Bank Accounts
-- `touches` -> DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts
 - `verifies` -> TC-LEDGER-ACCOUNT-MAINTENANCE-CONTRACT: Verify account maintenance contract
 
 ## Navigation

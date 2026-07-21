@@ -185,15 +185,15 @@
       "created_at": "2026-07-18T07:10:29.4870620+00:00"
     },
     {
-      "id": "01KXT0ZW3GCF2XKGMP8ZN22RSW",
+      "id": "01KY2HMKT272XJQ7NHW5C004WC",
       "target_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
       "target_entity_type": "data_model",
       "target_entity_id": "01KXSYGEQ3PSBB0XQ74D60EZWK",
       "target_title": "AccountCategoryOperationContracts",
       "relationship": "touches",
-      "required": 0,
+      "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-21T14:35:21.7955008+00:00"
     },
     {
       "id": "01KXT0ZW3GP5SA93V8CQNJ7FCC",
