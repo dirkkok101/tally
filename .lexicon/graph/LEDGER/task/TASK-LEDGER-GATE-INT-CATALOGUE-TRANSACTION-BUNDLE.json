@@ -271,44 +271,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY288D7N3ZF7FQ62D10S5M2E",
+      "id": "01KY2CJEFGJSR0QRM5EDKCKKVA",
       "kind": "acceptance_check",
       "text": [
-        "The bundle contains exactly 43 unique descriptors: 5 account, 7 category including ledger.category.reparent, 6 Payment Instrument, 6 cardholder, 6 pool, 4 transaction, 2 category assignment, 2 payment attribution, 2 Pool Assignment, and 3 evidence operations."
+        "The bundle contains exactly 43 unique descriptors: 5 account, 7 category including ledger.category.reparent, 6 Payment Instrument, 6 cardholder, 6 pool, 4 transaction, 2 Category Assignment, 2 payment attribution, 2 Pool Assignment, and 3 evidence operations."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:51:24.6605346+00:00"
+      "created_at": "2026-07-21T13:06:47.9195977+00:00"
     },
     {
-      "id": "01KY288D7PGGRZTTY3XQGH5H33",
+      "id": "01KY2CJEFHZ1ETHR36KTHF75WV",
       "kind": "acceptance_check",
       "text": [
         "Descriptor order is operationId ordinal; every path, kind, contract range, source-generated schema, hierarchy field, error, privacy rule, and idempotency classification is retained unchanged."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:51:24.6605346+00:00"
+      "created_at": "2026-07-21T13:06:47.9195977+00:00"
     },
     {
-      "id": "01KY288D7P6YQ6TSJR5N770V27",
+      "id": "01KY2CJEFHY8ZH2AA2YFJ4TXBK",
       "kind": "acceptance_check",
       "text": [
         "Missing module, duplicate ID/path, incompatible version, provider-specific field, open evidence metadata, flat-category contract, or missing reparent fails before dispatch."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:51:24.6605346+00:00"
+      "created_at": "2026-07-21T13:06:47.9195977+00:00"
     },
     {
-      "id": "01KY288D7P8QJPCAR5SB3YTRB7",
+      "id": "01KY2CJEFHR6538XTBCMVQJ58J",
       "kind": "acceptance_check",
       "text": [
         "Focused tests compare the exact 43-ID set and prove no descriptor is added, dropped, aliased, or rewritten."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T11:51:24.6605346+00:00"
+      "created_at": "2026-07-21T13:06:47.9195977+00:00"
     },
     {
       "id": "01KXT21TGTR57HC0HDXTJ60FE8",

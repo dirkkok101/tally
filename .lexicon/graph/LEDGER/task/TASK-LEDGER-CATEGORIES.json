@@ -247,34 +247,34 @@
       "created_at": "2026-07-18T07:05:09.0800297+00:00"
     },
     {
-      "id": "01KY27S91TNPPH13SCHB5TJ0P2",
+      "id": "01KY2CJ3QE0XXBQPAW6QQ587PZ",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT implement a flat catalogue, materialized-path overwrite, nested-set rewrite, split category assignment, hard delete, or in-place lifecycle edit — per DD-LEDGER-CATEGORY-HIERARCHY and DD-LEDGER-IMMUTABLE-HISTORY."
+        "Do NOT implement a flat catalogue, materialized-path overwrite, nested-set rewrite, split Category Assignment, hard delete, or in-place lifecycle edit — per DD-LEDGER-CATEGORY-HIERARCHY and DD-LEDGER-IMMUTABLE-HISTORY."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:43:08.8575006+00:00"
+      "created_at": "2026-07-21T13:06:36.9097128+00:00"
     },
     {
-      "id": "01KY27S91TJCS2X99RQDE13T2R",
+      "id": "01KY2CJ3QF76E7JPAWEMRCPBTY",
       "kind": "failure_criterion",
       "text": [
         "Do NOT create budget amounts, infer Spend Pool, or implement BUDGET exact-node/subtree overlap policy."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:43:08.8575006+00:00"
+      "created_at": "2026-07-21T13:06:36.9097128+00:00"
     },
     {
-      "id": "01KY27S91T6Y3VK0CQBPYTHEJQ",
+      "id": "01KY2CJ3QFHDEWFGCVJSFZVTNY",
       "kind": "failure_criterion",
       "text": [
         "Do NOT add HTTP endpoints, generic CRUD save/update/delete commands, or provider wording."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:43:08.8575006+00:00"
+      "created_at": "2026-07-21T13:06:36.9097128+00:00"
     }
   ],
   "references": [

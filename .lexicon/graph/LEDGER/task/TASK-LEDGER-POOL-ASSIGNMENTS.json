@@ -204,44 +204,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY280ZKG6AJER3NW8TFWCRHR",
+      "id": "01KY2CJM1T7EFVNYHTCWW0RYS9",
       "kind": "acceptance_check",
       "text": [
         "Every recorded transaction exposes one atomically initialized unassigned pool projection; public assign/correct transitions it to one active pool or back to unassigned with actor, reason, time, and predecessor."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:47:21.3265929+00:00"
+      "created_at": "2026-07-21T13:06:53.6263990+00:00"
     },
     {
-      "id": "01KY280ZKHA0JSC7YB010KBH4B",
+      "id": "01KY2CJM1VD62B3K79KHNTYSYF",
       "kind": "acceptance_check",
       "text": [
         "Missing/inactive transaction, absent/archived pool, multiple-pool request, stale state, same-as-active correction, and conflicting replay fail without changing current assignment."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:47:21.3265929+00:00"
+      "created_at": "2026-07-21T13:06:53.6263990+00:00"
     },
     {
-      "id": "01KY280ZKHZHV7GVKJVBB596CW",
+      "id": "01KY2CJM1VZE9MSXYHQNZC3CHV",
       "kind": "acceptance_check",
       "text": [
-        "CarryForwardAsync is internal to statement correction and appends the current assigned or unassigned state to the replacement with source transaction and reconciliation decision references; ordinary supersession never invokes it."
+        "CarryForwardAsync is internal to statement correction and appends the current assigned or unassigned state to the replacement with source transaction and Reconciliation Decision references; ordinary supersession never invokes it."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:47:21.3265929+00:00"
+      "created_at": "2026-07-21T13:06:53.6263990+00:00"
     },
     {
-      "id": "01KY280ZKHT7R1VZKYF4GX1DQX",
+      "id": "01KY2CJM1VCK21YHW0KFRGRWDK",
       "kind": "acceptance_check",
       "text": [
         "Pool changes and carry-forward do not mutate account, category, payment attribution, evidence, or prior reconciliation history."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T11:47:21.3265929+00:00"
+      "created_at": "2026-07-21T13:06:53.6263990+00:00"
     },
     {
       "id": "01KY1P0A41168C7T7C76ZTAHQK",

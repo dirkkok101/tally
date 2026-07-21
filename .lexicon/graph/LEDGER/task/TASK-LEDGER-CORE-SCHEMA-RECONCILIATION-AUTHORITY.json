@@ -130,44 +130,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY27PSPYNZ9TVNTZCD8TVSYY",
+      "id": "01KY2CJ8W7DVHM8YG2YTC2M2YY",
       "kind": "acceptance_check",
       "text": [
-        "V002 migrates a valid V001 store without data loss and expands reconciliation decisions to distinguish confirmed existing, corrected from statement, statement-only, ambiguity, exception, owner confirmation, rejection, revocation, and replacement."
+        "V002 migrates a valid V001 store without data loss and expands Reconciliation Decisions to distinguish confirmed existing, corrected from statement, statement-only, ambiguity, exception, owner confirmation, rejection, revocation, and replacement."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+      "created_at": "2026-07-21T13:06:42.1822152+00:00"
     },
     {
-      "id": "01KY27PSPZ5NDMPCPNDFN7H9GY",
+      "id": "01KY2CJ8W9X33Q2R2N5MSN4DH2",
       "kind": "acceptance_check",
       "text": [
         "A statement-correction record references prior and active transaction IDs, supersession, category and pool carry-forward events, payment carry-forward or explicit unknown initialization, optional invariant-preserving relationship replacement events, authority basis, actor, reason, and predecessor decision."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+      "created_at": "2026-07-21T13:06:42.1822152+00:00"
     },
     {
-      "id": "01KY27PSPZR2RYGEY03WW455CK",
+      "id": "01KY2CJ8W9BPN1ZF8GTF4B9FDR",
       "kind": "acceptance_check",
       "text": [
         "Evidence-link history supports retained historical agent evidence and one active confirming statement target; all new state is append-only, RESTRICT-linked, and excluded from arbitrary metadata or raw payloads."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+      "created_at": "2026-07-21T13:06:42.1822152+00:00"
     },
     {
-      "id": "01KY27PSPZ1WGXRFT8R077A46N",
+      "id": "01KY2CJ8W9GTAJTGJM3HQQA4ZC",
       "kind": "acceptance_check",
       "text": [
         "Real-SQLite tests prove V001-to-V002 upgrade, fresh composition, invalid reference rejection, immutable history, atomic rollback, and idempotent re-open with observable row and migration-metadata counts."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+      "created_at": "2026-07-21T13:06:42.1822152+00:00"
     },
     {
       "id": "01KY27PSPZJ4YAQJJ7DYD70ZJE",

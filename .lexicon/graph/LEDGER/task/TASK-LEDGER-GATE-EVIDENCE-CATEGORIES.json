@@ -9,7 +9,7 @@
     "Validation-only task with no Implements link: verify the direct owner decision recorded for OQ-LEDGER-6 and DD-LEDGER-CATEGORY-HIERARCHY before category implementation."
   ],
   "objective": [
-    "Lock hierarchical Spend Categories with zero or one active category assignment per transaction."
+    "Lock hierarchical Spend Categories with zero or one active Category Assignment per transaction."
   ],
   "planning_state": "ready",
   "priority": 0,

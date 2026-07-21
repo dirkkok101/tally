@@ -231,54 +231,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY2810Q55ZZSQ676YME01YWH",
+      "id": "01KY2CK5SRH7SH5TFPZT1BWEHC",
       "kind": "acceptance_check",
       "text": [
-        "Ordinary void appends an attributable lifecycle event, retires active transfer/refund relationships atomically, preserves evidence/decision/dimension history, and exposes affected confirmations as current reconciliation exceptions."
+        "Ordinary void appends an attributable lifecycle event, retires active transfer/refund relationships atomically, preserves evidence/decision/dimension history, and exposes affected confirmations as current Reconciliation Exceptions."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:47:22.4692197+00:00"
+      "created_at": "2026-07-21T13:07:11.8002214+00:00"
     },
     {
-      "id": "01KY2810Q6E602T34SBGDAKWAA",
+      "id": "01KY2CK5ST4AGKNE7XRKCJ374F",
       "kind": "acceptance_check",
       "text": [
         "Ordinary supersede creates one independent replacement with only explicitly supplied new evidence or attribution; it never copies category, pool, payment attribution, relationships, or confirmation."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:47:22.4692197+00:00"
+      "created_at": "2026-07-21T13:07:11.8002214+00:00"
     },
     {
-      "id": "01KY2810Q640AY4JRXT08QCC9C",
+      "id": "01KY2CK5STX2TWH4PA7RE73RMQ",
       "kind": "acceptance_check",
       "text": [
         "AppendStatementSupersessionAsync is internal and may run only inside an authorized reconciliation writer transaction; it creates the typed statement-derived replacement and supersession while leaving all carry-forward and relationship decisions to the coordinator."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:47:22.4692197+00:00"
+      "created_at": "2026-07-21T13:07:11.8002214+00:00"
     },
     {
-      "id": "01KY2810Q6QZK66TV0R9XSXCVW",
+      "id": "01KY2CK5ST6CVP8D6KRN3VRA8J",
       "kind": "acceptance_check",
       "text": [
-        "Any replacement validation, relationship retirement, reconciliation exception, or write failure leaves the original state unchanged; history returns complete original/replacement facts and retained associations."
+        "Any replacement validation, relationship retirement, Reconciliation Exception, or write failure leaves the original state unchanged; history returns complete original/replacement facts and retained associations."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T11:47:22.4692197+00:00"
+      "created_at": "2026-07-21T13:07:11.8002214+00:00"
     },
     {
-      "id": "01KY2810Q61VR7AQ80GCMCGACJ",
+      "id": "01KY2CK5STWWH4ZXM63DYS5E3W",
       "kind": "acceptance_check",
       "text": [
         "Identical correction replay returns the original outcome; an incompatible later correction returns stable lifecycle/conflict."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-21T11:47:22.4692197+00:00"
+      "created_at": "2026-07-21T13:07:11.8002214+00:00"
     },
     {
       "id": "01KXT0SME88PK0FT1Q3ZDNKSAB",

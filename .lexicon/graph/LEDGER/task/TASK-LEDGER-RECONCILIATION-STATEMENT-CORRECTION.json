@@ -297,54 +297,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY27XN5PBBHBTQKQPFB9DSW4",
+      "id": "01KY2CJXS256Q794FM9T2PBTF4",
       "kind": "acceptance_check",
       "text": [
         "Given one compatible prior economic event with differing authoritative statement facts and deterministic-policy or explicit owner authority, correct_existing_from_statement revalidates evidence, candidates, policy/authority, facts, active dimensions, and relationships inside one BEGIN IMMEDIATE transaction."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:45:32.3418525+00:00"
+      "created_at": "2026-07-21T13:07:03.5855825+00:00"
     },
     {
-      "id": "01KY27XN5P7NP89HTTX9FY5K2W",
+      "id": "01KY2CJXS3C5TR72S7CXD1K6MS",
       "kind": "acceptance_check",
       "text": [
-        "A valid correction appends one statement-derived fact, supersession, reconciliation decision, confirming link, category and Spend Pool carry-forward, compatible payment carry-forward or explicit unknown initialization, and any invariant-preserving transfer/refund relationship replacement; exactly one fact remains active."
+        "A valid correction appends one statement-derived fact, supersession, Reconciliation Decision, confirming link, category and Spend Pool carry-forward, compatible payment carry-forward or explicit unknown initialization, and any invariant-preserving transfer/refund relationship replacement; exactly one fact remains active."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:45:32.3418525+00:00"
+      "created_at": "2026-07-21T13:07:03.5855825+00:00"
     },
     {
-      "id": "01KY27XN5P0TCGQ4C9KQFM3Q3A",
+      "id": "01KY2CJXS34RXZ5AQ3MNG0FHGA",
       "kind": "acceptance_check",
       "text": [
-        "The original agent-capture fact, its supporting evidence, prior assignments, prior attribution, and prior relationship history remain queryable; every new event references the reconciliation decision and source/replacement transaction IDs."
+        "The original agent-capture fact, its supporting evidence, prior assignments, prior attribution, and prior relationship history remain queryable; every new event references the Reconciliation Decision and source/replacement transaction IDs."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:45:32.3418525+00:00"
+      "created_at": "2026-07-21T13:07:03.5855825+00:00"
     },
     {
-      "id": "01KY27XN5P06T5PBV420BKHAVV",
+      "id": "01KY2CJXS3KF45JEESRKFGR4WH",
       "kind": "acceptance_check",
       "text": [
         "If payment attribution is incompatible, explicit unknown state and review metadata commit; if an active transfer/refund would violate role, account, sign, currency, principal, or refund conservation, the operation returns review-required and commits no replacement or idempotency outcome."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T11:45:32.3418525+00:00"
+      "created_at": "2026-07-21T13:07:03.5855825+00:00"
     },
     {
-      "id": "01KY27XN5P3AXR2TDHMHJH2EWY",
+      "id": "01KY2CJXS32EVRR6ZNPNGEJ9TM",
       "kind": "acceptance_check",
       "text": [
         "Crash injection before and after every replacement, carry-forward, relationship, decision, link, state, and idempotency write yields either the complete outcome once or the unchanged prior state; identical replay returns the original result."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-21T11:45:32.3418525+00:00"
+      "created_at": "2026-07-21T13:07:03.5855825+00:00"
     },
     {
       "id": "01KY27XN5QFBQN75M5FZY3FKQ0",
@@ -387,44 +387,44 @@
       "created_at": "2026-07-21T11:45:32.3418525+00:00"
     },
     {
-      "id": "01KY27XN5PTPNQANP3C38JXWKT",
+      "id": "01KY2CJT2RXHGJFAYVQT04GYBZ",
       "kind": "failure_criterion",
       "text": [
         "Do NOT overwrite the notification-derived fact, create a second active spend effect, or move evidence/dimensions/relationships in place — rejected by DD-LEDGER-RECONCILIATION-CONTRACT and DD-LEDGER-IMMUTABLE-HISTORY."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:45:32.3418525+00:00"
+      "created_at": "2026-07-21T13:06:59.8002190+00:00"
     },
     {
-      "id": "01KY27XN5PRFC1YYZ652R0NHQH",
+      "id": "01KY2CJT2VQEZGNZPZ1NG2SG8X",
       "kind": "failure_criterion",
       "text": [
         "Do NOT accept raw email, MIME, statement document, provider payload, message ID semantics, or arbitrary metadata — per ADR-CORE-0030."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:45:32.3418525+00:00"
+      "created_at": "2026-07-21T13:06:59.8002190+00:00"
     },
     {
-      "id": "01KY27XN5PCMCV1NG36S9NST3Q",
+      "id": "01KY2CJT2VEZNXZ0MRQ6GVNHK9",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT preserve an invalid relationship or silently drop an existing category/Spend Pool assignment; invalid relationship blocks, while category/pool preservation is explicit."
+        "Do NOT preserve an invalid relationship or silently drop an existing category/Spend Pool Assignment; invalid relationship blocks, while category/pool preservation is explicit."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:45:32.3418525+00:00"
+      "created_at": "2026-07-21T13:06:59.8002190+00:00"
     },
     {
-      "id": "01KY27XN5QYXX7E9PVWZPCJV20",
+      "id": "01KY2CJT2VN40W790Y5GEABZZ5",
       "kind": "failure_criterion",
       "text": [
         "Do NOT enable automatic correction until OQ-LEDGER-13Resolution permits the exact case; explicit owner-approved correction remains available."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T11:45:32.3418525+00:00"
+      "created_at": "2026-07-21T13:06:59.8002190+00:00"
     },
     {
       "id": "01KY27XN5QHGCA640PA18Z78AC",
