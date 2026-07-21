@@ -7,7 +7,7 @@
     "Define correction semantics for canonical facts and every financial classification or reconciliation dimension."
   ],
   "decision": [
-    "Keep transaction facts insert-only. Record void and supersession, catalogue lifecycle, category allocation, payment attribution, Spend Pool assignment, evidence links, Reconciliation Decisions, statement coverage, transfers, and refunds as attributable append-only history. Derive current state from active history; never overwrite or silently move links or assignments."
+    "Keep transaction facts insert-only. Record void and supersession, catalogue lifecycle, category allocation, payment attribution, Spend Pool Assignment, evidence links, Reconciliation Decisions, statement coverage, transfers, and refunds as attributable append-only history. Derive current state from active history; never overwrite or silently move links or assignments."
   ],
   "rationale": [
     "Financial corrections must remain explainable, reversible, and recoverable. Reconciliation needs proof of deterministic versus owner-approved choices and their exact reasons."

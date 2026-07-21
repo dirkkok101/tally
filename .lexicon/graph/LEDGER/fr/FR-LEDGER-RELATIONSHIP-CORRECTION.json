@@ -23,7 +23,7 @@
     "Given an active transfer or refund relationship and a reason, when the owner revokes it, then it becomes retired, the event is attributable, and active actuals are recalculated atomically.",
     "Given an active relationship and proposed replacement participants, when the owner replaces it with a reason, then role exclusivity, cardinality, amount conservation, account, currency, sign, and lifecycle rules are revalidated before the prior relationship is retired and exactly one valid replacement is activated atomically.",
     "Given an inactive relationship, when it is revoked again, then the Ledger returns a stable lifecycle error and changes no actuals.",
-    "Given any retired relationship, when history-inclusive detail is requested, then its participants, type, lifecycle reason, actor context, time, and replacement reference where applicable remain queryable.",
+    "Given any retired relationship, when history-inclusive detail is requested, then its participants, type, lifecycle reason, actor context, and time remain queryable, and its replacement reference is returned when the retirement event records one or explicit null otherwise.",
     "Given a transfer or refund relationship is revoked or replaced, when pool, category, and pool-by-category actuals are queried, then the retired effect is removed and only the valid active replacement effect is applied atomically and exactly."
   ],
   "status": "active",

@@ -24,7 +24,7 @@
     "Given an active transaction, a reason, and valid replacement facts, when the owner supersedes it, then one distinct replacement is created, the original becomes inactive, and default actuals include only explicitly established active replacement state.",
     "Given a corrected transaction with evidence, Reconciliation Decisions, category or Pool Assignments, or payment attribution, when void or supersession is applied, then those records remain attached to their historical subject and none silently moves to the replacement.",
     "Given reconciliation was affected by void or supersession, when current state is queried, then one Reconciliation Exception outcome is returned until a valid deterministic or owner-approved decision is recorded.",
-    "Given a voided or superseded transaction, when history-inclusive detail is requested, then original facts, evidence and decision history, assignments, actor context, reason, time, retired relationships, and replacement reference where applicable remain queryable."
+    "Given a voided or superseded transaction, when history-inclusive detail is requested, then original facts, evidence and decision history, assignments, actor context, reason, time, and retired relationships remain queryable, and its replacement reference is returned for supersession or explicit null for void."
   ],
   "status": "active",
   "created_at": "2026-07-18T04:22:18.1335190+00:00",

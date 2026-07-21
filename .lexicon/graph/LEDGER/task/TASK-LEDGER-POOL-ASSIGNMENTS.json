@@ -4,7 +4,7 @@
   "sub_plan_id": "01KXT06A6E7WPPCP8KDAKCJ1H4",
   "ref_code": "TASK-LEDGER-POOL-ASSIGNMENTS",
   "slug": "POOL-ASSIGNMENTS",
-  "title": "Implement transaction Spend Pool assignment",
+  "title": "Implement transaction Spend Pool Assignment",
   "description": [
     "Deliver explicit unassigned or one active pool state and attributable corrections independently from category and payment dimensions."
   ],

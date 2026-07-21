@@ -5,7 +5,7 @@
   "ref_code": "FR-LEDGER-POOL-ASSIGNMENT",
   "title": "Assign and correct transaction Spend Pools",
   "description": [
-    "Maintain at most one active Spend Pool assignment per active spend transaction, with explicit unassigned state and attributable correction history independent of category. Implements G12 and UC-LEDGER-018 under C22 and C23."
+    "Maintain at most one active Spend Pool Assignment per active spend transaction, with explicit unassigned state and attributable correction history independent of category. Implements G12 and UC-LEDGER-018 under C22 and C23."
   ],
   "rationale": [
     "Pool actuals must remain exact through refunds, transfers, corrections, and reassignment without rewriting source transactions or category history."

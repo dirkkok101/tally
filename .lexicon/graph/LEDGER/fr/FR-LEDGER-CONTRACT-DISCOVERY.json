@@ -21,7 +21,7 @@
   ],
   "acceptance_criteria": [
     "Given the self-contained executable, when a caller requests top-level or Ledger help non-interactively, then available provider-neutral public operations, required inputs, output modes, compatibility metadata, and examples are returned without starting a daemon or mutation.",
-    "Given any public Ledger operation, when its machine schema is requested, then a versioned schema describes request fields, result shape, expected module-scoped errors, exit codes, idempotency requirements, and explicit ambiguity or review outcomes where applicable.",
+    "Given any public Ledger operation, when its machine schema is requested, then a versioned schema describes request fields, result shape, every expected module-scoped error and exit code, and its idempotency requirements; if its descriptor declares ambiguity or review states, the schema enumerates every such closed outcome.",
     "Given a schema request is repeated for the same contract version, when results are compared, then their semantic content is deterministic.",
     "Given an operation or field outside the public contract, including provider transport, mailbox, MIME, recipient, schedule, delivery, or acknowledgement concerns, when it is requested, then a stable unknown-operation or validation error is returned with no internal storage detail and no mutation.",
     "Given Hermes or another External Orchestrator uses the published schema, when it invokes Ledger, then no provider-specific adapter, private database access, or bundled agent skill is required."

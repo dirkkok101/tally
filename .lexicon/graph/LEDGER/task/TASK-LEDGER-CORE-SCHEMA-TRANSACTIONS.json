@@ -6,7 +6,7 @@
   "slug": "CORE-SCHEMA-TRANSACTIONS",
   "title": "Implement the V001 transaction schema fragment",
   "description": [
-    "Schema foundation intentionally has no Implements link: translate immutable transaction facts, lifecycle events, category-allocation, payment-attribution, and Spend Pool-assignment history into one independently verified V001 fragment."
+    "Schema foundation intentionally has no Implements link: translate immutable transaction facts, lifecycle events, category-allocation, payment-attribution, and Spend Pool Assignment history into one independently verified V001 fragment."
   ],
   "objective": [
     "Create exact immutable transaction and correction-history tables plus independent current/historical category, payment, and pool dimensions without implementing handlers."

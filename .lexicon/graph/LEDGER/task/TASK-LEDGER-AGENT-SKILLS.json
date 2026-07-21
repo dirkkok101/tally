@@ -167,54 +167,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0E8AVZ67WR2H24MXD6M2EY",
+      "id": "01KY1RS8E0972ZK07483Z956AR",
       "kind": "acceptance_check",
       "text": [
-        "The executable's help and schema are sufficient for every workflow with no installed guidance, private store access, or provider adapter."
+        "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE and TC-LEDGER-SKILL-COMPATIBILITY-CONTRACT complete every declared public Ledger workflow using only executable help and machine schemas, with no installed guidance, private store access, or provider adapter."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:57:44.8305289+00:00"
+      "created_at": "2026-07-21T07:20:59.5837588+00:00"
     },
     {
-      "id": "01KY0E8AW00EVHHTC68TPA415J",
+      "id": "01KY1RS8E00YQD263BW378T91S",
       "kind": "acceptance_check",
       "text": [
         "Embedded manifest declares host format, bundle checksum, operation IDs, executable range, and contract range and is generated/validated against OperationRegistry."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:57:44.8305289+00:00"
+      "created_at": "2026-07-21T07:20:59.5837588+00:00"
     },
     {
-      "id": "01KY0E8AW05AE6X5G322K9BEDP",
+      "id": "01KY1RS8E0X61N4M9AXD0Q7GHG",
       "kind": "acceptance_check",
       "text": [
         "guidance list/check are read-only and classify compatible, missing, outdated, newer, or invalid bundles for supported explicit scopes."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:57:44.8305289+00:00"
+      "created_at": "2026-07-21T07:20:59.5837588+00:00"
     },
     {
-      "id": "01KY0E8AW07S2N7AZHY596AKF9",
+      "id": "01KY1RS8E05VWSJ3GWZP7J465R",
       "kind": "acceptance_check",
       "text": [
         "guidance install fails before write for unsupported host/incompatible contract/unsafe path/invalid manifest; compatible install publishes only the documented host scope then verifies checksum/version."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T18:57:44.8305289+00:00"
+      "created_at": "2026-07-21T07:20:59.5837588+00:00"
     },
     {
-      "id": "01KY0E8AW0TA8AXKBEXMM3B453",
+      "id": "01KY1RS8E1Q37K2WE817K73BCX",
       "kind": "acceptance_check",
       "text": [
         "Identical install replay returns original path/version/checksum; crash after publication reconciles a matching manifest; bundled content uses only public provider-neutral operations and never teaches mailbox, MIME, WhatsApp, delivery, schedule, recipient, acknowledgement, private SQLite, or file access."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-20T18:57:44.8305289+00:00"
+      "created_at": "2026-07-21T07:20:59.5837588+00:00"
     },
     {
       "id": "01KXT0W0YZ9YC914D5NC8708WW",
