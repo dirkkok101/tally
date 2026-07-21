@@ -11,10 +11,19 @@
   "objective": [
     "Produce one deterministic 8-operation relationship/actuals bundle whose results remain exact by pool and category after reconciliation, refunds, reversals, transfers, and corrections."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 2,
   "created_at": "2026-07-18T07:29:01.9775135+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V3CZPSW47H57DRMVGWBQV",
+      "bead_id": "bd-3sd",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:29.0786858+00:00",
+      "created_at": "2026-07-21T08:01:29.0786858+00:00"
+    }
+  ],
   "dependencies": [
     {
       "id": "01KXT21TGW81KE7M6XA06XJVYE",

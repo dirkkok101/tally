@@ -11,10 +11,19 @@
   "objective": [
     "Prove isolated storage evolution preserves complete provider-neutral durable state and only activates a verified candidate after explicit authorization."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 140,
   "created_at": "2026-07-18T07:11:45.9941647+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V46ZTS1GGMK9E3QFPHJQ4",
+      "bead_id": "bd-3g2",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:55.7060392+00:00",
+      "created_at": "2026-07-21T08:01:55.7060392+00:00"
+    }
+  ],
   "dependencies": [
     {
       "id": "01KXT16F26P9JAS1ANPJKFVSFT",

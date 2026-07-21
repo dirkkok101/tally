@@ -11,10 +11,19 @@
   "objective": [
     "Atomically record at most one immutable Canonical Transaction and its privacy-safe initial Evidence Record while round-tripping every accepted fact and link exactly."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 30,
   "created_at": "2026-07-18T07:05:09.0800297+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V3VYMQGE9TASBV2FGCTCS",
+      "bead_id": "bd-84s",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:44.4046255+00:00",
+      "created_at": "2026-07-21T08:01:44.4046255+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXT0P36TKC13SH148A5S6Q6Y",

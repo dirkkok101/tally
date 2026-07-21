@@ -11,10 +11,19 @@
   "objective": [
     "Maintain stable masked owned asset and liability account identities and attributable lifecycle history without credentials or physical deletion."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 10,
   "created_at": "2026-07-18T07:05:09.0800297+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V3GQMKWRP02YGJMSJSQCN",
+      "bead_id": "bd-34k",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:32.9166658+00:00",
+      "created_at": "2026-07-21T08:01:32.9166658+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXT0P36RPE9HDKCDNFNB5XNV",

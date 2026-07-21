@@ -11,10 +11,19 @@
   "objective": [
     "Prove every supported local artifact and public process surface protects financial/evidence data, remains provider-neutral, and fails closed without custom cryptography."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 20,
   "created_at": "2026-07-18T07:09:31.6427414+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V3MT0FQBWJJDB8VBCARVC",
+      "bead_id": "bd-112",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:37.0882381+00:00",
+      "created_at": "2026-07-21T08:01:37.0882381+00:00"
+    }
+  ],
   "dependencies": [
     {
       "id": "01KXT1AWJ36B75KYFA13VV3K5D",

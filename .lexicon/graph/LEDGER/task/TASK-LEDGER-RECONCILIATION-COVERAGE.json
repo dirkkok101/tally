@@ -11,10 +11,19 @@
   "objective": [
     "Return a reconciliation batch summary in which every accepted row and every eligible prior transaction has exactly one explicit outcome."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 40,
   "created_at": "2026-07-20T18:49:57.6488706+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V3YBFVVW1A3K49FJ8K98B",
+      "bead_id": "bd-2ae",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:46.8638487+00:00",
+      "created_at": "2026-07-21T08:01:46.8638487+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KY0DT2MXXP2N85ZQ7YA2M2RE",

@@ -11,10 +11,19 @@
   "objective": [
     "Recover from a Verified Ledger Backup without changing CURRENT until every durable type, history, privacy rule, replay outcome, relationship/reconciliation rule, count, and exact total is revalidated against the expected fingerprint."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 20,
   "created_at": "2026-07-18T07:08:23.3874370+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V3P9X084WD146MEFC03HK",
+      "bead_id": "bd-fup",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:38.6215531+00:00",
+      "created_at": "2026-07-21T08:01:38.6215531+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXT0W0YXWDDFDBMA302YT11D",

@@ -11,10 +11,19 @@
   "objective": [
     "Publish exactly one owner-only versioned backup artifact after checksum, compatibility, complete-state, privacy, replay, count, relationship/reconciliation, and exact-total verification succeeds."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 10,
   "created_at": "2026-07-18T07:08:23.3874370+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V3H7TPD23T28E1XESRZTM",
+      "bead_id": "bd-3j9",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:33.4348091+00:00",
+      "created_at": "2026-07-21T08:01:33.4348091+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXT0W0YVQHSPN3GKKGVE9VXY",

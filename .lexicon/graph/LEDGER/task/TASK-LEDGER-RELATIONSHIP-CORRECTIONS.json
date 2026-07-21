@@ -11,10 +11,19 @@
   "objective": [
     "Retire or replace one active financial relationship atomically after fully revalidating the proposed roles and spend effect."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 30,
   "created_at": "2026-07-18T07:07:05.0252128+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V3V1QRP5Z3H4SW4QM2WPK",
+      "bead_id": "bd-2sb",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:43.4793525+00:00",
+      "created_at": "2026-07-21T08:01:43.4793525+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXT0SME4D4MEEXDK4V80A260",

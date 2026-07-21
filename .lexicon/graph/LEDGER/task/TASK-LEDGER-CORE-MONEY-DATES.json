@@ -11,10 +11,19 @@
   "objective": [
     "Provide deterministic value types that reject lossy inputs and round-trip accepted money/date values exactly."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 30,
   "created_at": "2026-07-18T07:03:45.8586325+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V3SZWQ831E1EN3MWBSBNV",
+      "bead_id": "bd-1b2",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:42.3962963+00:00",
+      "created_at": "2026-07-21T08:01:42.3962963+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXT0KHY60VQF0M3KCQB4JD5W",

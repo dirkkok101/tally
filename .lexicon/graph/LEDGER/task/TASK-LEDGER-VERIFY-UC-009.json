@@ -11,10 +11,19 @@
   "objective": [
     "Prove transaction correction preserves immutable facts, evidence and reconciliation history, retires financial relationships atomically, and never moves dimensions or confirmations silently."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 110,
   "created_at": "2026-07-18T07:11:45.9941647+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V45JZ0T6G3V2DYND4S7XG",
+      "bead_id": "bd-1ps",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:54.2719649+00:00",
+      "created_at": "2026-07-21T08:01:54.2719649+00:00"
+    }
+  ],
   "dependencies": [
     {
       "id": "01KXT16DD85CY3ZR64QNB355KN",

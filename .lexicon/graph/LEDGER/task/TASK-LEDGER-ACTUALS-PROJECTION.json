@@ -9,12 +9,21 @@
     "Build one canonical active-state projection with deterministic ordering and exact named totals across every independent dimension."
   ],
   "objective": [
-    "Return authoritative membership and Net Account Movement, External Spend, and Budget Actual matrices for all downstream modules."
+    "Return membership and Net Account Movement, External Spend, and Budget Actual matrices for downstream modules."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 50,
   "created_at": "2026-07-18T07:07:05.0252128+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V40TFVP3AK89KJ680N44M",
+      "bead_id": "bd-3hy",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:49.3912654+00:00",
+      "created_at": "2026-07-21T08:01:49.3912654+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXT0SME93M69R10W81Q6MT0A",

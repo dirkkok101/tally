@@ -11,10 +11,19 @@
   "objective": [
     "Create exact transfer/refund relationship, relationship-lifecycle, and expiry-bound query-snapshot tables supporting category, pool, instrument, cardholder, evidence, and reconciliation filters without implementing financial rules."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 23,
   "created_at": "2026-07-18T07:44:24.4911988+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V3QR5XBCZS86QGG3JQ5R2",
+      "bead_id": "bd-193",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:40.1016332+00:00",
+      "created_at": "2026-07-21T08:01:40.1016332+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXT2XZDDSA5ZT8XJFHHJ9DH4",

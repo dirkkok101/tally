@@ -11,10 +11,19 @@
   "objective": [
     "Provide a real-store-tested LedgerDb, schema-fragment registry, storage metadata schema, generation activation primitives, and owner-only artifact policy for complete provider-neutral Durable Ledger State."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 20,
   "created_at": "2026-07-18T07:03:45.8586325+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V3M7TMYF42NZJKMMDQ31X",
+      "bead_id": "bd-23m",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:36.5060215+00:00",
+      "created_at": "2026-07-21T08:01:36.5060215+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXT0KHY4HR8PAAMD94XCEWHC",

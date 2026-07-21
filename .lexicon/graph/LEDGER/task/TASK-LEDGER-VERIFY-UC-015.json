@@ -11,10 +11,19 @@
   "objective": [
     "Prove explicit owner decisions resolve or correct reconciliation without deleting history or duplicating actuals."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 170,
   "created_at": "2026-07-20T18:49:57.6488706+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V48C4PMZMECCWX7PJ5G37",
+      "bead_id": "bd-xt9",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:57.1245535+00:00",
+      "created_at": "2026-07-21T08:01:57.1245535+00:00"
+    }
+  ],
   "dependencies": [
     {
       "id": "01KY0DT2N1T26Y4P33EJ5W7AV3",

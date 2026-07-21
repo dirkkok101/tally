@@ -11,10 +11,19 @@
   "objective": [
     "Compose and prove the complete V001 schema plus provider-neutral process, exact-value, real-SQLite, privacy, and idempotent mutation architecture on linux-x64."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 50,
   "created_at": "2026-07-18T07:03:45.8586325+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V41PRP84NN59DV3H307N3",
+      "bead_id": "bd-2zt",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:50.2965792+00:00",
+      "created_at": "2026-07-21T08:01:50.2965792+00:00"
+    }
+  ],
   "dependencies": [
     {
       "id": "01KXT15W166Q3DP9CPQ048K2B4",

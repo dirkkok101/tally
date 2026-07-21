@@ -11,10 +11,19 @@
   "objective": [
     "Prove exact snapshot-bound actuals membership and named totals across category, pool, payment, relationship, evidence, and reconciliation filters."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 70,
   "created_at": "2026-07-18T07:10:29.4870620+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V43GK507ABT7S7R7R29T3",
+      "bead_id": "bd-3na",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:52.1472890+00:00",
+      "created_at": "2026-07-21T08:01:52.1472890+00:00"
+    }
+  ],
   "dependencies": [
     {
       "id": "01KXT16B9PZR5C87ZGTPZJ4FEW",

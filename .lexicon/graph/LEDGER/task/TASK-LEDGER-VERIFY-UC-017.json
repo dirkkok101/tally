@@ -11,10 +11,19 @@
   "objective": [
     "Prove privacy-safe payment identities and independent instrument/Cardholder Attribution across lifecycle, correction, unknown, and replay paths."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 190,
   "created_at": "2026-07-20T18:49:57.6488706+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V499JF2NZ722HK220Y2TT",
+      "bead_id": "bd-29w",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:58.0660628+00:00",
+      "created_at": "2026-07-21T08:01:58.0660628+00:00"
+    }
+  ],
   "dependencies": [
     {
       "id": "01KY0DT2N2BPBW3SBS79EBB3XQ",

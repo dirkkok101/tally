@@ -11,10 +11,19 @@
   "objective": [
     "Prove a valid full/partial refund offsets the original's current category and Spend Pool in the credit period while preserving facts and exact history."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 120,
   "created_at": "2026-07-18T07:11:45.9941647+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V4646Q7HECKXS6KSJ1SP3",
+      "bead_id": "bd-1jr",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:54.8226525+00:00",
+      "created_at": "2026-07-21T08:01:54.8226525+00:00"
+    }
+  ],
   "dependencies": [
     {
       "id": "01KXT16DZEFCHF9HRHZXXFQWRQ",

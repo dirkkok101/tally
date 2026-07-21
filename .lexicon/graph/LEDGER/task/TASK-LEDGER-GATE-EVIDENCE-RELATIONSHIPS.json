@@ -11,10 +11,19 @@
   "objective": [
     "Confirm transfer, refund, fee, and cash-withdrawal treatment."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 5,
   "created_at": "2026-07-18T07:02:10.6382550+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V3EVMY1ATCKAZJKVR3003",
+      "bead_id": "bd-2pt",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:30.9963372+00:00",
+      "created_at": "2026-07-21T08:01:30.9963372+00:00"
+    }
+  ],
   "files": [
     {
       "id": "01KXT0GMYHX85SB3APCHMH763X",

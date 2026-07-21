@@ -11,10 +11,19 @@
   "objective": [
     "Create one attributable active transfer only when distinct owned-account legs satisfy exact role, sign, currency, amount, account, and lifecycle rules."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 10,
   "created_at": "2026-07-18T07:07:05.0252128+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V3K63VGXKCPSKB51E59MM",
+      "bead_id": "bd-xq6",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:35.4276135+00:00",
+      "created_at": "2026-07-21T08:01:35.4276135+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXT0SME1YWZ5AMV4K5641Q29",

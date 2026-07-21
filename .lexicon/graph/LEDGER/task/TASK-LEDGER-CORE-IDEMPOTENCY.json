@@ -11,10 +11,19 @@
   "objective": [
     "Guarantee identical request and cross-key logical replay return the original effect while changed replay, invalid input, busy failure, and crash boundaries preserve exactly one effect."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 40,
   "created_at": "2026-07-18T07:03:45.8586325+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V3XTZG9NNEKZ37S8TMK2B",
+      "bead_id": "bd-2ne",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:46.3359500+00:00",
+      "created_at": "2026-07-21T08:01:46.3359500+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXT0KHY7NWNN3CW2F5NJK7PK",

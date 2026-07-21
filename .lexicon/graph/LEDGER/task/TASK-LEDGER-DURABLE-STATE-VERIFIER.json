@@ -11,10 +11,19 @@
   "objective": [
     "Provide one real-SQLite verifier whose complete normalized report is required before backup publication, restore activation, or storage-evolution activation."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 5,
   "created_at": "2026-07-18T07:27:47.5618899+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V3ECEENHDKNR81EKBH4WM",
+      "bead_id": "bd-3ja",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:30.5106546+00:00",
+      "created_at": "2026-07-21T08:01:30.5106546+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXT1ZHVAGJ2TE8FRPJ2QPC30",

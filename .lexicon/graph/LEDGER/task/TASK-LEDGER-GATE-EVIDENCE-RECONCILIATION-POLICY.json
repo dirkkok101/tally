@@ -11,10 +11,19 @@
   "objective": [
     "Produce the bounded versioned match and guard-candidate matrix that permits automatic outcomes without false matches or duplicate statement-only facts."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 7,
   "created_at": "2026-07-20T18:49:57.6488706+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V3FT8AZMBD8Z081ZKKCVV",
+      "bead_id": "bd-339",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:31.9764449+00:00",
+      "created_at": "2026-07-21T08:01:31.9764449+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KY0DT2MH5HYXJ3K4ZQ9Q5PPA",

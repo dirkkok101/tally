@@ -11,10 +11,19 @@
   "objective": [
     "Create exact immutable transaction and correction-history tables plus independent current/historical category, payment, and pool dimensions without implementing handlers."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 22,
   "created_at": "2026-07-18T07:44:24.4911988+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V3Q96NWJXD6PWM8974JTB",
+      "bead_id": "bd-2qj",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:39.6222849+00:00",
+      "created_at": "2026-07-21T08:01:39.6222849+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXT2XZDC6FH4WSMPJ8S4JM4A",

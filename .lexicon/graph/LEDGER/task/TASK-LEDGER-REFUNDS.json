@@ -11,10 +11,19 @@
   "objective": [
     "Create attributable refund relationships that safely offset the original transaction's current category and Spend Pool in the credit's own Effective Date period."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 20,
   "created_at": "2026-07-18T07:07:05.0252128+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V3NS5Y11JV09CYWPNAZCM",
+      "bead_id": "bd-10w",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:38.0852835+00:00",
+      "created_at": "2026-07-21T08:01:38.0852835+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXT0SME3SH9DD190CWE3WJ5F",

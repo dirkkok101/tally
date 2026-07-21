@@ -11,10 +11,19 @@
   "objective": [
     "Produce one offline tally executable whose explicit 72-operation registry drives dispatch, help, schema, structured streams, errors, exits, compatibility, and version reporting for any external caller."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 10,
   "created_at": "2026-07-18T07:03:45.8586325+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY1V3HQQYW14PAJX4YGESFYK",
+      "bead_id": "bd-3sx",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T08:01:33.9439541+00:00",
+      "created_at": "2026-07-21T08:01:33.9439541+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXT0KHY3BY7WZ9Y2VD9KWXN7",
