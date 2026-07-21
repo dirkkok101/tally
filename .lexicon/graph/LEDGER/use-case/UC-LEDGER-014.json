@@ -4,15 +4,16 @@
   "ref_code": "UC-LEDGER-014",
   "title": "Reconcile statement evidence to a canonical transaction",
   "preconditions": "The statement row was parsed and approved outside LEDGER; the account and statement scope are valid; the caller supplies evidence identity, candidate facts, deterministic-policy identity, and idempotency identity.",
-  "postconditions": "The statement row produces at most one canonical transaction effect; a strong match preserves one existing transaction, a zero-match creates one statement-only transaction, and ambiguity remains unapplied.",
-  "main_flow": "1. Tally registers or reuses the statement evidence and exposes compatible unreconciled candidates through the public reconciliation projection. 2. The caller submits the deterministic outcome and match basis. 3. Tally independently validates candidate compatibility, uniqueness, policy identity, lifecycle, and existing evidence links. 4. For one valid strong match, Tally links statement evidence to the existing transaction and records a deterministic reconciliation decision. 5. For no compatible prior transaction, an approved request atomically creates one statement-only canonical transaction and links the evidence. 6. For multiple compatible candidates, Tally appends an ambiguous outcome without linking or creating a transaction. 7. For accepted evidence that conflicts with canonical facts or an active confirmation, Tally appends a reconciliation exception without linking or creating a transaction. 8. Tally returns the resulting state and durable decision or exception reference.",
+  "postconditions": "Each statement row has at most one active economic effect; the statement governs the reconciled financial facts; prior agent capture remains auditable; exact matches do not duplicate; corrections leave one active replacement; no-match rows become statement-only only when authorized; ambiguity remains unapplied.",
+  "main_flow": "1. INGEST reads an approved statement outside LEDGER, registers or reuses privacy-safe statement-row evidence, and requests compatible unreconciled candidates. 2. The caller submits one closed disposition, authoritative statement facts, policy or explicit owner authority, match basis, reason, and idempotency identity. 3. Tally independently validates evidence, economic-event compatibility, uniqueness, policy, lifecycle, and current links. 4. Exact facts produce one confirming link to the existing transaction. 5. A compatible prior event with differing facts produces one statement-derived replacement, supersession, decision, link, and explicit category/pool/payment carry-forward in one transaction. 6. No compatible prior event may create one statement-only transaction. 7. Multiple candidates remain ambiguous and conflicts become exceptions without guessed financial effects. 8. Tally returns the durable state and exact current-effect reference.",
   "alt_flows": [
     "1a. Statement evidence replay is identical -> return the existing outcome with no duplicate effect",
-    "2a. Policy or match basis is missing or unsupported -> reject automatic application",
-    "3a. Candidate facts conflict, candidate is inactive, or evidence is linked elsewhere -> return exception without mutation",
-    "4a. More than one compatible candidate exists -> return ambiguous and do not guess",
-    "5a. Statement-only creation fails -> commit neither transaction nor evidence link",
-    "6a. Same key requests a different outcome -> return conflict and preserve the original"
+    "2a. Policy, owner authority, reason, or match basis is missing -> reject the requested application",
+    "3a. Candidate is inactive, evidence is confirmed elsewhere, or replacement facts violate Ledger invariants -> return an exception without changing the active financial effect",
+    "4a. More than one compatible or guard candidate exists -> return ambiguous and do not guess",
+    "5a. Replacement, supersession, carry-forward, decision, or evidence link cannot commit atomically -> commit none of them",
+    "6a. Statement-only creation fails -> commit neither transaction nor evidence link",
+    "7a. Same key requests a different outcome -> return conflict and preserve the original"
   ],
   "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"INGEST submits one accepted statement-row evidence record and its approved statement scope for reconciliation.\",\"status\":\"draft\"}",
   "created_at": "2026-07-20T16:59:36.7705788+00:00",

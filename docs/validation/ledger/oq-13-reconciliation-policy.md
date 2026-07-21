@@ -5,6 +5,7 @@ Status: blocked by incomplete paired evidence on 2026-07-21.
 ## Evidence available
 
 - Three owner-supplied statement documents are present, readable, private, ignored, and untracked.
+- The owner confirmed that an approved statement is authoritative over earlier agent-capture facts for the reconciled current view.
 - No paired agent-capture evidence or owner-confirmed match outcomes are present.
 - No statement filename, identifier, description, row, amount, balance, notification text, or transport metadata was copied into this report.
 
@@ -14,11 +15,11 @@ The gate requires paired, privacy-safe cases for exact same-day matches, shifted
 
 ## Evidence gap
 
-Statement rows alone cannot prove compatibility with an earlier agent capture or establish safe date tolerances, uniqueness rules, conflict guards, and stable match reasons. In particular, there is no evidence from which to distinguish a unique deterministic match from a duplicate-amount or competing-candidate ambiguity.
+Source precedence is settled, but statement rows alone cannot prove that a particular earlier agent capture represents the same economic event. Paired evidence is still required for safe date tolerances, uniqueness rules, conflict guards, stable match reasons, and the bounded cases where an automatic authoritative correction may replace differing provisional facts.
 
 ## Gate result
 
-OQ-LEDGER-13 remains open. No automatic ReconciliationPolicyV1 is approved. Automatic matching and automatic statement-only application remain disabled; unproven cases must remain review-required.
+OQ-LEDGER-13 remains open only for automatic identity and compatibility policy. No automatic ReconciliationPolicyV1 is approved. Automatic matching, authoritative correction, and statement-only application remain disabled; an explicit owner-approved correction is attributable and unproven cases remain review-required.
 
 ## Evidence needed to resume
 

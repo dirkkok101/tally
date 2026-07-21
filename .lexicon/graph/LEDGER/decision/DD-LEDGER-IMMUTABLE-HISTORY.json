@@ -7,7 +7,8 @@
     "Define correction semantics for canonical facts and every financial classification or reconciliation dimension."
   ],
   "decision": [
-    "Keep transaction facts insert-only. Record void and supersession, catalogue lifecycle, category allocation, payment attribution, Spend Pool Assignment, evidence links, Reconciliation Decisions, statement coverage, transfers, and refunds as attributable append-only history. Derive current state from active history; never overwrite or silently move links or assignments."
+    "Keep transaction facts insert-only. Record void and supersession, statement-authoritative replacement, catalogue lifecycle and category parent changes, category allocation, payment attribution, Spend Pool Assignment, evidence links, Reconciliation Decisions, statement coverage, transfers, and refunds as attributable append-only history. Derive current state from active history; never overwrite. A reconciliation correction may preserve state on a replacement only by appending explicit category/pool carry-forward, compatible payment carry-forward or unknown initialization, and invariant-preserving relationship replacement events that reference the governing decision.",
+    ""
   ],
   "rationale": [
     "Financial corrections must remain explainable, reversible, and recoverable. Reconciliation needs proof of deterministic versus owner-approved choices and their exact reasons."
@@ -16,7 +17,8 @@
     "Rejected mutable provenance flags, a single source reference, overwriting assignments, deleting decisions, and automatically inheriting evidence or dimensions across supersession."
   ],
   "consequences": [
-    "Queries and recovery validation resolve active history. Corrections require explicit operations. Storage is larger but auditability and replay safety are preserved."
+    "Queries and recovery validation resolve active history and category ancestry. Corrections require explicit operations. A statement-authoritative correction changes the current projection through one atomic replacement chain while preserving the original capture, prior assignments, and every carry-forward event. Storage is larger but auditability and replay safety are preserved.",
+    ""
   ],
   "status_notes": [
     "Expanded beyond transaction and category history to provider-neutral evidence, reconciliation, payment attribution, pools, and coverage."

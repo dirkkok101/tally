@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "term": "Canonical Transaction",
   "definition": [
-    "Tally's durable representation of at most one economic event on one owned account, preserving exact financial facts and stable identity while allowing multiple provider-neutral Evidence Records, reconciliation history, attribution, and corrections. Avoid: one row per source notification or statement observation."
+    "Tally's durable representation of one current economic event on one owned account. Facts are immutable; an approved statement may replace an earlier agent-capture fact through attributable supersession so exactly one version remains active while all evidence and history stay inspectable. Avoid: one active row per source observation or in-place overwrite."
   ],
   "source": "discovery",
   "created_at": "2026-07-17T13:45:15.7468386+00:00"

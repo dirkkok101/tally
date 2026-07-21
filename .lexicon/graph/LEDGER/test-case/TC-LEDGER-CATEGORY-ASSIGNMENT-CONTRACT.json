@@ -9,9 +9,9 @@
   "scenario": "happy",
   "automation": "automated",
   "status": "planned",
-  "preconditions": "A fresh representative local Ledger and the valid and invalid inputs required by FR-LEDGER-CATEGORY-ASSIGNMENT are available.",
-  "steps": "Invoke the relevant operations through the public CLI contract and exercise every acceptance criterion of FR-LEDGER-CATEGORY-ASSIGNMENT.",
-  "expected": "All FR-LEDGER-CATEGORY-ASSIGNMENT acceptance criteria, including stable-error and no-partial-mutation outcomes, hold.",
+  "preconditions": "Active and inactive transactions plus active root, intermediate, leaf, archived, renamed, and reparented categories are available.",
+  "steps": "Assign and correct one category through the public contract; reject simultaneous split assignments and invalid lifecycle targets; query direct and subtree membership before and after rename and reparent.",
+  "expected": "Each active transaction has zero or one current category assignment; history is attributable; current hierarchy roll-ups include the transaction exactly once per requested ancestor and never duplicate all-up actuals.",
   "owner": "LEDGER implementation",
   "created_at": "2026-07-18T04:26:15.7907448+00:00",
   "links": [

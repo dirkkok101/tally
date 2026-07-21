@@ -5,10 +5,10 @@
   "ref_code": "FR-LEDGER-CATEGORY-CATALOGUE",
   "title": "Maintain the Spend Category catalogue",
   "description": [
-    "Create and maintain a flat shared catalogue of Spend Categories. Implements G3 and UC-LEDGER-008 under A10 and A13."
+    "Create and maintain a hierarchical shared catalogue of Spend Categories with stable identity and attributable parent-history. Implements G3 and UC-LEDGER-008 under A5 and A13."
   ],
   "rationale": [
-    "A durable cross-account category identity is required before assignments and later budgets can reconcile."
+    "A durable cross-account hierarchy lets LEDGER expose exact direct and rolled-up category actuals while BUDGET can independently decide which stable category nodes a plan references."
   ],
   "priority": 0,
   "complexity": "S",
@@ -20,12 +20,15 @@
     "the same spend meanings are used across every account"
   ],
   "acceptance_criteria": [
-    "Given a valid unique category name, when the owner creates a category, then the Ledger returns one active category with a stable identifier.",
-    "Given an existing category, when the owner renames it, then its stable identifier and historical transaction assignments remain unchanged.",
-    "Given a category referenced by transactions, when the owner archives it, then historical assignments remain queryable and no existing transaction fact is rewritten.",
-    "Given an archived category, when a new assignment or correction targets it, then the Ledger rejects the request before mutation until the category is reactivated.",
-    "Given an archived category, when the owner reactivates it, then the same stable category identifier becomes active and may receive new assignments and corrections.",
-    "Given Spend Categories and Spend Pools, when either catalogue is maintained, then its identity, lifecycle, and naming remain independent and no value silently creates or selects a value in the other catalogue."
+    "Given a valid category name and optional active parent Category ID, when the owner creates a category, then the Ledger returns one active category with a stable identifier and its current ancestry path.",
+    "Given an active category hierarchy, when any node is inspected or listed, then each category exposes its stable ID, optional parent ID, depth, active state, and deterministic ancestry path without requiring callers to reconstruct the tree from names.",
+    "Given an existing category, when the owner renames it, then its stable identifier, parent relationship, child relationships, and historical transaction assignments remain unchanged.",
+    "Given an active category and an active proposed parent, when the owner reparents it with a reason, then one append-only parent-change event becomes current and category roll-ups use the new acyclic hierarchy.",
+    "Given a category is proposed as its own parent or descendant, a proposed parent is archived, or the move would create a cycle, when reparenting is attempted, then the Ledger returns a stable validation error and preserves the current hierarchy.",
+    "Given any category with historical transaction, budget, or hierarchy references, when physical deletion is requested, then the Ledger rejects it and retains the stable category and history; archival is the supported lifecycle action.",
+    "Given an archived category with no invalid archived ancestor, when the owner reactivates it, then the same stable identifier becomes active and may receive new assignments or active children.",
+    "Given Spend Categories and Spend Pools, when either catalogue is maintained, then its identity, lifecycle, and naming remain independent and no value silently creates or selects a value in the other catalogue.",
+    "Given an active category with active children, when archival is requested, then the Ledger rejects it without mutation; given no active children, archival succeeds and historical assignments and parent events remain queryable."
   ],
   "status": "active",
   "created_at": "2026-07-18T04:22:18.1335190+00:00",

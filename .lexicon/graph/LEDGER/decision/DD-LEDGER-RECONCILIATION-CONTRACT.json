@@ -7,19 +7,24 @@
     "Choose the public and transactional shape for matching approved statement evidence to Canonical Transactions without duplicates."
   ],
   "decision": [
-    "Expose explicit evidence registration, compatibility projection, per-evidence closed disposition, decision lifecycle, and statement coverage operations. Revalidate every apply inside one writer transaction. Persist policy ID, version, exact basis, actor, reason, history, and evidence link. Leave INGEST batch preview, approval, manifests, receipts, and recovery outside LEDGER. Disable automatic match and statement-only application until OQ-LEDGER-13 validates a bounded policy."
+    "Expose explicit evidence registration, compatibility projection, per-evidence closed disposition, decision lifecycle, and statement coverage operations. Approved statement-row evidence is authoritative over earlier agent-capture evidence for current canonical financial facts. Reconciliation supports match_existing, correct_existing_from_statement, create_statement_only, record_ambiguous, and record_exception. A correction appends a statement-derived replacement fact and supersession, records the decision and confirming link, explicitly carries current category and pool assignment, carries compatible payment attribution or initializes an explicit unknown state, and explicitly replaces any still-valid transfer/refund relationship in one writer transaction. If an active relationship would become invalid, correction is review-required and applies no financial effect. Leave INGEST batch lifecycle and source-file handling outside LEDGER. OQ-LEDGER-13 gates automatic matching/correction, not explicit owner-approved correction.",
+    ""
   ],
   "rationale": [
-    "This shape separates orchestration from financial authority, blocks ambiguous guesses, supports one Canonical Transaction with multiple Evidence Records, and makes every decision replay-safe and auditable."
+    "This preserves one active economic effect while allowing the bank statement to govern the reconciled view. Append-only replacement retains what Hermes originally recorded, explicit carry-forward keeps category and pool actuals stable unless the statement changes a financial fact, and closed dispositions keep ambiguity fail-closed without moving email or statement payloads into Tally.",
+    ""
   ],
   "alternatives": [
-    "Rejected minimal evaluate/apply/resolve because outcomes become opaque. Rejected Ledger-owned import batches because they duplicate INGEST. Rejected IReconciliationGateway because the CLI is already the public seam and there is one implementation."
+    "Rejected overwriting the notification-derived row because it destroys audit history. Rejected treating agent capture as co-equal authority because conflicts would never converge on the statement. Rejected creating a second active statement transaction because it duplicates spend. Rejected storing or parsing email and statement payloads in LEDGER because Hermes and INGEST own those boundaries. Rejected automatic fuzzy correction until OQ-LEDGER-13 proves a bounded deterministic policy.",
+    ""
   ],
   "consequences": [
-    "INGEST performs match-first orchestration and applies one result per row. LEDGER may return review-required and conflict outcomes. A versioned empirical matching spike is a hard implementation gate."
+    "INGEST remains match-first and provider-neutral. Exact match confirms the existing fact; approved authoritative correction yields one active replacement and retained history; no match may create one statement-only fact; ambiguity remains unapplied. Reconciliation changes current movement or spend only through explicit supersession. Category/pool state is preserved by attributable carry-forward, incompatible payment attribution becomes explicit unknown, and transfer/refund relationships are either explicitly rebound without changing meaning or block correction for review. Contracts, schema, actuals, recovery, and tests cover every composite effect atomically.",
+    ""
   ],
   "status_notes": [
-    "Selected after sequential interface exploration; governed by ADR-CORE-0030 and the revised LEDGER PRD."
+    "Revised on 2026-07-21 from direct owner policy that statements are authoritative over individual email-derived captures. OQ-LEDGER-13 remains open only for automatic economic-event matching fields and tolerances.",
+    ""
   ],
   "status": "accepted",
   "created_at": "2026-07-20T18:13:19.0327569+00:00",

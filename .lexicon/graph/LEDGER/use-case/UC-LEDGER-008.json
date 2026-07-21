@@ -4,14 +4,15 @@
   "ref_code": "UC-LEDGER-008",
   "title": "Maintain the spend-category catalogue",
   "preconditions": "The local Ledger is available; category maintenance is invoked through the public agent contract; budget amounts and automatic classification remain outside LEDGER.",
-  "postconditions": "The catalogue exposes one stable identity per category; referenced categories remain historically meaningful after rename or archival; no budget amount or automatic rule was created.",
-  "main_flow": "1. The owner delegates a category action to an AI agent. 2. The agent discovers the category command schema and lists current active/archived categories. 3. The agent supplies a category name or stable category reference. 4. Tally validates the flat-catalogue naming and archival rules. 5. Tally creates, renames, or archives the stable category record. 6. Historical assignments retain the same category identity and new assignments select only active categories by default.",
+  "postconditions": "The catalogue exposes one stable identity and deterministic ancestry per category; referenced categories remain historically meaningful after rename, move, or archival; no budget amount, Spend Pool, or automatic classification rule is created.",
+  "main_flow": "1. The owner delegates a category action to an AI agent. 2. The agent discovers the hierarchy-aware category command schema and lists active or archived categories with IDs and ancestry paths. 3. The agent supplies a category name, optional parent ID, or stable category reference. 4. Tally validates lifecycle, sibling naming, active-parent, and acyclic-hierarchy rules. 5. Tally creates, renames, reparents, archives, or reactivates the stable category and appends attributable lifecycle or parent history. 6. Historical assignments retain the same category identity and current roll-ups use the current hierarchy.",
   "alt_flows": [
-    "3a. Category name is absent or conflicts with an active category under the accepted comparison -> reject without mutation",
-    "4a. Physical deletion is requested for a referenced category -> reject and direct the caller to archive",
-    "5a. An already archived category is archived again -> return an idempotent no-change success",
-    "6a. A new assignment or correction targets an archived category -> reject; the owner must reactivate it or choose an active category"
+    "3a. Category name is absent or conflicts with an active sibling under the accepted comparison -> reject without mutation",
+    "4a. A parent choice would create a self-reference or cycle, or targets an archived parent -> reject without mutation",
+    "5a. Physical deletion is requested for a referenced category -> reject and direct the caller to archive",
+    "5b. Archival is requested while active children remain -> reject until the children are moved or archived",
+    "6a. A new assignment, child, or correction targets an archived category -> reject; the owner must reactivate it or choose an active category"
   ],
-  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner needs to create, list, rename, or retire a spend category used across accounts and later budgets.\",\"status\":\"draft\"}",
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner needs to create, list, rename, move, archive, or reactivate a Spend Category used across accounts and later budgets.\",\"status\":\"draft\"}",
   "created_at": "2026-07-17T17:43:15.6128330+00:00"
 }

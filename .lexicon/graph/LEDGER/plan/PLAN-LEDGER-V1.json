@@ -4,9 +4,9 @@
   "ref_code": "PLAN-LEDGER-V1",
   "title": "Provider-neutral Financial Ledger v1 implementation",
   "description": [
-    "Greenfield re-plan from MD-LEDGER-MASTER v0.8; implementation exists ratio 0%. Global constraints: C1 verbatim: The first Ledger release is one self-contained executable with one embedded local datastore, zero required daemons or network services, no frontend, and no general plugin runtime. An optional service process requires new evidence and a later ADR. C5 verbatim: Reuse the intent of ADR-CORE-0010 structured command results, ADR-CORE-0021 explicit DI, ADR-CORE-0024 vertical slices, and related pattern discipline where applicable. Do not inherit FastEndpoints, Aspire, PostgreSQL, RLS, multi-tenancy, or browser contracts without Tally-specific evidence. C6 verbatim: Ledger behavior and contracts cannot depend on web, AgentMail, WhatsApp, Hermes, scheduled delivery, recipients, or any specific AI host. An external orchestrator integrates only through stable provider-neutral public contracts; CHANNELS is not a Ledger runtime dependency. C8 verbatim: Every public Ledger mutation requires a caller-visible stable idempotency identity, including evidence registration and linking, reconciliation decisions and corrections, attribution changes, account/category/pool maintenance, transactions, relationships, backup, restore, and storage evolution. Identical reuse returns the original result with zero duplicate effects; conflicting operation, version, or logical input fails and preserves the original. Validation failures do not consume the identity. C10 verbatim: Canonical facts, evidence metadata and links, reconciliation decisions and exceptions, transaction lifecycle, payment-instrument/cardholder/pool attribution, category allocation, and transfer/refund history are retained attributably. Referenced identities may archive but cannot be removed or rewritten in a way that changes prior meaning. C11 verbatim: New Ledger and backup artifacts default to access by the invoking OS identity only. Logs, diagnostics, process arguments, and ordinary results must not leak credentials, encryption keys, unmasked bank or instrument identifiers, raw statement rows, mailbox or MIME payloads, messaging content, or full financial payloads outside explicit data-return/export commands. C13 verbatim: Encryption at rest, if required beyond host storage encryption, must use a maintained storage/cryptography provider and platform-protected key handling. Tally must not implement encryption algorithms or bespoke key derivation; inability to meet this bound triggers the recorded kill criterion. C18 verbatim: Evidence kinds are generic, including agent capture, statement row, receipt, external document, and owner assertion. Ledger stores only stable evidence identity, privacy-conscious metadata, content or logical fingerprints where needed, opaque external references, and link/decision history. It never stores or interprets mailbox, MIME, messaging, provider cursor, recipient, credential, or delivery payloads. Target .NET 10 Native AOT on linux-x64, nullable enabled, primary constructors, explicit DI, CancellationToken through async boundaries, raw Microsoft.Data.Sqlite, xUnit with real temporary stores, and source-generated JSON. No Controllers, Minimal APIs, EF Core, Angular, HTTP endpoints, hosted services, reflection scanning, generic repository, mediator, event bus, custom clock, custom cryptography, or general plugin runtime. Evidence gates OQ-LEDGER-5, OQ-LEDGER-6, OQ-LEDGER-13, and OQ-LEDGER-15 are compile blockers for their dependent slices; an invalidating result returns to lex:design. Removal impact: none because no implementation code exists. Stable legacy task slugs are retained during this structural re-plan; TASK-LEDGER-AGENT-SKILLS now owns optional provider-neutral integration guidance."
+    "Archived pending in-place replanning after direct owner policy on 2026-07-21 invalidated the flat-category design and added statement-authoritative append-only correction. Five foundation beads already completed remain valid only where the revised design preserves their contracts. OQ-LEDGER-13 and OQ-LEDGER-15 remain automatic-match and spend-pool gates; OQ-LEDGER-16 newly gates cash-withdrawal actuals. Do not execute remaining compiled beads until lex:plan revises task contracts/dependencies, lex:review-documentation passes, and lex:beads recompiles them."
   ],
-  "status": "active",
+  "status": "archived",
   "created_at": "2026-07-18T06:56:30.9196068+00:00",
   "links": [
     {
@@ -36,6 +36,27 @@
       "target": "MD-LEDGER-MASTER",
       "rel": "see-also",
       "created_at": "2026-07-18T11:29:40.1349316+00:00"
+    },
+    {
+      "id": "01KY269DNGPQEFDD6S2YM6A01D",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-13",
+      "rel": "see-also",
+      "created_at": "2026-07-21T11:17:00.7212299+00:00"
+    },
+    {
+      "id": "01KY269EVBPAXR6KEVV33GZD21",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-15",
+      "rel": "see-also",
+      "created_at": "2026-07-21T11:17:01.9317068+00:00"
+    },
+    {
+      "id": "01KY269G3G4XR1CV06A8SX4QVC",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-16",
+      "rel": "see-also",
+      "created_at": "2026-07-21T11:17:03.2174059+00:00"
     }
   ]
 }

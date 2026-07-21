@@ -4,10 +4,10 @@
   "ref_code": "DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS",
   "name": "PaymentAttributionAndPoolOperationContracts",
   "description": [
-    "Exact typed operation contracts for instrument, cardholder, pool catalogues and per-transaction assignment corrections."
+    "Exact typed operation contracts for instrument, cardholder, pool catalogues, transaction corrections, and explicit reconciliation carry-forward results."
   ],
   "schema_def": [
-    "instrument, cardholder, and pool create/get/list/rename/archive/reactivate use stable local IDs, owner labels, attributable lifecycle, idempotency, and RESTRICT history. Instrument accepts optional account association and masked suffix only. transaction.attribution.assign or correct sets instrument and cardholder independently to known IDs or explicit unknown and appends history. transaction.pool.assign or correct replaces explicit unassigned or one active pool under the v1 assumption and appends history. Stable errors cover missing or archived catalogue items, inactive transaction, same-as-active correction, absent active projection, masked identifier validation, and pool-cardinality violation. No operation accepts provider wording or transport metadata."
+    "Instrument, cardholder, and pool create/get/list/rename/archive/reactivate use stable local IDs, owner labels, attributable lifecycle, idempotency, and RESTRICT history. Instrument accepts optional account association and masked suffix only. transaction.attribution.assign/correct and transaction.pool.assign/correct set independent current values and append history. Reconciliation-only carry_forward results expose sourceTransactionId, replacementTransactionId, decisionId, and the appended attribution/pool event IDs; callers cannot invoke carry_forward directly. Stable errors cover missing/archived catalogue items, inactive transaction, same-as-active correction, absent projection, masked identifier validation, pool cardinality, stale source projection, and replay conflict. No operation accepts provider wording or transport metadata."
   ],
   "created_at": "2026-07-20T18:15:26.4637071+00:00",
   "links": [

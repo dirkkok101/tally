@@ -16,7 +16,8 @@
     "Rejected offset pagination over live rows, long-lived cross-process transactions, caller-maintained cursors, and pre-aggregated budget-owned totals."
   ],
   "consequences": [
-    "First-page queries briefly use the single writer and may return busy. Reconciliation alone cannot change monetary totals, while dimension corrections change groups but not the all-up exact total."
+    "First-page queries briefly use the single writer and may return busy. Evidence-only reconciliation changes state but not money; a statement-authoritative correction changes the active financial projection through an attributable replacement and therefore later snapshots may change current movement, spend, dates, and hierarchy groups. Each snapshot remains internally coherent and cites its generation and category-hierarchy fingerprints.",
+    ""
   ],
   "status_notes": [
     "Expanded snapshot projection to reconciliation and independent financial dimensions."

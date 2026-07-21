@@ -1,0 +1,54 @@
+{
+  "id": "01KY25R1J105M3BFF06SC5B9EA",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DD-LEDGER-CATEGORY-HIERARCHY",
+  "title": "Acyclic category hierarchy with single-node transaction assignment",
+  "description": [
+    "Choose the hierarchy representation, assignment target, and roll-up semantics after the owner rejected the flat category assumption."
+  ],
+  "decision": [
+    "Represent the current hierarchy as each Spend Category having zero or one active parent, with append-only parent-change history. A transaction has zero or one active assignment to any active category node. Direct totals include assignments to that node; subtree totals include direct plus descendant assignments exactly once. Create, rename, reparent, archive, and reactivate validate sibling-name uniqueness, active ancestry, and acyclicity transactionally."
+  ],
+  "rationale": [
+    "An adjacency relationship is the smallest durable model that supports owner-required hierarchy, stable IDs, cheap parent moves at personal scale, and deterministic roll-ups. Allowing assignment to any node avoids forced recategorization when the owner has only a broad classification, while exact and subtree modes prevent ambiguous totals."
+  ],
+  "status": "accepted",
+  "created_at": "2026-07-21T11:07:31.2668018+00:00",
+  "links": [
+    {
+      "id": "01KY25R9MF8H8KVZD9HDNZYM0V",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-ACTUALS-QUERY",
+      "rel": "implements",
+      "created_at": "2026-07-21T11:07:39.5369170+00:00"
+    },
+    {
+      "id": "01KY25R8J6V6Z30NB35NZWQWAH",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-ASSIGNMENT",
+      "rel": "implements",
+      "created_at": "2026-07-21T11:07:38.4394800+00:00"
+    },
+    {
+      "id": "01KY25R7F29ZX23ZWCNBQVASZ9",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-CATEGORY-CATALOGUE",
+      "rel": "implements",
+      "created_at": "2026-07-21T11:07:37.3152831+00:00"
+    },
+    {
+      "id": "01KY2688FRCFMWZDS51RVZHY1P",
+      "target_type": "open_question",
+      "target": "OQ-BUDGET-10",
+      "rel": "see-also",
+      "created_at": "2026-07-21T11:16:22.6492583+00:00"
+    },
+    {
+      "id": "01KY25RAPNJPZEYMNKNYSXQ2P9",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-6",
+      "rel": "motivated-by",
+      "created_at": "2026-07-21T11:07:40.6301569+00:00"
+    }
+  ]
+}

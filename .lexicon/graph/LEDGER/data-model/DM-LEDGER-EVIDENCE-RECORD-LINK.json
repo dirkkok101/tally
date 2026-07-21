@@ -4,10 +4,10 @@
   "ref_code": "DM-LEDGER-EVIDENCE-RECORD-LINK",
   "name": "EvidenceRecordObservationAndLink",
   "description": [
-    "Privacy-conscious provider-neutral evidence identity, normalized observations, and append-only links to canonical transactions."
+    "Privacy-conscious provider-neutral evidence identity, normalized observations, source authority role, and append-only links to canonical transactions."
   ],
   "schema_def": [
-    "evidence_record: id ULID; kind agent_capture, statement_row, receipt, external_document, or owner_assertion; logicalIdentityDigest unique; optional opaqueExternalReference; optional contentFingerprint; actor; trusted time. evidence_observation: evidenceId; optional accountId, signedAmountMinor, currencyCode, transactionDate, postingDate, instrumentId, cardholderId, and descriptionFingerprint; no arbitrary metadata or raw payload. evidence_link_event: id, evidenceId, transactionId, role supporting or confirming, action link or revoke or replace, optional decisionId, reason, actor, time. Active confirming statement evidence targets at most one transaction and requires a reconciliation decision; supporting links do not reconcile. One transaction may have many evidence records."
+    "evidence_record: id ULID; kind agent_capture|statement_row|receipt|external_document|owner_assertion; logicalIdentityDigest unique; optional opaqueExternalReference; optional contentFingerprint; actor; trusted time. evidence_observation: evidenceId; optional accountId, signedAmountMinor, currencyCode, transactionDate, postingDate, instrumentId, cardholderId, descriptionFingerprint; no arbitrary metadata or raw payload. evidence_link_event: id, evidenceId, transactionId, role supporting|confirming|historical_support, action link|revoke|replace, optional decisionId, reason, actor, time. Approved statement_row evidence is authoritative for current canonical financial facts only through a reconciliation decision; agent_capture remains provisional until reconciled. Active confirming statement evidence targets at most one active transaction. A statement correction keeps the prior agent link and superseded fact queryable and records the replacement chain; nothing is overwritten."
   ],
   "created_at": "2026-07-20T18:15:21.5554804+00:00",
   "links": [

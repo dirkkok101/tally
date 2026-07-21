@@ -4,7 +4,7 @@
   "ref_code": "OQ-LEDGER-15",
   "question": "Does one active spend pool per transaction cover company-paid and personal-after-tax examples, including corrections, refunds, reversals, and mixed purchases?",
   "context": [
-    "Pre-design owner evidence gate for A15. If a transaction must split across pools, revise the assumption and later PRD before pool-assignment design; until then unassigned is explicit and no pool is inferred from account, instrument, or cardholder."
+    "Still open. The owner confirmed one category per transaction and that BUDGET may later decide whether a plan references a category, but category and Spend Pool are independent dimensions. Evidence is still required to decide whether one active pool or explicit unassigned state covers company-paid, personal-after-tax, corrections, refunds, reversals, and mixed purchases without split pools."
   ],
   "status": "open",
   "owner": "LEDGER PRD validation",

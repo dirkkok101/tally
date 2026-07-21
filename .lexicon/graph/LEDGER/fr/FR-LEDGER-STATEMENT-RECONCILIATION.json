@@ -5,10 +5,10 @@
   "ref_code": "FR-LEDGER-STATEMENT-RECONCILIATION",
   "title": "Apply statement reconciliation outcomes",
   "description": [
-    "Apply one validated deterministic match, create one approved Statement-only Transaction for a zero-candidate outcome, or preserve ambiguity without an applied financial effect. Implements G10 and UC-LEDGER-014 under C19 and C20."
+    "Apply one statement-authoritative outcome: confirm an exact existing transaction, append an authoritative correction for one compatible prior event, create one approved Statement-only Transaction, or preserve ambiguity/exception without guessing. Implements G10 and UC-LEDGER-014 under C19 and C20."
   ],
   "rationale": [
-    "A statement row must confirm an existing transaction where possible and must never create a duplicate merely because the row is imported later."
+    "The statement is the financial authority for its approved account and period, but authority must converge one active economic event through append-only history rather than overwrite or duplicate it."
   ],
   "priority": 0,
   "complexity": "XL",
@@ -20,13 +20,15 @@
     "monthly statements confirm prior records without duplicate actuals or guessed matches"
   ],
   "acceptance_criteria": [
-    "Given one unique compatible unreconciled transaction, registered statement evidence, a supported deterministic-policy identity, exact match basis, and Idempotency Identity, when reconciliation is applied, then the statement evidence is linked to that existing transaction, one deterministic decision is appended, and its current state becomes statement-reconciled without creating another Canonical Transaction.",
-    "Given no compatible prior transaction, registered statement evidence, approved canonical facts, and explicit authorization to create a statement-only outcome, when reconciliation is applied, then exactly one statement-only Canonical Transaction is created and linked to the evidence atomically.",
-    "Given multiple compatible candidates, when reconciliation is requested, then one ambiguous current outcome records the stable evidence and candidate identities while no evidence link or Canonical Transaction is created.",
-    "Given accepted evidence conflicts with immutable canonical facts or an existing active confirmation, when reconciliation is requested, then one Reconciliation Exception outcome with stable reasons is appended and no active decision, evidence link, or Canonical Transaction is created.",
-    "Given an unsupported deterministic policy or a candidate that fails independent compatibility or lifecycle validation, when reconciliation is requested, then a stable validation error is returned and no decision, evidence link, or Canonical Transaction is created.",
-    "Given a deterministic match request whose supplied candidate set, policy identity, or match basis differs from the current Ledger projection, when it is applied, then the Ledger rejects the stale request without mutation.",
-    "Given the same logical statement evidence and reconciliation request is replayed, when it is submitted again, then the original transaction and decision result are returned with zero duplicate canonical, evidence, link, or decision effects."
+    "Given one unique compatible unreconciled transaction whose canonical facts equal the registered statement observation, when a supported deterministic or owner-approved match is applied, then statement evidence links to that existing transaction, one decision is appended, its state becomes statement-reconciled, and no transaction is created.",
+    "Given one owner-approved or policy-supported compatible prior event whose canonical facts differ from authoritative statement facts, when correction from statement is applied, then one statement-derived replacement fact, supersession, decision, confirming link, explicit valid dimension carry-forward events, and any invariant-preserving relationship replacement commit atomically; the prior fact becomes historical and exactly one replacement remains active.",
+    "Given no compatible prior transaction, registered statement evidence, approved canonical facts, and explicit authorization to create a statement-only outcome, when reconciliation is applied, then exactly one statement-only Canonical Transaction is created and linked atomically.",
+    "Given multiple compatible or guard candidates, when reconciliation is requested, then one ambiguous current outcome records stable evidence and candidate identities while no link, correction, or Canonical Transaction is applied.",
+    "Given statement evidence conflicts with an existing active confirmation, cannot be associated with one economic event, or cannot support an internally valid replacement, when reconciliation is requested, then one Reconciliation Exception with stable reasons is appended and no active financial effect changes.",
+    "Given an unsupported automatic policy or a candidate that fails independent compatibility or lifecycle validation, when automatic reconciliation is requested, then a stable validation error is returned and no decision, link, correction, or transaction is created.",
+    "Given a request whose supplied candidates, policy identity, observation fingerprint, authoritative statement facts, or match basis differs from the current Ledger projection, when it is applied, then the Ledger rejects the stale request without mutation.",
+    "Given the same logical statement evidence and reconciliation request is replayed, when it is submitted again, then the original transaction, replacement if any, decisions, links, and carry-forward results are returned with zero duplicate effects.",
+    "Given the prior transaction participates in an active transfer or refund relationship, when statement correction would violate role, account, sign, currency, principal, or refund conservation, then the Ledger returns a review-required exception and applies no replacement; when the relationship remains valid with the replacement, one explicit attributable relationship replacement commits with it."
   ],
   "security_criteria": [
     "Reconciliation accepts provider-neutral approved facts and opaque evidence references only; it does not parse statements or receive mailbox, document, or messaging payloads."

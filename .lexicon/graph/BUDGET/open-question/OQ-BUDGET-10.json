@@ -1,0 +1,12 @@
+{
+  "id": "01KY2687WRZVYQYJ5CXCQ7HHWA",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "OQ-BUDGET-10",
+  "question": "When a Budget Entry references a hierarchical Spend Category, does it govern only direct assignments or the entire category subtree, and may parent and descendant entries coexist in one plan?",
+  "context": [
+    "LEDGER now exposes stable category nodes plus exact and subtree actuals after the owner required hierarchy. BUDGET already stores Category Budget Entries, but the current flat-category contract does not define roll-up scope or prevent overlapping parent/descendant entries. Resolve before BUDGET implementation so planned and actual totals cannot double count. Candidate safe shapes are exact-node entries only, non-overlapping subtree entries only, or an explicit per-entry scope with overlap rejection."
+  ],
+  "status": "open",
+  "owner": "BUDGET design",
+  "created_at": "2026-07-21T11:16:22.0414781+00:00"
+}

@@ -21,17 +21,25 @@
   ],
   "acceptance_criteria": [
     "Given explicit filters for account, inclusive date range, category, Spend Pool, Payment Instrument, cardholder, Evidence Kind, Reconciliation State, transfer state, refund state, categorization state, Pool Assignment state, and transaction lifecycle state, when actuals are queried, then only transactions matching every supplied filter are returned.",
-    "Given no lifecycle-state override, when actuals are queried, then each active Canonical Transaction contributes at most once and voided or superseded transactions and retired relationships or assignments do not affect default totals.",
+    "Given no lifecycle-state override, when actuals are queried, then each active economic event contributes through exactly one current Canonical Transaction; voided or superseded facts and retired relationships or assignments do not affect default totals.",
     "Given any selected transaction set, when Net Account Movement is returned, then it equals the exact base-10 sum of each selected active transaction's Signed Account Amount, with inflows positive and outflows negative.",
-    "Given a selected transaction set, when External Spend is returned, then it adds positive magnitudes of qualifying active outflows, subtracts active linked refund or reversal magnitudes in their own Effective Date periods, excludes active owned-transfer principal and unrelated inflows, and includes separately recorded fees and unlinked cash withdrawals.",
-    "Given pool and category grouping is requested, when Budget Actual is returned, then each qualifying active transaction contributes to exactly one pool or the explicit unassigned-pool bucket and one category or uncategorized bucket, and group totals reconcile exactly to the selected External Spend total.",
+    "Given a selected transaction set, when External Spend is returned, then it adds positive magnitudes of qualifying active outflows, subtracts active linked refund or reversal magnitudes in their own Effective Date periods, excludes active owned-transfer principal and unrelated inflows, includes separately recorded fees, and never silently chooses a cash-withdrawal policy while OQ-LEDGER-16 is unresolved.",
+    "Given category grouping with scope exact or subtree, when Budget Actual is returned, then each qualifying active transaction contributes once to its direct category or uncategorized bucket and, for subtree scope, once to each requested ancestor roll-up; pool and pool-by-category totals reconcile exactly without hierarchy double counting.",
     "Given an active linked refund or reversal, when grouped actuals are queried, then it offsets the original transaction's current pool and category, including explicit unassigned buckets, without inheriting account, instrument, or cardholder as a pool rule.",
     "Given no matching transactions, when actuals are queried, then the Ledger returns a successful empty collection and zero exact totals rather than a not-found error.",
-    "Given unchanged Ledger state and identical filters, when the query is repeated, then membership, ordering, reconciliation and attribution state, and exact aggregates are identical."
+    "Given unchanged Ledger state and identical filters, when the query is repeated, then membership, ordering, reconciliation and attribution state, and exact aggregates are identical.",
+    "Given an approved statement-authoritative correction changes account, amount, or Effective Date, when current actuals are queried, then the superseded notification-derived fact contributes zero and the active statement-derived replacement contributes exactly once under its explicitly carried-forward or corrected dimensions."
   ],
   "status": "active",
   "created_at": "2026-07-18T04:22:52.2328224+00:00",
   "links": [
+    {
+      "id": "01KY25V50RAG74CFXCG7D8ZYT5",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-16",
+      "rel": "see-also",
+      "created_at": "2026-07-21T11:09:13.1128675+00:00"
+    },
     {
       "id": "01KXSQCYJCKNSW7EAVMGJBH2PN",
       "target_type": "use_case",

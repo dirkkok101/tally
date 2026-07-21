@@ -92,6 +92,15 @@
       "created_at": "2026-07-20T19:01:08.7929354+00:00"
     }
   ],
+  "links": [
+    {
+      "id": "01KY269HK3W1XEB93S4VHQCFVE",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-13",
+      "rel": "see-also",
+      "created_at": "2026-07-21T11:17:04.7401338+00:00"
+    }
+  ],
   "recipe_items": [
     {
       "id": "01KY0DT2MJVPM3WT9HW817AVP9",

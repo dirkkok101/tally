@@ -7,7 +7,7 @@
     "Spend-pool catalogue and explicit append-only transaction assignment independent from account, category, payment instrument, and cardholder."
   ],
   "schema_def": [
-    "spend_pool: id ULID, owner label, active lifecycle. pool_assignment_event: id, transactionId, state assigned with poolId or explicit unassigned, action initialize, assign, or correct, optional previousEventId, required correction reason, actor, trusted time. Transaction creation atomically appends one initialize-unassigned event. Under the v1 assumption every transaction has exactly one active projection that is either unassigned or one pool. No inference across dimensions. OQ-LEDGER-15 must validate cardinality before implementation; split-pool evidence requires PRD and design revision."
+    "spend_pool: id ULID, owner label, active lifecycle. pool_assignment_event: id, transactionId, state assigned with poolId or explicit unassigned, action initialize|assign|correct|carry_forward, optional previousEventId, optional sourceTransactionId, optional reconciliationDecisionId, required reason, actor, trusted time. Transaction creation appends initialize-unassigned. A statement-authoritative replacement may copy the prior current projection only through one explicit carry_forward event in the same reconciliation transaction. Under the v1 assumption every active transaction has exactly one projection: unassigned or one pool. No inference across dimensions. OQ-LEDGER-15 gates cardinality; split-pool evidence requires PRD/design revision."
   ],
   "created_at": "2026-07-20T18:15:23.7693018+00:00",
   "links": [

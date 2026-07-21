@@ -4,18 +4,10 @@
   "ref_code": "DM-LEDGER-SPEND-CATEGORY",
   "name": "SpendCategory",
   "description": [
-    "Flat user-maintained spend category with lifecycle retained for historical allocations."
+    "Hierarchical user-maintained Spend Category identity with append-only parent and lifecycle history retained for direct assignment and deterministic roll-ups."
   ],
   "schema_def": [
-    "spend_category",
-    "- id: ULID text, primary key",
-    "- name: text, required",
-    "- normalizedName: text, required",
-    "- status: enum {active,archived}",
-    "- createdAt: trusted UTC instant",
-    "- archivedAt: nullable trusted UTC instant",
-    "Constraints: flat catalogue only; active normalized name unique; archived categories reject new assignment/correction; reactivation is attributable; RESTRICT historical references.",
-    "Pre-implementation gate: OQ-LEDGER-6 must resolve from representative real-account categorization examples before this model or allocation contracts are implemented."
+    "spend_category: id ULID primary key; createdAt trusted UTC instant. category_lifecycle_event: id, categoryId, action create|rename|archive|reactivate, label, normalizedSiblingName, reason, actor, trusted time, previousEventId. category_parent_event: id, categoryId, parentCategoryId nullable for root, action initialize|reparent, reason, actor, trusted time, previousEventId. current_category_projection: categoryId, name, parentCategoryId, depth, ancestryIds ordered root-to-self, status. Constraints: zero or one active parent; no self-parent or cycle; active parent and active ancestry required for create, reparent, and reactivate; normalized name unique among active siblings; any active node is assignable; parent with active children cannot archive; historical references RESTRICT. Direct totals include assignments to the node; subtree totals include direct plus descendants exactly once."
   ],
   "created_at": "2026-07-18T06:01:04.6964709+00:00",
   "links": [

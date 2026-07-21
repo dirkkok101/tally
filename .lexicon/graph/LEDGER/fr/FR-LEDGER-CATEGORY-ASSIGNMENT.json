@@ -5,10 +5,10 @@
   "ref_code": "FR-LEDGER-CATEGORY-ASSIGNMENT",
   "title": "Assign and correct transaction categories",
   "description": [
-    "Maintain one attributable active category allocation per active transaction without rewriting transaction source facts. Implements G3 and UC-LEDGER-003 under A5."
+    "Maintain zero or one attributable active category assignment per active transaction against any active node in the Spend Category hierarchy without rewriting transaction facts. Implements G3 and UC-LEDGER-003 under validated A5."
   ],
   "rationale": [
-    "Explicit, correctable allocation is the canonical input to BUDGET and INSIGHTS while classification remains a separate concern."
+    "One stable category assignment is the canonical classification input; hierarchy roll-ups derive from the current category tree, while BUDGET and INSIGHTS remain separate consumers."
   ],
   "priority": 0,
   "complexity": "M",
@@ -20,10 +20,11 @@
     "spend across accounts uses consistent categories"
   ],
   "acceptance_criteria": [
-    "Given an active transaction and active category, when the owner assigns the category, then exactly one active allocation is returned and the transaction source facts remain unchanged.",
-    "Given a categorized active transaction, an active replacement category, and a reason, when the owner corrects the allocation, then the prior allocation is retired, the replacement becomes active, and both remain attributable in history.",
-    "Given an inactive transaction or archived category, when an assignment or correction is attempted, then the Ledger returns a stable validation error and changes no allocation.",
-    "Given a category rename, when historical and active assignments are queried, then they retain the same category identifier and resolve to the current display name.",
+    "Given an active transaction and any active category node, when the owner assigns the category, then exactly one active assignment is returned and the transaction facts remain unchanged.",
+    "Given a categorized active transaction, an active replacement category, and a reason, when the owner corrects the assignment, then the prior assignment is retired, the replacement becomes active, and both remain attributable in history.",
+    "Given an inactive transaction or archived category, when an assignment or correction is attempted, then the Ledger returns a stable validation error and changes no assignment.",
+    "Given one transaction assigned to a category node, when exact category actuals are queried for that node, then it contributes once to the direct total and once to each requested ancestor roll-up, never to a sibling and never more than once in an all-up total.",
+    "Given a category rename or attributable reparenting, when current hierarchy roll-ups are queried, then the same transaction assignment ID is retained and the current path is used without rewriting historical assignment events.",
     "Given a Category Assignment or correction, when it is applied, then account, Payment Instrument, cardholder, Spend Pool, evidence, and Reconciliation State remain unchanged unless changed through their own explicit operations."
   ],
   "status": "active",

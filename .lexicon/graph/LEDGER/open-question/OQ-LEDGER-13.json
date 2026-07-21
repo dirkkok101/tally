@@ -4,7 +4,7 @@
   "ref_code": "OQ-LEDGER-13",
   "question": "Which provider-neutral compatibility fields, tolerances, and conflict rules are sufficient for an automatic deterministic match between agent-capture and statement-row evidence?",
   "context": [
-    "Low-confidence feasibility item: run /lex:spike against private representative capture and statement evidence before design. The spike must identify a bounded allowlist of deterministic cases and preserve ambiguous or conflicting cases without mutation."
+    "The owner confirmed on 2026-07-21 that an approved bank statement is authoritative over prior agent-capture evidence. This resolves source precedence, not economic-event identity. The remaining gate must validate the bounded provider-neutral fields, date tolerances, uniqueness guards, and conflict rules that may automatically identify the same event; ambiguous cases remain unapplied."
   ],
   "status": "open",
   "owner": "LEDGER design",

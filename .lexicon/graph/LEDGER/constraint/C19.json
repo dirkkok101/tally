@@ -4,7 +4,7 @@
   "ref_code": "C19",
   "title": "Observable reconciliation lifecycle",
   "description": [
-    "Ledger must represent recorded but unreconciled, statement reconciled, statement-only, recorded absent from an approved statement scope, ambiguous match, explicitly owner-confirmed match, and reconciliation exception outcomes. Current state may be derived from append-only history, but every transition, scope, actor or deterministic policy, reason, and superseded decision remains inspectable."
+    "Ledger must represent recorded but unreconciled, statement reconciled with confirmed-existing or corrected-from-statement detail, statement-only, recorded absent from an approved statement scope, ambiguous match, explicitly owner-confirmed match, and reconciliation exception outcomes. Current state may be derived, but every transition, authoritative replacement, scope, policy or owner actor, reason, carry-forward event, and superseded decision remains inspectable."
   ],
   "type": "business",
   "created_at": "2026-07-20T16:56:48.8867743+00:00"

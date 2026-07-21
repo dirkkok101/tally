@@ -76,6 +76,15 @@
       "created_at": "2026-07-20T18:49:57.6488706+00:00"
     }
   ],
+  "links": [
+    {
+      "id": "01KY269JR9EMJ7MR3GR326RCAZ",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-15",
+      "rel": "see-also",
+      "created_at": "2026-07-21T11:17:05.9307685+00:00"
+    }
+  ],
   "recipe_items": [
     {
       "id": "01KY0DT2MKYBMQM3S472ESEV4F",

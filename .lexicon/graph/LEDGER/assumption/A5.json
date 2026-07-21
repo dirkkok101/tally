@@ -4,8 +4,8 @@
   "ref_code": "A5",
   "title": "One active category allocation per transaction",
   "description": [
-    "Assume a transaction has one active spend category in the first release; corrections replace the active decision but preserve history. Split allocation can be added later if OQ-LEDGER-6 invalidates this simplification."
+    "Owner-confirmed first-release rule: each active transaction has zero or one active Spend Category assignment. Category corrections replace the active assignment while retaining attributable history. Split category allocation is out of scope unless a future requirement explicitly reopens it."
   ],
-  "status": "active",
+  "status": "validated",
   "created_at": "2026-07-17T17:29:17.5098883+00:00"
 }

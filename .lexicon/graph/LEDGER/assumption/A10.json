@@ -4,8 +4,8 @@
   "ref_code": "A10",
   "title": "Spend categories are flat in the first release",
   "description": [
-    "Assume one flat user-managed category catalogue with archival for referenced categories. Hierarchies are deferred unless owner validation of OQ-LEDGER-6 shows they are required for budget reporting."
+    "Invalidated by the owner on 2026-07-21: the first release requires a hierarchical Spend Category catalogue, not a flat catalogue. FR-LEDGER-CATEGORY-CATALOGUE and the LEDGER design define the replacement hierarchy contract."
   ],
-  "status": "active",
+  "status": "invalidated",
   "created_at": "2026-07-17T17:31:10.3504799+00:00"
 }

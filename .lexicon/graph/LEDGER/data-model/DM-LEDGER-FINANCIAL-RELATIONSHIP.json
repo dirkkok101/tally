@@ -4,7 +4,7 @@
   "ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
   "name": "FinancialRelationshipAndLifecycle",
   "description": [
-    "Explicit active or retired transfer/refund classification with typed roles and attributable correction."
+    "Explicit active or retired transfer/refund classification with typed roles, owner correction, and reconciliation-authorized replacement."
   ],
   "schema_def": [
     "financial_relationship",
@@ -15,14 +15,16 @@
     "- amountMinor: positive Int64",
     "- state: enum {active,retired}",
     "- createdAt and actorContext",
+    "- reconciliationDecisionId: nullable; set only for a statement-authoritative relationship replacement",
     "relationship_lifecycle_event",
     "- id: ULID text, primary key",
     "- relationshipId: FinancialRelationship.id, RESTRICT",
     "- eventType: enum {revoked,replaced}",
     "- replacementRelationshipId: nullable relationship reference",
+    "- reconciliationDecisionId: nullable decision reference",
     "- reason: text, required",
     "- occurredAt and actorContext",
-    "Constraints: distinct active transactions; transfer has exactly one outflow and one inflow across distinct owned accounts with equal principal; refund names original debit and refund credit and respects cumulative magnitude; transaction roles are exclusive; revoke/replace retires atomically."
+    "Constraints: distinct active transactions; transfer has exactly one outflow and one inflow across distinct owned accounts with equal principal; refund names original debit and refund credit and respects cumulative magnitude; transaction roles are exclusive; revoke/replace retires atomically. Statement correction may replace a relationship only when substituting the replacement transaction preserves every invariant; otherwise correction returns review-required and commits no financial effect."
   ],
   "created_at": "2026-07-18T06:01:05.7051082+00:00",
   "links": [

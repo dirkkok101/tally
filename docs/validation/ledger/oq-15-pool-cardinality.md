@@ -12,6 +12,8 @@ Status: blocked by incomplete owner evidence on 2026-07-21.
 
 Statements do not encode spend-pool intent and cannot prove whether one active pool or explicit unassigned state conserves exact totals for corrections, refunds, reversals, transfers, voids, supersessions, and mixed purchases. No owner-confirmed candidate mixed purchase is available to test whether simultaneous split pools are required.
 
+The owner has confirmed one Spend Category per transaction and noted that BUDGET may reference categories. That does not resolve Spend Pool cardinality: category describes what the spending was for, while pool describes which funding context owns it.
+
 ## Gate result
 
 OQ-LEDGER-15 remains open. One-active-pool cardinality is not approved, and pool catalogue, assignment, and pool-aware actuals implementation must not proceed from account, instrument, cardholder, category, description, or statement wording.

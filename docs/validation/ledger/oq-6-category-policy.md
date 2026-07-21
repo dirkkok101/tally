@@ -1,6 +1,6 @@
 # OQ-LEDGER-6 category policy evidence
 
-Status: blocked by incomplete owner evidence on 2026-07-21.
+Status: resolved by direct owner policy on 2026-07-21; the flat-catalogue assumption is invalidated.
 
 ## Evidence available
 
@@ -8,14 +8,18 @@ Status: blocked by incomplete owner evidence on 2026-07-21.
 - The planned coverage target is all three accounts across both institutions.
 - No statement filename, identifier, description, row, amount, balance, or category mapping was copied into this report.
 
-## Evidence gap
+## Owner decision
 
-Statements do not establish the owner's desired category model. There is no owner-confirmed redacted evidence for category archival and reactivation, correcting a prior assignment, whether any transaction needs split categories, or whether a hierarchy is required. A flat catalogue with one active allocation per transaction therefore cannot be validated from the documents alone.
+- Spend Categories require a hierarchy.
+- A transaction links to at most one active category; split category allocation is not required for the first release.
+- Whether a Budget Plan references a category is a BUDGET design decision and does not change LEDGER assignment cardinality.
+
+The revised LEDGER design uses an acyclic parent hierarchy with append-only parent history, permits assignment to any active node, and defines exact direct and subtree roll-ups. Archive, reactivation, and move behavior are technical integrity rules rather than facts inferred from statements.
 
 ## Gate result
 
-OQ-LEDGER-6 remains open. No category-cardinality or hierarchy rule is approved, and category, allocation, and categorized-actuals implementation must not proceed on the current assumption.
+OQ-LEDGER-6 is resolved. A5 is validated; A10 is invalidated. Category work must not proceed under the old flat model and must be replanned against the hierarchical contracts.
 
 ## Evidence needed to resume
 
-Provide privacy-safe representative cases covering initial assignment, correction, archive, reactivation, a candidate split purchase, and any hierarchy requirement across all three accounts and both institutions. Confirm whether every first-release transaction has one active category allocation or whether the design must support splits or hierarchy.
+No further category-cardinality evidence is required before replanning. Later usability feedback may refine names or example trees without reopening the one-category or hierarchy decision.

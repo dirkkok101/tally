@@ -4,10 +4,10 @@
   "ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
   "name": "TransactionLifecycleAndCategoryAllocation",
   "description": [
-    "Append-only transaction void or supersession events and category allocation history; other dimensions have their own explicit histories."
+    "Append-only transaction lifecycle, statement-authoritative replacement, and single-category assignment history; other dimensions retain their own explicit histories."
   ],
   "schema_def": [
-    "transaction_lifecycle_event: id, transactionId, type void or superseded, optional replacementTransactionId, required reason, actor, trusted time; at most one active terminal event. category_allocation_event: id, transactionId, categoryId, action assign or correct, optional previousEventId, reason, actor, trusted time; exactly zero or one active allocation. Constraints: facts never update; supersession does not transfer evidence, reconciliation, pool, payment attribution, category, or relationship state; historical catalogue references use RESTRICT."
+    "transaction_lifecycle_event: id, transactionId, void|superseded|statement_authoritative_replacement, optional replacementTransactionId, optional reconciliationDecisionId, reason, actor, time; at most one active terminal event. category_allocation_event: id, transactionId, categoryId, assign|correct|carry_forward, optional previousEventId/sourceTransactionId/reconciliationDecisionId, reason, actor, time; zero or one active assignment. Statement correction creates one replacement and explicit category/pool carry-forward, compatible payment carry-forward or unknown initialization, and invariant-preserving relationship replacement events inside one transaction. If any required relationship cannot remain valid, no replacement event commits. No state moves by overwrite; historical references use RESTRICT."
   ],
   "created_at": "2026-07-18T06:01:05.3772431+00:00",
   "links": [

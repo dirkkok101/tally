@@ -9,9 +9,9 @@
   "scenario": "edge",
   "automation": "automated",
   "status": "planned",
-  "preconditions": "Approved statement evidence covering unique strong match, zero candidate, multiple candidates, conflicting evidence, stale projection, unsupported policy, and replay cases.",
-  "steps": "Apply each reconciliation case through the public CLI; inspect canonical transaction count, evidence links, decisions, current states, errors, and exact actuals before and after; replay successful logical inputs.",
-  "expected": "A unique valid match links the existing transaction only; an approved zero-candidate case creates one statement-only transaction; ambiguous, stale, conflicting, or unsupported cases apply nothing; replay creates no duplicate effect.",
+  "preconditions": "Approved statement evidence covering exact match, one compatible event with differing facts, compatible and incompatible active transfer/refund relationships, zero candidate, multiple or guard candidates, conflicting confirmation, stale projection, unsupported policy, owner approval, and replay.",
+  "steps": "Apply every closed disposition through the public CLI; inspect active/historical transaction counts, supersession, dimension carry-forward or unknown initialization, relationship replacement or review block, evidence links, decisions, current states, errors, and exact actuals before and after; replay successful logical inputs.",
+  "expected": "Exact match links the existing transaction only; approved correction leaves one active statement-derived replacement with attributable prior history and explicitly preserved valid relationships; an invalid relationship blocks correction with no financial change; approved no-candidate creates one statement-only transaction; ambiguous, stale, conflicting, or unsupported cases apply no financial effect; replay duplicates nothing.",
   "owner": "LEDGER",
   "created_at": "2026-07-20T17:45:58.3497514+00:00",
   "links": [

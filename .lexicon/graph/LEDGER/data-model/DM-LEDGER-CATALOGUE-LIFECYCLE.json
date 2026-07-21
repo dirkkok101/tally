@@ -4,10 +4,10 @@
   "ref_code": "DM-LEDGER-CATALOGUE-LIFECYCLE",
   "name": "FinancialDimensionCatalogueLifecycleEvents",
   "description": [
-    "Append-only create, rename, archive, and reactivate history for account, category, payment instrument, cardholder, and spend-pool catalogues."
+    "Append-only create, rename, archive, reactivate, and category-parent history for financial dimension catalogues."
   ],
   "schema_def": [
-    "catalogue_lifecycle_event: id ULID; catalogueKind account, category, payment_instrument, cardholder, or spend_pool; entityId; action create, rename, archive, or reactivate where allowed; previousLabel and newLabel as applicable; required reason for corrective actions; actor; trusted time. Current labels and active state derive from history. Historical transaction, attribution, pool, category, evidence, and reconciliation references use RESTRICT. Archive prevents new assignments but preserves prior facts and query history."
+    "catalogue_lifecycle_event: id ULID; catalogueKind account|category|payment_instrument|cardholder|spend_pool; entityId; action create|rename|archive|reactivate where allowed; previousLabel and newLabel as applicable; required reason for corrective actions; actor; trusted time. Category hierarchy uses category_parent_event with categoryId, nullable parentCategoryId, action initialize|reparent, previousEventId, reason, actor, trusted time. Current labels, active state, and category ancestry derive from history. Historical transaction, attribution, pool, category, evidence, and reconciliation references use RESTRICT. Archive prevents new assignments; category archive also requires no active children and reactivation requires valid active ancestry."
   ],
   "created_at": "2026-07-18T06:32:53.8424410+00:00",
   "links": [

@@ -9,9 +9,9 @@
   "scenario": "edge",
   "automation": "automated",
   "status": "planned",
-  "preconditions": "Representative Ledger containing every durable state type, including evidence, deterministic and owner reconciliation, exceptions, pools, payment attribution, assigned and unassigned cases, active and retired history, and exact derived baselines.",
-  "steps": "Create and independently verify a backup; restore into an empty generation; compare normalized manifests, per-type counts, evidence and decision links, assignments, exact pool/category totals, history, cardinality rules, and idempotency outcomes; activate; repeat with corrupt, incomplete, incompatible, and faulted candidates.",
-  "expected": "Accepted drills reproduce complete Durable Ledger State and every exact baseline; rejected drills never change CURRENT; prior state remains the recovery point.",
+  "preconditions": "Representative Ledger containing every durable state type, including category hierarchy/moves, evidence, exact and corrected statement reconciliation, replacement, dimension carry-forward or unknown initialization, relationship replacement, exceptions, pools, payment attribution, assigned/unassigned cases, active/retired history, and exact baselines.",
+  "steps": "Create and verify a backup; restore into an empty generation; compare manifests, counts, hierarchy ancestry, transaction/dimension/relationship replacement chains, evidence/decision links, assignments, exact direct/subtree/pool totals, history, cardinality, and idempotency; activate; repeat with corrupt, cyclic, incomplete, incompatible, and faulted candidates.",
+  "expected": "A valid restore reproduces the complete authoritative current and historical state exactly; invalid hierarchy, replacement, carry-forward, link, total, permission, checksum, schema, or policy state fails before activation and leaves the prior generation current.",
   "owner": "LEDGER implementation",
   "created_at": "2026-07-18T06:09:34.8260715+00:00",
   "links": [

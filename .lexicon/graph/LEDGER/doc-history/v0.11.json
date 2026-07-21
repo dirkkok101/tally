@@ -1,0 +1,9 @@
+{
+  "id": "01KY26K5ESFHYDVTV81CSVJJ1E",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.11",
+  "changes": [
+    "Owner-policy design revision: resolved OQ-LEDGER-5 for zero-spend owned-account transfers, normal fee/refund semantics, and OQ-LEDGER-6 for hierarchical categories with one active category per transaction; invalidated flat A10 and validated A5/A6. Added DD-LEDGER-CATEGORY-HIERARCHY, acyclic parent history, direct/subtree exact roll-ups, hierarchy-aware contracts and tests. Made approved statements authoritative over agent captures through append-only exact match, statement-derived replacement, explicit dimension carry-forward or unknown initialization, invariant-preserving relationship replacement, and fail-closed ambiguity without storing raw email or statement payloads. OQ-LEDGER-13 and OQ-LEDGER-15 remain open; new OQ-LEDGER-16 isolates cash-withdrawal treatment and OQ-BUDGET-10 isolates parent/subtree budget semantics. Archived PLAN-LEDGER-V1 pending in-place replanning and recompilation; five completed foundation beads require compatibility audit, not rollback."
+  ],
+  "created_at": "2026-07-21T11:22:19.9941674+00:00"
+}

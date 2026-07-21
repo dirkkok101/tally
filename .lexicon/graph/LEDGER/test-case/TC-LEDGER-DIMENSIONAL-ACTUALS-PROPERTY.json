@@ -9,9 +9,9 @@
   "scenario": "edge",
   "automation": "automated",
   "status": "planned",
-  "preconditions": "Generators can create exact transaction, refund, reversal, transfer, supersession, category, pool, instrument, cardholder, and reconciliation histories.",
-  "steps": "Generate and shrink histories; query all-up, pool, category, and pool-by-category projections before and after corrections and reconciliation.",
-  "expected": "All grouped minor-unit sums equal all-up totals; transfers contribute zero spend; refunds follow explicit current dimensions; reconciliation alone never changes finance totals; unknown and unassigned buckets lose no transaction.",
+  "preconditions": "Generators create exact transaction, statement-authoritative replacement, refund, reversal, transfer, supersession, category hierarchy/move, pool, instrument, cardholder, and reconciliation histories.",
+  "steps": "Generate and shrink histories; query all-up, pool, category-direct, category-subtree, and pool-by-category projections before and after assignment corrections, hierarchy moves, and statement reconciliation corrections.",
+  "expected": "All grouped minor-unit sums equal all-up totals; hierarchy roll-ups never double count; transfers contribute zero spend; refunds follow explicit current dimensions; statement correction replaces rather than duplicates the active effect and never leaves an invalid relationship active; unknown, uncategorized, and unassigned buckets lose no transaction.",
   "owner": "LEDGER",
   "created_at": "2026-07-20T18:17:19.8131506+00:00",
   "links": [

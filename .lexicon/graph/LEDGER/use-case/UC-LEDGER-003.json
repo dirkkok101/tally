@@ -4,13 +4,13 @@
   "ref_code": "UC-LEDGER-003",
   "title": "Assign or correct a spend category",
   "preconditions": "The canonical transaction and chosen active spend category exist; any automatic suggestion has been produced by CLASSIFY, not LEDGER.",
-  "postconditions": "The transaction has an explicit active category allocation; correction provenance is inspectable; original bank facts are unchanged.",
-  "main_flow": "1. The agent retrieves the transaction and its current allocation/correction history. 2. The owner or agent explicitly chooses the category allocation under the accepted allocation policy. 3. Tally validates the allocation against active categories and the transaction amount. 4. Tally records the new attributable decision without changing source facts. 5. Tally returns the active allocation and history reference. 6. Later queries use the active allocation while retaining prior decisions for inspection.",
+  "postconditions": "The transaction has zero or one explicit active category assignment; correction provenance is inspectable; hierarchy roll-ups are deterministic; original bank facts and independent dimensions are unchanged.",
+  "main_flow": "1. The caller retrieves the active transaction and hierarchical category catalogue. 2. The owner selects one active category node. 3. Tally validates transaction lifecycle, category lifecycle, and one-active-assignment cardinality. 4. Tally appends an assign or correct event with actor and reason. 5. Direct category membership and current ancestor roll-ups expose the transaction exactly once without changing transaction facts or any other financial dimension.",
   "alt_flows": [
     "1a. Transaction does not exist -> return not found",
-    "2a. Category is absent or archived -> reject without changing the active allocation",
-    "3a. Allocation violates the accepted cardinality or amount policy -> reject with structured errors",
-    "4a. The requested allocation matches the active decision -> return an idempotent no-change success"
+    "2a. Category is absent or archived -> reject without changing the active assignment",
+    "3a. A second simultaneous category or split allocation is requested -> reject with a stable cardinality error",
+    "4a. The requested assignment matches the active decision -> return an idempotent no-change success"
   ],
   "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner wants an uncategorized transaction classified or an existing category decision corrected.\",\"status\":\"draft\"}",
   "created_at": "2026-07-17T17:26:41.0912880+00:00"
