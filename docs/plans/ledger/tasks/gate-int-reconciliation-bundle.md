@@ -39,6 +39,7 @@ Expose one nine-operation ReconciliationOperationBundle with consistent schemas,
 | [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md) | `compile` | Bundle consumes ReconciliationDecisionOperationModule. |
 | [TASK-LEDGER-RECONCILIATION-COVERAGE](../tasks/reconciliation-coverage.md) | `compile` | Bundle consumes ReconciliationCoverageOperationModule. |
 | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md) | `compile` | The bundle consumes the extended reconciliation.apply correction disposition. |
+| [TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION](../tasks/reconciliation-automatic-activation.md) | `compile` | The complete reconciliation bundle proves automatic cases only after the evidence-backed policy is activated. |
 
 ## Recipe
 
@@ -109,6 +110,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 
 - `bead-ref` -> `bd-1f1` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md): Bundle consumes ReconciliationApplyOperationModule.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION](../tasks/reconciliation-automatic-activation.md): The complete reconciliation bundle proves automatic cases only after the evidence-backed policy is activated.
 - `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-COVERAGE](../tasks/reconciliation-coverage.md): Bundle consumes ReconciliationCoverageOperationModule.
 - `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md): Bundle consumes ReconciliationDecisionOperationModule.
 - `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-PROJECTION](../tasks/reconciliation-projection.md): Bundle consumes ReconciliationProjectionOperationModule.

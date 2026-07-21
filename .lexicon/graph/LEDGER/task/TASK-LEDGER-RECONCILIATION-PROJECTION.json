@@ -4,12 +4,12 @@
   "sub_plan_id": "01KY0D0QYX4CJZKSVH3MMGT6BK",
   "ref_code": "TASK-LEDGER-RECONCILIATION-PROJECTION",
   "slug": "RECONCILIATION-PROJECTION",
-  "title": "Implement deterministic reconciliation candidate projection",
+  "title": "Implement manual-review reconciliation candidate projection",
   "description": [
-    "Deliver the read-only, versioned candidate and guard-candidate projection proven by OQ-LEDGER-13, distinguishing exact facts from compatible events with authoritative differences."
+    "Deliver the read-only provider-neutral candidate and guard-candidate projection needed for owner review. It deterministically compares approved statement observations with active unreconciled Canonical Transactions but grants no automatic match or correction authority while OQ-LEDGER-13 remains unresolved."
   ],
   "objective": [
-    "Return deterministic candidate identity, comparison basis, conflicts, and advisory policy token without mutating Ledger state."
+    "Return stable exact and guard candidate identities, field comparisons, conflicts, and an advisory review token without mutating Ledger state or authorizing automation."
   ],
   "planning_state": "ready",
   "priority": 0,
@@ -48,16 +48,6 @@
       "created_at": "2026-07-20T18:49:57.6488706+00:00"
     },
     {
-      "id": "01KY0DT2MTJ33SE2Z3AZ9S8Q3E",
-      "target": "TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY",
-      "dependency_type": "compile",
-      "reason": [
-        "The policy must be empirically resolved before its code exists."
-      ],
-      "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
-    },
-    {
       "id": "01KY0DT2MVC379ZAWSY1J04TDZ",
       "target": "TASK-LEDGER-TRANSACTIONS-RECORD-GET",
       "dependency_type": "compile",
@@ -70,117 +60,103 @@
   ],
   "files": [
     {
-      "id": "01KY0DT2MTA2RNS8CD8975EXJW",
+      "id": "01KY2RPB1SF6721ST2QC7DXGRM",
       "path": "src/Tally/Contracts/Ledger/Reconciliation/ReconciliationProjectionContracts.cs",
       "action": "create",
       "role": "public contracts",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T16:38:38.3911473+00:00"
     },
     {
-      "id": "01KY0DT2MTVCGVVTS1BE23AAEG",
-      "path": "src/Tally/Domain/Ledger/Reconciliation/ReconciliationPolicyV1.cs",
+      "id": "01KY2RPB1SKDQWMSXX3R7CGKQY",
+      "path": "src/Tally/Domain/Ledger/Reconciliation/ManualReviewProjectionV1.cs",
       "action": "create",
-      "role": "versioned deterministic policy",
+      "role": "versioned non-authorizing comparison rules",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T16:38:38.3911473+00:00"
     },
     {
-      "id": "01KY0DT2MT4ZFR38RX54F88M5C",
+      "id": "01KY2RPB1SHE2JQDN72JS5RNKT",
       "path": "src/Tally/Features/Ledger/Reconciliation/ReconciliationProjectionHandler.cs",
       "action": "create",
       "role": "query handler",
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T16:38:38.3911473+00:00"
     },
     {
-      "id": "01KY0DT2MT622VXCVBG86ATHXC",
+      "id": "01KY2RPB1SZ8EGN22B9Z2Y4W7S",
       "path": "src/Tally/Infrastructure/Storage/Reconciliation/ReconciliationProjectionStore.cs",
       "action": "create",
       "role": "read projection",
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T16:38:38.3911473+00:00"
     },
     {
-      "id": "01KY0DT2MTH2TK1A719NBNS5B4",
+      "id": "01KY2RPB1SSK51NRRCR5KR3JEH",
       "path": "src/Tally/Features/Ledger/Reconciliation/ReconciliationProjectionOperationModule.cs",
       "action": "create",
       "role": "explicit descriptor and DI",
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T16:38:38.3911473+00:00"
     },
     {
-      "id": "01KY0DT2MTX0NCER960K7M619R",
-      "path": "tests/Tally.Tests/Ledger/ReconciliationPolicyMatrixTests.cs",
-      "action": "test",
-      "role": "policy tests",
-      "required": 1,
-      "sort_order": 5,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
-    },
-    {
-      "id": "01KY0DT2MT0R4W61Q67KXXGWB6",
+      "id": "01KY2RPB1SNQ86WQC3WN0DV5NW",
       "path": "tests/Tally.Tests/Ledger/ReconciliationProjectionTests.cs",
       "action": "test",
-      "role": "real-SQLite query tests",
+      "role": "real-SQLite manual-review projection tests",
       "required": 1,
-      "sort_order": 6,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "sort_order": 5,
+      "created_at": "2026-07-21T16:38:38.3911473+00:00"
     }
   ],
   "interfaces": [
     {
-      "id": "01KY0DT2MTY2AWCTD6F38X7H07",
-      "name": "ReconciliationPolicyV1",
+      "id": "01KY2RPB1SKFYC7MEGHF8JCP1P",
+      "name": "ManualReviewProjectionV1",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "notes": [
+        "Versioned advisory comparison only; never automatic authority"
+      ],
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T16:38:38.3911473+00:00"
     },
     {
-      "id": "01KY0DT2MTGD1M5MD9R4T02B0A",
+      "id": "01KY2RPB1SBFP3PZN9NVF0PVSS",
       "name": "ReconciliationProjectionStore",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T16:38:38.3911473+00:00"
     },
     {
-      "id": "01KY0DT2MTZB82SZ5EZ73B6RGD",
+      "id": "01KY2RPB1SH9M1S0HTV695W2ER",
       "name": "ReconciliationProjectionOperationModule",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T16:38:38.3911473+00:00"
     },
     {
-      "id": "01KY0DT2MTB618XBEEGQ4TB14E",
+      "id": "01KY2RPB1SVARQ974A0CVMQDNR",
       "name": "EvidenceStore",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-EVIDENCE-RECORD-LINK",
       "sort_order": 3,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T16:38:38.3911473+00:00"
     },
     {
-      "id": "01KY0DT2MTQCK0D9M3KX3PVVWM",
+      "id": "01KY2RPB1S4Z24SXB28S5W3SRJ",
       "name": "TransactionStore",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-TRANSACTION-FACT",
       "sort_order": 4,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
-    },
-    {
-      "id": "01KY0DT2MTAJ6WFYXBTH4DJ8KQ",
-      "name": "OQ-LEDGER-13Resolution",
-      "direction": "consumes",
-      "contract_ref_code": "OQ-LEDGER-13",
-      "sort_order": 5,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T16:38:38.3911473+00:00"
     }
   ],
   "links": [
@@ -194,74 +170,84 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY283A3AFCDJGTPMW21C8DET",
+      "id": "01KY2S6PRFDV413DDA5JG65960",
       "kind": "acceptance_check",
       "text": [
-        "For each resolved ReconciliationPolicyV1 fixture the query returns the same ordered compatible and guard candidates, exact fact-equality flag, authoritative-difference fields, basis, and rejection codes regardless of row or enumeration order."
+        "For approved statement evidence and scope, the query returns active unreconciled exact candidates whose Owned Bank Account, currency, Signed Account Amount, and Effective Date equal the typed observation, plus same-account in-scope guard candidates with explicit differing fields; membership and ordering are stable across enumeration order."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:48:37.6098084+00:00"
+      "created_at": "2026-07-21T16:47:34.6709191+00:00"
     },
     {
-      "id": "01KY283A3AJW7BB53KMNS5C3CV",
+      "id": "01KY2S6PRGHZ2GWNCCKE4HZ7QW",
       "kind": "acceptance_check",
       "text": [
-        "Inactive, reconciled, wrong-account/currency/amount/date, and conflicting-evidence transactions are excluded with stable reasons; zero, one exact, one differing-compatible, and multiple classifications are explicit."
+        "Zero exact candidates, one exact candidate, multiple exact candidates, and guard-only results are classified explicitly for owner review; no result authorizes automatic reconciliation while OQ-LEDGER-13 is unresolved."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:48:37.6098084+00:00"
+      "created_at": "2026-07-21T16:47:34.6709191+00:00"
     },
     {
-      "id": "01KY283A3BTA9AYH4N7Y54S4P9",
+      "id": "01KY2S6PRGCW0VWXMNJ2TJFTJQ",
       "kind": "acceptance_check",
       "text": [
-        "Projection exposes policy ID/version and an advisory token but creates no evidence link, decision, correction, transaction, idempotency, or snapshot row."
+        "Inactive, reconciled, voided, superseded, wrong-account, out-of-scope, currency-conflicting, and actively statement-confirmed Canonical Transactions are excluded or surfaced with stable reasons according to the reviewed contract."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:48:37.6098084+00:00"
+      "created_at": "2026-07-21T16:47:34.6709191+00:00"
     },
     {
-      "id": "01KY0DT2MTA93EB6FRRN7QBB8G",
+      "id": "01KY2S6PRGN8Z9ZHEY3M8K94ZP",
+      "kind": "acceptance_check",
+      "text": [
+        "Projection exposes a versioned advisory review token and complete privacy-safe comparison basis but creates no Evidence Record link, Reconciliation Decision, correction, Canonical Transaction, Idempotency Identity, or snapshot row."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-21T16:47:34.6709191+00:00"
+    },
+    {
+      "id": "01KY2RPB1SYA0MWJ765SJNA4AP",
       "kind": "expected_output",
       "text": [
-        "ReconciliationPolicyV1, projection contracts/store/handler/module, policy matrix and integration tests"
+        "ManualReviewProjectionV1, projection contracts/store/handler/module, and real-SQLite deterministic projection tests"
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T16:38:38.3911473+00:00"
     },
     {
-      "id": "01KY283A3BMT44PQV5BV1XBC2T",
+      "id": "01KY2S8HA6GKMH28YJ366CJ5CH",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT add fuzzy text matching, runtime tolerance configuration, provider fields, co-equal source authority, or hidden tie-breaking — per DD-LEDGER-RECONCILIATION-CONTRACT."
+        "Do NOT score descriptions, infer provider semantics, introduce automatic date or amount tolerances in this task, or choose a candidate; OQ-LEDGER-13 and TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION own any future automatic policy."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:48:37.6098084+00:00"
+      "created_at": "2026-07-21T16:48:34.6304940+00:00"
     },
     {
-      "id": "01KY283A3BPTFH879116N5JG3F",
+      "id": "01KY2S8HA88K530HZ848JVFXF5",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT let a projection token authorize later writes without transactional revalidation."
+        "Do NOT let a projection token authorize a write without transactional revalidation and explicit owner authority while automatic reconciliation is disabled."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:48:37.6098084+00:00"
+      "created_at": "2026-07-21T16:48:34.6304940+00:00"
     },
     {
-      "id": "01KY283A3BVX0CH3MWZ2M0BCTA",
+      "id": "01KY2S8HA8VYXBB2Y31J81VFWF",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT mutate durable or ephemeral Ledger state from the candidates query."
+        "Do NOT mutate durable or ephemeral Ledger state from the candidates query or expose raw evidence payloads."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:48:37.6098084+00:00"
+      "created_at": "2026-07-21T16:48:34.6304940+00:00"
     }
   ],
   "references": [
@@ -297,17 +283,6 @@
       "required": 1,
       "sort_order": 2,
       "created_at": "2026-07-20T18:49:57.6488706+00:00"
-    },
-    {
-      "id": "01KY0DT2MT15XQDXKE9ED1DV27",
-      "target_ref_code": "TC-LEDGER-RECONCILIATION-POLICY-MATRIX",
-      "target_entity_type": "test_case",
-      "target_entity_id": "01KY0BY9W4HESV0R3NBYPD8Q3W",
-      "target_title": "Prove deterministic reconciliation policy and ambiguity guards",
-      "relationship": "verifies",
-      "required": 1,
-      "sort_order": 3,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
     }
   ],
   "requirements": [
@@ -319,36 +294,36 @@
   ],
   "review_gates": [
     {
-      "id": "01KY283A3B7P3K2Y6DJNWNJPWF",
+      "id": "01KY2RPB1T48HBPD0YBJB6PCMS",
       "gate_type": "test-evidence",
       "description": [
-        "Attach the exact/differing policy matrix and proof that projection performs zero writes."
+        "Attach exact and guard candidate matrices and proof that projection performs zero writes."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:48:37.6098084+00:00"
+      "created_at": "2026-07-21T16:38:38.3911473+00:00"
     },
     {
-      "id": "01KY283A3B07CEV2P3GH5PN0AH",
+      "id": "01KY2RPB1T1ZNVK00M5SJFSNR3",
       "gate_type": "self-review",
       "description": [
-        "Every automatic rule appears in OQ-LEDGER-13Resolution and every unproven case is guarded."
+        "Confirm every result is advisory, provider-neutral, and incapable of authorizing automatic matching."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:48:37.6098084+00:00"
+      "created_at": "2026-07-21T16:38:38.3911473+00:00"
     }
   ],
   "verification_steps": [
     {
-      "id": "01KY0DT2MT9ESM1CA224Z1SV7R",
+      "id": "01KY2RPB1TCQFX62R5QXZ2HEFT",
       "phase": "after",
-      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~Tally.Tests.Ledger.ReconciliationPolicyMatrixTests|FullyQualifiedName~Tally.Tests.Ledger.ReconciliationProjectionTests' --no-restore",
-      "expected_result": "exit 0; at least 28 deterministic matrix and real-SQLite projection cases run and 0 fail",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Ledger.ReconciliationProjectionTests --no-restore",
+      "expected_result": "exit 0; at least 20 exact, guard, excluded, order-independence, zero-write, and provider-neutral cases run and 0 fail",
       "required": 1,
       "timeout_seconds": 600,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T16:38:38.3911473+00:00"
     }
   ]
 }

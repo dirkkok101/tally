@@ -1,0 +1,9 @@
+{
+  "id": "01KY2S25C1YR74SNB4RFT6T96V",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.16",
+  "changes": [
+    "Replanned active PLAN-LEDGER-V1 to unblock a manual-review-first reconciliation slice without weakening automatic-match safety. OQ-LEDGER-15 and OQ-LEDGER-16 are resolved owner gates. The advisory projection, owner-approved match, statement-only, ambiguity, exception, and statement-correction tasks now execute independently of OQ-LEDGER-13; one new evidence-proven automatic activation task remains compile-gated by OQ-LEDGER-13, and the complete reconciliation bundle depends on it. The plan now has 69 tasks across 7 sub-plans with zero coverage gaps, zero blocking audit findings, two clean self-review rounds, healthy decision paths, and all 69 zero-context payloads at or below 2500 estimated tokens with no required-context overflow."
+  ],
+  "created_at": "2026-07-21T16:45:05.7944353+00:00"
+}

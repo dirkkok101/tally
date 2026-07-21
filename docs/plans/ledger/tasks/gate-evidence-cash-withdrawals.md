@@ -74,7 +74,7 @@ No task dependencies recorded.
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `test -s docs/validation/ledger/oq-16-cash-withdrawal-policy.md && lex open-question show OQ-LEDGER-16 --json` | exit 0; the report exists and command output shows a non-empty resolved decision | `true` | 120 |
+| `after` | `test -s docs/validation/ledger/oq-16-cash-withdrawal-policy.md && jq -e '.status == "resolved" and (.decision != null) and (.decision != "")' <(lex open-question show OQ-LEDGER-16 --json)` | exit 0; the report exists and OQ-LEDGER-16 is resolved with a non-empty decision | `true` | 120 |
 
 ### Review Gates
 
@@ -85,12 +85,15 @@ No task dependencies recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-31r` | `verified` | 2026-07-21T15:14:56.3499832+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-31r` (verified)
 - `governed-by` -> DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions
 - `references` -> OQ-LEDGER-16: Should a cash withdrawal count as External Spend immediately, or as a transfer to a tracked cash account until later cash spending is recorded?
 - `satisfies` -> NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic

@@ -4,10 +4,14 @@
   "ref_code": "OQ-LEDGER-15",
   "question": "Does one active spend pool per transaction cover company-paid and personal-after-tax examples, including corrections, refunds, reversals, and mixed purchases?",
   "context": [
-    "Still open. The owner confirmed one category per transaction and that BUDGET may later decide whether a plan references a category, but category and Spend Pool are independent dimensions. Evidence is still required to decide whether one active pool or explicit unassigned state covers company-paid, personal-after-tax, corrections, refunds, reversals, and mixed purchases without split pools."
+    "Resolved by explicit owner approval on 2026-07-21. V1 uses one active Spend Pool assignment or explicit unassigned state per transaction. Mixed purchases do not create split-pool allocations; they remain unassigned until the owner chooses one pool or a later design explicitly adds splitting."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "Owner decision on 2026-07-21: each active spend transaction has at most one active Spend Pool assignment, independent of account, payment instrument, cardholder, and category, or remains explicitly unassigned. Corrections append history and replace the active assignment. Refunds and reversals follow the original transaction's current pool, transfer principal contributes zero spend, and mixed purchases remain unassigned until assigned wholly to one pool. Split-pool allocation is out of scope for v1."
+  ],
   "owner": "LEDGER PRD validation",
+  "disposition": "unspecified",
   "created_at": "2026-07-20T16:57:33.9253497+00:00",
   "links": [
     {

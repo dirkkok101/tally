@@ -101,12 +101,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3pa` | `verified` | 2026-07-21T15:14:57.4776162+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3pa` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CATEGORY-ALLOCATIONS](../tasks/category-allocations.md): Effect composition consumes category carry-forward.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](../tasks/core-schema-reconciliation-authority.md): Effect composition persists through V002 statement-authority references.
 - `depends-on:compile` -> [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md): Effect composition consumes payment carry-forward or unknown initialization.

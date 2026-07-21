@@ -1,0 +1,340 @@
+{
+  "id": "01KY2RSHVHK7RGEPTNPTK0942E",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KY0D0QYX4CJZKSVH3MMGT6BK",
+  "ref_code": "TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION",
+  "slug": "RECONCILIATION-AUTOMATIC-ACTIVATION",
+  "title": "Activate evidence-proven automatic reconciliation",
+  "description": [
+    "After OQ-LEDGER-13 is resolved from paired evidence, add the exact versioned automatic match and correction subset to the already working owner-reviewed reconciliation path. Every unproven case remains review-required."
+  ],
+  "objective": [
+    "Enable only the empirically proven deterministic reconciliation cases without weakening owner review, ambiguity guards, statement authority, or replay safety."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 37,
+  "created_at": "2026-07-21T16:40:23.6659579+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY2T4CSA71E1G6D5M0S0FD82",
+      "bead_id": "bd-1ui",
+      "verification_status": "verified",
+      "verified_at": "2026-07-21T17:03:47.4982043+00:00",
+      "created_at": "2026-07-21T17:03:47.4982043+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KY2RSHVJXEJ06RYRHBEQMEAE",
+      "target": "DD-LEDGER-IDEMPOTENT-MUTATIONS",
+      "created_at": "2026-07-21T16:40:23.6659579+00:00"
+    },
+    {
+      "id": "01KY2RSHVJEABAAHR22H45R104",
+      "target": "DD-LEDGER-RECONCILIATION-CONTRACT",
+      "created_at": "2026-07-21T16:40:23.6659579+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KY2RT6RX0Z9JYXZGAQNPCW4T",
+      "target": "TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY",
+      "dependency_type": "compile",
+      "reason": [
+        "Automatic behavior is forbidden until paired evidence resolves OQ-LEDGER-13 and defines the bounded policy matrix."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-21T16:40:45.0865389+00:00"
+    },
+    {
+      "id": "01KY2RT92W0G0WBQW2AW5AEXHG",
+      "target": "TASK-LEDGER-RECONCILIATION-APPLY",
+      "dependency_type": "compile",
+      "reason": [
+        "Activation extends the proven owner-reviewed base apply path rather than creating a second writer."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-21T16:40:47.4529652+00:00"
+    },
+    {
+      "id": "01KY2RT7XTB0FC2G419ENK335J",
+      "target": "TASK-LEDGER-RECONCILIATION-PROJECTION",
+      "dependency_type": "compile",
+      "reason": [
+        "Automatic authority reuses the stable advisory projection and comparison basis."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-21T16:40:46.2668498+00:00"
+    },
+    {
+      "id": "01KY2RTA7RCMKTYDF9GX2WGZDW",
+      "target": "TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION",
+      "dependency_type": "compile",
+      "reason": [
+        "Activation extends the proven owner-approved statement-correction path with only evidence-backed automatic cases."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-21T16:40:48.6337048+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY2RSHVJ1868XNJSKJCXT64N",
+      "path": "src/Tally/Domain/Ledger/Reconciliation/ReconciliationPolicyV1.cs",
+      "action": "create",
+      "role": "evidence-proven automatic policy",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T16:40:23.6659579+00:00"
+    },
+    {
+      "id": "01KY2RSHVJRV497B2S8W894ZD4",
+      "path": "src/Tally/Domain/Ledger/Reconciliation/ReconciliationDispositionPolicy.cs",
+      "action": "modify",
+      "role": "automatic match authority extension",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T16:40:23.6659579+00:00"
+    },
+    {
+      "id": "01KY2RSHVJW4HCHSWC9KWF6TQ6",
+      "path": "src/Tally/Domain/Ledger/Reconciliation/StatementAuthorityPolicy.cs",
+      "action": "modify",
+      "role": "automatic correction authority extension",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-21T16:40:23.6659579+00:00"
+    },
+    {
+      "id": "01KY2RSHVJ95YEAEJ89NZBC3KE",
+      "path": "src/Tally/Features/Ledger/Reconciliation/ReconciliationApplyHandler.cs",
+      "action": "modify",
+      "role": "transactional automatic authority integration",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-21T16:40:23.6659579+00:00"
+    },
+    {
+      "id": "01KY2RSHVJR7H00TNT1B41B76S",
+      "path": "src/Tally/Features/Ledger/Reconciliation/StatementAuthoritativeCorrectionCoordinator.cs",
+      "action": "modify",
+      "role": "automatic correction integration",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-21T16:40:23.6659579+00:00"
+    },
+    {
+      "id": "01KY2RSHVKPPPGXKQ32NEY0V6S",
+      "path": "tests/Tally.Tests/Ledger/ReconciliationPolicyMatrixTests.cs",
+      "action": "test",
+      "role": "resolved policy fixture matrix",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-21T16:40:23.6659579+00:00"
+    },
+    {
+      "id": "01KY2RSHVKDB5XADS91XXNVXQT",
+      "path": "tests/Tally.Tests/Ledger/ReconciliationApplyOperationTests.cs",
+      "action": "modify",
+      "role": "automatic match and owner regression tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-21T16:40:23.6659579+00:00"
+    },
+    {
+      "id": "01KY2RSHVK7C23E9VGCQDRBE2D",
+      "path": "tests/Tally.Tests/Ledger/StatementAuthoritativeCorrectionTests.cs",
+      "action": "modify",
+      "role": "automatic correction and owner regression tests",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-21T16:40:23.6659579+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY2RY6967FQR5FA9PQVD1VW4",
+      "name": "ReconciliationPolicyV1",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "notes": [
+        "Only rules recorded by OQ-LEDGER-13Resolution"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-21T16:42:55.6536423+00:00"
+    },
+    {
+      "id": "01KY2RY6977JVJG2T08P822K2C",
+      "name": "OQ-LEDGER-13Resolution",
+      "direction": "consumes",
+      "contract_ref_code": "OQ-LEDGER-13",
+      "sort_order": 1,
+      "created_at": "2026-07-21T16:42:55.6536423+00:00"
+    },
+    {
+      "id": "01KY2RY697WWYR06NT9F5639AY",
+      "name": "ManualReviewProjectionV1",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 2,
+      "created_at": "2026-07-21T16:42:55.6536423+00:00"
+    },
+    {
+      "id": "01KY2RY6975M0YCAEK668Q5NG5",
+      "name": "ReconciliationDispositionPolicy",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 3,
+      "created_at": "2026-07-21T16:42:55.6536423+00:00"
+    },
+    {
+      "id": "01KY2RY6971FWKBNRKEJWXHVX2",
+      "name": "StatementAuthorityPolicy",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 4,
+      "created_at": "2026-07-21T16:42:55.6536423+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY2S6TNDFMJV0KDTW09NKVQP",
+      "kind": "acceptance_check",
+      "text": [
+        "ReconciliationPolicyV1 encodes exactly the automatic match and correction cases recorded in the resolved OQ-LEDGER-13 matrix, including policy ID and version, Owned Bank Account, currency, Signed Account Amount, Effective Date, bounded tolerances if any, uniqueness requirements, conflict guards, and stable reasons."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T16:47:38.6688138+00:00"
+    },
+    {
+      "id": "01KY2S6TNDZ9DJJ4CSVCBVKEJ0",
+      "kind": "acceptance_check",
+      "text": [
+        "Automatic match or correction revalidates the Evidence Record fingerprint, current projection, policy and version, candidates, Canonical Transaction facts, lifecycle, and conflicts inside the existing writer transaction; drift or unsupported cases return a stable review-required or validation result with no mutation."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T16:47:38.6688138+00:00"
+    },
+    {
+      "id": "01KY2S6TNDDC6VEDHF9H7F9Z79",
+      "kind": "acceptance_check",
+      "text": [
+        "Candidate enumeration order cannot alter a policy outcome; multiple compatible or guard candidates, conflicting Evidence Records, unresolved relationship replacement, or any case absent from the matrix cannot apply automatically."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-21T16:47:38.6688138+00:00"
+    },
+    {
+      "id": "01KY2S6TND06VSN5JKB1Z94VEH",
+      "kind": "acceptance_check",
+      "text": [
+        "Owner-approved match, correction, Statement-only Transaction, ambiguity, and Reconciliation Exception behavior remains unchanged, and replay across both authority kinds returns one original effect."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-21T16:47:38.6688138+00:00"
+    },
+    {
+      "id": "01KY2RSHVJ78TYXFPMHWQ57GV1",
+      "kind": "expected_output",
+      "text": [
+        "ReconciliationPolicyV1 and automatic authority integration with policy-matrix, drift, ambiguity, owner-path regression, and replay tests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T16:40:23.6659579+00:00"
+    },
+    {
+      "id": "01KY2RSHVJXYBXZQKNDTQFXSDJ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT infer rules beyond the resolved evidence matrix, add fuzzy description scoring, provider-specific fields, runtime tolerance configuration, or hidden tie-breaking."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T16:40:23.6659579+00:00"
+    },
+    {
+      "id": "01KY2RSHVJ0ZYFHP4EG1G5CNQX",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT make OQ-LEDGER-13 optional, synthesize its resolution in code, or enable automatic behavior while its gate bead is incomplete."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T16:40:23.6659579+00:00"
+    },
+    {
+      "id": "01KY2RSHVJN9APM590NDRARH3X",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT fork a second reconciliation write path; extend the existing disposition and statement-correction policies inside LedgerMutationExecutor atomicity."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-21T16:40:23.6659579+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY2RTP8ZAFPB2J97B8E085MD",
+      "target_ref_code": "OQ-LEDGER-13",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KY07C7PVABDYP1V29H53B8S9",
+      "target_title": "Which provider-neutral compatibility fields, tolerances, and conflict rules are sufficient for an automatic deterministic match between agent-capture and statement-row evidence?",
+      "relationship": "blocked-by",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T16:41:00.9607189+00:00"
+    },
+    {
+      "id": "01KY2RTQCC2C81YP35EB3XCZVH",
+      "target_ref_code": "TC-LEDGER-RECONCILIATION-POLICY-MATRIX",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KY0BY9W4HESV0R3NBYPD8Q3W",
+      "target_title": "Prove deterministic reconciliation policy and ambiguity guards",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T16:41:02.0931587+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY2RSHVKM63RNHZX099RQ61S",
+      "gate_type": "test-evidence",
+      "description": [
+        "Map every enabled automatic branch to one resolved OQ-LEDGER-13 matrix row and prove every excluded row remains unapplied."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T16:40:23.6659579+00:00"
+    },
+    {
+      "id": "01KY2RSHVKHC6PYPZ4C4ZWTMH6",
+      "gate_type": "branch-review",
+      "description": [
+        "Confirm the change extends one reconciliation path and preserves owner authority, provider neutrality, statement authority, and append-only history."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T16:40:23.6659579+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY2RSHVKB0HSZCXEFKWHAYA3",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Reconciliation --no-restore",
+      "expected_result": "exit 0; the resolved automatic matrix, drift, ambiguity, owner-authority regression, correction, crash, and replay cases all run with 0 failures",
+      "required": 1,
+      "timeout_seconds": 1200,
+      "sort_order": 0,
+      "created_at": "2026-07-21T16:40:23.6659579+00:00"
+    }
+  ]
+}

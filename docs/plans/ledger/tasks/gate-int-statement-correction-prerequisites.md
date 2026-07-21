@@ -87,12 +87,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3lf` | `verified` | 2026-07-21T15:14:57.9793021+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3lf` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md): The seam consumes the base apply contracts, write store, and operation module.
 - `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](../tasks/reconciliation-statement-correction-effect-writer.md): The gate consumes StatementCorrectionEffectWriter.AppendAsync.
 - `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract

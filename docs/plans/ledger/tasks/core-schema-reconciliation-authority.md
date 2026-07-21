@@ -95,12 +95,15 @@ Represent statement corrections, prior and active transaction identity, dimensio
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-195` | `verified` | 2026-07-21T15:14:56.9097260+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-195` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-CATALOGUE](../tasks/core-schema-catalogue.md): Correction carry-forward references category, payment, and pool catalogue identities.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](../tasks/core-schema-evidence-reconciliation.md): V002 upgrades the committed V001 evidence and reconciliation tables.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](../tasks/core-schema-relationships-actuals.md): Statement correction optionally references invariant-preserving relationship and assignment events.

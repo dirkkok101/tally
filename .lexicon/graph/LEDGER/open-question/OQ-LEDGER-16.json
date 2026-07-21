@@ -4,9 +4,13 @@
   "ref_code": "OQ-LEDGER-16",
   "question": "Should a cash withdrawal count as External Spend immediately, or as a transfer to a tracked cash account until later cash spending is recorded?",
   "context": [
-    "The owner confirmed normal banking semantics for owned-account transfers, refunds or reversals, and separately recorded bank fees. Cash withdrawal remains materially ambiguous: treating it as immediate spend differs from treating cash as another owned account and would change External Spend and Budget Actual. Keep cash-withdrawal actuals and any dependent plan task gated until the owner selects one model."
+    "Resolved by explicit owner approval on 2026-07-21. V1 has no tracked-cash account: a cash withdrawal is recognized as spend when it leaves the bank account, preventing later unrecorded cash use from understating actuals."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "Owner decision on 2026-07-21: a cash withdrawal is immediate External Spend and Budget Actual in its Effective Date period; it is not an owned-account transfer because v1 has no tracked-cash account. Any separately recorded withdrawal fee remains ordinary spend. A linked reversal or refund offsets the withdrawal under the normal relationship rules. Later use of the same withdrawn cash is not recorded again as additional spend, preventing double counting."
+  ],
   "owner": "Personal Finance Owner",
+  "disposition": "unspecified",
   "created_at": "2026-07-21T11:04:18.8388401+00:00"
 }

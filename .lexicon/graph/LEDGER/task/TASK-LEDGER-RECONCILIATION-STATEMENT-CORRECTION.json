@@ -6,7 +6,7 @@
   "slug": "RECONCILIATION-STATEMENT-CORRECTION",
   "title": "Compose statement-authoritative reconciliation correction",
   "description": [
-    "Extend ledger.reconciliation.apply with the one composite correction that replaces provisional agent-capture facts from approved authoritative statement evidence."
+    "Extend ledger.reconciliation.apply with the owner-approved composite correction that replaces provisional agent-capture facts from approved authoritative statement evidence. Automatic correction remains disabled until the later OQ-LEDGER-13 activation task."
   ],
   "objective": [
     "Commit one statement-derived replacement and every required history/carry-forward effect atomically, or change nothing."
@@ -124,104 +124,115 @@
   ],
   "interfaces": [
     {
-      "id": "01KY2HEWJ74908N1X0TQX93W4G",
+      "id": "01KY2RX7GN92X8F66QERJ3B1PP",
       "name": "StatementAuthoritativeCorrectionCoordinator",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
       "sort_order": 0,
-      "created_at": "2026-07-21T14:32:14.1491524+00:00"
+      "created_at": "2026-07-21T16:42:24.1482890+00:00"
     },
     {
-      "id": "01KY2HEWJ75ESVHEK6FPRGK4WE",
+      "id": "01KY2RX7GNX9BFPF6JB9HBXQBY",
+      "name": "StatementAuthorityPolicy",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "notes": [
+        "Owner authority first; automatic authority remains unsupported until activation"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-21T16:42:24.1482890+00:00"
+    },
+    {
+      "id": "01KY2RX7GNBEKXWJESKY3JRHRN",
       "name": "StatementCorrectionOperationExtension",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
-      "sort_order": 1,
-      "created_at": "2026-07-21T14:32:14.1491524+00:00"
+      "sort_order": 2,
+      "created_at": "2026-07-21T16:42:24.1482890+00:00"
     },
     {
-      "id": "01KY2HEWJ79FXP93KJ0VBRASVX",
+      "id": "01KY2RX7GP1MC85EKJFZM3SW7K",
       "name": "StatementCorrectionEffectWriter.AppendAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
-      "sort_order": 2,
-      "created_at": "2026-07-21T14:32:14.1491524+00:00"
+      "sort_order": 3,
+      "created_at": "2026-07-21T16:42:24.1482890+00:00"
     },
     {
-      "id": "01KY2HEWJ7Q8K0ESZS6H7T72XF",
+      "id": "01KY2RX7GPFZP9C3GZB435RJZY",
       "name": "ReconciliationApplyOperationModule",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
-      "sort_order": 3,
-      "created_at": "2026-07-21T14:32:14.1491524+00:00"
+      "sort_order": 4,
+      "created_at": "2026-07-21T16:42:24.1482890+00:00"
     },
     {
-      "id": "01KY2HEWJ7YQ0PHZ54ETKKZNAX",
+      "id": "01KY2RX7GPPG4NVT1A509R1M8Z",
       "name": "LedgerMutationExecutor.ExecuteAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
-      "sort_order": 4,
-      "created_at": "2026-07-21T14:32:14.1491524+00:00"
+      "sort_order": 5,
+      "created_at": "2026-07-21T16:42:24.1482890+00:00"
     },
     {
-      "id": "01KY2HEWJ71JJHTVHXE60JDAHZ",
+      "id": "01KY2RX7GPQSMYBK5VR3P9AJT2",
       "name": "VerifiedStatementCorrectionPrerequisites",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
-      "sort_order": 5,
-      "created_at": "2026-07-21T14:32:14.1491524+00:00"
+      "sort_order": 6,
+      "created_at": "2026-07-21T16:42:24.1482890+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KY2CJXS256Q794FM9T2PBTF4",
+      "id": "01KY2S6SD7XQCZNDEXDRXEQ5XE",
       "kind": "acceptance_check",
       "text": [
-        "Given one compatible prior economic event with differing authoritative statement facts and deterministic-policy or explicit owner authority, correct_existing_from_statement revalidates evidence, candidates, policy/authority, facts, active dimensions, and relationships inside one BEGIN IMMEDIATE transaction."
+        "Given one prior economic event selected through the advisory projection and explicit owner authority, correct_existing_from_statement revalidates the Evidence Record, target and guard membership, owner actor and reason, authoritative facts, active dimensions, and relationships inside one BEGIN IMMEDIATE transaction."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T13:07:03.5855825+00:00"
+      "created_at": "2026-07-21T16:47:37.3834346+00:00"
     },
     {
-      "id": "01KY2CJXS3C5TR72S7CXD1K6MS",
+      "id": "01KY2S6SD8BS5JRXC0BYDYAHBD",
       "kind": "acceptance_check",
       "text": [
-        "A valid correction appends one statement-derived fact, supersession, Reconciliation Decision, confirming link, category and Spend Pool carry-forward, compatible payment carry-forward or explicit unknown initialization, and any invariant-preserving transfer/refund relationship replacement; exactly one fact remains active."
+        "A valid correction appends one statement-derived fact, supersession, Reconciliation Decision, confirming link, Category Assignment and Pool Assignment carry-forward, compatible Payment Instrument and Cardholder Attribution carry-forward or explicit unknown initialization, and any invariant-preserving transfer or refund relationship replacement; exactly one fact remains active."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T13:07:03.5855825+00:00"
+      "created_at": "2026-07-21T16:47:37.3834346+00:00"
     },
     {
-      "id": "01KY2CJXS34RXZ5AQ3MNG0FHGA",
+      "id": "01KY2S6SD8BMZDB9ANHSSZFEH7",
       "kind": "acceptance_check",
       "text": [
-        "The original agent-capture fact, its supporting evidence, prior assignments, prior attribution, and prior relationship history remain queryable; every new event references the Reconciliation Decision and source/replacement transaction IDs."
+        "The original agent-capture fact, its supporting Evidence Record, prior Category Assignment, prior Payment Instrument and Cardholder Attribution, Pool Assignment, and prior relationship history remain queryable; every new event references the Reconciliation Decision and source and replacement Canonical Transaction IDs."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T13:07:03.5855825+00:00"
+      "created_at": "2026-07-21T16:47:37.3834346+00:00"
     },
     {
-      "id": "01KY2CJXS3KF45JEESRKFGR4WH",
+      "id": "01KY2S6SD8Y864GQ0SC9ZQ5YD4",
       "kind": "acceptance_check",
       "text": [
-        "If payment attribution is incompatible, explicit unknown state and review metadata commit; if an active transfer/refund would violate role, account, sign, currency, principal, or refund conservation, the operation returns review-required and commits no replacement or idempotency outcome."
+        "If Payment Instrument or Cardholder Attribution is incompatible, explicit unknown state and review metadata commit; if an active transfer or refund would violate role, account, sign, currency, principal, or refund conservation, the operation returns review-required and commits no replacement or Idempotency Identity outcome."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T13:07:03.5855825+00:00"
+      "created_at": "2026-07-21T16:47:37.3834346+00:00"
     },
     {
-      "id": "01KY2CJXS32EVRR6ZNPNGEJ9TM",
+      "id": "01KY2S6SD8YGHHG4DNKZG98ZEE",
       "kind": "acceptance_check",
       "text": [
-        "Crash injection before and after every replacement, carry-forward, relationship, decision, link, state, and idempotency write yields either the complete outcome once or the unchanged prior state; identical replay returns the original result."
+        "An automatic correction request returns the stable unsupported-policy result until TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION completes; crash injection before and after every write yields either the complete owner-approved outcome once or unchanged prior state."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-21T13:07:03.5855825+00:00"
+      "created_at": "2026-07-21T16:47:37.3834346+00:00"
     },
     {
       "id": "01KY27XN5QFBQN75M5FZY3FKQ0",
@@ -264,44 +275,44 @@
       "created_at": "2026-07-21T11:45:32.3418525+00:00"
     },
     {
-      "id": "01KY2CJT2RXHGJFAYVQT04GYBZ",
+      "id": "01KY2S6SD8TR1T4SSGPZE9JPWQ",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT overwrite the notification-derived fact, create a second active spend effect, or move evidence/dimensions/relationships in place — rejected by DD-LEDGER-RECONCILIATION-CONTRACT and DD-LEDGER-IMMUTABLE-HISTORY."
+        "Do NOT overwrite the notification-derived fact, create a second active spend effect, or move Evidence Records, Category Assignments, Pool Assignments, Payment Instrument or Cardholder Attribution, or relationships in place."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T13:06:59.8002190+00:00"
+      "created_at": "2026-07-21T16:47:37.3834346+00:00"
     },
     {
-      "id": "01KY2CJT2VQEZGNZPZ1NG2SG8X",
+      "id": "01KY2S6SD8F4VKSK6WGDDYHAVZ",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT accept raw email, MIME, statement document, provider payload, message ID semantics, or arbitrary metadata — per ADR-CORE-0030."
+        "Do NOT accept raw email, MIME, statement document, provider payload, message ID semantics, or arbitrary metadata."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T13:06:59.8002190+00:00"
+      "created_at": "2026-07-21T16:47:37.3834346+00:00"
     },
     {
-      "id": "01KY2CJT2VEZNXZ0MRQ6GVNHK9",
+      "id": "01KY2S6SD8AM7GFR7RYB1PJA5F",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT preserve an invalid relationship or silently drop an existing category/Spend Pool Assignment; invalid relationship blocks, while category/pool preservation is explicit."
+        "Do NOT preserve an invalid relationship or silently drop an existing Category Assignment or Pool Assignment; an invalid relationship blocks, while category and pool preservation is explicit."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T13:06:59.8002190+00:00"
+      "created_at": "2026-07-21T16:47:37.3834346+00:00"
     },
     {
-      "id": "01KY2CJT2VN40W790Y5GEABZZ5",
+      "id": "01KY2S6SD9YTKXGMN6XWNZHQXV",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT enable automatic correction until OQ-LEDGER-13Resolution permits the exact case; explicit owner-approved correction remains available."
+        "Do NOT enable automatic correction until OQ-LEDGER-13 resolves and TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION supplies the exact supported policy; explicit owner-approved correction remains available."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T13:06:59.8002190+00:00"
+      "created_at": "2026-07-21T16:47:37.3834346+00:00"
     },
     {
       "id": "01KY27XN5QHGCA640PA18Z78AC",
@@ -395,14 +406,14 @@
   ],
   "verification_steps": [
     {
-      "id": "01KY27XN5QX8YCWX5FX1D903X4",
+      "id": "01KY2RRQFS727V2BEER4W4MN1X",
       "phase": "after",
-      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Ledger.StatementAuthoritativeCorrectionTests --no-restore && dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Integration.ReconciliationCrashAtomicityTests --no-restore",
-      "expected_result": "exit 0 from both commands; at least 36 authority, replacement, carry-forward, relationship, crash, rollback, and replay cases run in total and 0 fail",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~StatementAuthoritativeCorrectionTests --no-restore && dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ReconciliationCrashAtomicityTests --no-restore",
+      "expected_result": "exit 0 from both commands; at least 36 owner-authority, replacement, unsupported-policy, carry-forward, relationship, crash, rollback, and replay cases run in total and 0 fail",
       "required": 1,
       "timeout_seconds": 1200,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:45:32.3418525+00:00"
+      "created_at": "2026-07-21T16:39:56.6638735+00:00"
     }
   ]
 }

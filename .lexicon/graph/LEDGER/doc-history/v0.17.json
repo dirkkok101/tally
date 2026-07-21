@@ -1,0 +1,9 @@
+{
+  "id": "01KY2TAW5XDTXAGMMRBEHQQ256",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.17",
+  "changes": [
+    "Recompiled PLAN-LEDGER-V1 after the manual-review-first reconciliation replan; refreshed the projection, apply, statement-correction, reconciliation-bundle beads and added the evidence-gated automatic-reconciliation activation bead."
+  ],
+  "created_at": "2026-07-21T17:07:19.8701374+00:00"
+}

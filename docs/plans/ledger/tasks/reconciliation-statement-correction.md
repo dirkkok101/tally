@@ -12,7 +12,7 @@
 
 ## Summary
 
-Extend ledger.reconciliation.apply with the one composite correction that replaces provisional agent-capture facts from approved authoritative statement evidence.
+Extend ledger.reconciliation.apply with the owner-approved composite correction that replaces provisional agent-capture facts from approved authoritative statement evidence. Automatic correction remains disabled until the later OQ-LEDGER-13 activation task.
 
 ## Objective
 
@@ -41,18 +41,18 @@ Commit one statement-derived replacement and every required history/carry-forwar
 
 ### Acceptance Checks
 
-- Given one compatible prior economic event with differing authoritative statement facts and deterministic-policy or explicit owner authority, correct_existing_from_statement revalidates evidence, candidates, policy/authority, facts, active dimensions, and relationships inside one BEGIN IMMEDIATE transaction.
-- A valid correction appends one statement-derived fact, supersession, Reconciliation Decision, confirming link, category and Spend Pool carry-forward, compatible payment carry-forward or explicit unknown initialization, and any invariant-preserving transfer/refund relationship replacement; exactly one fact remains active.
-- The original agent-capture fact, its supporting evidence, prior assignments, prior attribution, and prior relationship history remain queryable; every new event references the Reconciliation Decision and source/replacement transaction IDs.
-- If payment attribution is incompatible, explicit unknown state and review metadata commit; if an active transfer/refund would violate role, account, sign, currency, principal, or refund conservation, the operation returns review-required and commits no replacement or idempotency outcome.
-- Crash injection before and after every replacement, carry-forward, relationship, decision, link, state, and idempotency write yields either the complete outcome once or the unchanged prior state; identical replay returns the original result.
+- Given one prior economic event selected through the advisory projection and explicit owner authority, correct_existing_from_statement revalidates the Evidence Record, target and guard membership, owner actor and reason, authoritative facts, active dimensions, and relationships inside one BEGIN IMMEDIATE transaction.
+- A valid correction appends one statement-derived fact, supersession, Reconciliation Decision, confirming link, Category Assignment and Pool Assignment carry-forward, compatible Payment Instrument and Cardholder Attribution carry-forward or explicit unknown initialization, and any invariant-preserving transfer or refund relationship replacement; exactly one fact remains active.
+- The original agent-capture fact, its supporting Evidence Record, prior Category Assignment, prior Payment Instrument and Cardholder Attribution, Pool Assignment, and prior relationship history remain queryable; every new event references the Reconciliation Decision and source and replacement Canonical Transaction IDs.
+- If Payment Instrument or Cardholder Attribution is incompatible, explicit unknown state and review metadata commit; if an active transfer or refund would violate role, account, sign, currency, principal, or refund conservation, the operation returns review-required and commits no replacement or Idempotency Identity outcome.
+- An automatic correction request returns the stable unsupported-policy result until TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION completes; crash injection before and after every write yields either the complete owner-approved outcome once or unchanged prior state.
 
 ### Failure Criteria
 
-- Do NOT overwrite the notification-derived fact, create a second active spend effect, or move evidence/dimensions/relationships in place — rejected by DD-LEDGER-RECONCILIATION-CONTRACT and DD-LEDGER-IMMUTABLE-HISTORY.
-- Do NOT accept raw email, MIME, statement document, provider payload, message ID semantics, or arbitrary metadata — per ADR-CORE-0030.
-- Do NOT preserve an invalid relationship or silently drop an existing category/Spend Pool Assignment; invalid relationship blocks, while category/pool preservation is explicit.
-- Do NOT enable automatic correction until OQ-LEDGER-13Resolution permits the exact case; explicit owner-approved correction remains available.
+- Do NOT overwrite the notification-derived fact, create a second active spend effect, or move Evidence Records, Category Assignments, Pool Assignments, Payment Instrument or Cardholder Attribution, or relationships in place.
+- Do NOT accept raw email, MIME, statement document, provider payload, message ID semantics, or arbitrary metadata.
+- Do NOT preserve an invalid relationship or silently drop an existing Category Assignment or Pool Assignment; an invalid relationship blocks, while category and pool preservation is explicit.
+- Do NOT enable automatic correction until OQ-LEDGER-13 resolves and TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION supplies the exact supported policy; explicit owner-approved correction remains available.
 
 ### Expected Outputs
 
@@ -84,6 +84,7 @@ Commit one statement-derived replacement and every required history/carry-forwar
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | StatementAuthoritativeCorrectionCoordinator | `produces` | DM-LEDGER-RECONCILIATION-HISTORY |  |
+| StatementAuthorityPolicy | `produces` | DM-LEDGER-RECONCILIATION-HISTORY | Owner authority first; automatic authority remains unsupported until activation |
 | StatementCorrectionOperationExtension | `produces` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
 | StatementCorrectionEffectWriter.AppendAsync | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY |  |
 | ReconciliationApplyOperationModule | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
@@ -94,7 +95,7 @@ Commit one statement-derived replacement and every required history/carry-forwar
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Ledger.StatementAuthoritativeCorrectionTests --no-restore && dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Integration.ReconciliationCrashAtomicityTests --no-restore` | exit 0 from both commands; at least 36 authority, replacement, carry-forward, relationship, crash, rollback, and replay cases run in total and 0 fail | `true` | 1200 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~StatementAuthoritativeCorrectionTests --no-restore && dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ReconciliationCrashAtomicityTests --no-restore` | exit 0 from both commands; at least 36 owner-authority, replacement, unsupported-policy, carry-forward, relationship, crash, rollback, and replay cases run in total and 0 fail | `true` | 1200 |
 
 ### Review Gates
 
@@ -105,12 +106,15 @@ Commit one statement-derived replacement and every required history/carry-forwar
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3ts` | `verified` | 2026-07-21T15:14:58.4812604+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3ts` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Correction consumes LedgerMutationExecutor.ExecuteAsync.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES](../tasks/gate-int-statement-correction-prerequisites.md): The correction composite consumes the prerequisite seam only after every producer interface and the V002 schema have been proven together.
 - `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md): The public correction extends ReconciliationApplyContracts and ReconciliationApplyOperationModule.
