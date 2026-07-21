@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Tally.Contracts.Common;
 
 namespace Tally.Application;
 
@@ -21,5 +22,7 @@ public sealed record CommandResult<TResult>(TResult? Value, string? ErrorCode)
 
 public interface IOperationHandler
 {
-    Task<CommandResult<JsonElement>> HandleAsync(JsonElement input, CancellationToken cancellationToken);
+    Task<CommandResult<JsonElement>> HandleAsync(OperationRequest request, CancellationToken cancellationToken);
 }
+
+public sealed record OperationRequest(JsonElement Input, SafeActor? Actor, string? IdempotencyKey);

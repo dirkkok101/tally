@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Tally.Contracts.Ledger.Evidence;
 
 namespace Tally.Contracts.Common;
 
@@ -23,4 +24,8 @@ public sealed record EmptyInput;
 [JsonSerializable(typeof(Tally.Contracts.System.OperationUnavailableResult))]
 [JsonSerializable(typeof(Tally.Contracts.System.OperationSchema))]
 [JsonSerializable(typeof(Tally.Contracts.System.OperationSchema[]))]
+[JsonSerializable(typeof(RegisterEvidenceInput))]
+[JsonSerializable(typeof(GetEvidenceInput))]
+[JsonSerializable(typeof(EvidenceRecordDetail))]
+[JsonSerializable(typeof(EvidenceLinkHistoryItem[]))]
 public partial class LedgerJsonContext : JsonSerializerContext;

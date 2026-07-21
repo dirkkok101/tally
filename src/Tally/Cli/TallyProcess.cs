@@ -1,13 +1,14 @@
 using System.Text.Json;
+using Tally.Application;
 using Tally.Bootstrap;
 using Tally.Contracts.Common;
 using Tally.Contracts.System;
 
 namespace Tally.Cli;
 
-public sealed class TallyProcess(OperationRegistry registry)
+public sealed class TallyProcess(OperationRegistry registry, LedgerServices? configuredServices = null)
 {
-    private readonly LedgerServices services = LedgerServices.Create();
+    private readonly LedgerServices services = configuredServices ?? LedgerServices.Create();
 
     public async Task<ProcessResult> RunAsync(IReadOnlyList<string> arguments, string? standardInput, CancellationToken cancellationToken)
     {
@@ -18,10 +19,13 @@ public sealed class TallyProcess(OperationRegistry registry)
             if (selection.ErrorCode is not null) return Error(2, selection.ErrorCode, "usage", "The input path must be '-' or '@file'.");
             var invocation = Resolve(selection.Arguments);
             if (invocation.ErrorCode is not null) return Error(invocation.ExitCode, invocation.ErrorCode, invocation.Category!, invocation.Message!);
+            if (invocation.UseRequestInput && !selection.HasInput) return Error(3, "validation.invalid_input", "validation", "Input does not match the published schema.");
             var input = await ReadInputAsync(selection, standardInput, cancellationToken);
-            if (selection.HasInput && !ValidRequest(input, invocation.Descriptor!)) return Error(3, "validation.invalid_input", "validation", "Input does not match the published schema.");
+            var requestEnvelope = selection.HasInput ? ReadRequest(input) : null;
+            if (selection.HasInput && !ValidRequest(requestEnvelope, invocation.Descriptor!)) return Error(3, "validation.invalid_input", "validation", "Input does not match the published schema.");
             var handler = invocation.Descriptor!.HandlerFactory(services, registry);
-            var result = await handler.HandleAsync(invocation.HandlerInput, cancellationToken);
+            var request = new OperationRequest(invocation.UseRequestInput ? requestEnvelope!.Input : invocation.HandlerInput, requestEnvelope?.Actor, requestEnvelope?.IdempotencyKey);
+            var result = await handler.HandleAsync(request, cancellationToken);
             return result.IsSuccess ? Success(invocation.Descriptor.OperationId, result.Value!) : ErrorForHandler(result.ErrorCode!);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { throw; }
@@ -34,6 +38,7 @@ public sealed class TallyProcess(OperationRegistry registry)
         ["help"] or ["schema", "list"] => Invocation.For(registry.Find("system.schema.list")!),
         ["schema", "show", var operationId] when registry.Find(operationId) is not null => Invocation.For(registry.Find("system.schema.show")!, JsonSerializer.SerializeToElement(new SchemaShowRequest(operationId), LedgerJsonContext.Default.SchemaShowRequest)),
         ["schema", "show", _] => Invocation.Error(4, "operation.not_found", "not_found", "The requested operation is not part of the public contract."),
+        _ when registry.FindByArguments(arguments) is { } descriptor => Invocation.For(descriptor, useRequestInput: true),
         _ => Invocation.Error(2, "operation.unknown", "usage", "The requested operation is not part of the public contract.")
     };
 
@@ -54,11 +59,17 @@ public sealed class TallyProcess(OperationRegistry registry)
         var path => await File.ReadAllTextAsync(path![1..], cancellationToken)
     };
 
-    private static bool ValidRequest(string? input, OperationDescriptor descriptor)
+    private static RequestEnvelope? ReadRequest(string? input)
+    {
+        if (input is null) return null;
+        try { return JsonSerializer.Deserialize(input!, LedgerJsonContext.Default.RequestEnvelope); }
+        catch (JsonException) { return null; }
+    }
+
+    private static bool ValidRequest(RequestEnvelope? request, OperationDescriptor descriptor)
     {
         try
         {
-            var request = JsonSerializer.Deserialize(input!, LedgerJsonContext.Default.RequestEnvelope);
             return request is not null && request.ContractVersion == "1.0"
                 && request.Actor is { Kind: "automation" or "human" or "system" }
                 && IsSafeLabel(request.Actor.Label)
@@ -68,6 +79,7 @@ public sealed class TallyProcess(OperationRegistry registry)
                 && (descriptor.RequiresIdempotencyKey ? !string.IsNullOrWhiteSpace(request.IdempotencyKey) : request.IdempotencyKey is null);
         }
         catch (JsonException) { return false; }
+        catch (NotSupportedException) { return false; }
     }
 
     private static bool IsSafeLabel(string value) => value is { Length: > 0 and <= 128 }
@@ -79,14 +91,16 @@ public sealed class TallyProcess(OperationRegistry registry)
     private static ProcessResult ErrorForHandler(string code) => code switch
     {
         "operation.not_found" => Error(4, code, "not_found", "The requested operation is not part of the public contract."),
+        "validation.invalid_input" => Error(3, code, "validation", "Input does not match the published schema."),
+        "LEDGER-IDEMPOTENCY-001" or "operation.conflict" => Error(5, code, "conflict", "The operation conflicts with existing state."),
         "host.unavailable" => Error(9, code, "host", "The requested operation is not available in this foundation."),
         _ => UnexpectedFailure()
     };
 
     private sealed record InputSelection(IReadOnlyList<string> Arguments, string? InputPath, bool HasInput, string? ErrorCode);
-    private sealed record Invocation(OperationDescriptor? Descriptor, JsonElement HandlerInput, int ExitCode, string? ErrorCode, string? Category, string? Message)
+    private sealed record Invocation(OperationDescriptor? Descriptor, JsonElement HandlerInput, bool UseRequestInput, int ExitCode, string? ErrorCode, string? Category, string? Message)
     {
-        public static Invocation For(OperationDescriptor descriptor, JsonElement? input = null) => new(descriptor, input ?? JsonSerializer.SerializeToElement(new EmptyInput(), LedgerJsonContext.Default.EmptyInput), 0, null, null, null);
-        public static Invocation Error(int exitCode, string code, string category, string message) => new(null, default, exitCode, code, category, message);
+        public static Invocation For(OperationDescriptor descriptor, JsonElement? input = null, bool useRequestInput = false) => new(descriptor, input ?? JsonSerializer.SerializeToElement(new EmptyInput(), LedgerJsonContext.Default.EmptyInput), useRequestInput, 0, null, null, null);
+        public static Invocation Error(int exitCode, string code, string category, string message) => new(null, default, false, exitCode, code, category, message);
     }
 }

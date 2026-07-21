@@ -3,7 +3,9 @@ using System.Text.Json.Serialization.Metadata;
 using Tally.Application;
 using Tally.Bootstrap;
 using Tally.Contracts.Common;
+using Tally.Contracts.Ledger.Evidence;
 using Tally.Contracts.System;
+using Tally.Features.Ledger.Evidence;
 using Tally.Features.System.Contract;
 
 namespace Tally.Cli;
@@ -26,6 +28,8 @@ public sealed class OperationRegistry
     public IReadOnlyList<OperationDescriptor> Descriptors => descriptors;
     public static OperationRegistry Create() => new(Inventory.Select(CreateDescriptor).OrderBy(x => x.OperationId, StringComparer.Ordinal).ToArray());
     public OperationDescriptor? Find(string operationId) => descriptors.SingleOrDefault(x => x.OperationId == operationId);
+    public OperationDescriptor? FindByArguments(IReadOnlyList<string> arguments) => descriptors.SingleOrDefault(descriptor =>
+        descriptor.CliPath.Split(' ', StringSplitOptions.RemoveEmptyEntries).Skip(1).SequenceEqual(arguments));
     public string SchemaListJson() => JsonSerializer.Serialize(descriptors.Select(x => x.ToSchema()).ToArray(), LedgerJsonContext.Default.OperationSchemaArray);
     public string SchemaShowJson(string operationId) => Find(operationId) is { } descriptor ? JsonSerializer.Serialize(descriptor.ToSchema(), LedgerJsonContext.Default.OperationSchema) : "null";
     private static OperationDescriptor CreateDescriptor(string operationId)
@@ -39,6 +43,8 @@ public sealed class OperationRegistry
             "system.version" => new(operationId, "tally version", "query", false, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.VersionResult, "SystemOperationModule.Version", static (services, _) => new SystemOperationHandler(services.SystemOperations, null, "system.version"), "tally version"),
             "system.schema.list" => new(operationId, "tally schema list", "query", false, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.SchemaListResult, "SystemOperationModule.List", static (services, registry) => new SystemOperationHandler(services.SystemOperations, registry, "system.schema.list"), "tally schema list"),
             "system.schema.show" => new(operationId, "tally schema show <operation-id>", "query", false, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.SchemaShowResult, "SystemOperationModule.Show", static (services, registry) => new SystemOperationHandler(services.SystemOperations, registry, "system.schema.show"), "tally schema show system.version"),
+            "ledger.evidence.register" => new(operationId, "tally ledger evidence register", "mutation", true, LedgerJsonContext.Default.RegisterEvidenceInput, LedgerJsonContext.Default.EvidenceRecordDetail, "EvidenceRegistryOperationModule.Register", static (services, _) => services.EvidenceRegistry is { } module ? new EvidenceRegistryOperationHandler(module, "ledger.evidence.register") : new FoundationOperationHandler(), "tally ledger evidence register --input -"),
+            "ledger.evidence.get" => new(operationId, "tally ledger evidence get", "query", false, LedgerJsonContext.Default.GetEvidenceInput, LedgerJsonContext.Default.EvidenceRecordDetail, "EvidenceRegistryOperationModule.Get", static (services, _) => services.EvidenceRegistry is { } module ? new EvidenceRegistryOperationHandler(module, "ledger.evidence.get") : new FoundationOperationHandler(), "tally ledger evidence get --input -"),
             _ => new(operationId, "tally " + operationId.Replace('.', ' '), isQuery ? "query" : "mutation", !isQuery, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.OperationUnavailableResult, "FoundationOperationHandler", static (_, _) => new FoundationOperationHandler(), "tally " + operationId.Replace('.', ' '))
         };
     }
@@ -58,18 +64,18 @@ public sealed class OperationRegistry
 
 internal sealed class SystemOperationHandler(SystemOperationModule module, OperationRegistry? registry, string operationId) : IOperationHandler
 {
-    public Task<CommandResult<JsonElement>> HandleAsync(JsonElement input, CancellationToken cancellationToken) => operationId switch
+    public Task<CommandResult<JsonElement>> HandleAsync(OperationRequest request, CancellationToken cancellationToken) => operationId switch
     {
-        "system.version" => module.VersionAsync(input, cancellationToken),
-        "system.schema.list" => module.ListAsync(registry!.Descriptors.Select(x => x.ToSchema()).ToArray(), input, cancellationToken),
-        "system.schema.show" => module.ShowAsync(registry!.Find(input.GetProperty("operationId").GetString()!)?.ToSchema(), input, cancellationToken),
+        "system.version" => module.VersionAsync(request.Input, cancellationToken),
+        "system.schema.list" => module.ListAsync(registry!.Descriptors.Select(x => x.ToSchema()).ToArray(), request.Input, cancellationToken),
+        "system.schema.show" => module.ShowAsync(registry!.Find(request.Input.GetProperty("operationId").GetString()!)?.ToSchema(), request.Input, cancellationToken),
         _ => Task.FromResult(CommandResult<JsonElement>.Failure("operation.not_found"))
     };
 }
 
 internal sealed class FoundationOperationHandler : IOperationHandler
 {
-    public Task<CommandResult<JsonElement>> HandleAsync(JsonElement input, CancellationToken cancellationToken)
+    public Task<CommandResult<JsonElement>> HandleAsync(OperationRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         return Task.FromResult(CommandResult<JsonElement>.Failure("host.unavailable"));

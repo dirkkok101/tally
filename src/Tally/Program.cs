@@ -1,4 +1,5 @@
 using Tally.Cli;
+using Tally.Bootstrap;
 using Tally.Contracts.Common;
 using Tally.Infrastructure.Storage;
 
@@ -11,6 +12,7 @@ Console.CancelKeyPress += (_, eventArgs) =>
 };
 try
 {
+    LedgerDb? database = null;
     var dataRoot = Environment.GetEnvironmentVariable("TALLY_DATA_ROOT");
     if (!string.IsNullOrWhiteSpace(dataRoot))
     {
@@ -19,10 +21,10 @@ try
             throw new PlatformNotSupportedException("Ledger storage requires Linux host protections.");
         }
 
-        await LedgerRuntimeBootstrap.InitializeCurrentAsync(dataRoot, cancellationSource.Token);
+        database = await LedgerRuntimeBootstrap.InitializeCurrentAsync(dataRoot, cancellationSource.Token);
     }
 
-    var process = new TallyProcess(OperationRegistry.Create());
+    var process = new TallyProcess(OperationRegistry.Create(), database is null ? LedgerServices.Create() : LedgerServices.Create(database));
     result = await process.RunAsync(args, Console.IsInputRedirected ? await Console.In.ReadToEndAsync(cancellationSource.Token) : null, cancellationSource.Token);
 }
 catch { result = TallyProcess.UnexpectedFailure(); }
