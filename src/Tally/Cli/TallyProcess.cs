@@ -92,6 +92,10 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
     {
         "operation.not_found" => Error(4, code, "not_found", "The requested operation is not part of the public contract."),
         "validation.invalid_input" => Error(3, code, "validation", "Input does not match the published schema."),
+        "LEDGER-ACCOUNT-TYPE-UNSUPPORTED" or "LEDGER-CURRENCY-UNSUPPORTED" => Error(3, code, "validation", "The account input is not supported."),
+        "LEDGER-ACCOUNT-NOT-FOUND" => Error(4, code, "not_found", "The account was not found."),
+        "LEDGER-ACCOUNT-DUPLICATE" or "LEDGER-ACCOUNT-NAME-CONFLICT" => Error(5, code, "conflict", "The account conflicts with existing state."),
+        "LEDGER-ACCOUNT-ARCHIVED" or "LEDGER-ACCOUNT-ALREADY-ARCHIVED" => Error(6, code, "lifecycle", "The account lifecycle does not allow the operation."),
         "LEDGER-IDEMPOTENCY-001" or "operation.conflict" => Error(5, code, "conflict", "The operation conflicts with existing state."),
         "host.unavailable" => Error(9, code, "host", "The requested operation is not available in this foundation."),
         _ => UnexpectedFailure()

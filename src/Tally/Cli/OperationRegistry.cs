@@ -3,16 +3,18 @@ using System.Text.Json.Serialization.Metadata;
 using Tally.Application;
 using Tally.Bootstrap;
 using Tally.Contracts.Common;
+using Tally.Contracts.Ledger.Accounts;
 using Tally.Contracts.Ledger.Evidence;
 using Tally.Contracts.System;
 using Tally.Features.Ledger.Evidence;
+using Tally.Features.Ledger.Accounts;
 using Tally.Features.System.Contract;
 
 namespace Tally.Cli;
 
-public sealed record OperationDescriptor(string OperationId, string CliPath, string Kind, bool RequiresIdempotencyKey, JsonTypeInfo RequestTypeInfo, JsonTypeInfo ResultTypeInfo, string HandlerTarget, Func<LedgerServices, OperationRegistry, IOperationHandler> HandlerFactory, string Example)
+public sealed record OperationDescriptor(string OperationId, string CliPath, string Kind, bool RequiresIdempotencyKey, JsonTypeInfo RequestTypeInfo, JsonTypeInfo ResultTypeInfo, string HandlerTarget, Func<LedgerServices, OperationRegistry, IOperationHandler> HandlerFactory, string Example, IReadOnlyList<ErrorSchema>? DomainErrors = null)
 {
-    public OperationSchema ToSchema() => new(OperationId, CliPath, Kind, "{\"type\":\"object\",\"additionalProperties\":false}", "{\"type\":\"object\"}", RequestTypeInfo.Type.FullName!, ResultTypeInfo.Type.FullName!, Errors, 0, RequiresIdempotencyKey, "1.0", "1.0", HandlerTarget, Example);
+    public OperationSchema ToSchema() => new(OperationId, CliPath, Kind, "{\"type\":\"object\",\"additionalProperties\":false}", "{\"type\":\"object\"}", RequestTypeInfo.Type.FullName!, ResultTypeInfo.Type.FullName!, [.. Errors, .. DomainErrors ?? []], 0, RequiresIdempotencyKey, "1.0", "1.0", HandlerTarget, Example);
     private static readonly IReadOnlyList<ErrorSchema> Errors =
     [
         new("usage.invalid_input_path", "usage", 2), new("validation.invalid_input", "validation", 3), new("operation.not_found", "not_found", 4),
@@ -43,11 +45,25 @@ public sealed class OperationRegistry
             "system.version" => new(operationId, "tally version", "query", false, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.VersionResult, "SystemOperationModule.Version", static (services, _) => new SystemOperationHandler(services.SystemOperations, null, "system.version"), "tally version"),
             "system.schema.list" => new(operationId, "tally schema list", "query", false, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.SchemaListResult, "SystemOperationModule.List", static (services, registry) => new SystemOperationHandler(services.SystemOperations, registry, "system.schema.list"), "tally schema list"),
             "system.schema.show" => new(operationId, "tally schema show <operation-id>", "query", false, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.SchemaShowResult, "SystemOperationModule.Show", static (services, registry) => new SystemOperationHandler(services.SystemOperations, registry, "system.schema.show"), "tally schema show system.version"),
+            "ledger.account.create" => new(operationId, "tally ledger account create", "mutation", true, LedgerJsonContext.Default.CreateAccountInput, LedgerJsonContext.Default.AccountDetail, "AccountOperationModule.Create", static (services, _) => services.Accounts is { } module ? new AccountOperationHandler(module, "ledger.account.create") : new FoundationOperationHandler(), "tally ledger account create --input -", AccountErrors(operationId)),
+            "ledger.account.get" => new(operationId, "tally ledger account get", "query", false, LedgerJsonContext.Default.GetAccountInput, LedgerJsonContext.Default.AccountDetail, "AccountOperationModule.Get", static (services, _) => services.Accounts is { } module ? new AccountOperationHandler(module, "ledger.account.get") : new FoundationOperationHandler(), "tally ledger account get --input -", AccountErrors(operationId)),
+            "ledger.account.list" => new(operationId, "tally ledger account list", "query", false, LedgerJsonContext.Default.ListAccountsInput, LedgerJsonContext.Default.AccountListResult, "AccountOperationModule.List", static (services, _) => services.Accounts is { } module ? new AccountOperationHandler(module, "ledger.account.list") : new FoundationOperationHandler(), "tally ledger account list --input -", AccountErrors(operationId)),
+            "ledger.account.rename" => new(operationId, "tally ledger account rename", "mutation", true, LedgerJsonContext.Default.RenameAccountInput, LedgerJsonContext.Default.AccountLifecycleResult, "AccountOperationModule.Rename", static (services, _) => services.Accounts is { } module ? new AccountOperationHandler(module, "ledger.account.rename") : new FoundationOperationHandler(), "tally ledger account rename --input -", AccountErrors(operationId)),
+            "ledger.account.archive" => new(operationId, "tally ledger account archive", "mutation", true, LedgerJsonContext.Default.ArchiveAccountInput, LedgerJsonContext.Default.AccountLifecycleResult, "AccountOperationModule.Archive", static (services, _) => services.Accounts is { } module ? new AccountOperationHandler(module, "ledger.account.archive") : new FoundationOperationHandler(), "tally ledger account archive --input -", AccountErrors(operationId)),
             "ledger.evidence.register" => new(operationId, "tally ledger evidence register", "mutation", true, LedgerJsonContext.Default.RegisterEvidenceInput, LedgerJsonContext.Default.EvidenceRecordDetail, "EvidenceRegistryOperationModule.Register", static (services, _) => services.EvidenceRegistry is { } module ? new EvidenceRegistryOperationHandler(module, "ledger.evidence.register") : new FoundationOperationHandler(), "tally ledger evidence register --input -"),
             "ledger.evidence.get" => new(operationId, "tally ledger evidence get", "query", false, LedgerJsonContext.Default.GetEvidenceInput, LedgerJsonContext.Default.EvidenceRecordDetail, "EvidenceRegistryOperationModule.Get", static (services, _) => services.EvidenceRegistry is { } module ? new EvidenceRegistryOperationHandler(module, "ledger.evidence.get") : new FoundationOperationHandler(), "tally ledger evidence get --input -"),
             _ => new(operationId, "tally " + operationId.Replace('.', ' '), isQuery ? "query" : "mutation", !isQuery, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.OperationUnavailableResult, "FoundationOperationHandler", static (_, _) => new FoundationOperationHandler(), "tally " + operationId.Replace('.', ' '))
         };
     }
+
+    private static IReadOnlyList<ErrorSchema> AccountErrors(string operationId) => operationId switch
+    {
+        "ledger.account.create" => [new("LEDGER-ACCOUNT-DUPLICATE", "conflict", 5), new("LEDGER-ACCOUNT-TYPE-UNSUPPORTED", "validation", 3), new("LEDGER-CURRENCY-UNSUPPORTED", "validation", 3)],
+        "ledger.account.get" => [new("LEDGER-ACCOUNT-NOT-FOUND", "not_found", 4)],
+        "ledger.account.rename" => [new("LEDGER-ACCOUNT-NOT-FOUND", "not_found", 4), new("LEDGER-ACCOUNT-ARCHIVED", "lifecycle", 6), new("LEDGER-ACCOUNT-NAME-CONFLICT", "conflict", 5)],
+        "ledger.account.archive" => [new("LEDGER-ACCOUNT-NOT-FOUND", "not_found", 4), new("LEDGER-ACCOUNT-ALREADY-ARCHIVED", "lifecycle", 6)],
+        _ => []
+    };
     private static readonly string[] Inventory =
     [
         "ledger.account.create","ledger.account.get","ledger.account.list","ledger.account.rename","ledger.account.archive",
