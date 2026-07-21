@@ -12,6 +12,9 @@
   "rationale": [
     "An adjacency relationship is the smallest durable model that supports owner-required hierarchy, stable IDs, cheap parent moves at personal scale, and deterministic roll-ups. Allowing assignment to any node avoids forced recategorization when the owner has only a broad classification, while exact and subtree modes prevent ambiguous totals."
   ],
+  "alternatives": [
+    "Flat category catalogue — rejected because the owner requires hierarchy and deterministic subtree roll-ups. Split or multiple Category Assignments — rejected because each transaction has at most one active category and split assignments complicate exact totals. Materialized-path or nested-set storage — rejected because reparenting rewrites structural data and conflicts with append-only parent history. Leaf-only assignment — rejected because transactions may legitimately use a broader parent category."
+  ],
   "status": "accepted",
   "created_at": "2026-07-21T11:07:31.2668018+00:00",
   "links": [
