@@ -29,7 +29,7 @@ public sealed class LedgerMutationExecutor(LedgerDb database, LedgerConnectionFa
         var canonicalHash = new CanonicalRequestHasher().Hash(request.ContractVersion, request.OperationId, request.Actor, request.Input);
         try
         {
-            await using var connection = await connectionFactory.OpenAsync(database, 1, cancellationToken);
+            await using var connection = await connectionFactory.OpenAsync(database, CompleteLedgerSchema.CurrentVersion, cancellationToken);
             await using var transaction = connection.BeginTransaction(deferred: false);
             try
             {

@@ -1,4 +1,7 @@
+using System.Runtime.Versioning;
 using Microsoft.Data.Sqlite;
+using Tally.Infrastructure.Storage.Migrations.V001;
+using Tally.Infrastructure.Storage.Migrations.V002;
 
 namespace Tally.Infrastructure.Storage;
 
@@ -61,5 +64,72 @@ public sealed class LedgerSchemaFragmentRegistry(IEnumerable<ILedgerSchemaFragme
         }
 
         return ordered;
+    }
+}
+
+public static class CompleteLedgerSchema
+{
+    public const int CurrentVersion = 2;
+    public static IReadOnlyList<string> V1FragmentNames { get; } =
+    [
+        V001StorageSchema.FragmentName,
+        V001CatalogueSchema.FragmentName,
+        V001RelationshipActualsSchema.FragmentName,
+        V001TransactionSchema.FragmentName,
+        V001EvidenceReconciliationSchema.FragmentName
+    ];
+    public static IReadOnlyList<string> CurrentFragmentNames { get; } =
+    [.. V1FragmentNames, V002StatementAuthoritySchema.FragmentName];
+
+    public static LedgerSchemaFragmentRegistry CreateV1() => new(V1Fragments(), V1FragmentNames);
+
+    public static LedgerSchemaFragmentRegistry CreateCurrent() => new(
+        [.. V1Fragments(), new V002StatementAuthoritySchema()],
+        CurrentFragmentNames);
+
+    private static ILedgerSchemaFragment[] V1Fragments() =>
+    [
+        new V001StorageSchema(),
+        new V001CatalogueSchema(),
+        new V001RelationshipActualsSchema(),
+        new V001TransactionSchema(),
+        new V001EvidenceReconciliationSchema()
+    ];
+}
+
+[SupportedOSPlatform("linux")]
+public static class LedgerRuntimeBootstrap
+{
+    public static async Task<LedgerDb> InitializeCurrentAsync(string dataRoot, CancellationToken cancellationToken)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(dataRoot);
+        var protection = new HostArtifactProtection();
+        protection.EnsureDataRoot(dataRoot);
+        var currentPath = Path.Combine(Path.GetFullPath(dataRoot), "CURRENT");
+        if (File.Exists(currentPath))
+        {
+            protection.RequireOwnerOnlyArtifact(currentPath);
+            var currentGeneration = (await File.ReadAllTextAsync(currentPath, cancellationToken)).Trim();
+            var current = new LedgerDb(dataRoot, currentGeneration);
+            await ApplyCurrentAsync(current, protection, cancellationToken);
+            return current;
+        }
+
+        var generationId = Guid.NewGuid().ToString("N");
+        var database = new LedgerDb(dataRoot, generationId);
+        await ApplyCurrentAsync(database, protection, cancellationToken);
+        const string fingerprint = "ledger-schema-v2";
+        await File.WriteAllTextAsync(database.ManifestPath, fingerprint, cancellationToken);
+        protection.ProtectArtifact(database.ManifestPath);
+        var manager = new StoreGenerationManager(protection);
+        manager.ConfigureDataRoot(dataRoot);
+        await manager.ActivateAsync(generationId, fingerprint, cancellationToken);
+        return database;
+    }
+
+    private static async Task ApplyCurrentAsync(LedgerDb database, HostArtifactProtection protection, CancellationToken cancellationToken)
+    {
+        await using var connection = await new LedgerConnectionFactory(protection).OpenAsync(database, CompleteLedgerSchema.CurrentVersion, cancellationToken);
+        await CompleteLedgerSchema.CreateCurrent().ApplyAsync(connection, cancellationToken);
     }
 }
