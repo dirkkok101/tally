@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Tally.Contracts.Ledger.Accounts;
+using Tally.Contracts.Ledger.Categories;
 using Tally.Contracts.Ledger.Evidence;
 
 namespace Tally.Contracts.Common;
@@ -39,4 +40,18 @@ public sealed record EmptyInput;
 [JsonSerializable(typeof(AccountLifecycleHistoryItem[]))]
 [JsonSerializable(typeof(AccountListResult))]
 [JsonSerializable(typeof(AccountLifecycleResult))]
+[JsonSerializable(typeof(CreateCategoryInput))]
+[JsonSerializable(typeof(GetCategoryInput))]
+[JsonSerializable(typeof(ListCategoriesInput))]
+[JsonSerializable(typeof(RenameCategoryInput))]
+[JsonSerializable(typeof(ReparentCategoryInput))]
+[JsonSerializable(typeof(ArchiveCategoryInput))]
+[JsonSerializable(typeof(ReactivateCategoryInput))]
+[JsonSerializable(typeof(CategoryDetail))]
+[JsonSerializable(typeof(CategorySummary[]))]
+[JsonSerializable(typeof(CategoryLifecycleHistoryItem[]))]
+[JsonSerializable(typeof(CategoryParentHistoryItem[]))]
+[JsonSerializable(typeof(CategoryListResult))]
+[JsonSerializable(typeof(CategoryLifecycleResult))]
+[JsonSerializable(typeof(CategoryReparentResult))]
 public partial class LedgerJsonContext : JsonSerializerContext;

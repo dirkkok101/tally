@@ -2,15 +2,17 @@ using Tally.Features.System.Contract;
 using Tally.Application;
 using Tally.Features.Ledger.Evidence;
 using Tally.Features.Ledger.Accounts;
+using Tally.Features.Ledger.Categories;
 using Tally.Infrastructure.Storage;
 using Tally.Infrastructure.Storage.Accounts;
+using Tally.Infrastructure.Storage.Categories;
 using Tally.Infrastructure.Storage.Evidence;
 
 namespace Tally.Bootstrap;
 
-public sealed record LedgerServices(SystemOperationModule SystemOperations, AccountOperationModule? Accounts, EvidenceRegistryOperationModule? EvidenceRegistry)
+public sealed record LedgerServices(SystemOperationModule SystemOperations, AccountOperationModule? Accounts, CategoryOperationModule? Categories, EvidenceRegistryOperationModule? EvidenceRegistry)
 {
-    public static LedgerServices Create() => new(new SystemOperationModule(), null, null);
+    public static LedgerServices Create() => new(new SystemOperationModule(), null, null, null);
 
     public static LedgerServices Create(LedgerDb database)
     {
@@ -24,8 +26,13 @@ public sealed record LedgerServices(SystemOperationModule SystemOperations, Acco
             new ListAccountsHandler(accountStore),
             new RenameAccountHandler(executor, accountStore),
             new ArchiveAccountHandler(executor, accountStore));
+        var categoryStore = new CategoryStore(database, factory);
+        var categories = new CategoryOperationModule(
+            new CreateCategoryHandler(executor, categoryStore), new GetCategoryHandler(categoryStore), new ListCategoriesHandler(categoryStore),
+            new RenameCategoryHandler(executor, categoryStore), new ReparentCategoryHandler(executor, categoryStore),
+            new ArchiveCategoryHandler(executor, categoryStore), new ReactivateCategoryHandler(executor, categoryStore));
         var evidenceStore = new EvidenceStore(database, factory);
         var evidence = new EvidenceRegistryOperationModule(new RegisterEvidenceHandler(executor, evidenceStore), new GetEvidenceHandler(evidenceStore));
-        return new(new SystemOperationModule(), accounts, evidence);
+        return new(new SystemOperationModule(), accounts, categories, evidence);
     }
 }

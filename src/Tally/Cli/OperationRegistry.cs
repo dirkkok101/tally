@@ -4,10 +4,13 @@ using Tally.Application;
 using Tally.Bootstrap;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Accounts;
+using Tally.Contracts.Ledger.Categories;
 using Tally.Contracts.Ledger.Evidence;
 using Tally.Contracts.System;
 using Tally.Features.Ledger.Evidence;
 using Tally.Features.Ledger.Accounts;
+using Tally.Features.Ledger.Categories;
+using Tally.Domain.Ledger.Categories;
 using Tally.Features.System.Contract;
 
 namespace Tally.Cli;
@@ -50,6 +53,13 @@ public sealed class OperationRegistry
             "ledger.account.list" => new(operationId, "tally ledger account list", "query", false, LedgerJsonContext.Default.ListAccountsInput, LedgerJsonContext.Default.AccountListResult, "AccountOperationModule.List", static (services, _) => services.Accounts is { } module ? new AccountOperationHandler(module, "ledger.account.list") : new FoundationOperationHandler(), "tally ledger account list --input -", AccountErrors(operationId)),
             "ledger.account.rename" => new(operationId, "tally ledger account rename", "mutation", true, LedgerJsonContext.Default.RenameAccountInput, LedgerJsonContext.Default.AccountLifecycleResult, "AccountOperationModule.Rename", static (services, _) => services.Accounts is { } module ? new AccountOperationHandler(module, "ledger.account.rename") : new FoundationOperationHandler(), "tally ledger account rename --input -", AccountErrors(operationId)),
             "ledger.account.archive" => new(operationId, "tally ledger account archive", "mutation", true, LedgerJsonContext.Default.ArchiveAccountInput, LedgerJsonContext.Default.AccountLifecycleResult, "AccountOperationModule.Archive", static (services, _) => services.Accounts is { } module ? new AccountOperationHandler(module, "ledger.account.archive") : new FoundationOperationHandler(), "tally ledger account archive --input -", AccountErrors(operationId)),
+            "ledger.category.create" => CategoryDescriptor(operationId, LedgerJsonContext.Default.CreateCategoryInput, LedgerJsonContext.Default.CategoryDetail, "Create"),
+            "ledger.category.get" => CategoryDescriptor(operationId, LedgerJsonContext.Default.GetCategoryInput, LedgerJsonContext.Default.CategoryDetail, "Get"),
+            "ledger.category.list" => CategoryDescriptor(operationId, LedgerJsonContext.Default.ListCategoriesInput, LedgerJsonContext.Default.CategoryListResult, "List"),
+            "ledger.category.rename" => CategoryDescriptor(operationId, LedgerJsonContext.Default.RenameCategoryInput, LedgerJsonContext.Default.CategoryLifecycleResult, "Rename"),
+            "ledger.category.reparent" => CategoryDescriptor(operationId, LedgerJsonContext.Default.ReparentCategoryInput, LedgerJsonContext.Default.CategoryReparentResult, "Reparent"),
+            "ledger.category.archive" => CategoryDescriptor(operationId, LedgerJsonContext.Default.ArchiveCategoryInput, LedgerJsonContext.Default.CategoryLifecycleResult, "Archive"),
+            "ledger.category.reactivate" => CategoryDescriptor(operationId, LedgerJsonContext.Default.ReactivateCategoryInput, LedgerJsonContext.Default.CategoryLifecycleResult, "Reactivate"),
             "ledger.evidence.register" => new(operationId, "tally ledger evidence register", "mutation", true, LedgerJsonContext.Default.RegisterEvidenceInput, LedgerJsonContext.Default.EvidenceRecordDetail, "EvidenceRegistryOperationModule.Register", static (services, _) => services.EvidenceRegistry is { } module ? new EvidenceRegistryOperationHandler(module, "ledger.evidence.register") : new FoundationOperationHandler(), "tally ledger evidence register --input -"),
             "ledger.evidence.get" => new(operationId, "tally ledger evidence get", "query", false, LedgerJsonContext.Default.GetEvidenceInput, LedgerJsonContext.Default.EvidenceRecordDetail, "EvidenceRegistryOperationModule.Get", static (services, _) => services.EvidenceRegistry is { } module ? new EvidenceRegistryOperationHandler(module, "ledger.evidence.get") : new FoundationOperationHandler(), "tally ledger evidence get --input -"),
             _ => new(operationId, "tally " + operationId.Replace('.', ' '), isQuery ? "query" : "mutation", !isQuery, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.OperationUnavailableResult, "FoundationOperationHandler", static (_, _) => new FoundationOperationHandler(), "tally " + operationId.Replace('.', ' '))
@@ -64,10 +74,30 @@ public sealed class OperationRegistry
         "ledger.account.archive" => [new("LEDGER-ACCOUNT-NOT-FOUND", "not_found", 4), new("LEDGER-ACCOUNT-ALREADY-ARCHIVED", "lifecycle", 6)],
         _ => []
     };
+
+    private static OperationDescriptor CategoryDescriptor(string operationId, JsonTypeInfo request, JsonTypeInfo result, string target) => new(
+        operationId, "tally " + operationId.Replace('.', ' '), operationId.EndsWith(".get", StringComparison.Ordinal) || operationId.EndsWith(".list", StringComparison.Ordinal) ? "query" : "mutation",
+        !operationId.EndsWith(".get", StringComparison.Ordinal) && !operationId.EndsWith(".list", StringComparison.Ordinal), request, result,
+        "CategoryOperationModule." + target, (services, _) => services.Categories is { } module ? new CategoryOperationHandler(module, operationId) : new FoundationOperationHandler(),
+        "tally " + operationId.Replace('.', ' ') + " --input -", CategoryErrorsFor(operationId));
+
+    private static IReadOnlyList<ErrorSchema> CategoryErrorsFor(string operationId) => operationId switch
+    {
+        "ledger.category.create" => [CategoryError(CategoryErrors.DuplicateSibling, "conflict", 5), CategoryError(CategoryErrors.ParentNotFound, "not_found", 4), CategoryError(CategoryErrors.ParentArchived, "lifecycle", 6), CategoryError(SpendCategory.InvalidError, "validation", 3)],
+        "ledger.category.get" => [CategoryError(CategoryErrors.NotFound, "not_found", 4)],
+        "ledger.category.list" => [CategoryError(CategoryErrors.ParentNotFound, "not_found", 4), CategoryError(CategoryErrors.ScopeInvalid, "validation", 3)],
+        "ledger.category.rename" => [CategoryError(CategoryErrors.NotFound, "not_found", 4), CategoryError(CategoryErrors.Archived, "lifecycle", 6), CategoryError(CategoryErrors.DuplicateSibling, "conflict", 5)],
+        "ledger.category.reparent" => [CategoryError(CategoryErrors.NotFound, "not_found", 4), CategoryError(CategoryErrors.Archived, "lifecycle", 6), CategoryError(CategoryErrors.ParentNotFound, "not_found", 4), CategoryError(CategoryErrors.ParentArchived, "lifecycle", 6), CategoryError(CategoryErrors.SelfParent, "validation", 3), CategoryError(CategoryErrors.Cycle, "lifecycle", 6), CategoryError(CategoryErrors.DuplicateSibling, "conflict", 5)],
+        "ledger.category.archive" => [CategoryError(CategoryErrors.NotFound, "not_found", 4), CategoryError(CategoryErrors.AlreadyArchived, "lifecycle", 6), CategoryError(CategoryErrors.ActiveChildren, "lifecycle", 6)],
+        "ledger.category.reactivate" => [CategoryError(CategoryErrors.NotFound, "not_found", 4), CategoryError(CategoryErrors.AlreadyActive, "lifecycle", 6), CategoryError(CategoryErrors.AncestorArchived, "lifecycle", 6), CategoryError(CategoryErrors.DuplicateSibling, "conflict", 5)],
+        _ => []
+    };
+
+    private static ErrorSchema CategoryError(string code, string category, int exitCode) => new(code, category, exitCode);
     private static readonly string[] Inventory =
     [
         "ledger.account.create","ledger.account.get","ledger.account.list","ledger.account.rename","ledger.account.archive",
-        "ledger.category.create","ledger.category.get","ledger.category.list","ledger.category.rename","ledger.category.archive","ledger.category.reactivate",
+        "ledger.category.create","ledger.category.get","ledger.category.list","ledger.category.rename","ledger.category.reparent","ledger.category.archive","ledger.category.reactivate",
         "ledger.instrument.create","ledger.instrument.get","ledger.instrument.list","ledger.instrument.rename","ledger.instrument.archive","ledger.instrument.reactivate",
         "ledger.cardholder.create","ledger.cardholder.get","ledger.cardholder.list","ledger.cardholder.rename","ledger.cardholder.archive","ledger.cardholder.reactivate",
         "ledger.pool.create","ledger.pool.get","ledger.pool.list","ledger.pool.rename","ledger.pool.archive","ledger.pool.reactivate",

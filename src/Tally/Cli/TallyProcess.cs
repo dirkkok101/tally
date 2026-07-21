@@ -96,6 +96,10 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
         "LEDGER-ACCOUNT-NOT-FOUND" => Error(4, code, "not_found", "The account was not found."),
         "LEDGER-ACCOUNT-DUPLICATE" or "LEDGER-ACCOUNT-NAME-CONFLICT" => Error(5, code, "conflict", "The account conflicts with existing state."),
         "LEDGER-ACCOUNT-ARCHIVED" or "LEDGER-ACCOUNT-ALREADY-ARCHIVED" => Error(6, code, "lifecycle", "The account lifecycle does not allow the operation."),
+        "LEDGER-CATEGORY-INVALID" or "LEDGER-CATEGORY-SELF-PARENT" or "LEDGER-CATEGORY-SCOPE-INVALID" => Error(3, code, "validation", "The category input is invalid."),
+        "LEDGER-CATEGORY-NOT-FOUND" or "LEDGER-CATEGORY-PARENT-NOT-FOUND" => Error(4, code, "not_found", "The category was not found."),
+        "LEDGER-CATEGORY-DUPLICATE-SIBLING" => Error(5, code, "conflict", "The category conflicts with an active sibling."),
+        "LEDGER-CATEGORY-PARENT-ARCHIVED" or "LEDGER-CATEGORY-ARCHIVED" or "LEDGER-CATEGORY-CYCLE" or "LEDGER-CATEGORY-ACTIVE-CHILDREN" or "LEDGER-CATEGORY-ALREADY-ARCHIVED" or "LEDGER-CATEGORY-ALREADY-ACTIVE" or "LEDGER-CATEGORY-ANCESTOR-ARCHIVED" => Error(6, code, "lifecycle", "The category lifecycle does not allow the operation."),
         "LEDGER-IDEMPOTENCY-001" or "operation.conflict" => Error(5, code, "conflict", "The operation conflicts with existing state."),
         "host.unavailable" => Error(9, code, "host", "The requested operation is not available in this foundation."),
         _ => UnexpectedFailure()
