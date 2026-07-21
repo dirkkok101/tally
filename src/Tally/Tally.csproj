@@ -8,6 +8,7 @@
     <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" />
     <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" ExcludeAssets="all" GeneratePathProperty="true" />
     <Content Include="$(PkgSQLitePCLRaw_lib_e_sqlite3)/runtimes/linux-x64/native/libe_sqlite3.so" Link="libe_sqlite3.so" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>

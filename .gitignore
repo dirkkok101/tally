@@ -1,2 +1,6 @@
 # Sensitive local financial documents
 docs/statements/
+
+# .NET build output
+**/bin/
+**/obj/
