@@ -6,10 +6,10 @@
   "slug": "GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE",
   "title": "Compose the relationship and actuals operation bundle",
   "description": [
-    "Convergence gate intentionally has no Implements link: compose transfer, refund, relationship-lifecycle, and exact multi-dimensional actuals modules without changing their contracts."
+    "Convergence gate with no Implements link: compose transfer, refund, relationship lifecycle, statement-corrected transactions, hierarchical actuals, and snapshots."
   ],
   "objective": [
-    "Produce one deterministic 8-operation relationship/actuals bundle whose results remain exact by pool and category after reconciliation, refunds, reversals, transfers, and corrections."
+    "Prove one eight-operation relationship/actuals bundle conserves exact spend across hierarchy, pools, corrections, and statements."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -130,44 +130,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY1P010YDH8DZH4BFWQJDQKK",
+      "id": "01KY288DVVCQYW5SAF5AGNKEPA",
       "kind": "acceptance_check",
       "text": [
-        "The bundle contains exactly 8 unique transfer, refund, relationship, and actuals descriptors defined by the consumed modules."
+        "The bundle contains exactly eight unique transfer, refund, relationship, and actuals descriptors; schemas retain exact/subtree category scope, unknown/unassigned buckets, statement-correction state, and cash-policy result."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T06:32:15.6466227+00:00"
+      "created_at": "2026-07-21T11:51:25.3069274+00:00"
     },
     {
-      "id": "01KY1P010ZHAFJESYFY1C4EHPX",
+      "id": "01KY288DVW83D3VMFKAW3C8G3S",
       "kind": "acceptance_check",
       "text": [
-        "Descriptor order is operationId ordinal and every source descriptor field, dimensional filter, explicit unknown/unassigned bucket, and error is retained byte-for-byte after canonical serialization."
+        "Descriptor order and every source field remain byte-for-byte stable after canonical serialization; missing module, duplicate path, incompatible version, lost hierarchy/reconciliation field, or unresolved cash gate fails before dispatch."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T06:32:15.6466227+00:00"
+      "created_at": "2026-07-21T11:51:25.3069274+00:00"
     },
     {
-      "id": "01KY1P010ZVN54YVEW6X7TG7TK",
+      "id": "01KY288DVW391BTEE2YZN46PKY",
       "kind": "acceptance_check",
       "text": [
-        "A missing module, duplicate operationId/path, incompatible contract range, or loss of pool/category/reconciliation schema fails before dispatch."
+        "Real-store tests prove all-up, category-direct, category-subtree, pool, and matrix conservation through transfer, separate fee, refund, hierarchy move, relationship replacement, ordinary correction, and statement-authoritative replacement."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T06:32:15.6466227+00:00"
-    },
-    {
-      "id": "01KY1P010ZN8ZNZ9Q16QXWP5WE",
-      "kind": "acceptance_check",
-      "text": [
-        "Focused real-store tests prove exact all-up, pool, category, and pool-by-category conservation through refund, transfer, relationship replacement, transaction correction, and Reconciliation State changes."
-      ],
-      "required": 1,
-      "sort_order": 3,
-      "created_at": "2026-07-21T06:32:15.6466227+00:00"
+      "created_at": "2026-07-21T11:51:25.3069274+00:00"
     },
     {
       "id": "01KXT21TGVR4R6J68AVK0VCCVV",
@@ -200,46 +190,46 @@
       "created_at": "2026-07-18T07:29:01.9775135+00:00"
     },
     {
-      "id": "01KXT21TGV5ZS5V1AGFZAA7BDE",
+      "id": "01KY288DVW9T49KSSB8TS8AAQT",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT infer financial relationships, duplicate actuals formulas, use reflection discovery, or implement domain behavior in composition."
+        "Do NOT duplicate financial formulas in composition, flatten category scope, count transfer principal, or count both superseded and replacement facts."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-21T11:51:25.3069274+00:00"
     },
     {
-      "id": "01KXT21TGVS2HAQMG7E6B8THZR",
+      "id": "01KY288DVW1K3JS2637BMW5PV0",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT accept a count-only assertion without exact set equality."
+        "Do NOT accept count-only inventory or infer cash, pool, category, or payment state from another dimension."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-21T11:51:25.3069274+00:00"
     }
   ],
   "review_gates": [
     {
-      "id": "01KXT21TGWRHR4V594JNQXGN4P",
+      "id": "01KY288DVWWCEHBZPYQD0JGR4K",
       "gate_type": "test-evidence",
       "description": [
-        "Show exact 8-ID set equality and each rejected composition state."
+        "Show exact inventory and conservation through hierarchy, transfer/refund, relationship, ordinary correction, and statement correction."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-21T11:51:25.3069274+00:00"
     },
     {
-      "id": "01KXT21TGWTJ226Y9YFWTSAP4F",
+      "id": "01KY288DVWDYJ2CFZP2QN21X4H",
       "gate_type": "self-review",
       "description": [
-        "No relationship rule, actuals formula, or descriptor copy is introduced."
+        "Every total derives from one composed ActualsCalculator path."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:29:01.9775135+00:00"
+      "created_at": "2026-07-21T11:51:25.3069274+00:00"
     }
   ],
   "verification_steps": [

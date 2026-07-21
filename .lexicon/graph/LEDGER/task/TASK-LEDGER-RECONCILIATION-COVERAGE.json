@@ -6,10 +6,10 @@
   "slug": "RECONCILIATION-COVERAGE",
   "title": "Implement statement coverage and exceptions",
   "description": [
-    "Deliver idempotent completed statement scopes, exact outcome accounting, prior-record absence classification, and historical exception correction."
+    "Deliver idempotent completed statement scopes, exact confirmed-existing/corrected/statement-only/absence/ambiguity/exception accounting, and historical correction."
   ],
   "objective": [
-    "Return a reconciliation batch summary in which every accepted row and every eligible prior transaction has exactly one explicit outcome."
+    "Return a batch summary in which every accepted row and eligible prior transaction has exactly one explicit current outcome."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -56,6 +56,16 @@
       ],
       "sort_order": 0,
       "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY28E4K98EZ0R8N9258PEJEA",
+      "target": "TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION",
+      "dependency_type": "compile",
+      "reason": [
+        "Coverage must classify corrected_from_statement outcomes and prior/active identities."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-21T11:54:32.4266855+00:00"
     },
     {
       "id": "01KY0EEDR1Y6Y17371HT91A38Z",
@@ -168,44 +178,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY1P0DB0J3RRRASQWA9RW6PH",
+      "id": "01KY283BVNHFKDMFDZ617CW309",
       "kind": "acceptance_check",
       "text": [
-        "coverage.complete requires an approved complete account/date scope, manifest opaque reference, expected evidence set, policy/version, and Idempotency Identity; incomplete or invalid scope cannot classify absence."
+        "coverage.complete requires an approved complete account/date scope, opaque manifest reference, expected statement evidence set, policy/version, and Idempotency Identity; incomplete scope cannot classify absence."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T06:32:28.2560566+00:00"
+      "created_at": "2026-07-21T11:48:39.4131653+00:00"
     },
     {
-      "id": "01KY1P0DB1Z8YDN8AKPPRYNDB5",
+      "id": "01KY283BVP6901XGJH5Z38R3GS",
       "kind": "acceptance_check",
       "text": [
-        "Completion transactionally proves every accepted statement row has one durable outcome and every eligible prior transaction is reconciled or classified recorded_absent_from_statement, ambiguous, or explicit exception exactly once."
+        "Completion proves every statement row is confirmed_existing, corrected_from_statement, statement_only, ambiguous, or exception and every eligible prior transaction is reconciled or recorded_absent_from_statement exactly once."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T06:32:28.2560566+00:00"
+      "created_at": "2026-07-21T11:48:39.4131653+00:00"
     },
     {
-      "id": "01KY1P0DB1FG6TAXPW7GHM13HG",
+      "id": "01KY283BVPF0ATSN8JKTEYKB4X",
       "kind": "acceptance_check",
       "text": [
-        "Result counts equal returned membership by class and include stable identifiers/reasons; identical replay returns the original summary while changed scope/evidence conflicts."
+        "Counts equal returned membership by class, include prior and active transaction IDs plus stable reasons, and replay identically; changed scope/evidence conflicts."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T06:32:28.2560566+00:00"
+      "created_at": "2026-07-21T11:48:39.4131653+00:00"
     },
     {
-      "id": "01KY1P0DB1PXBZ2FNGG8TPE25X",
+      "id": "01KY283BVPNPZHK7ZZS3NYEGNN",
       "kind": "acceptance_check",
       "text": [
-        "Later decisions retain the completed historical exception and expose the new current outcome through coverage.get without rewriting the scope."
+        "Later owner decisions or statement corrections retain the completed historical entry and coverage.get derives the new current outcome without rewriting scope history."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T06:32:28.2560566+00:00"
+      "created_at": "2026-07-21T11:48:39.4131653+00:00"
     },
     {
       "id": "01KY0DT2MY6X8N5NMM7ZHKS3DA",
@@ -218,34 +228,24 @@
       "created_at": "2026-07-20T18:49:57.6488706+00:00"
     },
     {
-      "id": "01KY0DT2MXH7B40F99KS2BNKA1",
+      "id": "01KY283BVPJ25V3N2C5BX9DEG9",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT let Ledger own INGEST manifests, approvals, receipts, or batch retries; accept only opaque references and typed scope facts per DD-LEDGER-RECONCILIATION-CONTRACT."
+        "Do NOT own INGEST manifests, approvals, receipts, raw statement content, or batch retries; accept opaque references and typed scope facts only."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:39.4131653+00:00"
     },
     {
-      "id": "01KY0DT2MXHV34X28AYRCNDJ06",
+      "id": "01KY283BVPEYFPBMVT31MBE7MS",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT infer absence from an incomplete statement or silently exclude transactions outside an explicit scope rule."
+        "Do NOT infer absence from incomplete scope, count superseded and replacement facts together, or overwrite prior coverage/exception history."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
-    },
-    {
-      "id": "01KY0DT2MXB64MQQ5ZVS46ZGGB",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT overwrite prior coverage or exception history."
-      ],
-      "required": 1,
-      "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:39.4131653+00:00"
     }
   ],
   "references": [
@@ -292,14 +292,24 @@
   ],
   "review_gates": [
     {
-      "id": "01KY0DT2MY3BZE77D1MVDFP5ZJ",
+      "id": "01KY283BVPAQM38E7YG13QRHHH",
       "gate_type": "test-evidence",
       "description": [
-        "Evidence proves exact one-class membership and no false absence from incomplete scopes."
+        "Prove exact one-class membership, corrected-state identity, replay, and no false absence from incomplete scopes."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:39.4131653+00:00"
+    },
+    {
+      "id": "01KY283BVP4Q9RAEZDX7PZFHCA",
+      "gate_type": "self-review",
+      "description": [
+        "All scope and correction history remains append-only and provider-neutral."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:48:39.4131653+00:00"
     }
   ],
   "verification_steps": [

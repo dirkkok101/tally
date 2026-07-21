@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-VERIFY-UC-008`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-05-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `100`
 - **Dialect:** `default`
 
 ## Summary
 
-Verification-only task intentionally has no Implements link: trace UC-LEDGER-008 main scenario and every failure path through the published CLI.
+Verification-only task with no Implements link: trace hierarchical category maintenance through the Release CLI.
 
 ## Objective
 
-Prove UC-LEDGER-008 through observable process results and durable-state invariants.
+Prove stable category identity and deterministic acyclic ancestry across every lifecycle operation.
 
 ## References
 
@@ -38,14 +38,13 @@ Prove UC-LEDGER-008 through observable process results and durable-state invaria
 
 ### Acceptance Checks
 
-- The agent discovers category schema, creates/renames/archives/reactivates one stable category, and history/assignments retain its ID.
-- Absent/conflicting names, referenced physical-delete intent, repeated archive, and new archived-category assignment/correction produce documented no-loss outcomes.
-- Identical retries create no duplicate lifecycle events and active/archived lists remain deterministic.
+- Published create/get/list/rename/reparent/archive/reactivate calls prove roots/children, sibling uniqueness, deterministic ancestry/depth, stable identity, and append-only lifecycle/parent history.
+- Self-parent, descendant cycle, archived parent, active-child archive, physical delete, archived assignment/child, stale move, and replay paths return stable no-mutation outcomes.
+- Current roll-ups follow legal reparenting without rewriting historical transaction assignments; no budget amount, pool choice, or classification rule is created.
 
 ### Failure Criteria
 
-- Do NOT replace archive/reactivation with hard delete/new identity.
-- Do NOT omit UC-LEDGER-008 archived assignment restriction.
+- Do NOT bypass the CLI, infer hierarchy from names, omit cycle/active-child cases, or accept flat-catalogue behavior.
 
 ### Expected Outputs
 
@@ -84,17 +83,19 @@ Prove UC-LEDGER-008 through observable process results and durable-state invaria
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Evidence maps UC-LEDGER-008 main scenario and each numbered failure path to stdout/error/exit/state assertions. | `true` |
-| `self-review` | No scenario calls handlers or SQLite directly. | `true` |
+| `test-evidence` | Map UC-LEDGER-008 main and every failure path to process, ancestry, history, and no-mutation evidence. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3cs` | `verified` | 2026-07-21T08:01:53.7452072+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3cs` (verified)
 - `covers` -> UC-LEDGER-008: Maintain the spend-category catalogue
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
 - `touches` -> DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts

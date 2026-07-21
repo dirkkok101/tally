@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-DURABLE-STATE-VERIFIER`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-04-RECOVERY-SKILLS`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `5`
 - **Dialect:** `default`
 
 ## Summary
 
-Shared recovery foundation intentionally has no Implements link: independently verify every durable fact, evidence record/link, reconciliation projection/decision/coverage history, financial dimension/history, relationship, idempotency/logical effect, count, and exact total in a candidate or backup store.
+Shared recovery foundation with no Implements link: verify every durable fact, hierarchy, evidence, reconciliation correction, dimension, relationship, idempotency effect, count, and exact total.
 
 ## Objective
 
-Provide one real-SQLite verifier whose complete normalized report is required before backup publication, restore activation, or storage-evolution activation.
+Produce one normalized real-SQLite report required before backup publication, restore activation, or storage-evolution activation.
 
 ## References
 
@@ -38,21 +38,22 @@ Provide one real-SQLite verifier whose complete normalized report is required be
 | [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md) | `compile` | Complete-state verification enumerates pool assignment history. |
 | [TASK-LEDGER-EVIDENCE-LINKING](../tasks/evidence-linking.md) | `compile` | Complete-state verification enumerates evidence records and links. |
 | [TASK-LEDGER-RECONCILIATION-COVERAGE](../tasks/reconciliation-coverage.md) | `compile` | Complete-state verification enumerates reconciliation projections, decisions, links, coverage, and exceptions. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md) | `compile` | Complete-state verification must validate statement replacement and carry-forward chains. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- Verification opens the selected non-live store read-only and checks checksum metadata, SQLite integrity, foreign keys, schema/storage/reconciliation-policy compatibility before domain reconciliation.
-- The report enumerates every Durable Ledger State type: facts and lifecycles; category, pool, instrument and cardholder state/history; evidence and links; reconciliation projections, decisions, links, coverage and exceptions; relationships; idempotency and logical-effect outcomes; per-type counts; and exact Int64 totals. QuerySnapshot rows are excluded.
-- Any missing type, orphan, invalid lifecycle, dimension conflict, evidence privacy violation, reconciliation state/history conflict, relationship-role conflict, replay mismatch, count mismatch, overflow, or total/cell mismatch returns a stable failed report and cannot activate or publish.
-- A verified backup restored into a fresh private generation reproduces the source normalized report exactly apart from generation-specific metadata.
-- Tests use real SQLite files and deterministic corruptions; diagnostics contain type names, identifiers, and counts only, never descriptions, raw evidence, credentials, full identifiers, or serialized financial payloads.
+- Verification opens a non-live store read-only and checks checksum metadata, SQLite integrity, foreign keys, current schema/storage/reconciliation-policy compatibility before domain reconciliation.
+- The report enumerates facts/lifecycles; category nodes, parent history, acyclicity and current ancestry; pool/payment/category histories; evidence/links; confirmed-existing and corrected-from-statement decisions; supersession/carry-forward/relationship chains; coverage/exceptions; idempotency/logical effects; counts and exact totals. QuerySnapshot is excluded.
+- Any missing type, cycle, orphan, invalid lifecycle/cardinality, privacy violation, duplicate active effect, incomplete statement correction, invalid relationship replacement, replay mismatch, count mismatch, overflow, hierarchy double-count, or total/cell mismatch fails closed.
+- A verified backup restored into a fresh private generation reproduces the normalized report exactly apart from generation metadata; deterministic corruptions prove each rejection.
+- Diagnostics contain safe type names, identifiers, and counts only, never descriptions, raw evidence, email/statement payloads, credentials, full identifiers, or serialized financial objects.
 
 ### Failure Criteria
 
-- Do NOT treat PRAGMA integrity_check, a checksum, or row counts alone as complete-state verification.
-- Do NOT include QuerySnapshot state, mutate the inspected store, use EF Core, mock SQLite, or claim encryption from ext4.
+- Do NOT treat PRAGMA integrity_check, checksum, or row counts alone as complete-state proof.
+- Do NOT omit hierarchy history, statement replacement/carry-forward, relationship replacement, or idempotency state; do not include QuerySnapshot or mutate the inspected store.
 
 ### Expected Outputs
 
@@ -94,17 +95,20 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Show per-type counts, exact totals, corruption rejection, snapshot exclusion, and fresh-generation reproduction. | `true` |
-| `self-review` | Compare the report inventory with every durable model in the LEDGER design. | `true` |
+| `test-evidence` | Show per-type counts, hierarchy/replacement invariants, exact totals, corruption rejection, snapshot exclusion, and fresh-generation reproduction. | `true` |
+| `self-review` | Compare the report inventory against every current durable model in MD-LEDGER-MASTER. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3ja` | `verified` | 2026-07-21T08:01:30.5106546+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3ja` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-ACTUALS-PROJECTION](../tasks/actuals-projection.md): Consumes ActualsCalculator.Calculate.
 - `depends-on:compile` -> [TASK-LEDGER-ACTUALS-SNAPSHOT](../tasks/actuals-snapshot.md): Complete-state verification uses the final actuals projection while excluding snapshots.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumes LedgerDb.
@@ -112,6 +116,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md): Complete-state verification enumerates payment attribution history.
 - `depends-on:compile` -> [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md): Complete-state verification enumerates pool assignment history.
 - `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-COVERAGE](../tasks/reconciliation-coverage.md): Complete-state verification enumerates reconciliation projections, decisions, links, coverage, and exceptions.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md): Complete-state verification must validate statement replacement and carry-forward chains.
 - `governed-by` -> DD-LEDGER-CANDIDATE-ACTIVATION: Verified store generations with atomic pointer activation
 - `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
 - `satisfies` -> NFR-LEDGER-VERIFIED-RECOVERABILITY: Prove Ledger recoverability

@@ -6,10 +6,10 @@
   "slug": "DURABLE-STATE-VERIFIER",
   "title": "Build the complete Durable Ledger State verifier",
   "description": [
-    "Shared recovery foundation intentionally has no Implements link: independently verify every durable fact, Evidence Record/link, reconciliation projection/decision/coverage history, financial dimension/history, relationship, idempotency/logical effect, count, and exact total in a candidate or backup store."
+    "Shared recovery foundation with no Implements link: verify every durable fact, hierarchy, evidence, reconciliation correction, dimension, relationship, idempotency effect, count, and exact total."
   ],
   "objective": [
-    "Provide one real-SQLite verifier whose complete normalized report is required before backup publication, restore activation, or storage-evolution activation."
+    "Produce one normalized real-SQLite report required before backup publication, restore activation, or storage-evolution activation."
   ],
   "planning_state": "ready",
   "priority": 0,
@@ -106,6 +106,16 @@
       ],
       "sort_order": 6,
       "created_at": "2026-07-20T19:00:14.3915268+00:00"
+    },
+    {
+      "id": "01KY28E863XPN87RTS21793HVR",
+      "target": "TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION",
+      "dependency_type": "compile",
+      "reason": [
+        "Complete-state verification must validate statement replacement and carry-forward chains."
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-21T11:54:36.0999063+00:00"
     }
   ],
   "files": [
@@ -165,54 +175,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY1NZB3PP051KNMNSXGA41FD",
+      "id": "01KY286BVQSN2DRXNDTW389GAN",
       "kind": "acceptance_check",
       "text": [
-        "Verification opens the selected non-live store read-only and checks checksum metadata, SQLite integrity, foreign keys, schema/storage/reconciliation-policy compatibility before domain reconciliation."
+        "Verification opens a non-live store read-only and checks checksum metadata, SQLite integrity, foreign keys, current schema/storage/reconciliation-policy compatibility before domain reconciliation."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T06:31:53.2057601+00:00"
+      "created_at": "2026-07-21T11:50:17.7187199+00:00"
     },
     {
-      "id": "01KY1NZB3QYHJVQY3JVVH7044Y",
+      "id": "01KY286BVRT29PT531GVEVSNGS",
       "kind": "acceptance_check",
       "text": [
-        "The report enumerates every Durable Ledger State type: facts and lifecycles; category, pool, instrument and cardholder state/history; evidence and links; reconciliation projections, decisions, links, coverage and exceptions; relationships; idempotency and logical-effect outcomes; per-type counts; and exact Int64 totals. QuerySnapshot rows are excluded."
+        "The report enumerates facts/lifecycles; category nodes, parent history, acyclicity and current ancestry; pool/payment/category histories; evidence/links; confirmed-existing and corrected-from-statement decisions; supersession/carry-forward/relationship chains; coverage/exceptions; idempotency/logical effects; counts and exact totals. QuerySnapshot is excluded."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T06:31:53.2057601+00:00"
+      "created_at": "2026-07-21T11:50:17.7187199+00:00"
     },
     {
-      "id": "01KY1NZB3QD4HE5843A7T2FEN7",
+      "id": "01KY286BVRFHBRG91BPKYV0ZWA",
       "kind": "acceptance_check",
       "text": [
-        "Any missing type, orphan, invalid lifecycle, dimension conflict, evidence privacy violation, Reconciliation State/history conflict, relationship-role conflict, replay mismatch, count mismatch, overflow, or total/cell mismatch returns a stable failed report and cannot activate or publish."
+        "Any missing type, cycle, orphan, invalid lifecycle/cardinality, privacy violation, duplicate active effect, incomplete statement correction, invalid relationship replacement, replay mismatch, count mismatch, overflow, hierarchy double-count, or total/cell mismatch fails closed."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T06:31:53.2057601+00:00"
+      "created_at": "2026-07-21T11:50:17.7187199+00:00"
     },
     {
-      "id": "01KY1NZB3Q1BWF83JYEM2QHJ1G",
+      "id": "01KY286BVR72YEHYVM99KM8NJB",
       "kind": "acceptance_check",
       "text": [
-        "A verified backup restored into a fresh private generation reproduces the source normalized report exactly apart from generation-specific metadata."
+        "A verified backup restored into a fresh private generation reproduces the normalized report exactly apart from generation metadata; deterministic corruptions prove each rejection."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T06:31:53.2057601+00:00"
+      "created_at": "2026-07-21T11:50:17.7187199+00:00"
     },
     {
-      "id": "01KY1NZB3Q9SC73CXQQZGAXGSV",
+      "id": "01KY286BVRDW5V2SHGJ5MT0MZ2",
       "kind": "acceptance_check",
       "text": [
-        "Tests use real SQLite files and deterministic corruptions; diagnostics contain type names, identifiers, and counts only, never descriptions, raw evidence, credentials, full identifiers, or serialized financial payloads."
+        "Diagnostics contain safe type names, identifiers, and counts only, never descriptions, raw evidence, email/statement payloads, credentials, full identifiers, or serialized financial objects."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-21T06:31:53.2057601+00:00"
+      "created_at": "2026-07-21T11:50:17.7187199+00:00"
     },
     {
       "id": "01KXT1ZHVAX08DNP70ZX3R6ENE",
@@ -255,24 +265,24 @@
       "created_at": "2026-07-18T07:27:47.5618899+00:00"
     },
     {
-      "id": "01KXT1ZHVAVP9262XGMMD7CV2G",
+      "id": "01KY286BVRNTZSMH4NZ6VRDM1R",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT treat PRAGMA integrity_check, a checksum, or row counts alone as complete-state verification."
+        "Do NOT treat PRAGMA integrity_check, checksum, or row counts alone as complete-state proof."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+      "created_at": "2026-07-21T11:50:17.7187199+00:00"
     },
     {
-      "id": "01KXT1ZHVADS0DARN52060RSJM",
+      "id": "01KY286BVR3T9D0VM7YT6QWXRD",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT include QuerySnapshot state, mutate the inspected store, use EF Core, mock SQLite, or claim encryption from ext4."
+        "Do NOT omit hierarchy history, statement replacement/carry-forward, relationship replacement, or idempotency state; do not include QuerySnapshot or mutate the inspected store."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+      "created_at": "2026-07-21T11:50:17.7187199+00:00"
     }
   ],
   "references": [
@@ -301,24 +311,24 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT1ZHVAWYNMPZPMN5WBAMHC",
+      "id": "01KY286BVRTEFAGSFR5PCZEGQZ",
       "gate_type": "test-evidence",
       "description": [
-        "Show per-type counts, exact totals, corruption rejection, snapshot exclusion, and fresh-generation reproduction."
+        "Show per-type counts, hierarchy/replacement invariants, exact totals, corruption rejection, snapshot exclusion, and fresh-generation reproduction."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+      "created_at": "2026-07-21T11:50:17.7187199+00:00"
     },
     {
-      "id": "01KXT1ZHVACTQAHMW5J573Y340",
+      "id": "01KY286BVRY1AEDA5B3D76RBTN",
       "gate_type": "self-review",
       "description": [
-        "Compare the report inventory with every durable model in the LEDGER design."
+        "Compare the report inventory against every current durable model in MD-LEDGER-MASTER."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:27:47.5618899+00:00"
+      "created_at": "2026-07-21T11:50:17.7187199+00:00"
     }
   ],
   "verification_steps": [

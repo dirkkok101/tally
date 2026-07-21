@@ -1,0 +1,228 @@
+{
+  "id": "01KY27PMX1NJK59VDK16VMSKWC",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT069GD3347N15180MYTNVK",
+  "ref_code": "TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS",
+  "slug": "GATE-EVIDENCE-CASH-WITHDRAWALS",
+  "title": "Resolve cash-withdrawal spend treatment",
+  "description": [
+    "Validation-only task with no Implements link: resolve OQ-LEDGER-16 before account, transfer, and actuals contracts harden."
+  ],
+  "objective": [
+    "Choose and record whether cash withdrawal is immediate External Spend or a transfer to a tracked cash account."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 9,
+  "created_at": "2026-07-21T11:41:42.6904485+00:00",
+  "files": [
+    {
+      "id": "01KY27PMX34E9J4K4TD94APDY1",
+      "path": "docs/validation/ledger/oq-16-cash-withdrawal-policy.md",
+      "action": "modify",
+      "role": "owner decision evidence",
+      "required": 1,
+      "notes": [
+        "Record the selected rule and exact impacts"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+    },
+    {
+      "id": "01KY27PMX31J1GWWQ9JMBZPVHX",
+      "path": ".lexicon/graph/LEDGER/open-question/OQ-LEDGER-16.json",
+      "action": "read",
+      "role": "canonical gate state",
+      "required": 1,
+      "notes": [
+        "Update through lex open-question commands only"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY27PMX36KEHF07H1T3QWEN1",
+      "name": "OQ-LEDGER-16Resolution",
+      "direction": "produces",
+      "contract_ref_code": "OQ-LEDGER-16",
+      "notes": [
+        "Exact cash-withdrawal spend rule or design-return result"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY27PMX3YXJVG4AGA4HXJZV5",
+      "kind": "acceptance_check",
+      "text": [
+        "The owner chooses exactly one rule: cash withdrawal is immediate spend, or it transfers value to an explicitly tracked cash account until later cash spending is recorded."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+    },
+    {
+      "id": "01KY27PMX3VSGSKH33JTX6KB55",
+      "kind": "acceptance_check",
+      "text": [
+        "The validation report tests the chosen rule against withdrawal fees, later cash purchases, refunds, account movement, External Spend, Budget Actual, and replay without retaining raw bank or email payloads."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+    },
+    {
+      "id": "01KY27PMX3VN44W7ADTK9A6K53",
+      "kind": "acceptance_check",
+      "text": [
+        "OQ-LEDGER-16 resolves with the exact rule and affected design entities; if tracked cash requires a new account class or relationship invariant, the gate records that impact and returns to lex:design before downstream code."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+    },
+    {
+      "id": "01KY27PMX3GD98M2CQZ75ADH4Z",
+      "kind": "constraint",
+      "text": [
+        "Only privacy-safe structural conclusions are committed; graph state changes use lex commands."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+    },
+    {
+      "id": "01KY27PMX3ZQFPVBKZXQ26HC80",
+      "kind": "expected_output",
+      "text": [
+        "docs/validation/ledger/oq-16-cash-withdrawal-policy.md with the owner decision"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+    },
+    {
+      "id": "01KY27PMX3M76EYBR228XMB2TC",
+      "kind": "expected_output",
+      "text": [
+        "OQ-LEDGER-16 resolved or an explicit lex:design handoff"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+    },
+    {
+      "id": "01KY27PMX3JFDSNYDEJRQV9E4A",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT infer cash treatment from provider wording, transaction description, or ATM code."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+    },
+    {
+      "id": "01KY27PMX3G3ERWWX9ZHMBGACJ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT classify an external cash withdrawal as an owned-account transfer unless a tracked cash account and balanced transfer semantics are explicitly designed."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+    },
+    {
+      "id": "01KY27PMX3TJYBYPWT8577H8YX",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT mark this gate complete while OQ-LEDGER-16 is open or while the chosen rule contradicts C22 exact actual conservation."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+    },
+    {
+      "id": "01KY27PMX3DK2NAHYYQMSBAYD9",
+      "kind": "note",
+      "text": [
+        "This gate isolates the only unresolved transaction-type spend rule from already-settled owned-account transfers and refunds."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY27PRCDA7DAH7B5XNVD3TWY",
+      "target_ref_code": "DD-LEDGER-DIMENSIONAL-ATTRIBUTION",
+      "target_entity_type": "design_decision",
+      "target_entity_id": "01KY0BQ0901QFE2XQE628B192H",
+      "target_title": "Independent local payment, category, and Spend Pool dimensions",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-21T11:41:46.2548249+00:00"
+    },
+    {
+      "id": "01KY27PNJVZ0C4N2M3WJHYN4G5",
+      "target_ref_code": "OQ-LEDGER-16",
+      "target_entity_type": "open_question",
+      "target_entity_id": "01KY25J5MP1T9R9WTTEX25AG9X",
+      "target_title": "Should a cash withdrawal count as External Spend immediately, or as a transfer to a tracked cash account until later cash spending is recorded?",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:43.3879680+00:00"
+    },
+    {
+      "id": "01KY27PPY62S2B34NJG4Z5DXB6",
+      "target_ref_code": "NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXSQFXBTBZ6YXSZEFF4WWRCX",
+      "target_title": "Preserve exact financial arithmetic",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:41:44.7752899+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY27PMX6Y43GX4QNYEYSV902",
+      "gate_type": "human-review",
+      "description": [
+        "Owner confirms the chosen cash rule and its later-cash-spend consequence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+    },
+    {
+      "id": "01KY27PMX68G5S0DS6DWSEHG9H",
+      "gate_type": "self-review",
+      "description": [
+        "No provider wording or private financial payload became a domain rule."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY27PMX5AA9WZ6XTG6EK571H",
+      "phase": "after",
+      "command": "test -s docs/validation/ledger/oq-16-cash-withdrawal-policy.md && lex open-question show OQ-LEDGER-16 --json",
+      "expected_result": "exit 0; the report exists and command output shows a non-empty resolved decision",
+      "required": 1,
+      "timeout_seconds": 120,
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+    }
+  ]
+}

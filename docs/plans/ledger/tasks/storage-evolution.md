@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-STORAGE-EVOLUTION`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-04-RECOVERY-SKILLS`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `30`
 - **Dialect:** `default`
 
 ## Summary
 
-Deliver storage status plus isolated prepare/activate evolution with preflight, recovery point, complete-state validation, and atomic generation switch.
+Deliver status plus isolated prepare/activate evolution with recovery point, full hierarchy/authority validation, and atomic generation switch.
 
 ## Objective
 
-Upgrade supported storage exactly once while every failure leaves the original fully verified provider-neutral generation authoritative.
+Upgrade supported storage exactly once while failure leaves the original complete generation authoritative.
 
 ## References
 
@@ -42,16 +42,15 @@ Upgrade supported storage exactly once while every failure leaves the original f
 
 ### Acceptance Checks
 
-- storage.status returns contract/storage/reconciliation-policy versions, current generation/fingerprint, permissions, integrity, and host-protection evidence without financial or evidence payload.
-- evolution.prepare validates source integrity, compatibility, permissions, free space, protection, and recovery requirements before transformation.
-- A verified recovery point exists before isolated transformation; candidate validation compares every durable fact/history/dimension/evidence/reconciliation/relationship/replay type, count, integrity rule, and exact declared total/cell.
-- evolution.activate requires expected current fingerprint and explicit authorization, revalidates under lock, atomically switches once, and retains the recovery generation.
-- Any preflight, conversion, privacy, validation, or activation failure leaves original current and reports a stable version/integrity/host error.
+- storage.status returns contract/storage/reconciliation-policy versions, current generation/fingerprint, permissions, integrity, and host protection without financial/evidence payload.
+- evolution.prepare validates source integrity, compatibility, permissions, free space, protection, and verified recovery before isolated transformation.
+- Candidate equivalence covers every durable fact/history/dimension/category ancestry/evidence/reconciliation replacement/carry-forward/relationship/replay type, count, and exact direct/subtree/pool total.
+- evolution.activate requires expected current fingerprint and authorization, revalidates under lock, switches once atomically, and retains recovery generation; every failure leaves the original current.
 
 ### Failure Criteria
 
-- Do NOT migrate live state in place, skip verified recovery, activate on stale fingerprint, or expose partial candidate — rejected per DD-LEDGER-CANDIDATE-ACTIVATION.
-- Do NOT invent provider-neutral migration interfaces or permit downgrade/newer-than-binary mutation.
+- Do NOT migrate live state in place, edit committed migrations, skip verified recovery, activate stale candidates, expose partial candidates, permit downgrade, or invent a generic migration abstraction.
+- Do NOT accept a candidate with category cycles, duplicate active effects, incomplete statement correction, invalid relationship replacement, or mismatched exact totals.
 
 ### Expected Outputs
 
@@ -99,17 +98,20 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Show preflight-before-write, verified recovery, complete equivalence, atomic once-only activation, and rollback. | `true` |
-| `self-review` | No in-place migration path or generic migration abstraction exists. | `true` |
+| `test-evidence` | Show preflight, verified recovery, V001-to-current evolution, complete equivalence, atomic activation, and rollback. | `true` |
+| `self-review` | No in-place path exists and every new durable model is included. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-4zp` | `verified` | 2026-07-21T08:01:43.9872788+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-4zp` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-BACKUP-VERIFY](../tasks/backup-verify.md): Consumer requires DurableLedgerVerifier from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-DURABLE-STATE-VERIFIER](../tasks/durable-state-verifier.md): Consumes DurableLedgerVerifier.
 - `depends-on:compile` -> [TASK-LEDGER-RESTORE-ACTIVATE](../tasks/restore-activate.md): Evolution reuses the verified candidate activation seam.

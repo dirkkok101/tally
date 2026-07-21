@@ -5,14 +5,14 @@
 - **Ref:** `TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-01-CORE-RUNTIME`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `22`
 - **Dialect:** `default`
 
 ## Summary
 
-Schema foundation intentionally has no Implements link: translate immutable transaction facts, lifecycle events, category-allocation, payment-attribution, and spend-pool-assignment history into one independently verified V001 fragment.
+Schema foundation intentionally has no Implements link: translate immutable transaction facts, lifecycle events, category-allocation, payment-attribution, and Spend Pool Assignment history into one independently verified V001 fragment.
 
 ## Objective
 
@@ -38,8 +38,8 @@ Create exact immutable transaction and correction-history tables plus independen
 
 ### Acceptance Checks
 
-- V001TransactionSchema creates every linked fact, lifecycle, category allocation, instrument/cardholder attribution, and pool assignment field with enum/date/money checks, RESTRICT foreign keys, terminal lifecycle rules, and one-current-record constraints.
-- signedAmountMinor is nonzero Int64, currency is literal ZAR, facts are insert-only by contract, initial payment attribution is explicitly unknown, and initial pool assignment is explicitly unassigned.
+- V001TransactionSchema creates every linked fact, lifecycle, category allocation, instrument/Cardholder Attribution, and Pool Assignment field with enum/date/money checks, RESTRICT foreign keys, terminal lifecycle rules, and one-current-record constraints.
+- signedAmountMinor is nonzero Int64, currency is literal ZAR, facts are insert-only by contract, initial payment attribution is explicitly unknown, and initial Pool Assignment is explicitly unassigned.
 - Source identity is not embedded as transport provenance or a single sourceReference; generic evidence and reconciliation schema is owned by V001EvidenceReconciliationSchema.
 - Applying the fragment twice in one migration plan is rejected before SQL; an injected statement failure rolls back every transaction, lifecycle, and dimensional-history table/index.
 
@@ -91,12 +91,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2qj` | `verified` | 2026-07-21T08:01:39.6222849+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2qj` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumes LedgerDb and LedgerSchemaFragmentRegistry.
 - `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
 - `governed-by` -> DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates

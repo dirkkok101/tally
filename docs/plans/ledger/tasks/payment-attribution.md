@@ -5,28 +5,28 @@
 - **Ref:** `TASK-LEDGER-PAYMENT-ATTRIBUTION`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-02-CATALOGUE-TRANSACTIONS`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `45`
 - **Dialect:** `default`
 
 ## Summary
 
-Deliver independent instrument/cardholder assignment and correction over atomically initialized unknown states.
+Deliver independent instrument/cardholder assignment, correction, and reconciliation-only compatible carry-forward over explicit unknown states.
 
 ## Objective
 
-Assign or correct payment instrument and cardholder independently while preserving explicit unknown state and attributable history.
+Assign or correct payment attribution independently and support statement correction without guessing incompatible identity.
 
 ## References
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and spend-pool dimensions | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts | `data_model` | `touches` | `true` |
 | DM-LEDGER-PAYMENT-ATTRIBUTION: PaymentInstrumentCardholderAndAttribution | `data_model` | `touches` | `true` |
-| FR-LEDGER-PAYMENT-ATTRIBUTION: Maintain payment instrument and cardholder attribution | `requirement` | `implements` | `true` |
+| FR-LEDGER-PAYMENT-ATTRIBUTION: Maintain Payment Instrument and Cardholder Attribution | `requirement` | `implements` | `true` |
 | TC-LEDGER-PAYMENT-ATTRIBUTION-CONTRACT: Verify payment instrument and cardholder attribution | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -41,15 +41,16 @@ Assign or correct payment instrument and cardholder independently while preservi
 
 ### Acceptance Checks
 
-- Every transaction exposes independent instrument and cardholder projections initialized as unknown; assign/correct can set either dimension known or unknown without changing account, category, pool, evidence, or reconciliation.
-- Missing/inactive transaction, absent/archived/incompatible identity, same-as-active correction, stale prior state, or conflicting replay returns the declared stable outcome and preserves current attribution.
-- Successful correction appends actor, reason, trusted time, and predecessor history; get/history returns the exact active projection and chain.
+- Every transaction exposes independent instrument and cardholder projections initialized as unknown; public assign/correct sets either dimension known or unknown without changing account, category, pool, evidence, or reconciliation.
+- Missing/inactive transaction, absent/archived/incompatible identity, same-as-active correction, stale prior state, or conflicting replay preserves the current attribution and returns the declared stable outcome.
+- CarryForwardOrUnknownAsync is internal to statement correction: compatible current identity appends carry_forward; incompatible account/identity appends explicit unknown initialization plus review metadata; both reference source, replacement, and reconciliation decision.
+- Get/history returns the active projection and complete initialize/assign/correct/carry_forward chain with actor, reason, trusted time, and predecessor.
 
 ### Failure Criteria
 
-- Do NOT infer attribution from account, pool, category, description, evidence kind, or provider wording — rejected per DD-LEDGER-DIMENSIONAL-ATTRIBUTION.
-- Do NOT overwrite attribution rows or inherit attribution across supersession — rejected per DD-LEDGER-IMMUTABLE-HISTORY.
-- Do NOT accept full provider identifiers.
+- Do NOT infer attribution from account, pool, category, description, Evidence Kind, or provider wording — rejected per DD-LEDGER-DIMENSIONAL-ATTRIBUTION.
+- Do NOT overwrite attribution rows, copy incompatible identity, or inherit attribution across ordinary supersession — per DD-LEDGER-IMMUTABLE-HISTORY.
+- Do NOT expose carry-forward publicly or accept full provider identifiers.
 
 ### Expected Outputs
 
@@ -78,11 +79,12 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| PaymentAttributionStore | `produces` | DM-LEDGER-PAYMENT-ATTRIBUTION |  |
-| PaymentAttributionOperationModule | `produces` | DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS |  |
-| TransactionStore | `consumes` | DM-LEDGER-TRANSACTION-FACT |  |
-| PaymentIdentityStore | `consumes` | DM-LEDGER-PAYMENT-ATTRIBUTION |  |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD |  |
+| PaymentAttributionStore | `produces` | DM-LEDGER-PAYMENT-ATTRIBUTION | Append-only attribution persistence |
+| PaymentAttributionStore.CarryForwardOrUnknownAsync | `produces` | DM-LEDGER-PAYMENT-ATTRIBUTION | Reconciliation-only compatible carry-forward or explicit unknown |
+| PaymentAttributionOperationModule | `produces` | DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS | Public assign and correct operations |
+| TransactionStore | `consumes` | DM-LEDGER-TRANSACTION-FACT | Active transaction identity |
+| PaymentIdentityStore | `consumes` | DM-LEDGER-PAYMENT-ATTRIBUTION | Identity lifecycle and account compatibility |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD | Atomic replay boundary |
 
 ### Verification
 
@@ -94,22 +96,26 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Tests prove both dimensions remain independent and history is append-only. | `true` |
+| `test-evidence` | Prove independent dimensions, compatible carry-forward, incompatible unknown initialization, no ordinary inheritance, history, and replay. | `true` |
+| `self-review` | Confirm no provider wording or cross-dimension inference enters attribution. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3nk` | `verified` | 2026-07-21T08:01:48.4176498+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3nk` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Assignment and correction consume LedgerMutationExecutor.ExecuteAsync.
 - `depends-on:compile` -> [TASK-LEDGER-PAYMENT-IDENTITIES](../tasks/payment-identities.md): Attribution validates local instrument and cardholder identities through PaymentIdentityStore.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Attribution consumes TransactionStore and its atomically initialized unknown projection.
-- `governed-by` -> DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and spend-pool dimensions
+- `governed-by` -> DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `implements` -> FR-LEDGER-PAYMENT-ATTRIBUTION: Maintain payment instrument and cardholder attribution
+- `implements` -> FR-LEDGER-PAYMENT-ATTRIBUTION: Maintain Payment Instrument and Cardholder Attribution
 - `touches` -> DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts
 - `touches` -> DM-LEDGER-PAYMENT-ATTRIBUTION: PaymentInstrumentCardholderAndAttribution
 - `verifies` -> TC-LEDGER-PAYMENT-ATTRIBUTION-CONTRACT: Verify payment instrument and cardholder attribution

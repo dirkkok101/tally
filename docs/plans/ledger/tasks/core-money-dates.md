@@ -5,7 +5,7 @@
 - **Ref:** `TASK-LEDGER-CORE-MONEY-DATES`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-01-CORE-RUNTIME`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `30`
 - **Dialect:** `default`
@@ -25,7 +25,7 @@ Provide deterministic value types that reject lossy inputs and round-trip accept
 | DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-TRANSACTION-FACT: TransactionFact | `data_model` | `touches` | `true` |
 | FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals | `requirement` | `implements` | `true` |
-| FR-LEDGER-TRANSACTION-RECORDING: Record canonical transactions | `requirement` | `implements` | `true` |
+| FR-LEDGER-TRANSACTION-RECORDING: Record Canonical Transactions | `requirement` | `implements` | `true` |
 | NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-EXACT-MONEY-CONFORMANCE: Verify exact money and actuals formulas | `test_case` | `verifies` | `true` |
 
@@ -42,7 +42,7 @@ Provide deterministic value types that reject lossy inputs and round-trip accept
 - Canonical -123.45 parses once to Int64 minor units and formats identically without floating point.
 - JSON numbers, exponents, negative zero, zero transaction amounts, excessive scale, unsupported currency, and overflow return stable field errors.
 - Signed amount follows the resolved owner economic-position delta rule across asset and liability accounts.
-- TransactionDate and optional PostingDate round-trip as yyyy-MM-dd; EffectiveDate is TransactionDate and no timezone is fabricated.
+- TransactionDate and optional PostingDate round-trip as yyyy-MM-dd; Effective Date is TransactionDate and no timezone is fabricated.
 - Identifiers are 26-character ULIDs and total accumulation detects overflow.
 
 ### Failure Criteria
@@ -51,7 +51,7 @@ Provide deterministic value types that reject lossy inputs and round-trip accept
 
 ### Expected Outputs
 
-- Money, LedgerCurrency, EffectiveDate, LedgerId, ExactTotals
+- Money, LedgerCurrency, Effective Date, LedgerId, ExactTotals
 - Boundary/property tests
 
 ### Constraints
@@ -78,7 +78,7 @@ None recorded.
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | Money | `produces` | DD-LEDGER-FINANCIAL-REPRESENTATION |  |
-| EffectiveDate.Resolve | `produces` | DM-LEDGER-TRANSACTION-FACT |  |
+| Effective Date.Resolve | `produces` | DM-LEDGER-TRANSACTION-FACT |  |
 | LedgerId | `produces` |  |  |
 | ExactTotals | `produces` | NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC |  |
 
@@ -97,16 +97,19 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1b2` | `verified` | 2026-07-21T08:01:42.3962963+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1b2` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md): Value types compile against common validation/result contracts.
 - `governed-by` -> DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates
 - `implements` -> FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals
-- `implements` -> FR-LEDGER-TRANSACTION-RECORDING: Record canonical transactions
+- `implements` -> FR-LEDGER-TRANSACTION-RECORDING: Record Canonical Transactions
 - `satisfies` -> NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic
 - `touches` -> DM-LEDGER-TRANSACTION-FACT: TransactionFact
 - `verifies` -> TC-LEDGER-EXACT-MONEY-CONFORMANCE: Verify exact money and actuals formulas

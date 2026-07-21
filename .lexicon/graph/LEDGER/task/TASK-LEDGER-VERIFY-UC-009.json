@@ -6,10 +6,10 @@
   "slug": "VERIFY-UC-009",
   "title": "TransactionCorrectionWorkflow",
   "description": [
-    "Verification-only task with no Implements link: trace revised UC-LEDGER-009 through Release void/supersede operations."
+    "Verification-only task with no Implements link: trace ordinary void/supersede separately from statement-authoritative correction."
   ],
   "objective": [
-    "Prove transaction correction preserves immutable facts, evidence and reconciliation history, retires financial relationships atomically, and never moves dimensions or confirmations silently."
+    "Prove ordinary correction retains history and never silently transfers evidence, decisions, dimensions, or relationships."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -92,34 +92,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0EB0K0RX258P5KBD62TM33",
+      "id": "01KY28D7BZDBX8V6AWRD9NBC5M",
       "kind": "acceptance_check",
       "text": [
-        "Void retains evidence/decision history, retires active transfer/refund links, excludes the fact from active actuals, and exposes any affected confirmation as an explicit current exception or unresolved state."
+        "Published ordinary void/supersede preserves original facts and evidence/decision/dimension history, retires incompatible relationships atomically, and counts only explicitly established replacement state."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:59:12.6084936+00:00"
+      "created_at": "2026-07-21T11:54:02.4955277+00:00"
     },
     {
-      "id": "01KY0EB0K1XNYJGYTE8EG636JT",
+      "id": "01KY28D7C04BBR3R2YSKYGVYCT",
       "kind": "acceptance_check",
       "text": [
-        "Supersede creates an independent replacement with only explicit new evidence/attribution and no silently copied relationship, confirmation, category, pool, instrument, or cardholder state."
+        "No-copy, invalid replacement, relationship retirement failure, stale/incompatible correction, history-inclusive detail, and replay cover every UC-LEDGER-009 failure path."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:59:12.6084936+00:00"
+      "created_at": "2026-07-21T11:54:02.4955277+00:00"
     },
     {
-      "id": "01KY0EB0K1VZB0736R877R2W67",
+      "id": "01KY28D7C0A4VSWFE4XE5RG6Q0",
       "kind": "acceptance_check",
       "text": [
-        "Missing reason/key, incompatible lifecycle, invalid replacement, relationship/reconciliation coherence failure, changed replay, and injected crash cover every failure path with all-or-none state."
+        "A separate statement-correction fixture proves carry-forward occurs only through ledger.reconciliation.apply with decision-linked events, never through ordinary transaction.supersede."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:59:12.6084936+00:00"
+      "created_at": "2026-07-21T11:54:02.4955277+00:00"
     },
     {
       "id": "01KXT126TC0WRXW16N0SAP65AM",
@@ -142,24 +142,14 @@
       "created_at": "2026-07-18T07:11:45.9941647+00:00"
     },
     {
-      "id": "01KY0EB0K1RN1DA55PPSWTH37R",
+      "id": "01KY28D7C1WWFS211XZ3TE49BS",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT delete historical evidence/decisions or silently reconfirm the replacement."
+        "Do NOT conflate ordinary supersession with statement authority or accept a replacement that inherits financial meaning silently."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:59:12.6084936+00:00"
-    },
-    {
-      "id": "01KY0EB0K1DAG20P7PG9R321FX",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT verify only active actuals; inspect retained old state and explicit current exception."
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-20T18:59:12.6084936+00:00"
+      "created_at": "2026-07-21T11:54:02.4955277+00:00"
     },
     {
       "id": "01KXT126TDDD0535AT9Z8E2JRV",
@@ -252,24 +242,14 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT126TDAN0T0KHCQSZC3R07",
+      "id": "01KY28D7C1PW9X7AH7HTESR19V",
       "gate_type": "test-evidence",
       "description": [
-        "Evidence maps UC-LEDGER-009 main scenario and each numbered failure path to stdout/error/exit/state assertions."
+        "Show ordinary no-copy, explicit statement-only carry-forward boundary, rollback, history, actuals, and replay."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
-    },
-    {
-      "id": "01KXT126TD5WDYJ99SERDA688A",
-      "gate_type": "self-review",
-      "description": [
-        "No scenario calls handlers or SQLite directly."
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-21T11:54:02.4955277+00:00"
     }
   ],
   "verification_steps": [

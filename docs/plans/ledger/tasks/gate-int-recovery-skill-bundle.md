@@ -5,7 +5,7 @@
 - **Ref:** `TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-05-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `3`
 - **Dialect:** `default`
@@ -90,12 +90,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-5gf` | `verified` | 2026-07-21T08:01:29.5643294+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-5gf` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-AGENT-SKILLS](../tasks/agent-skills.md): Consumes GuidanceOperationModule while preserving schema authority.
 - `depends-on:compile` -> [TASK-LEDGER-BACKUP-VERIFY](../tasks/backup-verify.md): Consumes BackupOperationModule.
 - `depends-on:compile` -> [TASK-LEDGER-RESTORE-ACTIVATE](../tasks/restore-activate.md): Consumes RestoreOperationModule.

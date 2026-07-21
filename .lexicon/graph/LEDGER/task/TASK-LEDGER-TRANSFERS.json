@@ -43,6 +43,16 @@
       "created_at": "2026-07-18T07:16:37.5620511+00:00"
     },
     {
+      "id": "01KY27TE7GTBYXHGGGH0T323K7",
+      "target": "TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS",
+      "dependency_type": "compile",
+      "reason": [
+        "Transfer invariants must not assume cash is external before OQ-LEDGER-16 resolves."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-21T11:43:46.9299874+00:00"
+    },
+    {
       "id": "01KXT160TH4ZC44VN24J1G1J7N",
       "target": "TASK-LEDGER-GATE-EVIDENCE-RELATIONSHIPS",
       "dependency_type": "compile",
@@ -271,17 +281,6 @@
     }
   ],
   "references": [
-    {
-      "id": "01KXT0SME3EDER2WE7JK2W3DNR",
-      "target_ref_code": "OQ-LEDGER-5",
-      "target_entity_type": "open_question",
-      "target_entity_id": "01KXR55HWRSWNEKE7H763R8173",
-      "target_title": "Validate the proposed transfer, refund/reversal, and cash-withdrawal spend policies with representative transactions.",
-      "relationship": "blocked-by",
-      "required": 1,
-      "sort_order": 5,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
-    },
     {
       "id": "01KXT0SME344MZVXA5997FRN95",
       "target_ref_code": "NFR-LEDGER-ATTRIBUTABLE-HISTORY",

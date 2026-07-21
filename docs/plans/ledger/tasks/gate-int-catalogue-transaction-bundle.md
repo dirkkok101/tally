@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-GATE-INT-CATALOGUE-TRANSACTION-BUNDLE`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-05-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `1`
 - **Dialect:** `default`
 
 ## Summary
 
-Convergence gate intentionally has no Implements link: compose account, category, payment identity/attribution, spend-pool, transaction, allocation, and evidence modules without changing their contracts.
+Convergence gate with no Implements link: compose hierarchical categories, account/payment/pool dimensions, transactions, assignments, and evidence without changing their contracts.
 
 ## Objective
 
-Produce one deterministic 42-operation bundle for financial dimensions, canonical transaction lifecycle, and generic evidence, rejecting missing, duplicate, or incompatible descriptors before dispatch.
+Produce one deterministic 43-operation bundle and reject missing, duplicate, incompatible, or provider-leaking descriptors before dispatch.
 
 ## References
 
@@ -30,31 +30,31 @@ No graph references recorded.
 | [TASK-LEDGER-CATEGORIES](../tasks/categories.md) | `compile` | Consumes CategoryOperationModule. |
 | [TASK-LEDGER-CATEGORY-ALLOCATIONS](../tasks/category-allocations.md) | `compile` | Consumes CategoryAllocationOperationModule. |
 | [TASK-LEDGER-TRANSACTION-CORRECTIONS](../tasks/transaction-corrections.md) | `compile` | Consumes final TransactionOperationModule. |
-| [TASK-LEDGER-PAYMENT-IDENTITIES](../tasks/payment-identities.md) | `compile` | The 42-operation bundle consumes payment-instrument and cardholder modules. |
-| [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md) | `compile` | The 42-operation bundle consumes payment-attribution operations. |
-| [TASK-LEDGER-SPEND-POOLS](../tasks/spend-pools.md) | `compile` | The 42-operation bundle consumes spend-pool catalogue operations. |
-| [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md) | `compile` | The 42-operation bundle consumes pool-assignment operations. |
-| [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md) | `compile` | The 42-operation bundle consumes evidence registration operations. |
-| [TASK-LEDGER-EVIDENCE-LINKING](../tasks/evidence-linking.md) | `compile` | The 42-operation bundle consumes supporting evidence linkage. |
+| [TASK-LEDGER-PAYMENT-IDENTITIES](../tasks/payment-identities.md) | `compile` | The 43-operation bundle consumes payment-instrument and cardholder modules. |
+| [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md) | `compile` | The 43-operation bundle consumes payment-attribution operations. |
+| [TASK-LEDGER-SPEND-POOLS](../tasks/spend-pools.md) | `compile` | The 43-operation bundle consumes spend-pool catalogue operations. |
+| [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md) | `compile` | The 43-operation bundle consumes pool-assignment operations. |
+| [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md) | `compile` | The 43-operation bundle consumes evidence registration operations. |
+| [TASK-LEDGER-EVIDENCE-LINKING](../tasks/evidence-linking.md) | `compile` | The 43-operation bundle consumes supporting evidence linkage. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- The bundle contains exactly 42 unique descriptors: 5 account, 6 category, 6 payment-instrument, 6 cardholder, 6 pool, 4 transaction, 2 category allocation, 2 payment attribution, 2 pool assignment, and 3 evidence operations.
-- Descriptor order is operationId ordinal; every path, ID, kind, contract range, source-generated schema, error, exit, privacy rule, and idempotency classification is retained unchanged.
-- A missing module, duplicate operationId/path, incompatible contract range, provider-specific field, or open evidence metadata fails composition before dispatch.
-- Focused tests compare the complete 42-operation inventory with every source module and prove no descriptor is added, dropped, aliased, or rewritten.
+- The bundle contains exactly 43 unique descriptors: 5 account, 7 category including ledger.category.reparent, 6 Payment Instrument, 6 cardholder, 6 pool, 4 transaction, 2 category assignment, 2 payment attribution, 2 Pool Assignment, and 3 evidence operations.
+- Descriptor order is operationId ordinal; every path, kind, contract range, source-generated schema, hierarchy field, error, privacy rule, and idempotency classification is retained unchanged.
+- Missing module, duplicate ID/path, incompatible version, provider-specific field, open evidence metadata, flat-category contract, or missing reparent fails before dispatch.
+- Focused tests compare the exact 43-ID set and prove no descriptor is added, dropped, aliased, or rewritten.
 
 ### Failure Criteria
 
-- Do NOT hand-maintain a second operation schema, discover modules through reflection, or make this gate implement domain behavior.
-- Do NOT accept a count-only assertion without exact set equality.
+- Do NOT hand-maintain a second schema, use reflection, implement domain behavior in the gate, or accept count-only assertions.
+- Do NOT omit reparent or expose budget-plan semantics through category commands.
 
 ### Expected Outputs
 
-- CatalogueTransactionOperationBundle with exactly 42 descriptors
-- Exact-set and provider-neutral composition tests
+- CatalogueTransactionOperationBundle with exactly 43 descriptors
+- Exact-set, hierarchy-contract, and provider-neutral composition tests
 
 ### Constraints
 
@@ -75,9 +75,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CatalogueTransactionOperationBundle | `produces` | DM-LEDGER-OPERATION-DESCRIPTOR | 42-operation dimension/transaction/evidence bundle |
+| CatalogueTransactionOperationBundle | `produces` | DM-LEDGER-OPERATION-DESCRIPTOR | 43-operation dimension, transaction, and evidence bundle |
 | AccountOperationModule | `consumes` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS | 5 operations |
-| CategoryOperationModule | `consumes` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS | 6 operations |
+| CategoryOperationModule | `consumes` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS | 7 operations including reparent |
 | PaymentIdentityOperationModule | `consumes` | DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS | 12 instrument/cardholder operations |
 | PaymentAttributionOperationModule | `consumes` | DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS | 2 operations |
 | SpendPoolOperationModule | `consumes` | DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS | 6 operations |
@@ -91,32 +91,35 @@ None recorded.
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~CatalogueTransactionOperationBundleTests --no-restore` | exit 0; at least 14 exact-inventory, provider-neutrality, duplicate, missing, and version cases run; exactly 42 operation IDs are reported; 0 fail | `true` | 300 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~CatalogueTransactionOperationBundleTests --no-restore` | exit 0; at least 16 exact-inventory, hierarchy, provider-neutrality, duplicate, missing, and version cases run; exactly 43 IDs are reported; 0 fail | `true` | 360 |
 
 ### Review Gates
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Show exact 42-ID set equality, operation subtotals, and every rejected composition state. | `true` |
-| `self-review` | No domain handler, provider adapter, open evidence schema, or duplicate descriptor is introduced. | `true` |
+| `test-evidence` | Show exact 43-ID equality, operation subtotals, reparent schema, and every rejected composition state. | `true` |
+| `self-review` | No domain handler, provider adapter, budget semantics, open evidence schema, or duplicate descriptor is introduced. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2ve` | `verified` | 2026-07-21T08:01:28.5748353+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2ve` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-ACCOUNTS](../tasks/accounts.md): Consumes AccountOperationModule.
 - `depends-on:compile` -> [TASK-LEDGER-CATEGORIES](../tasks/categories.md): Consumes CategoryOperationModule.
 - `depends-on:compile` -> [TASK-LEDGER-CATEGORY-ALLOCATIONS](../tasks/category-allocations.md): Consumes CategoryAllocationOperationModule.
-- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-LINKING](../tasks/evidence-linking.md): The 42-operation bundle consumes supporting evidence linkage.
-- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md): The 42-operation bundle consumes evidence registration operations.
-- `depends-on:compile` -> [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md): The 42-operation bundle consumes payment-attribution operations.
-- `depends-on:compile` -> [TASK-LEDGER-PAYMENT-IDENTITIES](../tasks/payment-identities.md): The 42-operation bundle consumes payment-instrument and cardholder modules.
-- `depends-on:compile` -> [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md): The 42-operation bundle consumes pool-assignment operations.
-- `depends-on:compile` -> [TASK-LEDGER-SPEND-POOLS](../tasks/spend-pools.md): The 42-operation bundle consumes spend-pool catalogue operations.
+- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-LINKING](../tasks/evidence-linking.md): The 43-operation bundle consumes supporting evidence linkage.
+- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md): The 43-operation bundle consumes evidence registration operations.
+- `depends-on:compile` -> [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md): The 43-operation bundle consumes payment-attribution operations.
+- `depends-on:compile` -> [TASK-LEDGER-PAYMENT-IDENTITIES](../tasks/payment-identities.md): The 43-operation bundle consumes payment-instrument and cardholder modules.
+- `depends-on:compile` -> [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md): The 43-operation bundle consumes pool-assignment operations.
+- `depends-on:compile` -> [TASK-LEDGER-SPEND-POOLS](../tasks/spend-pools.md): The 43-operation bundle consumes spend-pool catalogue operations.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSACTION-CORRECTIONS](../tasks/transaction-corrections.md): Consumes final TransactionOperationModule.
 
 ## Navigation

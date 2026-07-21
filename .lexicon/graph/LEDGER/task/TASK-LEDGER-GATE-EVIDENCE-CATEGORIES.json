@@ -4,12 +4,12 @@
   "sub_plan_id": "01KXT069GD3347N15180MYTNVK",
   "ref_code": "TASK-LEDGER-GATE-EVIDENCE-CATEGORIES",
   "slug": "GATE-EVIDENCE-CATEGORIES",
-  "title": "Validate Category Assignment policy",
+  "title": "Confirm owner category hierarchy policy",
   "description": [
-    "Validation-only task intentionally has no Implements link: it resolves OQ-LEDGER-6 from owner-supplied redacted evidence before categories, allocations, and categorized actuals implementation."
+    "Validation-only task with no Implements link: verify the direct owner decision recorded for OQ-LEDGER-6 and DD-LEDGER-CATEGORY-HIERARCHY before category implementation."
   ],
   "objective": [
-    "Confirm a flat catalogue and one active allocation satisfy v1."
+    "Lock hierarchical Spend Categories with zero or one active category assignment per transaction."
   ],
   "planning_state": "ready",
   "priority": 0,
@@ -26,44 +26,64 @@
   ],
   "files": [
     {
-      "id": "01KXT0GMYJ9DXT90HG1E2PAZZR",
+      "id": "01KY27MCBCPKXJ81M2AT2HTEF2",
       "path": "docs/validation/ledger/oq-6-category-policy.md",
-      "action": "document",
-      "role": "evidence",
+      "action": "read",
+      "role": "owner decision evidence",
       "required": 1,
+      "notes": [
+        "Verify hierarchy and one-category conclusion"
+      ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:02:10.6382550+00:00"
+      "created_at": "2026-07-21T11:40:28.3935611+00:00"
     },
     {
-      "id": "01KXT0GMYJ9HM6QJ2BM87EZ1GG",
+      "id": "01KY27MCBCNVAEYWR2RNST3HWT",
       "path": ".lexicon/graph/LEDGER/open-question/OQ-LEDGER-6.json",
-      "action": "modify",
+      "action": "read",
       "role": "canonical gate state",
       "required": 1,
+      "notes": [
+        "Read through lex open-question show"
+      ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:02:10.6382550+00:00"
+      "created_at": "2026-07-21T11:40:28.3935611+00:00"
     },
     {
-      "id": "01KXT0GMYJ2MN0A75P056JVKXZ",
-      "path": ".lexicon/graph/LEDGER/assumption/A5.json",
+      "id": "01KY27MCBCNPCRMSFNHPAMS12C",
+      "path": ".lexicon/graph/LEDGER/decision/DD-LEDGER-CATEGORY-HIERARCHY.json",
       "action": "read",
-      "role": "baseline",
+      "role": "accepted design",
       "required": 1,
+      "notes": [
+        "Read through lex decision show"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:02:10.6382550+00:00"
+      "created_at": "2026-07-21T11:40:28.3935611+00:00"
     }
   ],
   "interfaces": [
     {
-      "id": "01KXT3BTQPNMV9TY3ZW2YJW2M5",
+      "id": "01KY27MCBCB81RVM3DKW0FG82W",
       "name": "OQ-LEDGER-6Resolution",
       "direction": "produces",
       "contract_ref_code": "OQ-LEDGER-6",
       "notes": [
-        "Produced only when the open question resolves; invalidation leaves the task blocked"
+        "Owner-approved hierarchy and one-category policy"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:51:58.4532946+00:00"
+      "created_at": "2026-07-21T11:40:28.3935611+00:00"
+    },
+    {
+      "id": "01KY27MCBCRSA5TTNRVH9MEABH",
+      "name": "CategoryHierarchyPolicy",
+      "direction": "produces",
+      "contract_ref_code": "DD-LEDGER-CATEGORY-HIERARCHY",
+      "notes": [
+        "Acyclic adjacency history with direct and subtree roll-ups"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:40:28.3935611+00:00"
     }
   ],
   "links": [
@@ -77,124 +97,94 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT3BTQN53YSSBDWVB2YM8PK",
+      "id": "01KY27MCBANFBTMQH1EF0S6WMR",
       "kind": "acceptance_check",
       "text": [
-        "Given redacted samples covering all three accounts and both banks, the evidence matrix records archive, reactivation, correction, split, and hierarchy needs without descriptions, full identifiers, credentials, or raw rows."
+        "OQ-LEDGER-6 is resolved from direct owner instruction, A5 is validated, and the former flat-catalogue assumption A10 is invalidated."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:51:58.4532946+00:00"
+      "created_at": "2026-07-21T11:40:28.3935611+00:00"
     },
     {
-      "id": "01KXT3BTQPNMB8T4E12R7CC6VS",
+      "id": "01KY27MCBBNZ6E55T9JWMW15GM",
       "kind": "acceptance_check",
       "text": [
-        "Given consistent evidence, OQ-LEDGER-6 is resolved with a decision naming coverage and the exact confirmed rule."
+        "DD-LEDGER-CATEGORY-HIERARCHY is accepted and specifies zero or one active parent, append-only parent history, acyclicity, sibling-name uniqueness, assignment to any active node, and direct versus subtree roll-ups."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:51:58.4532946+00:00"
+      "created_at": "2026-07-21T11:40:28.3935611+00:00"
     },
     {
-      "id": "01KXT3BTQPWVSPDHAD8ACE31NN",
+      "id": "01KY27MCBBT6KQDTYFVFE4R5XK",
       "kind": "acceptance_check",
       "text": [
-        "Given invalidating or incomplete evidence, write the contradiction or unavailable-evidence reason to the redacted report, leave OQ-LEDGER-6 open, produce no OQ-LEDGER-6Resolution, keep this task non-complete, stop downstream execution, and hand off to /lex:design."
+        "The redacted validation report records one category per transaction and delegates budget exact-node versus subtree semantics to BUDGET through OQ-BUDGET-10."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:51:58.4532946+00:00"
+      "created_at": "2026-07-21T11:40:28.3935611+00:00"
     },
     {
-      "id": "01KXT0GMYJDQ6N09VQPB3GG3QE",
+      "id": "01KY27MCBBRYBZV0NB7MZ3CFJH",
       "kind": "constraint",
       "text": [
-        "Owner samples remain outside the repository; only redacted structural conclusions are committed."
+        "Only privacy-safe structural conclusions are committed; graph changes use lex commands."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:02:10.6382550+00:00"
+      "created_at": "2026-07-21T11:40:28.3935611+00:00"
     },
     {
-      "id": "01KXT3BTQPBT0WKRNS4R4KEYRH",
+      "id": "01KY27MCBBYHKVM9T9VGH1FWPX",
       "kind": "expected_output",
       "text": [
-        "docs/validation/ledger/oq-6-category-policy.md with redacted conclusions"
+        "Resolved hierarchy policy evidence and OQ-LEDGER-6Resolution"
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:51:58.4532946+00:00"
+      "created_at": "2026-07-21T11:40:28.3935611+00:00"
     },
     {
-      "id": "01KXT3BTQP1AH5JXD2064WKB7Q",
-      "kind": "expected_output",
+      "id": "01KY27MCBBBS6JZ8WS7WKP49VE",
+      "kind": "failure_criterion",
       "text": [
-        "OQ-LEDGER-6 resolved with a non-empty decision on the only completing path"
+        "Do NOT implement a flat catalogue, split category allocations, or hierarchy encoded in names — rejected by DD-LEDGER-CATEGORY-HIERARCHY."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:40:28.3935611+00:00"
+    },
+    {
+      "id": "01KY27MCBBPP8D0DH2ZHN018D9",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT decide BUDGET parent/descendant overlap semantics in LEDGER."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:51:58.4532946+00:00"
+      "created_at": "2026-07-21T11:40:28.3935611+00:00"
     },
     {
-      "id": "01KXT3BTQPVMGVN2AP1XSK4VGG",
+      "id": "01KY27MCBBFZ183AJEKR68BD7Q",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT store raw statements, full account numbers, credentials, descriptions, or identifying rows in docs/validation/ledger/oq-6-category-policy.md."
-      ],
-      "required": 1,
-      "sort_order": 0,
-      "created_at": "2026-07-18T07:51:58.4532946+00:00"
-    },
-    {
-      "id": "01KXT3BTQPJ1EXN8JH26D1CXMN",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT silently change DD-LEDGER-IMMUTABLE-HISTORY; invalidation returns to /lex:design."
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T07:51:58.4532946+00:00"
-    },
-    {
-      "id": "01KXT3BTQPQM7XBF2MBQX5CN8V",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT resolve OQ-LEDGER-6 from fewer than all three accounts and both banks."
+        "Do NOT store raw statements, email bodies, full identifiers, or transaction descriptions in validation evidence."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:51:58.4532946+00:00"
+      "created_at": "2026-07-21T11:40:28.3935611+00:00"
     },
     {
-      "id": "01KXT3BTQP7S9NG80AG8AX5ZB2",
-      "kind": "failure_criterion",
-      "text": [
-        "Contradictory, incomplete, or unavailable evidence is a non-completing blocked outcome; do NOT mark this task complete or unblock any consumer of OQ-LEDGER-6Resolution."
-      ],
-      "required": 1,
-      "sort_order": 3,
-      "created_at": "2026-07-18T07:51:58.4532946+00:00"
-    },
-    {
-      "id": "01KXT3BTQPPPAH4MMC7T9BHJPD",
+      "id": "01KY27MCBB0F4TFXA1PDW4WA7F",
       "kind": "note",
       "text": [
-        "Owner evidence remains external and must never be fabricated."
+        "The owner decision is already present; execution verifies and closes the gate."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:51:58.4532946+00:00"
-    },
-    {
-      "id": "01KXT3BTQPQW4X9664MZ52ZTV9",
-      "kind": "note",
-      "text": [
-        "Required verification intentionally accepts only the completing resolved path; a blocker report leaves this task and its downstream frontier blocked."
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T07:51:58.4532946+00:00"
+      "created_at": "2026-07-21T11:40:28.3935611+00:00"
     }
   ],
   "references": [
@@ -208,6 +198,17 @@
       "required": 1,
       "sort_order": 1,
       "created_at": "2026-07-18T07:02:10.6382550+00:00"
+    },
+    {
+      "id": "01KY27N63ZMKHVRF19N5BCHDGA",
+      "target_ref_code": "DD-LEDGER-CATEGORY-HIERARCHY",
+      "target_entity_type": "design_decision",
+      "target_entity_id": "01KY25R1J105M3BFF06SC5B9EA",
+      "target_title": "Acyclic category hierarchy with single-node transaction assignment",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-21T11:40:54.7847688+00:00"
     },
     {
       "id": "01KXT0GMYJD51558JRHR8FBG8C",
@@ -234,36 +235,36 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT0GMYJHT56H5ZVA6K7RHCY",
-      "gate_type": "human-review",
+      "id": "01KY27MCBCPJJRQD3VV0S8FV3D",
+      "gate_type": "test-evidence",
       "description": [
-        "Owner confirms the redacted matrix represents all accounts and banks."
+        "Show the owner decision, accepted hierarchy decision, and redacted validation report."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:02:10.6382550+00:00"
+      "created_at": "2026-07-21T11:40:28.3935611+00:00"
     },
     {
-      "id": "01KXT0GMYJF4XKNEGQHT1NGYZE",
+      "id": "01KY27MCBCYCGSYY8J74J65CVA",
       "gate_type": "self-review",
       "description": [
-        "Diff contains no raw financial data or unmasked identifiers."
+        "Confirm no flat, split-allocation, budget-plan, or private-payload behavior remains."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:02:10.6382550+00:00"
+      "created_at": "2026-07-21T11:40:28.3935611+00:00"
     }
   ],
   "verification_steps": [
     {
-      "id": "01KXT0GMYJM7RK2SJV3JJ5FEV5",
+      "id": "01KY27MCBCFW1E2PSGN913HR8S",
       "phase": "after",
-      "command": "test -s docs/validation/ledger/oq-6-category-policy.md && lex open-question show OQ-LEDGER-6 --json | jq -e '.status == \"resolved\" and (.decision | length > 0)'",
-      "expected_result": "exit 0; report is non-empty and OQ-LEDGER-6 has a non-empty resolved decision",
+      "command": "test -s docs/validation/ledger/oq-6-category-policy.md && lex open-question show OQ-LEDGER-6 --json && lex decision show DD-LEDGER-CATEGORY-HIERARCHY --json",
+      "expected_result": "exit 0; the report exists, OQ output shows resolved, and decision output shows accepted",
       "required": 1,
       "timeout_seconds": 60,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:02:10.6382550+00:00"
+      "created_at": "2026-07-21T11:40:28.3935611+00:00"
     }
   ]
 }

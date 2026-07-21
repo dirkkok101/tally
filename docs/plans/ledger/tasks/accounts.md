@@ -5,7 +5,7 @@
 - **Ref:** `TASK-LEDGER-ACCOUNTS`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-02-CATALOGUE-TRANSACTIONS`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `10`
 - **Dialect:** `default`
@@ -25,7 +25,7 @@ Maintain stable masked owned asset and liability account identities and attribut
 | DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts | `data_model` | `touches` | `true` |
-| FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain owned bank accounts | `requirement` | `implements` | `true` |
+| FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain Owned Bank Accounts | `requirement` | `implements` | `true` |
 | TC-LEDGER-ACCOUNT-MAINTENANCE-CONTRACT: Verify account maintenance contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -35,6 +35,7 @@ Maintain stable masked owned asset and liability account identities and attribut
 | [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md) | `compile` | Account slice consumes the proven core seam. |
 | [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
 | [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | Consumer requires LedgerDb from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](../tasks/gate-evidence-cash-withdrawals.md) | `compile` | Account operations must know whether tracked cash is an in-scope account class. |
 
 ## Recipe
 
@@ -101,18 +102,22 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-34k` | `verified` | 2026-07-21T08:01:32.9166658+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-34k` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumer requires LedgerDb from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](../tasks/gate-evidence-cash-withdrawals.md): Account operations must know whether tracked cash is an in-scope account class.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md): Account slice consumes the proven core seam.
 - `governed-by` -> DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `implements` -> FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain owned bank accounts
+- `implements` -> FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain Owned Bank Accounts
 - `touches` -> DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts
 - `verifies` -> TC-LEDGER-ACCOUNT-MAINTENANCE-CONTRACT: Verify account maintenance contract
 

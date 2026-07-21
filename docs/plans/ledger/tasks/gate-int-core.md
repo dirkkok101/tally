@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-GATE-INT-CORE`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-01-CORE-RUNTIME`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `50`
 - **Dialect:** `default`
 
 ## Summary
 
-Integration-only task intentionally has no Implements link: compose every independently reviewed V001 fragment and prove the published process-to-complete-store core seam.
+Integration-only task with no Implements link: compose every V001 fragment plus the additive V002 statement-authority upgrade and prove the published process-to-store seam.
 
 ## Objective
 
-Compose and prove the complete V001 schema plus provider-neutral process, exact-value, real-SQLite, privacy, and idempotent mutation architecture on linux-x64.
+Compose and verify the complete current schema, V001 upgrade path, process contract, exact values, privacy, and idempotent storage on linux-x64.
 
 ## References
 
@@ -38,33 +38,31 @@ Compose and prove the complete V001 schema plus provider-neutral process, exact-
 | [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](../tasks/core-schema-transactions.md) | `compile` | Consumes V001TransactionSchema. |
 | [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](../tasks/core-schema-relationships-actuals.md) | `compile` | Consumes V001RelationshipActualsSchema. |
 | [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](../tasks/core-schema-evidence-reconciliation.md) | `compile` | CompleteV001Schema consumes the evidence and reconciliation fragment. |
+| [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](../tasks/core-schema-reconciliation-authority.md) | `compile` | The proven complete schema must include the V002 statement-authority upgrade. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- CompleteV001Schema explicitly registers V001StorageSchema, V001CatalogueSchema, V001TransactionSchema, V001EvidenceReconciliationSchema, and V001RelationshipActualsSchema in dependency-safe order and applies them in one transaction.
-- Complete-schema tests compare every table, column, index, foreign key, check, uniqueness rule, privacy allowlist, ephemeral marker, and user_version with linked fragment contracts; missing/duplicate fragments or injected SQL failure leave no partial schema.
-- Published tally initializes a private complete generation, executes a typed idempotent probe through TallyProcess, emits one stdout envelope, and leaves no child process or network listener.
-- Identical request and logical replay return the original effect; a pre-commit crash leaves zero domain/idempotency/logical-effect rows; changed replay returns stable conflict.
-- Money/date round-trip is exact, integrity is ok, foreign-key violations are zero, artifact modes are 0700/0600, and provider/raw-payload diagnostic canaries never appear.
+- CompleteLedgerSchema explicitly registers all five V001 fragments and V002StatementAuthoritySchema in dependency-safe version/name order; a fresh store and a committed V001 fixture reach the same current schema and migration metadata.
+- Schema tests compare every table, column, index, foreign key, check, hierarchy rule, evidence privacy allowlist, statement-authority reference, and user_version; missing/duplicate fragments or injected SQL failure leave no partial schema.
+- Published tally initializes a private current generation, executes a typed idempotent probe through TallyProcess, emits one stdout envelope, and leaves no child process or network listener.
+- Identical request/logical replay returns the original effect; pre-commit crash leaves zero domain/idempotency rows; changed replay conflicts.
+- Money/date round-trip is exact, hierarchy is acyclic, integrity is ok, foreign-key violations are zero, artifact modes are 0700/0600, and provider/raw-payload canaries never appear.
 
 ### Failure Criteria
 
-- Do NOT substitute mocked handlers, mocked SQLite, partial-fragment initialization, or Debug-only evidence for complete published-process proof.
-- Do NOT clear while OQ-LEDGER-1..3 remain open or invalidate value semantics.
+- Do NOT edit committed V001EvidenceReconciliationSchema, substitute mocks/partial schema/Debug-only proof, or skip the V001-to-V002 upgrade test.
+- Do NOT clear while value-semantics gates or OQ-LEDGER-16 invalidate the selected schema.
 
 ### Expected Outputs
 
-- CompleteV001Schema composition
-- V001CompleteSchemaTests
-- CoreRuntimeStorageTests
-- PublishedBinaryCoreTests
-- scripts/verify-ledger-core.sh
+- CompleteLedgerSchema composition
+- CompleteLedgerSchemaTests, CoreRuntimeStorageTests, PublishedBinaryCoreTests, and scripts/verify-ledger-core.sh
 
 ### Constraints
 
-- The four V001 fragments remain independently owned; this gate only composes and verifies them.
+- V001 fragments remain independently owned; V002 is additive; this gate only composes and verifies them.
 
 ### Notes
 
@@ -74,54 +72,59 @@ None recorded.
 
 | Path | Action | Role | Required | Notes |
 |---|---|---|---|---|
-| `src/Tally/Infrastructure/Storage/LedgerSchema.cs` | `modify` | complete V001 composition | `true` |  |
-| `tests/Tally.Tests/Infrastructure/Storage/V001CompleteSchemaTests.cs` | `test` | complete schema inventory | `true` |  |
-| `tests/Tally.Tests/Integration/CoreRuntimeStorageTests.cs` | `test` | implementation | `true` |  |
-| `tests/Tally.Tests/Process/PublishedBinaryCoreTests.cs` | `test` | implementation | `true` |  |
-| `scripts/verify-ledger-core.sh` | `create` | verification | `true` |  |
+| `src/Tally/Infrastructure/Storage/LedgerSchema.cs` | `modify` | current schema composition | `true` | Register V001 fragments and V002 upgrade explicitly |
+| `tests/Tally.Tests/Infrastructure/Storage/CompleteLedgerSchemaTests.cs` | `test` | fresh and upgraded schema inventory | `true` | Compare fresh-current and V001-upgraded stores |
+| `tests/Tally.Tests/Integration/CoreRuntimeStorageTests.cs` | `test` | runtime integration | `true` | Exact values, privacy, and replay |
+| `tests/Tally.Tests/Process/PublishedBinaryCoreTests.cs` | `test` | published process | `true` | Native-AOT local process proof |
+| `scripts/verify-ledger-core.sh` | `create` | verification | `true` | Run non-vacuous core checks |
 
 ### Interface Contracts
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| TallyProcess.RunAsync | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | provider-neutral process boundary |
-| LedgerDb | `consumes` |  | raw SQLite runtime |
-| V001StorageSchema | `consumes` | DM-LEDGER-STORE-GENERATION | storage metadata fragment |
-| V001CatalogueSchema | `consumes` | DM-LEDGER-CATALOGUE-LIFECYCLE | financial-dimension fragment |
-| V001TransactionSchema | `consumes` | DM-LEDGER-TRANSACTION-HISTORY | transaction and dimensional-history fragment |
-| V001EvidenceReconciliationSchema | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY | evidence and reconciliation fragment |
-| V001RelationshipActualsSchema | `consumes` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS | relationship and snapshot fragment |
-| Money | `consumes` | DD-LEDGER-FINANCIAL-REPRESENTATION | exact values |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD | request and logical replay |
-| CompleteV001Schema | `produces` |  | five-fragment V001 schema |
-| VerifiedCoreRuntimeStorageSeam | `produces` |  | integration evidence |
+| TallyProcess.RunAsync | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Provider-neutral process boundary |
+| LedgerDb | `consumes` | DM-LEDGER-STORE-GENERATION | Raw SQLite runtime |
+| V001StorageSchema | `consumes` | DM-LEDGER-STORE-GENERATION | Storage metadata fragment |
+| V001CatalogueSchema | `consumes` | DM-LEDGER-CATALOGUE-LIFECYCLE | Hierarchical financial-dimension fragment |
+| V001TransactionSchema | `consumes` | DM-LEDGER-TRANSACTION-HISTORY | Transaction and assignment fragment |
+| V001EvidenceReconciliationSchema | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY | Committed evidence predecessor |
+| V001RelationshipActualsSchema | `consumes` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS | Relationship and snapshot fragment |
+| V002StatementAuthoritySchema | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY | Additive statement-correction upgrade |
+| Money | `consumes` | DD-LEDGER-FINANCIAL-REPRESENTATION | Exact values |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD | Request and logical replay |
+| CompleteLedgerSchema | `produces` | DM-LEDGER-STORE-GENERATION | Fresh and upgraded current schema |
+| VerifiedCoreRuntimeStorageSeam | `produces` |  | Integration evidence |
 
 ### Verification
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `bash scripts/verify-ledger-core.sh` | exit 0; AOT publish succeeds, at least 18 complete-schema/integration/process tests run, 0 fail, integrity is ok, every V001 fragment is present, and no canary leaks | `true` | 900 |
+| `after` | `bash scripts/verify-ledger-core.sh` | exit 0; AOT publish succeeds, at least 24 fresh-schema, upgrade, integration, and process tests run, 0 fail, integrity is ok, V001 and V002 metadata are present, and no canary leaks | `true` | 1200 |
 
 ### Review Gates
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Preserve exact schema inventory, fragment rollback, published-binary, integrity, exactness, permission, and replay evidence. | `true` |
-| `branch-review` | Reviewer confirms every model-owned fragment is complete and downstream slices consume CompleteV001Schema. | `true` |
+| `test-evidence` | Preserve schema inventory, V001 upgrade, rollback, published-binary, hierarchy, integrity, permission, exactness, and replay evidence. | `true` |
+| `branch-review` | Reviewer confirms V001 is unedited, V002 is additive, and downstream slices consume CompleteLedgerSchema. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2zt` | `verified` | 2026-07-21T08:01:50.2965792+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2zt` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Core gate proves transactional replay and crash behavior.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-MONEY-DATES](../tasks/core-money-dates.md): Core gate proves exact values through SQLite.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md): Consumer requires TallyProcess.RunAsync from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-CATALOGUE](../tasks/core-schema-catalogue.md): Consumes V001CatalogueSchema.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](../tasks/core-schema-evidence-reconciliation.md): CompleteV001Schema consumes the evidence and reconciliation fragment.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](../tasks/core-schema-reconciliation-authority.md): The proven complete schema must include the V002 statement-authority upgrade.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](../tasks/core-schema-relationships-actuals.md): Consumes V001RelationshipActualsSchema.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](../tasks/core-schema-transactions.md): Consumes V001TransactionSchema.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Core gate exercises the real store and generation policy.

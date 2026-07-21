@@ -5,7 +5,7 @@
 - **Ref:** `TASK-LEDGER-TRANSFERS`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-03-RELATIONSHIPS-ACTUALS`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `10`
 - **Dialect:** `default`
@@ -26,7 +26,6 @@ Create one attributable active transfer only when distinct owned-account legs sa
 | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | `true` |
 | FR-LEDGER-TRANSFER-CONFIRMATION: Confirm owned-account transfers | `requirement` | `implements` | `true` |
 | NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | `true` |
-| OQ-LEDGER-5: Validate the proposed transfer, refund/reversal, and cash-withdrawal spend policies with representative transactions. | `open_question` | `blocked-by` | `true` |
 | TC-LEDGER-TRANSFER-CONFIRMATION-CONTRACT: Verify confirm owned-account transfers contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -36,6 +35,7 @@ Create one attributable active transfer only when distinct owned-account legs sa
 | [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md) | `compile` | Transfer confirmation requires immutable transaction legs. |
 | [TASK-LEDGER-GATE-EVIDENCE-RELATIONSHIPS](../tasks/gate-evidence-relationships.md) | `compile` | Relationship policy cannot start until OQ-LEDGER-5 resolves. |
 | [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](../tasks/gate-evidence-cash-withdrawals.md) | `compile` | Transfer invariants must not assume cash is external before OQ-LEDGER-16 resolves. |
 
 ## Recipe
 
@@ -103,14 +103,17 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-xq6` | `verified` | 2026-07-21T08:01:35.4276135+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `blocked-by` -> OQ-LEDGER-5: Validate the proposed transfer, refund/reversal, and cash-withdrawal spend policies with representative transactions.
+- `bead-ref` -> `bd-xq6` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](../tasks/gate-evidence-cash-withdrawals.md): Transfer invariants must not assume cash is external before OQ-LEDGER-16 resolves.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-RELATIONSHIPS](../tasks/gate-evidence-relationships.md): Relationship policy cannot start until OQ-LEDGER-5 resolves.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Transfer confirmation requires immutable transaction legs.
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history

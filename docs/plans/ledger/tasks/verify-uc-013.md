@@ -5,7 +5,7 @@
 - **Ref:** `TASK-LEDGER-VERIFY-UC-013`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-05-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `150`
 - **Dialect:** `default`
@@ -36,14 +36,14 @@ Prove additional generic evidence registration and supporting linkage main/failu
 
 ### Acceptance Checks
 
-- The published workflow registers and links multiple evidence records to one active transaction, retrieves safe history, and leaves reconciliation state and exact actuals unchanged.
+- The published workflow registers and links multiple Evidence Records to one active transaction, retrieves safe history, and leaves Reconciliation State and exact actuals unchanged.
 - Forbidden payload, insufficient identity, inactive transaction, incompatible facts, other-transaction conflict, identical replay, changed replay, and injected atomic failure match every UC-LEDGER-013 failure path.
 - Persisted canary inspection finds no source payload or full identifier and one logical effect per evidence item.
 
 ### Failure Criteria
 
 - Do NOT call handlers or SQLite directly except read-only postcondition inspection.
-- Do NOT omit cross-key logical replay or the no-reconciliation-state-change assertion.
+- Do NOT omit cross-key logical replay or the no-Reconciliation State-change assertion.
 
 ### Expected Outputs
 
@@ -85,12 +85,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-e2o` | `verified` | 2026-07-21T08:01:56.1639719+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-e2o` (verified)
 - `covers` -> UC-LEDGER-013: Register and link additional transaction evidence
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
 - `verifies` -> FR-LEDGER-EVIDENCE-REGISTRATION: Register and link generic evidence

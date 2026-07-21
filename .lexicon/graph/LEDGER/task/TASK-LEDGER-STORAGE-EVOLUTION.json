@@ -6,10 +6,10 @@
   "slug": "STORAGE-EVOLUTION",
   "title": "Implement safe storage evolution and status",
   "description": [
-    "Deliver storage status plus isolated prepare/activate evolution with preflight, recovery point, complete-state validation, and atomic generation switch."
+    "Deliver status plus isolated prepare/activate evolution with recovery point, full hierarchy/authority validation, and atomic generation switch."
   ],
   "objective": [
-    "Upgrade supported storage exactly once while every failure leaves the original fully verified provider-neutral generation authoritative."
+    "Upgrade supported storage exactly once while failure leaves the original complete generation authoritative."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -176,54 +176,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0E8A99K2MEMBZCJP0AAQ9E",
+      "id": "01KY286D1MP3BKFNRCP5EMSWMK",
       "kind": "acceptance_check",
       "text": [
-        "storage.status returns contract/storage/reconciliation-policy versions, current generation/fingerprint, permissions, integrity, and host-protection evidence without financial or evidence payload."
+        "storage.status returns contract/storage/reconciliation-policy versions, current generation/fingerprint, permissions, integrity, and host protection without financial/evidence payload."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:57:44.2328650+00:00"
+      "created_at": "2026-07-21T11:50:18.9324758+00:00"
     },
     {
-      "id": "01KY0E8A990WKNAJ18ZRT92FA7",
+      "id": "01KY286D1N27ZJNDP6SGKP0T0T",
       "kind": "acceptance_check",
       "text": [
-        "evolution.prepare validates source integrity, compatibility, permissions, free space, protection, and recovery requirements before transformation."
+        "evolution.prepare validates source integrity, compatibility, permissions, free space, protection, and verified recovery before isolated transformation."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:57:44.2328650+00:00"
+      "created_at": "2026-07-21T11:50:18.9324758+00:00"
     },
     {
-      "id": "01KY0E8A99WHJ6ZCWJRXHACTRN",
+      "id": "01KY286D1NZDPK7BM90P757S09",
       "kind": "acceptance_check",
       "text": [
-        "A verified recovery point exists before isolated transformation; candidate validation compares every durable fact/history/dimension/evidence/reconciliation/relationship/replay type, count, integrity rule, and exact declared total/cell."
+        "Candidate equivalence covers every durable fact/history/dimension/category ancestry/evidence/reconciliation replacement/carry-forward/relationship/replay type, count, and exact direct/subtree/pool total."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:57:44.2328650+00:00"
+      "created_at": "2026-07-21T11:50:18.9324758+00:00"
     },
     {
-      "id": "01KY0E8A99DNGRDTD8NTX2HSYM",
+      "id": "01KY286D1NX0CDWXDYKAPSB613",
       "kind": "acceptance_check",
       "text": [
-        "evolution.activate requires expected current fingerprint and explicit authorization, revalidates under lock, atomically switches once, and retains the recovery generation."
+        "evolution.activate requires expected current fingerprint and authorization, revalidates under lock, switches once atomically, and retains recovery generation; every failure leaves the original current."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T18:57:44.2328650+00:00"
-    },
-    {
-      "id": "01KY0E8A9AJD29AK0DYJH48Q9Q",
-      "kind": "acceptance_check",
-      "text": [
-        "Any preflight, conversion, privacy, validation, or activation failure leaves original current and reports a stable version/integrity/host error."
-      ],
-      "required": 1,
-      "sort_order": 4,
-      "created_at": "2026-07-20T18:57:44.2328650+00:00"
+      "created_at": "2026-07-21T11:50:18.9324758+00:00"
     },
     {
       "id": "01KXT0W0YYV8T7D7VFRJ6RMK63",
@@ -256,24 +246,24 @@
       "created_at": "2026-07-18T07:08:23.3874370+00:00"
     },
     {
-      "id": "01KXT0W0YYQAP454MKS0YFT2G2",
+      "id": "01KY286D1NJDC1PX09ZEZ34VHX",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT migrate live state in place, skip verified recovery, activate on stale fingerprint, or expose partial candidate — rejected per DD-LEDGER-CANDIDATE-ACTIVATION."
+        "Do NOT migrate live state in place, edit committed migrations, skip verified recovery, activate stale candidates, expose partial candidates, permit downgrade, or invent a generic migration abstraction."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-21T11:50:18.9324758+00:00"
     },
     {
-      "id": "01KXT0W0YY3CF146E5BX4J1HDW",
+      "id": "01KY286D1N4YGFX78GRM6E0M4K",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT invent provider-neutral migration interfaces or permit downgrade/newer-than-binary mutation."
+        "Do NOT accept a candidate with category cycles, duplicate active effects, incomplete statement correction, invalid relationship replacement, or mismatched exact totals."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-21T11:50:18.9324758+00:00"
     }
   ],
   "references": [
@@ -331,24 +321,24 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT0W0YYW6ZWDCWJ05NQZS0B",
+      "id": "01KY286D1NSZ6NM99X2TEBQN55",
       "gate_type": "test-evidence",
       "description": [
-        "Show preflight-before-write, verified recovery, complete equivalence, atomic once-only activation, and rollback."
+        "Show preflight, verified recovery, V001-to-current evolution, complete equivalence, atomic activation, and rollback."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-21T11:50:18.9324758+00:00"
     },
     {
-      "id": "01KXT0W0YYDRTTZP50080BM89A",
+      "id": "01KY286D1NKVFSCWQFP3FNSEMR",
       "gate_type": "self-review",
       "description": [
-        "No in-place migration path or generic migration abstraction exists."
+        "No in-place path exists and every new durable model is included."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:08:23.3874370+00:00"
+      "created_at": "2026-07-21T11:50:18.9324758+00:00"
     }
   ],
   "verification_steps": [

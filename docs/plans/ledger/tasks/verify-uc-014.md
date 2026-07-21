@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-VERIFY-UC-014`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-05-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `160`
 - **Dialect:** `default`
 
 ## Summary
 
-Verification-only task with no Implements link: trace UC-LEDGER-014 through the Release published CLI.
+Verification-only task with no Implements link: trace statement-authoritative match-first reconciliation through the Release CLI.
 
 ## Objective
 
-Prove match-first statement reconciliation creates at most one canonical transaction effect and never guesses ambiguity.
+Prove exact confirmation, authoritative correction, statement-only creation, and ambiguity leave at most one active economic effect.
 
 ## References
 
@@ -36,14 +36,15 @@ Prove match-first statement reconciliation creates at most one canonical transac
 
 ### Acceptance Checks
 
-- A strong unique row confirms an existing transaction without creating another; an approved zero/guard-free row creates one statement-only fact with unknown attribution and unassigned pool; multiple candidates remain ambiguous without confirmation.
-- Replay, unsupported policy, missing basis, candidate conflict/inactivity, other-link conflict, statement-only failure, and changed idempotency outcome cover every UC-LEDGER-014 failure path.
-- Process output exposes policy/basis/state/history and durable inspection proves at most one canonical effect.
+- An exact row confirms the existing transaction without creation; one compatible event with differing facts creates one statement-derived replacement and supersedes the provisional fact with explicit category/pool/payment carry-forward.
+- Compatible active transfer/refund relationships are explicitly replaced and remain valid; incompatible replacement returns review-required and leaves the prior financial state unchanged.
+- Approved zero-candidate evidence creates one statement-only fact with unknown payment and unassigned pool; multiple/guard candidates remain ambiguous without link or financial effect.
+- Replay, unsupported policy, missing owner authority/basis, candidate conflict, stale authoritative facts, active confirmation conflict, write/crash failure, and changed idempotency request cover every failure path.
+- Process output and history expose prior/active IDs, authority basis, decision, link, carry-forward, relationship events, and exact before/after actuals; raw email/statement payloads never enter Tally.
 
 ### Failure Criteria
 
-- Do NOT bypass the public CLI or substitute an unvalidated test policy.
-- Do NOT accept a test that applies ambiguity or omits statement-only atomic initialization.
+- Do NOT bypass the published CLI, apply ambiguity, overwrite the agent-capture fact, create two active effects, or omit the relationship review block.
 
 ### Expected Outputs
 
@@ -81,16 +82,19 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Evidence proves one canonical effect across every statement disposition and replay. | `true` |
+| `test-evidence` | Prove one active effect and complete history across exact, corrected, statement-only, ambiguous, exception, crash, and replay paths. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3bo` | `verified` | 2026-07-21T08:01:56.6330678+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3bo` (verified)
 - `covers` -> UC-LEDGER-014: Reconcile statement evidence to a canonical transaction
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
 - `verifies` -> FR-LEDGER-STATEMENT-RECONCILIATION: Apply statement reconciliation outcomes

@@ -5,25 +5,28 @@
 - **Ref:** `TASK-LEDGER-ACTUALS-PROJECTION`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-03-RELATIONSHIPS-ACTUALS`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `50`
 - **Dialect:** `default`
 
 ## Summary
 
-Build one canonical active-state projection with deterministic ordering and exact named totals across every independent dimension.
+Project exact active membership and named totals across current hierarchy, pools, payment attribution, evidence, reconciliation, and financial relationships.
 
 ## Objective
 
-Return authoritative membership and Net Account Movement, External Spend, and Budget Actual matrices for all downstream modules.
+Return exact direct/subtree/pool actuals while counting one active economic effect and zero owned-transfer principal.
 
 ## References
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
+| DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
 | FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals | `requirement` | `implements` | `true` |
 | NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE: Respond at personal-ledger scale | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-ACTUALS-QUERY-CONTRACT: Verify query and reconcile ledger actuals contract | `test_case` | `verifies` | `true` |
@@ -41,20 +44,24 @@ Return authoritative membership and Net Account Movement, External Spend, and Bu
 | [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md) | `compile` | Actuals filters consume current instrument/cardholder attribution. |
 | [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md) | `compile` | Actuals totals consume current explicit pool assignments. |
 | [TASK-LEDGER-RECONCILIATION-COVERAGE](../tasks/reconciliation-coverage.md) | `compile` | Actuals filters consume current evidence/reconciliation coverage state. |
+| [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](../tasks/gate-evidence-cash-withdrawals.md) | `compile` | External Spend and Budget Actual require the resolved cash rule. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md) | `compile` | Actuals must count only the active statement-derived replacement after correction. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- Account/date/category/pool/instrument/cardholder/relationship/lifecycle/evidence/reconciliation filters combine with AND semantics; invalid combinations fail and empty matches return exact zero with explicit unknown/unassigned buckets.
-- Net Account Movement is signed selected sum; External Spend includes qualifying outflows and separate fees, subtracts active refunds, and excludes transfer principal/unrelated inflows.
-- Budget Actual uses current category and pool; refunds offset the original in the credit period; every all-up total equals pool, category, and pool-by-category cells including unassigned/uncategorized.
-- Payment/evidence/reconciliation filters change membership only; identical state/filter is deterministic; 100000 active transactions meet the under-2-second p95 profile.
+- Filters compose account/date, category with exact or subtree scope, pool including unassigned, instrument/cardholder including unknown, evidence, reconciliation, relationship, categorization, and lifecycle state; every supplied filter must match.
+- Net Account Movement sums signed active facts exactly; External Spend includes qualifying outflows and separate fees, excludes owned-transfer principal, and offsets linked refunds in their own Effective Date against the original current category and pool.
+- Category-direct, category-subtree, pool, and pool-by-category groups reconcile to all-up Budget Actual; current hierarchy moves change subtree membership without rewriting assignments and no transaction is double counted.
+- A statement-authoritative correction excludes the superseded agent-capture fact and includes the statement-derived replacement exactly once with explicit carried-forward or corrected dimensions.
+- Cash withdrawals follow OQ-LEDGER-16Resolution only; empty, uncategorized, unassigned, and unknown buckets are explicit and exact.
 
 ### Failure Criteria
 
-- Do NOT infer one financial dimension from another or silently omit unknown/unassigned membership.
-- Do NOT duplicate these formulas in BUDGET, INSIGHTS, INGEST, or Hermes.
+- Do NOT count owned-account transfer principal as spend, derive pool from category/account/cardholder, or silently select cash treatment — per C22 and OQ-LEDGER-16.
+- Do NOT aggregate through both direct and ancestor rows into all-up totals or count superseded statement-corrected facts.
+- Do NOT move budget-plan semantics into LEDGER; BUDGET owns exact-node/subtree plan overlap rules.
 
 ### Expected Outputs
 
@@ -106,27 +113,35 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Attach exact reconciliation for every named formula plus the personal-scale benchmark. | `true` |
-| `self-review` | BUDGET amounts/pacing and inferred classification are absent. | `true` |
+| `test-evidence` | Show exact all-up, direct, subtree, pool, matrix, refund, transfer, fee, hierarchy-move, statement-correction, and empty-bucket totals. | `true` |
+| `self-review` | Reconcile every group to explicit membership and confirm one active economic effect per event. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3hy` | `verified` | 2026-07-21T08:01:49.3912654+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3hy` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CATEGORY-ALLOCATIONS](../tasks/category-allocations.md): Budget Actual consumes active category allocation history.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-MONEY-DATES](../tasks/core-money-dates.md): Consumer requires Money from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](../tasks/gate-evidence-cash-withdrawals.md): External Spend and Budget Actual require the resolved cash rule.
 - `depends-on:compile` -> [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md): Actuals filters consume current instrument/cardholder attribution.
 - `depends-on:compile` -> [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md): Actuals totals consume current explicit pool assignments.
 - `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-COVERAGE](../tasks/reconciliation-coverage.md): Actuals filters consume current evidence/reconciliation coverage state.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md): Actuals must count only the active statement-derived replacement after correction.
 - `depends-on:compile` -> [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](../tasks/relationship-corrections.md): Actuals must use final active/retired relationship lifecycle semantics.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSACTION-CORRECTIONS](../tasks/transaction-corrections.md): Actuals must exclude final void/supersession state.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSFERS](../tasks/transfers.md): Consumer requires RelationshipStore from its producing task; direct compile edge enforces the declared interface contract.
+- `governed-by` -> DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment
+- `governed-by` -> DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions
 - `governed-by` -> DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
+- `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
 - `implements` -> FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals
 - `satisfies` -> NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE: Respond at personal-ledger scale
 - `verifies` -> TC-LEDGER-ACTUALS-QUERY-CONTRACT: Verify query and reconcile ledger actuals contract

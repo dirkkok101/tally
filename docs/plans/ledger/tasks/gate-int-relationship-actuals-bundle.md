@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-05-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `2`
 - **Dialect:** `default`
 
 ## Summary
 
-Convergence gate intentionally has no Implements link: compose transfer, refund, relationship-lifecycle, and exact multi-dimensional actuals modules without changing their contracts.
+Convergence gate with no Implements link: compose transfer, refund, relationship lifecycle, statement-corrected transactions, hierarchical actuals, and snapshots.
 
 ## Objective
 
-Produce one deterministic 8-operation relationship/actuals bundle whose results remain exact by pool and category after reconciliation, refunds, reversals, transfers, and corrections.
+Prove one eight-operation relationship/actuals bundle conserves exact spend across hierarchy, pools, corrections, and statements.
 
 ## References
 
@@ -35,15 +35,14 @@ No graph references recorded.
 
 ### Acceptance Checks
 
-- The bundle contains exactly 8 unique transfer, refund, relationship, and actuals descriptors defined by the consumed modules.
-- Descriptor order is operationId ordinal and every source descriptor field, dimensional filter, explicit unknown/unassigned bucket, and error is retained byte-for-byte after canonical serialization.
-- A missing module, duplicate operationId/path, incompatible contract range, or loss of pool/category/reconciliation schema fails before dispatch.
-- Focused real-store tests prove exact all-up, pool, category, and pool-by-category conservation through refund, transfer, relationship replacement, transaction correction, and reconciliation-state changes.
+- The bundle contains exactly eight unique transfer, refund, relationship, and actuals descriptors; schemas retain exact/subtree category scope, unknown/unassigned buckets, statement-correction state, and cash-policy result.
+- Descriptor order and every source field remain byte-for-byte stable after canonical serialization; missing module, duplicate path, incompatible version, lost hierarchy/reconciliation field, or unresolved cash gate fails before dispatch.
+- Real-store tests prove all-up, category-direct, category-subtree, pool, and matrix conservation through transfer, separate fee, refund, hierarchy move, relationship replacement, ordinary correction, and statement-authoritative replacement.
 
 ### Failure Criteria
 
-- Do NOT infer financial relationships, duplicate actuals formulas, use reflection discovery, or implement domain behavior in composition.
-- Do NOT accept a count-only assertion without exact set equality.
+- Do NOT duplicate financial formulas in composition, flatten category scope, count transfer principal, or count both superseded and replacement facts.
+- Do NOT accept count-only inventory or infer cash, pool, category, or payment state from another dimension.
 
 ### Expected Outputs
 
@@ -85,17 +84,20 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Show exact 8-ID set equality and each rejected composition state. | `true` |
-| `self-review` | No relationship rule, actuals formula, or descriptor copy is introduced. | `true` |
+| `test-evidence` | Show exact inventory and conservation through hierarchy, transfer/refund, relationship, ordinary correction, and statement correction. | `true` |
+| `self-review` | Every total derives from one composed ActualsCalculator path. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3sd` | `verified` | 2026-07-21T08:01:29.0786858+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3sd` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-ACTUALS-SNAPSHOT](../tasks/actuals-snapshot.md): Consumes ActualsOperationModule.
 - `depends-on:compile` -> [TASK-LEDGER-REFUNDS](../tasks/refunds.md): Consumes RefundOperationModule.
 - `depends-on:compile` -> [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](../tasks/relationship-corrections.md): Consumes RelationshipLifecycleOperationModule.

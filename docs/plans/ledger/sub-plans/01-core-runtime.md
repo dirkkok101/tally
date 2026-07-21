@@ -15,12 +15,13 @@ Create the process, exact primitives, SQLite generation, complete V001 fragments
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md) | Build the self-contained process and operation contract | `planned` | 0 |
-| [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | Implement the SQLite runtime and storage foundation | `planned` | 0 |
-| [TASK-LEDGER-CORE-SCHEMA-CATALOGUE](../tasks/core-schema-catalogue.md) | Implement the V001 financial-dimension catalogue schema fragment | `planned` | 0 |
-| [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](../tasks/core-schema-transactions.md) | Implement the V001 transaction schema fragment | `planned` | 0 |
-| [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](../tasks/core-schema-relationships-actuals.md) | Implement the V001 relationship and actuals schema fragment | `planned` | 0 |
-| [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](../tasks/core-schema-evidence-reconciliation.md) | Implement the V001 evidence and reconciliation schema fragment | `planned` | 0 |
-| [TASK-LEDGER-CORE-MONEY-DATES](../tasks/core-money-dates.md) | Implement exact money, identifiers, and dates | `planned` | 0 |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | Implement transactional mutation idempotency | `planned` | 0 |
-| [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md) | Prove the process-to-storage core seam | `planned` | 0 |
+| [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md) | Build the self-contained process and operation contract | `ready` | 0 |
+| [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | Implement the SQLite runtime and storage foundation | `ready` | 0 |
+| [TASK-LEDGER-CORE-SCHEMA-CATALOGUE](../tasks/core-schema-catalogue.md) | Implement the V001 financial-dimension catalogue schema fragment | `ready` | 0 |
+| [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](../tasks/core-schema-transactions.md) | Implement the V001 transaction schema fragment | `ready` | 0 |
+| [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](../tasks/core-schema-relationships-actuals.md) | Implement the V001 relationship and actuals schema fragment | `ready` | 0 |
+| [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](../tasks/core-schema-evidence-reconciliation.md) | Implement the V001 evidence and reconciliation schema fragment | `ready` | 0 |
+| [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](../tasks/core-schema-reconciliation-authority.md) | Add the V002 statement-authority schema upgrade | `ready` | 0 |
+| [TASK-LEDGER-CORE-MONEY-DATES](../tasks/core-money-dates.md) | Implement exact money, identifiers, and dates | `ready` | 0 |
+| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | Implement transactional mutation idempotency | `ready` | 0 |
+| [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md) | Prove the process-to-storage core seam | `ready` | 0 |

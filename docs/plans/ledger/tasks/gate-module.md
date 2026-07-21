@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-GATE-MODULE`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-05-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `200`
 - **Dialect:** `default`
 
 ## Summary
 
-Exactly-one module completion gate intentionally has no Implements link: converge every feature, security, use-case, build, graph, publish, provider-neutrality, and offline check.
+Exactly-one completion gate with no Implements link: converge every feature, security, use-case, build, graph, publish, hierarchy, reconciliation, and recovery check.
 
 ## Objective
 
-Prove LEDGER is release-buildable, fully tested, graph-conformant, Native-AOT publishable, recovery-complete, channel-neutral, and ready for work review.
+Prove LEDGER is buildable, graph-conformant, Native-AOT publishable, recovery-complete, channel-neutral, and ready for work review.
 
 ## References
 
@@ -51,16 +51,16 @@ No graph references recorded.
 
 ### Acceptance Checks
 
-- dotnet restore/build/format and the full xUnit suite exit 0 with zero warnings/failures; test output reports a nonzero count for every planned test class.
-- Release linux-x64 Native-AOT publish exits 0 and the binary completes the exact 72-operation offline contract inventory with no child process, listener, provider integration, or raw-payload schema.
-- Core/security/provider-neutral scripts exit 0; personal-scale p95 target passes; recovery drill reproduces every fact, history, dimension, evidence, reconciliation, relationship, replay outcome, count, and exact named/dimensional total.
-- lex coverage reports 25/25 active FRs covered with no gaps or orphan tests; lex check --fast reports 0 errors/warnings; plan coverage and audit remain gate-clean; all 18 use-case workflow verifiers pass.
-- git diff --check is empty and the verification report lists every command/result plus any intentionally non-code-covered file.
+- dotnet restore/build/format and full xUnit exit 0 with zero warnings/failures; every planned class has nonzero discovery.
+- Release linux-x64 Native-AOT publish exits 0 and reports the exact 73-operation offline inventory including category.reparent and statement correction with no child process, listener, provider integration, or raw-payload schema.
+- Core/security/provider-neutral scripts pass; personal-scale p95 passes; recovery reproduces category hierarchy/history, exact/corrected statement reconciliation, carry-forward/relationship chains, every replay outcome, count, and exact direct/subtree/pool total.
+- lex coverage reports 25/25 active FRs with no gaps; lex check --fast, plan coverage, audit, dependency cycles, and all 18 UC verifiers are clean.
+- git diff --check is empty and verification evidence lists every command/result and any changed file lacking direct test coverage.
 
 ### Failure Criteria
 
-- Do NOT accept zero-match filtered tests, Debug-only proof, skipped recovery/security/performance checks, or a manually edited coverage table.
-- Do NOT create beads, deploy, or write execution status into planning_state from this task.
+- Do NOT accept zero-match tests, Debug-only proof, skipped recovery/security/performance/hierarchy checks, manually edited coverage, unresolved cash/pool/match gates, or stale 72-operation expectations.
+- Do NOT create beads, deploy, or write execution status into planning_state.
 
 ### Expected Outputs
 
@@ -86,31 +86,34 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | 72-operation contract |
-| VerifiedLocalSecurityGate | `consumes` |  | local privacy and provider-neutrality |
-| VerifiedLedgerV1Module | `produces` |  | module completion evidence after all 18 dependency proofs |
+| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | 73-operation contract |
+| VerifiedLocalSecurityGate | `consumes` |  | Local privacy and provider neutrality |
+| VerifiedLedgerV1Module | `produces` |  | Completion evidence after all 18 workflows |
 
 ### Verification
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `bash scripts/verify-ledger-module.sh` | exit 0; restore/build/format/full tests/AOT publish/72-operation/core/security/provider-neutrality/performance/recovery/Lex/diff checks all succeed; every suite reports nonzero tests; 0 failures/warnings remain | `true` | 2400 |
+| `after` | `bash scripts/verify-ledger-module.sh` | exit 0; restore, build, format, full tests, AOT publish, 73-operation inventory, core/security/privacy/performance/recovery/Lex/diff checks succeed; every suite reports nonzero tests and 0 failures/warnings | `true` | 2700 |
 
 ### Review Gates
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Verification report contains command summaries and exact counts/timings for every gate, all 18 workflows, and all 25 requirements. | `true` |
-| `branch-review` | Fresh reviewer confirms graph, implementation, tests, complete-state recovery, and published provider-neutral behavior agree. | `true` |
+| `test-evidence` | Report exact counts/timings for all gates, 18 workflows, 25 requirements, hierarchy, and statement correction. | `true` |
+| `branch-review` | Fresh reviewer confirms graph, code, complete recovery, and published provider-neutral behavior agree. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3bx` | `verified` | 2026-07-21T08:01:59.0863266+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3bx` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Consumer requires CompletePublicContract from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-SECURITY](../tasks/gate-security.md): Module completion requires the consolidated security gate.
 - `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-001](../tasks/verify-uc-001.md): Requires UC proof.

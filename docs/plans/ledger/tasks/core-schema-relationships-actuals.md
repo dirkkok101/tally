@@ -5,7 +5,7 @@
 - **Ref:** `TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-01-CORE-RUNTIME`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `23`
 - **Dialect:** `default`
@@ -40,7 +40,7 @@ Create exact transfer/refund relationship, relationship-lifecycle, and expiry-bo
 
 - V001RelationshipActualsSchema creates every linked relationship, role, lifecycle, snapshot, item, canonical filter, version, expiry, exact named-total, dimension bucket, and ordering field with required foreign keys and checks.
 - Active relationship roles are unique per transaction, source and target differ, lifecycle replacement links are RESTRICT, and refund projections can follow the original current category and pool.
-- Snapshot items preserve exact pool/category cells plus explicit uncategorized, unassigned, unknown-attribution, and reconciliation-state membership while using snapshotId plus ordinal.
+- Snapshot items preserve exact pool/category cells plus explicit uncategorized, unassigned, unknown-attribution, and Reconciliation State membership while using snapshotId plus ordinal.
 - Query snapshots are explicitly ephemeral and excluded from Durable Ledger State; applying the fragment twice or injecting a statement failure leaves no partial tables/indexes.
 
 ### Failure Criteria
@@ -91,12 +91,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-193` | `verified` | 2026-07-21T08:01:40.1016332+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-193` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumes LedgerDb and LedgerSchemaFragmentRegistry.
 - `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history

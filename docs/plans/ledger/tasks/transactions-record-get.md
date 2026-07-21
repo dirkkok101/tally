@@ -5,7 +5,7 @@
 - **Ref:** `TASK-LEDGER-TRANSACTIONS-RECORD-GET`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-02-CATALOGUE-TRANSACTIONS`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `30`
 - **Dialect:** `default`
@@ -16,7 +16,7 @@ Deliver ledger.transaction.record/get over exact source facts, generic initial e
 
 ## Objective
 
-Atomically record at most one immutable Canonical Transaction and its privacy-safe initial EvidenceRecord while round-tripping every accepted fact and link exactly.
+Atomically record at most one immutable Canonical Transaction and its privacy-safe initial Evidence Record while round-tripping every accepted fact and link exactly.
 
 ## References
 
@@ -25,7 +25,7 @@ Atomically record at most one immutable Canonical Transaction and its privacy-sa
 | DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts | `data_model` | `touches` | `true` |
-| FR-LEDGER-TRANSACTION-RECORDING: Record canonical transactions | `requirement` | `implements` | `true` |
+| FR-LEDGER-TRANSACTION-RECORDING: Record Canonical Transactions | `requirement` | `implements` | `true` |
 | TC-LEDGER-TRANSACTION-RECORDING-CONTRACT: Verify record canonical transactions contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -41,16 +41,16 @@ Atomically record at most one immutable Canonical Transaction and its privacy-sa
 
 ### Acceptance Checks
 
-- Valid active asset or liability account, canonical nonzero owner-economic signedAmount, ZAR, required dates/description, closed generic evidence kind, opaque external reference, privacy-safe observation, actor, optional stable payment IDs, and key create one immutable TransactionDetail and one linked EvidenceRecord.
-- TransactionDate and distinct PostingDate round-trip independently; EffectiveDate is TransactionDate; missing payment identities remain explicitly unknown and pool remains explicitly unassigned.
+- Valid active asset or liability account, canonical nonzero owner-economic signedAmount, ZAR, required dates/description, closed generic Evidence Kind, Opaque External Reference, privacy-safe observation, actor, optional stable payment IDs, and key create one immutable TransactionDetail and one linked Evidence Record.
+- TransactionDate and distinct PostingDate round-trip independently; Effective Date is TransactionDate; missing payment identities remain explicitly unknown and pool remains explicitly unassigned.
 - Missing/zero/malformed/unsupported input, archived/missing account, incompatible attribution, or forbidden evidence field returns the documented stable error and creates no transaction, evidence link, assignment, or idempotency row.
-- Get returns unchanged facts plus safe evidence links, current reconciliation state, payment attribution, pool assignment, and requested history without mutating.
+- Get returns unchanged facts plus safe evidence links, current Reconciliation State, payment attribution, Pool Assignment, and requested history without mutating.
 - Identical request or logical evidence replay returns the existing transaction; conflicting key or evidence identity preserves the original; crash injection commits transaction, initial evidence, link, defaults, and replay outcome together or none.
 
 ### Failure Criteria
 
 - Do NOT update source facts, embed provider provenance, store raw evidence payloads, use a single sourceReference authority, use floating point, or silently normalize bank dates.
-- Do NOT infer payment instrument, cardholder, spend pool, category, or reconciliation confirmation.
+- Do NOT infer Payment Instrument, cardholder, Spend Pool, category, or reconciliation confirmation.
 - Do NOT accept credentials or expose unmasked account/payment identifiers in results or diagnostics.
 
 ### Expected Outputs
@@ -106,19 +106,22 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-84s` | `verified` | 2026-07-21T08:01:44.4046255+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-84s` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-ACCOUNTS](../tasks/accounts.md): Transactions require AccountStore and archived-account policy.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-MONEY-DATES](../tasks/core-money-dates.md): Consumer requires Money from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md): Atomic transaction capture consumes EvidenceStore.RegisterInitialAsync.
 - `governed-by` -> DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `implements` -> FR-LEDGER-TRANSACTION-RECORDING: Record canonical transactions
+- `implements` -> FR-LEDGER-TRANSACTION-RECORDING: Record Canonical Transactions
 - `touches` -> DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts
 - `verifies` -> TC-LEDGER-TRANSACTION-RECORDING-CONTRACT: Verify record canonical transactions contract
 

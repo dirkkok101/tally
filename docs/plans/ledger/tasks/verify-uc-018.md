@@ -5,7 +5,7 @@
 - **Ref:** `TASK-LEDGER-VERIFY-UC-018`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-05-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `195`
 - **Dialect:** `default`
@@ -16,7 +16,7 @@ Verification-only task with no Implements link: trace UC-LEDGER-018 through the 
 
 ## Objective
 
-Prove spend-pool lifecycle, assignment, unassigned behavior, and exact pool/category conservation across finance corrections.
+Prove Spend Pool lifecycle, assignment, unassigned behavior, and exact pool/category conservation across finance corrections.
 
 ## References
 
@@ -87,12 +87,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3ak` | `verified` | 2026-07-21T08:01:58.6383591+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3ak` (verified)
 - `covers` -> UC-LEDGER-018: Maintain spend pools and transaction pool assignment
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
 - `verifies` -> FR-LEDGER-POOL-ASSIGNMENT: Assign and correct transaction spend pools

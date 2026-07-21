@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-00-EVIDENCE-GATES`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `7`
 - **Dialect:** `default`
 
 ## Summary
 
-Validation-only task with no Implements link: resolve OQ-LEDGER-13 from private representative agent-capture and statement-row evidence before automatic reconciliation code.
+Validation-only task with no Implements link: resolve only the automatic matching/correction subset of OQ-LEDGER-13 from paired private agent-capture and statement-row evidence.
 
 ## Objective
 
-Produce the bounded versioned match and guard-candidate matrix that permits automatic outcomes without false matches or duplicate statement-only facts.
+Produce a bounded versioned automatic match matrix while keeping explicit owner-approved statement correction available independently.
 
 ## References
 
@@ -35,15 +35,15 @@ No task dependencies recorded.
 
 ### Acceptance Checks
 
-- A redacted matrix covers exact same-day matches, shifted dates, duplicate amounts, competing candidates, conflicting evidence, already-reconciled facts, and zero-candidate rows from every available account and institution without retaining raw rows or descriptions.
-- Each permitted automatic rule names exact account, currency, signed amount, date/tolerance, uniqueness, conflict guards, and stable reason output; every unproven case is explicitly review-required.
-- OQ-LEDGER-13 resolves only when the matrix proves a bounded ReconciliationPolicyV1; otherwise the report records the contradiction, the question remains open, this task remains incomplete, and downstream reconciliation tasks stay blocked.
+- A redacted paired-evidence matrix covers exact facts, differing authoritative statement facts, shifted dates, duplicate amounts, competing candidates, conflicts, reconciled facts, and zero-candidate rows without retaining raw rows or descriptions.
+- Each permitted automatic rule names exact account, currency, signed amount, date/tolerance, uniqueness, conflict guards, authority basis, and stable reason; every unproven case is review-required.
+- OQ-LEDGER-13 resolves only when the matrix proves bounded ReconciliationPolicyV1 matching and any automatic correction subset; otherwise this task remains incomplete while explicit owner-approved correction remains a separately valid runtime path.
 
 ### Failure Criteria
 
-- Do NOT invent a date or amount tolerance, runtime configuration, fuzzy description score, or provider-specific field — per DD-LEDGER-RECONCILIATION-CONTRACT and DD-LEDGER-FINANCIAL-REPRESENTATION.
-- Do NOT store raw statement rows, notification text, full identifiers, mailbox/MIME content, credentials, or owner-sensitive descriptions in the repository.
-- Do NOT resolve OQ-LEDGER-13 when any allowed automatic case has multiple compatible or guard candidates; return to lex:design if the bounded policy cannot be proven.
+- Do NOT invent tolerance, fuzzy description scoring, provider fields, or hidden tie-breaking — per DD-LEDGER-RECONCILIATION-CONTRACT.
+- Do NOT treat agent capture as co-equal authority or retain raw statement/email/MIME content; statement evidence is authoritative only through typed decisions.
+- Do NOT enable an automatic case with multiple compatible or guard candidates; unresolved automatic cases remain review-required.
 
 ### Expected Outputs
 
@@ -83,17 +83,20 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `human-review` | Owner confirms the redacted matrix represents the private capture and statement cases. | `true` |
-| `self-review` | Repository diff contains no raw finance or transport payload and every excluded case fails closed. | `true` |
+| `human-review` | Owner confirms the redacted matrix represents paired capture and statement cases. | `true` |
+| `self-review` | Every automatic case is bounded, statement-authoritative, provider-neutral, and fail-closed. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-339` | `verified` | 2026-07-21T08:01:31.9764449+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-339` (verified)
 - `governed-by` -> DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates
 - `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
 - `references` -> OQ-LEDGER-13: Which provider-neutral compatibility fields, tolerances, and conflict rules are sufficient for an automatic deterministic match between agent-capture and statement-row evidence?

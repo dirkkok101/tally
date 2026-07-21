@@ -6,10 +6,10 @@
   "slug": "ACTUALS-SNAPSHOT",
   "title": "Implement atomic snapshot actuals pagination",
   "description": [
-    "Expose ledger.actuals.query with one BEGIN IMMEDIATE first-page snapshot transaction over exact multi-dimensional current state and read-only cursor pages."
+    "Freeze active facts, current category hierarchy, dimensions, evidence, reconciliation, relationships, membership, and exact totals for deterministic pagination."
   ],
   "objective": [
-    "Return stable cross-process pages, exact full-set totals, and pool/category matrices despite later writes, without exposing a cursor before snapshot commit."
+    "Keep later pages bound to one category-hierarchy and ledger-generation view despite concurrent writes or reparenting."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -142,54 +142,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY1NYMKT2PWCR7KM7EX01SSZ",
+      "id": "01KY27SAYKT1F4QVXD4240H2D0",
       "kind": "acceptance_check",
       "text": [
-        "First-page request accepts canonical filters plus pageSize, acquires the writer lock, and in one BEGIN IMMEDIATE reads active facts, dimensions, evidence/reconciliation and relationships; computes items/totals/cells; inserts snapshot/items; commits; then emits page/cursor/expiry."
+        "First page materializes the complete ordered item set, exact full-set totals/groups, generation fingerprint, categoryHierarchyFingerprint, and each item's direct category plus frozen ancestry IDs under one BEGIN IMMEDIATE transaction."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T06:31:30.1696344+00:00"
+      "created_at": "2026-07-21T11:43:10.8028494+00:00"
     },
     {
-      "id": "01KY1NYMKTE32WXMAYBYAK3M6C",
+      "id": "01KY27SAYMXSKTDYAQKC4VHDYV",
       "kind": "acceptance_check",
       "text": [
-        "Busy before acquisition returns LEDGER-SNAPSHOT-BUSY; cancellation/crash/write failure before commit returns no cursor and leaves no partial usable snapshot."
+        "Later pages read only the stored snapshot; transaction writes, assignment corrections, statement corrections, or category reparenting cannot change membership, ancestry, ordering, or totals."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T06:31:30.1696344+00:00"
+      "created_at": "2026-07-21T11:43:10.8028494+00:00"
     },
     {
-      "id": "01KY1NYMKTTMPKDTXXP9QXD8F9",
+      "id": "01KY27SAYM6DZW0R492ARX7D9N",
       "kind": "acceptance_check",
       "text": [
-        "Later cursor-only requests read fixed ordinal projections, named totals, and dimensional cells despite unrelated writes or corrections after first page."
+        "Expired, missing, filter-mismatched, contract-mismatched, generation-mismatched, or hierarchy-mismatched cursors fail explicitly without switching to live state."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T06:31:30.1696344+00:00"
+      "created_at": "2026-07-21T11:43:10.8028494+00:00"
     },
     {
-      "id": "01KY1NYMKT1SA2EPE08V71TFCJ",
+      "id": "01KY27SAYM80E5XCKX5X2MFH3T",
       "kind": "acceptance_check",
       "text": [
-        "Changed filters, malformed/expired/incompatible/stale-generation cursor returns its documented stable error and no partial page."
+        "Snapshot cleanup is opportunistic and ephemeral; backup and Durable Ledger State exclude snapshots."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T06:31:30.1696344+00:00"
-    },
-    {
-      "id": "01KY1NYMKVRAY2R3CPYCPKJQZP",
-      "kind": "acceptance_check",
-      "text": [
-        "All pages contain each selected transaction exactly once in Effective Date/ULID order; snapshots retain explicit unknown/unassigned buckets, are opportunistically cleaned, and are excluded from backup."
-      ],
-      "required": 1,
-      "sort_order": 4,
-      "created_at": "2026-07-21T06:31:30.1696344+00:00"
+      "created_at": "2026-07-21T11:43:10.8028494+00:00"
     },
     {
       "id": "01KXT0SMEAH8Y3D95Q7G1ARMAJ",
@@ -222,27 +212,38 @@
       "created_at": "2026-07-18T07:07:05.0252128+00:00"
     },
     {
-      "id": "01KXT0SMEA2MT8NBM381MVKGAP",
+      "id": "01KY27SAYM217Z78PC01FHC5KD",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT use offset pagination, sort-key-only cursors, daemon-held transactions, read-then-write snapshot phases, or emit a cursor before COMMIT — rejected per DD-LEDGER-SNAPSHOT-ACTUALS."
+        "Do NOT recompute ancestry or totals on later pages, hold a transaction across invocations, or silently restart against current hierarchy — per DD-LEDGER-SNAPSHOT-ACTUALS."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-21T11:43:10.8028494+00:00"
     },
     {
-      "id": "01KXT0SMEAZX0J0H3KA5QJE79N",
+      "id": "01KY27SAYMKTAV6T7BBN62R7EH",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT require an idempotency key for the ephemeral first-page cache write or include snapshots in Durable Ledger State."
+        "Do NOT include snapshots in backup, restore, or migration durable-state counts."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-21T11:43:10.8028494+00:00"
     }
   ],
   "references": [
+    {
+      "id": "01KY27T6MMMZXF72Y19BTFWMPM",
+      "target_ref_code": "DD-LEDGER-CATEGORY-HIERARCHY",
+      "target_entity_type": "design_decision",
+      "target_entity_id": "01KY25R1J105M3BFF06SC5B9EA",
+      "target_title": "Acyclic category hierarchy with single-node transaction assignment",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-21T11:43:39.1574485+00:00"
+    },
     {
       "id": "01KXT0SMEBK5R8FRWT17PM2E9Z",
       "target_ref_code": "DIAG-LEDGER-ACTUALS-SNAPSHOT-SEQUENCE",
@@ -313,24 +314,24 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT0SMEA8FN2CWG801F0HVVR",
+      "id": "01KY27SAYMNCF0W28A16TXV1CD",
       "gate_type": "test-evidence",
       "description": [
-        "Show busy/no-cursor, rollback/no-partial, intervening-write stability, and invalid cursor evidence."
+        "Show frozen ancestry and totals across writes, reparenting, correction, expiry, cleanup, and cursor mismatch."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-21T11:43:10.8028494+00:00"
     },
     {
-      "id": "01KXT0SMEAJSWMZXCP7VH6CYDS",
+      "id": "01KY27SAYM964XYTXMNH6P2RF9",
       "gate_type": "self-review",
       "description": [
-        "Trace one first page to confirm read, calculation, insert, and commit share one BEGIN IMMEDIATE transaction."
+        "Confirm snapshots are immutable, bounded, provider-neutral, and excluded from Durable Ledger State."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-21T11:43:10.8028494+00:00"
     }
   ],
   "verification_steps": [

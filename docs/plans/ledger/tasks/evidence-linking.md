@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-EVIDENCE-LINKING`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-02-CATALOGUE-TRANSACTIONS`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `50`
 - **Dialect:** `default`
 
 ## Summary
 
-Deliver the explicit non-confirming link operation after canonical transaction and evidence registry behavior exist.
+Deliver the explicit non-confirming link operation after Canonical Transaction and evidence registry behavior exist.
 
 ## Objective
 
-Append or replay a supporting evidence link to an active transaction without changing reconciliation state or creating a duplicate fact.
+Append or replay a supporting evidence link to an active transaction without changing Reconciliation State or creating a duplicate fact.
 
 ## References
 
@@ -46,7 +46,7 @@ Append or replay a supporting evidence link to an active transaction without cha
 
 ### Failure Criteria
 
-- Do NOT use a supporting link as a reconciliation decision or allow one evidence item to be silently moved — rejected per DD-LEDGER-RECONCILIATION-CONTRACT.
+- Do NOT use a supporting link as a Reconciliation Decision or allow one evidence item to be silently moved — rejected per DD-LEDGER-RECONCILIATION-CONTRACT.
 - Do NOT overwrite evidence/link history — rejected per DD-LEDGER-IMMUTABLE-HISTORY.
 - Do NOT access provider payloads or private INGEST state.
 
@@ -94,12 +94,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-fan` | `verified` | 2026-07-21T08:01:49.8511384+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-fan` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Linking is an idempotent public mutation.
 - `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md): Linking consumes EvidenceStore and registered evidence identity.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Linking validates canonical transaction state through TransactionStore.

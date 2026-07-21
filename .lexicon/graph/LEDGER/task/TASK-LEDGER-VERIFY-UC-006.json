@@ -49,36 +49,36 @@
   ],
   "interfaces": [
     {
-      "id": "01KY0EAZDY59PXCPS4W8BJA0BZ",
+      "id": "01KY28ACTDYA20SPZ5N3R41AAY",
       "name": "PublishedTallyFixture",
       "direction": "consumes",
       "notes": [
         "Release published-process E2E fixture"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-20T18:59:11.4215965+00:00"
+      "created_at": "2026-07-21T11:52:29.7719007+00:00"
     },
     {
-      "id": "01KY0EAZDY1TTDESNPRC7H1PR9",
+      "id": "01KY28ACTD49CWDB4MGHP2J50C",
       "name": "CompletePublicContract",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "Exactly 72 provider-neutral operations"
+        "Exactly 73 provider-neutral operations"
       ],
       "sort_order": 1,
-      "created_at": "2026-07-20T18:59:11.4215965+00:00"
+      "created_at": "2026-07-21T11:52:29.7719007+00:00"
     },
     {
-      "id": "01KY0EAZDZT57G4C1VCAA57H7M",
+      "id": "01KY28ACTDM6Q5WHXQDQDCKKR7",
       "name": "VerifiedUC006",
       "direction": "produces",
       "contract_ref_code": "UC-LEDGER-006",
       "notes": [
-        "external-orchestrator contract workflow"
+        "External-orchestrator contract workflow"
       ],
       "sort_order": 2,
-      "created_at": "2026-07-20T18:59:11.4215965+00:00"
+      "created_at": "2026-07-21T11:52:29.7719007+00:00"
     }
   ],
   "links": [
@@ -92,44 +92,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0EAZDXZ71AC88TS3CJ0VD5",
+      "id": "01KY28ACTCQ6MG75Z0ZMZ2E5R7",
       "kind": "acceptance_check",
       "text": [
-        "The Release binary discovers version, help, compatibility, and exactly 72 provider-neutral operation schemas deterministically without store access or installed guidance."
+        "The Release binary discovers version, help, compatibility, and exactly 73 provider-neutral operation schemas deterministically without store access or installed guidance."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:59:11.4215965+00:00"
+      "created_at": "2026-07-21T11:52:29.7719007+00:00"
     },
     {
-      "id": "01KY0EAZDYVXVS6WE4JJ4JKPF9",
+      "id": "01KY28ACTD131JQR9HZVR2QJFD",
       "kind": "acceptance_check",
       "text": [
         "Valid structured input produces one stdout result and documented exit; domain/review/incompatibility errors are structured and safe; lost output is recovered by identical retry while changed replay conflicts."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:59:11.4215965+00:00"
+      "created_at": "2026-07-21T11:52:29.7719007+00:00"
     },
     {
-      "id": "01KY0EAZDY9Z3BZ4WEBDBE9EX2",
+      "id": "01KY28ACTD24A9Y034RERKTD55",
       "kind": "acceptance_check",
       "text": [
-        "Mailbox, MIME, message, recipient, schedule, delivery, acknowledgement, WhatsApp, AgentMail, raw evidence, and private database fields are absent from schemas and rejected before mutation."
+        "Mailbox, MIME, message, recipient, schedule, delivery, acknowledgement, WhatsApp, AgentMail, raw email/statement payload, and private database fields are absent and rejected before mutation."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:59:11.4215965+00:00"
+      "created_at": "2026-07-21T11:52:29.7719007+00:00"
     },
     {
-      "id": "01KY0EAZDYK4QPGB6CCDFA8CB4",
+      "id": "01KY28ACTD73YGHW0ST3ZAFQX5",
       "kind": "acceptance_check",
       "text": [
-        "Optional guidance matches the registry but removing it leaves every public workflow discoverable and invocable."
+        "Optional guidance matches the registry but removing it leaves category.reparent, statement correction, and every other public workflow discoverable and invocable."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T18:59:11.4215965+00:00"
+      "created_at": "2026-07-21T11:52:29.7719007+00:00"
     },
     {
       "id": "01KXT0ZW3KH2QFTPSY16C5RHSS",
@@ -296,14 +296,14 @@
   ],
   "verification_steps": [
     {
-      "id": "01KY0EK85DV380CWB48YCFEGGP",
+      "id": "01KY28ACTD5BH52A6DX3CPZ9ED",
       "phase": "after",
       "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~UC006ExternalOrchestratorContractWorkflowTests --no-restore",
-      "expected_result": "exit 0; at least 16 discovery, schema-only invocation, structured outcome, replay, provider-rejection, and optional-guidance cases run; exactly 72 operations discovered; 0 fail",
+      "expected_result": "exit 0; at least 18 discovery, schema-only invocation, structured outcome, replay, hierarchy, statement-correction, provider-rejection, and optional-guidance cases run; exactly 73 operations are discovered; 0 fail",
       "required": 1,
-      "timeout_seconds": 720,
+      "timeout_seconds": 900,
       "sort_order": 0,
-      "created_at": "2026-07-20T19:03:42.5078713+00:00"
+      "created_at": "2026-07-21T11:52:29.7719007+00:00"
     }
   ]
 }

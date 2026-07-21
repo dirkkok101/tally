@@ -6,10 +6,10 @@
   "slug": "VERIFY-UC-007",
   "title": "BackupRecoveryWorkflow",
   "description": [
-    "Verification-only task with no Implements link: trace revised UC-LEDGER-007 through Release backup and restore operations."
+    "Verification-only task with no Implements link: trace complete hierarchy- and statement-aware backup/restore through the Release CLI."
   ],
   "objective": [
-    "Prove backup verification and owner-authorized restore preserve every durable provider-neutral state type, replay outcome, rule, count, and exact total."
+    "Prove recovery reproduces every current and historical financial meaning before activation."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -92,34 +92,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0EB011R93D3GVJ7DXMPEKB",
+      "id": "01KY28D617YKP3YTX3SKAW4S5S",
       "kind": "acceptance_check",
       "text": [
-        "Backup create publishes one 0600 artifact only after independent verification of facts/histories, dimensions, evidence/reconciliation, relationships, request/logical replay outcomes, per-type counts, privacy rules, and exact named/dimensional totals."
+        "Create/verify/prepare/activate through the published CLI reproduces facts, category hierarchy/parent history, dimensions, evidence, exact and corrected statement decisions, carry-forward, relationship replacement, coverage, idempotency, and exact direct/subtree/pool totals."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:59:12.0334092+00:00"
+      "created_at": "2026-07-21T11:54:01.1272476+00:00"
     },
     {
-      "id": "01KY0EB012RGH68RFFNBF7PYP4",
+      "id": "01KY28D618RNZRQVGKFA4X6M4B",
       "kind": "acceptance_check",
       "text": [
-        "Restore prepare uses a separate private generation and reproduces the normalized complete-state report; incompatible, corrupt, incomplete, privacy-invalid, or permission-invalid artifacts never affect CURRENT."
+        "Checksum, permission, schema, cyclic hierarchy, incomplete correction, invalid relationship, count, exact-total, stale activation, and injected crash failures leave the prior generation current."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:59:12.0334092+00:00"
+      "created_at": "2026-07-21T11:54:01.1272476+00:00"
     },
     {
-      "id": "01KY0EB012HNY90FFF0V3CF4K4",
+      "id": "01KY28D618BSCTAKQJ4BGY4DNQ",
       "kind": "acceptance_check",
       "text": [
-        "Activation requires explicit authorization and expected current fingerprint, revalidates under lock, switches atomically, retains the previous generation, and remains replay-safe across crash boundaries."
+        "QuerySnapshot is excluded and diagnostics contain no raw email/statement/provider payload or full identifiers."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:59:12.0334092+00:00"
+      "created_at": "2026-07-21T11:54:01.1272476+00:00"
     },
     {
       "id": "01KXT126TAXDFFWPD66DR4S464",
@@ -142,24 +142,14 @@
       "created_at": "2026-07-18T07:11:45.9941647+00:00"
     },
     {
-      "id": "01KY0EB012D96SCKRM30JZ6SPY",
+      "id": "01KY28D618NFVFMRPC3EZ2K2R4",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT omit any durable evidence, reconciliation, payment, pool, or logical-effect class from source/candidate comparison."
+        "Do NOT accept file-copy-only, PRAGMA-only, count-only, or current-state-only recovery proof."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:59:12.0334092+00:00"
-    },
-    {
-      "id": "01KY0EB012AJEMZKDSWT5JVCJS",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT expose a candidate as current before complete revalidation and authorization."
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-20T18:59:12.0334092+00:00"
+      "created_at": "2026-07-21T11:54:01.1272476+00:00"
     },
     {
       "id": "01KXT126TANQHVFC7ZPNXFB7FM",
@@ -263,24 +253,14 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT126TB22X4JCQFE9NNG7YT",
+      "id": "01KY28D618EQGNH8N153T9SV6Y",
       "gate_type": "test-evidence",
       "description": [
-        "Evidence maps UC-LEDGER-007 main scenario and each numbered failure path to stdout/error/exit/state assertions."
+        "Map UC-LEDGER-007 to manifest, normalized-state equality, failure isolation, activation, and privacy assertions."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
-    },
-    {
-      "id": "01KXT126TBRAPY8QA9VZ8GE7SS",
-      "gate_type": "self-review",
-      "description": [
-        "No scenario calls handlers or SQLite directly."
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-21T11:54:01.1272476+00:00"
     }
   ],
   "verification_steps": [

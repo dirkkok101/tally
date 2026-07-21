@@ -5,7 +5,7 @@
 - **Ref:** `TASK-LEDGER-VERIFY-UC-011`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-05-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `130`
 - **Dialect:** `default`
@@ -91,12 +91,15 @@ Prove UC-LEDGER-011 through observable process results and durable-state invaria
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2rp` | `verified` | 2026-07-21T08:01:55.2662655+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2rp` (verified)
 - `covers` -> UC-LEDGER-011: Revoke or replace a transfer or refund relationship
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
 - `touches` -> DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts

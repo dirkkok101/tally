@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-VERIFY-UC-009`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-05-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `110`
 - **Dialect:** `default`
 
 ## Summary
 
-Verification-only task with no Implements link: trace revised UC-LEDGER-009 through Release void/supersede operations.
+Verification-only task with no Implements link: trace ordinary void/supersede separately from statement-authoritative correction.
 
 ## Objective
 
-Prove transaction correction preserves immutable facts, evidence and reconciliation history, retires financial relationships atomically, and never moves dimensions or confirmations silently.
+Prove ordinary correction retains history and never silently transfers evidence, decisions, dimensions, or relationships.
 
 ## References
 
@@ -39,14 +39,13 @@ Prove transaction correction preserves immutable facts, evidence and reconciliat
 
 ### Acceptance Checks
 
-- Void retains evidence/decision history, retires active transfer/refund links, excludes the fact from active actuals, and exposes any affected confirmation as an explicit current exception or unresolved state.
-- Supersede creates an independent replacement with only explicit new evidence/attribution and no silently copied relationship, confirmation, category, pool, instrument, or cardholder state.
-- Missing reason/key, incompatible lifecycle, invalid replacement, relationship/reconciliation coherence failure, changed replay, and injected crash cover every failure path with all-or-none state.
+- Published ordinary void/supersede preserves original facts and evidence/decision/dimension history, retires incompatible relationships atomically, and counts only explicitly established replacement state.
+- No-copy, invalid replacement, relationship retirement failure, stale/incompatible correction, history-inclusive detail, and replay cover every UC-LEDGER-009 failure path.
+- A separate statement-correction fixture proves carry-forward occurs only through ledger.reconciliation.apply with decision-linked events, never through ordinary transaction.supersede.
 
 ### Failure Criteria
 
-- Do NOT delete historical evidence/decisions or silently reconfirm the replacement.
-- Do NOT verify only active actuals; inspect retained old state and explicit current exception.
+- Do NOT conflate ordinary supersession with statement authority or accept a replacement that inherits financial meaning silently.
 
 ### Expected Outputs
 
@@ -85,17 +84,19 @@ Prove transaction correction preserves immutable facts, evidence and reconciliat
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Evidence maps UC-LEDGER-009 main scenario and each numbered failure path to stdout/error/exit/state assertions. | `true` |
-| `self-review` | No scenario calls handlers or SQLite directly. | `true` |
+| `test-evidence` | Show ordinary no-copy, explicit statement-only carry-forward boundary, rollback, history, actuals, and replay. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1ps` | `verified` | 2026-07-21T08:01:54.2719649+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1ps` (verified)
 - `covers` -> UC-LEDGER-009: Void or supersede an erroneous transaction
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
 - `touches` -> DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts

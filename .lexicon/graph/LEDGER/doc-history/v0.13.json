@@ -1,0 +1,9 @@
+{
+  "id": "01KY28S1Z6JYSEPKSZET0ZMY97",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.13",
+  "changes": [
+    "Correct v0.12 dependency-edge count after final interface audit: active PLAN-LEDGER-V1 contains 66 ready tasks across 7 sub-plans and 195 dependency edges. The two added edges connect V002 to LedgerSchemaFragmentRegistry and the statement-correction composite to LedgerMutationExecutor; no scope or behavior changed."
+  ],
+  "created_at": "2026-07-21T12:00:30.1829512+00:00"
+}

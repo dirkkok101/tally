@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-RECONCILIATION-COVERAGE`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-03-RECONCILIATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `40`
 - **Dialect:** `default`
 
 ## Summary
 
-Deliver idempotent completed statement scopes, exact outcome accounting, prior-record absence classification, and historical exception correction.
+Deliver idempotent completed statement scopes, exact confirmed-existing/corrected/statement-only/absence/ambiguity/exception accounting, and historical correction.
 
 ## Objective
 
-Return a reconciliation batch summary in which every accepted row and every eligible prior transaction has exactly one explicit outcome.
+Return a batch summary in which every accepted row and eligible prior transaction has exactly one explicit current outcome.
 
 ## References
 
@@ -36,21 +36,21 @@ Return a reconciliation batch summary in which every accepted row and every elig
 | [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md) | `compile` | Coverage derives current and historical outcome classes through ReconciliationStateReducer. |
 | [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Coverage completion is an idempotent durable mutation. |
 | [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md) | `compile` | Coverage consumes TransactionStore to establish exact active transaction membership. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md) | `compile` | Coverage must classify corrected_from_statement outcomes and prior/active identities. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- coverage.complete requires an approved complete account/date scope, manifest opaque reference, expected evidence set, policy/version, and idempotency identity; incomplete or invalid scope cannot classify absence.
-- Completion transactionally proves every accepted statement row has one durable outcome and every eligible prior transaction is reconciled or classified recorded_absent_from_statement, ambiguous, or explicit exception exactly once.
-- Result counts equal returned membership by class and include stable identifiers/reasons; identical replay returns the original summary while changed scope/evidence conflicts.
-- Later decisions retain the completed historical exception and expose the new current outcome through coverage.get without rewriting the scope.
+- coverage.complete requires an approved complete account/date scope, opaque manifest reference, expected statement evidence set, policy/version, and Idempotency Identity; incomplete scope cannot classify absence.
+- Completion proves every statement row is confirmed_existing, corrected_from_statement, statement_only, ambiguous, or exception and every eligible prior transaction is reconciled or recorded_absent_from_statement exactly once.
+- Counts equal returned membership by class, include prior and active transaction IDs plus stable reasons, and replay identically; changed scope/evidence conflicts.
+- Later owner decisions or statement corrections retain the completed historical entry and coverage.get derives the new current outcome without rewriting scope history.
 
 ### Failure Criteria
 
-- Do NOT let Ledger own INGEST manifests, approvals, receipts, or batch retries; accept only opaque references and typed scope facts per DD-LEDGER-RECONCILIATION-CONTRACT.
-- Do NOT infer absence from an incomplete statement or silently exclude transactions outside an explicit scope rule.
-- Do NOT overwrite prior coverage or exception history.
+- Do NOT own INGEST manifests, approvals, receipts, raw statement content, or batch retries; accept opaque references and typed scope facts only.
+- Do NOT infer absence from incomplete scope, count superseded and replacement facts together, or overwrite prior coverage/exception history.
 
 ### Expected Outputs
 
@@ -95,18 +95,23 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Evidence proves exact one-class membership and no false absence from incomplete scopes. | `true` |
+| `test-evidence` | Prove exact one-class membership, corrected-state identity, replay, and no false absence from incomplete scopes. | `true` |
+| `self-review` | All scope and correction history remains append-only and provider-neutral. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2ae` | `verified` | 2026-07-21T08:01:46.8638487+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2ae` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Coverage completion is an idempotent durable mutation.
 - `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md): Coverage derives current and historical outcome classes through ReconciliationStateReducer.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md): Coverage must classify corrected_from_statement outcomes and prior/active identities.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Coverage consumes TransactionStore to establish exact active transaction membership.
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract

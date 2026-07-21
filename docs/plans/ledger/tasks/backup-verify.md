@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-BACKUP-VERIFY`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-04-RECOVERY-SKILLS`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `10`
 - **Dialect:** `default`
 
 ## Summary
 
-Implement versioned backup operations on the complete DurableLedgerVerifier; publication remains impossible until every provider-neutral durable-state type and exact derived result verifies.
+Implement versioned backup operations on DurableLedgerVerifier; publication requires complete hierarchy and statement-authority verification.
 
 ## Objective
 
-Publish exactly one owner-only versioned backup artifact after checksum, compatibility, complete-state, privacy, replay, count, relationship/reconciliation, and exact-total verification succeeds.
+Publish one owner-only backup only after complete-state, privacy, replay, relationship, hierarchy, reconciliation, and exact-total verification.
 
 ## References
 
@@ -41,16 +41,15 @@ Publish exactly one owner-only versioned backup artifact after checksum, compati
 
 ### Acceptance Checks
 
-- backup.create under the writer lock uses SQLite online backup to private staging, invokes DurableLedgerVerifier, writes its normalized fingerprint/counts/totals/schema/storage/reconciliation-policy manifest, flushes, and atomically publishes a non-existing 0600 target without changing live state.
-- backup.verify independently checks artifact checksum and compatibility, then returns the same complete normalized report produced by DurableLedgerVerifier.
-- A corrupt, incomplete, unsupported, privacy-invalid, inaccessible, unsafe, or existing artifact path returns the stable error and mutates neither artifact nor live store.
-- Diagnostics expose no descriptions, raw evidence, credentials, or full identifiers; owner-only permissions and host-protection posture are preserved.
-- Identical create replay reconciles the published manifest and returns the original artifact result; changed request conflicts.
+- backup.create under the writer lock uses SQLite online backup to private staging, invokes DurableLedgerVerifier, writes its normalized fingerprint/counts/direct-subtree-pool totals/schema/storage/reconciliation-policy manifest, flushes, and atomically publishes one 0600 artifact.
+- backup.verify independently checks artifact checksum and compatibility, then returns the same complete report including category ancestry and statement-replacement chains.
+- Corrupt, cyclic, incomplete-correction, invalid-relationship, unsupported, privacy-invalid, inaccessible, unsafe, or existing target fails and mutates neither artifact nor live store.
+- Diagnostics expose no descriptions, raw evidence, email/statement payloads, credentials, or full identifiers; identical replay reconciles the artifact manifest while changed requests conflict.
 
 ### Failure Criteria
 
-- Do NOT copy a live WAL database file directly, overwrite an existing target, include QuerySnapshot rows, weaken permissions, or rely on database-only idempotency.
-- Do NOT publish before the shared verifier returns its complete successful report.
+- Do NOT copy a live WAL file, overwrite a target, include QuerySnapshot, weaken permissions, rely only on database idempotency, or publish before complete verification.
+- Do NOT omit V002 authority metadata, hierarchy ancestry, carry-forward, or relationship replacement from the manifest fingerprint.
 
 ### Expected Outputs
 
@@ -95,17 +94,20 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Show verified manifest publication, corruption rejection, owner-only permissions, and artifact replay. | `true` |
-| `self-review` | Snapshots are excluded by the shared verifier and no raw payload enters diagnostics. | `true` |
+| `test-evidence` | Show verified publication, hierarchy/correction corruption rejection, owner-only permissions, and artifact replay. | `true` |
+| `self-review` | Snapshots and raw payloads are absent and all current durable types are fingerprinted. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3j9` | `verified` | 2026-07-21T08:01:33.4348091+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3j9` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumes ArtifactReconciler.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumes IHostArtifactProtection.
 - `depends-on:compile` -> [TASK-LEDGER-DURABLE-STATE-VERIFIER](../tasks/durable-state-verifier.md): Consumes DurableLedgerVerifier.

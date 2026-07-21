@@ -6,10 +6,10 @@
   "slug": "ACTUALS-PROJECTION",
   "title": "Implement exact actuals projection and totals",
   "description": [
-    "Build one canonical active-state projection with deterministic ordering and exact named totals across every independent dimension."
+    "Project exact active membership and named totals across current hierarchy, pools, payment attribution, evidence, reconciliation, and financial relationships."
   ],
   "objective": [
-    "Return membership and Net Account Movement, External Spend, and Budget Actual matrices for downstream modules."
+    "Return exact direct/subtree/pool actuals while counting one active economic effect and zero owned-transfer principal."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -58,6 +58,16 @@
       "created_at": "2026-07-18T07:16:17.9691615+00:00"
     },
     {
+      "id": "01KY27TFAHTTHZ5T2S9W8B3RT0",
+      "target": "TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS",
+      "dependency_type": "compile",
+      "reason": [
+        "External Spend and Budget Actual require the resolved cash rule."
+      ],
+      "sort_order": 8,
+      "created_at": "2026-07-21T11:43:48.0502378+00:00"
+    },
+    {
       "id": "01KY0ECPGA549PNVMQ5Z7DBF1B",
       "target": "TASK-LEDGER-PAYMENT-ATTRIBUTION",
       "dependency_type": "compile",
@@ -86,6 +96,16 @@
       ],
       "sort_order": 7,
       "created_at": "2026-07-20T19:00:10.0267965+00:00"
+    },
+    {
+      "id": "01KY28E5SM3R71WPYSV8JZTRGS",
+      "target": "TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION",
+      "dependency_type": "compile",
+      "reason": [
+        "Actuals must count only the active statement-derived replacement after correction."
+      ],
+      "sort_order": 9,
+      "created_at": "2026-07-21T11:54:33.6528484+00:00"
     },
     {
       "id": "01KXT163ZY54MZE9EJS2FTC8FS",
@@ -277,44 +297,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0EWY1A7NZ0TKJBZ7WPF9AB",
+      "id": "01KY27SAAFNNJ38E4C47Q7QD7F",
       "kind": "acceptance_check",
       "text": [
-        "Account/date/category/pool/instrument/cardholder/relationship/lifecycle/evidence/reconciliation filters combine with AND semantics; invalid combinations fail and empty matches return exact zero with explicit unknown/unassigned buckets."
+        "Filters compose account/date, category with exact or subtree scope, pool including unassigned, instrument/cardholder including unknown, evidence, reconciliation, relationship, categorization, and lifecycle state; every supplied filter must match."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T19:08:59.8178184+00:00"
+      "created_at": "2026-07-21T11:43:10.1592386+00:00"
     },
     {
-      "id": "01KY0EWY1BN4Z9SH52XGYHTJ1M",
+      "id": "01KY27SAAG4QNDJWV2TFF4YJFW",
       "kind": "acceptance_check",
       "text": [
-        "Net Account Movement is signed selected sum; External Spend includes qualifying outflows and separate fees, subtracts active refunds, and excludes transfer principal/unrelated inflows."
+        "Net Account Movement sums signed active facts exactly; External Spend includes qualifying outflows and separate fees, excludes owned-transfer principal, and offsets linked refunds in their own Effective Date against the original current category and pool."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T19:08:59.8178184+00:00"
+      "created_at": "2026-07-21T11:43:10.1592386+00:00"
     },
     {
-      "id": "01KY0EWY1BV5NDN4R0GKA6M19Q",
+      "id": "01KY27SAAGJTS6N82NY7MX19CS",
       "kind": "acceptance_check",
       "text": [
-        "Budget Actual uses current category and pool; refunds offset the original in the credit period; every all-up total equals pool, category, and pool-by-category cells including unassigned/uncategorized."
+        "Category-direct, category-subtree, pool, and pool-by-category groups reconcile to all-up Budget Actual; current hierarchy moves change subtree membership without rewriting assignments and no transaction is double counted."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T19:08:59.8178184+00:00"
+      "created_at": "2026-07-21T11:43:10.1592386+00:00"
     },
     {
-      "id": "01KY0EWY1BCNDD2ER3PAWD19J0",
+      "id": "01KY27SAAGM1BP61K0EBDXE5QZ",
       "kind": "acceptance_check",
       "text": [
-        "Payment/evidence/reconciliation filters change membership only; identical state/filter is deterministic; 100000 active transactions meet the under-2-second p95 profile."
+        "A statement-authoritative correction excludes the superseded agent-capture fact and includes the statement-derived replacement exactly once with explicit carried-forward or corrected dimensions."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T19:08:59.8178184+00:00"
+      "created_at": "2026-07-21T11:43:10.1592386+00:00"
+    },
+    {
+      "id": "01KY27SAAGF03EA6H8E7XSKVJQ",
+      "kind": "acceptance_check",
+      "text": [
+        "Cash withdrawals follow OQ-LEDGER-16Resolution only; empty, uncategorized, unassigned, and unknown buckets are explicit and exact."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-21T11:43:10.1592386+00:00"
     },
     {
       "id": "01KXT0SME9NNV3T4TMHWK2V8BH",
@@ -347,27 +377,70 @@
       "created_at": "2026-07-18T07:07:05.0252128+00:00"
     },
     {
-      "id": "01KY0E87GEVT9A1CSB22G79NCK",
+      "id": "01KY27SAAGT7X1G1ZXCVAQK16S",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT infer one financial dimension from another or silently omit unknown/unassigned membership."
+        "Do NOT count owned-account transfer principal as spend, derive pool from category/account/cardholder, or silently select cash treatment — per C22 and OQ-LEDGER-16."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:57:41.3891091+00:00"
+      "created_at": "2026-07-21T11:43:10.1592386+00:00"
     },
     {
-      "id": "01KY0E87GEJ6DFG379M0AM7WPG",
+      "id": "01KY27SAAGBPT913H1DYB52WP1",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT duplicate these formulas in BUDGET, INSIGHTS, INGEST, or Hermes."
+        "Do NOT aggregate through both direct and ancestor rows into all-up totals or count superseded statement-corrected facts."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:57:41.3891091+00:00"
+      "created_at": "2026-07-21T11:43:10.1592386+00:00"
+    },
+    {
+      "id": "01KY27SAAGYCTSA38JZRDXY62B",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT move budget-plan semantics into LEDGER; BUDGET owns exact-node/subtree plan overlap rules."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-21T11:43:10.1592386+00:00"
     }
   ],
   "references": [
+    {
+      "id": "01KY27T5J0SNX46VC8JV73245N",
+      "target_ref_code": "DD-LEDGER-CATEGORY-HIERARCHY",
+      "target_entity_type": "design_decision",
+      "target_entity_id": "01KY25R1J105M3BFF06SC5B9EA",
+      "target_title": "Acyclic category hierarchy with single-node transaction assignment",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-21T11:43:38.0487587+00:00"
+    },
+    {
+      "id": "01KY27T7PMSV1NR4H1ZC1YXXVW",
+      "target_ref_code": "DD-LEDGER-DIMENSIONAL-ATTRIBUTION",
+      "target_entity_type": "design_decision",
+      "target_entity_id": "01KY0BQ0901QFE2XQE628B192H",
+      "target_title": "Independent local payment, category, and Spend Pool dimensions",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-21T11:43:40.2454239+00:00"
+    },
+    {
+      "id": "01KY27T8SZS0BK2NDSKKHN7XZ2",
+      "target_ref_code": "DD-LEDGER-RECONCILIATION-CONTRACT",
+      "target_entity_type": "design_decision",
+      "target_entity_id": "01KY0BPZHRNAE4X76HMJ3EC0ND",
+      "target_title": "Explicit match-first evidence reconciliation contract",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 8,
+      "created_at": "2026-07-21T11:43:41.3759229+00:00"
+    },
     {
       "id": "01KXT0SMEAJ7D5G7Q6E4ZRBPWQ",
       "target_ref_code": "NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE",
@@ -411,24 +484,24 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT0SMEAXA59BEYV1QFVGKHK",
+      "id": "01KY27SAAGES6RV4JGYPMFYHJD",
       "gate_type": "test-evidence",
       "description": [
-        "Attach exact reconciliation for every named formula plus the personal-scale benchmark."
+        "Show exact all-up, direct, subtree, pool, matrix, refund, transfer, fee, hierarchy-move, statement-correction, and empty-bucket totals."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-21T11:43:10.1592386+00:00"
     },
     {
-      "id": "01KXT0SMEA5NS1Z0YMQQVXRTXR",
+      "id": "01KY27SAAGWXCF5SJCW5BKWCE9",
       "gate_type": "self-review",
       "description": [
-        "BUDGET amounts/pacing and inferred classification are absent."
+        "Reconcile every group to explicit membership and confirm one active economic effect per event."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-21T11:43:10.1592386+00:00"
     }
   ],
   "verification_steps": [

@@ -4,12 +4,12 @@
   "sub_plan_id": "01KY0D0QYX4CJZKSVH3MMGT6BK",
   "ref_code": "TASK-LEDGER-RECONCILIATION-APPLY",
   "slug": "RECONCILIATION-APPLY",
-  "title": "Implement atomic reconciliation dispositions",
+  "title": "Implement base reconciliation dispositions",
   "description": [
-    "Deliver per-evidence match_existing, create_statement_only, record_ambiguous, and record_exception application with in-transaction revalidation."
+    "Deliver match_existing, create_statement_only, record_ambiguous, and record_exception before the later statement-correction composite extends the same public operation."
   ],
   "objective": [
-    "Commit exactly one safe reconciliation outcome and no duplicate Canonical Transaction despite drift, retry, or crash."
+    "Commit one safe base reconciliation outcome without duplicate transactions despite drift, retry, or crash."
   ],
   "planning_state": "ready",
   "priority": 0,
@@ -208,44 +208,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0DT2MVC0CF9NT03H0JE44E",
+      "id": "01KY283AP6A0CGGCWJQ5S7ZNMD",
       "kind": "acceptance_check",
       "text": [
-        "match_existing revalidates evidence fingerprint, policy/version, current candidate uniqueness, conflicts, and exact basis inside one BEGIN IMMEDIATE transaction before appending decision and confirming link."
+        "match_existing revalidates statement evidence fingerprint, policy/version or owner authority, exact current fact equality, candidate uniqueness, conflicts, and match basis inside one BEGIN IMMEDIATE transaction before appending decision and confirming link."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:38.2144074+00:00"
     },
     {
-      "id": "01KY0DT2MVC8WED7D966GR2M56",
+      "id": "01KY283AP7TFS1XFGNG6A1B1GB",
       "kind": "acceptance_check",
       "text": [
-        "create_statement_only requires a typed canonical fact whose account, amount, currency, and dates equal the evidence observation and atomically creates fact, unknown attribution, unassigned pool, decision, confirming link, and replay result."
+        "create_statement_only requires typed canonical facts equal to the normalized statement observation and atomically creates one statement-derived fact, unknown payment attribution, unassigned pool, decision, confirming link, and replay result only when no guard candidate exists."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:38.2144074+00:00"
     },
     {
-      "id": "01KY0DT2MVA7EPQJ52CN2JSAD5",
+      "id": "01KY283AP78SAFTHF64DMHDYNW",
       "kind": "acceptance_check",
       "text": [
-        "record_ambiguous preserves the complete candidate set and applies no confirming link; record_exception preserves code/reason; stale, unsupported, conflicting, or changed replay preserves prior state."
+        "record_ambiguous preserves the complete candidate set and applies no confirming link or financial effect; record_exception preserves stable code/reason; stale, unsupported, conflicting, or changed replay preserves prior state."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:38.2144074+00:00"
     },
     {
-      "id": "01KY0DT2MVJPFFYZFKSA1MXDQJ",
+      "id": "01KY283AP743CG8A9XMQ450Y09",
       "kind": "acceptance_check",
       "text": [
-        "Crash injection at every write boundary leaves the full outcome absent or committed; identical logical evidence and decision replay returns the existing outcome and never creates another transaction."
+        "Crash injection at every base write boundary leaves the full outcome absent or committed; identical logical evidence and disposition replay returns the existing outcome."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:38.2144074+00:00"
     },
     {
       "id": "01KY0DT2MVFBWXGG736D32M95E",
@@ -258,44 +258,34 @@
       "created_at": "2026-07-20T18:49:57.6488706+00:00"
     },
     {
-      "id": "01KY0DT2MVQRJ86Y43Q9XA80TB",
+      "id": "01KY283AP7T5ZSNMGXE7AZWQ1G",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT trust the advisory projection token, guess among candidates, or create statement-only while a guard candidate exists — per DD-LEDGER-RECONCILIATION-CONTRACT."
+        "Do NOT implement correct_existing_from_statement in this base task; TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION owns the cross-feature composite."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:38.2144074+00:00"
     },
     {
-      "id": "01KY0DT2MVKYKEP88N4SEP514G",
+      "id": "01KY283AP7TNJS5MRZDNM62TG8",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT implement Ledger-owned statement batches, manifests, previews, approvals, or receipts; INGEST owns them."
+        "Do NOT trust the advisory token, guess among candidates, or create statement-only while a guard exists — per DD-LEDGER-RECONCILIATION-CONTRACT."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:38.2144074+00:00"
     },
     {
-      "id": "01KY0DT2MVG6B6NYMSMKE4K2DW",
+      "id": "01KY283AP8KXGWHDBGGWHXWDWZ",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT use transport message IDs as authority or commit idempotency after the finance effect — rejected per DD-LEDGER-IDEMPOTENT-MUTATIONS."
+        "Do NOT implement INGEST batch/manifests/previews/approvals/receipts, use transport IDs as authority, or overwrite facts/evidence/decisions."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
-    },
-    {
-      "id": "01KY0DT2MV1QYV1K1X892NQREG",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT overwrite transaction, evidence, or decision history."
-      ],
-      "required": 1,
-      "sort_order": 3,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:38.2144074+00:00"
     }
   ],
   "references": [
@@ -353,24 +343,24 @@
   ],
   "review_gates": [
     {
-      "id": "01KY0DT2MVPZ9F6DQXV0Z16KFR",
+      "id": "01KY283AP8W323MQZXCQ8ABFV9",
       "gate_type": "test-evidence",
       "description": [
-        "Evidence proves one canonical effect and all-or-none writes at every crash point."
+        "Prove exact match, statement-only, ambiguity, exception, crash atomicity, and replay with at most one canonical effect."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:38.2144074+00:00"
     },
     {
-      "id": "01KY0DT2MVAHYFZ4R17GGMM6CB",
+      "id": "01KY283AP8BDNVG4RRVPENRQDD",
       "gate_type": "branch-review",
       "description": [
-        "Reviewer confirms INGEST batch responsibilities did not enter LEDGER."
+        "Confirm this slice contains no statement-correction composition or INGEST batch behavior."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:38.2144074+00:00"
     }
   ],
   "verification_steps": [

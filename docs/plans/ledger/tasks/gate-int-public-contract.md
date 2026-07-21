@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-05-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `10`
 - **Dialect:** `default`
 
 ## Summary
 
-Integration gate intentionally has no Implements link: explicitly compose every provider-neutral feature bundle and prove the released descriptor/process inventory.
+Integration gate with no Implements link: explicitly compose every provider-neutral bundle and prove the released 73-operation descriptor/process inventory.
 
 ## Objective
 
-Expose exactly the 72 designed public operations through one registry with deterministic schemas, stable errors/exits, idempotency classification, privacy constraints, and published-binary behavior.
+Expose exactly 73 designed operations with deterministic schemas, stable errors/exits, idempotency, hierarchy, statement authority, and privacy constraints.
 
 ## References
 
@@ -34,28 +34,25 @@ Expose exactly the 72 designed public operations through one registry with deter
 | [TASK-LEDGER-GATE-INT-CATALOGUE-TRANSACTION-BUNDLE](../tasks/gate-int-catalogue-transaction-bundle.md) | `compile` | Consumes CatalogueTransactionOperationBundle. |
 | [TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE](../tasks/gate-int-relationship-actuals-bundle.md) | `compile` | Consumes RelationshipActualsOperationBundle. |
 | [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md) | `compile` | Consumes OperationRegistry. |
-| [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](../tasks/gate-int-reconciliation-bundle.md) | `compile` | The 72-operation public contract consumes the 9-operation reconciliation bundle. |
 | [TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE](../tasks/gate-int-recovery-skill-bundle.md) | `compile` | Consumes RecoveryGuidanceOperationBundle. |
+| [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](../tasks/gate-int-reconciliation-bundle.md) | `compile` | The 73-operation public contract consumes the 9-operation reconciliation bundle. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- LedgerServices explicitly registers every module and OperationRegistry contains exactly 72 design operation IDs/paths: 42 financial-dimension/transaction/evidence, 9 reconciliation, 8 relationship/actuals, and 13 recovery/system/guidance; there are no aliases, generic invoke/CRUD/SQL/database operations, reflection scans, or private schemas.
-- Every descriptor has a concrete source-generated request/result schema, complete stable errors/exits, help/example, supported versions, handler, closed provider-neutral vocabulary, and correct read/write idempotency requirement.
-- Published tally schema list/show and representative success/error/review-required invocation write one stdout object, safe stderr metadata, and documented exits; schema inventory is deterministic across runs.
-- Every public mutation routes through LedgerMutationExecutor and logical-effect enforcement where required; actuals first page is the only internal ephemeral cache write without a public idempotency key.
-- Native-AOT publish and offline inventory complete without dynamic-code warnings, network listeners, child processes, missing JSON types, provider transport fields, or raw evidence payload fields.
+- LedgerServices explicitly registers every module and OperationRegistry contains exactly 73 IDs/paths: 43 dimension/transaction/evidence, 9 reconciliation, 8 relationship/actuals, and 13 recovery/system/guidance; no aliases, generic invoke/CRUD/SQL, reflection, or private schemas exist.
+- Every descriptor has concrete source-generated request/result schema, errors/exits, example, compatible versions, handler, closed vocabulary, and correct idempotency classification; category.reparent and correct_existing_from_statement are discoverable.
+- Published schema list/show and representative success/error/review-required calls write one stdout object and safe stderr metadata; inventory is deterministic and contains no provider, email, statement-document, recipient, or raw-payload fields.
+- Every public mutation routes through LedgerMutationExecutor; Native-AOT offline publish completes without dynamic-code warnings, listeners, child processes, or missing JSON types.
 
 ### Failure Criteria
 
-- Do NOT auto-discover modules by reflection, add aliases/generic commands, hand-maintain a second schema manifest, or expose HTTP/storage internals.
-- Do NOT weaken any feature descriptor to make inventory tests easier.
+- Do NOT use reflection, aliases/generic commands, a second schema manifest, HTTP/storage internals, transport concepts, or weakened feature descriptors.
 
 ### Expected Outputs
 
-- Explicit root module composition
-- 72-operation provider-neutral schema snapshot
+- Explicit root composition and 73-operation provider-neutral schema snapshot
 - PublicContractInventoryTests and PublishedLedgerContractTests
 
 ### Constraints
@@ -81,38 +78,41 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CatalogueTransactionOperationBundle | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | 42 operations |
+| CatalogueTransactionOperationBundle | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | 43 operations |
 | ReconciliationOperationBundle | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS | 9 operations |
 | RelationshipActualsOperationBundle | `consumes` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS | 8 operations |
 | RecoveryGuidanceOperationBundle | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | 13 operations |
-| OperationRegistry | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | explicit registry |
+| OperationRegistry | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Explicit registry |
 | PublishedTallyFixture | `produces` |  | Release process fixture |
-| CompletePublicContract | `produces` | DM-LEDGER-OPERATION-DESCRIPTOR | exactly 72 provider-neutral operations |
+| CompletePublicContract | `produces` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 73 provider-neutral operations |
 
 ### Verification
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~PublicContractIntegrationTests --no-restore` | exit 0; at least 76 inventory, schema, provider-neutrality, process, and idempotency-routing cases run; exactly 72 operations are reported; 0 tests fail | `true` | 900 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~PublicContractInventoryTests --no-restore && dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~PublishedLedgerContractTests --no-restore` | exit 0 from both commands; at least 80 inventory, schema, provider-neutrality, process, and idempotency-routing cases run; exactly 73 operations are reported; 0 fail | `true` | 1200 |
 
 ### Review Gates
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Attach exact 72-operation inventory, bundle subtotals, schema scan, and published success/error/review stream evidence. | `true` |
-| `self-review` | Compare every operation-table row in MD-LEDGER-MASTER with exactly one registry descriptor. | `true` |
+| `test-evidence` | Attach the exact 73-ID inventory, bundle subtotals, hierarchy/correction schemas, privacy scan, and publish output. | `true` |
+| `branch-review` | Fresh reviewer confirms every public command is typed, provider-neutral, explicitly composed, and source-generated. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2jj` | `verified` | 2026-07-21T08:01:34.4395976+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2jj` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md): Consumes OperationRegistry.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CATALOGUE-TRANSACTION-BUNDLE](../tasks/gate-int-catalogue-transaction-bundle.md): Consumes CatalogueTransactionOperationBundle.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](../tasks/gate-int-reconciliation-bundle.md): The 72-operation public contract consumes the 9-operation reconciliation bundle.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](../tasks/gate-int-reconciliation-bundle.md): The 73-operation public contract consumes the 9-operation reconciliation bundle.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE](../tasks/gate-int-recovery-skill-bundle.md): Consumes RecoveryGuidanceOperationBundle.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE](../tasks/gate-int-relationship-actuals-bundle.md): Consumes RelationshipActualsOperationBundle.
 - `satisfies` -> NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the agent contract stable

@@ -6,10 +6,10 @@
   "slug": "RELATIONSHIP-CORRECTIONS",
   "title": "Implement relationship revoke and replace",
   "description": [
-    "Deliver attributable transfer/refund revoke, replace, and history-inclusive relationship detail."
+    "Deliver attributable transfer/refund revoke, owner replacement, statement-correction replacement, and history-inclusive detail."
   ],
   "objective": [
-    "Retire or replace one active financial relationship atomically after fully revalidating the proposed roles and spend effect."
+    "Retire or replace one active financial relationship atomically only after typed policies prove the resulting roles and spend effect valid."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -121,104 +121,123 @@
   ],
   "interfaces": [
     {
-      "id": "01KXT0SME526VRX8XEWF6HTCWQ",
+      "id": "01KY28105W3KYTBA5VCB45R7NW",
       "name": "RelationshipLifecycleOperationModule",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "notes": [
+        "Public revoke, replace, and get operations"
+      ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-21T11:47:21.9146431+00:00"
     },
     {
-      "id": "01KXT0SME57GDQXC84A8VB3GAK",
+      "id": "01KY28105WV16RGJMBK6PGXEG7",
       "name": "RelationshipStore.RevokeAsync",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "notes": [
+        "Public attributable retirement"
+      ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-21T11:47:21.9146431+00:00"
     },
     {
-      "id": "01KXT0SME5F4GFFVHPEXA6M6GK",
+      "id": "01KY28105WHWCP160T275GK2NJ",
       "name": "RelationshipStore.ReplaceAsync",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "notes": [
+        "Public validated replacement"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-21T11:47:21.9146431+00:00"
     },
     {
-      "id": "01KXT0SME5QPTRGQBD27X9A75E",
+      "id": "01KY28105W6J1VHXB1GJSG2SGD",
+      "name": "RelationshipStore.ReplaceForStatementCorrectionAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "notes": [
+        "Internal decision-linked replacement or review block"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-21T11:47:21.9146431+00:00"
+    },
+    {
+      "id": "01KY28105W5HJ9A2S587MG77D2",
       "name": "TransferPolicy",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
-      "sort_order": 3,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "notes": [
+        "Owned-account equality and zero-spend invariants"
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-21T11:47:21.9146431+00:00"
     },
     {
-      "id": "01KXT0SME58HW6J337R9WK6XN3",
+      "id": "01KY28105WEM8J0JS8TWWYPYPS",
       "name": "RefundPolicy",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
-      "sort_order": 4,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "notes": [
+        "Same-account and cumulative refund invariants"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-21T11:47:21.9146431+00:00"
     },
     {
-      "id": "01KXT0SME5EQ40RK452454HAS9",
+      "id": "01KY28105WSNEH1EJWW8F0DE3T",
       "name": "LedgerMutationExecutor.ExecuteAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
-      "sort_order": 5,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "notes": [
+        "Atomic replay boundary"
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-21T11:47:21.9146431+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KXT0SME4MG10S2YNZ0HVRS7G",
+      "id": "01KY28105V3VVJ5QCBC4JQCE5F",
       "kind": "acceptance_check",
       "text": [
-        "Revoke active transfer/refund with reason appends attributable lifecycle event, retires it atomically, and removes its active spend effect."
+        "Public revoke appends an attributable lifecycle event, retires one active transfer/refund atomically, and removes its spend effect; public replace validates the entire proposed relationship before retiring the old one."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-21T11:47:21.9146431+00:00"
     },
     {
-      "id": "01KXT0SME4182WMBCKHB6KBX7F",
+      "id": "01KY28105WGHZ9NE2JVQNM4DXY",
       "kind": "acceptance_check",
       "text": [
-        "Replace revalidates lifecycle, role, cardinality, amount, account, currency, sign, cumulative refund, and exclusivity before retiring old and activating exactly one distinct relationship."
+        "Replace revalidates lifecycle, role, cardinality, amount, account, currency, sign, cumulative refund, and exclusivity; invalid replacement leaves the old relationship active."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-21T11:47:21.9146431+00:00"
     },
     {
-      "id": "01KXT0SME45S581Z9VJK4EZ1F7",
+      "id": "01KY28105WW3S23S0V3RE2X6A7",
       "kind": "acceptance_check",
       "text": [
-        "Invalid replacement leaves the old relationship active; inactive re-revoke returns the documented lifecycle error with no change."
+        "ReplaceForStatementCorrectionAsync substitutes only the statement-derived replacement transaction and appends a decision-linked relationship replacement when every prior invariant remains valid; otherwise it returns review-required before any write."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-21T11:47:21.9146431+00:00"
     },
     {
-      "id": "01KXT0SME43VFKCSZAK7DPTWWN",
+      "id": "01KY28105WBC0CT7BNDPEPN3SE",
       "kind": "acceptance_check",
       "text": [
-        "History detail returns participants/type/reason/actor/time and replacement references for active/retired chain."
+        "History returns participants, type, reason, actor/time, reconciliationDecisionId when applicable, and complete replacement references; identical replay returns the original outcome."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
-    },
-    {
-      "id": "01KXT0SME4S28359YFC8G1G025",
-      "kind": "acceptance_check",
-      "text": [
-        "Identical replay returns original before/after outcome; changed replay conflicts without altering the chain."
-      ],
-      "required": 1,
-      "sort_order": 4,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-21T11:47:21.9146431+00:00"
     },
     {
       "id": "01KXT0SME45WCPGBW2NQTNWK52",
@@ -251,38 +270,27 @@
       "created_at": "2026-07-18T07:07:05.0252128+00:00"
     },
     {
-      "id": "01KXT0SME45PRFXH97HD8S043J",
+      "id": "01KY28105WP031YNVP4V50R9FE",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT edit a relationship in place, retire before replacement validation, silently move roles, or erase history — per DD-LEDGER-IMMUTABLE-HISTORY."
+        "Do NOT edit a relationship in place, retire before validation, silently move roles, or erase history — per DD-LEDGER-IMMUTABLE-HISTORY."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-21T11:47:21.9146431+00:00"
     },
     {
-      "id": "01KXT0SME4CDC5EPZY8RCTF2T8",
+      "id": "01KY28105WEDVD8YZ4A892W24J",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT bypass TransferPolicy or RefundPolicy during replacement."
+        "Do NOT bypass TransferPolicy or RefundPolicy, preserve an invalid relationship for convenience, or expose statement replacement as an independent public command."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-21T11:47:21.9146431+00:00"
     }
   ],
   "references": [
-    {
-      "id": "01KXT0SME874HAD0WXJKJM9B6S",
-      "target_ref_code": "OQ-LEDGER-5",
-      "target_entity_type": "open_question",
-      "target_entity_id": "01KXR55HWRSWNEKE7H763R8173",
-      "target_title": "Validate the proposed transfer, refund/reversal, and cash-withdrawal spend policies with representative transactions.",
-      "relationship": "blocked-by",
-      "required": 1,
-      "sort_order": 4,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
-    },
     {
       "id": "01KXT0SME8AVFASEGFWA3D3BR7",
       "target_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
@@ -315,24 +323,24 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT0SME8SCH6H68EK7HYH1BZ",
+      "id": "01KY28105WS6S25JBT4D361EVJ",
       "gate_type": "test-evidence",
       "description": [
-        "Show validation-before-retirement, rollback, lifecycle history, spend-effect, and replay evidence."
+        "Show validation-before-retirement, statement replacement success/block, rollback, history, spend effect, and replay."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-21T11:47:21.9146431+00:00"
     },
     {
-      "id": "01KXT0SME8FR6EF5QWFK7RZAHA",
+      "id": "01KY28105W1SBPCV8M5CS04BX1",
       "gate_type": "self-review",
       "description": [
-        "All replacement paths reuse typed transfer/refund policies."
+        "Every owner and statement replacement path reuses typed transfer/refund policies."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-21T11:47:21.9146431+00:00"
     }
   ],
   "verification_steps": [

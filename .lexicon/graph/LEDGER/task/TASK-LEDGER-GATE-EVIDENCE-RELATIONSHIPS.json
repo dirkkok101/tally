@@ -4,12 +4,12 @@
   "sub_plan_id": "01KXT069GD3347N15180MYTNVK",
   "ref_code": "TASK-LEDGER-GATE-EVIDENCE-RELATIONSHIPS",
   "slug": "GATE-EVIDENCE-RELATIONSHIPS",
-  "title": "Validate relationship spend policy",
+  "title": "Confirm owner relationship spend policy",
   "description": [
-    "Validation-only task intentionally has no Implements link: it resolves OQ-LEDGER-5 from owner-supplied redacted evidence before relationships, corrections, and actuals implementation."
+    "Validation-only task with no Implements link: verify the direct owner decision recorded for OQ-LEDGER-5 before relationship and actuals implementation."
   ],
   "objective": [
-    "Confirm transfer, refund, fee, and cash-withdrawal treatment."
+    "Lock the owner-approved transfer, refund, reversal, and fee rules without deciding cash-withdrawal treatment."
   ],
   "planning_state": "ready",
   "priority": 0,
@@ -26,44 +26,41 @@
   ],
   "files": [
     {
-      "id": "01KXT0GMYHX85SB3APCHMH763X",
+      "id": "01KY27MBRSHGJBV5042CDWBTHQ",
       "path": "docs/validation/ledger/oq-5-relationship-policy.md",
-      "action": "document",
-      "role": "evidence",
+      "action": "read",
+      "role": "owner decision evidence",
       "required": 1,
+      "notes": [
+        "Verify the resolved structural policy"
+      ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:02:10.6382550+00:00"
+      "created_at": "2026-07-21T11:40:27.8001005+00:00"
     },
     {
-      "id": "01KXT0GMYH6V7HSZ5CAMP58N2N",
+      "id": "01KY27MBRSB1PKGPAX6SRP0D5P",
       "path": ".lexicon/graph/LEDGER/open-question/OQ-LEDGER-5.json",
-      "action": "modify",
+      "action": "read",
       "role": "canonical gate state",
       "required": 1,
+      "notes": [
+        "Read through lex open-question show"
+      ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:02:10.6382550+00:00"
-    },
-    {
-      "id": "01KXT0GMYHCMDV29QTQ9893G3Z",
-      "path": ".lexicon/graph/LEDGER/assumption/A6.json",
-      "action": "read",
-      "role": "baseline",
-      "required": 1,
-      "sort_order": 2,
-      "created_at": "2026-07-18T07:02:10.6382550+00:00"
+      "created_at": "2026-07-21T11:40:27.8001005+00:00"
     }
   ],
   "interfaces": [
     {
-      "id": "01KXT3BSSRDX6D4BPJDBMZDDAW",
+      "id": "01KY27MBRSVAYQ5GBADDP8CFC5",
       "name": "OQ-LEDGER-5Resolution",
       "direction": "produces",
       "contract_ref_code": "OQ-LEDGER-5",
       "notes": [
-        "Produced only when the open question resolves; invalidation leaves the task blocked"
+        "Owner-approved transfer, refund, reversal, and fee policy"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:51:57.4946467+00:00"
+      "created_at": "2026-07-21T11:40:27.8001005+00:00"
     }
   ],
   "links": [
@@ -77,124 +74,94 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT3BSSPRJH287G2XVSYVNMY",
+      "id": "01KY27MBRR0WAWS0BMZSB8TM46",
       "kind": "acceptance_check",
       "text": [
-        "Given redacted samples covering all three accounts and both banks, the evidence matrix records owner-confirmed classifications and exact totals without descriptions, full identifiers, credentials, or raw rows."
+        "OQ-LEDGER-5 is resolved from direct owner instruction: principal moved between owned accounts contributes zero External Spend and Budget Actual while both account transactions remain queryable."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:51:57.4946467+00:00"
+      "created_at": "2026-07-21T11:40:27.8001005+00:00"
     },
     {
-      "id": "01KXT3BSSQMA54ZH0QXGCSZD0R",
+      "id": "01KY27MBRSZXYKWXNNJA5DQ44E",
       "kind": "acceptance_check",
       "text": [
-        "Given consistent evidence, OQ-LEDGER-5 is resolved with a decision naming coverage and the exact confirmed rule."
+        "Linked refunds and reversals offset the original transaction's current category and Spend Pool in the refund Effective Date period; a separately recorded bank fee remains ordinary spend."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:51:57.4946467+00:00"
+      "created_at": "2026-07-21T11:40:27.8001005+00:00"
     },
     {
-      "id": "01KXT3BSSQ7RCQT0R3MK0AQYHF",
+      "id": "01KY27MBRS19QBY1FKA0XS3TM9",
       "kind": "acceptance_check",
       "text": [
-        "Given invalidating or incomplete evidence, write the contradiction or unavailable-evidence reason to the redacted report, leave OQ-LEDGER-5 open, produce no OQ-LEDGER-5Resolution, keep this task non-complete, stop downstream execution, and hand off to /lex:design."
+        "The redacted validation report names the approved rules, excludes raw financial or transport payloads, and routes cash-withdrawal treatment exclusively to OQ-LEDGER-16."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:51:57.4946467+00:00"
+      "created_at": "2026-07-21T11:40:27.8001005+00:00"
     },
     {
-      "id": "01KXT0GMYHB1SVFVBJ9HM05DG6",
+      "id": "01KY27MBRS7YXEVGCBTGWPQMF4",
       "kind": "constraint",
       "text": [
-        "Owner samples remain outside the repository; only redacted structural conclusions are committed."
+        "Only privacy-safe structural conclusions are committed; no raw email or statement content."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:02:10.6382550+00:00"
+      "created_at": "2026-07-21T11:40:27.8001005+00:00"
     },
     {
-      "id": "01KXT3BSSQDPHPEJ1M5S4Q2JGG",
+      "id": "01KY27MBRSFG2T3VBRHESQ0ZDS",
       "kind": "expected_output",
       "text": [
-        "docs/validation/ledger/oq-5-relationship-policy.md with redacted conclusions"
+        "Resolved relationship policy evidence and OQ-LEDGER-5Resolution"
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:51:57.4946467+00:00"
+      "created_at": "2026-07-21T11:40:27.8001005+00:00"
     },
     {
-      "id": "01KXT3BSSRV9SHB1WW6B19J7M1",
-      "kind": "expected_output",
+      "id": "01KY27MBRST9HDE8EXG1QCXASJ",
+      "kind": "failure_criterion",
       "text": [
-        "OQ-LEDGER-5 resolved with a non-empty decision on the only completing path"
+        "Do NOT treat owned-account transfer principal as spend or remove either bank transaction — per the resolved OQ-LEDGER-5 policy."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:40:27.8001005+00:00"
+    },
+    {
+      "id": "01KY27MBRSPBPEH4SYTCASXF6R",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT infer transfer or refund relationships from description, provider wording, or date alone — per DD-LEDGER-IMMUTABLE-HISTORY."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:51:57.4946467+00:00"
+      "created_at": "2026-07-21T11:40:27.8001005+00:00"
     },
     {
-      "id": "01KXT3BSSQMDY3APKCRJ1E745H",
+      "id": "01KY27MBRSBDE663KJ1MA1BAEY",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT store raw statements, full account numbers, credentials, descriptions, or identifying rows in docs/validation/ledger/oq-5-relationship-policy.md."
-      ],
-      "required": 1,
-      "sort_order": 0,
-      "created_at": "2026-07-18T07:51:57.4946467+00:00"
-    },
-    {
-      "id": "01KXT3BSSQ2NGA0VJ7RV2Q0ZWQ",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT silently change DD-LEDGER-IMMUTABLE-HISTORY; invalidation returns to /lex:design."
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T07:51:57.4946467+00:00"
-    },
-    {
-      "id": "01KXT3BSSQQZ3F6TDTKP3H6JT1",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT resolve OQ-LEDGER-5 from fewer than all three accounts and both banks."
+        "Do NOT decide cash-withdrawal treatment in this task; OQ-LEDGER-16 owns that separate gate."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:51:57.4946467+00:00"
+      "created_at": "2026-07-21T11:40:27.8001005+00:00"
     },
     {
-      "id": "01KXT3BSSQ7FBHXT7WQA1NBDNW",
-      "kind": "failure_criterion",
-      "text": [
-        "Contradictory, incomplete, or unavailable evidence is a non-completing blocked outcome; do NOT mark this task complete or unblock any consumer of OQ-LEDGER-5Resolution."
-      ],
-      "required": 1,
-      "sort_order": 3,
-      "created_at": "2026-07-18T07:51:57.4946467+00:00"
-    },
-    {
-      "id": "01KXT3BSSR2DHAD0R0JTZDSVS4",
+      "id": "01KY27MBRSYT18MJ3PWEEB23MX",
       "kind": "note",
       "text": [
-        "Owner evidence remains external and must never be fabricated."
+        "The owner decision is already present; execution verifies and closes the gate rather than soliciting new samples."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:51:57.4946467+00:00"
-    },
-    {
-      "id": "01KXT3BSSR1SR3BBN6N370TJP7",
-      "kind": "note",
-      "text": [
-        "Required verification intentionally accepts only the completing resolved path; a blocker report leaves this task and its downstream frontier blocked."
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T07:51:57.4946467+00:00"
+      "created_at": "2026-07-21T11:40:27.8001005+00:00"
     }
   ],
   "references": [
@@ -230,40 +197,62 @@
       "required": 0,
       "sort_order": 2,
       "created_at": "2026-07-18T07:02:10.6382550+00:00"
+    },
+    {
+      "id": "01KY27N7B419H3K2H8XG9D7HP9",
+      "target_ref_code": "FR-LEDGER-TRANSFER-CONFIRMATION",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXSQCYJ8AFV3RA3G86X0E1SB",
+      "target_title": "Confirm owned-account transfers",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-21T11:40:56.0370071+00:00"
+    },
+    {
+      "id": "01KY27N8EXT1ARW551R17ATJ9F",
+      "target_ref_code": "FR-LEDGER-REFUND-CONFIRMATION",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXSQCYJA0F0J6BD9QTWZ58Q5",
+      "target_title": "Confirm refunds and reversals",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-21T11:40:57.1819022+00:00"
     }
   ],
   "review_gates": [
     {
-      "id": "01KXT0GMYHKE7KMAS9GZP4B3BP",
-      "gate_type": "human-review",
+      "id": "01KY27MBRS63BDENTN1X4HRQ57",
+      "gate_type": "test-evidence",
       "description": [
-        "Owner confirms the redacted matrix represents all accounts and banks."
+        "Show the canonical resolved decision and redacted validation report."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:02:10.6382550+00:00"
+      "created_at": "2026-07-21T11:40:27.8001005+00:00"
     },
     {
-      "id": "01KXT0GMYHC5M4T67EAKDPVW1B",
+      "id": "01KY27MBRS151PN0A7SP7QEKX2",
       "gate_type": "self-review",
       "description": [
-        "Diff contains no raw financial data or unmasked identifiers."
+        "Confirm cash treatment remains isolated in OQ-LEDGER-16 and no private payload is present."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:02:10.6382550+00:00"
+      "created_at": "2026-07-21T11:40:27.8001005+00:00"
     }
   ],
   "verification_steps": [
     {
-      "id": "01KXT0GMYHF4QV13VQE3BRWB9Z",
+      "id": "01KY27MBRS9SYT7XRVFJFYA9F2",
       "phase": "after",
-      "command": "test -s docs/validation/ledger/oq-5-relationship-policy.md && lex open-question show OQ-LEDGER-5 --json | jq -e '.status == \"resolved\" and (.decision | length > 0)'",
-      "expected_result": "exit 0; report is non-empty and OQ-LEDGER-5 has a non-empty resolved decision",
+      "command": "test -s docs/validation/ledger/oq-5-relationship-policy.md && lex open-question show OQ-LEDGER-5 --json",
+      "expected_result": "exit 0; the report exists and command output shows a non-empty resolved decision with zero-spend owned-account transfers",
       "required": 1,
       "timeout_seconds": 60,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:02:10.6382550+00:00"
+      "created_at": "2026-07-21T11:40:27.8001005+00:00"
     }
   ]
 }

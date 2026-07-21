@@ -6,10 +6,10 @@
   "slug": "PAYMENT-ATTRIBUTION",
   "title": "Implement transaction payment attribution",
   "description": [
-    "Deliver independent instrument/cardholder assignment and correction over atomically initialized unknown states."
+    "Deliver independent instrument/cardholder assignment, correction, and reconciliation-only compatible carry-forward over explicit unknown states."
   ],
   "objective": [
-    "Assign or correct Payment Instrument and cardholder independently while preserving explicit unknown state and attributable history."
+    "Assign or correct payment attribution independently and support statement correction without guessing incompatible identity."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -126,76 +126,112 @@
   ],
   "interfaces": [
     {
-      "id": "01KY0DT2MPR5PCFTW5NCN6HN5S",
+      "id": "01KY280Z14D0MJDPR7208MH36R",
       "name": "PaymentAttributionStore",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-PAYMENT-ATTRIBUTION",
+      "notes": [
+        "Append-only attribution persistence"
+      ],
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:47:20.7388670+00:00"
     },
     {
-      "id": "01KY0DT2MP8ER8QQY6C4YAMN5Q",
+      "id": "01KY280Z140AYSRRPAWPSFW6ZD",
+      "name": "PaymentAttributionStore.CarryForwardOrUnknownAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-PAYMENT-ATTRIBUTION",
+      "notes": [
+        "Reconciliation-only compatible carry-forward or explicit unknown"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:47:20.7388670+00:00"
+    },
+    {
+      "id": "01KY280Z14198Y0ZCXNHPM7ERA",
       "name": "PaymentAttributionOperationModule",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS",
-      "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "notes": [
+        "Public assign and correct operations"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-21T11:47:20.7388670+00:00"
     },
     {
-      "id": "01KY0DT2MPGS700TNQ78XHBP4T",
+      "id": "01KY280Z144TE63GFQZ79DXTPF",
       "name": "TransactionStore",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-TRANSACTION-FACT",
-      "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "notes": [
+        "Active transaction identity"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-21T11:47:20.7388670+00:00"
     },
     {
-      "id": "01KY0DT2MP6QNGVMPJASSKR252",
+      "id": "01KY280Z14B5X74GW4J6W3XPBP",
       "name": "PaymentIdentityStore",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-PAYMENT-ATTRIBUTION",
-      "sort_order": 3,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "notes": [
+        "Identity lifecycle and account compatibility"
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-21T11:47:20.7388670+00:00"
     },
     {
-      "id": "01KY0DT2MPCW4VMTH0V2105044",
+      "id": "01KY280Z14HWM3H8ZE8Y259X1Z",
       "name": "LedgerMutationExecutor.ExecuteAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
-      "sort_order": 4,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "notes": [
+        "Atomic replay boundary"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-21T11:47:20.7388670+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KY0DT2MNMMVNF74N551EKXSD",
+      "id": "01KY280Z13H0W3CK6TAGAVEKE6",
       "kind": "acceptance_check",
       "text": [
-        "Every transaction exposes independent instrument and cardholder projections initialized as unknown; assign/correct can set either dimension known or unknown without changing account, category, pool, evidence, or reconciliation."
+        "Every transaction exposes independent instrument and cardholder projections initialized as unknown; public assign/correct sets either dimension known or unknown without changing account, category, pool, evidence, or reconciliation."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:47:20.7388670+00:00"
     },
     {
-      "id": "01KY0DT2MN1GD853T9JV79CFF2",
+      "id": "01KY280Z143PMRWFAZZZ0WH54K",
       "kind": "acceptance_check",
       "text": [
-        "Missing/inactive transaction, absent/archived/incompatible identity, same-as-active correction, stale prior state, or conflicting replay returns the declared stable outcome and preserves current attribution."
+        "Missing/inactive transaction, absent/archived/incompatible identity, same-as-active correction, stale prior state, or conflicting replay preserves the current attribution and returns the declared stable outcome."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:47:20.7388670+00:00"
     },
     {
-      "id": "01KY0DT2MNMM4WGCKYF6ZS54DR",
+      "id": "01KY280Z14EEDA4CFS3NZSZBXQ",
       "kind": "acceptance_check",
       "text": [
-        "Successful correction appends actor, reason, trusted time, and predecessor history; get/history returns the exact active projection and chain."
+        "CarryForwardOrUnknownAsync is internal to statement correction: compatible current identity appends carry_forward; incompatible account/identity appends explicit unknown initialization plus review metadata; both reference source, replacement, and reconciliation decision."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:47:20.7388670+00:00"
+    },
+    {
+      "id": "01KY280Z14A98EXSCH8WEMRZ28",
+      "kind": "acceptance_check",
+      "text": [
+        "Get/history returns the active projection and complete initialize/assign/correct/carry_forward chain with actor, reason, trusted time, and predecessor."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-21T11:47:20.7388670+00:00"
     },
     {
       "id": "01KY0DT2MNE3Y95P1VJMFQGPDY",
@@ -208,34 +244,34 @@
       "created_at": "2026-07-20T18:49:57.6488706+00:00"
     },
     {
-      "id": "01KY1P02GFH9F8ES3Z862XQF87",
+      "id": "01KY280Z14CYHPYAMMZ4KWQXA6",
       "kind": "failure_criterion",
       "text": [
         "Do NOT infer attribution from account, pool, category, description, Evidence Kind, or provider wording — rejected per DD-LEDGER-DIMENSIONAL-ATTRIBUTION."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T06:32:17.1673184+00:00"
+      "created_at": "2026-07-21T11:47:20.7388670+00:00"
     },
     {
-      "id": "01KY1P02GGJH0X20N8QA6SEHT7",
+      "id": "01KY280Z14C7EXENJZZS6VGESV",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT overwrite attribution rows or inherit attribution across supersession — rejected per DD-LEDGER-IMMUTABLE-HISTORY."
+        "Do NOT overwrite attribution rows, copy incompatible identity, or inherit attribution across ordinary supersession — per DD-LEDGER-IMMUTABLE-HISTORY."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T06:32:17.1673184+00:00"
+      "created_at": "2026-07-21T11:47:20.7388670+00:00"
     },
     {
-      "id": "01KY1P02GGWGZ45B2NGJ753E4V",
+      "id": "01KY280Z14973QG70W3A835F7W",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT accept full provider identifiers."
+        "Do NOT expose carry-forward publicly or accept full provider identifiers."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T06:32:17.1673184+00:00"
+      "created_at": "2026-07-21T11:47:20.7388670+00:00"
     }
   ],
   "references": [
@@ -282,14 +318,24 @@
   ],
   "review_gates": [
     {
-      "id": "01KY0DT2MP8YGMDS5BT9ZR4QDT",
+      "id": "01KY280Z14MXGBWP3ZQV5CZK8V",
       "gate_type": "test-evidence",
       "description": [
-        "Tests prove both dimensions remain independent and history is append-only."
+        "Prove independent dimensions, compatible carry-forward, incompatible unknown initialization, no ordinary inheritance, history, and replay."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:47:20.7388670+00:00"
+    },
+    {
+      "id": "01KY280Z147QQCB0J5P1DFM82Q",
+      "gate_type": "self-review",
+      "description": [
+        "Confirm no provider wording or cross-dimension inference enters attribution."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:47:20.7388670+00:00"
     }
   ],
   "verification_steps": [

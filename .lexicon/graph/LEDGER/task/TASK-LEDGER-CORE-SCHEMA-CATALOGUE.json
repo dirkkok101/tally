@@ -6,10 +6,10 @@
   "slug": "CORE-SCHEMA-CATALOGUE",
   "title": "Implement the V001 financial-dimension catalogue schema fragment",
   "description": [
-    "Schema foundation intentionally has no Implements link: translate the approved account, category, Payment Instrument, cardholder, Spend Pool, and catalogue-lifecycle models into one independently verified V001 fragment."
+    "Schema foundation intentionally has no Implements link: translate account, hierarchical category, Payment Instrument, cardholder, Spend Pool, and append-only catalogue/parent history into one independently verified V001 fragment."
   ],
   "objective": [
-    "Create exact provider-neutral financial-dimension tables, constraints, indexes, lifecycle history, and active uniqueness without implementing catalogue behavior."
+    "Create provider-neutral financial-dimension tables and hierarchy constraints without implementing catalogue behavior."
   ],
   "planning_state": "ready",
   "priority": 0,
@@ -46,6 +46,26 @@
       ],
       "sort_order": 0,
       "created_at": "2026-07-18T07:44:24.4911988+00:00"
+    },
+    {
+      "id": "01KY27TC2BRXG4D8DJFZV38C1F",
+      "target": "TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS",
+      "dependency_type": "compile",
+      "reason": [
+        "A tracked-cash decision could change account catalogue shape before V001 hardens."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-21T11:43:44.7161467+00:00"
+    },
+    {
+      "id": "01KY27TAVD59102CAAN2567Z3B",
+      "target": "TASK-LEDGER-GATE-EVIDENCE-CATEGORIES",
+      "dependency_type": "compile",
+      "reason": [
+        "Hierarchy policy must be verified before the category schema is implemented."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:43:43.4699089+00:00"
     }
   ],
   "files": [
@@ -96,44 +116,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY1NYZYSQ25D6NHWWYEPRWJT",
+      "id": "01KY27S8DB50GQ5XHQC7J7PR9N",
       "kind": "acceptance_check",
       "text": [
-        "V001CatalogueSchema creates every field, closed enum check, lifecycle foreign key, RESTRICT rule, status/timestamp rule, and active uniqueness constraint from Account, Spend Category, PaymentInstrumentCardholderAndAttribution identity records, SpendPoolAndAssignment pool records, and FinancialDimensionCatalogueLifecycleEvents."
+        "V001CatalogueSchema creates Account, Spend Category, Payment Instrument, cardholder, Spend Pool, catalogue lifecycle, and category_parent_event structures with every closed enum, RESTRICT foreign key, status/timestamp rule, and immutable-history trigger required by the linked models."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T06:31:41.7849337+00:00"
+      "created_at": "2026-07-21T11:43:08.2031296+00:00"
     },
     {
-      "id": "01KY1NYZYTSJT2AAPWPW3PBPES",
+      "id": "01KY27S8DC2PMG84A1GH7ZK22A",
       "kind": "acceptance_check",
       "text": [
-        "Active masked account identity is unique within institution; category and pool active normalized names are unique; privacy-safe instrument/cardholder identities never retain a full identifier or provider payload."
+        "Each category has zero or one current parent; active normalized names are unique among siblings; self-parenting, descendant cycles, archived parents, and archiving a parent with active children fail without mutation."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T06:31:41.7849337+00:00"
+      "created_at": "2026-07-21T11:43:08.2031296+00:00"
     },
     {
-      "id": "01KY1NYZYT77E5JHB9KZB2H7MD",
+      "id": "01KY27S8DCSQVMBR8Q0SMWAPKQ",
       "kind": "acceptance_check",
       "text": [
-        "Archive/reactivation history remains attributable and append-only, and referenced dimensions cannot be physically deleted."
+        "Current ancestry and depth derive deterministically from append-only initialize/reparent history; referenced dimensions and parent events cannot be physically deleted."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T06:31:41.7849337+00:00"
+      "created_at": "2026-07-21T11:43:08.2031296+00:00"
     },
     {
-      "id": "01KY1NYZYT5M6A0DQW5QKCW8RQ",
+      "id": "01KY27S8DCCJRAB7KXVXPFB6ZG",
       "kind": "acceptance_check",
       "text": [
-        "Applying the fragment twice in one migration plan is rejected before SQL; an injected statement failure rolls back every dimension table and index."
+        "Real-SQLite tests prove valid roots/children/moves, cycle and lifecycle rejection, exact current ancestry, duplicate-fragment rejection, and full rollback after injected failure."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T06:31:41.7849337+00:00"
+      "created_at": "2026-07-21T11:43:08.2031296+00:00"
     },
     {
       "id": "01KXT2XZDB69G0XCEV0VTWH4XR",
@@ -166,27 +186,48 @@
       "created_at": "2026-07-18T07:44:24.4911988+00:00"
     },
     {
-      "id": "01KY1NYYD4BQAP131BE02W65CG",
+      "id": "01KY27S8DC8CASJC3RH31M3NS2",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT implement a flat category table, materialized path rewrites, nested sets, or hierarchy encoded in names — rejected by DD-LEDGER-CATEGORY-HIERARCHY."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:43:08.2031296+00:00"
+    },
+    {
+      "id": "01KY27S8DC4X68G4D9DHT9ZBQ0",
       "kind": "failure_criterion",
       "text": [
         "Do NOT conflate account, instrument, cardholder, Spend Pool, or category; each is an independent stable dimension."
       ],
       "required": 1,
-      "sort_order": 0,
-      "created_at": "2026-07-21T06:31:40.1962095+00:00"
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:43:08.2031296+00:00"
     },
     {
-      "id": "01KY1NYYD5QS5B8T7GPGXEEHY6",
+      "id": "01KY27S8DCCB2XH6YWS615BSBA",
       "kind": "failure_criterion",
       "text": [
         "Do NOT persist provider-specific identity payloads or full payment identifiers."
       ],
       "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-21T06:31:40.1962095+00:00"
+      "sort_order": 2,
+      "created_at": "2026-07-21T11:43:08.2031296+00:00"
     }
   ],
   "references": [
+    {
+      "id": "01KY27T24Q5XF0QP5VVMAXXNDM",
+      "target_ref_code": "DD-LEDGER-CATEGORY-HIERARCHY",
+      "target_entity_type": "design_decision",
+      "target_entity_id": "01KY25R1J105M3BFF06SC5B9EA",
+      "target_title": "Acyclic category hierarchy with single-node transaction assignment",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-21T11:43:34.5525154+00:00"
+    },
     {
       "id": "01KXT2XZDC5B6RDJ3BV117N40B",
       "target_ref_code": "DM-LEDGER-ACCOUNT",
@@ -223,24 +264,24 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT2XZDCRN8DSE1C582702K6",
+      "id": "01KY27S8DCCEZP9R6QJRAEH1HS",
       "gate_type": "test-evidence",
       "description": [
-        "Show exact table, index, foreign-key, check, uniqueness, and rollback evidence for every linked model."
+        "Show exact tables, parent-history constraints, acyclicity, sibling uniqueness, RESTRICT behavior, and rollback evidence."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+      "created_at": "2026-07-21T11:43:08.2031296+00:00"
     },
     {
-      "id": "01KXT2XZDCPZQETYDRV86G91Z2",
+      "id": "01KY27S8DCHN0WXEX6KN0TT75X",
       "gate_type": "self-review",
       "description": [
-        "The fragment contains every linked model field and no tables owned by another fragment."
+        "The fragment contains every linked model field, no flat-category shortcut, and no table owned by another fragment."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:44:24.4911988+00:00"
+      "created_at": "2026-07-21T11:43:08.2031296+00:00"
     }
   ],
   "verification_steps": [

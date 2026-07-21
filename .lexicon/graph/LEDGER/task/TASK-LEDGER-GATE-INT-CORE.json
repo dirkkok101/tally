@@ -6,10 +6,10 @@
   "slug": "GATE-INT-CORE",
   "title": "Prove the process-to-storage core seam",
   "description": [
-    "Integration-only task intentionally has no Implements link: compose every independently reviewed V001 fragment and prove the published process-to-complete-store core seam."
+    "Integration-only task with no Implements link: compose every V001 fragment plus the additive V002 statement-authority upgrade and prove the published process-to-store seam."
   ],
   "objective": [
-    "Compose and prove the complete V001 schema plus provider-neutral process, exact-value, real-SQLite, privacy, and idempotent mutation architecture on linux-x64."
+    "Compose and verify the complete current schema, V001 upgrade path, process contract, exact values, privacy, and idempotent storage on linux-x64."
   ],
   "planning_state": "ready",
   "priority": 0,
@@ -76,6 +76,16 @@
       "created_at": "2026-07-20T18:59:57.6916872+00:00"
     },
     {
+      "id": "01KY27TGC7JS89QJNCJ8PJH93M",
+      "target": "TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY",
+      "dependency_type": "compile",
+      "reason": [
+        "The proven complete schema must include the V002 statement-authority upgrade."
+      ],
+      "sort_order": 8,
+      "created_at": "2026-07-21T11:43:49.1286670+00:00"
+    },
+    {
       "id": "01KXT2ZGY74A06M48YN7VSY3MY",
       "target": "TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS",
       "dependency_type": "compile",
@@ -108,301 +118,299 @@
   ],
   "files": [
     {
-      "id": "01KXT2Z0TFTQVXQX4HGPPRKF1Q",
+      "id": "01KY2867RKBEX909MZSN6KQHV2",
       "path": "src/Tally/Infrastructure/Storage/LedgerSchema.cs",
       "action": "modify",
-      "role": "complete V001 composition",
+      "role": "current schema composition",
       "required": 1,
+      "notes": [
+        "Register V001 fragments and V002 upgrade explicitly"
+      ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KXT2Z0TFJWPA8JMN0AYEVJHF",
-      "path": "tests/Tally.Tests/Infrastructure/Storage/V001CompleteSchemaTests.cs",
+      "id": "01KY2867RMMXMBN9SH2RQP655C",
+      "path": "tests/Tally.Tests/Infrastructure/Storage/CompleteLedgerSchemaTests.cs",
       "action": "test",
-      "role": "complete schema inventory",
+      "role": "fresh and upgraded schema inventory",
       "required": 1,
+      "notes": [
+        "Compare fresh-current and V001-upgraded stores"
+      ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KXT2Z0TFN00847KT5CR8GF56",
+      "id": "01KY2867RMGW5P7Y3QJTA4PJWX",
       "path": "tests/Tally.Tests/Integration/CoreRuntimeStorageTests.cs",
       "action": "test",
-      "role": "implementation",
+      "role": "runtime integration",
       "required": 1,
+      "notes": [
+        "Exact values, privacy, and replay"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KXT2Z0TF5NJX8DB1HKHA69XA",
+      "id": "01KY2867RM0W600RQDYFH7VAA1",
       "path": "tests/Tally.Tests/Process/PublishedBinaryCoreTests.cs",
       "action": "test",
-      "role": "implementation",
+      "role": "published process",
       "required": 1,
+      "notes": [
+        "Native-AOT local process proof"
+      ],
       "sort_order": 3,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KXT2Z0TF7EHE919A056H1J3C",
+      "id": "01KY2867RM676DP21BVEPMDGSV",
       "path": "scripts/verify-ledger-core.sh",
       "action": "create",
       "role": "verification",
       "required": 1,
+      "notes": [
+        "Run non-vacuous core checks"
+      ],
       "sort_order": 4,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     }
   ],
   "interfaces": [
     {
-      "id": "01KY0E2BQYYBQ3K51C75QRBRTS",
+      "id": "01KY2867RMX4SCM3G42QYMNWYW",
       "name": "TallyProcess.RunAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "provider-neutral process boundary"
+        "Provider-neutral process boundary"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-20T18:54:29.1150269+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KY0E2BQYZMXHZMZB1R56BBCJ",
+      "id": "01KY2867RMFZN1B2TS2MQRRP17",
       "name": "LedgerDb",
       "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
       "notes": [
-        "raw SQLite runtime"
+        "Raw SQLite runtime"
       ],
       "sort_order": 1,
-      "created_at": "2026-07-20T18:54:29.1150269+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KY0E2BQYP7EV6BC00D5N9XZT",
+      "id": "01KY2867RMJQ7SF5P2MNPGHGH6",
       "name": "V001StorageSchema",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
       "notes": [
-        "storage metadata fragment"
+        "Storage metadata fragment"
       ],
       "sort_order": 2,
-      "created_at": "2026-07-20T18:54:29.1150269+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KY0E2BQY94ZR8BY6DN99ZX8F",
+      "id": "01KY2867RMZ6CWP5H0B0NRGMDN",
       "name": "V001CatalogueSchema",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-CATALOGUE-LIFECYCLE",
       "notes": [
-        "financial-dimension fragment"
+        "Hierarchical financial-dimension fragment"
       ],
       "sort_order": 3,
-      "created_at": "2026-07-20T18:54:29.1150269+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KY0E2BQYEA2PSNHFMWNSWFTN",
+      "id": "01KY2867RMY9KFT08THBTYPP6G",
       "name": "V001TransactionSchema",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
       "notes": [
-        "transaction and dimensional-history fragment"
+        "Transaction and assignment fragment"
       ],
       "sort_order": 4,
-      "created_at": "2026-07-20T18:54:29.1150269+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KY0E2BQY3J1DNGJC1X6HPB40",
+      "id": "01KY2867RM09S3Q0SSD3D37EPN",
       "name": "V001EvidenceReconciliationSchema",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
       "notes": [
-        "evidence and reconciliation fragment"
+        "Committed evidence predecessor"
       ],
       "sort_order": 5,
-      "created_at": "2026-07-20T18:54:29.1150269+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KY0E2BQY1MWN5KEXX4GVJVD3",
+      "id": "01KY2867RMPHH2GGC24A3VYKAV",
       "name": "V001RelationshipActualsSchema",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
       "notes": [
-        "relationship and snapshot fragment"
+        "Relationship and snapshot fragment"
       ],
       "sort_order": 6,
-      "created_at": "2026-07-20T18:54:29.1150269+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KY0E2BQYW3WY9TTWX8FQ09Y8",
+      "id": "01KY2867RM882D1B81NW6FNCRB",
+      "name": "V002StatementAuthoritySchema",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "notes": [
+        "Additive statement-correction upgrade"
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
+    },
+    {
+      "id": "01KY2867RMEAQBK706Y20ASAP1",
       "name": "Money",
       "direction": "consumes",
       "contract_ref_code": "DD-LEDGER-FINANCIAL-REPRESENTATION",
       "notes": [
-        "exact values"
+        "Exact values"
       ],
-      "sort_order": 7,
-      "created_at": "2026-07-20T18:54:29.1150269+00:00"
+      "sort_order": 8,
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KY0E2BQYD06V9QR7YA0CZES2",
+      "id": "01KY2867RMB5J7V288YCHGN23F",
       "name": "LedgerMutationExecutor.ExecuteAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
       "notes": [
-        "request and logical replay"
-      ],
-      "sort_order": 8,
-      "created_at": "2026-07-20T18:54:29.1150269+00:00"
-    },
-    {
-      "id": "01KY0E2BQYPVRT77HAZ5BGFN6E",
-      "name": "CompleteV001Schema",
-      "direction": "produces",
-      "notes": [
-        "five-fragment V001 schema"
+        "Request and logical replay"
       ],
       "sort_order": 9,
-      "created_at": "2026-07-20T18:54:29.1150269+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KY0E2BQYRKYMP2E543EMM5F6",
+      "id": "01KY2867RMWT8NFFFFXJGTV5A7",
+      "name": "CompleteLedgerSchema",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "notes": [
+        "Fresh and upgraded current schema"
+      ],
+      "sort_order": 10,
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
+    },
+    {
+      "id": "01KY2867RMBJ78SZ8WETJNVV0F",
       "name": "VerifiedCoreRuntimeStorageSeam",
       "direction": "produces",
       "notes": [
-        "integration evidence"
+        "Integration evidence"
       ],
-      "sort_order": 10,
-      "created_at": "2026-07-20T18:54:29.1150269+00:00"
+      "sort_order": 11,
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KY0E2BQVR8R6NQGPHM3ZJ5RQ",
+      "id": "01KY2867RJF6VQRRZ6PJWCZKE3",
       "kind": "acceptance_check",
       "text": [
-        "CompleteV001Schema explicitly registers V001StorageSchema, V001CatalogueSchema, V001TransactionSchema, V001EvidenceReconciliationSchema, and V001RelationshipActualsSchema in dependency-safe order and applies them in one transaction."
+        "CompleteLedgerSchema explicitly registers all five V001 fragments and V002StatementAuthoritySchema in dependency-safe version/name order; a fresh store and a committed V001 fixture reach the same current schema and migration metadata."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:54:29.1150269+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KY0E2BQWKZBS7M0WQGBT0HEE",
+      "id": "01KY2867RKJ8V2TA4STJ4MW9XS",
       "kind": "acceptance_check",
       "text": [
-        "Complete-schema tests compare every table, column, index, foreign key, check, uniqueness rule, privacy allowlist, ephemeral marker, and user_version with linked fragment contracts; missing/duplicate fragments or injected SQL failure leave no partial schema."
+        "Schema tests compare every table, column, index, foreign key, check, hierarchy rule, evidence privacy allowlist, statement-authority reference, and user_version; missing/duplicate fragments or injected SQL failure leave no partial schema."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:54:29.1150269+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KY0E2BQWBYHXJCQWKE0ECQCX",
+      "id": "01KY2867RK68WA53VST0762030",
       "kind": "acceptance_check",
       "text": [
-        "Published tally initializes a private complete generation, executes a typed idempotent probe through TallyProcess, emits one stdout envelope, and leaves no child process or network listener."
+        "Published tally initializes a private current generation, executes a typed idempotent probe through TallyProcess, emits one stdout envelope, and leaves no child process or network listener."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:54:29.1150269+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KY0E2BQWYTP1V5TNWX0BJYZ8",
+      "id": "01KY2867RKHM0PW8YN8R0CPKV0",
       "kind": "acceptance_check",
       "text": [
-        "Identical request and logical replay return the original effect; a pre-commit crash leaves zero domain/idempotency/logical-effect rows; changed replay returns stable conflict."
+        "Identical request/logical replay returns the original effect; pre-commit crash leaves zero domain/idempotency rows; changed replay conflicts."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T18:54:29.1150269+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KY0E2BQXJ7BDXDXQC8FG2C9K",
+      "id": "01KY2867RK4JVFDR53Z0B3W1W3",
       "kind": "acceptance_check",
       "text": [
-        "Money/date round-trip is exact, integrity is ok, foreign-key violations are zero, artifact modes are 0700/0600, and provider/raw-payload diagnostic canaries never appear."
+        "Money/date round-trip is exact, hierarchy is acyclic, integrity is ok, foreign-key violations are zero, artifact modes are 0700/0600, and provider/raw-payload canaries never appear."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-20T18:54:29.1150269+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KXT2Z0TFC4873W845FJ42PYT",
+      "id": "01KY2867RK3EFS4PVWWA0DRT2A",
       "kind": "constraint",
       "text": [
-        "The four V001 fragments remain independently owned; this gate only composes and verifies them."
+        "V001 fragments remain independently owned; V002 is additive; this gate only composes and verifies them."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KXT2Z0TFP6Q4MQXCJD03WVE8",
+      "id": "01KY2867RKN0PN9DQK39TNC1YS",
       "kind": "expected_output",
       "text": [
-        "CompleteV001Schema composition"
+        "CompleteLedgerSchema composition"
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KXT2Z0TFPWXMEFPMR9AFPRNR",
+      "id": "01KY2867RK3849HJTMEFQN648T",
       "kind": "expected_output",
       "text": [
-        "V001CompleteSchemaTests"
+        "CompleteLedgerSchemaTests, CoreRuntimeStorageTests, PublishedBinaryCoreTests, and scripts/verify-ledger-core.sh"
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KXT2Z0TF95W6F3DX7X6CN9H4",
-      "kind": "expected_output",
-      "text": [
-        "CoreRuntimeStorageTests"
-      ],
-      "required": 1,
-      "sort_order": 2,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
-    },
-    {
-      "id": "01KXT2Z0TFF21PF6MC5MQ21EWB",
-      "kind": "expected_output",
-      "text": [
-        "PublishedBinaryCoreTests"
-      ],
-      "required": 1,
-      "sort_order": 3,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
-    },
-    {
-      "id": "01KXT2Z0TF6D4XP66646GQPEJP",
-      "kind": "expected_output",
-      "text": [
-        "scripts/verify-ledger-core.sh"
-      ],
-      "required": 1,
-      "sort_order": 4,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
-    },
-    {
-      "id": "01KXT2Z0TEAE406S276SR64N2W",
+      "id": "01KY2867RK7CSASR4HM0F970JC",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT substitute mocked handlers, mocked SQLite, partial-fragment initialization, or Debug-only evidence for complete published-process proof."
+        "Do NOT edit committed V001EvidenceReconciliationSchema, substitute mocks/partial schema/Debug-only proof, or skip the V001-to-V002 upgrade test."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KXT2Z0TF66FV5QXZYK9VWHJS",
+      "id": "01KY2867RKEY3AJNKMJRNR2H7B",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT clear while OQ-LEDGER-1..3 remain open or invalidate value semantics."
+        "Do NOT clear while value-semantics gates or OQ-LEDGER-16 invalidate the selected schema."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     }
   ],
   "references": [
@@ -442,36 +450,36 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT2Z0TFZEHX8KAQ1EQTHF0M",
+      "id": "01KY2867RMXFBQNPWCCECAV5XX",
       "gate_type": "test-evidence",
       "description": [
-        "Preserve exact schema inventory, fragment rollback, published-binary, integrity, exactness, permission, and replay evidence."
+        "Preserve schema inventory, V001 upgrade, rollback, published-binary, hierarchy, integrity, permission, exactness, and replay evidence."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     },
     {
-      "id": "01KXT2Z0TF0ZFTKYXW0BFJA7HC",
+      "id": "01KY2867RMS6B313GC733P0ZTB",
       "gate_type": "branch-review",
       "description": [
-        "Reviewer confirms every model-owned fragment is complete and downstream slices consume CompleteV001Schema."
+        "Reviewer confirms V001 is unedited, V002 is additive, and downstream slices consume CompleteLedgerSchema."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     }
   ],
   "verification_steps": [
     {
-      "id": "01KXT2Z0TFF90R8FD69YM3VMAM",
+      "id": "01KY2867RMJ45B0VVQ141GD6H6",
       "phase": "after",
       "command": "bash scripts/verify-ledger-core.sh",
-      "expected_result": "exit 0; AOT publish succeeds, at least 18 complete-schema/integration/process tests run, 0 fail, integrity is ok, every V001 fragment is present, and no canary leaks",
+      "expected_result": "exit 0; AOT publish succeeds, at least 24 fresh-schema, upgrade, integration, and process tests run, 0 fail, integrity is ok, V001 and V002 metadata are present, and no canary leaks",
       "required": 1,
-      "timeout_seconds": 900,
+      "timeout_seconds": 1200,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:44:58.7015071+00:00"
+      "created_at": "2026-07-21T11:50:13.5222021+00:00"
     }
   ]
 }

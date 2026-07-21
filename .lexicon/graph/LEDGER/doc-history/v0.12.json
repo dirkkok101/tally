@@ -1,0 +1,9 @@
+{
+  "id": "01KY28QKE7EEB29761DBQ76VGA",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.12",
+  "changes": [
+    "Reactivated PLAN-LEDGER-V1 after owner-policy replanning: 66 ready tasks across 7 sub-plans and 193 dependency edges preserve five completed foundation slices while adding an explicit OQ-LEDGER-16 cash-withdrawal gate, additive V002 statement-authority schema upgrade, hierarchical category reparenting and direct/subtree actuals, and one crash-atomic statement-authoritative correction composite. The public inventory is exactly 73 provider-neutral operations. Coverage is 285/285 with no gaps or blocking audit findings; all task contexts fit within 12000 tokens. OQ-LEDGER-13, OQ-LEDGER-15, and OQ-LEDGER-16 remain fail-closed execution gates. Existing beads were not recompiled in this planning run."
+  ],
+  "created_at": "2026-07-21T11:59:42.5361395+00:00"
+}

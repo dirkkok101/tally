@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-RELATIONSHIP-CORRECTIONS`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-03-RELATIONSHIPS-ACTUALS`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `30`
 - **Dialect:** `default`
 
 ## Summary
 
-Deliver attributable transfer/refund revoke, replace, and history-inclusive relationship detail.
+Deliver attributable transfer/refund revoke, owner replacement, statement-correction replacement, and history-inclusive detail.
 
 ## Objective
 
-Retire or replace one active financial relationship atomically after fully revalidating the proposed roles and spend effect.
+Retire or replace one active financial relationship atomically only after typed policies prove the resulting roles and spend effect valid.
 
 ## References
 
@@ -25,7 +25,6 @@ Retire or replace one active financial relationship atomically after fully reval
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | `true` |
 | FR-LEDGER-RELATIONSHIP-CORRECTION: Revoke or replace financial relationships | `requirement` | `implements` | `true` |
-| OQ-LEDGER-5: Validate the proposed transfer, refund/reversal, and cash-withdrawal spend policies with representative transactions. | `open_question` | `blocked-by` | `true` |
 | TC-LEDGER-RELATIONSHIP-CORRECTION-CONTRACT: Verify revoke or replace financial relationships contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -40,16 +39,15 @@ Retire or replace one active financial relationship atomically after fully reval
 
 ### Acceptance Checks
 
-- Revoke active transfer/refund with reason appends attributable lifecycle event, retires it atomically, and removes its active spend effect.
-- Replace revalidates lifecycle, role, cardinality, amount, account, currency, sign, cumulative refund, and exclusivity before retiring old and activating exactly one distinct relationship.
-- Invalid replacement leaves the old relationship active; inactive re-revoke returns the documented lifecycle error with no change.
-- History detail returns participants/type/reason/actor/time and replacement references for active/retired chain.
-- Identical replay returns original before/after outcome; changed replay conflicts without altering the chain.
+- Public revoke appends an attributable lifecycle event, retires one active transfer/refund atomically, and removes its spend effect; public replace validates the entire proposed relationship before retiring the old one.
+- Replace revalidates lifecycle, role, cardinality, amount, account, currency, sign, cumulative refund, and exclusivity; invalid replacement leaves the old relationship active.
+- ReplaceForStatementCorrectionAsync substitutes only the statement-derived replacement transaction and appends a decision-linked relationship replacement when every prior invariant remains valid; otherwise it returns review-required before any write.
+- History returns participants, type, reason, actor/time, reconciliationDecisionId when applicable, and complete replacement references; identical replay returns the original outcome.
 
 ### Failure Criteria
 
-- Do NOT edit a relationship in place, retire before replacement validation, silently move roles, or erase history — per DD-LEDGER-IMMUTABLE-HISTORY.
-- Do NOT bypass TransferPolicy or RefundPolicy during replacement.
+- Do NOT edit a relationship in place, retire before validation, silently move roles, or erase history — per DD-LEDGER-IMMUTABLE-HISTORY.
+- Do NOT bypass TransferPolicy or RefundPolicy, preserve an invalid relationship for convenience, or expose statement replacement as an independent public command.
 
 ### Expected Outputs
 
@@ -80,12 +78,13 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| RelationshipLifecycleOperationModule | `produces` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS |  |
-| RelationshipStore.RevokeAsync | `produces` | DM-LEDGER-FINANCIAL-RELATIONSHIP |  |
-| RelationshipStore.ReplaceAsync | `produces` | DM-LEDGER-FINANCIAL-RELATIONSHIP |  |
-| TransferPolicy | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP |  |
-| RefundPolicy | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP |  |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD |  |
+| RelationshipLifecycleOperationModule | `produces` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS | Public revoke, replace, and get operations |
+| RelationshipStore.RevokeAsync | `produces` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Public attributable retirement |
+| RelationshipStore.ReplaceAsync | `produces` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Public validated replacement |
+| RelationshipStore.ReplaceForStatementCorrectionAsync | `produces` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Internal decision-linked replacement or review block |
+| TransferPolicy | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Owned-account equality and zero-spend invariants |
+| RefundPolicy | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Same-account and cumulative refund invariants |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD | Atomic replay boundary |
 
 ### Verification
 
@@ -97,18 +96,20 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Show validation-before-retirement, rollback, lifecycle history, spend-effect, and replay evidence. | `true` |
-| `self-review` | All replacement paths reuse typed transfer/refund policies. | `true` |
+| `test-evidence` | Show validation-before-retirement, statement replacement success/block, rollback, history, spend effect, and replay. | `true` |
+| `self-review` | Every owner and statement replacement path reuses typed transfer/refund policies. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2sb` | `verified` | 2026-07-21T08:01:43.4793525+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `blocked-by` -> OQ-LEDGER-5: Validate the proposed transfer, refund/reversal, and cash-withdrawal spend policies with representative transactions.
+- `bead-ref` -> `bd-2sb` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-REFUNDS](../tasks/refunds.md): Correction must revalidate both transfer and refund policies and modify the shared RelationshipStore after both exist.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSFERS](../tasks/transfers.md): Consumer requires TransferPolicy from its producing task; direct compile edge enforces the declared interface contract.

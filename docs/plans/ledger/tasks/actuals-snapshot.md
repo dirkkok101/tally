@@ -5,23 +5,24 @@
 - **Ref:** `TASK-LEDGER-ACTUALS-SNAPSHOT`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-03-RELATIONSHIPS-ACTUALS`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `60`
 - **Dialect:** `default`
 
 ## Summary
 
-Expose ledger.actuals.query with one BEGIN IMMEDIATE first-page snapshot transaction over exact multi-dimensional current state and read-only cursor pages.
+Freeze active facts, current category hierarchy, dimensions, evidence, reconciliation, relationships, membership, and exact totals for deterministic pagination.
 
 ## Objective
 
-Return stable cross-process pages, exact full-set totals, and pool/category matrices despite later writes, without exposing a cursor before snapshot commit.
+Keep later pages bound to one category-hierarchy and ledger-generation view despite concurrent writes or reparenting.
 
 ## References
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
+| DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-SNAPSHOT-ACTUALS: Materialized coherent snapshots for dimensional actuals | `design_decision` | `governed-by` | `true` |
 | DIAG-LEDGER-ACTUALS-SNAPSHOT-SEQUENCE: Cross-process actuals snapshot pagination | `design_diagram` | `references` | `false` |
 | DM-LEDGER-QUERY-SNAPSHOT: QuerySnapshot | `data_model` | `touches` | `true` |
@@ -41,16 +42,15 @@ Return stable cross-process pages, exact full-set totals, and pool/category matr
 
 ### Acceptance Checks
 
-- First-page request accepts canonical filters plus pageSize, acquires the writer lock, and in one BEGIN IMMEDIATE reads active facts, dimensions, evidence/reconciliation and relationships; computes items/totals/cells; inserts snapshot/items; commits; then emits page/cursor/expiry.
-- Busy before acquisition returns LEDGER-SNAPSHOT-BUSY; cancellation/crash/write failure before commit returns no cursor and leaves no partial usable snapshot.
-- Later cursor-only requests read fixed ordinal projections, named totals, and dimensional cells despite unrelated writes or corrections after first page.
-- Changed filters, malformed/expired/incompatible/stale-generation cursor returns its documented stable error and no partial page.
-- All pages contain each selected transaction exactly once in EffectiveDate/ULID order; snapshots retain explicit unknown/unassigned buckets, are opportunistically cleaned, and are excluded from backup.
+- First page materializes the complete ordered item set, exact full-set totals/groups, generation fingerprint, categoryHierarchyFingerprint, and each item's direct category plus frozen ancestry IDs under one BEGIN IMMEDIATE transaction.
+- Later pages read only the stored snapshot; transaction writes, assignment corrections, statement corrections, or category reparenting cannot change membership, ancestry, ordering, or totals.
+- Expired, missing, filter-mismatched, contract-mismatched, generation-mismatched, or hierarchy-mismatched cursors fail explicitly without switching to live state.
+- Snapshot cleanup is opportunistic and ephemeral; backup and Durable Ledger State exclude snapshots.
 
 ### Failure Criteria
 
-- Do NOT use offset pagination, sort-key-only cursors, daemon-held transactions, read-then-write snapshot phases, or emit a cursor before COMMIT — rejected per DD-LEDGER-SNAPSHOT-ACTUALS.
-- Do NOT require an idempotency key for the ephemeral first-page cache write or include snapshots in Durable Ledger State.
+- Do NOT recompute ancestry or totals on later pages, hold a transaction across invocations, or silently restart against current hierarchy — per DD-LEDGER-SNAPSHOT-ACTUALS.
+- Do NOT include snapshots in backup, restore, or migration durable-state counts.
 
 ### Expected Outputs
 
@@ -97,18 +97,22 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Show busy/no-cursor, rollback/no-partial, intervening-write stability, and invalid cursor evidence. | `true` |
-| `self-review` | Trace one first page to confirm read, calculation, insert, and commit share one BEGIN IMMEDIATE transaction. | `true` |
+| `test-evidence` | Show frozen ancestry and totals across writes, reparenting, correction, expiry, cleanup, and cursor mismatch. | `true` |
+| `self-review` | Confirm snapshots are immutable, bounded, provider-neutral, and excluded from Durable Ledger State. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1dt` | `verified` | 2026-07-21T08:01:51.2489309+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1dt` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-ACTUALS-PROJECTION](../tasks/actuals-projection.md): Snapshot handler materializes the exact projection and totals.
+- `governed-by` -> DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment
 - `governed-by` -> DD-LEDGER-SNAPSHOT-ACTUALS: Materialized coherent snapshots for dimensional actuals
 - `implements` -> FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals
 - `implements` -> FR-LEDGER-SNAPSHOT-PAGINATION: Preserve query snapshots across pages

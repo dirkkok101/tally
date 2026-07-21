@@ -6,10 +6,10 @@
   "slug": "VERIFY-UC-014",
   "title": "StatementReconciliationWorkflow",
   "description": [
-    "Verification-only task with no Implements link: trace UC-LEDGER-014 through the Release published CLI."
+    "Verification-only task with no Implements link: trace statement-authoritative match-first reconciliation through the Release CLI."
   ],
   "objective": [
-    "Prove match-first statement reconciliation creates at most one Canonical Transaction effect and never guesses ambiguity."
+    "Prove exact confirmation, authoritative correction, statement-only creation, and ambiguity leave at most one active economic effect."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -86,34 +86,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0DT2N02ZQTB73PD2SAF7VA",
+      "id": "01KY28D80MEZN1Z3JRY2HJEMPB",
       "kind": "acceptance_check",
       "text": [
-        "A strong unique row confirms an existing transaction without creating another; an approved zero/guard-free row creates one statement-only fact with unknown attribution and unassigned pool; multiple candidates remain ambiguous without confirmation."
+        "An exact row confirms the existing transaction without creation; one compatible event with differing facts creates one statement-derived replacement and supersedes the provisional fact with explicit category/pool/payment carry-forward."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:54:03.1559410+00:00"
     },
     {
-      "id": "01KY0DT2N08997PBSM01SSTXWA",
+      "id": "01KY28D80NBY78YEHJCMDRPDJT",
       "kind": "acceptance_check",
       "text": [
-        "Replay, unsupported policy, missing basis, candidate conflict/inactivity, other-link conflict, statement-only failure, and changed idempotency outcome cover every UC-LEDGER-014 failure path."
+        "Compatible active transfer/refund relationships are explicitly replaced and remain valid; incompatible replacement returns review-required and leaves the prior financial state unchanged."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:54:03.1559410+00:00"
     },
     {
-      "id": "01KY0DT2N06A1VYVDNVGT4CFA1",
+      "id": "01KY28D80NP5N2G004ZXNPSY78",
       "kind": "acceptance_check",
       "text": [
-        "Process output exposes policy/basis/state/history and durable inspection proves at most one canonical effect."
+        "Approved zero-candidate evidence creates one statement-only fact with unknown payment and unassigned pool; multiple/guard candidates remain ambiguous without link or financial effect."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:54:03.1559410+00:00"
+    },
+    {
+      "id": "01KY28D80N4ABE3FZ4BD92ZW6P",
+      "kind": "acceptance_check",
+      "text": [
+        "Replay, unsupported policy, missing owner authority/basis, candidate conflict, stale authoritative facts, active confirmation conflict, write/crash failure, and changed idempotency request cover every failure path."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-21T11:54:03.1559410+00:00"
+    },
+    {
+      "id": "01KY28D80NRT9BW8KPBBH4XCFP",
+      "kind": "acceptance_check",
+      "text": [
+        "Process output and history expose prior/active IDs, authority basis, decision, link, carry-forward, relationship events, and exact before/after actuals; raw email/statement payloads never enter Tally."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-21T11:54:03.1559410+00:00"
     },
     {
       "id": "01KY0DT2N09AWM9FV1ZKYSACF9",
@@ -126,24 +146,14 @@
       "created_at": "2026-07-20T18:49:57.6488706+00:00"
     },
     {
-      "id": "01KY0DT2N0WTSMDK4WKCTVAAS7",
+      "id": "01KY28D80N0376ENP6MGYK374E",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT bypass the public CLI or substitute an unvalidated test policy."
+        "Do NOT bypass the published CLI, apply ambiguity, overwrite the agent-capture fact, create two active effects, or omit the relationship review block."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
-    },
-    {
-      "id": "01KY0DT2N064939SKS3H5T3W76",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT accept a test that applies ambiguity or omits statement-only atomic initialization."
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:54:03.1559410+00:00"
     }
   ],
   "references": [
@@ -183,14 +193,14 @@
   ],
   "review_gates": [
     {
-      "id": "01KY0DT2N0BN4EX1ZK302T3HCM",
+      "id": "01KY28D80NAP9MK6JWWYW7HJXJ",
       "gate_type": "test-evidence",
       "description": [
-        "Evidence proves one canonical effect across every statement disposition and replay."
+        "Prove one active effect and complete history across exact, corrected, statement-only, ambiguous, exception, crash, and replay paths."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:54:03.1559410+00:00"
     }
   ],
   "verification_steps": [

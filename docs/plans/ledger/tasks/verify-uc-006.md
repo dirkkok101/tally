@@ -5,7 +5,7 @@
 - **Ref:** `TASK-LEDGER-VERIFY-UC-006`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-05-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `80`
 - **Dialect:** `default`
@@ -41,10 +41,10 @@ Prove Hermes, another orchestrator, or a direct caller can discover and invoke a
 
 ### Acceptance Checks
 
-- The Release binary discovers version, help, compatibility, and exactly 72 provider-neutral operation schemas deterministically without store access or installed guidance.
+- The Release binary discovers version, help, compatibility, and exactly 73 provider-neutral operation schemas deterministically without store access or installed guidance.
 - Valid structured input produces one stdout result and documented exit; domain/review/incompatibility errors are structured and safe; lost output is recovered by identical retry while changed replay conflicts.
-- Mailbox, MIME, message, recipient, schedule, delivery, acknowledgement, WhatsApp, AgentMail, raw evidence, and private database fields are absent from schemas and rejected before mutation.
-- Optional guidance matches the registry but removing it leaves every public workflow discoverable and invocable.
+- Mailbox, MIME, message, recipient, schedule, delivery, acknowledgement, WhatsApp, AgentMail, raw email/statement payload, and private database fields are absent and rejected before mutation.
+- Optional guidance matches the registry but removing it leaves category.reparent, statement correction, and every other public workflow discoverable and invocable.
 
 ### Failure Criteria
 
@@ -74,14 +74,14 @@ Prove Hermes, another orchestrator, or a direct caller can discover and invoke a
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 72 provider-neutral operations |
-| VerifiedUC006 | `produces` | UC-LEDGER-006 | external-orchestrator contract workflow |
+| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 73 provider-neutral operations |
+| VerifiedUC006 | `produces` | UC-LEDGER-006 | External-orchestrator contract workflow |
 
 ### Verification
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~UC006ExternalOrchestratorContractWorkflowTests --no-restore` | exit 0; at least 16 discovery, schema-only invocation, structured outcome, replay, provider-rejection, and optional-guidance cases run; exactly 72 operations discovered; 0 fail | `true` | 720 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~UC006ExternalOrchestratorContractWorkflowTests --no-restore` | exit 0; at least 18 discovery, schema-only invocation, structured outcome, replay, hierarchy, statement-correction, provider-rejection, and optional-guidance cases run; exactly 73 operations are discovered; 0 fail | `true` | 900 |
 
 ### Review Gates
 
@@ -92,12 +92,15 @@ Prove Hermes, another orchestrator, or a direct caller can discover and invoke a
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-gpm` | `verified` | 2026-07-21T08:01:52.6412830+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-gpm` (verified)
 - `covers` -> UC-LEDGER-006: Discover and invoke the external-orchestrator contract
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
 - `touches` -> DM-LEDGER-SYSTEM-SKILL-CONTRACTS: SystemIntegrationGuidanceContracts

@@ -15,7 +15,8 @@ Resolve the four owner-evidence questions before their dependent financial polic
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-LEDGER-GATE-EVIDENCE-RELATIONSHIPS](../tasks/gate-evidence-relationships.md) | Validate relationship spend policy | `planned` | 0 |
-| [TASK-LEDGER-GATE-EVIDENCE-CATEGORIES](../tasks/gate-evidence-categories.md) | Validate Category Assignment policy | `planned` | 0 |
-| [TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY](../tasks/gate-evidence-reconciliation-policy.md) | Validate deterministic reconciliation policy | `planned` | 0 |
-| [TASK-LEDGER-GATE-EVIDENCE-POOL-CARDINALITY](../tasks/gate-evidence-pool-cardinality.md) | Validate spend-pool cardinality | `planned` | 0 |
+| [TASK-LEDGER-GATE-EVIDENCE-RELATIONSHIPS](../tasks/gate-evidence-relationships.md) | Confirm owner relationship spend policy | `ready` | 0 |
+| [TASK-LEDGER-GATE-EVIDENCE-CATEGORIES](../tasks/gate-evidence-categories.md) | Confirm owner category hierarchy policy | `ready` | 0 |
+| [TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY](../tasks/gate-evidence-reconciliation-policy.md) | Validate deterministic reconciliation policy | `ready` | 0 |
+| [TASK-LEDGER-GATE-EVIDENCE-POOL-CARDINALITY](../tasks/gate-evidence-pool-cardinality.md) | Validate Spend Pool cardinality | `ready` | 0 |
+| [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](../tasks/gate-evidence-cash-withdrawals.md) | Resolve cash-withdrawal spend treatment | `ready` | 0 |

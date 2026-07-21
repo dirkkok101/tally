@@ -5,7 +5,7 @@
 - **Ref:** `TASK-LEDGER-EVIDENCE-REGISTRY`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-02-CATALOGUE-TRANSACTIONS`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `28`
 - **Dialect:** `default`
@@ -16,7 +16,7 @@ Deliver logical evidence identity, privacy allowlisting, register/get operations
 
 ## Objective
 
-Register one privacy-safe generic EvidenceRecord per logical item and return identical cross-key replay without provider payload retention.
+Register one privacy-safe generic Evidence Record per logical item and return identical cross-key replay without provider payload retention.
 
 ## References
 
@@ -42,7 +42,7 @@ Register one privacy-safe generic EvidenceRecord per logical item and return ide
 
 ### Acceptance Checks
 
-- Register accepts only closed evidence kinds, privacy-safe logical identity/content fingerprints, opaque external reference, actor, and allowlisted observation fields; get returns safe metadata and history.
+- Register accepts only closed Evidence Kinds, privacy-safe logical identity/content fingerprints, Opaque External Reference, actor, and allowlisted observation fields; get returns safe metadata and history.
 - Identical logical evidence under the same or another request key returns the existing record; changed observation/content conflicts and preserves the original.
 - Forbidden arbitrary metadata, source payload, provider cursor, mailbox/MIME/message/delivery fields, credentials, or full identifiers fail before any evidence/idempotency row is retained.
 
@@ -89,7 +89,7 @@ None recorded.
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Ledger.EvidenceRegistryOperationTests --no-restore` | exit 0; at least 18 evidence kind, allowlist, logical replay, conflict, and privacy cases run and 0 fail | `true` | 420 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Ledger.EvidenceRegistryOperationTests --no-restore` | exit 0; at least 18 Evidence Kind, allowlist, logical replay, conflict, and privacy cases run and 0 fail | `true` | 420 |
 
 ### Review Gates
 
@@ -100,12 +100,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3qf` | `verified` | 2026-07-21T08:01:41.9342635+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3qf` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Register is a public idempotent mutation.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](../tasks/core-schema-evidence-reconciliation.md): EvidenceStore requires the evidence tables and uniqueness constraints.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md): Evidence consumes the complete V001 schema, process contract, and real store.

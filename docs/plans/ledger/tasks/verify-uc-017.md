@@ -5,7 +5,7 @@
 - **Ref:** `TASK-LEDGER-VERIFY-UC-017`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-05-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `190`
 - **Dialect:** `default`
@@ -16,7 +16,7 @@ Verification-only task with no Implements link: trace UC-LEDGER-017 through the 
 
 ## Objective
 
-Prove privacy-safe payment identities and independent instrument/cardholder attribution across lifecycle, correction, unknown, and replay paths.
+Prove privacy-safe payment identities and independent instrument/Cardholder Attribution across lifecycle, correction, unknown, and replay paths.
 
 ## References
 
@@ -85,12 +85,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-29w` | `verified` | 2026-07-21T08:01:58.0660628+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-29w` (verified)
 - `covers` -> UC-LEDGER-017: Maintain payment-instrument and cardholder attribution
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
 - `verifies` -> FR-LEDGER-PAYMENT-ATTRIBUTION: Maintain payment instrument and cardholder attribution

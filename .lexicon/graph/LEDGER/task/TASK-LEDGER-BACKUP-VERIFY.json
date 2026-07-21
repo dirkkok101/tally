@@ -6,10 +6,10 @@
   "slug": "BACKUP-VERIFY",
   "title": "Create and independently verify Ledger backups",
   "description": [
-    "Implement versioned backup operations on the complete DurableLedgerVerifier; publication remains impossible until every provider-neutral durable-state type and exact derived result verifies."
+    "Implement versioned backup operations on DurableLedgerVerifier; publication requires complete hierarchy and statement-authority verification."
   ],
   "objective": [
-    "Publish exactly one owner-only versioned backup artifact after checksum, compatibility, complete-state, privacy, replay, count, relationship/reconciliation, and exact-total verification succeeds."
+    "Publish one owner-only backup only after complete-state, privacy, replay, relationship, hierarchy, reconciliation, and exact-total verification."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -150,54 +150,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0E895C3Y0SHEAYKF3HNN2W",
+      "id": "01KY286CESJBFHKFRMZ5M881SX",
       "kind": "acceptance_check",
       "text": [
-        "backup.create under the writer lock uses SQLite online backup to private staging, invokes DurableLedgerVerifier, writes its normalized fingerprint/counts/totals/schema/storage/reconciliation-policy manifest, flushes, and atomically publishes a non-existing 0600 target without changing live state."
+        "backup.create under the writer lock uses SQLite online backup to private staging, invokes DurableLedgerVerifier, writes its normalized fingerprint/counts/direct-subtree-pool totals/schema/storage/reconciliation-policy manifest, flushes, and atomically publishes one 0600 artifact."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:57:43.0843137+00:00"
+      "created_at": "2026-07-21T11:50:18.3294443+00:00"
     },
     {
-      "id": "01KY0E895DM9TB1D1W9A4JNRTQ",
+      "id": "01KY286CET02BCQ2JSQ0N4V2QK",
       "kind": "acceptance_check",
       "text": [
-        "backup.verify independently checks artifact checksum and compatibility, then returns the same complete normalized report produced by DurableLedgerVerifier."
+        "backup.verify independently checks artifact checksum and compatibility, then returns the same complete report including category ancestry and statement-replacement chains."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:57:43.0843137+00:00"
+      "created_at": "2026-07-21T11:50:18.3294443+00:00"
     },
     {
-      "id": "01KY0E895DRVFNGB8H75B9ZNDM",
+      "id": "01KY286CET7JGJ6Z14W863PHKD",
       "kind": "acceptance_check",
       "text": [
-        "A corrupt, incomplete, unsupported, privacy-invalid, inaccessible, unsafe, or existing artifact path returns the stable error and mutates neither artifact nor live store."
+        "Corrupt, cyclic, incomplete-correction, invalid-relationship, unsupported, privacy-invalid, inaccessible, unsafe, or existing target fails and mutates neither artifact nor live store."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:57:43.0843137+00:00"
+      "created_at": "2026-07-21T11:50:18.3294443+00:00"
     },
     {
-      "id": "01KY0E895DK119ZC83EV9EB6Z4",
+      "id": "01KY286CETJNG01GYDQNJFP76G",
       "kind": "acceptance_check",
       "text": [
-        "Diagnostics expose no descriptions, raw evidence, credentials, or full identifiers; owner-only permissions and host-protection posture are preserved."
+        "Diagnostics expose no descriptions, raw evidence, email/statement payloads, credentials, or full identifiers; identical replay reconciles the artifact manifest while changed requests conflict."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T18:57:43.0843137+00:00"
-    },
-    {
-      "id": "01KY0E895DM29G3NVG8GMQZYHQ",
-      "kind": "acceptance_check",
-      "text": [
-        "Identical create replay reconciles the published manifest and returns the original artifact result; changed request conflicts."
-      ],
-      "required": 1,
-      "sort_order": 4,
-      "created_at": "2026-07-20T18:57:43.0843137+00:00"
+      "created_at": "2026-07-21T11:50:18.3294443+00:00"
     },
     {
       "id": "01KXT25YEY19SQ3XPXG1ME1RDB",
@@ -240,24 +230,24 @@
       "created_at": "2026-07-18T07:31:17.0849364+00:00"
     },
     {
-      "id": "01KXT25YEYXZR2R6Y91TYXG1AY",
+      "id": "01KY286CET47AG6C08Q2K2YQPS",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT copy a live WAL database file directly, overwrite an existing target, include QuerySnapshot rows, weaken permissions, or rely on database-only idempotency."
+        "Do NOT copy a live WAL file, overwrite a target, include QuerySnapshot, weaken permissions, rely only on database idempotency, or publish before complete verification."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+      "created_at": "2026-07-21T11:50:18.3294443+00:00"
     },
     {
-      "id": "01KXT25YEYDAQPFJE1XR2H289Z",
+      "id": "01KY286CETKCWP3QB1AG4NAEAF",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT publish before the shared verifier returns its complete successful report."
+        "Do NOT omit V002 authority metadata, hierarchy ancestry, carry-forward, or relationship replacement from the manifest fingerprint."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+      "created_at": "2026-07-21T11:50:18.3294443+00:00"
     }
   ],
   "references": [
@@ -304,24 +294,24 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT25YEZ0TP52PMY895SJM9B",
+      "id": "01KY286CETAWNDFN9XWE7MDR9E",
       "gate_type": "test-evidence",
       "description": [
-        "Show verified manifest publication, corruption rejection, owner-only permissions, and artifact replay."
+        "Show verified publication, hierarchy/correction corruption rejection, owner-only permissions, and artifact replay."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+      "created_at": "2026-07-21T11:50:18.3294443+00:00"
     },
     {
-      "id": "01KXT25YEZD2NPEBVH0TP1N4VD",
+      "id": "01KY286CEVS3AN0C6R76863JB8",
       "gate_type": "self-review",
       "description": [
-        "Snapshots are excluded by the shared verifier and no raw payload enters diagnostics."
+        "Snapshots and raw payloads are absent and all current durable types are fingerprinted."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:31:17.0849364+00:00"
+      "created_at": "2026-07-21T11:50:18.3294443+00:00"
     }
   ],
   "verification_steps": [

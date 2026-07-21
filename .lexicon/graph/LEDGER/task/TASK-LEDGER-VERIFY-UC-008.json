@@ -6,10 +6,10 @@
   "slug": "VERIFY-UC-008",
   "title": "CategoryCatalogueWorkflow",
   "description": [
-    "Verification-only task intentionally has no Implements link: trace UC-LEDGER-008 main scenario and every failure path through the published CLI."
+    "Verification-only task with no Implements link: trace hierarchical category maintenance through the Release CLI."
   ],
   "objective": [
-    "Prove UC-LEDGER-008 through observable process results and durable-state invariants."
+    "Prove stable category identity and deterministic acyclic ancestry across every lifecycle operation."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -92,34 +92,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY1P1AW3SSRCA4TASJSNP5AY",
+      "id": "01KY28D6MPD6T2K1TN150VQ4RQ",
       "kind": "acceptance_check",
       "text": [
-        "The agent discovers category schema, creates/renames/archives/reactivates one stable category, and history/assignments retain its ID."
+        "Published create/get/list/rename/reparent/archive/reactivate calls prove roots/children, sibling uniqueness, deterministic ancestry/depth, stable identity, and append-only lifecycle/parent history."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T06:32:58.4996526+00:00"
+      "created_at": "2026-07-21T11:54:01.7495705+00:00"
     },
     {
-      "id": "01KY1P1AW4QN8BM0CK4AFJNWRX",
+      "id": "01KY28D6MQM3C69QETJS20FP6E",
       "kind": "acceptance_check",
       "text": [
-        "Absent/conflicting names, referenced physical-delete intent, repeated archive, and new archived-Category Assignment/correction produce documented no-loss outcomes."
+        "Self-parent, descendant cycle, archived parent, active-child archive, physical delete, archived assignment/child, stale move, and replay paths return stable no-mutation outcomes."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T06:32:58.4996526+00:00"
+      "created_at": "2026-07-21T11:54:01.7495705+00:00"
     },
     {
-      "id": "01KY1P1AW4AHAJPYBKVBQ5EJ7E",
+      "id": "01KY28D6MQAETNTN9ZD4R537F7",
       "kind": "acceptance_check",
       "text": [
-        "Identical retries create no duplicate lifecycle events and active/archived lists remain deterministic."
+        "Current roll-ups follow legal reparenting without rewriting historical transaction assignments; no budget amount, pool choice, or classification rule is created."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T06:32:58.4996526+00:00"
+      "created_at": "2026-07-21T11:54:01.7495705+00:00"
     },
     {
       "id": "01KXT126TCVAPBN0A6F1WEN2HK",
@@ -142,24 +142,14 @@
       "created_at": "2026-07-18T07:11:45.9941647+00:00"
     },
     {
-      "id": "01KXT126TBJV4HFZJ3WNGFD5ZT",
+      "id": "01KY28D6MQ42RK1YNQXT5PFN5S",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT replace archive/reactivation with hard delete/new identity."
+        "Do NOT bypass the CLI, infer hierarchy from names, omit cycle/active-child cases, or accept flat-catalogue behavior."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
-    },
-    {
-      "id": "01KXT126TBXPNW6E0AX7SWW69B",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT omit UC-LEDGER-008 archived assignment restriction."
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-21T11:54:01.7495705+00:00"
     },
     {
       "id": "01KXT126TCJKFSWXSJWMP1D2NM",
@@ -241,24 +231,14 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT126TCFGX7W8YVJKS34QR8",
+      "id": "01KY28D6MQ853K4ZHJPWNZ9F5M",
       "gate_type": "test-evidence",
       "description": [
-        "Evidence maps UC-LEDGER-008 main scenario and each numbered failure path to stdout/error/exit/state assertions."
+        "Map UC-LEDGER-008 main and every failure path to process, ancestry, history, and no-mutation evidence."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
-    },
-    {
-      "id": "01KXT126TC60WP1D7NQ7Y6CSYD",
-      "gate_type": "self-review",
-      "description": [
-        "No scenario calls handlers or SQLite directly."
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-21T11:54:01.7495705+00:00"
     }
   ],
   "verification_steps": [

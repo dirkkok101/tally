@@ -5,7 +5,7 @@
 - **Ref:** `TASK-LEDGER-AGENT-SKILLS`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-04-RECOVERY-SKILLS`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `40`
 - **Dialect:** `default`
@@ -42,7 +42,7 @@ Keep the executable schema sufficient for every caller while optional guidance t
 
 ### Acceptance Checks
 
-- The executable's help and schema are sufficient for every workflow with no installed guidance, private store access, or provider adapter.
+- TC-LEDGER-AGENT-CONTRACT-CONFORMANCE and TC-LEDGER-SKILL-COMPATIBILITY-CONTRACT complete every declared public Ledger workflow using only executable help and machine schemas, with no installed guidance, private store access, or provider adapter.
 - Embedded manifest declares host format, bundle checksum, operation IDs, executable range, and contract range and is generated/validated against OperationRegistry.
 - guidance list/check are read-only and classify compatible, missing, outdated, newer, or invalid bundles for supported explicit scopes.
 - guidance install fails before write for unsupported host/incompatible contract/unsafe path/invalid manifest; compatible install publishes only the documented host scope then verifies checksum/version.
@@ -104,12 +104,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1ie` | `verified` | 2026-07-21T08:01:45.3398343+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1ie` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires ArtifactReconciler from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md): Consumer requires OperationRegistry from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md): Skill operations consume the proven registry, process, artifact, and idempotency seams.

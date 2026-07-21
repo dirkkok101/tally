@@ -5,7 +5,7 @@
 - **Ref:** `TASK-LEDGER-VERIFY-UC-010`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-05-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `120`
 - **Dialect:** `default`
@@ -16,7 +16,7 @@ Verification-only task with no Implements link: trace revised UC-LEDGER-010 thro
 
 ## Objective
 
-Prove a valid full/partial refund offsets the original's current category and spend pool in the credit period while preserving facts and exact history.
+Prove a valid full/partial refund offsets the original's current category and Spend Pool in the credit period while preserving facts and exact history.
 
 ## References
 
@@ -38,7 +38,7 @@ Prove a valid full/partial refund offsets the original's current category and sp
 
 ### Acceptance Checks
 
-- A valid opposite-sign same-account credit creates one active attributable relationship and reduces External Spend under the original current category and pool in the credit EffectiveDate period.
+- A valid opposite-sign same-account credit creates one active attributable relationship and reduces External Spend under the original current category and pool in the credit Effective Date period.
 - Later category or pool correction moves the linked offset deterministically without rewriting either transaction or relationship; exact all-up, pool, category, and cell totals remain conserved.
 - Account/currency/sign/lifecycle/role/cardinality/cumulative-magnitude errors, replay conflict, concurrent credit reuse, and write failure leave prior state unchanged.
 
@@ -89,12 +89,15 @@ Prove a valid full/partial refund offsets the original's current category and sp
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1jr` | `verified` | 2026-07-21T08:01:54.8226525+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1jr` (verified)
 - `covers` -> UC-LEDGER-010: Confirm a refund or reversal
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
 - `touches` -> DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts

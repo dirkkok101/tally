@@ -5,7 +5,7 @@
 - **Ref:** `TASK-LEDGER-VERIFY-UC-002`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-05-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `40`
 - **Dialect:** `default`
@@ -16,7 +16,7 @@ Verification-only task with no Implements link: trace revised UC-LEDGER-002 thro
 
 ## Objective
 
-Prove one canonical transaction plus generic initial evidence is atomic, privacy-safe, replay-safe, and returned with explicit unknown/unassigned dimensions and reconciliation state.
+Prove one Canonical Transaction plus generic initial evidence is atomic, privacy-safe, replay-safe, and returned with explicit unknown/unassigned dimensions and Reconciliation State.
 
 ## References
 
@@ -39,7 +39,7 @@ Prove one canonical transaction plus generic initial evidence is atomic, privacy
 
 ### Acceptance Checks
 
-- A discovered record schema accepts exact signed ZAR/date facts, generic evidence allowlist fields, optional stable payment IDs, and idempotency identity for an active account; get round-trips facts, evidence link, current reconciliation state, payment attribution, and pool exactly.
+- A discovered record schema accepts exact signed ZAR/date facts, generic evidence allowlist fields, optional stable payment IDs, and Idempotency Identity for an active account; get round-trips facts, evidence link, current Reconciliation State, payment attribution, and pool exactly.
 - Provider/raw payload, full identifier, invalid fact/evidence/attribution/key, and missing/archived account failures create no transaction, evidence, link, assignment, or replay row.
 - Identical request or cross-key logical evidence replay returns the existing result; conflict preserves the original; crash injection proves transaction, evidence link, unknown/unassigned defaults, and replay outcome commit together or none.
 
@@ -89,12 +89,15 @@ Prove one canonical transaction plus generic initial evidence is atomic, privacy
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2m5` | `verified` | 2026-07-21T08:01:47.8771377+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2m5` (verified)
 - `covers` -> UC-LEDGER-002: Record a canonical transaction
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
 - `touches` -> DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts

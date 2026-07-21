@@ -6,10 +6,10 @@
   "slug": "CATEGORIES",
   "title": "Implement Spend Category catalogue operations",
   "description": [
-    "Deliver the gated flat category catalogue and attributable lifecycle operations."
+    "Deliver the owner-approved hierarchical category catalogue and attributable lifecycle/parent operations."
   ],
   "objective": [
-    "Maintain stable category identities and attributable lifecycle history while preserving all historical allocations."
+    "Maintain stable category identities, deterministic ancestry, and append-only parent/lifecycle history."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -187,54 +187,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT0P36SVJKZGDQ267ZYME5J",
+      "id": "01KY27S91SEARZC0XDWVSVYV4J",
       "kind": "acceptance_check",
       "text": [
-        "Unique normalized name creates one active category with stable ULID; conflicts return the documented stable error without mutation."
+        "Create accepts an optional active parent and returns stable ID, parent ID, depth, and ancestry; normalized names are unique only among active siblings."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:43:08.8575006+00:00"
     },
     {
-      "id": "01KXT0P36SBMVD3PFXEPKC84N3",
+      "id": "01KY27S91THBQ5ZAP6PWYEK14M",
       "kind": "acceptance_check",
       "text": [
-        "Rename appends attributable history and preserves ID and prior allocation references."
+        "Rename preserves ID, parent, children, and assignments; reparent appends one reasoned parent event and preserves identity while current ancestry changes."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:43:08.8575006+00:00"
     },
     {
-      "id": "01KXT0P36SS6WPFPFZTNBHVFGR",
+      "id": "01KY27S91T3Q67RBB2XHZJYMCV",
       "kind": "acceptance_check",
       "text": [
-        "Archive preserves historical assignments and blocks new assignment/correction until reactivation."
+        "Self-parent, descendant cycle, archived parent, archived target, and active-child archive requests return stable no-mutation errors; valid reactivation preserves identity and requires active ancestry."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:43:08.8575006+00:00"
     },
     {
-      "id": "01KXT0P36SA9HVE4DCV790YRWE",
+      "id": "01KY27S91T6MMYSX14T92A026W",
       "kind": "acceptance_check",
       "text": [
-        "Reactivation preserves ID, requires no active normalized-name conflict, and appends a lifecycle event."
+        "List/get return deterministic ancestry-path, name, and ID ordering for requested children, subtree, or all scope; all six mutations including reparent are idempotent."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
-    },
-    {
-      "id": "01KXT0P36SA8CCN9NF6FE6M032",
-      "kind": "acceptance_check",
-      "text": [
-        "List/get expose active/archived state and optional history in deterministic name/ID order; all mutations are idempotent."
-      ],
-      "required": 1,
-      "sort_order": 4,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:43:08.8575006+00:00"
     },
     {
       "id": "01KXT0P36TH81YJJF9TFY8GTPZ",
@@ -257,37 +247,48 @@
       "created_at": "2026-07-18T07:05:09.0800297+00:00"
     },
     {
-      "id": "01KXT0P36TNFYKZM4G0CD3GEV0",
+      "id": "01KY27S91TNPPH13SCHB5TJ0P2",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT implement hierarchy, split allocations, hard delete, or in-place lifecycle edits — rejected/deferred by DD-LEDGER-IMMUTABLE-HISTORY."
+        "Do NOT implement a flat catalogue, materialized-path overwrite, nested-set rewrite, split category assignment, hard delete, or in-place lifecycle edit — per DD-LEDGER-CATEGORY-HIERARCHY and DD-LEDGER-IMMUTABLE-HISTORY."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:43:08.8575006+00:00"
     },
     {
-      "id": "01KXT0P36TV0SVF7D0B5RH6CNH",
+      "id": "01KY27S91TJCS2X99RQDE13T2R",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT introduce generic CRUD save/update/delete commands or HTTP endpoints."
+        "Do NOT create budget amounts, infer Spend Pool, or implement BUDGET exact-node/subtree overlap policy."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:43:08.8575006+00:00"
     },
     {
-      "id": "01KXT0P36T2JRGJ0MBXXH4HTSZ",
+      "id": "01KY27S91T6Y3VK0CQBPYTHEJQ",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT implement before OQ-LEDGER-6 resolves without invalidating category contracts."
+        "Do NOT add HTTP endpoints, generic CRUD save/update/delete commands, or provider wording."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:43:08.8575006+00:00"
     }
   ],
   "references": [
+    {
+      "id": "01KY27T38EVTQ3WNXQR5BYRMQ3",
+      "target_ref_code": "DD-LEDGER-CATEGORY-HIERARCHY",
+      "target_entity_type": "design_decision",
+      "target_entity_id": "01KY25R1J105M3BFF06SC5B9EA",
+      "target_title": "Acyclic category hierarchy with single-node transaction assignment",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-21T11:43:35.6951892+00:00"
+    },
     {
       "id": "01KXT0P36TV9WS0P0Y8AKW8RRQ",
       "target_ref_code": "NFR-LEDGER-ATTRIBUTABLE-HISTORY",
@@ -320,24 +321,24 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT0P36TX5FKRD1ZSTSGHJFY",
+      "id": "01KY27S91TJXV8KVGFRAYR016Z",
       "gate_type": "test-evidence",
       "description": [
-        "Show rename/archive/reactivate history, conflict, restriction, and replay evidence."
+        "Show root/child create, rename, legal move, cycle rejection, active-child archive block, reactivation, history, ordering, and replay evidence."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:43:08.8575006+00:00"
     },
     {
-      "id": "01KXT0P36TN7WFYD7ZFM2S8XMT",
+      "id": "01KY27S91TBHBE0852RQT4Y878",
       "gate_type": "self-review",
       "description": [
-        "Confirm no hierarchy/split/hard-delete behavior exists."
+        "Confirm category identity is stable, parent changes are append-only, and no budget or split-allocation behavior exists."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:43:08.8575006+00:00"
     }
   ],
   "verification_steps": [

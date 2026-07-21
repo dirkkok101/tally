@@ -6,10 +6,10 @@
   "slug": "GATE-EVIDENCE-RECONCILIATION-POLICY",
   "title": "Validate deterministic reconciliation policy",
   "description": [
-    "Validation-only task with no Implements link: resolve OQ-LEDGER-13 from private representative agent-capture and statement-row evidence before automatic reconciliation code."
+    "Validation-only task with no Implements link: resolve only the automatic matching/correction subset of OQ-LEDGER-13 from paired private agent-capture and statement-row evidence."
   ],
   "objective": [
-    "Produce the bounded versioned match and guard-candidate matrix that permits automatic outcomes without false matches or duplicate statement-only facts."
+    "Produce a bounded versioned automatic match matrix while keeping explicit owner-approved statement correction available independently."
   ],
   "planning_state": "ready",
   "priority": 0,
@@ -103,34 +103,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0DT2MJVPM3WT9HW817AVP9",
+      "id": "01KY2839G519DPBPPG3QHG7SG6",
       "kind": "acceptance_check",
       "text": [
-        "A redacted matrix covers exact same-day matches, shifted dates, duplicate amounts, competing candidates, conflicting evidence, already-reconciled facts, and zero-candidate rows from every available account and institution without retaining raw rows or descriptions."
+        "A redacted paired-evidence matrix covers exact facts, differing authoritative statement facts, shifted dates, duplicate amounts, competing candidates, conflicts, reconciled facts, and zero-candidate rows without retaining raw rows or descriptions."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:36.9970466+00:00"
     },
     {
-      "id": "01KY0DT2MJRPT2WHRX1E2HH8AB",
+      "id": "01KY2839G624V8WM3CK886A44V",
       "kind": "acceptance_check",
       "text": [
-        "Each permitted automatic rule names exact account, currency, signed amount, date/tolerance, uniqueness, conflict guards, and stable reason output; every unproven case is explicitly review-required."
+        "Each permitted automatic rule names exact account, currency, signed amount, date/tolerance, uniqueness, conflict guards, authority basis, and stable reason; every unproven case is review-required."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:36.9970466+00:00"
     },
     {
-      "id": "01KY0DT2MJ8R7S0MA69GH1J4SB",
+      "id": "01KY2839G6GMTQWCXDKRF27NM6",
       "kind": "acceptance_check",
       "text": [
-        "OQ-LEDGER-13 resolves only when the matrix proves a bounded ReconciliationPolicyV1; otherwise the report records the contradiction, the question remains open, this task remains incomplete, and downstream reconciliation tasks stay blocked."
+        "OQ-LEDGER-13 resolves only when the matrix proves bounded ReconciliationPolicyV1 matching and any automatic correction subset; otherwise this task remains incomplete while explicit owner-approved correction remains a separately valid runtime path."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:36.9970466+00:00"
     },
     {
       "id": "01KY0DT2MJERSK5WM2CGQEG6K1",
@@ -153,34 +153,34 @@
       "created_at": "2026-07-20T18:49:57.6488706+00:00"
     },
     {
-      "id": "01KY0DT2MJVGQFS9XE79JZ3KY5",
+      "id": "01KY2839G672BFVHTZPCRGE31N",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT invent a date or amount tolerance, runtime configuration, fuzzy description score, or provider-specific field — per DD-LEDGER-RECONCILIATION-CONTRACT and DD-LEDGER-FINANCIAL-REPRESENTATION."
+        "Do NOT invent tolerance, fuzzy description scoring, provider fields, or hidden tie-breaking — per DD-LEDGER-RECONCILIATION-CONTRACT."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:36.9970466+00:00"
     },
     {
-      "id": "01KY0DT2MJA2KNE0X27JNZ24HH",
+      "id": "01KY2839G6C5KGM5TSB3B2CNGR",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT store raw statement rows, notification text, full identifiers, mailbox/MIME content, credentials, or owner-sensitive descriptions in the repository."
+        "Do NOT treat agent capture as co-equal authority or retain raw statement/email/MIME content; statement evidence is authoritative only through typed decisions."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:36.9970466+00:00"
     },
     {
-      "id": "01KY0DT2MJ0DWQYB6QPFEHTVX3",
+      "id": "01KY2839G68FXPX45BY6WD8SCX",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT resolve OQ-LEDGER-13 when any allowed automatic case has multiple compatible or guard candidates; return to lex:design if the bounded policy cannot be proven."
+        "Do NOT enable an automatic case with multiple compatible or guard candidates; unresolved automatic cases remain review-required."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:36.9970466+00:00"
     }
   ],
   "references": [
@@ -209,24 +209,24 @@
   ],
   "review_gates": [
     {
-      "id": "01KY0DT2MJYKT36WXEKSVTRWDV",
+      "id": "01KY2839G6QPB5K5C4XZ015KQ3",
       "gate_type": "human-review",
       "description": [
-        "Owner confirms the redacted matrix represents the private capture and statement cases."
+        "Owner confirms the redacted matrix represents paired capture and statement cases."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:36.9970466+00:00"
     },
     {
-      "id": "01KY0DT2MK8RGRFCWN233KZV6G",
+      "id": "01KY2839G6RQF9Q9WT83ZB0ZK6",
       "gate_type": "self-review",
       "description": [
-        "Repository diff contains no raw finance or transport payload and every excluded case fails closed."
+        "Every automatic case is bounded, statement-authoritative, provider-neutral, and fail-closed."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:36.9970466+00:00"
     }
   ],
   "verification_steps": [

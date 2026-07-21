@@ -5,7 +5,7 @@
 - **Ref:** `TASK-LEDGER-REFUNDS`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-03-RELATIONSHIPS-ACTUALS`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `20`
 - **Dialect:** `default`
@@ -16,7 +16,7 @@ Deliver explicit full/partial refund confirmation using the entire credit, cumul
 
 ## Objective
 
-Create attributable refund relationships that safely offset the original transaction's current category and spend pool in the credit's own Effective Date period.
+Create attributable refund relationships that safely offset the original transaction's current category and Spend Pool in the credit's own Effective Date period.
 
 ## References
 
@@ -26,7 +26,6 @@ Create attributable refund relationships that safely offset the original transac
 | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | `true` |
 | FR-LEDGER-REFUND-CONFIRMATION: Confirm refunds and reversals | `requirement` | `implements` | `true` |
 | NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | `true` |
-| OQ-LEDGER-5: Validate the proposed transfer, refund/reversal, and cash-withdrawal spend policies with representative transactions. | `open_question` | `blocked-by` | `true` |
 | TC-LEDGER-REFUND-CONFIRMATION-CONTRACT: Verify confirm refunds and reversals contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -50,7 +49,7 @@ Create attributable refund relationships that safely offset the original transac
 ### Failure Criteria
 
 - Do NOT infer a pool from account, instrument, cardholder, category, or evidence.
-- Do NOT rewrite either transaction or relationship when a current category/pool assignment changes.
+- Do NOT rewrite either transaction or relationship when a current category/Pool Assignment changes.
 
 ### Expected Outputs
 
@@ -100,13 +99,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-10w` | `verified` | 2026-07-21T08:01:38.0852835+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `blocked-by` -> OQ-LEDGER-5: Validate the proposed transfer, refund/reversal, and cash-withdrawal spend policies with representative transactions.
+- `bead-ref` -> `bd-10w` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Consumer requires TransactionStore from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSFERS](../tasks/transfers.md): Refunds consume the RelationshipStore and active-role model created with transfers.

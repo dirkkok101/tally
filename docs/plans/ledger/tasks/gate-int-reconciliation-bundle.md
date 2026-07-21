@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-05-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `4`
 - **Dialect:** `default`
 
 ## Summary
 
-Integration gate with no Implements link: compose evidence-aware candidate, apply, decision, and coverage modules and prove their public seam before actuals/recovery consumers.
+Integration gate with no Implements link: compose evidence-aware candidate, base apply, statement correction, decision, and coverage modules.
 
 ## Objective
 
-Expose one explicit ReconciliationOperationBundle with consistent schemas, errors, atomicity, and current-state semantics.
+Expose one nine-operation ReconciliationOperationBundle with consistent schemas, statement authority, atomicity, and current-state semantics.
 
 ## References
 
@@ -37,20 +37,21 @@ Expose one explicit ReconciliationOperationBundle with consistent schemas, error
 | [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md) | `compile` | Bundle consumes ReconciliationApplyOperationModule. |
 | [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md) | `compile` | Bundle consumes ReconciliationDecisionOperationModule. |
 | [TASK-LEDGER-RECONCILIATION-COVERAGE](../tasks/reconciliation-coverage.md) | `compile` | Bundle consumes ReconciliationCoverageOperationModule. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md) | `compile` | The bundle consumes the extended reconciliation.apply correction disposition. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- The bundle exposes evidence/reconciliation operation descriptors once with concrete source-generated request/result/error types and explicit DI; schema inventory contains no aliases or open payloads.
-- An end-to-end real-store sequence registers evidence, projects, applies match/statement-only/ambiguity, corrects an owner decision, completes coverage, and returns exact state/history without direct store access.
-- Crash/retry and provider-neutral schema suites exercise the composed handlers and report nonzero cases with no duplicate canonical effect.
+- The bundle exposes exactly nine evidence-reconciliation descriptors once with concrete source-generated request/result/error types and explicit DI; schema inventory contains correct_existing_from_statement and no aliases or open payloads.
+- A real-store sequence registers statement evidence, projects exact and differing candidates, confirms an exact fact, applies one authoritative correction with explicit carry-forward, creates a statement-only fact, preserves ambiguity, corrects an owner decision, completes coverage, and returns exact history without direct store access.
+- Compatible transfer/refund replacement remains valid; incompatible relationship correction returns review-required with unchanged financial state; crash/retry and provider-neutral scans report nonzero cases and no duplicate effect.
 
 ### Failure Criteria
 
-- Do NOT add reflection discovery, a generic reconciliation gateway, minimal overloaded reconcile commands, or INGEST batch behavior — rejected by the governing decisions.
-- Do NOT call one operation handler directly from another feature; compose through named stores/policies and the public operation modules.
-- Do NOT weaken conflict/review-required outcomes to make the integration test green.
+- Do NOT add reflection discovery, generic reconciliation gateway, overloaded reconcile commands, INGEST batch behavior, or raw payloads — rejected by the governing decisions.
+- Do NOT call one public handler from another; compose through named stores/policies and the statement coordinator.
+- Do NOT weaken conflict, ambiguity, authority, or review-required outcomes to make integration tests green.
 
 ### Expected Outputs
 
@@ -75,11 +76,12 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ReconciliationProjectionOperationModule | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
-| ReconciliationApplyOperationModule | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
-| ReconciliationDecisionOperationModule | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
-| ReconciliationCoverageOperationModule | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
-| ReconciliationOperationBundle | `produces` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
+| ReconciliationProjectionOperationModule | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS | Projection and candidate descriptors |
+| ReconciliationApplyOperationModule | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS | Base reconciliation dispositions |
+| StatementCorrectionOperationExtension | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS | Statement-authoritative correction disposition |
+| ReconciliationDecisionOperationModule | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS | Owner decision descriptors |
+| ReconciliationCoverageOperationModule | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS | Coverage and exception descriptors |
+| ReconciliationOperationBundle | `produces` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS | Exactly nine provider-neutral reconciliation descriptors |
 
 ### Verification
 
@@ -91,20 +93,25 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Attach composed operation inventory and the full match-first lifecycle evidence. | `true` |
+| `test-evidence` | Attach the exact nine-operation inventory and full exact/corrected/statement-only/ambiguous/coverage lifecycle evidence. | `true` |
+| `self-review` | Confirm one active economic effect and no provider or transport semantics across the composed seam. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1f1` | `verified` | 2026-07-21T08:01:30.0045098+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1f1` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md): Bundle consumes ReconciliationApplyOperationModule.
 - `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-COVERAGE](../tasks/reconciliation-coverage.md): Bundle consumes ReconciliationCoverageOperationModule.
 - `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md): Bundle consumes ReconciliationDecisionOperationModule.
 - `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-PROJECTION](../tasks/reconciliation-projection.md): Bundle consumes ReconciliationProjectionOperationModule.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md): The bundle consumes the extended reconciliation.apply correction disposition.
 - `governed-by` -> DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry
 - `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
 - `touches` -> DIAG-LEDGER-RECONCILIATION-SEQUENCE: Match-first statement reconciliation sequence

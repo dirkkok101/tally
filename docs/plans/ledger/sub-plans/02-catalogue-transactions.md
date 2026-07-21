@@ -15,13 +15,13 @@ Deliver provider-neutral financial dimensions, immutable transaction capture, ge
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-LEDGER-ACCOUNTS](../tasks/accounts.md) | Implement account lifecycle operations | `planned` | 1 |
-| [TASK-LEDGER-CATEGORIES](../tasks/categories.md) | Implement Spend Category catalogue operations | `planned` | 1 |
-| [TASK-LEDGER-PAYMENT-IDENTITIES](../tasks/payment-identities.md) | Implement payment-instrument and cardholder catalogues | `planned` | 1 |
-| [TASK-LEDGER-SPEND-POOLS](../tasks/spend-pools.md) | Implement spend-pool catalogue operations | `planned` | 1 |
-| [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md) | Implement provider-neutral evidence registration | `planned` | 0 |
-| [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md) | Implement immutable transaction record and get | `planned` | 1 |
-| [TASK-LEDGER-CATEGORY-ALLOCATIONS](../tasks/category-allocations.md) | Implement category assignment and correction | `planned` | 1 |
-| [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md) | Implement transaction payment attribution | `planned` | 1 |
-| [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md) | Implement transaction spend-pool assignment | `planned` | 1 |
-| [TASK-LEDGER-EVIDENCE-LINKING](../tasks/evidence-linking.md) | Implement supporting evidence linkage | `planned` | 1 |
+| [TASK-LEDGER-ACCOUNTS](../tasks/accounts.md) | Implement account lifecycle operations | `ready` | 1 |
+| [TASK-LEDGER-CATEGORIES](../tasks/categories.md) | Implement Spend Category catalogue operations | `ready` | 1 |
+| [TASK-LEDGER-PAYMENT-IDENTITIES](../tasks/payment-identities.md) | Implement Payment Instrument and cardholder catalogues | `ready` | 1 |
+| [TASK-LEDGER-SPEND-POOLS](../tasks/spend-pools.md) | Implement Spend Pool catalogue operations | `ready` | 1 |
+| [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md) | Implement provider-neutral evidence registration | `ready` | 0 |
+| [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md) | Implement immutable transaction record and get | `ready` | 1 |
+| [TASK-LEDGER-CATEGORY-ALLOCATIONS](../tasks/category-allocations.md) | Implement Category Assignment and correction | `ready` | 1 |
+| [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md) | Implement transaction payment attribution | `ready` | 1 |
+| [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md) | Implement transaction Spend Pool Assignment | `ready` | 1 |
+| [TASK-LEDGER-EVIDENCE-LINKING](../tasks/evidence-linking.md) | Implement supporting evidence linkage | `ready` | 1 |

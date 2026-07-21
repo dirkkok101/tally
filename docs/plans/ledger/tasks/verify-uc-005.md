@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-VERIFY-UC-005`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-05-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `70`
 - **Dialect:** `default`
 
 ## Summary
 
-Verification-only task with no Implements link: trace revised UC-LEDGER-005 through the Release published CLI.
+Verification-only task with no Implements link: trace exact hierarchy/pool/reconciliation actuals and snapshot pagination through the Release CLI.
 
 ## Objective
 
-Prove exact snapshot-bound actuals membership and named totals across category, pool, payment, relationship, evidence, and reconciliation filters.
+Prove exact membership and totals across transfers, refunds, hierarchy, dimensions, and statement correction.
 
 ## References
 
@@ -39,14 +39,14 @@ Prove exact snapshot-bound actuals membership and named totals across category, 
 
 ### Acceptance Checks
 
-- Explicit filter combinations select active canonical transactions under EffectiveDate, category/pool, instrument/cardholder, relationship, evidence, reconciliation, and correction rules; invalid combinations fail before snapshot creation.
-- One committed snapshot returns deterministic pages and unchanged full-set Net Account Movement, External Spend, Budget Actual, pool, category, and pool-by-category totals despite later writes; expired/unavailable cursor fails explicitly.
-- Every all-up result equals exact selected membership and grouped cells including uncategorized and unassigned; refunds, transfers, reversals, and corrections obey the governing formulas and integrity mismatch fails closed.
+- Published actuals queries prove every filter and explicit unknown/uncategorized/unassigned bucket with deterministic membership and exact Net Account Movement, External Spend, and Budget Actual.
+- Owned-transfer principal contributes zero; separate fees remain spend; refunds offset original current category/pool in refund date; cash follows OQ-LEDGER-16Resolution.
+- Category-direct, subtree, pool, and matrix totals reconcile without double counting before and after hierarchy moves.
+- Statement correction excludes the superseded fact and includes the replacement once; later snapshot pages retain frozen ancestry, reconciliation state, membership, ordering, and totals despite writes.
 
 ### Failure Criteria
 
-- Do NOT verify only aggregate totals; prove exact membership and every requested pool/category cell.
-- Do NOT duplicate formulas in the test fixture; reconcile published items independently.
+- Do NOT accept aggregate-only assertions, live second-page reads, stale hierarchy, duplicated ancestors, both replacement facts, or private-store calculation.
 
 ### Expected Outputs
 
@@ -84,17 +84,19 @@ Prove exact snapshot-bound actuals membership and named totals across category, 
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Evidence maps UC-LEDGER-005 main scenario and each numbered failure path to stdout/error/exit/state assertions. | `true` |
-| `self-review` | No scenario calls handlers or SQLite directly. | `true` |
+| `test-evidence` | Reconcile every named/group total to explicit frozen membership across all UC-LEDGER-005 paths. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3na` | `verified` | 2026-07-21T08:01:52.1472890+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3na` (verified)
 - `covers` -> UC-LEDGER-005: Query and reconcile ledger actuals
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
 - `touches` -> DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts

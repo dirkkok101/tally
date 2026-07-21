@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-VERIFY-UC-003`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-05-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `50`
 - **Dialect:** `default`
 
 ## Summary
 
-Verification-only task intentionally has no Implements link: trace UC-LEDGER-003 main scenario and every failure path through the published CLI.
+Verification-only task with no Implements link: trace hierarchical UC-LEDGER-003 through the Release CLI.
 
 ## Objective
 
-Prove UC-LEDGER-003 through observable process results and durable-state invariants.
+Prove one category assignment remains attributable and rolls up exactly through the current hierarchy.
 
 ## References
 
@@ -38,14 +38,13 @@ Prove UC-LEDGER-003 through observable process results and durable-state invaria
 
 ### Acceptance Checks
 
-- The agent retrieves transaction/allocation history, assigns an active category, corrects it with reason, and later queries use one active allocation while retaining both decisions.
-- Missing transaction, archived/missing category, inactive transaction, cardinality violation, and same active decision return documented no-mutation outcomes.
-- Source transaction facts remain unchanged and identical retry creates no second allocation.
+- Published calls assign root, intermediate, and leaf nodes and correct between them; each transaction has zero or one active assignment and facts/other dimensions remain unchanged.
+- Archived target, inactive transaction, simultaneous split request, stale correction, and conflicting replay produce documented no-mutation outcomes.
+- After category rename and reparent, the assignment ID/history remains stable while direct and current-ancestor membership each include the transaction exactly once.
 
 ### Failure Criteria
 
-- Do NOT treat a correction as an in-place update or rewrite transaction facts.
-- Do NOT omit UC-LEDGER-003 no-change/idempotency path.
+- Do NOT bypass the public CLI, assert only stored category ID, or omit split, lifecycle, hierarchy-move, and replay paths.
 
 ### Expected Outputs
 
@@ -83,17 +82,19 @@ Prove UC-LEDGER-003 through observable process results and durable-state invaria
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Evidence maps UC-LEDGER-003 main scenario and each numbered failure path to stdout/error/exit/state assertions. | `true` |
-| `self-review` | No scenario calls handlers or SQLite directly. | `true` |
+| `test-evidence` | Map UC-LEDGER-003 main and every failure path to process output, durable history, and exact membership. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3ub` | `verified` | 2026-07-21T08:01:50.7877307+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3ub` (verified)
 - `covers` -> UC-LEDGER-003: Assign or correct a spend category
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
 - `touches` -> DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts

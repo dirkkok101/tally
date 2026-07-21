@@ -9,7 +9,7 @@
     "Deliver owner confirm/reject and attributable get/revoke/replace transitions over immutable decision and evidence-link history."
   ],
   "objective": [
-    "Resolve ambiguity and correct wrong reconciliation outcomes only through explicit valid owner intent without duplicate actuals or silent evidence movement."
+    "Resolve ambiguity and correct decisions through explicit owner intent while retaining statement-authority detail and one active confirmation target."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -191,44 +191,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY1P0GEY341NWT3X6DBJX7JQ",
+      "id": "01KY283BA8BGDCCGGXT9YTM33H",
       "kind": "acceptance_check",
       "text": [
-        "decision.get returns full ordered history, active decision/link, deterministic or owner-approved basis, actor, reason, policy/version, and current state."
+        "decision.get returns ordered history, prior and active transaction IDs, confirmed_existing or corrected_from_statement detail, deterministic-policy or owner authority, statement authority basis, actor, reason, policy/version, links, carry-forward IDs, relationship replacement IDs, and current state."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T06:32:31.4537771+00:00"
+      "created_at": "2026-07-21T11:48:38.8557044+00:00"
     },
     {
-      "id": "01KY1P0GEYZPHN7WP8J65DA67T",
+      "id": "01KY283BA8TSZHRRGJEMF0G3B6",
       "kind": "acceptance_check",
       "text": [
-        "confirm/reject require explicit owner actor and reason; revoke/replace require the expected active predecessor and atomically retire/create links and decisions."
+        "confirm/reject require typed owner actor and reason; revoke/replace require the expected active predecessor and atomically retire/create links and decisions."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T06:32:31.4537771+00:00"
+      "created_at": "2026-07-21T11:48:38.8557044+00:00"
     },
     {
-      "id": "01KY1P0GEY7R1Q069264K85S7J",
+      "id": "01KY283BA8N9YQXPE391C9R1HW",
       "kind": "acceptance_check",
       "text": [
-        "Missing/inactive/incompatible candidate, evidence confirmed elsewhere, stale predecessor, conflicting replay, or write failure preserves the prior active state and returns a stable result."
+        "Missing/inactive/incompatible candidate, evidence confirmed elsewhere, stale predecessor, conflicting replay, or write failure preserves prior active state with a stable result."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T06:32:31.4537771+00:00"
+      "created_at": "2026-07-21T11:48:38.8557044+00:00"
     },
     {
-      "id": "01KY1P0GEY42VF7D75YKTKMZFJ",
+      "id": "01KY283BA8SQRWCXG6KPP6H5WM",
       "kind": "acceptance_check",
       "text": [
-        "Correction never deletes history, moves evidence to a superseding fact, or permits one Evidence Record to confirm multiple active transactions."
+        "Correction never deletes history, edits a fact, or permits one statement Evidence Record to confirm multiple active transactions."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T06:32:31.4537771+00:00"
+      "created_at": "2026-07-21T11:48:38.8557044+00:00"
     },
     {
       "id": "01KY0DT2MWY04CH8Y6MZH5JG4M",
@@ -241,34 +241,34 @@
       "created_at": "2026-07-20T18:49:57.6488706+00:00"
     },
     {
-      "id": "01KY0DT2MWJ77H40MXR4165DGB",
+      "id": "01KY283BA99G5SNDJC2D19R9VS",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT treat Hermes clarification as implicit owner intent; require the typed owner assertion fields per DD-LEDGER-RECONCILIATION-CONTRACT."
+        "Do NOT treat Hermes clarification as implicit owner intent; require typed owner assertion fields."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:38.8557044+00:00"
     },
     {
-      "id": "01KY0DT2MW2Y2H1RM06PMFCB57",
+      "id": "01KY283BA9CXR4CYEEZ0E7ZAN4",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT overwrite/delete decisions or links, silently inherit across supersession, or repair duplicates by editing facts — rejected per DD-LEDGER-IMMUTABLE-HISTORY."
+        "Do NOT overwrite/delete decisions or links, silently inherit across ordinary supersession, or repair duplicates by editing facts — per DD-LEDGER-IMMUTABLE-HISTORY."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:38.8557044+00:00"
     },
     {
-      "id": "01KY0DT2MWWM95BRFPPDMXV04P",
+      "id": "01KY283BA95CHZ086M6VT4YWR7",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT bypass logical decision idempotency."
+        "Do NOT bypass logical decision idempotency or erase statement authority/carry-forward references."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:38.8557044+00:00"
     }
   ],
   "references": [
@@ -304,14 +304,24 @@
   ],
   "review_gates": [
     {
-      "id": "01KY0DT2MX2Y0543B55RDJ16CX",
+      "id": "01KY283BA9VGX7CVVRNSHBE6FV",
       "gate_type": "test-evidence",
       "description": [
-        "Tests prove explicit owner intent, immutable history, and one active confirmation target."
+        "Prove explicit owner intent, immutable predecessor history, authority detail, and one active confirmation target."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:38.8557044+00:00"
+    },
+    {
+      "id": "01KY283BA9KKSG5GMTY96FJKWB",
+      "gate_type": "self-review",
+      "description": [
+        "Every current state is derived from append-only facts, links, and decisions."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:48:38.8557044+00:00"
     }
   ],
   "verification_steps": [

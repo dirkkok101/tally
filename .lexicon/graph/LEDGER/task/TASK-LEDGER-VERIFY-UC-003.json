@@ -6,10 +6,10 @@
   "slug": "VERIFY-UC-003",
   "title": "CategoryAllocationWorkflow",
   "description": [
-    "Verification-only task intentionally has no Implements link: trace UC-LEDGER-003 main scenario and every failure path through the published CLI."
+    "Verification-only task with no Implements link: trace hierarchical UC-LEDGER-003 through the Release CLI."
   ],
   "objective": [
-    "Prove UC-LEDGER-003 through observable process results and durable-state invariants."
+    "Prove one category assignment remains attributable and rolls up exactly through the current hierarchy."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -92,34 +92,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT0ZW3H48R34N68CFA148PY",
+      "id": "01KY28D4SAVM2TGPYEZA6Y5CPT",
       "kind": "acceptance_check",
       "text": [
-        "The agent retrieves transaction/allocation history, assigns an active category, corrects it with reason, and later queries use one active allocation while retaining both decisions."
+        "Published calls assign root, intermediate, and leaf nodes and correct between them; each transaction has zero or one active assignment and facts/other dimensions remain unchanged."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-21T11:53:59.8497815+00:00"
     },
     {
-      "id": "01KXT0ZW3H2JYCYJADPJ1XR3K9",
+      "id": "01KY28D4SADXZCQG1B1EXC90A2",
       "kind": "acceptance_check",
       "text": [
-        "Missing transaction, archived/missing category, inactive transaction, cardinality violation, and same active decision return documented no-mutation outcomes."
+        "Archived target, inactive transaction, simultaneous split request, stale correction, and conflicting replay produce documented no-mutation outcomes."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-21T11:53:59.8497815+00:00"
     },
     {
-      "id": "01KXT0ZW3HK3D57C2TD8DWDCZ5",
+      "id": "01KY28D4SAK705YFM55ADGMBSK",
       "kind": "acceptance_check",
       "text": [
-        "Source transaction facts remain unchanged and identical retry creates no second allocation."
+        "After category rename and reparent, the assignment ID/history remains stable while direct and current-ancestor membership each include the transaction exactly once."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-21T11:53:59.8497815+00:00"
     },
     {
       "id": "01KXT0ZW3HVYNQT8EMK7T0DB5P",
@@ -142,24 +142,14 @@
       "created_at": "2026-07-18T07:10:29.4870620+00:00"
     },
     {
-      "id": "01KXT0ZW3HKWCB80BDG609JCGV",
+      "id": "01KY28D4SATWE6RSRW2NC7S7ER",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT treat a correction as an in-place update or rewrite transaction facts."
+        "Do NOT bypass the public CLI, assert only stored category ID, or omit split, lifecycle, hierarchy-move, and replay paths."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
-    },
-    {
-      "id": "01KXT0ZW3HB4PSKWBPDY7XDGMX",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT omit UC-LEDGER-003 no-change/idempotency path."
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-21T11:53:59.8497815+00:00"
     },
     {
       "id": "01KXT0ZW3HP9YP01DBV52GT3CF",
@@ -231,24 +221,14 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT0ZW3H4REA22SGF7XFP1M2",
+      "id": "01KY28D4SAGH30D940TBYSG6D2",
       "gate_type": "test-evidence",
       "description": [
-        "Evidence maps UC-LEDGER-003 main scenario and each numbered failure path to stdout/error/exit/state assertions."
+        "Map UC-LEDGER-003 main and every failure path to process output, durable history, and exact membership."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
-    },
-    {
-      "id": "01KXT0ZW3HSH0HZNDNCA46NT0W",
-      "gate_type": "self-review",
-      "description": [
-        "No scenario calls handlers or SQLite directly."
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-21T11:53:59.8497815+00:00"
     }
   ],
   "verification_steps": [

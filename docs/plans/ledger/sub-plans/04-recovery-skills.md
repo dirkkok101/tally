@@ -15,8 +15,8 @@ Verify every durable state type, publish backups and candidate activation, evolv
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-LEDGER-DURABLE-STATE-VERIFIER](../tasks/durable-state-verifier.md) | Build the complete Durable Ledger State verifier | `planned` | 0 |
-| [TASK-LEDGER-BACKUP-VERIFY](../tasks/backup-verify.md) | Create and independently verify Ledger backups | `planned` | 1 |
-| [TASK-LEDGER-RESTORE-ACTIVATE](../tasks/restore-activate.md) | Implement safe restore prepare and activation | `planned` | 1 |
-| [TASK-LEDGER-STORAGE-EVOLUTION](../tasks/storage-evolution.md) | Implement safe storage evolution and status | `planned` | 1 |
-| [TASK-LEDGER-AGENT-SKILLS](../tasks/agent-skills.md) | Implement version-matched integration guidance | `planned` | 1 |
+| [TASK-LEDGER-DURABLE-STATE-VERIFIER](../tasks/durable-state-verifier.md) | Build the complete Durable Ledger State verifier | `ready` | 0 |
+| [TASK-LEDGER-BACKUP-VERIFY](../tasks/backup-verify.md) | Create and independently verify Ledger backups | `ready` | 1 |
+| [TASK-LEDGER-RESTORE-ACTIVATE](../tasks/restore-activate.md) | Implement safe restore prepare and activation | `ready` | 1 |
+| [TASK-LEDGER-STORAGE-EVOLUTION](../tasks/storage-evolution.md) | Implement safe storage evolution and status | `ready` | 1 |
+| [TASK-LEDGER-AGENT-SKILLS](../tasks/agent-skills.md) | Implement version-matched integration guidance | `ready` | 1 |

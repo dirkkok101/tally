@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-CORE-PROCESS-CONTRACT`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-01-CORE-RUNTIME`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `10`
 - **Dialect:** `default`
 
 ## Summary
 
-Create the .NET 10 Native-AOT solution and provider-neutral descriptor-driven process boundary every Ledger slice registers with.
+Create the .NET 10 Native-AOT solution and provider-neutral descriptor-driven process boundary every Ledger slice extends.
 
 ## Objective
 
-Produce one offline tally executable whose explicit 72-operation registry drives dispatch, help, schema, structured streams, errors, exits, compatibility, and version reporting for any external caller.
+Produce one offline tally executable whose explicit foundation registry drives dispatch, help, schemas, streams, errors, exits, compatibility, and version reporting.
 
 ## References
 
@@ -47,11 +47,11 @@ No task dependencies recorded.
 
 ### Acceptance Checks
 
-- Release linux-x64 publish contains one native tally executable and adjacent SQLite native library; invocations start no daemon/listener and leave no child process.
-- tally schema list/show, tally version, and help return deterministic descriptor-derived operation, request, result, error, exit, compatibility, and example metadata without store access or an installed skill.
-- Valid JSON through explicit --input - or @file writes exactly one result envelope to stdout; malformed JSON, unknown fields, unknown operations, and provider or delivery fields fail before mutation with documented error/exit.
-- Expected and sanitized unexpected failures keep diagnostics on stderr with metadata/correlation only and never serialize financial payloads, evidence payloads, full identifiers, or stack traces.
-- Every asynchronous process/handler boundary propagates CancellationToken; registration is explicit; the final inventory gate proves exactly 72 provider-neutral operations.
+- Release linux-x64 publish contains one native tally executable and adjacent SQLite library; invocations start no daemon/listener and leave no child process.
+- schema list/show, version, and help return deterministic descriptor-derived request/result/error/exit/compatibility/example metadata without store access or installed guidance.
+- Valid JSON through --input - or @file writes one result envelope to stdout; malformed JSON, unknown fields/operations, and provider/delivery fields fail before mutation.
+- Expected and sanitized unexpected failures keep diagnostics on stderr with metadata only and never serialize financial/evidence payloads, full identifiers, or stack traces.
+- Every async process/handler boundary propagates CancellationToken and registration is explicit; this completed foundation supplied the prior descriptor scaffold, while TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT owns the revised exact 73-operation release inventory after category.reparent is added.
 
 ### Failure Criteria
 
@@ -74,7 +74,7 @@ No task dependencies recorded.
 
 ### Notes
 
-- The registry is authoritative; optional guidance is derived and cannot broaden the public contract.
+- Historical completion remains valid for the process boundary; the later public-contract gate expands the descriptor inventory from its original 72-operation scaffold to 73.
 
 ### File Contracts
 
@@ -118,16 +118,19 @@ No task dependencies recorded.
 | Gate | Description | Required |
 |---|---|---|
 | `test-evidence` | Attach contract-test and AOT publish output with zero failures/warnings. | `true` |
-| `self-review` | Compare process code with every rejected alternative in both decisions. | `true` |
+| `self-review` | Confirm the process boundary stays provider-neutral and the final inventory count is owned downstream. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3sx` | `verified` | 2026-07-21T08:01:33.9439541+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3sx` (verified)
 - `governed-by` -> ADR-CORE-0010: CommandResult Pattern for Commands
 - `governed-by` -> ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning
 - `governed-by` -> ADR-CORE-0024: Vertical Slice Architecture

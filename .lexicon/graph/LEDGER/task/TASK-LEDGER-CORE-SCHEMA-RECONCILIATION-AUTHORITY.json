@@ -1,0 +1,367 @@
+{
+  "id": "01KY27PSPV4K7CNBQ71Z99Y7K2",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT069TD553802AT505MG72F",
+  "ref_code": "TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY",
+  "slug": "CORE-SCHEMA-RECONCILIATION-AUTHORITY",
+  "title": "Add the V002 statement-authority schema upgrade",
+  "description": [
+    "Additive schema follow-up for the already-completed V001 evidence fragment; preserve V001 and upgrade both existing and fresh stores to the revised statement-authoritative model."
+  ],
+  "objective": [
+    "Represent statement corrections, prior and active transaction identity, dimension carry-forward, relationship replacement, and historical evidence support without rewriting V001."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 25,
+  "created_at": "2026-07-21T11:41:47.6127762+00:00",
+  "dependencies": [
+    {
+      "id": "01KY27Q555BA2MX631WBB7XMFY",
+      "target": "TASK-LEDGER-CORE-SCHEMA-CATALOGUE",
+      "dependency_type": "compile",
+      "reason": [
+        "Correction carry-forward references category, payment, and pool catalogue identities."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:41:59.3347435+00:00"
+    },
+    {
+      "id": "01KY27Q3YY8G1H9Z9K8B2PAZG9",
+      "target": "TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION",
+      "dependency_type": "compile",
+      "reason": [
+        "V002 upgrades the committed V001 evidence and reconciliation tables."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:58.1113383+00:00"
+    },
+    {
+      "id": "01KY27Q7X9XK4B73QQ1PRKV0A5",
+      "target": "TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS",
+      "dependency_type": "compile",
+      "reason": [
+        "Statement correction optionally references invariant-preserving relationship and assignment events."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-21T11:42:02.1544433+00:00"
+    },
+    {
+      "id": "01KY27Q6FVW9MJWJV41MH7PE92",
+      "target": "TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS",
+      "dependency_type": "compile",
+      "reason": [
+        "Statement correction references prior, replacement, and supersession transaction records."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-21T11:42:00.7001216+00:00"
+    },
+    {
+      "id": "01KY28J634V6Y33JKYYBR768VA",
+      "target": "TASK-LEDGER-CORE-STORAGE",
+      "dependency_type": "sequence",
+      "reason": [
+        "Consumes LedgerSchemaFragmentRegistry for ordered V002 registration."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-21T11:56:45.0296465+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY27PSPZ192ANYPX65X2HFA0",
+      "path": "src/Tally/Infrastructure/Storage/Migrations/V002/V002StatementAuthoritySchema.cs",
+      "action": "create",
+      "role": "schema upgrade",
+      "required": 1,
+      "notes": [
+        "Add statement-authority and correction history without editing V001"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+    },
+    {
+      "id": "01KY27PSQ2ZMZHTABMMTJPC80D",
+      "path": "tests/Tally.Tests/Infrastructure/Storage/LedgerStatementAuthoritySchemaTests.cs",
+      "action": "test",
+      "role": "real SQLite upgrade verification",
+      "required": 1,
+      "notes": [
+        "Cover V001 upgrade, fresh store, constraints, rollback, and reopen"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY27PSQ2STBQCGQXXWD8N6HK",
+      "name": "V002StatementAuthoritySchema",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "notes": [
+        "Additive statement-authority schema fragment"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+    },
+    {
+      "id": "01KY27PSQ29BBZ7B8SPEHDB0XE",
+      "name": "V001EvidenceReconciliationSchema",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECORD-LINK",
+      "notes": [
+        "Committed predecessor schema"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+    },
+    {
+      "id": "01KY27PSQ2V6SZCPSW0TFAYXK0",
+      "name": "LedgerSchemaFragmentRegistry",
+      "direction": "consumes",
+      "contract_ref_code": "DD-LEDGER-EMBEDDED-STORAGE",
+      "notes": [
+        "Transactional version ordering"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY27PSPYNZ9TVNTZCD8TVSYY",
+      "kind": "acceptance_check",
+      "text": [
+        "V002 migrates a valid V001 store without data loss and expands reconciliation decisions to distinguish confirmed existing, corrected from statement, statement-only, ambiguity, exception, owner confirmation, rejection, revocation, and replacement."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+    },
+    {
+      "id": "01KY27PSPZ5NDMPCPNDFN7H9GY",
+      "kind": "acceptance_check",
+      "text": [
+        "A statement-correction record references prior and active transaction IDs, supersession, category and pool carry-forward events, payment carry-forward or explicit unknown initialization, optional invariant-preserving relationship replacement events, authority basis, actor, reason, and predecessor decision."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+    },
+    {
+      "id": "01KY27PSPZR2RYGEY03WW455CK",
+      "kind": "acceptance_check",
+      "text": [
+        "Evidence-link history supports retained historical agent evidence and one active confirming statement target; all new state is append-only, RESTRICT-linked, and excluded from arbitrary metadata or raw payloads."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+    },
+    {
+      "id": "01KY27PSPZ1WGXRFT8R077A46N",
+      "kind": "acceptance_check",
+      "text": [
+        "Real-SQLite tests prove V001-to-V002 upgrade, fresh composition, invalid reference rejection, immutable history, atomic rollback, and idempotent re-open with observable row and migration-metadata counts."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+    },
+    {
+      "id": "01KY27PSPZJ4YAQJJ7DYD70ZJE",
+      "kind": "constraint",
+      "text": [
+        "The migration is additive from committed V001 and composes under LedgerSchemaFragmentRegistry in one transaction."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+    },
+    {
+      "id": "01KY27PSPZ4Y9JFWWCQRA6DZJQ",
+      "kind": "expected_output",
+      "text": [
+        "V002StatementAuthoritySchema"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+    },
+    {
+      "id": "01KY27PSPZ2WD9ZMS8A0MQMVQ4",
+      "kind": "expected_output",
+      "text": [
+        "LedgerStatementAuthoritySchemaTests upgrade and rollback evidence"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+    },
+    {
+      "id": "01KY27PSPZ6KX4837R7R47EP6Z",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT edit or replace V001EvidenceReconciliationSchema.cs — completed migration history is extended through V002."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+    },
+    {
+      "id": "01KY27PSPZAD8JZ0Y4MC80G56Y",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT overwrite the notification-derived fact, move evidence in place, or allow a statement row to confirm two active transactions — rejected by DD-LEDGER-RECONCILIATION-CONTRACT."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+    },
+    {
+      "id": "01KY27PSPZ4QBCE8SQHFJSE2Q9",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add raw statement, email, MIME, provider cursor, recipient, or delivery columns — per ADR-CORE-0030 and C18."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+    },
+    {
+      "id": "01KY27PSPZCK79NV9ZMZEXYNPE",
+      "kind": "note",
+      "text": [
+        "Removal impact: none; every V001 record remains queryable after upgrade."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY27PTDPV2C24HWN415B0PKT",
+      "target_ref_code": "DD-LEDGER-EMBEDDED-STORAGE",
+      "target_entity_type": "design_decision",
+      "target_entity_id": "01KXSWZ6WJJ89QZ0KYCV9EPTV7",
+      "target_title": "Raw SQLite with host-managed at-rest protection",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:48.3431677+00:00"
+    },
+    {
+      "id": "01KY27PVHWYGZSDZ182W5SWV6C",
+      "target_ref_code": "DD-LEDGER-IMMUTABLE-HISTORY",
+      "target_entity_type": "design_decision",
+      "target_entity_id": "01KXSWZ7J9GPCEHT6NPRX2M79C",
+      "target_title": "Immutable facts, evidence, decisions, and append-only lifecycle history",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:41:49.5010004+00:00"
+    },
+    {
+      "id": "01KY27PWQQVF4WJ0ZBFKYE7CA5",
+      "target_ref_code": "DD-LEDGER-RECONCILIATION-CONTRACT",
+      "target_entity_type": "design_decision",
+      "target_entity_id": "01KY0BPZHRNAE4X76HMJ3EC0ND",
+      "target_title": "Explicit match-first evidence reconciliation contract",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-21T11:41:50.7129069+00:00"
+    },
+    {
+      "id": "01KY27PXVGZQZ3TZTTBXRQDP49",
+      "target_ref_code": "DM-LEDGER-EVIDENCE-RECORD-LINK",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KY0BTQ6J2YPR81ZERF5RK3YW",
+      "target_title": "EvidenceRecordObservationAndLink",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-21T11:41:51.8576207+00:00"
+    },
+    {
+      "id": "01KY27PZ20AD4E7DJ6Y9WAXYXQ",
+      "target_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KY0BTQPT00M98Z8NRSF7Y2XP",
+      "target_title": "ReconciliationProjectionDecisionAndCoverage",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-21T11:41:53.0888778+00:00"
+    },
+    {
+      "id": "01KY27Q090VG8T6G0PFG832GGN",
+      "target_ref_code": "DM-LEDGER-PAYMENT-ATTRIBUTION",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KY0BTRE9PBBFAS2M7GP801QM",
+      "target_title": "PaymentInstrumentCardholderAndAttribution",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-21T11:41:54.3375677+00:00"
+    },
+    {
+      "id": "01KY27Q1GVEA2YSF4WX1S0YYK7",
+      "target_ref_code": "DM-LEDGER-SPEND-POOL-ASSIGNMENT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KY0BTSBRPW49WGWJSS2KA9HW",
+      "target_title": "SpendPoolAndAssignment",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-21T11:41:55.6123077+00:00"
+    },
+    {
+      "id": "01KY27Q2SJSYK2YYXWPP21YMNK",
+      "target_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSX0SX8SS7SNVPA6VEMRF06",
+      "target_title": "FinancialRelationshipAndLifecycle",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-21T11:41:56.9152599+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY27PSQ29AKWPM1JZTPHGBAY",
+      "gate_type": "test-evidence",
+      "description": [
+        "Show V001 preservation, exact upgraded inventory, rollback, and no-data-loss evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+    },
+    {
+      "id": "01KY27PSQ2A6W1KJP8YCG623RA",
+      "gate_type": "self-review",
+      "description": [
+        "Confirm every correction reference is attributable and no transport or raw-payload field exists."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY27PSQ24TMFQ7T5BFTNR6PX",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Infrastructure.Storage.LedgerStatementAuthoritySchemaTests --no-restore",
+      "expected_result": "exit 0; at least 14 V001-upgrade, fresh-composition, constraint, immutability, rollback, and reopen cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-07-21T11:41:47.6127762+00:00"
+    }
+  ]
+}

@@ -6,10 +6,10 @@
   "slug": "CATEGORY-ALLOCATIONS",
   "title": "Implement Category Assignment and correction",
   "description": [
-    "Deliver assign/correct handlers and append-only allocation storage with one active category per active transaction."
+    "Deliver zero-or-one Category Assignment, correction, and reconciliation-only carry-forward against any active hierarchy node without rewriting facts."
   ],
   "objective": [
-    "Apply and correct attributable category decisions without rewriting transaction facts or losing prior allocations."
+    "Apply one attributable category decision and expose exact direct/current-ancestor membership."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -121,96 +121,122 @@
   ],
   "interfaces": [
     {
-      "id": "01KXT0P36WSD35M8G4PH603958",
+      "id": "01KY280YFRKZ15JD6NYYTZSAM2",
       "name": "CategoryAllocationOperationModule",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
+      "notes": [
+        "Public assign and correct operations"
+      ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:47:20.1828451+00:00"
     },
     {
-      "id": "01KXT0P36WVM2JHKC1EXR4CT4P",
+      "id": "01KY280YFRAPZXYPMKB8GMW788",
       "name": "CategoryAllocationStore",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
+      "notes": [
+        "Append-only assignment persistence"
+      ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:47:20.1828451+00:00"
     },
     {
-      "id": "01KXT0P36WGKN51K1F29PKMR5F",
+      "id": "01KY280YFR8PN83Y85S9GCW5AT",
+      "name": "CategoryAllocationStore.CarryForwardAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
+      "notes": [
+        "Reconciliation-only explicit carry-forward"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-21T11:47:20.1828451+00:00"
+    },
+    {
+      "id": "01KY280YFRKN2XHN2XSE1FD1SX",
       "name": "TransactionStore",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-TRANSACTION-FACT",
-      "sort_order": 2,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "notes": [
+        "Active transaction identity"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-21T11:47:20.1828451+00:00"
     },
     {
-      "id": "01KXT0P36WM800MX427TC9CY56",
+      "id": "01KY280YFR0HHQ9EVYDXEB9E7Z",
       "name": "CategoryStore",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-SPEND-CATEGORY",
-      "sort_order": 3,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "notes": [
+        "Active hierarchy and ancestry"
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-21T11:47:20.1828451+00:00"
     },
     {
-      "id": "01KXT0P36W6APTHQ6E0Q7ZJKD5",
+      "id": "01KY280YFRYG842JT358MDPAYT",
       "name": "LedgerMutationExecutor.ExecuteAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
-      "sort_order": 4,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "notes": [
+        "Atomic replay boundary"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-21T11:47:20.1828451+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KXT0P36VD5MRFTPT6ZAWYC0C",
+      "id": "01KY280YFQZX4J8T7Q4WR0RMRK",
       "kind": "acceptance_check",
       "text": [
-        "Assigning an active category to an active uncategorized transaction appends exactly one active allocation and leaves source facts unchanged."
+        "Assigning any active root, intermediate, or leaf category to an active transaction creates exactly one current assignment and changes no transaction fact or independent dimension."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:47:20.1828451+00:00"
     },
     {
-      "id": "01KXT0P36VTFZ9HJFKXQ90VHST",
+      "id": "01KY280YFRK5DN45WD7KD73J7Y",
       "kind": "acceptance_check",
       "text": [
-        "Correct with active replacement and reason atomically retires prior allocation and appends one attributable active allocation; history retains both."
+        "Correction retires the prior event and appends one replacement with reason/actor; identical replay returns the original result and simultaneous split assignment returns a stable cardinality error."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:47:20.1828451+00:00"
     },
     {
-      "id": "01KXT0P36V3871PKHYYB18HE7F",
+      "id": "01KY280YFR1PYH1JF7RSB8CBE4",
       "kind": "acceptance_check",
       "text": [
-        "Inactive transaction, missing/archived category, no active allocation, or same-as-active correction returns its stable error with no allocation change."
+        "Inactive transaction, archived category, or invalid hierarchy target changes nothing; category rename or reparent preserves the assignment ID and current roll-ups use the current ancestry."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:47:20.1828451+00:00"
     },
     {
-      "id": "01KXT0P36V7B7H7NNBDGQME3P1",
+      "id": "01KY280YFRP307R12R760NW8MH",
       "kind": "acceptance_check",
       "text": [
-        "Category rename resolves current display name through stable ID for active and retired allocations."
+        "Direct membership contains the transaction once at the assigned node; requested ancestor membership contains it once per ancestor and all-up membership never duplicates it."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:47:20.1828451+00:00"
     },
     {
-      "id": "01KXT0P36VZHZKRW1EZRT4GKA1",
+      "id": "01KY280YFRC6BQ5JKJQHVH30G6",
       "kind": "acceptance_check",
       "text": [
-        "Identical mutation replay returns the original allocation outcome without a second row."
+        "CarryForwardAsync is internal to an authorized statement-correction transaction: it copies the current category to the replacement through one append-only carry_forward event referencing source, replacement, and reconciliation decision; ordinary supersession never invokes it."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:47:20.1828451+00:00"
     },
     {
       "id": "01KXT0P36VR0QTEARFYAZ9APP8",
@@ -233,37 +259,47 @@
       "created_at": "2026-07-18T07:05:09.0800297+00:00"
     },
     {
-      "id": "01KXT0P36V1FJVQA6EFXQV7Q1A",
+      "id": "01KY280YFRHDW9B2BMY7E1WNWK",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT store category on TransactionFact, update allocations in place, create splits/hierarchy, or assign archived categories — per DD-LEDGER-IMMUTABLE-HISTORY."
+        "Do NOT split an amount across categories, copy category state into transaction facts, or infer category from account, pool, evidence, or description — per DD-LEDGER-CATEGORY-HIERARCHY."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:47:20.1828451+00:00"
     },
     {
-      "id": "01KXT0P36V86W8TQE71REYT3RQ",
+      "id": "01KY280YFR6KDH9FDHVEWKFSTT",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT implement before OQ-LEDGER-6 resolves consistently."
+        "Do NOT rewrite assignment history after category rename or reparent; resolve current ancestry at query time."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:47:20.1828451+00:00"
+    },
+    {
+      "id": "01KY280YFRHY06SM51WJBP834X",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT expose carry-forward as a public command or silently inherit category during ordinary void/supersession — per DD-LEDGER-IMMUTABLE-HISTORY."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-21T11:47:20.1828451+00:00"
     }
   ],
   "references": [
     {
-      "id": "01KXT0P36W9J99D6CVHEFGM6AR",
-      "target_ref_code": "OQ-LEDGER-6",
-      "target_entity_type": "open_question",
-      "target_entity_id": "01KXR55J26NDF2WS6NRR6C23VX",
-      "target_title": "Validate flat, archivable categories with one active category allocation per transaction for the first release.",
-      "relationship": "blocked-by",
+      "id": "01KY27T4BXGABEK4ANQRCBENVV",
+      "target_ref_code": "DD-LEDGER-CATEGORY-HIERARCHY",
+      "target_entity_type": "design_decision",
+      "target_entity_id": "01KY25R1J105M3BFF06SC5B9EA",
+      "target_title": "Acyclic category hierarchy with single-node transaction assignment",
+      "relationship": "governed-by",
       "required": 1,
-      "sort_order": 5,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "sort_order": 6,
+      "created_at": "2026-07-21T11:43:36.8297432+00:00"
     },
     {
       "id": "01KXT0P36WXYDNKC315QZBJVH6",
@@ -308,24 +344,24 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT0P36W9NT68G4NC14H68J9",
+      "id": "01KY280YFRPGC1ADFXHJ01MY0Z",
       "gate_type": "test-evidence",
       "description": [
-        "Show one-active invariant, append-only correction, archived-category rejection, and replay."
+        "Show hierarchy-node assignment, correction, split rejection, reparent roll-up, authorized carry-forward, ordinary-supersession no-copy, history, and replay."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:47:20.1828451+00:00"
     },
     {
-      "id": "01KXT0P36WVNM5WK2Q4887HTZV",
+      "id": "01KY280YFR9A61X1EQSZ4QYK1H",
       "gate_type": "self-review",
       "description": [
-        "TransactionFact remains category-free and allocation SQL contains no in-place history update."
+        "Confirm each transaction has zero or one current category and carry-forward is internal and decision-linked."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:05:09.0800297+00:00"
+      "created_at": "2026-07-21T11:47:20.1828451+00:00"
     }
   ],
   "verification_steps": [

@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-VERIFY-UC-007`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-05-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `90`
 - **Dialect:** `default`
 
 ## Summary
 
-Verification-only task with no Implements link: trace revised UC-LEDGER-007 through Release backup and restore operations.
+Verification-only task with no Implements link: trace complete hierarchy- and statement-aware backup/restore through the Release CLI.
 
 ## Objective
 
-Prove backup verification and owner-authorized restore preserve every durable provider-neutral state type, replay outcome, rule, count, and exact total.
+Prove recovery reproduces every current and historical financial meaning before activation.
 
 ## References
 
@@ -40,14 +40,13 @@ Prove backup verification and owner-authorized restore preserve every durable pr
 
 ### Acceptance Checks
 
-- Backup create publishes one 0600 artifact only after independent verification of facts/histories, dimensions, evidence/reconciliation, relationships, request/logical replay outcomes, per-type counts, privacy rules, and exact named/dimensional totals.
-- Restore prepare uses a separate private generation and reproduces the normalized complete-state report; incompatible, corrupt, incomplete, privacy-invalid, or permission-invalid artifacts never affect CURRENT.
-- Activation requires explicit authorization and expected current fingerprint, revalidates under lock, switches atomically, retains the previous generation, and remains replay-safe across crash boundaries.
+- Create/verify/prepare/activate through the published CLI reproduces facts, category hierarchy/parent history, dimensions, evidence, exact and corrected statement decisions, carry-forward, relationship replacement, coverage, idempotency, and exact direct/subtree/pool totals.
+- Checksum, permission, schema, cyclic hierarchy, incomplete correction, invalid relationship, count, exact-total, stale activation, and injected crash failures leave the prior generation current.
+- QuerySnapshot is excluded and diagnostics contain no raw email/statement/provider payload or full identifiers.
 
 ### Failure Criteria
 
-- Do NOT omit any durable evidence, reconciliation, payment, pool, or logical-effect class from source/candidate comparison.
-- Do NOT expose a candidate as current before complete revalidation and authorization.
+- Do NOT accept file-copy-only, PRAGMA-only, count-only, or current-state-only recovery proof.
 
 ### Expected Outputs
 
@@ -86,17 +85,19 @@ Prove backup verification and owner-authorized restore preserve every durable pr
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Evidence maps UC-LEDGER-007 main scenario and each numbered failure path to stdout/error/exit/state assertions. | `true` |
-| `self-review` | No scenario calls handlers or SQLite directly. | `true` |
+| `test-evidence` | Map UC-LEDGER-007 to manifest, normalized-state equality, failure isolation, activation, and privacy assertions. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-e2g` | `verified` | 2026-07-21T08:01:53.2188545+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-e2g` (verified)
 - `covers` -> UC-LEDGER-007: Back up and recover the local ledger
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
 - `touches` -> DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts

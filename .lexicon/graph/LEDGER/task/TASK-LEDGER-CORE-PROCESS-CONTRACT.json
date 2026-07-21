@@ -6,10 +6,10 @@
   "slug": "CORE-PROCESS-CONTRACT",
   "title": "Build the self-contained process and operation contract",
   "description": [
-    "Create the .NET 10 Native-AOT solution and provider-neutral descriptor-driven process boundary every Ledger slice registers with."
+    "Create the .NET 10 Native-AOT solution and provider-neutral descriptor-driven process boundary every Ledger slice extends."
   ],
   "objective": [
-    "Produce one offline tally executable whose explicit 72-operation registry drives dispatch, help, schema, structured streams, errors, exits, compatibility, and version reporting for any external caller."
+    "Produce one offline tally executable whose explicit foundation registry drives dispatch, help, schemas, streams, errors, exits, compatibility, and version reporting."
   ],
   "planning_state": "ready",
   "priority": 0,
@@ -214,54 +214,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0E281XPZ57ZYBRPRPH92J3",
+      "id": "01KY28AB1CJ47B4VA149VGFQFZ",
       "kind": "acceptance_check",
       "text": [
-        "Release linux-x64 publish contains one native tally executable and adjacent SQLite native library; invocations start no daemon/listener and leave no child process."
+        "Release linux-x64 publish contains one native tally executable and adjacent SQLite library; invocations start no daemon/listener and leave no child process."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:54:25.3409724+00:00"
+      "created_at": "2026-07-21T11:52:27.9478908+00:00"
     },
     {
-      "id": "01KY0E281YVH24KPTBTR9RG4F7",
+      "id": "01KY28AB1DD37XACYM99KY00NT",
       "kind": "acceptance_check",
       "text": [
-        "tally schema list/show, tally version, and help return deterministic descriptor-derived operation, request, result, error, exit, compatibility, and example metadata without store access or an installed skill."
+        "schema list/show, version, and help return deterministic descriptor-derived request/result/error/exit/compatibility/example metadata without store access or installed guidance."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:54:25.3409724+00:00"
+      "created_at": "2026-07-21T11:52:27.9478908+00:00"
     },
     {
-      "id": "01KY0E281YYTP1VMZSFZ29S64Y",
+      "id": "01KY28AB1DQ6ZGHRMNH9A7531C",
       "kind": "acceptance_check",
       "text": [
-        "Valid JSON through explicit --input - or @file writes exactly one result envelope to stdout; malformed JSON, unknown fields, unknown operations, and provider or delivery fields fail before mutation with documented error/exit."
+        "Valid JSON through --input - or @file writes one result envelope to stdout; malformed JSON, unknown fields/operations, and provider/delivery fields fail before mutation."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:54:25.3409724+00:00"
+      "created_at": "2026-07-21T11:52:27.9478908+00:00"
     },
     {
-      "id": "01KY0E281YPFAVA4FGDD8ETCWD",
+      "id": "01KY28AB1DFFA8Z7HBMVVHS51A",
       "kind": "acceptance_check",
       "text": [
-        "Expected and sanitized unexpected failures keep diagnostics on stderr with metadata/correlation only and never serialize financial payloads, evidence payloads, full identifiers, or stack traces."
+        "Expected and sanitized unexpected failures keep diagnostics on stderr with metadata only and never serialize financial/evidence payloads, full identifiers, or stack traces."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T18:54:25.3409724+00:00"
+      "created_at": "2026-07-21T11:52:27.9478908+00:00"
     },
     {
-      "id": "01KY0E281YA0VHYJKPJ8TPMSBK",
+      "id": "01KY28AB1DCCNTW3PQ7GBZX99N",
       "kind": "acceptance_check",
       "text": [
-        "Every asynchronous process/handler boundary propagates CancellationToken; registration is explicit; the final inventory gate proves exactly 72 provider-neutral operations."
+        "Every async process/handler boundary propagates CancellationToken and registration is explicit; this completed foundation supplied the prior descriptor scaffold, while TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT owns the revised exact 73-operation release inventory after category.reparent is added."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-20T18:54:25.3409724+00:00"
+      "created_at": "2026-07-21T11:52:27.9478908+00:00"
     },
     {
       "id": "01KXT0KHY3R5DDST32R0HYGZ5V",
@@ -364,14 +364,14 @@
       "created_at": "2026-07-20T18:54:25.3409724+00:00"
     },
     {
-      "id": "01KY0E281Y3H5QWZN36DYVMCQ8",
+      "id": "01KY28AB1DGBRHMC9MYENE7F3K",
       "kind": "note",
       "text": [
-        "The registry is authoritative; optional guidance is derived and cannot broaden the public contract."
+        "Historical completion remains valid for the process boundary; the later public-contract gate expands the descriptor inventory from its original 72-operation scaffold to 73."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:54:25.3409724+00:00"
+      "created_at": "2026-07-21T11:52:27.9478908+00:00"
     }
   ],
   "references": [
@@ -522,24 +522,24 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT0KHY45A2654TB2JRGH41E",
+      "id": "01KY28AB1D8GNC0KNBD2SCTGV0",
       "gate_type": "test-evidence",
       "description": [
         "Attach contract-test and AOT publish output with zero failures/warnings."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-21T11:52:27.9478908+00:00"
     },
     {
-      "id": "01KXT0KHY4EFHNXVZVWE68CC1N",
+      "id": "01KY28AB1DTYM3CR7XDS9Q69W3",
       "gate_type": "self-review",
       "description": [
-        "Compare process code with every rejected alternative in both decisions."
+        "Confirm the process boundary stays provider-neutral and the final inventory count is owned downstream."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-21T11:52:27.9478908+00:00"
     }
   ],
   "verification_steps": [

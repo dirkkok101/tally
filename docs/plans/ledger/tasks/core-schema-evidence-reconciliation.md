@@ -5,7 +5,7 @@
 - **Ref:** `TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-01-CORE-RUNTIME`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `24`
 - **Dialect:** `default`
@@ -39,7 +39,7 @@ Register one real-SQLite V001 fragment whose constraints preserve provider-neutr
 
 ### Acceptance Checks
 
-- A fresh real SQLite generation contains evidence record/observation/link, reconciliation decision/current projection, statement scope/coverage/exception, and required unique/index/foreign-key structures.
+- A fresh real SQLite generation contains Evidence Record/observation/link, Reconciliation Decision/current projection, statement scope/coverage/exception, and required unique/index/foreign-key structures.
 - Constraints reject duplicate logical evidence with changed content, multiple active confirming targets, broken decision predecessors, mutable-history replacement, and coverage entries outside their scope.
 - V001 composition remains deterministic and idempotent and every table participates in integrity/count manifest discovery.
 
@@ -92,12 +92,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-35j` | `verified` | 2026-07-21T08:01:40.5679292+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-35j` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): The fragment registers with LedgerSchemaFragmentRegistry and is exercised through LedgerDb.
 - `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history

@@ -5,24 +5,25 @@
 - **Ref:** `TASK-LEDGER-CATEGORIES`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-02-CATALOGUE-TRANSACTIONS`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `20`
 - **Dialect:** `default`
 
 ## Summary
 
-Deliver the gated flat category catalogue and attributable lifecycle operations.
+Deliver the owner-approved hierarchical category catalogue and attributable lifecycle/parent operations.
 
 ## Objective
 
-Maintain stable category identities and attributable lifecycle history while preserving all historical allocations.
+Maintain stable category identities, deterministic ancestry, and append-only parent/lifecycle history.
 
 ## References
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports | `design_decision` | `governed-by` | `true` |
+| DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | FR-LEDGER-CATEGORY-CATALOGUE: Maintain the Spend Category catalogue | `requirement` | `implements` | `true` |
 | NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | `true` |
@@ -41,17 +42,16 @@ Maintain stable category identities and attributable lifecycle history while pre
 
 ### Acceptance Checks
 
-- Unique normalized name creates one active category with stable ULID; conflicts return the documented stable error without mutation.
-- Rename appends attributable history and preserves ID and prior allocation references.
-- Archive preserves historical assignments and blocks new assignment/correction until reactivation.
-- Reactivation preserves ID, requires no active normalized-name conflict, and appends a lifecycle event.
-- List/get expose active/archived state and optional history in deterministic name/ID order; all mutations are idempotent.
+- Create accepts an optional active parent and returns stable ID, parent ID, depth, and ancestry; normalized names are unique only among active siblings.
+- Rename preserves ID, parent, children, and assignments; reparent appends one reasoned parent event and preserves identity while current ancestry changes.
+- Self-parent, descendant cycle, archived parent, archived target, and active-child archive requests return stable no-mutation errors; valid reactivation preserves identity and requires active ancestry.
+- List/get return deterministic ancestry-path, name, and ID ordering for requested children, subtree, or all scope; all six mutations including reparent are idempotent.
 
 ### Failure Criteria
 
-- Do NOT implement hierarchy, split allocations, hard delete, or in-place lifecycle edits — rejected/deferred by DD-LEDGER-IMMUTABLE-HISTORY.
-- Do NOT introduce generic CRUD save/update/delete commands or HTTP endpoints.
-- Do NOT implement before OQ-LEDGER-6 resolves without invalidating category contracts.
+- Do NOT implement a flat catalogue, materialized-path overwrite, nested-set rewrite, split category assignment, hard delete, or in-place lifecycle edit — per DD-LEDGER-CATEGORY-HIERARCHY and DD-LEDGER-IMMUTABLE-HISTORY.
+- Do NOT create budget amounts, infer Spend Pool, or implement BUDGET exact-node/subtree overlap policy.
+- Do NOT add HTTP endpoints, generic CRUD save/update/delete commands, or provider wording.
 
 ### Expected Outputs
 
@@ -98,22 +98,26 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Show rename/archive/reactivate history, conflict, restriction, and replay evidence. | `true` |
-| `self-review` | Confirm no hierarchy/split/hard-delete behavior exists. | `true` |
+| `test-evidence` | Show root/child create, rename, legal move, cycle rejection, active-child archive block, reactivation, history, ordering, and replay evidence. | `true` |
+| `self-review` | Confirm category identity is stable, parent changes are append-only, and no budget or split-allocation behavior exists. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-34a` | `verified` | 2026-07-21T08:01:35.9638558+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-34a` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumer requires LedgerDb from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CATEGORIES](../tasks/gate-evidence-categories.md): Category contracts cannot start until OQ-LEDGER-6 resolves.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md): Category slice consumes the proven core seam.
 - `governed-by` -> DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports
+- `governed-by` -> DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `implements` -> FR-LEDGER-CATEGORY-CATALOGUE: Maintain the Spend Category catalogue
 - `satisfies` -> NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history

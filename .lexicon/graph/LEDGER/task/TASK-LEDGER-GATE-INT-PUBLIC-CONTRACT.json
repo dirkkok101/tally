@@ -6,10 +6,10 @@
   "slug": "GATE-INT-PUBLIC-CONTRACT",
   "title": "Wire and prove the complete public CLI contract",
   "description": [
-    "Integration gate intentionally has no Implements link: explicitly compose every provider-neutral feature bundle and prove the released descriptor/process inventory."
+    "Integration gate with no Implements link: explicitly compose every provider-neutral bundle and prove the released 73-operation descriptor/process inventory."
   ],
   "objective": [
-    "Expose exactly the 72 designed public operations through one registry with deterministic schemas, stable errors/exits, idempotency classification, privacy constraints, and published-binary behavior."
+    "Expose exactly 73 designed operations with deterministic schemas, stable errors/exits, idempotency, hierarchy, statement authority, and privacy constraints."
   ],
   "planning_state": "ready",
   "priority": 0,
@@ -46,14 +46,14 @@
       "created_at": "2026-07-18T07:32:10.6412885+00:00"
     },
     {
-      "id": "01KY0ECY1GER9J5Z10DDFW64KB",
+      "id": "01KY28BDQE467JW7JXCPW32JG4",
       "target": "TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE",
       "dependency_type": "compile",
       "reason": [
-        "The 72-operation public contract consumes the 9-operation reconciliation bundle."
+        "The 73-operation public contract consumes the 9-operation reconciliation bundle."
       ],
-      "sort_order": 4,
-      "created_at": "2026-07-20T19:00:15.5377891+00:00"
+      "sort_order": 6,
+      "created_at": "2026-07-21T11:53:03.4716522+00:00"
     },
     {
       "id": "01KY0EKN0PY16TMDSG8Y2ATE06",
@@ -134,18 +134,18 @@
   ],
   "interfaces": [
     {
-      "id": "01KY0E8D7FYJN1SAF9Z28V8EQ9",
+      "id": "01KY288EF68BSPPZ06BA7A0QXA",
       "name": "CatalogueTransactionOperationBundle",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "42 operations"
+        "43 operations"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-20T18:57:47.2448020+00:00"
+      "created_at": "2026-07-21T11:51:25.9244776+00:00"
     },
     {
-      "id": "01KY0E8D7FHWWZ0K8442P5P42S",
+      "id": "01KY288EF6SZANCKCZS28ACV33",
       "name": "ReconciliationOperationBundle",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
@@ -153,10 +153,10 @@
         "9 operations"
       ],
       "sort_order": 1,
-      "created_at": "2026-07-20T18:57:47.2448020+00:00"
+      "created_at": "2026-07-21T11:51:25.9244776+00:00"
     },
     {
-      "id": "01KY0E8D7FNAJ540CKWX9M1RBV",
+      "id": "01KY288EF6MNXB22Z77R2GDMKZ",
       "name": "RelationshipActualsOperationBundle",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
@@ -164,10 +164,10 @@
         "8 operations"
       ],
       "sort_order": 2,
-      "created_at": "2026-07-20T18:57:47.2448020+00:00"
+      "created_at": "2026-07-21T11:51:25.9244776+00:00"
     },
     {
-      "id": "01KY0E8D7FGTGVEJ5A955F6S09",
+      "id": "01KY288EF6B1HFYX345RMBDGEV",
       "name": "RecoveryGuidanceOperationBundle",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
@@ -175,141 +175,111 @@
         "13 operations"
       ],
       "sort_order": 3,
-      "created_at": "2026-07-20T18:57:47.2448020+00:00"
+      "created_at": "2026-07-21T11:51:25.9244776+00:00"
     },
     {
-      "id": "01KY0E8D7F7SA1QFPF8D6JR88V",
+      "id": "01KY288EF6F8J7DY1QVGHX1K5R",
       "name": "OperationRegistry",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "explicit registry"
+        "Explicit registry"
       ],
       "sort_order": 4,
-      "created_at": "2026-07-20T18:57:47.2448020+00:00"
+      "created_at": "2026-07-21T11:51:25.9244776+00:00"
     },
     {
-      "id": "01KY0E8D7FRAXPZNB66ES2H8VJ",
+      "id": "01KY288EF6JWKA3W715CFW8QXV",
       "name": "PublishedTallyFixture",
       "direction": "produces",
       "notes": [
         "Release process fixture"
       ],
       "sort_order": 5,
-      "created_at": "2026-07-20T18:57:47.2448020+00:00"
+      "created_at": "2026-07-21T11:51:25.9244776+00:00"
     },
     {
-      "id": "01KY0E8D7FVSJDQX17DX4CM2XG",
+      "id": "01KY288EF6Y4P5PSBGAHRSRPJF",
       "name": "CompletePublicContract",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "exactly 72 provider-neutral operations"
+        "Exactly 73 provider-neutral operations"
       ],
       "sort_order": 6,
-      "created_at": "2026-07-20T18:57:47.2448020+00:00"
+      "created_at": "2026-07-21T11:51:25.9244776+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KY0E8D7DZPYXR1X661EZKZGK",
+      "id": "01KY288EF55R3PD6TPWJ18WT5R",
       "kind": "acceptance_check",
       "text": [
-        "LedgerServices explicitly registers every module and OperationRegistry contains exactly 72 design operation IDs/paths: 42 financial-dimension/transaction/evidence, 9 reconciliation, 8 relationship/actuals, and 13 recovery/system/guidance; there are no aliases, generic invoke/CRUD/SQL/database operations, reflection scans, or private schemas."
+        "LedgerServices explicitly registers every module and OperationRegistry contains exactly 73 IDs/paths: 43 dimension/transaction/evidence, 9 reconciliation, 8 relationship/actuals, and 13 recovery/system/guidance; no aliases, generic invoke/CRUD/SQL, reflection, or private schemas exist."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:57:47.2448020+00:00"
+      "created_at": "2026-07-21T11:51:25.9244776+00:00"
     },
     {
-      "id": "01KY0E8D7E50XZYARCVGF1XD4P",
+      "id": "01KY288EF5YAJXSJVA9XJS3PDR",
       "kind": "acceptance_check",
       "text": [
-        "Every descriptor has a concrete source-generated request/result schema, complete stable errors/exits, help/example, supported versions, handler, closed provider-neutral vocabulary, and correct read/write idempotency requirement."
+        "Every descriptor has concrete source-generated request/result schema, errors/exits, example, compatible versions, handler, closed vocabulary, and correct idempotency classification; category.reparent and correct_existing_from_statement are discoverable."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:57:47.2448020+00:00"
+      "created_at": "2026-07-21T11:51:25.9244776+00:00"
     },
     {
-      "id": "01KY0E8D7EJQC5S7NM7H8GTAN2",
+      "id": "01KY288EF69RHCRD1JSPFQB6Q9",
       "kind": "acceptance_check",
       "text": [
-        "Published tally schema list/show and representative success/error/review-required invocation write one stdout object, safe stderr metadata, and documented exits; schema inventory is deterministic across runs."
+        "Published schema list/show and representative success/error/review-required calls write one stdout object and safe stderr metadata; inventory is deterministic and contains no provider, email, statement-document, recipient, or raw-payload fields."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:57:47.2448020+00:00"
+      "created_at": "2026-07-21T11:51:25.9244776+00:00"
     },
     {
-      "id": "01KY0E8D7EGK6R765WHCHRNT0C",
+      "id": "01KY288EF6WN3FZS5N47P1QYBX",
       "kind": "acceptance_check",
       "text": [
-        "Every public mutation routes through LedgerMutationExecutor and logical-effect enforcement where required; actuals first page is the only internal ephemeral cache write without a public idempotency key."
+        "Every public mutation routes through LedgerMutationExecutor; Native-AOT offline publish completes without dynamic-code warnings, listeners, child processes, or missing JSON types."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T18:57:47.2448020+00:00"
+      "created_at": "2026-07-21T11:51:25.9244776+00:00"
     },
     {
-      "id": "01KY0E8D7EDWGT8WXFPXA66VSG",
-      "kind": "acceptance_check",
-      "text": [
-        "Native-AOT publish and offline inventory complete without dynamic-code warnings, network listeners, child processes, missing JSON types, provider transport fields, or raw evidence payload fields."
-      ],
-      "required": 1,
-      "sort_order": 4,
-      "created_at": "2026-07-20T18:57:47.2448020+00:00"
-    },
-    {
-      "id": "01KY0EK7JRQQ679KQS52M5E5CH",
+      "id": "01KY288EF63EDD08JWV95GVM5R",
       "kind": "expected_output",
       "text": [
-        "Explicit root module composition"
+        "Explicit root composition and 73-operation provider-neutral schema snapshot"
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T19:03:41.9127024+00:00"
+      "created_at": "2026-07-21T11:51:25.9244776+00:00"
     },
     {
-      "id": "01KY0EK7JS1VXV0P01HJMJRZ62",
-      "kind": "expected_output",
-      "text": [
-        "72-operation provider-neutral schema snapshot"
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-20T19:03:41.9127024+00:00"
-    },
-    {
-      "id": "01KY0EK7JS61B1EBP797YFTJFP",
+      "id": "01KY288EF6ENP5W5GZDGYDB64F",
       "kind": "expected_output",
       "text": [
         "PublicContractInventoryTests and PublishedLedgerContractTests"
       ],
       "required": 1,
-      "sort_order": 2,
-      "created_at": "2026-07-20T19:03:41.9127024+00:00"
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:51:25.9244776+00:00"
     },
     {
-      "id": "01KXT0Y3KVJJRTJ2TKTXHXBRWQ",
+      "id": "01KY288EF6P8W84WKAVH0HT4GV",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT auto-discover modules by reflection, add aliases/generic commands, hand-maintain a second schema manifest, or expose HTTP/storage internals."
+        "Do NOT use reflection, aliases/generic commands, a second schema manifest, HTTP/storage internals, transport concepts, or weakened feature descriptors."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:09:31.6427414+00:00"
-    },
-    {
-      "id": "01KXT0Y3KV8TT8V3MMVMCZGDVV",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT weaken any feature descriptor to make inventory tests easier."
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T07:09:31.6427414+00:00"
+      "created_at": "2026-07-21T11:51:25.9244776+00:00"
     }
   ],
   "references": [
@@ -360,36 +330,36 @@
   ],
   "review_gates": [
     {
-      "id": "01KY0E8D7G4CWBFZ2X3H59FMWN",
+      "id": "01KY288EF6ARKS05PWW6H164JK",
       "gate_type": "test-evidence",
       "description": [
-        "Attach exact 72-operation inventory, bundle subtotals, schema scan, and published success/error/review stream evidence."
+        "Attach the exact 73-ID inventory, bundle subtotals, hierarchy/correction schemas, privacy scan, and publish output."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:57:47.2448020+00:00"
+      "created_at": "2026-07-21T11:51:25.9244776+00:00"
     },
     {
-      "id": "01KY0E8D7GWKV2CS374XERR3KF",
-      "gate_type": "self-review",
+      "id": "01KY288EF67YTTMVWD9RNXWRF1",
+      "gate_type": "branch-review",
       "description": [
-        "Compare every operation-table row in MD-LEDGER-MASTER with exactly one registry descriptor."
+        "Fresh reviewer confirms every public command is typed, provider-neutral, explicitly composed, and source-generated."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:57:47.2448020+00:00"
+      "created_at": "2026-07-21T11:51:25.9244776+00:00"
     }
   ],
   "verification_steps": [
     {
-      "id": "01KY1W4GHHTF2MBNYFPAKR33HN",
+      "id": "01KY288EF6QZMJ9XKXZXYB7PPG",
       "phase": "after",
       "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~PublicContractInventoryTests --no-restore && dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~PublishedLedgerContractTests --no-restore",
-      "expected_result": "exit 0; both named test classes are discovered; at least 76 inventory, schema, provider-neutrality, process, and idempotency-routing cases run in total; exactly 72 operations are reported; 0 tests fail",
+      "expected_result": "exit 0 from both commands; at least 80 inventory, schema, provider-neutrality, process, and idempotency-routing cases run; exactly 73 operations are reported; 0 fail",
       "required": 1,
-      "timeout_seconds": 900,
+      "timeout_seconds": 1200,
       "sort_order": 0,
-      "created_at": "2026-07-21T08:19:34.0653422+00:00"
+      "created_at": "2026-07-21T11:51:25.9244776+00:00"
     }
   ]
 }

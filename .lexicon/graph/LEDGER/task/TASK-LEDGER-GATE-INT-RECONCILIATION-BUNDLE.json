@@ -6,10 +6,10 @@
   "slug": "GATE-INT-RECONCILIATION-BUNDLE",
   "title": "Compose the reconciliation operation bundle",
   "description": [
-    "Integration gate with no Implements link: compose evidence-aware candidate, apply, decision, and coverage modules and prove their public seam before actuals/recovery consumers."
+    "Integration gate with no Implements link: compose evidence-aware candidate, base apply, statement correction, decision, and coverage modules."
   ],
   "objective": [
-    "Expose one explicit ReconciliationOperationBundle with consistent schemas, errors, atomicity, and current-state semantics."
+    "Expose one nine-operation ReconciliationOperationBundle with consistent schemas, statement authority, atomicity, and current-state semantics."
   ],
   "planning_state": "ready",
   "priority": 0,
@@ -76,6 +76,16 @@
       ],
       "sort_order": 0,
       "created_at": "2026-07-20T18:49:57.6488706+00:00"
+    },
+    {
+      "id": "01KY28E71EYAEM0QG77HBZ29DG",
+      "target": "TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION",
+      "dependency_type": "compile",
+      "reason": [
+        "The bundle consumes the extended reconciliation.apply correction disposition."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-21T11:54:34.9278049+00:00"
     }
   ],
   "files": [
@@ -100,76 +110,102 @@
   ],
   "interfaces": [
     {
-      "id": "01KY0DT2MYEXFCBFT2VWQFVZAP",
+      "id": "01KY28K15CBFCY3YR8ZQYYNE9P",
       "name": "ReconciliationProjectionOperationModule",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "notes": [
+        "Projection and candidate descriptors"
+      ],
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:57:12.7472430+00:00"
     },
     {
-      "id": "01KY0DT2MYXD9VGRRCWA9M1CS3",
+      "id": "01KY28K15DWJRMAJWZCTZCD2TP",
       "name": "ReconciliationApplyOperationModule",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "notes": [
+        "Base reconciliation dispositions"
+      ],
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:57:12.7472430+00:00"
     },
     {
-      "id": "01KY0DT2MYCYGPWQF62KTW826D",
+      "id": "01KY28K15DP5T2ESM8MF83D9N3",
+      "name": "StatementCorrectionOperationExtension",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "notes": [
+        "Statement-authoritative correction disposition"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-21T11:57:12.7472430+00:00"
+    },
+    {
+      "id": "01KY28K15D3PMCW24D7PV1A71J",
       "name": "ReconciliationDecisionOperationModule",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
-      "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "notes": [
+        "Owner decision descriptors"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-21T11:57:12.7472430+00:00"
     },
     {
-      "id": "01KY0DT2MY3C79NZEEWF0VWF7E",
+      "id": "01KY28K15DF7NN5NRB344HEXHR",
       "name": "ReconciliationCoverageOperationModule",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
-      "sort_order": 3,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "notes": [
+        "Coverage and exception descriptors"
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-21T11:57:12.7472430+00:00"
     },
     {
-      "id": "01KY0DT2MZG9M9DTH4DN8ZD4QX",
+      "id": "01KY28K15DDM773B4DZ0K3WD5X",
       "name": "ReconciliationOperationBundle",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
-      "sort_order": 4,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "notes": [
+        "Exactly nine provider-neutral reconciliation descriptors"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-21T11:57:12.7472430+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KY0DT2MYY2F07X3RGK9TFSHB",
+      "id": "01KY283CF96M1BJVJT4ZQHZF65",
       "kind": "acceptance_check",
       "text": [
-        "The bundle exposes evidence/reconciliation operation descriptors once with concrete source-generated request/result/error types and explicit DI; schema inventory contains no aliases or open payloads."
+        "The bundle exposes exactly nine evidence-reconciliation descriptors once with concrete source-generated request/result/error types and explicit DI; schema inventory contains correct_existing_from_statement and no aliases or open payloads."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:40.0411714+00:00"
     },
     {
-      "id": "01KY0DT2MYZ7T3TPPB514PC2DM",
+      "id": "01KY283CFAM028MGBT96MADH64",
       "kind": "acceptance_check",
       "text": [
-        "An end-to-end real-store sequence registers evidence, projects, applies match/statement-only/ambiguity, corrects an owner decision, completes coverage, and returns exact state/history without direct store access."
+        "A real-store sequence registers statement evidence, projects exact and differing candidates, confirms an exact fact, applies one authoritative correction with explicit carry-forward, creates a statement-only fact, preserves ambiguity, corrects an owner decision, completes coverage, and returns exact history without direct store access."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:40.0411714+00:00"
     },
     {
-      "id": "01KY0DT2MYKZVR7SAT6MEHF3E1",
+      "id": "01KY283CFAS2MYWXS5EJPMZYP4",
       "kind": "acceptance_check",
       "text": [
-        "Crash/retry and provider-neutral schema suites exercise the composed handlers and report nonzero cases with no duplicate canonical effect."
+        "Compatible transfer/refund replacement remains valid; incompatible relationship correction returns review-required with unchanged financial state; crash/retry and provider-neutral scans report nonzero cases and no duplicate effect."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:40.0411714+00:00"
     },
     {
       "id": "01KY0DT2MYZ6389W2PEDQBRBCD",
@@ -182,34 +218,34 @@
       "created_at": "2026-07-20T18:49:57.6488706+00:00"
     },
     {
-      "id": "01KY0DT2MY24R8VHN839CVQJM5",
+      "id": "01KY283CFANV7T5ZBQDNG0E1KS",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT add reflection discovery, a generic reconciliation gateway, minimal overloaded reconcile commands, or INGEST batch behavior — rejected by the governing decisions."
+        "Do NOT add reflection discovery, generic reconciliation gateway, overloaded reconcile commands, INGEST batch behavior, or raw payloads — rejected by the governing decisions."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:40.0411714+00:00"
     },
     {
-      "id": "01KY0DT2MYSQJMRK3Q2GTFE41K",
+      "id": "01KY283CFA6HM0T68G2M564GE6",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT call one operation handler directly from another feature; compose through named stores/policies and the public operation modules."
+        "Do NOT call one public handler from another; compose through named stores/policies and the statement coordinator."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:40.0411714+00:00"
     },
     {
-      "id": "01KY0DT2MYZ618CFFEQEFB2JH0",
+      "id": "01KY283CFAR88VNQC0XBZ00QX7",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT weaken conflict/review-required outcomes to make the integration test green."
+        "Do NOT weaken conflict, ambiguity, authority, or review-required outcomes to make integration tests green."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:40.0411714+00:00"
     }
   ],
   "references": [
@@ -260,14 +296,24 @@
   ],
   "review_gates": [
     {
-      "id": "01KY0DT2MZX15FFDW9PEWX4QVH",
+      "id": "01KY283CFAQ9VYZTKSYE3A6RB5",
       "gate_type": "test-evidence",
       "description": [
-        "Attach composed operation inventory and the full match-first lifecycle evidence."
+        "Attach the exact nine-operation inventory and full exact/corrected/statement-only/ambiguous/coverage lifecycle evidence."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:40.0411714+00:00"
+    },
+    {
+      "id": "01KY283CFA45DW820MHRW9S6HR",
+      "gate_type": "self-review",
+      "description": [
+        "Confirm one active economic effect and no provider or transport semantics across the composed seam."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-21T11:48:40.0411714+00:00"
     }
   ],
   "verification_steps": [

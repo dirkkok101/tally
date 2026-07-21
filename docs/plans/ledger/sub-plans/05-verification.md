@@ -15,28 +15,28 @@ Converge explicit operation bundles, security, eighteen use cases, Native-AOT pu
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-LEDGER-GATE-INT-CATALOGUE-TRANSACTION-BUNDLE](../tasks/gate-int-catalogue-transaction-bundle.md) | Compose the financial-dimension, transaction, and evidence bundle | `planned` | 1 |
-| [TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE](../tasks/gate-int-relationship-actuals-bundle.md) | Compose the relationship and actuals operation bundle | `planned` | 1 |
-| [TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE](../tasks/gate-int-recovery-skill-bundle.md) | Compose the recovery and integration-guidance bundle | `planned` | 1 |
-| [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](../tasks/gate-int-reconciliation-bundle.md) | Compose the reconciliation operation bundle | `planned` | 0 |
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | Wire and prove the complete public CLI contract | `planned` | 0 |
-| [TASK-LEDGER-GATE-SECURITY](../tasks/gate-security.md) | Validate local financial-data security | `planned` | 0 |
-| [TASK-LEDGER-VERIFY-UC-001](../tasks/verify-uc-001.md) | AccountWorkflow | `planned` | 1 |
-| [TASK-LEDGER-VERIFY-UC-002](../tasks/verify-uc-002.md) | TransactionWorkflow | `planned` | 1 |
-| [TASK-LEDGER-VERIFY-UC-003](../tasks/verify-uc-003.md) | CategoryAllocationWorkflow | `planned` | 1 |
-| [TASK-LEDGER-VERIFY-UC-004](../tasks/verify-uc-004.md) | TransferWorkflow | `planned` | 1 |
-| [TASK-LEDGER-VERIFY-UC-005](../tasks/verify-uc-005.md) | ActualsWorkflow | `planned` | 1 |
-| [TASK-LEDGER-VERIFY-UC-006](../tasks/verify-uc-006.md) | ExternalOrchestratorContractWorkflow | `planned` | 1 |
-| [TASK-LEDGER-VERIFY-UC-007](../tasks/verify-uc-007.md) | BackupRecoveryWorkflow | `planned` | 1 |
-| [TASK-LEDGER-VERIFY-UC-008](../tasks/verify-uc-008.md) | CategoryCatalogueWorkflow | `planned` | 1 |
-| [TASK-LEDGER-VERIFY-UC-009](../tasks/verify-uc-009.md) | TransactionCorrectionWorkflow | `planned` | 1 |
-| [TASK-LEDGER-VERIFY-UC-010](../tasks/verify-uc-010.md) | RefundWorkflow | `planned` | 1 |
-| [TASK-LEDGER-VERIFY-UC-011](../tasks/verify-uc-011.md) | RelationshipCorrectionWorkflow | `planned` | 1 |
-| [TASK-LEDGER-VERIFY-UC-012](../tasks/verify-uc-012.md) | StorageEvolutionWorkflow | `planned` | 1 |
-| [TASK-LEDGER-VERIFY-UC-013](../tasks/verify-uc-013.md) | EvidenceLinkWorkflow | `planned` | 1 |
-| [TASK-LEDGER-VERIFY-UC-014](../tasks/verify-uc-014.md) | StatementReconciliationWorkflow | `planned` | 1 |
-| [TASK-LEDGER-VERIFY-UC-015](../tasks/verify-uc-015.md) | ReconciliationDecisionWorkflow | `planned` | 1 |
-| [TASK-LEDGER-VERIFY-UC-016](../tasks/verify-uc-016.md) | StatementCoverageWorkflow | `planned` | 1 |
-| [TASK-LEDGER-VERIFY-UC-017](../tasks/verify-uc-017.md) | PaymentAttributionWorkflow | `planned` | 1 |
-| [TASK-LEDGER-VERIFY-UC-018](../tasks/verify-uc-018.md) | SpendPoolWorkflow | `planned` | 1 |
-| [TASK-LEDGER-GATE-MODULE](../tasks/gate-module.md) | Complete the LEDGER v1 module gate | `planned` | 0 |
+| [TASK-LEDGER-GATE-INT-CATALOGUE-TRANSACTION-BUNDLE](../tasks/gate-int-catalogue-transaction-bundle.md) | Compose the financial-dimension, transaction, and evidence bundle | `ready` | 1 |
+| [TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE](../tasks/gate-int-relationship-actuals-bundle.md) | Compose the relationship and actuals operation bundle | `ready` | 1 |
+| [TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE](../tasks/gate-int-recovery-skill-bundle.md) | Compose the recovery and integration-guidance bundle | `ready` | 1 |
+| [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](../tasks/gate-int-reconciliation-bundle.md) | Compose the reconciliation operation bundle | `ready` | 0 |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | Wire and prove the complete public CLI contract | `ready` | 0 |
+| [TASK-LEDGER-GATE-SECURITY](../tasks/gate-security.md) | Validate local financial-data security | `ready` | 0 |
+| [TASK-LEDGER-VERIFY-UC-001](../tasks/verify-uc-001.md) | AccountWorkflow | `ready` | 1 |
+| [TASK-LEDGER-VERIFY-UC-002](../tasks/verify-uc-002.md) | TransactionWorkflow | `ready` | 1 |
+| [TASK-LEDGER-VERIFY-UC-003](../tasks/verify-uc-003.md) | CategoryAllocationWorkflow | `ready` | 1 |
+| [TASK-LEDGER-VERIFY-UC-004](../tasks/verify-uc-004.md) | TransferWorkflow | `ready` | 1 |
+| [TASK-LEDGER-VERIFY-UC-005](../tasks/verify-uc-005.md) | ActualsWorkflow | `ready` | 1 |
+| [TASK-LEDGER-VERIFY-UC-006](../tasks/verify-uc-006.md) | ExternalOrchestratorContractWorkflow | `ready` | 1 |
+| [TASK-LEDGER-VERIFY-UC-007](../tasks/verify-uc-007.md) | BackupRecoveryWorkflow | `ready` | 1 |
+| [TASK-LEDGER-VERIFY-UC-008](../tasks/verify-uc-008.md) | CategoryCatalogueWorkflow | `ready` | 1 |
+| [TASK-LEDGER-VERIFY-UC-009](../tasks/verify-uc-009.md) | TransactionCorrectionWorkflow | `ready` | 1 |
+| [TASK-LEDGER-VERIFY-UC-010](../tasks/verify-uc-010.md) | RefundWorkflow | `ready` | 1 |
+| [TASK-LEDGER-VERIFY-UC-011](../tasks/verify-uc-011.md) | RelationshipCorrectionWorkflow | `ready` | 1 |
+| [TASK-LEDGER-VERIFY-UC-012](../tasks/verify-uc-012.md) | StorageEvolutionWorkflow | `ready` | 1 |
+| [TASK-LEDGER-VERIFY-UC-013](../tasks/verify-uc-013.md) | EvidenceLinkWorkflow | `ready` | 1 |
+| [TASK-LEDGER-VERIFY-UC-014](../tasks/verify-uc-014.md) | StatementReconciliationWorkflow | `ready` | 1 |
+| [TASK-LEDGER-VERIFY-UC-015](../tasks/verify-uc-015.md) | ReconciliationDecisionWorkflow | `ready` | 1 |
+| [TASK-LEDGER-VERIFY-UC-016](../tasks/verify-uc-016.md) | StatementCoverageWorkflow | `ready` | 1 |
+| [TASK-LEDGER-VERIFY-UC-017](../tasks/verify-uc-017.md) | PaymentAttributionWorkflow | `ready` | 1 |
+| [TASK-LEDGER-VERIFY-UC-018](../tasks/verify-uc-018.md) | SpendPoolWorkflow | `ready` | 1 |
+| [TASK-LEDGER-GATE-MODULE](../tasks/gate-module.md) | Complete the LEDGER v1 module gate | `ready` | 0 |

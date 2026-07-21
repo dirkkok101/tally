@@ -6,10 +6,10 @@
   "slug": "RECONCILIATION-PROJECTION",
   "title": "Implement deterministic reconciliation candidate projection",
   "description": [
-    "Deliver the read-only, versioned candidate and guard-candidate projection proven by OQ-LEDGER-13."
+    "Deliver the read-only, versioned candidate and guard-candidate projection proven by OQ-LEDGER-13, distinguishing exact facts from compatible events with authoritative differences."
   ],
   "objective": [
-    "Return deterministic compatible candidates, conflicts, rejection reasons, policy version, and advisory token without mutating Ledger state."
+    "Return deterministic candidate identity, comparison basis, conflicts, and advisory policy token without mutating Ledger state."
   ],
   "planning_state": "ready",
   "priority": 0,
@@ -194,34 +194,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0DT2MTYP3MQDVKCYWE88MT",
+      "id": "01KY283A3AFCDJGTPMW21C8DET",
       "kind": "acceptance_check",
       "text": [
-        "For each resolved ReconciliationPolicyV1 fixture the query returns the same ordered compatible/guard candidates, exact basis and rejection codes regardless of row insertion or candidate enumeration order."
+        "For each resolved ReconciliationPolicyV1 fixture the query returns the same ordered compatible and guard candidates, exact fact-equality flag, authoritative-difference fields, basis, and rejection codes regardless of row or enumeration order."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:37.6098084+00:00"
     },
     {
-      "id": "01KY0DT2MTR93D2NFRPPKVB781",
+      "id": "01KY283A3AJW7BB53KMNS5C3CV",
       "kind": "acceptance_check",
       "text": [
-        "Inactive, reconciled, wrong-account/currency/amount/date, and conflicting-evidence transactions are excluded with stable reasons; zero, one, and multiple candidate classifications are explicit."
+        "Inactive, reconciled, wrong-account/currency/amount/date, and conflicting-evidence transactions are excluded with stable reasons; zero, one exact, one differing-compatible, and multiple classifications are explicit."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:37.6098084+00:00"
     },
     {
-      "id": "01KY0DT2MT1XAACZDTPVJ86VAZ",
+      "id": "01KY283A3BTA9AYH4N7Y54S4P9",
       "kind": "acceptance_check",
       "text": [
-        "Projection returns an advisory token and policy ID/version but creates no evidence link, decision, state, transaction, idempotency, or snapshot row."
+        "Projection exposes policy ID/version and an advisory token but creates no evidence link, decision, correction, transaction, idempotency, or snapshot row."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:37.6098084+00:00"
     },
     {
       "id": "01KY0DT2MTA93EB6FRRN7QBB8G",
@@ -234,34 +234,34 @@
       "created_at": "2026-07-20T18:49:57.6488706+00:00"
     },
     {
-      "id": "01KY0DT2MTY5PFPXT10AQT3285",
+      "id": "01KY283A3BMT44PQV5BV1XBC2T",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT add fuzzy text matching, runtime tolerance configuration, provider fields, or hidden tie-breaking — rejected per DD-LEDGER-RECONCILIATION-CONTRACT."
+        "Do NOT add fuzzy text matching, runtime tolerance configuration, provider fields, co-equal source authority, or hidden tie-breaking — per DD-LEDGER-RECONCILIATION-CONTRACT."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:37.6098084+00:00"
     },
     {
-      "id": "01KY0DT2MT7VVGMR7GRX3QNYJX",
+      "id": "01KY283A3BPTFH879116N5JG3F",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT let a projection token authorize a later write without transactional revalidation."
+        "Do NOT let a projection token authorize later writes without transactional revalidation."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:37.6098084+00:00"
     },
     {
-      "id": "01KY0DT2MT722V85RW7NGVPZZB",
+      "id": "01KY283A3BVX0CH3MWZ2M0BCTA",
       "kind": "failure_criterion",
       "text": [
         "Do NOT mutate durable or ephemeral Ledger state from the candidates query."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:37.6098084+00:00"
     }
   ],
   "references": [
@@ -319,24 +319,24 @@
   ],
   "review_gates": [
     {
-      "id": "01KY0DT2MT90E587G9BEB6EWPW",
+      "id": "01KY283A3B7P3K2Y6DJNWNJPWF",
       "gate_type": "test-evidence",
       "description": [
-        "Attach the policy matrix and proof that projection performs zero writes."
+        "Attach the exact/differing policy matrix and proof that projection performs zero writes."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:37.6098084+00:00"
     },
     {
-      "id": "01KY0DT2MT9VVPC6E9W0RP12VW",
+      "id": "01KY283A3B07CEV2P3GH5PN0AH",
       "gate_type": "self-review",
       "description": [
-        "Every automatic rule is present in the resolved OQ-LEDGER-13 decision."
+        "Every automatic rule appears in OQ-LEDGER-13Resolution and every unproven case is guarded."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T11:48:37.6098084+00:00"
     }
   ],
   "verification_steps": [

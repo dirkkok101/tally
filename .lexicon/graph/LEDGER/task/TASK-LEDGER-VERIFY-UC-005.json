@@ -6,10 +6,10 @@
   "slug": "VERIFY-UC-005",
   "title": "ActualsWorkflow",
   "description": [
-    "Verification-only task with no Implements link: trace revised UC-LEDGER-005 through the Release published CLI."
+    "Verification-only task with no Implements link: trace exact hierarchy/pool/reconciliation actuals and snapshot pagination through the Release CLI."
   ],
   "objective": [
-    "Prove exact snapshot-bound actuals membership and named totals across category, pool, payment, relationship, evidence, and reconciliation filters."
+    "Prove exact membership and totals across transfers, refunds, hierarchy, dimensions, and statement correction."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -92,34 +92,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY1P1989HY96AMS60KBV70K0",
+      "id": "01KY28D5D8RJSARB7Z2QHBGPF0",
       "kind": "acceptance_check",
       "text": [
-        "Explicit filter combinations select active Canonical Transactions under Effective Date, category/pool, instrument/cardholder, relationship, evidence, reconciliation, and correction rules; invalid combinations fail before snapshot creation."
+        "Published actuals queries prove every filter and explicit unknown/uncategorized/unassigned bucket with deterministic membership and exact Net Account Movement, External Spend, and Budget Actual."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T06:32:56.8409143+00:00"
+      "created_at": "2026-07-21T11:54:00.4881520+00:00"
     },
     {
-      "id": "01KY1P198A2NK27DT89K1M2WY4",
+      "id": "01KY28D5D925734PXKJ42SWY5X",
       "kind": "acceptance_check",
       "text": [
-        "One committed snapshot returns deterministic pages and unchanged full-set Net Account Movement, External Spend, Budget Actual, pool, category, and pool-by-category totals despite later writes; expired/unavailable cursor fails explicitly."
+        "Owned-transfer principal contributes zero; separate fees remain spend; refunds offset original current category/pool in refund date; cash follows OQ-LEDGER-16Resolution."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T06:32:56.8409143+00:00"
+      "created_at": "2026-07-21T11:54:00.4881520+00:00"
     },
     {
-      "id": "01KY1P198A60QPPBSMGQ8HE71B",
+      "id": "01KY28D5D9AF6Y32Q577BXSYCT",
       "kind": "acceptance_check",
       "text": [
-        "Every all-up result equals exact selected membership and grouped cells including uncategorized and unassigned; refunds, transfers, reversals, and corrections obey the governing formulas and integrity mismatch fails closed."
+        "Category-direct, subtree, pool, and matrix totals reconcile without double counting before and after hierarchy moves."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T06:32:56.8409143+00:00"
+      "created_at": "2026-07-21T11:54:00.4881520+00:00"
+    },
+    {
+      "id": "01KY28D5D93HN2WQ7PBZEYJM6M",
+      "kind": "acceptance_check",
+      "text": [
+        "Statement correction excludes the superseded fact and includes the replacement once; later snapshot pages retain frozen ancestry, reconciliation state, membership, ordering, and totals despite writes."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-21T11:54:00.4881520+00:00"
     },
     {
       "id": "01KXT0ZW3J0YVSTR1CX0AYVHCR",
@@ -142,24 +152,14 @@
       "created_at": "2026-07-18T07:10:29.4870620+00:00"
     },
     {
-      "id": "01KY0EAYVKE0SVAAZGKMY4NXED",
+      "id": "01KY28D5DA1CKNNVKN4YMGAE6H",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT verify only aggregate totals; prove exact membership and every requested pool/category cell."
+        "Do NOT accept aggregate-only assertions, live second-page reads, stale hierarchy, duplicated ancestors, both replacement facts, or private-store calculation."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:59:10.8336304+00:00"
-    },
-    {
-      "id": "01KY0EAYVKSM1KYKJD1JF8NZ4J",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT duplicate formulas in the test fixture; reconcile published items independently."
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-20T18:59:10.8336304+00:00"
+      "created_at": "2026-07-21T11:54:00.4881520+00:00"
     },
     {
       "id": "01KXT0ZW3J18G9H76CTQZEY7YX",
@@ -242,24 +242,14 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT0ZW3KGC0Y7ZB293WR233N",
+      "id": "01KY28D5DA7C138YFYSXGFGPY3",
       "gate_type": "test-evidence",
       "description": [
-        "Evidence maps UC-LEDGER-005 main scenario and each numbered failure path to stdout/error/exit/state assertions."
+        "Reconcile every named/group total to explicit frozen membership across all UC-LEDGER-005 paths."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
-    },
-    {
-      "id": "01KXT0ZW3KCP13TG728EYRDV39",
-      "gate_type": "self-review",
-      "description": [
-        "No scenario calls handlers or SQLite directly."
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-21T11:54:00.4881520+00:00"
     }
   ],
   "verification_steps": [

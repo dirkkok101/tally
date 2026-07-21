@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-TRANSACTION-CORRECTIONS`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-03-RELATIONSHIPS-ACTUALS`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `40`
 - **Dialect:** `default`
 
 ## Summary
 
-Deliver attributable void/supersede behavior that preserves source facts and evidence/decision history while atomically retiring active financial relationships.
+Deliver ordinary attributable void/supersede behavior and a reconciliation-only supersession primitive while preserving source facts and history.
 
 ## Objective
 
-Ensure default active state counts only the valid transaction outcome while evidence, reconciliation, dimensional, correction, and retired-link history remains complete and current reconciliation exceptions are explicit.
+Count only the valid active transaction outcome while keeping ordinary correction and statement-authoritative composition semantically distinct.
 
 ## References
 
@@ -41,16 +41,17 @@ Ensure default active state counts only the valid transaction outcome while evid
 
 ### Acceptance Checks
 
-- Void appends an attributable lifecycle event, marks the transaction inactive, retires every active transfer/refund atomically, preserves evidence/reconciliation decision history, and exposes affected confirmations as current reconciliation exceptions.
-- Supersede validates and creates one independent replacement with explicit new evidence and requested attribution only; it never copies relationships, confirming evidence, category, pool, instrument, or cardholder state automatically.
-- Any replacement validation, relationship retirement, exception projection, or write failure leaves original, links, evidence decisions, and current-state projections unchanged and creates no replacement/idempotency outcome.
-- History returns original/replacement facts, reason, actor/time, assignment/attribution history, retained evidence/decision history, retired relationship IDs, and the explicit current reconciliation consequence.
-- Identical correction replay returns the original outcome; an incompatible second correction returns stable lifecycle/conflict.
+- Ordinary void appends an attributable lifecycle event, retires active transfer/refund relationships atomically, preserves evidence/decision/dimension history, and exposes affected confirmations as current reconciliation exceptions.
+- Ordinary supersede creates one independent replacement with only explicitly supplied new evidence or attribution; it never copies category, pool, payment attribution, relationships, or confirmation.
+- AppendStatementSupersessionAsync is internal and may run only inside an authorized reconciliation writer transaction; it creates the typed statement-derived replacement and supersession while leaving all carry-forward and relationship decisions to the coordinator.
+- Any replacement validation, relationship retirement, reconciliation exception, or write failure leaves the original state unchanged; history returns complete original/replacement facts and retained associations.
+- Identical correction replay returns the original outcome; an incompatible later correction returns stable lifecycle/conflict.
 
 ### Failure Criteria
 
-- Do NOT move or silently reconfirm evidence, reconciliation decisions, category, pool, payment attribution, or relationships onto a replacement.
-- Do NOT delete a decision made against the original; retain it historically and derive a current exception or unresolved state.
+- Do NOT move or silently reconfirm evidence, decisions, category, pool, payment attribution, or relationships onto an ordinary replacement.
+- Do NOT expose AppendStatementSupersessionAsync publicly or let it commit outside StatementAuthoritativeCorrectionCoordinator — per DD-LEDGER-RECONCILIATION-CONTRACT.
+- Do NOT overwrite original transaction columns or delete historical decisions.
 
 ### Expected Outputs
 
@@ -81,13 +82,14 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| TransactionOperationModule | `produces` | DM-LEDGER-TRANSACTION-CONTRACTS | void and supersede descriptors |
-| TransactionBaseOperationModule | `consumes` | DM-LEDGER-TRANSACTION-CONTRACTS | record/get composition |
-| TransactionStore.VoidAsync | `produces` | DM-LEDGER-TRANSACTION-HISTORY | atomic void history |
-| TransactionStore.SupersedeAsync | `produces` | DM-LEDGER-TRANSACTION-HISTORY | independent replacement |
-| RelationshipStore.RetireForTransactionAsync | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP | retire active financial links |
-| ReconciliationStateReducer | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY | preserve history and expose current exception |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD | atomic replay |
+| TransactionOperationModule | `produces` | DM-LEDGER-TRANSACTION-CONTRACTS | Public void and supersede descriptors |
+| TransactionBaseOperationModule | `consumes` | DM-LEDGER-TRANSACTION-CONTRACTS | Record/get composition |
+| TransactionStore.VoidAsync | `produces` | DM-LEDGER-TRANSACTION-HISTORY | Atomic ordinary void |
+| TransactionStore.SupersedeAsync | `produces` | DM-LEDGER-TRANSACTION-HISTORY | Independent ordinary replacement |
+| TransactionStore.AppendStatementSupersessionAsync | `produces` | DM-LEDGER-TRANSACTION-HISTORY | Internal statement-derived replacement primitive |
+| RelationshipStore.RetireForTransactionAsync | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Retire active roles for ordinary correction |
+| ReconciliationStateReducer | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY | Preserve history and expose current exception |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD | Atomic replay boundary |
 
 ### Verification
 
@@ -99,17 +101,20 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Show atomic relationship retirement, no silent copy, rollback, active totals, and history. | `true` |
-| `self-review` | Original transaction columns remain untouched after every correction. | `true` |
+| `test-evidence` | Show ordinary no-copy, internal statement primitive, relationship retirement, rollback, active totals, history, and replay. | `true` |
+| `self-review` | Original facts remain immutable and statement-only composition cannot be invoked outside reconciliation. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2rh` | `verified` | 2026-07-21T08:01:47.3403337+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2rh` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md): Corrections consume ReconciliationStateReducer to retain decisions and derive current exceptions.
 - `depends-on:compile` -> [TASK-LEDGER-REFUNDS](../tasks/refunds.md): Transaction correction must retire both transfer and refund roles.

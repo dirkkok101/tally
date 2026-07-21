@@ -5,18 +5,18 @@
 - **Ref:** `TASK-LEDGER-RECONCILIATION-PROJECTION`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-03-RECONCILIATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `10`
 - **Dialect:** `default`
 
 ## Summary
 
-Deliver the read-only, versioned candidate and guard-candidate projection proven by OQ-LEDGER-13.
+Deliver the read-only, versioned candidate and guard-candidate projection proven by OQ-LEDGER-13, distinguishing exact facts from compatible events with authoritative differences.
 
 ## Objective
 
-Return deterministic compatible candidates, conflicts, rejection reasons, policy version, and advisory token without mutating Ledger state.
+Return deterministic candidate identity, comparison basis, conflicts, and advisory policy token without mutating Ledger state.
 
 ## References
 
@@ -42,14 +42,14 @@ Return deterministic compatible candidates, conflicts, rejection reasons, policy
 
 ### Acceptance Checks
 
-- For each resolved ReconciliationPolicyV1 fixture the query returns the same ordered compatible/guard candidates, exact basis and rejection codes regardless of row insertion or candidate enumeration order.
-- Inactive, reconciled, wrong-account/currency/amount/date, and conflicting-evidence transactions are excluded with stable reasons; zero, one, and multiple candidate classifications are explicit.
-- Projection returns an advisory token and policy ID/version but creates no evidence link, decision, state, transaction, idempotency, or snapshot row.
+- For each resolved ReconciliationPolicyV1 fixture the query returns the same ordered compatible and guard candidates, exact fact-equality flag, authoritative-difference fields, basis, and rejection codes regardless of row or enumeration order.
+- Inactive, reconciled, wrong-account/currency/amount/date, and conflicting-evidence transactions are excluded with stable reasons; zero, one exact, one differing-compatible, and multiple classifications are explicit.
+- Projection exposes policy ID/version and an advisory token but creates no evidence link, decision, correction, transaction, idempotency, or snapshot row.
 
 ### Failure Criteria
 
-- Do NOT add fuzzy text matching, runtime tolerance configuration, provider fields, or hidden tie-breaking — rejected per DD-LEDGER-RECONCILIATION-CONTRACT.
-- Do NOT let a projection token authorize a later write without transactional revalidation.
+- Do NOT add fuzzy text matching, runtime tolerance configuration, provider fields, co-equal source authority, or hidden tie-breaking — per DD-LEDGER-RECONCILIATION-CONTRACT.
+- Do NOT let a projection token authorize later writes without transactional revalidation.
 - Do NOT mutate durable or ephemeral Ledger state from the candidates query.
 
 ### Expected Outputs
@@ -97,17 +97,20 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Attach the policy matrix and proof that projection performs zero writes. | `true` |
-| `self-review` | Every automatic rule is present in the resolved OQ-LEDGER-13 decision. | `true` |
+| `test-evidence` | Attach the exact/differing policy matrix and proof that projection performs zero writes. | `true` |
+| `self-review` | Every automatic rule appears in OQ-LEDGER-13Resolution and every unproven case is guarded. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1zm` | `verified` | 2026-07-21T08:01:34.9445740+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1zm` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md): Projection reads normalized evidence through EvidenceStore.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY](../tasks/gate-evidence-reconciliation-policy.md): The policy must be empirically resolved before its code exists.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Projection reads canonical active transaction facts through TransactionStore.

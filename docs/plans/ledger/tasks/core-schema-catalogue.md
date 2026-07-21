@@ -5,23 +5,24 @@
 - **Ref:** `TASK-LEDGER-CORE-SCHEMA-CATALOGUE`
 - **Plan:** `PLAN-LEDGER-V1`
 - **Sub-Plan:** `SP-LEDGER-01-CORE-RUNTIME`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `21`
 - **Dialect:** `default`
 
 ## Summary
 
-Schema foundation intentionally has no Implements link: translate the approved account, category, payment-instrument, cardholder, spend-pool, and catalogue-lifecycle models into one independently verified V001 fragment.
+Schema foundation intentionally has no Implements link: translate account, hierarchical category, Payment Instrument, cardholder, Spend Pool, and append-only catalogue/parent history into one independently verified V001 fragment.
 
 ## Objective
 
-Create exact provider-neutral financial-dimension tables, constraints, indexes, lifecycle history, and active uniqueness without implementing catalogue behavior.
+Create provider-neutral financial-dimension tables and hierarchy constraints without implementing catalogue behavior.
 
 ## References
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
+| DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-ACCOUNT: Account | `data_model` | `touches` | `true` |
@@ -33,19 +34,22 @@ Create exact provider-neutral financial-dimension tables, constraints, indexes, 
 | Depends On | Type | Reason |
 |---|---|---|
 | [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | Consumes LedgerDb and LedgerSchemaFragmentRegistry. |
+| [TASK-LEDGER-GATE-EVIDENCE-CATEGORIES](../tasks/gate-evidence-categories.md) | `compile` | Hierarchy policy must be verified before the category schema is implemented. |
+| [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](../tasks/gate-evidence-cash-withdrawals.md) | `compile` | A tracked-cash decision could change account catalogue shape before V001 hardens. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- V001CatalogueSchema creates every field, closed enum check, lifecycle foreign key, RESTRICT rule, status/timestamp rule, and active uniqueness constraint from Account, SpendCategory, PaymentInstrumentCardholderAndAttribution identity records, SpendPoolAndAssignment pool records, and FinancialDimensionCatalogueLifecycleEvents.
-- Active masked account identity is unique within institution; category and pool active normalized names are unique; privacy-safe instrument/cardholder identities never retain a full identifier or provider payload.
-- Archive/reactivation history remains attributable and append-only, and referenced dimensions cannot be physically deleted.
-- Applying the fragment twice in one migration plan is rejected before SQL; an injected statement failure rolls back every dimension table and index.
+- V001CatalogueSchema creates Account, Spend Category, Payment Instrument, cardholder, Spend Pool, catalogue lifecycle, and category_parent_event structures with every closed enum, RESTRICT foreign key, status/timestamp rule, and immutable-history trigger required by the linked models.
+- Each category has zero or one current parent; active normalized names are unique among siblings; self-parenting, descendant cycles, archived parents, and archiving a parent with active children fail without mutation.
+- Current ancestry and depth derive deterministically from append-only initialize/reparent history; referenced dimensions and parent events cannot be physically deleted.
+- Real-SQLite tests prove valid roots/children/moves, cycle and lifecycle rejection, exact current ancestry, duplicate-fragment rejection, and full rollback after injected failure.
 
 ### Failure Criteria
 
-- Do NOT conflate account, instrument, cardholder, spend pool, or category; each is an independent stable dimension.
+- Do NOT implement a flat category table, materialized path rewrites, nested sets, or hierarchy encoded in names — rejected by DD-LEDGER-CATEGORY-HIERARCHY.
+- Do NOT conflate account, instrument, cardholder, Spend Pool, or category; each is an independent stable dimension.
 - Do NOT persist provider-specific identity payloads or full payment identifiers.
 
 ### Expected Outputs
@@ -86,18 +90,24 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Show exact table, index, foreign-key, check, uniqueness, and rollback evidence for every linked model. | `true` |
-| `self-review` | The fragment contains every linked model field and no tables owned by another fragment. | `true` |
+| `test-evidence` | Show exact tables, parent-history constraints, acyclicity, sibling uniqueness, RESTRICT behavior, and rollback evidence. | `true` |
+| `self-review` | The fragment contains every linked model field, no flat-category shortcut, and no table owned by another fragment. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2i5` | `verified` | 2026-07-21T08:01:39.1477946+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2i5` (verified)
 - `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumes LedgerDb and LedgerSchemaFragmentRegistry.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](../tasks/gate-evidence-cash-withdrawals.md): A tracked-cash decision could change account catalogue shape before V001 hardens.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CATEGORIES](../tasks/gate-evidence-categories.md): Hierarchy policy must be verified before the category schema is implemented.
+- `governed-by` -> DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment
 - `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `touches` -> DM-LEDGER-ACCOUNT: Account
