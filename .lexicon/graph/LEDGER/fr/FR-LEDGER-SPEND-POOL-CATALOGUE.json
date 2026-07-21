@@ -3,9 +3,9 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "type": "functional",
   "ref_code": "FR-LEDGER-SPEND-POOL-CATALOGUE",
-  "title": "Maintain the spend-pool catalogue",
+  "title": "Maintain the Spend Pool catalogue",
   "description": [
-    "Create and maintain stable spend-pool identities independently from accounts, payment instruments, cardholders, and spend categories. Implements G12 and UC-LEDGER-018 under C21."
+    "Create and maintain stable Spend Pool identities independently from accounts, Payment Instruments, cardholders, and Spend Categories. Implements G12 and UC-LEDGER-018 under C21."
   ],
   "rationale": [
     "Company-paid discretionary spending and personal after-tax spending require first-class pool identities rather than category or account conventions."
@@ -20,10 +20,10 @@
     "budget and insight consumers can report exact pool totals without inferring them from other dimensions"
   ],
   "acceptance_criteria": [
-    "Given a valid unique pool name such as company-paid discretionary or personal after-tax, when the owner creates a spend pool, then one active pool with a stable identifier is returned.",
-    "Given an existing spend pool, when the owner renames it, then its stable identifier and historical transaction assignments remain unchanged.",
-    "Given a referenced spend pool, when the owner archives it, then history remains queryable and new assignments are rejected until the same identity is reactivated.",
-    "Given account, payment instrument, cardholder, category, and pool records, when any is created or changed, then no value in one dimension silently creates, selects, renames, or archives a value in another.",
+    "Given a valid unique pool name such as company-paid discretionary or personal after-tax, when the owner creates a Spend Pool, then one active pool with a stable identifier is returned.",
+    "Given an existing Spend Pool, when the owner renames it, then its stable identifier and historical transaction assignments remain unchanged.",
+    "Given a referenced Spend Pool, when the owner archives it, then history remains queryable and new assignments are rejected until the same identity is reactivated.",
+    "Given account, Payment Instrument, cardholder, category, and pool records, when any is created or changed, then no value in one dimension silently creates, selects, renames, or archives a value in another.",
     "Given active and archived pools, when they are listed with an explicit lifecycle filter, then each matching pool appears once with stable identity and assignment counts."
   ],
   "security_criteria": [

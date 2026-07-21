@@ -9,7 +9,7 @@
     "Deliver explicit full/partial refund confirmation using the entire credit, cumulative active-refund limits, and independent current category/pool attribution."
   ],
   "objective": [
-    "Create attributable refund relationships that safely offset the original transaction's current category and spend pool in the credit's own Effective Date period."
+    "Create attributable refund relationships that safely offset the original transaction's current category and Spend Pool in the credit's own Effective Date period."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -215,24 +215,24 @@
       "created_at": "2026-07-18T07:07:05.0252128+00:00"
     },
     {
-      "id": "01KY0E86BVB7FY1TM9DBASK18W",
+      "id": "01KY1P0J10T4N717JT8DRJH2TK",
       "kind": "failure_criterion",
       "text": [
         "Do NOT infer a pool from account, instrument, cardholder, category, or evidence."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:57:40.2179735+00:00"
+      "created_at": "2026-07-21T06:32:33.0563499+00:00"
     },
     {
-      "id": "01KY0E86BVNPJD8BQC435HTYVD",
+      "id": "01KY1P0J12MEP5TSZF7B19W1DW",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT rewrite either transaction or relationship when a current category/pool assignment changes."
+        "Do NOT rewrite either transaction or relationship when a current category/Pool Assignment changes."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:57:40.2179735+00:00"
+      "created_at": "2026-07-21T06:32:33.0563499+00:00"
     }
   ],
   "references": [

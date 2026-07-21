@@ -9,7 +9,7 @@
     "Deliver attributable void/supersede behavior that preserves source facts and evidence/decision history while atomically retiring active financial relationships."
   ],
   "objective": [
-    "Ensure default active state counts only the valid transaction outcome while evidence, reconciliation, dimensional, correction, and retired-link history remains complete and current reconciliation exceptions are explicit."
+    "Ensure default active state counts only the valid transaction outcome while evidence, reconciliation, dimensional, correction, and retired-link history remains complete and current Reconciliation Exceptions are explicit."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -211,54 +211,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0E86Z5A2Z1PN6RB0F88BX8",
+      "id": "01KY1P0SP0J83QB1P9SBDQ0DYP",
       "kind": "acceptance_check",
       "text": [
-        "Void appends an attributable lifecycle event, marks the transaction inactive, retires every active transfer/refund atomically, preserves evidence/reconciliation decision history, and exposes affected confirmations as current reconciliation exceptions."
+        "Void appends an attributable lifecycle event, marks the transaction inactive, retires every active transfer/refund atomically, preserves evidence/Reconciliation Decision history, and exposes affected confirmations as current Reconciliation Exceptions."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:57:40.8370798+00:00"
+      "created_at": "2026-07-21T06:32:40.8961287+00:00"
     },
     {
-      "id": "01KY0E86Z6PWG0N1TM95HC1FV6",
+      "id": "01KY1P0SP1NEWSVB6ESFMG061S",
       "kind": "acceptance_check",
       "text": [
         "Supersede validates and creates one independent replacement with explicit new evidence and requested attribution only; it never copies relationships, confirming evidence, category, pool, instrument, or cardholder state automatically."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:57:40.8370798+00:00"
+      "created_at": "2026-07-21T06:32:40.8961287+00:00"
     },
     {
-      "id": "01KY0E86Z6HE4JVQ8VQJF7F84R",
+      "id": "01KY1P0SP1DJQA0X3FZH9FRD0M",
       "kind": "acceptance_check",
       "text": [
         "Any replacement validation, relationship retirement, exception projection, or write failure leaves original, links, evidence decisions, and current-state projections unchanged and creates no replacement/idempotency outcome."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:57:40.8370798+00:00"
+      "created_at": "2026-07-21T06:32:40.8961287+00:00"
     },
     {
-      "id": "01KY0E86Z612RS53VPQQ4ZJQNQ",
+      "id": "01KY1P0SP16B7DJF4N660RK898",
       "kind": "acceptance_check",
       "text": [
         "History returns original/replacement facts, reason, actor/time, assignment/attribution history, retained evidence/decision history, retired relationship IDs, and the explicit current reconciliation consequence."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T18:57:40.8370798+00:00"
+      "created_at": "2026-07-21T06:32:40.8961287+00:00"
     },
     {
-      "id": "01KY0E86Z765F1421Q7FFS8BRF",
+      "id": "01KY1P0SP1Y7APERYT1XADFKJM",
       "kind": "acceptance_check",
       "text": [
         "Identical correction replay returns the original outcome; an incompatible second correction returns stable lifecycle/conflict."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-20T18:57:40.8370798+00:00"
+      "created_at": "2026-07-21T06:32:40.8961287+00:00"
     },
     {
       "id": "01KXT0SME88PK0FT1Q3ZDNKSAB",
@@ -291,24 +291,24 @@
       "created_at": "2026-07-18T07:07:05.0252128+00:00"
     },
     {
-      "id": "01KY0E86Z7J9C1MDNQXYA602YC",
+      "id": "01KY1P0WPZP5FB5HQJ8Q690DBD",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT move or silently reconfirm evidence, reconciliation decisions, category, pool, payment attribution, or relationships onto a replacement."
+        "Do NOT move or silently reconfirm evidence, Reconciliation Decisions, category, pool, payment attribution, or relationships onto a replacement."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:57:40.8370798+00:00"
+      "created_at": "2026-07-21T06:32:43.9992077+00:00"
     },
     {
-      "id": "01KY0E86Z70WPX1ZQFPHS5WDS6",
+      "id": "01KY1P0WQ0FQBWJYSJAKRM761M",
       "kind": "failure_criterion",
       "text": [
         "Do NOT delete a decision made against the original; retain it historically and derive a current exception or unresolved state."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:57:40.8370798+00:00"
+      "created_at": "2026-07-21T06:32:43.9992077+00:00"
     }
   ],
   "references": [

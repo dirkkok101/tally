@@ -6,7 +6,7 @@
   "slug": "CORE-SCHEMA-CATALOGUE",
   "title": "Implement the V001 financial-dimension catalogue schema fragment",
   "description": [
-    "Schema foundation intentionally has no Implements link: translate the approved account, category, payment-instrument, cardholder, spend-pool, and catalogue-lifecycle models into one independently verified V001 fragment."
+    "Schema foundation intentionally has no Implements link: translate the approved account, category, Payment Instrument, cardholder, Spend Pool, and catalogue-lifecycle models into one independently verified V001 fragment."
   ],
   "objective": [
     "Create exact provider-neutral financial-dimension tables, constraints, indexes, lifecycle history, and active uniqueness without implementing catalogue behavior."
@@ -87,44 +87,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0E298GKGBQ0WC8BCP6MTWH",
+      "id": "01KY1NYZYSQ25D6NHWWYEPRWJT",
       "kind": "acceptance_check",
       "text": [
-        "V001CatalogueSchema creates every field, closed enum check, lifecycle foreign key, RESTRICT rule, status/timestamp rule, and active uniqueness constraint from Account, SpendCategory, PaymentInstrumentCardholderAndAttribution identity records, SpendPoolAndAssignment pool records, and FinancialDimensionCatalogueLifecycleEvents."
+        "V001CatalogueSchema creates every field, closed enum check, lifecycle foreign key, RESTRICT rule, status/timestamp rule, and active uniqueness constraint from Account, Spend Category, PaymentInstrumentCardholderAndAttribution identity records, SpendPoolAndAssignment pool records, and FinancialDimensionCatalogueLifecycleEvents."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:54:26.5760607+00:00"
+      "created_at": "2026-07-21T06:31:41.7849337+00:00"
     },
     {
-      "id": "01KY0E298H2G8XKR77B0VEXS22",
+      "id": "01KY1NYZYTSJT2AAPWPW3PBPES",
       "kind": "acceptance_check",
       "text": [
         "Active masked account identity is unique within institution; category and pool active normalized names are unique; privacy-safe instrument/cardholder identities never retain a full identifier or provider payload."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:54:26.5760607+00:00"
+      "created_at": "2026-07-21T06:31:41.7849337+00:00"
     },
     {
-      "id": "01KY0E298HKW3ZPJ6JZSAPCVVN",
+      "id": "01KY1NYZYT77E5JHB9KZB2H7MD",
       "kind": "acceptance_check",
       "text": [
         "Archive/reactivation history remains attributable and append-only, and referenced dimensions cannot be physically deleted."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:54:26.5760607+00:00"
+      "created_at": "2026-07-21T06:31:41.7849337+00:00"
     },
     {
-      "id": "01KY0E298HC779XMWMXBFQ4RMW",
+      "id": "01KY1NYZYT5M6A0DQW5QKCW8RQ",
       "kind": "acceptance_check",
       "text": [
         "Applying the fragment twice in one migration plan is rejected before SQL; an injected statement failure rolls back every dimension table and index."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T18:54:26.5760607+00:00"
+      "created_at": "2026-07-21T06:31:41.7849337+00:00"
     },
     {
       "id": "01KXT2XZDB69G0XCEV0VTWH4XR",
@@ -157,24 +157,24 @@
       "created_at": "2026-07-18T07:44:24.4911988+00:00"
     },
     {
-      "id": "01KY0E298H21H2BS3DQH7GHG1B",
+      "id": "01KY1NYYD4BQAP131BE02W65CG",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT conflate account, instrument, cardholder, spend pool, or category; each is an independent stable dimension."
+        "Do NOT conflate account, instrument, cardholder, Spend Pool, or category; each is an independent stable dimension."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:54:26.5760607+00:00"
+      "created_at": "2026-07-21T06:31:40.1962095+00:00"
     },
     {
-      "id": "01KY0E298HBTWNB5DH7GGATJGV",
+      "id": "01KY1NYYD5QS5B8T7GPGXEEHY6",
       "kind": "failure_criterion",
       "text": [
         "Do NOT persist provider-specific identity payloads or full payment identifiers."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:54:26.5760607+00:00"
+      "created_at": "2026-07-21T06:31:40.1962095+00:00"
     }
   ],
   "references": [

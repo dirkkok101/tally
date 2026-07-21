@@ -2,12 +2,12 @@
   "id": "01KY0BQ0901QFE2XQE628B192H",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "DD-LEDGER-DIMENSIONAL-ATTRIBUTION",
-  "title": "Independent local payment, category, and spend-pool dimensions",
+  "title": "Independent local payment, category, and Spend Pool dimensions",
   "description": [
-    "Define stable provider-neutral attribution and pool semantics without conflating account, payment instrument, cardholder, category, or funding pool."
+    "Define stable provider-neutral attribution and pool semantics without conflating account, Payment Instrument, cardholder, category, or funding pool."
   ],
   "decision": [
-    "Use local ULIDs and owner labels for instruments, cardholders, categories, and pools; allow optional masked suffixes but no full provider identifiers. Store instrument and cardholder attribution independently with explicit unknown values. Give each transaction explicit unassigned or one active pool under the v1 assumption, with append-only corrections and no inference across dimensions."
+    "Use local ULIDs and owner labels for instruments, cardholders, categories, and pools; allow optional masked suffixes but no full provider identifiers. Store instrument and Cardholder Attribution independently with explicit unknown values. Give each transaction explicit unassigned or one active pool under the v1 assumption, with append-only corrections and no inference across dimensions."
   ],
   "rationale": [
     "These dimensions answer different questions. Stable local identity protects privacy and lets Hermes map provider wording without making the provider authoritative. Explicit unknown and unassigned states fail closed."

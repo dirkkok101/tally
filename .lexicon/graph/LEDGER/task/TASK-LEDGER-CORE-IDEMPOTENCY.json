@@ -160,54 +160,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0E2B3P40NZTF1TDNEE992R",
+      "id": "01KY1NYQVXVSPHY30T6V0WM8QQ",
       "kind": "acceptance_check",
       "text": [
         "Request identity is contract version + operation ID + caller key; hash includes normalized input and actor."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:54:28.4695935+00:00"
+      "created_at": "2026-07-21T06:31:33.5007461+00:00"
     },
     {
-      "id": "01KY0E2B3QBH867H613NZAECK3",
+      "id": "01KY1NYQVYKT6KY8EC2GHNC7JW",
       "kind": "acceptance_check",
       "text": [
         "Identical request replay returns the stored result/entity/artifact with no volatile replay field and no second effect; changed operation/version/actor/payload returns LEDGER-IDEMPOTENCY-001 and preserves the first outcome."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:54:28.4695935+00:00"
+      "created_at": "2026-07-21T06:31:33.5007461+00:00"
     },
     {
-      "id": "01KY0E2B3Q35J2V7YT4JTN4WQM",
+      "id": "01KY1NYQVYW3831SJ7Q1TY276X",
       "kind": "acceptance_check",
       "text": [
-        "Evidence registration and reconciliation decisions also claim closed logical-effect identities, so identical evidence or decision submitted under another caller key returns the existing outcome and conflicting semantic input fails closed."
+        "Evidence registration and Reconciliation Decisions also claim closed logical-effect identities, so identical evidence or decision submitted under another caller key returns the existing outcome and conflicting semantic input fails closed."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:54:28.4695935+00:00"
+      "created_at": "2026-07-21T06:31:33.5007461+00:00"
     },
     {
-      "id": "01KY0E2B3Q571R4FZH8PT87HJK",
+      "id": "01KY1NYQVY9WJ4XXGJ48TFDJZH",
       "kind": "acceptance_check",
       "text": [
         "Validation and busy/resource failures occur before key or logical identity consumption; domain changes, histories, links, stored result, request identity, and logical identity commit in one transaction."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T18:54:28.4695935+00:00"
+      "created_at": "2026-07-21T06:31:33.5007461+00:00"
     },
     {
-      "id": "01KY0E2B3QZN4JDFD3XR1AWFEZ",
+      "id": "01KY1NYQVYMSJZTM9D42GQTH09",
       "kind": "acceptance_check",
       "text": [
         "Artifact publication uses deterministic identity, private staging, checksum, flush, atomic publication, and retry reconciliation."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-20T18:54:28.4695935+00:00"
+      "created_at": "2026-07-21T06:31:33.5007461+00:00"
     },
     {
       "id": "01KXT0KHY7Z12690ZQ1XTK7MH9",

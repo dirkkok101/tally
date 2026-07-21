@@ -3,9 +3,9 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "type": "functional",
   "ref_code": "FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE",
-  "title": "Resolve and correct reconciliation decisions",
+  "title": "Resolve and correct Reconciliation Decisions",
   "description": [
-    "Record deterministic and explicitly owner-approved reconciliation decisions as attributable append-only lifecycle history. Implements G10 and UC-LEDGER-015 under C19, C20, and C23."
+    "Record deterministic and explicitly owner-approved Reconciliation Decisions as attributable append-only lifecycle history. Implements G10 and UC-LEDGER-015 under C19, C20, and C23."
   ],
   "rationale": [
     "Ambiguous and incorrect matches must be resolved or corrected explicitly while retaining the basis and history of every prior decision."
@@ -20,11 +20,11 @@
     "the current match is correct and every prior decision remains explainable"
   ],
   "acceptance_criteria": [
-    "Given ambiguous statement evidence, compatible candidates, an explicit owner selection, reason, actor context, and idempotency identity, when the owner confirms one candidate, then one owner-confirmed decision and active evidence link are created atomically and no other candidate is changed.",
-    "Given ambiguous or unmatched evidence and an explicit owner rejection of all candidates with a reason, when the decision is recorded, then one attributable rejected decision is appended without linking the evidence or creating a canonical transaction.",
-    "Given an active reconciliation decision and a valid correction request, when the owner revokes it or replaces it with one compatible candidate, then the prior decision remains immutable, the active evidence link changes atomically, and the current state reflects only the new decision.",
-    "Given an inactive or incompatible candidate, an evidence record already actively confirming another transaction, or a correction without explicit reason and actor context, when a decision is attempted, then the Ledger returns a stable validation or conflict error and changes no link or decision.",
-    "Given a transaction is voided or superseded, when it has reconciliation history, then no evidence or confirmation silently moves to the replacement and one reconciliation-exception current outcome remains until another valid decision is recorded."
+    "Given ambiguous statement evidence, compatible candidates, an explicit owner selection, reason, actor context, and Idempotency Identity, when the owner confirms one candidate, then one owner-confirmed decision and active evidence link are created atomically and no other candidate is changed.",
+    "Given ambiguous or unmatched evidence and an explicit owner rejection of all candidates with a reason, when the decision is recorded, then one attributable rejected decision is appended without linking the evidence or creating a Canonical Transaction.",
+    "Given an active Reconciliation Decision and a valid correction request, when the owner revokes it or replaces it with one compatible candidate, then the prior decision remains immutable, the active evidence link changes atomically, and the current state reflects only the new decision.",
+    "Given an inactive or incompatible candidate, an Evidence Record already actively confirming another transaction, or a correction without explicit reason and actor context, when a decision is attempted, then the Ledger returns a stable validation or conflict error and changes no link or decision.",
+    "Given a transaction is voided or superseded, when it has reconciliation history, then no evidence or confirmation silently moves to the replacement and one Reconciliation Exception current outcome remains until another valid decision is recorded."
   ],
   "security_criteria": [
     "Decision history records only provider-neutral match basis, actor context, reasons, stable identities, and privacy-safe evidence metadata."

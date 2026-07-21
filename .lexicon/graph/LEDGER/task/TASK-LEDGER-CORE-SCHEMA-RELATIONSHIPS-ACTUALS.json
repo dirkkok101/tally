@@ -92,44 +92,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0E2AFB0TZHG741KS9ETM2C",
+      "id": "01KY1NZ4GTC3V87J8FE1H821GT",
       "kind": "acceptance_check",
       "text": [
         "V001RelationshipActualsSchema creates every linked relationship, role, lifecycle, snapshot, item, canonical filter, version, expiry, exact named-total, dimension bucket, and ordering field with required foreign keys and checks."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:54:27.8187664+00:00"
+      "created_at": "2026-07-21T06:31:46.4577058+00:00"
     },
     {
-      "id": "01KY0E2AFBJ0BQZAHVSCSXE23E",
+      "id": "01KY1NZ4GVGZYHGT9Q0QV36QDW",
       "kind": "acceptance_check",
       "text": [
         "Active relationship roles are unique per transaction, source and target differ, lifecycle replacement links are RESTRICT, and refund projections can follow the original current category and pool."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:54:27.8187664+00:00"
+      "created_at": "2026-07-21T06:31:46.4577058+00:00"
     },
     {
-      "id": "01KY0E2AFBPQH6J8PV50676JA1",
+      "id": "01KY1NZ4GVXAJ857PZYE9WWCPM",
       "kind": "acceptance_check",
       "text": [
-        "Snapshot items preserve exact pool/category cells plus explicit uncategorized, unassigned, unknown-attribution, and reconciliation-state membership while using snapshotId plus ordinal."
+        "Snapshot items preserve exact pool/category cells plus explicit uncategorized, unassigned, unknown-attribution, and Reconciliation State membership while using snapshotId plus ordinal."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:54:27.8187664+00:00"
+      "created_at": "2026-07-21T06:31:46.4577058+00:00"
     },
     {
-      "id": "01KY0E2AFBWASM7PGFFSCFX5H4",
+      "id": "01KY1NZ4GVXQBZT6Z6K20TQ3TM",
       "kind": "acceptance_check",
       "text": [
         "Query snapshots are explicitly ephemeral and excluded from Durable Ledger State; applying the fragment twice or injecting a statement failure leaves no partial tables/indexes."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T18:54:27.8187664+00:00"
+      "created_at": "2026-07-21T06:31:46.4577058+00:00"
     },
     {
       "id": "01KXT2XZDD0GHX9RWWGK4WEDTX",

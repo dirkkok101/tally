@@ -6,10 +6,10 @@
   "slug": "GATE-INT-CATALOGUE-TRANSACTION-BUNDLE",
   "title": "Compose the financial-dimension, transaction, and evidence bundle",
   "description": [
-    "Convergence gate intentionally has no Implements link: compose account, category, payment identity/attribution, spend-pool, transaction, allocation, and evidence modules without changing their contracts."
+    "Convergence gate intentionally has no Implements link: compose account, category, payment identity/attribution, Spend Pool, transaction, allocation, and evidence modules without changing their contracts."
   ],
   "objective": [
-    "Produce one deterministic 42-operation bundle for financial dimensions, canonical transaction lifecycle, and generic evidence, rejecting missing, duplicate, or incompatible descriptors before dispatch."
+    "Produce one deterministic 42-operation bundle for financial dimensions, Canonical Transaction lifecycle, and generic evidence, rejecting missing, duplicate, or incompatible descriptors before dispatch."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -262,44 +262,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0E8BES3V0FJ2Q20EPS2P4S",
+      "id": "01KY1NZXZW933BKCFD55VSJ4HD",
       "kind": "acceptance_check",
       "text": [
-        "The bundle contains exactly 42 unique descriptors: 5 account, 6 category, 6 payment-instrument, 6 cardholder, 6 pool, 4 transaction, 2 category allocation, 2 payment attribution, 2 pool assignment, and 3 evidence operations."
+        "The bundle contains exactly 42 unique descriptors: 5 account, 6 category, 6 Payment Instrument, 6 cardholder, 6 pool, 4 transaction, 2 category allocation, 2 payment attribution, 2 Pool Assignment, and 3 evidence operations."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:57:45.4333516+00:00"
+      "created_at": "2026-07-21T06:32:12.5397611+00:00"
     },
     {
-      "id": "01KY0E8BETR82V0AG9EMCQWDDG",
+      "id": "01KY1NZXZXHZVSFR20J7FZ2PX2",
       "kind": "acceptance_check",
       "text": [
         "Descriptor order is operationId ordinal; every path, ID, kind, contract range, source-generated schema, error, exit, privacy rule, and idempotency classification is retained unchanged."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:57:45.4333516+00:00"
+      "created_at": "2026-07-21T06:32:12.5397611+00:00"
     },
     {
-      "id": "01KY0E8BETH6Y7BSBKYYVNG9P5",
+      "id": "01KY1NZXZX88SRQJG6NG2C5FBX",
       "kind": "acceptance_check",
       "text": [
         "A missing module, duplicate operationId/path, incompatible contract range, provider-specific field, or open evidence metadata fails composition before dispatch."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:57:45.4333516+00:00"
+      "created_at": "2026-07-21T06:32:12.5397611+00:00"
     },
     {
-      "id": "01KY0E8BETB8FR6SKMWYMQ30A6",
+      "id": "01KY1NZXZXSGZ60KF54H5ANA15",
       "kind": "acceptance_check",
       "text": [
         "Focused tests compare the complete 42-operation inventory with every source module and prove no descriptor is added, dropped, aliased, or rewritten."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T18:57:45.4333516+00:00"
+      "created_at": "2026-07-21T06:32:12.5397611+00:00"
     },
     {
       "id": "01KXT21TGTR57HC0HDXTJ60FE8",

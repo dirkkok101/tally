@@ -4,12 +4,12 @@
   "sub_plan_id": "01KXT06A6E7WPPCP8KDAKCJ1H4",
   "ref_code": "TASK-LEDGER-SPEND-POOLS",
   "slug": "SPEND-POOLS",
-  "title": "Implement spend-pool catalogue operations",
+  "title": "Implement Spend Pool catalogue operations",
   "description": [
     "Deliver the first-class provider-neutral pool catalogue independently from accounts, payment identities, and categories."
   ],
   "objective": [
-    "Create, inspect, list, rename, archive, and reactivate spend pools with stable identity and historical RESTRICT behavior."
+    "Create, inspect, list, rename, archive, and reactivate Spend Pools with stable identity and historical RESTRICT behavior."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -181,14 +181,14 @@
       "created_at": "2026-07-20T18:49:57.6488706+00:00"
     },
     {
-      "id": "01KY0DT2MPMPSHBTVB6HZS1RPA",
+      "id": "01KY1P0N6TGJJKEA62HJE0NZJQ",
       "kind": "expected_output",
       "text": [
-        "Spend-pool contracts, lifecycle, store, handlers, operation module, and focused tests"
+        "Spend Pool contracts, lifecycle, store, handlers, operation module, and focused tests"
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:32:36.3139230+00:00"
     },
     {
       "id": "01KY0DT2MPZ9AJWVJAKRSTADKS",

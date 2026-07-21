@@ -5,7 +5,7 @@
   "ref_code": "FR-LEDGER-CATEGORY-CATALOGUE",
   "title": "Maintain the Spend Category catalogue",
   "description": [
-    "Create and maintain a flat shared catalogue of spend categories. Implements G3 and UC-LEDGER-008 under A10 and A13."
+    "Create and maintain a flat shared catalogue of Spend Categories. Implements G3 and UC-LEDGER-008 under A10 and A13."
   ],
   "rationale": [
     "A durable cross-account category identity is required before assignments and later budgets can reconcile."
@@ -25,7 +25,7 @@
     "Given a category referenced by transactions, when the owner archives it, then historical assignments remain queryable and no existing transaction fact is rewritten.",
     "Given an archived category, when a new assignment or correction targets it, then the Ledger rejects the request before mutation until the category is reactivated.",
     "Given an archived category, when the owner reactivates it, then the same stable category identifier becomes active and may receive new assignments and corrections.",
-    "Given spend categories and spend pools, when either catalogue is maintained, then its identity, lifecycle, and naming remain independent and no value silently creates or selects a value in the other catalogue."
+    "Given Spend Categories and Spend Pools, when either catalogue is maintained, then its identity, lifecycle, and naming remain independent and no value silently creates or selects a value in the other catalogue."
   ],
   "status": "active",
   "created_at": "2026-07-18T04:22:18.1335190+00:00",

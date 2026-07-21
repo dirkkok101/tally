@@ -159,44 +159,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0DT2MXBW5RTCSXKD9WR997",
+      "id": "01KY1P0DB0J3RRRASQWA9RW6PH",
       "kind": "acceptance_check",
       "text": [
-        "coverage.complete requires an approved complete account/date scope, manifest opaque reference, expected evidence set, policy/version, and idempotency identity; incomplete or invalid scope cannot classify absence."
+        "coverage.complete requires an approved complete account/date scope, manifest opaque reference, expected evidence set, policy/version, and Idempotency Identity; incomplete or invalid scope cannot classify absence."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:32:28.2560566+00:00"
     },
     {
-      "id": "01KY0DT2MXEWKKJHKSKP8BY9VS",
+      "id": "01KY1P0DB1Z8YDN8AKPPRYNDB5",
       "kind": "acceptance_check",
       "text": [
         "Completion transactionally proves every accepted statement row has one durable outcome and every eligible prior transaction is reconciled or classified recorded_absent_from_statement, ambiguous, or explicit exception exactly once."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:32:28.2560566+00:00"
     },
     {
-      "id": "01KY0DT2MXJJVJNDE459ZFTQNC",
+      "id": "01KY1P0DB1FG6TAXPW7GHM13HG",
       "kind": "acceptance_check",
       "text": [
         "Result counts equal returned membership by class and include stable identifiers/reasons; identical replay returns the original summary while changed scope/evidence conflicts."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:32:28.2560566+00:00"
     },
     {
-      "id": "01KY0DT2MX79QW7X3XB87K749K",
+      "id": "01KY1P0DB1PXBZ2FNGG8TPE25X",
       "kind": "acceptance_check",
       "text": [
         "Later decisions retain the completed historical exception and expose the new current outcome through coverage.get without rewriting the scope."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:32:28.2560566+00:00"
     },
     {
       "id": "01KY0DT2MY6X8N5NMM7ZHKS3DA",

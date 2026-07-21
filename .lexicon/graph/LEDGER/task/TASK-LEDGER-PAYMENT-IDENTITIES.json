@@ -4,12 +4,12 @@
   "sub_plan_id": "01KXT06A6E7WPPCP8KDAKCJ1H4",
   "ref_code": "TASK-LEDGER-PAYMENT-IDENTITIES",
   "slug": "PAYMENT-IDENTITIES",
-  "title": "Implement payment-instrument and cardholder catalogues",
+  "title": "Implement Payment Instrument and cardholder catalogues",
   "description": [
     "Deliver stable local privacy-safe identity operations independently from transaction attribution."
   ],
   "objective": [
-    "Create, inspect, list, rename, archive, and reactivate payment instruments and cardholders using local ULIDs and attributable lifecycle history."
+    "Create, inspect, list, rename, archive, and reactivate Payment Instruments and cardholders using local ULIDs and attributable lifecycle history."
   ],
   "planning_state": "planned",
   "priority": 1,

@@ -7,7 +7,7 @@
     "Define the stable automation boundary used equally by Hermes, sibling modules, and direct local callers."
   ],
   "decision": [
-    "Generate CLI paths, operation IDs, help, schemas, descriptors, and compatibility checks from one explicit registry. Give evidence, reconciliation candidates and dispositions, decision lifecycle, statement coverage, payment attribution, spend pools, actuals, and recovery their own closed typed operations. Reject unknown fields and generic invocation or batch payloads."
+    "Generate CLI paths, operation IDs, help, schemas, descriptors, and compatibility checks from one explicit registry. Give evidence, reconciliation candidates and dispositions, decision lifecycle, statement coverage, payment attribution, Spend Pools, actuals, and recovery their own closed typed operations. Reject unknown fields and generic invocation or batch payloads."
   ],
   "rationale": [
     "Explicit operations make mutation authority, idempotency, privacy, errors, and versioning auditable. Per-evidence atomic commands keep Ledger safe without stealing INGEST batch responsibilities."

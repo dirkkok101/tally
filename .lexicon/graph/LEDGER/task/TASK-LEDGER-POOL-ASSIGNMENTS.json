@@ -4,7 +4,7 @@
   "sub_plan_id": "01KXT06A6E7WPPCP8KDAKCJ1H4",
   "ref_code": "TASK-LEDGER-POOL-ASSIGNMENTS",
   "slug": "POOL-ASSIGNMENTS",
-  "title": "Implement transaction spend-pool assignment",
+  "title": "Implement transaction Spend Pool assignment",
   "description": [
     "Deliver explicit unassigned or one active pool state and attributable corrections independently from category and payment dimensions."
   ],
@@ -199,14 +199,14 @@
       "created_at": "2026-07-20T18:49:57.6488706+00:00"
     },
     {
-      "id": "01KY0DT2MQGEC6Z7T8R3N1N6M5",
+      "id": "01KY1P0A41168C7T7C76ZTAHQK",
       "kind": "expected_output",
       "text": [
-        "Pool assignment contracts, policy, store, handlers, module, and exact history tests"
+        "Pool Assignment contracts, policy, store, handlers, module, and exact history tests"
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:32:24.9611675+00:00"
     },
     {
       "id": "01KY0DT2MQE6BYDY9Y228WTV1Y",

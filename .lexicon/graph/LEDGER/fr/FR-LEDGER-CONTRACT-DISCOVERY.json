@@ -24,7 +24,7 @@
     "Given any public Ledger operation, when its machine schema is requested, then a versioned schema describes request fields, result shape, expected module-scoped errors, exit codes, idempotency requirements, and explicit ambiguity or review outcomes where applicable.",
     "Given a schema request is repeated for the same contract version, when results are compared, then their semantic content is deterministic.",
     "Given an operation or field outside the public contract, including provider transport, mailbox, MIME, recipient, schedule, delivery, or acknowledgement concerns, when it is requested, then a stable unknown-operation or validation error is returned with no internal storage detail and no mutation.",
-    "Given Hermes or another external orchestrator uses the published schema, when it invokes Ledger, then no provider-specific adapter, private database access, or bundled agent skill is required."
+    "Given Hermes or another External Orchestrator uses the published schema, when it invokes Ledger, then no provider-specific adapter, private database access, or bundled agent skill is required."
   ],
   "status": "active",
   "created_at": "2026-07-18T04:22:52.2328224+00:00",

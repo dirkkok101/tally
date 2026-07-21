@@ -10,7 +10,7 @@
     "Prepare candidates outside the current generation; validate schema, integrity, all durable counts and invariants, exact totals and dimensional groups, evidence uniqueness, decision/link state, coverage, histories, and idempotency; then atomically replace an owner-private CURRENT pointer using expected fingerprints and explicit replacement authorization."
   ],
   "rationale": [
-    "A restore or migration must never partially replace the source of truth. Expanded reconciliation state is just as canonical as transaction amounts."
+    "A restore or migration must never partially replace the source of truth. Expanded Reconciliation State is just as canonical as transaction amounts."
   ],
   "alternatives": [
     "Rejected in-place restore or migration, directory copying over the current store, activation without a manifest, and validation that checks only SQLite integrity."

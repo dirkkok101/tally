@@ -4,13 +4,13 @@
   "ref_code": "DD-LEDGER-RECONCILIATION-CONTRACT",
   "title": "Explicit match-first evidence reconciliation contract",
   "description": [
-    "Choose the public and transactional shape for matching approved statement evidence to canonical transactions without duplicates."
+    "Choose the public and transactional shape for matching approved statement evidence to Canonical Transactions without duplicates."
   ],
   "decision": [
     "Expose explicit evidence registration, compatibility projection, per-evidence closed disposition, decision lifecycle, and statement coverage operations. Revalidate every apply inside one writer transaction. Persist policy ID, version, exact basis, actor, reason, history, and evidence link. Leave INGEST batch preview, approval, manifests, receipts, and recovery outside LEDGER. Disable automatic match and statement-only application until OQ-LEDGER-13 validates a bounded policy."
   ],
   "rationale": [
-    "This shape separates orchestration from financial authority, blocks ambiguous guesses, supports one canonical transaction with multiple evidence records, and makes every decision replay-safe and auditable."
+    "This shape separates orchestration from financial authority, blocks ambiguous guesses, supports one Canonical Transaction with multiple Evidence Records, and makes every decision replay-safe and auditable."
   ],
   "alternatives": [
     "Rejected minimal evaluate/apply/resolve because outcomes become opaque. Rejected Ledger-owned import batches because they duplicate INGEST. Rejected IReconciliationGateway because the CLI is already the public seam and there is one implementation."

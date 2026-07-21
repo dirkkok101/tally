@@ -9,7 +9,7 @@
     "Verification-only task with no Implements link: trace UC-LEDGER-014 through the Release published CLI."
   ],
   "objective": [
-    "Prove match-first statement reconciliation creates at most one canonical transaction effect and never guesses ambiguity."
+    "Prove match-first statement reconciliation creates at most one Canonical Transaction effect and never guesses ambiguity."
   ],
   "planning_state": "planned",
   "priority": 1,

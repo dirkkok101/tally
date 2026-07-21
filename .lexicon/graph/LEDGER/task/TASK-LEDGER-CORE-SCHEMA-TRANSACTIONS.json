@@ -6,7 +6,7 @@
   "slug": "CORE-SCHEMA-TRANSACTIONS",
   "title": "Implement the V001 transaction schema fragment",
   "description": [
-    "Schema foundation intentionally has no Implements link: translate immutable transaction facts, lifecycle events, category-allocation, payment-attribution, and spend-pool-assignment history into one independently verified V001 fragment."
+    "Schema foundation intentionally has no Implements link: translate immutable transaction facts, lifecycle events, category-allocation, payment-attribution, and Spend Pool-assignment history into one independently verified V001 fragment."
   ],
   "objective": [
     "Create exact immutable transaction and correction-history tables plus independent current/historical category, payment, and pool dimensions without implementing handlers."
@@ -92,44 +92,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0E29W6EEFY0QZKC3GGZZFE",
+      "id": "01KY1NZ9D7P7ST8Y7FTDKS34V8",
       "kind": "acceptance_check",
       "text": [
-        "V001TransactionSchema creates every linked fact, lifecycle, category allocation, instrument/cardholder attribution, and pool assignment field with enum/date/money checks, RESTRICT foreign keys, terminal lifecycle rules, and one-current-record constraints."
+        "V001TransactionSchema creates every linked fact, lifecycle, category allocation, instrument/Cardholder Attribution, and Pool Assignment field with enum/date/money checks, RESTRICT foreign keys, terminal lifecycle rules, and one-current-record constraints."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:54:27.2058846+00:00"
+      "created_at": "2026-07-21T06:31:51.4629104+00:00"
     },
     {
-      "id": "01KY0E29W7PW0NMCQWWAE7R5W9",
+      "id": "01KY1NZ9D8641ZRYX1JJQ4DKM4",
       "kind": "acceptance_check",
       "text": [
-        "signedAmountMinor is nonzero Int64, currency is literal ZAR, facts are insert-only by contract, initial payment attribution is explicitly unknown, and initial pool assignment is explicitly unassigned."
+        "signedAmountMinor is nonzero Int64, currency is literal ZAR, facts are insert-only by contract, initial payment attribution is explicitly unknown, and initial Pool Assignment is explicitly unassigned."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:54:27.2058846+00:00"
+      "created_at": "2026-07-21T06:31:51.4629104+00:00"
     },
     {
-      "id": "01KY0E29W7TNPSCJB2ZYQH3C2P",
+      "id": "01KY1NZ9D8QT5H9JDZPBFTDY9D",
       "kind": "acceptance_check",
       "text": [
         "Source identity is not embedded as transport provenance or a single sourceReference; generic evidence and reconciliation schema is owned by V001EvidenceReconciliationSchema."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:54:27.2058846+00:00"
+      "created_at": "2026-07-21T06:31:51.4629104+00:00"
     },
     {
-      "id": "01KY0E29W7TYGZ44MTJV0KMPJH",
+      "id": "01KY1NZ9D8PQQ6ZPB6T9HNPN3G",
       "kind": "acceptance_check",
       "text": [
         "Applying the fragment twice in one migration plan is rejected before SQL; an injected statement failure rolls back every transaction, lifecycle, and dimensional-history table/index."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T18:54:27.2058846+00:00"
+      "created_at": "2026-07-21T06:31:51.4629104+00:00"
     },
     {
       "id": "01KXT2XZDD6DXM4092XM58GCBT",

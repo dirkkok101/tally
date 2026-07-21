@@ -121,44 +121,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0E8C3NATG17EFXMYR2EZNY",
+      "id": "01KY1P010YDH8DZH4BFWQJDQKK",
       "kind": "acceptance_check",
       "text": [
         "The bundle contains exactly 8 unique transfer, refund, relationship, and actuals descriptors defined by the consumed modules."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:57:46.1013465+00:00"
+      "created_at": "2026-07-21T06:32:15.6466227+00:00"
     },
     {
-      "id": "01KY0E8C3P1EG5K2SA9ANG70GQ",
+      "id": "01KY1P010ZHAFJESYFY1C4EHPX",
       "kind": "acceptance_check",
       "text": [
         "Descriptor order is operationId ordinal and every source descriptor field, dimensional filter, explicit unknown/unassigned bucket, and error is retained byte-for-byte after canonical serialization."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:57:46.1013465+00:00"
+      "created_at": "2026-07-21T06:32:15.6466227+00:00"
     },
     {
-      "id": "01KY0E8C3P9A811CDMVKXK9WN2",
+      "id": "01KY1P010ZVN54YVEW6X7TG7TK",
       "kind": "acceptance_check",
       "text": [
         "A missing module, duplicate operationId/path, incompatible contract range, or loss of pool/category/reconciliation schema fails before dispatch."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:57:46.1013465+00:00"
+      "created_at": "2026-07-21T06:32:15.6466227+00:00"
     },
     {
-      "id": "01KY0E8C3P1H7PG385R0JRGNRS",
+      "id": "01KY1P010ZN8ZNZ9Q16QXWP5WE",
       "kind": "acceptance_check",
       "text": [
-        "Focused real-store tests prove exact all-up, pool, category, and pool-by-category conservation through refund, transfer, relationship replacement, transaction correction, and reconciliation-state changes."
+        "Focused real-store tests prove exact all-up, pool, category, and pool-by-category conservation through refund, transfer, relationship replacement, transaction correction, and Reconciliation State changes."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T18:57:46.1013465+00:00"
+      "created_at": "2026-07-21T06:32:15.6466227+00:00"
     },
     {
       "id": "01KXT21TGVR4R6J68AVK0VCCVV",

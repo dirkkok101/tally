@@ -4,7 +4,7 @@
   "sub_plan_id": "01KXT06A6E7WPPCP8KDAKCJ1H4",
   "ref_code": "TASK-LEDGER-CATEGORY-ALLOCATIONS",
   "slug": "CATEGORY-ALLOCATIONS",
-  "title": "Implement category assignment and correction",
+  "title": "Implement Category Assignment and correction",
   "description": [
     "Deliver assign/correct handlers and append-only allocation storage with one active category per active transaction."
   ],

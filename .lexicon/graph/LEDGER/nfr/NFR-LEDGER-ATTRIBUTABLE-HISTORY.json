@@ -4,7 +4,7 @@
   "ref_code": "NFR-LEDGER-ATTRIBUTABLE-HISTORY",
   "title": "Retain attributable correction history",
   "description": [
-    "Transaction corrections, category and pool corrections, payment attribution, evidence links, reconciliation decisions and exceptions, and financial relationships remain explainable without mutating or deleting prior facts."
+    "Transaction corrections, category and pool corrections, payment attribution, evidence links, Reconciliation Decisions and exceptions, and financial relationships remain explainable without mutating or deleting prior facts."
   ],
   "category": "data_integrity",
   "target": "100% of lifecycle events retain stable subject and evidence references, event or decision type, deterministic policy or owner actor as applicable, reason or match basis, trusted timestamp, prior and resulting state, and replacement or superseded-decision reference where applicable.",

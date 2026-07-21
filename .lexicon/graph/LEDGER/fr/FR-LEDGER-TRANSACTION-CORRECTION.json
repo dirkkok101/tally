@@ -5,7 +5,7 @@
   "ref_code": "FR-LEDGER-TRANSACTION-CORRECTION",
   "title": "Void or supersede erroneous transactions",
   "description": [
-    "Correct erroneous canonical transaction facts through attributable void or supersession history without silently transferring evidence, reconciliation, category, pool, or attribution meaning. Implements G2, G10-G12, and UC-LEDGER-009."
+    "Correct erroneous Canonical Transaction facts through attributable void or supersession history without silently transferring evidence, reconciliation, category, pool, or attribution meaning. Implements G2, G10-G12, and UC-LEDGER-009."
   ],
   "rationale": [
     "Original source facts and the reason for correction must remain auditable while active actuals include only the valid outcome."
@@ -22,8 +22,8 @@
   "acceptance_criteria": [
     "Given an active transaction and a reason, when the owner voids it, then it becomes inactive, the void event is attributable, active financial relationships retire atomically, and default actuals exclude it.",
     "Given an active transaction, a reason, and valid replacement facts, when the owner supersedes it, then one distinct replacement is created, the original becomes inactive, and default actuals include only explicitly established active replacement state.",
-    "Given a corrected transaction with evidence, reconciliation decisions, category or pool assignments, or payment attribution, when void or supersession is applied, then those records remain attached to their historical subject and none silently moves to the replacement.",
-    "Given reconciliation was affected by void or supersession, when current state is queried, then one reconciliation-exception outcome is returned until a valid deterministic or owner-approved decision is recorded.",
+    "Given a corrected transaction with evidence, Reconciliation Decisions, category or Pool Assignments, or payment attribution, when void or supersession is applied, then those records remain attached to their historical subject and none silently moves to the replacement.",
+    "Given reconciliation was affected by void or supersession, when current state is queried, then one Reconciliation Exception outcome is returned until a valid deterministic or owner-approved decision is recorded.",
     "Given a voided or superseded transaction, when history-inclusive detail is requested, then original facts, evidence and decision history, assignments, actor context, reason, time, retired relationships, and replacement reference where applicable remain queryable."
   ],
   "status": "active",

@@ -24,7 +24,7 @@
     "Given an expected validation, conflict, lifecycle, compatibility, cursor, not-found, ambiguous-match, stale-projection, or review-required failure, when the operation completes, then one machine-readable module-scoped error is emitted through the documented structured channel, safe diagnostics remain on stderr, and the documented non-zero exit is stable.",
     "Given malformed JSON, unknown fields forbidden by the schema, or provider transport, mailbox, MIME, recipient, schedule, delivery, or acknowledgement fields, when invocation is attempted, then validation fails before any mutation.",
     "Given a successful or expected-failure invocation, when stdout and stderr are inspected, then stderr contains no transaction description, raw evidence, full account or instrument identifier, credential, or serialized request or response body.",
-    "Given output is lost after a committed mutation, when the external orchestrator retries the same idempotency identity and semantic input, then the original structured outcome is recoverable without duplicate effects."
+    "Given output is lost after a committed mutation, when the External Orchestrator retries the same Idempotency Identity and semantic input, then the original structured outcome is recoverable without duplicate effects."
   ],
   "security_criteria": [
     "Diagnostics and logs contain metadata only, never financial payloads, credentials, or full account identifiers."

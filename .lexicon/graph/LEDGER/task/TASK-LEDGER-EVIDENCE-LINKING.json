@@ -6,10 +6,10 @@
   "slug": "EVIDENCE-LINKING",
   "title": "Implement supporting evidence linkage",
   "description": [
-    "Deliver the explicit non-confirming link operation after canonical transaction and evidence registry behavior exist."
+    "Deliver the explicit non-confirming link operation after Canonical Transaction and evidence registry behavior exist."
   ],
   "objective": [
-    "Append or replay a supporting evidence link to an active transaction without changing reconciliation state or creating a duplicate fact."
+    "Append or replay a supporting evidence link to an active transaction without changing Reconciliation State or creating a duplicate fact."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -173,34 +173,34 @@
       "created_at": "2026-07-20T18:49:57.6488706+00:00"
     },
     {
-      "id": "01KY0DT2MS1MX97FC45R3QFJAF",
+      "id": "01KY1NZHF59S1VS9F4Z4EVQ03M",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT use a supporting link as a reconciliation decision or allow one evidence item to be silently moved — rejected per DD-LEDGER-RECONCILIATION-CONTRACT."
+        "Do NOT use a supporting link as a Reconciliation Decision or allow one evidence item to be silently moved — rejected per DD-LEDGER-RECONCILIATION-CONTRACT."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:31:59.7171407+00:00"
     },
     {
-      "id": "01KY0DT2MS54CYZZE95RJFH79R",
+      "id": "01KY1NZHF6G6GF34EJ47TN6GAQ",
       "kind": "failure_criterion",
       "text": [
         "Do NOT overwrite evidence/link history — rejected per DD-LEDGER-IMMUTABLE-HISTORY."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:31:59.7171407+00:00"
     },
     {
-      "id": "01KY0DT2MSX88SHAAQDMSJ46JV",
+      "id": "01KY1NZHF68MJCDC2EGDQDP8HY",
       "kind": "failure_criterion",
       "text": [
         "Do NOT access provider payloads or private INGEST state."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:31:59.7171407+00:00"
     }
   ],
   "references": [

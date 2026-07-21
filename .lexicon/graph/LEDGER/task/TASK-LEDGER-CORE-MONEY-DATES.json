@@ -92,107 +92,107 @@
   ],
   "interfaces": [
     {
-      "id": "01KXT0KHY7GV3G85WH0CPNMZG7",
+      "id": "01KY1NYSKF2NBBPV8FKTS110CJ",
       "name": "Money",
       "direction": "produces",
       "contract_ref_code": "DD-LEDGER-FINANCIAL-REPRESENTATION",
       "sort_order": 0,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-21T06:31:35.2792061+00:00"
     },
     {
-      "id": "01KXT0KHY79RCD2HQ202T3XRNZ",
-      "name": "EffectiveDate.Resolve",
+      "id": "01KY1NYSKGWDPEVZ5D52DC4DZ2",
+      "name": "Effective Date.Resolve",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-TRANSACTION-FACT",
       "sort_order": 1,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-21T06:31:35.2792061+00:00"
     },
     {
-      "id": "01KXT0KHY7RV7908QNBTFZ5HH3",
+      "id": "01KY1NYSKGN2HH7TDT0MAMS3HC",
       "name": "LedgerId",
       "direction": "produces",
       "sort_order": 2,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-21T06:31:35.2792061+00:00"
     },
     {
-      "id": "01KXT0KHY7MNC219RSBZX04YDF",
+      "id": "01KY1NYSKGMC3WHHN0FJCP41N5",
       "name": "ExactTotals",
       "direction": "produces",
       "contract_ref_code": "NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC",
       "sort_order": 3,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-21T06:31:35.2792061+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KXTFPTD4T5RSVFE81DRQAT0N",
+      "id": "01KY1NYV6PRXG4DPNK3DE2H6FK",
       "kind": "acceptance_check",
       "text": [
         "Canonical -123.45 parses once to Int64 minor units and formats identically without floating point."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T11:27:41.4765388+00:00"
+      "created_at": "2026-07-21T06:31:36.9178605+00:00"
     },
     {
-      "id": "01KXTFPTD54JWF2D2F5673A810",
+      "id": "01KY1NYV6Q7BB5YRCECV9W02DP",
       "kind": "acceptance_check",
       "text": [
         "JSON numbers, exponents, negative zero, zero transaction amounts, excessive scale, unsupported currency, and overflow return stable field errors."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T11:27:41.4765388+00:00"
+      "created_at": "2026-07-21T06:31:36.9178605+00:00"
     },
     {
-      "id": "01KXTFPTD5TWKF23C41E6V8H91",
+      "id": "01KY1NYV6QQ08XX7M5Q3ZPHAZA",
       "kind": "acceptance_check",
       "text": [
         "Signed amount follows the resolved owner economic-position delta rule across asset and liability accounts."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T11:27:41.4765388+00:00"
+      "created_at": "2026-07-21T06:31:36.9178605+00:00"
     },
     {
-      "id": "01KXTFPTD51CT96KV3PNTTBXKC",
+      "id": "01KY1NYV6QMVA6BAC5ZVXMM0RZ",
       "kind": "acceptance_check",
       "text": [
-        "TransactionDate and optional PostingDate round-trip as yyyy-MM-dd; EffectiveDate is TransactionDate and no timezone is fabricated."
+        "TransactionDate and optional PostingDate round-trip as yyyy-MM-dd; Effective Date is TransactionDate and no timezone is fabricated."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T11:27:41.4765388+00:00"
+      "created_at": "2026-07-21T06:31:36.9178605+00:00"
     },
     {
-      "id": "01KXTFPTD5A3J3DNMCJH3KJAE0",
+      "id": "01KY1NYV6QD0SJPK4AZ4TMCBQA",
       "kind": "acceptance_check",
       "text": [
         "Identifiers are 26-character ULIDs and total accumulation detects overflow."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T11:27:41.4765388+00:00"
+      "created_at": "2026-07-21T06:31:36.9178605+00:00"
     },
     {
-      "id": "01KXT0KHY6VWG7HX10HCJTKQ2M",
+      "id": "01KY1NYWWRJRJ22VZHBTVNSWY1",
       "kind": "expected_output",
       "text": [
-        "Money, LedgerCurrency, EffectiveDate, LedgerId, ExactTotals"
+        "Money, LedgerCurrency, Effective Date, LedgerId, ExactTotals"
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-21T06:31:38.6482725+00:00"
     },
     {
-      "id": "01KXT0KHY63HJYK6E5RH4984KG",
+      "id": "01KY1NYWWSVVE0FVQVMYY8XP8R",
       "kind": "expected_output",
       "text": [
         "Boundary/property tests"
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:03:45.8586325+00:00"
+      "created_at": "2026-07-21T06:31:38.6482725+00:00"
     },
     {
       "id": "01KXTFPTD5T2Z3PZGRJVX7YRNV",

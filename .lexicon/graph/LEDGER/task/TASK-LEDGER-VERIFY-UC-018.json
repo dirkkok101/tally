@@ -9,7 +9,7 @@
     "Verification-only task with no Implements link: trace UC-LEDGER-018 through the Release published CLI."
   ],
   "objective": [
-    "Prove spend-pool lifecycle, assignment, unassigned behavior, and exact pool/category conservation across finance corrections."
+    "Prove Spend Pool lifecycle, assignment, unassigned behavior, and exact pool/category conservation across finance corrections."
   ],
   "planning_state": "planned",
   "priority": 1,

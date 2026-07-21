@@ -83,34 +83,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXT126TBEYH3Q22J3N2XEKGZ",
+      "id": "01KY1P1AW3SSRCA4TASJSNP5AY",
       "kind": "acceptance_check",
       "text": [
         "The agent discovers category schema, creates/renames/archives/reactivates one stable category, and history/assignments retain its ID."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-21T06:32:58.4996526+00:00"
     },
     {
-      "id": "01KXT126TBY6F849TRBEVBN244",
+      "id": "01KY1P1AW4QN8BM0CK4AFJNWRX",
       "kind": "acceptance_check",
       "text": [
-        "Absent/conflicting names, referenced physical-delete intent, repeated archive, and new archived-category assignment/correction produce documented no-loss outcomes."
+        "Absent/conflicting names, referenced physical-delete intent, repeated archive, and new archived-Category Assignment/correction produce documented no-loss outcomes."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-21T06:32:58.4996526+00:00"
     },
     {
-      "id": "01KXT126TBE51GSCX037MGCFCT",
+      "id": "01KY1P1AW4AHAJPYBKVBQ5EJ7E",
       "kind": "acceptance_check",
       "text": [
         "Identical retries create no duplicate lifecycle events and active/archived lists remain deterministic."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-21T06:32:58.4996526+00:00"
     },
     {
       "id": "01KXT126TCVAPBN0A6F1WEN2HK",

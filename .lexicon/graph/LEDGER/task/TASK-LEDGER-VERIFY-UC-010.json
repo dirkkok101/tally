@@ -9,7 +9,7 @@
     "Verification-only task with no Implements link: trace revised UC-LEDGER-010 through Release refund operations and dimensional actuals."
   ],
   "objective": [
-    "Prove a valid full/partial refund offsets the original's current category and spend pool in the credit period while preserving facts and exact history."
+    "Prove a valid full/partial refund offsets the original's current category and Spend Pool in the credit period while preserving facts and exact history."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -83,34 +83,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0EB14FKZ851KESTRMCC2WE",
+      "id": "01KY1P1DWJV9WH0T1K11DFJJVY",
       "kind": "acceptance_check",
       "text": [
-        "A valid opposite-sign same-account credit creates one active attributable relationship and reduces External Spend under the original current category and pool in the credit EffectiveDate period."
+        "A valid opposite-sign same-account credit creates one active attributable relationship and reduces External Spend under the original current category and pool in the credit Effective Date period."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:59:13.1670229+00:00"
+      "created_at": "2026-07-21T06:33:01.5857649+00:00"
     },
     {
-      "id": "01KY0EB14GW9X6ES3AV5ZAR42X",
+      "id": "01KY1P1DWKM2HSKQ72HH8HQ5MP",
       "kind": "acceptance_check",
       "text": [
         "Later category or pool correction moves the linked offset deterministically without rewriting either transaction or relationship; exact all-up, pool, category, and cell totals remain conserved."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:59:13.1670229+00:00"
+      "created_at": "2026-07-21T06:33:01.5857649+00:00"
     },
     {
-      "id": "01KY0EB14GSHXG5D7TGTKRE5A3",
+      "id": "01KY1P1DWKA5B6XMPYMNWZRP97",
       "kind": "acceptance_check",
       "text": [
         "Account/currency/sign/lifecycle/role/cardinality/cumulative-magnitude errors, replay conflict, concurrent credit reuse, and write failure leave prior state unchanged."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:59:13.1670229+00:00"
+      "created_at": "2026-07-21T06:33:01.5857649+00:00"
     },
     {
       "id": "01KXT126TEZNR7MNRW1ZDW8HBT",

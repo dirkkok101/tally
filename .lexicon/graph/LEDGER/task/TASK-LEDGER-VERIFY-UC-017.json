@@ -9,7 +9,7 @@
     "Verification-only task with no Implements link: trace UC-LEDGER-017 through the Release published CLI."
   ],
   "objective": [
-    "Prove privacy-safe payment identities and independent instrument/cardholder attribution across lifecycle, correction, unknown, and replay paths."
+    "Prove privacy-safe payment identities and independent instrument/Cardholder Attribution across lifecycle, correction, unknown, and replay paths."
   ],
   "planning_state": "planned",
   "priority": 1,

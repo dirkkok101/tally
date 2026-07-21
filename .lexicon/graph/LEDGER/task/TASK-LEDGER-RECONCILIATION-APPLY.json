@@ -9,7 +9,7 @@
     "Deliver per-evidence match_existing, create_statement_only, record_ambiguous, and record_exception application with in-transaction revalidation."
   ],
   "objective": [
-    "Commit exactly one safe reconciliation outcome and no duplicate canonical transaction despite drift, retry, or crash."
+    "Commit exactly one safe reconciliation outcome and no duplicate Canonical Transaction despite drift, retry, or crash."
   ],
   "planning_state": "planned",
   "priority": 0,

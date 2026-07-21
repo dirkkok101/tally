@@ -4,12 +4,12 @@
   "sub_plan_id": "01KXT069GD3347N15180MYTNVK",
   "ref_code": "TASK-LEDGER-GATE-EVIDENCE-POOL-CARDINALITY",
   "slug": "GATE-EVIDENCE-POOL-CARDINALITY",
-  "title": "Validate spend-pool cardinality",
+  "title": "Validate Spend Pool cardinality",
   "description": [
-    "Validation-only task with no Implements link: resolve OQ-LEDGER-15 before pool assignment and pool-aware actuals implementation."
+    "Validation-only task with no Implements link: resolve OQ-LEDGER-15 before Pool Assignment and pool-aware actuals implementation."
   ],
   "objective": [
-    "Prove that explicit unassigned or one active spend pool per transaction covers the owner finance cases, or stop for design revision."
+    "Prove that explicit unassigned or one active Spend Pool per transaction covers the owner finance cases, or stop for design revision."
   ],
   "planning_state": "planned",
   "priority": 0,

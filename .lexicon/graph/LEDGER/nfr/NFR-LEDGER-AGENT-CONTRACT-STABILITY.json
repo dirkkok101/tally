@@ -2,7 +2,7 @@
   "id": "01KXSQFY9C8649APJ7XN79GBZ3",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "NFR-LEDGER-AGENT-CONTRACT-STABILITY",
-  "title": "Keep the external-orchestrator contract stable",
+  "title": "Keep the External Orchestrator contract stable",
   "description": [
     "The versioned public process contract is the only supported automation boundary and remains provider-neutral for Hermes, other orchestrators, and optional agent skills."
   ],

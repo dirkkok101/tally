@@ -9,7 +9,7 @@
     "Deliver logical evidence identity, privacy allowlisting, register/get operations, and the reusable transaction-scoped evidence store primitive."
   ],
   "objective": [
-    "Register one privacy-safe generic EvidenceRecord per logical item and return identical cross-key replay without provider payload retention."
+    "Register one privacy-safe generic Evidence Record per logical item and return identical cross-key replay without provider payload retention."
   ],
   "planning_state": "planned",
   "priority": 0,
@@ -167,34 +167,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0DT2MRBXP7W1A836ZMDKJ2",
+      "id": "01KY1NZK1WCHXC0S6E57K6CW9H",
       "kind": "acceptance_check",
       "text": [
-        "Register accepts only closed evidence kinds, privacy-safe logical identity/content fingerprints, opaque external reference, actor, and allowlisted observation fields; get returns safe metadata and history."
+        "Register accepts only closed Evidence Kinds, privacy-safe logical identity/content fingerprints, Opaque External Reference, actor, and allowlisted observation fields; get returns safe metadata and history."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:32:01.3405307+00:00"
     },
     {
-      "id": "01KY0DT2MR4CFP9GSCF0TK8SET",
+      "id": "01KY1NZK1XR9XCY26VHEKZDPAA",
       "kind": "acceptance_check",
       "text": [
         "Identical logical evidence under the same or another request key returns the existing record; changed observation/content conflicts and preserves the original."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:32:01.3405307+00:00"
     },
     {
-      "id": "01KY0DT2MRVHBG0MBTABJ4YXDD",
+      "id": "01KY1NZK1XZ10ED6QW9J6XKX1Y",
       "kind": "acceptance_check",
       "text": [
         "Forbidden arbitrary metadata, source payload, provider cursor, mailbox/MIME/message/delivery fields, credentials, or full identifiers fail before any evidence/idempotency row is retained."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:32:01.3405307+00:00"
     },
     {
       "id": "01KY0DT2MRQD734N78AV8D4BSG",
@@ -303,14 +303,14 @@
   ],
   "verification_steps": [
     {
-      "id": "01KY0DT2MRHWVZE2038S7T2YHN",
+      "id": "01KY1NZMKQJYKE38SBDSK6GYJD",
       "phase": "after",
       "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Ledger.EvidenceRegistryOperationTests --no-restore",
-      "expected_result": "exit 0; at least 18 evidence kind, allowlist, logical replay, conflict, and privacy cases run and 0 fail",
+      "expected_result": "exit 0; at least 18 Evidence Kind, allowlist, logical replay, conflict, and privacy cases run and 0 fail",
       "required": 1,
       "timeout_seconds": 420,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:32:02.9350918+00:00"
     }
   ]
 }

@@ -92,34 +92,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0DT2MMV5GSY37Q81VTSS2X",
+      "id": "01KY1NZ2Z3R4EFZRXNPMSJ3REK",
       "kind": "acceptance_check",
       "text": [
-        "A fresh real SQLite generation contains evidence record/observation/link, reconciliation decision/current projection, statement scope/coverage/exception, and required unique/index/foreign-key structures."
+        "A fresh real SQLite generation contains Evidence Record/observation/link, Reconciliation Decision/current projection, statement scope/coverage/exception, and required unique/index/foreign-key structures."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:31:44.8676525+00:00"
     },
     {
-      "id": "01KY0DT2MMQVXJRV62VKTA2V2X",
+      "id": "01KY1NZ2Z4E6ZB542XQTTTMACK",
       "kind": "acceptance_check",
       "text": [
         "Constraints reject duplicate logical evidence with changed content, multiple active confirming targets, broken decision predecessors, mutable-history replacement, and coverage entries outside their scope."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:31:44.8676525+00:00"
     },
     {
-      "id": "01KY0DT2MM260DAZBR4A0CQ32F",
+      "id": "01KY1NZ2Z4AT1M59HSXD1KP17R",
       "kind": "acceptance_check",
       "text": [
         "V001 composition remains deterministic and idempotent and every table participates in integrity/count manifest discovery."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:31:44.8676525+00:00"
     },
     {
       "id": "01KY0DT2MMN5FYST9JZFAQWPDS",

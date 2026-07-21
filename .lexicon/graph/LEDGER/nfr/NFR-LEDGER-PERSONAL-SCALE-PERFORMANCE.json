@@ -4,7 +4,7 @@
   "ref_code": "NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE",
   "title": "Respond at personal-ledger scale",
   "description": [
-    "Interactive external-orchestrator operations remain responsive for the personal dataset without a daemon, remote cache, or external database."
+    "Interactive External Orchestrator operations remain responsive for the personal dataset without a daemon, remote cache, or external database."
   ],
   "category": "performance",
   "target": "At 100000 active transactions plus retained evidence and history, first-page filtered actuals with full pool/category aggregates and reconciliation candidate or completed-scope projections complete within 2 seconds at p95; ordinary single-entity writes complete within 1 second at p95, excluding backup, restore, and migration.",

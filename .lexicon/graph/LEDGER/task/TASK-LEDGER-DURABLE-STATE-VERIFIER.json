@@ -6,7 +6,7 @@
   "slug": "DURABLE-STATE-VERIFIER",
   "title": "Build the complete Durable Ledger State verifier",
   "description": [
-    "Shared recovery foundation intentionally has no Implements link: independently verify every durable fact, evidence record/link, reconciliation projection/decision/coverage history, financial dimension/history, relationship, idempotency/logical effect, count, and exact total in a candidate or backup store."
+    "Shared recovery foundation intentionally has no Implements link: independently verify every durable fact, Evidence Record/link, reconciliation projection/decision/coverage history, financial dimension/history, relationship, idempotency/logical effect, count, and exact total in a candidate or backup store."
   ],
   "objective": [
     "Provide one real-SQLite verifier whose complete normalized report is required before backup publication, restore activation, or storage-evolution activation."
@@ -156,54 +156,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0E88M93QB73CZP987E7NEQ",
+      "id": "01KY1NZB3PP051KNMNSXGA41FD",
       "kind": "acceptance_check",
       "text": [
         "Verification opens the selected non-live store read-only and checks checksum metadata, SQLite integrity, foreign keys, schema/storage/reconciliation-policy compatibility before domain reconciliation."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:57:42.5375550+00:00"
+      "created_at": "2026-07-21T06:31:53.2057601+00:00"
     },
     {
-      "id": "01KY0E88MAEKE8E2J6F9VDM4D0",
+      "id": "01KY1NZB3QYHJVQY3JVVH7044Y",
       "kind": "acceptance_check",
       "text": [
         "The report enumerates every Durable Ledger State type: facts and lifecycles; category, pool, instrument and cardholder state/history; evidence and links; reconciliation projections, decisions, links, coverage and exceptions; relationships; idempotency and logical-effect outcomes; per-type counts; and exact Int64 totals. QuerySnapshot rows are excluded."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:57:42.5375550+00:00"
+      "created_at": "2026-07-21T06:31:53.2057601+00:00"
     },
     {
-      "id": "01KY0E88MAMFMFYD6YX52736FW",
+      "id": "01KY1NZB3QD4HE5843A7T2FEN7",
       "kind": "acceptance_check",
       "text": [
-        "Any missing type, orphan, invalid lifecycle, dimension conflict, evidence privacy violation, reconciliation state/history conflict, relationship-role conflict, replay mismatch, count mismatch, overflow, or total/cell mismatch returns a stable failed report and cannot activate or publish."
+        "Any missing type, orphan, invalid lifecycle, dimension conflict, evidence privacy violation, Reconciliation State/history conflict, relationship-role conflict, replay mismatch, count mismatch, overflow, or total/cell mismatch returns a stable failed report and cannot activate or publish."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:57:42.5375550+00:00"
+      "created_at": "2026-07-21T06:31:53.2057601+00:00"
     },
     {
-      "id": "01KY0E88MAB8MSGB9DER0P7QMC",
+      "id": "01KY1NZB3Q1BWF83JYEM2QHJ1G",
       "kind": "acceptance_check",
       "text": [
         "A verified backup restored into a fresh private generation reproduces the source normalized report exactly apart from generation-specific metadata."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T18:57:42.5375550+00:00"
+      "created_at": "2026-07-21T06:31:53.2057601+00:00"
     },
     {
-      "id": "01KY0E88MAD2YAS8Q9PA6QQ0HC",
+      "id": "01KY1NZB3Q9SC73CXQQZGAXGSV",
       "kind": "acceptance_check",
       "text": [
         "Tests use real SQLite files and deterministic corruptions; diagnostics contain type names, identifiers, and counts only, never descriptions, raw evidence, credentials, full identifiers, or serialized financial payloads."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-20T18:57:42.5375550+00:00"
+      "created_at": "2026-07-21T06:31:53.2057601+00:00"
     },
     {
       "id": "01KXT1ZHVAX08DNP70ZX3R6ENE",

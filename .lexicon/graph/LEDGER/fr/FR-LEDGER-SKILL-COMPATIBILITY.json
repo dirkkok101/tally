@@ -20,7 +20,7 @@
     "AI agents can use Ledger commands safely without bespoke prompting"
   ],
   "acceptance_criteria": [
-    "Given only the executable and its discovered schemas, when Hermes or another external orchestrator integrates with Ledger, then every public workflow is usable without installing an agent-specific skill or accessing private storage.",
+    "Given only the executable and its discovered schemas, when Hermes or another External Orchestrator integrates with Ledger, then every public workflow is usable without installing an agent-specific skill or accessing private storage.",
     "Given a supported optional agent host, when Ledger integration guidance or a skill is installed, then its instructions and declared contract version are available without copying private database files, implementation APIs, or provider-specific transport semantics.",
     "Given guidance or a skill and executable with compatible declared contract versions, when a Ledger workflow is invoked, then only discoverable provider-neutral public operations and schemas are used.",
     "Given an incompatible declared contract version, when execution is attempted, then compatibility fails before any Ledger mutation and returns a stable module-scoped error.",

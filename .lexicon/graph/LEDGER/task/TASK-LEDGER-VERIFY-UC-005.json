@@ -83,34 +83,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0EAYVJD3T0HWMTCB90SNF5",
+      "id": "01KY1P1989HY96AMS60KBV70K0",
       "kind": "acceptance_check",
       "text": [
-        "Explicit filter combinations select active canonical transactions under EffectiveDate, category/pool, instrument/cardholder, relationship, evidence, reconciliation, and correction rules; invalid combinations fail before snapshot creation."
+        "Explicit filter combinations select active Canonical Transactions under Effective Date, category/pool, instrument/cardholder, relationship, evidence, reconciliation, and correction rules; invalid combinations fail before snapshot creation."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:59:10.8336304+00:00"
+      "created_at": "2026-07-21T06:32:56.8409143+00:00"
     },
     {
-      "id": "01KY0EAYVKYC3RSH85QF67TR55",
+      "id": "01KY1P198A2NK27DT89K1M2WY4",
       "kind": "acceptance_check",
       "text": [
         "One committed snapshot returns deterministic pages and unchanged full-set Net Account Movement, External Spend, Budget Actual, pool, category, and pool-by-category totals despite later writes; expired/unavailable cursor fails explicitly."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:59:10.8336304+00:00"
+      "created_at": "2026-07-21T06:32:56.8409143+00:00"
     },
     {
-      "id": "01KY0EAYVK1QR7DDX53T4ZT4DZ",
+      "id": "01KY1P198A60QPPBSMGQ8HE71B",
       "kind": "acceptance_check",
       "text": [
         "Every all-up result equals exact selected membership and grouped cells including uncategorized and unassigned; refunds, transfers, reversals, and corrections obey the governing formulas and integrity mismatch fails closed."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:59:10.8336304+00:00"
+      "created_at": "2026-07-21T06:32:56.8409143+00:00"
     },
     {
       "id": "01KXT0ZW3J0YVSTR1CX0AYVHCR",

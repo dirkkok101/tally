@@ -68,34 +68,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0DT2MZYSWFEFK5C4E5WTNY",
+      "id": "01KY1P1H1KHC3PM00MAFN8T4VB",
       "kind": "acceptance_check",
       "text": [
-        "The published workflow registers and links multiple evidence records to one active transaction, retrieves safe history, and leaves reconciliation state and exact actuals unchanged."
+        "The published workflow registers and links multiple Evidence Records to one active transaction, retrieves safe history, and leaves Reconciliation State and exact actuals unchanged."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:33:04.8192196+00:00"
     },
     {
-      "id": "01KY0DT2MZAPW1SDA9FWZ0RZ0B",
+      "id": "01KY1P1H1ME2ZZ6N252MTQQXDG",
       "kind": "acceptance_check",
       "text": [
         "Forbidden payload, insufficient identity, inactive transaction, incompatible facts, other-transaction conflict, identical replay, changed replay, and injected atomic failure match every UC-LEDGER-013 failure path."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:33:04.8192196+00:00"
     },
     {
-      "id": "01KY0DT2MZG7SDHCFNYVR12S95",
+      "id": "01KY1P1H1MWQDB31709ZN4B8EW",
       "kind": "acceptance_check",
       "text": [
         "Persisted canary inspection finds no source payload or full identifier and one logical effect per evidence item."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:33:04.8192196+00:00"
     },
     {
       "id": "01KY0DT2MZ92PWR3893TEZP1FD",
@@ -108,24 +108,24 @@
       "created_at": "2026-07-20T18:49:57.6488706+00:00"
     },
     {
-      "id": "01KY0DT2MZES5GXNWGT45Z92T4",
+      "id": "01KY1P1FEMY5ET7WYY4DDXSBX0",
       "kind": "failure_criterion",
       "text": [
         "Do NOT call handlers or SQLite directly except read-only postcondition inspection."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:33:03.1880408+00:00"
     },
     {
-      "id": "01KY0DT2MZMTPHKBJ8MG6JX2DS",
+      "id": "01KY1P1FENP9RPC50XV91C29VA",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT omit cross-key logical replay or the no-reconciliation-state-change assertion."
+        "Do NOT omit cross-key logical replay or the no-Reconciliation State-change assertion."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-21T06:33:03.1880408+00:00"
     }
   ],
   "references": [

@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "type": "functional",
   "ref_code": "FR-LEDGER-ACCOUNT-MAINTENANCE",
-  "title": "Maintain owned bank accounts",
+  "title": "Maintain Owned Bank Accounts",
   "description": [
     "Create and maintain stable local records for owned asset and liability accounts using masked identity fields only. Implements G1 and UC-LEDGER-001."
   ],
@@ -24,7 +24,7 @@
     "Given an existing account, when the owner renames its display label, then its stable identifier and previously recorded transaction references remain unchanged.",
     "Given an account referenced by transactions, when the owner archives it, then its history remains queryable and the Ledger rejects new transactions against it with a stable validation error.",
     "Given active and archived accounts, when the owner lists accounts with an explicit lifecycle-state filter, then each matching account is returned once with its stable identifier and masked identity fields.",
-    "Given an owned account, payment instruments, cardholders, spend pools, and categories, when account maintenance occurs, then no account value silently creates, selects, or changes another dimension."
+    "Given an owned account, Payment Instruments, cardholders, Spend Pools, and categories, when account maintenance occurs, then no account value silently creates, selects, or changes another dimension."
   ],
   "security_criteria": [
     "Never store online-banking credentials or unmasked full account numbers."

@@ -21,7 +21,7 @@
   ],
   "acceptance_criteria": [
     "Given approved statement-row evidence, canonical candidate facts, an owned account, and a statement scope, when reconciliation candidates are requested, then the Ledger returns only active compatible unreconciled transactions with stable identifiers and explicit compatibility or exclusion reason codes.",
-    "Given zero, one, or multiple compatible candidates, when the projection is returned, then it classifies the outcome as no-candidate, unique-candidate, or ambiguous respectively without registering a reconciliation decision, linking evidence, or creating a transaction.",
+    "Given zero, one, or multiple compatible candidates, when the projection is returned, then it classifies the outcome as no-candidate, unique-candidate, or ambiguous respectively without registering a Reconciliation Decision, linking evidence, or creating a transaction.",
     "Given a voided or superseded transaction, mismatched account or currency, incompatible sign or amount semantics, or conflicting active statement evidence, when projection runs, then that transaction cannot be returned as a deterministic match candidate.",
     "Given unchanged Ledger state, identical candidate facts, scope, and deterministic-policy identity, when projection is repeated, then candidate membership, ordering, facts, and reason codes are identical.",
     "Given provider-specific transport, sender, mailbox, MIME, recipient, schedule, or delivery fields, when projection input is validated, then the Ledger rejects them before any state access or mutation."
