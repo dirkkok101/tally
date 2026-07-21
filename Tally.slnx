@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/Tally/Tally.csproj" />
+  <Project Path="tests/Tally.Tests/Tally.Tests.csproj" />
+</Solution>
