@@ -1,4 +1,5 @@
 using Tally.Features.System.Contract;
+using Tally.Features.System.Guidance;
 using Tally.Application;
 using Tally.Features.Ledger.Evidence;
 using Tally.Features.Ledger.Relationships;
@@ -16,9 +17,9 @@ using Tally.Infrastructure.Storage.Transactions;
 
 namespace Tally.Bootstrap;
 
-public sealed record LedgerServices(SystemOperationModule SystemOperations, AccountOperationModule? Accounts, CategoryOperationModule? Categories, PaymentIdentityOperationModule? PaymentIdentities, SpendPoolOperationModule? SpendPools, EvidenceRegistryOperationModule? EvidenceRegistry, TransactionOperationModule? Transactions, CategoryAllocationOperationModule? CategoryAllocations, PaymentAttributionOperationModule? PaymentAttributions, PoolAssignmentOperationModule? PoolAssignments, EvidenceLinkOperationModule? EvidenceLinks, TransferOperationModule? Transfers)
+public sealed record LedgerServices(SystemOperationModule SystemOperations, GuidanceOperationModule Guidance, AccountOperationModule? Accounts, CategoryOperationModule? Categories, PaymentIdentityOperationModule? PaymentIdentities, SpendPoolOperationModule? SpendPools, EvidenceRegistryOperationModule? EvidenceRegistry, TransactionOperationModule? Transactions, CategoryAllocationOperationModule? CategoryAllocations, PaymentAttributionOperationModule? PaymentAttributions, PoolAssignmentOperationModule? PoolAssignments, EvidenceLinkOperationModule? EvidenceLinks, TransferOperationModule? Transfers)
 {
-    public static LedgerServices Create() => new(new SystemOperationModule(), null, null, null, null, null, null, null, null, null, null, null);
+    public static LedgerServices Create() => new(new SystemOperationModule(), CreateGuidance(), null, null, null, null, null, null, null, null, null, null, null);
 
     public static LedgerServices Create(LedgerDb database)
     {
@@ -70,6 +71,8 @@ public sealed record LedgerServices(SystemOperationModule SystemOperations, Acco
         var transfers = new TransferOperationModule(
             new ConfirmTransferHandler(executor, accountStore, transactionStore, relationshipStore),
             new GetRelationshipHandler(relationshipStore));
-        return new(new SystemOperationModule(), accounts, categories, paymentIdentities, spendPools, evidence, transactions, categoryAllocations, paymentAttributions, poolAssignments, evidenceLinks, transfers);
+        return new(new SystemOperationModule(), CreateGuidance(), accounts, categories, paymentIdentities, spendPools, evidence, transactions, categoryAllocations, paymentAttributions, poolAssignments, evidenceLinks, transfers);
     }
+
+    private static GuidanceOperationModule CreateGuidance() => new(new GuidanceService());
 }

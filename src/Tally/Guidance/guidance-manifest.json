@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "bundleVersion": "1.0.0",
+  "minimumExecutableVersion": "1.0",
+  "maximumExecutableVersion": "1.0",
+  "minimumContractVersion": "1.0",
+  "maximumContractVersion": "1.0",
+  "operationIds": [
+    "system.schema.list",
+    "system.schema.show",
+    "system.version"
+  ],
+  "bundles": [
+    {
+      "host": "codex",
+      "format": "codex-skill-v1",
+      "resourceName": "Tally.Guidance.Codex.Skill",
+      "installRelativePath": ".agents/skills/tally-ledger/SKILL.md",
+      "checksum": "6ee86390964b29037895aa50df0fd192ce6f98d035ca9208a957fc3d8fa6df94"
+    },
+    {
+      "host": "claude-code",
+      "format": "claude-code-skill-v1",
+      "resourceName": "Tally.Guidance.ClaudeCode.Skill",
+      "installRelativePath": ".claude/skills/tally-ledger/SKILL.md",
+      "checksum": "6ee86390964b29037895aa50df0fd192ce6f98d035ca9208a957fc3d8fa6df94"
+    }
+  ]
+}

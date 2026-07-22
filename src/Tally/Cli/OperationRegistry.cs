@@ -23,6 +23,7 @@ using Tally.Domain.Ledger.Transactions;
 using Tally.Domain.Ledger.Relationships;
 using Tally.Infrastructure.Storage.Accounts;
 using Tally.Features.System.Contract;
+using Tally.Features.System.Guidance;
 
 namespace Tally.Cli;
 
@@ -59,6 +60,9 @@ public sealed class OperationRegistry
             "system.version" => new(operationId, "tally version", "query", false, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.VersionResult, "SystemOperationModule.Version", static (services, _) => new SystemOperationHandler(services.SystemOperations, null, "system.version"), "tally version"),
             "system.schema.list" => new(operationId, "tally schema list", "query", false, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.SchemaListResult, "SystemOperationModule.List", static (services, registry) => new SystemOperationHandler(services.SystemOperations, registry, "system.schema.list"), "tally schema list"),
             "system.schema.show" => new(operationId, "tally schema show <operation-id>", "query", false, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.SchemaShowResult, "SystemOperationModule.Show", static (services, registry) => new SystemOperationHandler(services.SystemOperations, registry, "system.schema.show"), "tally schema show system.version"),
+            "system.guidance.list" => GuidanceDescriptor(operationId, LedgerJsonContext.Default.ListGuidanceInput, LedgerJsonContext.Default.GuidanceListResult, false, "List"),
+            "system.guidance.check" => GuidanceDescriptor(operationId, LedgerJsonContext.Default.CheckGuidanceInput, LedgerJsonContext.Default.GuidanceCheckResult, false, "Check"),
+            "system.guidance.install" => GuidanceDescriptor(operationId, LedgerJsonContext.Default.InstallGuidanceInput, LedgerJsonContext.Default.GuidanceInstallResult, true, "Install"),
             "ledger.account.create" => new(operationId, "tally ledger account create", "mutation", true, LedgerJsonContext.Default.CreateAccountInput, LedgerJsonContext.Default.AccountDetail, "AccountOperationModule.Create", static (services, _) => services.Accounts is { } module ? new AccountOperationHandler(module, "ledger.account.create") : new FoundationOperationHandler(), "tally ledger account create --input -", AccountErrors(operationId)),
             "ledger.account.get" => new(operationId, "tally ledger account get", "query", false, LedgerJsonContext.Default.GetAccountInput, LedgerJsonContext.Default.AccountDetail, "AccountOperationModule.Get", static (services, _) => services.Accounts is { } module ? new AccountOperationHandler(module, "ledger.account.get") : new FoundationOperationHandler(), "tally ledger account get --input -", AccountErrors(operationId)),
             "ledger.account.list" => new(operationId, "tally ledger account list", "query", false, LedgerJsonContext.Default.ListAccountsInput, LedgerJsonContext.Default.AccountListResult, "AccountOperationModule.List", static (services, _) => services.Accounts is { } module ? new AccountOperationHandler(module, "ledger.account.list") : new FoundationOperationHandler(), "tally ledger account list --input -", AccountErrors(operationId)),
@@ -284,6 +288,19 @@ public sealed class OperationRegistry
             new(TransferErrors.ActiveRoleConflict, "conflict", 5),
             new(TransferErrors.TransactionInactive, "lifecycle", 6),
             new(AccountStore.ArchivedError, "lifecycle", 6)
+        ]);
+
+    private static OperationDescriptor GuidanceDescriptor(string operationId, JsonTypeInfo request, JsonTypeInfo result, bool mutation, string target) => new(
+        operationId, "tally " + operationId.Replace('.', ' '), mutation ? "mutation" : "query", mutation,
+        request, result, "GuidanceOperationModule." + target,
+        (services, registry) => new GuidanceOperationHandler(services.Guidance, registry, operationId),
+        "tally " + operationId.Replace('.', ' ') + " --input -",
+        [
+            new(GuidanceErrors.Invalid, "validation", 3),
+            new(GuidanceErrors.UnsupportedHost, "validation", 3),
+            new(GuidanceErrors.UnsafePath, "validation", 3),
+            new(GuidanceErrors.Incompatible, "compatibility", 7),
+            new(GuidanceErrors.InvalidBundle, "compatibility", 7)
         ]);
     private static readonly string[] Inventory =
     [

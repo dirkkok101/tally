@@ -12,4 +12,9 @@
     <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" ExcludeAssets="all" GeneratePathProperty="true" />
     <Content Include="$(PkgSQLitePCLRaw_lib_e_sqlite3)/runtimes/linux-x64/native/libe_sqlite3.so" Link="libe_sqlite3.so" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Guidance/guidance-manifest.json" LogicalName="Tally.Guidance.Manifest" />
+    <EmbeddedResource Include="Guidance/Codex/SKILL.md" LogicalName="Tally.Guidance.Codex.Skill" />
+    <EmbeddedResource Include="Guidance/ClaudeCode/SKILL.md" LogicalName="Tally.Guidance.ClaudeCode.Skill" />
+  </ItemGroup>
 </Project>

@@ -129,6 +129,8 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
         "LEDGER-RELATIONSHIP-NOT-FOUND" => Error(4, code, "not_found", "The financial relationship was not found."),
         "LEDGER-RELATIONSHIP-ACTIVE-ROLE-CONFLICT" => Error(5, code, "conflict", "A transaction already participates in an active financial relationship."),
         "LEDGER-TRANSFER-TRANSACTION-INACTIVE" => Error(6, code, "lifecycle", "The transaction lifecycle does not allow transfer confirmation."),
+        "LEDGER-GUIDANCE-INVALID" or "LEDGER-GUIDANCE-HOST-UNSUPPORTED" or "LEDGER-GUIDANCE-PATH-UNSAFE" => Error(3, code, "validation", "The guidance request is invalid."),
+        "LEDGER-GUIDANCE-CONTRACT-INCOMPATIBLE" or "LEDGER-GUIDANCE-BUNDLE-INVALID" => Error(7, code, "compatibility", "The guidance bundle is incompatible with this executable contract."),
         "LEDGER-IDEMPOTENCY-001" or "operation.conflict" => Error(5, code, "conflict", "The operation conflicts with existing state."),
         "host.unavailable" => Error(9, code, "host", "The requested operation is not available in this foundation."),
         _ => UnexpectedFailure()
