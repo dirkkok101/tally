@@ -5,12 +5,15 @@ using Tally.Bootstrap;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Accounts;
 using Tally.Contracts.Ledger.Categories;
+using Tally.Contracts.Ledger.Dimensions;
 using Tally.Contracts.Ledger.Evidence;
 using Tally.Contracts.System;
 using Tally.Features.Ledger.Evidence;
 using Tally.Features.Ledger.Accounts;
 using Tally.Features.Ledger.Categories;
+using Tally.Features.Ledger.Dimensions;
 using Tally.Domain.Ledger.Categories;
+using Tally.Domain.Ledger.Dimensions;
 using Tally.Features.System.Contract;
 
 namespace Tally.Cli;
@@ -60,6 +63,18 @@ public sealed class OperationRegistry
             "ledger.category.reparent" => CategoryDescriptor(operationId, LedgerJsonContext.Default.ReparentCategoryInput, LedgerJsonContext.Default.CategoryReparentResult, "Reparent"),
             "ledger.category.archive" => CategoryDescriptor(operationId, LedgerJsonContext.Default.ArchiveCategoryInput, LedgerJsonContext.Default.CategoryLifecycleResult, "Archive"),
             "ledger.category.reactivate" => CategoryDescriptor(operationId, LedgerJsonContext.Default.ReactivateCategoryInput, LedgerJsonContext.Default.CategoryLifecycleResult, "Reactivate"),
+            "ledger.instrument.create" => PaymentIdentityDescriptor(operationId, LedgerJsonContext.Default.CreatePaymentInstrumentInput, LedgerJsonContext.Default.PaymentInstrumentDetail, "Create"),
+            "ledger.instrument.get" => PaymentIdentityDescriptor(operationId, LedgerJsonContext.Default.GetPaymentInstrumentInput, LedgerJsonContext.Default.PaymentInstrumentDetail, "Get"),
+            "ledger.instrument.list" => PaymentIdentityDescriptor(operationId, LedgerJsonContext.Default.ListPaymentInstrumentsInput, LedgerJsonContext.Default.PaymentInstrumentListResult, "List"),
+            "ledger.instrument.rename" => PaymentIdentityDescriptor(operationId, LedgerJsonContext.Default.RenamePaymentInstrumentInput, LedgerJsonContext.Default.PaymentInstrumentLifecycleResult, "Rename"),
+            "ledger.instrument.archive" => PaymentIdentityDescriptor(operationId, LedgerJsonContext.Default.ArchivePaymentInstrumentInput, LedgerJsonContext.Default.PaymentInstrumentLifecycleResult, "Archive"),
+            "ledger.instrument.reactivate" => PaymentIdentityDescriptor(operationId, LedgerJsonContext.Default.ReactivatePaymentInstrumentInput, LedgerJsonContext.Default.PaymentInstrumentLifecycleResult, "Reactivate"),
+            "ledger.cardholder.create" => PaymentIdentityDescriptor(operationId, LedgerJsonContext.Default.CreateCardholderInput, LedgerJsonContext.Default.CardholderDetail, "Create"),
+            "ledger.cardholder.get" => PaymentIdentityDescriptor(operationId, LedgerJsonContext.Default.GetCardholderInput, LedgerJsonContext.Default.CardholderDetail, "Get"),
+            "ledger.cardholder.list" => PaymentIdentityDescriptor(operationId, LedgerJsonContext.Default.ListCardholdersInput, LedgerJsonContext.Default.CardholderListResult, "List"),
+            "ledger.cardholder.rename" => PaymentIdentityDescriptor(operationId, LedgerJsonContext.Default.RenameCardholderInput, LedgerJsonContext.Default.CardholderLifecycleResult, "Rename"),
+            "ledger.cardholder.archive" => PaymentIdentityDescriptor(operationId, LedgerJsonContext.Default.ArchiveCardholderInput, LedgerJsonContext.Default.CardholderLifecycleResult, "Archive"),
+            "ledger.cardholder.reactivate" => PaymentIdentityDescriptor(operationId, LedgerJsonContext.Default.ReactivateCardholderInput, LedgerJsonContext.Default.CardholderLifecycleResult, "Reactivate"),
             "ledger.evidence.register" => new(operationId, "tally ledger evidence register", "mutation", true, LedgerJsonContext.Default.RegisterEvidenceInput, LedgerJsonContext.Default.EvidenceRecordDetail, "EvidenceRegistryOperationModule.Register", static (services, _) => services.EvidenceRegistry is { } module ? new EvidenceRegistryOperationHandler(module, "ledger.evidence.register") : new FoundationOperationHandler(), "tally ledger evidence register --input -"),
             "ledger.evidence.get" => new(operationId, "tally ledger evidence get", "query", false, LedgerJsonContext.Default.GetEvidenceInput, LedgerJsonContext.Default.EvidenceRecordDetail, "EvidenceRegistryOperationModule.Get", static (services, _) => services.EvidenceRegistry is { } module ? new EvidenceRegistryOperationHandler(module, "ledger.evidence.get") : new FoundationOperationHandler(), "tally ledger evidence get --input -"),
             _ => new(operationId, "tally " + operationId.Replace('.', ' '), isQuery ? "query" : "mutation", !isQuery, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.OperationUnavailableResult, "FoundationOperationHandler", static (_, _) => new FoundationOperationHandler(), "tally " + operationId.Replace('.', ' '))
@@ -94,6 +109,30 @@ public sealed class OperationRegistry
     };
 
     private static ErrorSchema CategoryError(string code, string category, int exitCode) => new(code, category, exitCode);
+
+    private static OperationDescriptor PaymentIdentityDescriptor(string operationId, JsonTypeInfo request, JsonTypeInfo result, string target) => new(
+        operationId, "tally " + operationId.Replace('.', ' '), operationId.EndsWith(".get", StringComparison.Ordinal) || operationId.EndsWith(".list", StringComparison.Ordinal) ? "query" : "mutation",
+        !operationId.EndsWith(".get", StringComparison.Ordinal) && !operationId.EndsWith(".list", StringComparison.Ordinal), request, result,
+        "PaymentIdentityOperationModule." + target, (services, _) => services.PaymentIdentities is { } module ? new PaymentIdentityOperationHandler(module, operationId) : new FoundationOperationHandler(),
+        "tally " + operationId.Replace('.', ' ') + " --input -", PaymentIdentityErrorsFor(operationId));
+
+    private static IReadOnlyList<ErrorSchema> PaymentIdentityErrorsFor(string operationId)
+    {
+        var instrument = operationId.StartsWith("ledger.instrument.", StringComparison.Ordinal);
+        var notFound = instrument ? PaymentIdentityErrors.InstrumentNotFound : PaymentIdentityErrors.CardholderNotFound;
+        var duplicate = instrument ? PaymentIdentityErrors.InstrumentDuplicate : PaymentIdentityErrors.CardholderDuplicate;
+        var archived = instrument ? PaymentIdentityErrors.InstrumentArchived : PaymentIdentityErrors.CardholderArchived;
+        var alreadyArchived = instrument ? PaymentIdentityErrors.InstrumentAlreadyArchived : PaymentIdentityErrors.CardholderAlreadyArchived;
+        var alreadyActive = instrument ? PaymentIdentityErrors.InstrumentAlreadyActive : PaymentIdentityErrors.CardholderAlreadyActive;
+        var errors = new List<ErrorSchema> { new(PaymentIdentity.InvalidError, "validation", 3) };
+        if (!operationId.EndsWith(".create", StringComparison.Ordinal) && !operationId.EndsWith(".list", StringComparison.Ordinal)) errors.Add(new(notFound, "not_found", 4));
+        if (operationId.EndsWith(".create", StringComparison.Ordinal) || operationId.EndsWith(".rename", StringComparison.Ordinal) || operationId.EndsWith(".reactivate", StringComparison.Ordinal)) errors.Add(new(duplicate, "conflict", 5));
+        if (operationId.EndsWith(".rename", StringComparison.Ordinal)) errors.Add(new(archived, "lifecycle", 6));
+        if (operationId.EndsWith(".archive", StringComparison.Ordinal)) errors.Add(new(alreadyArchived, "lifecycle", 6));
+        if (operationId.EndsWith(".reactivate", StringComparison.Ordinal)) errors.Add(new(alreadyActive, "lifecycle", 6));
+        if (instrument && (operationId.EndsWith(".create", StringComparison.Ordinal) || operationId.EndsWith(".reactivate", StringComparison.Ordinal))) errors.Add(new(PaymentIdentityErrors.InstrumentAccountNotActive, "lifecycle", 6));
+        return errors;
+    }
     private static readonly string[] Inventory =
     [
         "ledger.account.create","ledger.account.get","ledger.account.list","ledger.account.rename","ledger.account.archive",

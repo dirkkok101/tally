@@ -100,6 +100,10 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
         "LEDGER-CATEGORY-NOT-FOUND" or "LEDGER-CATEGORY-PARENT-NOT-FOUND" => Error(4, code, "not_found", "The category was not found."),
         "LEDGER-CATEGORY-DUPLICATE-SIBLING" => Error(5, code, "conflict", "The category conflicts with an active sibling."),
         "LEDGER-CATEGORY-PARENT-ARCHIVED" or "LEDGER-CATEGORY-ARCHIVED" or "LEDGER-CATEGORY-CYCLE" or "LEDGER-CATEGORY-ACTIVE-CHILDREN" or "LEDGER-CATEGORY-ALREADY-ARCHIVED" or "LEDGER-CATEGORY-ALREADY-ACTIVE" or "LEDGER-CATEGORY-ANCESTOR-ARCHIVED" => Error(6, code, "lifecycle", "The category lifecycle does not allow the operation."),
+        "LEDGER-PAYMENT-IDENTITY-INVALID" => Error(3, code, "validation", "The payment identity input is invalid."),
+        "LEDGER-PAYMENT-INSTRUMENT-NOT-FOUND" or "LEDGER-CARDHOLDER-NOT-FOUND" => Error(4, code, "not_found", "The payment identity was not found."),
+        "LEDGER-PAYMENT-INSTRUMENT-DUPLICATE" or "LEDGER-CARDHOLDER-DUPLICATE" => Error(5, code, "conflict", "The payment identity conflicts with active catalogue state."),
+        "LEDGER-PAYMENT-INSTRUMENT-ACCOUNT-NOT-ACTIVE" or "LEDGER-PAYMENT-INSTRUMENT-ARCHIVED" or "LEDGER-CARDHOLDER-ARCHIVED" or "LEDGER-PAYMENT-INSTRUMENT-ALREADY-ARCHIVED" or "LEDGER-CARDHOLDER-ALREADY-ARCHIVED" or "LEDGER-PAYMENT-INSTRUMENT-ALREADY-ACTIVE" or "LEDGER-CARDHOLDER-ALREADY-ACTIVE" => Error(6, code, "lifecycle", "The payment identity lifecycle does not allow the operation."),
         "LEDGER-IDEMPOTENCY-001" or "operation.conflict" => Error(5, code, "conflict", "The operation conflicts with existing state."),
         "host.unavailable" => Error(9, code, "host", "The requested operation is not available in this foundation."),
         _ => UnexpectedFailure()

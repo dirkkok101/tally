@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Tally.Contracts.Ledger.Accounts;
 using Tally.Contracts.Ledger.Categories;
+using Tally.Contracts.Ledger.Dimensions;
 using Tally.Contracts.Ledger.Evidence;
 
 namespace Tally.Contracts.Common;
@@ -54,4 +55,25 @@ public sealed record EmptyInput;
 [JsonSerializable(typeof(CategoryListResult))]
 [JsonSerializable(typeof(CategoryLifecycleResult))]
 [JsonSerializable(typeof(CategoryReparentResult))]
+[JsonSerializable(typeof(CreatePaymentInstrumentInput))]
+[JsonSerializable(typeof(GetPaymentInstrumentInput))]
+[JsonSerializable(typeof(ListPaymentInstrumentsInput))]
+[JsonSerializable(typeof(RenamePaymentInstrumentInput))]
+[JsonSerializable(typeof(ArchivePaymentInstrumentInput))]
+[JsonSerializable(typeof(ReactivatePaymentInstrumentInput))]
+[JsonSerializable(typeof(PaymentInstrumentDetail))]
+[JsonSerializable(typeof(PaymentInstrumentDetail[]))]
+[JsonSerializable(typeof(PaymentIdentityHistoryItem[]))]
+[JsonSerializable(typeof(PaymentInstrumentListResult))]
+[JsonSerializable(typeof(PaymentInstrumentLifecycleResult))]
+[JsonSerializable(typeof(CreateCardholderInput))]
+[JsonSerializable(typeof(GetCardholderInput))]
+[JsonSerializable(typeof(ListCardholdersInput))]
+[JsonSerializable(typeof(RenameCardholderInput))]
+[JsonSerializable(typeof(ArchiveCardholderInput))]
+[JsonSerializable(typeof(ReactivateCardholderInput))]
+[JsonSerializable(typeof(CardholderDetail))]
+[JsonSerializable(typeof(CardholderDetail[]))]
+[JsonSerializable(typeof(CardholderListResult))]
+[JsonSerializable(typeof(CardholderLifecycleResult))]
 public partial class LedgerJsonContext : JsonSerializerContext;
