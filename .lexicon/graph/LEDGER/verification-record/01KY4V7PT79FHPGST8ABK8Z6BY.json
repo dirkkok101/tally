@@ -1,0 +1,13 @@
+{
+  "id": "01KY4V7PT79FHPGST8ABK8Z6BY",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-SNAPSHOT-PAGINATION",
+  "subject_entity_id": "01KXSQCYJDXYDNKTV7NV98Z0BZ",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-SNAPSHOT-PAGINATION-CONTRACT",
+  "note": "31 focused snapshot, cursor, concurrency, crash, stability, and provider-neutral cases passed; 1021 full-suite tests passed; Native AOT publish passed.",
+  "commit_sha": "5cf3093",
+  "bead_id": "bd-1dt",
+  "verified_at": "2026-07-22T12:01:33.5122816+00:00"
+}
