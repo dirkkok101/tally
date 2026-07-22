@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 using Tally.Application;
 using Tally.Bootstrap;
+using Tally.Composition.Ledger;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Accounts;
 using Tally.Contracts.Ledger.Categories;
@@ -11,6 +13,9 @@ using Tally.Contracts.Ledger.Relationships;
 using Tally.Contracts.Ledger.Transactions;
 using Tally.Contracts.System;
 using Tally.Features.Ledger.Evidence;
+using Tally.Features.Ledger.Actuals;
+using Tally.Features.Ledger.Reconciliation;
+using Tally.Features.Ledger.Recovery;
 using Tally.Features.Ledger.Relationships;
 using Tally.Features.Ledger.Accounts;
 using Tally.Features.Ledger.Categories;
@@ -29,12 +34,22 @@ namespace Tally.Cli;
 
 public sealed record OperationDescriptor(string OperationId, string CliPath, string Kind, bool RequiresIdempotencyKey, JsonTypeInfo RequestTypeInfo, JsonTypeInfo ResultTypeInfo, string HandlerTarget, Func<LedgerServices, OperationRegistry, IOperationHandler> HandlerFactory, string Example, IReadOnlyList<ErrorSchema>? DomainErrors = null, string MinimumContractVersion = "1.0", string MaximumContractVersion = "1.0")
 {
-    public OperationSchema ToSchema() => new(OperationId, CliPath, Kind, "{\"type\":\"object\",\"additionalProperties\":false}", "{\"type\":\"object\"}", RequestTypeInfo.Type.FullName!, ResultTypeInfo.Type.FullName!, [.. Errors, .. DomainErrors ?? []], 0, RequiresIdempotencyKey, MinimumContractVersion, MaximumContractVersion, HandlerTarget, Example);
+    public OperationSchema ToSchema() => new(OperationId, CliPath, Kind, "{\"type\":\"object\",\"additionalProperties\":false}", "{\"type\":\"object\"}", RequestTypeInfo.Type.FullName!, ResultTypeInfo.Type.FullName!, SchemaErrors(), 0, RequiresIdempotencyKey, MinimumContractVersion, MaximumContractVersion, HandlerTarget, Example);
+
+    private IReadOnlyList<ErrorSchema> SchemaErrors()
+    {
+        ErrorSchema[] errors = [.. Errors, .. RequiresIdempotencyKey ? IdempotencyErrors : [], .. DomainErrors ?? []];
+        return errors.DistinctBy(error => error.Code, StringComparer.Ordinal).ToArray();
+    }
     private static readonly IReadOnlyList<ErrorSchema> Errors =
     [
         new("usage.invalid_input_path", "usage", 2), new("validation.invalid_input", "validation", 3), new("operation.not_found", "not_found", 4),
         new("operation.conflict", "conflict", 5), new("operation.lifecycle", "lifecycle", 6), new("contract.incompatible", "compatibility", 7),
         new("operation.review_required", "integrity", 8), new("host.unavailable", "host", 9), new("host.unexpected", "host", 10)
+    ];
+    private static readonly IReadOnlyList<ErrorSchema> IdempotencyErrors =
+    [
+        new("LEDGER-IDEMPOTENCY-001", "conflict", 5)
     ];
 }
 
@@ -50,6 +65,17 @@ public sealed class OperationRegistry
     public string SchemaListJson() => JsonSerializer.Serialize(descriptors.Select(x => x.ToSchema()).ToArray(), LedgerJsonContext.Default.OperationSchemaArray);
     public string SchemaShowJson(string operationId) => Find(operationId) is { } descriptor ? JsonSerializer.Serialize(descriptor.ToSchema(), LedgerJsonContext.Default.OperationSchema) : "null";
     private static OperationDescriptor CreateDescriptor(string operationId)
+    {
+        var descriptor = CompositeDescriptorTemplates.TryGetValue(operationId, out var composite)
+            ? composite
+            : CreateCoreDescriptor(operationId);
+        return descriptor with
+        {
+            HandlerFactory = (services, registry) => RuntimeHandler(descriptor, services, registry)
+        };
+    }
+
+    private static OperationDescriptor CreateCoreDescriptor(string operationId)
     {
         var isQuery = operationId is "system.schema.list" or "system.schema.show" or "system.version" or "system.guidance.list" or "system.guidance.check"
             || operationId.EndsWith(".get", StringComparison.Ordinal) || operationId.EndsWith(".list", StringComparison.Ordinal)
@@ -95,6 +121,8 @@ public sealed class OperationRegistry
             "ledger.pool.reactivate" => SpendPoolDescriptor(operationId, LedgerJsonContext.Default.ReactivateSpendPoolInput, LedgerJsonContext.Default.SpendPoolLifecycleResult, "Reactivate"),
             "ledger.transaction.record" => TransactionDescriptor(operationId, LedgerJsonContext.Default.RecordTransactionInput, true, "Record"),
             "ledger.transaction.get" => TransactionDescriptor(operationId, LedgerJsonContext.Default.GetTransactionInput, false, "Get"),
+            "ledger.transaction.void" => TransactionCorrectionDescriptor(operationId, TransactionCorrectionJsonContext.Default.VoidTransactionInput, "Void"),
+            "ledger.transaction.supersede" => TransactionCorrectionDescriptor(operationId, TransactionCorrectionJsonContext.Default.SupersedeTransactionInput, "Supersede"),
             "ledger.transfer.revoke" => RelationshipLifecycleDescriptor(operationId, LedgerJsonContext.Default.RevokeRelationshipInput, "RevokeTransfer"),
             "ledger.transfer.replace" => RelationshipLifecycleDescriptor(operationId, LedgerJsonContext.Default.ReplaceTransferInput, "ReplaceTransfer"),
             "ledger.refund.revoke" => RelationshipLifecycleDescriptor(operationId, LedgerJsonContext.Default.RevokeRelationshipInput, "RevokeRefund"),
@@ -203,6 +231,11 @@ public sealed class OperationRegistry
         "TransactionOperationModule." + target, (services, _) => services.Transactions is { } module ? new TransactionOperationHandler(module, operationId) : new FoundationOperationHandler(),
         "tally " + operationId.Replace('.', ' ') + " --input -", TransactionErrorsFor(operationId));
 
+    private static OperationDescriptor TransactionCorrectionDescriptor(string operationId, JsonTypeInfo request, string target) => new(
+        operationId, "tally " + operationId.Replace('.', ' '), "mutation", true, request, TransactionCorrectionJsonContext.Default.TransactionCorrectionResult,
+        "TransactionOperationModule." + target, (services, _) => services.Transactions is { } module ? new TransactionOperationHandler(module, operationId) : new FoundationOperationHandler(),
+        "tally " + operationId.Replace('.', ' ') + " --input -", TransactionCorrectionErrors);
+
     private static OperationDescriptor RelationshipLifecycleDescriptor(string operationId, JsonTypeInfo request, string target) => new(
         operationId, "tally " + operationId.Replace('.', ' '), operationId == "ledger.relationship.get" ? "query" : "mutation", operationId != "ledger.relationship.get", request, operationId == "ledger.relationship.get" ? LedgerJsonContext.Default.FinancialRelationshipDetail : LedgerJsonContext.Default.RelationshipLifecycleResult,
         "RelationshipLifecycleOperationModule." + target, (services, _) => services.RelationshipLifecycle is { } module ? new RelationshipLifecycleOperationHandler(module, operationId) : new FoundationOperationHandler(),
@@ -243,6 +276,22 @@ public sealed class OperationRegistry
         "ledger.transaction.get" => [new(TransactionFact.InvalidError, "validation", 3), new(TransactionErrors.NotFound, "not_found", 4)],
         _ => []
     };
+
+    private static readonly IReadOnlyList<ErrorSchema> TransactionCorrectionErrors =
+    [
+        new(TransactionLifecycle.InvalidError, "validation", 3),
+        new(Money.InvalidAmountError, "validation", 3),
+        new(Money.ZeroTransactionAmountError, "validation", 3),
+        new(LedgerCurrency.UnsupportedCurrencyError, "validation", 3),
+        new(EffectiveDate.InvalidDateError, "validation", 3),
+        new(TransactionFact.EvidenceIncompatibleError, "validation", 3),
+        new(TransactionLifecycle.NotFoundError, "not_found", 4),
+        new(AccountStore.NotFoundError, "not_found", 4),
+        new(TransactionErrors.EvidenceConflict, "conflict", 5),
+        new(TransactionLifecycle.InactiveError, "lifecycle", 6),
+        new(AccountStore.ArchivedError, "lifecycle", 6),
+        new(TransactionErrors.AttributionIncompatible, "lifecycle", 6)
+    ];
 
     private static OperationDescriptor CategoryAllocationDescriptor(string operationId, JsonTypeInfo request, string target) => new(
         operationId, "tally " + operationId.Replace('.', ' '), "mutation", true, request, LedgerJsonContext.Default.CategoryAllocationResult,
@@ -352,6 +401,60 @@ public sealed class OperationRegistry
             new(GuidanceErrors.Incompatible, "compatibility", 7),
             new(GuidanceErrors.InvalidBundle, "compatibility", 7)
         ]);
+
+    [SuppressMessage("Interoperability", "CA1416", Justification = "Recovery handlers are selected only after Linux storage bootstrap succeeds.")]
+    private static IOperationHandler RuntimeHandler(
+        OperationDescriptor descriptor,
+        LedgerServices services,
+        OperationRegistry registry)
+    {
+        if (descriptor.OperationId.StartsWith("system.", StringComparison.Ordinal))
+        {
+            return descriptor.HandlerFactory(services, registry);
+        }
+
+        var runtimeDescriptors = descriptor.OperationId switch
+        {
+            var operationId when operationId.StartsWith("ledger.reconciliation.", StringComparison.Ordinal) =>
+                services.Reconciliation?.Descriptors,
+            "ledger.actuals.query" or "ledger.relationship.get" => services.RelationshipActuals?.Descriptors,
+            var operationId when operationId.StartsWith("ledger.transfer.", StringComparison.Ordinal)
+                || operationId.StartsWith("ledger.refund.", StringComparison.Ordinal) =>
+                services.RelationshipActuals?.Descriptors,
+            var operationId when operationId.StartsWith("ledger.backup.", StringComparison.Ordinal)
+                || operationId.StartsWith("ledger.restore.", StringComparison.Ordinal)
+                || operationId.StartsWith("ledger.storage.", StringComparison.Ordinal) =>
+                services.RecoveryGuidance?.Descriptors,
+            _ => services.CatalogueTransactions?.Descriptors
+        };
+        var runtime = runtimeDescriptors?.SingleOrDefault(candidate => candidate.OperationId == descriptor.OperationId);
+        return runtime is null
+            ? new FoundationOperationHandler()
+            : runtime.HandlerFactory(services, registry);
+    }
+
+    private static readonly IReadOnlyDictionary<string, OperationDescriptor> CompositeDescriptorTemplates =
+        CreateCompositeDescriptorTemplates();
+
+    [SuppressMessage("Interoperability", "CA1416", Justification = "Constructing descriptor-only modules performs no host operation.")]
+    private static IReadOnlyDictionary<string, OperationDescriptor> CreateCompositeDescriptorTemplates()
+    {
+        var reconciliation = new ReconciliationOperationBundle(
+            new ReconciliationProjectionOperationModule(null!),
+            new ReconciliationApplyOperationModule(null!),
+            new ReconciliationDecisionOperationModule(null!, null!),
+            new ReconciliationCoverageOperationModule(null!, null!));
+        var backup = new BackupOperationModule(null!);
+        var restore = new RestoreOperationModule(null!);
+        var storageEvolution = new StorageEvolutionOperationModule(null!);
+        return reconciliation.Descriptors
+            .Concat(new ActualsOperationModule(null!).Descriptors)
+            .Concat(backup.Descriptors)
+            .Concat(restore.Descriptors)
+            .Concat(storageEvolution.Descriptors)
+            .ToDictionary(descriptor => descriptor.OperationId, StringComparer.Ordinal);
+    }
+
     private static readonly string[] Inventory =
     [
         "ledger.account.create","ledger.account.get","ledger.account.list","ledger.account.rename","ledger.account.archive",

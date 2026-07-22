@@ -8,7 +8,8 @@ using Xunit;
 namespace Tally.Tests.Process;
 
 [SupportedOSPlatform("linux")]
-public sealed class PublishedBinaryCoreTests(PublishedBinaryFixture fixture) : IClassFixture<PublishedBinaryFixture>, IAsyncLifetime
+[Collection(PublishedTallyCollection.Name)]
+public sealed class PublishedBinaryCoreTests(PublishedTallyFixture fixture) : IAsyncLifetime
 {
     private const string ValidRequest = "{\"contractVersion\":\"1.0\",\"actor\":{\"kind\":\"automation\",\"label\":\"published-core-test\"},\"input\":{}}";
     private readonly string dataRoot = Path.Combine(Path.GetTempPath(), $"tally-published-core-{Guid.NewGuid():N}");
@@ -221,59 +222,4 @@ public sealed class PublishedBinaryCoreTests(PublishedBinaryFixture fixture) : I
     }
 
     private sealed record PublishedProcessResult(int ExitCode, string Stdout, string Stderr);
-}
-
-[SupportedOSPlatform("linux")]
-public sealed class PublishedBinaryFixture : IDisposable
-{
-    private readonly string? ownedRoot;
-
-    public PublishedBinaryFixture()
-    {
-        var supplied = Environment.GetEnvironmentVariable("TALLY_PUBLISHED_BINARY");
-        if (!string.IsNullOrWhiteSpace(supplied))
-        {
-            BinaryPath = Path.GetFullPath(supplied);
-            return;
-        }
-
-        ownedRoot = Path.Combine(Path.GetTempPath(), $"tally-publish-{Guid.NewGuid():N}");
-        Directory.CreateDirectory(ownedRoot);
-        var repositoryRoot = FindRepositoryRoot();
-        var start = new ProcessStartInfo("dotnet")
-        {
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            WorkingDirectory = repositoryRoot
-        };
-        foreach (var argument in new[]
-                 {
-                     "publish", "src/Tally/Tally.csproj", "-c", "Release", "-r", "linux-x64",
-                     "--self-contained", "true", "--no-restore", "-p:PublishAot=true", "-o", ownedRoot
-                 }) start.ArgumentList.Add(argument);
-        using var process = Assert.IsType<System.Diagnostics.Process>(System.Diagnostics.Process.Start(start));
-        var stdout = process.StandardOutput.ReadToEnd();
-        var stderr = process.StandardError.ReadToEnd();
-        process.WaitForExit();
-        Assert.True(process.ExitCode == 0, $"Native publish failed.{Environment.NewLine}{stdout}{Environment.NewLine}{stderr}");
-        BinaryPath = Path.Combine(ownedRoot, "tally");
-    }
-
-    public string BinaryPath { get; }
-
-    public void Dispose()
-    {
-        if (ownedRoot is not null && Directory.Exists(ownedRoot)) Directory.Delete(ownedRoot, true);
-    }
-
-    private static string FindRepositoryRoot()
-    {
-        for (var directory = new DirectoryInfo(AppContext.BaseDirectory); directory is not null; directory = directory.Parent)
-        {
-            if (File.Exists(Path.Combine(directory.FullName, "Tally.slnx"))) return directory.FullName;
-        }
-
-        throw new InvalidOperationException("Could not locate the Tally repository root.");
-    }
 }
