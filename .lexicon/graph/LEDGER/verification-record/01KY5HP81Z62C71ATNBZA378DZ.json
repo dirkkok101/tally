@@ -1,0 +1,13 @@
+{
+  "id": "01KY5HP81Z62C71ATNBZA378DZ",
+  "subject_type": "test_case",
+  "subject_ref_code": "TC-LEDGER-LOCAL-DATA-PROTECTION",
+  "subject_entity_id": "01KXSXGA4X7RA3QMZQ1PX4MRRR",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-LOCAL-DATA-PROTECTION",
+  "note": "Security gate passed 339 real host, recovery, guidance, and published-process cases; build and Native AOT were clean, diagnostic canaries stayed contained, and deployment host evidence fails closed when required.",
+  "commit_sha": "707c5749a3d90031f737de95be4a9285f78a6aa9",
+  "bead_id": "bd-112",
+  "verified_at": "2026-07-22T18:33:58.5922278+00:00"
+}
