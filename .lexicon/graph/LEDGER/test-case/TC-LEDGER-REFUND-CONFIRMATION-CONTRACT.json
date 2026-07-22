@@ -11,7 +11,7 @@
   "status": "planned",
   "preconditions": "A fresh representative local Ledger and the valid and invalid inputs required by FR-LEDGER-REFUND-CONFIRMATION are available.",
   "steps": "Invoke the relevant operations through the public CLI contract and exercise every acceptance criterion of FR-LEDGER-REFUND-CONFIRMATION.",
-  "expected": "All FR-LEDGER-REFUND-CONFIRMATION acceptance criteria, including stable-error and no-partial-mutation outcomes, hold.",
+  "expected": "All FR-LEDGER-REFUND-CONFIRMATION acceptance criteria hold, including exact full-amount and currency eligibility, rejected partial and over-refund attempts, unmatched and active-role duplicate behavior, immutable source facts, lifecycle/history visibility, idempotent replay, stable errors, and no mutation on failure.",
   "owner": "LEDGER implementation",
   "created_at": "2026-07-18T04:26:17.0319071+00:00",
   "links": [

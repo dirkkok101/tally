@@ -123,6 +123,7 @@ public sealed record EmptyInput;
 [JsonSerializable(typeof(TransactionCategoryHistoryItem[]))]
 [JsonSerializable(typeof(TransactionHistory))]
 [JsonSerializable(typeof(ConfirmTransferInput))]
+[JsonSerializable(typeof(ConfirmRefundInput))]
 [JsonSerializable(typeof(GetRelationshipInput))]
 [JsonSerializable(typeof(FinancialRelationshipDetail))]
 [JsonSerializable(typeof(RelationshipLifecycleHistoryItem[]))]

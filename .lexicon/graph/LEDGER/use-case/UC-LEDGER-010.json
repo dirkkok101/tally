@@ -3,16 +3,19 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "UC-LEDGER-010",
   "title": "Confirm a refund or reversal",
-  "preconditions": "Both Canonical Transactions exist; the original is an outflow on an owned account; the owner or agent explicitly selected the proposed relationship.",
-  "postconditions": "The active refund belongs in full to one original within the magnitude cap; incompatible roles are absent; current category and pool actuals offset exactly; all source and relationship history remains queryable.",
-  "main_flow": "1. The caller retrieves the original outflow, proposed credit, current category and spend pool, existing refunds, active roles, and supplies an idempotency identity. 2. The owner or caller explicitly requests a refund or reversal link. 3. Tally validates account, currency, opposite signs, lifecycle, role exclusivity, credit cardinality, and cumulative magnitude. 4. Tally records the attributable relationship without changing either source fact. 5. The credit reduces External Spend in its own Effective Date period and follows the original current category and spend pool. 6. Tally returns the relationship and exact pool/category effect.",
+  "preconditions": "Both Canonical Transactions exist and are active; the original is an outflow on an owned account; the proposed refund is a credit on that same account; the owner or agent explicitly selected the relationship.",
+  "postconditions": "Exactly one active full-amount refund links the original outflow to one refund credit; both source facts remain immutable; incompatible roles are absent; current category and pool actuals offset exactly; relationship history remains queryable.",
+  "main_flow": "1. The caller retrieves the original outflow, proposed refund credit, current category and spend pool, active relationship roles, and supplies an idempotency identity. 2. The owner or caller explicitly requests a refund or reversal link. 3. Tally validates existence, active lifecycle, same account, ZAR currency, original-negative and refund-positive roles, exact absolute minor-unit equality, and active-role exclusivity. 4. Tally records one attributable relationship without changing either source fact. 5. The credit reduces External Spend in its own Effective Date period and follows the original current category and spend pool. 6. Tally returns the relationship and exact pool/category effect.",
   "alt_flows": [
-    "3a. Account or currency differs, signs do not oppose, a participant is inactive, or cumulative refund exceeds original -> reject",
-    "3b. Either participant has an incompatible transfer or refund role -> return a stable conflict",
+    "3a. Either transaction is missing -> return the stable transaction-not-found error and create no relationship",
+    "3b. Account or currency differs, signs do not identify an original outflow and refund credit, or a participant is inactive -> return the documented stable validation or lifecycle error and create no relationship",
+    "3c. Refund magnitude is less than or greater than the original magnitude -> return the stable refund-amount error and create no relationship",
+    "3d. Either participant already has an active transfer or refund role, including a second refund for the original -> return the stable active-role conflict and preserve the existing relationship",
     "4a. Relationship write fails -> leave facts and prior relationships unchanged",
-    "5a. Original category or pool is corrected later -> apply linked offset to the new current attribution",
-    "5b. Refund Effective Date is later -> subtract in that later period even when original is outside it"
+    "4b. A semantically identical request is replayed -> return the original result; changed input under the same idempotency identity returns the stable idempotency conflict",
+    "5a. Original category or pool is corrected later -> apply the linked offset to the new current attribution without rewriting source or relationship history",
+    "5b. Refund Effective Date is later -> subtract the full refund in that later period even when the original is outside it"
   ],
-  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"A credit appears to refund or reverse some or all of an earlier spend transaction.\",\"status\":\"draft\"}",
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"A credit appears to be the full refund or reversal of an earlier spend transaction.\",\"status\":\"draft\"}",
   "created_at": "2026-07-17T17:43:16.1670834+00:00"
 }

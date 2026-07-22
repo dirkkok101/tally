@@ -6,10 +6,10 @@
   "slug": "REFUNDS",
   "title": "Implement refund and reversal confirmation",
   "description": [
-    "Deliver explicit full/partial refund confirmation using the entire credit, cumulative active-refund limits, and independent current category/pool attribution."
+    "Deliver explicit single full-amount refund and reversal confirmation with exact amount and currency eligibility, one active relationship per participant, stable replay, and immutable source facts."
   ],
   "objective": [
-    "Create attributable refund relationships that safely offset the original transaction's current category and Spend Pool in the credit's own Effective Date period."
+    "Create one attributable full-refund relationship for an eligible original transaction and reject partial, over-refund, unmatched, duplicate-role, and incompatible attempts without changing existing state."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -26,9 +26,14 @@
   ],
   "decisions": [
     {
-      "id": "01KXT0SME3SH9DD190CWE3WJ5F",
+      "id": "01KY45ZANARM87RD502HSY8HT4",
+      "target": "DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP",
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
+    },
+    {
+      "id": "01KY45ZANBF5BGSWQ9T46WXNX4",
       "target": "DD-LEDGER-IMMUTABLE-HISTORY",
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     }
   ],
   "dependencies": [
@@ -65,183 +70,291 @@
   ],
   "files": [
     {
-      "id": "01KXT0SME3EBTX8XMWD7RK42Z8",
+      "id": "01KY45ZANEJQFSZ77KPEJ718WF",
       "path": "src/Tally/Contracts/Ledger/Relationships/RefundContracts.cs",
       "action": "create",
       "role": "implementation",
       "required": 1,
+      "notes": [
+        "Typed full-refund confirmation input"
+      ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     },
     {
-      "id": "01KXT0SME3BB7YQTRCNTXY3AGZ",
+      "id": "01KY45ZANEYV6YTJE2REX8G0A4",
       "path": "src/Tally/Domain/Ledger/Relationships/RefundPolicy.cs",
       "action": "create",
       "role": "implementation",
       "required": 1,
+      "notes": [
+        "Pure exact eligibility and stable error policy"
+      ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     },
     {
-      "id": "01KXT0SME3WGHCR3KRJV4P6QCN",
+      "id": "01KY45ZANE6B6DH7DBKZ0V29SQ",
       "path": "src/Tally/Features/Ledger/Relationships/RefundHandlers.cs",
       "action": "create",
       "role": "implementation",
       "required": 1,
+      "notes": [
+        "Transactional confirmation handler"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     },
     {
-      "id": "01KXT0SME3F1BRVTTYAGY7AA63",
+      "id": "01KY45ZANEC11SJGTQHQZ60GZJ",
       "path": "src/Tally/Features/Ledger/Relationships/RefundOperationModule.cs",
       "action": "create",
       "role": "implementation",
       "required": 1,
+      "notes": [
+        "Provider-neutral operation adapter"
+      ],
       "sort_order": 3,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     },
     {
-      "id": "01KXT0SME3KEW62M5Q6TS9FVEB",
+      "id": "01KY45ZANEBVTB7N2VDMT8KSGY",
+      "path": "src/Tally/Contracts/Common/ProcessContracts.cs",
+      "action": "modify",
+      "role": "integration",
+      "required": 1,
+      "notes": [
+        "Source-generated refund request metadata"
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
+    },
+    {
+      "id": "01KY45ZANEYQAY5CQFFH43V9N7",
+      "path": "src/Tally/Bootstrap/LedgerServices.cs",
+      "action": "modify",
+      "role": "integration",
+      "required": 1,
+      "notes": [
+        "Compose the refund vertical slice"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
+    },
+    {
+      "id": "01KY45ZANEGDC8ZNPBK17AHYHN",
+      "path": "src/Tally/Cli/OperationRegistry.cs",
+      "action": "modify",
+      "role": "integration",
+      "required": 1,
+      "notes": [
+        "Publish ledger.refund.confirm schema and domain errors"
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
+    },
+    {
+      "id": "01KY45ZANF8W0SC3FQ5T32KW5D",
+      "path": "src/Tally/Cli/TallyProcess.cs",
+      "action": "modify",
+      "role": "integration",
+      "required": 1,
+      "notes": [
+        "Map stable refund errors to process categories and exit codes"
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
+    },
+    {
+      "id": "01KY45ZANFENZDEXGWGQFGQ6XJ",
       "path": "tests/Tally.Tests/Features/Ledger/Relationships/RefundTests.cs",
       "action": "test",
       "role": "implementation",
       "required": 1,
-      "sort_order": 4,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "notes": [
+        "Focused contract and persistence coverage"
+      ],
+      "sort_order": 8,
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     }
   ],
   "interfaces": [
     {
-      "id": "01KXT0SME4A7QZ5T18MJFV21N1",
+      "id": "01KY45ZANGV67AH40FMA1KDWTF",
       "name": "RefundOperationModule",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "notes": [
+        "Public ledger.refund.confirm operation"
+      ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     },
     {
-      "id": "01KXT0SME4QAZGP3SHS36HQS85",
+      "id": "01KY45ZANG98KGQ0D5P6A3XHDF",
       "name": "RefundPolicy",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "notes": [
+        "Full-amount eligibility and stable errors"
+      ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     },
     {
-      "id": "01KXT0SME4SV8XBBC3242BK23Y",
+      "id": "01KY45ZANG16V50DARTQJTMTFK",
       "name": "RelationshipStore",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "notes": [
+        "Existing insert, get, and active-role exclusivity guard"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     },
     {
-      "id": "01KXT0SME4YSPKVMXFJNBEJKJY",
+      "id": "01KY45ZANG3RY0FGZ0XZ3KJP48",
       "name": "TransactionStore",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-TRANSACTION-FACT",
+      "notes": [
+        "Immutable original and refund transaction lookup"
+      ],
       "sort_order": 3,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     },
     {
-      "id": "01KXT0SME4KDQ0NJVFP8XQA57T",
+      "id": "01KY45ZANG4Y0EXX5ENYTP6FDF",
       "name": "LedgerMutationExecutor.ExecuteAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
+      "notes": [
+        "Atomic request and logical-effect replay"
+      ],
       "sort_order": 4,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KY0E86BTYV12NCA62FVHYBJE",
+      "id": "01KY45ZANBESY5A6FQGEH6ZKB4",
       "kind": "acceptance_check",
       "text": [
-        "Active same-account ZAR opposite-sign original/credit plus reason creates one active attributable refund using the credit's entire magnitude."
+        "An active same-account ZAR original outflow below zero and refund credit above zero with exactly equal absolute minor-unit amounts plus a reason creates one active relationship with refund_original and refund_credit roles and the full original amount."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:57:40.2179735+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     },
     {
-      "id": "01KY0E86BV70NY77P5959EKP6Z",
+      "id": "01KY45ZANC1J74H23N6TB8199Z",
       "kind": "acceptance_check",
       "text": [
-        "Multiple partial credits may link to one original only while cumulative active magnitude is at most the original."
+        "A smaller partial credit or larger over-refund returns LEDGER-REFUND-AMOUNT and creates no relationship or idempotency effect."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:57:40.2179735+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     },
     {
-      "id": "01KY0E86BV2HN295DN610042Q9",
+      "id": "01KY45ZANCKVT46Q95AZNSN7B4",
       "kind": "acceptance_check",
       "text": [
-        "Different account/currency, same sign, inactive participant, over-refund, transfer role, refund-credit reuse, or refund-credit-as-original returns a stable error and creates no link."
+        "Different account or currency, same or reversed role signs, inactive or missing participants, refund-credit-as-original, and unsafe input return their documented stable validation, lifecycle, or not-found errors with no mutation."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:57:40.2179735+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     },
     {
-      "id": "01KY0E86BVMWW15G37TR5S95VJ",
+      "id": "01KY45ZANC7MWPW7DXTENGZ8G8",
       "kind": "acceptance_check",
       "text": [
-        "Refund detail retains explicit original/credit roles and exact amount; its spend offset follows the original's independently current category and pool without changing source facts or the credit's own stored assignments."
+        "Any active transfer or refund role on either participant, including a second active refund proposed for the same original, returns LEDGER-RELATIONSHIP-ACTIVE-ROLE-CONFLICT and preserves exactly one active relationship."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T18:57:40.2179735+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     },
     {
-      "id": "01KY0E86BVYR5CXJ87FSVM94MS",
+      "id": "01KY45ZANCQCSMSE1QNABDJGWX",
       "kind": "acceptance_check",
       "text": [
-        "Identical replay returns the first relationship; concurrent credit reuse yields one active role; later category or pool correction deterministically moves the linked offset without rewriting relationship history."
+        "A semantically identical replay returns the first relationship without duplicate rows; changed input under a consumed idempotency identity returns LEDGER-IDEMPOTENCY-001; competing logical effects cannot create two active roles."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-20T18:57:40.2179735+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     },
     {
-      "id": "01KXT0SME32E85YVM1RAV389YW",
+      "id": "01KY45ZANDGDNNCTF2V39EJ8B4",
+      "kind": "acceptance_check",
+      "text": [
+        "Relationship detail exposes exact amount, ZAR currency, explicit roles, active state, actor, created time, and queryable empty confirmation history while both ordinary source transactions remain byte-for-byte equivalent in financial and lifecycle facts."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
+    },
+    {
+      "id": "01KY45ZAND6WMYWYAD2NZXGPR3",
+      "kind": "acceptance_check",
+      "text": [
+        "The existing financial_relationship_roles_are_exclusive_before_insert trigger and RelationshipStore active-role guard remain unchanged because their semantics correctly enforce the full-refund-only model."
+      ],
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
+    },
+    {
+      "id": "01KY45ZANDNR00BDJ32EM61C4A",
       "kind": "expected_output",
       "text": [
-        "Refund contracts/policy/handler/module"
+        "Refund contracts, full-amount policy, handler, operation module, and public CLI/bootstrap/source-generation wiring"
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     },
     {
-      "id": "01KXT0SME3ZXD6T20K71A414S2",
+      "id": "01KY45ZANDVZW99JEWCZF00056",
       "kind": "expected_output",
       "text": [
-        "Cumulative refund and role tests"
+        "Focused full-amount, amount-mismatch, duplicate-role, lifecycle/history, immutable-source, idempotency, and atomic-failure tests"
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     },
     {
-      "id": "01KY1P0J10T4N717JT8DRJH2TK",
+      "id": "01KY45ZAND55V1HTVX9HYY1MEY",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT infer a pool from account, instrument, cardholder, category, or evidence."
+        "Do NOT support partial refunds, cumulative refund credits, or multiple active refunds for one original."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T06:32:33.0563499+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     },
     {
-      "id": "01KY1P0J12MEP5TSZF7B19W1DW",
+      "id": "01KY45ZAND5CHZ0SK3KB8NMP4B",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT rewrite either transaction or relationship when a current category/Pool Assignment changes."
+        "Do NOT weaken or replace the existing relationship-role exclusivity trigger or add a storage migration for this correction."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T06:32:33.0563499+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
+    },
+    {
+      "id": "01KY45ZANDZZV3PDPD9GSDPT4M",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT rewrite either ordinary bank transaction or infer the refund from description, date, category, pool, instrument, cardholder, or evidence."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     }
   ],
   "references": [
@@ -288,36 +401,36 @@
   ],
   "review_gates": [
     {
-      "id": "01KXT0SME4RVZ0GXVWYR8JANQD",
+      "id": "01KY45ZANH8GAHYPZCG0JTSFKJ",
       "gate_type": "test-evidence",
       "description": [
-        "Show cumulative bounds, full-credit use, exclusivity, later-period semantics, and replay."
+        "Show exact amount/currency eligibility, partial and over-refund rejection, unmatched participants, duplicate-role rejection, source immutability, relationship history, replay, and atomic failure."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     },
     {
-      "id": "01KXT0SME4Y78ABKCXFP5836KN",
+      "id": "01KY45ZANJEPTB4FHCCNSQNCPJ",
       "gate_type": "self-review",
       "description": [
-        "No inferred or split-credit relationship behavior exists."
+        "Confirm V001 relationship-role exclusivity and RelationshipStore active-role semantics are unchanged and correct for one active full refund."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     }
   ],
   "verification_steps": [
     {
-      "id": "01KXT0SME45P5J6PY5WSVA0H6V",
+      "id": "01KY45ZANGNZMK1W4222N3BNQV",
       "phase": "after",
       "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Features.Ledger.Relationships.RefundTests --no-restore",
-      "expected_result": "exit 0; at least 14 partial/cumulative/role/category/date/replay cases run and 0 fail",
+      "expected_result": "exit 0; at least 16 full-amount, partial, over-refund, role, lifecycle, history, replay, and immutability cases run and 0 fail",
       "required": 1,
       "timeout_seconds": 300,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T05:49:58.8238431+00:00"
     }
   ]
 }

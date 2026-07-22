@@ -2,7 +2,7 @@
   "id": "01KXSRBBM4TTFPRP0B96A4XA0X",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "metric": "Relationship role and amount conservation",
-  "target": "100% of conformance cases enforce one active transfer per leg, no transfer/refund role overlap, one original per refund credit using its full magnitude, cumulative active refund magnitude at most the original, and atomic revalidation on replacement",
+  "target": "100% of conformance cases enforce one active transfer per leg, no transfer/refund role overlap, exactly one full-amount refund relationship per eligible original, exact original/refund minor-unit equality, and atomic revalidation on replacement",
   "by_when": "LEDGER acceptance",
   "measured": 0,
   "created_at": "2026-07-18T04:39:28.6454255+00:00"

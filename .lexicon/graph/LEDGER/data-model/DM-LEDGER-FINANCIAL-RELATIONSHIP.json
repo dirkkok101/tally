@@ -24,7 +24,7 @@
     "- reconciliationDecisionId: nullable decision reference",
     "- reason: text, required",
     "- occurredAt and actorContext",
-    "Constraints: distinct active transactions; transfer has exactly one outflow and one inflow across distinct owned accounts with equal principal; refund names original debit and refund credit and respects cumulative magnitude; transaction roles are exclusive; revoke/replace retires atomically. Statement correction may replace a relationship only when substituting the replacement transaction preserves every invariant; otherwise correction returns review-required and commits no financial effect."
+    "Constraints: distinct active transactions; transfer has exactly one outflow and one inflow across distinct owned accounts with equal principal; refund names an original negative outflow and positive refund credit on the same owned account in ZAR whose absolute minor-unit amounts are exactly equal; every transaction participant has at most one active financial relationship; revoke/replace retires atomically. Partial, cumulative, and over-refund relationships are unsupported. Statement correction may replace a relationship only when substituting the replacement transaction preserves every invariant; otherwise correction returns review-required and commits no financial effect."
   ],
   "created_at": "2026-07-18T06:01:05.7051082+00:00",
   "links": [

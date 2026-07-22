@@ -1,0 +1,49 @@
+{
+  "id": "01KY45VXAB2EWCQ0S0MSS5JVP8",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP",
+  "title": "Single full-amount refund relationships",
+  "description": [
+    "Define refund eligibility, cardinality, replay, and history for the full-refund-only product model."
+  ],
+  "decision": [
+    "A refund relationship may link exactly one active original outflow to exactly one active refund credit only when both transactions belong to the same active owned account, both use ZAR, the original amount is negative, the refund amount is positive, and their absolute minor-unit amounts are exactly equal. Each participant may have at most one active financial relationship, so a second active refund for the original is rejected by the existing active-role exclusivity contract. Partial, cumulative, and over-refund relationships are unsupported. Confirmation appends an immutable relationship and never rewrites either ordinary bank transaction; revoke or replace appends lifecycle history. A semantically identical replay returns the original effect, while changed input under a consumed idempotency identity conflicts."
+  ],
+  "rationale": [
+    "Dirk corrected the product requirement on 2026-07-22: expected refunds are for the full original amount. The existing role-exclusivity trigger already enforces the resulting one-active-refund cardinality and should remain unchanged."
+  ],
+  "alternatives": [
+    "Rejected: support multiple partial credits with cumulative amount tracking, because Tally does not support partial refunds. Rejected: weaken relationship-role exclusivity for refund originals, because that would permit duplicate active refunds and require a different storage contract. Rejected: mutate or negate the original transaction, because bank transactions remain immutable source facts."
+  ],
+  "consequences": [
+    "Refund confirmation rejects both smaller partial credits and larger over-refunds with the stable refund-amount error. A second active refund or any transfer/refund role reuse returns the stable active-role conflict. Retired relationship history remains attributable and a later valid replacement must revalidate exact full-amount eligibility. Existing schema and exclusivity trigger require no migration."
+  ],
+  "status_notes": [
+    "Accepted from Dirk product correction on 2026-07-22; supersedes all partial-refund and cumulative-refund assumptions in LEDGER."
+  ],
+  "status": "accepted",
+  "created_at": "2026-07-22T05:48:06.8608744+00:00",
+  "links": [
+    {
+      "id": "01KY45VZ1GDHGGEDJ4XQ2XXKE7",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
+      "rel": "supports",
+      "created_at": "2026-07-22T05:48:08.6252402+00:00"
+    },
+    {
+      "id": "01KY45W05NCK79NX0WK5E6XASV",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
+      "rel": "supports",
+      "created_at": "2026-07-22T05:48:09.7820501+00:00"
+    },
+    {
+      "id": "01KY45VXX68YA9S5WCGRC4GDB2",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-REFUND-CONFIRMATION",
+      "rel": "implements",
+      "created_at": "2026-07-22T05:48:07.4639086+00:00"
+    }
+  ]
+}

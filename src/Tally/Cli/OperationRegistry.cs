@@ -118,6 +118,7 @@ public sealed class OperationRegistry
                     new(EvidenceLinkErrors.TransactionInactive, "lifecycle", 6)
                 ]),
             "ledger.transfer.confirm" => TransferDescriptor(operationId, LedgerJsonContext.Default.ConfirmTransferInput, true, "Confirm"),
+            "ledger.refund.confirm" => RefundDescriptor(operationId, LedgerJsonContext.Default.ConfirmRefundInput),
             "ledger.relationship.get" => TransferDescriptor(operationId, LedgerJsonContext.Default.GetRelationshipInput, false, "Get"),
             _ => new(operationId, "tally " + operationId.Replace('.', ' '), isQuery ? "query" : "mutation", !isQuery, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.OperationUnavailableResult, "FoundationOperationHandler", static (_, _) => new FoundationOperationHandler(), "tally " + operationId.Replace('.', ' '))
         };
@@ -287,6 +288,24 @@ public sealed class OperationRegistry
             new(TransferErrors.Currency, "validation", 3),
             new(TransferErrors.ActiveRoleConflict, "conflict", 5),
             new(TransferErrors.TransactionInactive, "lifecycle", 6),
+            new(AccountStore.ArchivedError, "lifecycle", 6)
+        ]);
+
+    private static OperationDescriptor RefundDescriptor(string operationId, JsonTypeInfo request) => new(
+        operationId, "tally " + operationId.Replace('.', ' '), "mutation", true,
+        request, LedgerJsonContext.Default.FinancialRelationshipDetail, "RefundOperationModule.Confirm",
+        (services, _) => services.Refunds is { } module ? new RefundOperationHandler(module, operationId) : new FoundationOperationHandler(),
+        "tally " + operationId.Replace('.', ' ') + " --input -",
+        [
+            new(RefundErrors.Invalid, "validation", 3),
+            new(TransactionErrors.NotFound, "not_found", 4),
+            new(AccountStore.NotFoundError, "not_found", 4),
+            new(RefundErrors.Account, "validation", 3),
+            new(RefundErrors.Sign, "validation", 3),
+            new(RefundErrors.Amount, "validation", 3),
+            new(RefundErrors.Currency, "validation", 3),
+            new(RefundErrors.ActiveRoleConflict, "conflict", 5),
+            new(RefundErrors.TransactionInactive, "lifecycle", 6),
             new(AccountStore.ArchivedError, "lifecycle", 6)
         ]);
 

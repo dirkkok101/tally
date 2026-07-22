@@ -9,7 +9,7 @@
     "Verification-only task with no Implements link: trace revised UC-LEDGER-010 through Release refund operations and dimensional actuals."
   ],
   "objective": [
-    "Prove a valid full/partial refund offsets the original's current category and Spend Pool in the credit period while preserving facts and exact history."
+    "Prove one valid full-amount refund offsets the current category and Spend Pool assigned to the original transaction in the credit period while preserving immutable facts and exact history."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -22,6 +22,13 @@
       "verification_status": "verified",
       "verified_at": "2026-07-21T08:01:54.8226525+00:00",
       "created_at": "2026-07-21T08:01:54.8226525+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KY460RZ7KNW8CMWZD5RXC1PA",
+      "target": "DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP",
+      "created_at": "2026-07-22T05:50:46.2372811+00:00"
     }
   ],
   "dependencies": [
@@ -92,34 +99,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY1P1DWJV9WH0T1K11DFJJVY",
+      "id": "01KY460RZ8ST5ZGZ3V3VR970TD",
       "kind": "acceptance_check",
       "text": [
-        "A valid opposite-sign same-account credit creates one active attributable relationship and reduces External Spend under the original current category and pool in the credit Effective Date period."
+        "A valid active same-account ZAR refund credit with opposite roles and exactly equal absolute minor-unit amount creates one active attributable relationship and reduces External Spend under the current category and pool assigned to the original transaction in the credit Effective Date period."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T06:33:01.5857649+00:00"
+      "created_at": "2026-07-22T05:50:46.2372811+00:00"
     },
     {
-      "id": "01KY1P1DWKM2HSKQ72HH8HQ5MP",
+      "id": "01KY460RZ9F3H9FK2Y4GRKWVMA",
       "kind": "acceptance_check",
       "text": [
         "Later category or pool correction moves the linked offset deterministically without rewriting either transaction or relationship; exact all-up, pool, category, and cell totals remain conserved."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T06:33:01.5857649+00:00"
+      "created_at": "2026-07-22T05:50:46.2372811+00:00"
     },
     {
-      "id": "01KY1P1DWKA5B6XMPYMNWZRP97",
+      "id": "01KY460RZ9AGDGSADJ19FFDX9A",
       "kind": "acceptance_check",
       "text": [
-        "Account/currency/sign/lifecycle/role/cardinality/cumulative-magnitude errors, replay conflict, concurrent credit reuse, and write failure leave prior state unchanged."
+        "Missing, account, currency, sign, lifecycle, amount mismatch including partial and over-refund, active-role duplicate, replay conflict, concurrent competing refund, and write-failure cases leave prior state unchanged."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T06:33:01.5857649+00:00"
+      "created_at": "2026-07-22T05:50:46.2372811+00:00"
+    },
+    {
+      "id": "01KY460RZ93FE760ED7MN62T23",
+      "kind": "acceptance_check",
+      "text": [
+        "A semantically identical replay returns the original relationship; detail and history expose exact full-amount roles while both source transaction facts remain unchanged."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-22T05:50:46.2372811+00:00"
     },
     {
       "id": "01KXT126TEZNR7MNRW1ZDW8HBT",
@@ -263,14 +280,14 @@
   ],
   "verification_steps": [
     {
-      "id": "01KXT126TEMV4JQXFYEZHJED5E",
+      "id": "01KY460RZ95WF2Q7G7RT8KHF36",
       "phase": "after",
       "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.EndToEnd.UC010RefundWorkflowTests --no-restore",
-      "expected_result": "exit 0; at least 11 main/failure-path scenarios run and 0 fail",
+      "expected_result": "exit 0; at least 12 full-refund main and failure-path scenarios run and 0 fail",
       "required": 1,
       "timeout_seconds": 480,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:11:45.9941647+00:00"
+      "created_at": "2026-07-22T05:50:46.2372811+00:00"
     }
   ]
 }

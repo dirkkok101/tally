@@ -9,7 +9,7 @@
   "category": "data_integrity",
   "target": "100% of conformance examples round-trip Signed Account Amount exactly; Net Account Movement equals the exact selected signed sum; External Spend follows the accepted transfer/refund formula; every active spend contributes to exactly one pool or unassigned bucket and one category or uncategorized bucket; all pool-by-category cells reconcile exactly to their row, column, and selected-set totals with no duplicate effect after reconciliation.",
   "load_condition": "All supported transaction, statement-only, evidence reconciliation, transfer, refund, correction, category, pool, attribution, and query paths.",
-  "measurement": "Automated conformance tests use boundary decimals, matched notification plus statement evidence, statement-only rows, ambiguous outcomes, mixed signs, cross-period and partial refunds, transfers, fees, cash withdrawals, unassigned states, corrections, empty sets, and repeated aggregation.",
+  "measurement": "Automated conformance tests use boundary decimals, matched notification plus statement evidence, statement-only rows, ambiguous outcomes, mixed signs, cross-period full refunds, rejected partial and over-refund attempts, transfers, fees, cash withdrawals, unassigned states, corrections, empty sets, and repeated aggregation.",
   "rationale": [
     "Rounding, duplicate statement effects, or dimensional drift would make BUDGET and INSIGHTS untrustworthy. Supports G2, G4, G6, G10, and G12."
   ],

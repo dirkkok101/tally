@@ -5,7 +5,7 @@
   "ref_code": "FR-LEDGER-REFUND-CONFIRMATION",
   "title": "Confirm refunds and reversals",
   "description": [
-    "Explicitly link a full or partial refund or reversal to its original transaction. Implements G6 and UC-LEDGER-010 under A6."
+    "Explicitly link one full-amount refund or reversal to its original transaction. Partial refunds are unsupported. Implements G6 and UC-LEDGER-010 under A6."
   ],
   "rationale": [
     "Refunds must offset the original category without being misreported as unrelated income or spend."
@@ -20,11 +20,13 @@
     "category actuals reflect the net spend"
   ],
   "acceptance_criteria": [
-    "Given active same-account ZAR transactions with opposite signs, when the owner explicitly confirms one transaction as a refund or reversal of the other with a reason, then one active attributable refund relationship is created without inferring the relationship from description or date alone.",
-    "Given an active refund relationship, when pool and category actuals are queried, then the refund offsets the original transaction's current active pool and category in the refund's own Effective Date period, including explicit unassigned buckets.",
-    "Given one or more active partial refunds, when another refund is proposed, then confirmation succeeds only if cumulative active refunded magnitude does not exceed the original transaction magnitude.",
-    "Given same-sign, different-account, different-currency, inactive, over-refund, transfer-linked, refund-credit-as-original, or refund-credit-reuse participants, when confirmation is attempted, then the Ledger returns a stable validation error and creates no relationship.",
-    "Given a valid refund credit, when it is confirmed, then its entire magnitude participates in exactly one active refund relationship to one original; an original may have multiple active refund credits only while their cumulative magnitude remains at most the original magnitude."
+    "Given an active original outflow and proposed refund credit on the same owned account in ZAR, with original Signed Account Amount below zero, refund Signed Account Amount above zero, and exactly equal absolute minor-unit amounts, when the owner explicitly confirms the relationship with a reason, then one active attributable refund relationship is created without inference from description or date.",
+    "Given an active refund relationship, when pool and category actuals are queried, then the refund offsets the current active pool and category assigned to the original transaction in the refund Effective Date period, including explicit unassigned buckets.",
+    "Given a proposed refund credit whose absolute minor-unit amount is less than or greater than the original outflow absolute minor-unit amount, when confirmation is attempted, then the Ledger returns the stable refund-amount validation error and creates no relationship; partial and over refunds are both unsupported.",
+    "Given same-sign, different-account, different-currency, inactive, missing, transfer-linked, refund-credit-as-original, or active-role-reuse participants, when confirmation is attempted, then the Ledger returns the documented stable validation, not-found, lifecycle, or conflict error and creates no relationship.",
+    "Given an original transaction already participating in an active refund relationship, when a different refund credit is proposed, then the Ledger rejects the second relationship as an active-role duplicate and preserves exactly one active refund for the original.",
+    "Given a successfully confirmed refund, when relationship detail and both source transactions are queried, then the relationship exposes explicit original and refund-credit roles, the exact full amount, active state, actor, and history while both ordinary bank transactions remain unchanged.",
+    "Given a semantically identical confirmation replay, when it uses the same idempotency identity or repeats the same logical effect, then the original relationship result is returned without a duplicate effect; changed input under a consumed idempotency identity returns the stable idempotency conflict."
   ],
   "status": "active",
   "created_at": "2026-07-18T04:22:52.2328224+00:00",

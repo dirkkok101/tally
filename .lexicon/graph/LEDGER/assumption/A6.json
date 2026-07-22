@@ -4,7 +4,7 @@
   "ref_code": "A6",
   "title": "Linked refunds and reversals offset original spend",
   "description": [
-    "Owner-confirmed normal banking rule: an explicitly linked refund or reversal uses its active credit magnitude, is associated with one original outflow under exact relationship rules, and offsets the original transaction's current category and Spend Pool in its own Effective Date period. Unlinked credits remain ordinary inflows. Cash-withdrawal treatment is separate in OQ-LEDGER-16."
+    "Owner-confirmed normal banking rule: an explicitly linked refund or reversal is one full refund whose positive credit amount exactly equals the absolute amount of one original negative outflow in ZAR on the same owned account. It offsets the current category and Spend Pool assigned to the original transaction in its own Effective Date period. Partial, cumulative, and over-refund relationships are unsupported; unlinked credits remain ordinary inflows. Cash-withdrawal treatment is separate in OQ-LEDGER-16."
   ],
   "status": "validated",
   "created_at": "2026-07-17T17:29:17.7862385+00:00"

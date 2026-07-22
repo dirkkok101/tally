@@ -26,9 +26,14 @@
   ],
   "decisions": [
     {
-      "id": "01KXT0SME4D4MEEXDK4V80A260",
+      "id": "01KY460PSP7H115VZ7SXTTF85T",
+      "target": "DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP",
+      "created_at": "2026-07-22T05:50:44.0215829+00:00"
+    },
+    {
+      "id": "01KY460PSQ45Q1WRG0859V1R59",
       "target": "DD-LEDGER-IMMUTABLE-HISTORY",
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T05:50:44.0215829+00:00"
     }
   ],
   "dependencies": [
@@ -121,7 +126,7 @@
   ],
   "interfaces": [
     {
-      "id": "01KY28105W3KYTBA5VCB45R7NW",
+      "id": "01KY460PSR5B7GE6B6MV34Q91W",
       "name": "RelationshipLifecycleOperationModule",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
@@ -129,10 +134,10 @@
         "Public revoke, replace, and get operations"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-21T11:47:21.9146431+00:00"
+      "created_at": "2026-07-22T05:50:44.0215829+00:00"
     },
     {
-      "id": "01KY28105WV16RGJMBK6PGXEG7",
+      "id": "01KY460PSRS8QJY4DGB352KP1N",
       "name": "RelationshipStore.RevokeAsync",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
@@ -140,10 +145,10 @@
         "Public attributable retirement"
       ],
       "sort_order": 1,
-      "created_at": "2026-07-21T11:47:21.9146431+00:00"
+      "created_at": "2026-07-22T05:50:44.0215829+00:00"
     },
     {
-      "id": "01KY28105WHWCP160T275GK2NJ",
+      "id": "01KY460PSRXKD3MHG2YC6B1C89",
       "name": "RelationshipStore.ReplaceAsync",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
@@ -151,10 +156,10 @@
         "Public validated replacement"
       ],
       "sort_order": 2,
-      "created_at": "2026-07-21T11:47:21.9146431+00:00"
+      "created_at": "2026-07-22T05:50:44.0215829+00:00"
     },
     {
-      "id": "01KY28105W6J1VHXB1GJSG2SGD",
+      "id": "01KY460PSRJX5XFQNZR6G9BA2H",
       "name": "RelationshipStore.ReplaceForStatementCorrectionAsync",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
@@ -162,10 +167,10 @@
         "Internal decision-linked replacement or review block"
       ],
       "sort_order": 3,
-      "created_at": "2026-07-21T11:47:21.9146431+00:00"
+      "created_at": "2026-07-22T05:50:44.0215829+00:00"
     },
     {
-      "id": "01KY28105W5HJ9A2S587MG77D2",
+      "id": "01KY460PSR1PEG1MVS3ZZKHM2N",
       "name": "TransferPolicy",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
@@ -173,21 +178,21 @@
         "Owned-account equality and zero-spend invariants"
       ],
       "sort_order": 4,
-      "created_at": "2026-07-21T11:47:21.9146431+00:00"
+      "created_at": "2026-07-22T05:50:44.0215829+00:00"
     },
     {
-      "id": "01KY28105WEM8J0JS8TWWYPYPS",
+      "id": "01KY460PSR56DTX2BHJKD6KY3M",
       "name": "RefundPolicy",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-FINANCIAL-RELATIONSHIP",
       "notes": [
-        "Same-account and cumulative refund invariants"
+        "Same-account ZAR, sign, exact full-amount, and active-role invariants"
       ],
       "sort_order": 5,
-      "created_at": "2026-07-21T11:47:21.9146431+00:00"
+      "created_at": "2026-07-22T05:50:44.0215829+00:00"
     },
     {
-      "id": "01KY28105WSNEH1EJWW8F0DE3T",
+      "id": "01KY460PSR04207D1B8NJXF3VC",
       "name": "LedgerMutationExecutor.ExecuteAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
@@ -195,49 +200,49 @@
         "Atomic replay boundary"
       ],
       "sort_order": 6,
-      "created_at": "2026-07-21T11:47:21.9146431+00:00"
+      "created_at": "2026-07-22T05:50:44.0215829+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KY28105V3VVJ5QCBC4JQCE5F",
+      "id": "01KY460PSQN3TKGD4385Q43ZWK",
       "kind": "acceptance_check",
       "text": [
-        "Public revoke appends an attributable lifecycle event, retires one active transfer/refund atomically, and removes its spend effect; public replace validates the entire proposed relationship before retiring the old one."
+        "Public revoke appends an attributable lifecycle event, retires one active transfer or refund atomically, and removes its spend effect; public replace validates the entire proposed relationship before retiring the old one."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:47:21.9146431+00:00"
+      "created_at": "2026-07-22T05:50:44.0215829+00:00"
     },
     {
-      "id": "01KY28105WGHZ9NE2JVQNM4DXY",
+      "id": "01KY460PSQNGJ1B5YEQ3KM3AAR",
       "kind": "acceptance_check",
       "text": [
-        "Replace revalidates lifecycle, role, cardinality, amount, account, currency, sign, cumulative refund, and exclusivity; invalid replacement leaves the old relationship active."
+        "Replace revalidates lifecycle, role, cardinality, exact amount, account, currency, sign, full-refund equality, and exclusivity; invalid replacement leaves the old relationship active."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:47:21.9146431+00:00"
+      "created_at": "2026-07-22T05:50:44.0215829+00:00"
     },
     {
-      "id": "01KY28105WW3S23S0V3RE2X6A7",
+      "id": "01KY460PSQ3FFK5M7Y6VG2VM8B",
       "kind": "acceptance_check",
       "text": [
-        "ReplaceForStatementCorrectionAsync substitutes only the statement-derived replacement transaction and appends a decision-linked relationship replacement when every prior invariant remains valid; otherwise it returns review-required before any write."
+        "ReplaceForStatementCorrectionAsync substitutes only the statement-derived replacement transaction and appends a decision-linked relationship replacement when every prior invariant remains valid, including exact full-refund equality; otherwise it returns review-required before any write."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:47:21.9146431+00:00"
+      "created_at": "2026-07-22T05:50:44.0215829+00:00"
     },
     {
-      "id": "01KY28105WBC0CT7BNDPEPN3SE",
+      "id": "01KY460PSQAR1C5C75S9TQ0DBR",
       "kind": "acceptance_check",
       "text": [
         "History returns participants, type, reason, actor/time, reconciliationDecisionId when applicable, and complete replacement references; identical replay returns the original outcome."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T11:47:21.9146431+00:00"
+      "created_at": "2026-07-22T05:50:44.0215829+00:00"
     },
     {
       "id": "01KXT0SME45WCPGBW2NQTNWK52",

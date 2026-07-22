@@ -145,7 +145,7 @@
     "",
     "Signed amount is the owner's economic-position delta: asset increases and liability reductions are positive; asset decreases and liability increases are negative. ZAR uses exact signed `Int64` cents. Effective Date is transaction date; a distinct supplied posting date is preserved.",
     "",
-    "Transfers require two active distinct-account transactions with equal-and-opposite principal and explicit outflow/inflow roles. Refunds identify original and refund transactions, enforce role exclusivity and cumulative magnitude, and may make later-period net spend negative. Net Account Movement is the signed selected sum. External Spend is qualifying outflow magnitude minus active in-set refund magnitude, excluding transfer principal and unrelated inflows. Budget Actual applies the same formula to each pool/category cell, including explicit `unassigned` and `uncategorized` buckets. Exact full-set totals equal the sum of returned dimension groups. BUDGET owns plans and performance decisions; LEDGER only returns facts and exact actuals.",
+    "Transfers require two active distinct-account transactions with equal-and-opposite principal and explicit outflow/inflow roles. Refunds link one active original outflow to one active same-account refund credit in ZAR only when their absolute minor-unit amounts are exactly equal. Existing role exclusivity rejects a second active refund or any transfer/refund role overlap; partial and over-refund relationships are unsupported. A full refund may make later-period net spend negative. Net Account Movement is the signed selected sum. External Spend is qualifying outflow magnitude minus active in-set refund magnitude, excluding transfer principal and unrelated inflows. Budget Actual applies the same formula to each pool/category cell, including explicit `unassigned` and `uncategorized` buckets. Exact full-set totals equal the sum of returned dimension groups. BUDGET owns plans and performance decisions; LEDGER only returns facts and exact actuals.",
     "",
     "Actuals filters may include account, category with `exact` or `subtree` scope, pool, instrument, cardholder, evidence kind, reconciliation state, relationship type, and date range. Grouping supports pool totals, category-direct totals, category-subtree totals, and the pool-by-category matrix without conflating dimensions or double counting. Reconciliation normally changes evidence and state only; the explicit statement-authoritative replacement disposition may change current movement or spend, and then the superseded fact contributes zero while the active replacement contributes exactly once.",
     "",
@@ -249,13 +249,16 @@
     "",
     "Direct owner policy on 2026-07-21 resolved `OQ-LEDGER-5` for owned-account transfers, linked refunds or reversals, and separately recorded bank fees, and resolved `OQ-LEDGER-6` by requiring hierarchical categories with one active category assignment per transaction. `A5` is validated and the flat-catalogue `A10` is invalidated.",
     "",
+    "Direct owner correction on 2026-07-22 establishes a full-refund-only model: an eligible refund credit must exactly equal the original outflow magnitude in ZAR on the same account, only one active refund relationship may use the original, both source transactions remain immutable, and partial, cumulative, and over-refund relationships are rejected. `DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP` governs the contract and confirms that the existing active-role exclusivity trigger remains correct.",
+    "",
     "| Gate | Required evidence | Affected design |",
     "|---|---|---|",
     "| `OQ-LEDGER-13` | Paired private agent-capture and statement evidence proving safe automatic identity fields, tolerances, uniqueness, and conflict guards | Automatic match, correction, and statement-only policy; statement authority itself is settled |",
     "| `OQ-LEDGER-15` | Representative company-paid, personal-after-tax, refund, reversal, correction, and mixed-purchase cases | One-active-pool cardinality; category choice does not resolve pool ownership |",
     "| `OQ-LEDGER-16` | Owner choice between immediate cash spend and transfer to a tracked cash account | Cash-withdrawal External Spend and Budget Actual treatment |",
     "",
-    "Payment-instrument/cardholder identity, category hierarchy, statement-over-capture authority, and transfer zero-spend semantics are design facts. None of the remaining gates permits fail-open inference; unresolved cases remain explicit and reviewable."
+    "Payment-instrument/cardholder identity, category hierarchy, statement-over-capture authority, and transfer zero-spend semantics are design facts. None of the remaining gates permits fail-open inference; unresolved cases remain explicit and reviewable.",
+    ""
   ],
   "origin": "LEDGER PRD v0.7; ADR-CORE-0030; ARCH-CORE-TALLY-SYSTEM-CONTEXT; existing LEDGER design decisions; private statement findings through 2026-07-20",
   "status": "current",
@@ -372,6 +375,13 @@
       "target": "DD-LEDGER-FINANCIAL-REPRESENTATION",
       "rel": "references",
       "created_at": "2026-07-18T06:07:28.8599376+00:00"
+    },
+    {
+      "id": "01KY45WKCWCD75RJ8MAZWPWCA4",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP",
+      "rel": "see-also",
+      "created_at": "2026-07-22T05:48:29.4688172+00:00"
     },
     {
       "id": "01KXSXCGJ0DSJ4ENNN06PBRB1G",
