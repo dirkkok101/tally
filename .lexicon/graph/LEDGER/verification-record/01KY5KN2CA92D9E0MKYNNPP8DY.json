@@ -1,0 +1,13 @@
+{
+  "id": "01KY5KN2CA92D9E0MKYNNPP8DY",
+  "subject_type": "test_case",
+  "subject_ref_code": "TC-LEDGER-CATEGORY-ASSIGNMENT-CONTRACT",
+  "subject_entity_id": "01KXSQK5BDCD6DVBMMT7TBWHCN",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-CATEGORY-ASSIGNMENT-CONTRACT",
+  "note": "Published CLI UC-003 passed 11/11 scenarios including root/intermediate/leaf assignment, correction history, archived/inactive failures, two-process split race, stale projections, replay conflict, and exact current-hierarchy actuals; focused regressions 43/43, full non-performance suite 1331/1331, build and format clean.",
+  "commit_sha": "24de3e8",
+  "bead_id": "bd-3ub",
+  "verified_at": "2026-07-22T19:08:17.1632636+00:00"
+}
