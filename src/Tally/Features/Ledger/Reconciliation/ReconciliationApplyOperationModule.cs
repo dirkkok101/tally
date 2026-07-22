@@ -4,7 +4,9 @@ using Tally.Contracts.Ledger.Reconciliation;
 
 namespace Tally.Features.Ledger.Reconciliation;
 
-public sealed class ReconciliationApplyOperationModule(ReconciliationApplyHandler handler)
+public sealed class ReconciliationApplyOperationModule(
+    ReconciliationApplyHandler handler,
+    StatementAuthoritativeCorrectionCoordinator? correctionCoordinator = null)
 {
     public const string OperationId = "ledger.reconciliation.apply";
 
@@ -13,9 +15,12 @@ public sealed class ReconciliationApplyOperationModule(ReconciliationApplyHandle
         try
         {
             var input = JsonSerializer.Deserialize(request.Input, ReconciliationApplyJsonContext.Default.ReconciliationApplyInput);
-            return input is null
-                ? CommandResult<JsonElement>.Failure(ReconciliationApplyErrors.InvalidInput)
-                : await handler.HandleAsync(input, request.Actor, request.IdempotencyKey, cancellationToken);
+            if (input is null) return CommandResult<JsonElement>.Failure(ReconciliationApplyErrors.InvalidInput);
+            if (input.Disposition != ReconciliationApplyDisposition.CorrectExistingFromStatement)
+                return await handler.HandleAsync(input, request.Actor, request.IdempotencyKey, cancellationToken);
+            return correctionCoordinator is null
+                ? CommandResult<JsonElement>.Failure(ReconciliationApplyErrors.UnsupportedStatementCorrection)
+                : await correctionCoordinator.HandleAsync(input, request.Actor, request.IdempotencyKey, cancellationToken);
         }
         catch (JsonException)
         {

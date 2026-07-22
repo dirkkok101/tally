@@ -249,14 +249,15 @@ public sealed class TransactionStore(LedgerDb database, LedgerConnectionFactory 
                    COALESCE(
                        (SELECT entry.outcome FROM coverage_entry AS entry WHERE entry.transaction_id = fact.transaction_id ORDER BY entry.recorded_at DESC, entry.coverage_entry_id DESC LIMIT 1),
                        (SELECT CASE decision.disposition
-                           WHEN 'deterministic_match' THEN 'statement_reconciled'
+                           WHEN 'confirmed_existing' THEN 'statement_reconciled'
+                           WHEN 'corrected_from_statement' THEN 'statement_reconciled'
                            WHEN 'statement_only' THEN 'statement_only'
                            WHEN 'ambiguous' THEN 'ambiguous_match'
-                           WHEN 'owner_confirmed' THEN 'owner_confirmed_match'
+                           WHEN 'owner_confirmed_match' THEN 'owner_confirmed_match'
                            WHEN 'exception' THEN 'reconciliation_exception'
                            ELSE 'recorded_unreconciled' END
-                        FROM reconciliation_current AS decision
-                        WHERE decision.transaction_id = fact.transaction_id
+                        FROM reconciliation_current_v2 AS decision
+                        WHERE decision.active_transaction_id = fact.transaction_id
                         ORDER BY decision.decided_at DESC, decision.decision_id DESC LIMIT 1),
                        'recorded_unreconciled'),
                    allocation.allocation_event_id, category.category_id, category.ancestry_ids,

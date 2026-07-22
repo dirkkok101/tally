@@ -6,15 +6,22 @@ using Microsoft.Data.Sqlite;
 using Tally.Application;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Accounts;
+using Tally.Contracts.Ledger.Dimensions;
 using Tally.Contracts.Ledger.Evidence;
+using Tally.Contracts.Ledger.Reconciliation;
+using Tally.Contracts.Ledger.Transactions;
 using Tally.Domain.Ledger;
 using Tally.Domain.Ledger.Accounts;
 using Tally.Domain.Ledger.Evidence;
 using Tally.Domain.Ledger.Reconciliation;
+using Tally.Domain.Ledger.Transactions;
+using Tally.Features.Ledger.Reconciliation;
 using Tally.Infrastructure.Storage;
 using Tally.Infrastructure.Storage.Accounts;
+using Tally.Infrastructure.Storage.Dimensions;
 using Tally.Infrastructure.Storage.Evidence;
 using Tally.Infrastructure.Storage.Reconciliation;
+using Tally.Infrastructure.Storage.Relationships;
 using Tally.Infrastructure.Storage.Transactions;
 using Xunit;
 
@@ -29,7 +36,10 @@ public sealed class ReconciliationCrashAtomicityTests : IAsyncLifetime
     private LedgerMutationExecutor executor = null!;
     private AccountStore accountStore = null!;
     private EvidenceStore evidenceStore = null!;
+    private TransactionStore transactionStore = null!;
     private ReconciliationWriteStore writeStore = null!;
+    private ReconciliationProjectionStore projectionStore = null!;
+    private StatementAuthoritativeCorrectionCoordinator correctionCoordinator = null!;
     private StatementFixture statement = null!;
 
     [Fact]
@@ -84,6 +94,35 @@ public sealed class ReconciliationCrashAtomicityTests : IAsyncLifetime
         Assert.Equal(before, await Counts());
     }
 
+    public static IEnumerable<object[]> CorrectionCrashBoundaries =>
+        new[]
+        {
+            "replacement_fact", "decision", "supersession", "confirming_link",
+            "pool", "payment", "correction", "idempotency"
+        }.SelectMany(boundary => new[] { "before", "after" }.Select(timing => new object[] { boundary, timing }));
+
+    [Theory]
+    [MemberData(nameof(CorrectionCrashBoundaries))]
+    public async Task TC_LEDGER_RECONCILIATION_CRASH_ATOMICITY_rolls_back_before_and_after_each_correction_boundary(
+        string boundary,
+        string timing)
+    {
+        var targetId = await SeedCorrectionTarget();
+        var input = await CorrectionInput(targetId);
+        var before = await Counts();
+        await CreateCorrectionFailureTrigger(boundary, timing);
+
+        await Assert.ThrowsAsync<SqliteException>(() => correctionCoordinator.HandleAsync(
+            input,
+            new("human", "correction-crash-test", "run-1"),
+            $"correction-crash-{boundary}-{timing}",
+            CancellationToken.None));
+
+        Assert.Equal(before, await Counts());
+        var target = await transactionStore.GetAsync(targetId, true, CancellationToken.None);
+        Assert.Equal(TransactionLifecycleStatus.Active, target!.LifecycleStatus);
+    }
+
     public async Task InitializeAsync()
     {
         database = await LedgerRuntimeBootstrap.InitializeCurrentAsync(root, CancellationToken.None);
@@ -91,8 +130,27 @@ public sealed class ReconciliationCrashAtomicityTests : IAsyncLifetime
         executor = new(database, factory, new IdempotencyStore());
         accountStore = new(database, factory);
         evidenceStore = new(database, factory);
-        var transactionStore = new TransactionStore(database, factory);
+        transactionStore = new(database, factory);
         writeStore = new(evidenceStore, transactionStore);
+        projectionStore = new(database, factory, evidenceStore, transactionStore);
+        var decisionStore = new ReconciliationDecisionStore(database, factory, evidenceStore, transactionStore);
+        var relationshipStore = new RelationshipStore(database, factory);
+        var effectWriter = new StatementCorrectionEffectWriter(
+            writeStore,
+            decisionStore,
+            transactionStore,
+            new CategoryAllocationStore(database, factory),
+            new PaymentAttributionStore(),
+            new PaymentIdentityStore(database, factory),
+            new PoolAssignmentStore(),
+            relationshipStore);
+        correctionCoordinator = new(
+            executor,
+            accountStore,
+            projectionStore,
+            writeStore,
+            transactionStore,
+            effectWriter);
         statement = await SeedStatement();
     }
 
@@ -207,12 +265,94 @@ public sealed class ReconciliationCrashAtomicityTests : IAsyncLifetime
         return new(evidence.EvidenceId, scopeId, new(accountId, "-12.34", "ZAR", "2026-07-10", null, "statement transaction"));
     }
 
+    private async Task<string> SeedCorrectionTarget()
+    {
+        var input = new Tally.Contracts.Ledger.Transactions.RecordTransactionInput(
+            statement.Fact.AccountId,
+            "-12.30",
+            "ZAR",
+            statement.Fact.TransactionDate,
+            null,
+            "agent transaction",
+            null,
+            null,
+            new(EvidenceKind.AgentCapture, Digest(), "capture:crash", null, null));
+        Assert.True(TransactionFact.TryCreate(input, out var fact, out var error), error);
+        var transactionId = LedgerId.New().ToString();
+        await using var connection = await Open();
+        await using var transaction = connection.BeginTransaction();
+        await transactionStore.InsertFactAndDefaultsAsync(
+            connection,
+            transaction,
+            transactionId,
+            LedgerId.New().ToString(),
+            null,
+            LedgerId.New().ToString(),
+            fact!,
+            At(2),
+            "ubuntu",
+            "test:actor",
+            CancellationToken.None);
+        await transaction.CommitAsync();
+        return transactionId;
+    }
+
+    private async Task<ReconciliationApplyInput> CorrectionInput(string targetId)
+    {
+        var read = await projectionStore.ReadAsync(statement.EvidenceId, statement.ScopeId, CancellationToken.None);
+        Assert.True(read.IsSuccess, read.ErrorCode);
+        var projection = ManualReviewProjectionV1.Project(read.Source!);
+        var candidates = projection.ExactCandidates.Concat(projection.GuardCandidates)
+            .Select(candidate => candidate.TransactionId)
+            .Order(StringComparer.Ordinal)
+            .ToArray();
+        return new(
+            statement.EvidenceId,
+            projection.EvidenceFingerprint,
+            statement.ScopeId,
+            projection.AdvisoryToken,
+            ReconciliationApplyDisposition.CorrectExistingFromStatement,
+            ReconciliationAuthorityKind.Owner,
+            candidates,
+            targetId,
+            statement.Fact,
+            null,
+            "owner approved crash correction");
+    }
+
+    private async Task CreateCorrectionFailureTrigger(string boundary, string timing)
+    {
+        var (table, condition) = boundary switch
+        {
+            "replacement_fact" => ("transaction_fact", "WHEN NEW.original_description = 'statement transaction'"),
+            "decision" => ("reconciliation_decision", string.Empty),
+            "supersession" => ("transaction_lifecycle_event", "WHEN NEW.action = 'statement_authoritative_replacement'"),
+            "confirming_link" => ("evidence_link_event", "WHEN NEW.role = 'confirming'"),
+            "pool" => ("pool_assignment_event", "WHEN NEW.action = 'carry_forward'"),
+            "payment" => ("transaction_attribution_event", "WHEN NEW.action IN ('carry_forward', 'initialize')"),
+            "correction" => ("statement_correction", string.Empty),
+            "idempotency" => ("idempotency_record", string.Empty),
+            _ => throw new ArgumentOutOfRangeException(nameof(boundary))
+        };
+        await using var connection = await Open();
+        await using var command = connection.CreateCommand();
+        command.CommandText = $"""
+            CREATE TRIGGER fail_statement_correction_{boundary}_{timing}
+            {timing.ToUpperInvariant()} INSERT ON {table} {condition}
+            BEGIN SELECT RAISE(ABORT, 'injected statement correction crash'); END;
+            """;
+        await command.ExecuteNonQueryAsync();
+    }
+
     private async Task<IReadOnlyDictionary<string, long>> Counts()
     {
         var tables = new[]
         {
-            "transaction_fact", "transaction_attribution_event", "pool_assignment_event", "reconciliation_decision",
-            "reconciliation_decision_authority", "evidence_link_event", "reconciliation_exception", "idempotency_record", "logical_effect"
+            "transaction_fact", "transaction_lifecycle_event", "transaction_attribution_event", "pool_assignment_event",
+            "category_allocation_event", "reconciliation_decision", "reconciliation_decision_authority",
+            "evidence_link_event", "reconciliation_exception", "statement_unknown_attribution_authority",
+            "financial_relationship", "relationship_lifecycle_event", "statement_correction",
+            "statement_correction_relationship_event", "idempotency_record", "logical_effect"
         };
         var result = new SortedDictionary<string, long>(StringComparer.Ordinal);
         await using var connection = await Open();

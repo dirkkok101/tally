@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Tally.Contracts.Ledger.Dimensions;
 
 namespace Tally.Contracts.Ledger.Reconciliation;
 
@@ -62,7 +63,19 @@ public sealed record ReconciliationApplyResult(
     string Reason,
     string PolicyId,
     string PolicyVersion,
-    string ProjectionToken);
+    string ProjectionToken,
+    StatementCorrectionApplyResult? Correction = null);
+
+public sealed record StatementCorrectionApplyResult(
+    string CorrectionId,
+    string PriorTransactionId,
+    string ReplacementTransactionId,
+    string SupersessionLifecycleEventId,
+    string? CategoryAllocationEventId,
+    string PoolAssignmentEventId,
+    string AttributionEventId,
+    PaymentAttributionCarryForwardResolution PaymentResolution,
+    IReadOnlyList<string> RelationshipLifecycleEventIds);
 
 public static class ReconciliationApplyErrors
 {
@@ -81,5 +94,6 @@ public static class ReconciliationApplyErrors
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase, UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow)]
 [JsonSerializable(typeof(ReconciliationApplyInput))]
 [JsonSerializable(typeof(ReconciliationApplyResult))]
+[JsonSerializable(typeof(StatementCorrectionApplyResult))]
 [JsonSerializable(typeof(AuthoritativeStatementFact))]
 public partial class ReconciliationApplyJsonContext : JsonSerializerContext;
