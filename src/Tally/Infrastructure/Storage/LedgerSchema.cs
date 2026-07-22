@@ -112,7 +112,7 @@ public static class LedgerRuntimeBootstrap
             protection.RequireOwnerOnlyArtifact(currentPath);
             var currentGeneration = (await File.ReadAllTextAsync(currentPath, cancellationToken)).Trim();
             var current = new LedgerDb(dataRoot, currentGeneration);
-            await ApplyCurrentAsync(current, protection, cancellationToken);
+            await ValidateExistingAsync(current, protection, cancellationToken);
             return current;
         }
 
@@ -132,5 +132,35 @@ public static class LedgerRuntimeBootstrap
     {
         await using var connection = await new LedgerConnectionFactory(protection).OpenAsync(database, CompleteLedgerSchema.CurrentVersion, cancellationToken);
         await CompleteLedgerSchema.CreateCurrent().ApplyAsync(connection, cancellationToken);
+    }
+
+    private static async Task ValidateExistingAsync(
+        LedgerDb database,
+        HostArtifactProtection protection,
+        CancellationToken cancellationToken)
+    {
+        protection.RequireOwnerOnlyDirectory(database.GenerationDirectory);
+        protection.RequireOwnerOnlyArtifact(database.DatabasePath);
+        protection.RequireOwnerOnlyArtifact(database.ManifestPath);
+        foreach (var sidecar in new[] { database.DatabasePath + "-wal", database.DatabasePath + "-shm" }.Where(File.Exists))
+        {
+            protection.RequireOwnerOnlyArtifact(sidecar);
+        }
+
+        await using var connection = new SqliteConnection(new SqliteConnectionStringBuilder
+        {
+            DataSource = database.DatabasePath,
+            Mode = SqliteOpenMode.ReadOnly,
+            Cache = SqliteCacheMode.Private,
+            Pooling = false
+        }.ToString());
+        await connection.OpenAsync(cancellationToken);
+        var version = Convert.ToInt32(
+            await LedgerConnectionFactory.ScalarAsync(connection, "PRAGMA user_version;", cancellationToken),
+            System.Globalization.CultureInfo.InvariantCulture);
+        if (version is < 1 or > CompleteLedgerSchema.CurrentVersion)
+        {
+            throw new InvalidOperationException("The current database schema version is not supported by this Ledger runtime.");
+        }
     }
 }

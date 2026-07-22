@@ -34,6 +34,23 @@ public sealed class AuthoritativeStoreActivator(
         SqliteTransaction writerTransaction,
         ActivateRestoreInput input,
         string requestFingerprint,
+        CancellationToken cancellationToken) =>
+        await ActivateCoreAsync(lockedConnection, writerTransaction, input, requestFingerprint, evolutionSource: false, cancellationToken);
+
+    public async Task<CommandResult<RestoreActivationResult>> ActivateEvolutionAsync(
+        SqliteConnection lockedConnection,
+        SqliteTransaction writerTransaction,
+        ActivateRestoreInput input,
+        string requestFingerprint,
+        CancellationToken cancellationToken) =>
+        await ActivateCoreAsync(lockedConnection, writerTransaction, input, requestFingerprint, evolutionSource: true, cancellationToken);
+
+    private async Task<CommandResult<RestoreActivationResult>> ActivateCoreAsync(
+        SqliteConnection lockedConnection,
+        SqliteTransaction writerTransaction,
+        ActivateRestoreInput input,
+        string requestFingerprint,
+        bool evolutionSource,
         CancellationToken cancellationToken)
     {
         if (writerTransaction.Connection != lockedConnection
@@ -83,12 +100,23 @@ public sealed class AuthoritativeStoreActivator(
                 return CommandResult<RestoreActivationResult>.Failure(RestoreErrors.ActivationConflict);
             }
 
-            var current = await VerifyLockedCurrentAsync(lockedConnection, cancellationToken);
-            if (!current.IsVerified)
+            string currentFingerprint;
+            if (evolutionSource)
             {
-                return CommandResult<RestoreActivationResult>.Failure(MapVerificationError(current.ErrorCode));
+                var current = await VerifyLockedEvolutionSourceAsync(lockedConnection, cancellationToken);
+                if (!current.IsSuccess) return CommandResult<RestoreActivationResult>.Failure(current.ErrorCode!);
+                currentFingerprint = current.Value!;
             }
-            if (current.Report!.NormalizedFingerprint != input.ExpectedCurrentFingerprint)
+            else
+            {
+                var current = await VerifyLockedCurrentAsync(lockedConnection, cancellationToken);
+                if (!current.IsVerified)
+                {
+                    return CommandResult<RestoreActivationResult>.Failure(MapVerificationError(current.ErrorCode));
+                }
+                currentFingerprint = current.Report!.NormalizedFingerprint;
+            }
+            if (currentFingerprint != input.ExpectedCurrentFingerprint)
             {
                 return CommandResult<RestoreActivationResult>.Failure(RestoreErrors.StaleCurrent);
             }
@@ -177,6 +205,54 @@ public sealed class AuthoritativeStoreActivator(
             artifactProtection.EnsureDataRoot(Path.GetDirectoryName(snapshot.GenerationDirectory)!);
             artifactProtection.EnsureDataRoot(snapshot.GenerationDirectory);
             return await backupService.SnapshotAndVerifyAsync(lockedConnection, snapshot, cancellationToken);
+        }
+        finally
+        {
+            if (Directory.Exists(root)) Directory.Delete(root, recursive: true);
+        }
+    }
+
+    private async Task<CommandResult<string>> VerifyLockedEvolutionSourceAsync(
+        SqliteConnection lockedConnection,
+        CancellationToken cancellationToken)
+    {
+        var root = Path.Combine(operationDatabase.DataRoot, ".evolution-activation-verify-" + Guid.NewGuid().ToString("N"));
+        try
+        {
+            artifactProtection.EnsureDataRoot(root);
+            var snapshot = new LedgerDb(root, Guid.NewGuid().ToString("N"));
+            artifactProtection.EnsureDataRoot(Path.GetDirectoryName(snapshot.GenerationDirectory)!);
+            artifactProtection.EnsureDataRoot(snapshot.GenerationDirectory);
+            await BackupService.OnlineBackupAsync(lockedConnection, snapshot, cancellationToken);
+            await BackupService.RemoveEphemeralStateAsync(snapshot.DatabasePath, cancellationToken);
+            artifactProtection.ProtectArtifact(snapshot.DatabasePath);
+            await using var connection = new SqliteConnection(new SqliteConnectionStringBuilder
+            {
+                DataSource = snapshot.DatabasePath,
+                Mode = SqliteOpenMode.ReadOnly,
+                Cache = SqliteCacheMode.Private,
+                Pooling = false
+            }.ToString());
+            await connection.OpenAsync(cancellationToken);
+            var integrity = Convert.ToString(
+                await LedgerConnectionFactory.ScalarAsync(connection, "PRAGMA integrity_check;", cancellationToken),
+                System.Globalization.CultureInfo.InvariantCulture);
+            var foreignKeys = Convert.ToInt64(
+                await LedgerConnectionFactory.ScalarAsync(connection, "SELECT COUNT(*) FROM pragma_foreign_key_check;", cancellationToken),
+                System.Globalization.CultureInfo.InvariantCulture);
+            var version = Convert.ToInt32(
+                await LedgerConnectionFactory.ScalarAsync(connection, "PRAGMA user_version;", cancellationToken),
+                System.Globalization.CultureInfo.InvariantCulture);
+            if (!string.Equals(integrity, "ok", StringComparison.OrdinalIgnoreCase) || foreignKeys != 0)
+            {
+                return CommandResult<string>.Failure(RestoreErrors.Integrity);
+            }
+            if (version is < 1 or > CompleteLedgerSchema.CurrentVersion)
+            {
+                return CommandResult<string>.Failure(RestoreErrors.Incompatible);
+            }
+            return CommandResult<string>.Success(
+                await MigrationCandidateBuilder.EvolutionFingerprintAsync(snapshot, artifactProtection, cancellationToken));
         }
         finally
         {

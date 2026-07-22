@@ -130,6 +130,90 @@ public sealed class BackupService(
         return VerifyCoreAsync(artifactPath, input.ExpectedChecksum, cancellationToken);
     }
 
+    internal async Task<CommandResult<BackupReceipt>> CreateVerifiedArtifactAsync(
+        LedgerDb sourceDatabase,
+        string targetPath,
+        string requestFingerprint,
+        CancellationToken cancellationToken)
+    {
+        await using var source = new SqliteConnection(new SqliteConnectionStringBuilder
+        {
+            DataSource = sourceDatabase.DatabasePath,
+            Mode = SqliteOpenMode.ReadOnly,
+            Cache = SqliteCacheMode.Private,
+            Pooling = false,
+            DefaultTimeout = 5
+        }.ToString());
+        await source.OpenAsync(cancellationToken);
+        return await CreateVerifiedArtifactAsync(source, targetPath, requestFingerprint, cancellationToken);
+    }
+
+    internal async Task<CommandResult<BackupReceipt>> CreateVerifiedArtifactAsync(
+        SqliteConnection source,
+        string targetPath,
+        string requestFingerprint,
+        CancellationToken cancellationToken)
+    {
+        if (!TryArtifactPath(targetPath, out var normalizedPath) || !IsChecksum(requestFingerprint))
+        {
+            return CommandResult<BackupReceipt>.Failure(BackupErrors.Invalid);
+        }
+
+        var parent = Path.GetDirectoryName(normalizedPath)!;
+        try
+        {
+            artifactProtection.RequireOwnerOnlyDirectory(parent);
+            CommandResult<JsonElement> result;
+            if (File.Exists(normalizedPath))
+            {
+                result = await VerifyCoreAsync(normalizedPath, null, cancellationToken);
+                if (!result.IsSuccess) return CommandResult<BackupReceipt>.Failure(BackupErrors.TargetExists);
+                var existing = result.Value!.Deserialize(BackupJsonContext.Default.BackupReceipt);
+                if (existing is null
+                    || existing.Manifest.RequestFingerprint != requestFingerprint
+                    || !await SourceMatchesManifestAsync(source, existing.Manifest, parent, cancellationToken))
+                {
+                    return CommandResult<BackupReceipt>.Failure(BackupErrors.TargetExists);
+                }
+            }
+            else
+            {
+                result = await CreateArtifactAsync(source, normalizedPath, requestFingerprint, cancellationToken);
+            }
+
+            if (!result.IsSuccess) return CommandResult<BackupReceipt>.Failure(result.ErrorCode!);
+            var receipt = result.Value!.Deserialize(BackupJsonContext.Default.BackupReceipt);
+            if (receipt is null) return CommandResult<BackupReceipt>.Failure(BackupErrors.Integrity);
+            var verified = await VerifyCoreAsync(normalizedPath, receipt.ArtifactChecksum, cancellationToken);
+            var verifiedReceipt = verified.IsSuccess
+                ? verified.Value!.Deserialize(BackupJsonContext.Default.BackupReceipt)
+                : null;
+            return verifiedReceipt is not null && SameReceipt(receipt, verifiedReceipt)
+                ? CommandResult<BackupReceipt>.Success(receipt)
+                : CommandResult<BackupReceipt>.Failure(verified.ErrorCode ?? BackupErrors.Integrity);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return CommandResult<BackupReceipt>.Failure(BackupErrors.Permission);
+        }
+        catch (IOException)
+        {
+            return CommandResult<BackupReceipt>.Failure(BackupErrors.Disk);
+        }
+        catch (SqliteException exception) when (exception.SqliteErrorCode is 5 or 6)
+        {
+            return CommandResult<BackupReceipt>.Failure(BackupErrors.Busy);
+        }
+        catch (SqliteException)
+        {
+            return CommandResult<BackupReceipt>.Failure(BackupErrors.Integrity);
+        }
+        catch (InvalidOperationException)
+        {
+            return CommandResult<BackupReceipt>.Failure(BackupErrors.HostProtection);
+        }
+    }
+
     private async Task<CommandResult<JsonElement>> CreateArtifactAsync(
         SqliteConnection source,
         string targetPath,
@@ -297,7 +381,7 @@ public sealed class BackupService(
         }
     }
 
-    private static async Task OnlineBackupAsync(SqliteConnection lockedSource, LedgerDb destination, CancellationToken cancellationToken)
+    internal static async Task OnlineBackupAsync(SqliteConnection lockedSource, LedgerDb destination, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         await using var snapshotSource = new SqliteConnection(new SqliteConnectionStringBuilder
@@ -319,7 +403,7 @@ public sealed class BackupService(
         snapshotSource.BackupDatabase(target);
     }
 
-    private static async Task RemoveEphemeralStateAsync(string databasePath, CancellationToken cancellationToken)
+    internal static async Task RemoveEphemeralStateAsync(string databasePath, CancellationToken cancellationToken)
     {
         await using var connection = new SqliteConnection(new SqliteConnectionStringBuilder
         {
@@ -332,7 +416,15 @@ public sealed class BackupService(
         await LedgerConnectionFactory.ExecuteAsync(connection, "PRAGMA foreign_keys = ON;", cancellationToken);
         await using (var transaction = connection.BeginTransaction())
         {
-            await LedgerConnectionFactory.ExecuteAsync(connection, "DELETE FROM query_snapshot_payload; DELETE FROM query_snapshot_item; DELETE FROM query_snapshot_group; DELETE FROM query_snapshot;", cancellationToken, transaction);
+            foreach (var table in new[] { "query_snapshot_payload", "query_snapshot_item", "query_snapshot_group", "query_snapshot" })
+            {
+                await using var exists = connection.CreateCommand();
+                exists.Transaction = transaction;
+                exists.CommandText = "SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' AND name = $name;";
+                exists.Parameters.AddWithValue("$name", table);
+                if (Convert.ToInt64(await exists.ExecuteScalarAsync(cancellationToken), System.Globalization.CultureInfo.InvariantCulture) == 0) continue;
+                await LedgerConnectionFactory.ExecuteAsync(connection, "DELETE FROM " + table + ";", cancellationToken, transaction);
+            }
             await transaction.CommitAsync(cancellationToken);
         }
         await LedgerConnectionFactory.ExecuteAsync(connection, "PRAGMA wal_checkpoint(TRUNCATE);", cancellationToken);
@@ -453,7 +545,7 @@ public sealed class BackupService(
 
     private static bool IsChecksum(string value) => value.Length == 64 && value.All(character => char.IsAsciiHexDigit(character));
 
-    private static async Task<string> ChecksumAsync(string path, CancellationToken cancellationToken)
+    internal static async Task<string> ChecksumAsync(string path, CancellationToken cancellationToken)
     {
         await using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 81920, FileOptions.SequentialScan);
         return Convert.ToHexStringLower(await SHA256.HashDataAsync(stream, cancellationToken));
