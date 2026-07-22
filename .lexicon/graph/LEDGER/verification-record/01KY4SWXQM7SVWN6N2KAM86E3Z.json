@@ -1,0 +1,13 @@
+{
+  "id": "01KY4SWXQM7SVWN6N2KAM86E3Z",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-ACTUALS-QUERY",
+  "subject_entity_id": "01KXSQCYJC2RVMH6KBHKV1K3FB",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-ACTUALS-QUERY-CONTRACT",
+  "note": "bd-3hy: 22 calculator cases, 18 projection cases, full suite 990/990, build clean, format clean, native AOT publish passed, provider-boundary scan clean",
+  "commit_sha": "7cb00a9",
+  "bead_id": "bd-3hy",
+  "verified_at": "2026-07-22T11:38:11.5733517+00:00"
+}
