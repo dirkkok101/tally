@@ -1,0 +1,13 @@
+{
+  "id": "01KY5NC1W1H940R2688X2DHR4Y",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-CONTRACT-DISCOVERY",
+  "subject_entity_id": "01KXSQCYJETVQ99J4RX2Y5W7K1",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE",
+  "note": "All 73 public descriptors publish deterministic source-generated request/result schemas with fields, requiredness, nested shapes, closed vocabularies, errors/exits, versions, and idempotency metadata; 82/82 inventory and 11/11 published Release tests passed; 1348/1348 functional tests passed.",
+  "commit_sha": "1af26df",
+  "bead_id": "bd-2jj",
+  "verified_at": "2026-07-22T19:38:18.8823284+00:00"
+}
