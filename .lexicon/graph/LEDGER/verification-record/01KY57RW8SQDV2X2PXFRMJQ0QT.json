@@ -1,0 +1,13 @@
+{
+  "id": "01KY57RW8SQDV2X2PXFRMJQ0QT",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE",
+  "subject_entity_id": "01KXSQFYX4NQ8JXNGWNYBA7EK5",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-PERSONAL-SCALE-PERFORMANCE",
+  "note": "Relationship/actuals bundle: 19 composition tests, 30 warmed 100000-transaction p95 performance test, and all 1069 tests passed; warning-free build, format verification, exact totals, stable cursor continuation, and linux-x64 Native AOT publish passed.",
+  "commit_sha": "7121bc8f",
+  "bead_id": "bd-3sd",
+  "verified_at": "2026-07-22T15:40:39.0660473+00:00"
+}
