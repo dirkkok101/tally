@@ -1,0 +1,13 @@
+{
+  "id": "01KY59PC4C509AQVAV2HM81DQM",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-BACKUP-VERIFICATION",
+  "subject_entity_id": "01KXSQDTAHSDK4MMVJ2NJB2RHX",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-BACKUP-VERIFICATION-CONTRACT",
+  "note": "25/25 focused backup publication, permission, replay, privacy, corruption, hierarchy, correction, relationship, and verifier-boundary tests; full suite 1094/1094; linux-x64 Native AOT publish passed.",
+  "commit_sha": "ba07cad",
+  "bead_id": "bd-3j9",
+  "verified_at": "2026-07-22T16:14:14.1572917+00:00"
+}
