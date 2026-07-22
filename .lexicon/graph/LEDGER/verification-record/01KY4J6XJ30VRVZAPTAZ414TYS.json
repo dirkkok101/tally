@@ -1,0 +1,13 @@
+{
+  "id": "01KY4J6XJ30VRVZAPTAZ414TYS",
+  "subject_type": "decision",
+  "subject_ref_code": "DD-LEDGER-RECONCILIATION-CONTRACT",
+  "subject_entity_id": "01KY0BPZHRNAE4X76HMJ3EC0ND",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT",
+  "note": "Test-only prerequisite seam composes ReconciliationApplyOperationModule and StatementCorrectionEffectWriter.AppendAsync against fresh and V001-upgraded V002 stores, proves shared caller-transaction signatures, required targets and foreign keys, V001 fail-closed behavior, cross-connection mismatch rejection, and zero financial effects. Focused 13/13; full 746/746; build zero warnings/errors; format clean.",
+  "commit_sha": "98577ecf5273697f1d739165ea99191cf0136c61",
+  "bead_id": "bd-3lf",
+  "verified_at": "2026-07-22T09:23:50.4685427+00:00"
+}
