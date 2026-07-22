@@ -1,0 +1,14 @@
+{
+  "id": "01KY4GS908RP93V43NSRBFHCBY",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-TRANSACTION-CORRECTION",
+  "subject_entity_id": "01KXSQBX8VHG12WG2VF5XXDB0E",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-TRANSACTION-CORRECTION-CONTRACT",
+  "note": "Superseding seam verification: 31 transaction-correction tests, 263 transaction/relationship/reconciliation tests, 713 full tests, zero-warning build, format verification, and Native AOT publish passed. Statement-authoritative supersession now leaves pool and payment dimensions uninitialized for the coordinator's explicit decision-bound carry-forward or unknown outcome; ordinary transaction defaults remain unchanged.",
+  "commit_sha": "6c9b83a",
+  "bead_id": "bd-2rh",
+  "supersedes_record_id": "01KY4G9DC3YF02Y8K2HKZKVJEC",
+  "verified_at": "2026-07-22T08:58:54.8571383+00:00"
+}
