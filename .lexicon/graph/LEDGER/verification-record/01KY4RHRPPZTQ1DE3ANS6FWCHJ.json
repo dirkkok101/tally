@@ -1,0 +1,13 @@
+{
+  "id": "01KY4RHRPPZTQ1DE3ANS6FWCHJ",
+  "subject_type": "decision",
+  "subject_ref_code": "DD-LEDGER-CLI-OPERATION-CONTRACT",
+  "subject_entity_id": "01KXSWZ691B67MGFHJNAQ12FPF",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE",
+  "note": "CatalogueTransactionOperationBundle preserves and explicitly binds the exact 43 account, category hierarchy, payment identity, Spend Pool, transaction, assignment, and evidence descriptors. Focused 42/42, focused plus CLI 61/61, full 950/950, build and format clean, Native AOT publish passed; malformed composition states fail before dispatch.",
+  "commit_sha": "beaf3a8",
+  "bead_id": "bd-2ve",
+  "verified_at": "2026-07-22T11:14:37.3992364+00:00"
+}
