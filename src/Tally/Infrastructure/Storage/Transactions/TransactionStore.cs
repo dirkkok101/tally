@@ -107,6 +107,137 @@ public sealed class TransactionStore(LedgerDb database, LedgerConnectionFactory 
         await command.ExecuteNonQueryAsync(cancellationToken);
     }
 
+    public Task VoidAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        string lifecycleEventId,
+        string transactionId,
+        string reason,
+        string actor,
+        string occurredAt,
+        CancellationToken cancellationToken) =>
+        AppendLifecycleAsync(
+            connection,
+            transaction,
+            lifecycleEventId,
+            transactionId,
+            "void",
+            null,
+            null,
+            reason,
+            actor,
+            occurredAt,
+            cancellationToken);
+
+    public async Task SupersedeAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        string lifecycleEventId,
+        string transactionId,
+        string replacementTransactionId,
+        string initialAttributionEventId,
+        string? assignedAttributionEventId,
+        string poolAssignmentEventId,
+        TransactionFact replacementFact,
+        string reason,
+        string actor,
+        string occurredAt,
+        CancellationToken cancellationToken)
+    {
+        await InsertFactAndDefaultsAsync(
+            connection,
+            transaction,
+            replacementTransactionId,
+            initialAttributionEventId,
+            assignedAttributionEventId,
+            poolAssignmentEventId,
+            replacementFact,
+            occurredAt,
+            Environment.UserName,
+            actor,
+            cancellationToken);
+        await AppendLifecycleAsync(
+            connection,
+            transaction,
+            lifecycleEventId,
+            transactionId,
+            "superseded",
+            replacementTransactionId,
+            null,
+            reason,
+            actor,
+            occurredAt,
+            cancellationToken);
+    }
+
+    internal async Task<StatementSupersessionResult> AppendStatementSupersessionAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        string lifecycleEventId,
+        string transactionId,
+        string replacementTransactionId,
+        string initialAttributionEventId,
+        string poolAssignmentEventId,
+        TransactionFact statementFact,
+        string reason,
+        string actor,
+        string occurredAt,
+        StatementSupersessionDecisionWriter writeDecision,
+        CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(writeDecision);
+        const string savepoint = "transaction_statement_supersession";
+        await ExecuteTransactionControlAsync(connection, transaction, $"SAVEPOINT {savepoint};", cancellationToken);
+        try
+        {
+            await InsertFactAndDefaultsAsync(
+                connection,
+                transaction,
+                replacementTransactionId,
+                initialAttributionEventId,
+                assignedAttributionEventId: null,
+                poolAssignmentEventId,
+                statementFact,
+                occurredAt,
+                Environment.UserName,
+                actor,
+                cancellationToken);
+            var decisionId = await writeDecision(replacementTransactionId, cancellationToken);
+            if (!LedgerId.TryParse(decisionId, out _, out _)
+                || !await IsAuthorizedStatementSupersession(
+                    connection,
+                    transaction,
+                    transactionId,
+                    replacementTransactionId,
+                    decisionId!,
+                    cancellationToken))
+            {
+                await RollbackSavepointAsync(connection, transaction, savepoint);
+                return new(null, null, TransactionLifecycle.ReplacementConflictError);
+            }
+
+            await AppendLifecycleAsync(
+                connection,
+                transaction,
+                lifecycleEventId,
+                transactionId,
+                "statement_authoritative_replacement",
+                replacementTransactionId,
+                decisionId,
+                reason,
+                actor,
+                occurredAt,
+                cancellationToken);
+            await ExecuteTransactionControlAsync(connection, transaction, $"RELEASE SAVEPOINT {savepoint};", cancellationToken);
+            return new(replacementTransactionId, decisionId, null);
+        }
+        catch
+        {
+            await RollbackSavepointAsync(connection, transaction, savepoint);
+            throw;
+        }
+    }
+
     public async Task<TransactionDetail?> GetAsync(string transactionId, bool includeHistory, CancellationToken cancellationToken)
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Ledger storage requires Linux host protections.");
@@ -226,6 +357,79 @@ public sealed class TransactionStore(LedgerDb database, LedgerConnectionFactory 
             await PoolHistoryAsync(connection, transaction, transactionId, cancellationToken),
             await CategoryHistoryAsync(connection, transaction, transactionId, cancellationToken));
 
+    private static async Task AppendLifecycleAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        string lifecycleEventId,
+        string transactionId,
+        string action,
+        string? replacementTransactionId,
+        string? reconciliationDecisionId,
+        string reason,
+        string actor,
+        string occurredAt,
+        CancellationToken cancellationToken)
+    {
+        await using var command = Command(connection, transaction, """
+            INSERT INTO transaction_lifecycle_event(
+                lifecycle_event_id, transaction_id, action, replacement_transaction_id,
+                reconciliation_decision_id, reason, actor, occurred_at)
+            VALUES ($eventId, $transactionId, $action, $replacementId,
+                    $decisionId, $reason, $actor, $occurredAt);
+            """,
+            ("$eventId", lifecycleEventId),
+            ("$transactionId", transactionId),
+            ("$action", action),
+            ("$replacementId", replacementTransactionId),
+            ("$decisionId", reconciliationDecisionId),
+            ("$reason", reason),
+            ("$actor", actor),
+            ("$occurredAt", occurredAt));
+        await command.ExecuteNonQueryAsync(cancellationToken);
+    }
+
+    private static async Task<bool> IsAuthorizedStatementSupersession(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        string transactionId,
+        string replacementTransactionId,
+        string decisionId,
+        CancellationToken cancellationToken)
+    {
+        await using var command = Command(connection, transaction, """
+            SELECT EXISTS(
+                SELECT 1 FROM reconciliation_decision_authority
+                WHERE decision_id = $decisionId
+                  AND disposition_detail = 'corrected_from_statement'
+                  AND prior_transaction_id = $transactionId
+                  AND active_transaction_id = $replacementTransactionId
+                  AND statement_authority_basis IS NOT NULL);
+            """,
+            ("$decisionId", decisionId),
+            ("$transactionId", transactionId),
+            ("$replacementTransactionId", replacementTransactionId));
+        return Convert.ToInt64(await command.ExecuteScalarAsync(cancellationToken), System.Globalization.CultureInfo.InvariantCulture) == 1;
+    }
+
+    private static async Task ExecuteTransactionControlAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        string sql,
+        CancellationToken cancellationToken)
+    {
+        await using var command = Command(connection, transaction, sql);
+        await command.ExecuteNonQueryAsync(cancellationToken);
+    }
+
+    private static Task RollbackSavepointAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        string savepoint) => ExecuteTransactionControlAsync(
+            connection,
+            transaction,
+            $"ROLLBACK TO SAVEPOINT {savepoint}; RELEASE SAVEPOINT {savepoint};",
+            CancellationToken.None);
+
     private static async Task<IReadOnlyList<TransactionLifecycleHistoryItem>> LifecycleHistoryAsync(SqliteConnection connection, SqliteTransaction? transaction, string transactionId, CancellationToken cancellationToken)
     {
         await using var command = Command(connection, transaction, "SELECT lifecycle_event_id, action, replacement_transaction_id, reconciliation_decision_id, reason, actor, occurred_at FROM transaction_lifecycle_event WHERE transaction_id = $id ORDER BY occurred_at, lifecycle_event_id;", ("$id", transactionId));
@@ -327,4 +531,10 @@ public sealed class TransactionStore(LedgerDb database, LedgerConnectionFactory 
         "carry_forward" => TransactionCategoryAction.CarryForward,
         _ => throw new InvalidOperationException("Unknown transaction category action.")
     };
+}
+
+internal delegate Task<string?> StatementSupersessionDecisionWriter(string replacementTransactionId, CancellationToken cancellationToken);
+internal sealed record StatementSupersessionResult(string? ReplacementTransactionId, string? DecisionId, string? ErrorCode)
+{
+    public bool IsSuccess => ErrorCode is null;
 }

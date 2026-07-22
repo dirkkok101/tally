@@ -108,6 +108,21 @@ public sealed record RecordTransactionInput(
 
 public sealed record GetTransactionInput([property: JsonRequired] string TransactionId, bool IncludeHistory = false);
 
+public sealed record VoidTransactionInput(
+    [property: JsonRequired] string TransactionId,
+    [property: JsonRequired] string Reason);
+
+public sealed record SupersedeTransactionInput(
+    [property: JsonRequired] string TransactionId,
+    [property: JsonRequired] RecordTransactionInput Replacement,
+    [property: JsonRequired] string Reason);
+
+public sealed record TransactionCorrectionResult(
+    TransactionLifecycleAction Action,
+    TransactionDetail Original,
+    TransactionDetail? Replacement,
+    IReadOnlyList<string> RetiredRelationshipIds);
+
 public sealed record TransactionPaymentAttribution(
     string AttributionEventId,
     TransactionKnowledgeState InstrumentState,
@@ -201,3 +216,9 @@ public sealed record TransactionDetail(
     string RecordedByOsIdentity,
     string RecordedAt,
     TransactionHistory? History);
+
+[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase, UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow)]
+[JsonSerializable(typeof(VoidTransactionInput))]
+[JsonSerializable(typeof(SupersedeTransactionInput))]
+[JsonSerializable(typeof(TransactionCorrectionResult))]
+public partial class TransactionCorrectionJsonContext : JsonSerializerContext;
