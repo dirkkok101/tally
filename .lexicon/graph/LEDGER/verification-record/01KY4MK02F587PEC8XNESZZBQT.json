@@ -1,0 +1,13 @@
+{
+  "id": "01KY4MK02F587PEC8XNESZZBQT",
+  "subject_type": "decision",
+  "subject_ref_code": "DD-LEDGER-RECONCILIATION-CONTRACT",
+  "subject_entity_id": "01KY0BPZHRNAE4X76HMJ3EC0ND",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-RECONCILIATION-POLICY-MATRIX",
+  "note": "ReconciliationPolicyV1 enables only the OQ-LEDGER-13 exact unique match; all excluded rows and automatic correction remain review-required. Reconciliation tests 234/234 and full tests 826/826 passed; build, format verification, and native AOT publish passed.",
+  "commit_sha": "3213129367632271cc8d569595593ecbbd87a455",
+  "bead_id": "bd-1ui",
+  "verified_at": "2026-07-22T10:05:23.4078899+00:00"
+}
