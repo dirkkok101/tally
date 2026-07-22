@@ -202,7 +202,7 @@ public sealed class BackupService(
         }
     }
 
-    private async Task<DurableLedgerVerificationResult> SnapshotAndVerifyAsync(
+    internal async Task<DurableLedgerVerificationResult> SnapshotAndVerifyAsync(
         SqliteConnection source,
         LedgerDb destination,
         CancellationToken cancellationToken)
@@ -255,7 +255,7 @@ public sealed class BackupService(
             var extractedDatabase = new LedgerDb(extractionRoot, Guid.NewGuid().ToString("N"));
             artifactProtection.EnsureDataRoot(Path.GetDirectoryName(extractedDatabase.GenerationDirectory)!);
             artifactProtection.EnsureDataRoot(extractedDatabase.GenerationDirectory);
-            var manifest = await ExtractAsync(artifactPath, extractedDatabase.DatabasePath, cancellationToken);
+            var manifest = await ExtractArtifactAsync(artifactPath, extractedDatabase.DatabasePath, cancellationToken);
             artifactProtection.ProtectArtifact(extractedDatabase.DatabasePath);
             if (!IsManifestShapeValid(manifest)) return Failure(BackupErrors.Integrity);
 
@@ -339,7 +339,10 @@ public sealed class BackupService(
         await LedgerConnectionFactory.ExecuteAsync(connection, "PRAGMA journal_mode = DELETE;", cancellationToken);
     }
 
-    private async Task<BackupManifest> ExtractAsync(string artifactPath, string databasePath, CancellationToken cancellationToken)
+    internal static async Task<BackupManifest> ExtractArtifactAsync(
+        string artifactPath,
+        string databasePath,
+        CancellationToken cancellationToken)
     {
         await using var stream = new FileStream(artifactPath, FileMode.Open, FileAccess.Read, FileShare.Read, 81920, FileOptions.SequentialScan);
         using var archive = new ZipArchive(stream, ZipArchiveMode.Read, leaveOpen: false);
@@ -396,7 +399,7 @@ public sealed class BackupService(
         await source.CopyToAsync(destination, cancellationToken);
     }
 
-    private static BackupManifest Manifest(DurableLedgerReport report, string requestFingerprint) => new(
+    internal static BackupManifest Manifest(DurableLedgerReport report, string requestFingerprint) => new(
         BackupManifest.CurrentFormatVersion,
         requestFingerprint,
         report.Artifacts.Single(artifact => artifact.Name == "ledger.db").Checksum,
@@ -419,7 +422,7 @@ public sealed class BackupService(
         && manifest.Types.Count > 0
         && manifest.Actuals.Count > 0;
 
-    private static bool SameManifest(BackupManifest first, BackupManifest second) =>
+    internal static bool SameManifest(BackupManifest first, BackupManifest second) =>
         JsonSerializer.Serialize(first, BackupJsonContext.Default.BackupManifest)
         == JsonSerializer.Serialize(second, BackupJsonContext.Default.BackupManifest);
 
