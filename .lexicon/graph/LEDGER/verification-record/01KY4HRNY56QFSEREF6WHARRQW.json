@@ -1,0 +1,13 @@
+{
+  "id": "01KY4HRNY56QFSEREF6WHARRQW",
+  "subject_type": "decision",
+  "subject_ref_code": "DD-LEDGER-RECONCILIATION-CONTRACT",
+  "subject_entity_id": "01KY0BPZHRNAE4X76HMJ3EC0ND",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY",
+  "note": "Statement-correction effect writer composes replacement fact, authoritative decision and confirming link, explicit category/pool/payment lineage, invariant-preserving relationship replacement, stable exact replay, and savepoint rollback in the caller transaction. Focused 20/20; Ledger slice 357/357; full 733/733; build zero warnings/errors; format clean; Native AOT publish passed.",
+  "commit_sha": "85a3119c1a8651593419c0b90d668ef7da68e2d1",
+  "bead_id": "bd-3pa",
+  "verified_at": "2026-07-22T09:16:03.9103300+00:00"
+}
