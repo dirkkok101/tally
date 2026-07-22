@@ -27,9 +27,9 @@ using Tally.Features.System.Guidance;
 
 namespace Tally.Cli;
 
-public sealed record OperationDescriptor(string OperationId, string CliPath, string Kind, bool RequiresIdempotencyKey, JsonTypeInfo RequestTypeInfo, JsonTypeInfo ResultTypeInfo, string HandlerTarget, Func<LedgerServices, OperationRegistry, IOperationHandler> HandlerFactory, string Example, IReadOnlyList<ErrorSchema>? DomainErrors = null)
+public sealed record OperationDescriptor(string OperationId, string CliPath, string Kind, bool RequiresIdempotencyKey, JsonTypeInfo RequestTypeInfo, JsonTypeInfo ResultTypeInfo, string HandlerTarget, Func<LedgerServices, OperationRegistry, IOperationHandler> HandlerFactory, string Example, IReadOnlyList<ErrorSchema>? DomainErrors = null, string MinimumContractVersion = "1.0", string MaximumContractVersion = "1.0")
 {
-    public OperationSchema ToSchema() => new(OperationId, CliPath, Kind, "{\"type\":\"object\",\"additionalProperties\":false}", "{\"type\":\"object\"}", RequestTypeInfo.Type.FullName!, ResultTypeInfo.Type.FullName!, [.. Errors, .. DomainErrors ?? []], 0, RequiresIdempotencyKey, "1.0", "1.0", HandlerTarget, Example);
+    public OperationSchema ToSchema() => new(OperationId, CliPath, Kind, "{\"type\":\"object\",\"additionalProperties\":false}", "{\"type\":\"object\"}", RequestTypeInfo.Type.FullName!, ResultTypeInfo.Type.FullName!, [.. Errors, .. DomainErrors ?? []], 0, RequiresIdempotencyKey, MinimumContractVersion, MaximumContractVersion, HandlerTarget, Example);
     private static readonly IReadOnlyList<ErrorSchema> Errors =
     [
         new("usage.invalid_input_path", "usage", 2), new("validation.invalid_input", "validation", 3), new("operation.not_found", "not_found", 4),
