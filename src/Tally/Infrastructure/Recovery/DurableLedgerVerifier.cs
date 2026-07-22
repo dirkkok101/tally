@@ -88,7 +88,8 @@ public sealed class DurableLedgerVerifier(IHostArtifactProtection artifactProtec
                 "ledger.reconciliation.decision.confirm", "ledger.reconciliation.decision.reject",
                 "ledger.reconciliation.decision.revoke", "ledger.reconciliation.decision.replace"
             ],
-            ["statement_coverage_completion"] = ["ledger.reconciliation.coverage.complete"]
+            ["statement_coverage_completion"] = ["ledger.reconciliation.coverage.complete"],
+            ["backup_artifact"] = ["ledger.backup.create"]
         };
 
     private static readonly (string Table, string Id, string Previous, string SafeType)[] HistoryChains =
