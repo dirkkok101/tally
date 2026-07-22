@@ -55,7 +55,7 @@ public sealed class ReconciliationApplyHandler(
                 token);
             if (!currentRead.IsSuccess) return CommandResult<JsonElement>.Failure(currentRead.ErrorCode!);
             var currentProjection = ManualReviewProjectionV1.Project(currentRead.Source!);
-            if (ReconciliationDispositionPolicy.ValidateProjection(normalized, currentProjection) is { } currentError)
+            if (ReconciliationDispositionPolicy.ValidateProjection(normalized, currentRead.Source!, currentProjection) is { } currentError)
                 return CommandResult<JsonElement>.Failure(currentError);
 
             var evidence = await writeStore.GetEvidenceAsync(connection, transaction, normalized.EvidenceId, token);
@@ -88,8 +88,13 @@ public sealed class ReconciliationApplyHandler(
                 createdStatementOnly = true;
             }
 
-            var shape = Shape(normalized.Disposition);
-            var matchBasis = MatchBasis(normalized, currentProjection);
+            var shape = Shape(normalized.Disposition, normalized.AuthorityKind);
+            var automaticDecision = normalized.AuthorityKind == ReconciliationAuthorityKind.DeterministicPolicy
+                ? ReconciliationPolicyV1.Evaluate(currentRead.Source!, currentProjection)
+                : null;
+            var policyId = automaticDecision?.PolicyId ?? currentProjection.PolicyId;
+            var policyVersion = automaticDecision?.PolicyVersion ?? currentProjection.PolicyVersion;
+            var matchBasis = automaticDecision?.MatchBasis ?? MatchBasis(normalized, currentProjection);
             var statementAuthorityBasis = $"scope:{normalized.ScopeId}|evidence:{normalized.EvidenceFingerprint}";
             await writeStore.InsertDecisionAsync(
                 connection,
@@ -99,17 +104,24 @@ public sealed class ReconciliationApplyHandler(
                     normalized.EvidenceId,
                     transactionId,
                     shape.BaseDisposition,
-                    ManualReviewProjectionV1.PolicyId,
-                    ManualReviewProjectionV1.PolicyVersion,
+                    policyId,
+                    policyVersion,
                     matchBasis,
                     normalized.Reason,
                     actorIdentity,
-                    occurredAt),
+                    occurredAt,
+                    normalized.AuthorityKind == ReconciliationAuthorityKind.DeterministicPolicy),
                 token);
             await writeStore.InsertDecisionAuthorityAsync(
                 connection,
                 transaction,
-                new(decisionId, shape.DetailDisposition, transactionId, statementAuthorityBasis, occurredAt),
+                new(
+                    decisionId,
+                    shape.DetailDisposition,
+                    transactionId,
+                    statementAuthorityBasis,
+                    occurredAt,
+                    normalized.AuthorityKind),
                 token);
 
             if (normalized.Disposition is ReconciliationApplyDisposition.MatchExisting or ReconciliationApplyDisposition.CreateStatementOnly)
@@ -160,22 +172,25 @@ public sealed class ReconciliationApplyHandler(
                 normalized.ExceptionCode,
                 normalized.ReviewedCandidateIds,
                 normalized.Reason,
-                currentProjection.PolicyId,
-                currentProjection.PolicyVersion,
+                policyId,
+                policyVersion,
                 currentProjection.AdvisoryToken);
             return CommandResult<JsonElement>.Success(
                 JsonSerializer.SerializeToElement(result, ReconciliationApplyJsonContext.Default.ReconciliationApplyResult));
         }, cancellationToken);
     }
 
-    private static (string BaseDisposition, string DetailDisposition) Shape(ReconciliationApplyDisposition disposition) => disposition switch
-    {
-        ReconciliationApplyDisposition.MatchExisting => ("owner_confirmed", "owner_confirmed_match"),
-        ReconciliationApplyDisposition.CreateStatementOnly => ("statement_only", "statement_only"),
-        ReconciliationApplyDisposition.RecordAmbiguous => ("ambiguous", "ambiguous"),
-        ReconciliationApplyDisposition.RecordException => ("exception", "exception"),
-        _ => throw new InvalidOperationException("Unsupported reconciliation disposition reached the write boundary.")
-    };
+    private static (string BaseDisposition, string DetailDisposition) Shape(
+        ReconciliationApplyDisposition disposition,
+        ReconciliationAuthorityKind authorityKind) => (disposition, authorityKind) switch
+        {
+            (ReconciliationApplyDisposition.MatchExisting, ReconciliationAuthorityKind.DeterministicPolicy) => ("deterministic_match", "confirmed_existing"),
+            (ReconciliationApplyDisposition.MatchExisting, _) => ("owner_confirmed", "owner_confirmed_match"),
+            (ReconciliationApplyDisposition.CreateStatementOnly, _) => ("statement_only", "statement_only"),
+            (ReconciliationApplyDisposition.RecordAmbiguous, _) => ("ambiguous", "ambiguous"),
+            (ReconciliationApplyDisposition.RecordException, _) => ("exception", "exception"),
+            _ => throw new InvalidOperationException("Unsupported reconciliation disposition reached the write boundary.")
+        };
 
     private static string MatchBasis(NormalizedReconciliationApply input, ReconciliationProjectionResult projection) =>
         $"policy={projection.PolicyId}:{projection.PolicyVersion};token={projection.AdvisoryToken};candidates={string.Join(',', input.ReviewedCandidateIds)};target={input.TargetTransactionId ?? "none"};exception={input.ExceptionCode ?? "none"}";

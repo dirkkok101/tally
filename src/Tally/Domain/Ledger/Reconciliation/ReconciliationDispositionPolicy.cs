@@ -33,9 +33,10 @@ public static class ReconciliationDispositionPolicy
             return false;
         }
 
-        if (input.AuthorityKind == ReconciliationAuthorityKind.DeterministicPolicy)
+        if (input.AuthorityKind == ReconciliationAuthorityKind.DeterministicPolicy
+            && input.Disposition != ReconciliationApplyDisposition.MatchExisting)
         {
-            error = ReconciliationApplyErrors.UnsupportedAutomaticAuthority;
+            error = ReconciliationApplyErrors.ReviewRequired;
             return false;
         }
 
@@ -83,12 +84,17 @@ public static class ReconciliationDispositionPolicy
             input.TargetTransactionId,
             fact,
             input.ExceptionCode?.Trim(),
-            reason);
+            input.AuthorityKind == ReconciliationAuthorityKind.DeterministicPolicy
+                ? ReconciliationPolicyV1.ExactUniqueCandidateReason
+                : reason);
         error = null;
         return true;
     }
 
-    public static string? ValidateProjection(NormalizedReconciliationApply input, ReconciliationProjectionResult projection)
+    public static string? ValidateProjection(
+        NormalizedReconciliationApply input,
+        ReconciliationProjectionSource source,
+        ReconciliationProjectionResult projection)
     {
         if (!string.Equals(input.EvidenceFingerprint, projection.EvidenceFingerprint, StringComparison.Ordinal))
             return ReconciliationApplyErrors.EvidenceFingerprintChanged;
@@ -105,6 +111,16 @@ public static class ReconciliationDispositionPolicy
             .ToArray();
         if (!currentCandidates.SequenceEqual(input.ReviewedCandidateIds, StringComparer.Ordinal))
             return ReconciliationApplyErrors.CandidateSetChanged;
+
+        if (input.AuthorityKind == ReconciliationAuthorityKind.DeterministicPolicy)
+        {
+            var decision = ReconciliationPolicyV1.Evaluate(source, projection);
+            if (decision.Outcome != AutomaticReconciliationOutcome.ApplyExactMatch)
+                return ReconciliationApplyErrors.ReviewRequired;
+            return string.Equals(decision.TargetTransactionId, input.TargetTransactionId, StringComparison.Ordinal)
+                ? null
+                : ReconciliationApplyErrors.TargetNotCandidate;
+        }
 
         return input.Disposition switch
         {

@@ -140,24 +140,157 @@ public sealed class ReconciliationApplyOperationTests : IAsyncLifetime
             "SELECT reason FROM reconciliation_exception WHERE exception_id = $id;", ("$id", result.ExceptionId!)));
     }
 
-    [Theory]
-    [InlineData(ReconciliationAuthorityKind.DeterministicPolicy, ReconciliationApplyDisposition.MatchExisting, ReconciliationApplyErrors.UnsupportedAutomaticAuthority)]
-    [InlineData(ReconciliationAuthorityKind.Owner, ReconciliationApplyDisposition.CorrectExistingFromStatement, ReconciliationApplyErrors.UnsupportedStatementCorrection)]
-    public async Task FR_LEDGER_STATEMENT_RECONCILIATION_rejects_reserved_authority_and_correction_without_mutation(
-        ReconciliationAuthorityKind authority,
-        ReconciliationApplyDisposition disposition,
-        string expectedError)
+    [Fact]
+    public async Task FR_LEDGER_STATEMENT_RECONCILIATION_base_module_keeps_owner_correction_in_the_composite()
     {
         var statement = await SeedStatement();
         var before = await MutationCounts();
-        var target = disposition == ReconciliationApplyDisposition.MatchExisting
-            ? await SeedTransaction(statement.AccountId, statement.AmountMinor, statement.TransactionDate)
-            : null;
-        if (target is not null) before = await MutationCounts();
 
-        var result = await Apply(statement, disposition, target is null ? [] : [target], target, authority: authority);
+        var result = await Apply(
+            statement,
+            ReconciliationApplyDisposition.CorrectExistingFromStatement,
+            [],
+            authority: ReconciliationAuthorityKind.Owner);
+
+        AssertError(result, ReconciliationApplyErrors.UnsupportedStatementCorrection);
+        Assert.Equal(before, await MutationCounts());
+    }
+
+    [Fact]
+    public async Task OQ_LEDGER_13_automatic_exact_unique_match_records_deterministic_authority()
+    {
+        var statement = await SeedStatement();
+        var target = await SeedTransaction(statement.AccountId, statement.AmountMinor, statement.TransactionDate);
+        var before = await Scalar("SELECT COUNT(*) FROM transaction_fact;");
+
+        var result = Success(await Apply(
+            statement,
+            ReconciliationApplyDisposition.MatchExisting,
+            [target],
+            target,
+            authority: ReconciliationAuthorityKind.DeterministicPolicy));
+
+        Assert.Equal(ReconciliationAuthorityKind.DeterministicPolicy, result.AuthorityKind);
+        Assert.Equal(ReconciliationPolicyV1.PolicyId, result.PolicyId);
+        Assert.Equal(ReconciliationPolicyV1.PolicyVersion, result.PolicyVersion);
+        Assert.Equal(ReconciliationPolicyV1.ExactUniqueCandidateReason, result.Reason);
+        Assert.Equal(before, await Scalar("SELECT COUNT(*) FROM transaction_fact;"));
+        Assert.Equal(TransactionReconciliationState.StatementReconciled, (await transactionStore.GetAsync(target, false, CancellationToken.None))!.ReconciliationState);
+        Assert.Equal("1|deterministic_policy|confirmed_existing", await Text("""
+            SELECT decision.deterministic || '|' || authority.authority_kind || '|' || authority.disposition_detail
+            FROM reconciliation_decision AS decision
+            JOIN reconciliation_decision_authority AS authority ON authority.decision_id = decision.decision_id
+            WHERE decision.decision_id = $id;
+            """, ("$id", result.DecisionId)));
+    }
+
+    [Theory]
+    [InlineData("guard")]
+    [InlineData("multiple")]
+    [InlineData("exact_and_guard")]
+    public async Task OQ_LEDGER_13_unproven_automatic_cases_remain_review_required(string scenario)
+    {
+        var statement = await SeedStatement();
+        var first = await SeedTransaction(
+            statement.AccountId,
+            scenario == "guard" ? statement.AmountMinor + 1 : statement.AmountMinor,
+            statement.TransactionDate);
+        var candidates = new List<string> { first };
+        if (scenario is "multiple" or "exact_and_guard")
+        {
+            candidates.Add(await SeedTransaction(
+                statement.AccountId,
+                scenario == "multiple" ? statement.AmountMinor : statement.AmountMinor + 1,
+                statement.TransactionDate));
+        }
+        var before = await MutationCounts();
+
+        var result = await Apply(
+            statement,
+            ReconciliationApplyDisposition.MatchExisting,
+            candidates,
+            first,
+            authority: ReconciliationAuthorityKind.DeterministicPolicy);
+
+        AssertError(result, ReconciliationApplyErrors.ReviewRequired);
+        Assert.Equal(before, await MutationCounts());
+    }
+
+    [Fact]
+    public async Task DD_LEDGER_IDEMPOTENT_MUTATIONS_automatic_match_replays_the_original_decision()
+    {
+        var statement = await SeedStatement();
+        var target = await SeedTransaction(statement.AccountId, statement.AmountMinor, statement.TransactionDate);
+        var first = Success(await Apply(
+            statement,
+            ReconciliationApplyDisposition.MatchExisting,
+            [target],
+            target,
+            authority: ReconciliationAuthorityKind.DeterministicPolicy,
+            key: "automatic-first"));
+        var before = await MutationCounts();
+
+        var replay = Success(await Apply(
+            statement,
+            ReconciliationApplyDisposition.MatchExisting,
+            [target],
+            target,
+            authority: ReconciliationAuthorityKind.DeterministicPolicy,
+            key: "automatic-second",
+            useCapturedProjection: first));
+
+        Assert.Equal(first.DecisionId, replay.DecisionId);
+        Assert.Equal(before, await MutationCounts());
+    }
+
+    [Theory]
+    [InlineData("fingerprint", ReconciliationApplyErrors.EvidenceFingerprintChanged)]
+    [InlineData("token", ReconciliationApplyErrors.ProjectionChanged)]
+    public async Task OQ_LEDGER_13_automatic_match_rejects_stale_projection_material(
+        string changed,
+        string expectedError)
+    {
+        var statement = await SeedStatement();
+        var target = await SeedTransaction(statement.AccountId, statement.AmountMinor, statement.TransactionDate);
+        var before = await MutationCounts();
+
+        var result = await Apply(
+            statement,
+            ReconciliationApplyDisposition.MatchExisting,
+            [target],
+            target,
+            authority: ReconciliationAuthorityKind.DeterministicPolicy,
+            fingerprint: changed == "fingerprint" ? Digest() : null,
+            token: changed == "token" ? Digest() : null);
 
         AssertError(result, expectedError);
+        Assert.Equal(before, await MutationCounts());
+    }
+
+    [Fact]
+    public async Task DD_LEDGER_IDEMPOTENT_MUTATIONS_authority_change_conflicts_with_the_original_effect()
+    {
+        var statement = await SeedStatement();
+        var target = await SeedTransaction(statement.AccountId, statement.AmountMinor, statement.TransactionDate);
+        var first = Success(await Apply(
+            statement,
+            ReconciliationApplyDisposition.MatchExisting,
+            [target],
+            target,
+            authority: ReconciliationAuthorityKind.DeterministicPolicy,
+            key: "automatic-first"));
+        var before = await MutationCounts();
+
+        var result = await Apply(
+            statement,
+            ReconciliationApplyDisposition.MatchExisting,
+            [target],
+            target,
+            authority: ReconciliationAuthorityKind.Owner,
+            key: "owner-second",
+            useCapturedProjection: first);
+
+        AssertError(result, LedgerMutationExecutor.ConflictCode);
         Assert.Equal(before, await MutationCounts());
     }
 

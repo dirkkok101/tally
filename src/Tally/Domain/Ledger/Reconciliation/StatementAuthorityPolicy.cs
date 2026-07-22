@@ -21,7 +21,9 @@ public static class StatementAuthorityPolicy
 
         if (input.AuthorityKind == ReconciliationAuthorityKind.DeterministicPolicy)
         {
-            error = ReconciliationApplyErrors.UnsupportedAutomaticAuthority;
+            error = ReconciliationPolicyV1.SupportsAutomaticCorrection
+                ? ReconciliationApplyErrors.UnsupportedAutomaticAuthority
+                : ReconciliationApplyErrors.ReviewRequired;
             return false;
         }
 

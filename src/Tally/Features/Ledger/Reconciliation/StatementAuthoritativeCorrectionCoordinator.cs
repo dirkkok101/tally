@@ -6,7 +6,6 @@ using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Reconciliation;
 using Tally.Domain.Ledger;
 using Tally.Domain.Ledger.Reconciliation;
-using Tally.Domain.Ledger.Relationships;
 using Tally.Domain.Ledger.Transactions;
 using Tally.Infrastructure.Storage.Accounts;
 using Tally.Infrastructure.Storage.Reconciliation;
@@ -117,7 +116,7 @@ public sealed class StatementAuthoritativeCorrectionCoordinator(
             {
                 return CommandResult<JsonElement>.Failure(
                     effect.ReviewRequired
-                        ? RelationshipLifecycleErrors.ReviewRequired
+                        ? ReconciliationApplyErrors.ReviewRequired
                         : effect.ErrorCode ?? StatementCorrectionEffectErrors.Conflict);
             }
 

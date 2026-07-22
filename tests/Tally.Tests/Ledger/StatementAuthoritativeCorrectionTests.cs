@@ -78,7 +78,7 @@ public sealed class StatementAuthoritativeCorrectionTests : IAsyncLifetime
     }
 
     [Fact]
-    public void FR_LEDGER_STATEMENT_RECONCILIATION_automatic_correction_remains_unsupported()
+    public void FR_LEDGER_STATEMENT_RECONCILIATION_automatic_correction_remains_review_required()
     {
         var accepted = StatementAuthorityPolicy.TryNormalize(
             ValidInput() with { AuthorityKind = ReconciliationAuthorityKind.DeterministicPolicy },
@@ -87,7 +87,7 @@ public sealed class StatementAuthoritativeCorrectionTests : IAsyncLifetime
 
         Assert.False(accepted);
         Assert.Null(normalized);
-        Assert.Equal(ReconciliationApplyErrors.UnsupportedAutomaticAuthority, error);
+        Assert.Equal(ReconciliationApplyErrors.ReviewRequired, error);
     }
 
     [Theory]
@@ -249,7 +249,7 @@ public sealed class StatementAuthoritativeCorrectionTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task FR_LEDGER_STATEMENT_RECONCILIATION_automatic_correction_returns_unsupported_without_mutation()
+    public async Task FR_LEDGER_STATEMENT_RECONCILIATION_automatic_correction_remains_review_required_without_mutation()
     {
         var account = await CreateAccount("Primary", "1111");
         var source = await Record(account.AccountId, "-12.30");
@@ -258,7 +258,7 @@ public sealed class StatementAuthoritativeCorrectionTests : IAsyncLifetime
 
         var result = await Apply(statement, source.TransactionId, authority: ReconciliationAuthorityKind.DeterministicPolicy);
 
-        AssertError(result, ReconciliationApplyErrors.UnsupportedAutomaticAuthority);
+        AssertError(result, ReconciliationApplyErrors.ReviewRequired);
         Assert.Equal(before, await MutationCounts());
     }
 

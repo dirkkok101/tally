@@ -80,6 +80,7 @@ public sealed record StatementCorrectionApplyResult(
 public static class ReconciliationApplyErrors
 {
     public const string InvalidInput = "validation.invalid_input";
+    public const string ReviewRequired = "operation.review_required";
     public const string UnsupportedAutomaticAuthority = "LEDGER-RECONCILIATION-AUTOMATIC-UNSUPPORTED";
     public const string UnsupportedStatementCorrection = "LEDGER-RECONCILIATION-CORRECTION-UNSUPPORTED";
     public const string EvidenceFingerprintChanged = "LEDGER-RECONCILIATION-EVIDENCE-CHANGED";

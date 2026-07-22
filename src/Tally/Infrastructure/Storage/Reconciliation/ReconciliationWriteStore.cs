@@ -105,7 +105,7 @@ public sealed class ReconciliationWriteStore(EvidenceStore evidenceStore, Transa
                 decision_id, evidence_id, transaction_id, disposition, policy_id, policy_version,
                 match_basis, deterministic, reason, decided_by, decided_at, previous_decision_id)
             VALUES ($decisionId, $evidenceId, $transactionId, $disposition, $policyId, $policyVersion,
-                    $matchBasis, 0, $reason, $actor, $occurredAt, NULL);
+                    $matchBasis, $deterministic, $reason, $actor, $occurredAt, NULL);
             """,
             ("$decisionId", decision.DecisionId),
             ("$evidenceId", decision.EvidenceId),
@@ -114,6 +114,7 @@ public sealed class ReconciliationWriteStore(EvidenceStore evidenceStore, Transa
             ("$policyId", decision.PolicyId),
             ("$policyVersion", decision.PolicyVersion),
             ("$matchBasis", decision.MatchBasis),
+            ("$deterministic", decision.Deterministic ? 1 : 0),
             ("$reason", decision.Reason),
             ("$actor", decision.Actor),
             ("$occurredAt", decision.OccurredAt));
@@ -131,11 +132,14 @@ public sealed class ReconciliationWriteStore(EvidenceStore evidenceStore, Transa
                 decision_id, disposition_detail, prior_transaction_id, active_transaction_id,
                 authority_kind, statement_authority_basis, schema_origin, recorded_at)
             VALUES ($decisionId, $detail, NULL, $activeTransactionId,
-                    'owner', $basis, 'v2', $occurredAt);
+                    $authorityKind, $basis, 'v2', $occurredAt);
             """,
             ("$decisionId", authority.DecisionId),
             ("$detail", authority.DispositionDetail),
             ("$activeTransactionId", authority.ActiveTransactionId),
+            ("$authorityKind", authority.AuthorityKind == ReconciliationAuthorityKind.DeterministicPolicy
+                ? "deterministic_policy"
+                : "owner"),
             ("$basis", authority.StatementAuthorityBasis),
             ("$occurredAt", authority.OccurredAt));
         await command.ExecuteNonQueryAsync(cancellationToken);
@@ -307,11 +311,13 @@ public sealed record ReconciliationDecisionWrite(
     string MatchBasis,
     string Reason,
     string Actor,
-    string OccurredAt);
+    string OccurredAt,
+    bool Deterministic = false);
 
 public sealed record ReconciliationDecisionAuthorityWrite(
     string DecisionId,
     string DispositionDetail,
     string? ActiveTransactionId,
     string StatementAuthorityBasis,
-    string OccurredAt);
+    string OccurredAt,
+    ReconciliationAuthorityKind AuthorityKind = ReconciliationAuthorityKind.Owner);
