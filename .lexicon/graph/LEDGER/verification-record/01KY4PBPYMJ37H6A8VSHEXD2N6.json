@@ -1,0 +1,13 @@
+{
+  "id": "01KY4PBPYMJ37H6A8VSHEXD2N6",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-RECONCILIATION-COVERAGE",
+  "subject_entity_id": "01KY09SPSFJPG60WKJ26MAYG1V",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-RECONCILIATION-COVERAGE-CONTRACT",
+  "note": "Completed-scope coverage records exact statement-row and eligible-transaction outcomes with append-only history; later owner decisions and statement corrections re-derive current state. Coverage tests 45/45, reconciliation tests 279/279, and full tests 871/871 passed; build, format verification, provider-neutral scan, and isolated native AOT publish passed.",
+  "commit_sha": "64f912a5923f3d42bd22be094237c327ccb7e852",
+  "bead_id": "bd-2ae",
+  "verified_at": "2026-07-22T10:36:21.8452701+00:00"
+}
