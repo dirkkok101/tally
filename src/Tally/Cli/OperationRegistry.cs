@@ -96,6 +96,20 @@ public sealed class OperationRegistry
             "ledger.transaction.pool.correct" => PoolAssignmentDescriptor(operationId, LedgerJsonContext.Default.CorrectPoolInput, "Correct"),
             "ledger.evidence.register" => new(operationId, "tally ledger evidence register", "mutation", true, LedgerJsonContext.Default.RegisterEvidenceInput, LedgerJsonContext.Default.EvidenceRecordDetail, "EvidenceRegistryOperationModule.Register", static (services, _) => services.EvidenceRegistry is { } module ? new EvidenceRegistryOperationHandler(module, "ledger.evidence.register") : new FoundationOperationHandler(), "tally ledger evidence register --input -"),
             "ledger.evidence.get" => new(operationId, "tally ledger evidence get", "query", false, LedgerJsonContext.Default.GetEvidenceInput, LedgerJsonContext.Default.EvidenceRecordDetail, "EvidenceRegistryOperationModule.Get", static (services, _) => services.EvidenceRegistry is { } module ? new EvidenceRegistryOperationHandler(module, "ledger.evidence.get") : new FoundationOperationHandler(), "tally ledger evidence get --input -"),
+            "ledger.evidence.link-supporting" => new(
+                operationId, "tally ledger evidence link-supporting", "mutation", true,
+                LedgerJsonContext.Default.LinkSupportingEvidenceInput, LedgerJsonContext.Default.EvidenceLinkResult,
+                "EvidenceLinkOperationModule.LinkSupporting",
+                static (services, _) => services.EvidenceLinks is { } module ? new EvidenceLinkOperationHandler(module) : new FoundationOperationHandler(),
+                "tally ledger evidence link-supporting --input -",
+                [
+                    new(EvidenceLinkErrors.Invalid, "validation", 3),
+                    new(EvidenceLinkErrors.EvidenceNotFound, "not_found", 4),
+                    new(TransactionErrors.NotFound, "not_found", 4),
+                    new(TransactionFact.EvidenceIncompatibleError, "validation", 3),
+                    new(EvidenceLinkErrors.Conflict, "conflict", 5),
+                    new(EvidenceLinkErrors.TransactionInactive, "lifecycle", 6)
+                ]),
             _ => new(operationId, "tally " + operationId.Replace('.', ' '), isQuery ? "query" : "mutation", !isQuery, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.OperationUnavailableResult, "FoundationOperationHandler", static (_, _) => new FoundationOperationHandler(), "tally " + operationId.Replace('.', ' '))
         };
     }

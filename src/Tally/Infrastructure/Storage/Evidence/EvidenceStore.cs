@@ -74,7 +74,18 @@ public sealed class EvidenceStore(LedgerDb database, LedgerConnectionFactory con
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Ledger storage requires Linux host protections.");
         await using var connection = await connectionFactory.OpenAsync(database, CompleteLedgerSchema.CurrentVersion, cancellationToken);
+        return await GetAsync(connection, null, evidenceId, true, cancellationToken);
+    }
+
+    public async Task<EvidenceRecordDetail?> GetAsync(
+        SqliteConnection connection,
+        SqliteTransaction? transaction,
+        string evidenceId,
+        bool includeHistory,
+        CancellationToken cancellationToken)
+    {
         await using var command = connection.CreateCommand();
+        command.Transaction = transaction;
         command.CommandText = """
             SELECT record.evidence_id, record.kind, record.logical_identity_digest,
                    record.opaque_external_reference, record.content_fingerprint,
@@ -102,7 +113,62 @@ public sealed class EvidenceStore(LedgerDb database, LedgerConnectionFactory con
             reader.GetString(6),
             []);
         await reader.DisposeAsync();
-        return detail with { LinkHistory = await LinkHistoryAsync(connection, evidenceId, cancellationToken) };
+        return includeHistory
+            ? detail with { LinkHistory = await LinkHistoryAsync(connection, transaction, evidenceId, cancellationToken) }
+            : detail;
+    }
+
+    public async Task<IReadOnlyList<EvidenceLinkHistoryItem>> CurrentLinksAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        string evidenceId,
+        CancellationToken cancellationToken)
+    {
+        await using var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        command.CommandText = """
+            SELECT link_event_id, transaction_id, role, action, decision_id, reason, recorded_by, recorded_at, previous_link_event_id
+            FROM evidence_link_event AS link
+            WHERE evidence_id = $id
+              AND NOT EXISTS (
+                  SELECT 1 FROM evidence_link_event AS successor
+                  WHERE successor.previous_link_event_id = link.link_event_id)
+            ORDER BY recorded_at, link_event_id;
+            """;
+        command.Parameters.AddWithValue("$id", evidenceId);
+        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+        var links = new List<EvidenceLinkHistoryItem>();
+        while (await reader.ReadAsync(cancellationToken)) links.Add(ReadLink(reader));
+        return links;
+    }
+
+    public async Task AppendSupportingLinkAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        string linkEventId,
+        string evidenceId,
+        string transactionId,
+        string reason,
+        string actor,
+        string recordedAt,
+        CancellationToken cancellationToken)
+    {
+        await using var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        command.CommandText = """
+            INSERT INTO evidence_link_event (
+                link_event_id, evidence_id, transaction_id, role, action, decision_id,
+                reason, recorded_by, recorded_at, previous_link_event_id)
+            VALUES ($linkId, $evidenceId, $transactionId, 'supporting', 'link', NULL,
+                    $reason, $actor, $recordedAt, NULL);
+            """;
+        command.Parameters.AddWithValue("$linkId", linkEventId);
+        command.Parameters.AddWithValue("$evidenceId", evidenceId);
+        command.Parameters.AddWithValue("$transactionId", transactionId);
+        command.Parameters.AddWithValue("$reason", reason);
+        command.Parameters.AddWithValue("$actor", actor);
+        command.Parameters.AddWithValue("$recordedAt", recordedAt);
+        await command.ExecuteNonQueryAsync(cancellationToken);
     }
 
     public async Task<bool> ObservationReferencesExistAsync(SqliteConnection connection, SqliteTransaction transaction, EvidenceObservation? observation, CancellationToken cancellationToken)
@@ -113,9 +179,10 @@ public sealed class EvidenceStore(LedgerDb database, LedgerConnectionFactory con
             && await ExistsAsync(connection, transaction, "cardholder", "cardholder_id", observation.CardholderId, cancellationToken);
     }
 
-    private static async Task<IReadOnlyList<EvidenceLinkHistoryItem>> LinkHistoryAsync(SqliteConnection connection, string evidenceId, CancellationToken cancellationToken)
+    private static async Task<IReadOnlyList<EvidenceLinkHistoryItem>> LinkHistoryAsync(SqliteConnection connection, SqliteTransaction? transaction, string evidenceId, CancellationToken cancellationToken)
     {
         await using var command = connection.CreateCommand();
+        command.Transaction = transaction;
         command.CommandText = """
             SELECT link_event_id, transaction_id, role, action, decision_id, reason, recorded_by, recorded_at, previous_link_event_id
             FROM evidence_link_event
@@ -125,15 +192,14 @@ public sealed class EvidenceStore(LedgerDb database, LedgerConnectionFactory con
         command.Parameters.AddWithValue("$id", evidenceId);
         await using var reader = await command.ExecuteReaderAsync(cancellationToken);
         var history = new List<EvidenceLinkHistoryItem>();
-        while (await reader.ReadAsync(cancellationToken))
-        {
-            history.Add(new(
-                reader.GetString(0), reader.GetString(1), ParseRole(reader.GetString(2)), ParseAction(reader.GetString(3)),
-                OptionalString(reader, 4), reader.GetString(5), reader.GetString(6), reader.GetString(7), OptionalString(reader, 8)));
-        }
+        while (await reader.ReadAsync(cancellationToken)) history.Add(ReadLink(reader));
 
         return history;
     }
+
+    private static EvidenceLinkHistoryItem ReadLink(SqliteDataReader reader) => new(
+        reader.GetString(0), reader.GetString(1), ParseRole(reader.GetString(2)), ParseAction(reader.GetString(3)),
+        OptionalString(reader, 4), reader.GetString(5), reader.GetString(6), reader.GetString(7), OptionalString(reader, 8));
 
     private static async Task<bool> ExistsAsync(SqliteConnection connection, SqliteTransaction transaction, string table, string column, string? value, CancellationToken cancellationToken)
     {

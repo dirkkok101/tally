@@ -32,6 +32,8 @@ public sealed record EmptyInput;
 [JsonSerializable(typeof(GetEvidenceInput))]
 [JsonSerializable(typeof(EvidenceRecordDetail))]
 [JsonSerializable(typeof(EvidenceLinkHistoryItem[]))]
+[JsonSerializable(typeof(LinkSupportingEvidenceInput))]
+[JsonSerializable(typeof(EvidenceLinkResult))]
 [JsonSerializable(typeof(CreateAccountInput))]
 [JsonSerializable(typeof(GetAccountInput))]
 [JsonSerializable(typeof(ListAccountsInput))]
