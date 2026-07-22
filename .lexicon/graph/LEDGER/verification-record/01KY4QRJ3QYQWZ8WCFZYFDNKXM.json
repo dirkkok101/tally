@@ -1,0 +1,13 @@
+{
+  "id": "01KY4QRJ3QYQWZ8WCFZYFDNKXM",
+  "subject_type": "decision",
+  "subject_ref_code": "DD-LEDGER-CLI-OPERATION-CONTRACT",
+  "subject_entity_id": "01KXSWZ691B67MGFHJNAQ12FPF",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY",
+  "note": "ReconciliationOperationBundle exposes exactly nine typed provider-neutral descriptors. Focused 37/37, reconciliation 315/315, full 908/908, build and format clean, Native AOT publish passed; exact, automatic, corrected, statement-only, ambiguous, coverage, relationship, crash/retry and idempotent history paths proved.",
+  "commit_sha": "3dbe311",
+  "bead_id": "bd-1f1",
+  "verified_at": "2026-07-22T11:00:51.4485699+00:00"
+}
