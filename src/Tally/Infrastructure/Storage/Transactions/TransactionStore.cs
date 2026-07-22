@@ -138,7 +138,7 @@ public sealed class TransactionStore(LedgerDb database, LedgerConnectionFactory 
                         WHERE decision.transaction_id = fact.transaction_id
                         ORDER BY decision.decided_at DESC, decision.decision_id DESC LIMIT 1),
                        'recorded_unreconciled'),
-                   category.category_id, category.ancestry_ids,
+                   allocation.allocation_event_id, category.category_id, category.ancestry_ids,
                    pool.assignment_state, pool.pool_id,
                    attribution.instrument_state, attribution.instrument_id,
                    attribution.cardholder_state, attribution.cardholder_id,
@@ -166,13 +166,13 @@ public sealed class TransactionStore(LedgerDb database, LedgerConnectionFactory 
             Optional(reader, 9),
             ParseReconciliation(reader.GetString(10)),
             reader.IsDBNull(11)
-                ? new(TransactionCategoryState.Uncategorized, null, [])
-                : new(TransactionCategoryState.Categorized, reader.GetString(11), ParseAncestry(reader.GetString(12))),
-            new(ParsePoolState(reader.GetString(13)), Optional(reader, 14)),
-            new(ParseKnowledge(reader.GetString(15)), Optional(reader, 16), ParseKnowledge(reader.GetString(17)), Optional(reader, 18)),
+                ? new(TransactionCategoryState.Uncategorized, null, null, [])
+                : new(TransactionCategoryState.Categorized, reader.GetString(11), reader.GetString(12), ParseAncestry(reader.GetString(13))),
+            new(ParsePoolState(reader.GetString(14)), Optional(reader, 15)),
+            new(ParseKnowledge(reader.GetString(16)), Optional(reader, 17), ParseKnowledge(reader.GetString(18)), Optional(reader, 19)),
             [],
-            reader.GetString(19),
             reader.GetString(20),
+            reader.GetString(21),
             null);
         await reader.DisposeAsync();
 
@@ -255,10 +255,10 @@ public sealed class TransactionStore(LedgerDb database, LedgerConnectionFactory 
 
     private static async Task<IReadOnlyList<TransactionCategoryHistoryItem>> CategoryHistoryAsync(SqliteConnection connection, SqliteTransaction? transaction, string transactionId, CancellationToken cancellationToken)
     {
-        await using var command = Command(connection, transaction, "SELECT allocation_event_id, category_id, action, previous_event_id, reason, actor, occurred_at FROM category_allocation_event WHERE transaction_id = $id ORDER BY occurred_at, allocation_event_id;", ("$id", transactionId));
+        await using var command = Command(connection, transaction, "SELECT allocation_event_id, category_id, action, previous_event_id, source_transaction_id, reconciliation_decision_id, reason, actor, occurred_at FROM category_allocation_event WHERE transaction_id = $id ORDER BY occurred_at, allocation_event_id;", ("$id", transactionId));
         await using var reader = await command.ExecuteReaderAsync(cancellationToken);
         var items = new List<TransactionCategoryHistoryItem>();
-        while (await reader.ReadAsync(cancellationToken)) items.Add(new(reader.GetString(0), reader.GetString(1), ParseCategoryAction(reader.GetString(2)), Optional(reader, 3), reader.GetString(4), reader.GetString(5), reader.GetString(6)));
+        while (await reader.ReadAsync(cancellationToken)) items.Add(new(reader.GetString(0), reader.GetString(1), ParseCategoryAction(reader.GetString(2)), Optional(reader, 3), Optional(reader, 4), Optional(reader, 5), reader.GetString(6), reader.GetString(7), reader.GetString(8)));
         return items;
     }
 

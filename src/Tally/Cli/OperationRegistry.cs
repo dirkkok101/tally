@@ -88,6 +88,8 @@ public sealed class OperationRegistry
             "ledger.pool.reactivate" => SpendPoolDescriptor(operationId, LedgerJsonContext.Default.ReactivateSpendPoolInput, LedgerJsonContext.Default.SpendPoolLifecycleResult, "Reactivate"),
             "ledger.transaction.record" => TransactionDescriptor(operationId, LedgerJsonContext.Default.RecordTransactionInput, true, "Record"),
             "ledger.transaction.get" => TransactionDescriptor(operationId, LedgerJsonContext.Default.GetTransactionInput, false, "Get"),
+            "ledger.transaction.category.assign" => CategoryAllocationDescriptor(operationId, LedgerJsonContext.Default.AssignCategoryInput, "Assign"),
+            "ledger.transaction.category.correct" => CategoryAllocationDescriptor(operationId, LedgerJsonContext.Default.CorrectCategoryInput, "Correct"),
             "ledger.evidence.register" => new(operationId, "tally ledger evidence register", "mutation", true, LedgerJsonContext.Default.RegisterEvidenceInput, LedgerJsonContext.Default.EvidenceRecordDetail, "EvidenceRegistryOperationModule.Register", static (services, _) => services.EvidenceRegistry is { } module ? new EvidenceRegistryOperationHandler(module, "ledger.evidence.register") : new FoundationOperationHandler(), "tally ledger evidence register --input -"),
             "ledger.evidence.get" => new(operationId, "tally ledger evidence get", "query", false, LedgerJsonContext.Default.GetEvidenceInput, LedgerJsonContext.Default.EvidenceRecordDetail, "EvidenceRegistryOperationModule.Get", static (services, _) => services.EvidenceRegistry is { } module ? new EvidenceRegistryOperationHandler(module, "ledger.evidence.get") : new FoundationOperationHandler(), "tally ledger evidence get --input -"),
             _ => new(operationId, "tally " + operationId.Replace('.', ' '), isQuery ? "query" : "mutation", !isQuery, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.OperationUnavailableResult, "FoundationOperationHandler", static (_, _) => new FoundationOperationHandler(), "tally " + operationId.Replace('.', ' '))
@@ -182,6 +184,25 @@ public sealed class OperationRegistry
         "ledger.transaction.get" => [new(TransactionFact.InvalidError, "validation", 3), new(TransactionErrors.NotFound, "not_found", 4)],
         _ => []
     };
+
+    private static OperationDescriptor CategoryAllocationDescriptor(string operationId, JsonTypeInfo request, string target) => new(
+        operationId, "tally " + operationId.Replace('.', ' '), "mutation", true, request, LedgerJsonContext.Default.CategoryAllocationResult,
+        "CategoryAllocationOperationModule." + target,
+        (services, _) => services.CategoryAllocations is { } module ? new CategoryAllocationOperationHandler(module, operationId) : new FoundationOperationHandler(),
+        "tally " + operationId.Replace('.', ' ') + " --input -", CategoryAllocationErrorsFor(operationId));
+
+    private static IReadOnlyList<ErrorSchema> CategoryAllocationErrorsFor(string operationId) =>
+    [
+        new(CategoryAllocation.InvalidError, "validation", 3),
+        new(TransactionErrors.NotFound, "not_found", 4),
+        new(CategoryErrors.NotFound, "not_found", 4),
+        new(CategoryAllocationErrors.TransactionInactive, "lifecycle", 6),
+        new(CategoryErrors.Archived, "lifecycle", 6),
+        new(CategoryAllocationErrors.Cardinality, "conflict", 5),
+        .. (operationId.EndsWith(".correct", StringComparison.Ordinal)
+            ? new ErrorSchema[] { new(CategoryAllocationErrors.NotAssigned, "lifecycle", 6), new(CategoryAllocationErrors.Unchanged, "conflict", 5) }
+            : [])
+    ];
     private static readonly string[] Inventory =
     [
         "ledger.account.create","ledger.account.get","ledger.account.list","ledger.account.rename","ledger.account.archive",

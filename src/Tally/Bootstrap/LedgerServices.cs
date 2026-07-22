@@ -14,9 +14,9 @@ using Tally.Infrastructure.Storage.Transactions;
 
 namespace Tally.Bootstrap;
 
-public sealed record LedgerServices(SystemOperationModule SystemOperations, AccountOperationModule? Accounts, CategoryOperationModule? Categories, PaymentIdentityOperationModule? PaymentIdentities, SpendPoolOperationModule? SpendPools, EvidenceRegistryOperationModule? EvidenceRegistry, TransactionOperationModule? Transactions)
+public sealed record LedgerServices(SystemOperationModule SystemOperations, AccountOperationModule? Accounts, CategoryOperationModule? Categories, PaymentIdentityOperationModule? PaymentIdentities, SpendPoolOperationModule? SpendPools, EvidenceRegistryOperationModule? EvidenceRegistry, TransactionOperationModule? Transactions, CategoryAllocationOperationModule? CategoryAllocations)
 {
-    public static LedgerServices Create() => new(new SystemOperationModule(), null, null, null, null, null, null);
+    public static LedgerServices Create() => new(new SystemOperationModule(), null, null, null, null, null, null, null);
 
     public static LedgerServices Create(LedgerDb database)
     {
@@ -51,6 +51,10 @@ public sealed record LedgerServices(SystemOperationModule SystemOperations, Acco
         var transactions = new TransactionOperationModule(
             new RecordTransactionHandler(executor, accountStore, paymentIdentityStore, evidenceStore, transactionStore),
             new GetTransactionHandler(transactionStore));
-        return new(new SystemOperationModule(), accounts, categories, paymentIdentities, spendPools, evidence, transactions);
+        var categoryAllocationStore = new CategoryAllocationStore(database, factory);
+        var categoryAllocations = new CategoryAllocationOperationModule(
+            new AssignCategoryHandler(executor, transactionStore, categoryStore, categoryAllocationStore),
+            new CorrectCategoryHandler(executor, transactionStore, categoryStore, categoryAllocationStore));
+        return new(new SystemOperationModule(), accounts, categories, paymentIdentities, spendPools, evidence, transactions, categoryAllocations);
     }
 }

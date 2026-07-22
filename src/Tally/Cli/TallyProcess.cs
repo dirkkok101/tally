@@ -112,6 +112,9 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
         "LEDGER-TRANSACTION-NOT-FOUND" => Error(4, code, "not_found", "The transaction was not found."),
         "LEDGER-TRANSACTION-EVIDENCE-CONFLICT" => Error(5, code, "conflict", "The transaction evidence conflicts with existing state."),
         "LEDGER-TRANSACTION-ATTRIBUTION-INCOMPATIBLE" => Error(6, code, "lifecycle", "The transaction payment attribution is incompatible."),
+        "LEDGER-CATEGORY-ALLOCATION-INVALID" => Error(3, code, "validation", "The category assignment input is invalid."),
+        "LEDGER-CATEGORY-ALLOCATION-CARDINALITY" or "LEDGER-CATEGORY-ALLOCATION-UNCHANGED" => Error(5, code, "conflict", "The category assignment conflicts with current state."),
+        "LEDGER-CATEGORY-ALLOCATION-NOT-ASSIGNED" or "LEDGER-TRANSACTION-INACTIVE" => Error(6, code, "lifecycle", "The transaction category lifecycle does not allow the operation."),
         "LEDGER-IDEMPOTENCY-001" or "operation.conflict" => Error(5, code, "conflict", "The operation conflicts with existing state."),
         "host.unavailable" => Error(9, code, "host", "The requested operation is not available in this foundation."),
         _ => UnexpectedFailure()
