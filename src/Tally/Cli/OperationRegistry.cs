@@ -75,6 +75,12 @@ public sealed class OperationRegistry
             "ledger.cardholder.rename" => PaymentIdentityDescriptor(operationId, LedgerJsonContext.Default.RenameCardholderInput, LedgerJsonContext.Default.CardholderLifecycleResult, "Rename"),
             "ledger.cardholder.archive" => PaymentIdentityDescriptor(operationId, LedgerJsonContext.Default.ArchiveCardholderInput, LedgerJsonContext.Default.CardholderLifecycleResult, "Archive"),
             "ledger.cardholder.reactivate" => PaymentIdentityDescriptor(operationId, LedgerJsonContext.Default.ReactivateCardholderInput, LedgerJsonContext.Default.CardholderLifecycleResult, "Reactivate"),
+            "ledger.pool.create" => SpendPoolDescriptor(operationId, LedgerJsonContext.Default.CreateSpendPoolInput, LedgerJsonContext.Default.SpendPoolDetail, "Create"),
+            "ledger.pool.get" => SpendPoolDescriptor(operationId, LedgerJsonContext.Default.GetSpendPoolInput, LedgerJsonContext.Default.SpendPoolDetail, "Get"),
+            "ledger.pool.list" => SpendPoolDescriptor(operationId, LedgerJsonContext.Default.ListSpendPoolsInput, LedgerJsonContext.Default.SpendPoolListResult, "List"),
+            "ledger.pool.rename" => SpendPoolDescriptor(operationId, LedgerJsonContext.Default.RenameSpendPoolInput, LedgerJsonContext.Default.SpendPoolLifecycleResult, "Rename"),
+            "ledger.pool.archive" => SpendPoolDescriptor(operationId, LedgerJsonContext.Default.ArchiveSpendPoolInput, LedgerJsonContext.Default.SpendPoolLifecycleResult, "Archive"),
+            "ledger.pool.reactivate" => SpendPoolDescriptor(operationId, LedgerJsonContext.Default.ReactivateSpendPoolInput, LedgerJsonContext.Default.SpendPoolLifecycleResult, "Reactivate"),
             "ledger.evidence.register" => new(operationId, "tally ledger evidence register", "mutation", true, LedgerJsonContext.Default.RegisterEvidenceInput, LedgerJsonContext.Default.EvidenceRecordDetail, "EvidenceRegistryOperationModule.Register", static (services, _) => services.EvidenceRegistry is { } module ? new EvidenceRegistryOperationHandler(module, "ledger.evidence.register") : new FoundationOperationHandler(), "tally ledger evidence register --input -"),
             "ledger.evidence.get" => new(operationId, "tally ledger evidence get", "query", false, LedgerJsonContext.Default.GetEvidenceInput, LedgerJsonContext.Default.EvidenceRecordDetail, "EvidenceRegistryOperationModule.Get", static (services, _) => services.EvidenceRegistry is { } module ? new EvidenceRegistryOperationHandler(module, "ledger.evidence.get") : new FoundationOperationHandler(), "tally ledger evidence get --input -"),
             _ => new(operationId, "tally " + operationId.Replace('.', ' '), isQuery ? "query" : "mutation", !isQuery, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.OperationUnavailableResult, "FoundationOperationHandler", static (_, _) => new FoundationOperationHandler(), "tally " + operationId.Replace('.', ' '))
@@ -131,6 +137,23 @@ public sealed class OperationRegistry
         if (operationId.EndsWith(".archive", StringComparison.Ordinal)) errors.Add(new(alreadyArchived, "lifecycle", 6));
         if (operationId.EndsWith(".reactivate", StringComparison.Ordinal)) errors.Add(new(alreadyActive, "lifecycle", 6));
         if (instrument && (operationId.EndsWith(".create", StringComparison.Ordinal) || operationId.EndsWith(".reactivate", StringComparison.Ordinal))) errors.Add(new(PaymentIdentityErrors.InstrumentAccountNotActive, "lifecycle", 6));
+        return errors;
+    }
+
+    private static OperationDescriptor SpendPoolDescriptor(string operationId, JsonTypeInfo request, JsonTypeInfo result, string target) => new(
+        operationId, "tally " + operationId.Replace('.', ' '), operationId.EndsWith(".get", StringComparison.Ordinal) || operationId.EndsWith(".list", StringComparison.Ordinal) ? "query" : "mutation",
+        !operationId.EndsWith(".get", StringComparison.Ordinal) && !operationId.EndsWith(".list", StringComparison.Ordinal), request, result,
+        "SpendPoolOperationModule." + target, (services, _) => services.SpendPools is { } module ? new SpendPoolOperationHandler(module, operationId) : new FoundationOperationHandler(),
+        "tally " + operationId.Replace('.', ' ') + " --input -", SpendPoolErrorsFor(operationId));
+
+    private static IReadOnlyList<ErrorSchema> SpendPoolErrorsFor(string operationId)
+    {
+        var errors = new List<ErrorSchema> { new(SpendPool.InvalidError, "validation", 3) };
+        if (!operationId.EndsWith(".create", StringComparison.Ordinal) && !operationId.EndsWith(".list", StringComparison.Ordinal)) errors.Add(new(SpendPoolErrors.NotFound, "not_found", 4));
+        if (operationId.EndsWith(".create", StringComparison.Ordinal) || operationId.EndsWith(".rename", StringComparison.Ordinal) || operationId.EndsWith(".reactivate", StringComparison.Ordinal)) errors.Add(new(SpendPoolErrors.Duplicate, "conflict", 5));
+        if (operationId.EndsWith(".rename", StringComparison.Ordinal)) errors.Add(new(SpendPoolErrors.Archived, "lifecycle", 6));
+        if (operationId.EndsWith(".archive", StringComparison.Ordinal)) errors.Add(new(SpendPoolErrors.AlreadyArchived, "lifecycle", 6));
+        if (operationId.EndsWith(".reactivate", StringComparison.Ordinal)) errors.Add(new(SpendPoolErrors.AlreadyActive, "lifecycle", 6));
         return errors;
     }
     private static readonly string[] Inventory =

@@ -4,6 +4,7 @@ using Tally.Bootstrap;
 using Tally.Cli;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Categories;
+using Tally.Contracts.Ledger.Dimensions;
 using Tally.Domain.Ledger;
 using Tally.Features.Ledger.Categories;
 using Tally.Infrastructure.Storage;
@@ -30,7 +31,7 @@ public sealed class CategoryOperationTests : IAsyncLifetime
     [Fact] public async Task Mutation_replay_is_stable_and_changed_replay_conflicts() { var first = Detail(await Create("Root", null, "same")); var replay = Detail(await Create("Root", null, "same")); Assert.Equal(first.CategoryId, replay.CategoryId); AssertError(await Create("Changed", null, "same"), 5, "LEDGER-IDEMPOTENCY-001"); }
     [Fact] public async Task Rename_reparent_archive_and_reactivate_replays_return_original_events() { var first = Detail(await Create("First", null, "a")); var second = Detail(await Create("Second", null, "b")); var rename = Lifecycle(await Rename(first.CategoryId, "Renamed", "why", "rename")); Assert.Equal(rename.LifecycleEventId, Lifecycle(await Rename(first.CategoryId, "Renamed", "why", "rename")).LifecycleEventId); var move = Reparented(await Reparent(first.CategoryId, second.CategoryId, "move", "move")); Assert.Equal(move.ParentEventId, Reparented(await Reparent(first.CategoryId, second.CategoryId, "move", "move")).ParentEventId); var archive = Lifecycle(await Archive(first.CategoryId, "old", "archive")); Assert.Equal(archive.LifecycleEventId, Lifecycle(await Archive(first.CategoryId, "old", "archive")).LifecycleEventId); var active = Lifecycle(await Reactivate(first.CategoryId, "back", "active")); Assert.Equal(active.LifecycleEventId, Lifecycle(await Reactivate(first.CategoryId, "back", "active")).LifecycleEventId); }
     [Fact] public async Task Get_history_is_explicit_and_unknown_is_stable() { var category = Detail(await Create("Root", null, "a")); await Rename(category.CategoryId, "Renamed", "why", "b"); Assert.Empty(Detail(await Get(category.CategoryId, false)).LifecycleHistory); Assert.Equal(2, Detail(await Get(category.CategoryId, true)).LifecycleHistory.Count); AssertError(await Get(LedgerId.New().ToString(), false), 4, CategoryErrors.NotFound); }
-    [Fact] public async Task Category_creation_does_not_create_a_spend_pool() { await Create("Food", null, "a"); var result = await Run("ledger.pool.list", Json("{}"), null); Assert.Equal(9, result.ExitCode); }
+    [Fact] public async Task Category_creation_does_not_create_a_spend_pool() { await Create("Food", null, "a"); var result = await Run("ledger.pool.list", Json("{}"), null); Assert.Empty(Success(result, LedgerJsonContext.Default.SpendPoolListResult).Items); }
 
     public async Task InitializeAsync() { var db = await LedgerRuntimeBootstrap.InitializeCurrentAsync(root, CancellationToken.None); process = new(OperationRegistry.Create(), LedgerServices.Create(db)); }
     public Task DisposeAsync() { if (Directory.Exists(root)) Directory.Delete(root, true); return Task.CompletedTask; }

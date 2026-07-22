@@ -12,9 +12,9 @@ using Tally.Infrastructure.Storage.Evidence;
 
 namespace Tally.Bootstrap;
 
-public sealed record LedgerServices(SystemOperationModule SystemOperations, AccountOperationModule? Accounts, CategoryOperationModule? Categories, PaymentIdentityOperationModule? PaymentIdentities, EvidenceRegistryOperationModule? EvidenceRegistry)
+public sealed record LedgerServices(SystemOperationModule SystemOperations, AccountOperationModule? Accounts, CategoryOperationModule? Categories, PaymentIdentityOperationModule? PaymentIdentities, SpendPoolOperationModule? SpendPools, EvidenceRegistryOperationModule? EvidenceRegistry)
 {
-    public static LedgerServices Create() => new(new SystemOperationModule(), null, null, null, null);
+    public static LedgerServices Create() => new(new SystemOperationModule(), null, null, null, null, null);
 
     public static LedgerServices Create(LedgerDb database)
     {
@@ -39,8 +39,12 @@ public sealed record LedgerServices(SystemOperationModule SystemOperations, Acco
             new RenamePaymentInstrumentHandler(executor, paymentIdentityStore), new ArchivePaymentInstrumentHandler(executor, paymentIdentityStore), new ReactivatePaymentInstrumentHandler(executor, paymentIdentityStore),
             new CreateCardholderHandler(executor, paymentIdentityStore), new GetCardholderHandler(paymentIdentityStore), new ListCardholdersHandler(paymentIdentityStore),
             new RenameCardholderHandler(executor, paymentIdentityStore), new ArchiveCardholderHandler(executor, paymentIdentityStore), new ReactivateCardholderHandler(executor, paymentIdentityStore));
+        var spendPoolStore = new SpendPoolStore(database, factory);
+        var spendPools = new SpendPoolOperationModule(
+            new CreateSpendPoolHandler(executor, spendPoolStore), new GetSpendPoolHandler(spendPoolStore), new ListSpendPoolsHandler(spendPoolStore),
+            new RenameSpendPoolHandler(executor, spendPoolStore), new ArchiveSpendPoolHandler(executor, spendPoolStore), new ReactivateSpendPoolHandler(executor, spendPoolStore));
         var evidenceStore = new EvidenceStore(database, factory);
         var evidence = new EvidenceRegistryOperationModule(new RegisterEvidenceHandler(executor, evidenceStore), new GetEvidenceHandler(evidenceStore));
-        return new(new SystemOperationModule(), accounts, categories, paymentIdentities, evidence);
+        return new(new SystemOperationModule(), accounts, categories, paymentIdentities, spendPools, evidence);
     }
 }
