@@ -39,6 +39,8 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
         Assert.Equal(descriptor.Kind == "mutation", descriptor.RequiresIdempotencyKey);
         Assert.Equal(schema.Errors.Count, schema.Errors.Select(error => error.Code).Distinct(StringComparer.Ordinal).Count());
         Assert.Contains(schema.Errors, error => error.Code == "contract.incompatible" && error.ExitCode == 7);
+        AssertObjectSchema(schema.RequestSchema, descriptor.RequestTypeInfo.Properties.Select(property => property.Name));
+        AssertObjectSchema(schema.ResultSchema, descriptor.ResultTypeInfo.Properties.Select(property => property.Name));
         if (descriptor.RequiresIdempotencyKey)
         {
             Assert.Contains(schema.Errors, error => error.Code == "LEDGER-IDEMPOTENCY-001" && error.ExitCode == 5);
@@ -136,6 +138,22 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
     }
 
     [Fact]
+    public void FR_LEDGER_CONTRACT_DISCOVERY_publishes_required_fields_and_closed_vocabularies()
+    {
+        var account = Assert.IsType<OperationDescriptor>(OperationRegistry.Create().Find("ledger.account.create")).ToSchema();
+        using var request = JsonDocument.Parse(account.RequestSchema);
+        var root = request.RootElement;
+
+        Assert.Equal(
+            new[] { "accountType", "currencyCode", "displayName", "institutionName", "maskedIdentifier" },
+            root.GetProperty("required").EnumerateArray().Select(item => item.GetString()).Order(StringComparer.Ordinal));
+        Assert.Equal(
+            new[] { "cheque", "credit_card", "other_asset", "other_liability", "savings" },
+            root.GetProperty("properties").GetProperty("accountType").GetProperty("enum").EnumerateArray()
+                .Select(item => item.GetString()).Order(StringComparer.Ordinal));
+    }
+
+    [Fact]
     public void TC_LEDGER_AGENT_CONTRACT_CONFORMANCE_inventory_is_byte_stable_across_repeated_builds()
     {
         Assert.Equal(OperationRegistry.Create().SchemaListJson(), OperationRegistry.Create().SchemaListJson());
@@ -164,6 +182,25 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
         }
 
         throw new InvalidOperationException("Could not locate the Tally repository root.");
+    }
+
+    private static void AssertObjectSchema(string schemaJson, IEnumerable<string> expectedPropertyNames)
+    {
+        using var document = JsonDocument.Parse(schemaJson);
+        var schema = document.RootElement;
+        var expected = expectedPropertyNames.Order(StringComparer.Ordinal).ToArray();
+
+        Assert.Equal("object", schema.GetProperty("type").GetString());
+        Assert.False(schema.GetProperty("additionalProperties").GetBoolean());
+        if (expected.Length == 0)
+        {
+            Assert.False(schema.TryGetProperty("properties", out var emptyProperties) && emptyProperties.EnumerateObject().Any());
+            return;
+        }
+
+        Assert.Equal(
+            expected,
+            schema.GetProperty("properties").EnumerateObject().Select(property => property.Name).Order(StringComparer.Ordinal));
     }
 }
 

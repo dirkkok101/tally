@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
+using System.Text.Json.Schema;
 using System.Text.Json.Serialization.Metadata;
 using Tally.Application;
 using Tally.Bootstrap;
@@ -34,7 +35,10 @@ namespace Tally.Cli;
 
 public sealed record OperationDescriptor(string OperationId, string CliPath, string Kind, bool RequiresIdempotencyKey, JsonTypeInfo RequestTypeInfo, JsonTypeInfo ResultTypeInfo, string HandlerTarget, Func<LedgerServices, OperationRegistry, IOperationHandler> HandlerFactory, string Example, IReadOnlyList<ErrorSchema>? DomainErrors = null, string MinimumContractVersion = "1.0", string MaximumContractVersion = "1.0")
 {
-    public OperationSchema ToSchema() => new(OperationId, CliPath, Kind, "{\"type\":\"object\",\"additionalProperties\":false}", "{\"type\":\"object\"}", RequestTypeInfo.Type.FullName!, ResultTypeInfo.Type.FullName!, SchemaErrors(), 0, RequiresIdempotencyKey, MinimumContractVersion, MaximumContractVersion, HandlerTarget, Example);
+    public OperationSchema ToSchema() => new(OperationId, CliPath, Kind, JsonSchema(RequestTypeInfo), JsonSchema(ResultTypeInfo), RequestTypeInfo.Type.FullName!, ResultTypeInfo.Type.FullName!, SchemaErrors(), 0, RequiresIdempotencyKey, MinimumContractVersion, MaximumContractVersion, HandlerTarget, Example);
+
+    private static string JsonSchema(JsonTypeInfo typeInfo) => typeInfo.GetJsonSchemaAsNode(
+        new JsonSchemaExporterOptions { TreatNullObliviousAsNonNullable = true }).ToJsonString();
 
     private IReadOnlyList<ErrorSchema> SchemaErrors()
     {
