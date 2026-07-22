@@ -4,10 +4,14 @@
   "ref_code": "OQ-LEDGER-13",
   "question": "Which provider-neutral compatibility fields, tolerances, and conflict rules are sufficient for an automatic deterministic match between agent-capture and statement-row evidence?",
   "context": [
-    "The owner confirmed on 2026-07-21 that an approved bank statement is authoritative over prior agent-capture evidence. This resolves source precedence, not economic-event identity. The remaining gate must validate the bounded provider-neutral fields, date tolerances, uniqueness guards, and conflict rules that may automatically identify the same event; ambiguous cases remain unapplied."
+    "Resolved from the owner-approved conservative policy on 2026-07-22. The redacted symbolic matrix at docs/validation/ledger/oq-13-reconciliation-policy.md records outcomes without retaining or inferring private statement data."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "ReconciliationPolicyV1 automatically matches only when approved statement-row evidence has exact owned account identity, ZAR currency, signed Int64 minor-unit amount, and effective date with zero-day tolerance; exactly one active recorded-but-unreconciled compatible candidate and zero guard candidates survive; and neither evidence nor candidate has a conflicting active confirmation or decision. The deterministic reason is exact_unique_candidate, the decision records the four-field basis and policy version, and replay is idempotent. Posting date, payment attribution, description, provider data, Evidence Kind, and candidate order are not compatibility fields or tie-breakers. Differing facts, shifted dates, multiple or guard candidates, conflicts, already-reconciled candidates, and stale or unsupported policy are review-required and apply no automatic financial effect. The automatic correction subset is empty. Zero-candidate statement-only creation and statement-authoritative correction remain explicit owner-approved dispositions with attributable append-only history."
+  ],
   "owner": "LEDGER design",
+  "disposition": "unspecified",
   "created_at": "2026-07-20T16:57:32.6357871+00:00",
   "links": [
     {
