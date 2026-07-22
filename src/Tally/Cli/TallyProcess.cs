@@ -128,12 +128,15 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
         "LEDGER-TRANSFER-INVALID" or "LEDGER-TRANSFER-SAME-ACCOUNT" or "LEDGER-TRANSFER-SIGN" or "LEDGER-TRANSFER-AMOUNT" or "LEDGER-TRANSFER-CURRENCY" => Error(3, code, "validation", "The transfer does not satisfy the financial relationship contract."),
         "LEDGER-REFUND-INVALID" or "LEDGER-REFUND-ACCOUNT" or "LEDGER-REFUND-SIGN" or "LEDGER-REFUND-AMOUNT" or "LEDGER-REFUND-CURRENCY" => Error(3, code, "validation", "The refund does not satisfy the full-amount financial relationship contract."),
         "LEDGER-RELATIONSHIP-NOT-FOUND" => Error(4, code, "not_found", "The financial relationship was not found."),
+        "LEDGER-RELATIONSHIP-LIFECYCLE-INVALID" => Error(3, code, "validation", "The relationship lifecycle input is invalid."),
+        "LEDGER-RELATIONSHIP-ALREADY-RETIRED" or "LEDGER-RELATIONSHIP-TYPE-MISMATCH" => Error(6, code, "lifecycle", "The financial relationship lifecycle does not allow the operation."),
         "LEDGER-RELATIONSHIP-ACTIVE-ROLE-CONFLICT" => Error(5, code, "conflict", "A transaction already participates in an active financial relationship."),
         "LEDGER-TRANSFER-TRANSACTION-INACTIVE" => Error(6, code, "lifecycle", "The transaction lifecycle does not allow transfer confirmation."),
         "LEDGER-REFUND-TRANSACTION-INACTIVE" => Error(6, code, "lifecycle", "The transaction lifecycle does not allow refund confirmation."),
         "LEDGER-GUIDANCE-INVALID" or "LEDGER-GUIDANCE-HOST-UNSUPPORTED" or "LEDGER-GUIDANCE-PATH-UNSAFE" => Error(3, code, "validation", "The guidance request is invalid."),
         "LEDGER-GUIDANCE-CONTRACT-INCOMPATIBLE" or "LEDGER-GUIDANCE-BUNDLE-INVALID" => Error(7, code, "compatibility", "The guidance bundle is incompatible with this executable contract."),
         "LEDGER-IDEMPOTENCY-001" or "operation.conflict" => Error(5, code, "conflict", "The operation conflicts with existing state."),
+        "operation.review_required" => Error(8, code, "integrity", "The operation requires explicit review before any financial effect changes."),
         "host.unavailable" => Error(9, code, "host", "The requested operation is not available in this foundation."),
         _ => UnexpectedFailure()
     };

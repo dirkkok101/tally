@@ -70,58 +70,124 @@
   ],
   "files": [
     {
-      "id": "01KXT0SME4AY50E10JDC7MPSGY",
+      "id": "01KY47NY2QS21BQ4XSMV5KCJ0K",
       "path": "src/Tally/Contracts/Ledger/Relationships/RelationshipLifecycleContracts.cs",
       "action": "create",
       "role": "implementation",
       "required": 1,
+      "notes": [
+        "Typed public revoke and replace inputs/results"
+      ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T06:19:48.1834107+00:00"
     },
     {
-      "id": "01KXT0SME5GG7Y4FK1HVH35847",
+      "id": "01KY47NY2R3HV208WEEQDHGV1K",
       "path": "src/Tally/Domain/Ledger/Relationships/RelationshipLifecycle.cs",
       "action": "create",
       "role": "implementation",
       "required": 1,
+      "notes": [
+        "Pure lifecycle command validation and replacement proposal policy"
+      ],
       "sort_order": 1,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T06:19:48.1834107+00:00"
     },
     {
-      "id": "01KXT0SME5RMRER3M7WPY774MY",
+      "id": "01KY47NY2RZ7Y3J7189KQ4GJGM",
       "path": "src/Tally/Features/Ledger/Relationships/RelationshipLifecycleHandlers.cs",
       "action": "create",
       "role": "implementation",
       "required": 1,
+      "notes": [
+        "Transactional owner and statement-correction handlers"
+      ],
       "sort_order": 2,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T06:19:48.1834107+00:00"
     },
     {
-      "id": "01KXT0SME5T1W5GHWBEH18NSSQ",
+      "id": "01KY47NY2RQ49XWKPZ7NWFMXWA",
       "path": "src/Tally/Infrastructure/Storage/Relationships/RelationshipStore.cs",
       "action": "modify",
       "role": "implementation",
       "required": 1,
+      "notes": [
+        "Atomic append-only revoke and replacement persistence"
+      ],
       "sort_order": 3,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T06:19:48.1834107+00:00"
     },
     {
-      "id": "01KXT0SME55NZNJVM5C0YT4VZ4",
+      "id": "01KY47NY2SSREK6D9BJCTYHZTR",
       "path": "src/Tally/Features/Ledger/Relationships/RelationshipLifecycleOperationModule.cs",
       "action": "create",
       "role": "implementation",
       "required": 1,
+      "notes": [
+        "Provider-neutral public operation adapter"
+      ],
       "sort_order": 4,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "created_at": "2026-07-22T06:19:48.1834107+00:00"
     },
     {
-      "id": "01KXT0SME5Z1DTP84M0MJBJYHR",
+      "id": "01KY47NY2SCQT8C8JRZN1P8XNB",
+      "path": "src/Tally/Contracts/Common/ProcessContracts.cs",
+      "action": "modify",
+      "role": "integration",
+      "required": 1,
+      "notes": [
+        "Source-generated lifecycle request and result metadata"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-22T06:19:48.1834107+00:00"
+    },
+    {
+      "id": "01KY47NY2S6V2SKQSWAE69ES1P",
+      "path": "src/Tally/Bootstrap/LedgerServices.cs",
+      "action": "modify",
+      "role": "integration",
+      "required": 1,
+      "notes": [
+        "Compose the relationship lifecycle vertical slice"
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-22T06:19:48.1834107+00:00"
+    },
+    {
+      "id": "01KY47NY2SJ2XEJHGAGJH0F1RJ",
+      "path": "src/Tally/Cli/OperationRegistry.cs",
+      "action": "modify",
+      "role": "integration",
+      "required": 1,
+      "notes": [
+        "Publish typed relationship revoke replace and get descriptors"
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-22T06:19:48.1834107+00:00"
+    },
+    {
+      "id": "01KY47NY2SY2K9Y0RRZHXS4SE7",
+      "path": "src/Tally/Cli/TallyProcess.cs",
+      "action": "modify",
+      "role": "integration",
+      "required": 1,
+      "notes": [
+        "Map stable lifecycle errors to process categories and exit codes"
+      ],
+      "sort_order": 8,
+      "created_at": "2026-07-22T06:19:48.1834107+00:00"
+    },
+    {
+      "id": "01KY47NY2SZ70AFF504Y1WBXDY",
       "path": "tests/Tally.Tests/Features/Ledger/Relationships/RelationshipLifecycleTests.cs",
       "action": "test",
       "role": "implementation",
       "required": 1,
-      "sort_order": 5,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
+      "notes": [
+        "Focused public contract persistence rollback history and replay coverage"
+      ],
+      "sort_order": 9,
+      "created_at": "2026-07-22T06:19:48.1834107+00:00"
     }
   ],
   "interfaces": [

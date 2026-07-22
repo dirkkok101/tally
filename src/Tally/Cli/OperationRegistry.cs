@@ -95,6 +95,11 @@ public sealed class OperationRegistry
             "ledger.pool.reactivate" => SpendPoolDescriptor(operationId, LedgerJsonContext.Default.ReactivateSpendPoolInput, LedgerJsonContext.Default.SpendPoolLifecycleResult, "Reactivate"),
             "ledger.transaction.record" => TransactionDescriptor(operationId, LedgerJsonContext.Default.RecordTransactionInput, true, "Record"),
             "ledger.transaction.get" => TransactionDescriptor(operationId, LedgerJsonContext.Default.GetTransactionInput, false, "Get"),
+            "ledger.transfer.revoke" => RelationshipLifecycleDescriptor(operationId, LedgerJsonContext.Default.RevokeRelationshipInput, "RevokeTransfer"),
+            "ledger.transfer.replace" => RelationshipLifecycleDescriptor(operationId, LedgerJsonContext.Default.ReplaceTransferInput, "ReplaceTransfer"),
+            "ledger.refund.revoke" => RelationshipLifecycleDescriptor(operationId, LedgerJsonContext.Default.RevokeRelationshipInput, "RevokeRefund"),
+            "ledger.refund.replace" => RelationshipLifecycleDescriptor(operationId, LedgerJsonContext.Default.ReplaceRefundInput, "ReplaceRefund"),
+            "ledger.relationship.get" => RelationshipLifecycleDescriptor(operationId, LedgerJsonContext.Default.GetRelationshipInput, "Get"),
             "ledger.transaction.category.assign" => CategoryAllocationDescriptor(operationId, LedgerJsonContext.Default.AssignCategoryInput, "Assign"),
             "ledger.transaction.category.correct" => CategoryAllocationDescriptor(operationId, LedgerJsonContext.Default.CorrectCategoryInput, "Correct"),
             "ledger.transaction.attribution.assign" => PaymentAttributionDescriptor(operationId, LedgerJsonContext.Default.AssignPaymentAttributionInput, "Assign"),
@@ -119,7 +124,6 @@ public sealed class OperationRegistry
                 ]),
             "ledger.transfer.confirm" => TransferDescriptor(operationId, LedgerJsonContext.Default.ConfirmTransferInput, true, "Confirm"),
             "ledger.refund.confirm" => RefundDescriptor(operationId, LedgerJsonContext.Default.ConfirmRefundInput),
-            "ledger.relationship.get" => TransferDescriptor(operationId, LedgerJsonContext.Default.GetRelationshipInput, false, "Get"),
             _ => new(operationId, "tally " + operationId.Replace('.', ' '), isQuery ? "query" : "mutation", !isQuery, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.OperationUnavailableResult, "FoundationOperationHandler", static (_, _) => new FoundationOperationHandler(), "tally " + operationId.Replace('.', ' '))
         };
     }
@@ -198,6 +202,33 @@ public sealed class OperationRegistry
         operationId, "tally " + operationId.Replace('.', ' '), mutation ? "mutation" : "query", mutation, request, LedgerJsonContext.Default.TransactionDetail,
         "TransactionOperationModule." + target, (services, _) => services.Transactions is { } module ? new TransactionOperationHandler(module, operationId) : new FoundationOperationHandler(),
         "tally " + operationId.Replace('.', ' ') + " --input -", TransactionErrorsFor(operationId));
+
+    private static OperationDescriptor RelationshipLifecycleDescriptor(string operationId, JsonTypeInfo request, string target) => new(
+        operationId, "tally " + operationId.Replace('.', ' '), operationId == "ledger.relationship.get" ? "query" : "mutation", operationId != "ledger.relationship.get", request, operationId == "ledger.relationship.get" ? LedgerJsonContext.Default.FinancialRelationshipDetail : LedgerJsonContext.Default.RelationshipLifecycleResult,
+        "RelationshipLifecycleOperationModule." + target, (services, _) => services.RelationshipLifecycle is { } module ? new RelationshipLifecycleOperationHandler(module, operationId) : new FoundationOperationHandler(),
+        "tally " + operationId.Replace('.', ' ') + " --input -", RelationshipLifecycleErrorsFor());
+
+    private static IReadOnlyList<ErrorSchema> RelationshipLifecycleErrorsFor() =>
+    [
+        new(RelationshipLifecycleErrors.Invalid, "validation", 3),
+        new(RelationshipLifecycleErrors.NotFound, "not_found", 4),
+        new(TransactionErrors.NotFound, "not_found", 4),
+        new(AccountStore.NotFoundError, "not_found", 4),
+        new(RelationshipLifecycleErrors.AlreadyRetired, "lifecycle", 6),
+        new(RelationshipLifecycleErrors.TypeMismatch, "lifecycle", 6),
+        new(TransferErrors.ActiveRoleConflict, "conflict", 5),
+        new(TransferErrors.TransactionInactive, "lifecycle", 6),
+        new(RefundErrors.TransactionInactive, "lifecycle", 6),
+        new(AccountStore.ArchivedError, "lifecycle", 6),
+        new(TransferErrors.SameAccount, "validation", 3),
+        new(TransferErrors.Sign, "validation", 3),
+        new(TransferErrors.Amount, "validation", 3),
+        new(TransferErrors.Currency, "validation", 3),
+        new(RefundErrors.Amount, "validation", 3),
+        new(RefundErrors.Account, "validation", 3),
+        new(RefundErrors.Sign, "validation", 3),
+        new(RefundErrors.Currency, "validation", 3)
+    ];
 
     private static IReadOnlyList<ErrorSchema> TransactionErrorsFor(string operationId) => operationId switch
     {

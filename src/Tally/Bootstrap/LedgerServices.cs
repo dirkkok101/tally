@@ -17,9 +17,9 @@ using Tally.Infrastructure.Storage.Transactions;
 
 namespace Tally.Bootstrap;
 
-public sealed record LedgerServices(SystemOperationModule SystemOperations, GuidanceOperationModule Guidance, AccountOperationModule? Accounts, CategoryOperationModule? Categories, PaymentIdentityOperationModule? PaymentIdentities, SpendPoolOperationModule? SpendPools, EvidenceRegistryOperationModule? EvidenceRegistry, TransactionOperationModule? Transactions, CategoryAllocationOperationModule? CategoryAllocations, PaymentAttributionOperationModule? PaymentAttributions, PoolAssignmentOperationModule? PoolAssignments, EvidenceLinkOperationModule? EvidenceLinks, TransferOperationModule? Transfers, RefundOperationModule? Refunds)
+public sealed record LedgerServices(SystemOperationModule SystemOperations, GuidanceOperationModule Guidance, AccountOperationModule? Accounts, CategoryOperationModule? Categories, PaymentIdentityOperationModule? PaymentIdentities, SpendPoolOperationModule? SpendPools, EvidenceRegistryOperationModule? EvidenceRegistry, TransactionOperationModule? Transactions, CategoryAllocationOperationModule? CategoryAllocations, PaymentAttributionOperationModule? PaymentAttributions, PoolAssignmentOperationModule? PoolAssignments, EvidenceLinkOperationModule? EvidenceLinks, TransferOperationModule? Transfers, RefundOperationModule? Refunds, RelationshipLifecycleOperationModule? RelationshipLifecycle)
 {
-    public static LedgerServices Create() => new(new SystemOperationModule(), CreateGuidance(), null, null, null, null, null, null, null, null, null, null, null, null);
+    public static LedgerServices Create() => new(new SystemOperationModule(), CreateGuidance(), null, null, null, null, null, null, null, null, null, null, null, null, null);
 
     public static LedgerServices Create(LedgerDb database)
     {
@@ -71,9 +71,9 @@ public sealed record LedgerServices(SystemOperationModule SystemOperations, Guid
         var transfers = new TransferOperationModule(
             new ConfirmTransferHandler(executor, accountStore, transactionStore, relationshipStore),
             new GetRelationshipHandler(relationshipStore));
-        var refunds = new RefundOperationModule(
-            new ConfirmRefundHandler(executor, accountStore, transactionStore, relationshipStore));
-        return new(new SystemOperationModule(), CreateGuidance(), accounts, categories, paymentIdentities, spendPools, evidence, transactions, categoryAllocations, paymentAttributions, poolAssignments, evidenceLinks, transfers, refunds);
+        var refunds = new RefundOperationModule(new ConfirmRefundHandler(executor, accountStore, transactionStore, relationshipStore));
+        var lifecycle = new RelationshipLifecycleOperationModule(new RelationshipLifecycleHandler(executor, accountStore, transactionStore, relationshipStore), new GetRelationshipHandler(relationshipStore));
+        return new(new SystemOperationModule(), CreateGuidance(), accounts, categories, paymentIdentities, spendPools, evidence, transactions, categoryAllocations, paymentAttributions, poolAssignments, evidenceLinks, transfers, refunds, lifecycle);
     }
 
     private static GuidanceOperationModule CreateGuidance() => new(new GuidanceService());

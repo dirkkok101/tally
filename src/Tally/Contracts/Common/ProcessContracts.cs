@@ -124,7 +124,11 @@ public sealed record EmptyInput;
 [JsonSerializable(typeof(TransactionHistory))]
 [JsonSerializable(typeof(ConfirmTransferInput))]
 [JsonSerializable(typeof(ConfirmRefundInput))]
+[JsonSerializable(typeof(RevokeRelationshipInput))]
+[JsonSerializable(typeof(ReplaceTransferInput))]
+[JsonSerializable(typeof(ReplaceRefundInput))]
 [JsonSerializable(typeof(GetRelationshipInput))]
 [JsonSerializable(typeof(FinancialRelationshipDetail))]
+[JsonSerializable(typeof(RelationshipLifecycleResult))]
 [JsonSerializable(typeof(RelationshipLifecycleHistoryItem[]))]
 public partial class LedgerJsonContext : JsonSerializerContext;

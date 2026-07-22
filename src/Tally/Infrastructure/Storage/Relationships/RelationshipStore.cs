@@ -1,7 +1,11 @@
 using Microsoft.Data.Sqlite;
 using Tally.Contracts.Ledger.Relationships;
+using Tally.Contracts.Ledger.Transactions;
 using Tally.Domain.Ledger;
 using Tally.Domain.Ledger.Relationships;
+using Tally.Features.Ledger.Transactions;
+using Tally.Infrastructure.Storage.Accounts;
+using Tally.Infrastructure.Storage.Transactions;
 
 namespace Tally.Infrastructure.Storage.Relationships;
 
@@ -23,6 +27,27 @@ public sealed class RelationshipStore(LedgerDb database, LedgerConnectionFactory
         return Convert.ToInt64(await command.ExecuteScalarAsync(cancellationToken), System.Globalization.CultureInfo.InvariantCulture) == 1;
     }
 
+    public async Task<bool> HasActiveRoleExceptAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        string firstTransactionId,
+        string secondTransactionId,
+        string excludedRelationshipId,
+        CancellationToken cancellationToken)
+    {
+        await using var command = Command(connection, transaction, """
+            SELECT EXISTS(
+                SELECT 1 FROM financial_relationship_current
+                WHERE state = 'active'
+                  AND relationship_id <> $excluded
+                  AND (source_transaction_id IN ($first, $second) OR target_transaction_id IN ($first, $second)));
+            """,
+            ("$first", firstTransactionId),
+            ("$second", secondTransactionId),
+            ("$excluded", excludedRelationshipId));
+        return Convert.ToInt64(await command.ExecuteScalarAsync(cancellationToken), System.Globalization.CultureInfo.InvariantCulture) == 1;
+    }
+
     public async Task InsertAsync(
         SqliteConnection connection,
         SqliteTransaction transaction,
@@ -37,15 +62,23 @@ public sealed class RelationshipStore(LedgerDb database, LedgerConnectionFactory
             VALUES ($id, $type, $sourceId, $sourceRole, $targetId, $targetRole, $amount,
                     'active', $createdAt, $actor, $decisionId);
             """,
-            ("$id", relationship.RelationshipId), ("$type", TypeValue(relationship.Type)),
-            ("$sourceId", relationship.SourceTransactionId), ("$sourceRole", RoleValue(relationship.SourceRole)),
-            ("$targetId", relationship.TargetTransactionId), ("$targetRole", RoleValue(relationship.TargetRole)),
-            ("$amount", relationship.PrincipalMinor), ("$createdAt", relationship.CreatedAt),
-            ("$actor", relationship.Actor), ("$decisionId", relationship.ReconciliationDecisionId));
+            ("$id", relationship.RelationshipId),
+            ("$type", TypeValue(relationship.Type)),
+            ("$sourceId", relationship.SourceTransactionId),
+            ("$sourceRole", RoleValue(relationship.SourceRole)),
+            ("$targetId", relationship.TargetTransactionId),
+            ("$targetRole", RoleValue(relationship.TargetRole)),
+            ("$amount", relationship.PrincipalMinor),
+            ("$createdAt", relationship.CreatedAt),
+            ("$actor", relationship.Actor),
+            ("$decisionId", relationship.ReconciliationDecisionId));
         await command.ExecuteNonQueryAsync(cancellationToken);
     }
 
-    public async Task<FinancialRelationshipDetail?> GetAsync(string relationshipId, bool includeHistory, CancellationToken cancellationToken)
+    public async Task<FinancialRelationshipDetail?> GetAsync(
+        string relationshipId,
+        bool includeHistory,
+        CancellationToken cancellationToken)
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Ledger storage requires Linux host protections.");
         await using var connection = await connectionFactory.OpenAsync(database, CompleteLedgerSchema.CurrentVersion, cancellationToken);
@@ -69,11 +102,23 @@ public sealed class RelationshipStore(LedgerDb database, LedgerConnectionFactory
         await using var reader = await command.ExecuteReaderAsync(cancellationToken);
         if (!await reader.ReadAsync(cancellationToken)) return null;
         var detail = new FinancialRelationshipDetail(
-            reader.GetString(0), ParseType(reader.GetString(1)), reader.GetString(2), ParseRole(reader.GetString(3)),
-            reader.GetString(4), ParseRole(reader.GetString(5)), Money.FromMinorUnits(reader.GetInt64(6)).ToString(), "ZAR",
-            ParseState(reader.GetString(7)), reader.GetString(8), reader.GetString(9), Optional(reader, 10), []);
+            reader.GetString(0),
+            ParseType(reader.GetString(1)),
+            reader.GetString(2),
+            ParseRole(reader.GetString(3)),
+            reader.GetString(4),
+            ParseRole(reader.GetString(5)),
+            Money.FromMinorUnits(reader.GetInt64(6)).ToString(),
+            "ZAR",
+            ParseState(reader.GetString(7)),
+            reader.GetString(8),
+            reader.GetString(9),
+            Optional(reader, 10),
+            []);
         await reader.DisposeAsync();
-        return includeHistory ? detail with { History = await HistoryAsync(connection, transaction, relationshipId, cancellationToken) } : detail;
+        return includeHistory
+            ? detail with { History = await HistoryAsync(connection, transaction, relationshipId, cancellationToken) }
+            : detail;
     }
 
     public async Task<string?> RetireForTransactionAsync(
@@ -94,20 +139,280 @@ public sealed class RelationshipStore(LedgerDb database, LedgerConnectionFactory
             """, ("$id", transactionId));
         var relationshipId = (string?)await find.ExecuteScalarAsync(cancellationToken);
         if (relationshipId is null) return null;
+        await AppendLifecycleAsync(
+            connection,
+            transaction,
+            lifecycleEventId,
+            relationshipId,
+            replacementRelationshipId is null ? "revoked" : "replaced",
+            replacementRelationshipId,
+            reconciliationDecisionId,
+            reason,
+            actor,
+            occurredAt,
+            cancellationToken);
+        return relationshipId;
+    }
+
+    public Task RevokeAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        string relationshipId,
+        string lifecycleEventId,
+        string reason,
+        string actor,
+        string occurredAt,
+        CancellationToken cancellationToken) =>
+        AppendLifecycleAsync(
+            connection,
+            transaction,
+            lifecycleEventId,
+            relationshipId,
+            "revoked",
+            null,
+            null,
+            reason,
+            actor,
+            occurredAt,
+            cancellationToken);
+
+    public async Task ReplaceAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        string relationshipId,
+        FinancialRelationship replacement,
+        string lifecycleEventId,
+        string reason,
+        string actor,
+        string occurredAt,
+        string? reconciliationDecisionId,
+        CancellationToken cancellationToken)
+    {
+        await AppendLifecycleAsync(
+            connection,
+            transaction,
+            lifecycleEventId,
+            relationshipId,
+            "replaced",
+            replacement.RelationshipId,
+            reconciliationDecisionId,
+            reason,
+            actor,
+            occurredAt,
+            cancellationToken);
+        await InsertAsync(
+            connection,
+            transaction,
+            replacement with { ReconciliationDecisionId = reconciliationDecisionId },
+            cancellationToken);
+    }
+
+    public async Task<StatementRelationshipReplacementResult> ReplaceForStatementCorrectionAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        string relationshipId,
+        string priorTransactionId,
+        string replacementTransactionId,
+        string reconciliationDecisionId,
+        string reason,
+        string actor,
+        string occurredAt,
+        CancellationToken cancellationToken)
+    {
+        if (!LedgerId.TryParse(relationshipId, out _, out _)
+            || !LedgerId.TryParse(priorTransactionId, out _, out _)
+            || !LedgerId.TryParse(reconciliationDecisionId, out _, out _)
+            || !RelationshipLifecycle.ValidReason(reason, out var normalizedReason)
+            || string.IsNullOrWhiteSpace(actor)
+            || !occurredAt.EndsWith('Z')
+            || !DateTimeOffset.TryParseExact(
+                occurredAt,
+                "yyyy-MM-ddTHH:mm:ss.FFFFFFFK",
+                System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.None,
+                out _))
+        {
+            return ReviewRequired(RelationshipLifecycleErrors.ReviewRequired);
+        }
+
+        var current = await GetAsync(connection, transaction, relationshipId, false, cancellationToken);
+        if (current is null) return ReviewRequired(RelationshipLifecycleErrors.NotFound);
+        if (current.State != FinancialRelationshipState.Active) return ReviewRequired(RelationshipLifecycleErrors.AlreadyRetired);
+        if (!await IsAuthorizedStatementCorrectionAsync(
+                connection,
+                transaction,
+                priorTransactionId,
+                replacementTransactionId,
+                reconciliationDecisionId,
+                cancellationToken))
+        {
+            return ReviewRequired(RelationshipLifecycleErrors.ReviewRequired);
+        }
+
+        var counterpartTransactionId = current.SourceTransactionId == priorTransactionId
+            ? current.TargetTransactionId
+            : current.TargetTransactionId == priorTransactionId
+                ? current.SourceTransactionId
+                : null;
+        if (counterpartTransactionId is null)
+        {
+            return ReviewRequired(RelationshipLifecycleErrors.ReviewRequired);
+        }
+
+        var transactionStore = new TransactionStore(database, connectionFactory);
+        var replacementTransaction = await transactionStore.GetAsync(
+            connection,
+            transaction,
+            replacementTransactionId,
+            false,
+            cancellationToken);
+        var counterpartTransaction = await transactionStore.GetAsync(
+            connection,
+            transaction,
+            counterpartTransactionId,
+            false,
+            cancellationToken);
+        if (replacementTransaction is null || counterpartTransaction is null)
+        {
+            return ReviewRequired(TransactionErrors.NotFound);
+        }
+
+        var source = current.SourceTransactionId == priorTransactionId
+            ? replacementTransaction
+            : counterpartTransaction;
+        var target = current.TargetTransactionId == priorTransactionId
+            ? replacementTransaction
+            : counterpartTransaction;
+        if (source.TransactionId == target.TransactionId)
+        {
+            return ReviewRequired(RelationshipLifecycleErrors.ReviewRequired);
+        }
+
+        if (source.LifecycleStatus != TransactionLifecycleStatus.Active
+            || target.LifecycleStatus != TransactionLifecycleStatus.Active)
+        {
+            return ReviewRequired(TransactionInactiveError(current.Type));
+        }
+
+        var accountStore = new AccountStore(database, connectionFactory);
+        if (await accountStore.ActiveWriteErrorAsync(connection, transaction, source.AccountId, cancellationToken) is { } sourceAccountError)
+        {
+            return ReviewRequired(sourceAccountError);
+        }
+        if (await accountStore.ActiveWriteErrorAsync(connection, transaction, target.AccountId, cancellationToken) is { } targetAccountError)
+        {
+            return ReviewRequired(targetAccountError);
+        }
+
+        if (!TryPrincipal(current.Type, source, target, out var principalMinor, out var policyError))
+        {
+            return ReviewRequired(policyError!);
+        }
+        if (await HasActiveRoleExceptAsync(
+                connection,
+                transaction,
+                source.TransactionId,
+                target.TransactionId,
+                relationshipId,
+                cancellationToken))
+        {
+            return ReviewRequired(TransferErrors.ActiveRoleConflict);
+        }
+
+        var lifecycleEventId = LedgerId.New().ToString();
+        var replacement = new FinancialRelationship(
+            LedgerId.New().ToString(),
+            current.Type,
+            source.TransactionId,
+            current.SourceRole,
+            target.TransactionId,
+            current.TargetRole,
+            principalMinor,
+            actor,
+            occurredAt,
+            reconciliationDecisionId);
+        await ReplaceAsync(
+            connection,
+            transaction,
+            relationshipId,
+            replacement,
+            lifecycleEventId,
+            normalizedReason,
+            actor,
+            occurredAt,
+            reconciliationDecisionId,
+            cancellationToken);
+
+        var retired = await GetAsync(connection, transaction, relationshipId, true, cancellationToken);
+        var activeReplacement = await GetAsync(connection, transaction, replacement.RelationshipId, true, cancellationToken);
+        return new(false, null, lifecycleEventId, retired, activeReplacement);
+    }
+
+    private static async Task AppendLifecycleAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        string lifecycleEventId,
+        string relationshipId,
+        string action,
+        string? replacementRelationshipId,
+        string? reconciliationDecisionId,
+        string reason,
+        string actor,
+        string occurredAt,
+        CancellationToken cancellationToken)
+    {
         await using var command = Command(connection, transaction, """
             INSERT INTO relationship_lifecycle_event (
                 lifecycle_event_id, relationship_id, event_type, replacement_relationship_id,
                 reconciliation_decision_id, reason, actor_context, occurred_at)
             VALUES ($eventId, $relationshipId, $action, $replacementId, $decisionId, $reason, $actor, $occurredAt);
-            """, ("$eventId", lifecycleEventId), ("$relationshipId", relationshipId),
-            ("$action", replacementRelationshipId is null ? "revoked" : "replaced"),
-            ("$replacementId", replacementRelationshipId), ("$decisionId", reconciliationDecisionId),
-            ("$reason", reason), ("$actor", actor), ("$occurredAt", occurredAt));
+            """,
+            ("$eventId", lifecycleEventId),
+            ("$relationshipId", relationshipId),
+            ("$action", action),
+            ("$replacementId", replacementRelationshipId),
+            ("$decisionId", reconciliationDecisionId),
+            ("$reason", reason),
+            ("$actor", actor),
+            ("$occurredAt", occurredAt));
         await command.ExecuteNonQueryAsync(cancellationToken);
-        return relationshipId;
     }
 
-    private static async Task<IReadOnlyList<RelationshipLifecycleHistoryItem>> HistoryAsync(SqliteConnection connection, SqliteTransaction? transaction, string relationshipId, CancellationToken cancellationToken)
+    private static async Task<bool> IsAuthorizedStatementCorrectionAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        string priorTransactionId,
+        string replacementTransactionId,
+        string decisionId,
+        CancellationToken cancellationToken)
+    {
+        await using var command = Command(connection, transaction, """
+            SELECT EXISTS(
+                SELECT 1
+                FROM reconciliation_decision_authority AS authority
+                JOIN transaction_lifecycle_event AS lifecycle
+                  ON lifecycle.transaction_id = authority.prior_transaction_id
+                 AND lifecycle.replacement_transaction_id = authority.active_transaction_id
+                 AND lifecycle.reconciliation_decision_id = authority.decision_id
+                WHERE authority.decision_id = $decisionId
+                  AND authority.disposition_detail = 'corrected_from_statement'
+                  AND authority.prior_transaction_id = $priorId
+                  AND authority.active_transaction_id = $replacementId
+                  AND lifecycle.action = 'statement_authoritative_replacement');
+            """,
+            ("$decisionId", decisionId),
+            ("$priorId", priorTransactionId),
+            ("$replacementId", replacementTransactionId));
+        return Convert.ToInt64(
+            await command.ExecuteScalarAsync(cancellationToken),
+            System.Globalization.CultureInfo.InvariantCulture) == 1;
+    }
+
+    private static async Task<IReadOnlyList<RelationshipLifecycleHistoryItem>> HistoryAsync(
+        SqliteConnection connection,
+        SqliteTransaction? transaction,
+        string relationshipId,
+        CancellationToken cancellationToken)
     {
         await using var command = Command(connection, transaction, """
             SELECT lifecycle_event_id, event_type, replacement_relationship_id, reconciliation_decision_id,
@@ -116,11 +421,49 @@ public sealed class RelationshipStore(LedgerDb database, LedgerConnectionFactory
             """, ("$id", relationshipId));
         await using var reader = await command.ExecuteReaderAsync(cancellationToken);
         var items = new List<RelationshipLifecycleHistoryItem>();
-        while (await reader.ReadAsync(cancellationToken)) items.Add(new(reader.GetString(0), ParseAction(reader.GetString(1)), Optional(reader, 2), Optional(reader, 3), reader.GetString(4), reader.GetString(5), reader.GetString(6)));
+        while (await reader.ReadAsync(cancellationToken))
+        {
+            items.Add(new(
+                reader.GetString(0),
+                ParseAction(reader.GetString(1)),
+                Optional(reader, 2),
+                Optional(reader, 3),
+                reader.GetString(4),
+                reader.GetString(5),
+                reader.GetString(6)));
+        }
         return items;
     }
 
-    private static SqliteCommand Command(SqliteConnection connection, SqliteTransaction? transaction, string sql, params (string Name, object? Value)[] parameters) { var command = connection.CreateCommand(); command.Transaction = transaction; command.CommandText = sql; foreach (var parameter in parameters) command.Parameters.AddWithValue(parameter.Name, parameter.Value ?? DBNull.Value); return command; }
+    private static bool TryPrincipal(
+        FinancialRelationshipType type,
+        TransactionDetail source,
+        TransactionDetail target,
+        out long principalMinor,
+        out string? error) =>
+        type == FinancialRelationshipType.Transfer
+            ? TransferPolicy.TryPrincipal(source, target, out principalMinor, out error)
+            : RefundPolicy.TryFullAmount(source, target, out principalMinor, out error);
+
+    private static string TransactionInactiveError(FinancialRelationshipType type) =>
+        type == FinancialRelationshipType.Transfer ? TransferErrors.TransactionInactive : RefundErrors.TransactionInactive;
+
+    private static StatementRelationshipReplacementResult ReviewRequired(string errorCode) =>
+        new(true, errorCode, null, null, null);
+
+    private static SqliteCommand Command(
+        SqliteConnection connection,
+        SqliteTransaction? transaction,
+        string sql,
+        params (string Name, object? Value)[] parameters)
+    {
+        var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        command.CommandText = sql;
+        foreach (var parameter in parameters) command.Parameters.AddWithValue(parameter.Name, parameter.Value ?? DBNull.Value);
+        return command;
+    }
+
     private static string? Optional(SqliteDataReader reader, int ordinal) => reader.IsDBNull(ordinal) ? null : reader.GetString(ordinal);
     private static string TypeValue(FinancialRelationshipType value) => value == FinancialRelationshipType.Transfer ? "transfer" : "refund";
     private static FinancialRelationshipType ParseType(string value) => value == "transfer" ? FinancialRelationshipType.Transfer : value == "refund" ? FinancialRelationshipType.Refund : throw new InvalidOperationException("Stored relationship type is invalid.");
