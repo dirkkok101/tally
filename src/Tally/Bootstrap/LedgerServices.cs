@@ -14,9 +14,9 @@ using Tally.Infrastructure.Storage.Transactions;
 
 namespace Tally.Bootstrap;
 
-public sealed record LedgerServices(SystemOperationModule SystemOperations, AccountOperationModule? Accounts, CategoryOperationModule? Categories, PaymentIdentityOperationModule? PaymentIdentities, SpendPoolOperationModule? SpendPools, EvidenceRegistryOperationModule? EvidenceRegistry, TransactionOperationModule? Transactions, CategoryAllocationOperationModule? CategoryAllocations)
+public sealed record LedgerServices(SystemOperationModule SystemOperations, AccountOperationModule? Accounts, CategoryOperationModule? Categories, PaymentIdentityOperationModule? PaymentIdentities, SpendPoolOperationModule? SpendPools, EvidenceRegistryOperationModule? EvidenceRegistry, TransactionOperationModule? Transactions, CategoryAllocationOperationModule? CategoryAllocations, PaymentAttributionOperationModule? PaymentAttributions)
 {
-    public static LedgerServices Create() => new(new SystemOperationModule(), null, null, null, null, null, null, null);
+    public static LedgerServices Create() => new(new SystemOperationModule(), null, null, null, null, null, null, null, null);
 
     public static LedgerServices Create(LedgerDb database)
     {
@@ -55,6 +55,10 @@ public sealed record LedgerServices(SystemOperationModule SystemOperations, Acco
         var categoryAllocations = new CategoryAllocationOperationModule(
             new AssignCategoryHandler(executor, transactionStore, categoryStore, categoryAllocationStore),
             new CorrectCategoryHandler(executor, transactionStore, categoryStore, categoryAllocationStore));
-        return new(new SystemOperationModule(), accounts, categories, paymentIdentities, spendPools, evidence, transactions, categoryAllocations);
+        var paymentAttributionStore = new PaymentAttributionStore();
+        var paymentAttributions = new PaymentAttributionOperationModule(
+            new AssignPaymentAttributionHandler(executor, transactionStore, paymentIdentityStore, paymentAttributionStore),
+            new CorrectPaymentAttributionHandler(executor, transactionStore, paymentIdentityStore, paymentAttributionStore));
+        return new(new SystemOperationModule(), accounts, categories, paymentIdentities, spendPools, evidence, transactions, categoryAllocations, paymentAttributions);
     }
 }

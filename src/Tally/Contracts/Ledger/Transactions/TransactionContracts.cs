@@ -109,6 +109,7 @@ public sealed record RecordTransactionInput(
 public sealed record GetTransactionInput([property: JsonRequired] string TransactionId, bool IncludeHistory = false);
 
 public sealed record TransactionPaymentAttribution(
+    string AttributionEventId,
     TransactionKnowledgeState InstrumentState,
     string? InstrumentId,
     TransactionKnowledgeState CardholderState,
@@ -146,6 +147,8 @@ public sealed record TransactionAttributionHistoryItem(
     string? CardholderId,
     TransactionAssignmentAction Action,
     string? PreviousEventId,
+    string? SourceTransactionId,
+    string? ReconciliationDecisionId,
     string Reason,
     string Actor,
     string OccurredAt);

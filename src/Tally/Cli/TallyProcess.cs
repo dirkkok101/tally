@@ -115,6 +115,9 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
         "LEDGER-CATEGORY-ALLOCATION-INVALID" => Error(3, code, "validation", "The category assignment input is invalid."),
         "LEDGER-CATEGORY-ALLOCATION-CARDINALITY" or "LEDGER-CATEGORY-ALLOCATION-UNCHANGED" => Error(5, code, "conflict", "The category assignment conflicts with current state."),
         "LEDGER-CATEGORY-ALLOCATION-NOT-ASSIGNED" or "LEDGER-TRANSACTION-INACTIVE" => Error(6, code, "lifecycle", "The transaction category lifecycle does not allow the operation."),
+        "LEDGER-PAYMENT-ATTRIBUTION-INVALID" => Error(3, code, "validation", "The payment attribution input is invalid."),
+        "LEDGER-PAYMENT-ATTRIBUTION-STALE" or "LEDGER-PAYMENT-ATTRIBUTION-ALREADY-ASSIGNED" or "LEDGER-PAYMENT-ATTRIBUTION-UNCHANGED" => Error(5, code, "conflict", "The payment attribution conflicts with current state."),
+        "LEDGER-PAYMENT-ATTRIBUTION-TRANSACTION-INACTIVE" or "LEDGER-PAYMENT-ATTRIBUTION-ACCOUNT-INCOMPATIBLE" => Error(6, code, "lifecycle", "The payment attribution lifecycle does not allow the operation."),
         "LEDGER-IDEMPOTENCY-001" or "operation.conflict" => Error(5, code, "conflict", "The operation conflicts with existing state."),
         "host.unavailable" => Error(9, code, "host", "The requested operation is not available in this foundation."),
         _ => UnexpectedFailure()

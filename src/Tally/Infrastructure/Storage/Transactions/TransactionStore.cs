@@ -140,7 +140,7 @@ public sealed class TransactionStore(LedgerDb database, LedgerConnectionFactory 
                        'recorded_unreconciled'),
                    allocation.allocation_event_id, category.category_id, category.ancestry_ids,
                    pool.assignment_state, pool.pool_id,
-                   attribution.instrument_state, attribution.instrument_id,
+                   attribution.attribution_event_id, attribution.instrument_state, attribution.instrument_id,
                    attribution.cardholder_state, attribution.cardholder_id,
                    fact.recorded_by_os_identity, fact.recorded_at
             FROM transaction_fact AS fact
@@ -169,10 +169,10 @@ public sealed class TransactionStore(LedgerDb database, LedgerConnectionFactory 
                 ? new(TransactionCategoryState.Uncategorized, null, null, [])
                 : new(TransactionCategoryState.Categorized, reader.GetString(11), reader.GetString(12), ParseAncestry(reader.GetString(13))),
             new(ParsePoolState(reader.GetString(14)), Optional(reader, 15)),
-            new(ParseKnowledge(reader.GetString(16)), Optional(reader, 17), ParseKnowledge(reader.GetString(18)), Optional(reader, 19)),
+            new(reader.GetString(16), ParseKnowledge(reader.GetString(17)), Optional(reader, 18), ParseKnowledge(reader.GetString(19)), Optional(reader, 20)),
             [],
-            reader.GetString(20),
             reader.GetString(21),
+            reader.GetString(22),
             null);
         await reader.DisposeAsync();
 
@@ -237,10 +237,10 @@ public sealed class TransactionStore(LedgerDb database, LedgerConnectionFactory 
 
     private static async Task<IReadOnlyList<TransactionAttributionHistoryItem>> AttributionHistoryAsync(SqliteConnection connection, SqliteTransaction? transaction, string transactionId, CancellationToken cancellationToken)
     {
-        await using var command = Command(connection, transaction, "SELECT attribution_event_id, instrument_state, instrument_id, cardholder_state, cardholder_id, action, previous_event_id, reason, actor, occurred_at FROM transaction_attribution_event WHERE transaction_id = $id ORDER BY occurred_at, attribution_event_id;", ("$id", transactionId));
+        await using var command = Command(connection, transaction, "SELECT attribution_event_id, instrument_state, instrument_id, cardholder_state, cardholder_id, action, previous_event_id, source_transaction_id, reconciliation_decision_id, reason, actor, occurred_at FROM transaction_attribution_event WHERE transaction_id = $id ORDER BY occurred_at, attribution_event_id;", ("$id", transactionId));
         await using var reader = await command.ExecuteReaderAsync(cancellationToken);
         var items = new List<TransactionAttributionHistoryItem>();
-        while (await reader.ReadAsync(cancellationToken)) items.Add(new(reader.GetString(0), ParseKnowledge(reader.GetString(1)), Optional(reader, 2), ParseKnowledge(reader.GetString(3)), Optional(reader, 4), ParseAssignmentAction(reader.GetString(5)), Optional(reader, 6), reader.GetString(7), reader.GetString(8), reader.GetString(9)));
+        while (await reader.ReadAsync(cancellationToken)) items.Add(new(reader.GetString(0), ParseKnowledge(reader.GetString(1)), Optional(reader, 2), ParseKnowledge(reader.GetString(3)), Optional(reader, 4), ParseAssignmentAction(reader.GetString(5)), Optional(reader, 6), Optional(reader, 7), Optional(reader, 8), reader.GetString(9), reader.GetString(10), reader.GetString(11)));
         return items;
     }
 
