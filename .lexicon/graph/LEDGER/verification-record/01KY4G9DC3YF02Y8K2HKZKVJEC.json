@@ -1,0 +1,13 @@
+{
+  "id": "01KY4G9DC3YF02Y8K2HKZKVJEC",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-TRANSACTION-CORRECTION",
+  "subject_entity_id": "01KXSQBX8VHG12WG2VF5XXDB0E",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-TRANSACTION-CORRECTION-CONTRACT",
+  "note": "31 transaction-correction tests, 263 transaction/relationship/reconciliation tests, 713 full tests, zero-warning build, format verification, 9 published-binary core tests, and Native AOT publish passed. Ordinary void/supersede history, no-copy dimensions and evidence, transfer/refund retirement, reconciliation exceptions, idempotent replay, failure rollback, and transaction-scoped statement supersession were proven.",
+  "commit_sha": "7a0b0d9",
+  "bead_id": "bd-2rh",
+  "verified_at": "2026-07-22T08:50:15.0449255+00:00"
+}
