@@ -108,6 +108,10 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
         "LEDGER-SPEND-POOL-NOT-FOUND" => Error(4, code, "not_found", "The Spend Pool was not found."),
         "LEDGER-SPEND-POOL-DUPLICATE" => Error(5, code, "conflict", "The Spend Pool conflicts with active catalogue state."),
         "LEDGER-SPEND-POOL-ARCHIVED" or "LEDGER-SPEND-POOL-ALREADY-ARCHIVED" or "LEDGER-SPEND-POOL-ALREADY-ACTIVE" => Error(6, code, "lifecycle", "The Spend Pool lifecycle does not allow the operation."),
+        "LEDGER-TRANSACTION-INVALID" or "LEDGER-TRANSACTION-EVIDENCE-INCOMPATIBLE" or "amount.invalid" or "amount.zero" or "currency.unsupported" or "date.invalid" => Error(3, code, "validation", "The transaction input is invalid."),
+        "LEDGER-TRANSACTION-NOT-FOUND" => Error(4, code, "not_found", "The transaction was not found."),
+        "LEDGER-TRANSACTION-EVIDENCE-CONFLICT" => Error(5, code, "conflict", "The transaction evidence conflicts with existing state."),
+        "LEDGER-TRANSACTION-ATTRIBUTION-INCOMPATIBLE" => Error(6, code, "lifecycle", "The transaction payment attribution is incompatible."),
         "LEDGER-IDEMPOTENCY-001" or "operation.conflict" => Error(5, code, "conflict", "The operation conflicts with existing state."),
         "host.unavailable" => Error(9, code, "host", "The requested operation is not available in this foundation."),
         _ => UnexpectedFailure()

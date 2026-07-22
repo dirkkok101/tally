@@ -7,13 +7,18 @@ using Tally.Contracts.Ledger.Accounts;
 using Tally.Contracts.Ledger.Categories;
 using Tally.Contracts.Ledger.Dimensions;
 using Tally.Contracts.Ledger.Evidence;
+using Tally.Contracts.Ledger.Transactions;
 using Tally.Contracts.System;
 using Tally.Features.Ledger.Evidence;
 using Tally.Features.Ledger.Accounts;
 using Tally.Features.Ledger.Categories;
 using Tally.Features.Ledger.Dimensions;
+using Tally.Features.Ledger.Transactions;
+using Tally.Domain.Ledger;
 using Tally.Domain.Ledger.Categories;
 using Tally.Domain.Ledger.Dimensions;
+using Tally.Domain.Ledger.Transactions;
+using Tally.Infrastructure.Storage.Accounts;
 using Tally.Features.System.Contract;
 
 namespace Tally.Cli;
@@ -81,6 +86,8 @@ public sealed class OperationRegistry
             "ledger.pool.rename" => SpendPoolDescriptor(operationId, LedgerJsonContext.Default.RenameSpendPoolInput, LedgerJsonContext.Default.SpendPoolLifecycleResult, "Rename"),
             "ledger.pool.archive" => SpendPoolDescriptor(operationId, LedgerJsonContext.Default.ArchiveSpendPoolInput, LedgerJsonContext.Default.SpendPoolLifecycleResult, "Archive"),
             "ledger.pool.reactivate" => SpendPoolDescriptor(operationId, LedgerJsonContext.Default.ReactivateSpendPoolInput, LedgerJsonContext.Default.SpendPoolLifecycleResult, "Reactivate"),
+            "ledger.transaction.record" => TransactionDescriptor(operationId, LedgerJsonContext.Default.RecordTransactionInput, true, "Record"),
+            "ledger.transaction.get" => TransactionDescriptor(operationId, LedgerJsonContext.Default.GetTransactionInput, false, "Get"),
             "ledger.evidence.register" => new(operationId, "tally ledger evidence register", "mutation", true, LedgerJsonContext.Default.RegisterEvidenceInput, LedgerJsonContext.Default.EvidenceRecordDetail, "EvidenceRegistryOperationModule.Register", static (services, _) => services.EvidenceRegistry is { } module ? new EvidenceRegistryOperationHandler(module, "ledger.evidence.register") : new FoundationOperationHandler(), "tally ledger evidence register --input -"),
             "ledger.evidence.get" => new(operationId, "tally ledger evidence get", "query", false, LedgerJsonContext.Default.GetEvidenceInput, LedgerJsonContext.Default.EvidenceRecordDetail, "EvidenceRegistryOperationModule.Get", static (services, _) => services.EvidenceRegistry is { } module ? new EvidenceRegistryOperationHandler(module, "ledger.evidence.get") : new FoundationOperationHandler(), "tally ledger evidence get --input -"),
             _ => new(operationId, "tally " + operationId.Replace('.', ' '), isQuery ? "query" : "mutation", !isQuery, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.OperationUnavailableResult, "FoundationOperationHandler", static (_, _) => new FoundationOperationHandler(), "tally " + operationId.Replace('.', ' '))
@@ -156,6 +163,25 @@ public sealed class OperationRegistry
         if (operationId.EndsWith(".reactivate", StringComparison.Ordinal)) errors.Add(new(SpendPoolErrors.AlreadyActive, "lifecycle", 6));
         return errors;
     }
+
+    private static OperationDescriptor TransactionDescriptor(string operationId, JsonTypeInfo request, bool mutation, string target) => new(
+        operationId, "tally " + operationId.Replace('.', ' '), mutation ? "mutation" : "query", mutation, request, LedgerJsonContext.Default.TransactionDetail,
+        "TransactionOperationModule." + target, (services, _) => services.Transactions is { } module ? new TransactionOperationHandler(module, operationId) : new FoundationOperationHandler(),
+        "tally " + operationId.Replace('.', ' ') + " --input -", TransactionErrorsFor(operationId));
+
+    private static IReadOnlyList<ErrorSchema> TransactionErrorsFor(string operationId) => operationId switch
+    {
+        "ledger.transaction.record" =>
+        [
+            new(TransactionFact.InvalidError, "validation", 3), new(Money.InvalidAmountError, "validation", 3),
+            new(Money.ZeroTransactionAmountError, "validation", 3), new(LedgerCurrency.UnsupportedCurrencyError, "validation", 3),
+            new(EffectiveDate.InvalidDateError, "validation", 3), new(TransactionFact.EvidenceIncompatibleError, "validation", 3),
+            new(AccountStore.NotFoundError, "not_found", 4), new(AccountStore.ArchivedError, "lifecycle", 6),
+            new(TransactionErrors.AttributionIncompatible, "lifecycle", 6), new(TransactionErrors.EvidenceConflict, "conflict", 5)
+        ],
+        "ledger.transaction.get" => [new(TransactionFact.InvalidError, "validation", 3), new(TransactionErrors.NotFound, "not_found", 4)],
+        _ => []
+    };
     private static readonly string[] Inventory =
     [
         "ledger.account.create","ledger.account.get","ledger.account.list","ledger.account.rename","ledger.account.archive",
