@@ -1,0 +1,13 @@
+{
+  "id": "01KY5BSK9CC037QV2M94T4E40G",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-SAFE-RESTORE",
+  "subject_entity_id": "01KXSQDTAKFR7EDMZKG7WBK3QX",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-SAFE-RESTORE-CONTRACT",
+  "note": "Restore prepare and authorized activation pass 22 focused separate-generation, complete-fingerprint, failure-isolation, atomic-pointer, crash-retry, malformed-receipt, privacy, and idempotency cases; build and linux-x64 Native AOT publish pass.",
+  "commit_sha": "09c2187444ebe6971aac30e957bded4359159d2f",
+  "bead_id": "bd-fup",
+  "verified_at": "2026-07-22T16:50:56.9412871+00:00"
+}
