@@ -1,6 +1,7 @@
 using Tally.Features.System.Contract;
 using Tally.Application;
 using Tally.Features.Ledger.Evidence;
+using Tally.Features.Ledger.Relationships;
 using Tally.Features.Ledger.Accounts;
 using Tally.Features.Ledger.Categories;
 using Tally.Features.Ledger.Dimensions;
@@ -10,13 +11,14 @@ using Tally.Infrastructure.Storage.Accounts;
 using Tally.Infrastructure.Storage.Categories;
 using Tally.Infrastructure.Storage.Dimensions;
 using Tally.Infrastructure.Storage.Evidence;
+using Tally.Infrastructure.Storage.Relationships;
 using Tally.Infrastructure.Storage.Transactions;
 
 namespace Tally.Bootstrap;
 
-public sealed record LedgerServices(SystemOperationModule SystemOperations, AccountOperationModule? Accounts, CategoryOperationModule? Categories, PaymentIdentityOperationModule? PaymentIdentities, SpendPoolOperationModule? SpendPools, EvidenceRegistryOperationModule? EvidenceRegistry, TransactionOperationModule? Transactions, CategoryAllocationOperationModule? CategoryAllocations, PaymentAttributionOperationModule? PaymentAttributions, PoolAssignmentOperationModule? PoolAssignments, EvidenceLinkOperationModule? EvidenceLinks)
+public sealed record LedgerServices(SystemOperationModule SystemOperations, AccountOperationModule? Accounts, CategoryOperationModule? Categories, PaymentIdentityOperationModule? PaymentIdentities, SpendPoolOperationModule? SpendPools, EvidenceRegistryOperationModule? EvidenceRegistry, TransactionOperationModule? Transactions, CategoryAllocationOperationModule? CategoryAllocations, PaymentAttributionOperationModule? PaymentAttributions, PoolAssignmentOperationModule? PoolAssignments, EvidenceLinkOperationModule? EvidenceLinks, TransferOperationModule? Transfers)
 {
-    public static LedgerServices Create() => new(new SystemOperationModule(), null, null, null, null, null, null, null, null, null, null);
+    public static LedgerServices Create() => new(new SystemOperationModule(), null, null, null, null, null, null, null, null, null, null, null);
 
     public static LedgerServices Create(LedgerDb database)
     {
@@ -64,6 +66,10 @@ public sealed record LedgerServices(SystemOperationModule SystemOperations, Acco
             new AssignPoolHandler(executor, transactionStore, spendPoolStore, poolAssignmentStore),
             new CorrectPoolHandler(executor, transactionStore, spendPoolStore, poolAssignmentStore));
         var evidenceLinks = new EvidenceLinkOperationModule(new LinkSupportingEvidenceHandler(executor, evidenceStore, transactionStore));
-        return new(new SystemOperationModule(), accounts, categories, paymentIdentities, spendPools, evidence, transactions, categoryAllocations, paymentAttributions, poolAssignments, evidenceLinks);
+        var relationshipStore = new RelationshipStore(database, factory);
+        var transfers = new TransferOperationModule(
+            new ConfirmTransferHandler(executor, accountStore, transactionStore, relationshipStore),
+            new GetRelationshipHandler(relationshipStore));
+        return new(new SystemOperationModule(), accounts, categories, paymentIdentities, spendPools, evidence, transactions, categoryAllocations, paymentAttributions, poolAssignments, evidenceLinks, transfers);
     }
 }

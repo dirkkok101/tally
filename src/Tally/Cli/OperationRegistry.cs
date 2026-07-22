@@ -7,9 +7,11 @@ using Tally.Contracts.Ledger.Accounts;
 using Tally.Contracts.Ledger.Categories;
 using Tally.Contracts.Ledger.Dimensions;
 using Tally.Contracts.Ledger.Evidence;
+using Tally.Contracts.Ledger.Relationships;
 using Tally.Contracts.Ledger.Transactions;
 using Tally.Contracts.System;
 using Tally.Features.Ledger.Evidence;
+using Tally.Features.Ledger.Relationships;
 using Tally.Features.Ledger.Accounts;
 using Tally.Features.Ledger.Categories;
 using Tally.Features.Ledger.Dimensions;
@@ -18,6 +20,7 @@ using Tally.Domain.Ledger;
 using Tally.Domain.Ledger.Categories;
 using Tally.Domain.Ledger.Dimensions;
 using Tally.Domain.Ledger.Transactions;
+using Tally.Domain.Ledger.Relationships;
 using Tally.Infrastructure.Storage.Accounts;
 using Tally.Features.System.Contract;
 
@@ -110,6 +113,8 @@ public sealed class OperationRegistry
                     new(EvidenceLinkErrors.Conflict, "conflict", 5),
                     new(EvidenceLinkErrors.TransactionInactive, "lifecycle", 6)
                 ]),
+            "ledger.transfer.confirm" => TransferDescriptor(operationId, LedgerJsonContext.Default.ConfirmTransferInput, true, "Confirm"),
+            "ledger.relationship.get" => TransferDescriptor(operationId, LedgerJsonContext.Default.GetRelationshipInput, false, "Get"),
             _ => new(operationId, "tally " + operationId.Replace('.', ' '), isQuery ? "query" : "mutation", !isQuery, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.OperationUnavailableResult, "FoundationOperationHandler", static (_, _) => new FoundationOperationHandler(), "tally " + operationId.Replace('.', ' '))
         };
     }
@@ -261,6 +266,25 @@ public sealed class OperationRegistry
         new(PoolAssignmentErrors.AlreadyAssigned, "conflict", 5),
         new(PoolAssignmentErrors.Unchanged, "conflict", 5)
     ];
+
+    private static OperationDescriptor TransferDescriptor(string operationId, JsonTypeInfo request, bool mutation, string target) => new(
+        operationId, "tally " + operationId.Replace('.', ' '), mutation ? "mutation" : "query", mutation,
+        request, LedgerJsonContext.Default.FinancialRelationshipDetail, "TransferOperationModule." + target,
+        (services, _) => services.Transfers is { } module ? new TransferOperationHandler(module, operationId) : new FoundationOperationHandler(),
+        "tally " + operationId.Replace('.', ' ') + " --input -",
+        [
+            new(TransferErrors.Invalid, "validation", 3),
+            new(TransactionErrors.NotFound, "not_found", 4),
+            new(TransferErrors.RelationshipNotFound, "not_found", 4),
+            new(AccountStore.NotFoundError, "not_found", 4),
+            new(TransferErrors.SameAccount, "validation", 3),
+            new(TransferErrors.Sign, "validation", 3),
+            new(TransferErrors.Amount, "validation", 3),
+            new(TransferErrors.Currency, "validation", 3),
+            new(TransferErrors.ActiveRoleConflict, "conflict", 5),
+            new(TransferErrors.TransactionInactive, "lifecycle", 6),
+            new(AccountStore.ArchivedError, "lifecycle", 6)
+        ]);
     private static readonly string[] Inventory =
     [
         "ledger.account.create","ledger.account.get","ledger.account.list","ledger.account.rename","ledger.account.archive",

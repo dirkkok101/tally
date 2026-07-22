@@ -125,6 +125,10 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
         "LEDGER-POOL-ASSIGNMENT-INVALID" => Error(3, code, "validation", "The Spend Pool assignment input is invalid."),
         "LEDGER-POOL-ASSIGNMENT-STALE" or "LEDGER-POOL-ASSIGNMENT-ALREADY-ASSIGNED" or "LEDGER-POOL-ASSIGNMENT-UNCHANGED" => Error(5, code, "conflict", "The Spend Pool assignment conflicts with current state."),
         "LEDGER-POOL-ASSIGNMENT-TRANSACTION-INACTIVE" => Error(6, code, "lifecycle", "The Spend Pool assignment lifecycle does not allow the operation."),
+        "LEDGER-TRANSFER-INVALID" or "LEDGER-TRANSFER-SAME-ACCOUNT" or "LEDGER-TRANSFER-SIGN" or "LEDGER-TRANSFER-AMOUNT" or "LEDGER-TRANSFER-CURRENCY" => Error(3, code, "validation", "The transfer does not satisfy the financial relationship contract."),
+        "LEDGER-RELATIONSHIP-NOT-FOUND" => Error(4, code, "not_found", "The financial relationship was not found."),
+        "LEDGER-RELATIONSHIP-ACTIVE-ROLE-CONFLICT" => Error(5, code, "conflict", "A transaction already participates in an active financial relationship."),
+        "LEDGER-TRANSFER-TRANSACTION-INACTIVE" => Error(6, code, "lifecycle", "The transaction lifecycle does not allow transfer confirmation."),
         "LEDGER-IDEMPOTENCY-001" or "operation.conflict" => Error(5, code, "conflict", "The operation conflicts with existing state."),
         "host.unavailable" => Error(9, code, "host", "The requested operation is not available in this foundation."),
         _ => UnexpectedFailure()

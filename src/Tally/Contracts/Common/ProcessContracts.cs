@@ -4,6 +4,7 @@ using Tally.Contracts.Ledger.Accounts;
 using Tally.Contracts.Ledger.Categories;
 using Tally.Contracts.Ledger.Dimensions;
 using Tally.Contracts.Ledger.Evidence;
+using Tally.Contracts.Ledger.Relationships;
 using Tally.Contracts.Ledger.Transactions;
 
 namespace Tally.Contracts.Common;
@@ -110,4 +111,8 @@ public sealed record EmptyInput;
 [JsonSerializable(typeof(TransactionPoolHistoryItem[]))]
 [JsonSerializable(typeof(TransactionCategoryHistoryItem[]))]
 [JsonSerializable(typeof(TransactionHistory))]
+[JsonSerializable(typeof(ConfirmTransferInput))]
+[JsonSerializable(typeof(GetRelationshipInput))]
+[JsonSerializable(typeof(FinancialRelationshipDetail))]
+[JsonSerializable(typeof(RelationshipLifecycleHistoryItem[]))]
 public partial class LedgerJsonContext : JsonSerializerContext;
