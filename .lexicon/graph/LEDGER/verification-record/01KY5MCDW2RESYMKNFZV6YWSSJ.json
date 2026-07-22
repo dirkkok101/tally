@@ -1,0 +1,13 @@
+{
+  "id": "01KY5MCDW2RESYMKNFZV6YWSSJ",
+  "subject_type": "test_case",
+  "subject_ref_code": "TC-LEDGER-TRANSFER-CONFIRMATION-CONTRACT",
+  "subject_entity_id": "01KXSQK99DZS5T99TYN393FMBF",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-TRANSFER-CONFIRMATION-CONTRACT",
+  "note": "Published CLI UC-004 passed 16/16 scenarios: dimensioned zero-spend transfer, date independence, separate-fee spend, all role/conservation/lifecycle/exclusivity failures, replay, and process-crash convergence. Non-ZAR legs are rejected at canonical recording before relationship state. Focused regressions 68/68, full non-performance suite 1347/1347, build and format clean.",
+  "commit_sha": "2bd6e57",
+  "bead_id": "bd-2qb",
+  "verified_at": "2026-07-22T19:21:02.5953968+00:00"
+}
