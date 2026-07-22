@@ -247,18 +247,27 @@ public sealed class TransactionStore(LedgerDb database, LedgerConnectionFactory 
                    fact.transaction_date, fact.posting_date, fact.effective_date, fact.original_description,
                    lifecycle.action, lifecycle.replacement_transaction_id,
                    COALESCE(
-                       (SELECT entry.outcome FROM coverage_entry AS entry WHERE entry.transaction_id = fact.transaction_id ORDER BY entry.recorded_at DESC, entry.coverage_entry_id DESC LIMIT 1),
                        (SELECT CASE decision.disposition
                            WHEN 'confirmed_existing' THEN 'statement_reconciled'
                            WHEN 'corrected_from_statement' THEN 'statement_reconciled'
                            WHEN 'statement_only' THEN 'statement_only'
                            WHEN 'ambiguous' THEN 'ambiguous_match'
                            WHEN 'owner_confirmed_match' THEN 'owner_confirmed_match'
+                           WHEN 'replaced' THEN 'owner_confirmed_match'
                            WHEN 'exception' THEN 'reconciliation_exception'
                            ELSE 'recorded_unreconciled' END
                         FROM reconciliation_current_v2 AS decision
                         WHERE decision.active_transaction_id = fact.transaction_id
                         ORDER BY decision.decided_at DESC, decision.decision_id DESC LIMIT 1),
+                       (SELECT CASE decision.disposition
+                           WHEN 'corrected_from_statement' THEN 'statement_reconciled'
+                           WHEN 'replaced' THEN 'recorded_absent_from_statement'
+                           WHEN 'revoked' THEN 'recorded_absent_from_statement'
+                           ELSE 'reconciliation_exception' END
+                        FROM reconciliation_current_v2 AS decision
+                        WHERE decision.prior_transaction_id = fact.transaction_id
+                        ORDER BY decision.decided_at DESC, decision.decision_id DESC LIMIT 1),
+                       (SELECT entry.outcome FROM coverage_entry AS entry WHERE entry.transaction_id = fact.transaction_id ORDER BY entry.recorded_at DESC, entry.coverage_entry_id DESC LIMIT 1),
                        'recorded_unreconciled'),
                    allocation.allocation_event_id, category.category_id, category.ancestry_ids,
                    pool.pool_assignment_event_id, pool.assignment_state, pool.pool_id,
