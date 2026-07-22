@@ -1,0 +1,13 @@
+{
+  "id": "01KY5DXTD4SJEQ20KCVEJ9QEB2",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-SAFE-STORAGE-EVOLUTION",
+  "subject_entity_id": "01KXSQDTAMTJ1Y16FE3S7BJDP8",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-SAFE-STORAGE-EVOLUTION-CONTRACT",
+  "note": "Safe status, V1/V2 isolated candidate evolution, independent recovery verification, guarded atomic activation, crash recovery, replay, and no in-place startup migration verified by 28 focused tests; 47 backup/restore regressions, 1144 full tests, clean build/format, and linux-x64 Native AOT publish passed.",
+  "commit_sha": "4d1f676920563f732bb95cc1345c16e7e82e16c6",
+  "bead_id": "bd-4zp",
+  "verified_at": "2026-07-22T17:28:12.4538080+00:00"
+}
