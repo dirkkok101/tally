@@ -1,0 +1,13 @@
+{
+  "id": "01KY499FEYYEN1M4T39KMVXWZA",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-RELATIONSHIP-CORRECTION",
+  "subject_entity_id": "01KXSQCYJBJCNY42182W7BRMQA",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-RELATIONSHIP-CORRECTION-CONTRACT",
+  "note": "bd-2sb: 21 focused lifecycle tests, 71 relationship tests, 568 full tests, zero-warning build, formatting, and linux-x64 AOT publish passed.",
+  "commit_sha": "6414812",
+  "bead_id": "bd-2sb",
+  "verified_at": "2026-07-22T06:47:57.1511206+00:00"
+}
