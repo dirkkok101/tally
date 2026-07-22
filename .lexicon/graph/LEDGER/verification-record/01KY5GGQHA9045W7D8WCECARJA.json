@@ -1,0 +1,13 @@
+{
+  "id": "01KY5GGQHA9045W7D8WCECARJA",
+  "subject_type": "test_case",
+  "subject_ref_code": "TC-LEDGER-OFFLINE-SELF-CONTAINED",
+  "subject_entity_id": "01KXSXGARJWH67PJ3TH12CNVDZ",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-OFFLINE-SELF-CONTAINED",
+  "note": "Release linux-x64 Native AOT publish and process contract tests pass without an installed dotnet runtime, listeners, or child services.",
+  "commit_sha": "9a2d3e188725d8b8156a96f279e57ac73b021634",
+  "bead_id": "bd-2jj",
+  "verified_at": "2026-07-22T18:13:29.2590115+00:00"
+}

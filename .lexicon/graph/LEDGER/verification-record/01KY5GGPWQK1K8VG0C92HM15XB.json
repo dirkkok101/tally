@@ -1,0 +1,13 @@
+{
+  "id": "01KY5GGPWQK1K8VG0C92HM15XB",
+  "subject_type": "test_case",
+  "subject_ref_code": "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE",
+  "subject_entity_id": "01KXSXG8TR927NTWCDM2MBGVTV",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE",
+  "note": "Published inventory has exactly 73 concrete provider-neutral operation schemas; 92 targeted, 159 composition, and 20 published-process tests pass.",
+  "commit_sha": "9a2d3e188725d8b8156a96f279e57ac73b021634",
+  "bead_id": "bd-2jj",
+  "verified_at": "2026-07-22T18:13:28.6006845+00:00"
+}
