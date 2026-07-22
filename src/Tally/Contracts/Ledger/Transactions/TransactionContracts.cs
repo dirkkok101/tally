@@ -115,7 +115,7 @@ public sealed record TransactionPaymentAttribution(
     TransactionKnowledgeState CardholderState,
     string? CardholderId);
 
-public sealed record TransactionPoolAssignment(TransactionPoolState State, string? PoolId);
+public sealed record TransactionPoolAssignment(string PoolAssignmentEventId, TransactionPoolState State, string? PoolId);
 public sealed record TransactionCategoryAssignment(TransactionCategoryState State, string? AllocationEventId, string? CategoryId, IReadOnlyList<string> CurrentAncestryIds);
 
 public sealed record TransactionEvidenceDetail(
@@ -159,6 +159,8 @@ public sealed record TransactionPoolHistoryItem(
     string? PoolId,
     TransactionAssignmentAction Action,
     string? PreviousEventId,
+    string? SourceTransactionId,
+    string? ReconciliationDecisionId,
     string Reason,
     string Actor,
     string OccurredAt);

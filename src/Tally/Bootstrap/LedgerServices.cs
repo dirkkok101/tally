@@ -14,9 +14,9 @@ using Tally.Infrastructure.Storage.Transactions;
 
 namespace Tally.Bootstrap;
 
-public sealed record LedgerServices(SystemOperationModule SystemOperations, AccountOperationModule? Accounts, CategoryOperationModule? Categories, PaymentIdentityOperationModule? PaymentIdentities, SpendPoolOperationModule? SpendPools, EvidenceRegistryOperationModule? EvidenceRegistry, TransactionOperationModule? Transactions, CategoryAllocationOperationModule? CategoryAllocations, PaymentAttributionOperationModule? PaymentAttributions)
+public sealed record LedgerServices(SystemOperationModule SystemOperations, AccountOperationModule? Accounts, CategoryOperationModule? Categories, PaymentIdentityOperationModule? PaymentIdentities, SpendPoolOperationModule? SpendPools, EvidenceRegistryOperationModule? EvidenceRegistry, TransactionOperationModule? Transactions, CategoryAllocationOperationModule? CategoryAllocations, PaymentAttributionOperationModule? PaymentAttributions, PoolAssignmentOperationModule? PoolAssignments)
 {
-    public static LedgerServices Create() => new(new SystemOperationModule(), null, null, null, null, null, null, null, null);
+    public static LedgerServices Create() => new(new SystemOperationModule(), null, null, null, null, null, null, null, null, null);
 
     public static LedgerServices Create(LedgerDb database)
     {
@@ -59,6 +59,10 @@ public sealed record LedgerServices(SystemOperationModule SystemOperations, Acco
         var paymentAttributions = new PaymentAttributionOperationModule(
             new AssignPaymentAttributionHandler(executor, transactionStore, paymentIdentityStore, paymentAttributionStore),
             new CorrectPaymentAttributionHandler(executor, transactionStore, paymentIdentityStore, paymentAttributionStore));
-        return new(new SystemOperationModule(), accounts, categories, paymentIdentities, spendPools, evidence, transactions, categoryAllocations, paymentAttributions);
+        var poolAssignmentStore = new PoolAssignmentStore();
+        var poolAssignments = new PoolAssignmentOperationModule(
+            new AssignPoolHandler(executor, transactionStore, spendPoolStore, poolAssignmentStore),
+            new CorrectPoolHandler(executor, transactionStore, spendPoolStore, poolAssignmentStore));
+        return new(new SystemOperationModule(), accounts, categories, paymentIdentities, spendPools, evidence, transactions, categoryAllocations, paymentAttributions, poolAssignments);
     }
 }

@@ -92,6 +92,8 @@ public sealed class OperationRegistry
             "ledger.transaction.category.correct" => CategoryAllocationDescriptor(operationId, LedgerJsonContext.Default.CorrectCategoryInput, "Correct"),
             "ledger.transaction.attribution.assign" => PaymentAttributionDescriptor(operationId, LedgerJsonContext.Default.AssignPaymentAttributionInput, "Assign"),
             "ledger.transaction.attribution.correct" => PaymentAttributionDescriptor(operationId, LedgerJsonContext.Default.CorrectPaymentAttributionInput, "Correct"),
+            "ledger.transaction.pool.assign" => PoolAssignmentDescriptor(operationId, LedgerJsonContext.Default.AssignPoolInput, "Assign"),
+            "ledger.transaction.pool.correct" => PoolAssignmentDescriptor(operationId, LedgerJsonContext.Default.CorrectPoolInput, "Correct"),
             "ledger.evidence.register" => new(operationId, "tally ledger evidence register", "mutation", true, LedgerJsonContext.Default.RegisterEvidenceInput, LedgerJsonContext.Default.EvidenceRecordDetail, "EvidenceRegistryOperationModule.Register", static (services, _) => services.EvidenceRegistry is { } module ? new EvidenceRegistryOperationHandler(module, "ledger.evidence.register") : new FoundationOperationHandler(), "tally ledger evidence register --input -"),
             "ledger.evidence.get" => new(operationId, "tally ledger evidence get", "query", false, LedgerJsonContext.Default.GetEvidenceInput, LedgerJsonContext.Default.EvidenceRecordDetail, "EvidenceRegistryOperationModule.Get", static (services, _) => services.EvidenceRegistry is { } module ? new EvidenceRegistryOperationHandler(module, "ledger.evidence.get") : new FoundationOperationHandler(), "tally ledger evidence get --input -"),
             _ => new(operationId, "tally " + operationId.Replace('.', ' '), isQuery ? "query" : "mutation", !isQuery, LedgerJsonContext.Default.EmptyInput, LedgerJsonContext.Default.OperationUnavailableResult, "FoundationOperationHandler", static (_, _) => new FoundationOperationHandler(), "tally " + operationId.Replace('.', ' '))
@@ -226,6 +228,24 @@ public sealed class OperationRegistry
         new(PaymentAttributionErrors.Stale, "conflict", 5),
         new(PaymentAttributionErrors.AlreadyAssigned, "conflict", 5),
         new(PaymentAttributionErrors.Unchanged, "conflict", 5)
+    ];
+
+    private static OperationDescriptor PoolAssignmentDescriptor(string operationId, JsonTypeInfo request, string target) => new(
+        operationId, "tally " + operationId.Replace('.', ' '), "mutation", true, request, LedgerJsonContext.Default.PoolAssignmentResult,
+        "PoolAssignmentOperationModule." + target,
+        (services, _) => services.PoolAssignments is { } module ? new PoolAssignmentOperationHandler(module, operationId) : new FoundationOperationHandler(),
+        "tally " + operationId.Replace('.', ' ') + " --input -", PoolAssignmentErrorsFor());
+
+    private static IReadOnlyList<ErrorSchema> PoolAssignmentErrorsFor() =>
+    [
+        new(PoolAssignmentPolicy.InvalidError, "validation", 3),
+        new(TransactionErrors.NotFound, "not_found", 4),
+        new(SpendPoolErrors.NotFound, "not_found", 4),
+        new(PoolAssignmentErrors.TransactionInactive, "lifecycle", 6),
+        new(SpendPoolErrors.Archived, "lifecycle", 6),
+        new(PoolAssignmentErrors.Stale, "conflict", 5),
+        new(PoolAssignmentErrors.AlreadyAssigned, "conflict", 5),
+        new(PoolAssignmentErrors.Unchanged, "conflict", 5)
     ];
     private static readonly string[] Inventory =
     [
