@@ -1,0 +1,13 @@
+{
+  "id": "01KY5J31CHMYMHMSMBCNMDPNDY",
+  "subject_type": "test_case",
+  "subject_ref_code": "TC-LEDGER-ACCOUNT-MAINTENANCE-CONTRACT",
+  "subject_entity_id": "01KXSQJCN18EQW8FPHCQAS6H0P",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-ACCOUNT-MAINTENANCE-CONTRACT",
+  "note": "Release published-process UC-001 verifier passed 12 main and failure-path cases; account identity/history/references, privacy rejection, archive behavior, replay, and dimension isolation were proven without private handler or SQLite access.",
+  "commit_sha": "97510c48c6c1c3020e6605b97dd369eeb78fc680",
+  "bead_id": "bd-nt9",
+  "verified_at": "2026-07-22T18:40:57.7458735+00:00"
+}
