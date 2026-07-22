@@ -1,0 +1,13 @@
+{
+  "id": "01KY4XHHA2W7M2VSP03QKV5ZJX",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-LEDGER-VERIFIED-RECOVERABILITY",
+  "subject_entity_id": "01KXSQFYKENRZNNNRNH8E8NWYD",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-VERIFIED-RECOVERY-DRILL",
+  "note": "Durable verifier: 28 focused, 116 Recovery/Actuals, and 1049 full tests passed; build, format, Native AOT, 31-type inventory, corruption rejection, snapshot exclusion, and logical clone reproduction passed.",
+  "commit_sha": "817d92ff5e176d0aac022af3f952f55774806a42",
+  "bead_id": "bd-3ja",
+  "verified_at": "2026-07-22T12:41:52.7071856+00:00"
+}
