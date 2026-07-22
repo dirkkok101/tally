@@ -1,0 +1,13 @@
+{
+  "id": "01KY5Q29Z8ZXF6YC7ZG7MQBJ5P",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-CATEGORY-CATALOGUE",
+  "subject_entity_id": "01KXSQBX8R182MNEY6JZ4KQV82",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-CATEGORY-CATALOGUE-CONTRACT",
+  "note": "UC-008 published Release tests prove typed create/get/list/rename/reparent/archive/reactivate, stable identity and ancestry, append-only history, current subtree rollups, lifecycle/cycle/sibling failures, physical-delete absence, and replay safety; 10/10 UC, 60/60 focused, and 1392/1392 functional tests passed.",
+  "commit_sha": "9b7bf30",
+  "bead_id": "bd-3cs",
+  "verified_at": "2026-07-22T20:07:56.6502613+00:00"
+}
