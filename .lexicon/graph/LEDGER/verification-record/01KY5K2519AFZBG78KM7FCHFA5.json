@@ -1,0 +1,13 @@
+{
+  "id": "01KY5K2519AFZBG78KM7FCHFA5",
+  "subject_type": "test_case",
+  "subject_ref_code": "TC-LEDGER-TRANSACTION-RECORDING-CONTRACT",
+  "subject_entity_id": "01KXSQK908FJNQCMJ4ZVD1G4SY",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-TRANSACTION-RECORDING-CONTRACT",
+  "note": "Published CLI UC-002 passed 23/23 scenarios; focused transaction/public-contract regressions passed 59/59; full non-performance suite passed 1320/1320; build and format clean.",
+  "commit_sha": "016b4c5",
+  "bead_id": "bd-2m5",
+  "verified_at": "2026-07-22T18:57:57.2904110+00:00"
+}
