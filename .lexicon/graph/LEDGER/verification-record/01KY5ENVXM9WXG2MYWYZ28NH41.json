@@ -1,0 +1,13 @@
+{
+  "id": "01KY5ENVXM9WXG2MYWYZ28NH41",
+  "subject_type": "test_case",
+  "subject_ref_code": "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE",
+  "subject_entity_id": "01KXSXG8TR927NTWCDM2MBGVTV",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE",
+  "note": "Exact 13-operation recovery/system/guidance composition, byte-stable source schemas, optional guidance, explicit handler binding, and all missing/duplicate/version/provider/capability rejection states verified by 19 focused tests and 80 Ledger composition tests; clean build/format and linux-x64 Native AOT publish passed.",
+  "commit_sha": "0baa22b1c5786fe5fd49cc383f167b997d11c545",
+  "bead_id": "bd-5gf",
+  "verified_at": "2026-07-22T17:41:20.4369940+00:00"
+}
