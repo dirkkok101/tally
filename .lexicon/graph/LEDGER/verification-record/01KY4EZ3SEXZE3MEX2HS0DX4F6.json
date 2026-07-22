@@ -1,0 +1,13 @@
+{
+  "id": "01KY4EZ3SEXZE3MEX2HS0DX4F6",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE",
+  "subject_entity_id": "01KY09SP7CGPEJNY9GPCF3A6XG",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-RECONCILIATION-DECISION-LIFECYCLE-CONTRACT",
+  "note": "41 decision-lifecycle tests, 140 focused reconciliation tests, 682 full tests, zero-warning build, format verification, and 27 Native AOT/core tests passed. Explicit owner authority, append-only confirm/reject/revoke/replace history, one active confirming link, stable replay, rollback, and inactive-target exception projection were proven.",
+  "commit_sha": "69946c5",
+  "bead_id": "bd-3q4",
+  "verified_at": "2026-07-22T08:27:08.9756014+00:00"
+}
