@@ -1,0 +1,13 @@
+{
+  "id": "01KY4DF1X5NNCYMSD3BY1ZYAMP",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-STATEMENT-RECONCILIATION",
+  "subject_entity_id": "01KY09SNNG25N20YWX3J86S4RY",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT",
+  "note": "40 owner-reviewed apply and crash-boundary tests, 99 focused reconciliation tests, 641 full tests, zero-warning build, format verification, and 27 Native AOT/core tests passed. Owner match, statement-only, ambiguity, exception, drift rejection, idempotent replay, and atomic rollback were proven without automatic authority or statement correction.",
+  "commit_sha": "9c8530e",
+  "bead_id": "bd-37y",
+  "verified_at": "2026-07-22T08:00:54.1829235+00:00"
+}
