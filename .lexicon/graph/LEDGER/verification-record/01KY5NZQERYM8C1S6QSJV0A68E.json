@@ -1,0 +1,13 @@
+{
+  "id": "01KY5NZQERYM8C1S6QSJV0A68E",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-STRUCTURED-INVOCATION",
+  "subject_entity_id": "01KXSQDTAD4TBE8A2M89F3BM2Q",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-STRUCTURED-INVOCATION-CONTRACT",
+  "note": "UC-006 published Release tests prove one-object stdout, safe stable domain/review/compatibility/validation errors, provider-field rejection before mutation, and lost-output idempotent replay; 34/34 UC cases and 1382/1382 functional tests passed.",
+  "commit_sha": "37d064a",
+  "bead_id": "bd-gpm",
+  "verified_at": "2026-07-22T19:49:03.5776656+00:00"
+}

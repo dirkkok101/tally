@@ -1,0 +1,13 @@
+{
+  "id": "01KY5NZPR7RJKYC0798EFZNJEN",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-SKILL-COMPATIBILITY",
+  "subject_entity_id": "01KXSQDTAGKNX8F1FK1JK3N189",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-SKILL-COMPATIBILITY-CONTRACT",
+  "note": "UC-006 published Release tests prove optional Codex guidance is registry-compatible and provider-neutral, while all 73 workflows remain discoverable and hierarchy/statement-correction calls remain invocable after guidance removal; 34/34 UC cases and 149/149 focused contract regressions passed.",
+  "commit_sha": "37d064a",
+  "bead_id": "bd-gpm",
+  "verified_at": "2026-07-22T19:49:02.8568371+00:00"
+}
