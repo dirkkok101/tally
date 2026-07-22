@@ -404,8 +404,6 @@ public sealed class TransactionCorrectionTests : IAsyncLifetime
                 LedgerId.New().ToString(),
                 original.TransactionId,
                 LedgerId.New().ToString(),
-                LedgerId.New().ToString(),
-                LedgerId.New().ToString(),
                 statementFact!,
                 "statement correction",
                 "system:reconciliation",
@@ -423,7 +421,7 @@ public sealed class TransactionCorrectionTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task DD_LEDGER_RECONCILIATION_CONTRACT_authorized_statement_supersession_appends_the_typed_lifecycle_without_carry_forward()
+    public async Task DD_LEDGER_RECONCILIATION_CONTRACT_authorized_statement_supersession_leaves_dimensions_for_explicit_carry_forward()
     {
         var account = await CreateAccount("Primary", "1111");
         var original = await Record(account.AccountId, "-12.34");
@@ -449,8 +447,6 @@ public sealed class TransactionCorrectionTests : IAsyncLifetime
                 lifecycleId,
                 original.TransactionId,
                 replacementId,
-                LedgerId.New().ToString(),
-                LedgerId.New().ToString(),
                 statementFact!,
                 "statement authority",
                 "system:reconciliation",
@@ -466,17 +462,15 @@ public sealed class TransactionCorrectionTests : IAsyncLifetime
         Assert.Equal(replacementId, result.GetType().GetProperty("ReplacementTransactionId")!.GetValue(result));
         Assert.Equal(decisionWriter.DecisionId, result.GetType().GetProperty("DecisionId")!.GetValue(result));
         var corrected = await Get(original.TransactionId);
-        var replacement = await Get(replacementId);
         Assert.Equal(TransactionLifecycleStatus.Superseded, corrected.LifecycleStatus);
         Assert.Equal(replacementId, corrected.ActiveReplacementTransactionId);
         var lifecycle = Assert.Single(corrected.History!.Lifecycle);
         Assert.Equal(TransactionLifecycleAction.StatementAuthoritativeReplacement, lifecycle.Action);
         Assert.Equal(decisionWriter.DecisionId, lifecycle.ReconciliationDecisionId);
-        Assert.Equal(TransactionLifecycleStatus.Active, replacement.LifecycleStatus);
-        Assert.Equal(TransactionCategoryState.Uncategorized, replacement.Category.State);
-        Assert.Equal(TransactionPoolState.Unassigned, replacement.Pool.State);
-        Assert.Equal(TransactionKnowledgeState.Unknown, replacement.PaymentAttribution.InstrumentState);
-        Assert.Empty(replacement.Evidence);
+        Assert.Equal(1, await CountWhere("transaction_fact", "transaction_id", replacementId));
+        Assert.Equal(0, await CountWhere("pool_assignment_event", "transaction_id", replacementId));
+        Assert.Equal(0, await CountWhere("transaction_attribution_event", "transaction_id", replacementId));
+        Assert.Null(await transactionStore.GetAsync(replacementId, true, CancellationToken.None));
     }
 
     public async Task InitializeAsync()
@@ -701,6 +695,15 @@ public sealed class TransactionCorrectionTests : IAsyncLifetime
         await using var connection = await Open();
         await using var command = connection.CreateCommand();
         command.CommandText = $"SELECT COUNT(*) FROM {table};";
+        return Convert.ToInt64(await command.ExecuteScalarAsync(), System.Globalization.CultureInfo.InvariantCulture);
+    }
+
+    private async Task<long> CountWhere(string table, string column, string value)
+    {
+        await using var connection = await Open();
+        await using var command = connection.CreateCommand();
+        command.CommandText = $"SELECT COUNT(*) FROM {table} WHERE {column} = $value;";
+        command.Parameters.AddWithValue("$value", value);
         return Convert.ToInt64(await command.ExecuteScalarAsync(), System.Globalization.CultureInfo.InvariantCulture);
     }
 

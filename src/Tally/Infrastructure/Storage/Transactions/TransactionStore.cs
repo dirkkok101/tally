@@ -31,12 +31,15 @@ public sealed class TransactionStore(LedgerDb database, LedgerConnectionFactory 
         string actor,
         CancellationToken cancellationToken)
     {
+        await InsertFactAsync(
+            connection,
+            transaction,
+            transactionId,
+            fact,
+            recordedAt,
+            osIdentity,
+            cancellationToken);
         await using var command = Command(connection, transaction, """
-            INSERT INTO transaction_fact (
-                transaction_id, account_id, signed_amount_minor, currency_code, transaction_date,
-                posting_date, original_description, recorded_at, recorded_by_os_identity)
-            VALUES ($transactionId, $accountId, $amount, $currency, $transactionDate,
-                    $postingDate, $description, $recordedAt, $osIdentity);
             INSERT INTO transaction_attribution_event (
                 attribution_event_id, transaction_id, instrument_state, instrument_id, cardholder_state, cardholder_id,
                 action, previous_event_id, source_transaction_id, reconciliation_decision_id, reason, actor, occurred_at)
@@ -49,14 +52,7 @@ public sealed class TransactionStore(LedgerDb database, LedgerConnectionFactory 
                     NULL, NULL, NULL, 'initialize transaction pool', $actor, $recordedAt);
             """,
             ("$transactionId", transactionId),
-            ("$accountId", fact.AccountId),
-            ("$amount", fact.SignedAmount.MinorUnits),
-            ("$currency", fact.Currency.Code),
-            ("$transactionDate", fact.TransactionDate.ToString()),
-            ("$postingDate", fact.PostingDate?.ToString()),
-            ("$description", fact.OriginalDescription),
             ("$recordedAt", recordedAt),
-            ("$osIdentity", osIdentity),
             ("$initialAttributionEventId", initialAttributionEventId),
             ("$poolAssignmentEventId", poolAssignmentEventId),
             ("$actor", actor));
@@ -176,8 +172,6 @@ public sealed class TransactionStore(LedgerDb database, LedgerConnectionFactory 
         string lifecycleEventId,
         string transactionId,
         string replacementTransactionId,
-        string initialAttributionEventId,
-        string poolAssignmentEventId,
         TransactionFact statementFact,
         string reason,
         string actor,
@@ -190,17 +184,13 @@ public sealed class TransactionStore(LedgerDb database, LedgerConnectionFactory 
         await ExecuteTransactionControlAsync(connection, transaction, $"SAVEPOINT {savepoint};", cancellationToken);
         try
         {
-            await InsertFactAndDefaultsAsync(
+            await InsertFactAsync(
                 connection,
                 transaction,
                 replacementTransactionId,
-                initialAttributionEventId,
-                assignedAttributionEventId: null,
-                poolAssignmentEventId,
                 statementFact,
                 occurredAt,
                 Environment.UserName,
-                actor,
                 cancellationToken);
             var decisionId = await writeDecision(replacementTransactionId, cancellationToken);
             if (!LedgerId.TryParse(decisionId, out _, out _)
@@ -385,6 +375,34 @@ public sealed class TransactionStore(LedgerDb database, LedgerConnectionFactory 
             ("$reason", reason),
             ("$actor", actor),
             ("$occurredAt", occurredAt));
+        await command.ExecuteNonQueryAsync(cancellationToken);
+    }
+
+    private static async Task InsertFactAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        string transactionId,
+        TransactionFact fact,
+        string recordedAt,
+        string osIdentity,
+        CancellationToken cancellationToken)
+    {
+        await using var command = Command(connection, transaction, """
+            INSERT INTO transaction_fact (
+                transaction_id, account_id, signed_amount_minor, currency_code, transaction_date,
+                posting_date, original_description, recorded_at, recorded_by_os_identity)
+            VALUES ($transactionId, $accountId, $amount, $currency, $transactionDate,
+                    $postingDate, $description, $recordedAt, $osIdentity);
+            """,
+            ("$transactionId", transactionId),
+            ("$accountId", fact.AccountId),
+            ("$amount", fact.SignedAmount.MinorUnits),
+            ("$currency", fact.Currency.Code),
+            ("$transactionDate", fact.TransactionDate.ToString()),
+            ("$postingDate", fact.PostingDate?.ToString()),
+            ("$description", fact.OriginalDescription),
+            ("$recordedAt", recordedAt),
+            ("$osIdentity", osIdentity));
         await command.ExecuteNonQueryAsync(cancellationToken);
     }
 
