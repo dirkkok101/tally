@@ -14,7 +14,7 @@ public sealed class CompleteLedgerSchemaTests : IAsyncLifetime
     public void Complete_schema_names_every_owned_fragment_in_version_name_order()
     {
         Assert.Equal(["storage", "v001_catalogue", "v001_relationship_actuals", "v001_transaction", "z_evidence_reconciliation"], CompleteLedgerSchema.V1FragmentNames);
-        Assert.Equal(["storage", "v001_catalogue", "v001_relationship_actuals", "v001_transaction", "z_evidence_reconciliation", "statement_authority"], CompleteLedgerSchema.CurrentFragmentNames);
+        Assert.Equal(["storage", "v001_catalogue", "v001_relationship_actuals", "v001_transaction", "z_evidence_reconciliation", "statement_authority", "actuals_query_indexes"], CompleteLedgerSchema.CurrentFragmentNames);
     }
 
     // DD-LEDGER-EMBEDDED-STORAGE
@@ -24,9 +24,18 @@ public sealed class CompleteLedgerSchemaTests : IAsyncLifetime
         await using var connection = await OpenAsync("fresh");
         await CompleteLedgerSchema.CreateCurrent().ApplyAsync(connection, CancellationToken.None);
 
-        Assert.Equal(2L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
-        Assert.Equal(34L, await ScalarLongAsync(connection, "SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%';"));
-        Assert.Equal(6L, await ScalarLongAsync(connection, "SELECT COUNT(*) FROM migration_metadata;"));
+        Assert.Equal(3L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
+        Assert.Equal(35L, await ScalarLongAsync(connection, "SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%';"));
+        Assert.Equal(7L, await ScalarLongAsync(connection, "SELECT COUNT(*) FROM migration_metadata;"));
+        Assert.Equal(3L, await ScalarLongAsync(connection, """
+            SELECT COUNT(*)
+            FROM sqlite_master
+            WHERE type = 'index'
+              AND name IN (
+                  'ix_category_allocation_event_transaction',
+                  'ix_pool_assignment_event_transaction',
+                  'ix_transaction_attribution_event_transaction');
+            """));
     }
 
     // DD-LEDGER-EMBEDDED-STORAGE

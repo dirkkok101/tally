@@ -63,15 +63,25 @@ public static class ActualsCalculator
     {
         if (item.LifecycleStatus != TransactionLifecycleStatus.Active) return ActualsTotals.Zero;
 
-        var signed = item.SignedAccountAmount.MinorUnits;
-        var spend = item.RelationshipState switch
+        var contribution = ActiveContributionMinor(item.SignedAccountAmount.MinorUnits, item.RelationshipState);
+        return new(
+            Money.FromMinorUnits(contribution.NetAccountMovement),
+            Money.FromMinorUnits(contribution.ExternalSpend),
+            Money.FromMinorUnits(contribution.BudgetActual));
+    }
+
+    internal static (long NetAccountMovement, long ExternalSpend, long BudgetActual) ActiveContributionMinor(
+        long signedAmountMinor,
+        ActualsRelationshipState relationshipState)
+    {
+        var spend = relationshipState switch
         {
             ActualsRelationshipState.TransferOutflow or ActualsRelationshipState.TransferInflow => 0,
-            ActualsRelationshipState.RefundCredit => checked(-signed),
-            _ when signed < 0 => checked(-signed),
+            ActualsRelationshipState.RefundCredit => checked(-signedAmountMinor),
+            _ when signedAmountMinor < 0 => checked(-signedAmountMinor),
             _ => 0
         };
-        return new(Money.FromMinorUnits(signed), Money.FromMinorUnits(spend), Money.FromMinorUnits(spend));
+        return (signedAmountMinor, spend, spend);
     }
 
     private static IReadOnlyList<ActualsGroup> Group(IReadOnlyList<CalculatedActualsItem> items, ActualsGroupKind groupKind)

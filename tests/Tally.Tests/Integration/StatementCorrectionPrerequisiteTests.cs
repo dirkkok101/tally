@@ -100,7 +100,7 @@ public sealed class StatementCorrectionPrerequisiteTests : IAsyncLifetime
         Assert.NotNull(seam.ApplyModule);
         Assert.NotNull(seam.EffectWriter);
         await using var connection = await seam.Factory.OpenAsync(seam.Database, CompleteLedgerSchema.CurrentVersion, CancellationToken.None);
-        Assert.Equal(2L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
+        Assert.Equal(CompleteLedgerSchema.CurrentVersion, await ScalarLongAsync(connection, "PRAGMA user_version;"));
         Assert.Equal(0L, await ScalarLongAsync(connection, """
             SELECT
                 (SELECT COUNT(*) FROM transaction_fact) +

@@ -2,6 +2,7 @@ using System.Runtime.Versioning;
 using Microsoft.Data.Sqlite;
 using Tally.Infrastructure.Storage.Migrations.V001;
 using Tally.Infrastructure.Storage.Migrations.V002;
+using Tally.Infrastructure.Storage.Migrations.V003;
 
 namespace Tally.Infrastructure.Storage;
 
@@ -69,7 +70,7 @@ public sealed class LedgerSchemaFragmentRegistry(IEnumerable<ILedgerSchemaFragme
 
 public static class CompleteLedgerSchema
 {
-    public const int CurrentVersion = 2;
+    public const int CurrentVersion = 3;
     public static IReadOnlyList<string> V1FragmentNames { get; } =
     [
         V001StorageSchema.FragmentName,
@@ -79,12 +80,12 @@ public static class CompleteLedgerSchema
         V001EvidenceReconciliationSchema.FragmentName
     ];
     public static IReadOnlyList<string> CurrentFragmentNames { get; } =
-    [.. V1FragmentNames, V002StatementAuthoritySchema.FragmentName];
+    [.. V1FragmentNames, V002StatementAuthoritySchema.FragmentName, V003ActualsQueryIndexes.FragmentName];
 
     public static LedgerSchemaFragmentRegistry CreateV1() => new(V1Fragments(), V1FragmentNames);
 
     public static LedgerSchemaFragmentRegistry CreateCurrent() => new(
-        [.. V1Fragments(), new V002StatementAuthoritySchema()],
+        [.. V1Fragments(), new V002StatementAuthoritySchema(), new V003ActualsQueryIndexes()],
         CurrentFragmentNames);
 
     private static ILedgerSchemaFragment[] V1Fragments() =>
@@ -118,7 +119,7 @@ public static class LedgerRuntimeBootstrap
         var generationId = Guid.NewGuid().ToString("N");
         var database = new LedgerDb(dataRoot, generationId);
         await ApplyCurrentAsync(database, protection, cancellationToken);
-        const string fingerprint = "ledger-schema-v2";
+        const string fingerprint = "ledger-schema-v3";
         await File.WriteAllTextAsync(database.ManifestPath, fingerprint, cancellationToken);
         protection.ProtectArtifact(database.ManifestPath);
         var manager = new StoreGenerationManager(protection);

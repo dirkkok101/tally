@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -30,12 +31,30 @@ public sealed class QuerySnapshotStore(LedgerDb database, LedgerConnectionFactor
         var expiresAt = Utc(now.Add(Lifetime));
         await DeleteExpiredAsync(connection, transaction, createdAt, cancellationToken);
 
-        var membership = await ActualsProjectionStore.ProjectAsync(connection, transaction, filter, cancellationToken);
-        var calculation = ActualsCalculator.Calculate(membership, filter.GroupBy);
         var hierarchyFingerprint = await HierarchyFingerprintAsync(connection, transaction, cancellationToken);
         var generationFingerprint = GenerationFingerprint(database);
         var snapshotId = LedgerId.New().ToString();
+        if (CanCreatePoolCategorySnapshotInSql(filter)
+            && await HasPersonalScaleMembershipAsync(connection, transaction, cancellationToken))
+        {
+            var page = await CreatePoolCategorySnapshotInSqlAsync(
+                connection,
+                transaction,
+                filter,
+                snapshotId,
+                filterHash,
+                generationFingerprint,
+                hierarchyFingerprint,
+                createdAt,
+                expiresAt,
+                pageSize,
+                cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
+            return page;
+        }
 
+        var membership = await ActualsProjectionStore.ProjectAsync(connection, transaction, filter, cancellationToken);
+        var calculation = ActualsCalculator.Calculate(membership, filter.GroupBy);
         await InsertHeaderAsync(
             connection,
             transaction,
@@ -155,6 +174,302 @@ public sealed class QuerySnapshotStore(LedgerDb database, LedgerConnectionFactor
             filterHash,
             generationFingerprint,
             hierarchyFingerprint);
+    }
+
+    private static bool CanCreatePoolCategorySnapshotInSql(ActualsFilter filter) =>
+        filter.GroupBy == ActualsGroupKind.PoolCategory
+        && filter.CategoryIds is null
+        && filter.CategorizationStates is null
+        && filter.PoolIds is null
+        && filter.PoolStates is null
+        && filter.InstrumentIds is null
+        && filter.InstrumentStates is null
+        && filter.CardholderIds is null
+        && filter.CardholderStates is null
+        && filter.EvidenceKinds is null
+        && filter.ReconciliationStates is null
+        && filter.RelationshipStates is null
+        && filter.LifecycleStates is null;
+
+    private static async Task<bool> HasPersonalScaleMembershipAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        CancellationToken cancellationToken) =>
+        await ScalarLongAsync(connection, transaction, "SELECT COUNT(*) FROM transaction_fact;", cancellationToken) >= 10_000;
+
+    private static bool ValidProjectedItem(
+        string transactionId,
+        string accountId,
+        long signed,
+        TransactionCategoryState categoryState,
+        string? categoryId,
+        IReadOnlyList<string> ancestryIds,
+        TransactionPoolState poolState,
+        string? poolId,
+        TransactionKnowledgeState instrumentState,
+        string? instrumentId,
+        TransactionKnowledgeState cardholderState,
+        string? cardholderId,
+        ActualsRelationshipRole relationshipState,
+        HashSet<string> validIds)
+    {
+        var categoryValid = categoryState switch
+        {
+            TransactionCategoryState.Categorized => ValidId(categoryId, validIds)
+                && ancestryIds.Count > 0
+                && ancestryIds[^1] == categoryId
+                && ancestryIds.All(id => ValidId(id, validIds)),
+            TransactionCategoryState.Uncategorized => categoryId is null && ancestryIds.Count == 0,
+            _ => false
+        };
+        var poolValid = poolState switch
+        {
+            TransactionPoolState.Assigned => ValidId(poolId, validIds),
+            TransactionPoolState.Unassigned => poolId is null,
+            _ => false
+        };
+        var instrumentValid = instrumentState switch
+        {
+            TransactionKnowledgeState.Known => ValidId(instrumentId, validIds),
+            TransactionKnowledgeState.Unknown => instrumentId is null,
+            _ => false
+        };
+        var cardholderValid = cardholderState switch
+        {
+            TransactionKnowledgeState.Known => ValidId(cardholderId, validIds),
+            TransactionKnowledgeState.Unknown => cardholderId is null,
+            _ => false
+        };
+        var directionValid = relationshipState switch
+        {
+            ActualsRelationshipRole.None => true,
+            ActualsRelationshipRole.TransferOutflow or ActualsRelationshipRole.RefundOriginal => signed < 0,
+            ActualsRelationshipRole.TransferInflow or ActualsRelationshipRole.RefundCredit => signed > 0,
+            _ => false
+        };
+        return signed != 0
+            && LedgerId.TryParse(transactionId, out _, out _)
+            && ValidId(accountId, validIds)
+            && categoryValid
+            && poolValid
+            && instrumentValid
+            && cardholderValid
+            && directionValid;
+    }
+
+    private static bool ValidId(string? value, HashSet<string> validIds)
+    {
+        if (value is null) return false;
+        if (validIds.Contains(value)) return true;
+        if (!LedgerId.TryParse(value, out _, out _)) return false;
+        validIds.Add(value);
+        return true;
+    }
+
+    private static async Task<SnapshotPage> CreatePoolCategorySnapshotInSqlAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        ActualsFilter filter,
+        string snapshotId,
+        string filterHash,
+        string generationFingerprint,
+        string hierarchyFingerprint,
+        string createdAt,
+        string expiresAt,
+        int pageSize,
+        CancellationToken cancellationToken)
+    {
+        using var payloadBuffer = new PooledByteBufferWriter(20 * 1024 * 1024);
+        var pageItems = new List<ActualsPageItem>(pageSize);
+        var grouped = new Dictionary<PoolCategorySnapshotKey, (long Net, long Spend)>();
+        var ancestryCache = new Dictionary<string, string[]>(StringComparer.Ordinal);
+        var evidenceCache = new Dictionary<string, IReadOnlyList<EvidenceKind>>(StringComparer.Ordinal);
+        var validIds = new HashSet<string>(StringComparer.Ordinal);
+        long totalNet = 0;
+        long totalSpend = 0;
+        var totalCount = 0;
+
+        using (var writer = new Utf8JsonWriter(payloadBuffer))
+        {
+            writer.WriteStartArray();
+            await using var project = connection.CreateCommand();
+            project.Transaction = transaction;
+            project.CommandText = ActualsProjectionStore.Sql(filter, compact: true);
+            ActualsProjectionStore.BindSqlFilter(project, filter);
+            await using var reader = await project.ExecuteReaderAsync(cancellationToken);
+            while (reader.Read())
+            {
+                if ((totalCount & 1023) == 0) cancellationToken.ThrowIfCancellationRequested();
+                if (totalCount == int.MaxValue) throw new InvalidOperationException(ActualsErrors.Invariant);
+
+                var transactionId = reader.GetString(0);
+                var accountId = reader.GetString(1);
+                var signed = reader.GetInt64(2);
+                var effectiveDate = reader.GetString(3);
+                var categoryId = Optional(reader, 4);
+                var ancestryValue = Optional(reader, 5);
+                string[] ancestryIds;
+                if (ancestryValue is null) ancestryIds = [];
+                else if (!ancestryCache.TryGetValue(ancestryValue, out ancestryIds!))
+                {
+                    ancestryIds = ancestryValue.Split('/', StringSplitOptions.RemoveEmptyEntries);
+                    ancestryCache.Add(ancestryValue, ancestryIds);
+                }
+                var categoryState = categoryId is null ? TransactionCategoryState.Uncategorized : TransactionCategoryState.Categorized;
+                var poolState = PoolState(reader.GetString(6));
+                var poolId = Optional(reader, 7);
+                var instrumentState = KnowledgeState(reader.GetString(8));
+                var instrumentId = Optional(reader, 9);
+                var cardholderState = KnowledgeState(reader.GetString(10));
+                var cardholderId = Optional(reader, 11);
+                var evidenceValue = reader.GetString(12);
+                if (!evidenceCache.TryGetValue(evidenceValue, out var evidenceKinds))
+                {
+                    evidenceKinds = EvidenceKinds(evidenceValue);
+                    evidenceCache.Add(evidenceValue, evidenceKinds);
+                }
+                var reconciliationState = ReconciliationState(reader.GetString(13));
+                var relationshipState = RelationshipRole(reader.GetString(14));
+                if (!ValidProjectedItem(
+                        transactionId,
+                        accountId,
+                        signed,
+                        categoryState,
+                        categoryId,
+                        ancestryIds,
+                        poolState,
+                        poolId,
+                        instrumentState,
+                        instrumentId,
+                        cardholderState,
+                        cardholderId,
+                        relationshipState,
+                        validIds)
+                    || evidenceKinds.Count != evidenceKinds.Distinct().Count())
+                {
+                    throw new InvalidOperationException($"{ActualsErrors.Invariant}: SQL snapshot membership is invalid.");
+                }
+
+                var contribution = ActualsCalculator.ActiveContributionMinor(signed, RelationshipState(relationshipState));
+                totalNet = checked(totalNet + contribution.NetAccountMovement);
+                totalSpend = checked(totalSpend + contribution.ExternalSpend);
+                var key = new PoolCategorySnapshotKey(poolState, poolId, categoryState, categoryId);
+                grouped.TryGetValue(key, out var group);
+                grouped[key] = (checked(group.Net + contribution.NetAccountMovement), checked(group.Spend + contribution.ExternalSpend));
+
+                writer.WriteStartArray();
+                writer.WriteStringValue(transactionId);
+                writer.WriteStringValue(effectiveDate);
+                writer.WriteStringValue(categoryId);
+                writer.WriteStringValue(ancestryValue);
+                writer.WriteStringValue(poolId);
+                writer.WriteStringValue(instrumentId);
+                writer.WriteStringValue(cardholderId);
+                writer.WriteNumberValue(EvidenceMask(evidenceKinds));
+                writer.WriteNumberValue((int)reconciliationState);
+                writer.WriteNumberValue((int)relationshipState);
+                writer.WriteNumberValue(contribution.NetAccountMovement);
+                writer.WriteNumberValue(contribution.ExternalSpend);
+                writer.WriteEndArray();
+
+                if (totalCount < pageSize)
+                {
+                    pageItems.Add(new(
+                        totalCount,
+                        transactionId,
+                        effectiveDate,
+                        categoryState,
+                        categoryId,
+                        ancestryIds,
+                        poolState,
+                        poolId,
+                        instrumentState,
+                        instrumentId,
+                        cardholderState,
+                        cardholderId,
+                        evidenceKinds,
+                        reconciliationState,
+                        relationshipState,
+                        Totals(contribution.NetAccountMovement, contribution.ExternalSpend, contribution.BudgetActual)));
+                }
+                totalCount++;
+            }
+            writer.WriteEndArray();
+            writer.Flush();
+        }
+
+        var totals = new ActualsTotals(Money.FromMinorUnits(totalNet), Money.FromMinorUnits(totalSpend), Money.FromMinorUnits(totalSpend));
+        var calculatedGroups = grouped
+            .OrderBy(entry => entry.Key.PoolState)
+            .ThenBy(entry => entry.Key.PoolId, StringComparer.Ordinal)
+            .ThenBy(entry => entry.Key.CategoryState)
+            .ThenBy(entry => entry.Key.CategoryId, StringComparer.Ordinal)
+            .Select(entry => new ActualsGroup(
+                ActualsGroupKind.PoolCategory,
+                entry.Key.PoolState,
+                entry.Key.PoolId,
+                entry.Key.CategoryState,
+                entry.Key.CategoryId,
+                new(
+                    Money.FromMinorUnits(entry.Value.Net),
+                    Money.FromMinorUnits(entry.Value.Spend),
+                    Money.FromMinorUnits(entry.Value.Spend)),
+                []))
+            .ToArray();
+
+        await InsertHeaderAsync(
+            connection,
+            transaction,
+            snapshotId,
+            filterHash,
+            generationFingerprint,
+            hierarchyFingerprint,
+            createdAt,
+            expiresAt,
+            totals,
+            cancellationToken);
+
+        await using (var payload = connection.CreateCommand())
+        {
+            payload.Transaction = transaction;
+            payload.CommandText = """
+                INSERT INTO query_snapshot_payload(snapshot_id, total_count, items_json)
+                VALUES ($snapshotId, $totalCount, $itemsJson);
+                """;
+            payload.Parameters.AddWithValue("$snapshotId", snapshotId);
+            payload.Parameters.AddWithValue("$totalCount", totalCount);
+            payload.Parameters.Add("$itemsJson", SqliteType.Blob, payloadBuffer.WrittenCount).Value = payloadBuffer.Buffer;
+            await payload.ExecuteNonQueryAsync(cancellationToken);
+        }
+        await InsertGroupsAsync(connection, transaction, snapshotId, calculatedGroups, cancellationToken);
+
+        var result = new ActualsQueryResult(
+            snapshotId,
+            expiresAt,
+            totalCount,
+            pageItems,
+            Totals(totals),
+            calculatedGroups.Select(Group).ToArray(),
+            null);
+        return new(
+            result,
+            pageItems.Count < totalCount ? pageItems.Count : null,
+            pageSize,
+            filterHash,
+            generationFingerprint,
+            hierarchyFingerprint);
+    }
+
+    private static async Task<long> ScalarLongAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        string sql,
+        CancellationToken cancellationToken)
+    {
+        await using var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        command.CommandText = sql;
+        return Convert.ToInt64(await command.ExecuteScalarAsync(cancellationToken), System.Globalization.CultureInfo.InvariantCulture);
     }
 
     private static async Task DeleteExpiredAsync(
@@ -295,7 +610,9 @@ public sealed class QuerySnapshotStore(LedgerDb database, LedgerConnectionFactor
             SELECT snapshot.contract_version, snapshot.canonical_filter_hash, snapshot.generation_fingerprint,
                    snapshot.category_hierarchy_fingerprint, snapshot.expires_at,
                    snapshot.net_account_movement_minor, snapshot.external_spend_minor, snapshot.budget_actual_minor,
-                   (SELECT COUNT(*) FROM query_snapshot_item AS item WHERE item.snapshot_id = snapshot.snapshot_id)
+                   COALESCE(
+                       (SELECT payload.total_count FROM query_snapshot_payload AS payload WHERE payload.snapshot_id = snapshot.snapshot_id),
+                       (SELECT COUNT(*) FROM query_snapshot_item AS item WHERE item.snapshot_id = snapshot.snapshot_id))
             FROM query_snapshot AS snapshot
             WHERE snapshot.snapshot_id = $snapshotId;
             """;
@@ -313,9 +630,20 @@ public sealed class QuerySnapshotStore(LedgerDb database, LedgerConnectionFactor
         string snapshotId,
         int nextOrdinal,
         int pageSize,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken,
+        SqliteTransaction? transaction = null)
     {
+        var payloadItems = await ReadPayloadItemsAsync(
+            connection,
+            transaction,
+            snapshotId,
+            nextOrdinal,
+            pageSize,
+            cancellationToken);
+        if (payloadItems is not null) return payloadItems;
+
         await using var command = connection.CreateCommand();
+        command.Transaction = transaction;
         command.CommandText = """
             SELECT ordinal, transaction_id, effective_date, category_state, category_id,
                    frozen_ancestry_ids_json, pool_state, pool_id, instrument_state, instrument_id,
@@ -354,12 +682,86 @@ public sealed class QuerySnapshotStore(LedgerDb database, LedgerConnectionFactor
         return items;
     }
 
-    private static async Task<IReadOnlyList<ActualsGroupResult>> ReadGroupsAsync(
+    private static async Task<IReadOnlyList<ActualsPageItem>?> ReadPayloadItemsAsync(
         SqliteConnection connection,
+        SqliteTransaction? transaction,
         string snapshotId,
+        int nextOrdinal,
+        int pageSize,
         CancellationToken cancellationToken)
     {
         await using var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        command.CommandText = """
+            SELECT CAST(entry.key AS INTEGER),
+                   json_extract(entry.value, '$[0]'),
+                   json_extract(entry.value, '$[1]'),
+                   CASE WHEN json_extract(entry.value, '$[2]') IS NULL THEN 'uncategorized' ELSE 'categorized' END,
+                   json_extract(entry.value, '$[2]'),
+                   json_extract(entry.value, '$[3]'),
+                   CASE WHEN json_extract(entry.value, '$[4]') IS NULL THEN 'unassigned' ELSE 'assigned' END,
+                   json_extract(entry.value, '$[4]'),
+                   CASE WHEN json_extract(entry.value, '$[5]') IS NULL THEN 'unknown' ELSE 'known' END,
+                   json_extract(entry.value, '$[5]'),
+                   CASE WHEN json_extract(entry.value, '$[6]') IS NULL THEN 'unknown' ELSE 'known' END,
+                   json_extract(entry.value, '$[6]'),
+                   json_extract(entry.value, '$[7]'),
+                   json_extract(entry.value, '$[8]'),
+                   json_extract(entry.value, '$[9]'),
+                   json_extract(entry.value, '$[10]'),
+                   json_extract(entry.value, '$[11]'),
+                   json_extract(entry.value, '$[11]')
+            FROM query_snapshot_payload AS payload,
+                 json_each(payload.items_json) AS entry
+            WHERE payload.snapshot_id = $snapshotId
+              AND CAST(entry.key AS INTEGER) >= $nextOrdinal
+            ORDER BY CAST(entry.key AS INTEGER)
+            LIMIT $pageSize;
+            """;
+        command.Parameters.AddWithValue("$snapshotId", snapshotId);
+        command.Parameters.AddWithValue("$nextOrdinal", nextOrdinal);
+        command.Parameters.AddWithValue("$pageSize", pageSize);
+        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+        var items = new List<ActualsPageItem>();
+        while (reader.Read())
+        {
+            items.Add(new(
+                reader.GetInt32(0),
+                reader.GetString(1),
+                reader.GetString(2),
+                CategoryState(reader.GetString(3)),
+                Optional(reader, 4),
+                Optional(reader, 5)?.Split('/', StringSplitOptions.RemoveEmptyEntries) ?? [],
+                PoolState(reader.GetString(6)),
+                Optional(reader, 7),
+                KnowledgeState(reader.GetString(8)),
+                Optional(reader, 9),
+                KnowledgeState(reader.GetString(10)),
+                Optional(reader, 11),
+                EvidenceKindsFromMask(reader.GetInt32(12)),
+                ReconciliationState(reader.GetInt32(13)),
+                RelationshipRole(reader.GetInt32(14)),
+                Totals(reader.GetInt64(15), reader.GetInt64(16), reader.GetInt64(17))));
+        }
+        if (items.Count != 0) return items;
+
+        await using var exists = connection.CreateCommand();
+        exists.Transaction = transaction;
+        exists.CommandText = "SELECT COUNT(*) FROM query_snapshot_payload WHERE snapshot_id = $snapshotId;";
+        exists.Parameters.AddWithValue("$snapshotId", snapshotId);
+        return Convert.ToInt64(await exists.ExecuteScalarAsync(cancellationToken), System.Globalization.CultureInfo.InvariantCulture) == 0
+            ? null
+            : items;
+    }
+
+    private static async Task<IReadOnlyList<ActualsGroupResult>> ReadGroupsAsync(
+        SqliteConnection connection,
+        string snapshotId,
+        CancellationToken cancellationToken,
+        SqliteTransaction? transaction = null)
+    {
+        await using var command = connection.CreateCommand();
+        command.Transaction = transaction;
         command.CommandText = """
             SELECT group_kind, pool_bucket, pool_id, category_bucket, category_id,
                    net_account_movement_minor, external_spend_minor, budget_actual_minor
@@ -522,6 +924,16 @@ public sealed class QuerySnapshotStore(LedgerDb database, LedgerConnectionFactor
         ActualsRelationshipState.RefundCredit => "refund_credit",
         _ => throw new InvalidOperationException(ActualsErrors.Invariant)
     };
+
+    private static ActualsRelationshipState RelationshipState(ActualsRelationshipRole value) => value switch
+    {
+        ActualsRelationshipRole.None => ActualsRelationshipState.None,
+        ActualsRelationshipRole.TransferOutflow => ActualsRelationshipState.TransferOutflow,
+        ActualsRelationshipRole.TransferInflow => ActualsRelationshipState.TransferInflow,
+        ActualsRelationshipRole.RefundOriginal => ActualsRelationshipState.RefundOriginal,
+        ActualsRelationshipRole.RefundCredit => ActualsRelationshipState.RefundCredit,
+        _ => throw new InvalidOperationException(ActualsErrors.Invariant)
+    };
     private static ActualsRelationshipRole RelationshipRole(ActualsRelationshipState value) => value switch
     {
         ActualsRelationshipState.None => ActualsRelationshipRole.None,
@@ -540,6 +952,40 @@ public sealed class QuerySnapshotStore(LedgerDb database, LedgerConnectionFactor
         "refund_credit" => ActualsRelationshipRole.RefundCredit,
         _ => throw new InvalidOperationException(ActualsErrors.Invariant)
     };
+
+    private static int EvidenceMask(IReadOnlyList<EvidenceKind> values)
+    {
+        var mask = 0;
+        foreach (var value in values) mask |= 1 << (int)value;
+        return mask;
+    }
+
+    private static IReadOnlyList<EvidenceKind> EvidenceKindsFromMask(int mask)
+    {
+        const int validMask = (1 << (int)EvidenceKind.AgentCapture)
+            | (1 << (int)EvidenceKind.StatementRow)
+            | (1 << (int)EvidenceKind.Receipt)
+            | (1 << (int)EvidenceKind.ExternalDocument)
+            | (1 << (int)EvidenceKind.OwnerAssertion);
+        if (mask < 0 || (mask & ~validMask) != 0) throw new InvalidOperationException(ActualsErrors.Invariant);
+
+        var values = new List<EvidenceKind>();
+        foreach (var value in Enum.GetValues<EvidenceKind>())
+        {
+            if ((mask & (1 << (int)value)) != 0) values.Add(value);
+        }
+        return values;
+    }
+
+    private static TransactionReconciliationState ReconciliationState(int value) =>
+        Enum.IsDefined((TransactionReconciliationState)value)
+            ? (TransactionReconciliationState)value
+            : throw new InvalidOperationException(ActualsErrors.Invariant);
+
+    private static ActualsRelationshipRole RelationshipRole(int value) =>
+        Enum.IsDefined((ActualsRelationshipRole)value)
+            ? (ActualsRelationshipRole)value
+            : throw new InvalidOperationException(ActualsErrors.Invariant);
     private static string GroupKind(ActualsGroupKind value) => value switch
     {
         ActualsGroupKind.None => "none",
@@ -592,6 +1038,59 @@ public sealed class QuerySnapshotStore(LedgerDb database, LedgerConnectionFactor
         "owner_assertion" => EvidenceKind.OwnerAssertion,
         _ => throw new InvalidOperationException(ActualsErrors.Invariant)
     };
+
+    private sealed record PoolCategorySnapshotKey(
+        TransactionPoolState PoolState,
+        string? PoolId,
+        TransactionCategoryState CategoryState,
+        string? CategoryId);
+
+    private sealed class PooledByteBufferWriter(int initialCapacity) : IBufferWriter<byte>, IDisposable
+    {
+        private byte[] buffer = ArrayPool<byte>.Shared.Rent(initialCapacity);
+
+        public byte[] Buffer => buffer;
+        public int WrittenCount { get; private set; }
+
+        public void Advance(int count)
+        {
+            if (count < 0 || WrittenCount > buffer.Length - count) throw new ArgumentOutOfRangeException(nameof(count));
+            WrittenCount += count;
+        }
+
+        public Memory<byte> GetMemory(int sizeHint = 0)
+        {
+            Ensure(sizeHint);
+            return buffer.AsMemory(WrittenCount);
+        }
+
+        public Span<byte> GetSpan(int sizeHint = 0)
+        {
+            Ensure(sizeHint);
+            return buffer.AsSpan(WrittenCount);
+        }
+
+        public void Dispose()
+        {
+            var rented = buffer;
+            buffer = [];
+            WrittenCount = 0;
+            ArrayPool<byte>.Shared.Return(rented, clearArray: true);
+        }
+
+        private void Ensure(int sizeHint)
+        {
+            if (sizeHint < 0) throw new ArgumentOutOfRangeException(nameof(sizeHint));
+            if (sizeHint == 0) sizeHint = 1;
+            if (sizeHint <= buffer.Length - WrittenCount) return;
+
+            var replacement = ArrayPool<byte>.Shared.Rent(checked(Math.Max(buffer.Length * 2, WrittenCount + sizeHint)));
+            buffer.AsSpan(0, WrittenCount).CopyTo(replacement);
+            ArrayPool<byte>.Shared.Return(buffer, clearArray: true);
+            buffer = replacement;
+        }
+
+    }
 
     private sealed record SnapshotHeader(
         string ContractVersion,

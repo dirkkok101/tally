@@ -52,7 +52,7 @@ public sealed class DurableLedgerVerifier(IHostArtifactProtection artifactProtec
         "transaction_lifecycle_event"
     ];
 
-    private static readonly string[] EphemeralTables = ["query_snapshot", "query_snapshot_group", "query_snapshot_item"];
+    private static readonly string[] EphemeralTables = ["query_snapshot", "query_snapshot_group", "query_snapshot_item", "query_snapshot_payload"];
 
     private static readonly string[] ForbiddenSchemaTerms =
     [
@@ -292,7 +292,12 @@ public sealed class DurableLedgerVerifier(IHostArtifactProtection artifactProtec
         var fragments = new List<(long Version, string Name)>();
         while (await reader.ReadAsync(cancellationToken)) fragments.Add((reader.GetInt64(0), reader.GetString(1)));
         var required = CompleteLedgerSchema.CurrentFragmentNames
-            .Select(name => (Version: name == "statement_authority" ? 2L : 1L, Name: name))
+            .Select(name => (Version: name switch
+            {
+                "statement_authority" => 2L,
+                "actuals_query_indexes" => 3L,
+                _ => 1L
+            }, Name: name))
             .OrderBy(value => value.Version)
             .ThenBy(value => value.Name, StringComparer.Ordinal)
             .ToArray();

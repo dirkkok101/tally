@@ -29,6 +29,23 @@ public sealed class ActualsProjectionStore(LedgerDb database, LedgerConnectionFa
         await using var command = connection.CreateCommand();
         command.Transaction = transaction;
         command.CommandText = Sql(filter);
+        BindSqlFilter(command, filter);
+
+        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+        var items = new List<ActualsItem>();
+        var row = 0;
+        while (reader.Read())
+        {
+            if ((row++ & 1023) == 0) cancellationToken.ThrowIfCancellationRequested();
+            var item = Read(reader);
+            if (filter.Matches(item)) items.Add(item);
+        }
+
+        return items;
+    }
+
+    internal static void BindSqlFilter(SqliteCommand command, ActualsFilter filter)
+    {
         command.Parameters.AddWithValue("$effectiveFrom", filter.EffectiveFrom is null ? DBNull.Value : filter.EffectiveFrom.Value.ToString());
         command.Parameters.AddWithValue("$effectiveTo", filter.EffectiveTo is null ? DBNull.Value : filter.EffectiveTo.Value.ToString());
         if (filter.AccountIds is not null)
@@ -39,19 +56,9 @@ public sealed class ActualsProjectionStore(LedgerDb database, LedgerConnectionFa
                 command.Parameters.AddWithValue("$account" + index++, accountId);
             }
         }
-
-        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
-        var items = new List<ActualsItem>();
-        while (await reader.ReadAsync(cancellationToken))
-        {
-            var item = Read(reader);
-            if (filter.Matches(item)) items.Add(item);
-        }
-
-        return items;
     }
 
-    private static string Sql(ActualsFilter filter)
+    internal static string Sql(ActualsFilter filter, bool compact = false)
     {
         var accountPredicate = filter.AccountIds is null
             ? "1 = 1"
@@ -59,6 +66,43 @@ public sealed class ActualsProjectionStore(LedgerDb database, LedgerConnectionFa
         var lifecyclePredicate = filter.LifecycleStates is null
             ? "lifecycle.transaction_id IS NULL"
             : "1 = 1";
+        var projection = compact
+            ? """
+              current.transaction_id,
+              current.account_id,
+              current.signed_amount_minor,
+              current.effective_date,
+              current.category_id,
+              category.ancestry_ids,
+              current.pool_state,
+              current.pool_id,
+              current.instrument_state,
+              current.instrument_id,
+              current.cardholder_state,
+              current.cardholder_id,
+              current.evidence_kinds_json,
+              current.reconciliation_state,
+              current.relationship_state
+              """
+            : """
+              current.transaction_id,
+              current.account_id,
+              current.signed_amount_minor,
+              current.effective_date,
+              current.original_description,
+              current.lifecycle_action,
+              current.category_id,
+              category.ancestry_ids,
+              current.pool_state,
+              current.pool_id,
+              current.instrument_state,
+              current.instrument_id,
+              current.cardholder_state,
+              current.cardholder_id,
+              current.evidence_kinds_json,
+              current.reconciliation_state,
+              current.relationship_state
+              """;
         return $$"""
             WITH active_evidence_distinct AS (
                 SELECT link.transaction_id, evidence.kind
@@ -179,23 +223,7 @@ public sealed class ActualsProjectionStore(LedgerDb database, LedgerConnectionFa
                   AND {{accountPredicate}}
                   AND {{lifecyclePredicate}}
             )
-            SELECT current.transaction_id,
-                   current.account_id,
-                   current.signed_amount_minor,
-                   current.effective_date,
-                   current.original_description,
-                   current.lifecycle_action,
-                   current.category_id,
-                   category.ancestry_ids,
-                   current.pool_state,
-                   current.pool_id,
-                   current.instrument_state,
-                   current.instrument_id,
-                   current.cardholder_state,
-                   current.cardholder_id,
-                   current.evidence_kinds_json,
-                   current.reconciliation_state,
-                   current.relationship_state
+            SELECT {{projection}}
             FROM current_rows AS current
             LEFT JOIN current_category_projection AS category ON category.category_id = current.category_id
             ORDER BY current.effective_date DESC, current.transaction_id DESC;

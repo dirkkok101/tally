@@ -44,7 +44,7 @@ public readonly record struct LedgerId
 
     public static bool TryParse(string? value, out LedgerId identifier, out string? error)
     {
-        if (value is { Length: 26 } && value[0] <= '7' && value.All(Alphabet.Contains))
+        if (value is { Length: 26 } && value[0] <= '7' && HasOnlyAlphabetCharacters(value))
         {
             identifier = new LedgerId(value);
             error = null;
@@ -54,6 +54,15 @@ public readonly record struct LedgerId
         identifier = default;
         error = InvalidIdentifierError;
         return false;
+    }
+
+    private static bool HasOnlyAlphabetCharacters(string value)
+    {
+        foreach (var character in value)
+        {
+            if (Alphabet.IndexOf(character) < 0) return false;
+        }
+        return true;
     }
 
     public override string ToString() => Value ?? string.Empty;
