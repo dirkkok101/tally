@@ -1,0 +1,13 @@
+{
+  "id": "01KY4KDKEQJDTWT5DPKFMHCTEB",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-STATEMENT-RECONCILIATION",
+  "subject_entity_id": "01KY09SNNG25N20YWX3J86S4RY",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT",
+  "note": "Owner-approved correct_existing_from_statement now revalidates the live projection and authoritative statement fact inside one immediate mutation transaction, appends one immutable replacement with explicit category/pool/payment and relationship lineage, reports review-required without effects for invalid relationships, rejects automatic authority, and replays exactly. Transaction reads now derive corrected statement-reconciled state from the V2 authority view. Focused correction 36/36; crash 22/22; Ledger 422/422; full 798/798; build zero warnings/errors; format clean; Native AOT publish passed.",
+  "commit_sha": "a3006cf576bd6bba8ed0d5a95aa04ad163c44ae5",
+  "bead_id": "bd-3ts",
+  "verified_at": "2026-07-22T09:44:58.0723032+00:00"
+}
