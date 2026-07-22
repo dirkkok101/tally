@@ -1,0 +1,13 @@
+{
+  "id": "01KY4734YKSPS2EZCBZX3SM342",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-REFUND-CONFIRMATION",
+  "subject_entity_id": "01KXSQCYJA0F0J6BD9QTWZ58Q5",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-REFUND-CONFIRMATION-CONTRACT",
+  "note": "Full-amount-only refund confirmation: focused 27/27, full 547/547, build and Native AOT publish passed.",
+  "commit_sha": "e14542ef305f05602500037a8ca61e60362b0ac4",
+  "bead_id": "bd-10w",
+  "verified_at": "2026-07-22T06:09:32.6275098+00:00"
+}
