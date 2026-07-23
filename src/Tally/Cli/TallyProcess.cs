@@ -3,6 +3,7 @@ using Tally.Application;
 using Tally.Bootstrap;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Actuals;
+using Tally.Contracts.Ledger.Recovery;
 using Tally.Contracts.System;
 
 namespace Tally.Cli;
@@ -135,6 +136,18 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
         ActualsErrors.SnapshotExpired => Error(6, code, "lifecycle", "The actuals query snapshot has expired."),
         ActualsErrors.CursorInvalid or ActualsErrors.ContractMismatch or ActualsErrors.CursorFilterMismatch or ActualsErrors.GenerationMismatch or ActualsErrors.HierarchyMismatch => Error(7, code, "compatibility", "The actuals query cursor is not compatible with this request."),
         ActualsErrors.Invariant => Error(8, code, "integrity", "The actuals query could not preserve its integrity contract."),
+        BackupErrors.Invalid => Error(3, code, "validation", "The backup request is invalid."),
+        BackupErrors.NotFound => Error(4, code, "not_found", "The backup artifact was not found."),
+        BackupErrors.TargetExists or BackupErrors.Busy => Error(5, code, "conflict", "The backup request conflicts with current state."),
+        BackupErrors.Incompatible => Error(7, code, "compatibility", "The backup artifact is not compatible with this executable contract."),
+        BackupErrors.ChecksumMismatch or BackupErrors.Integrity => Error(8, code, "integrity", "The backup artifact did not satisfy its integrity contract."),
+        BackupErrors.HostProtection or BackupErrors.Permission or BackupErrors.Disk => Error(9, code, "host", "The host could not safely complete the backup operation."),
+        RestoreErrors.Invalid or RestoreErrors.NotAuthorized => Error(3, code, "validation", "The restore request is invalid or is not authorized."),
+        RestoreErrors.CandidateConflict or RestoreErrors.ActivationConflict or RestoreErrors.Busy => Error(5, code, "conflict", "The restore request conflicts with current state."),
+        RestoreErrors.StaleCurrent or RestoreErrors.StaleCandidate => Error(6, code, "lifecycle", "The restore candidate is stale for the current Ledger lifecycle."),
+        RestoreErrors.Incompatible => Error(7, code, "compatibility", "The restore candidate is not compatible with this executable contract."),
+        RestoreErrors.Integrity => Error(8, code, "integrity", "The restore candidate did not satisfy its integrity contract."),
+        RestoreErrors.HostProtection or RestoreErrors.Permission or RestoreErrors.Disk => Error(9, code, "host", "The host could not safely complete the restore operation."),
         "LEDGER-TRANSFER-INVALID" or "LEDGER-TRANSFER-SAME-ACCOUNT" or "LEDGER-TRANSFER-SIGN" or "LEDGER-TRANSFER-AMOUNT" or "LEDGER-TRANSFER-CURRENCY" => Error(3, code, "validation", "The transfer does not satisfy the financial relationship contract."),
         "LEDGER-REFUND-INVALID" or "LEDGER-REFUND-ACCOUNT" or "LEDGER-REFUND-SIGN" or "LEDGER-REFUND-AMOUNT" or "LEDGER-REFUND-CURRENCY" => Error(3, code, "validation", "The refund does not satisfy the full-amount financial relationship contract."),
         "LEDGER-RELATIONSHIP-NOT-FOUND" => Error(4, code, "not_found", "The financial relationship was not found."),
