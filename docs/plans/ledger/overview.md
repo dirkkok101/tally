@@ -9,14 +9,14 @@
 
 | Ref | Title | Status | Coverage | Sub-Plans | Tasks |
 |---|---|---|---|---:|---:|
-| Provider-neutral Financial Ledger v1 implementation | Provider-neutral Financial Ledger v1 implementation | `active` | `warn` | 7 | 72 |
+| Provider-neutral Financial Ledger v1 implementation | Provider-neutral Financial Ledger v1 implementation | `active` | `warn` | 7 | 73 |
 
 ## PLAN-LEDGER-V1: Provider-neutral Financial Ledger v1 implementation
 
 - **Ref:** `PLAN-LEDGER-V1`
 - **Status:** `active`
 - **Created:** `2026-07-18T06:56:30.9196068+00:00`
-- **Updated:** `2026-07-23T05:43:57.7896120+00:00`
+- **Updated:** `2026-07-23T08:50:43.8882986+00:00`
 
 ### Description
 
@@ -31,7 +31,7 @@ Global constraints: C1 verbatim: The first Ledger release is one self-contained 
 | [SP-LEDGER-02-CATALOGUE-TRANSACTIONS](sub-plans/02-catalogue-transactions.md) | Catalogues, transactions, evidence, and attribution | 2 | 10 |
 | [SP-LEDGER-03-RECONCILIATION](sub-plans/03-reconciliation.md) | Match-first reconciliation and coverage | 3 | 10 |
 | [SP-LEDGER-03-RELATIONSHIPS-ACTUALS](sub-plans/03-relationships-actuals.md) | Relationships and dimensional actuals | 4 | 6 |
-| [SP-LEDGER-04-RECOVERY-SKILLS](sub-plans/04-recovery-skills.md) | Recovery and integration guidance | 5 | 5 |
+| [SP-LEDGER-04-RECOVERY-SKILLS](sub-plans/04-recovery-skills.md) | Recovery and integration guidance | 5 | 6 |
 | [SP-LEDGER-05-VERIFICATION](sub-plans/05-verification.md) | Composition and end-to-end verification | 6 | 26 |
 
 ### Tasks
@@ -83,6 +83,7 @@ Global constraints: C1 verbatim: The first Ledger release is one self-contained 
 | [TASK-LEDGER-BACKUP-VERIFY](tasks/backup-verify.md) | Create and independently verify Ledger backups | `ready` | 1 | SP-LEDGER-04-RECOVERY-SKILLS: Recovery and integration guidance |
 | [TASK-LEDGER-RESTORE-ACTIVATE](tasks/restore-activate.md) | Implement safe restore prepare and activation | `ready` | 1 | SP-LEDGER-04-RECOVERY-SKILLS: Recovery and integration guidance |
 | [TASK-LEDGER-STORAGE-EVOLUTION](tasks/storage-evolution.md) | Implement safe storage evolution and status | `ready` | 1 | SP-LEDGER-04-RECOVERY-SKILLS: Recovery and integration guidance |
+| [TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT](tasks/recovery-status-normalized-fingerprint.md) | Expose the normalized restore fingerprint in storage status | `ready` | 0 | SP-LEDGER-04-RECOVERY-SKILLS: Recovery and integration guidance |
 | [TASK-LEDGER-AGENT-SKILLS](tasks/agent-skills.md) | Implement version-matched integration guidance | `ready` | 1 | SP-LEDGER-04-RECOVERY-SKILLS: Recovery and integration guidance |
 | [TASK-LEDGER-GATE-INT-CATALOGUE-TRANSACTION-BUNDLE](tasks/gate-int-catalogue-transaction-bundle.md) | Compose the financial-dimension, transaction, and evidence bundle | `ready` | 1 | SP-LEDGER-05-VERIFICATION: Composition and end-to-end verification |
 | [TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE](tasks/gate-int-relationship-actuals-bundle.md) | Compose the relationship and actuals operation bundle | `ready` | 1 | SP-LEDGER-05-VERIFICATION: Composition and end-to-end verification |
@@ -235,6 +236,8 @@ Global constraints: C1 verbatim: The first Ledger release is one self-contained 
 | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | [TASK-LEDGER-CORE-IDEMPOTENCY](tasks/core-idempotency.md) | `compile` | Correction consumes LedgerMutationExecutor.ExecuteAsync. |
 | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](tasks/reconciliation-statement-correction-effect-writer.md) | `compile` | The public composite consumes StatementCorrectionEffectWriter.AppendAsync. |
 | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | [TASK-LEDGER-RECONCILIATION-APPLY](tasks/reconciliation-apply.md) | `compile` | The public correction extends ReconciliationApplyContracts and ReconciliationApplyOperationModule. |
+| [TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT](tasks/recovery-status-normalized-fingerprint.md) | [TASK-LEDGER-STORAGE-EVOLUTION](tasks/storage-evolution.md) | `compile` | The correction extends the existing StorageStatusResult and StorageEvolutionService implemented by the storage-evolution task. |
+| [TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT](tasks/recovery-status-normalized-fingerprint.md) | [TASK-LEDGER-RESTORE-ACTIVATE](tasks/restore-activate.md) | `compile` | The correction exposes the normalized fingerprint already enforced by restore activation. |
 | [TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION](tasks/reconciliation-automatic-activation.md) | [TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY](tasks/gate-evidence-reconciliation-policy.md) | `compile` | Automatic behavior is forbidden until paired evidence resolves OQ-LEDGER-13 and defines the bounded policy matrix. |
 | [TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION](tasks/reconciliation-automatic-activation.md) | [TASK-LEDGER-RECONCILIATION-PROJECTION](tasks/reconciliation-projection.md) | `compile` | Automatic authority reuses the stable advisory projection and comparison basis. |
 | [TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION](tasks/reconciliation-automatic-activation.md) | [TASK-LEDGER-RECONCILIATION-APPLY](tasks/reconciliation-apply.md) | `compile` | Activation extends the proven owner-reviewed base apply path rather than creating a second writer. |
@@ -291,6 +294,7 @@ Global constraints: C1 verbatim: The first Ledger release is one self-contained 
 | [TASK-LEDGER-VERIFY-UC-006](tasks/verify-uc-006.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
 | [TASK-LEDGER-VERIFY-UC-007](tasks/verify-uc-007.md) | [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
 | [TASK-LEDGER-VERIFY-UC-007](tasks/verify-uc-007.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
+| [TASK-LEDGER-VERIFY-UC-007](tasks/verify-uc-007.md) | [TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT](tasks/recovery-status-normalized-fingerprint.md) | `compile` | The published UC-007 restore workflow requires the status-derived normalized fingerprint before activation can succeed. |
 | [TASK-LEDGER-VERIFY-UC-008](tasks/verify-uc-008.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
 | [TASK-LEDGER-VERIFY-UC-009](tasks/verify-uc-009.md) | [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
 | [TASK-LEDGER-VERIFY-UC-009](tasks/verify-uc-009.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
@@ -336,8 +340,8 @@ Global constraints: C1 verbatim: The first Ledger release is one self-contained 
 ### Coverage
 
 - **Status:** `warn`
-- **Required refs:** 288
-- **Covered refs:** 288
+- **Required refs:** 293
+- **Covered refs:** 293
 - **Gaps:** 0
 
 #### Covered References
@@ -440,6 +444,8 @@ Global constraints: C1 verbatim: The first Ledger release is one self-contained 
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION](tasks/reconciliation-scope-registration.md) | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](tasks/reconciliation-statement-correction-effect-writer.md) | `true` |
+| DD-LEDGER-RECOVERY-FINGERPRINT-SURFACES: Separate restore and evolution fingerprints | `design_decision` | `governed-by` | [TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT](tasks/recovery-status-normalized-fingerprint.md) | `true` |
+| DD-LEDGER-RECOVERY-FINGERPRINT-SURFACES: Separate restore and evolution fingerprints | `design_decision` | `governed-by` | [TASK-LEDGER-VERIFY-UC-007](tasks/verify-uc-007.md) | `true` |
 | DD-LEDGER-SKILL-COMPATIBILITY: Provider-neutral self-describing contract with optional guidance | `design_decision` | `governed-by` | [TASK-LEDGER-AGENT-SKILLS](tasks/agent-skills.md) | `true` |
 | DD-LEDGER-SNAPSHOT-ACTUALS: Materialized coherent snapshots for dimensional actuals | `design_decision` | `governed-by` | [TASK-LEDGER-ACTUALS-SNAPSHOT](tasks/actuals-snapshot.md) | `true` |
 | DD-LEDGER-SNAPSHOT-ACTUALS: Materialized coherent snapshots for dimensional actuals | `design_decision` | `governed-by` | [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](tasks/core-schema-relationships-actuals.md) | `true` |
@@ -473,6 +479,7 @@ Global constraints: C1 verbatim: The first Ledger release is one self-contained 
 | DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | [TASK-LEDGER-RECONCILIATION-COVERAGE](tasks/reconciliation-coverage.md) | `true` |
 | DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | [TASK-LEDGER-RECONCILIATION-DECISIONS](tasks/reconciliation-decisions.md) | `true` |
 | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts | `data_model` | `touches` | [TASK-LEDGER-BACKUP-VERIFY](tasks/backup-verify.md) | `true` |
+| DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts | `data_model` | `touches` | [TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT](tasks/recovery-status-normalized-fingerprint.md) | `true` |
 | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts | `data_model` | `touches` | [TASK-LEDGER-RESTORE-ACTIVATE](tasks/restore-activate.md) | `true` |
 | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts | `data_model` | `touches` | [TASK-LEDGER-STORAGE-EVOLUTION](tasks/storage-evolution.md) | `true` |
 | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | [TASK-LEDGER-ACTUALS-SNAPSHOT](tasks/actuals-snapshot.md) | `true` |
@@ -506,8 +513,8 @@ Global constraints: C1 verbatim: The first Ledger release is one self-contained 
 | FR-LEDGER-RECONCILIATION-PROJECTION: Project reconciliation candidates | `requirement` | `implements` | [TASK-LEDGER-RECONCILIATION-PROJECTION](tasks/reconciliation-projection.md) | `true` |
 | FR-LEDGER-REFUND-CONFIRMATION: Confirm refunds and reversals | `requirement` | `verifies` | [TASK-LEDGER-GATE-EVIDENCE-RELATIONSHIPS](tasks/gate-evidence-relationships.md) | `true` |
 | FR-LEDGER-RELATIONSHIP-CORRECTION: Revoke or replace financial relationships | `requirement` | `implements` | [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](tasks/relationship-corrections.md) | `true` |
-| FR-LEDGER-SAFE-RESTORE: Restore the Ledger safely | `requirement` | `implements` | [TASK-LEDGER-RESTORE-ACTIVATE](tasks/restore-activate.md) | `true` |
-| FR-LEDGER-SAFE-STORAGE-EVOLUTION: Upgrade or migrate Ledger storage safely | `requirement` | `implements` | [TASK-LEDGER-STORAGE-EVOLUTION](tasks/storage-evolution.md) | `true` |
+| FR-LEDGER-SAFE-RESTORE: Restore the Ledger safely | `requirement` | `implements` | [TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT](tasks/recovery-status-normalized-fingerprint.md) | `true` |
+| FR-LEDGER-SAFE-STORAGE-EVOLUTION: Upgrade or migrate Ledger storage safely | `requirement` | `implements` | [TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT](tasks/recovery-status-normalized-fingerprint.md) | `true` |
 | FR-LEDGER-SKILL-COMPATIBILITY: Expose version-matched integration guidance | `requirement` | `implements` | [TASK-LEDGER-AGENT-SKILLS](tasks/agent-skills.md) | `true` |
 | FR-LEDGER-SNAPSHOT-PAGINATION: Preserve query snapshots across pages | `requirement` | `implements` | [TASK-LEDGER-ACTUALS-SNAPSHOT](tasks/actuals-snapshot.md) | `true` |
 | FR-LEDGER-SPEND-POOL-CATALOGUE: Maintain the Spend Pool catalogue | `requirement` | `implements` | [TASK-LEDGER-SPEND-POOLS](tasks/spend-pools.md) | `true` |
@@ -588,8 +595,10 @@ Global constraints: C1 verbatim: The first Ledger release is one self-contained 
 | TC-LEDGER-REFUND-CONFIRMATION-CONTRACT: Verify confirm refunds and reversals contract | `test_case` | `verifies` | [TASK-LEDGER-VERIFY-UC-010](tasks/verify-uc-010.md) | `true` |
 | TC-LEDGER-RELATIONSHIP-CORRECTION-CONTRACT: Verify revoke or replace financial relationships contract | `test_case` | `verifies` | [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](tasks/relationship-corrections.md) | `true` |
 | TC-LEDGER-RELATIONSHIP-CORRECTION-CONTRACT: Verify revoke or replace financial relationships contract | `test_case` | `verifies` | [TASK-LEDGER-VERIFY-UC-011](tasks/verify-uc-011.md) | `true` |
+| TC-LEDGER-SAFE-RESTORE-CONTRACT: Verify restore the ledger safely contract | `test_case` | `verifies` | [TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT](tasks/recovery-status-normalized-fingerprint.md) | `true` |
 | TC-LEDGER-SAFE-RESTORE-CONTRACT: Verify restore the ledger safely contract | `test_case` | `verifies` | [TASK-LEDGER-RESTORE-ACTIVATE](tasks/restore-activate.md) | `true` |
 | TC-LEDGER-SAFE-RESTORE-CONTRACT: Verify restore the ledger safely contract | `test_case` | `verifies` | [TASK-LEDGER-VERIFY-UC-007](tasks/verify-uc-007.md) | `true` |
+| TC-LEDGER-SAFE-STORAGE-EVOLUTION-CONTRACT: Verify upgrade or migrate ledger storage safely contract | `test_case` | `verifies` | [TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT](tasks/recovery-status-normalized-fingerprint.md) | `true` |
 | TC-LEDGER-SAFE-STORAGE-EVOLUTION-CONTRACT: Verify upgrade or migrate ledger storage safely contract | `test_case` | `verifies` | [TASK-LEDGER-STORAGE-EVOLUTION](tasks/storage-evolution.md) | `true` |
 | TC-LEDGER-SAFE-STORAGE-EVOLUTION-CONTRACT: Verify upgrade or migrate ledger storage safely contract | `test_case` | `verifies` | [TASK-LEDGER-VERIFY-UC-012](tasks/verify-uc-012.md) | `true` |
 | TC-LEDGER-SKILL-COMPATIBILITY-CONTRACT: Verify version-matched integration guidance | `test_case` | `verifies` | [TASK-LEDGER-AGENT-SKILLS](tasks/agent-skills.md) | `true` |
@@ -717,6 +726,11 @@ Global constraints: C1 verbatim: The first Ledger release is one self-contained 
 - [TASK-LEDGER-VERIFY-UC-017](tasks/verify-uc-017.md): Task has no implements refs.
 - [TASK-LEDGER-VERIFY-UC-018](tasks/verify-uc-018.md): Task has no implements refs.
 
+#### Tasks Without Bead Refs
+
+- [TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT](tasks/recovery-status-normalized-fingerprint.md): Task has no bead refs.
+
 #### Coverage Warnings
 
 - 43 loose task(s) have no implements refs.
+- 1 task(s) have no bead refs.

@@ -22,6 +22,7 @@ Prove recovery reproduces every current and historical financial meaning before 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
+| DD-LEDGER-RECOVERY-FINGERPRINT-SURFACES: Separate restore and evolution fingerprints | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts | `data_model` | `touches` | `false` |
 | FR-LEDGER-BACKUP-VERIFICATION: Create and verify Ledger backups | `requirement` | `verifies` | `true` |
 | FR-LEDGER-SAFE-RESTORE: Restore the Ledger safely | `requirement` | `verifies` | `true` |
@@ -36,6 +37,7 @@ Prove recovery reproduces every current and historical financial meaning before 
 |---|---|---|
 | [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
 | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
+| [TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT](../tasks/recovery-status-normalized-fingerprint.md) | `compile` | The published UC-007 restore workflow requires the status-derived normalized fingerprint before activation can succeed. |
 
 ## Recipe
 
@@ -102,6 +104,8 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `covers` -> UC-LEDGER-007: Back up and recover the local ledger
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
+- `depends-on:compile` -> [TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT](../tasks/recovery-status-normalized-fingerprint.md): The published UC-007 restore workflow requires the status-derived normalized fingerprint before activation can succeed.
+- `governed-by` -> DD-LEDGER-RECOVERY-FINGERPRINT-SURFACES: Separate restore and evolution fingerprints
 - `touches` -> DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts
 - `verifies` -> FR-LEDGER-BACKUP-VERIFICATION: Create and verify Ledger backups
 - `verifies` -> FR-LEDGER-SAFE-RESTORE: Restore the Ledger safely

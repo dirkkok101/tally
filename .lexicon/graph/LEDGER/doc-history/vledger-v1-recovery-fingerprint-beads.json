@@ -1,0 +1,9 @@
+{
+  "id": "01KY72VQD6QV87K6MTN97CVQVM",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "ledger-v1-recovery-fingerprint-beads",
+  "changes": [
+    "Compiled PLAN-LEDGER-V1 correction: TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT mapped to bd-2n4; UC-007 now compile-blocked on the normalized fingerprint contract."
+  ],
+  "created_at": "2026-07-23T08:53:18.3755041+00:00"
+}

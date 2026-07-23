@@ -1,0 +1,54 @@
+{
+  "id": "01KY72J16QBRYHF2NBBBW2KEPR",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "DD-LEDGER-RECOVERY-FINGERPRINT-SURFACES",
+  "title": "Separate restore and evolution fingerprints",
+  "description": [
+    "Public recovery callers need both the storage-evolution source fingerprint and the Durable Ledger normalized fingerprint; using one field for both makes restore activation impossible through the published CLI."
+  ],
+  "decision": [
+    "Keep StorageStatusResult.currentFingerprint as the storage-evolution source fingerprint and add currentNormalizedFingerprint from the verified current-equivalent Durable Ledger report. restore.activate.expectedCurrentFingerprint consumes currentNormalizedFingerprint; storage.evolution.activate.expectedCurrentFingerprint continues to consume currentFingerprint."
+  ],
+  "rationale": [
+    "The two fingerprints protect different invariants. A separately named additive field preserves the evolution contract while giving restore callers the exact compare-and-swap value validated under the activation lock."
+  ],
+  "alternatives": [
+    "Rejected changing currentFingerprint to the normalized value because that breaks storage evolution. Rejected deriving the value from backup or restore.prepare because those idempotent mutations change current Durable Ledger State before activation. Rejected weakening restore activation to compare the storage source fingerprint because that would bypass the complete normalized-state verification contract."
+  ],
+  "consequences": [
+    "The status schema exposes two explicit 64-character lowercase SHA-256 values. Native CLI tests must prove a status-derived currentNormalizedFingerprint permits valid restore activation, stale current and stale candidate remain distinct, and currentFingerprint retains storage-evolution behavior."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Contracts/Ledger/Recovery/StorageEvolutionContracts.cs\",\"src/Tally/Infrastructure/Recovery/StorageEvolutionService.cs\",\"tests/Tally.Tests/Features/Ledger/Recovery/StorageEvolutionTests.cs\",\"tests/Tally.Tests/EndToEnd/UC007BackupRecoveryWorkflowTests.cs\"]}",
+  "created_at": "2026-07-23T08:48:00.7278088+00:00",
+  "links": [
+    {
+      "id": "01KY72J4BTAYZ1T0BZTNQWBH37",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-CANDIDATE-ACTIVATION",
+      "rel": "supports",
+      "created_at": "2026-07-23T08:48:03.9637192+00:00"
+    },
+    {
+      "id": "01KY72J3R09W9HAJXSPJ0WYMR0",
+      "target_type": "data_model",
+      "target": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "rel": "references",
+      "created_at": "2026-07-23T08:48:03.3291382+00:00"
+    },
+    {
+      "id": "01KY72J2FX4E2EJ7QF7BHMMV3N",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SAFE-RESTORE",
+      "rel": "implements",
+      "created_at": "2026-07-23T08:48:02.0467777+00:00"
+    },
+    {
+      "id": "01KY72J34CM4F0C6YMBS7025BT",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-SAFE-STORAGE-EVOLUTION",
+      "rel": "implements",
+      "created_at": "2026-07-23T08:48:02.7016443+00:00"
+    }
+  ]
+}

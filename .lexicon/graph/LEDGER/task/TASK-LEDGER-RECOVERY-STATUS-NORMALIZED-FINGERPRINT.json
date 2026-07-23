@@ -1,0 +1,290 @@
+{
+  "id": "01KY72MW4AJZRRN7ZH5QTT8HHW",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KXT06AV2YBFA37A3CEQMT346",
+  "ref_code": "TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT",
+  "slug": "RECOVERY-STATUS-NORMALIZED-FINGERPRINT",
+  "title": "Expose the normalized restore fingerprint in storage status",
+  "description": [
+    "Narrow correction discovered by UC-LEDGER-007: status currently exposes only the raw storage-evolution source fingerprint, so restore activation cannot be completed from public outputs."
+  ],
+  "objective": [
+    "A public caller can obtain the exact normalized current-state fingerprint required by restore activation without changing storage-evolution fingerprint semantics."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 35,
+  "created_at": "2026-07-23T08:49:33.8352143+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY72R166WFCZEND92E4WE2SM",
+      "bead_id": "bd-2n4",
+      "verification_status": "verified",
+      "verified_at": "2026-07-23T08:51:17.3188222+00:00",
+      "created_at": "2026-07-23T08:51:17.3188222+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KY72MW4CC7T07P3X7YHMXXNV",
+      "target": "DD-LEDGER-RECOVERY-FINGERPRINT-SURFACES",
+      "created_at": "2026-07-23T08:49:33.8352143+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KY72NN4FWYSWF78NTJATGYV1",
+      "target": "TASK-LEDGER-RESTORE-ACTIVATE",
+      "dependency_type": "compile",
+      "reason": [
+        "The correction exposes the normalized fingerprint already enforced by restore activation."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-23T08:49:59.4478099+00:00"
+    },
+    {
+      "id": "01KY72NJXG41RN12AS26QAD2P7",
+      "target": "TASK-LEDGER-STORAGE-EVOLUTION",
+      "dependency_type": "compile",
+      "reason": [
+        "The correction extends the existing StorageStatusResult and StorageEvolutionService implemented by the storage-evolution task."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-23T08:49:57.1814823+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY72MW4CS5RR700CP1CXYT43",
+      "path": "src/Tally/Contracts/Ledger/Recovery/StorageEvolutionContracts.cs",
+      "action": "modify",
+      "role": "contract",
+      "required": 1,
+      "notes": [
+        "Add the explicitly named normalized current fingerprint."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-23T08:49:33.8352143+00:00"
+    },
+    {
+      "id": "01KY72MW4CCFKWHS7T7HTNWE5S",
+      "path": "src/Tally/Infrastructure/Recovery/StorageEvolutionService.cs",
+      "action": "modify",
+      "role": "implementation",
+      "required": 1,
+      "notes": [
+        "Populate both source and normalized fingerprints from one verified inspection."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-23T08:49:33.8352143+00:00"
+    },
+    {
+      "id": "01KY72MW4CH128G1CTR7HBN8D7",
+      "path": "tests/Tally.Tests/Features/Ledger/Recovery/StorageEvolutionTests.cs",
+      "action": "test",
+      "role": "verification",
+      "required": 1,
+      "notes": [
+        "Prove field semantics and evolution compatibility."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-23T08:49:33.8352143+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY72QQPE4ZXS6PKPPPNZ5RA5",
+      "name": "StorageStatusResult.CurrentNormalizedFingerprint",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "notes": [
+        "Normalized compare-and-swap value consumed by restore.activate."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-23T08:51:07.5982725+00:00"
+    },
+    {
+      "id": "01KY72QQPFK8Z264HFWJJ92Q8M",
+      "name": "MigrationCandidateBuilder",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-STORE-GENERATION",
+      "notes": [
+        "Existing builder supplies StorageSourceInspection.CurrentEquivalentVerification.Report.NormalizedFingerprint."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-23T08:51:07.5982725+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KY72PZKGVB3MY3AE7PRXSR6A",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-007",
+      "rel": "see-also",
+      "created_at": "2026-07-23T08:50:42.9290883+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY72MW4CDW8KR2H2X5NRPNHR",
+      "kind": "acceptance_check",
+      "text": [
+        "Given a verified current Ledger, when ledger.storage.status succeeds, then currentFingerprint and currentNormalizedFingerprint are separate lowercase 64-character SHA-256 values and currentNormalizedFingerprint equals DurableLedgerVerifier.Report.NormalizedFingerprint for that state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T08:49:33.8352143+00:00"
+    },
+    {
+      "id": "01KY72MW4CPR3XHM75EY01E3MY",
+      "kind": "acceptance_check",
+      "text": [
+        "Given an existing storage-evolution caller, when it uses status.currentFingerprint as expectedCurrentFingerprint, then the existing prepare/activate lifecycle and stale-current behavior remain unchanged."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-23T08:49:33.8352143+00:00"
+    },
+    {
+      "id": "01KY72MW4C0RX1N42DG610SZ9X",
+      "kind": "acceptance_check",
+      "text": [
+        "Given schema discovery for ledger.storage.status, when the response schema is inspected, then StorageStatusResult includes currentNormalizedFingerprint as a required string field."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-23T08:49:33.8352143+00:00"
+    },
+    {
+      "id": "01KY72MW4CN1NBE9R8JQKNCJF6",
+      "kind": "constraint",
+      "text": [
+        "Preserve the 74-operation provider-neutral public inventory and existing CurrentFingerprint field."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T08:49:33.8352143+00:00"
+    },
+    {
+      "id": "01KY72MW4CM4PXZ06BFKHZHR7T",
+      "kind": "expected_output",
+      "text": [
+        "StorageStatusResult.CurrentNormalizedFingerprint and verified status population"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T08:49:33.8352143+00:00"
+    },
+    {
+      "id": "01KY72MW4CTHFGWTBZHSKF6HAE",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT repurpose currentFingerprint as the normalized value because storage evolution consumes its existing source-fingerprint semantics per DD-LEDGER-RECOVERY-FINGERPRINT-SURFACES."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T08:49:33.8352143+00:00"
+    },
+    {
+      "id": "01KY72MW4CZ45G5F0281FDS499",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT weaken restore activation to compare the storage source fingerprint because activation must revalidate complete normalized Durable Ledger State per DD-LEDGER-RECOVERY-FINGERPRINT-SURFACES."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-23T08:49:33.8352143+00:00"
+    },
+    {
+      "id": "01KY72MW4CBG9R51RNFKZNQ6K6",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT derive the normalized current value from backup or restore.prepare receipts because those mutations change durable idempotency state before activation per DD-LEDGER-RECOVERY-FINGERPRINT-SURFACES."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-23T08:49:33.8352143+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY72NCS5G0JQ5P1SRCYG77X8",
+      "target_ref_code": "DM-LEDGER-RECOVERY-STORAGE-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSYGFP6T4HV8E4YASJ6A3FT",
+      "target_title": "RecoveryStorageOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T08:49:50.8868619+00:00"
+    },
+    {
+      "id": "01KY72NEHZ10NNZMYP2E3ZZWYK",
+      "target_ref_code": "TC-LEDGER-SAFE-RESTORE-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK759MF0EQM55HZSY6ZYY",
+      "target_title": "Verify restore the ledger safely contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-23T08:49:52.7042952+00:00"
+    },
+    {
+      "id": "01KY72NFWM6P7VY2V4NN7SX4FJ",
+      "target_ref_code": "TC-LEDGER-SAFE-STORAGE-EVOLUTION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXSQK7FBSYF372PSHVZMD37W",
+      "target_title": "Verify upgrade or migrate ledger storage safely contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-23T08:49:54.0701674+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KY72MW4CMZ2JRKFHP7BGNY4J",
+      "target": "FR-LEDGER-SAFE-RESTORE",
+      "created_at": "2026-07-23T08:49:33.8352143+00:00"
+    },
+    {
+      "id": "01KY72MW4CR5RCKD8GKEW05M5B",
+      "target": "FR-LEDGER-SAFE-STORAGE-EVOLUTION",
+      "created_at": "2026-07-23T08:49:33.8352143+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY72MW4D1WTNDKK5MHCMEB21",
+      "gate_type": "test-evidence",
+      "description": [
+        "Focused tests distinguish source and normalized fingerprints and preserve evolution activation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T08:49:33.8352143+00:00"
+    },
+    {
+      "id": "01KY72MW4D4JJFYYV0BHZFMR35",
+      "gate_type": "self-review",
+      "description": [
+        "Diff changes only the status DTO, its population, and focused recovery verification."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-23T08:49:33.8352143+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY72MW4CYBP3GWGF5Q8HR684",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Features.Ledger.Recovery.StorageEvolutionTests --no-restore",
+      "expected_result": "exit 0, at least 15 tests run, and 0 fail",
+      "required": 1,
+      "timeout_seconds": 240,
+      "sort_order": 0,
+      "created_at": "2026-07-23T08:49:33.8352143+00:00"
+    }
+  ]
+}
