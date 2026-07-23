@@ -1,0 +1,13 @@
+{
+  "id": "01KY7NE6E7J9ANSY80B3NFWBRT",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS",
+  "subject_entity_id": "01KXSQFXNVGXH9FYFN6KF8KSE9",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-ATOMIC-CRASH-RECOVERY",
+  "note": "The full module, security, recovery, and crash-atomicity gates passed.",
+  "commit_sha": "ecf6457f1339842fac4b11b0cd66f71885539cd2",
+  "bead_id": "bd-3bx",
+  "verified_at": "2026-07-23T14:17:57.9574719+00:00"
+}

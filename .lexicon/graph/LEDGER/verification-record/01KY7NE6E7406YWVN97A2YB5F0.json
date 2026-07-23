@@ -1,0 +1,13 @@
+{
+  "id": "01KY7NE6E7406YWVN97A2YB5F0",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-LEDGER-VERIFIED-RECOVERABILITY",
+  "subject_entity_id": "01KXSQFYKENRZNNNRNH8E8NWYD",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-VERIFIED-RECOVERY-DRILL",
+  "note": "Backup, verification, restore, and storage-evolution recovery drills passed.",
+  "commit_sha": "ecf6457f1339842fac4b11b0cd66f71885539cd2",
+  "bead_id": "bd-e2g",
+  "verified_at": "2026-07-23T14:17:57.9574719+00:00"
+}

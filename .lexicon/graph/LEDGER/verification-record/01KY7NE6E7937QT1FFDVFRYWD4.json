@@ -1,0 +1,13 @@
+{
+  "id": "01KY7NE6E7937QT1FFDVFRYWD4",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-LEDGER-SELF-CONTAINED-LOCAL-OPERATION",
+  "subject_entity_id": "01KXSQFZ7CYGE4ER8E0BE86W0E",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-OFFLINE-SELF-CONTAINED",
+  "note": "The linux-x64 NativeAOT executable published and passed offline process-boundary tests.",
+  "commit_sha": "ecf6457f1339842fac4b11b0cd66f71885539cd2",
+  "bead_id": "bd-gpm",
+  "verified_at": "2026-07-23T14:17:57.9574719+00:00"
+}

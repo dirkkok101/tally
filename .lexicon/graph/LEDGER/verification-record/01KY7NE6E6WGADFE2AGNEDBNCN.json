@@ -1,0 +1,13 @@
+{
+  "id": "01KY7NE6E6WGADFE2AGNEDBNCN",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-SPEND-POOL-CATALOGUE",
+  "subject_entity_id": "01KY09SQTXB94THKZNDAR42EGV",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-SPEND-POOL-CATALOGUE-CONTRACT",
+  "note": "Review-work iteration 2 passed the complete Ledger v1 module gate and the selected graph-linked test case is cited by the passing implementation test.",
+  "commit_sha": "ecf6457f1339842fac4b11b0cd66f71885539cd2",
+  "bead_id": "bd-3ak",
+  "verified_at": "2026-07-23T14:17:57.9574719+00:00"
+}

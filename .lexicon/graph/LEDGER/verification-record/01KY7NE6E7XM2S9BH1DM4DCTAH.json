@@ -1,0 +1,13 @@
+{
+  "id": "01KY7NE6E7XM2S9BH1DM4DCTAH",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-LEDGER-LOCAL-DATA-PROTECTION",
+  "subject_entity_id": "01KXSQFY0879FNP1G5123TXCPZ",
+  "verdict": "failed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-LOCAL-DATA-PROTECTION",
+  "note": "Owner-only artifact and diagnostic controls pass, but the intended deployment lacks external evidence of a host-managed encrypted volume. Sensitive field data remains blocked by bd-64c.",
+  "commit_sha": "ecf6457f1339842fac4b11b0cd66f71885539cd2",
+  "bead_id": "bd-64c",
+  "verified_at": "2026-07-23T14:17:57.9574719+00:00"
+}

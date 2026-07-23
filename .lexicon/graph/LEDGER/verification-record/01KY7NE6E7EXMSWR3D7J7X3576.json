@@ -1,0 +1,13 @@
+{
+  "id": "01KY7NE6E7EXMSWR3D7J7X3576",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-LEDGER-ATTRIBUTABLE-HISTORY",
+  "subject_entity_id": "01KXSQFZJ0XVBBX0FPF6FJ7E2Y",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-ATTRIBUTABLE-HISTORY-INVARIANTS",
+  "note": "Immutable transaction, relationship, evidence, reconciliation, and correction history tests passed.",
+  "commit_sha": "ecf6457f1339842fac4b11b0cd66f71885539cd2",
+  "bead_id": "bd-3bx",
+  "verified_at": "2026-07-23T14:17:57.9574719+00:00"
+}

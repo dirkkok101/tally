@@ -1,0 +1,13 @@
+{
+  "id": "01KY7NE6E64T76HG532K6FFJAD",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-LEDGER-AGENT-CONTRACT-STABILITY",
+  "subject_entity_id": "01KXSQFY9C8649APJ7XN79GBZ3",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE",
+  "note": "The published 74-operation provider-neutral contract and offline invocation tests passed; Hermes consumer validation remains external to Tally.",
+  "commit_sha": "ecf6457f1339842fac4b11b0cd66f71885539cd2",
+  "bead_id": "bd-gpm",
+  "verified_at": "2026-07-23T14:17:57.9574719+00:00"
+}

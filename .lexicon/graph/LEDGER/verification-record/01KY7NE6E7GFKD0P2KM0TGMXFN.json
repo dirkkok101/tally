@@ -1,0 +1,13 @@
+{
+  "id": "01KY7NE6E7GFKD0P2KM0TGMXFN",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-LEDGER-RECONCILIATION-SAFETY",
+  "subject_entity_id": "01KY0A32623J1HNH608CS19WJ3",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY",
+  "note": "Deterministic fail-closed reconciliation and crash-atomicity tests passed.",
+  "commit_sha": "ecf6457f1339842fac4b11b0cd66f71885539cd2",
+  "bead_id": "bd-3bo",
+  "verified_at": "2026-07-23T14:17:57.9574719+00:00"
+}

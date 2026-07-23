@@ -1,0 +1,13 @@
+{
+  "id": "01KY7NE6E66X21GFRQKGMNDPND",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-SAFE-STORAGE-EVOLUTION",
+  "subject_entity_id": "01KXSQDTAMTJ1Y16FE3S7BJDP8",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-SAFE-STORAGE-EVOLUTION-CONTRACT",
+  "note": "Review-work iteration 2 passed the complete Ledger v1 module gate and the selected graph-linked test case is cited by the passing implementation test.",
+  "commit_sha": "ecf6457f1339842fac4b11b0cd66f71885539cd2",
+  "bead_id": "bd-3g2",
+  "verified_at": "2026-07-23T14:17:57.9574719+00:00"
+}

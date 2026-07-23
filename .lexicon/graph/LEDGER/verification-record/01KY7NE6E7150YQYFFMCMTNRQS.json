@@ -1,0 +1,13 @@
+{
+  "id": "01KY7NE6E7150YQYFFMCMTNRQS",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC",
+  "subject_entity_id": "01KXSQFXBTBZ6YXSZEFF4WWRCX",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-DIMENSIONAL-ACTUALS-PROPERTY",
+  "note": "Exact integer-money and dimensional actuals properties passed across the complete suite.",
+  "commit_sha": "ecf6457f1339842fac4b11b0cd66f71885539cd2",
+  "bead_id": "bd-3ak",
+  "verified_at": "2026-07-23T14:17:57.9574719+00:00"
+}

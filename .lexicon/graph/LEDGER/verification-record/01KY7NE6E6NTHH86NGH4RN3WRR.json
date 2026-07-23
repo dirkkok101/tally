@@ -1,0 +1,13 @@
+{
+  "id": "01KY7NE6E6NTHH86NGH4RN3WRR",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-ACTUALS-QUERY",
+  "subject_entity_id": "01KXSQCYJC2RVMH6KBHKV1K3FB",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-ACTUALS-QUERY-CONTRACT",
+  "note": "Review-work iteration 2 passed the complete Ledger v1 module gate and the selected graph-linked test case is cited by the passing implementation test.",
+  "commit_sha": "ecf6457f1339842fac4b11b0cd66f71885539cd2",
+  "bead_id": "bd-3na",
+  "verified_at": "2026-07-23T14:17:57.9574719+00:00"
+}

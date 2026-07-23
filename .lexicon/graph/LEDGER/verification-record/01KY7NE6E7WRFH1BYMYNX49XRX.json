@@ -1,0 +1,13 @@
+{
+  "id": "01KY7NE6E7WRFH1BYMYNX49XRX",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE",
+  "subject_entity_id": "01KXSQFYX4NQ8JXNGWNYBA7EK5",
+  "verdict": "passed",
+  "proof_kind": "benchmark",
+  "proof_ref": "docs/verification/ledger-v1.md",
+  "note": "The 100000-transaction 30-run path returned exact results and recorded advisory p50 and p95 timing without a blocking latency threshold.",
+  "commit_sha": "ecf6457f1339842fac4b11b0cd66f71885539cd2",
+  "bead_id": "bd-3bx",
+  "verified_at": "2026-07-23T14:17:57.9574719+00:00"
+}
