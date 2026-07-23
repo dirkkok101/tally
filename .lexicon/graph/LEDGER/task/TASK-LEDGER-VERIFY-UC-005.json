@@ -26,14 +26,24 @@
   ],
   "dependencies": [
     {
-      "id": "01KXT16B9PZR5C87ZGTPZJ4FEW",
+      "id": "01KY6J5ZNY7AG695CYJCCQS36R",
       "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
       "dependency_type": "compile",
       "reason": [
-        "Use-case verification invokes the fully wired published public contract."
+        "The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-23T04:01:48.7351345+00:00"
+    },
+    {
+      "id": "01KY6J27NMK56XKGMDAN9AJV7Y",
+      "target": "TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "The black-box actuals workflow requires the released 74-operation contract including public statement-scope registration."
       ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:14:01.6556045+00:00"
+      "created_at": "2026-07-23T03:59:45.8451840+00:00"
     }
   ],
   "files": [
@@ -49,28 +59,28 @@
   ],
   "interfaces": [
     {
-      "id": "01KY0EAYVKJWJA1PD1KPDTAHMB",
+      "id": "01KY6J25X2Q3GEDM7HWJ19FZEG",
       "name": "PublishedTallyFixture",
       "direction": "consumes",
       "notes": [
         "Release published-process E2E fixture"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-20T18:59:10.8336304+00:00"
+      "created_at": "2026-07-23T03:59:44.0321926+00:00"
     },
     {
-      "id": "01KY0EAYVK4JQKM8VNZDXMM998",
-      "name": "CompletePublicContract",
+      "id": "01KY6J25X36YQTVX37VFWW724Y",
+      "name": "CompletePublicContract74",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "Exactly 72 provider-neutral operations"
+        "Exactly 74 provider-neutral operations"
       ],
       "sort_order": 1,
-      "created_at": "2026-07-20T18:59:10.8336304+00:00"
+      "created_at": "2026-07-23T03:59:44.0321926+00:00"
     },
     {
-      "id": "01KY0EAYVKCN6DM3WJBR4EMF3M",
+      "id": "01KY6J25X3ZKP3BF84HEYXXVCR",
       "name": "VerifiedUC005",
       "direction": "produces",
       "contract_ref_code": "UC-LEDGER-005",
@@ -78,7 +88,7 @@
         "multi-dimensional actuals workflow"
       ],
       "sort_order": 2,
-      "created_at": "2026-07-20T18:59:10.8336304+00:00"
+      "created_at": "2026-07-23T03:59:44.0321926+00:00"
     }
   ],
   "links": [
@@ -92,44 +102,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY2CKCHAFGZKSWF1X00ACTQA",
+      "id": "01KY6J5ERY3HJPKC2JWRXFJ4FY",
       "kind": "acceptance_check",
       "text": [
         "Published actuals queries prove every filter and explicit unknown/uncategorized/unassigned bucket with deterministic membership and exact Net Account Movement, External Spend, and Budget Actual."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T13:07:18.6970200+00:00"
+      "created_at": "2026-07-23T04:01:31.4221532+00:00"
     },
     {
-      "id": "01KY2CKCHBHDHNHN506F14RWBM",
+      "id": "01KY6J5ERZNC0W2RK3KAWT1GDX",
       "kind": "acceptance_check",
       "text": [
-        "Owned-transfer principal contributes zero; separate fees remain spend; refunds offset original current category/pool in refund date; cash follows OQ-LEDGER-16Resolution."
+        "Owned-transfer principal contributes zero; separate fees remain spend; full refunds offset original current category/pool on refund date; cash follows OQ-LEDGER-16Resolution."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T13:07:18.6970200+00:00"
+      "created_at": "2026-07-23T04:01:31.4221532+00:00"
     },
     {
-      "id": "01KY2CKCHC4GEY6NDWEVX4JJ1M",
+      "id": "01KY6J5ERZ83NPAWJVPDD77S62",
       "kind": "acceptance_check",
       "text": [
         "Category-direct, subtree, pool, and matrix totals reconcile without double counting before and after hierarchy moves."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T13:07:18.6970200+00:00"
+      "created_at": "2026-07-23T04:01:31.4221532+00:00"
     },
     {
-      "id": "01KY2CKCHC67QGNKEHTVCDTD12",
+      "id": "01KY6J5ERZRMRTRA91V00EG97J",
       "kind": "acceptance_check",
       "text": [
-        "Statement correction excludes the superseded fact and includes the replacement once; later snapshot pages retain frozen ancestry, Reconciliation State, membership, ordering, and totals despite writes."
+        "The statement-correction fixture registers its completed account-period scope and evidence membership through ledger.reconciliation.scope.register, then excludes the superseded fact and includes the replacement once; later snapshot pages retain frozen ancestry, Reconciliation State, membership, ordering, and totals despite writes."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T13:07:18.6970200+00:00"
+      "created_at": "2026-07-23T04:01:31.4221532+00:00"
     },
     {
       "id": "01KXT0ZW3J0YVSTR1CX0AYVHCR",

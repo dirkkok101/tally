@@ -49,7 +49,7 @@ Commit one statement-derived replacement and every required history/carry-forwar
 
 ### Failure Criteria
 
-- Do NOT overwrite the notification-derived fact, create a second active spend effect, or move Evidence Records, Category Assignments, Pool Assignments, Payment Instrument or Cardholder Attribution, or relationships in place.
+- Do NOT overwrite the notification-derived fact, create a second active spend effect, or move Evidence Record, Category Assignment, Pool Assignment, Payment Instrument or Cardholder Attribution, or relationships in place.
 - Do NOT accept raw email, MIME, statement document, provider payload, message ID semantics, or arbitrary metadata.
 - Do NOT preserve an invalid relationship or silently drop an existing Category Assignment or Pool Assignment; an invalid relationship blocks, while category and pool preservation is explicit.
 - Do NOT enable automatic correction until OQ-LEDGER-13 resolves and TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION supplies the exact supported policy; explicit owner-approved correction remains available.

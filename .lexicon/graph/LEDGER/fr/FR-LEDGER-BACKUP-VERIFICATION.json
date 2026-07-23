@@ -21,7 +21,7 @@
   ],
   "acceptance_criteria": [
     "Given a healthy Ledger, when the owner creates a backup, then one version-identifiable consistent artifact containing the complete Durable Ledger State is produced with owner-only host permissions and the live Ledger is unchanged.",
-    "Given a backup artifact, when it is verified independently, then compatibility, integrity, storage metadata, accounts, categories, Spend Pools, transactions and correction chains, category and pool history, Payment Instrument and Cardholder Attribution, Evidence Records and links, reconciliation scopes, decisions and exceptions, financial relationships, idempotency outcomes, per-type counts, cardinality rules, and exact pool/category totals all validate before success.",
+    "Given a backup artifact, when it is verified independently, then compatibility, integrity, storage metadata, accounts, categories, Spend Pool, transactions and correction chains, category and pool history, Payment Instrument and Cardholder Attribution, Evidence Record and links, reconciliation scopes, decisions and exceptions, financial relationships, idempotency outcomes, per-type counts, cardinality rules, and exact pool/category totals all validate before success.",
     "Given a corrupt, incomplete, unsupported, or permission-inaccessible artifact, when verification is attempted, then a stable failure is returned and neither the artifact nor live Ledger is mutated.",
     "Given backup or verification output and diagnostics, when inspected, then no credential, raw evidence or provider payload, unmasked account or instrument identifier, or transaction description is emitted."
   ],

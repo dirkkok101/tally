@@ -2,7 +2,7 @@
   "id": "01KXRJ3N4D9K5QNNHXBBJ68RD7",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "A10",
-  "title": "Spend categories are flat in the first release",
+  "title": "Spend Category are flat in the first release",
   "description": [
     "Invalidated by the owner on 2026-07-21: the first release requires a hierarchical Spend Category catalogue, not a flat catalogue. FR-LEDGER-CATEGORY-CATALOGUE and the LEDGER design define the replacement hierarchy contract."
   ],

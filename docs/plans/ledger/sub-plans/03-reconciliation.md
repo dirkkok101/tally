@@ -15,6 +15,8 @@ Deliver versioned candidate policy, atomic dispositions, decision corrections, a
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
+| [TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION](../tasks/reconciliation-scope-registration.md) | Register approved statement scopes atomically | `ready` | 0 |
+| [TASK-LEDGER-RECONCILIATION-SCOPE-PUBLIC-COMPOSITION](../tasks/reconciliation-scope-public-composition.md) | Compose statement-scope public operation | `ready` | 0 |
 | [TASK-LEDGER-RECONCILIATION-PROJECTION](../tasks/reconciliation-projection.md) | Implement manual-review reconciliation candidate projection | `ready` | 0 |
 | [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md) | Implement owner-reviewed reconciliation dispositions | `ready` | 0 |
 | [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md) | Implement Reconciliation Decision correction lifecycle | `ready` | 1 |

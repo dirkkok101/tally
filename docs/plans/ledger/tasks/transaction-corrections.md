@@ -41,7 +41,7 @@ Count only the valid active transaction outcome while keeping ordinary correctio
 
 ### Acceptance Checks
 
-- Ordinary void appends an attributable lifecycle event, retires active transfer/refund relationships atomically, preserves evidence/decision/dimension history, and exposes affected confirmations as current Reconciliation Exceptions.
+- Ordinary void appends an attributable lifecycle event, retires active transfer/refund relationships atomically, preserves evidence/decision/dimension history, and exposes affected confirmations as current Reconciliation Exception.
 - Ordinary supersede creates one independent replacement with only explicitly supplied new evidence or attribution; it never copies category, pool, payment attribution, relationships, or confirmation.
 - AppendStatementSupersessionAsync is internal and may run only inside an authorized reconciliation writer transaction; it creates the typed statement-derived replacement and supersession while leaving all carry-forward and relationship decisions to the coordinator.
 - Any replacement validation, relationship retirement, Reconciliation Exception, or write failure leaves the original state unchanged; history returns complete original/replacement facts and retained associations.

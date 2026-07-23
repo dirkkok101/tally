@@ -22,6 +22,7 @@ Retire or replace one active financial relationship atomically only after typed 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
+| DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP: Single full-amount refund relationships | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | `true` |
 | FR-LEDGER-RELATIONSHIP-CORRECTION: Revoke or replace financial relationships | `requirement` | `implements` | `true` |
@@ -39,9 +40,9 @@ Retire or replace one active financial relationship atomically only after typed 
 
 ### Acceptance Checks
 
-- Public revoke appends an attributable lifecycle event, retires one active transfer/refund atomically, and removes its spend effect; public replace validates the entire proposed relationship before retiring the old one.
-- Replace revalidates lifecycle, role, cardinality, amount, account, currency, sign, cumulative refund, and exclusivity; invalid replacement leaves the old relationship active.
-- ReplaceForStatementCorrectionAsync substitutes only the statement-derived replacement transaction and appends a decision-linked relationship replacement when every prior invariant remains valid; otherwise it returns review-required before any write.
+- Public revoke appends an attributable lifecycle event, retires one active transfer or refund atomically, and removes its spend effect; public replace validates the entire proposed relationship before retiring the old one.
+- Replace revalidates lifecycle, role, cardinality, exact amount, account, currency, sign, full-refund equality, and exclusivity; invalid replacement leaves the old relationship active.
+- ReplaceForStatementCorrectionAsync substitutes only the statement-derived replacement transaction and appends a decision-linked relationship replacement when every prior invariant remains valid, including exact full-refund equality; otherwise it returns review-required before any write.
 - History returns participants, type, reason, actor/time, reconciliationDecisionId when applicable, and complete replacement references; identical replay returns the original outcome.
 
 ### Failure Criteria
@@ -67,12 +68,16 @@ None recorded.
 
 | Path | Action | Role | Required | Notes |
 |---|---|---|---|---|
-| `src/Tally/Contracts/Ledger/Relationships/RelationshipLifecycleContracts.cs` | `create` | implementation | `true` |  |
-| `src/Tally/Domain/Ledger/Relationships/RelationshipLifecycle.cs` | `create` | implementation | `true` |  |
-| `src/Tally/Features/Ledger/Relationships/RelationshipLifecycleHandlers.cs` | `create` | implementation | `true` |  |
-| `src/Tally/Infrastructure/Storage/Relationships/RelationshipStore.cs` | `modify` | implementation | `true` |  |
-| `src/Tally/Features/Ledger/Relationships/RelationshipLifecycleOperationModule.cs` | `create` | implementation | `true` |  |
-| `tests/Tally.Tests/Features/Ledger/Relationships/RelationshipLifecycleTests.cs` | `test` | implementation | `true` |  |
+| `src/Tally/Contracts/Ledger/Relationships/RelationshipLifecycleContracts.cs` | `create` | implementation | `true` | Typed public revoke and replace inputs/results |
+| `src/Tally/Domain/Ledger/Relationships/RelationshipLifecycle.cs` | `create` | implementation | `true` | Pure lifecycle command validation and replacement proposal policy |
+| `src/Tally/Features/Ledger/Relationships/RelationshipLifecycleHandlers.cs` | `create` | implementation | `true` | Transactional owner and statement-correction handlers |
+| `src/Tally/Infrastructure/Storage/Relationships/RelationshipStore.cs` | `modify` | implementation | `true` | Atomic append-only revoke and replacement persistence |
+| `src/Tally/Features/Ledger/Relationships/RelationshipLifecycleOperationModule.cs` | `create` | implementation | `true` | Provider-neutral public operation adapter |
+| `src/Tally/Contracts/Common/ProcessContracts.cs` | `modify` | integration | `true` | Source-generated lifecycle request and result metadata |
+| `src/Tally/Bootstrap/LedgerServices.cs` | `modify` | integration | `true` | Compose the relationship lifecycle vertical slice |
+| `src/Tally/Cli/OperationRegistry.cs` | `modify` | integration | `true` | Publish typed relationship revoke replace and get descriptors |
+| `src/Tally/Cli/TallyProcess.cs` | `modify` | integration | `true` | Map stable lifecycle errors to process categories and exit codes |
+| `tests/Tally.Tests/Features/Ledger/Relationships/RelationshipLifecycleTests.cs` | `test` | implementation | `true` | Focused public contract persistence rollback history and replay coverage |
 
 ### Interface Contracts
 
@@ -83,7 +88,7 @@ None recorded.
 | RelationshipStore.ReplaceAsync | `produces` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Public validated replacement |
 | RelationshipStore.ReplaceForStatementCorrectionAsync | `produces` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Internal decision-linked replacement or review block |
 | TransferPolicy | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Owned-account equality and zero-spend invariants |
-| RefundPolicy | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Same-account and cumulative refund invariants |
+| RefundPolicy | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Same-account ZAR, sign, exact full-amount, and active-role invariants |
 | LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD | Atomic replay boundary |
 
 ### Verification
@@ -113,6 +118,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-REFUNDS](../tasks/refunds.md): Correction must revalidate both transfer and refund policies and modify the shared RelationshipStore after both exist.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSFERS](../tasks/transfers.md): Consumer requires TransferPolicy from its producing task; direct compile edge enforces the declared interface contract.
+- `governed-by` -> DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP: Single full-amount refund relationships
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `implements` -> FR-LEDGER-RELATIONSHIP-CORRECTION: Revoke or replace financial relationships
 - `touches` -> DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts

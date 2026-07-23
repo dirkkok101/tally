@@ -4,7 +4,7 @@
   "ref_code": "C22",
   "title": "Exact pool and category actual conservation",
   "description": [
-    "Every active spend transaction is either assigned to one active spend pool or exposed in an explicit unassigned-pool bucket, and to zero or one direct Spend Category independently. Transfers contribute zero external spend to all pools and categories. Category exact and subtree roll-ups use the current acyclic hierarchy and never duplicate a transaction. Linked refunds and reversals offset the original current pool/category in their own Effective Date period. Corrections, statement-authoritative replacements, hierarchy moves, and relationship changes update exact current actuals atomically without overwriting history."
+    "Every active spend transaction is either assigned to one active Spend Pool or exposed in an explicit unassigned-pool bucket, and to zero or one direct Spend Category independently. Transfers contribute zero External Spend to all pools and categories. Category exact and subtree roll-ups use the current acyclic hierarchy and never duplicate a transaction. Linked refunds and reversals offset the original current pool/category in their own Effective Date period. Corrections, statement-authoritative replacements, hierarchy moves, and relationship changes update exact current actuals atomically without overwriting history."
   ],
   "type": "business",
   "created_at": "2026-07-20T16:56:50.7833556+00:00"

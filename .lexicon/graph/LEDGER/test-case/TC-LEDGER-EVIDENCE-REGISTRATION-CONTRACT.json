@@ -11,7 +11,7 @@
   "status": "planned",
   "preconditions": "A fresh Ledger with active and inactive transactions plus valid, duplicate, conflicting, cross-transaction, and forbidden-payload evidence requests.",
   "steps": "Exercise every acceptance criterion of FR-LEDGER-EVIDENCE-REGISTRATION through the public CLI, including same-request replay and logical-evidence replay under another request identity.",
-  "expected": "One privacy-safe Evidence Record and active link exist per logical effect; multiple evidence records may support one transaction; conflicts and forbidden payloads fail without mutation; evidence alone does not change reconciliation state.",
+  "expected": "One allowlisted Evidence Record and active link exist per logical effect; multiple Evidence Record may support one transaction; conflicts and forbidden payloads fail without mutation; evidence alone does not change Reconciliation State.",
   "owner": "LEDGER",
   "created_at": "2026-07-20T17:45:57.2246839+00:00",
   "links": [

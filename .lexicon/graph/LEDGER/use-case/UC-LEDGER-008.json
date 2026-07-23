@@ -2,7 +2,7 @@
   "id": "01KXRJSSCVPRDXDGXR37MBBR8F",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "UC-LEDGER-008",
-  "title": "Maintain the spend-category catalogue",
+  "title": "Maintain the Spend Category catalogue",
   "preconditions": "The local Ledger is available; category maintenance is invoked through the public agent contract; budget amounts and automatic classification remain outside LEDGER.",
   "postconditions": "The catalogue exposes one stable identity and deterministic ancestry per category; referenced categories remain historically meaningful after rename, move, or archival; no budget amount, Spend Pool, or automatic classification rule is created.",
   "main_flow": "1. The owner delegates a category action to an AI agent. 2. The agent discovers the hierarchy-aware category command schema and lists active or archived categories with IDs and ancestry paths. 3. The agent supplies a category name, optional parent ID, or stable category reference. 4. Tally validates lifecycle, sibling naming, active-parent, and acyclic-hierarchy rules. 5. Tally creates, renames, reparents, archives, or reactivates the stable category and appends attributable lifecycle or parent history. 6. Historical assignments retain the same category identity and current roll-ups use the current hierarchy.",

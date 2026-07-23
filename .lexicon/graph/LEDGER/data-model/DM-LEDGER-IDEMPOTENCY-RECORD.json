@@ -4,7 +4,7 @@
   "ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
   "name": "IdempotencyAndLogicalEffectIdentity",
   "description": [
-    "Atomic replay outcomes plus domain-level uniqueness for evidence registration and reconciliation decisions."
+    "Atomic replay outcomes plus domain-level uniqueness for evidence registration and Reconciliation Decision."
   ],
   "schema_def": [
     "idempotency_record: key, operationId, canonicalRequestHash, actor, state committed, stableResult, committedAt; unique key. Same key and request returns the stored logical result; changed operation or request conflicts. evidence logical identity: kind plus privacy-safe digest unique for one real item, with optional content fingerprint conflict guard. Identical logical evidence registered under a different request key returns the existing record and, for atomic transaction capture, the existing actively linked transaction outcome; it never creates another fact. A changed observation or financial fact conflicts. reconciliation logical identity: evidenceId plus active disposition scope and decision predecessor; confirm, reject, revoke, replace, and coverage completion each have stable uniqueness. Domain effect and request outcome commit together; filesystem artifacts reconcile from committed database state after crashes."

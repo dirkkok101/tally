@@ -4,7 +4,7 @@
   "ref_code": "DM-LEDGER-TRANSACTION-HISTORY",
   "name": "TransactionLifecycleAndCategoryAllocation",
   "description": [
-    "Append-only transaction lifecycle, statement-authoritative replacement, and single-category assignment history; other dimensions retain their own explicit histories."
+    "Append-only transaction lifecycle, statement-authoritative replacement, and single-category Assignment history; other dimensions retain their own explicit histories."
   ],
   "schema_def": [
     "transaction_lifecycle_event: id, transactionId, void|superseded|statement_authoritative_replacement, optional replacementTransactionId, optional reconciliationDecisionId, reason, actor, time; at most one active terminal event. category_allocation_event: id, transactionId, categoryId, assign|correct|carry_forward, optional previousEventId/sourceTransactionId/reconciliationDecisionId, reason, actor, time; zero or one active assignment. Statement correction creates one replacement and explicit category/pool carry-forward, compatible payment carry-forward or unknown initialization, and invariant-preserving relationship replacement events inside one transaction. If any required relationship cannot remain valid, no replacement event commits. No state moves by overwrite; historical references use RESTRICT."

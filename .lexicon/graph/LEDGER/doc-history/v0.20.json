@@ -1,0 +1,9 @@
+{
+  "id": "01KY6NP3NCECDE43DYQJ4M0FXZ",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.20",
+  "changes": [
+    "Compiled PLAN-LEDGER-V1 update: 71 verified bead refs, created bd-3sw and bd-1ku for atomic statement-scope registration and the 74-operation public contract, emitted 19 compile dependencies, and restored the gated LEDGER execution frontier."
+  ],
+  "created_at": "2026-07-23T05:03:02.8300006+00:00"
+}

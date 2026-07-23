@@ -27,7 +27,6 @@ No graph references recorded.
 | Depends On | Type | Reason |
 |---|---|---|
 | [TASK-LEDGER-GATE-SECURITY](../tasks/gate-security.md) | `compile` | Module completion requires the consolidated security gate. |
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Consumer requires CompletePublicContract from its producing task; direct compile edge enforces the declared interface contract. |
 | [TASK-LEDGER-VERIFY-UC-001](../tasks/verify-uc-001.md) | `compile` | Requires UC proof. |
 | [TASK-LEDGER-VERIFY-UC-002](../tasks/verify-uc-002.md) | `compile` | Requires UC proof. |
 | [TASK-LEDGER-VERIFY-UC-003](../tasks/verify-uc-003.md) | `compile` | Requires UC proof. |
@@ -46,20 +45,21 @@ No graph references recorded.
 | [TASK-LEDGER-VERIFY-UC-016](../tasks/verify-uc-016.md) | `compile` | Requires UC proof. |
 | [TASK-LEDGER-VERIFY-UC-017](../tasks/verify-uc-017.md) | `compile` | Requires UC proof. |
 | [TASK-LEDGER-VERIFY-UC-018](../tasks/verify-uc-018.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md) | `compile` | Module completion consumes CompletePublicContract74 from the corrective scope-publication gate. |
 
 ## Recipe
 
 ### Acceptance Checks
 
 - dotnet restore/build/format and full xUnit exit 0 with zero warnings/failures; every planned class has nonzero discovery.
-- Release linux-x64 Native-AOT publish exits 0 and reports the exact 73-operation offline inventory including category.reparent and statement correction with no child process, listener, provider integration, or raw-payload schema.
-- Core/security/provider-neutral scripts pass; personal-scale p95 passes; recovery reproduces category hierarchy/history, exact/corrected statement reconciliation, carry-forward/relationship chains, every replay outcome, count, and exact direct/subtree/pool total.
+- Release linux-x64 Native-AOT publish exits 0 and reports the exact 74-operation offline inventory including category.reparent, statement-scope registration, and statement correction with no child process, listener, provider integration, or raw-payload schema.
+- Core/security/provider-neutral scripts pass; personal-scale p95 passes; recovery reproduces category hierarchy/history, immutable statement scopes and membership, exact/corrected statement reconciliation, carry-forward/relationship chains, every replay outcome, count, and exact direct/subtree/pool total.
 - lex coverage reports 25/25 active FRs with no gaps; lex check --fast, plan coverage, audit, dependency cycles, and all 18 UC verifiers are clean.
 - git diff --check is empty and verification evidence lists every command/result and any changed file lacking direct test coverage.
 
 ### Failure Criteria
 
-- Do NOT accept zero-match tests, Debug-only proof, skipped recovery/security/performance/hierarchy checks, manually edited coverage, unresolved cash/pool/match gates, or stale 72-operation expectations.
+- Do NOT accept zero-match tests, Debug-only proof, skipped recovery/security/performance/hierarchy checks, manually edited coverage, unresolved cash/pool/match gates, or stale 72/73-operation expectations.
 - Do NOT create beads, deploy, or write execution status into planning_state.
 
 ### Expected Outputs
@@ -86,7 +86,7 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | 73-operation contract |
+| CompletePublicContract74 | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | 74-operation successor contract |
 | VerifiedLocalSecurityGate | `consumes` |  | Local privacy and provider neutrality |
 | VerifiedLedgerV1Module | `produces` |  | Completion evidence after all 18 workflows |
 
@@ -94,7 +94,7 @@ None recorded.
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `bash scripts/verify-ledger-module.sh` | exit 0; restore, build, format, full tests, AOT publish, 73-operation inventory, core/security/privacy/performance/recovery/Lex/diff checks succeed; every suite reports nonzero tests and 0 failures/warnings | `true` | 2700 |
+| `after` | `bash scripts/verify-ledger-module.sh` | exit 0; restore, build, format, full tests, AOT publish, 74-operation inventory, core/security/privacy/performance/recovery/Lex/diff checks succeed; every suite reports nonzero tests and 0 failures/warnings | `true` | 2700 |
 
 ### Review Gates
 
@@ -114,7 +114,7 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3bx` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Consumer requires CompletePublicContract from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md): Module completion consumes CompletePublicContract74 from the corrective scope-publication gate.
 - `depends-on:compile` -> [TASK-LEDGER-GATE-SECURITY](../tasks/gate-security.md): Module completion requires the consolidated security gate.
 - `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-001](../tasks/verify-uc-001.md): Requires UC proof.
 - `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-002](../tasks/verify-uc-002.md): Requires UC proof.

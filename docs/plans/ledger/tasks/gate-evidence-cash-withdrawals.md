@@ -51,7 +51,7 @@ No task dependencies recorded.
 
 ### Constraints
 
-- Only privacy-safe structural conclusions are committed; graph state changes use lex commands.
+- Only allowlisted structural conclusions are committed; graph state changes use lex commands.
 
 ### Notes
 

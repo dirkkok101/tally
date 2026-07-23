@@ -11,5 +11,6 @@
     "All initial fixtures expose transaction date and no distinct posting/value-date column. Transaction date is the Effective Date. One layout derives omitted row years uniquely from its explicit statement period; any future distinct posting date is preserved separately without changing Effective Date."
   ],
   "owner": "LEDGER planning validation",
+  "disposition": "unspecified",
   "created_at": "2026-07-17T13:45:00.7691818+00:00"
 }

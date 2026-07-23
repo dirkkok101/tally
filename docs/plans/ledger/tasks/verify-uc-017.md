@@ -16,7 +16,7 @@ Verification-only task with no Implements link: trace UC-LEDGER-017 through the 
 
 ## Objective
 
-Prove privacy-safe payment identities and independent instrument/Cardholder Attribution across lifecycle, correction, unknown, and replay paths.
+Prove allowlisted payment identities and independent instrument/Cardholder Attribution across lifecycle, correction, unknown, and replay paths.
 
 ## References
 
@@ -30,13 +30,14 @@ Prove privacy-safe payment identities and independent instrument/Cardholder Attr
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- The published workflow creates privacy-safe local identities, assigns/corrects instrument and cardholder independently, restores either to unknown, archives/reactivates identities, and retrieves attributable history.
+- The published workflow creates allowlisted local identities, assigns/corrects instrument and cardholder independently, restores either to unknown, archives/reactivates identities, and retrieves attributable history.
 - Full identifier/provider payload, identity conflict/archive/incompatibility, identical replay, changed replay, stale state, and write failure cover every UC-LEDGER-017 failure path.
 - Account, category, pool, evidence, reconciliation, and monetary totals remain unchanged by attribution-only operations.
 
@@ -68,7 +69,7 @@ None recorded.
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  |  |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | 72 provider-neutral operations |
+| CompletePublicContract74 | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 74 provider-neutral operations |
 | VerifiedUC017 | `produces` | UC-LEDGER-017 |  |
 
 ### Verification
@@ -81,7 +82,7 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Evidence proves privacy-safe local identities and independent explicit attribution. | `true` |
+| `test-evidence` | Evidence proves allowlisted local identities and independent explicit attribution. | `true` |
 
 ## Bead References
 
@@ -95,7 +96,8 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 
 - `bead-ref` -> `bd-29w` (verified)
 - `covers` -> UC-LEDGER-017: Maintain payment-instrument and cardholder attribution
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
 - `verifies` -> FR-LEDGER-PAYMENT-ATTRIBUTION: Maintain payment instrument and cardholder attribution
 - `verifies` -> TC-LEDGER-PAYMENT-ATTRIBUTION-CONTRACT: Verify payment instrument and cardholder attribution
 

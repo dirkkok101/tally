@@ -34,14 +34,15 @@ Prove recovery reproduces every current and historical financial meaning before 
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- Create/verify/prepare/activate through the published CLI reproduces facts, category hierarchy/parent history, dimensions, evidence, exact and corrected statement decisions, carry-forward, relationship replacement, coverage, idempotency, and exact direct/subtree/pool totals.
-- Checksum, permission, schema, cyclic hierarchy, incomplete correction, invalid relationship, count, exact-total, stale activation, and injected crash failures leave the prior generation current.
+- Create statement-row evidence and one completed Statement Scope through the published 74-operation CLI, apply exact and corrected decisions plus coverage, then backup.create/verify and restore.prepare/activate reproduce facts, category hierarchy/parent history, dimensions, immutable scope/membership, evidence, decisions, carry-forward, relationship replacement, coverage, idempotency, and exact direct/subtree/pool totals.
+- Checksum, permission, schema, duplicate/corrupt scope membership, cyclic hierarchy, incomplete correction, invalid relationship, count, exact-total, stale activation, and injected crash failures leave the prior generation current.
 - QuerySnapshot is excluded and diagnostics contain no raw email/statement/provider payload or full identifiers.
 
 ### Failure Criteria
@@ -72,7 +73,7 @@ Prove recovery reproduces every current and historical financial meaning before 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 72 provider-neutral operations |
+| CompletePublicContract74 | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 74 provider-neutral operations |
 | VerifiedUC007 | `produces` | UC-LEDGER-007 | complete-state backup and restore workflow |
 
 ### Verification
@@ -99,7 +100,8 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 
 - `bead-ref` -> `bd-e2g` (verified)
 - `covers` -> UC-LEDGER-007: Back up and recover the local ledger
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
 - `touches` -> DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts
 - `verifies` -> FR-LEDGER-BACKUP-VERIFICATION: Create and verify Ledger backups
 - `verifies` -> FR-LEDGER-SAFE-RESTORE: Restore the Ledger safely

@@ -4,7 +4,7 @@
   "ref_code": "DM-LEDGER-SPEND-POOL-ASSIGNMENT",
   "name": "SpendPoolAndAssignment",
   "description": [
-    "Spend-pool catalogue and explicit append-only transaction assignment independent from account, category, payment instrument, and cardholder."
+    "Spend Pool catalogue and explicit append-only transaction assignment independent from account, category, Payment Instrument, and cardholder."
   ],
   "schema_def": [
     "spend_pool: id ULID, owner label, active lifecycle. pool_assignment_event: id, transactionId, state assigned with poolId or explicit unassigned, action initialize|assign|correct|carry_forward, optional previousEventId, optional sourceTransactionId, optional reconciliationDecisionId, required reason, actor, trusted time. Transaction creation appends initialize-unassigned. A statement-authoritative replacement may copy the prior current projection only through one explicit carry_forward event in the same reconciliation transaction. Under the v1 assumption every active transaction has exactly one projection: unassigned or one pool. No inference across dimensions. OQ-LEDGER-15 gates cardinality; split-pool evidence requires PRD/design revision."

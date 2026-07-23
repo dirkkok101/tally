@@ -9,7 +9,7 @@
     "Verification-only task with no Implements link: trace UC-LEDGER-017 through the Release published CLI."
   ],
   "objective": [
-    "Prove privacy-safe payment identities and independent instrument/Cardholder Attribution across lifecycle, correction, unknown, and replay paths."
+    "Prove allowlisted payment identities and independent instrument/Cardholder Attribution across lifecycle, correction, unknown, and replay paths."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -26,14 +26,24 @@
   ],
   "dependencies": [
     {
-      "id": "01KY0DT2N2BPBW3SBS79EBB3XQ",
+      "id": "01KY6J661V58CYSE1ZP95W4E60",
       "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
       "dependency_type": "compile",
       "reason": [
-        "Use-case verification invokes the fully wired published public contract."
+        "The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-23T04:01:55.2609781+00:00"
+    },
+    {
+      "id": "01KY6J3S45PWCNCZPMW6AD8JQA",
+      "target": "TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "The remaining Release-CLI workflow consumes the successor 74-operation public contract."
       ],
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-23T04:00:36.4869105+00:00"
     }
   ],
   "files": [
@@ -49,30 +59,30 @@
   ],
   "interfaces": [
     {
-      "id": "01KY0DT2N26PVE74CJ80QYHZ9F",
+      "id": "01KY6J3K88ZAZ9PAZY056MPQ1Z",
       "name": "PublishedTallyFixture",
       "direction": "consumes",
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-23T04:00:30.4714495+00:00"
     },
     {
-      "id": "01KY0DT2N2AE6W3A78D9V2VV31",
-      "name": "CompletePublicContract",
+      "id": "01KY6J3K89X29NPJEM958G1789",
+      "name": "CompletePublicContract74",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "72 provider-neutral operations"
+        "Exactly 74 provider-neutral operations"
       ],
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-23T04:00:30.4714495+00:00"
     },
     {
-      "id": "01KY0DT2N24PBEFY1B5NG6T8TF",
+      "id": "01KY6J3K89N4E8V7RB1X3804BR",
       "name": "VerifiedUC017",
       "direction": "produces",
       "contract_ref_code": "UC-LEDGER-017",
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-23T04:00:30.4714495+00:00"
     }
   ],
   "links": [
@@ -86,34 +96,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY0DT2N2E0B6E5RXY69HWPD1",
+      "id": "01KY6M2E1NHAN7V02A0Z3Z9CAH",
       "kind": "acceptance_check",
       "text": [
-        "The published workflow creates privacy-safe local identities, assigns/corrects instrument and cardholder independently, restores either to unknown, archives/reactivates identities, and retrieves attributable history."
+        "The published workflow creates allowlisted local identities, assigns/corrects instrument and cardholder independently, restores either to unknown, archives/reactivates identities, and retrieves attributable history."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-23T04:34:49.5254564+00:00"
     },
     {
-      "id": "01KY0DT2N2PNQPZYKHSHNNQZ75",
+      "id": "01KY6M2E1PMAXSFA8GN8TKX48E",
       "kind": "acceptance_check",
       "text": [
         "Full identifier/provider payload, identity conflict/archive/incompatibility, identical replay, changed replay, stale state, and write failure cover every UC-LEDGER-017 failure path."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-23T04:34:49.5254564+00:00"
     },
     {
-      "id": "01KY0DT2N2H65TXNQQ32ZD99FN",
+      "id": "01KY6M2E1P4S08Y2ASJQV8952G",
       "kind": "acceptance_check",
       "text": [
         "Account, category, pool, evidence, reconciliation, and monetary totals remain unchanged by attribution-only operations."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-23T04:34:49.5254564+00:00"
     },
     {
       "id": "01KY0DT2N2H04AXE0WP0768K72",
@@ -183,14 +193,14 @@
   ],
   "review_gates": [
     {
-      "id": "01KY0DT2N24BF4B1Q295CY39WQ",
+      "id": "01KY6M2MTAB8TDC5GYH6EX3AA9",
       "gate_type": "test-evidence",
       "description": [
-        "Evidence proves privacy-safe local identities and independent explicit attribution."
+        "Evidence proves allowlisted local identities and independent explicit attribution."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-23T04:34:56.4585110+00:00"
     }
   ],
   "verification_steps": [

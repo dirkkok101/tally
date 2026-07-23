@@ -14,20 +14,20 @@
   "complexity": "L",
   "story_as": "Personal Finance Owner",
   "story_want": [
-    "attribute transactions to stable payment instruments and cardholders"
+    "attribute transactions to stable Payment Instrument and cardholders"
   ],
   "story_so_that": [
     "pool assignment, reconciliation, and reporting can use explicit provider-neutral identities"
   ],
   "acceptance_criteria": [
-    "Given a privacy-safe unique label and optional masked identifier, when a Payment Instrument or cardholder is created, then one active provider-neutral identity is returned and no full card number, credential, or provider payload is stored.",
+    "Given a unique allowlisted label and optional masked identifier, when a Payment Instrument or cardholder is created, then one active provider-neutral identity is returned and no full card number, credential, or provider payload is stored.",
     "Given an active transaction, active Payment Instrument or cardholder identity, reason, actor context, and Idempotency Identity, when attribution is assigned, then at most one current identity per dimension is recorded without changing account, category, pool, evidence, or source facts.",
     "Given an existing attribution and a valid replacement or explicit unknown state, when it is corrected, then the prior attribution is retired, the replacement or unknown state becomes current, and both remain attributable in history.",
     "Given an archived identity, incompatible declared account association, inactive transaction, or missing correction reason, when attribution is attempted, then the Ledger returns a stable validation error and changes no attribution.",
     "Given an identity is renamed or archived, when current and historical transactions are queried, then stable references remain resolvable and archival prevents only new assignments."
   ],
   "security_criteria": [
-    "Only privacy-safe labels and masked identifiers may be stored or returned; full PANs, credentials, and provider-specific message content are forbidden."
+    "Only allowlisted labels and masked identifiers may be stored or returned; full PANs, credentials, and provider-specific message content are forbidden."
   ],
   "status": "active",
   "created_at": "2026-07-20T17:39:51.7497710+00:00",

@@ -1,0 +1,468 @@
+{
+  "id": "01KY6QQ935KJCFFT28PYT7XRBE",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KY0D0QYX4CJZKSVH3MMGT6BK",
+  "ref_code": "TASK-LEDGER-RECONCILIATION-SCOPE-PUBLIC-COMPOSITION",
+  "slug": "RECONCILIATION-SCOPE-PUBLIC-COMPOSITION",
+  "title": "Compose statement-scope public operation",
+  "description": [
+    "Compose scope.register into the existing reconciliation bundle and runtime, advance all current exact inventory assertions and the snapshot to 74, and add its Release-process workflow."
+  ],
+  "objective": [
+    "Publish ledger.reconciliation.scope.register through the existing provider-neutral operation registry as the 74th public operation."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 6,
+  "created_at": "2026-07-23T05:38:38.3099849+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY6VBTAQEAE205NDYCV39AVX",
+      "bead_id": "bd-1ge",
+      "verification_status": "verified",
+      "verified_at": "2026-07-23T06:42:17.0479386+00:00",
+      "created_at": "2026-07-23T06:42:17.0479386+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KY6QQ936SY23XS860MFCT265",
+      "target": "DD-LEDGER-CLI-OPERATION-CONTRACT",
+      "created_at": "2026-07-23T05:38:38.3099849+00:00"
+    },
+    {
+      "id": "01KY6QQ9370D0272JYDZ672HZ6",
+      "target": "DD-LEDGER-RECONCILIATION-CONTRACT",
+      "created_at": "2026-07-23T05:38:38.3099849+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KY6QRJ8TEXK5JXVF9E2PADH3",
+      "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "The 74-operation composition extends the previously proven 73-operation root registry."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-23T05:39:20.4751858+00:00"
+    },
+    {
+      "id": "01KY6QRHPK26N41MBVF0TAHJWX",
+      "target": "TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Public composition consumes the completed scope module and contracts."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-23T05:39:19.8919696+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY6WX065ZXFJZ9BMSZAKX7TW",
+      "path": "src/Tally/Features/Ledger/Reconciliation/ReconciliationOperationBundle.cs",
+      "action": "modify",
+      "role": "compose the tenth typed descriptor",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6WX065PTGRPQ3XEQ12KA4Q",
+      "path": "src/Tally/Bootstrap/LedgerServices.cs",
+      "action": "modify",
+      "role": "compose real scope services",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6WX065GZR5XN3R1ZNX6M4D",
+      "path": "src/Tally/Cli/OperationRegistry.cs",
+      "action": "modify",
+      "role": "host-independent descriptor template and inventory",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6WX0654DS946K2QSFVXBNG",
+      "path": "src/Tally/Cli/TallyProcess.cs",
+      "action": "modify",
+      "role": "map declared scope domain errors to stable public exits",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6WX0657FJCEN5QDG4SD996",
+      "path": "tests/Tally.Tests/Integration/ReconciliationOperationBundleTests.cs",
+      "action": "test",
+      "role": "ten-operation bundle seam",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6WX065VJWZFEPF9BPNTAAY",
+      "path": "tests/Tally.Tests/Cli/CliContractTests.cs",
+      "action": "test",
+      "role": "74-operation root count",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6WX0652X4BDMX54W54VPRV",
+      "path": "tests/Tally.Tests/Cli/PublicContractInventoryTests.cs",
+      "action": "test",
+      "role": "schema privacy inventory and public error mapping assertions",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6WX065PAQ4K1VG4B2KC1ZN",
+      "path": "tests/Tally.Tests/Cli/Snapshots/ledger-operations-v1.json",
+      "action": "test",
+      "role": "deterministic 74-operation snapshot",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6WX065B0XD71SMKHTB0E15",
+      "path": "tests/Tally.Tests/Process/PublishedBinaryCoreTests.cs",
+      "action": "test",
+      "role": "published schema count",
+      "required": 1,
+      "sort_order": 8,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6WX065WHAVEA0YV0R9ACH7",
+      "path": "tests/Tally.Tests/Process/PublishedLedgerContractTests.cs",
+      "action": "test",
+      "role": "published help and schema count",
+      "required": 1,
+      "sort_order": 9,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6WX0651VV7CF7YZAM47TDD",
+      "path": "tests/Tally.Tests/Process/PublishedReconciliationScopeContractTests.cs",
+      "action": "create",
+      "role": "Release-process scope workflow and stable error exits",
+      "required": 1,
+      "sort_order": 10,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6WX065EQVN6RD6N9BM427B",
+      "path": "tests/Tally.Tests/EndToEnd/UC006ExternalOrchestratorContractWorkflowTests.cs",
+      "action": "test",
+      "role": "external orchestrator inventory count",
+      "required": 1,
+      "sort_order": 11,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6WX065PW1XPBEDB0CNC470",
+      "path": "tests/Tally.Tests/Features/Ledger/Categories/CategoryOperationTests.cs",
+      "action": "test",
+      "role": "category registry count",
+      "required": 1,
+      "sort_order": 12,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6WX065QFPJ6TDHJD7KV2YF",
+      "path": "tests/Tally.Tests/Features/Ledger/Transactions/TransactionRecordingTests.cs",
+      "action": "test",
+      "role": "transaction registry count",
+      "required": 1,
+      "sort_order": 13,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6WX065BXX7APWHZYASJP82",
+      "path": "tests/Tally.Tests/Ledger/PaymentIdentityOperationTests.cs",
+      "action": "test",
+      "role": "payment registry count",
+      "required": 1,
+      "sort_order": 14,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6WX065GNZNPWEGJ1Z3ZEBF",
+      "path": "tests/Tally.Tests/Ledger/SpendPoolOperationTests.cs",
+      "action": "test",
+      "role": "pool registry count",
+      "required": 1,
+      "sort_order": 15,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY6QW0Z338CN11X6FPZFBCCY",
+      "name": "ReconciliationScopeOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "notes": [
+        "completed scope implementation from TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-23T05:41:13.8265613+00:00"
+    },
+    {
+      "id": "01KY6QW0Z4RXEHGW678RG94HPJ",
+      "name": "CompletePublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "historically proven 73-operation registry"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-23T05:41:13.8265613+00:00"
+    },
+    {
+      "id": "01KY6QW0Z4MV1TW5H578H9XM2A",
+      "name": "StatementScopePublicComposition74",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "committed ten-descriptor reconciliation composition and 74-operation registry"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-23T05:41:13.8265613+00:00"
+    },
+    {
+      "id": "01KY6QW0Z4HRB2CJD4FFYMQQ35",
+      "name": "PublishedTallyFixture",
+      "direction": "consumes",
+      "notes": [
+        "Release executable fixture"
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-23T05:41:13.8265613+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY6WX0644AQFT2Y1YXCTAXYZ",
+      "kind": "acceptance_check",
+      "text": [
+        "The reconciliation bundle returns ten ordinal descriptors and contains scope.register once with RegisterReconciliationScopeInput, ReconciliationScopeDetail, mutation idempotency, stable errors, a concrete handler, and CLI path tally ledger reconciliation scope register."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6WX0650XBYT9GMRCGNAB9F",
+      "kind": "acceptance_check",
+      "text": [
+        "LedgerServices composes the real scope store, handler, and module; descriptor-only registry construction stays host independent; all current exact inventory assertions and ledger-operations-v1.json report 74 distinct IDs and paths with scope.register once."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6WX065RQ9NTN6PGDYKPWJM",
+      "kind": "acceptance_check",
+      "text": [
+        "The public process maps every declared scope error to its stable validation, not-found, lifecycle, or conflict exit instead of host.unexpected."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6WX065W02DM49380HYV861",
+      "kind": "acceptance_check",
+      "text": [
+        "PublishedReconciliationScopeContractTests uses only the Release executable to prove success, same-key and cross-key replay, changed-membership conflict, invalid evidence, and a following reconciliation.candidates query."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6WX0654GMZJW0ZHE8G7TQY",
+      "kind": "acceptance_check",
+      "text": [
+        "Public schema and privacy assertions expose closed concrete scope shapes and contain no database internals, source documents, provider or channel names, delivery state, retry state, or arbitrary metadata."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-23T07:09:08.6753051+00:00"
+    },
+    {
+      "id": "01KY6QYNWZ660KTVYFX4E0GP55",
+      "kind": "constraint",
+      "text": [
+        ".NET 10, source-generated JSON, primary constructors, CancellationToken propagation, and NativeAOT compatibility."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T05:42:40.7976966+00:00"
+    },
+    {
+      "id": "01KY6QYNWYGXJ18Q7Q3EQ1TAP2",
+      "kind": "expected_output",
+      "text": [
+        "StatementScopePublicComposition74"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T05:42:40.7976966+00:00"
+    },
+    {
+      "id": "01KY6QYNWZQXX2VBS6N81MNPVG",
+      "kind": "expected_output",
+      "text": [
+        "Release scope workflow and 74-operation snapshot"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-23T05:42:40.7976966+00:00"
+    },
+    {
+      "id": "01KY6QYNWY1KSVDJDJTRZQM6HY",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add another registry, alias, generic invoke path, or reflection discovery — per DD-LEDGER-CLI-OPERATION-CONTRACT."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T05:42:40.7976966+00:00"
+    },
+    {
+      "id": "01KY6QYNWYQZWTS41V0YVEE4XC",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add direct-SQL process fixtures, INGEST behavior, provider payloads, non-completed scope creation, or separate membership attachment — per DD-LEDGER-RECONCILIATION-CONTRACT."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-23T05:42:40.7976966+00:00"
+    },
+    {
+      "id": "01KY6QYNWY9YZM7A4EF83Z7TKW",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT rewrite closed 73-operation evidence; update only current assertions and the 74-operation successor snapshot."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-23T05:42:40.7976966+00:00"
+    },
+    {
+      "id": "01KY6QQ937R4QTCN981YKR00BR",
+      "kind": "note",
+      "text": [
+        "This is the implementation producer for the read-only TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT gate."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T05:38:38.3099849+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY6QSPWHE26PM3VAHX2QTKVP",
+      "target_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXSX0V97NBKV7XJQ6F2GGR07",
+      "target_title": "OperationDescriptorAndEnvelope",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-23T05:39:57.9710834+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KY6QQ9367R6ZF2XCK4TSZKSP",
+      "target": "FR-LEDGER-RECONCILIATION-COVERAGE",
+      "created_at": "2026-07-23T05:38:38.3099849+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY6QQ938AET1VS1ZCYN55VHS",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach red-first descriptor, inventory, and published-process evidence followed by all focused green counts."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T05:38:38.3099849+00:00"
+    },
+    {
+      "id": "01KY6QQ938D26B9GZ1NGT21QCY",
+      "gate_type": "self-review",
+      "description": [
+        "Confirm the 74th operation is typed, atomic, provider-neutral, and the only inventory expansion."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-23T05:38:38.3099849+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY6QYNWZRQ6X5RWVZTW1PQN5",
+      "phase": "after",
+      "command": "dotnet build Tally.slnx --no-restore",
+      "expected_result": "exit 0; 0 warnings and 0 errors",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-23T05:42:40.7976966+00:00"
+    },
+    {
+      "id": "01KY6QYNWZTYZQVRK81ZS6RC91",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ReconciliationOperationBundleTests --no-restore",
+      "expected_result": "at least 37 cases; ten descriptors including scope.register; exit 0 and 0 fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 1,
+      "created_at": "2026-07-23T05:42:40.7976966+00:00"
+    },
+    {
+      "id": "01KY6QYNWZ2D8BZBSX9JNZ26JM",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~PublicContractInventoryTests --no-restore",
+      "expected_result": "at least 82 cases; 74 distinct operations and paths match the snapshot; exit 0 and 0 fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 2,
+      "created_at": "2026-07-23T05:42:40.7976966+00:00"
+    },
+    {
+      "id": "01KY6QYNWZ0W2M8SKV5YW1GYZY",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~PublishedReconciliationScopeContractTests --no-restore",
+      "expected_result": "at least 8 Release-process cases cover success, replay, conflict, invalid evidence, and candidates; exit 0 and 0 fail",
+      "required": 1,
+      "timeout_seconds": 1200,
+      "sort_order": 3,
+      "created_at": "2026-07-23T05:42:40.7976966+00:00"
+    },
+    {
+      "id": "01KY6QYNWZCRGEZPSKP9SNVK88",
+      "phase": "after",
+      "command": "dotnet test Tally.slnx --no-build",
+      "expected_result": "at least 1422 cases; exit 0, 0 fail, and 0 skip",
+      "required": 1,
+      "timeout_seconds": 1200,
+      "sort_order": 4,
+      "created_at": "2026-07-23T05:42:40.7976966+00:00"
+    }
+  ]
+}

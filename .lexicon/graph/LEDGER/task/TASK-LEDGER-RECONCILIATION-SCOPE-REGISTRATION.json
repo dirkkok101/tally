@@ -1,0 +1,379 @@
+{
+  "id": "01KY6HZ3B6ZRB4N4G45EXM4EK8",
+  "plan_id": "01KXT0696627D7GRFGDF9JYXC7",
+  "sub_plan_id": "01KY0D0QYX4CJZKSVH3MMGT6BK",
+  "ref_code": "TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION",
+  "slug": "RECONCILIATION-SCOPE-REGISTRATION",
+  "title": "Register approved statement scopes atomically",
+  "description": [
+    "Add one provider-neutral mutation that atomically records an approved complete account-period manifest and its statement-row evidence membership."
+  ],
+  "objective": [
+    "Return one immutable completed Statement Scope for public reconciliation and recovery workflows."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 5,
+  "created_at": "2026-07-23T03:58:03.1182574+00:00",
+  "bead_refs": [
+    {
+      "id": "01KY6NHEGQ406YXV260M2QZXE4",
+      "bead_id": "bd-3sw",
+      "verification_status": "verified",
+      "verified_at": "2026-07-23T05:00:30.1032469+00:00",
+      "created_at": "2026-07-23T05:00:30.1032469+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KY6JATCX73N46RC3PMBG0WNK",
+      "target": "DD-LEDGER-IDEMPOTENT-MUTATIONS",
+      "created_at": "2026-07-23T04:04:27.1631294+00:00"
+    },
+    {
+      "id": "01KY6JATCX4FCGEYMEJTNA3XHH",
+      "target": "DD-LEDGER-RECONCILIATION-CONTRACT",
+      "created_at": "2026-07-23T04:04:27.1631294+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KY6HZ3BQVN7GT9WHQSCND0P9",
+      "target": "TASK-LEDGER-ACCOUNTS",
+      "dependency_type": "compile",
+      "reason": [
+        "The operation validates active owned-account identity."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-23T03:58:03.1182574+00:00"
+    },
+    {
+      "id": "01KY6HZ3BQ5E8EKFH7NZBVA4WR",
+      "target": "TASK-LEDGER-CORE-IDEMPOTENCY",
+      "dependency_type": "compile",
+      "reason": [
+        "Scope registration uses LedgerMutationExecutor and logical-effect replay."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-23T03:58:03.1182574+00:00"
+    },
+    {
+      "id": "01KY6HZ3BQAR9CMF8F47MECE3V",
+      "target": "TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION",
+      "dependency_type": "compile",
+      "reason": [
+        "The operation writes existing statement_scope and statement_scope_evidence tables."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-23T03:58:03.1182574+00:00"
+    },
+    {
+      "id": "01KY6HZ3BQK6BK8XDFFFCSB880",
+      "target": "TASK-LEDGER-EVIDENCE-REGISTRY",
+      "dependency_type": "compile",
+      "reason": [
+        "The operation validates existing statement_row evidence and observations."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-23T03:58:03.1182574+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KY6JGQ9YFH046SXNJGBBZVSZ",
+      "path": "src/Tally/Contracts/Ledger/Reconciliation/ReconciliationScopeContracts.cs",
+      "action": "create",
+      "role": "contracts",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JGQ9YM32JMN7B9CRJWCZ2",
+      "path": "src/Tally/Domain/Ledger/Reconciliation/StatementScopeRegistrationPolicy.cs",
+      "action": "create",
+      "role": "policy",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JGQ9YH9GXGCYK86J3C80Q",
+      "path": "src/Tally/Infrastructure/Storage/Reconciliation/ReconciliationScopeStore.cs",
+      "action": "create",
+      "role": "store",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JGQ9YPZXEE44HRHSE069V",
+      "path": "src/Tally/Features/Ledger/Reconciliation/ReconciliationScopeHandlers.cs",
+      "action": "create",
+      "role": "handler",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JGQ9YTSQS8W7XTJBR34VE",
+      "path": "src/Tally/Features/Ledger/Reconciliation/ReconciliationScopeOperationModule.cs",
+      "action": "create",
+      "role": "adapter",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JGQ9Y14C8EMQJ2MASEWM7",
+      "path": "src/Tally/Infrastructure/Recovery/DurableLedgerVerifier.cs",
+      "action": "modify",
+      "role": "integrity",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JGQ9YHXY95WP9EQ21MC1D",
+      "path": "tests/Tally.Tests/Ledger/ReconciliationScopeRegistrationTests.cs",
+      "action": "test",
+      "role": "focused tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KY6JGQ9YSWHTVW4091B8V5R6",
+      "name": "RegisterReconciliationScopeInput",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JGQ9YFVD8RBBPYC3ADJZP",
+      "name": "ReconciliationScopeDetail",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 1,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JGQ9YZ7DYNWX3ZR4NVP1V",
+      "name": "StatementScopeRegistrationPolicy",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 2,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JGQ9YX6NMCCZHHA3YJ00S",
+      "name": "ReconciliationScopeStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
+      "sort_order": 3,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JGQ9Y1TJDYGQEGKHG6WG5",
+      "name": "ReconciliationScopeOperationModule",
+      "direction": "produces",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "sort_order": 4,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JGQ9YS759X1ZFNJX477DA",
+      "name": "LedgerMutationExecutor.ExecuteAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-IDEMPOTENCY-RECORD",
+      "sort_order": 5,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JGQ9YQBFFPN18PWENCVY3",
+      "name": "EvidenceStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-EVIDENCE-RECORD-LINK",
+      "sort_order": 6,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JGQ9YDYM20Z73NHPVXSGB",
+      "name": "AccountStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-ACCOUNT",
+      "sort_order": 7,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KY6JGQ9XCW3KTG9RMFJVZC7Y",
+      "kind": "acceptance_check",
+      "text": [
+        "Valid account, period, non-empty statement-row evidence set, manifest reference, actor, and key atomically commit one completed scope and all memberships; result returns canonical fields and ordered IDs."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JGQ9YT99RZVDXRSWJ7QFR",
+      "kind": "acceptance_check",
+      "text": [
+        "Missing/inactive account; missing, wrong-kind, incomplete, wrong-account/date, or already-scoped evidence; and changed account-period content return stable errors with zero writes."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JGQ9YK87ZQ0KBD7BBX4CN",
+      "kind": "acceptance_check",
+      "text": [
+        "Same-key and cross-key canonical replay return the original. Pre-commit failure writes nothing; lost-output replay returns the commit; DurableLedgerVerifier rejects duplicate or inconsistent scope state."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JFZ3YCMJJWDT3VBHYB2BA",
+      "kind": "constraint",
+      "text": [
+        ".NET 10, source-generated JSON, primary constructors, raw Microsoft.Data.Sqlite, and CancellationToken propagation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T04:07:15.8366818+00:00"
+    },
+    {
+      "id": "01KY6JFZ3YCKX812MTAK0A893S",
+      "kind": "expected_output",
+      "text": [
+        "Typed contracts, policy, transactional store/handler/module, verifier checks, and focused tests"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T04:07:15.8366818+00:00"
+    },
+    {
+      "id": "01KY6JGQ9Y0JND0R7PG02SMBZD",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT split creation/attachment or mutate from candidates."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JGQ9YTKNX8SJCMV9VG88N",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add INGEST or provider/transport payloads."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JGQ9YA8SHYJD9XE2WY1AT",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT edit existing migrations or expose open/replaced public status."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JFZ3YFS6CEWJMAE7XEX0R",
+      "kind": "note",
+      "text": [
+        "Reuse the existing immutable V001 tables and triggers."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T04:07:15.8366818+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KY6HZ3BJBQ8A4X9Z7BFS0YEV",
+      "target_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KY0BTTT9FVNN9897X5WAR9GQ",
+      "target_title": "EvidenceReconciliationOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T03:58:03.1182574+00:00"
+    },
+    {
+      "id": "01KY6HZ3BNT6M3210P03RAAAWS",
+      "target_ref_code": "TC-LEDGER-STATEMENT-SCOPE-REGISTRATION",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KY6HPDFBXPK0B23DQP8ATA0Z",
+      "target_title": "Verify atomic statement-scope registration",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-23T03:58:03.1182574+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KY6JATCW54RBPPKQ71VE6B4D",
+      "target": "FR-LEDGER-RECONCILIATION-COVERAGE",
+      "created_at": "2026-07-23T04:04:27.1631294+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KY6JGQ9YJV1D485Y0S5FRRMT",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach focused red/green and durable-row evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    },
+    {
+      "id": "01KY6JGQ9ZYTF09GZKJ6WK9S8F",
+      "gate_type": "self-review",
+      "description": [
+        "Confirm atomic provider-neutral scope registration."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-23T04:07:40.6041339+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KY6HZ3BJ4EGFP50AE0D35H47",
+      "phase": "before",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Ledger.ReconciliationScopeRegistrationTests --no-restore",
+      "expected_result": "exit nonzero because the new scope contract and operation do not exist; at least one intended test is discovered",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-23T03:58:03.1182574+00:00"
+    },
+    {
+      "id": "01KY6HZ3BJ9ZMYHTDJBV40RKMJ",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Ledger.ReconciliationScopeRegistrationTests --no-restore",
+      "expected_result": "exit 0; at least 18 registration, validation, same-key replay, cross-key replay, conflict, rollback, and verifier cases run and 0 fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 1,
+      "created_at": "2026-07-23T03:58:03.1182574+00:00"
+    }
+  ]
+}

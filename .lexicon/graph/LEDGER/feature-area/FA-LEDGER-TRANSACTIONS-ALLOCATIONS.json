@@ -4,7 +4,7 @@
   "ref_code": "FA-LEDGER-TRANSACTIONS-ALLOCATIONS",
   "name": "Transactions, Evidence, and Attribution",
   "description": [
-    "Owns immutable canonical transaction facts, generic privacy-conscious evidence, transaction correction history, category allocation, payment attribution, pool assignment, and explicit unknown or unassigned states."
+    "Owns immutable Canonical Transaction facts, generic privacy-conscious evidence, transaction correction history, category allocation, payment attribution, Pool Assignment, and explicit unknown or unassigned states."
   ],
   "created_at": "2026-07-18T06:00:11.7475631+00:00",
   "links": [

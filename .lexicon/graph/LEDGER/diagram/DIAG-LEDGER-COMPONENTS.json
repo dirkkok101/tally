@@ -8,7 +8,7 @@
   "content": [
     "flowchart LR",
     "  Owner[Personal finance owner]",
-    "  Hermes[Hermes external orchestrator]",
+    "  Hermes[Hermes External Orchestrator]",
     "  Modules[INGEST / CLASSIFY / BUDGET / INSIGHTS]",
     "  CLI[Tally CLI and operation registry]",
     "",

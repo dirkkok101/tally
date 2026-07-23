@@ -9,7 +9,7 @@
     "Deliver ledger.transaction.record/get over exact source facts, generic initial evidence, account state, explicit unknown attribution/unassigned pool, idempotency, and real SQLite."
   ],
   "objective": [
-    "Atomically record at most one immutable Canonical Transaction and its privacy-safe initial Evidence Record while round-tripping every accepted fact and link exactly."
+    "Atomically record at most one immutable Canonical Transaction and its allowlisted initial Evidence Record while round-tripping every accepted fact and link exactly."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -224,54 +224,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY1P130B3X2BN0QDVAY39QYX",
+      "id": "01KY6M2CA58FDZXBTB2T4196BY",
       "kind": "acceptance_check",
       "text": [
-        "Valid active asset or liability account, canonical nonzero owner-economic signedAmount, ZAR, required dates/description, closed generic Evidence Kind, Opaque External Reference, privacy-safe observation, actor, optional stable payment IDs, and key create one immutable TransactionDetail and one linked Evidence Record."
+        "Valid active asset or liability account, canonical nonzero owner-economic signedAmount, ZAR, required dates/description, closed generic Evidence Kind, Opaque External Reference, allowlisted observation, actor, optional stable payment IDs, and key create one immutable TransactionDetail and one linked Evidence Record."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T06:32:50.4431726+00:00"
+      "created_at": "2026-07-23T04:34:47.7487657+00:00"
     },
     {
-      "id": "01KY1P130CTQ4M9V62Q8XMCXGW",
+      "id": "01KY6M2CA5TTFAS47J77T5YF9Q",
       "kind": "acceptance_check",
       "text": [
         "TransactionDate and distinct PostingDate round-trip independently; Effective Date is TransactionDate; missing payment identities remain explicitly unknown and pool remains explicitly unassigned."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T06:32:50.4431726+00:00"
+      "created_at": "2026-07-23T04:34:47.7487657+00:00"
     },
     {
-      "id": "01KY1P130C4CA22B7H5FTMPZ44",
+      "id": "01KY6M2CA5SYDZ3DXVH6W4KNAA",
       "kind": "acceptance_check",
       "text": [
         "Missing/zero/malformed/unsupported input, archived/missing account, incompatible attribution, or forbidden evidence field returns the documented stable error and creates no transaction, evidence link, assignment, or idempotency row."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T06:32:50.4431726+00:00"
+      "created_at": "2026-07-23T04:34:47.7487657+00:00"
     },
     {
-      "id": "01KY1P130C7Y7KED5V42MP85NR",
+      "id": "01KY6M2CA5ASZVRVNJQVW6VFRG",
       "kind": "acceptance_check",
       "text": [
-        "Get returns unchanged facts plus safe evidence links, current Reconciliation State, payment attribution, Pool Assignment, and requested history without mutating."
+        "Get returns unchanged facts plus allowlisted evidence links, current Reconciliation State, payment attribution, Pool Assignment, and requested history without mutating."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T06:32:50.4431726+00:00"
+      "created_at": "2026-07-23T04:34:47.7487657+00:00"
     },
     {
-      "id": "01KY1P130C42ZKE3WQWV469AGD",
+      "id": "01KY6M2CA54KSD8SW8EPJB0J6R",
       "kind": "acceptance_check",
       "text": [
         "Identical request or logical evidence replay returns the existing transaction; conflicting key or evidence identity preserves the original; crash injection commits transaction, initial evidence, link, defaults, and replay outcome together or none."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-21T06:32:50.4431726+00:00"
+      "created_at": "2026-07-23T04:34:47.7487657+00:00"
     },
     {
       "id": "01KXT0P36VQSW2T247BEEFXE6M",

@@ -43,7 +43,7 @@ Expose exactly 73 designed operations with deterministic schemas, stable errors/
 
 - LedgerServices explicitly registers every module and OperationRegistry contains exactly 73 IDs/paths: 43 dimension/transaction/evidence, 9 reconciliation, 8 relationship/actuals, and 13 recovery/system/guidance; no aliases, generic invoke/CRUD/SQL, reflection, or private schemas exist.
 - Every descriptor has concrete source-generated request/result schema, errors/exits, example, compatible versions, handler, closed vocabulary, and correct idempotency classification; category.reparent and correct_existing_from_statement are discoverable.
-- Published schema list/show and representative success/error/review-required calls write one stdout object and safe stderr metadata; inventory is deterministic and contains no provider, email, statement-document, recipient, or raw-payload fields.
+- Published schema list/show and representative success/error/review-required calls write one stdout object and allowlisted stderr metadata; inventory is deterministic and contains no provider, email, statement-document, recipient, or raw-payload fields.
 - Every public mutation routes through LedgerMutationExecutor; Native-AOT offline publish completes without dynamic-code warnings, listeners, child processes, or missing JSON types.
 
 ### Failure Criteria

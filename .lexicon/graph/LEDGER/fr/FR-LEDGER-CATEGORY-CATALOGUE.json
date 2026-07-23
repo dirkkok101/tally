@@ -5,7 +5,7 @@
   "ref_code": "FR-LEDGER-CATEGORY-CATALOGUE",
   "title": "Maintain the Spend Category catalogue",
   "description": [
-    "Create and maintain a hierarchical shared catalogue of Spend Categories with stable identity and attributable parent-history. Implements G3 and UC-LEDGER-008 under A5 and A13."
+    "Create and maintain a hierarchical shared catalogue of Spend Category with stable identity and attributable parent-history. Implements G3 and UC-LEDGER-008 under A5 and A13."
   ],
   "rationale": [
     "A durable cross-account hierarchy lets LEDGER expose exact direct and rolled-up category actuals while BUDGET can independently decide which stable category nodes a plan references."
@@ -27,7 +27,7 @@
     "Given a category is proposed as its own parent or descendant, a proposed parent is archived, or the move would create a cycle, when reparenting is attempted, then the Ledger returns a stable validation error and preserves the current hierarchy.",
     "Given any category with historical transaction, budget, or hierarchy references, when physical deletion is requested, then the Ledger rejects it and retains the stable category and history; archival is the supported lifecycle action.",
     "Given an archived category with no invalid archived ancestor, when the owner reactivates it, then the same stable identifier becomes active and may receive new assignments or active children.",
-    "Given Spend Categories and Spend Pools, when either catalogue is maintained, then its identity, lifecycle, and naming remain independent and no value silently creates or selects a value in the other catalogue.",
+    "Given Spend Category and Spend Pool, when either catalogue is maintained, then its identity, lifecycle, and naming remain independent and no value silently creates or selects a value in the other catalogue.",
     "Given an active category with active children, when archival is requested, then the Ledger rejects it without mutation; given no active children, archival succeeds and historical assignments and parent events remain queryable."
   ],
   "status": "active",

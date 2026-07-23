@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "TC-LEDGER-RECONCILIATION-DECISION-LIFECYCLE-CONTRACT",
   "slug": "reconciliation-decision-lifecycle-contract",
-  "title": "Verify owner reconciliation decisions and corrections",
+  "title": "Verify owner Reconciliation Decision and corrections",
   "level": "integration",
   "surface": "persistence",
   "scenario": "edge",

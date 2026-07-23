@@ -63,46 +63,55 @@
       "created_at": "2026-07-21T11:41:42.6904485+00:00"
     }
   ],
+  "links": [
+    {
+      "id": "01KY6HR9QWNDZ3W3EYW4EW5GHV",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-16",
+      "rel": "see-also",
+      "created_at": "2026-07-23T03:54:20.2848707+00:00"
+    }
+  ],
   "recipe_items": [
     {
-      "id": "01KY27PMX3YXJVG4AGA4HXJZV5",
+      "id": "01KY6M26B8Z0RHW5A3YZ9VHPQ6",
       "kind": "acceptance_check",
       "text": [
         "The owner chooses exactly one rule: cash withdrawal is immediate spend, or it transfers value to an explicitly tracked cash account until later cash spending is recorded."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+      "created_at": "2026-07-23T04:34:41.6397091+00:00"
     },
     {
-      "id": "01KY27PMX3VSGSKH33JTX6KB55",
+      "id": "01KY6M26B9TFZ9GPA4MCW1EZVA",
       "kind": "acceptance_check",
       "text": [
         "The validation report tests the chosen rule against withdrawal fees, later cash purchases, refunds, account movement, External Spend, Budget Actual, and replay without retaining raw bank or email payloads."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+      "created_at": "2026-07-23T04:34:41.6397091+00:00"
     },
     {
-      "id": "01KY27PMX3VN44W7ADTK9A6K53",
+      "id": "01KY6M26BAT8GVCD6RZ82S9EXT",
       "kind": "acceptance_check",
       "text": [
         "OQ-LEDGER-16 resolves with the exact rule and affected design entities; if tracked cash requires a new account class or relationship invariant, the gate records that impact and returns to lex:design before downstream code."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+      "created_at": "2026-07-23T04:34:41.6397091+00:00"
     },
     {
-      "id": "01KY27PMX3GD98M2CQZ75ADH4Z",
+      "id": "01KY6M3H1FG2TKNJE8CVTW4X8G",
       "kind": "constraint",
       "text": [
-        "Only privacy-safe structural conclusions are committed; graph state changes use lex commands."
+        "Only allowlisted structural conclusions are committed; graph state changes use lex commands."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:41:42.6904485+00:00"
+      "created_at": "2026-07-23T04:35:25.3585316+00:00"
     },
     {
       "id": "01KY27PMX3ZQFPVBKZXQ26HC80",

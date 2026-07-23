@@ -4,7 +4,7 @@
   "ref_code": "C8",
   "title": "Idempotent public writes",
   "description": [
-    "Every public Ledger mutation requires a caller-visible stable idempotency identity, including evidence registration and linking, reconciliation decisions and corrections, attribution changes, account/category/pool maintenance, transactions, relationships, backup, restore, and storage evolution. Identical reuse returns the original result with zero duplicate effects; conflicting operation, version, or logical input fails and preserves the original. Validation failures do not consume the identity."
+    "Every public Ledger mutation requires a caller-visible stable Idempotency Identity, including evidence registration and linking, Reconciliation Decision and corrections, attribution changes, account/category/pool maintenance, transactions, relationships, backup, restore, and storage evolution. Identical reuse returns the original result with zero duplicate effects; conflicting operation, version, or logical input fails and preserves the original. Validation failures do not consume the identity."
   ],
   "type": "technical",
   "created_at": "2026-07-17T17:29:43.0880944+00:00"

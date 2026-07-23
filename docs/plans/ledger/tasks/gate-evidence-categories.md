@@ -16,7 +16,7 @@ Validation-only task with no Implements link: verify the direct owner decision r
 
 ## Objective
 
-Lock hierarchical Spend Categories with zero or one active Category Assignment per transaction.
+Lock hierarchical Spend Category with zero or one active Category Assignment per transaction.
 
 ## References
 
@@ -51,7 +51,7 @@ No task dependencies recorded.
 
 ### Constraints
 
-- Only privacy-safe structural conclusions are committed; graph changes use lex commands.
+- Only allowlisted structural conclusions are committed; graph changes use lex commands.
 
 ### Notes
 

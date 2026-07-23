@@ -27,7 +27,7 @@
     "Given a later valid match or owner decision changes a covered outcome, when current coverage is queried, then the current classification changes without deleting the original scope, exception, or decision history."
   ],
   "security_criteria": [
-    "Coverage results expose stable identifiers and privacy-safe summaries only; raw statement rows and provider payloads are never retained or emitted."
+    "Coverage results expose stable identifiers and allowlisted summaries only; raw statement rows and provider payloads are never retained or emitted."
   ],
   "status": "active",
   "created_at": "2026-07-20T17:39:51.2166745+00:00",

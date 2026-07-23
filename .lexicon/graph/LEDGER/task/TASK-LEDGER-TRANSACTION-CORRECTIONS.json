@@ -234,7 +234,7 @@
       "id": "01KY2CK5SRH7SH5TFPZT1BWEHC",
       "kind": "acceptance_check",
       "text": [
-        "Ordinary void appends an attributable lifecycle event, retires active transfer/refund relationships atomically, preserves evidence/decision/dimension history, and exposes affected confirmations as current Reconciliation Exceptions."
+        "Ordinary void appends an attributable lifecycle event, retires active transfer/refund relationships atomically, preserves evidence/decision/dimension history, and exposes affected confirmations as current Reconciliation Exception."
       ],
       "required": 1,
       "sort_order": 0,

@@ -197,6 +197,15 @@
       "created_at": "2026-07-21T16:42:55.6536423+00:00"
     }
   ],
+  "links": [
+    {
+      "id": "01KY6HRBF8NQT7S3SGKY492CYK",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-13",
+      "rel": "see-also",
+      "created_at": "2026-07-23T03:54:22.0579487+00:00"
+    }
+  ],
   "recipe_items": [
     {
       "id": "01KY2S6TNDFMJV0KDTW09NKVQP",
@@ -222,7 +231,7 @@
       "id": "01KY2S6TNDDC6VEDHF9H7F9Z79",
       "kind": "acceptance_check",
       "text": [
-        "Candidate enumeration order cannot alter a policy outcome; multiple compatible or guard candidates, conflicting Evidence Records, unresolved relationship replacement, or any case absent from the matrix cannot apply automatically."
+        "Candidate enumeration order cannot alter a policy outcome; multiple compatible or guard candidates, conflicting Evidence Record, unresolved relationship replacement, or any case absent from the matrix cannot apply automatically."
       ],
       "required": 1,
       "sort_order": 2,

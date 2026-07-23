@@ -4,27 +4,26 @@
   "ref_code": "DD-LEDGER-RECONCILIATION-CONTRACT",
   "title": "Explicit match-first evidence reconciliation contract",
   "description": [
-    "Choose the public and transactional shape for matching approved statement evidence to Canonical Transactions without duplicates."
+    "Choose the public and transactional shape for matching approved statement evidence to Canonical Transaction without duplicates."
   ],
   "decision": [
-    "Expose explicit evidence registration, compatibility projection, per-evidence closed disposition, decision lifecycle, and statement coverage operations. Approved statement-row evidence is authoritative over earlier agent-capture evidence for current canonical financial facts. Reconciliation supports match_existing, correct_existing_from_statement, create_statement_only, record_ambiguous, and record_exception. A correction appends a statement-derived replacement fact and supersession, records the decision and confirming link, explicitly carries current category and Pool Assignment, carries compatible payment attribution or initializes an explicit unknown state, and explicitly replaces any still-valid transfer/refund relationship in one writer transaction. If an active relationship would become invalid, correction is review-required and applies no financial effect. Leave INGEST batch lifecycle and source-file handling outside LEDGER. OQ-LEDGER-13 gates automatic matching/correction, not explicit owner-approved correction.",
+    "Expose evidence registration, atomic approved statement-scope registration, compatibility projection, closed per-evidence dispositions, decision lifecycle, and coverage operations. scope.register atomically stores one immutable completed account/period scope with its full registered statement-row evidence set. Statement evidence governs current canonical facts. Apply supports match_existing, correct_existing_from_statement, create_statement_only, record_ambiguous, and record_exception. Correction atomically appends the replacement/supersession, decision/link, explicit category/pool carry-forward, compatible payment carry-forward or unknown state, and any still-valid relationship replacement; an invalid relationship returns review-required with no effect. INGEST retains batch/source lifecycle. OQ-LEDGER-13 gates automatic, not owner-approved, correction.",
     ""
   ],
   "rationale": [
-    "This preserves one active economic effect while allowing the bank statement to govern the reconciled view. Append-only replacement retains what Hermes originally recorded, explicit carry-forward keeps category and pool actuals stable unless the statement changes a financial fact, and closed dispositions keep ambiguity fail-closed without moving email or statement payloads into Tally.",
+    "Atomic scope registration prevents partial manifests while Ledger validates account, period, evidence, uniqueness, and replay. Append-only correction preserves one active economic effect and original capture history; explicit carry-forward preserves category/pool meaning. Closed dispositions keep ambiguity fail-closed without storing source payloads.",
     ""
   ],
   "alternatives": [
-    "Rejected overwriting the notification-derived row because it destroys audit history. Rejected treating agent capture as co-equal authority because conflicts would never converge on the statement. Rejected creating a second active statement transaction because it duplicates spend. Rejected storing or parsing email and statement payloads in LEDGER because Hermes and INGEST own those boundaries. Rejected automatic fuzzy correction until OQ-LEDGER-13 proves a bounded deterministic policy.",
+    "Rejected separate scope creation/attachment because partial scopes expose recovery ordering. Rejected implicit candidate-time creation because queries must not mutate. Rejected overwrite, co-equal agent authority, and a second active statement transaction because they lose history or duplicate spend. Rejected source-payload storage and automatic fuzzy correction; Hermes/INGEST own sources and OQ-LEDGER-13 gates automatic policy.",
     ""
   ],
   "consequences": [
-    "INGEST remains match-first and provider-neutral. Exact match confirms the existing fact; approved authoritative correction yields one active replacement and retained history; no match may create one statement-only fact; ambiguity remains unapplied. Reconciliation changes current movement or spend only through explicit supersession. Category/pool state is preserved by attributable carry-forward, incompatible payment attribution becomes explicit unknown, and transfer/refund relationships are either explicitly rebound without changing meaning or block correction for review. Contracts, schema, actuals, recovery, and tests cover every composite effect atomically.",
+    "INGEST registers rows, then one completed account/period scope, then reconciles match-first. Scope and membership are atomic, immutable, idempotent, and unique by account/period; changed manifest/membership conflicts. Exact match reuses the fact, correction leaves one active replacement, no match may create statement-only, and ambiguity remains unapplied. Carry-forward is explicit; invalid relationship replacement blocks for review. Recovery and tests cover the composite state.",
     ""
   ],
   "status_notes": [
-    "Revised on 2026-07-21 from direct owner policy that statements are authoritative over individual email-derived captures. OQ-LEDGER-13 remains open only for automatic economic-event matching fields and tolerances.",
-    ""
+    "Revised on 2026-07-23 to add the missing provider-neutral atomic statement-scope registration contract discovered by black-box execution. Existing statement-authority and automatic-policy decisions remain unchanged."
   ],
   "status": "accepted",
   "created_at": "2026-07-20T18:13:19.0327569+00:00",
@@ -119,6 +118,13 @@
       "target": "TC-LEDGER-RECONCILIATION-POLICY-MATRIX",
       "rel": "validated-by",
       "created_at": "2026-07-20T18:20:26.4407767+00:00"
+    },
+    {
+      "id": "01KY6HQ106BHTK3ZAA3QGM110K",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-STATEMENT-SCOPE-REGISTRATION",
+      "rel": "validated-by",
+      "created_at": "2026-07-23T03:53:38.5670873+00:00"
     }
   ]
 }

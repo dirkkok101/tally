@@ -4,7 +4,7 @@
   "ref_code": "C20",
   "title": "Deterministic reconciliation safety",
   "description": [
-    "An approved statement row is authoritative over earlier agent-capture evidence for current canonical facts, but automatic reconciliation or correction is permitted only when documented compatible evidence produces one strong deterministic candidate. Zero candidates may create one statement-only transaction through an approved INGEST request; multiple or conflicting candidates remain unapplied. Owner-confirmed match or correction requires explicit intent, reason, and evidence. No active statement evidence may confirm more than one active transaction."
+    "An approved statement row is authoritative over earlier agent-capture evidence for current canonical facts, but automatic reconciliation or correction is permitted only when documented compatible evidence produces one strong deterministic candidate. Zero candidates may create one Statement-only Transaction through an approved INGEST request; multiple or conflicting candidates remain unapplied. Owner-confirmed match or correction requires explicit intent, reason, and evidence. No active statement evidence may confirm more than one active transaction."
   ],
   "type": "business",
   "created_at": "2026-07-20T16:56:49.5346063+00:00"

@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "G6",
   "text": [
-    "Query and aggregate canonical actuals consistently by account, date range, category, spend pool, payment instrument, cardholder attribution, lifecycle, relationship, evidence, and reconciliation state. Evidence: direct — the owner requires exact pool/category reporting and evidence-backed reconciliation; workflows UC-LEDGER-005, UC-LEDGER-010, UC-LEDGER-011, UC-LEDGER-016, and UC-LEDGER-018."
+    "Query and aggregate canonical actuals consistently by account, date range, category, Spend Pool, Payment Instrument, Cardholder Attribution, lifecycle, relationship, evidence, and Reconciliation State. Evidence: direct — the owner requires exact pool/category reporting and evidence-backed reconciliation; workflows UC-LEDGER-005, UC-LEDGER-010, UC-LEDGER-011, UC-LEDGER-016, and UC-LEDGER-018."
   ],
   "target": "Equivalent filters over unchanged active state select identical snapshot membership; exact Net Account Movement, External Spend, and Budget Actual totals reconcile by pool and category and remain consumable by BUDGET and INSIGHTS without duplicated finance logic.",
   "created_at": "2026-07-17T13:41:22.4000969+00:00"

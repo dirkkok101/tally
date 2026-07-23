@@ -4,7 +4,7 @@
   "ref_code": "A11",
   "title": "Explicit transfer confirmation uses equal principal movements",
   "description": [
-    "A transfer may be confirmed between any two distinct owned accounts, including asset-to-liability credit payments, when Signed Account Amounts are same-currency, equal, and opposite. Posting dates may differ. Any fee must be a separate Canonical Transaction; an embedded fee leaves the pair unconfirmed."
+    "A transfer may be confirmed between any two distinct owned accounts, including asset-to-liability credit payments, when Signed Account Amount are same-currency, equal, and opposite. Posting dates may differ. Any fee must be a separate Canonical Transaction; an embedded fee leaves the pair unconfirmed."
   ],
   "status": "validated",
   "created_at": "2026-07-17T17:42:20.4288492+00:00"

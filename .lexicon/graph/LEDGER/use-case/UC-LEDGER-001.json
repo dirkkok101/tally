@@ -2,8 +2,8 @@
   "id": "01KXRHVDNFGN9MVBCW3H5JFVAH",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "UC-LEDGER-001",
-  "title": "Maintain an owned bank account",
-  "preconditions": "A local Ledger is available; Hermes or another external orchestrator runs under the owner's delegated OS identity, or the owner invokes the CLI directly; no online-banking credentials are required.",
+  "title": "Maintain an Owned Bank Account",
+  "preconditions": "A local Ledger is available; Hermes or another External Orchestrator runs under the owner's delegated OS identity, or the owner invokes the CLI directly; no online-banking credentials are required.",
   "postconditions": "The owned account has one stable reference; historical transaction references survive rename or archival; archived accounts cannot receive new transactions by default.",
   "main_flow": "1. The owner delegates the account action to an AI agent. 2. The agent discovers the account command schema. 3. The agent supplies the account's human label, bank, supported account type, currency, and masked distinguishing identifier. 4. Tally validates identity and scope without accepting credentials. 5. Tally creates or updates the stable account record and returns its canonical reference. 6. List/query commands immediately expose the resulting state.",
   "alt_flows": [

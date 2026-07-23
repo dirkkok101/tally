@@ -9,7 +9,7 @@
   "scenario": "edge",
   "automation": "automated",
   "status": "planned",
-  "preconditions": "Representative active transactions, statement-authoritative replacements, evidence links, deterministic and owner reconciliation decisions, category hierarchy and moves, category/pool allocations, payment attribution, transfer/refund relationships, archived identities, and correction cases.",
+  "preconditions": "Representative active transactions, statement-authoritative replacements, evidence links, deterministic and owner Reconciliation Decision, category hierarchy and moves, category/pool allocations, payment attribution, transfer/refund relationships, archived identities, and correction cases.",
   "steps": "Void and supersede transactions; apply statement corrections; reparent categories; correct evidence decisions, category, pool, payment attribution, and financial relationships; query history-inclusive projections and backup state.",
   "expected": "Original facts, hierarchy versions, evidence, decisions, relationships, and assignments remain attributable; only explicit replacement/carry-forward events affect current projections; no correction overwrites or silently moves state; exact actuals count one active event.",
   "owner": "LEDGER implementation",

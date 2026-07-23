@@ -9,7 +9,7 @@
     "Deliver stable local privacy-safe identity operations independently from transaction attribution."
   ],
   "objective": [
-    "Create, inspect, list, rename, archive, and reactivate Payment Instruments and cardholders using local ULIDs and attributable lifecycle history."
+    "Create, inspect, list, rename, archive, and reactivate Payment Instrument and cardholders using local ULIDs and attributable lifecycle history."
   ],
   "planning_state": "ready",
   "priority": 1,

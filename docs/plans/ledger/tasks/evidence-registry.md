@@ -16,7 +16,7 @@ Deliver logical evidence identity, privacy allowlisting, register/get operations
 
 ## Objective
 
-Register one privacy-safe generic Evidence Record per logical item and return identical cross-key replay without provider payload retention.
+Register one allowlisted generic Evidence Record per logical item and return identical cross-key replay without retaining provider payloads.
 
 ## References
 
@@ -42,7 +42,7 @@ Register one privacy-safe generic Evidence Record per logical item and return id
 
 ### Acceptance Checks
 
-- Register accepts only closed Evidence Kinds, privacy-safe logical identity/content fingerprints, Opaque External Reference, actor, and allowlisted observation fields; get returns safe metadata and history.
+- Register accepts only closed Evidence Kind, allowlisted logical identity/content fingerprints, Opaque External Reference, actor, and allowlisted observation fields; get returns allowlisted metadata and history.
 - Identical logical evidence under the same or another request key returns the existing record; changed observation/content conflicts and preserves the original.
 - Forbidden arbitrary metadata, source payload, provider cursor, mailbox/MIME/message/delivery fields, credentials, or full identifiers fail before any evidence/idempotency row is retained.
 
@@ -81,7 +81,7 @@ None recorded.
 |---|---|---|---|
 | EvidenceIdentity | `produces` | DM-LEDGER-EVIDENCE-RECORD-LINK |  |
 | EvidenceStore | `produces` | DM-LEDGER-EVIDENCE-RECORD-LINK |  |
-| EvidenceStore.RegisterInitialAsync | `produces` | DM-LEDGER-EVIDENCE-RECORD-LINK | Caller-scoped transaction primitive used by canonical transaction capture |
+| EvidenceStore.RegisterInitialAsync | `produces` | DM-LEDGER-EVIDENCE-RECORD-LINK | Caller-scoped transaction primitive used by Canonical Transaction capture |
 | EvidenceRegistryOperationModule | `produces` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
 | LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD |  |
 

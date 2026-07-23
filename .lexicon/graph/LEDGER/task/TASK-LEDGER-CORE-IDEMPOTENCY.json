@@ -192,7 +192,7 @@
       "id": "01KY1NYQVYW3831SJ7Q1TY276X",
       "kind": "acceptance_check",
       "text": [
-        "Evidence registration and Reconciliation Decisions also claim closed logical-effect identities, so identical evidence or decision submitted under another caller key returns the existing outcome and conflicting semantic input fails closed."
+        "Evidence registration and Reconciliation Decision also claim closed logical-effect identities, so identical evidence or decision submitted under another caller key returns the existing outcome and conflicting semantic input fails closed."
       ],
       "required": 1,
       "sort_order": 2,

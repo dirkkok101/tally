@@ -2,7 +2,7 @@
   "id": "01KXRJ06NNKDN0H7KGH1VVH144",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "A4",
-  "title": "Transaction date is the default effective date",
+  "title": "Transaction date is the default Effective Date",
   "description": [
     "Validated for the initial statement variants: the bank-reported transaction date is the Effective Date, date-only facts gain no time or timezone, and a distinct posting/value-date column is absent. One variant omits row years, but its explicit statement period uniquely derives each year. A future supplied posting date is preserved separately and does not replace Effective Date."
   ],

@@ -52,7 +52,7 @@ No task dependencies recorded.
 
 ### Constraints
 
-- Only privacy-safe structural conclusions are committed; no raw email or statement content.
+- Only allowlisted structural conclusions are committed; no raw email or statement content.
 
 ### Notes
 

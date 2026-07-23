@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "TC-LEDGER-TRANSACTION-RECORDING-CONTRACT",
   "slug": "transaction-recording-contract",
-  "title": "Verify record canonical transactions contract",
+  "title": "Verify record Canonical Transaction contract",
   "level": "integration",
   "surface": "contract",
   "scenario": "happy",

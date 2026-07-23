@@ -7,7 +7,7 @@
     "Define the stable automation boundary used equally by Hermes, sibling modules, and direct local callers."
   ],
   "decision": [
-    "Generate CLI paths, operation IDs, help, schemas, descriptors, and compatibility checks from one explicit registry. Give evidence, reconciliation candidates and dispositions, decision lifecycle, statement coverage, payment attribution, Spend Pools, actuals, and recovery their own closed typed operations. Reject unknown fields and generic invocation or batch payloads."
+    "Generate CLI paths, operation IDs, help, schemas, descriptors, and compatibility checks from one explicit registry. Give evidence, atomic approved statement-scope registration, reconciliation candidates and dispositions, decision lifecycle, statement coverage, payment attribution, Spend Pool, actuals, and recovery their own closed typed operations. Reject unknown fields and generic invocation or batch payloads."
   ],
   "rationale": [
     "Explicit operations make mutation authority, idempotency, privacy, errors, and versioning auditable. Per-evidence atomic commands keep Ledger safe without stealing INGEST batch responsibilities."
@@ -16,10 +16,10 @@
     "Rejected a generic invoke or open metadata bag because it hides capability and permits provider vocabulary. Rejected minimal evaluate/apply/resolve because it overloads outcomes. Rejected Ledger-owned statement batch commands because INGEST owns that lifecycle."
   ],
   "consequences": [
-    "The operation registry is a completeness gate. Every public operation requires a typed contract and process test. Schema discovery works without a skill. New commands expand the registry deliberately rather than through aliases."
+    "The operation registry is a completeness gate. ledger.reconciliation.scope.register is a typed idempotent mutation and expands the public inventory by one operation. Every public operation requires a typed contract and process test. Schema discovery works without a skill. New commands expand the registry deliberately rather than through aliases."
   ],
   "status_notes": [
-    "Expanded for evidence, reconciliation, coverage, attribution, pools, and channel-neutral external callers."
+    "Expanded on 2026-07-23 with the provider-neutral statement-scope registration operation required by black-box reconciliation workflows."
   ],
   "status": "accepted",
   "created_at": "2026-07-18T06:00:12.8343979+00:00",

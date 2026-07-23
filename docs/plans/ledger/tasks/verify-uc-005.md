@@ -33,16 +33,17 @@ Prove exact membership and totals across transfers, refunds, hierarchy, dimensio
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md) | `compile` | The black-box actuals workflow requires the released 74-operation contract including public statement-scope registration. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
 
 ## Recipe
 
 ### Acceptance Checks
 
 - Published actuals queries prove every filter and explicit unknown/uncategorized/unassigned bucket with deterministic membership and exact Net Account Movement, External Spend, and Budget Actual.
-- Owned-transfer principal contributes zero; separate fees remain spend; refunds offset original current category/pool in refund date; cash follows OQ-LEDGER-16Resolution.
+- Owned-transfer principal contributes zero; separate fees remain spend; full refunds offset original current category/pool on refund date; cash follows OQ-LEDGER-16Resolution.
 - Category-direct, subtree, pool, and matrix totals reconcile without double counting before and after hierarchy moves.
-- Statement correction excludes the superseded fact and includes the replacement once; later snapshot pages retain frozen ancestry, Reconciliation State, membership, ordering, and totals despite writes.
+- The statement-correction fixture registers its completed account-period scope and evidence membership through ledger.reconciliation.scope.register, then excludes the superseded fact and includes the replacement once; later snapshot pages retain frozen ancestry, Reconciliation State, membership, ordering, and totals despite writes.
 
 ### Failure Criteria
 
@@ -71,7 +72,7 @@ Prove exact membership and totals across transfers, refunds, hierarchy, dimensio
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 72 provider-neutral operations |
+| CompletePublicContract74 | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 74 provider-neutral operations |
 | VerifiedUC005 | `produces` | UC-LEDGER-005 | multi-dimensional actuals workflow |
 
 ### Verification
@@ -98,7 +99,8 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 
 - `bead-ref` -> `bd-3na` (verified)
 - `covers` -> UC-LEDGER-005: Query and reconcile ledger actuals
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md): The black-box actuals workflow requires the released 74-operation contract including public statement-scope registration.
 - `touches` -> DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts
 - `verifies` -> FR-LEDGER-ACTUALS-QUERY: Query and reconcile Ledger actuals
 - `verifies` -> FR-LEDGER-SNAPSHOT-PAGINATION: Preserve query snapshots across pages

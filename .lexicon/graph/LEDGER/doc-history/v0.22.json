@@ -1,0 +1,9 @@
+{
+  "id": "01KY6VNT9SVP9Y6MRFH8J7WETF",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.22",
+  "changes": [
+    "Recompiled corrected PLAN-LEDGER-V1 after clean documentation review 20260723T061641441Z-01cf713d. Created verified producer bead bd-1ge for the 74-operation statement-scope composition, rewired read-only gate bd-1ku to depend on it, removed the obsolete direct scope-registration edge, aligned the inventory gate floor to 82 cases, and passed a clean fresh-context bead polish. The plan has 72 tasks and 72 verified bead refs; bd-1ge is the Ledger execution frontier and bd-1ku remains blocked."
+  ],
+  "created_at": "2026-07-23T06:47:44.6988723+00:00"
+}

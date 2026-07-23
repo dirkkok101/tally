@@ -16,7 +16,7 @@ Embed optional provider-neutral, version-matched integration guidance and suppor
 
 ## Objective
 
-Keep the executable schema sufficient for every caller while optional guidance teaches only public operations and rejects incompatibility before host-file mutation.
+Keep the executable schema aligned one-to-one with every published operation descriptor while optional guidance teaches only public operations and rejects incompatibility before host-file mutation.
 
 ## References
 

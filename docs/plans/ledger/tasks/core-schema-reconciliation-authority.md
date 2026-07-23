@@ -41,9 +41,9 @@ Represent statement corrections, prior and active transaction identity, dimensio
 
 ### Acceptance Checks
 
-- V002 migrates a valid V001 store without data loss and expands Reconciliation Decisions to distinguish confirmed existing, corrected from statement, statement-only, ambiguity, exception, owner confirmation, rejection, revocation, and replacement.
+- V002 migrates a valid V001 store without data loss and expands Reconciliation Decision to distinguish confirmed existing, corrected from statement, statement-only, ambiguity, exception, owner confirmation, rejection, revocation, and replacement.
 - A statement-correction record references prior and active transaction IDs, supersession, category and pool carry-forward events, payment carry-forward or explicit unknown initialization, optional invariant-preserving relationship replacement events, authority basis, actor, reason, and predecessor decision.
-- Evidence-link history supports retained historical agent evidence and one active confirming statement target; all new state is append-only, RESTRICT-linked, and excluded from arbitrary metadata or raw payloads.
+- Evidence-link history retains retained historical agent evidence and one active confirming statement target; all new state is append-only, RESTRICT-linked, and excluded from arbitrary metadata or raw payloads.
 - Real-SQLite tests prove V001-to-V002 upgrade, fresh composition, invalid reference rejection, immutable history, atomic rollback, and idempotent re-open with observable row and migration-metadata counts.
 
 ### Failure Criteria

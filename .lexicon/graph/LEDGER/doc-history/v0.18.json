@@ -1,0 +1,9 @@
+{
+  "id": "01KY6HS2M6DDP4EF9V5BJ5JSV7",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.18",
+  "changes": [
+    "Corrected the Ledger technical design after black-box execution exposed a missing public scope seam. Added one provider-neutral idempotent ledger.reconciliation.scope.register mutation for an approved complete account-period manifest and its entire statement-row evidence set; defined atomic validation, account-period logical uniqueness, replay/conflict behavior, closed errors, operation-registry expansion, and a dedicated contract test. Link suggestions are clear, decision paths and coverage are healthy. The existing assumed Hermes client validation remains a known external-dependency warning; no new external API claim was introduced. Installed Lex 0.5.7 does not expose the design skill's naming normalize or review lint subcommands even though both invocations exit zero after printing top-level help."
+  ],
+  "created_at": "2026-07-23T03:54:45.7671230+00:00"
+}

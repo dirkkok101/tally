@@ -8,7 +8,7 @@
   ],
   "category": "architecture",
   "target": "100% of public Ledger operations expose deterministic provider-neutral schemas, structured expected errors, documented exits, idempotency semantics, and compatibility metadata; zero schemas contain mailbox, MIME, messaging, recipient, schedule, delivery, or provider-specific fields; 100% of incompatible-version tests fail before mutation.",
-  "load_condition": "Every public operation across compatible and incompatible contract versions, exercised by a schema-driven external-orchestrator client and any bundled optional agent skills.",
+  "load_condition": "Every public operation across compatible and incompatible contract versions, exercised by a schema-driven External Orchestrator client and any bundled optional agent skills.",
   "measurement": "Generated contract inventory plus automated schema snapshots, forbidden-field scans, error and exit tests, stream-separation tests, replay tests, and compatibility tests.",
   "rationale": [
     "Hermes and other callers must rely on typed public contracts rather than prose, provider assumptions, private storage, or implementation APIs. Supports G5 and G7."

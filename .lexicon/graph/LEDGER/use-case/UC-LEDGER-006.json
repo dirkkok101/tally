@@ -2,7 +2,7 @@
   "id": "01KXRHVEYC171ENABXY4BWGX0C",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "UC-LEDGER-006",
-  "title": "Discover and invoke the external-orchestrator contract",
+  "title": "Discover and invoke the External Orchestrator contract",
   "preconditions": "A compatible Tally executable is on PATH; the caller can start it under the trusted owner OS identity and has no private-store access.",
   "postconditions": "The caller completes the financial task using only public contracts and can distinguish success, domain failure, incompatibility, ambiguity, and replay without parsing prose or accessing storage.",
   "main_flow": "1. The caller discovers the Tally version, provider-neutral operations, help, and machine-readable schemas. 2. It checks contract compatibility. 3. It constructs deterministic structured input without mailbox, messaging, recipient, schedule, or delivery fields. 4. Tally validates input and domain authority before mutation. 5. Tally emits structured results on stdout, safe diagnostics on stderr, and a documented exit. 6. If output is lost after commit, the caller retries the same logical request and recovers the original result.",

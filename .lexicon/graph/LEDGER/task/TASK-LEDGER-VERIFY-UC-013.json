@@ -23,14 +23,24 @@
   ],
   "dependencies": [
     {
-      "id": "01KY0DT2N0NPACSNNBVES9EYY7",
+      "id": "01KY6J63FN060C3B4F8F66DV7W",
       "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
       "dependency_type": "compile",
       "reason": [
-        "Use-case verification invokes the fully wired published public contract."
+        "The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-23T04:01:52.6305298+00:00"
+    },
+    {
+      "id": "01KY6J30G4J6RET4HVXWYVYWPR",
+      "target": "TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "The remaining Release-CLI workflow consumes the successor 74-operation public contract."
       ],
       "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
+      "created_at": "2026-07-23T04:00:11.2689200+00:00"
     }
   ],
   "files": [
@@ -45,27 +55,30 @@
   ],
   "interfaces": [
     {
-      "id": "01KY2J2Y7ESBGMG1CN3THQS4F1",
+      "id": "01KY6J2Z27NXAYWK404A4467Q2",
       "name": "PublishedTallyFixture",
       "direction": "consumes",
       "sort_order": 0,
-      "created_at": "2026-07-21T14:43:11.2124513+00:00"
+      "created_at": "2026-07-23T04:00:09.7987108+00:00"
     },
     {
-      "id": "01KY2J2Y7EK2NEQ4G666M99F5M",
-      "name": "CompletePublicContract",
+      "id": "01KY6J2Z28YDMFQG3H4EBXFRA9",
+      "name": "CompletePublicContract74",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
+      "notes": [
+        "Exactly 74 provider-neutral operations"
+      ],
       "sort_order": 1,
-      "created_at": "2026-07-21T14:43:11.2124513+00:00"
+      "created_at": "2026-07-23T04:00:09.7987108+00:00"
     },
     {
-      "id": "01KY2J2Y7EK30DWDW66E6FR2XB",
+      "id": "01KY6J2Z28MNTQDN4XAH5104RJ",
       "name": "VerifiedUC013",
       "direction": "produces",
       "contract_ref_code": "UC-LEDGER-013",
       "sort_order": 2,
-      "created_at": "2026-07-21T14:43:11.2124513+00:00"
+      "created_at": "2026-07-23T04:00:09.7987108+00:00"
     }
   ],
   "links": [
@@ -79,24 +92,24 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY2J3CRFBPMNXGXGDW4RZVK9",
+      "id": "01KY6M2D585EZ7W330BD5CD08A",
       "kind": "acceptance_check",
       "text": [
-        "The published CLI links multiple generic evidence records to one active transaction, returns privacy-safe history, leaves reconciliation and actuals unchanged, and persists neither source payloads nor full identifiers."
+        "The published CLI links multiple generic Evidence Record to one active transaction, returns allowlisted history, leaves reconciliation and actuals unchanged, and persists neither source payloads nor full identifiers."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T14:43:26.0951761+00:00"
+      "created_at": "2026-07-23T04:34:48.6160270+00:00"
     },
     {
-      "id": "01KY2J3CRGX229052YD9Q2DFZD",
+      "id": "01KY6M2D59CY03W6JVHHB0X6K9",
       "kind": "acceptance_check",
       "text": [
         "Invalid identity, payload, transaction, conflict, replay, and injected-failure paths return specified errors with no partial or duplicate effect."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T14:43:26.0951761+00:00"
+      "created_at": "2026-07-23T04:34:48.6160270+00:00"
     },
     {
       "id": "01KY2J3CRHGZHSF6F6DABE1MCB",

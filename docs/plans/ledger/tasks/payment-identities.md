@@ -16,7 +16,7 @@ Deliver stable local privacy-safe identity operations independently from transac
 
 ## Objective
 
-Create, inspect, list, rename, archive, and reactivate Payment Instruments and cardholders using local ULIDs and attributable lifecycle history.
+Create, inspect, list, rename, archive, and reactivate Payment Instrument and cardholders using local ULIDs and attributable lifecycle history.
 
 ## References
 

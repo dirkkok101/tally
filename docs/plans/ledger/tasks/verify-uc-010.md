@@ -16,12 +16,13 @@ Verification-only task with no Implements link: trace revised UC-LEDGER-010 thro
 
 ## Objective
 
-Prove a valid full/partial refund offsets the original's current category and Spend Pool in the credit period while preserving facts and exact history.
+Prove one valid full-amount refund offsets the current category and Spend Pool assigned to the original transaction in the credit period while preserving immutable facts and exact history.
 
 ## References
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
+| DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP: Single full-amount refund relationships | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | `false` |
 | FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent | `requirement` | `verifies` | `true` |
 | FR-LEDGER-REFUND-CONFIRMATION: Confirm refunds and reversals | `requirement` | `verifies` | `true` |
@@ -32,15 +33,17 @@ Prove a valid full/partial refund offsets the original's current category and Sp
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- A valid opposite-sign same-account credit creates one active attributable relationship and reduces External Spend under the original current category and pool in the credit Effective Date period.
+- A valid active same-account ZAR refund credit with opposite roles and exactly equal absolute minor-unit amount creates one active attributable relationship and reduces External Spend under the current category and pool assigned to the original transaction in the credit Effective Date period.
 - Later category or pool correction moves the linked offset deterministically without rewriting either transaction or relationship; exact all-up, pool, category, and cell totals remain conserved.
-- Account/currency/sign/lifecycle/role/cardinality/cumulative-magnitude errors, replay conflict, concurrent credit reuse, and write failure leave prior state unchanged.
+- Missing, account, currency, sign, lifecycle, amount mismatch including partial and over-refund, active-role duplicate, replay conflict, concurrent competing refund, and write-failure cases leave prior state unchanged.
+- A semantically identical replay returns the original relationship; detail and history expose exact full-amount roles while both source transaction facts remain unchanged.
 
 ### Failure Criteria
 
@@ -71,14 +74,14 @@ Prove a valid full/partial refund offsets the original's current category and Sp
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 72 provider-neutral operations |
+| CompletePublicContract74 | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 74 provider-neutral operations |
 | VerifiedUC010 | `produces` | UC-LEDGER-010 | pool/category-aware refund workflow |
 
 ### Verification
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.EndToEnd.UC010RefundWorkflowTests --no-restore` | exit 0; at least 11 main/failure-path scenarios run and 0 fail | `true` | 480 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.EndToEnd.UC010RefundWorkflowTests --no-restore` | exit 0; at least 12 full-refund main and failure-path scenarios run and 0 fail | `true` | 480 |
 
 ### Review Gates
 
@@ -99,7 +102,9 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 
 - `bead-ref` -> `bd-1jr` (verified)
 - `covers` -> UC-LEDGER-010: Confirm a refund or reversal
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
+- `governed-by` -> DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP: Single full-amount refund relationships
 - `touches` -> DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts
 - `verifies` -> FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent
 - `verifies` -> FR-LEDGER-REFUND-CONFIRMATION: Confirm refunds and reversals

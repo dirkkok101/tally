@@ -1,0 +1,9 @@
+{
+  "id": "01KY6R1HT3MRK1RZ4XYXKFWN6Z",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.21",
+  "changes": [
+    "Replanned PLAN-LEDGER-V1 in place after execution exposed a gate/implementation conflict: added TASK-LEDGER-RECONCILIATION-SCOPE-PUBLIC-COMPOSITION as the code-producing 74-operation cutover and made TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT read-only. The active plan now has 72 tasks, 291/291 required references covered, zero recipe or verification gaps, zero lint findings, zero blocking or warning audit findings for the current fingerprint, and all 72 task contexts at or below 2500 tokens. The existing 33 audit infos are optional generic context refs outside this narrow replan; the sole missing bead ref is the new task and is expected before recompilation."
+  ],
+  "created_at": "2026-07-23T05:44:14.9162939+00:00"
+}

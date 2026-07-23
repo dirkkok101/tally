@@ -16,7 +16,7 @@ Deliver owner-approved match_existing and create_statement_only plus record_ambi
 
 ## Objective
 
-Commit one explicitly owner-reviewed base reconciliation outcome without duplicate Canonical Transactions despite drift, retry, or crash.
+Commit one explicitly owner-reviewed base reconciliation outcome without duplicate Canonical Transaction despite drift, retry, or crash.
 
 ## References
 
@@ -25,7 +25,6 @@ Commit one explicitly owner-reviewed base reconciliation outcome without duplica
 | DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | `true` |
 | FR-LEDGER-STATEMENT-RECONCILIATION: Apply statement reconciliation outcomes | `requirement` | `implements` | `true` |
 | TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY: Prove reconciliation effects are crash-atomic and replay-safe | `test_case` | `verifies` | `true` |
 | TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT: Verify match-first statement reconciliation | `test_case` | `verifies` | `true` |
@@ -122,7 +121,6 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
 - `implements` -> FR-LEDGER-STATEMENT-RECONCILIATION: Apply statement reconciliation outcomes
-- `touches` -> DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage
 - `verifies` -> TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY: Prove reconciliation effects are crash-atomic and replay-safe
 - `verifies` -> TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT: Verify match-first statement reconciliation
 

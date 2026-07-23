@@ -1,0 +1,12 @@
+{
+  "id": "01KY6Z1YEWB4Z50K2MT9AYSPX6",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-RECONCILIATION-COVERAGE",
+  "subject_entity_id": "01KY09SPSFJPG60WKJ26MAYG1V",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-STATEMENT-SCOPE-REGISTRATION",
+  "commit_sha": "52c31b9",
+  "bead_id": "bd-1ge",
+  "verified_at": "2026-07-23T07:46:47.9001631+00:00"
+}

@@ -7,7 +7,7 @@
     "Define stable provider-neutral attribution and pool semantics without conflating account, Payment Instrument, cardholder, category, or funding pool."
   ],
   "decision": [
-    "Use local ULIDs and owner labels for instruments, cardholders, categories, and pools; allow optional masked suffixes but no full provider identifiers. Store instrument and Cardholder Attribution independently with explicit unknown values. Spend Categories form the acyclic hierarchy defined by DD-LEDGER-CATEGORY-HIERARCHY and each transaction has at most one active Category Assignment. Give each transaction explicit unassigned or one active pool under the v1 assumption, with append-only corrections and no inference across dimensions.",
+    "Use local ULIDs and owner labels for instruments, cardholders, categories, and pools; allow optional masked suffixes but no full provider identifiers. Store instrument and Cardholder Attribution independently with explicit unknown values. Spend Category form the acyclic hierarchy defined by DD-LEDGER-CATEGORY-HIERARCHY and each transaction has at most one active Category Assignment. Give each transaction explicit unassigned or one active pool under the v1 assumption, with append-only corrections and no inference across dimensions.",
     ""
   ],
   "rationale": [

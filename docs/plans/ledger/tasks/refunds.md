@@ -12,20 +12,19 @@
 
 ## Summary
 
-Deliver explicit full/partial refund confirmation using the entire credit, cumulative active-refund limits, and independent current category/pool attribution.
+Deliver explicit single full-amount refund and reversal confirmation with exact amount and currency eligibility, one active relationship per participant, stable replay, and immutable source facts.
 
 ## Objective
 
-Create attributable refund relationships that safely offset the original transaction's current category and Spend Pool in the credit's own Effective Date period.
+Create one attributable full-refund relationship for an eligible original transaction and reject partial, over-refund, unmatched, duplicate-role, and incompatible attempts without changing existing state.
 
 ## References
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
+| DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP: Single full-amount refund relationships | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | `true` |
 | FR-LEDGER-REFUND-CONFIRMATION: Confirm refunds and reversals | `requirement` | `implements` | `true` |
-| NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-REFUND-CONFIRMATION-CONTRACT: Verify confirm refunds and reversals contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -40,21 +39,24 @@ Create attributable refund relationships that safely offset the original transac
 
 ### Acceptance Checks
 
-- Active same-account ZAR opposite-sign original/credit plus reason creates one active attributable refund using the credit's entire magnitude.
-- Multiple partial credits may link to one original only while cumulative active magnitude is at most the original.
-- Different account/currency, same sign, inactive participant, over-refund, transfer role, refund-credit reuse, or refund-credit-as-original returns a stable error and creates no link.
-- Refund detail retains explicit original/credit roles and exact amount; its spend offset follows the original's independently current category and pool without changing source facts or the credit's own stored assignments.
-- Identical replay returns the first relationship; concurrent credit reuse yields one active role; later category or pool correction deterministically moves the linked offset without rewriting relationship history.
+- An active same-account ZAR original outflow below zero and refund credit above zero with exactly equal absolute minor-unit amounts plus a reason creates one active relationship with refund_original and refund_credit roles and the full original amount.
+- A smaller partial credit or larger over-refund returns LEDGER-REFUND-AMOUNT and creates no relationship or idempotency effect.
+- Different account or currency, same or reversed role signs, inactive or missing participants, refund-credit-as-original, and unallowlisted input return their documented stable validation, lifecycle, or not-found errors with no mutation.
+- Any active transfer or refund role on either participant, including a second active refund proposed for the same original, returns LEDGER-RELATIONSHIP-ACTIVE-ROLE-CONFLICT and preserves exactly one active relationship.
+- A semantically identical replay returns the first relationship without duplicate rows; changed input under a consumed Idempotency Identity returns LEDGER-IDEMPOTENCY-001; competing logical effects cannot create two active roles.
+- Relationship detail exposes exact amount, ZAR currency, explicit roles, active state, actor, created time, and queryable empty confirmation history while both ordinary source transactions remain byte-for-byte equivalent in financial and lifecycle facts.
+- The existing financial_relationship_roles_are_exclusive_before_insert trigger and RelationshipStore active-role guard remain unchanged because their semantics enforce the full-refund-only model.
 
 ### Failure Criteria
 
-- Do NOT infer a pool from account, instrument, cardholder, category, or evidence.
-- Do NOT rewrite either transaction or relationship when a current category/Pool Assignment changes.
+- Do NOT support partial refunds, cumulative refund credits, or multiple active refunds for one original.
+- Do NOT weaken or replace the existing relationship-role exclusivity trigger or add a storage migration for this correction.
+- Do NOT rewrite either ordinary bank transaction or infer the refund from description, date, category, pool, instrument, cardholder, or evidence.
 
 ### Expected Outputs
 
-- Refund contracts/policy/handler/module
-- Cumulative refund and role tests
+- Refund contracts, full-amount policy, handler, operation module, and public CLI/bootstrap/source-generation wiring
+- Focused full-amount, amount-mismatch, duplicate-role, lifecycle/history, immutable-source, idempotency, and atomic-failure tests
 
 ### Constraints
 
@@ -68,34 +70,38 @@ None recorded.
 
 | Path | Action | Role | Required | Notes |
 |---|---|---|---|---|
-| `src/Tally/Contracts/Ledger/Relationships/RefundContracts.cs` | `create` | implementation | `true` |  |
-| `src/Tally/Domain/Ledger/Relationships/RefundPolicy.cs` | `create` | implementation | `true` |  |
-| `src/Tally/Features/Ledger/Relationships/RefundHandlers.cs` | `create` | implementation | `true` |  |
-| `src/Tally/Features/Ledger/Relationships/RefundOperationModule.cs` | `create` | implementation | `true` |  |
-| `tests/Tally.Tests/Features/Ledger/Relationships/RefundTests.cs` | `test` | implementation | `true` |  |
+| `src/Tally/Contracts/Ledger/Relationships/RefundContracts.cs` | `create` | implementation | `true` | Typed full-refund confirmation input |
+| `src/Tally/Domain/Ledger/Relationships/RefundPolicy.cs` | `create` | implementation | `true` | Pure exact eligibility and stable error policy |
+| `src/Tally/Features/Ledger/Relationships/RefundHandlers.cs` | `create` | implementation | `true` | Transactional confirmation handler |
+| `src/Tally/Features/Ledger/Relationships/RefundOperationModule.cs` | `create` | implementation | `true` | Provider-neutral operation adapter |
+| `src/Tally/Contracts/Common/ProcessContracts.cs` | `modify` | integration | `true` | Source-generated refund request metadata |
+| `src/Tally/Bootstrap/LedgerServices.cs` | `modify` | integration | `true` | Compose the refund vertical slice |
+| `src/Tally/Cli/OperationRegistry.cs` | `modify` | integration | `true` | Publish ledger.refund.confirm schema and domain errors |
+| `src/Tally/Cli/TallyProcess.cs` | `modify` | integration | `true` | Map stable refund errors to process categories and exit codes |
+| `tests/Tally.Tests/Features/Ledger/Relationships/RefundTests.cs` | `test` | implementation | `true` | Focused contract and persistence coverage |
 
 ### Interface Contracts
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| RefundOperationModule | `produces` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS |  |
-| RefundPolicy | `produces` | DM-LEDGER-FINANCIAL-RELATIONSHIP |  |
-| RelationshipStore | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP |  |
-| TransactionStore | `consumes` | DM-LEDGER-TRANSACTION-FACT |  |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD |  |
+| RefundOperationModule | `produces` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS | Public ledger.refund.confirm operation |
+| RefundPolicy | `produces` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Full-amount eligibility and stable errors |
+| RelationshipStore | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Existing insert, get, and active-role exclusivity guard |
+| TransactionStore | `consumes` | DM-LEDGER-TRANSACTION-FACT | Immutable original and refund transaction lookup |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD | Atomic request and logical-effect replay |
 
 ### Verification
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Features.Ledger.Relationships.RefundTests --no-restore` | exit 0; at least 14 partial/cumulative/role/category/date/replay cases run and 0 fail | `true` | 300 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Tally.Tests.Features.Ledger.Relationships.RefundTests --no-restore` | exit 0; at least 16 full-amount, partial, over-refund, role, lifecycle, history, replay, and immutability cases run and 0 fail | `true` | 300 |
 
 ### Review Gates
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Show cumulative bounds, full-credit use, exclusivity, later-period semantics, and replay. | `true` |
-| `self-review` | No inferred or split-credit relationship behavior exists. | `true` |
+| `test-evidence` | Show exact amount/currency eligibility, partial and over-refund rejection, unmatched participants, duplicate-role rejection, source immutability, relationship history, replay, and atomic failure. | `true` |
+| `self-review` | Confirm V001 relationship-role exclusivity and RelationshipStore active-role semantics are unchanged and correct for one active full refund. | `true` |
 
 ## Bead References
 
@@ -111,10 +117,9 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Consumer requires TransactionStore from its producing task; direct compile edge enforces the declared interface contract.
 - `depends-on:compile` -> [TASK-LEDGER-TRANSFERS](../tasks/transfers.md): Refunds consume the RelationshipStore and active-role model created with transfers.
+- `governed-by` -> DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP: Single full-amount refund relationships
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `implements` -> FR-LEDGER-REFUND-CONFIRMATION: Confirm refunds and reversals
-- `satisfies` -> NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history
-- `touches` -> DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts
 - `verifies` -> TC-LEDGER-REFUND-CONFIRMATION-CONTRACT: Verify confirm refunds and reversals contract
 
 ## Navigation

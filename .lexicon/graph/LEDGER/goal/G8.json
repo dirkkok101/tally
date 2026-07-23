@@ -5,6 +5,6 @@
   "text": [
     "Keep the local Ledger recoverable through verified backup, restore, upgrade, and storage-migration outcomes. Evidence: analogous — sensitive long-lived financial history plus C4/RISK-LEDGER-002/007 require recoverable evolution; workflows UC-LEDGER-007 and UC-LEDGER-012."
   ],
-  "target": "Backup, verification, separate-target restore, and storage evolution cover accounts, transactions, evidence and links, reconciliation history and exceptions, payment instruments, cardholder and pool attribution, categories, relationships, idempotency outcomes, and exact derived totals; failure leaves the prior Ledger authoritative.",
+  "target": "Backup, verification, separate-target restore, and storage evolution cover accounts, transactions, evidence and links, reconciliation history and exceptions, Payment Instrument, cardholder and pool attribution, categories, relationships, idempotency outcomes, and exact derived totals; failure leaves the prior Ledger authoritative.",
   "created_at": "2026-07-17T17:28:47.6609707+00:00"
 }

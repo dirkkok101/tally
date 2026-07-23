@@ -14,7 +14,7 @@
   "complexity": "XL",
   "story_as": "Personal Finance Owner",
   "story_want": [
-    "reconcile approved statement rows against canonical transactions"
+    "reconcile approved statement rows against Canonical Transaction"
   ],
   "story_so_that": [
     "monthly statements confirm prior records without duplicate actuals or guessed matches"

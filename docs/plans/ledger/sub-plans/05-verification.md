@@ -19,6 +19,7 @@ Converge explicit operation bundles, security, eighteen use cases, Native-AOT pu
 | [TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE](../tasks/gate-int-relationship-actuals-bundle.md) | Compose the relationship and actuals operation bundle | `ready` | 1 |
 | [TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE](../tasks/gate-int-recovery-skill-bundle.md) | Compose the recovery and integration-guidance bundle | `ready` | 1 |
 | [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](../tasks/gate-int-reconciliation-bundle.md) | Compose the reconciliation operation bundle | `ready` | 0 |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md) | Prove statement-scope public contract | `ready` | 0 |
 | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | Wire and prove the complete public CLI contract | `ready` | 0 |
 | [TASK-LEDGER-GATE-SECURITY](../tasks/gate-security.md) | Validate local financial-data security | `ready` | 0 |
 | [TASK-LEDGER-VERIFY-UC-001](../tasks/verify-uc-001.md) | AccountWorkflow | `ready` | 1 |

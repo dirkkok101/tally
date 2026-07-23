@@ -26,7 +26,7 @@ Resolve ambiguity and correct decisions through explicit owner intent while reta
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | `true` |
-| FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE: Resolve and correct Reconciliation Decisions | `requirement` | `implements` | `true` |
+| FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE: Resolve and correct Reconciliation Decision | `requirement` | `implements` | `true` |
 | TC-LEDGER-RECONCILIATION-DECISION-LIFECYCLE-CONTRACT: Verify owner reconciliation decisions and corrections | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -118,7 +118,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `governed-by` -> DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
-- `implements` -> FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE: Resolve and correct Reconciliation Decisions
+- `implements` -> FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE: Resolve and correct Reconciliation Decision
 - `touches` -> DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage
 - `verifies` -> TC-LEDGER-RECONCILIATION-DECISION-LIFECYCLE-CONTRACT: Verify owner reconciliation decisions and corrections
 

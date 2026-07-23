@@ -75,7 +75,7 @@
       "direction": "produces",
       "contract_ref_code": "UC-LEDGER-006",
       "notes": [
-        "External-orchestrator contract workflow"
+        "External Orchestrator contract workflow"
       ],
       "sort_order": 2,
       "created_at": "2026-07-21T11:52:29.7719007+00:00"
@@ -172,14 +172,24 @@
       "created_at": "2026-07-20T18:59:11.4215965+00:00"
     },
     {
-      "id": "01KXT0ZW3KNYP55Z3MS17JBWP8",
+      "id": "01KY6SWDGHE544JYQBX4DCR351",
       "kind": "note",
       "text": [
         "This gate validates completed behavior and therefore intentionally has no Implements link."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T07:10:29.4870620+00:00"
+      "created_at": "2026-07-23T06:16:23.8246881+00:00"
+    },
+    {
+      "id": "01KY6SWDGJWSTTADZ1NBH953MV",
+      "kind": "note",
+      "text": [
+        "Historical predecessor evidence: bd-gpm verified CompletePublicContract at exactly 73 operations before ledger.reconciliation.scope.register existed. Do not rerun this exact-count check after StatementScopePublicComposition74; TASK-LEDGER-RECONCILIATION-SCOPE-PUBLIC-COMPOSITION advances the shared UC006 test and current inventory to 74, and TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT proves the successor contract."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-23T06:16:23.8246881+00:00"
     }
   ],
   "references": [

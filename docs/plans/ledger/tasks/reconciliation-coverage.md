@@ -26,7 +26,6 @@ Return a batch summary in which every accepted row and eligible prior transactio
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | `true` |
 | FR-LEDGER-RECONCILIATION-COVERAGE: Report statement coverage and exceptions | `requirement` | `implements` | `true` |
-| NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-RECONCILIATION-COVERAGE-CONTRACT: Verify statement coverage and exception accounting | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -116,7 +115,6 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
 - `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
 - `implements` -> FR-LEDGER-RECONCILIATION-COVERAGE: Report statement coverage and exceptions
-- `satisfies` -> NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed
 - `touches` -> DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage
 - `verifies` -> TC-LEDGER-RECONCILIATION-COVERAGE-CONTRACT: Verify statement coverage and exception accounting
 

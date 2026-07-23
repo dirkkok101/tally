@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "TC-LEDGER-CATEGORY-CATALOGUE-CONTRACT",
   "slug": "category-catalogue-contract",
-  "title": "Verify maintain the spend-category catalogue contract",
+  "title": "Verify maintain the Spend Category catalogue contract",
   "level": "integration",
   "surface": "contract",
   "scenario": "happy",

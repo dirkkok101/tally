@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "RISK-LEDGER-009",
   "description": [
-    "Conflating bank account, payment instrument, cardholder, spend pool, or category could place correct transactions in the wrong budget actuals while aggregate totals still appear plausible."
+    "Conflating bank account, Payment Instrument, cardholder, Spend Pool, or category could place correct transactions in the wrong Budget Actual while aggregate totals still appear plausible."
   ],
   "likelihood": "Medium",
   "impact": "High",

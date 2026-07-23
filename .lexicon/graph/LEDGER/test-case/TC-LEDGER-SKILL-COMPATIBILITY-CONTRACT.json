@@ -9,7 +9,7 @@
   "scenario": "happy",
   "automation": "automated",
   "status": "planned",
-  "preconditions": "A fresh Ledger, a schema-driven external-orchestrator client, optional agent guidance, and compatible and incompatible contract versions.",
+  "preconditions": "A fresh Ledger, a schema-driven External Orchestrator client, optional agent guidance, and compatible and incompatible contract versions.",
   "steps": "Exercise every acceptance criterion of FR-LEDGER-SKILL-COMPATIBILITY through public schemas and commands with and without optional agent guidance.",
   "expected": "Every workflow is provider-neutral and usable without a required skill; optional guidance uses only public contracts; incompatible versions fail before mutation; all FR-LEDGER-SKILL-COMPATIBILITY criteria hold.",
   "owner": "LEDGER implementation",

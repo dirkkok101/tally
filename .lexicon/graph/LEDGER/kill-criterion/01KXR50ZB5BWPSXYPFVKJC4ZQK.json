@@ -3,5 +3,6 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "condition": "Before planning, local file permissions, backup and restore, and the chosen encryption-at-rest posture cannot protect and recover complete Durable Ledger State including evidence, reconciliation, attribution, pools, history, and idempotency without a custom cryptography subsystem; stop and select a safer storage approach.",
   "monitored": 1,
+  "evaluation_state": "unassessed",
   "created_at": "2026-07-17T13:42:31.0141950+00:00"
 }

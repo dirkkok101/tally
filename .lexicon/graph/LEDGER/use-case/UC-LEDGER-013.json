@@ -3,14 +3,14 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "UC-LEDGER-013",
   "title": "Register and link additional transaction evidence",
-  "preconditions": "The transaction and generic evidence kind are identifiable; the caller supplies privacy-safe metadata, opaque reference, logical evidence identity, reason, and idempotency identity.",
-  "postconditions": "The transaction may have multiple independently inspectable evidence records; the same logical evidence has one effect; no provider payload is retained and no unsupported match is inferred.",
-  "main_flow": "1. The caller retrieves the transaction, current evidence links, reconciliation state, and lifecycle. 2. Tally validates the evidence kind, privacy boundary, logical identity, and compatibility with the transaction. 3. Tally detects identical registration or any active link to another canonical transaction. 4. Tally atomically registers the evidence if new and links it to the transaction with actor, reason, and time. 5. Tally updates only reconciliation state justified by an explicit valid decision; evidence presence alone never implies a match. 6. Tally returns the evidence identity, link, current state, and history reference.",
+  "preconditions": "The transaction and generic Evidence Kind are identifiable; the caller supplies privacy-safe metadata, opaque reference, logical evidence identity, reason, and Idempotency Identity.",
+  "postconditions": "The transaction may have multiple independently inspectable Evidence Record; the same logical evidence has one effect; no provider payload is retained and no unsupported match is inferred.",
+  "main_flow": "1. The caller retrieves the transaction, current evidence links, Reconciliation State, and lifecycle. 2. Tally validates the Evidence Kind, privacy boundary, logical identity, and compatibility with the transaction. 3. Tally detects identical registration or any active link to another Canonical Transaction. 4. Tally atomically registers the evidence if new and links it to the transaction with actor, reason, and time. 5. Tally updates only Reconciliation State justified by an explicit valid decision; evidence presence alone never implies a match. 6. Tally returns the evidence identity, link, current state, and history reference.",
   "alt_flows": [
     "2a. Evidence includes prohibited payload or insufficient identity -> reject without retention",
     "2b. Transaction is inactive or evidence conflicts with immutable facts -> return a structured exception without active confirmation",
     "3a. Identical evidence registration or link already exists -> return the original idempotent result",
-    "3b. Evidence is actively linked to another canonical transaction -> return conflict and preserve both prior states",
+    "3b. Evidence is actively linked to another Canonical Transaction -> return conflict and preserve both prior states",
     "4a. Registration and link cannot commit atomically -> apply neither"
   ],
   "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"A receipt, statement row, external document, agent capture, or owner clarification supplies additional support for an existing canonical transaction.\",\"status\":\"draft\"}",

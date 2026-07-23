@@ -25,7 +25,7 @@ Provide deterministic value types that reject lossy inputs and round-trip accept
 | DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-TRANSACTION-FACT: TransactionFact | `data_model` | `touches` | `true` |
 | FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals | `requirement` | `implements` | `true` |
-| FR-LEDGER-TRANSACTION-RECORDING: Record Canonical Transactions | `requirement` | `implements` | `true` |
+| FR-LEDGER-TRANSACTION-RECORDING: Record Canonical Transaction | `requirement` | `implements` | `true` |
 | NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-EXACT-MONEY-CONFORMANCE: Verify exact money and actuals formulas | `test_case` | `verifies` | `true` |
 
@@ -109,7 +109,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md): Value types compile against common validation/result contracts.
 - `governed-by` -> DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates
 - `implements` -> FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals
-- `implements` -> FR-LEDGER-TRANSACTION-RECORDING: Record Canonical Transactions
+- `implements` -> FR-LEDGER-TRANSACTION-RECORDING: Record Canonical Transaction
 - `satisfies` -> NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic
 - `touches` -> DM-LEDGER-TRANSACTION-FACT: TransactionFact
 - `verifies` -> TC-LEDGER-EXACT-MONEY-CONFORMANCE: Verify exact money and actuals formulas

@@ -1,0 +1,9 @@
+{
+  "id": "01KY6JMNCKGKSSRYKM358YTECG",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.19",
+  "changes": [
+    "Replanned active PLAN-LEDGER-V1 after execution exposed the missing public statement-scope seam. Added two gap-driven tasks: atomic provider-neutral scope registration and the corrective 74-operation Release contract gate. Remaining open UC workflows now consume CompletePublicContract74 while retaining the closed PublishedTallyFixture dependency; UC005, UC007, and UC009 explicitly require public scope creation. Coverage is 299/299 with zero gaps, audit has zero blocking or warning findings and 33 pre-existing informational optional-reference findings, link suggestions and decision paths are clear, and all 71 task contexts fit within 2500 tokens (maximum 2469)."
+  ],
+  "created_at": "2026-07-23T04:09:49.7162569+00:00"
+}

@@ -313,54 +313,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY2867RJF6VQRRZ6PJWCZKE3",
+      "id": "01KY6M28ZNDFNM9J5ZWZZXGKH8",
       "kind": "acceptance_check",
       "text": [
-        "CompleteLedgerSchema explicitly registers all five V001 fragments and V002StatementAuthoritySchema in dependency-safe version/name order; a fresh store and a committed V001 fixture reach the same current schema and migration metadata."
+        "CompleteLedgerSchema explicitly registers all five V001 fragments and V002StatementAuthoritySchema in dependency-allowlisted version/name order; a fresh store and a committed V001 fixture reach the same current schema and migration metadata."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:50:13.5222021+00:00"
+      "created_at": "2026-07-23T04:34:44.3414977+00:00"
     },
     {
-      "id": "01KY2867RKJ8V2TA4STJ4MW9XS",
+      "id": "01KY6M28ZPP73KXKFABP6CDW4X",
       "kind": "acceptance_check",
       "text": [
         "Schema tests compare every table, column, index, foreign key, check, hierarchy rule, evidence privacy allowlist, statement-authority reference, and user_version; missing/duplicate fragments or injected SQL failure leave no partial schema."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:50:13.5222021+00:00"
+      "created_at": "2026-07-23T04:34:44.3414977+00:00"
     },
     {
-      "id": "01KY2867RK68WA53VST0762030",
+      "id": "01KY6M28ZP2WA9HXPR3BH7MQXN",
       "kind": "acceptance_check",
       "text": [
         "Published tally initializes a private current generation, executes a typed idempotent probe through TallyProcess, emits one stdout envelope, and leaves no child process or network listener."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:50:13.5222021+00:00"
+      "created_at": "2026-07-23T04:34:44.3414977+00:00"
     },
     {
-      "id": "01KY2867RKHM0PW8YN8R0CPKV0",
+      "id": "01KY6M28ZP8QNP3ZVBV2PTCS3D",
       "kind": "acceptance_check",
       "text": [
         "Identical request/logical replay returns the original effect; pre-commit crash leaves zero domain/idempotency rows; changed replay conflicts."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T11:50:13.5222021+00:00"
+      "created_at": "2026-07-23T04:34:44.3414977+00:00"
     },
     {
-      "id": "01KY2867RK4JVFDR53Z0B3W1W3",
+      "id": "01KY6M28ZPRT2ZAXMYTE202N3K",
       "kind": "acceptance_check",
       "text": [
         "Money/date round-trip is exact, hierarchy is acyclic, integrity is ok, foreign-key violations are zero, artifact modes are 0700/0600, and provider/raw-payload canaries never appear."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-21T11:50:13.5222021+00:00"
+      "created_at": "2026-07-23T04:34:44.3414977+00:00"
     },
     {
       "id": "01KY2867RK3EFS4PVWWA0DRT2A",

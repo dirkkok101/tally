@@ -6,7 +6,7 @@
     "Parse PDF, CSV, or Excel statements or orchestrate bulk imports in the Ledger module."
   ],
   "rationale": [
-    "INGEST owns heterogeneous file parsing, preview, approval, manifests, batch orchestration, and exception presentation. LEDGER owns canonical evidence registration, reconciliation state and decisions, statement-only transaction outcomes, and duplicate-safe public operations used by INGEST."
+    "INGEST owns heterogeneous file parsing, preview, approval, manifests, batch orchestration, and exception presentation. LEDGER owns canonical evidence registration, Reconciliation State and decisions, Statement-only Transaction outcomes, and duplicate-safe public operations used by INGEST."
   ],
   "created_at": "2026-07-17T13:41:36.2260152+00:00"
 }

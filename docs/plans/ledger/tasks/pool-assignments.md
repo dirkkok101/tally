@@ -26,7 +26,7 @@ Assign and correct transaction pools while preserving exact history and fail-clo
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts | `data_model` | `touches` | `true` |
 | DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment | `data_model` | `touches` | `true` |
-| FR-LEDGER-POOL-ASSIGNMENT: Assign and correct transaction Spend Pools | `requirement` | `implements` | `true` |
+| FR-LEDGER-POOL-ASSIGNMENT: Assign and correct transaction Spend Pool | `requirement` | `implements` | `true` |
 | TC-LEDGER-POOL-ASSIGNMENT-ACTUALS-CONTRACT: Verify pool assignment and exact grouped actuals | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -116,7 +116,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Assignment consumes TransactionStore and the initialized unassigned projection.
 - `governed-by` -> DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `implements` -> FR-LEDGER-POOL-ASSIGNMENT: Assign and correct transaction Spend Pools
+- `implements` -> FR-LEDGER-POOL-ASSIGNMENT: Assign and correct transaction Spend Pool
 - `touches` -> DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts
 - `touches` -> DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment
 - `verifies` -> TC-LEDGER-POOL-ASSIGNMENT-ACTUALS-CONTRACT: Verify pool assignment and exact grouped actuals

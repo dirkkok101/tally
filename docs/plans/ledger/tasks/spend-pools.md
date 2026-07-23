@@ -16,7 +16,7 @@ Deliver the first-class provider-neutral pool catalogue independently from accou
 
 ## Objective
 
-Create, inspect, list, rename, archive, and reactivate Spend Pools with stable identity and historical RESTRICT behavior.
+Create, inspect, list, rename, archive, and reactivate Spend Pool with stable identity and historical RESTRICT behavior.
 
 ## References
 

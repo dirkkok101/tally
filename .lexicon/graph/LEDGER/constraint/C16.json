@@ -4,7 +4,7 @@
   "ref_code": "C16",
   "title": "Attributable transaction void and supersession",
   "description": [
-    "Erroneous Canonical Transaction facts are never edited or silently deleted. An explicit reasoned void or supersession preserves the original, creates a separate replacement when needed, retires incompatible active relationships atomically, and never silently moves evidence, reconciliation decisions, or attribution to the replacement. Default actuals count only the valid outcome; history exposes the full chain."
+    "Erroneous Canonical Transaction facts are never edited or silently deleted. An explicit reasoned void or supersession preserves the original, creates a separate replacement when needed, retires incompatible active relationships atomically, and never silently moves evidence, Reconciliation Decision, or attribution to the replacement. Default actuals count only the valid outcome; history exposes the full chain."
   ],
   "type": "business",
   "created_at": "2026-07-17T17:43:47.6151383+00:00"

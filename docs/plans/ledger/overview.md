@@ -9,18 +9,18 @@
 
 | Ref | Title | Status | Coverage | Sub-Plans | Tasks |
 |---|---|---|---|---:|---:|
-| Provider-neutral Financial Ledger v1 implementation | Provider-neutral Financial Ledger v1 implementation | `active` | `warn` | 7 | 69 |
+| Provider-neutral Financial Ledger v1 implementation | Provider-neutral Financial Ledger v1 implementation | `active` | `warn` | 7 | 72 |
 
 ## PLAN-LEDGER-V1: Provider-neutral Financial Ledger v1 implementation
 
 - **Ref:** `PLAN-LEDGER-V1`
 - **Status:** `active`
 - **Created:** `2026-07-18T06:56:30.9196068+00:00`
-- **Updated:** `2026-07-18T06:56:30.9196068+00:00`
+- **Updated:** `2026-07-23T05:43:57.7896120+00:00`
 
 ### Description
 
-Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior tasks exist as completed foundation slices; the remaining business behavior is new, and the completed V001 evidence schema requires an additive V002 statement-authority upgrade. Global constraints: C1 verbatim: The first Ledger release is one self-contained executable with one embedded local datastore, zero required daemons or network services, no frontend, and no general plugin runtime. An optional service process requires new evidence and a later ADR. C5 verbatim: Reuse the intent of ADR-CORE-0010 structured command results, ADR-CORE-0021 explicit DI, ADR-CORE-0024 vertical slices, and related pattern discipline where applicable. Do not inherit FastEndpoints, Aspire, PostgreSQL, RLS, multi-tenancy, or browser contracts without Tally-specific evidence. C6 verbatim: Ledger behavior and contracts cannot depend on web, AgentMail, WhatsApp, Hermes, scheduled delivery, recipients, or any specific AI host. An external orchestrator integrates only through stable provider-neutral public contracts; CHANNELS is not a Ledger runtime dependency. C8 verbatim: Every public Ledger mutation requires a caller-visible stable idempotency identity, including evidence registration and linking, reconciliation decisions and corrections, attribution changes, account/category/pool maintenance, transactions, relationships, backup, restore, and storage evolution. Identical reuse returns the original result with zero duplicate effects; conflicting operation, version, or logical input fails and preserves the original. Validation failures do not consume the identity. C10 verbatim: Canonical facts, evidence metadata and links, reconciliation decisions and exceptions, transaction lifecycle, payment-instrument/cardholder/pool attribution, category allocation, and transfer/refund history are retained attributably. Referenced identities may archive but cannot be removed or rewritten in a way that changes prior meaning. C11 verbatim: New Ledger and backup artifacts default to access by the invoking OS identity only. Logs, diagnostics, process arguments, and ordinary results must not leak credentials, encryption keys, unmasked bank or instrument identifiers, raw statement rows, mailbox or MIME payloads, messaging content, or full financial payloads outside explicit data-return/export commands. C13 verbatim: Encryption at rest, if required beyond host storage encryption, must use a maintained storage/cryptography provider and platform-protected key handling. Tally must not implement encryption algorithms or bespoke key derivation; inability to meet this bound triggers the recorded kill criterion. C18 verbatim: Evidence kinds are generic, including agent capture, statement row, receipt, external document, and owner assertion. Ledger stores only stable evidence identity, privacy-conscious metadata, content or logical fingerprints where needed, opaque external references, and link/decision history. It never stores or interprets mailbox, MIME, messaging, provider cursor, recipient, credential, or delivery payloads. Target .NET 10 Native AOT on linux-x64, nullable enabled, primary constructors, explicit DI, CancellationToken through async boundaries, raw Microsoft.Data.Sqlite, xUnit with real temporary stores, and source-generated JSON. No Controllers, Minimal APIs, EF Core, Angular, HTTP endpoints, hosted services, reflection scanning, generic repository, mediator, event bus, custom clock, custom cryptography, or general plugin runtime. OQ-LEDGER-15 and OQ-LEDGER-16 are resolved owner-policy gates. OQ-LEDGER-13 remains a fail-closed compile gate only for TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION; the provider-neutral projection and explicit owner-reviewed match, statement-only, ambiguity, exception, and correction paths proceed independently, while automatic match or correction remains unsupported until evidence resolves the gate. An invalidating result returns to lex:design. Completed foundation tasks remain historical proof and are not rewritten; V002 extends rather than edits V001. Removal impact: no released behavior is removed. The public operation inventory remains 73 because ledger.category.reparent is added; manual-review-first sequencing adds no public operation.
+Global constraints: C1 verbatim: The first Ledger release is one self-contained executable with one embedded local datastore, zero required daemons or network services, no frontend, and no general plugin runtime. An optional service process requires new evidence and a later ADR. C5 verbatim: Reuse the intent of ADR-CORE-0010 structured command results, ADR-CORE-0021 explicit DI, ADR-CORE-0024 vertical slices, and related pattern discipline where applicable. Do not inherit FastEndpoints, Aspire, PostgreSQL, RLS, multi-tenancy, or browser contracts without Tally-specific evidence. C6 verbatim: Ledger behavior and contracts cannot depend on web, AgentMail, WhatsApp, Hermes, scheduled delivery, recipients, or any specific AI host. An External Orchestrator integrates only through stable provider-neutral public contracts; CHANNELS is not a Ledger runtime dependency. C8 verbatim: Every public Ledger mutation requires a caller-visible stable Idempotency Identity, including evidence registration and linking, Reconciliation Decision and corrections, attribution changes, account/category/pool maintenance, transactions, relationships, backup, restore, and storage evolution. Identical reuse returns the original result with zero duplicate effects; conflicting operation, version, or logical input fails and preserves the original. Validation failures do not consume the identity. C10 verbatim: Canonical facts, evidence metadata and links, Reconciliation Decision and exceptions, transaction lifecycle, Payment Instrument/cardholder/pool attribution, category allocation, and transfer/refund history are retained attributably. Referenced identities may archive but cannot be removed or rewritten in a way that changes prior meaning. C11 verbatim: New Ledger and backup artifacts default to access by the invoking OS identity only. Logs, diagnostics, process arguments, and ordinary results must not leak credentials, encryption keys, unmasked bank or instrument identifiers, raw statement rows, mailbox or MIME payloads, messaging content, or full financial payloads outside explicit data-return/export commands. C13 verbatim: Encryption at rest, if required beyond host storage encryption, must use a maintained storage/cryptography provider and platform-protected key handling. Tally must not implement encryption algorithms or bespoke key derivation; inability to meet this bound triggers the recorded kill criterion. C18 verbatim: Evidence Kind are generic, including agent capture, statement row, receipt, external document, and owner assertion. Ledger stores only stable evidence identity, privacy-conscious metadata, content or logical fingerprints where needed, Opaque External Reference, and link/decision history. It never stores or interprets mailbox, MIME, messaging, provider cursor, recipient, credential, or delivery payloads. Target .NET 10 Native AOT on linux-x64, nullable enabled, primary constructors, explicit DI, CancellationToken through async boundaries, raw Microsoft.Data.Sqlite, xUnit with real temporary stores, and source-generated JSON. No Controllers, Minimal APIs, EF Core, Angular, HTTP endpoints, hosted services, reflection scanning, generic repository, mediator, event bus, custom clock, custom cryptography, or general plugin runtime. OQ-LEDGER-15 and OQ-LEDGER-16 are resolved. OQ-LEDGER-13 gates only TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION; manual-review paths remain active. Closed tasks remain historical proof; no released behavior is removed. The public operation inventory expands from the historically proven 73 operations to 74 by adding ledger.reconciliation.scope.register; the corrective gate preserves the closed 73-operation evidence and proves the successor contract before remaining black-box workflows resume.
 
 ### Sub-Plans
 
@@ -29,10 +29,10 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | [SP-LEDGER-00-EVIDENCE-GATES](sub-plans/00-evidence-gates.md) | Pre-implementation evidence gates | 0 | 5 |
 | [SP-LEDGER-01-CORE-RUNTIME](sub-plans/01-core-runtime.md) | Core runtime and durable schema | 1 | 10 |
 | [SP-LEDGER-02-CATALOGUE-TRANSACTIONS](sub-plans/02-catalogue-transactions.md) | Catalogues, transactions, evidence, and attribution | 2 | 10 |
-| [SP-LEDGER-03-RECONCILIATION](sub-plans/03-reconciliation.md) | Match-first reconciliation and coverage | 3 | 8 |
+| [SP-LEDGER-03-RECONCILIATION](sub-plans/03-reconciliation.md) | Match-first reconciliation and coverage | 3 | 10 |
 | [SP-LEDGER-03-RELATIONSHIPS-ACTUALS](sub-plans/03-relationships-actuals.md) | Relationships and dimensional actuals | 4 | 6 |
 | [SP-LEDGER-04-RECOVERY-SKILLS](sub-plans/04-recovery-skills.md) | Recovery and integration guidance | 5 | 5 |
-| [SP-LEDGER-05-VERIFICATION](sub-plans/05-verification.md) | Composition and end-to-end verification | 6 | 25 |
+| [SP-LEDGER-05-VERIFICATION](sub-plans/05-verification.md) | Composition and end-to-end verification | 6 | 26 |
 
 ### Tasks
 
@@ -63,6 +63,8 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | [TASK-LEDGER-PAYMENT-ATTRIBUTION](tasks/payment-attribution.md) | Implement transaction payment attribution | `ready` | 1 | SP-LEDGER-02-CATALOGUE-TRANSACTIONS: Catalogues, transactions, evidence, and attribution |
 | [TASK-LEDGER-POOL-ASSIGNMENTS](tasks/pool-assignments.md) | Implement transaction Spend Pool Assignment | `ready` | 1 | SP-LEDGER-02-CATALOGUE-TRANSACTIONS: Catalogues, transactions, evidence, and attribution |
 | [TASK-LEDGER-EVIDENCE-LINKING](tasks/evidence-linking.md) | Implement supporting evidence linkage | `ready` | 1 | SP-LEDGER-02-CATALOGUE-TRANSACTIONS: Catalogues, transactions, evidence, and attribution |
+| [TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION](tasks/reconciliation-scope-registration.md) | Register approved statement scopes atomically | `ready` | 0 | SP-LEDGER-03-RECONCILIATION: Match-first reconciliation and coverage |
+| [TASK-LEDGER-RECONCILIATION-SCOPE-PUBLIC-COMPOSITION](tasks/reconciliation-scope-public-composition.md) | Compose statement-scope public operation | `ready` | 0 | SP-LEDGER-03-RECONCILIATION: Match-first reconciliation and coverage |
 | [TASK-LEDGER-RECONCILIATION-PROJECTION](tasks/reconciliation-projection.md) | Implement manual-review reconciliation candidate projection | `ready` | 0 | SP-LEDGER-03-RECONCILIATION: Match-first reconciliation and coverage |
 | [TASK-LEDGER-RECONCILIATION-APPLY](tasks/reconciliation-apply.md) | Implement owner-reviewed reconciliation dispositions | `ready` | 0 | SP-LEDGER-03-RECONCILIATION: Match-first reconciliation and coverage |
 | [TASK-LEDGER-RECONCILIATION-DECISIONS](tasks/reconciliation-decisions.md) | Implement Reconciliation Decision correction lifecycle | `ready` | 1 | SP-LEDGER-03-RECONCILIATION: Match-first reconciliation and coverage |
@@ -86,6 +88,7 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | [TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE](tasks/gate-int-relationship-actuals-bundle.md) | Compose the relationship and actuals operation bundle | `ready` | 1 | SP-LEDGER-05-VERIFICATION: Composition and end-to-end verification |
 | [TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE](tasks/gate-int-recovery-skill-bundle.md) | Compose the recovery and integration-guidance bundle | `ready` | 1 | SP-LEDGER-05-VERIFICATION: Composition and end-to-end verification |
 | [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](tasks/gate-int-reconciliation-bundle.md) | Compose the reconciliation operation bundle | `ready` | 0 | SP-LEDGER-05-VERIFICATION: Composition and end-to-end verification |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | Prove statement-scope public contract | `ready` | 0 | SP-LEDGER-05-VERIFICATION: Composition and end-to-end verification |
 | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | Wire and prove the complete public CLI contract | `ready` | 0 | SP-LEDGER-05-VERIFICATION: Composition and end-to-end verification |
 | [TASK-LEDGER-GATE-SECURITY](tasks/gate-security.md) | Validate local financial-data security | `ready` | 0 | SP-LEDGER-05-VERIFICATION: Composition and end-to-end verification |
 | [TASK-LEDGER-VERIFY-UC-001](tasks/verify-uc-001.md) | AccountWorkflow | `ready` | 1 | SP-LEDGER-05-VERIFICATION: Composition and end-to-end verification |
@@ -139,6 +142,14 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | [TASK-LEDGER-DURABLE-STATE-VERIFIER](tasks/durable-state-verifier.md) | [TASK-LEDGER-ACTUALS-SNAPSHOT](tasks/actuals-snapshot.md) | `compile` | Complete-state verification uses the final actuals projection while excluding snapshots. |
 | [TASK-LEDGER-DURABLE-STATE-VERIFIER](tasks/durable-state-verifier.md) | [TASK-LEDGER-CORE-STORAGE](tasks/core-storage.md) | `compile` | Consumes LedgerDb. |
 | [TASK-LEDGER-DURABLE-STATE-VERIFIER](tasks/durable-state-verifier.md) | [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | `compile` | Durable state verification consumes ActualsCalculator.Calculate. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | [TASK-LEDGER-RECONCILIATION-SCOPE-PUBLIC-COMPOSITION](tasks/reconciliation-scope-public-composition.md) | `compile` | The read-only gate verifies the committed CompletePublicContract74 producer output. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | The gate invokes the existing PublishedTallyFixture supplied by the prior public-contract gate. |
+| [TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION](tasks/reconciliation-scope-registration.md) | [TASK-LEDGER-CORE-IDEMPOTENCY](tasks/core-idempotency.md) | `compile` | Scope registration uses LedgerMutationExecutor and logical-effect replay. |
+| [TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION](tasks/reconciliation-scope-registration.md) | [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](tasks/core-schema-evidence-reconciliation.md) | `compile` | The operation writes existing statement_scope and statement_scope_evidence tables. |
+| [TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION](tasks/reconciliation-scope-registration.md) | [TASK-LEDGER-ACCOUNTS](tasks/accounts.md) | `compile` | The operation validates active owned-account identity. |
+| [TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION](tasks/reconciliation-scope-registration.md) | [TASK-LEDGER-EVIDENCE-REGISTRY](tasks/evidence-registry.md) | `compile` | The operation validates existing statement_row evidence and observations. |
+| [TASK-LEDGER-RECONCILIATION-SCOPE-PUBLIC-COMPOSITION](tasks/reconciliation-scope-public-composition.md) | [TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION](tasks/reconciliation-scope-registration.md) | `compile` | Public composition consumes the completed scope module and contracts. |
+| [TASK-LEDGER-RECONCILIATION-SCOPE-PUBLIC-COMPOSITION](tasks/reconciliation-scope-public-composition.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | The 74-operation composition extends the previously proven 73-operation root registry. |
 | [TASK-LEDGER-ACCOUNTS](tasks/accounts.md) | [TASK-LEDGER-GATE-INT-CORE](tasks/gate-int-core.md) | `compile` | Account slice consumes the proven core seam. |
 | [TASK-LEDGER-ACCOUNTS](tasks/accounts.md) | [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](tasks/gate-evidence-cash-withdrawals.md) | `compile` | Account operations must know whether tracked cash is an in-scope account class. |
 | [TASK-LEDGER-ACCOUNTS](tasks/accounts.md) | [TASK-LEDGER-CORE-IDEMPOTENCY](tasks/core-idempotency.md) | `compile` | Account mutations consume LedgerMutationExecutor.ExecuteAsync. |
@@ -275,22 +286,33 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | [TASK-LEDGER-VERIFY-UC-003](tasks/verify-uc-003.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
 | [TASK-LEDGER-ACTUALS-SNAPSHOT](tasks/actuals-snapshot.md) | [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | `compile` | Snapshot handler materializes the exact projection and totals. |
 | [TASK-LEDGER-VERIFY-UC-004](tasks/verify-uc-004.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
-| [TASK-LEDGER-VERIFY-UC-005](tasks/verify-uc-005.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
+| [TASK-LEDGER-VERIFY-UC-005](tasks/verify-uc-005.md) | [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | `compile` | The black-box actuals workflow requires the released 74-operation contract including public statement-scope registration. |
+| [TASK-LEDGER-VERIFY-UC-005](tasks/verify-uc-005.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
 | [TASK-LEDGER-VERIFY-UC-006](tasks/verify-uc-006.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
-| [TASK-LEDGER-VERIFY-UC-007](tasks/verify-uc-007.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
+| [TASK-LEDGER-VERIFY-UC-007](tasks/verify-uc-007.md) | [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-VERIFY-UC-007](tasks/verify-uc-007.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
 | [TASK-LEDGER-VERIFY-UC-008](tasks/verify-uc-008.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
-| [TASK-LEDGER-VERIFY-UC-009](tasks/verify-uc-009.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
-| [TASK-LEDGER-VERIFY-UC-010](tasks/verify-uc-010.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
-| [TASK-LEDGER-VERIFY-UC-011](tasks/verify-uc-011.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
-| [TASK-LEDGER-VERIFY-UC-012](tasks/verify-uc-012.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
-| [TASK-LEDGER-VERIFY-UC-013](tasks/verify-uc-013.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
-| [TASK-LEDGER-VERIFY-UC-014](tasks/verify-uc-014.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
-| [TASK-LEDGER-VERIFY-UC-015](tasks/verify-uc-015.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
-| [TASK-LEDGER-VERIFY-UC-016](tasks/verify-uc-016.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
-| [TASK-LEDGER-VERIFY-UC-017](tasks/verify-uc-017.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
-| [TASK-LEDGER-VERIFY-UC-018](tasks/verify-uc-018.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
+| [TASK-LEDGER-VERIFY-UC-009](tasks/verify-uc-009.md) | [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-VERIFY-UC-009](tasks/verify-uc-009.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
+| [TASK-LEDGER-VERIFY-UC-010](tasks/verify-uc-010.md) | [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-VERIFY-UC-010](tasks/verify-uc-010.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
+| [TASK-LEDGER-VERIFY-UC-011](tasks/verify-uc-011.md) | [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-VERIFY-UC-011](tasks/verify-uc-011.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
+| [TASK-LEDGER-VERIFY-UC-012](tasks/verify-uc-012.md) | [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-VERIFY-UC-012](tasks/verify-uc-012.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
+| [TASK-LEDGER-VERIFY-UC-013](tasks/verify-uc-013.md) | [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-VERIFY-UC-013](tasks/verify-uc-013.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
+| [TASK-LEDGER-VERIFY-UC-014](tasks/verify-uc-014.md) | [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-VERIFY-UC-014](tasks/verify-uc-014.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
+| [TASK-LEDGER-VERIFY-UC-015](tasks/verify-uc-015.md) | [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-VERIFY-UC-015](tasks/verify-uc-015.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
+| [TASK-LEDGER-VERIFY-UC-016](tasks/verify-uc-016.md) | [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-VERIFY-UC-016](tasks/verify-uc-016.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
+| [TASK-LEDGER-VERIFY-UC-017](tasks/verify-uc-017.md) | [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-VERIFY-UC-017](tasks/verify-uc-017.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
+| [TASK-LEDGER-VERIFY-UC-018](tasks/verify-uc-018.md) | [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-VERIFY-UC-018](tasks/verify-uc-018.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
 | [TASK-LEDGER-GATE-MODULE](tasks/gate-module.md) | [TASK-LEDGER-GATE-SECURITY](tasks/gate-security.md) | `compile` | Module completion requires the consolidated security gate. |
-| [TASK-LEDGER-GATE-MODULE](tasks/gate-module.md) | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Consumer requires CompletePublicContract from its producing task; direct compile edge enforces the declared interface contract. |
 | [TASK-LEDGER-GATE-MODULE](tasks/gate-module.md) | [TASK-LEDGER-VERIFY-UC-001](tasks/verify-uc-001.md) | `compile` | Requires UC proof. |
 | [TASK-LEDGER-GATE-MODULE](tasks/gate-module.md) | [TASK-LEDGER-VERIFY-UC-002](tasks/verify-uc-002.md) | `compile` | Requires UC proof. |
 | [TASK-LEDGER-GATE-MODULE](tasks/gate-module.md) | [TASK-LEDGER-VERIFY-UC-003](tasks/verify-uc-003.md) | `compile` | Requires UC proof. |
@@ -309,12 +331,13 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | [TASK-LEDGER-GATE-MODULE](tasks/gate-module.md) | [TASK-LEDGER-VERIFY-UC-016](tasks/verify-uc-016.md) | `compile` | Requires UC proof. |
 | [TASK-LEDGER-GATE-MODULE](tasks/gate-module.md) | [TASK-LEDGER-VERIFY-UC-017](tasks/verify-uc-017.md) | `compile` | Requires UC proof. |
 | [TASK-LEDGER-GATE-MODULE](tasks/gate-module.md) | [TASK-LEDGER-VERIFY-UC-018](tasks/verify-uc-018.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-GATE-MODULE](tasks/gate-module.md) | [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | `compile` | Module completion consumes CompletePublicContract74 from the corrective scope-publication gate. |
 
 ### Coverage
 
 - **Status:** `warn`
-- **Required refs:** 282
-- **Covered refs:** 282
+- **Required refs:** 288
+- **Covered refs:** 288
 - **Gaps:** 0
 
 #### Covered References
@@ -336,6 +359,8 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment | `design_decision` | `governed-by` | [TASK-LEDGER-GATE-EVIDENCE-CATEGORIES](tasks/gate-evidence-categories.md) | `true` |
 | DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry | `design_decision` | `governed-by` | [TASK-LEDGER-CORE-PROCESS-CONTRACT](tasks/core-process-contract.md) | `true` |
 | DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry | `design_decision` | `governed-by` | [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](tasks/gate-int-reconciliation-bundle.md) | `true` |
+| DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry | `design_decision` | `governed-by` | [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | `true` |
+| DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-SCOPE-PUBLIC-COMPOSITION](tasks/reconciliation-scope-public-composition.md) | `true` |
 | DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions | `design_decision` | `governed-by` | [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | `true` |
 | DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions | `design_decision` | `governed-by` | [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](tasks/gate-evidence-cash-withdrawals.md) | `true` |
 | DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions | `design_decision` | `governed-by` | [TASK-LEDGER-GATE-EVIDENCE-POOL-CARDINALITY](tasks/gate-evidence-pool-cardinality.md) | `true` |
@@ -359,12 +384,16 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates | `design_decision` | `governed-by` | [TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY](tasks/gate-evidence-reconciliation-policy.md) | `true` |
 | DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-PROJECTION](tasks/reconciliation-projection.md) | `true` |
 | DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates | `design_decision` | `governed-by` | [TASK-LEDGER-TRANSACTIONS-RECORD-GET](tasks/transactions-record-get.md) | `true` |
+| DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP: Single full-amount refund relationships | `design_decision` | `governed-by` | [TASK-LEDGER-REFUNDS](tasks/refunds.md) | `true` |
+| DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP: Single full-amount refund relationships | `design_decision` | `governed-by` | [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](tasks/relationship-corrections.md) | `true` |
+| DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP: Single full-amount refund relationships | `design_decision` | `governed-by` | [TASK-LEDGER-VERIFY-UC-010](tasks/verify-uc-010.md) | `true` |
 | DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | [TASK-LEDGER-BACKUP-VERIFY](tasks/backup-verify.md) | `true` |
 | DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | [TASK-LEDGER-CORE-IDEMPOTENCY](tasks/core-idempotency.md) | `true` |
 | DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | [TASK-LEDGER-EVIDENCE-REGISTRY](tasks/evidence-registry.md) | `true` |
 | DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-APPLY](tasks/reconciliation-apply.md) | `true` |
 | DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION](tasks/reconciliation-automatic-activation.md) | `true` |
 | DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-DECISIONS](tasks/reconciliation-decisions.md) | `true` |
+| DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION](tasks/reconciliation-scope-registration.md) | `true` |
 | DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | [TASK-LEDGER-ACCOUNTS](tasks/accounts.md) | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | `true` |
@@ -401,11 +430,14 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY](tasks/gate-evidence-reconciliation-policy.md) | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](tasks/gate-int-reconciliation-bundle.md) | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES](tasks/gate-int-statement-correction-prerequisites.md) | `true` |
+| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-APPLY](tasks/reconciliation-apply.md) | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION](tasks/reconciliation-automatic-activation.md) | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-COVERAGE](tasks/reconciliation-coverage.md) | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-DECISIONS](tasks/reconciliation-decisions.md) | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-PROJECTION](tasks/reconciliation-projection.md) | `true` |
+| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-SCOPE-PUBLIC-COMPOSITION](tasks/reconciliation-scope-public-composition.md) | `true` |
+| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION](tasks/reconciliation-scope-registration.md) | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](tasks/reconciliation-statement-correction-effect-writer.md) | `true` |
 | DD-LEDGER-SKILL-COMPATIBILITY: Provider-neutral self-describing contract with optional guidance | `design_decision` | `governed-by` | [TASK-LEDGER-AGENT-SKILLS](tasks/agent-skills.md) | `true` |
@@ -420,8 +452,8 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts | `data_model` | `touches` | [TASK-LEDGER-SPEND-POOLS](tasks/spend-pools.md) | `true` |
 | DM-LEDGER-CATALOGUE-LIFECYCLE: CatalogueLifecycleEvents | `data_model` | `touches` | [TASK-LEDGER-CORE-SCHEMA-CATALOGUE](tasks/core-schema-catalogue.md) | `true` |
 | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts | `data_model` | `touches` | [TASK-LEDGER-EVIDENCE-REGISTRY](tasks/evidence-registry.md) | `true` |
-| DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts | `data_model` | `touches` | [TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION](tasks/reconciliation-automatic-activation.md) | `true` |
 | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts | `data_model` | `touches` | [TASK-LEDGER-RECONCILIATION-PROJECTION](tasks/reconciliation-projection.md) | `true` |
+| DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts | `data_model` | `touches` | [TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION](tasks/reconciliation-scope-registration.md) | `true` |
 | DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink | `data_model` | `touches` | [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](tasks/core-schema-evidence-reconciliation.md) | `true` |
 | DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink | `data_model` | `touches` | [TASK-LEDGER-EVIDENCE-LINKING](tasks/evidence-linking.md) | `true` |
 | DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink | `data_model` | `touches` | [TASK-LEDGER-EVIDENCE-REGISTRY](tasks/evidence-registry.md) | `true` |
@@ -430,21 +462,20 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | DM-LEDGER-IDEMPOTENCY-RECORD: IdempotencyRecord | `data_model` | `touches` | [TASK-LEDGER-CORE-STORAGE](tasks/core-storage.md) | `true` |
 | DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope | `data_model` | `touches` | [TASK-LEDGER-CORE-PROCESS-CONTRACT](tasks/core-process-contract.md) | `true` |
 | DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope | `data_model` | `touches` | [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `true` |
+| DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope | `data_model` | `touches` | [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md) | `true` |
+| DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope | `data_model` | `touches` | [TASK-LEDGER-RECONCILIATION-SCOPE-PUBLIC-COMPOSITION](tasks/reconciliation-scope-public-composition.md) | `true` |
 | DM-LEDGER-PAYMENT-ATTRIBUTION: PaymentInstrumentCardholderAndAttribution | `data_model` | `touches` | [TASK-LEDGER-PAYMENT-ATTRIBUTION](tasks/payment-attribution.md) | `true` |
 | DM-LEDGER-PAYMENT-ATTRIBUTION: PaymentInstrumentCardholderAndAttribution | `data_model` | `touches` | [TASK-LEDGER-PAYMENT-IDENTITIES](tasks/payment-identities.md) | `true` |
 | DM-LEDGER-QUERY-SNAPSHOT: QuerySnapshot | `data_model` | `touches` | [TASK-LEDGER-ACTUALS-SNAPSHOT](tasks/actuals-snapshot.md) | `true` |
 | DM-LEDGER-QUERY-SNAPSHOT: QuerySnapshot | `data_model` | `touches` | [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](tasks/core-schema-relationships-actuals.md) | `true` |
 | DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](tasks/core-schema-evidence-reconciliation.md) | `true` |
 | DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](tasks/core-schema-reconciliation-authority.md) | `true` |
-| DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | [TASK-LEDGER-RECONCILIATION-APPLY](tasks/reconciliation-apply.md) | `true` |
 | DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | [TASK-LEDGER-RECONCILIATION-COVERAGE](tasks/reconciliation-coverage.md) | `true` |
 | DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | [TASK-LEDGER-RECONCILIATION-DECISIONS](tasks/reconciliation-decisions.md) | `true` |
-| DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | [TASK-LEDGER-RECONCILIATION-PROJECTION](tasks/reconciliation-projection.md) | `true` |
 | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts | `data_model` | `touches` | [TASK-LEDGER-BACKUP-VERIFY](tasks/backup-verify.md) | `true` |
 | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts | `data_model` | `touches` | [TASK-LEDGER-RESTORE-ACTIVATE](tasks/restore-activate.md) | `true` |
 | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts | `data_model` | `touches` | [TASK-LEDGER-STORAGE-EVOLUTION](tasks/storage-evolution.md) | `true` |
 | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | [TASK-LEDGER-ACTUALS-SNAPSHOT](tasks/actuals-snapshot.md) | `true` |
-| DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | [TASK-LEDGER-REFUNDS](tasks/refunds.md) | `true` |
 | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](tasks/relationship-corrections.md) | `true` |
 | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | [TASK-LEDGER-TRANSFERS](tasks/transfers.md) | `true` |
 | DM-LEDGER-SPEND-CATEGORY: SpendCategory | `data_model` | `touches` | [TASK-LEDGER-CORE-SCHEMA-CATALOGUE](tasks/core-schema-catalogue.md) | `true` |
@@ -460,7 +491,7 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | DM-LEDGER-TRANSACTION-FACT: TransactionFact | `data_model` | `touches` | [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](tasks/core-schema-transactions.md) | `true` |
 | DM-LEDGER-TRANSACTION-HISTORY: TransactionLifecycleAndAllocation | `data_model` | `touches` | [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](tasks/core-schema-transactions.md) | `true` |
 | FA-LEDGER-RECONCILIATION: Evidence Reconciliation and Coverage | `feature_area` | `touches` | [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](tasks/gate-int-reconciliation-bundle.md) | `true` |
-| FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain Owned Bank Accounts | `requirement` | `implements` | [TASK-LEDGER-ACCOUNTS](tasks/accounts.md) | `true` |
+| FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain Owned Bank Account | `requirement` | `implements` | [TASK-LEDGER-ACCOUNTS](tasks/accounts.md) | `true` |
 | FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals | `requirement` | `implements` | [TASK-LEDGER-ACTUALS-PROJECTION](tasks/actuals-projection.md) | `true` |
 | FR-LEDGER-BACKUP-VERIFICATION: Create and verify Ledger backups | `requirement` | `implements` | [TASK-LEDGER-BACKUP-VERIFY](tasks/backup-verify.md) | `true` |
 | FR-LEDGER-CATEGORY-ASSIGNMENT: Assign and correct transaction categories | `requirement` | `implements` | [TASK-LEDGER-CATEGORY-ALLOCATIONS](tasks/category-allocations.md) | `true` |
@@ -469,9 +500,9 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | FR-LEDGER-EVIDENCE-REGISTRATION: Register and link generic evidence | `requirement` | `implements` | [TASK-LEDGER-EVIDENCE-LINKING](tasks/evidence-linking.md) | `true` |
 | FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent | `requirement` | `implements` | [TASK-LEDGER-CORE-IDEMPOTENCY](tasks/core-idempotency.md) | `true` |
 | FR-LEDGER-PAYMENT-ATTRIBUTION: Maintain Payment Instrument and Cardholder Attribution | `requirement` | `implements` | [TASK-LEDGER-PAYMENT-ATTRIBUTION](tasks/payment-attribution.md) | `true` |
-| FR-LEDGER-POOL-ASSIGNMENT: Assign and correct transaction Spend Pools | `requirement` | `implements` | [TASK-LEDGER-POOL-ASSIGNMENTS](tasks/pool-assignments.md) | `true` |
+| FR-LEDGER-POOL-ASSIGNMENT: Assign and correct transaction Spend Pool | `requirement` | `implements` | [TASK-LEDGER-POOL-ASSIGNMENTS](tasks/pool-assignments.md) | `true` |
 | FR-LEDGER-RECONCILIATION-COVERAGE: Report statement coverage and exceptions | `requirement` | `implements` | [TASK-LEDGER-RECONCILIATION-COVERAGE](tasks/reconciliation-coverage.md) | `true` |
-| FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE: Resolve and correct Reconciliation Decisions | `requirement` | `implements` | [TASK-LEDGER-RECONCILIATION-DECISIONS](tasks/reconciliation-decisions.md) | `true` |
+| FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE: Resolve and correct Reconciliation Decision | `requirement` | `implements` | [TASK-LEDGER-RECONCILIATION-DECISIONS](tasks/reconciliation-decisions.md) | `true` |
 | FR-LEDGER-RECONCILIATION-PROJECTION: Project reconciliation candidates | `requirement` | `implements` | [TASK-LEDGER-RECONCILIATION-PROJECTION](tasks/reconciliation-projection.md) | `true` |
 | FR-LEDGER-REFUND-CONFIRMATION: Confirm refunds and reversals | `requirement` | `verifies` | [TASK-LEDGER-GATE-EVIDENCE-RELATIONSHIPS](tasks/gate-evidence-relationships.md) | `true` |
 | FR-LEDGER-RELATIONSHIP-CORRECTION: Revoke or replace financial relationships | `requirement` | `implements` | [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](tasks/relationship-corrections.md) | `true` |
@@ -483,7 +514,7 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | FR-LEDGER-STATEMENT-RECONCILIATION: Apply statement reconciliation outcomes | `requirement` | `implements` | [TASK-LEDGER-RECONCILIATION-APPLY](tasks/reconciliation-apply.md) | `true` |
 | FR-LEDGER-STRUCTURED-INVOCATION: Invoke Ledger operations non-interactively | `requirement` | `implements` | [TASK-LEDGER-CORE-PROCESS-CONTRACT](tasks/core-process-contract.md) | `true` |
 | FR-LEDGER-TRANSACTION-CORRECTION: Void or supersede erroneous transactions | `requirement` | `implements` | [TASK-LEDGER-TRANSACTION-CORRECTIONS](tasks/transaction-corrections.md) | `true` |
-| FR-LEDGER-TRANSACTION-RECORDING: Record Canonical Transactions | `requirement` | `implements` | [TASK-LEDGER-CORE-MONEY-DATES](tasks/core-money-dates.md) | `true` |
+| FR-LEDGER-TRANSACTION-RECORDING: Record Canonical Transaction | `requirement` | `implements` | [TASK-LEDGER-CORE-MONEY-DATES](tasks/core-money-dates.md) | `true` |
 | FR-LEDGER-TRANSFER-CONFIRMATION: Confirm owned-account transfers | `requirement` | `verifies` | [TASK-LEDGER-GATE-EVIDENCE-RELATIONSHIPS](tasks/gate-evidence-relationships.md) | `true` |
 | NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the agent contract stable | `nfr` | `satisfies` | [TASK-LEDGER-ACTUALS-SNAPSHOT](tasks/actuals-snapshot.md) | `true` |
 | NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the external-orchestrator contract stable | `nfr` | `satisfies` | [TASK-LEDGER-AGENT-SKILLS](tasks/agent-skills.md) | `true` |
@@ -495,7 +526,6 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable | `nfr` | `satisfies` | [TASK-LEDGER-GATE-SECURITY](tasks/gate-security.md) | `true` |
 | NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | [TASK-LEDGER-CATEGORIES](tasks/categories.md) | `true` |
 | NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | [TASK-LEDGER-CATEGORY-ALLOCATIONS](tasks/category-allocations.md) | `true` |
-| NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | [TASK-LEDGER-REFUNDS](tasks/refunds.md) | `true` |
 | NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | [TASK-LEDGER-TRANSFERS](tasks/transfers.md) | `true` |
 | NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic | `nfr` | `satisfies` | [TASK-LEDGER-CORE-MONEY-DATES](tasks/core-money-dates.md) | `true` |
 | NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic | `nfr` | `satisfies` | [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](tasks/gate-evidence-cash-withdrawals.md) | `true` |
@@ -506,8 +536,6 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE: Respond at personal-ledger scale | `nfr` | `satisfies` | [TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE](tasks/gate-int-relationship-actuals-bundle.md) | `true` |
 | NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed | `nfr` | `satisfies` | [TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY](tasks/gate-evidence-reconciliation-policy.md) | `true` |
 | NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed | `nfr` | `satisfies` | [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](tasks/gate-int-reconciliation-bundle.md) | `true` |
-| NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed | `nfr` | `satisfies` | [TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION](tasks/reconciliation-automatic-activation.md) | `true` |
-| NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed | `nfr` | `satisfies` | [TASK-LEDGER-RECONCILIATION-COVERAGE](tasks/reconciliation-coverage.md) | `true` |
 | NFR-LEDGER-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local executable | `nfr` | `satisfies` | [TASK-LEDGER-CORE-PROCESS-CONTRACT](tasks/core-process-contract.md) | `true` |
 | NFR-LEDGER-VERIFIED-RECOVERABILITY: Prove Ledger recoverability | `nfr` | `satisfies` | [TASK-LEDGER-DURABLE-STATE-VERIFIER](tasks/durable-state-verifier.md) | `true` |
 | NFR-LEDGER-VERIFIED-RECOVERABILITY: Prove Ledger recoverability | `nfr` | `satisfies` | [TASK-LEDGER-RESTORE-ACTIVATE](tasks/restore-activate.md) | `true` |
@@ -573,6 +601,7 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 | TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT: Verify match-first statement reconciliation | `test_case` | `verifies` | [TASK-LEDGER-RECONCILIATION-APPLY](tasks/reconciliation-apply.md) | `true` |
 | TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT: Verify match-first statement reconciliation | `test_case` | `verifies` | [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](tasks/reconciliation-statement-correction.md) | `true` |
 | TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT: Verify match-first statement reconciliation | `test_case` | `verifies` | [TASK-LEDGER-VERIFY-UC-014](tasks/verify-uc-014.md) | `true` |
+| TC-LEDGER-STATEMENT-SCOPE-REGISTRATION: Verify atomic statement-scope registration | `test_case` | `verifies` | [TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION](tasks/reconciliation-scope-registration.md) | `true` |
 | TC-LEDGER-STRUCTURED-INVOCATION-CONTRACT: Verify invoke ledger operations non-interactively contract | `test_case` | `verifies` | [TASK-LEDGER-CORE-PROCESS-CONTRACT](tasks/core-process-contract.md) | `true` |
 | TC-LEDGER-TRANSACTION-CORRECTION-CONTRACT: Verify void or supersede erroneous transactions contract | `test_case` | `verifies` | [TASK-LEDGER-TRANSACTION-CORRECTIONS](tasks/transaction-corrections.md) | `true` |
 | TC-LEDGER-TRANSACTION-CORRECTION-CONTRACT: Verify void or supersede erroneous transactions contract | `test_case` | `verifies` | [TASK-LEDGER-VERIFY-UC-009](tasks/verify-uc-009.md) | `true` |
@@ -663,6 +692,7 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 - [TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE](tasks/gate-int-recovery-skill-bundle.md): Task has no implements refs.
 - [TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE](tasks/gate-int-relationship-actuals-bundle.md): Task has no implements refs.
 - [TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES](tasks/gate-int-statement-correction-prerequisites.md): Task has no implements refs.
+- [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](tasks/gate-int-statement-scope-public-contract.md): Task has no implements refs.
 - [TASK-LEDGER-GATE-MODULE](tasks/gate-module.md): Task has no implements refs.
 - [TASK-LEDGER-GATE-SECURITY](tasks/gate-security.md): Task has no implements refs.
 - [TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION](tasks/reconciliation-automatic-activation.md): Task has no implements refs.
@@ -687,11 +717,6 @@ Greenfield-continuation re-plan from MD-LEDGER-MASTER v0.11: five of 63 prior ta
 - [TASK-LEDGER-VERIFY-UC-017](tasks/verify-uc-017.md): Task has no implements refs.
 - [TASK-LEDGER-VERIFY-UC-018](tasks/verify-uc-018.md): Task has no implements refs.
 
-#### Tasks Without Bead Refs
-
-- [TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION](tasks/reconciliation-automatic-activation.md): Task has no bead refs.
-
 #### Coverage Warnings
 
-- 42 loose task(s) have no implements refs.
-- 1 task(s) have no bead refs.
+- 43 loose task(s) have no implements refs.

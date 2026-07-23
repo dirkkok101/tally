@@ -7,7 +7,7 @@
     "Define correction semantics for canonical facts and every financial classification or reconciliation dimension."
   ],
   "decision": [
-    "Keep transaction facts insert-only. Record void and supersession, statement-authoritative replacement, catalogue lifecycle and category parent changes, category allocation, payment attribution, Spend Pool Assignment, evidence links, Reconciliation Decisions, statement coverage, transfers, and refunds as attributable append-only history. Derive current state from active history; never overwrite. A reconciliation correction may preserve state on a replacement only by appending explicit category/pool carry-forward, compatible payment carry-forward or unknown initialization, and invariant-preserving relationship replacement events that reference the governing decision.",
+    "Keep transaction facts insert-only. Record void and supersession, statement-authoritative replacement, catalogue lifecycle and category parent changes, category allocation, payment attribution, Spend Pool Assignment, evidence links, Reconciliation Decision, statement coverage, transfers, and refunds as attributable append-only history. Derive current state from active history; never overwrite. A reconciliation correction may preserve state on a replacement only by appending explicit category/pool carry-forward, compatible payment carry-forward or unknown initialization, and invariant-preserving relationship replacement events that reference the governing decision.",
     ""
   ],
   "rationale": [

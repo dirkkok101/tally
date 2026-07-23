@@ -4,12 +4,12 @@
   "ref_code": "NFR-LEDGER-ATTRIBUTABLE-HISTORY",
   "title": "Retain attributable correction history",
   "description": [
-    "Transaction corrections, category and pool corrections, payment attribution, evidence links, Reconciliation Decisions and exceptions, and financial relationships remain explainable without mutating or deleting prior facts."
+    "Transaction corrections, category and pool corrections, payment attribution, evidence links, Reconciliation Decision and exceptions, and financial relationships remain explainable without mutating or deleting prior facts."
   ],
   "category": "data_integrity",
   "target": "100% of lifecycle events retain stable subject and evidence references, event or decision type, deterministic policy or owner actor as applicable, reason or match basis, trusted timestamp, prior and resulting state, and replacement or superseded-decision reference where applicable.",
   "load_condition": "All correction, evidence-link, reconciliation, attribution, assignment, scope-exception, and financial-relationship lifecycle paths, including cascading effects of transaction void or supersession.",
-  "measurement": "Automated history reconstruction tests compare current evidence links, reconciliation state, assignments, relationships, and exact actuals with the complete retained event chain.",
+  "measurement": "Automated history reconstruction tests compare current evidence links, Reconciliation State, assignments, relationships, and exact actuals with the complete retained event chain.",
   "rationale": [
     "Attribution prevents silent rewriting and makes evidence, matches, and exact financial corrections auditable. Supports G2-G4 and G9-G12."
   ],

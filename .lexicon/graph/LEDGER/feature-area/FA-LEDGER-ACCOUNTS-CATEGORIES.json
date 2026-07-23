@@ -4,7 +4,7 @@
   "ref_code": "FA-LEDGER-ACCOUNTS-CATEGORIES",
   "name": "Accounts and Financial Dimensions",
   "description": [
-    "Owns account, spend-category, payment-instrument, cardholder, and spend-pool catalogues with stable local IDs, explicit lifecycle history, privacy-safe labels, and RESTRICT historical references."
+    "Owns account, Spend Category, Payment Instrument, cardholder, and Spend Pool catalogues with stable local IDs, explicit lifecycle history, privacy-safe labels, and RESTRICT historical references."
   ],
   "created_at": "2026-07-18T06:00:11.4315776+00:00",
   "links": [

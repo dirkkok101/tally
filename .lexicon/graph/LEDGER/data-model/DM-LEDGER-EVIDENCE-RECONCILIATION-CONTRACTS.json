@@ -7,7 +7,7 @@
     "Exact typed operation inputs, results, transitions, and stable errors for evidence, statement-authoritative match-first reconciliation, corrections, decisions, and coverage."
   ],
   "schema_def": [
-    "evidence.register/get/link-supporting retain provider-neutral privacy-safe identity and observations. reconciliation.candidates returns compatible plus guard candidates without mutation. reconciliation.apply accepts evidenceId/fingerprint, disposition match_existing|correct_existing_from_statement|create_statement_only|record_ambiguous|record_exception, candidates, typed authoritativeStatementFact for create/correct, policy/version or explicit owner authority, basis, reason, idempotency. Match links existing. Correction validates one event, creates statement replacement and supersession, appends decision/link, explicit category/pool carry-forward, compatible payment carry-forward or unknown initialization, and any invariant-preserving transfer/refund relationship replacement atomically. If an active relationship cannot remain valid, it returns review-required with no replacement. Statement-only creates one fact with unknown attribution and unassigned pool. Decision lifecycle and coverage retain history. Stable errors cover identity, stale policy/projection, candidate drift, authoritative fact conflict, dimension/relationship review, ambiguity, incomplete coverage, and replay. Automatic outcomes remain disabled until OQ-LEDGER-13; owner-approved correction remains available. No raw email, MIME, statement document, provider payload, or transport state."
+    "evidence.register/get/link-supporting retain provider-neutral privacy-safe identity and observations. reconciliation.scope.register input: accountId, periodStart, periodEnd, manifestOpaqueReference, complete non-empty evidenceIds; mutation idempotency key and actor remain in the common envelope. Result: generated scopeId, accountId, inclusive period, opaque manifest reference, status completed, deterministically ordered evidenceIds, createdBy, createdAt. The operation atomically validates active account, statement_row kind, complete observation, matching account, transaction date inside period, unique evidence membership, and account-period logical identity. Same canonical request under the same or another key returns the original result; changed manifest or membership conflicts. reconciliation.candidates returns compatible plus guard candidates without mutation. reconciliation.apply accepts evidenceId/fingerprint, disposition match_existing|correct_existing_from_statement|create_statement_only|record_ambiguous|record_exception, candidates, typed authoritativeStatementFact for create/correct, policy/version or explicit owner authority, basis, reason, idempotency. Match links existing. Correction validates one event, creates statement replacement and supersession, appends decision/link, explicit category/pool carry-forward, compatible payment carry-forward or unknown initialization, and any invariant-preserving transfer/refund relationship replacement atomically. If an active relationship cannot remain valid, it returns review-required with no replacement. Statement-only creates one fact with unknown attribution and unassigned pool. Decision lifecycle and coverage retain history. Stable scope errors cover account not found or inactive, evidence not found, statement evidence required, incomplete observation, account/date conflict, evidence already scoped, and account-period conflict. Remaining stable errors cover identity, stale policy/projection, candidate drift, authoritative fact conflict, dimension/relationship review, ambiguity, incomplete coverage, and replay. Automatic outcomes remain disabled until OQ-LEDGER-13; owner-approved correction remains available. No raw email, MIME, statement document, provider payload, or transport state."
   ],
   "created_at": "2026-07-20T18:15:25.2586300+00:00",
   "links": [
@@ -73,6 +73,13 @@
       "target": "TC-LEDGER-RECONCILIATION-POLICY-MATRIX",
       "rel": "validated-by",
       "created_at": "2026-07-20T18:20:28.4828807+00:00"
+    },
+    {
+      "id": "01KY6HQ3H7AKZZXGYBJKMDXCP4",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-STATEMENT-SCOPE-REGISTRATION",
+      "rel": "validated-by",
+      "created_at": "2026-07-23T03:53:41.1626059+00:00"
     }
   ]
 }

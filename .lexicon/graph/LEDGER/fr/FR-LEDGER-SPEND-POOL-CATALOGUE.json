@@ -5,7 +5,7 @@
   "ref_code": "FR-LEDGER-SPEND-POOL-CATALOGUE",
   "title": "Maintain the Spend Pool catalogue",
   "description": [
-    "Create and maintain stable Spend Pool identities independently from accounts, Payment Instruments, cardholders, and Spend Categories. Implements G12 and UC-LEDGER-018 under C21."
+    "Create and maintain stable Spend Pool identities independently from accounts, Payment Instrument, cardholders, and Spend Category. Implements G12 and UC-LEDGER-018 under C21."
   ],
   "rationale": [
     "Company-paid discretionary spending and personal after-tax spending require first-class pool identities rather than category or account conventions."
@@ -14,7 +14,7 @@
   "complexity": "M",
   "story_as": "Personal Finance Owner",
   "story_want": [
-    "maintain the spend pools used to separate funding contexts"
+    "maintain the Spend Pool used to separate funding contexts"
   ],
   "story_so_that": [
     "budget and insight consumers can report exact pool totals without inferring them from other dimensions"

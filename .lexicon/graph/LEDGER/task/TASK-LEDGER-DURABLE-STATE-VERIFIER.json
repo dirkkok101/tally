@@ -125,54 +125,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY286BVQSN2DRXNDTW389GAN",
+      "id": "01KY6M24JK2D2QB8A59R6SN190",
       "kind": "acceptance_check",
       "text": [
         "Verification opens a non-live store read-only and checks checksum metadata, SQLite integrity, foreign keys, current schema/storage/reconciliation-policy compatibility before domain reconciliation."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:50:17.7187199+00:00"
+      "created_at": "2026-07-23T04:34:39.8266343+00:00"
     },
     {
-      "id": "01KY286BVRT29PT531GVEVSNGS",
+      "id": "01KY6M24JMF18RXT3ZJGESH2JY",
       "kind": "acceptance_check",
       "text": [
         "The report enumerates facts/lifecycles; category nodes, parent history, acyclicity and current ancestry; pool/payment/category histories; evidence/links; confirmed-existing and corrected-from-statement decisions; supersession/carry-forward/relationship chains; coverage/exceptions; idempotency/logical effects; counts and exact totals. QuerySnapshot is excluded."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:50:17.7187199+00:00"
+      "created_at": "2026-07-23T04:34:39.8266343+00:00"
     },
     {
-      "id": "01KY286BVRFHBRG91BPKYV0ZWA",
+      "id": "01KY6M24JMB5N7NWRW24GR63QY",
       "kind": "acceptance_check",
       "text": [
         "Any missing type, cycle, orphan, invalid lifecycle/cardinality, privacy violation, duplicate active effect, incomplete statement correction, invalid relationship replacement, replay mismatch, count mismatch, overflow, hierarchy double-count, or total/cell mismatch fails closed."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:50:17.7187199+00:00"
+      "created_at": "2026-07-23T04:34:39.8266343+00:00"
     },
     {
-      "id": "01KY286BVR72YEHYVM99KM8NJB",
+      "id": "01KY6M24JMVQY19Y0VKKBX1PB0",
       "kind": "acceptance_check",
       "text": [
         "A verified backup restored into a fresh private generation reproduces the normalized report exactly apart from generation metadata; deterministic corruptions prove each rejection."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T11:50:17.7187199+00:00"
+      "created_at": "2026-07-23T04:34:39.8266343+00:00"
     },
     {
-      "id": "01KY286BVRDW5V2SHGJ5MT0MZ2",
+      "id": "01KY6M24JMXM0SD87ADZNB5V8Q",
       "kind": "acceptance_check",
       "text": [
-        "Diagnostics contain safe type names, identifiers, and counts only, never descriptions, raw evidence, email/statement payloads, credentials, full identifiers, or serialized financial objects."
+        "Diagnostics contain allowlisted type names, identifiers, and counts only, never descriptions, raw evidence, email/statement payloads, credentials, full identifiers, or serialized financial objects."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-21T11:50:17.7187199+00:00"
+      "created_at": "2026-07-23T04:34:39.8266343+00:00"
     },
     {
       "id": "01KXT1ZHVAX08DNP70ZX3R6ENE",

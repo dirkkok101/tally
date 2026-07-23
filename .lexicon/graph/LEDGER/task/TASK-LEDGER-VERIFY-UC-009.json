@@ -26,14 +26,24 @@
   ],
   "dependencies": [
     {
-      "id": "01KXT16DD85CY3ZR64QNB355KN",
+      "id": "01KY6J60Z3Y4BCDSZ1BDEJQQRP",
       "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
       "dependency_type": "compile",
       "reason": [
-        "Use-case verification invokes the fully wired published public contract."
+        "The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-23T04:01:50.0523275+00:00"
+    },
+    {
+      "id": "01KY6J2PSQGT6T32D55R5M8WSX",
+      "target": "TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "The remaining Release-CLI workflow consumes the successor 74-operation public contract."
       ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:14:03.8168074+00:00"
+      "created_at": "2026-07-23T04:00:01.3370896+00:00"
     }
   ],
   "files": [
@@ -49,28 +59,28 @@
   ],
   "interfaces": [
     {
-      "id": "01KY0EB0K10JJHE7CDA2DZVNNE",
+      "id": "01KY6J2NEG2MS8KA6XJTR9VYYT",
       "name": "PublishedTallyFixture",
       "direction": "consumes",
       "notes": [
         "Release published-process E2E fixture"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-20T18:59:12.6084936+00:00"
+      "created_at": "2026-07-23T03:59:59.9515015+00:00"
     },
     {
-      "id": "01KY0EB0K1BJBW1P563QAAVA10",
-      "name": "CompletePublicContract",
+      "id": "01KY6J2NEGZZMB85ZY29H7E0RM",
+      "name": "CompletePublicContract74",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "Exactly 72 provider-neutral operations"
+        "Exactly 74 provider-neutral operations"
       ],
       "sort_order": 1,
-      "created_at": "2026-07-20T18:59:12.6084936+00:00"
+      "created_at": "2026-07-23T03:59:59.9515015+00:00"
     },
     {
-      "id": "01KY0EB0K1KKEHBCHSR552HMRP",
+      "id": "01KY6J2NEGA8VHTWQ4DENM3PEC",
       "name": "VerifiedUC009",
       "direction": "produces",
       "contract_ref_code": "UC-LEDGER-009",
@@ -78,7 +88,7 @@
         "evidence-aware correction workflow"
       ],
       "sort_order": 2,
-      "created_at": "2026-07-20T18:59:12.6084936+00:00"
+      "created_at": "2026-07-23T03:59:59.9515015+00:00"
     }
   ],
   "links": [
@@ -92,34 +102,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY28D7BZDBX8V6AWRD9NBC5M",
+      "id": "01KY6J5G113YSR2PZBHEAB4NEQ",
       "kind": "acceptance_check",
       "text": [
         "Published ordinary void/supersede preserves original facts and evidence/decision/dimension history, retires incompatible relationships atomically, and counts only explicitly established replacement state."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:54:02.4955277+00:00"
+      "created_at": "2026-07-23T04:01:32.7050546+00:00"
     },
     {
-      "id": "01KY28D7C04BBR3R2YSKYGVYCT",
+      "id": "01KY6J5G129JW8730GF693XZX4",
       "kind": "acceptance_check",
       "text": [
         "No-copy, invalid replacement, relationship retirement failure, stale/incompatible correction, history-inclusive detail, and replay cover every UC-LEDGER-009 failure path."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:54:02.4955277+00:00"
+      "created_at": "2026-07-23T04:01:32.7050546+00:00"
     },
     {
-      "id": "01KY28D7C0A4VSWFE4XE5RG6Q0",
+      "id": "01KY6J5G12CNK4ZPG5P80FNG2X",
       "kind": "acceptance_check",
       "text": [
-        "A separate statement-correction fixture proves carry-forward occurs only through ledger.reconciliation.apply with decision-linked events, never through ordinary transaction.supersede."
+        "A separate successful fixture registers statement-row evidence and its completed scope through ledger.reconciliation.scope.register, then proves carry-forward occurs only through ledger.reconciliation.apply with decision-linked events, never through ordinary transaction.supersede."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:54:02.4955277+00:00"
+      "created_at": "2026-07-23T04:01:32.7050546+00:00"
     },
     {
       "id": "01KXT126TC0WRXW16N0SAP65AM",

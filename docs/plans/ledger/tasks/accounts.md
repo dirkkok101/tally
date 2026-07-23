@@ -24,7 +24,7 @@ Maintain stable masked asset and liability accounts with attributable append-onl
 |---|---|---|---|
 | DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain Owned Bank Accounts | `requirement` | `implements` | `true` |
+| FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain Owned Bank Account | `requirement` | `implements` | `true` |
 | TC-LEDGER-ACCOUNT-MAINTENANCE-CONTRACT: Verify account maintenance contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -115,7 +115,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md): Account slice consumes the proven core seam.
 - `governed-by` -> DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports
 - `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `implements` -> FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain Owned Bank Accounts
+- `implements` -> FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain Owned Bank Account
 - `verifies` -> TC-LEDGER-ACCOUNT-MAINTENANCE-CONTRACT: Verify account maintenance contract
 
 ## Navigation

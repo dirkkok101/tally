@@ -7,7 +7,7 @@
     "Each successful Ledger mutation is durable as one logical change; validation, storage, crash, integrity, and resource failures fail closed without partial canonical, evidence, reconciliation, attribution, financial, or recovery state."
   ],
   "category": "reliability",
-  "target": "For every injected failure point, restart inspection observes either the complete committed mutation exactly once or the unchanged pre-operation state, with zero partial transactions, evidence links, reconciliation decisions, assignments, relationships, scopes, or artifacts.",
+  "target": "For every injected failure point, restart inspection observes either the complete committed mutation exactly once or the unchanged pre-operation state, with zero partial transactions, evidence links, Reconciliation Decision, assignments, relationships, scopes, or artifacts.",
   "load_condition": "All public writes, including evidence registration and linking, reconciliation application and correction, payment and pool attribution, transaction and relationship correction, restore activation, and storage evolution.",
   "measurement": "Automated fault-injection and restart tests at each persistence boundary, followed by integrity, uniqueness, cardinality, history, idempotency, and exact pool/category total checks.",
   "rationale": [

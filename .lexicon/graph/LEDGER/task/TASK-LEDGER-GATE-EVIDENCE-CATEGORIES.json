@@ -9,7 +9,7 @@
     "Validation-only task with no Implements link: verify the direct owner decision recorded for OQ-LEDGER-6 and DD-LEDGER-CATEGORY-HIERARCHY before category implementation."
   ],
   "objective": [
-    "Lock hierarchical Spend Categories with zero or one active Category Assignment per transaction."
+    "Lock hierarchical Spend Category with zero or one active Category Assignment per transaction."
   ],
   "planning_state": "ready",
   "priority": 0,
@@ -88,6 +88,13 @@
   ],
   "links": [
     {
+      "id": "01KY6HR95NPSH2M6FX0AQ2CHYF",
+      "target_type": "design_decision",
+      "target": "DD-LEDGER-CATEGORY-HIERARCHY",
+      "rel": "see-also",
+      "created_at": "2026-07-23T03:54:19.7022337+00:00"
+    },
+    {
       "id": "01KXTFYV1E61H8V7YEW2S9BNPW",
       "target_type": "open_question",
       "target": "OQ-LEDGER-6",
@@ -97,44 +104,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY27MCBANFBTMQH1EF0S6WMR",
+      "id": "01KY6M277GRKYMP21RQ6S4XJ2E",
       "kind": "acceptance_check",
       "text": [
         "OQ-LEDGER-6 is resolved from direct owner instruction, A5 is validated, and the former flat-catalogue assumption A10 is invalidated."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:40:28.3935611+00:00"
+      "created_at": "2026-07-23T04:34:42.5441367+00:00"
     },
     {
-      "id": "01KY27MCBBNZ6E55T9JWMW15GM",
+      "id": "01KY6M277HVPSZ7SGNGEJVFRAQ",
       "kind": "acceptance_check",
       "text": [
         "DD-LEDGER-CATEGORY-HIERARCHY is accepted and specifies zero or one active parent, append-only parent history, acyclicity, sibling-name uniqueness, assignment to any active node, and direct versus subtree roll-ups."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:40:28.3935611+00:00"
+      "created_at": "2026-07-23T04:34:42.5441367+00:00"
     },
     {
-      "id": "01KY27MCBBT6KQDTYFVFE4R5XK",
+      "id": "01KY6M277H7HP0A63HSZH1K70K",
       "kind": "acceptance_check",
       "text": [
         "The redacted validation report records one category per transaction and delegates budget exact-node versus subtree semantics to BUDGET through OQ-BUDGET-10."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:40:28.3935611+00:00"
+      "created_at": "2026-07-23T04:34:42.5441367+00:00"
     },
     {
-      "id": "01KY27MCBBRYBZV0NB7MZ3CFJH",
+      "id": "01KY6M3J3AMH5PHF71AE30R5JP",
       "kind": "constraint",
       "text": [
-        "Only privacy-safe structural conclusions are committed; graph changes use lex commands."
+        "Only allowlisted structural conclusions are committed; graph changes use lex commands."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:40:28.3935611+00:00"
+      "created_at": "2026-07-23T04:35:26.4416580+00:00"
     },
     {
       "id": "01KY27MCBBYHKVM9T9VGH1FWPX",

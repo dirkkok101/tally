@@ -33,7 +33,8 @@ Prove isolated storage evolution preserves complete provider-neutral durable sta
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
 
 ## Recipe
 
@@ -72,7 +73,7 @@ Prove isolated storage evolution preserves complete provider-neutral durable sta
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 72 provider-neutral operations |
+| CompletePublicContract74 | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 74 provider-neutral operations |
 | VerifiedUC012 | `produces` | UC-LEDGER-012 | complete-state evolution workflow |
 
 ### Verification
@@ -100,7 +101,8 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 
 - `bead-ref` -> `bd-3g2` (verified)
 - `covers` -> UC-LEDGER-012: Upgrade or migrate Ledger storage safely
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
 - `touches` -> DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts
 - `verifies` -> FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent
 - `verifies` -> FR-LEDGER-SAFE-STORAGE-EVOLUTION: Upgrade or migrate Ledger storage safely

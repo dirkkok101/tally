@@ -2,13 +2,13 @@
   "id": "01KY07C8Z39KAQA20K0B0VGD8E",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "OQ-LEDGER-15",
-  "question": "Does one active spend pool per transaction cover company-paid and personal-after-tax examples, including corrections, refunds, reversals, and mixed purchases?",
+  "question": "Does one active Spend Pool per transaction cover company-paid and personal-after-tax examples, including corrections, refunds, reversals, and mixed purchases?",
   "context": [
-    "Resolved by explicit owner approval on 2026-07-21. V1 uses one active Spend Pool assignment or explicit unassigned state per transaction. Mixed purchases do not create split-pool allocations; they remain unassigned until the owner chooses one pool or a later design explicitly adds splitting."
+    "Resolved by explicit owner approval on 2026-07-21. V1 uses one active Spend Pool Assignment or explicit unassigned state per transaction. Mixed purchases do not create split-pool allocations; they remain unassigned until the owner chooses one pool or a later design explicitly adds splitting."
   ],
   "status": "resolved",
   "decision": [
-    "Owner decision on 2026-07-21: each active spend transaction has at most one active Spend Pool assignment, independent of account, payment instrument, cardholder, and category, or remains explicitly unassigned. Corrections append history and replace the active assignment. Refunds and reversals follow the original transaction's current pool, transfer principal contributes zero spend, and mixed purchases remain unassigned until assigned wholly to one pool. Split-pool allocation is out of scope for v1."
+    "Owner decision on 2026-07-21: each active spend transaction has at most one active Spend Pool Assignment, independent of account, Payment Instrument, cardholder, and category, or remains explicitly unassigned. Corrections append history and replace the active assignment. Refunds and reversals follow the original transaction's current pool, transfer principal contributes zero spend, and mixed purchases remain unassigned until assigned wholly to one pool. Split-pool allocation is out of scope for v1."
   ],
   "owner": "LEDGER PRD validation",
   "disposition": "unspecified",

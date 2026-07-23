@@ -1,0 +1,12 @@
+{
+  "id": "01KY6Z1YEX5Z8GS8QEQN0V38XD",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-LEDGER-IDEMPOTENT-WRITES",
+  "subject_entity_id": "01KXSQBX8TSCMJV15PDGZSHYVE",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-LEDGER-STATEMENT-SCOPE-REGISTRATION",
+  "commit_sha": "52c31b9",
+  "bead_id": "bd-1ge",
+  "verified_at": "2026-07-23T07:46:47.9001631+00:00"
+}

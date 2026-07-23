@@ -3,5 +3,6 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "condition": "At design, the proposed data and command model cannot prove exact decimal totals, explicit date and sign semantics, one canonical transaction per event, deterministic or owner-approved reconciliation history, independent attribution dimensions, exact pool/category conservation, correction provenance, and non-spend transfer handling; stop before planning and redesign the Ledger model.",
   "monitored": 1,
+  "evaluation_state": "unassessed",
   "created_at": "2026-07-17T13:42:30.8468772+00:00"
 }

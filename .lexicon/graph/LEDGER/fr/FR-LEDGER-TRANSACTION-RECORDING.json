@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "type": "functional",
   "ref_code": "FR-LEDGER-TRANSACTION-RECORDING",
-  "title": "Record Canonical Transactions",
+  "title": "Record Canonical Transaction",
   "description": [
     "Record one Canonical Transaction from exact provider-neutral facts and an initial generic Evidence Record on an active owned account. Implements G2, G9, and UC-LEDGER-002 under A1-A4, A12, and C18."
   ],
@@ -20,7 +20,7 @@
     "the original financial fact can always be reproduced and reconciled"
   ],
   "acceptance_criteria": [
-    "Given an active account, valid original description, exact base-10 signed amount, ZAR currency, transaction date, privacy-safe initial evidence, and Idempotency Identity, when recording succeeds, then one stable Canonical Transaction and one linked Evidence Record are created atomically without precision loss.",
+    "Given an active account, valid original description, exact base-10 signed amount, ZAR currency, transaction date, allowlisted initial evidence metadata, and Idempotency Identity, when recording succeeds, then one stable Canonical Transaction and one linked Evidence Record are created atomically without precision loss.",
     "Given a transaction with a distinct supplied posting date, when it is recorded, then both transaction date and posting date round-trip without substituting one for the other.",
     "Given any missing required fact, unsupported currency, zero amount, malformed date, archived account, unsupported Evidence Kind, or forbidden provider payload, when recording is attempted, then a stable validation error is returned and neither transaction nor evidence is created.",
     "Given a recorded transaction, when it is read later, then its account identity, original description, signed amount, currency, supplied dates, stable identifier, evidence links, current Reconciliation State, and explicit unknown attribution states round-trip without silently inferring category, pool, instrument, or cardholder.",

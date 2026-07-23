@@ -2,10 +2,10 @@
   "id": "01KY07G3NF0XNB78FQ87RWAJZC",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "UC-LEDGER-018",
-  "title": "Maintain spend pools and transaction pool assignment",
+  "title": "Maintain Spend Pool and transaction Pool Assignment",
   "preconditions": "The Ledger is readable; required pool identities can be created without tying them to one bank account, instrument, cardholder, or category.",
   "postconditions": "Pool and category actuals remain exact and independently explainable; no account, instrument, cardholder, or description silently determines the pool.",
-  "main_flow": "1. The caller creates, lists, renames, archives, or reactivates stable spend pools, including pools representing company-paid and personal-after-tax spending. 2. Tally validates unique active identity and historical references. 3. The owner assigns or corrects one active pool for a spend transaction with reason and idempotency identity, or leaves it explicitly unassigned. 4. Tally appends pool-assignment history independently from category and other dimensions. 5. Refunds follow the original current pool; transfers contribute zero; voids, supersessions, and corrections change active actuals atomically. 6. Queries return exact pool totals and pool-by-category detail plus explicit unassigned values. 7. Archive prevents new assignment while preserving history.",
+  "main_flow": "1. The caller creates, lists, renames, archives, or reactivates stable Spend Pool, including pools representing company-paid and personal-after-tax spending. 2. Tally validates unique active identity and historical references. 3. The owner assigns or corrects one active pool for a spend transaction with reason and Idempotency Identity, or leaves it explicitly unassigned. 4. Tally appends Pool Assignment history independently from category and other dimensions. 5. Refunds follow the original current pool; transfers contribute zero; voids, supersessions, and corrections change active actuals atomically. 6. Queries return exact pool totals and pool-by-category detail plus explicit unassigned values. 7. Archive prevents new assignment while preserving history.",
   "alt_flows": [
     "1a. Pool identity conflicts -> reject without mutation",
     "2a. Referenced pool is archived -> reject new assignment until reactivated",

@@ -2,9 +2,9 @@
   "id": "01KXRHVE62YSN7X36CCGJ66W7G",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "UC-LEDGER-003",
-  "title": "Assign or correct a spend category",
-  "preconditions": "The canonical transaction and chosen active spend category exist; any automatic suggestion has been produced by CLASSIFY, not LEDGER.",
-  "postconditions": "The transaction has zero or one explicit active category assignment; correction provenance is inspectable; hierarchy roll-ups are deterministic; original bank facts and independent dimensions are unchanged.",
+  "title": "Assign or correct a Spend Category",
+  "preconditions": "The Canonical Transaction and chosen active Spend Category exist; any automatic suggestion has been produced by CLASSIFY, not LEDGER.",
+  "postconditions": "The transaction has zero or one explicit active Category Assignment; correction provenance is inspectable; hierarchy roll-ups are deterministic; original bank facts and independent dimensions are unchanged.",
   "main_flow": "1. The caller retrieves the active transaction and hierarchical category catalogue. 2. The owner selects one active category node. 3. Tally validates transaction lifecycle, category lifecycle, and one-active-assignment cardinality. 4. Tally appends an assign or correct event with actor and reason. 5. Direct category membership and current ancestor roll-ups expose the transaction exactly once without changing transaction facts or any other financial dimension.",
   "alt_flows": [
     "1a. Transaction does not exist -> return not found",

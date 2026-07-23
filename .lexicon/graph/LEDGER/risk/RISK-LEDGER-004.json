@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "RISK-LEDGER-004",
   "description": [
-    "CLI JSON schemas, exit codes, command names, or compatibility metadata could drift from Hermes, another schema-driven external orchestrator, or optional bundled agent guidance and silently break financial workflows."
+    "CLI JSON schemas, exit codes, command names, or compatibility metadata could drift from Hermes, another schema-driven External Orchestrator, or optional bundled agent guidance and silently break financial workflows."
   ],
   "likelihood": "Medium",
   "impact": "High",

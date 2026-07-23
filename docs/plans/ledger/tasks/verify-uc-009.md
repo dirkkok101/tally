@@ -33,7 +33,8 @@ Prove ordinary correction retains history and never silently transfers evidence,
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
 
 ## Recipe
 
@@ -41,7 +42,7 @@ Prove ordinary correction retains history and never silently transfers evidence,
 
 - Published ordinary void/supersede preserves original facts and evidence/decision/dimension history, retires incompatible relationships atomically, and counts only explicitly established replacement state.
 - No-copy, invalid replacement, relationship retirement failure, stale/incompatible correction, history-inclusive detail, and replay cover every UC-LEDGER-009 failure path.
-- A separate statement-correction fixture proves carry-forward occurs only through ledger.reconciliation.apply with decision-linked events, never through ordinary transaction.supersede.
+- A separate successful fixture registers statement-row evidence and its completed scope through ledger.reconciliation.scope.register, then proves carry-forward occurs only through ledger.reconciliation.apply with decision-linked events, never through ordinary transaction.supersede.
 
 ### Failure Criteria
 
@@ -71,7 +72,7 @@ Prove ordinary correction retains history and never silently transfers evidence,
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 72 provider-neutral operations |
+| CompletePublicContract74 | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 74 provider-neutral operations |
 | VerifiedUC009 | `produces` | UC-LEDGER-009 | evidence-aware correction workflow |
 
 ### Verification
@@ -98,7 +99,8 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 
 - `bead-ref` -> `bd-1ps` (verified)
 - `covers` -> UC-LEDGER-009: Void or supersede an erroneous transaction
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
 - `touches` -> DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts
 - `verifies` -> FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent
 - `verifies` -> FR-LEDGER-TRANSACTION-CORRECTION: Void or supersede erroneous transactions

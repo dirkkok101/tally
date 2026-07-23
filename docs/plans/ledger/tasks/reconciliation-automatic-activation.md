@@ -24,8 +24,6 @@ Enable only the empirically proven deterministic reconciliation cases without we
 |---|---|---|---|
 | DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts | `data_model` | `touches` | `true` |
-| NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed | `nfr` | `satisfies` | `true` |
 | OQ-LEDGER-13: Which provider-neutral compatibility fields, tolerances, and conflict rules are sufficient for an automatic deterministic match between agent-capture and statement-row evidence? | `open_question` | `blocked-by` | `true` |
 | TC-LEDGER-RECONCILIATION-POLICY-MATRIX: Prove deterministic reconciliation policy and ambiguity guards | `test_case` | `verifies` | `true` |
 
@@ -44,7 +42,7 @@ Enable only the empirically proven deterministic reconciliation cases without we
 
 - ReconciliationPolicyV1 encodes exactly the automatic match and correction cases recorded in the resolved OQ-LEDGER-13 matrix, including policy ID and version, Owned Bank Account, currency, Signed Account Amount, Effective Date, bounded tolerances if any, uniqueness requirements, conflict guards, and stable reasons.
 - Automatic match or correction revalidates the Evidence Record fingerprint, current projection, policy and version, candidates, Canonical Transaction facts, lifecycle, and conflicts inside the existing writer transaction; drift or unsupported cases return a stable review-required or validation result with no mutation.
-- Candidate enumeration order cannot alter a policy outcome; multiple compatible or guard candidates, conflicting Evidence Records, unresolved relationship replacement, or any case absent from the matrix cannot apply automatically.
+- Candidate enumeration order cannot alter a policy outcome; multiple compatible or guard candidates, conflicting Evidence Record, unresolved relationship replacement, or any case absent from the matrix cannot apply automatically.
 - Owner-approved match, correction, Statement-only Transaction, ambiguity, and Reconciliation Exception behavior remains unchanged, and replay across both authority kinds returns one original effect.
 
 ### Failure Criteria
@@ -103,12 +101,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1ui` | `verified` | 2026-07-21T17:03:47.4982043+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1ui` (verified)
 - `blocked-by` -> OQ-LEDGER-13: Which provider-neutral compatibility fields, tolerances, and conflict rules are sufficient for an automatic deterministic match between agent-capture and statement-row evidence?
 - `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY](../tasks/gate-evidence-reconciliation-policy.md): Automatic behavior is forbidden until paired evidence resolves OQ-LEDGER-13 and defines the bounded policy matrix.
 - `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md): Activation extends the proven owner-reviewed base apply path rather than creating a second writer.
@@ -116,8 +117,6 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md): Activation extends the proven owner-approved statement-correction path with only evidence-backed automatic cases.
 - `governed-by` -> DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency
 - `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
-- `satisfies` -> NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed
-- `touches` -> DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts
 - `verifies` -> TC-LEDGER-RECONCILIATION-POLICY-MATRIX: Prove deterministic reconciliation policy and ambiguity guards
 
 ## Navigation

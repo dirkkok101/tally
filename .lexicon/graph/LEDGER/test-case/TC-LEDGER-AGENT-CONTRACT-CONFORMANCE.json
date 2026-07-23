@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "TC-LEDGER-AGENT-CONTRACT-CONFORMANCE",
   "slug": "AGENT-CONTRACT-CONFORMANCE",
-  "title": "Verify every external-orchestrator operation contract",
+  "title": "Verify every External Orchestrator operation contract",
   "level": "e2e",
   "surface": "contract",
   "scenario": "edge",
@@ -11,7 +11,7 @@
   "status": "planned",
   "preconditions": "Published executable, a schema-driven provider-neutral client, compatible and incompatible contract versions, and any bundled optional agent guidance.",
   "steps": "Enumerate operation descriptors; invoke help and schemas; scan for forbidden provider fields; exercise success and every declared expected-error class through JSON input; run compatibility and lost-output replay cases; compare stdout, stderr, exits, and optional guidance manifests.",
-  "expected": "Every public operation has deterministic provider-neutral schema, help, compatibility and idempotency metadata; one structured result; safe diagnostics; documented exits; no channel fields; incompatible versions fail before writes; core workflows require no agent-specific skill.",
+  "expected": "Every public operation has deterministic provider-neutral schema, help, compatibility and idempotency metadata; one structured result; redacted diagnostics; documented exits; no channel fields; incompatible versions fail before writes; core workflows require no agent-specific skill.",
   "owner": "LEDGER implementation",
   "created_at": "2026-07-18T06:09:32.5061184+00:00",
   "links": [

@@ -5,7 +5,7 @@
   "ref_code": "FR-LEDGER-EVIDENCE-REGISTRATION",
   "title": "Register and link generic evidence",
   "description": [
-    "Register privacy-conscious provider-neutral Evidence Records and link multiple records to Canonical Transactions without treating evidence presence as a Reconciliation Decision. Implements G9 and UC-LEDGER-013 under C18, C20, and C23."
+    "Register privacy-conscious provider-neutral Evidence Record and link multiple records to Canonical Transaction without treating evidence presence as a Reconciliation Decision. Implements G9 and UC-LEDGER-013 under C18, C20, and C23."
   ],
   "rationale": [
     "Daily captures, statement rows, receipts, external documents, and owner assertions must support one Canonical Transaction without importing provider payloads or silently changing financial meaning."
@@ -14,21 +14,21 @@
   "complexity": "L",
   "story_as": "Personal Finance Owner",
   "story_want": [
-    "attach independently identifiable evidence to a canonical transaction"
+    "attach independently identifiable evidence to a Canonical Transaction"
   ],
   "story_so_that": [
     "each transaction can be substantiated and reconciled without duplication or provider coupling"
   ],
   "acceptance_criteria": [
-    "Given a supported generic Evidence Kind, logical evidence identity, Opaque External Reference, privacy-safe metadata or fingerprint, and Idempotency Identity, when evidence is registered, then one stable Evidence Record is returned without storing raw provider, mailbox, MIME, messaging, document, or delivery payloads.",
-    "Given a registered Evidence Record, an active Canonical Transaction, actor context, and reason, when the evidence is linked, then one attributable active link is appended and the transaction may retain multiple independently queryable Evidence Records.",
+    "Given a supported generic Evidence Kind, logical evidence identity, Opaque External Reference, allowlisted metadata or fingerprint, and Idempotency Identity, when evidence is registered, then one stable Evidence Record is returned without storing raw provider, mailbox, MIME, messaging, document, or delivery payloads.",
+    "Given a registered Evidence Record, an active Canonical Transaction, actor context, and reason, when the evidence is linked, then one attributable active link is appended and the transaction may retain multiple independently queryable Evidence Record.",
     "Given the same logical evidence registration or link is replayed with semantically identical input, when it is submitted again, then the original result is returned and no second Evidence Record or link is created.",
     "Given an existing logical evidence identity or active confirmation link, when conflicting metadata is supplied or a direct link to a second Canonical Transaction is requested, then the Ledger returns a stable conflict and preserves the existing state.",
     "Given newly registered or linked evidence with no valid Reconciliation Decision, when current state is queried, then evidence presence alone does not mark the transaction statement-reconciled or owner-confirmed.",
     "Given statement-row evidence with no valid Reconciliation Decision, when a caller requests a confirming transaction link directly, then the Ledger rejects the link and preserves the evidence as unconfirmed."
   ],
   "security_criteria": [
-    "Evidence input and output may contain only provider-neutral kinds, privacy-safe metadata or fingerprints, and Opaque External References; full provider payloads and unmasked financial identifiers are rejected."
+    "Evidence input and output may contain only provider-neutral kinds, allowlisted metadata or fingerprints, and Opaque External Reference; full provider payloads and unmasked financial identifiers are rejected."
   ],
   "status": "active",
   "created_at": "2026-07-20T17:39:48.9138945+00:00",

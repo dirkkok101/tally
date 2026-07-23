@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "RISK-LEDGER-003",
   "description": [
-    "Transfers, refunds, reversals, cash withdrawals, category or spend-pool corrections, or split purchases could be modeled inconsistently and distort exact pool/category actuals."
+    "Transfers, refunds, reversals, cash withdrawals, category or Spend Pool corrections, or split purchases could be modeled inconsistently and distort exact pool/category actuals."
   ],
   "likelihood": "Medium",
   "impact": "High",

@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "TC-LEDGER-POOL-ASSIGNMENT-ACTUALS-CONTRACT",
   "slug": "pool-assignment-actuals-contract",
-  "title": "Verify pool assignment and exact grouped actuals",
+  "title": "Verify Pool Assignment and exact grouped actuals",
   "level": "integration",
   "surface": "contract",
   "scenario": "edge",

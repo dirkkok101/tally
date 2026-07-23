@@ -84,8 +84,9 @@ references, supersedes, see-also); `lex link suggest --module <CODE>
 
 ### Adversarial content review
 
-- `/lex:review-documentation --module <CODE>` — report-only default; four read-only sub-agents (vague-AC, decision-gap, contradiction, naming-drift) + consolidator.
-- `--apply` runs unsupervised on BOTH platforms: MECHANICAL findings auto-applied via `lex <entity> update`, JUDGMENT findings filed as br beads.
+- `/lex:review-documentation --module <CODE>` — report-only default; the binary reuses an unchanged current V2 archive or dispatches up to four read-only semantic lenses (vague-AC, stage-eligible decision-gap, contradiction, naming-drift) + consolidator. Decision-gap is omitted before current design and plan-scoped after plan selection.
+- `--apply [--from-run <RUN-ID>]` runs unsupervised on BOTH platforms: current immutable findings are revalidated without rediscovery, MECHANICAL findings auto-applied through the binary's writer-locked compare-and-set command, and JUDGMENT findings filed as br beads.
+- Successful apply receipts close their exact operations without a zero-findings confirmation rerun; a later material authoring mutation requires fresh review.
 - Suppressions are user-issued only: `lex review suppress <ref> --field <name> --agent <slug> --reason "<text>" --fingerprint <hex>` / `lex review unsuppress <id>`.
 
 ### Prerequisites

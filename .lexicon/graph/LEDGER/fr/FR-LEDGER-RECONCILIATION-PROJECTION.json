@@ -27,7 +27,7 @@
     "Given provider-specific transport, sender, mailbox, MIME, recipient, schedule, or delivery fields, when projection input is validated, then the Ledger rejects them before any state access or mutation."
   ],
   "security_criteria": [
-    "The projection returns only the privacy-safe canonical and evidence metadata required to explain compatibility; it never returns provider payloads or full account or instrument identifiers."
+    "The projection returns only the allowlisted canonical and evidence metadata required to explain compatibility; it never returns provider payloads or full account or instrument identifiers."
   ],
   "status": "active",
   "created_at": "2026-07-20T17:39:49.5305264+00:00",

@@ -26,7 +26,7 @@
     "Given same-sign, different-account, different-currency, inactive, missing, transfer-linked, refund-credit-as-original, or active-role-reuse participants, when confirmation is attempted, then the Ledger returns the documented stable validation, not-found, lifecycle, or conflict error and creates no relationship.",
     "Given an original transaction already participating in an active refund relationship, when a different refund credit is proposed, then the Ledger rejects the second relationship as an active-role duplicate and preserves exactly one active refund for the original.",
     "Given a successfully confirmed refund, when relationship detail and both source transactions are queried, then the relationship exposes explicit original and refund-credit roles, the exact full amount, active state, actor, and history while both ordinary bank transactions remain unchanged.",
-    "Given a semantically identical confirmation replay, when it uses the same idempotency identity or repeats the same logical effect, then the original relationship result is returned without a duplicate effect; changed input under a consumed idempotency identity returns the stable idempotency conflict."
+    "Given a semantically identical confirmation replay, when it uses the same Idempotency Identity or repeats the same logical effect, then the original relationship result is returned without a duplicate effect; changed input under a consumed Idempotency Identity returns the stable idempotency conflict."
   ],
   "status": "active",
   "created_at": "2026-07-18T04:22:52.2328224+00:00",

@@ -183,6 +183,15 @@
       "created_at": "2026-07-21T16:42:24.1482890+00:00"
     }
   ],
+  "links": [
+    {
+      "id": "01KY6HRAWWGAKK3E0B01AYQDNK",
+      "target_type": "open_question",
+      "target": "OQ-LEDGER-13",
+      "rel": "see-also",
+      "created_at": "2026-07-23T03:54:21.4696025+00:00"
+    }
+  ],
   "recipe_items": [
     {
       "id": "01KY2S6SD7XQCZNDEXDRXEQ5XE",
@@ -278,7 +287,7 @@
       "id": "01KY2S6SD8TR1T4SSGPZE9JPWQ",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT overwrite the notification-derived fact, create a second active spend effect, or move Evidence Records, Category Assignments, Pool Assignments, Payment Instrument or Cardholder Attribution, or relationships in place."
+        "Do NOT overwrite the notification-derived fact, create a second active spend effect, or move Evidence Record, Category Assignment, Pool Assignment, Payment Instrument or Cardholder Attribution, or relationships in place."
       ],
       "required": 1,
       "sort_order": 0,

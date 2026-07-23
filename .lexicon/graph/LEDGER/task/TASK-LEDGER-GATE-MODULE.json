@@ -26,14 +26,14 @@
   ],
   "dependencies": [
     {
-      "id": "01KXT1AW0MKQDHE2116S87QWM9",
-      "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
+      "id": "01KY6J4Z0F2JXCSVXVRDBC3N5A",
+      "target": "TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT",
       "dependency_type": "compile",
       "reason": [
-        "Consumer requires CompletePublicContract from its producing task; direct compile edge enforces the declared interface contract."
+        "Module completion consumes CompletePublicContract74 from the corrective scope-publication gate."
       ],
-      "sort_order": 13,
-      "created_at": "2026-07-18T07:16:29.8448233+00:00"
+      "sort_order": 38,
+      "created_at": "2026-07-23T04:01:15.2808346+00:00"
     },
     {
       "id": "01KXT16FJ9VYQ3ZYA6Z57E2RV6",
@@ -248,87 +248,87 @@
   ],
   "interfaces": [
     {
-      "id": "01KY288F280QRVSRRKKRVVYKTC",
-      "name": "CompletePublicContract",
+      "id": "01KY6J4XPM1STZFK26QKRNM4K1",
+      "name": "CompletePublicContract74",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "73-operation contract"
+        "74-operation successor contract"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-21T11:51:26.5350069+00:00"
+      "created_at": "2026-07-23T04:01:13.9378732+00:00"
     },
     {
-      "id": "01KY288F28MB66REPGY19K03XS",
+      "id": "01KY6J4XPM5GKQ83R3G85GHCYD",
       "name": "VerifiedLocalSecurityGate",
       "direction": "consumes",
       "notes": [
         "Local privacy and provider neutrality"
       ],
       "sort_order": 1,
-      "created_at": "2026-07-21T11:51:26.5350069+00:00"
+      "created_at": "2026-07-23T04:01:13.9378732+00:00"
     },
     {
-      "id": "01KY288F28X9NEBHAJ1MGH373T",
+      "id": "01KY6J4XPM5SVNXQZW7DKPQCRA",
       "name": "VerifiedLedgerV1Module",
       "direction": "produces",
       "notes": [
         "Completion evidence after all 18 workflows"
       ],
       "sort_order": 2,
-      "created_at": "2026-07-21T11:51:26.5350069+00:00"
+      "created_at": "2026-07-23T04:01:13.9378732+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KY288F27XVSAR1K273Y385RA",
+      "id": "01KY6J4XPK2GMMAPW02SWSRQ3Q",
       "kind": "acceptance_check",
       "text": [
         "dotnet restore/build/format and full xUnit exit 0 with zero warnings/failures; every planned class has nonzero discovery."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:51:26.5350069+00:00"
+      "created_at": "2026-07-23T04:01:13.9378732+00:00"
     },
     {
-      "id": "01KY288F280KGFAA3GPWQ0PA67",
+      "id": "01KY6J4XPM76QJ0PS7PV4WTPB6",
       "kind": "acceptance_check",
       "text": [
-        "Release linux-x64 Native-AOT publish exits 0 and reports the exact 73-operation offline inventory including category.reparent and statement correction with no child process, listener, provider integration, or raw-payload schema."
+        "Release linux-x64 Native-AOT publish exits 0 and reports the exact 74-operation offline inventory including category.reparent, statement-scope registration, and statement correction with no child process, listener, provider integration, or raw-payload schema."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:51:26.5350069+00:00"
+      "created_at": "2026-07-23T04:01:13.9378732+00:00"
     },
     {
-      "id": "01KY288F28BKGBQHZHAJ5DETEH",
+      "id": "01KY6J4XPM8M756GZZH05EB8G7",
       "kind": "acceptance_check",
       "text": [
-        "Core/security/provider-neutral scripts pass; personal-scale p95 passes; recovery reproduces category hierarchy/history, exact/corrected statement reconciliation, carry-forward/relationship chains, every replay outcome, count, and exact direct/subtree/pool total."
+        "Core/security/provider-neutral scripts pass; personal-scale p95 passes; recovery reproduces category hierarchy/history, immutable statement scopes and membership, exact/corrected statement reconciliation, carry-forward/relationship chains, every replay outcome, count, and exact direct/subtree/pool total."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:51:26.5350069+00:00"
+      "created_at": "2026-07-23T04:01:13.9378732+00:00"
     },
     {
-      "id": "01KY288F286R9Z53NJYPAEQ1XX",
+      "id": "01KY6J4XPMMS2PVNF6966TGYMB",
       "kind": "acceptance_check",
       "text": [
         "lex coverage reports 25/25 active FRs with no gaps; lex check --fast, plan coverage, audit, dependency cycles, and all 18 UC verifiers are clean."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T11:51:26.5350069+00:00"
+      "created_at": "2026-07-23T04:01:13.9378732+00:00"
     },
     {
-      "id": "01KY288F28166GT6XGWCG0FVAR",
+      "id": "01KY6J4XPMVGJKKAG0GAH35QSC",
       "kind": "acceptance_check",
       "text": [
         "git diff --check is empty and verification evidence lists every command/result and any changed file lacking direct test coverage."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-21T11:51:26.5350069+00:00"
+      "created_at": "2026-07-23T04:01:13.9378732+00:00"
     },
     {
       "id": "01KXT126TG3NAZ1VECCTEV4ESW",
@@ -361,24 +361,24 @@
       "created_at": "2026-07-18T07:11:45.9941647+00:00"
     },
     {
-      "id": "01KY288F288D1K4RM0NA2ZK80J",
+      "id": "01KY6J4XPMCAE38G069GZYNZZG",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT accept zero-match tests, Debug-only proof, skipped recovery/security/performance/hierarchy checks, manually edited coverage, unresolved cash/pool/match gates, or stale 72-operation expectations."
+        "Do NOT accept zero-match tests, Debug-only proof, skipped recovery/security/performance/hierarchy checks, manually edited coverage, unresolved cash/pool/match gates, or stale 72/73-operation expectations."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:51:26.5350069+00:00"
+      "created_at": "2026-07-23T04:01:13.9378732+00:00"
     },
     {
-      "id": "01KY288F28HWHZV3P5TRAXGJ9W",
+      "id": "01KY6J4XPM374KQXT4TAHFQR99",
       "kind": "failure_criterion",
       "text": [
         "Do NOT create beads, deploy, or write execution status into planning_state."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:51:26.5350069+00:00"
+      "created_at": "2026-07-23T04:01:13.9378732+00:00"
     }
   ],
   "review_gates": [
@@ -405,14 +405,14 @@
   ],
   "verification_steps": [
     {
-      "id": "01KY288F28FRQVDTNPN30CVMKK",
+      "id": "01KY6J4XPMWTWM6Q2DMP1D3R64",
       "phase": "after",
       "command": "bash scripts/verify-ledger-module.sh",
-      "expected_result": "exit 0; restore, build, format, full tests, AOT publish, 73-operation inventory, core/security/privacy/performance/recovery/Lex/diff checks succeed; every suite reports nonzero tests and 0 failures/warnings",
+      "expected_result": "exit 0; restore, build, format, full tests, AOT publish, 74-operation inventory, core/security/privacy/performance/recovery/Lex/diff checks succeed; every suite reports nonzero tests and 0 failures/warnings",
       "required": 1,
       "timeout_seconds": 2700,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:51:26.5350069+00:00"
+      "created_at": "2026-07-23T04:01:13.9378732+00:00"
     }
   ]
 }

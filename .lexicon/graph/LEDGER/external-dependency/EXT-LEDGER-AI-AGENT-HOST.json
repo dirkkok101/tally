@@ -4,7 +4,7 @@
   "ref_code": "EXT-LEDGER-AI-AGENT-HOST",
   "name": "External Orchestrator",
   "description": [
-    "Hermes is the current external orchestrator deployment. It invokes released provider-neutral Tally contracts under the owner's OS identity, supplies extracted facts and opaque evidence references, and consumes structured results. It owns AgentMail, WhatsApp, provider payloads, clarification, schedules, recipients, rendering, delivery, and retries; it has no private Ledger storage access or authority to bypass financial rules."
+    "Hermes is the current External Orchestrator deployment. It invokes released provider-neutral Tally contracts under the owner's OS identity, supplies extracted facts and opaque evidence references, and consumes structured results. It owns AgentMail, WhatsApp, provider payloads, clarification, schedules, recipients, rendering, delivery, and retries; it has no private Ledger storage access or authority to bypass financial rules."
   ],
   "type": "client",
   "owner": "Hermes",

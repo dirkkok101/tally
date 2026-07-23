@@ -250,17 +250,6 @@
   ],
   "references": [
     {
-      "id": "01KY0DT2MYNZTFWYNNQ0Y12F49",
-      "target_ref_code": "NFR-LEDGER-RECONCILIATION-SAFETY",
-      "target_entity_type": "nfr",
-      "target_entity_id": "01KY0A32623J1HNH608CS19WJ3",
-      "target_title": "Reconcile deterministically and fail closed",
-      "relationship": "satisfies",
-      "required": 1,
-      "sort_order": 3,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
-    },
-    {
       "id": "01KY0DT2MYTNDRVVA5JN553ZHJ",
       "target_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
       "target_entity_type": "data_model",

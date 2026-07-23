@@ -8,7 +8,7 @@
   ],
   "category": "security",
   "target": "100% of created financial artifacts have owner-only host access; zero diagnostics, logs, process arguments, or non-data-return outputs contain credentials, raw provider or document payloads, mailbox or messaging content, unmasked account or instrument identifiers, transaction descriptions, or serialized financial payloads; the selected maintained at-rest protection passes OQ-LEDGER-8 before planning.",
-  "load_condition": "Normal operation, errors, evidence and reconciliation workflows, backup, restore, storage evolution, external-orchestrator invocation, and optional skill invocation on each supported host.",
+  "load_condition": "Normal operation, errors, evidence and reconciliation workflows, backup, restore, storage evolution, External Orchestrator invocation, and optional skill invocation on each supported host.",
   "measurement": "Permission inspection, forbidden-field contract scans, secret and payload canary scans, negative-path tests, artifact inspection, and the required storage security spike.",
   "rationale": [
     "Evidence and payment attribution expand sensitive local state but do not change the accepted owner-only, provider-neutral boundary. Supports G1, G5, G8, G9, and G11."

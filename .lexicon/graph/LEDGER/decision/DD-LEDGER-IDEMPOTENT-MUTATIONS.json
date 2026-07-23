@@ -4,10 +4,10 @@
   "ref_code": "DD-LEDGER-IDEMPOTENT-MUTATIONS",
   "title": "Transactional request and logical-effect idempotency",
   "description": [
-    "Prevent duplicate finance effects across retries, crashes, evidence re-registration, and Reconciliation Decisions."
+    "Prevent duplicate finance effects across retries, crashes, evidence re-registration, and Reconciliation Decision."
   ],
   "decision": [
-    "Commit each mutation outcome and its IdempotencyRecord in the same database transaction. The same key and canonical request returns the original result; a changed request conflicts. Additionally enforce stable logical identities for evidence and Reconciliation Decisions so different request keys cannot duplicate one real effect. Reconcile filesystem artifacts against committed database state on retry."
+    "Commit each mutation outcome and its IdempotencyRecord in the same database transaction. The same key and canonical request returns the original result; a changed request conflicts. Additionally enforce stable logical identities for evidence, approved statement scopes, and Reconciliation Decision so different request keys cannot duplicate one real effect. Statement-scope identity is account plus inclusive period: identical canonical cross-key replay returns the existing scope, while changed manifest reference or evidence membership conflicts. Reconcile filesystem artifacts against committed database state on retry."
   ],
   "rationale": [
     "Request replay protection alone cannot prevent duplicate evidence arriving through another orchestration attempt. Logical uniqueness plus atomic outcomes protects the canonical ledger."
@@ -16,10 +16,10 @@
     "Rejected best-effort caller deduplication, transport message IDs as authority, after-commit idempotency writes, and treating every statement replay as a new transaction."
   ],
   "consequences": [
-    "Contracts define canonical request fingerprints and logical identity keys. Identical logical evidence under another request key returns the existing evidence and existing linked transaction outcome; changed content or finance facts conflict. Backup and activation artifacts use the same reconciliation rule around durable commits."
+    "Contracts define canonical request fingerprints and logical identity keys. Identical logical evidence, approved scope, or reconciliation effect under another request key returns the existing result; changed content, scope membership, or finance facts conflict. Backup and activation artifacts use the same reconciliation rule around durable commits."
   ],
   "status_notes": [
-    "Expanded from request/artifact replay to evidence registration and reconciliation decisions."
+    "Expanded on 2026-07-23 to define account-period statement-scope logical uniqueness and cross-key replay."
   ],
   "status": "accepted",
   "created_at": "2026-07-18T06:00:14.7906393+00:00",
@@ -93,6 +93,13 @@
       "target": "TC-LEDGER-IDEMPOTENT-WRITES-CONTRACT",
       "rel": "validated-by",
       "created_at": "2026-07-18T06:08:31.0236506+00:00"
+    },
+    {
+      "id": "01KY6HQ2CXMQFT7YXCW9Z956MZ",
+      "target_type": "test_case",
+      "target": "TC-LEDGER-STATEMENT-SCOPE-REGISTRATION",
+      "rel": "validated-by",
+      "created_at": "2026-07-23T03:53:39.9984811+00:00"
     }
   ]
 }

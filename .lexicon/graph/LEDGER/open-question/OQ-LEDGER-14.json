@@ -2,15 +2,16 @@
   "id": "01KY07C89GJ4AQZ7DYRH6YAGFV",
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "OQ-LEDGER-14",
-  "question": "Which privacy-safe stable payment-instrument and cardholder identifiers are available across the initial accounts and notification or statement evidence?",
+  "question": "Which privacy-safe stable Payment Instrument and cardholder identifiers are available across the initial accounts and notification or statement evidence?",
   "context": [
     "Validate against private fixtures before design. Full card or account numbers are prohibited; missing attribution must remain explicit, and Hermes may map provider wording only to stable Tally identifiers."
   ],
   "status": "resolved",
   "decision": [
-    "Use stable local Tally ULIDs as authoritative payment-instrument and cardholder identities, owner-managed labels, optional masked suffixes, and explicit unknown states. Full provider identifiers are prohibited; Hermes may map provider wording to these IDs. Private fixtures still validate mappings before production entry."
+    "Use stable local Tally ULIDs as authoritative Payment Instrument and cardholder identities, owner-managed labels, optional masked suffixes, and explicit unknown states. Full provider identifiers are prohibited; Hermes may map provider wording to these IDs. Private fixtures still validate mappings before production entry."
   ],
   "owner": "LEDGER design",
+  "disposition": "unspecified",
   "created_at": "2026-07-20T16:57:33.2331569+00:00",
   "links": [
     {

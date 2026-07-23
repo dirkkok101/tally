@@ -6,7 +6,7 @@
   "slug": "RECONCILIATION-PROJECTION",
   "title": "Implement manual-review reconciliation candidate projection",
   "description": [
-    "Deliver the read-only provider-neutral candidate and guard-candidate projection needed for owner review. It deterministically compares approved statement observations with active unreconciled Canonical Transactions but grants no automatic match or correction authority while OQ-LEDGER-13 remains unresolved."
+    "Deliver the read-only provider-neutral candidate and guard-candidate projection needed for owner review. It deterministically compares approved statement observations with active unreconciled Canonical Transaction but grants no automatic match or correction authority while OQ-LEDGER-13 remains unresolved."
   ],
   "objective": [
     "Return stable exact and guard candidate identities, field comparisons, conflicts, and an advisory review token without mutating Ledger state or authorizing automation."
@@ -170,44 +170,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY2S6PRFDV413DDA5JG65960",
+      "id": "01KY6M2AKRCAYP9475DDZC77YC",
       "kind": "acceptance_check",
       "text": [
         "For approved statement evidence and scope, the query returns active unreconciled exact candidates whose Owned Bank Account, currency, Signed Account Amount, and Effective Date equal the typed observation, plus same-account in-scope guard candidates with explicit differing fields; membership and ordering are stable across enumeration order."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T16:47:34.6709191+00:00"
+      "created_at": "2026-07-23T04:34:46.0078163+00:00"
     },
     {
-      "id": "01KY2S6PRGHZ2GWNCCKE4HZ7QW",
+      "id": "01KY6M2AKSPMT84MWX36BHDM0W",
       "kind": "acceptance_check",
       "text": [
         "Zero exact candidates, one exact candidate, multiple exact candidates, and guard-only results are classified explicitly for owner review; no result authorizes automatic reconciliation while OQ-LEDGER-13 is unresolved."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T16:47:34.6709191+00:00"
+      "created_at": "2026-07-23T04:34:46.0078163+00:00"
     },
     {
-      "id": "01KY2S6PRGCW0VWXMNJ2TJFTJQ",
+      "id": "01KY6M2AKSSC4FVG2176PNCYR4",
       "kind": "acceptance_check",
       "text": [
-        "Inactive, reconciled, voided, superseded, wrong-account, out-of-scope, currency-conflicting, and actively statement-confirmed Canonical Transactions are excluded or surfaced with stable reasons according to the reviewed contract."
+        "Inactive, reconciled, voided, superseded, wrong-account, out-of-scope, currency-conflicting, and actively statement-confirmed Canonical Transaction are excluded or surfaced with stable reasons according to the reviewed contract."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T16:47:34.6709191+00:00"
+      "created_at": "2026-07-23T04:34:46.0078163+00:00"
     },
     {
-      "id": "01KY2S6PRGN8Z9ZHEY3M8K94ZP",
+      "id": "01KY6M2AKSM9QBVMJ19Y4JSNYZ",
       "kind": "acceptance_check",
       "text": [
-        "Projection exposes a versioned advisory review token and complete privacy-safe comparison basis but creates no Evidence Record link, Reconciliation Decision, correction, Canonical Transaction, Idempotency Identity, or snapshot row."
+        "Projection exposes a versioned advisory review token and complete allowlisted comparison basis but creates no Evidence Record link, Reconciliation Decision, correction, Canonical Transaction, Idempotency Identity, or snapshot row."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T16:47:34.6709191+00:00"
+      "created_at": "2026-07-23T04:34:46.0078163+00:00"
     },
     {
       "id": "01KY2RPB1SYA0MWJ765SJNA4AP",
@@ -251,17 +251,6 @@
     }
   ],
   "references": [
-    {
-      "id": "01KY0DT2MTPE4DPW4GC0H3305A",
-      "target_ref_code": "DM-LEDGER-RECONCILIATION-HISTORY",
-      "target_entity_type": "data_model",
-      "target_entity_id": "01KY0BTQPT00M98Z8NRSF7Y2XP",
-      "target_title": "ReconciliationProjectionDecisionAndCoverage",
-      "relationship": "touches",
-      "required": 1,
-      "sort_order": 0,
-      "created_at": "2026-07-20T18:49:57.6488706+00:00"
-    },
     {
       "id": "01KY0DT2MTAN4T8BZ7ATTC0NCW",
       "target_ref_code": "DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS",

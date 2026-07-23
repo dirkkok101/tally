@@ -212,44 +212,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY288EF55R3PD6TPWJ18WT5R",
+      "id": "01KY6M29T5Z3VZVJW1WEXWPX8T",
       "kind": "acceptance_check",
       "text": [
         "LedgerServices explicitly registers every module and OperationRegistry contains exactly 73 IDs/paths: 43 dimension/transaction/evidence, 9 reconciliation, 8 relationship/actuals, and 13 recovery/system/guidance; no aliases, generic invoke/CRUD/SQL, reflection, or private schemas exist."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:51:25.9244776+00:00"
+      "created_at": "2026-07-23T04:34:45.1894110+00:00"
     },
     {
-      "id": "01KY288EF5YAJXSJVA9XJS3PDR",
+      "id": "01KY6M29T6CY3ZTVX8BNYJK7V0",
       "kind": "acceptance_check",
       "text": [
         "Every descriptor has concrete source-generated request/result schema, errors/exits, example, compatible versions, handler, closed vocabulary, and correct idempotency classification; category.reparent and correct_existing_from_statement are discoverable."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:51:25.9244776+00:00"
+      "created_at": "2026-07-23T04:34:45.1894110+00:00"
     },
     {
-      "id": "01KY288EF69RHCRD1JSPFQB6Q9",
+      "id": "01KY6M29T6PNF3FZPJB6KS8HD1",
       "kind": "acceptance_check",
       "text": [
-        "Published schema list/show and representative success/error/review-required calls write one stdout object and safe stderr metadata; inventory is deterministic and contains no provider, email, statement-document, recipient, or raw-payload fields."
+        "Published schema list/show and representative success/error/review-required calls write one stdout object and allowlisted stderr metadata; inventory is deterministic and contains no provider, email, statement-document, recipient, or raw-payload fields."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:51:25.9244776+00:00"
+      "created_at": "2026-07-23T04:34:45.1894110+00:00"
     },
     {
-      "id": "01KY288EF6WN3FZS5N47P1QYBX",
+      "id": "01KY6M29T68PSWVHZBYV437V64",
       "kind": "acceptance_check",
       "text": [
         "Every public mutation routes through LedgerMutationExecutor; Native-AOT offline publish completes without dynamic-code warnings, listeners, child processes, or missing JSON types."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-21T11:51:25.9244776+00:00"
+      "created_at": "2026-07-23T04:34:45.1894110+00:00"
     },
     {
       "id": "01KY288EF63EDD08JWV95GVM5R",

@@ -43,7 +43,7 @@ Compose and verify the complete current schema, V001 upgrade path, process contr
 
 ### Acceptance Checks
 
-- CompleteLedgerSchema explicitly registers all five V001 fragments and V002StatementAuthoritySchema in dependency-safe version/name order; a fresh store and a committed V001 fixture reach the same current schema and migration metadata.
+- CompleteLedgerSchema explicitly registers all five V001 fragments and V002StatementAuthoritySchema in dependency-allowlisted version/name order; a fresh store and a committed V001 fixture reach the same current schema and migration metadata.
 - Schema tests compare every table, column, index, foreign key, check, hierarchy rule, evidence privacy allowlist, statement-authority reference, and user_version; missing/duplicate fragments or injected SQL failure leave no partial schema.
 - Published tally initializes a private current generation, executes a typed idempotent probe through TallyProcess, emits one stdout envelope, and leaves no child process or network listener.
 - Identical request/logical replay returns the original effect; pre-commit crash leaves zero domain/idempotency rows; changed replay conflicts.

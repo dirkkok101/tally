@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "G12",
   "text": [
-    "Maintain first-class spend pools and attributable transaction pool assignment independently from account, instrument, cardholder, and category. Evidence: direct — the owner requires company-paid discretionary or personal-expense spending to remain separate from personal after-tax spending; workflow UC-LEDGER-018."
+    "Maintain first-class Spend Pool and attributable transaction Pool Assignment independently from account, instrument, cardholder, and category. Evidence: direct — the owner requires company-paid discretionary or personal-expense spending to remain separate from personal after-tax spending; workflow UC-LEDGER-018."
   ],
   "target": "The owner can represent at least the required company-paid and personal-after-tax pools, preserve stable pool identity and assignment history, expose unassigned-pool actuals, and return exact actuals by pool and category through public Ledger queries.",
   "created_at": "2026-07-20T16:56:26.5907962+00:00"

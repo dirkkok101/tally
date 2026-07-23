@@ -44,7 +44,7 @@ Guarantee identical request and cross-key logical replay return the original eff
 
 - Request identity is contract version + operation ID + caller key; hash includes normalized input and actor.
 - Identical request replay returns the stored result/entity/artifact with no volatile replay field and no second effect; changed operation/version/actor/payload returns LEDGER-IDEMPOTENCY-001 and preserves the first outcome.
-- Evidence registration and Reconciliation Decisions also claim closed logical-effect identities, so identical evidence or decision submitted under another caller key returns the existing outcome and conflicting semantic input fails closed.
+- Evidence registration and Reconciliation Decision also claim closed logical-effect identities, so identical evidence or decision submitted under another caller key returns the existing outcome and conflicting semantic input fails closed.
 - Validation and busy/resource failures occur before key or logical identity consumption; domain changes, histories, links, stored result, request identity, and logical identity commit in one transaction.
 - Artifact publication uses deterministic identity, private staging, checksum, flush, atomic publication, and retry reconciliation.
 

@@ -6,7 +6,7 @@
     "Provide web or messaging pages, navigation, menus, translations, application permissions, browser workflows, frontend key models, or any other human delivery surface in LEDGER."
   ],
   "rationale": [
-    "LEDGER is a provider-neutral contract-only local CLI. Hermes or another external orchestrator owns all screens, conversations, schedules, recipient disclosure, rendering, notification, and delivery. CHANNELS is not a Ledger implementation dependency."
+    "LEDGER is a provider-neutral contract-only local CLI. Hermes or another External Orchestrator owns all screens, conversations, schedules, recipient disclosure, rendering, notification, and delivery. CHANNELS is not a Ledger implementation dependency."
   ],
   "created_at": "2026-07-17T13:41:36.7690735+00:00"
 }

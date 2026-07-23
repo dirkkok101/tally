@@ -12,7 +12,7 @@
 
 ## Summary
 
-Deliver the read-only provider-neutral candidate and guard-candidate projection needed for owner review. It deterministically compares approved statement observations with active unreconciled Canonical Transactions but grants no automatic match or correction authority while OQ-LEDGER-13 remains unresolved.
+Deliver the read-only provider-neutral candidate and guard-candidate projection needed for owner review. It deterministically compares approved statement observations with active unreconciled Canonical Transaction but grants no automatic match or correction authority while OQ-LEDGER-13 remains unresolved.
 
 ## Objective
 
@@ -25,7 +25,6 @@ Return stable exact and guard candidate identities, field comparisons, conflicts
 | DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates | `design_decision` | `governed-by` | `true` |
 | DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
 | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts | `data_model` | `touches` | `true` |
-| DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | `true` |
 | FR-LEDGER-RECONCILIATION-PROJECTION: Project reconciliation candidates | `requirement` | `implements` | `true` |
 | TC-LEDGER-RECONCILIATION-PROJECTION-CONTRACT: Verify deterministic reconciliation candidate projection | `test_case` | `verifies` | `true` |
 
@@ -42,8 +41,8 @@ Return stable exact and guard candidate identities, field comparisons, conflicts
 
 - For approved statement evidence and scope, the query returns active unreconciled exact candidates whose Owned Bank Account, currency, Signed Account Amount, and Effective Date equal the typed observation, plus same-account in-scope guard candidates with explicit differing fields; membership and ordering are stable across enumeration order.
 - Zero exact candidates, one exact candidate, multiple exact candidates, and guard-only results are classified explicitly for owner review; no result authorizes automatic reconciliation while OQ-LEDGER-13 is unresolved.
-- Inactive, reconciled, voided, superseded, wrong-account, out-of-scope, currency-conflicting, and actively statement-confirmed Canonical Transactions are excluded or surfaced with stable reasons according to the reviewed contract.
-- Projection exposes a versioned advisory review token and complete privacy-safe comparison basis but creates no Evidence Record link, Reconciliation Decision, correction, Canonical Transaction, Idempotency Identity, or snapshot row.
+- Inactive, reconciled, voided, superseded, wrong-account, out-of-scope, currency-conflicting, and actively statement-confirmed Canonical Transaction are excluded or surfaced with stable reasons according to the reviewed contract.
+- Projection exposes a versioned advisory review token and complete allowlisted comparison basis but creates no Evidence Record link, Reconciliation Decision, correction, Canonical Transaction, Idempotency Identity, or snapshot row.
 
 ### Failure Criteria
 
@@ -114,7 +113,6 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
 - `implements` -> FR-LEDGER-RECONCILIATION-PROJECTION: Project reconciliation candidates
 - `touches` -> DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts
-- `touches` -> DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage
 - `verifies` -> TC-LEDGER-RECONCILIATION-PROJECTION-CONTRACT: Verify deterministic reconciliation candidate projection
 
 ## Navigation

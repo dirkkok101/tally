@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "ref_code": "G7",
   "text": [
-    "Make retries of every Ledger mutation, evidence registration, and reconciliation decision safe and deterministic. Evidence: analogous — external orchestrators can lose output after commit, and repeated email or statement evidence must create no duplicate effects; workflows UC-LEDGER-002, UC-LEDGER-006, UC-LEDGER-013, UC-LEDGER-014, and UC-LEDGER-015."
+    "Make retries of every Ledger mutation, evidence registration, and Reconciliation Decision safe and deterministic. Evidence: analogous — External Orchestrator can lose output after commit, and repeated email or statement evidence must create no duplicate effects; workflows UC-LEDGER-002, UC-LEDGER-006, UC-LEDGER-013, UC-LEDGER-014, and UC-LEDGER-015."
   ],
   "target": "Semantically identical reuse returns the original result with no duplicate transaction, evidence link, decision, attribution, or artifact; conflicting reuse returns a stable conflict and preserves the original outcome.",
   "created_at": "2026-07-17T17:28:47.3713247+00:00"

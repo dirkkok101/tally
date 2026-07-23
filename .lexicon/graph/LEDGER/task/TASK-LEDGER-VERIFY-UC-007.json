@@ -26,14 +26,24 @@
   ],
   "dependencies": [
     {
-      "id": "01KXT16CBYP3DV3SJB4X1735NG",
+      "id": "01KY6J60A8RB59E2H6675AKQEB",
       "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
       "dependency_type": "compile",
       "reason": [
-        "Use-case verification invokes the fully wired published public contract."
+        "The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-23T04:01:49.3850068+00:00"
+    },
+    {
+      "id": "01KY6J2MJMAM6RD894XX81B29J",
+      "target": "TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "The remaining Release-CLI workflow consumes the successor 74-operation public contract."
       ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:14:02.7510256+00:00"
+      "created_at": "2026-07-23T03:59:59.0610114+00:00"
     }
   ],
   "files": [
@@ -49,28 +59,28 @@
   ],
   "interfaces": [
     {
-      "id": "01KY0EB012F92GCT73M28Y1G7J",
+      "id": "01KY6J2K300V1TDW3Z0Y4YMVMY",
       "name": "PublishedTallyFixture",
       "direction": "consumes",
       "notes": [
         "Release published-process E2E fixture"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-20T18:59:12.0334092+00:00"
+      "created_at": "2026-07-23T03:59:57.5364047+00:00"
     },
     {
-      "id": "01KY0EB012PF0FZDP8B08FMXQE",
-      "name": "CompletePublicContract",
+      "id": "01KY6J2K31EZG1NKM3T5JT5P8E",
+      "name": "CompletePublicContract74",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "Exactly 72 provider-neutral operations"
+        "Exactly 74 provider-neutral operations"
       ],
       "sort_order": 1,
-      "created_at": "2026-07-20T18:59:12.0334092+00:00"
+      "created_at": "2026-07-23T03:59:57.5364047+00:00"
     },
     {
-      "id": "01KY0EB012KE0FVTVZSRF7HT35",
+      "id": "01KY6J2K31FFRXT1M42YARZK3Y",
       "name": "VerifiedUC007",
       "direction": "produces",
       "contract_ref_code": "UC-LEDGER-007",
@@ -78,7 +88,7 @@
         "complete-state backup and restore workflow"
       ],
       "sort_order": 2,
-      "created_at": "2026-07-20T18:59:12.0334092+00:00"
+      "created_at": "2026-07-23T03:59:57.5364047+00:00"
     }
   ],
   "links": [
@@ -92,34 +102,34 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY28D617YKP3YTX3SKAW4S5S",
+      "id": "01KY6J5FCX3ZEKDKSGCSKMQFVR",
       "kind": "acceptance_check",
       "text": [
-        "Create/verify/prepare/activate through the published CLI reproduces facts, category hierarchy/parent history, dimensions, evidence, exact and corrected statement decisions, carry-forward, relationship replacement, coverage, idempotency, and exact direct/subtree/pool totals."
+        "Create statement-row evidence and one completed Statement Scope through the published 74-operation CLI, apply exact and corrected decisions plus coverage, then backup.create/verify and restore.prepare/activate reproduce facts, category hierarchy/parent history, dimensions, immutable scope/membership, evidence, decisions, carry-forward, relationship replacement, coverage, idempotency, and exact direct/subtree/pool totals."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-21T11:54:01.1272476+00:00"
+      "created_at": "2026-07-23T04:01:32.0606064+00:00"
     },
     {
-      "id": "01KY28D618RNZRQVGKFA4X6M4B",
+      "id": "01KY6J5FCXKHZM96J7Y5S7HRN3",
       "kind": "acceptance_check",
       "text": [
-        "Checksum, permission, schema, cyclic hierarchy, incomplete correction, invalid relationship, count, exact-total, stale activation, and injected crash failures leave the prior generation current."
+        "Checksum, permission, schema, duplicate/corrupt scope membership, cyclic hierarchy, incomplete correction, invalid relationship, count, exact-total, stale activation, and injected crash failures leave the prior generation current."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-21T11:54:01.1272476+00:00"
+      "created_at": "2026-07-23T04:01:32.0606064+00:00"
     },
     {
-      "id": "01KY28D618BSCTAKQJ4BGY4DNQ",
+      "id": "01KY6J5FCX33YT0QYYMSE8PX19",
       "kind": "acceptance_check",
       "text": [
         "QuerySnapshot is excluded and diagnostics contain no raw email/statement/provider payload or full identifiers."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-21T11:54:01.1272476+00:00"
+      "created_at": "2026-07-23T04:01:32.0606064+00:00"
     },
     {
       "id": "01KXT126TAXDFFWPD66DR4S464",

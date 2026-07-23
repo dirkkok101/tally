@@ -237,74 +237,74 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY45ZANBESY5A6FQGEH6ZKB4",
+      "id": "01KY6M2BDE1SH3R6Z4NHWS2SM4",
       "kind": "acceptance_check",
       "text": [
         "An active same-account ZAR original outflow below zero and refund credit above zero with exactly equal absolute minor-unit amounts plus a reason creates one active relationship with refund_original and refund_credit roles and the full original amount."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-22T05:49:58.8238431+00:00"
+      "created_at": "2026-07-23T04:34:46.8301786+00:00"
     },
     {
-      "id": "01KY45ZANC1J74H23N6TB8199Z",
+      "id": "01KY6M2BDHZVRZJCDVJH735BGD",
       "kind": "acceptance_check",
       "text": [
         "A smaller partial credit or larger over-refund returns LEDGER-REFUND-AMOUNT and creates no relationship or idempotency effect."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-22T05:49:58.8238431+00:00"
+      "created_at": "2026-07-23T04:34:46.8301786+00:00"
     },
     {
-      "id": "01KY45ZANCKVT46Q95AZNSN7B4",
+      "id": "01KY6M2BDHKXE9CSRX7MQZF9NQ",
       "kind": "acceptance_check",
       "text": [
-        "Different account or currency, same or reversed role signs, inactive or missing participants, refund-credit-as-original, and unsafe input return their documented stable validation, lifecycle, or not-found errors with no mutation."
+        "Different account or currency, same or reversed role signs, inactive or missing participants, refund-credit-as-original, and unallowlisted input return their documented stable validation, lifecycle, or not-found errors with no mutation."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-22T05:49:58.8238431+00:00"
+      "created_at": "2026-07-23T04:34:46.8301786+00:00"
     },
     {
-      "id": "01KY45ZANC7MWPW7DXTENGZ8G8",
+      "id": "01KY6M2BDHR1XRVZQ25BSVMR8K",
       "kind": "acceptance_check",
       "text": [
         "Any active transfer or refund role on either participant, including a second active refund proposed for the same original, returns LEDGER-RELATIONSHIP-ACTIVE-ROLE-CONFLICT and preserves exactly one active relationship."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-22T05:49:58.8238431+00:00"
+      "created_at": "2026-07-23T04:34:46.8301786+00:00"
     },
     {
-      "id": "01KY45ZANCQCSMSE1QNABDJGWX",
+      "id": "01KY6M2BDHT5VDWPTKS4Y2YJAN",
       "kind": "acceptance_check",
       "text": [
-        "A semantically identical replay returns the first relationship without duplicate rows; changed input under a consumed idempotency identity returns LEDGER-IDEMPOTENCY-001; competing logical effects cannot create two active roles."
+        "A semantically identical replay returns the first relationship without duplicate rows; changed input under a consumed Idempotency Identity returns LEDGER-IDEMPOTENCY-001; competing logical effects cannot create two active roles."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-22T05:49:58.8238431+00:00"
+      "created_at": "2026-07-23T04:34:46.8301786+00:00"
     },
     {
-      "id": "01KY45ZANDGDNNCTF2V39EJ8B4",
+      "id": "01KY6M2BDHGK5G1Q7YK34HN612",
       "kind": "acceptance_check",
       "text": [
         "Relationship detail exposes exact amount, ZAR currency, explicit roles, active state, actor, created time, and queryable empty confirmation history while both ordinary source transactions remain byte-for-byte equivalent in financial and lifecycle facts."
       ],
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-22T05:49:58.8238431+00:00"
+      "created_at": "2026-07-23T04:34:46.8301786+00:00"
     },
     {
-      "id": "01KY45ZAND6WMYWYAD2NZXGPR3",
+      "id": "01KY6M2BDHDRAFYNY3P3YBB9SZ",
       "kind": "acceptance_check",
       "text": [
-        "The existing financial_relationship_roles_are_exclusive_before_insert trigger and RelationshipStore active-role guard remain unchanged because their semantics correctly enforce the full-refund-only model."
+        "The existing financial_relationship_roles_are_exclusive_before_insert trigger and RelationshipStore active-role guard remain unchanged because their semantics enforce the full-refund-only model."
       ],
       "required": 1,
       "sort_order": 6,
-      "created_at": "2026-07-22T05:49:58.8238431+00:00"
+      "created_at": "2026-07-23T04:34:46.8301786+00:00"
     },
     {
       "id": "01KY45ZANDNR00BDJ32EM61C4A",
@@ -358,28 +358,6 @@
     }
   ],
   "references": [
-    {
-      "id": "01KXT0SME4NAH53KJF169JQVZV",
-      "target_ref_code": "NFR-LEDGER-ATTRIBUTABLE-HISTORY",
-      "target_entity_type": "nfr",
-      "target_entity_id": "01KXSQFZJ0XVBBX0FPF6FJ7E2Y",
-      "target_title": "Retain attributable correction history",
-      "relationship": "satisfies",
-      "required": 1,
-      "sort_order": 0,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
-    },
-    {
-      "id": "01KXT0SME4QXGA0JZNANS0ZV56",
-      "target_ref_code": "DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS",
-      "target_entity_type": "data_model",
-      "target_entity_id": "01KXSYGFC3892700GHYSWPE777",
-      "target_title": "RelationshipActualsOperationContracts",
-      "relationship": "touches",
-      "required": 1,
-      "sort_order": 2,
-      "created_at": "2026-07-18T07:07:05.0252128+00:00"
-    },
     {
       "id": "01KXT0SME4XMSGZ2MY451V6AMH",
       "target_ref_code": "TC-LEDGER-REFUND-CONFIRMATION-CONTRACT",

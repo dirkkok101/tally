@@ -8,7 +8,7 @@
   "likelihood": "Medium",
   "impact": "High",
   "mitigation": [
-    "Use generic evidence kinds, opaque references, privacy-safe fingerprints and metadata, restricted artifacts, payload-free diagnostics, and canary tests for provider and financial disclosure."
+    "Use generic Evidence Kind, opaque references, privacy-safe fingerprints and metadata, restricted artifacts, payload-free diagnostics, and canary tests for provider and financial disclosure."
   ],
   "created_at": "2026-07-20T16:57:35.8956062+00:00"
 }

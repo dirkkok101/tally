@@ -43,7 +43,7 @@ Produce one normalized real-SQLite report required before backup publication, re
 - The report enumerates facts/lifecycles; category nodes, parent history, acyclicity and current ancestry; pool/payment/category histories; evidence/links; confirmed-existing and corrected-from-statement decisions; supersession/carry-forward/relationship chains; coverage/exceptions; idempotency/logical effects; counts and exact totals. QuerySnapshot is excluded.
 - Any missing type, cycle, orphan, invalid lifecycle/cardinality, privacy violation, duplicate active effect, incomplete statement correction, invalid relationship replacement, replay mismatch, count mismatch, overflow, hierarchy double-count, or total/cell mismatch fails closed.
 - A verified backup restored into a fresh private generation reproduces the normalized report exactly apart from generation metadata; deterministic corruptions prove each rejection.
-- Diagnostics contain safe type names, identifiers, and counts only, never descriptions, raw evidence, email/statement payloads, credentials, full identifiers, or serialized financial objects.
+- Diagnostics contain allowlisted type names, identifiers, and counts only, never descriptions, raw evidence, email/statement payloads, credentials, full identifiers, or serialized financial objects.
 
 ### Failure Criteria
 

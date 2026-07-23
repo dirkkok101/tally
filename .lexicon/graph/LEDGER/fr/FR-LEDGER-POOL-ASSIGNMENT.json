@@ -3,7 +3,7 @@
   "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
   "type": "functional",
   "ref_code": "FR-LEDGER-POOL-ASSIGNMENT",
-  "title": "Assign and correct transaction Spend Pools",
+  "title": "Assign and correct transaction Spend Pool",
   "description": [
     "Maintain at most one active Spend Pool Assignment per active spend transaction, with explicit unassigned state and attributable correction history independent of category. Implements G12 and UC-LEDGER-018 under C22 and C23."
   ],
@@ -14,7 +14,7 @@
   "complexity": "L",
   "story_as": "Personal Finance Owner",
   "story_want": [
-    "assign or correct a transaction's spend pool"
+    "assign or correct a transaction's Spend Pool"
   ],
   "story_so_that": [
     "pool and pool-by-category actuals remain exact and independently explainable"

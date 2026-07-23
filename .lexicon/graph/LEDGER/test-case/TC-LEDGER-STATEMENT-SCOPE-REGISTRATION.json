@@ -1,0 +1,61 @@
+{
+  "id": "01KY6HPDFBXPK0B23DQP8ATA0Z",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "ref_code": "TC-LEDGER-STATEMENT-SCOPE-REGISTRATION",
+  "slug": "STATEMENT-SCOPE-REGISTRATION",
+  "title": "Verify atomic statement-scope registration",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "An active owned account and registered provider-neutral Evidence Record, including valid statement rows and invalid kind/account/date variants.",
+  "steps": "Invoke ledger.reconciliation.scope.register with one approved account, inclusive period, opaque manifest reference, and complete statement-row evidence set; inspect the public result and durable scope membership; replay with the same key and another key; then vary manifest, membership, Evidence Kind, account, date, and crash point.",
+  "expected": "One completed immutable scope and all memberships commit atomically; evidence IDs are ordered; identical same-key and cross-key replay return the original scope with zero duplicate effects; changed account-period content and invalid evidence return stable errors with zero scope, membership, or consumed invalid-request idempotency effect.",
+  "owner": "LEDGER",
+  "created_at": "2026-07-23T03:53:18.5728734+00:00",
+  "links": [
+    {
+      "id": "01KY6HPZV0D51H4EDMXVQT429N",
+      "target_type": "feature_area",
+      "target": "FA-LEDGER-RECONCILIATION",
+      "rel": "belongs-to",
+      "created_at": "2026-07-23T03:53:37.3786985+00:00"
+    },
+    {
+      "id": "01KY6HPVQH1HCP7N7X0W9JXBK2",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-IDEMPOTENT-WRITES",
+      "rel": "verifies",
+      "created_at": "2026-07-23T03:53:33.1704198+00:00"
+    },
+    {
+      "id": "01KY6HPTG5199234SGEBV5MCC1",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-RECONCILIATION-COVERAGE",
+      "rel": "verifies",
+      "created_at": "2026-07-23T03:53:31.9107886+00:00"
+    },
+    {
+      "id": "01KY6HPSJC96BN1368M9F5QD99",
+      "target_type": "requirement",
+      "target": "FR-LEDGER-STATEMENT-RECONCILIATION",
+      "rel": "verifies",
+      "created_at": "2026-07-23T03:53:30.9575868+00:00"
+    },
+    {
+      "id": "01KY6HPX4A37ZT0JNTXC9C46GP",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-014",
+      "rel": "verifies",
+      "created_at": "2026-07-23T03:53:34.6029752+00:00"
+    },
+    {
+      "id": "01KY6HPYGG9YFX7K5G9A7D0CF6",
+      "target_type": "use_case",
+      "target": "UC-LEDGER-016",
+      "rel": "verifies",
+      "created_at": "2026-07-23T03:53:36.0173586+00:00"
+    }
+  ]
+}

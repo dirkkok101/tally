@@ -26,14 +26,24 @@
   ],
   "dependencies": [
     {
-      "id": "01KXT16F26P9JAS1ANPJKFVSFT",
+      "id": "01KY6J62V7BPPXRE7VRZA2X9M9",
       "target": "TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT",
       "dependency_type": "compile",
       "reason": [
-        "Use-case verification invokes the fully wired published public contract."
+        "The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-23T04:01:51.9760072+00:00"
+    },
+    {
+      "id": "01KY6J2Y5KET1AMN3T6TMGT1H9",
+      "target": "TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "The remaining Release-CLI workflow consumes the successor 74-operation public contract."
       ],
       "sort_order": 0,
-      "created_at": "2026-07-18T07:14:05.5112203+00:00"
+      "created_at": "2026-07-23T04:00:08.8844583+00:00"
     }
   ],
   "files": [
@@ -49,28 +59,28 @@
   ],
   "interfaces": [
     {
-      "id": "01KY0EB1QKE7SN9K3RR7THSGDR",
+      "id": "01KY6J2WVFZ1AJRQDF8955VDNZ",
       "name": "PublishedTallyFixture",
       "direction": "consumes",
       "notes": [
         "Release published-process E2E fixture"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-20T18:59:13.7784940+00:00"
+      "created_at": "2026-07-23T04:00:07.5349920+00:00"
     },
     {
-      "id": "01KY0EB1QK4XMXMC27X5A57SY9",
-      "name": "CompletePublicContract",
+      "id": "01KY6J2WVGS55HWE4WMVC4FT1H",
+      "name": "CompletePublicContract74",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "Exactly 72 provider-neutral operations"
+        "Exactly 74 provider-neutral operations"
       ],
       "sort_order": 1,
-      "created_at": "2026-07-20T18:59:13.7784940+00:00"
+      "created_at": "2026-07-23T04:00:07.5349920+00:00"
     },
     {
-      "id": "01KY0EB1QKEGSF1Y9GQX4JXD8K",
+      "id": "01KY6J2WVG0NVQYMG46DWEC1GH",
       "name": "VerifiedUC012",
       "direction": "produces",
       "contract_ref_code": "UC-LEDGER-012",
@@ -78,7 +88,7 @@
         "complete-state evolution workflow"
       ],
       "sort_order": 2,
-      "created_at": "2026-07-20T18:59:13.7784940+00:00"
+      "created_at": "2026-07-23T04:00:07.5349920+00:00"
     }
   ],
   "links": [

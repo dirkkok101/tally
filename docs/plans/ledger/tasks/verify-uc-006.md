@@ -62,6 +62,7 @@ Prove Hermes, another orchestrator, or a direct caller can discover and invoke a
 ### Notes
 
 - This gate validates completed behavior and therefore intentionally has no Implements link.
+- Historical predecessor evidence: bd-gpm verified CompletePublicContract at exactly 73 operations before ledger.reconciliation.scope.register existed. Do not rerun this exact-count check after StatementScopePublicComposition74; TASK-LEDGER-RECONCILIATION-SCOPE-PUBLIC-COMPOSITION advances the shared UC006 test and current inventory to 74, and TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT proves the successor contract.
 
 ### File Contracts
 
@@ -75,7 +76,7 @@ Prove Hermes, another orchestrator, or a direct caller can discover and invoke a
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
 | CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 73 provider-neutral operations |
-| VerifiedUC006 | `produces` | UC-LEDGER-006 | External-orchestrator contract workflow |
+| VerifiedUC006 | `produces` | UC-LEDGER-006 | External Orchestrator contract workflow |
 
 ### Verification
 
