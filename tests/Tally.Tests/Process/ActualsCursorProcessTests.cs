@@ -66,6 +66,24 @@ public sealed class ActualsCursorProcessTests : IAsyncLifetime
         Assert.Equal(ActualsErrors.CursorFilterMismatch, result.ErrorCode);
     }
 
+    [Fact]
+    public async Task FR_LEDGER_SNAPSHOT_PAGINATION_published_invalid_cursor_uses_the_declared_compatibility_exit()
+    {
+        var result = await RunProcess(new(Cursor: "not-base64"));
+
+        AssertProcessError(result, 7, ActualsErrors.CursorInvalid);
+    }
+
+    [Fact]
+    public async Task FR_LEDGER_SNAPSHOT_PAGINATION_published_resubmitted_filters_use_the_declared_compatibility_exit()
+    {
+        var cursor = (await FirstPage()).Cursor;
+
+        var result = await RunProcess(new(new(), Cursor: cursor));
+
+        AssertProcessError(result, 7, ActualsErrors.CursorFilterMismatch);
+    }
+
     [Theory]
     [InlineData("not-base64")]
     [InlineData("e30")]
@@ -171,6 +189,25 @@ public sealed class ActualsCursorProcessTests : IAsyncLifetime
         var result = await Dispatch(input);
         Assert.True(result.IsSuccess, result.ErrorCode);
         return JsonSerializer.Deserialize(result.Value, ActualsJsonContext.Default.ActualsQueryResult)!;
+    }
+
+    private async Task<ProcessResult> RunProcess(QueryActualsInput input)
+    {
+        var request = new RequestEnvelope(
+            "1.0",
+            new("automation", "actuals-process-test"),
+            JsonSerializer.SerializeToElement(input, ActualsJsonContext.Default.QueryActualsInput),
+            null);
+        var body = JsonSerializer.Serialize(request, LedgerJsonContext.Default.RequestEnvelope);
+        return await process.RunAsync(["ledger", "actuals", "query", "--input", "-"], body, CancellationToken.None);
+    }
+
+    private static void AssertProcessError(ProcessResult result, int exitCode, string errorCode)
+    {
+        Assert.Equal(exitCode, result.ExitCode);
+        Assert.Equal("tally: " + errorCode, result.Stderr);
+        using var document = JsonDocument.Parse(result.Stdout);
+        Assert.Equal(errorCode, document.RootElement.GetProperty("error").GetProperty("code").GetString());
     }
 
     private Task<TransactionDetail> Record(string accountId, string amount, string date, string description)

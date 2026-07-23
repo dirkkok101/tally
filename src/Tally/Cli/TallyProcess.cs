@@ -2,6 +2,7 @@ using System.Text.Json;
 using Tally.Application;
 using Tally.Bootstrap;
 using Tally.Contracts.Common;
+using Tally.Contracts.Ledger.Actuals;
 using Tally.Contracts.System;
 
 namespace Tally.Cli;
@@ -128,6 +129,12 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
         "LEDGER-POOL-ASSIGNMENT-INVALID" => Error(3, code, "validation", "The Spend Pool assignment input is invalid."),
         "LEDGER-POOL-ASSIGNMENT-STALE" or "LEDGER-POOL-ASSIGNMENT-ALREADY-ASSIGNED" or "LEDGER-POOL-ASSIGNMENT-UNCHANGED" => Error(5, code, "conflict", "The Spend Pool assignment conflicts with current state."),
         "LEDGER-POOL-ASSIGNMENT-TRANSACTION-INACTIVE" => Error(6, code, "lifecycle", "The Spend Pool assignment lifecycle does not allow the operation."),
+        ActualsErrors.InvalidFilter => Error(3, code, "validation", "The actuals query filter is invalid."),
+        ActualsErrors.SnapshotNotFound => Error(4, code, "not_found", "The actuals query snapshot was not found."),
+        ActualsErrors.SnapshotBusy => Error(5, code, "conflict", "The actuals query snapshot conflicts with current state."),
+        ActualsErrors.SnapshotExpired => Error(6, code, "lifecycle", "The actuals query snapshot has expired."),
+        ActualsErrors.CursorInvalid or ActualsErrors.ContractMismatch or ActualsErrors.CursorFilterMismatch or ActualsErrors.GenerationMismatch or ActualsErrors.HierarchyMismatch => Error(7, code, "compatibility", "The actuals query cursor is not compatible with this request."),
+        ActualsErrors.Invariant => Error(8, code, "integrity", "The actuals query could not preserve its integrity contract."),
         "LEDGER-TRANSFER-INVALID" or "LEDGER-TRANSFER-SAME-ACCOUNT" or "LEDGER-TRANSFER-SIGN" or "LEDGER-TRANSFER-AMOUNT" or "LEDGER-TRANSFER-CURRENCY" => Error(3, code, "validation", "The transfer does not satisfy the financial relationship contract."),
         "LEDGER-REFUND-INVALID" or "LEDGER-REFUND-ACCOUNT" or "LEDGER-REFUND-SIGN" or "LEDGER-REFUND-AMOUNT" or "LEDGER-REFUND-CURRENCY" => Error(3, code, "validation", "The refund does not satisfy the full-amount financial relationship contract."),
         "LEDGER-RELATIONSHIP-NOT-FOUND" => Error(4, code, "not_found", "The financial relationship was not found."),
