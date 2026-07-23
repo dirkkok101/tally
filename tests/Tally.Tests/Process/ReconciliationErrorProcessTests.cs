@@ -51,6 +51,16 @@ public sealed class ReconciliationErrorProcessTests
         { ReconciliationDecisionErrors.CandidateInactive, 6, "lifecycle" },
         { ReconciliationDecisionErrors.CandidateIncompatible, 8, "integrity" },
         { ReconciliationDecisionErrors.CandidateAlreadyReconciled, 5, "conflict" },
-        { ReconciliationDecisionErrors.LinkConflict, 5, "conflict" }
+        { ReconciliationDecisionErrors.LinkConflict, 5, "conflict" },
+        { ReconciliationCoverageErrors.ScopeNotFound, 4, "not_found" },
+        { ReconciliationCoverageErrors.ScopeIncomplete, 8, "integrity" },
+        { ReconciliationCoverageErrors.ScopeInactive, 6, "lifecycle" },
+        { ReconciliationCoverageErrors.ScopeConflict, 5, "conflict" },
+        { ReconciliationCoverageErrors.EvidenceSetChanged, 5, "conflict" },
+        { ReconciliationCoverageErrors.PolicyUnsupported, 7, "compatibility" },
+        { ReconciliationCoverageErrors.MissingOutcome, 8, "integrity" },
+        { ReconciliationCoverageErrors.DuplicateTransactionOutcome, 5, "conflict" },
+        { ReconciliationCoverageErrors.AlreadyCompleted, 5, "conflict" },
+        { ReconciliationCoverageErrors.NotFound, 4, "not_found" }
     };
 }
