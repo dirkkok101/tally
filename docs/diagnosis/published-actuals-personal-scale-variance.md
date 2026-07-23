@@ -1,10 +1,14 @@
 # Published actuals personal-scale variance
 
+## Product disposition
+
+Superseded on 2026-07-23 by Dirk's decision to prioritize initial real-world CLI validation. Personal-scale p50 and p95 remain mandatory reported diagnostics, but no fixed latency threshold blocks the initial Ledger module gate. All correctness, exactness, pagination, recovery, security, and provider-neutrality checks remain blocking.
+
 ## Symptom report
 
 `Tally.Tests.Performance.ActualsPersonalScaleTests.Published_pool_category_actuals_path_meets_personal_scale_budget` intermittently exceeds the accepted `TC-LEDGER-PERSONAL-SCALE-PERFORMANCE` wall-clock contract: p95 must remain below 2,000 ms for a published 100,000-transaction pool/category query.
 
-The defect blocks `bd-3bx`, the LEDGER v1 module gate. The threshold is not changed or conditionally skipped.
+The original fixed threshold blocked `bd-3bx`, the LEDGER v1 module gate. The measurements below are retained as evidence for choosing a later field-informed threshold.
 
 ## Reproduction
 
@@ -59,4 +63,4 @@ Run the existing 30-sample Release gate on a supported reference workstation wit
 
 ## Resolution
 
-Blocked on a valid performance verification environment. The Lex design review found the graph already defines the missing precondition, so no design or plan entity was changed. Resume when the declared no-concurrent-load Release measurement can be run without disrupting unrelated work.
+Resolved by product correction rather than performance implementation: the initial CLI field-validation release reports the unchanged 30-run benchmark's p50 and p95 without asserting a fixed threshold. Revisit a blocking latency target after real-world usage provides representative workload and environment evidence.

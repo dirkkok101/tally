@@ -281,54 +281,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KY6J4XPK2GMMAPW02SWSRQ3Q",
+      "id": "01KY7GNZ3012JHHZXXCB6DSKCV",
       "kind": "acceptance_check",
       "text": [
         "dotnet restore/build/format and full xUnit exit 0 with zero warnings/failures; every planned class has nonzero discovery."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-23T04:01:13.9378732+00:00"
+      "created_at": "2026-07-23T12:54:49.6951693+00:00"
     },
     {
-      "id": "01KY6J4XPM76QJ0PS7PV4WTPB6",
+      "id": "01KY7GNZ3145900E33NHE7ZWFK",
       "kind": "acceptance_check",
       "text": [
         "Release linux-x64 Native-AOT publish exits 0 and reports the exact 74-operation offline inventory including category.reparent, statement-scope registration, and statement correction with no child process, listener, provider integration, or raw-payload schema."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-23T04:01:13.9378732+00:00"
+      "created_at": "2026-07-23T12:54:49.6951693+00:00"
     },
     {
-      "id": "01KY6J4XPM8M756GZZH05EB8G7",
+      "id": "01KY7GNZ32KK3SG83JYX6KZ9XE",
       "kind": "acceptance_check",
       "text": [
-        "Core/security/provider-neutral scripts pass; personal-scale p95 passes; recovery reproduces category hierarchy/history, immutable statement scopes and membership, exact/corrected statement reconciliation, carry-forward/relationship chains, every replay outcome, count, and exact direct/subtree/pool total."
+        "Core/security/provider-neutral scripts pass; the personal-scale benchmark reports p50 and p95 without a blocking latency threshold; recovery reproduces category hierarchy/history, immutable statement scopes and membership, exact/corrected statement reconciliation, carry-forward/relationship chains, every replay outcome, count, and exact direct/subtree/pool total."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-23T04:01:13.9378732+00:00"
+      "created_at": "2026-07-23T12:54:49.6951693+00:00"
     },
     {
-      "id": "01KY6J4XPMMS2PVNF6966TGYMB",
+      "id": "01KY7GNZ32NSEPPZZGDZ6DMTTY",
       "kind": "acceptance_check",
       "text": [
         "lex coverage reports 25/25 active FRs with no gaps; lex check --fast, plan coverage, audit, dependency cycles, and all 18 UC verifiers are clean."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-23T04:01:13.9378732+00:00"
+      "created_at": "2026-07-23T12:54:49.6951693+00:00"
     },
     {
-      "id": "01KY6J4XPMVGJKKAG0GAH35QSC",
+      "id": "01KY7GNZ321RPNQ8V6803APNDJ",
       "kind": "acceptance_check",
       "text": [
         "git diff --check is empty and verification evidence lists every command/result and any changed file lacking direct test coverage."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-23T04:01:13.9378732+00:00"
+      "created_at": "2026-07-23T12:54:49.6951693+00:00"
     },
     {
       "id": "01KXT126TG3NAZ1VECCTEV4ESW",
@@ -361,24 +361,24 @@
       "created_at": "2026-07-18T07:11:45.9941647+00:00"
     },
     {
-      "id": "01KY6J4XPMCAE38G069GZYNZZG",
+      "id": "01KY7GNZ32BJAM36BQWRX0V1ZY",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT accept zero-match tests, Debug-only proof, skipped recovery/security/performance/hierarchy checks, manually edited coverage, unresolved cash/pool/match gates, or stale 72/73-operation expectations."
+        "Do NOT accept zero-match tests, Debug-only proof, omitted performance reporting, skipped recovery/security/hierarchy checks, manually edited coverage, unresolved cash/pool/match gates, or stale 72/73-operation expectations."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-23T04:01:13.9378732+00:00"
+      "created_at": "2026-07-23T12:54:49.6951693+00:00"
     },
     {
-      "id": "01KY6J4XPM374KQXT4TAHFQR99",
+      "id": "01KY7GNZ32BQJ3G68EDQAKQQGJ",
       "kind": "failure_criterion",
       "text": [
         "Do NOT create beads, deploy, or write execution status into planning_state."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-23T04:01:13.9378732+00:00"
+      "created_at": "2026-07-23T12:54:49.6951693+00:00"
     }
   ],
   "review_gates": [
@@ -405,14 +405,14 @@
   ],
   "verification_steps": [
     {
-      "id": "01KY6J4XPMWTWM6Q2DMP1D3R64",
+      "id": "01KY7GNZ32FA2AD8V56EECE943",
       "phase": "after",
       "command": "bash scripts/verify-ledger-module.sh",
-      "expected_result": "exit 0; restore, build, format, full tests, AOT publish, 74-operation inventory, core/security/privacy/performance/recovery/Lex/diff checks succeed; every suite reports nonzero tests and 0 failures/warnings",
+      "expected_result": "exit 0; restore, build, format, full tests, AOT publish, 74-operation inventory, core/security/privacy/recovery/Lex/diff checks succeed; the personal-scale benchmark reports p50 and p95; every suite reports nonzero tests and 0 correctness failures/warnings",
       "required": 1,
       "timeout_seconds": 2700,
       "sort_order": 0,
-      "created_at": "2026-07-23T04:01:13.9378732+00:00"
+      "created_at": "2026-07-23T12:54:49.6951693+00:00"
     }
   ]
 }

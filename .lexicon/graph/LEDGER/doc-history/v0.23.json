@@ -1,0 +1,9 @@
+{
+  "id": "01KY7GNZQDD8JJ4PA7Z3GMFABZ",
+  "module_id": "01KXR4WN5YEX7RT6D1GJ30SCJN",
+  "version": "0.23",
+  "changes": [
+    "Product correction: personal-scale latency remains a measured p50/p95 diagnostic but no fixed latency threshold blocks the initial CLI field-validation release; exact results and every other Ledger module gate remain mandatory. TASK-LEDGER-GATE-MODULE now requires performance reporting rather than a threshold pass."
+  ],
+  "created_at": "2026-07-23T12:54:50.3499762+00:00"
+}

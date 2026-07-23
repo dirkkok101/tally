@@ -4,16 +4,16 @@
   "ref_code": "NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE",
   "title": "Respond at personal-ledger scale",
   "description": [
-    "Interactive External Orchestrator operations remain responsive for the personal dataset without a daemon, remote cache, or external database."
+    "Measure interactive External Orchestrator latency at personal-ledger scale during initial CLI field validation without making a fixed latency threshold a module-completion condition."
   ],
   "category": "performance",
-  "target": "At 100000 active transactions plus retained evidence and history, first-page filtered actuals with full pool/category aggregates and reconciliation candidate or completed-scope projections complete within 2 seconds at p95; ordinary single-entity writes complete within 1 second at p95, excluding backup, restore, and migration.",
-  "load_condition": "Three accounts, 100000 active transactions, two Spend Pool, representative category, payment-attribution, evidence, reconciliation, correction, and relationship history, one OS identity, one writer, and no concurrent load on the supported reference workstation.",
-  "measurement": "Thirty warmed repetitions per representative actuals, reconciliation-candidate, coverage, and ordinary write scenario using monotonic elapsed time; report p50 and p95.",
+  "target": "For the initial CLI field-validation release, actuals, reconciliation-candidate, completed-scope, and ordinary-write benchmarks report p50 and p95 latency; no fixed latency value blocks module completion, while exact membership, totals, grouping, pagination, reconciliation, and mutation outcomes remain mandatory.",
+  "load_condition": "Three accounts, 100000 active transactions, two Spend Pool, representative category, payment-attribution, evidence, reconciliation, correction, and relationship history, one OS identity, and one writer; record the host and concurrent workload with every result.",
+  "measurement": "Run thirty warmed repetitions per representative actuals, reconciliation-candidate, coverage, and ordinary-write scenario using monotonic elapsed time; report p50, p95, environment, and correctness. Latency is advisory until real-world CLI evidence establishes a new blocking target.",
   "rationale": [
-    "This gives design a measurable local baseline for the expanded Ledger while preserving the accepted complexity budget."
+    "Dirk prioritizes starting real-world CLI validation over pre-release latency tuning. Retaining repeatable measurements exposes regressions and supplies evidence for a later threshold without delaying usability feedback."
   ],
-  "priority": 2,
+  "priority": 3,
   "created_at": "2026-07-18T04:24:30.8859885+00:00",
   "links": [
     {

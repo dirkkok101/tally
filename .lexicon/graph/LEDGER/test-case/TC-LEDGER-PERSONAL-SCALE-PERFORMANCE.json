@@ -9,9 +9,9 @@
   "scenario": "performance",
   "automation": "automated",
   "status": "planned",
-  "preconditions": "Release binary and production SQLite settings with three accounts, 100000 active transactions, two pools, representative categories, evidence, reconciliation, attribution, correction and relationship history, and supported filters.",
+  "preconditions": "Release binary and production SQLite settings with three accounts, 100000 active transactions, two pools, representative categories, evidence, reconciliation, attribution, correction and relationship history; host and concurrent workload can be recorded.",
   "steps": "Warm according to the benchmark protocol; measure thirty actuals first-page plus full grouped totals, reconciliation-candidate projections, completed-scope coverage projections, and ordinary single-entity writes; report p50, p95, environment, and correctness.",
-  "expected": "Actuals, reconciliation-candidate, and coverage projections complete below 2 seconds p95; ordinary writes below 1 second p95; exact membership and grouped results remain correct.",
+  "expected": "Every measured operation returns exact membership, totals, groups, pagination, reconciliation, coverage, or mutation outcomes and reports p50 and p95. No fixed latency assertion blocks the initial CLI field-validation release.",
   "owner": "LEDGER implementation",
   "created_at": "2026-07-18T06:09:34.1805388+00:00",
   "links": [
