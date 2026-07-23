@@ -247,15 +247,17 @@ public sealed class TransactionStore(LedgerDb database, LedgerConnectionFactory 
                    fact.transaction_date, fact.posting_date, fact.effective_date, fact.original_description,
                    lifecycle.action, lifecycle.replacement_transaction_id,
                    COALESCE(
-                       (SELECT CASE decision.disposition
-                           WHEN 'confirmed_existing' THEN 'statement_reconciled'
-                           WHEN 'corrected_from_statement' THEN 'statement_reconciled'
-                           WHEN 'statement_only' THEN 'statement_only'
-                           WHEN 'ambiguous' THEN 'ambiguous_match'
-                           WHEN 'owner_confirmed_match' THEN 'owner_confirmed_match'
-                           WHEN 'replaced' THEN 'owner_confirmed_match'
-                           WHEN 'exception' THEN 'reconciliation_exception'
-                           ELSE 'recorded_unreconciled' END
+                       (SELECT CASE WHEN lifecycle.action IS NOT NULL THEN 'reconciliation_exception' ELSE
+                           CASE decision.disposition
+                               WHEN 'confirmed_existing' THEN 'statement_reconciled'
+                               WHEN 'corrected_from_statement' THEN 'statement_reconciled'
+                               WHEN 'statement_only' THEN 'statement_only'
+                               WHEN 'ambiguous' THEN 'ambiguous_match'
+                               WHEN 'owner_confirmed_match' THEN 'owner_confirmed_match'
+                               WHEN 'replaced' THEN 'owner_confirmed_match'
+                               WHEN 'exception' THEN 'reconciliation_exception'
+                               ELSE 'recorded_unreconciled' END
+                           END
                         FROM reconciliation_current_v2 AS decision
                         WHERE decision.active_transaction_id = fact.transaction_id
                         ORDER BY decision.decided_at DESC, decision.decision_id DESC LIMIT 1),

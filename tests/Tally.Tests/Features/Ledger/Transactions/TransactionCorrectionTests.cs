@@ -205,6 +205,9 @@ public sealed class TransactionCorrectionTests : IAsyncLifetime
         Assert.Equal(original.TransactionId, decision.ActiveTransactionId);
         Assert.NotNull(decision.ActiveConfirmingLinkEventId);
         Assert.Single(decision.History);
+        Assert.Equal(
+            TransactionReconciliationState.ReconciliationException,
+            (await Get(original.TransactionId)).ReconciliationState);
     }
 
     [Fact]
