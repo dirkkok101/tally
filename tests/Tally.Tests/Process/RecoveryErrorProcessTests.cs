@@ -48,6 +48,20 @@ public sealed class RecoveryErrorProcessTests
         { RestoreErrors.Integrity, 8, "integrity" },
         { RestoreErrors.HostProtection, 9, "host" },
         { RestoreErrors.Permission, 9, "host" },
-        { RestoreErrors.Disk, 9, "host" }
+        { RestoreErrors.Disk, 9, "host" },
+        { StorageEvolutionErrors.Invalid, 3, "validation" },
+        { StorageEvolutionErrors.NotAuthorized, 3, "validation" },
+        { StorageEvolutionErrors.CandidateConflict, 5, "conflict" },
+        { StorageEvolutionErrors.ActivationConflict, 5, "conflict" },
+        { StorageEvolutionErrors.Busy, 5, "conflict" },
+        { StorageEvolutionErrors.AlreadyCurrent, 6, "lifecycle" },
+        { StorageEvolutionErrors.StaleCurrent, 6, "lifecycle" },
+        { StorageEvolutionErrors.StaleCandidate, 6, "lifecycle" },
+        { StorageEvolutionErrors.Incompatible, 7, "compatibility" },
+        { StorageEvolutionErrors.Integrity, 8, "integrity" },
+        { StorageEvolutionErrors.HostProtection, 9, "host" },
+        { StorageEvolutionErrors.Permission, 9, "host" },
+        { StorageEvolutionErrors.Disk, 9, "host" },
+        { StorageEvolutionErrors.InsufficientSpace, 9, "host" }
     };
 }
