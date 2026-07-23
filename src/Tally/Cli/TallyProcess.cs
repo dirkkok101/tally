@@ -3,6 +3,7 @@ using Tally.Application;
 using Tally.Bootstrap;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Actuals;
+using Tally.Contracts.Ledger.Reconciliation;
 using Tally.Contracts.Ledger.Recovery;
 using Tally.Contracts.System;
 
@@ -120,6 +121,14 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
         "LEDGER-SCOPE-STATEMENT-EVIDENCE-REQUIRED" or "LEDGER-SCOPE-INCOMPLETE-OBSERVATION" => Error(3, code, "validation", "The statement scope evidence is invalid."),
         "LEDGER-SCOPE-EVIDENCE-NOT-FOUND" => Error(4, code, "not_found", "The statement scope evidence was not found."),
         "LEDGER-SCOPE-ACCOUNT-DATE-CONFLICT" or "LEDGER-SCOPE-EVIDENCE-ALREADY-SCOPED" or "LEDGER-SCOPE-ACCOUNT-PERIOD-CONFLICT" => Error(5, code, "conflict", "The statement scope conflicts with existing state."),
+        ReconciliationProjectionErrors.StatementEvidenceRequired or ReconciliationProjectionErrors.IncompleteObservation => Error(3, code, "validation", "The reconciliation evidence is invalid."),
+        ReconciliationProjectionErrors.EvidenceNotFound or ReconciliationProjectionErrors.ScopeNotFound => Error(4, code, "not_found", "The reconciliation evidence or scope was not found."),
+        ReconciliationProjectionErrors.ScopeConflict => Error(5, code, "conflict", "The reconciliation scope conflicts with current state."),
+        ReconciliationProjectionErrors.ScopeInactive => Error(6, code, "lifecycle", "The reconciliation scope lifecycle does not allow the operation."),
+        ReconciliationProjectionErrors.UnsupportedPolicy => Error(7, code, "compatibility", "The reconciliation policy is not supported by this contract."),
+        ReconciliationApplyErrors.EvidenceFingerprintChanged or ReconciliationApplyErrors.ProjectionChanged or ReconciliationApplyErrors.CandidateSetChanged or ReconciliationApplyErrors.ProjectionConflict or ReconciliationApplyErrors.StatementFactMismatch or "LEDGER-RECONCILIATION-CORRECTION-CONFLICT" => Error(5, code, "conflict", "The reconciliation request conflicts with current state."),
+        ReconciliationApplyErrors.DispositionIncompatible => Error(6, code, "lifecycle", "The reconciliation disposition is incompatible with current state."),
+        ReconciliationApplyErrors.UnsupportedAutomaticAuthority or ReconciliationApplyErrors.UnsupportedStatementCorrection or ReconciliationApplyErrors.TargetNotCandidate => Error(8, code, "integrity", "The reconciliation request requires review or cannot preserve integrity."),
         "LEDGER-TRANSACTION-ATTRIBUTION-INCOMPATIBLE" => Error(6, code, "lifecycle", "The transaction payment attribution is incompatible."),
         "LEDGER-CATEGORY-ALLOCATION-INVALID" => Error(3, code, "validation", "The category assignment input is invalid."),
         "LEDGER-CATEGORY-ALLOCATION-CARDINALITY" or "LEDGER-CATEGORY-ALLOCATION-UNCHANGED" => Error(5, code, "conflict", "The category assignment conflicts with current state."),
