@@ -41,22 +41,22 @@ Code path:
 
 ## Root cause analysis
 
-1. Why does p95 cross 2,000 ms? The query rebuilds and persists all 100,000 immutable snapshot members on every first-page request, leaving little wall-clock margin for scheduler contention.
-2. Why does reducing managed allocation not stabilize p95? The projection still performs the full relational reconciliation/category/attribution scan, sort, validation, aggregation, JSON construction, and snapshot persistence synchronously.
-3. Why did the database-side materialization regress? Avoiding managed allocations by writing an intermediate table introduced additional I/O and full-table scans rather than reducing the amount of required work.
-4. Why did direct UTF-8 consumption still fail? It reduced managed materialization but retained the same full synchronous projection and persistence workload; shared-host scheduling still stretched two or more of 30 samples above the contract.
-5. Why can this not be resolved as a localized reader optimization? Three materially different implementations preserved the contract and all showed that per-query reconstruction, rather than one encoding detail, controls tail latency.
+1. Why does the observed p95 cross 2,000 ms? The query runs concurrently with multiple CPU-intensive builds, test hosts, Angular development servers, browser processes, and Aspire services on a 16-core shared host.
+2. Why does that invalidate the gate rather than fail the product NFR? `NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE` explicitly requires the supported reference workstation, one writer, and no concurrent load.
+3. Why did allocation reductions not stabilize the observed p95? They reduced ordinary work but could not control scheduling delays caused by unrelated processes outside the test.
+4. Why did some unchanged or lightly optimized runs pass? When scheduling contention subsided, measured p95 fell below 2,000 ms, consistent with an environment-sensitive result.
+5. Why should the snapshot design remain unchanged for now? No failing 30-run Release result has been captured under the NFR's declared no-concurrent-load condition, so the evidence does not prove a product or architecture defect.
 
-Root cause: the accepted query contract requires a complete 100,000-member immutable snapshot to be reconstructed synchronously for each first-page request. That architecture has insufficient wall-clock headroom to guarantee p95 below 2,000 ms under the repository's shared-host execution conditions.
+Root cause: the module gate was executed on a heavily shared host that violates the accepted performance test's explicit no-concurrent-load precondition. The benchmark therefore cannot produce a valid pass or fail decision for `NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE` in the current environment.
 
-Classification: design-level performance gap. The shared host amplifies the tail, but the gate correctly demonstrates that the current per-query reconstruction design does not reliably meet the accepted NFR. Allocation and textual encoding are contributing costs, not the controlling root cause.
+Classification: verification-environment blocker. The synchronous snapshot path has limited margin and may still warrant future optimization, but the current evidence cannot justify a design change. Allocation and textual encoding are measured costs, not a proven contract failure under the supported load condition.
 
 ## Triage decision
 
-Escalate `bd-5j2` from localized implementation work to a narrow Ledger design correction. Do not weaken the p95 threshold, discard outliers, retry until passing, or suppress the gate under host load.
+Do not change the Ledger design, weaken the p95 threshold, discard outliers, retry until passing, or suppress the gate under host load. Preserve all unrelated workloads as required by the execution scope.
 
-The design must reduce synchronous first-page work while preserving the published query contract, exact totals and groups, immutable pagination membership, generation and hierarchy invalidation, crash safety, and privacy boundaries. Candidate directions include transactionally maintained actuals projections or another reusable snapshot basis; selecting one requires explicit design and plan coverage because it changes persistence and recovery behavior.
+Run the existing 30-sample Release gate on a supported reference workstation with no concurrent load and record median, p95, environment, and correctness. Only if that valid run fails should `bd-5j2` return to Lex design for a snapshot-architecture correction.
 
 ## Resolution
 
-Blocked at the design boundary after three failed implementation approaches. Resume only through the Lex design/plan correction for the actuals snapshot architecture, then recompile the affected bead contract before implementation.
+Blocked on a valid performance verification environment. The Lex design review found the graph already defines the missing precondition, so no design or plan entity was changed. Resume when the declared no-concurrent-load Release measurement can be run without disrupting unrelated work.
