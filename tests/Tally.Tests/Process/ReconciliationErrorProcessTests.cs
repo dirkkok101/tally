@@ -43,6 +43,14 @@ public sealed class ReconciliationErrorProcessTests
         { ReconciliationApplyErrors.ProjectionConflict, 5, "conflict" },
         { ReconciliationApplyErrors.DispositionIncompatible, 6, "lifecycle" },
         { ReconciliationApplyErrors.StatementFactMismatch, 5, "conflict" },
-        { "LEDGER-RECONCILIATION-CORRECTION-CONFLICT", 5, "conflict" }
+        { "LEDGER-RECONCILIATION-CORRECTION-CONFLICT", 5, "conflict" },
+        { ReconciliationDecisionErrors.NotFound, 4, "not_found" },
+        { ReconciliationDecisionErrors.StalePredecessor, 5, "conflict" },
+        { ReconciliationDecisionErrors.TransitionIncompatible, 6, "lifecycle" },
+        { ReconciliationDecisionErrors.CandidateNotFound, 4, "not_found" },
+        { ReconciliationDecisionErrors.CandidateInactive, 6, "lifecycle" },
+        { ReconciliationDecisionErrors.CandidateIncompatible, 8, "integrity" },
+        { ReconciliationDecisionErrors.CandidateAlreadyReconciled, 5, "conflict" },
+        { ReconciliationDecisionErrors.LinkConflict, 5, "conflict" }
     };
 }
