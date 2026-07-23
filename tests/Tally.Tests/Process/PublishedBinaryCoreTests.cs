@@ -76,7 +76,7 @@ public sealed class PublishedBinaryCoreTests(PublishedTallyFixture fixture) : IA
 
         Assert.Equal(0, result.ExitCode);
         Assert.Single(result.Stdout.Split('\n', StringSplitOptions.RemoveEmptyEntries));
-        Assert.Equal(73, envelope.RootElement.GetProperty("result").GetProperty("operations").GetArrayLength());
+        Assert.Equal(74, envelope.RootElement.GetProperty("result").GetProperty("operations").GetArrayLength());
         foreach (var canary in new[] { "mailbox", "mime", "recipient", "whatsapp", "providerCursor", "rawPayload" })
         {
             Assert.DoesNotContain(canary, result.Stdout, StringComparison.OrdinalIgnoreCase);

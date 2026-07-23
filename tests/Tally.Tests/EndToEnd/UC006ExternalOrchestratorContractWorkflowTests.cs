@@ -20,7 +20,7 @@ public sealed class UC006ExternalOrchestratorContractWorkflowTests(PublishedTall
 
         Assert.Equal("1.0", version.GetProperty("contractVersion").GetString());
         Assert.Equal("1.0", version.GetProperty("compatibility").GetString());
-        Assert.Equal(73, help.GetProperty("operations").GetArrayLength());
+        Assert.Equal(74, help.GetProperty("operations").GetArrayLength());
         Assert.False(Directory.Exists(Path.Combine(dataRoot, ".agents")));
         Assert.False(Directory.Exists(Path.Combine(dataRoot, ".claude")));
     }
@@ -36,13 +36,13 @@ public sealed class UC006ExternalOrchestratorContractWorkflowTests(PublishedTall
     }
 
     [Fact]
-    public async Task FR_LEDGER_CONTRACT_DISCOVERY_all_73_operations_have_complete_showable_schemas()
+    public async Task TC_LEDGER_STATEMENT_SCOPE_REGISTRATION_all_74_operations_have_complete_showable_schemas()
     {
         var list = await SuccessWithoutStore(["schema", "list"], null, "system.schema.list");
         var operations = list.GetProperty("operations").EnumerateArray().Select(operation => operation.Clone()).ToArray();
         var operationIds = operations.Select(operation => operation.GetProperty("operationId").GetString()!).ToArray();
 
-        Assert.Equal(73, operations.Length);
+        Assert.Equal(74, operations.Length);
         Assert.Equal(operationIds.Order(StringComparer.Ordinal), operationIds);
         foreach (var operation in operations)
         {
@@ -287,7 +287,7 @@ public sealed class UC006ExternalOrchestratorContractWorkflowTests(PublishedTall
         Directory.Delete(Path.Combine(scope, ".agents"), true);
 
         var schemas = await SuccessWithoutStore(["help"], null, "system.schema.list");
-        Assert.Equal(73, schemas.GetProperty("operations").GetArrayLength());
+        Assert.Equal(74, schemas.GetProperty("operations").GetArrayLength());
         var firstParent = await CreateCategory("First parent", null, "first-parent");
         var secondParent = await CreateCategory("Second parent", null, "second-parent");
         var child = await CreateCategory("Child", firstParent.GetProperty("categoryId").GetString(), "child");

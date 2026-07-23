@@ -44,7 +44,8 @@ public sealed class ReconciliationOperationBundleTests
         "ledger.reconciliation.decision.get",
         "ledger.reconciliation.decision.reject",
         "ledger.reconciliation.decision.replace",
-        "ledger.reconciliation.decision.revoke"
+        "ledger.reconciliation.decision.revoke",
+        "ledger.reconciliation.scope.register"
     ];
 
     [Theory]
@@ -86,8 +87,8 @@ public sealed class ReconciliationOperationBundleTests
         var descriptors = CreateBundle().Descriptors;
 
         Assert.Equal(ExpectedOperationIds, descriptors.Select(descriptor => descriptor.OperationId));
-        Assert.Equal(9, descriptors.Select(descriptor => descriptor.OperationId).Distinct(StringComparer.Ordinal).Count());
-        Assert.Equal(9, descriptors.Select(descriptor => descriptor.CliPath).Distinct(StringComparer.Ordinal).Count());
+        Assert.Equal(10, descriptors.Select(descriptor => descriptor.OperationId).Distinct(StringComparer.Ordinal).Count());
+        Assert.Equal(10, descriptors.Select(descriptor => descriptor.CliPath).Distinct(StringComparer.Ordinal).Count());
         Assert.All(descriptors, descriptor => Assert.StartsWith("Reconciliation", descriptor.HandlerTarget, StringComparison.Ordinal));
     }
 
@@ -427,7 +428,9 @@ public sealed class ReconciliationOperationBundleTests
         { "ledger.reconciliation.decision.revoke", typeof(RevokeReconciliationDecisionInput), typeof(ReconciliationDecisionMutationResult), "mutation", true },
         { "ledger.reconciliation.decision.replace", typeof(ReplaceReconciliationDecisionInput), typeof(ReconciliationDecisionMutationResult), "mutation", true },
         { "ledger.reconciliation.coverage.complete", typeof(CompleteStatementCoverageInput), typeof(StatementCoverageSummary), "mutation", true },
-        { "ledger.reconciliation.coverage.get", typeof(GetStatementCoverageInput), typeof(StatementCoverageSummary), "query", false }
+        { "ledger.reconciliation.coverage.get", typeof(GetStatementCoverageInput), typeof(StatementCoverageSummary), "query", false },
+        // TC-LEDGER-STATEMENT-SCOPE-REGISTRATION, DM-LEDGER-OPERATION-DESCRIPTOR
+        { "ledger.reconciliation.scope.register", typeof(RegisterReconciliationScopeInput), typeof(ReconciliationScopeDetail), "mutation", true }
     };
 
     public static TheoryData<string> OperationIds => new(ExpectedOperationIds);
@@ -436,7 +439,8 @@ public sealed class ReconciliationOperationBundleTests
         new ReconciliationProjectionOperationModule(null!),
         new ReconciliationApplyOperationModule(null!),
         new ReconciliationDecisionOperationModule(null!, null!),
-        new ReconciliationCoverageOperationModule(null!, null!));
+        new ReconciliationCoverageOperationModule(null!, null!),
+        new ReconciliationScopeOperationModule(null!));
 
     private sealed class ReconciliationSeam(
         string root,
@@ -492,7 +496,9 @@ public sealed class ReconciliationOperationBundleTests
                     new ReconciliationDecisionMutationHandler(executor, decisionStore)),
                 new ReconciliationCoverageOperationModule(
                     new CompleteStatementCoverageHandler(executor, coverageStore),
-                    new GetStatementCoverageHandler(coverageStore)));
+                    new GetStatementCoverageHandler(coverageStore)),
+                new ReconciliationScopeOperationModule(
+                    new RegisterReconciliationScopeHandler(executor, new ReconciliationScopeStore())));
             return new(root, database, factory, accountStore, evidenceStore, transactionStore, process, bundle);
         }
 

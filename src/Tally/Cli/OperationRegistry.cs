@@ -447,7 +447,8 @@ public sealed class OperationRegistry
             new ReconciliationProjectionOperationModule(null!),
             new ReconciliationApplyOperationModule(null!),
             new ReconciliationDecisionOperationModule(null!, null!),
-            new ReconciliationCoverageOperationModule(null!, null!));
+            new ReconciliationCoverageOperationModule(null!, null!),
+            new ReconciliationScopeOperationModule(null!));
         var backup = new BackupOperationModule(null!);
         var restore = new RestoreOperationModule(null!);
         var storageEvolution = new StorageEvolutionOperationModule(null!);
@@ -467,7 +468,7 @@ public sealed class OperationRegistry
         "ledger.cardholder.create","ledger.cardholder.get","ledger.cardholder.list","ledger.cardholder.rename","ledger.cardholder.archive","ledger.cardholder.reactivate",
         "ledger.pool.create","ledger.pool.get","ledger.pool.list","ledger.pool.rename","ledger.pool.archive","ledger.pool.reactivate",
         "ledger.transaction.record","ledger.transaction.get","ledger.transaction.void","ledger.transaction.supersede","ledger.transaction.category.assign","ledger.transaction.category.correct","ledger.transaction.attribution.assign","ledger.transaction.attribution.correct","ledger.transaction.pool.assign","ledger.transaction.pool.correct",
-        "ledger.evidence.register","ledger.evidence.get","ledger.evidence.link-supporting","ledger.reconciliation.candidates","ledger.reconciliation.apply","ledger.reconciliation.decision.get","ledger.reconciliation.decision.confirm","ledger.reconciliation.decision.reject","ledger.reconciliation.decision.revoke","ledger.reconciliation.decision.replace","ledger.reconciliation.coverage.complete","ledger.reconciliation.coverage.get",
+        "ledger.evidence.register","ledger.evidence.get","ledger.evidence.link-supporting","ledger.reconciliation.candidates","ledger.reconciliation.apply","ledger.reconciliation.decision.get","ledger.reconciliation.decision.confirm","ledger.reconciliation.decision.reject","ledger.reconciliation.decision.revoke","ledger.reconciliation.decision.replace","ledger.reconciliation.coverage.complete","ledger.reconciliation.coverage.get","ledger.reconciliation.scope.register",
         "ledger.transfer.confirm","ledger.transfer.revoke","ledger.transfer.replace","ledger.refund.confirm","ledger.refund.revoke","ledger.refund.replace","ledger.relationship.get","ledger.actuals.query","ledger.backup.create","ledger.backup.verify","ledger.restore.prepare","ledger.restore.activate","ledger.storage.status","ledger.storage.evolution.prepare","ledger.storage.evolution.activate",
         "system.schema.list","system.schema.show","system.version","system.guidance.list","system.guidance.check","system.guidance.install"
     ];

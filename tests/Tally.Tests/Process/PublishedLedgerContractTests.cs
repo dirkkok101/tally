@@ -19,13 +19,13 @@ public sealed class PublishedLedgerContractTests(PublishedTallyFixture fixture) 
     }
 
     [Fact]
-    public async Task TC_LEDGER_AGENT_CONTRACT_CONFORMANCE_publishes_exactly_73_provider_neutral_schemas()
+    public async Task TC_LEDGER_STATEMENT_SCOPE_REGISTRATION_publishes_exactly_74_provider_neutral_schemas()
     {
         var result = await Run(["schema", "list", "--input", "-"], EmptyRequest());
 
         AssertSuccess(result, "system.schema.list");
         using var document = JsonDocument.Parse(result.Stdout);
-        Assert.Equal(73, document.RootElement.GetProperty("result").GetProperty("operations").GetArrayLength());
+        Assert.Equal(74, document.RootElement.GetProperty("result").GetProperty("operations").GetArrayLength());
         foreach (var forbidden in new[] { "mailbox", "mime", "recipient", "whatsapp", "providerCursor", "rawPayload", "statementDocument" })
         {
             Assert.DoesNotContain(forbidden, result.Stdout, StringComparison.OrdinalIgnoreCase);

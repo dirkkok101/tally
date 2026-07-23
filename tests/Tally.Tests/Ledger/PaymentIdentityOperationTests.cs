@@ -26,7 +26,7 @@ public sealed class PaymentIdentityOperationTests : IAsyncLifetime
     {
         var registry = OperationRegistry.Create();
 
-        Assert.Equal(73, registry.Descriptors.Count);
+        Assert.Equal(74, registry.Descriptors.Count);
         Assert.Equal(12, registry.Descriptors.Count(descriptor => descriptor.OperationId.StartsWith("ledger.instrument.", StringComparison.Ordinal) || descriptor.OperationId.StartsWith("ledger.cardholder.", StringComparison.Ordinal)));
         Assert.Equal(typeof(CreatePaymentInstrumentInput), registry.Find("ledger.instrument.create")!.RequestTypeInfo.Type);
         Assert.Equal(typeof(PaymentInstrumentDetail), registry.Find("ledger.instrument.create")!.ResultTypeInfo.Type);

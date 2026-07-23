@@ -15,7 +15,8 @@ public sealed class ReconciliationOperationBundle(
     ReconciliationProjectionOperationModule projection,
     ReconciliationApplyOperationModule apply,
     ReconciliationDecisionOperationModule decisions,
-    ReconciliationCoverageOperationModule coverage)
+    ReconciliationCoverageOperationModule coverage,
+    ReconciliationScopeOperationModule scope)
 {
     private const string IdempotencyConflict = "LEDGER-IDEMPOTENCY-001";
 
@@ -23,13 +24,15 @@ public sealed class ReconciliationOperationBundle(
         projection ?? throw new ArgumentNullException(nameof(projection)),
         apply ?? throw new ArgumentNullException(nameof(apply)),
         decisions ?? throw new ArgumentNullException(nameof(decisions)),
-        coverage ?? throw new ArgumentNullException(nameof(coverage)));
+        coverage ?? throw new ArgumentNullException(nameof(coverage)),
+        scope ?? throw new ArgumentNullException(nameof(scope)));
 
     private static IReadOnlyList<OperationDescriptor> CreateDescriptors(
         ReconciliationProjectionOperationModule projection,
         ReconciliationApplyOperationModule apply,
         ReconciliationDecisionOperationModule decisions,
-        ReconciliationCoverageOperationModule coverage)
+        ReconciliationCoverageOperationModule coverage,
+        ReconciliationScopeOperationModule scope)
     {
         OperationDescriptor[] descriptors =
         [
@@ -113,7 +116,17 @@ public sealed class ReconciliationOperationBundle(
                 ReconciliationCoverageJsonContext.Default.StatementCoverageSummary,
                 "ReconciliationCoverageOperationModule.Get",
                 (_, _) => new ReconciliationCoverageOperationHandler(coverage, ReconciliationCoverageOperationModule.GetOperationId),
-                CoverageGetErrors)
+                CoverageGetErrors),
+            Descriptor(
+                ReconciliationScopeOperationModule.RegisterOperationId,
+                "scope register",
+                "mutation",
+                true,
+                ReconciliationScopeJsonContext.Default.RegisterReconciliationScopeInput,
+                ReconciliationScopeJsonContext.Default.ReconciliationScopeDetail,
+                "ReconciliationScopeOperationModule.Register",
+                (_, _) => new ReconciliationScopeOperationHandler(scope),
+                ScopeRegisterErrors)
         ];
 
         return descriptors.OrderBy(descriptor => descriptor.OperationId, StringComparer.Ordinal).ToArray();
@@ -241,5 +254,18 @@ public sealed class ReconciliationOperationBundle(
     private static readonly IReadOnlyList<ErrorSchema> CoverageGetErrors =
     [
         NotFound(ReconciliationCoverageErrors.NotFound)
+    ];
+
+    private static readonly IReadOnlyList<ErrorSchema> ScopeRegisterErrors =
+    [
+        Conflict(IdempotencyConflict),
+        NotFound(ReconciliationScopeErrors.AccountNotFound),
+        Lifecycle(ReconciliationScopeErrors.AccountInactive),
+        NotFound(ReconciliationScopeErrors.EvidenceNotFound),
+        Validation(ReconciliationScopeErrors.StatementEvidenceRequired),
+        Validation(ReconciliationScopeErrors.IncompleteObservation),
+        Conflict(ReconciliationScopeErrors.AccountDateConflict),
+        Conflict(ReconciliationScopeErrors.EvidenceAlreadyScoped),
+        Conflict(ReconciliationScopeErrors.AccountPeriodConflict)
     ];
 }

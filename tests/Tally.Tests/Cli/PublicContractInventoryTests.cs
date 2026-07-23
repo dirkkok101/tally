@@ -48,13 +48,13 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
     }
 
     [Fact]
-    public void TC_LEDGER_AGENT_CONTRACT_CONFORMANCE_has_the_exact_73_id_and_path_inventory()
+    public void TC_LEDGER_STATEMENT_SCOPE_REGISTRATION_has_the_exact_74_id_and_path_inventory()
     {
         var descriptors = OperationRegistry.Create().Descriptors;
 
-        Assert.Equal(73, descriptors.Count);
-        Assert.Equal(73, descriptors.Select(descriptor => descriptor.OperationId).Distinct(StringComparer.Ordinal).Count());
-        Assert.Equal(73, descriptors.Select(descriptor => descriptor.CliPath).Distinct(StringComparer.Ordinal).Count());
+        Assert.Equal(74, descriptors.Count);
+        Assert.Equal(74, descriptors.Select(descriptor => descriptor.OperationId).Distinct(StringComparer.Ordinal).Count());
+        Assert.Equal(74, descriptors.Select(descriptor => descriptor.CliPath).Distinct(StringComparer.Ordinal).Count());
         Assert.Equal(descriptors.Select(descriptor => descriptor.OperationId).Order(StringComparer.Ordinal), descriptors.Select(descriptor => descriptor.OperationId));
         Assert.Equal("ledger.account.archive", descriptors[0].OperationId);
         Assert.Equal("system.version", descriptors[^1].OperationId);
@@ -64,7 +64,7 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
     public void TASK_LEDGER_GATE_INT_PUBLIC_CONTRACT_retains_the_four_exact_bundle_subtotals()
     {
         Assert.Equal(43, fixture.Services.CatalogueTransactions!.Descriptors.Count);
-        Assert.Equal(9, fixture.Services.Reconciliation!.Descriptors.Count);
+        Assert.Equal(10, fixture.Services.Reconciliation!.Descriptors.Count);
         Assert.Equal(8, fixture.Services.RelationshipActuals!.Descriptors.Count);
         Assert.Equal(13, fixture.Services.RecoveryGuidance!.Descriptors.Count);
 
@@ -74,7 +74,7 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
             .Concat(fixture.Services.RecoveryGuidance.Descriptors)
             .OrderBy(descriptor => descriptor.OperationId, StringComparer.Ordinal)
             .ToArray();
-        Assert.Equal(73, bundled.Length);
+        Assert.Equal(74, bundled.Length);
         Assert.Equal(
             JsonSerializer.Serialize(OperationRegistry.Create().Descriptors.Select(descriptor => descriptor.ToSchema()).ToArray(), LedgerJsonContext.Default.OperationSchemaArray),
             JsonSerializer.Serialize(bundled.Select(descriptor => descriptor.ToSchema()).ToArray(), LedgerJsonContext.Default.OperationSchemaArray));
@@ -135,6 +135,23 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
         Assert.Equal(typeof(TransactionCorrectionResult), correction.ResultTypeInfo.Type);
         Assert.Equal(typeof(ReconciliationApplyInput), reconciliation.RequestTypeInfo.Type);
         Assert.Contains("correct_existing_from_statement", reconciliation.Example, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void DM_LEDGER_OPERATION_DESCRIPTOR_scope_registration_is_closed_typed_and_provider_neutral()
+    {
+        var scope = Assert.IsType<OperationDescriptor>(OperationRegistry.Create().Find("ledger.reconciliation.scope.register"));
+        var schema = scope.ToSchema();
+
+        Assert.Equal(typeof(RegisterReconciliationScopeInput), scope.RequestTypeInfo.Type);
+        Assert.Equal(typeof(ReconciliationScopeDetail), scope.ResultTypeInfo.Type);
+        Assert.Equal("tally ledger reconciliation scope register", scope.CliPath);
+        Assert.True(scope.RequiresIdempotencyKey);
+        foreach (var forbidden in new[] { "sqlite", "statementdocument", "provider", "channel", "delivery", "retry", "metadata" })
+        {
+            Assert.DoesNotContain(forbidden, schema.RequestSchema, StringComparison.OrdinalIgnoreCase);
+            Assert.DoesNotContain(forbidden, schema.ResultSchema, StringComparison.OrdinalIgnoreCase);
+        }
     }
 
     [Fact]

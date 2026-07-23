@@ -138,6 +138,7 @@ public sealed record LedgerServices(
             transactionStore,
             effectWriter);
         var coverageStore = new ReconciliationCoverageStore(database, factory, transactionStore);
+        var scopeStore = new ReconciliationScopeStore();
         var reconciliation = new ReconciliationOperationBundle(
             new ReconciliationProjectionOperationModule(new ReconciliationProjectionHandler(projectionStore)),
             new ReconciliationApplyOperationModule(
@@ -148,7 +149,9 @@ public sealed record LedgerServices(
                 new ReconciliationDecisionMutationHandler(executor, decisionStore)),
             new ReconciliationCoverageOperationModule(
                 new CompleteStatementCoverageHandler(executor, coverageStore),
-                new GetStatementCoverageHandler(coverageStore)));
+                new GetStatementCoverageHandler(coverageStore)),
+            new ReconciliationScopeOperationModule(
+                new RegisterReconciliationScopeHandler(executor, scopeStore)));
 
         var verifier = new DurableLedgerVerifier(protection);
         var artifactReconciler = new ArtifactReconciler();

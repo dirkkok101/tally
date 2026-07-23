@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "schemaFingerprint": "a49483b8aeaf0b883e5fd790c40839247c3c089af62bf9803a6371bd00e9566a",
+  "schemaFingerprint": "ce5af4871c0ecd9ba0ce9d91ed340272f9317966f8acf2ed12c2b14c3dc5b995",
   "operationIds": [
     "ledger.account.archive",
     "ledger.account.create",
@@ -47,6 +47,7 @@
     "ledger.reconciliation.decision.reject",
     "ledger.reconciliation.decision.replace",
     "ledger.reconciliation.decision.revoke",
+    "ledger.reconciliation.scope.register",
     "ledger.refund.confirm",
     "ledger.refund.replace",
     "ledger.refund.revoke",

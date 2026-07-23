@@ -28,7 +28,7 @@ public sealed class TransactionRecordingTests : IAsyncLifetime
     {
         var registry = OperationRegistry.Create();
 
-        Assert.Equal(73, registry.Descriptors.Count);
+        Assert.Equal(74, registry.Descriptors.Count);
         Assert.Equal(typeof(RecordTransactionInput), registry.Find("ledger.transaction.record")!.RequestTypeInfo.Type);
         Assert.Equal(typeof(GetTransactionInput), registry.Find("ledger.transaction.get")!.RequestTypeInfo.Type);
         Assert.All(new[] { "ledger.transaction.record", "ledger.transaction.get" }, operation => Assert.Equal(typeof(TransactionDetail), registry.Find(operation)!.ResultTypeInfo.Type));
