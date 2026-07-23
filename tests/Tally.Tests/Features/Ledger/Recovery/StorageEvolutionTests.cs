@@ -30,7 +30,11 @@ public sealed class StorageEvolutionTests : IAsyncLifetime
             module.Descriptors.OrderBy(descriptor => descriptor.OperationId, StringComparer.Ordinal),
             descriptor => Assert.Equal(StorageEvolutionOperationModule.ActivateOperationId, descriptor.OperationId),
             descriptor => Assert.Equal(StorageEvolutionOperationModule.PrepareOperationId, descriptor.OperationId),
-            descriptor => Assert.Equal(StorageEvolutionOperationModule.StatusOperationId, descriptor.OperationId));
+            descriptor =>
+            {
+                Assert.Equal(StorageEvolutionOperationModule.StatusOperationId, descriptor.OperationId);
+                Assert.Contains("currentNormalizedFingerprint", descriptor.ToSchema().ResultSchema, StringComparison.Ordinal);
+            });
     }
 
     [Fact]
@@ -44,6 +48,13 @@ public sealed class StorageEvolutionTests : IAsyncLifetime
         Assert.Equal(CompleteLedgerSchema.CurrentVersion, status.CurrentSchemaVersion);
         Assert.Equal(database.GenerationId, status.CurrentGenerationId);
         Assert.Equal(64, status.CurrentFingerprint.Length);
+        Assert.Equal(64, status.CurrentNormalizedFingerprint.Length);
+        Assert.NotEqual(status.CurrentFingerprint, status.CurrentNormalizedFingerprint);
+        var factory = new LedgerConnectionFactory(protection);
+        var verifier = new DurableLedgerVerifier(protection);
+        var inspection = await new MigrationCandidateBuilder(database, factory, verifier, new ArtifactReconciler(), protection).InspectAsync(CancellationToken.None);
+        Assert.True(inspection.IsSuccess, inspection.ErrorCode);
+        Assert.Equal(inspection.Value!.CurrentEquivalentVerification.Report!.NormalizedFingerprint, status.CurrentNormalizedFingerprint);
         Assert.True(status.OwnerOnlyPermissions);
         Assert.True(status.IntegrityVerified);
         Assert.True(status.HostProtectionVerified);

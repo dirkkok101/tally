@@ -38,6 +38,7 @@ public sealed class StorageEvolutionService(
             report.ReconciliationPolicyVersions,
             database.GenerationId,
             inspection.Value.SourceFingerprint,
+            report.NormalizedFingerprint,
             OwnerOnlyPermissions: true,
             IntegrityVerified: true,
             HostProtectionVerified: true);

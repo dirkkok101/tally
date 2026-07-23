@@ -20,6 +20,7 @@ public sealed record StorageStatusResult(
     IReadOnlyList<string> ReconciliationPolicyVersions,
     string CurrentGenerationId,
     string CurrentFingerprint,
+    string CurrentNormalizedFingerprint,
     bool OwnerOnlyPermissions,
     bool IntegrityVerified,
     bool HostProtectionVerified);
