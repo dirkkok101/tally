@@ -69,6 +69,10 @@ public sealed class ActualsPersonalScaleTests : IAsyncLifetime
 
         samples.Sort();
         var p95 = samples[(int)Math.Ceiling(MeasuredRuns * 0.95) - 1];
+        Console.WriteLine(
+            $"LEDGER personal-scale: transactions={TransactionCount}, runs={MeasuredRuns}, "
+            + $"median={samples[MeasuredRuns / 2].TotalMilliseconds:0.0} ms, "
+            + $"p95={p95.TotalMilliseconds:0.0} ms, budget < {P95Budget.TotalMilliseconds:0} ms.");
         Assert.True(
             p95 < P95Budget,
             $"Published 100,000-transaction pool/category actuals p95 was {p95.TotalMilliseconds:0.0} ms; budget is < {P95Budget.TotalMilliseconds:0} ms.");
