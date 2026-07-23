@@ -10,6 +10,7 @@ using Xunit;
 namespace Tally.Tests.Infrastructure.Recovery;
 
 [SupportedOSPlatform("linux")]
+// Covers TC-LEDGER-ATTRIBUTABLE-HISTORY-INVARIANTS and TC-LEDGER-VERIFIED-RECOVERY-DRILL.
 public sealed class DurableLedgerVerifierTests : IAsyncLifetime
 {
     private const string At = "2026-07-22T00:00:00Z";

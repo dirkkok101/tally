@@ -28,6 +28,7 @@ using Xunit;
 namespace Tally.Tests.Integration;
 
 [SupportedOSPlatform("linux")]
+// Covers TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY.
 public sealed class ReconciliationCrashAtomicityTests : IAsyncLifetime
 {
     private readonly string root = Path.Combine(Path.GetTempPath(), $"tally-reconciliation-crash-{Guid.NewGuid():N}");

@@ -13,6 +13,7 @@ using Xunit;
 namespace Tally.Tests.Ledger;
 
 [SupportedOSPlatform("linux")]
+// Covers TC-LEDGER-EVIDENCE-REGISTRATION-CONTRACT.
 public sealed class EvidenceRegistryOperationTests : IAsyncLifetime
 {
     private const string Digest = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";

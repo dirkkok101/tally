@@ -19,6 +19,7 @@ using Xunit;
 namespace Tally.Tests.Ledger;
 
 [SupportedOSPlatform("linux")]
+// Covers TC-LEDGER-POOL-ASSIGNMENT-ACTUALS-CONTRACT.
 public sealed class PoolAssignmentOperationTests : IAsyncLifetime
 {
     private const string At = "2026-07-22T00:00:00.0000000Z";

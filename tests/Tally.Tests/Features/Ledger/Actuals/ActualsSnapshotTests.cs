@@ -20,6 +20,7 @@ using Xunit;
 namespace Tally.Tests.Features.Ledger.Actuals;
 
 [SupportedOSPlatform("linux")]
+// Covers TC-LEDGER-SNAPSHOT-PAGINATION-CONTRACT.
 public sealed class ActualsSnapshotTests : IAsyncLifetime
 {
     private readonly string root = Path.Combine(Path.GetTempPath(), "tally-actuals-snapshot-" + Guid.NewGuid().ToString("N"));

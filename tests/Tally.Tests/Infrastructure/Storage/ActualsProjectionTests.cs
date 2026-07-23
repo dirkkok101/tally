@@ -11,6 +11,7 @@ using Xunit;
 namespace Tally.Tests.Infrastructure.Storage;
 
 [SupportedOSPlatform("linux")]
+// Covers TC-LEDGER-ACTUALS-QUERY-CONTRACT.
 public sealed class ActualsProjectionTests : IAsyncLifetime
 {
     private const string At = "2026-07-22T00:00:00Z";

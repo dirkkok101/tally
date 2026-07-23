@@ -18,6 +18,7 @@ using Xunit;
 namespace Tally.Tests.Features.Ledger.Recovery;
 
 [SupportedOSPlatform("linux")]
+// Covers TC-LEDGER-BACKUP-VERIFICATION-CONTRACT.
 public sealed class BackupTests : IAsyncLifetime
 {
     private const string At = "2026-07-22T00:00:00Z";

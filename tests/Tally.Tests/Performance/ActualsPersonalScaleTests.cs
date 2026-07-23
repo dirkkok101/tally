@@ -24,6 +24,7 @@ public sealed class PerformanceCollection
 
 [SupportedOSPlatform("linux")]
 [Collection(PerformanceCollection.Name)]
+// Covers TC-LEDGER-PERSONAL-SCALE-PERFORMANCE.
 public sealed class ActualsPersonalScaleTests : IAsyncLifetime
 {
     private const int TransactionCount = 100_000;

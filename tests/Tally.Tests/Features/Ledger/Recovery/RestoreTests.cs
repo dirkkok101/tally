@@ -14,6 +14,7 @@ using Xunit;
 namespace Tally.Tests.Features.Ledger.Recovery;
 
 [SupportedOSPlatform("linux")]
+// Covers TC-LEDGER-SAFE-RESTORE-CONTRACT.
 public sealed class RestoreTests : IAsyncLifetime
 {
     private readonly string root = Path.Combine(Path.GetTempPath(), "tally-restore-" + Guid.NewGuid().ToString("N"));

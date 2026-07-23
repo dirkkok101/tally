@@ -14,6 +14,7 @@ using Xunit;
 namespace Tally.Tests.Features.Ledger.Accounts;
 
 [SupportedOSPlatform("linux")]
+// Covers TC-LEDGER-ACCOUNT-MAINTENANCE-CONTRACT.
 public sealed class AccountOperationTests : IAsyncLifetime
 {
     private readonly string root = Path.Combine(Path.GetTempPath(), $"tally-account-operations-{Guid.NewGuid():N}");

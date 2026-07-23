@@ -13,6 +13,7 @@ using Xunit;
 namespace Tally.Tests.Features.Ledger.Recovery;
 
 [SupportedOSPlatform("linux")]
+// Covers TC-LEDGER-SAFE-STORAGE-EVOLUTION-CONTRACT.
 public sealed class StorageEvolutionTests : IAsyncLifetime
 {
     private readonly string root = Path.Combine(Path.GetTempPath(), "tally-evolution-" + Guid.NewGuid().ToString("N"));

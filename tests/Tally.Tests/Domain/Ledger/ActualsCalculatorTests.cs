@@ -6,6 +6,7 @@ using Xunit;
 
 namespace Tally.Tests.Domain.Ledger;
 
+// Covers TC-LEDGER-DIMENSIONAL-ACTUALS-PROPERTY.
 public sealed class ActualsCalculatorTests
 {
     [Fact]

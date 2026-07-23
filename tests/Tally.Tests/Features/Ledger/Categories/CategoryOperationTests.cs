@@ -13,6 +13,7 @@ using Xunit;
 namespace Tally.Tests.Features.Ledger.Categories;
 
 [SupportedOSPlatform("linux")]
+// Covers TC-LEDGER-CATEGORY-CATALOGUE-CONTRACT.
 public sealed class CategoryOperationTests : IAsyncLifetime
 {
     private readonly string root = Path.Combine(Path.GetTempPath(), $"tally-category-{Guid.NewGuid():N}");

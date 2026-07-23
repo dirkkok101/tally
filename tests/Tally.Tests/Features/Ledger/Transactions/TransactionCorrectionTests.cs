@@ -29,6 +29,7 @@ using Xunit;
 namespace Tally.Tests.Features.Ledger.Transactions;
 
 [SupportedOSPlatform("linux")]
+// Covers TC-LEDGER-TRANSACTION-CORRECTION-CONTRACT.
 public sealed class TransactionCorrectionTests : IAsyncLifetime
 {
     private const string At = "2026-07-22T00:00:00.0000000Z";

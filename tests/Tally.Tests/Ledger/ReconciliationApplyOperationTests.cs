@@ -25,6 +25,7 @@ using Xunit;
 namespace Tally.Tests.Ledger;
 
 [SupportedOSPlatform("linux")]
+// Covers TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT.
 public sealed class ReconciliationApplyOperationTests : IAsyncLifetime
 {
     private readonly string root = Path.Combine(Path.GetTempPath(), $"tally-reconciliation-apply-{Guid.NewGuid():N}");

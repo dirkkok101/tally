@@ -15,6 +15,7 @@ using Xunit;
 namespace Tally.Tests.Ledger;
 
 [SupportedOSPlatform("linux")]
+// Covers TC-LEDGER-SPEND-POOL-CATALOGUE-CONTRACT.
 public sealed class SpendPoolOperationTests : IAsyncLifetime
 {
     private readonly string root = Path.Combine(Path.GetTempPath(), $"tally-spend-pool-{Guid.NewGuid():N}");
