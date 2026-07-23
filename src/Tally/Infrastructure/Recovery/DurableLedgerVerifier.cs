@@ -89,6 +89,7 @@ public sealed class DurableLedgerVerifier(IHostArtifactProtection artifactProtec
                 "ledger.reconciliation.decision.revoke", "ledger.reconciliation.decision.replace"
             ],
             ["statement_coverage_completion"] = ["ledger.reconciliation.coverage.complete"],
+            ["statement_scope_registration"] = ["ledger.reconciliation.scope.register"],
             ["backup_artifact"] = ["ledger.backup.create"],
             ["restore_prepare"] = ["ledger.restore.prepare"],
             ["restore_activation"] = ["ledger.restore.activate"],
@@ -497,6 +498,26 @@ public sealed class DurableLedgerVerifier(IHostArtifactProtection artifactProtec
             ("evidence_link", """
                 SELECT COUNT(*) FROM evidence_active_confirming_target
                 GROUP BY evidence_id HAVING COUNT(*) > 1;
+                """),
+            ("statement_scope", """
+                SELECT COUNT(*) FROM statement_scope
+                GROUP BY account_id, period_start, period_end HAVING COUNT(*) > 1;
+                """),
+            ("statement_scope", """
+                SELECT COUNT(*) FROM statement_scope_evidence
+                GROUP BY evidence_id HAVING COUNT(*) > 1;
+                """),
+            ("statement_scope", """
+                SELECT COUNT(*)
+                FROM statement_scope_evidence AS member
+                JOIN statement_scope AS scope ON scope.scope_id = member.scope_id
+                JOIN evidence_record AS record ON record.evidence_id = member.evidence_id
+                LEFT JOIN evidence_observation AS observation ON observation.evidence_id = member.evidence_id
+                WHERE scope.status <> 'completed' OR record.kind <> 'statement_row'
+                   OR observation.account_id IS NULL OR observation.signed_amount_minor IS NULL
+                   OR observation.currency_code IS NULL OR observation.transaction_date IS NULL
+                   OR observation.account_id <> scope.account_id
+                   OR observation.transaction_date < scope.period_start OR observation.transaction_date > scope.period_end;
                 """),
             ("reconciliation_decision", """
                 SELECT ABS((SELECT COUNT(*) FROM reconciliation_decision) - (SELECT COUNT(*) FROM reconciliation_decision_authority))
