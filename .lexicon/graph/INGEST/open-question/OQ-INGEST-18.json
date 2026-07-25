@@ -1,0 +1,23 @@
+{
+  "id": "01KYDJ050EA2CMHZSCF9GA2FA6",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "OQ-INGEST-18",
+  "question": "The authorized Layout A fixture contains two nonzero transaction-bearing rows for which PdfPig exposes no description evidence in the deterministic row band, while FR-INGEST-FINANCIAL-NORMALIZATION requires missing descriptions to block. Should the owner provide a source export with extractable descriptions, provide authoritative out-of-band descriptions under a newly reviewed provenance contract, or remove Layout A from the v1 supported set?",
+  "context": [
+    "bd-1as private golden verification accounted for all 16 ordered dates, running balances, and controls, but exactly two rows cannot produce normalization-ready FinancialEvidence without borrowing a distant statement-control line. OCR, adjacent-row guessing, blank descriptions, and weakened assertions are prohibited. The adapter fails closed when row-band description ownership is absent or ambiguous."
+  ],
+  "status": "open",
+  "owner": "Dirk",
+  "disposition": "blocking",
+  "blocking_stage": "execute",
+  "created_at": "2026-07-25T21:13:18.6075972+00:00",
+  "links": [
+    {
+      "id": "01KYDJ050GDCAKQ9H1NTQXQWWP",
+      "target_type": "requirement",
+      "target": "FR-INGEST-FINANCIAL-NORMALIZATION",
+      "rel": "see-also",
+      "created_at": "2026-07-25T21:13:18.6081714+00:00"
+    }
+  ]
+}

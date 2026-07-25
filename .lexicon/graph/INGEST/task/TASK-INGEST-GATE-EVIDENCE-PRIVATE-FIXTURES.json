@@ -255,34 +255,34 @@
   ],
   "verification_steps": [
     {
-      "id": "01KYCVJYPSPEPGKY1G2340GBSF",
+      "id": "01KYDEA42YNZD6J42F0GVBD4XR",
       "phase": "after",
       "command": "test -s docs/statements/.ingest-fixture-manifest.json && jq -e '(.schemaVersion == 1) and (.fixtures[0] != null) and (.fixtures[1] != null) and (.fixtures[2] != null) and (.fixtures[3] == null) and (((.fixtures[0].variantId == .fixtures[1].variantId) and (.fixtures[0].variantId != .fixtures[2].variantId)) or ((.fixtures[0].variantId == .fixtures[2].variantId) and (.fixtures[0].variantId != .fixtures[1].variantId)) or ((.fixtures[1].variantId == .fixtures[2].variantId) and (.fixtures[1].variantId != .fixtures[0].variantId))) and (.fixtures[0].sourcePath != .fixtures[1].sourcePath) and (.fixtures[0].sourcePath != .fixtures[2].sourcePath) and (.fixtures[1].sourcePath != .fixtures[2].sourcePath) and (all(.fixtures[]; (.expected.statementPeriod != null) and (.expected.accountEvidence != null) and (.expected.orderedRecords != null) and (.expected.controls != null)))' docs/statements/.ingest-fixture-manifest.json >/dev/null",
       "expected_result": "exit 0 with no stdout; schemaVersion, exactly three unique fixtures, exactly two variants, and all expected-fact structures are present",
       "required": 1,
       "timeout_seconds": 30,
       "sort_order": 0,
-      "created_at": "2026-07-25T14:41:37.4950362+00:00"
+      "created_at": "2026-07-25T20:08:51.0375878+00:00"
     },
     {
-      "id": "01KYCVJYPSYZDAFCR3DP1KE2P3",
+      "id": "01KYDEA42ZFF3MC84W9NH24039",
       "phase": "after",
-      "command": "bash -lc 'set -euo pipefail; root=$(realpath -e docs/statements); while IFS= read -r p; do [[ \"$p\" != /* && \"$p\" == docs/statements/* && \"$p\" != */../* && \"$p\" != */./* ]]; [[ ! -L \"$p\" && -f \"$p\" && -r \"$p\" ]]; resolved=$(realpath -e \"$p\"); [[ \"$resolved\" == \"$root\"/* ]]; mode=$(stat -c %a \"$p\"); (( (8#$mode & 077) == 0 )); done < <(jq -er '.fixtures[].sourcePath' docs/statements/.ingest-fixture-manifest.json); shopt -s nullglob nocaseglob; pdfs=(docs/statements/*.pdf); ((${#pdfs[@]} == 3)); manifest_mode=$(stat -c %a docs/statements/.ingest-fixture-manifest.json); root_mode=$(stat -c %a docs/statements); (( (8#$manifest_mode & 077) == 0 && (8#$root_mode & 077) == 0 ))'",
-      "expected_result": "exit 0 with no stdout; exactly three regular non-symlink PDFs are referenced strictly below the canonical owner-only root and every private file is owner-only",
+      "command": "TALLY_INGEST_PRIVATE_FIXTURE_MANIFEST=\"$PWD/docs/statements/.ingest-fixture-manifest.json\" dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~Authorized_private_fixture_set_is_deterministic_and_bounded_when_injected --no-restore --verbosity quiet",
+      "expected_result": "exit 0 with exactly 1 discovered test and 0 failures; the in-process loader proves strict repository-relative containment, regular non-symlink source files, owner-only directory/file modes, digests, three fixtures, and two variants without placing private source locators in subprocess arguments",
       "required": 1,
-      "timeout_seconds": 30,
+      "timeout_seconds": 300,
       "sort_order": 1,
-      "created_at": "2026-07-25T14:41:37.4950362+00:00"
+      "created_at": "2026-07-25T20:08:51.0375878+00:00"
     },
     {
-      "id": "01KYCVJYPS2W6X94YT79WKYRJZ",
+      "id": "01KYDEA42Z8Z2Q9WECD5HTK1AV",
       "phase": "after",
       "command": "git check-ignore -q docs/statements/.ingest-fixture-manifest.json && test -z \"$(git ls-files -- docs/statements)\"",
       "expected_result": "exit 0 with no stdout; the private manifest is ignored and no file below docs/statements is tracked",
       "required": 1,
       "timeout_seconds": 30,
       "sort_order": 2,
-      "created_at": "2026-07-25T14:41:37.4950362+00:00"
+      "created_at": "2026-07-25T20:08:51.0375878+00:00"
     }
   ]
 }

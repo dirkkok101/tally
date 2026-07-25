@@ -162,56 +162,85 @@
       "created_at": "2026-07-25T18:27:41.3317486+00:00"
     }
   ],
+  "links": [
+    {
+      "id": "01KYDJ0CTAVQMXW5YMH5A1E4Z0",
+      "target_type": "open_question",
+      "target": "OQ-INGEST-18",
+      "rel": "see-also",
+      "created_at": "2026-07-25T21:13:26.6034244+00:00"
+    }
+  ],
   "recipe_items": [
     {
-      "id": "01KYD9EVBTV770HC02XXMC2W4H",
+      "id": "01KYDHKRBDY6CM2Q28NCNCPZBH",
       "kind": "acceptance_check",
       "text": [
         "Descriptor is exactly pdf-text-layout-a-v1 with reviewed versions, media type, and bounds."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-25T18:44:03.0655596+00:00"
+      "created_at": "2026-07-25T21:06:32.4293019+00:00"
     },
     {
-      "id": "01KYD9EVBVAACWN85AZQHD4BXB",
+      "id": "01KYDHKRBFZZ7PECS6CGAT2BHG",
       "kind": "acceptance_check",
       "text": [
         "Probe exact-matches only layout A structure and no-matches layout B/unsupported evidence; filenames and extensions are irrelevant."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-25T18:44:03.0655596+00:00"
+      "created_at": "2026-07-25T21:06:32.4293019+00:00"
     },
     {
-      "id": "01KYD9EVBVN2WDWDFTHSPZN42G",
+      "id": "01KYDHKRBF4WFP3JFR2R31XVWH",
       "kind": "acceptance_check",
       "text": [
-        "Extract accounts for every record/control, emits ordered FinancialEvidence/reconciliation inputs, validates selected AccountDetail, and fingerprints only versioned normalized statement account metadata (never paths, IDs, rows, or financial values)."
+        "Extract accounts for every record/control, emits ordered FinancialEvidence/reconciliation inputs, and validates selected AccountDetail."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-25T18:44:03.0655596+00:00"
+      "created_at": "2026-07-25T21:06:32.4293019+00:00"
     },
     {
-      "id": "01KYD9EVBVPCN0MXFSWN8R4238",
+      "id": "01KYDHKRBFVMVK302EG8HMXRJF",
+      "kind": "acceptance_check",
+      "text": [
+        "Layout A rows use date/amount/balance anchors; a separately rendered description is accepted only from the unique description-only visual line within that row vertical midpoint band, and missing or ambiguous ownership fails closed."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-25T21:06:32.4293019+00:00"
+    },
+    {
+      "id": "01KYDHKRBFZMFRVJ7EH6N5KZFK",
+      "kind": "acceptance_check",
+      "text": [
+        "Metadata fingerprint uses canonical UTF-8 adapterVersion + LF + LF-joined normalized Layout A visual account/card lines with monetary tokens removed and no trailing LF; it rejects absent metadata and never includes paths, IDs, rows, or financial values."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-25T21:06:32.4293019+00:00"
+    },
+    {
+      "id": "01KYDHKRBF9B5QVHHSRPT555N6",
       "kind": "acceptance_check",
       "text": [
         "FinancialNormalizer with selected AccountDetail.AccountClass plus StatementReconciler reproduces every private expected fact in integer minor units."
       ],
       "required": 1,
-      "sort_order": 3,
-      "created_at": "2026-07-25T18:44:03.0655596+00:00"
+      "sort_order": 5,
+      "created_at": "2026-07-25T21:06:32.4293019+00:00"
     },
     {
-      "id": "01KYD9EVBVY98JC6VGGR46K4AK",
+      "id": "01KYDHKRBFG4APPATRDHTEY9G9",
       "kind": "acceptance_check",
       "text": [
         "Two runs are identical; malformed or drifted structures fail closed."
       ],
       "required": 1,
-      "sort_order": 4,
-      "created_at": "2026-07-25T18:44:03.0655596+00:00"
+      "sort_order": 6,
+      "created_at": "2026-07-25T21:06:32.4293019+00:00"
     },
     {
       "id": "01KXTM5NS4NE0C26ZC9YQDG266",
@@ -272,6 +301,16 @@
       "required": 1,
       "sort_order": 2,
       "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KYDJ0DD6WZ7QKTBW73KW5F8M",
+      "kind": "note",
+      "text": [
+        "Execution is blocked by OQ-INGEST-18: the authorized Layout A fixture has two nonzero rows with no extractable description evidence; blank, borrowed, or guessed descriptions violate FR-INGEST-FINANCIAL-NORMALIZATION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T21:13:27.2061038+00:00"
     }
   ],
   "references": [
