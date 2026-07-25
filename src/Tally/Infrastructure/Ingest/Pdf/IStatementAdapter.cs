@@ -1,3 +1,7 @@
+using Tally.Contracts.Ingest;
+using Tally.Contracts.Ledger.Accounts;
+using Tally.Domain.Ingest.Normalization;
+
 namespace Tally.Infrastructure.Ingest.Pdf;
 
 // DD-INGEST-FORMAT-ADAPTERS
@@ -7,7 +11,7 @@ public interface IStatementAdapter
 
     VariantProbeResult Probe(PdfDocumentEvidence evidence);
 
-    ExtractedStatement Extract(PdfDocumentEvidence evidence, StatementAccountContext selectedAccount);
+    ExtractedStatement Extract(PdfDocumentEvidence evidence, AccountDetail selectedAccount);
 }
 
 public sealed record FormatVariantDescriptor(
@@ -30,7 +34,13 @@ public sealed record VariantProbeResult(
     VariantProbeOutcome Outcome,
     IReadOnlyList<string> StructuralEvidenceCodes);
 
-public sealed record StatementAccountContext(string AccountId);
+public sealed record StatementAccountEvidence(
+    string AccountId,
+    AccountClass AccountClass,
+    string CurrencyCode,
+    string MaskedIdentifier,
+    string MetadataFingerprint,
+    bool Matched);
 
 public sealed record SourceRecordEvidence(
     string SourceRecordId,
@@ -39,9 +49,9 @@ public sealed record SourceRecordEvidence(
     string RecordKind,
     string OriginalTextEvidence,
     string? SourceReference,
-    string RawDateEvidence,
-    string RawAmountEvidence,
-    string? RawControlEvidence);
+    FinancialEvidence FinancialEvidence,
+    long? RunningBalanceMinor,
+    long? SourceControlMinor);
 
 public enum ReconciliationControlKind
 {
@@ -66,7 +76,9 @@ public sealed record ReconciliationControl(
 
 public sealed record ExtractedStatement(
     FormatVariantDescriptor Variant,
-    string StatementPeriod,
-    string AccountEvidence,
+    StatementPeriod StatementPeriod,
+    StatementAccountEvidence AccountEvidence,
     IReadOnlyList<SourceRecordEvidence> OrderedRecords,
-    IReadOnlyList<ReconciliationControl> Controls);
+    long? OpeningEconomicBalanceMinor,
+    long? ClosingEconomicBalanceMinor,
+    IReadOnlyList<ReconciliationControlKind> AdvertisedControls);
