@@ -1,0 +1,35 @@
+{
+  "id": "01KYC9W6MX7YGT107JNEYB4Y5P",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "OQ-INGEST-15",
+  "question": "DM-INGEST-LEDGER-COMMIT-CONTRACT names sourceReference and provenance{kind:statement_import} fields that the shipped LEDGER public contract does not expose. Should the data model be reconciled to the shipped shape (InitialEvidence: RegisterEvidenceInput with EvidenceKind.statement_row, returned as Evidence[]) before the commit saga is built?",
+  "context": [
+    "Discovered by TASK-INGEST-GATE-INT-LEDGER-CONTRACT (bd-2dg). RecordTransactionInput exposes AccountId, SignedAmount, CurrencyCode, TransactionDate, PostingDate?, OriginalDescription, InstrumentId?, CardholderId?, InitialEvidence. TransactionDetail returns Evidence[] (TransactionEvidenceDetail). There is no sourceReference or provenance member on either. Statement provenance round-trips through evidence and is proven by Statement_provenance_round_trips_through_initial_evidence. Downstream commit beads (FR-INGEST-APPROVED-BATCH-COMMIT, FR-INGEST-DURABLE-RECEIPT-RESUME) freeze this request byte-for-byte, so the DM must name the real fields."
+  ],
+  "status": "open",
+  "disposition": "unspecified",
+  "created_at": "2026-07-25T09:32:06.1746774+00:00",
+  "links": [
+    {
+      "id": "01KYC9W6N6M3W79M9MNHWW8T11",
+      "target_type": "data_model",
+      "target": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+      "rel": "see-also",
+      "created_at": "2026-07-25T09:32:06.1823738+00:00"
+    },
+    {
+      "id": "01KYC9W6N6852K7XXM6DMJPS1N",
+      "target_type": "requirement",
+      "target": "FR-INGEST-APPROVED-BATCH-COMMIT",
+      "rel": "see-also",
+      "created_at": "2026-07-25T09:32:06.1828628+00:00"
+    },
+    {
+      "id": "01KYC9W6N60J4R2D4SJXNTGBGY",
+      "target_type": "requirement",
+      "target": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+      "rel": "see-also",
+      "created_at": "2026-07-25T09:32:06.1829598+00:00"
+    }
+  ]
+}

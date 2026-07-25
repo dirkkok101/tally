@@ -1,0 +1,28 @@
+{
+  "id": "01KYC9WDWXH18M4F6SQKYQ4N0P",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "OQ-INGEST-16",
+  "question": "DM-INGEST-LEDGER-COMMIT-CONTRACT makes commit terminal only after ledger.transaction.get returns the same immutable facts. Since record returns a populated history projection and get omits it unless includeHistory is true, should the terminal check compare only the frozen immutable facts?",
+  "context": [
+    "Discovered by TASK-INGEST-GATE-INT-LEDGER-CONTRACT (bd-2dg). A whole-payload equality check between the record result and the get result fails on the history member alone; the gate normalizes history out before comparing. The resume/receipt logic in FR-INGEST-DURABLE-RECEIPT-RESUME needs the same rule stated explicitly so it does not treat a healthy commit as unverified."
+  ],
+  "status": "open",
+  "disposition": "unspecified",
+  "created_at": "2026-07-25T09:32:13.5981919+00:00",
+  "links": [
+    {
+      "id": "01KYC9WDWYF2YZHE8MT39SNBGY",
+      "target_type": "data_model",
+      "target": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+      "rel": "see-also",
+      "created_at": "2026-07-25T09:32:13.5986453+00:00"
+    },
+    {
+      "id": "01KYC9WDWYV9GHR1PZCQ8404XA",
+      "target_type": "requirement",
+      "target": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+      "rel": "see-also",
+      "created_at": "2026-07-25T09:32:13.5989688+00:00"
+    }
+  ]
+}
