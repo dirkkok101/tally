@@ -1,0 +1,21 @@
+{
+  "id": "01KYCGNRRSQ8PM4GP2V0G3P4NM",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "OQ-INGEST-17",
+  "question": "What durable state and deterministic policy must ingest.status use for last-error code/category/retry/mutation guidance and snapshot-stable cursor paging without rereading the source or mutating in StatusHandler?",
+  "context": [
+    "TASK-INGEST-STATUS-WORKFLOW is blocked: V001 persists only candidate_receipt.error_code, has no batch-level last-error metadata or paging snapshot, while FR-INGEST-FAILURE-STATUS requires exact durable guidance and the task requires no-skip/no-duplicate paging under a stable snapshot. Resolve the schema/policy and reconcile the bead before implementation."
+  ],
+  "status": "open",
+  "disposition": "unspecified",
+  "created_at": "2026-07-25T11:30:55.3859705+00:00",
+  "links": [
+    {
+      "id": "01KYCGNRRTDZP853TFECN6SEJ9",
+      "target_type": "requirement",
+      "target": "FR-INGEST-FAILURE-STATUS",
+      "rel": "see-also",
+      "created_at": "2026-07-25T11:30:55.3866087+00:00"
+    }
+  ]
+}
