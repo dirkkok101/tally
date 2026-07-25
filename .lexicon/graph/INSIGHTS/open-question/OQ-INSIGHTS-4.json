@@ -11,5 +11,6 @@
     "Forecast remains a formally deferred requirement until a privacy-safe signal-activation spike establishes a deterministic formula and minimum horizon and coverage rules for each supported evidence shape, including recurring, irregular, refund-heavy, zero-budget, and partial-period cases. Unsupported shapes must remain explicit Insufficient Evidence; failure keeps Forecast out of v1."
   ],
   "owner": "INSIGHTS signal-activation spike",
+  "disposition": "unspecified",
   "created_at": "2026-07-20T07:28:34.0698114+00:00"
 }

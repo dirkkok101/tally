@@ -11,6 +11,7 @@
     "Use candidate-granular commit through existing public LEDGER writes. Batch atomicity is not required when the reviewed manifest is immutable, every candidate has a stable idempotency identity, each outcome is durable before continuation, failure stops unsafe progress, and resume reuses the exact request and identity. No new LEDGER batch API is required by discovery."
   ],
   "owner": "INGEST discovery",
+  "disposition": "unspecified",
   "created_at": "2026-07-18T09:45:50.7194354+00:00",
   "links": [
     {

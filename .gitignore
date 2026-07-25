@@ -4,3 +4,6 @@ docs/statements/
 # .NET build output
 **/bin/
 **/obj/
+
+# bv (beads viewer) local config and caches
+.bv/

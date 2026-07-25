@@ -11,5 +11,6 @@
     "v1 provides no dedicated copy-previous or inherited-plan operation. An Agent Host may read a prior revision and submit a new complete ordinary draft; a future PRD may reconsider only if measured representative maintenance exceeds 15 minutes."
   ],
   "owner": "BUDGET discovery",
+  "disposition": "unspecified",
   "created_at": "2026-07-19T13:27:37.7841224+00:00"
 }

@@ -3,5 +3,6 @@
   "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
   "condition": "Before planning, if the public LEDGER contract cannot preserve required source provenance or make interrupted and repeated commits deterministic, amend the upstream contract rather than coupling INGEST to private storage.",
   "monitored": 1,
+  "evaluation_state": "unassessed",
   "created_at": "2026-07-18T09:45:08.3213822+00:00"
 }

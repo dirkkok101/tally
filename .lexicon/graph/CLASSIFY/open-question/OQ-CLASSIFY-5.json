@@ -11,5 +11,6 @@
     "A correction records feedback against the exact prior evaluation and rule version, then may propose the smallest retire, narrow, or replacement change with owner rationale. One correction never activates or broadens a rule. Every candidate is privately re-evaluated and activation remains explicit; Ledger correction history remains authoritative and unchanged."
   ],
   "owner": "CLASSIFY discovery",
+  "disposition": "unspecified",
   "created_at": "2026-07-18T17:51:37.6612352+00:00"
 }

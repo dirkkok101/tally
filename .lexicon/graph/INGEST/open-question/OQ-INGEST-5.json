@@ -11,6 +11,7 @@
     "Every initial fixture exposes statement period plus opening and closing balances, and all reconcile exactly as opening economic balance plus normalized signed movement equals closing economic balance. One variant also exposes running balances. No fixture exposes a trustworthy transaction-count or debit/credit-total control, so those are not required."
   ],
   "owner": "INGEST pre-planning spike",
+  "disposition": "unspecified",
   "created_at": "2026-07-18T09:45:50.4088483+00:00",
   "links": [
     {

@@ -11,5 +11,6 @@
     "INGEST does not copy caller-owned source files; removes extraction temporaries after success, failure, abandonment, and safe startup recovery; retains incomplete owner-only manifests and receipts for review or resume; and retains completed metadata-only receipts until explicit owner cleanup. This first-release policy is now validated as A4; configurable time-based retention is outside the current requirement."
   ],
   "owner": "INGEST discovery",
+  "disposition": "unspecified",
   "created_at": "2026-07-18T09:45:50.9666323+00:00"
 }

@@ -10,5 +10,6 @@
   "decision": [
     "Yes. A single BUDGET-owned budget.insights.evidence.get operation can bind one immutable Budget Plan Revision, the exact Budget Position, and bounded dated ActualsItem members by reusing the same complete public LEDGER snapshot already materialized for BUDGET calculation. In the 2026-07-20 disposable .NET 10 harness, independent calls mixed generations in 1000/1000 forced races; the composite returned 1000/1000 coherent pre-correction and 1000/1000 coherent post-correction results, with 0 mixed and 0 reconciliation failures. INSIGHTS must not make a second LEDGER actuals call or calculate Budget Position. This validates A3 and is governed by DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE."
   ],
+  "disposition": "unspecified",
   "created_at": "2026-07-20T08:56:11.8065218+00:00"
 }

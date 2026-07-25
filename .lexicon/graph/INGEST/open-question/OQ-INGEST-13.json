@@ -11,6 +11,7 @@
     "Exact Replay requires the same Source Fingerprint, selected account, adapter version, and LEDGER contract version. Filename is excluded; any account or version change requires a new preview."
   ],
   "owner": "INGEST design",
+  "disposition": "unspecified",
   "created_at": "2026-07-18T15:17:06.5220564+00:00",
   "links": [
     {

@@ -11,5 +11,6 @@
     "Budget Position recomputes current corrected actuals from a cited LEDGER snapshot while binding results to an explicit plan revision. BUDGET retains plan history only; durable report snapshots belong to INSIGHTS. Recorded as A4."
   ],
   "owner": "BUDGET discovery",
+  "disposition": "unspecified",
   "created_at": "2026-07-19T13:27:38.5607145+00:00"
 }
