@@ -4,7 +4,7 @@
   "condition": "Before design, stop the selected approach if it requires uploading statements to a cloud parser, holding bank credentials, implementing custom cryptography, or operating a generic OCR service.",
   "monitored": 1,
   "evaluation_state": "clear",
-  "evaluation_evidence": "The current accepted design uses local bounded PdfPig extraction, no cloud parser, no bank credentials, no custom cryptography, and no OCR service.",
-  "evaluated_at": "2026-07-25T13:47:12.7814371+00:00",
+  "evaluation_evidence": "The ready extractor task remains bounded local PdfPig processing with no cloud parser, bank credentials, custom cryptography, OCR service, external process, or external fetch.",
+  "evaluated_at": "2026-07-25T17:06:47.0101440+00:00",
   "created_at": "2026-07-18T09:45:08.0216653+00:00"
 }
