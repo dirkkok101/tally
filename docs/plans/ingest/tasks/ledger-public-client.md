@@ -12,7 +12,7 @@
 
 ## Summary
 
-Use the shared typed operation executor for account lookup and exact released transaction record/get contracts; the client performs no request translation, transport abstraction, or private LEDGER coupling.
+Resolve the released ledger.account.get, ledger.transaction.record, and ledger.transaction.get descriptors through OperationRegistry.Find and invoke TallyProcess.RunAsync with RequestEnvelope; parse ProcessResult through ResultEnvelope without request translation, transport abstraction, or private LEDGER coupling.
 
 ## Objective
 
@@ -32,7 +32,7 @@ Provide one concrete LedgerContractClient that preserves released schemas, error
 |---|---|---|
 | [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md) | `compile` | The prerequisite gate proves every operation and contract consumed by the client. |
 | [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | The client consumes FrozenLedgerRecordRequest and stable INGEST compatibility errors. |
-| [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](../tasks/ledger-evidence-contract-correction.md) | `compile` | The client consumes the corrected exact public frozen request and verification tuple. |
+| [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](../tasks/ledger-evidence-contract-correction.md) | `compile` | The client consumes the corrected exact public frozen RecordTransactionInput without translation. |
 
 ## Recipe
 
@@ -62,35 +62,39 @@ Provide one concrete LedgerContractClient that preserves released schemas, error
 
 ### Notes
 
-None recorded.
+- FrozenLedgerRecordRequest.Input must be the released RecordTransactionInput directly; retaining the isomorphic INGEST-only wrapper would force forbidden client-side request reshaping.
 
 ### File Contracts
 
 | Path | Action | Role | Required | Notes |
 |---|---|---|---|---|
+| `src/Tally/Contracts/Ingest/IngestReceiptContracts.cs` | `modify` | replace the INGEST-only frozen input wrapper with the released RecordTransactionInput | `true` |  |
+| `src/Tally/Contracts/Ingest/IngestJsonContext.cs` | `modify` | source-generated frozen request metadata for the released nested input | `true` |  |
 | `src/Tally/Integration/Ledger/LedgerContractClient.cs` | `create` | public operation executor client | `true` |  |
-| `tests/Tally.Tests/Ingest/LedgerContract/LedgerContractClientTests.cs` | `test` | account/record/get contract tests | `true` |  |
-| `tests/Tally.Tests/Ingest/LedgerContract/LedgerBoundaryArchitectureTests.cs` | `test` | private-reference guards | `true` |  |
+| `tests/Tally.Tests/Ingest/Contract/IngestContractModelTests.cs` | `test` | exact released frozen input type and byte stability | `true` |  |
+| `tests/Tally.Tests/Ingest/LedgerContract/LedgerContractClientTests.cs` | `test` | account record and get contract tests | `true` |  |
+| `tests/Tally.Tests/Ingest/LedgerContract/LedgerBoundaryArchitectureTests.cs` | `test` | private reference guards | `true` |  |
 
 ### Interface Contracts
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| VerifiedLedgerOperationRegistry | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Validated by the prerequisite gate |
+| VerifiedLedgerOperationRegistry | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Validated OperationRegistry.Find descriptors plus in-process TallyProcess.RunAsync using RequestEnvelope, ProcessResult, ResultEnvelope, registry-derived arguments, and CancellationToken |
 | VerifiedLedgerAccountDetail | `consumes` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS | Validated external AccountDetail |
 | VerifiedLedgerTransactionDetail | `consumes` | DM-LEDGER-TRANSACTION-CONTRACTS | Validated external TransactionDetail |
-| LedgerIngestContractPrerequisite | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Twelve-case upstream proof |
-| FrozenLedgerRecordRequest | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Exact persisted released request envelope |
-| LedgerImmutableVerification | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Comparison tuple owned by the commit saga |
+| LedgerIngestContractPrerequisite | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Twelve-case proof of the exact common-envelope and in-process executor seam |
+| FrozenLedgerRecordRequest | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Exact persisted released request envelope whose Input is RecordTransactionInput |
 | LedgerContractClient.GetAccountAsync | `produces` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS | Public account lookup |
 | LedgerContractClient.RecordTransactionAsync | `produces` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Exact public idempotent write |
-| LedgerContractClient.GetTransactionAsync | `produces` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Public IncludeHistory=false verification read |
+| LedgerContractClient.GetTransactionAsync | `produces` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Public IncludeHistory=false verification read returned untouched to the commit saga |
 
 ### Verification
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~LedgerContractClientTests\|FullyQualifiedName~LedgerBoundaryArchitectureTests'` | exit 0; at least 14 account, version, record/get, replay, cancellation, error-preservation, and private-reference cases are discovered and 0 tests fail | `true` | 360 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~IngestContractModelTests` | exit 0; FrozenLedgerRecordRequest.Input is the released RecordTransactionInput and remains byte-stable | `true` | 360 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~LedgerContractClientTests` | exit 0; account, version, record/get, replay, cancellation, and error-preservation cases are discovered and 0 tests fail | `true` | 360 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~LedgerBoundaryArchitectureTests` | exit 0; private-reference architecture cases are discovered and 0 tests fail | `true` | 360 |
 
 ### Review Gates
 
@@ -112,7 +116,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `bead-ref` -> `bd-2sg` (verified)
 - `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): The client consumes FrozenLedgerRecordRequest and stable INGEST compatibility errors.
 - `depends-on:compile` -> [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md): The prerequisite gate proves every operation and contract consumed by the client.
-- `depends-on:compile` -> [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](../tasks/ledger-evidence-contract-correction.md): The client consumes the corrected exact public frozen request and verification tuple.
+- `depends-on:compile` -> [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](../tasks/ledger-evidence-contract-correction.md): The client consumes the corrected exact public frozen RecordTransactionInput without translation.
 - `governed-by` -> DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor
 - `implements` -> FR-INGEST-APPROVED-BATCH-COMMIT: Commit approved candidates through public LEDGER operations
 - `verifies` -> TC-INGEST-LEDGER-PUBLIC-CONFORMANCE: Verify INGEST uses only the public LEDGER contract

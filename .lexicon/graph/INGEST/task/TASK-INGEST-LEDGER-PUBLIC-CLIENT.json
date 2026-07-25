@@ -6,7 +6,7 @@
   "slug": "LEDGER-PUBLIC-CLIENT",
   "title": "Implement the concrete public LEDGER client",
   "description": [
-    "Use the shared typed operation executor for account lookup and exact released transaction record/get contracts; the client performs no request translation, transport abstraction, or private LEDGER coupling."
+    "Resolve the released ledger.account.get, ledger.transaction.record, and ledger.transaction.get descriptors through OperationRegistry.Find and invoke TallyProcess.RunAsync with RequestEnvelope; parse ProcessResult through ResultEnvelope without request translation, transport abstraction, or private LEDGER coupling."
   ],
   "objective": [
     "Provide one concrete LedgerContractClient that preserves released schemas, errors, versions, cancellation, and idempotency unchanged."
@@ -53,59 +53,86 @@
       "created_at": "2026-07-18T12:48:21.7802577+00:00"
     },
     {
-      "id": "01KYCRCQHY4KW52CVPAMEQ04Y0",
+      "id": "01KYD2PEP5V3J9SKERNF3ZHHX4",
       "target": "TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION",
       "dependency_type": "compile",
       "reason": [
-        "The client consumes the corrected exact public frozen request and verification tuple."
+        "The client consumes the corrected exact public frozen RecordTransactionInput without translation."
       ],
       "sort_order": 2,
-      "created_at": "2026-07-25T13:45:47.8396165+00:00"
+      "created_at": "2026-07-25T16:45:52.1981923+00:00"
     }
   ],
   "files": [
     {
-      "id": "01KXTMAH8NQJSGNBMWB6XZCM20",
+      "id": "01KYD29JMK4BXSEHB2SFTDKXHZ",
+      "path": "src/Tally/Contracts/Ingest/IngestReceiptContracts.cs",
+      "action": "modify",
+      "role": "replace the INGEST-only frozen input wrapper with the released RecordTransactionInput",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T16:38:50.2569317+00:00"
+    },
+    {
+      "id": "01KYD29JMKA2Q174YCM174K4XR",
+      "path": "src/Tally/Contracts/Ingest/IngestJsonContext.cs",
+      "action": "modify",
+      "role": "source-generated frozen request metadata for the released nested input",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-25T16:38:50.2569317+00:00"
+    },
+    {
+      "id": "01KYD29JMK3SC3ACJQQK6ZQQJP",
       "path": "src/Tally/Integration/Ledger/LedgerContractClient.cs",
       "action": "create",
       "role": "public operation executor client",
       "required": 1,
-      "sort_order": 0,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "sort_order": 2,
+      "created_at": "2026-07-25T16:38:50.2569317+00:00"
     },
     {
-      "id": "01KXTMAH8NVX7CYCH9ZAHKZWV7",
+      "id": "01KYD29JMKM77JWVQC2Q9TWAQ6",
+      "path": "tests/Tally.Tests/Ingest/Contract/IngestContractModelTests.cs",
+      "action": "test",
+      "role": "exact released frozen input type and byte stability",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-25T16:38:50.2569317+00:00"
+    },
+    {
+      "id": "01KYD29JMKJAAFSVCDJK7KG03H",
       "path": "tests/Tally.Tests/Ingest/LedgerContract/LedgerContractClientTests.cs",
       "action": "test",
-      "role": "account/record/get contract tests",
+      "role": "account record and get contract tests",
       "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "sort_order": 4,
+      "created_at": "2026-07-25T16:38:50.2569317+00:00"
     },
     {
-      "id": "01KXTMAH8NCM6KN7YG8RQJQ24F",
+      "id": "01KYD29JMKEMQ7ZNM930GC4BA3",
       "path": "tests/Tally.Tests/Ingest/LedgerContract/LedgerBoundaryArchitectureTests.cs",
       "action": "test",
-      "role": "private-reference guards",
+      "role": "private reference guards",
       "required": 1,
-      "sort_order": 2,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "sort_order": 5,
+      "created_at": "2026-07-25T16:38:50.2569317+00:00"
     }
   ],
   "interfaces": [
     {
-      "id": "01KYCR72W3WZN2P7ZNAR4Q31YZ",
+      "id": "01KYD2V6S7DQWWM1YX6RYFETHC",
       "name": "VerifiedLedgerOperationRegistry",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-OPERATION-DESCRIPTOR",
       "notes": [
-        "Validated by the prerequisite gate"
+        "Validated OperationRegistry.Find descriptors plus in-process TallyProcess.RunAsync using RequestEnvelope, ProcessResult, ResultEnvelope, registry-derived arguments, and CancellationToken"
       ],
       "sort_order": 0,
-      "created_at": "2026-07-25T13:42:42.8165672+00:00"
+      "created_at": "2026-07-25T16:48:27.9428704+00:00"
     },
     {
-      "id": "01KYCR72W3XTVMXPRJB12T9HG4",
+      "id": "01KYD2V6S9QF6K6PMD17HDX9MQ",
       "name": "VerifiedLedgerAccountDetail",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
@@ -113,10 +140,10 @@
         "Validated external AccountDetail"
       ],
       "sort_order": 1,
-      "created_at": "2026-07-25T13:42:42.8165672+00:00"
+      "created_at": "2026-07-25T16:48:27.9428704+00:00"
     },
     {
-      "id": "01KYCR72W3Y31YT82H28T1JPXM",
+      "id": "01KYD2V6S9JB9SZK91S23D85HH",
       "name": "VerifiedLedgerTransactionDetail",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-TRANSACTION-CONTRACTS",
@@ -124,73 +151,62 @@
         "Validated external TransactionDetail"
       ],
       "sort_order": 2,
-      "created_at": "2026-07-25T13:42:42.8165672+00:00"
+      "created_at": "2026-07-25T16:48:27.9428704+00:00"
     },
     {
-      "id": "01KYCR72W3RRV6RXG2VMJG21AM",
+      "id": "01KYD2V6S9KSGMK8Z5CA1GF85A",
       "name": "LedgerIngestContractPrerequisite",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
       "notes": [
-        "Twelve-case upstream proof"
+        "Twelve-case proof of the exact common-envelope and in-process executor seam"
       ],
       "sort_order": 3,
-      "created_at": "2026-07-25T13:42:42.8165672+00:00"
+      "created_at": "2026-07-25T16:48:27.9428704+00:00"
     },
     {
-      "id": "01KYCR72W3SHE529G0BNVB7HG1",
+      "id": "01KYD2V6S9S8EVCRFS7QNBBQWN",
       "name": "FrozenLedgerRecordRequest",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
       "notes": [
-        "Exact persisted released request envelope"
+        "Exact persisted released request envelope whose Input is RecordTransactionInput"
       ],
       "sort_order": 4,
-      "created_at": "2026-07-25T13:42:42.8165672+00:00"
+      "created_at": "2026-07-25T16:48:27.9428704+00:00"
     },
     {
-      "id": "01KYCR72W3AT3M1WWSKNR4Z1WN",
-      "name": "LedgerImmutableVerification",
-      "direction": "consumes",
-      "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
-      "notes": [
-        "Comparison tuple owned by the commit saga"
-      ],
-      "sort_order": 5,
-      "created_at": "2026-07-25T13:42:42.8165672+00:00"
-    },
-    {
-      "id": "01KYCR72W3D7HM4JTC7E0BKMAK",
+      "id": "01KYD2V6S9DCFFXY1H5EYP8AK6",
       "name": "LedgerContractClient.GetAccountAsync",
       "direction": "produces",
       "contract_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
       "notes": [
         "Public account lookup"
       ],
-      "sort_order": 6,
-      "created_at": "2026-07-25T13:42:42.8165672+00:00"
+      "sort_order": 5,
+      "created_at": "2026-07-25T16:48:27.9428704+00:00"
     },
     {
-      "id": "01KYCR72W3PXF3A0A88GZZG9GK",
+      "id": "01KYD2V6S97NGW4BCJ3TR532Z3",
       "name": "LedgerContractClient.RecordTransactionAsync",
       "direction": "produces",
       "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
       "notes": [
         "Exact public idempotent write"
       ],
-      "sort_order": 7,
-      "created_at": "2026-07-25T13:42:42.8165672+00:00"
+      "sort_order": 6,
+      "created_at": "2026-07-25T16:48:27.9428704+00:00"
     },
     {
-      "id": "01KYCR72W3Z2ZNJ42E1SKG4ECD",
+      "id": "01KYD2V6S9MG78N23783PSPRSY",
       "name": "LedgerContractClient.GetTransactionAsync",
       "direction": "produces",
       "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
       "notes": [
-        "Public IncludeHistory=false verification read"
+        "Public IncludeHistory=false verification read returned untouched to the commit saga"
       ],
-      "sort_order": 8,
-      "created_at": "2026-07-25T13:42:42.8165672+00:00"
+      "sort_order": 7,
+      "created_at": "2026-07-25T16:48:27.9428704+00:00"
     }
   ],
   "recipe_items": [
@@ -313,6 +329,16 @@
       "required": 1,
       "sort_order": 3,
       "created_at": "2026-07-25T13:42:42.8165672+00:00"
+    },
+    {
+      "id": "01KYD29JMHTQV1PZHEE0G8ZD08",
+      "kind": "note",
+      "text": [
+        "FrozenLedgerRecordRequest.Input must be the released RecordTransactionInput directly; retaining the isomorphic INGEST-only wrapper would force forbidden client-side request reshaping."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T16:38:50.2569317+00:00"
     }
   ],
   "references": [
@@ -359,14 +385,34 @@
   ],
   "verification_steps": [
     {
-      "id": "01KXTMAH8PGM5Y346TC7DV9D2Q",
+      "id": "01KYD29JMKHFC4B38P3KNMHFR6",
       "phase": "after",
-      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~LedgerContractClientTests|FullyQualifiedName~LedgerBoundaryArchitectureTests'",
-      "expected_result": "exit 0; at least 14 account, version, record/get, replay, cancellation, error-preservation, and private-reference cases are discovered and 0 tests fail",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~IngestContractModelTests",
+      "expected_result": "exit 0; FrozenLedgerRecordRequest.Input is the released RecordTransactionInput and remains byte-stable",
       "required": 1,
       "timeout_seconds": 360,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-25T16:38:50.2569317+00:00"
+    },
+    {
+      "id": "01KYD29JMKTA3YARNWVK7VN3P2",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~LedgerContractClientTests",
+      "expected_result": "exit 0; account, version, record/get, replay, cancellation, and error-preservation cases are discovered and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 1,
+      "created_at": "2026-07-25T16:38:50.2569317+00:00"
+    },
+    {
+      "id": "01KYD29JMKXNBFT4VXJZQXCBAD",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~LedgerBoundaryArchitectureTests",
+      "expected_result": "exit 0; private-reference architecture cases are discovered and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 2,
+      "created_at": "2026-07-25T16:38:50.2569317+00:00"
     }
   ]
 }

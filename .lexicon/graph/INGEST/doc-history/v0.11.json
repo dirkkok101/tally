@@ -1,0 +1,9 @@
+{
+  "id": "01KYD2YA70ZBN32HFHKFZ59BER",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "version": "0.11",
+  "changes": [
+    "Corrected TASK-INGEST-LEDGER-PUBLIC-CLIENT after execution preflight proved the isomorphic frozen input wrapper would force prohibited request reshaping. The task now reserves the released RecordTransactionInput contract correction, names the OperationRegistry and TallyProcess common-envelope seam, removes client ownership of immutable verification, and passed delta review 20260725T164836668Z-14af57f2 plus plan audit and fresh-context polish."
+  ],
+  "created_at": "2026-07-25T16:50:09.7616261+00:00"
+}
