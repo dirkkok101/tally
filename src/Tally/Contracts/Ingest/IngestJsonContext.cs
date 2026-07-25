@@ -25,6 +25,7 @@ namespace Tally.Contracts.Ingest;
 [JsonSerializable(typeof(IngestError))]
 [JsonSerializable(typeof(BatchStatusSummary))]
 [JsonSerializable(typeof(BatchStatusDetail))]
+[JsonSerializable(typeof(IngestStatusCursorPayload))]
 [JsonSerializable(typeof(StatementPeriod))]
 [JsonSerializable(typeof(ImportProvenance))]
 [JsonSerializable(typeof(ImportBatch))]

@@ -94,3 +94,12 @@ public sealed record BatchStatusDetail(
     [property: JsonRequired] IReadOnlyList<string> UnresolvedFrontier,
     IngestError? LastStableError,
     [property: JsonRequired] IReadOnlyList<ArtifactKind> RetainedArtifactKinds);
+
+public sealed record IngestStatusCursorPayload(
+    [property: JsonRequired] int CursorVersion,
+    [property: JsonRequired] string ContractVersion,
+    [property: JsonRequired] string SnapshotId,
+    [property: JsonRequired] int NextOrdinal,
+    [property: JsonRequired] int PageSize,
+    [property: JsonRequired] string StoreGeneration,
+    [property: JsonRequired] string ExpiresAt);
