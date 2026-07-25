@@ -1,6 +1,8 @@
 using Microsoft.Data.Sqlite;
 using System.Runtime.Versioning;
+using Tally.Contracts.Ingest;
 using Tally.Infrastructure.Ingest.Storage;
+using Tally.Infrastructure.Ingest.Storage.Migrations;
 using Xunit;
 
 namespace Tally.Tests.Ingest.Storage;
@@ -36,40 +38,44 @@ public sealed class IngestDatabaseFoundationTests : IAsyncLifetime
 
     // DM-INGEST-STATE-STORE
     [Fact]
-    public async Task V001_creates_the_exact_state_store_tables_with_snake_case_identifiers()
+    public async Task V002_creates_the_exact_state_store_tables_with_snake_case_identifiers()
     {
         await using var connection = await OpenAsync();
         await new IngestSchemaMigrator().ApplyAsync(connection, CancellationToken.None);
 
         Assert.Equal(
         [
-            "candidate_receipt", "import_candidate", "import_receipt", "ingest_batch", "manifest_approval",
-            "manifest_revision", "reconciliation_control", "source_record_outcome"
+            "batch_error_event", "candidate_receipt", "import_candidate", "import_receipt", "ingest_batch",
+            "ingest_store_metadata", "manifest_approval", "manifest_revision", "reconciliation_control",
+            "source_record_outcome", "status_snapshot", "status_snapshot_item"
         ], await TableNamesAsync(connection));
         Assert.Equal(["manifest_revision_id", "batch_id", "revision_number", "canonical_digest", "committable", "created_at"], await ColumnNamesAsync(connection, "manifest_revision"));
+        Assert.Equal(["error_event_id", "batch_id", "sequence", "code", "category", "safe_message", "candidate_id", "mutation_possibility", "durable_state", "retry_action", "field", "recorded_at"], await ColumnNamesAsync(connection, "batch_error_event"));
+        Assert.Equal(["snapshot_id", "contract_version", "store_generation", "created_at", "expires_at", "total_count"], await ColumnNamesAsync(connection, "status_snapshot"));
+        Assert.Equal(["snapshot_id", "ordinal", "batch_status_summary_json"], await ColumnNamesAsync(connection, "status_snapshot_item"));
     }
 
     // DM-INGEST-STATE-STORE
     [Fact]
-    public async Task V001_advances_user_version_atomically()
+    public async Task V002_advances_user_version()
     {
         await using var connection = await OpenAsync();
         await new IngestSchemaMigrator().ApplyAsync(connection, CancellationToken.None);
 
-        Assert.Equal(1L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
+        Assert.Equal(2L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
     }
 
     // DD-INGEST-STATE-STORE
     [Fact]
-    public async Task Reapplying_v001_is_idempotent()
+    public async Task Reapplying_v002_is_idempotent()
     {
         await using var connection = await OpenAsync();
         var migrator = new IngestSchemaMigrator();
         await migrator.ApplyAsync(connection, CancellationToken.None);
         await migrator.ApplyAsync(connection, CancellationToken.None);
 
-        Assert.Equal(1L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
-        Assert.Equal(8, (await TableNamesAsync(connection)).Length);
+        Assert.Equal(2L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
+        Assert.Equal(12, (await TableNamesAsync(connection)).Length);
     }
 
     // DD-INGEST-STATE-STORE
@@ -77,7 +83,7 @@ public sealed class IngestDatabaseFoundationTests : IAsyncLifetime
     public async Task A_newer_user_version_returns_a_stable_compatibility_failure()
     {
         await using var connection = await OpenAsync();
-        await ExecuteAsync(connection, "PRAGMA user_version = 2;");
+        await ExecuteAsync(connection, "PRAGMA user_version = 3;");
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => new IngestSchemaMigrator().ApplyAsync(connection, CancellationToken.None));
 
@@ -100,6 +106,117 @@ public sealed class IngestDatabaseFoundationTests : IAsyncLifetime
 
         Assert.Empty(await TableNamesAsync(blocked));
         Assert.Equal(0L, await ScalarLongAsync(blocked, "PRAGMA user_version;"));
+    }
+
+    // DD-INGEST-STATE-STORE
+    [Fact]
+    public async Task V002_upgrades_an_existing_v001_database_without_rebuilding_v001_state()
+    {
+        await using var connection = await OpenAsync();
+        await using (var transaction = (SqliteTransaction)await connection.BeginTransactionAsync())
+        {
+            await new IngestMigrationV001().ApplyAsync(connection, transaction, CancellationToken.None);
+            await ExecuteAsync(connection, "PRAGMA user_version = 1;", transaction);
+            await transaction.CommitAsync();
+        }
+        await InsertBatchAsync(connection);
+
+        await new IngestSchemaMigrator().ApplyAsync(connection, CancellationToken.None);
+
+        Assert.Equal(2L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
+        Assert.Equal(1L, await ScalarLongAsync(connection, "SELECT COUNT(*) FROM ingest_batch WHERE batch_id = 'batch-1';"));
+    }
+
+    // DM-INGEST-STATE-STORE
+    [Fact]
+    public async Task V002_creates_exactly_one_store_generation_row()
+    {
+        await using var connection = await MigratedAsync();
+
+        Assert.Equal(1L, await ScalarLongAsync(connection, "SELECT COUNT(*) FROM ingest_store_metadata;"));
+        await Assert.ThrowsAsync<SqliteException>(() => ExecuteAsync(connection, "INSERT INTO ingest_store_metadata VALUES (2, 'another-generation');"));
+    }
+
+    // DM-INGEST-ERROR-STATUS-CONTRACTS
+    [Fact]
+    public async Task Error_events_round_trip_complete_metadata_and_latest_uses_highest_sequence()
+    {
+        await using var connection = await MigratedAsync();
+        await InsertBatchAsync(connection);
+        var store = new BatchErrorEventStore();
+        var first = new IngestError("INGEST-001", IngestErrorCategory.Validation, "Correct the selected field.", "batch-1", null, MutationPossibility.None, "preview_blocked", IngestRetryAction.CorrectSource, "account");
+        var latest = new IngestError("INGEST-002", IngestErrorCategory.Ledger, "Resume the interrupted commit.", "batch-1", "candidate-1", MutationPossibility.Possible, "commit_interrupted", IngestRetryAction.Resume, null);
+        await using (var transaction = (SqliteTransaction)await connection.BeginTransactionAsync())
+        {
+            await store.AppendAsync(connection, transaction, "event-1", first, "2026-07-25T00:00:00Z", CancellationToken.None);
+            await store.AppendAsync(connection, transaction, "event-2", latest, "2026-07-25T00:00:01Z", CancellationToken.None);
+            await transaction.CommitAsync();
+        }
+
+        Assert.Equal(latest, await store.LatestAsync(connection, "batch-1", CancellationToken.None));
+        Assert.Equal(2L, await ScalarLongAsync(connection, "SELECT MAX(sequence) FROM batch_error_event WHERE batch_id = 'batch-1';"));
+    }
+
+    // DM-INGEST-ERROR-STATUS-CONTRACTS
+    [Fact]
+    public async Task Error_append_participates_in_the_caller_owned_transaction()
+    {
+        await using var connection = await MigratedAsync();
+        await InsertBatchAsync(connection);
+        var store = new BatchErrorEventStore();
+        var error = new IngestError("INGEST-001", IngestErrorCategory.Interrupted, "Resume the operation.", "batch-1", null, MutationPossibility.Possible, "commit_interrupted", IngestRetryAction.Resume, null);
+        await using (var transaction = (SqliteTransaction)await connection.BeginTransactionAsync())
+        {
+            await store.AppendAsync(connection, transaction, "event-1", error, "2026-07-25T00:00:00Z", CancellationToken.None);
+            await transaction.RollbackAsync();
+        }
+
+        Assert.Null(await store.LatestAsync(connection, "batch-1", CancellationToken.None));
+    }
+
+    // DM-INGEST-STATE-STORE
+    [Fact]
+    public async Task Error_events_are_append_only_and_sequences_are_unique_per_batch()
+    {
+        await using var connection = await MigratedAsync();
+        await InsertBatchAsync(connection);
+        const string insert = "INSERT INTO batch_error_event VALUES ('event-1', 'batch-1', 1, 'INGEST-001', 1, 'Safe.', NULL, 0, NULL, 0, NULL, '2026-07-25T00:00:00Z');";
+        await ExecuteAsync(connection, insert);
+
+        await Assert.ThrowsAsync<SqliteException>(() => ExecuteAsync(connection, "UPDATE batch_error_event SET safe_message = 'Changed.' WHERE error_event_id = 'event-1';"));
+        await Assert.ThrowsAsync<SqliteException>(() => ExecuteAsync(connection, "DELETE FROM batch_error_event WHERE error_event_id = 'event-1';"));
+        await Assert.ThrowsAsync<SqliteException>(() => ExecuteAsync(connection, "INSERT INTO batch_error_event VALUES ('event-2', 'batch-1', 1, 'INGEST-002', 1, 'Safe.', NULL, 0, NULL, 0, NULL, '2026-07-25T00:00:01Z');"));
+    }
+
+    // DD-INGEST-STATE-STORE
+    [Fact]
+    public async Task Snapshot_membership_is_immutable_and_parent_expiry_cascades_items()
+    {
+        await using var connection = await MigratedAsync();
+        var generation = Convert.ToString(await ScalarAsync(connection, "SELECT generation_id FROM ingest_store_metadata WHERE singleton_id = 1;"), System.Globalization.CultureInfo.InvariantCulture);
+        await ExecuteAsync(connection, $"INSERT INTO status_snapshot VALUES ('snapshot-1', '1', '{generation}', '2026-07-25T00:00:00Z', '2026-07-25T00:15:00Z', 1);");
+        await ExecuteAsync(connection, "INSERT INTO status_snapshot_item VALUES ('snapshot-1', 0, '{}');");
+
+        await Assert.ThrowsAsync<SqliteException>(() => ExecuteAsync(connection, "UPDATE status_snapshot SET total_count = 2 WHERE snapshot_id = 'snapshot-1';"));
+        await Assert.ThrowsAsync<SqliteException>(() => ExecuteAsync(connection, "UPDATE status_snapshot_item SET ordinal = 1 WHERE snapshot_id = 'snapshot-1';"));
+        await Assert.ThrowsAsync<SqliteException>(() => ExecuteAsync(connection, "DELETE FROM status_snapshot_item WHERE snapshot_id = 'snapshot-1';"));
+        await Assert.ThrowsAsync<SqliteException>(() => ExecuteAsync(connection, "INSERT INTO status_snapshot_item VALUES ('snapshot-1', 1, '{}');"));
+        await ExecuteAsync(connection, "DELETE FROM status_snapshot WHERE snapshot_id = 'snapshot-1';");
+
+        Assert.Equal(0L, await ScalarLongAsync(connection, "SELECT COUNT(*) FROM status_snapshot_item;"));
+    }
+
+    // NFR-INGEST-LOCAL-DATA-PROTECTION
+    [Fact]
+    public async Task V002_tables_contain_no_prohibited_financial_payload_columns()
+    {
+        await using var connection = await MigratedAsync();
+        var columns = (await ColumnNamesAsync(connection, "batch_error_event"))
+            .Concat(await ColumnNamesAsync(connection, "status_snapshot"))
+            .Concat(await ColumnNamesAsync(connection, "status_snapshot_item"));
+        string[] prohibited = ["source_path", "statement", "description", "amount", "balance", "bank_identifier", "manifest", "request", "exception", "stack"];
+
+        Assert.DoesNotContain(columns, column => prohibited.Any(term => column.Contains(term, StringComparison.OrdinalIgnoreCase)));
     }
 
     // TC-INGEST-STATE-STORE-CONFORMANCE
