@@ -102,6 +102,8 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | [TASK-INGEST-PDF-EXTRACTION](tasks/pdf-extraction.md) | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `compile` | Extractor failures use the stable IngestError contract. |
 | [TASK-INGEST-PDF-EXTRACTION](tasks/pdf-extraction.md) | [TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES](tasks/gate-evidence-private-fixtures.md) | `compile` | Fixture-dependent extractor tests consume the validated private expectation manifest. |
 | [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | [TASK-INGEST-PDF-EXTRACTION](tasks/pdf-extraction.md) | `compile` | The adapter implements IStatementAdapter over PdfDocumentEvidence and uses the private fixture helper. |
+| [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](tasks/gate-int-ledger-contract.md) | `compile` | The adapter consumes the gate-validated exact public AccountDetail contract. |
+| [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | `compile` | Golden verification composes extracted FinancialEvidence and controls with the existing FinancialNormalizer and StatementReconciler. |
 | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](tasks/gate-int-ledger-contract.md) | `compile` | The common envelope and public Ledger contract types must exist before INGEST contract records compile. |
 | [TASK-INGEST-GATE-SECURITY](tasks/gate-security.md) | [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | Security is validated against the complete published eight-operation surface. |
 | [TASK-INGEST-GATE-SECURITY](tasks/gate-security.md) | [TASK-INGEST-PDF-EXTRACTION](tasks/pdf-extraction.md) | `compile` | Consumes PrivateStatementFixtureSet. |
@@ -109,7 +111,7 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `compile` | Pure policies construct the canonical manifest and error contract records. |
 | [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md) | [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | `compile` | Resume reuses CandidateCommitSaga, BatchCommitLock, and CommitStateStore. |
 | [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md) | [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md) | `compile` | Resume failures append complete stable errors through the V002 store. |
-| [TASK-INGEST-ADAPTER-LAYOUT-B](tasks/adapter-layout-b.md) | [TASK-INGEST-PDF-EXTRACTION](tasks/pdf-extraction.md) | `compile` | The adapter implements IStatementAdapter over PdfDocumentEvidence and uses the private fixture helper. |
+| [TASK-INGEST-ADAPTER-LAYOUT-B](tasks/adapter-layout-b.md) | [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | `compile` | Layout B consumes the AccountDetail-bound corrected IStatementAdapter contract produced by Layout A. |
 | [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](tasks/gate-int-format-adapters.md) | `compile` | Preview consumes only the qualified StatementAdapterRegistry. |
 | [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | [TASK-INGEST-LEDGER-PUBLIC-CLIENT](tasks/ledger-public-client.md) | `compile` | Preview validates the selected account through LedgerContractClient.GetAccountAsync. |
 | [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | `compile` | Preview composes the deterministic identity, normalization, reconciliation, manifest, and overlap policies. |
@@ -158,8 +160,8 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 ### Coverage
 
 - **Status:** `warn`
-- **Required refs:** 112
-- **Covered refs:** 112
+- **Required refs:** 113
+- **Covered refs:** 113
 - **Gaps:** 0
 
 #### Covered References
@@ -171,6 +173,7 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling | `design_decision` | `governed-by` | [TASK-INGEST-ABANDON-CLEANUP](tasks/abandon-cleanup.md) | `true` |
 | DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling | `design_decision` | `governed-by` | [TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES](tasks/gate-evidence-private-fixtures.md) | `true` |
 | DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling | `design_decision` | `governed-by` | [TASK-INGEST-GATE-SECURITY](tasks/gate-security.md) | `true` |
+| DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling | `design_decision` | `governed-by` | [TASK-INGEST-PDF-EXTRACTION](tasks/pdf-extraction.md) | `true` |
 | DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling | `design_decision` | `governed-by` | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `true` |
 | DD-INGEST-CLI-OPERATION-CONTRACT: Eight explicit workflow operations from one registry | `design_decision` | `governed-by` | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `true` |
 | DD-INGEST-CLI-OPERATION-CONTRACT: Eight explicit workflow operations from one registry | `design_decision` | `governed-by` | [TASK-INGEST-STATUS-WORKFLOW](tasks/status-workflow.md) | `true` |

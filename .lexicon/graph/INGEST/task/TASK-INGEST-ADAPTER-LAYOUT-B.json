@@ -9,7 +9,7 @@
     "Encode only the structural detection, row boundaries, financial semantics, exclusions, and source controls proven by the private layout B fixture, including permission encryption and yearless dates."
   ],
   "objective": [
-    "Produce deterministic layout B statement evidence and normalized source records without a generic template or fallback parser."
+    "Produce deterministic layout B statement evidence that feeds the governed normalization and reconciliation policies without a generic template or fallback parser."
   ],
   "planning_state": "ready",
   "priority": 0,
@@ -33,14 +33,14 @@
   ],
   "dependencies": [
     {
-      "id": "01KXTM5NS5XG2SAGM2F35S97DD",
-      "target": "TASK-INGEST-PDF-EXTRACTION",
+      "id": "01KYD8GYAY4374Z701ME64VTRX",
+      "target": "TASK-INGEST-ADAPTER-LAYOUT-A",
       "dependency_type": "compile",
       "reason": [
-        "The adapter implements IStatementAdapter over PdfDocumentEvidence and uses the private fixture helper."
+        "Layout B consumes the AccountDetail-bound corrected IStatementAdapter contract produced by Layout A."
       ],
-      "sort_order": 0,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "sort_order": 3,
+      "created_at": "2026-07-25T18:27:43.0720656+00:00"
     }
   ],
   "files": [
@@ -65,98 +65,85 @@
   ],
   "interfaces": [
     {
-      "id": "01KXTM5NS58KNP0CEHS9TS92BE",
-      "name": "IStatementAdapter",
+      "id": "01KYD8KFW0AD1JDARJV8FK3HSX",
+      "name": "CorrectedIStatementAdapterContract",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+      "notes": [
+        "Produced by Layout A after binding exact AccountDetail, FinancialEvidence/control inputs, PdfDocumentEvidence, private fixture injection, FinancialNormalizer, and StatementReconciler dependencies."
+      ],
       "sort_order": 0,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-25T18:29:06.5602439+00:00"
     },
     {
-      "id": "01KXTM5NS5M2JSMM1SQWJA8481",
-      "name": "PdfDocumentEvidence",
-      "direction": "consumes",
-      "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
-      "sort_order": 1,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
-    },
-    {
-      "id": "01KXTM5NS52KAKPTQ5S7P922AA",
-      "name": "PrivateStatementFixtureSet",
-      "direction": "consumes",
-      "contract_ref_code": "EXT-INGEST-OWNER-BANK-STATEMENT",
-      "sort_order": 2,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
-    },
-    {
-      "id": "01KXTM5NS5G3FRZKME7C4PHYSX",
+      "id": "01KYD8KFW1QADHKXSX87XKP6Y6",
       "name": "PdfTextLayoutBStatementAdapter",
       "direction": "produces",
       "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
-      "sort_order": 3,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "sort_order": 1,
+      "created_at": "2026-07-25T18:29:06.5602439+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KXTM5NS5GWDYP1K48DHJWSB4",
+      "id": "01KYD8HD6A1MQ1KX25EQS60ZH3",
       "kind": "acceptance_check",
       "text": [
-        "Descriptor advertises exactly pdf-text-layout-b-v1, its adapter/extraction/manifest versions, media type, and hard limits."
+        "Descriptor is exactly pdf-text-layout-b-v1 with reviewed versions, media type, and bounds."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-25T18:27:58.2823453+00:00"
     },
     {
-      "id": "01KXTM5NS5TB00CNKG7N2KAXST",
+      "id": "01KYD8HD6BCMKJYXHBPXSN6MCW",
       "kind": "acceptance_check",
       "text": [
-        "Probe selects exact_match only from layout B structural evidence, including the permission-encrypted but opening-password-free fixture, and returns no_match for layout A and unsupported fixtures."
+        "Probe exact-matches only layout B structure and no-matches layout A/unsupported evidence."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-25T18:27:58.2823453+00:00"
     },
     {
-      "id": "01KXTM5NS5NKW7Q73QPV84E9QQ",
+      "id": "01KYD8HD6BKWMYSV0E0PD0S6Z5",
       "kind": "acceptance_check",
       "text": [
-        "Extract accounts for every layout B source record in order, preserves raw evidence privately, distinguishes transaction and non-transaction records, and exposes all variant controls."
+        "Extract emits ordered complete FinancialEvidence and reconciliation inputs and accounts for every record/control."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-25T18:27:58.2823453+00:00"
     },
     {
-      "id": "01KXTM5NS55DYNY27TSFWZ7QKZ",
+      "id": "01KYD8HD6BM6K5N0T3VNV89E1C",
       "kind": "acceptance_check",
       "text": [
-        "A yearless source date resolves only when exactly one calendar date lies inside the explicit statement period; zero or multiple matches block the record and batch."
+        "FinancialNormalizer resolves a yearless date only when exactly one in-period date exists."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-25T18:27:58.2823453+00:00"
     },
     {
-      "id": "01KXTM5NS5SHC566NCD77V2CQ7",
+      "id": "01KYD8HD6B9NQJK32WE57K1ARH",
       "kind": "acceptance_check",
       "text": [
-        "Layout B account-class, owner-economic sign, zero-movement exclusion, amount, description, source-reference, and control rules reproduce every private expected fact in integer minor units."
+        "FinancialNormalizer with selected AccountDetail.AccountClass plus StatementReconciler reproduces every private expected fact in integer minor units."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-25T18:27:58.2823453+00:00"
     },
     {
-      "id": "01KXTM5NS59BHYKGEH6NTBKKJM",
+      "id": "01KYD8HD6BWMASDP2GD5V5Q87C",
       "kind": "acceptance_check",
       "text": [
-        "Two runs produce identical ordered evidence and structural positions; password-required, scan-only, malformed, or drifted structures fail closed."
+        "Two runs are identical; password-required, scan-only, malformed, or drifted structures fail closed."
       ],
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-25T18:27:58.2823453+00:00"
     },
     {
       "id": "01KXTM5NS51JVH8F5FJ1M3ABK6",

@@ -16,7 +16,7 @@ Encode only the structural detection, row boundaries, financial semantics, exclu
 
 ## Objective
 
-Produce deterministic layout B statement evidence and normalized source records without a generic template or fallback parser.
+Produce deterministic layout B statement evidence that feeds the governed normalization and reconciliation policies without a generic template or fallback parser.
 
 ## References
 
@@ -35,18 +35,18 @@ Produce deterministic layout B statement evidence and normalized source records 
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md) | `compile` | The adapter implements IStatementAdapter over PdfDocumentEvidence and uses the private fixture helper. |
+| [TASK-INGEST-ADAPTER-LAYOUT-A](../tasks/adapter-layout-a.md) | `compile` | Layout B consumes the AccountDetail-bound corrected IStatementAdapter contract produced by Layout A. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- Descriptor advertises exactly pdf-text-layout-b-v1, its adapter/extraction/manifest versions, media type, and hard limits.
-- Probe selects exact_match only from layout B structural evidence, including the permission-encrypted but opening-password-free fixture, and returns no_match for layout A and unsupported fixtures.
-- Extract accounts for every layout B source record in order, preserves raw evidence privately, distinguishes transaction and non-transaction records, and exposes all variant controls.
-- A yearless source date resolves only when exactly one calendar date lies inside the explicit statement period; zero or multiple matches block the record and batch.
-- Layout B account-class, owner-economic sign, zero-movement exclusion, amount, description, source-reference, and control rules reproduce every private expected fact in integer minor units.
-- Two runs produce identical ordered evidence and structural positions; password-required, scan-only, malformed, or drifted structures fail closed.
+- Descriptor is exactly pdf-text-layout-b-v1 with reviewed versions, media type, and bounds.
+- Probe exact-matches only layout B structure and no-matches layout A/unsupported evidence.
+- Extract emits ordered complete FinancialEvidence and reconciliation inputs and accounts for every record/control.
+- FinancialNormalizer resolves a yearless date only when exactly one in-period date exists.
+- FinancialNormalizer with selected AccountDetail.AccountClass plus StatementReconciler reproduces every private expected fact in integer minor units.
+- Two runs are identical; password-required, scan-only, malformed, or drifted structures fail closed.
 
 ### Failure Criteria
 
@@ -78,9 +78,7 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| IStatementAdapter | `consumes` | DM-INGEST-FORMAT-EVIDENCE |  |
-| PdfDocumentEvidence | `consumes` | DM-INGEST-FORMAT-EVIDENCE |  |
-| PrivateStatementFixtureSet | `consumes` | EXT-INGEST-OWNER-BANK-STATEMENT |  |
+| CorrectedIStatementAdapterContract | `consumes` | DM-INGEST-FORMAT-EVIDENCE | Produced by Layout A after binding exact AccountDetail, FinancialEvidence/control inputs, PdfDocumentEvidence, private fixture injection, FinancialNormalizer, and StatementReconciler dependencies. |
 | PdfTextLayoutBStatementAdapter | `produces` | DM-INGEST-FORMAT-EVIDENCE |  |
 
 ### Verification
@@ -107,7 +105,7 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3c4` (verified)
-- `depends-on:compile` -> [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md): The adapter implements IStatementAdapter over PdfDocumentEvidence and uses the private fixture helper.
+- `depends-on:compile` -> [TASK-INGEST-ADAPTER-LAYOUT-A](../tasks/adapter-layout-a.md): Layout B consumes the AccountDetail-bound corrected IStatementAdapter contract produced by Layout A.
 - `governed-by` -> DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam
 - `implements` -> FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts
 - `implements` -> FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval

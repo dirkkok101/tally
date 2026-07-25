@@ -111,55 +111,58 @@
   ],
   "interfaces": [
     {
-      "id": "01KXTNAGME6VDDC1HKKJX19QK1",
+      "id": "01KYD8HTG67JCKY8GPWT2DJKHS",
       "name": "IngestError",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
       "sort_order": 0,
-      "created_at": "2026-07-18T13:05:49.7096895+00:00"
+      "created_at": "2026-07-25T18:28:11.9092099+00:00"
     },
     {
-      "id": "01KXTNAGMEW2TW44BBE654MRE7",
+      "id": "01KYD8HTG746ZFDECSJV507F58",
       "name": "PrivateFixtureExpectationManifest",
       "direction": "consumes",
       "contract_ref_code": "EXT-INGEST-OWNER-BANK-STATEMENT",
       "notes": [
-        "Validated by TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES and supplied via TALLY_INGEST_PRIVATE_FIXTURE_MANIFEST."
+        "Gate-validated ignored repository-relative sourcePath locators strictly below owner-only docs/statements; no locator or fixture value enters output/state."
       ],
       "sort_order": 1,
-      "created_at": "2026-07-18T13:05:49.7096895+00:00"
+      "created_at": "2026-07-25T18:28:11.9092099+00:00"
     },
     {
-      "id": "01KXTNAGMF7A0V9F5F82G36KC8",
+      "id": "01KYD8HTG7AXGF41VZA5ZMSM4N",
       "name": "PdfStatementTextExtractor.ExtractAsync",
       "direction": "produces",
       "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
       "sort_order": 2,
-      "created_at": "2026-07-18T13:05:49.7096895+00:00"
+      "created_at": "2026-07-25T18:28:11.9092099+00:00"
     },
     {
-      "id": "01KXTNAGMF8XF7JNV0WYHD4C7F",
+      "id": "01KYD8HTG7HP0EX8WBET9KKG4S",
       "name": "PdfDocumentEvidence",
       "direction": "produces",
       "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
       "sort_order": 3,
-      "created_at": "2026-07-18T13:05:49.7096895+00:00"
+      "created_at": "2026-07-25T18:28:11.9092099+00:00"
     },
     {
-      "id": "01KXTNAGMF1H7AHAV0X2E9T5P6",
+      "id": "01KYD8HTG7RKWMJH3WMZCC3AW9",
       "name": "IStatementAdapter",
       "direction": "produces",
       "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+      "notes": [
+        "Layout A later corrects Extract to consume exact AccountDetail and emit FinancialEvidence/control inputs."
+      ],
       "sort_order": 4,
-      "created_at": "2026-07-18T13:05:49.7096895+00:00"
+      "created_at": "2026-07-25T18:28:11.9092099+00:00"
     },
     {
-      "id": "01KXTNAGMF2XJP16VBNFC3YT2J",
+      "id": "01KYD8HTG7Z77Y1TBFSHR7DNKE",
       "name": "PrivateStatementFixtureSet",
       "direction": "produces",
       "contract_ref_code": "EXT-INGEST-OWNER-BANK-STATEMENT",
       "sort_order": 5,
-      "created_at": "2026-07-18T13:05:49.7096895+00:00"
+      "created_at": "2026-07-25T18:28:11.9092099+00:00"
     }
   ],
   "recipe_items": [
@@ -224,14 +227,24 @@
       "created_at": "2026-07-18T12:45:42.5606427+00:00"
     },
     {
-      "id": "01KXTM5NS2EDMHQ9M9CN959MNG",
+      "id": "01KYD8HDQKTG9JHQYMFYBF9MGX",
       "kind": "constraint",
       "text": [
-        "Hard limits are checked before allocation or continued parsing where the source makes that possible; cancellation is propagated at every async boundary."
+        "Hard limits are checked before allocation or continued parsing where possible; cancellation propagates at every async boundary."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-25T18:27:58.8350796+00:00"
+    },
+    {
+      "id": "01KYD8HDQMHPB6A3E6J9FC7TCX",
+      "kind": "constraint",
+      "text": [
+        "Private test sourcePath locators are ignored repository-relative paths strictly below docs/statements; manifest and sources are owner-only, and no fixture data, financial contents, locator values, or paths enter runtime state, logs, receipts, graph files, committed output, test names, snapshots, or failures."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-25T18:27:58.8350796+00:00"
     },
     {
       "id": "01KXTM5NS20MH9BGPRSE1QY6QN",
@@ -335,6 +348,17 @@
     }
   ],
   "references": [
+    {
+      "id": "01KYD8J327SZB9E7VD3MZX3FR0",
+      "target_ref_code": "DD-INGEST-ARTIFACT-SECURITY",
+      "target_entity_type": "design_decision",
+      "target_entity_id": "01KXTHS0D4Y49485KSQNYYF551",
+      "target_title": "Memory-only extraction and owner-only payload handling",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-25T18:28:20.6802452+00:00"
+    },
     {
       "id": "01KXTM5NS34K4RJ9E4JQCHGA4C",
       "target_ref_code": "DM-INGEST-FORMAT-EVIDENCE",

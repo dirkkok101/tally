@@ -40,7 +40,7 @@ Frozen INGEST Ledger requests use the released InitialEvidence contract with det
 
 ### Acceptance Checks
 
-- FrozenLedgerRecordInput has the exact released RecordTransactionInput fields including InitialEvidence; obsolete SourceReference and Provenance members do not exist outside InitialEvidence.
+- FrozenLedgerRecordRequest.Input is the exact released RecordTransactionInput directly, including InitialEvidence; no INGEST-only FrozenLedgerRecordInput wrapper exists and obsolete SourceReference and Provenance members do not exist outside InitialEvidence.
 - IngestIdentity derives statement evidence deterministically: candidateId is LogicalIdentityDigest, ingest:{candidateId} is OpaqueExternalReference and idempotency key, sourceRecordId is ContentFingerprint, and Observation repeats normalized financial facts plus the lowercase SHA-256 UTF-8 normalized-description fingerprint.
 - Two constructions from identical candidate facts serialize byte-equivalently through IngestJsonContext; a changed candidate fact changes the candidate/evidence identity and frozen request.
 - Focused contract tests prove the exact public shape and immutable verification tuple without relying on History or other mutable TransactionDetail projections.
@@ -53,7 +53,7 @@ Frozen INGEST Ledger requests use the released InitialEvidence contract with det
 
 ### Expected Outputs
 
-- Corrected FrozenLedgerRecordRequest contracts and JSON metadata
+- Corrected FrozenLedgerRecordRequest with direct released RecordTransactionInput and JSON metadata
 - Deterministic statement evidence identity and immutable verification tuple
 
 ### Constraints
@@ -79,9 +79,10 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| FrozenLedgerRecordRequest | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Corrects the exact released record input already produced by contract foundation |
-| LedgerImmutableVerification | `produces` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Terminal immutable comparison tuple |
-| IngestIdentity.StatementEvidence | `produces` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Deterministic RegisterEvidenceInput derivation |
+| LedgerIngestContractPrerequisite | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Proves exact released RecordTransactionInput and InitialEvidence. |
+| FrozenLedgerRecordRequest | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Corrects the existing contract-foundation producer so Input is RecordTransactionInput directly. |
+| LedgerImmutableVerification | `produces` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Terminal immutable comparison tuple. |
+| IngestIdentity.StatementEvidence | `produces` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Deterministic RegisterEvidenceInput derivation. |
 
 ### Verification
 

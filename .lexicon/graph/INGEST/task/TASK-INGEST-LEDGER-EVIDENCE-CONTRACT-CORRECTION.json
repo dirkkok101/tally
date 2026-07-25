@@ -124,79 +124,90 @@
   ],
   "interfaces": [
     {
-      "id": "01KYCRN65TD5YCVRB9Q4CSCDRS",
+      "id": "01KYD6HPW3SHYG24NK0GRTVZ4Z",
+      "name": "LedgerIngestContractPrerequisite",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+      "notes": [
+        "Proves exact released RecordTransactionInput and InitialEvidence."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-25T17:53:11.0429014+00:00"
+    },
+    {
+      "id": "01KYD6HPW4H27JT8HMZCRW3F5C",
       "name": "FrozenLedgerRecordRequest",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
       "notes": [
-        "Corrects the exact released record input already produced by contract foundation"
+        "Corrects the existing contract-foundation producer so Input is RecordTransactionInput directly."
       ],
-      "sort_order": 0,
-      "created_at": "2026-07-25T13:50:24.9539226+00:00"
+      "sort_order": 1,
+      "created_at": "2026-07-25T17:53:11.0429014+00:00"
     },
     {
-      "id": "01KYCRN65VSV5XGM8AQXQRE8EW",
+      "id": "01KYD6HPW46YKEJQJ0VK0DGVN0",
       "name": "LedgerImmutableVerification",
       "direction": "produces",
       "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
       "notes": [
-        "Terminal immutable comparison tuple"
+        "Terminal immutable comparison tuple."
       ],
-      "sort_order": 1,
-      "created_at": "2026-07-25T13:50:24.9539226+00:00"
+      "sort_order": 2,
+      "created_at": "2026-07-25T17:53:11.0429014+00:00"
     },
     {
-      "id": "01KYCRN65VGTP726TQP79WFRWE",
+      "id": "01KYD6HPW4ZGEGTB0EE13JNK1K",
       "name": "IngestIdentity.StatementEvidence",
       "direction": "produces",
       "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
       "notes": [
-        "Deterministic RegisterEvidenceInput derivation"
+        "Deterministic RegisterEvidenceInput derivation."
       ],
-      "sort_order": 2,
-      "created_at": "2026-07-25T13:50:24.9539226+00:00"
+      "sort_order": 3,
+      "created_at": "2026-07-25T17:53:11.0429014+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KYCR3SQM3PQ4VMS0DM34NWE5",
+      "id": "01KYD61M5EHM4PM686SZGVWJPA",
       "kind": "acceptance_check",
       "text": [
-        "FrozenLedgerRecordInput has the exact released RecordTransactionInput fields including InitialEvidence; obsolete SourceReference and Provenance members do not exist outside InitialEvidence."
+        "FrozenLedgerRecordRequest.Input is the exact released RecordTransactionInput directly, including InitialEvidence; no INGEST-only FrozenLedgerRecordInput wrapper exists and obsolete SourceReference and Provenance members do not exist outside InitialEvidence."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+      "created_at": "2026-07-25T17:44:23.9823321+00:00"
     },
     {
-      "id": "01KYCR3SQMEZ8M41D0DP978XWR",
+      "id": "01KYD61M5F7JMJF2RMZ9E18VTY",
       "kind": "acceptance_check",
       "text": [
         "IngestIdentity derives statement evidence deterministically: candidateId is LogicalIdentityDigest, ingest:{candidateId} is OpaqueExternalReference and idempotency key, sourceRecordId is ContentFingerprint, and Observation repeats normalized financial facts plus the lowercase SHA-256 UTF-8 normalized-description fingerprint."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+      "created_at": "2026-07-25T17:44:23.9823321+00:00"
     },
     {
-      "id": "01KYCR3SQM21TPW7GEJYQBXHVD",
+      "id": "01KYD61M5F5CR3JFBBT83GRXC1",
       "kind": "acceptance_check",
       "text": [
         "Two constructions from identical candidate facts serialize byte-equivalently through IngestJsonContext; a changed candidate fact changes the candidate/evidence identity and frozen request."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+      "created_at": "2026-07-25T17:44:23.9823321+00:00"
     },
     {
-      "id": "01KYCR3SQMZ8MH1PJE2VVFQZD1",
+      "id": "01KYD61M5GD5DHWEG24C08HWYC",
       "kind": "acceptance_check",
       "text": [
         "Focused contract tests prove the exact public shape and immutable verification tuple without relying on History or other mutable TransactionDetail projections."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+      "created_at": "2026-07-25T17:44:23.9823321+00:00"
     },
     {
       "id": "01KYCR3SQN0AMSD2DCFX8FBE9B",
@@ -209,24 +220,24 @@
       "created_at": "2026-07-25T13:40:55.1552870+00:00"
     },
     {
-      "id": "01KYCR3SQNCEY2B51JYFP2CX86",
+      "id": "01KYD61M5GGGX3H4DN9NY0QS83",
       "kind": "expected_output",
       "text": [
-        "Corrected FrozenLedgerRecordRequest contracts and JSON metadata"
+        "Corrected FrozenLedgerRecordRequest with direct released RecordTransactionInput and JSON metadata"
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+      "created_at": "2026-07-25T17:44:23.9823321+00:00"
     },
     {
-      "id": "01KYCR3SQNWTX85GDKT39RKJA0",
+      "id": "01KYD61M5GQTSGHPZZNXFGG93X",
       "kind": "expected_output",
       "text": [
         "Deterministic statement evidence identity and immutable verification tuple"
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+      "created_at": "2026-07-25T17:44:23.9823321+00:00"
     },
     {
       "id": "01KYCR3SQNZ51JDCJKQYJRK2Y8",

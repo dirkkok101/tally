@@ -16,7 +16,7 @@ Encode only the structural detection, row boundaries, financial semantics, exclu
 
 ## Objective
 
-Produce deterministic layout A statement evidence and normalized source records without a generic template or fallback parser.
+Produce deterministic layout A statement evidence that feeds the governed normalization and reconciliation policies without a generic template or fallback parser.
 
 ## References
 
@@ -36,16 +36,18 @@ Produce deterministic layout A statement evidence and normalized source records 
 | Depends On | Type | Reason |
 |---|---|---|
 | [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md) | `compile` | The adapter implements IStatementAdapter over PdfDocumentEvidence and uses the private fixture helper. |
+| [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md) | `compile` | The adapter consumes the gate-validated exact public AccountDetail contract. |
+| [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md) | `compile` | Golden verification composes extracted FinancialEvidence and controls with the existing FinancialNormalizer and StatementReconciler. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- Descriptor advertises exactly pdf-text-layout-a-v1, its adapter/extraction/manifest versions, media type, and hard limits.
-- Probe selects exact_match only from layout A structural evidence and returns no_match for every layout B and unsupported fixture; filename and extension never contribute.
-- Extract accounts for every layout A source record in source order, preserves raw evidence privately, distinguishes transaction and non-transaction records, and exposes all variant controls.
-- Layout A date, account-class, owner-economic sign, zero-movement exclusion, amount, description, source-reference, and statement-period rules reproduce every private expected fact exactly in integer minor units.
-- Two extraction runs over every assigned fixture produce identical ordered evidence and stable source-context positions; malformed or drifted structures fail closed.
+- Descriptor is exactly pdf-text-layout-a-v1 with reviewed versions, media type, and bounds.
+- Probe exact-matches only layout A structure and no-matches layout B/unsupported evidence; filenames and extensions are irrelevant.
+- Extract emits ordered complete FinancialEvidence and reconciliation inputs and accounts for every record/control.
+- FinancialNormalizer with selected AccountDetail.AccountClass plus StatementReconciler reproduces every private expected fact in integer minor units.
+- Two runs are identical; malformed or drifted structures fail closed.
 
 ### Failure Criteria
 
@@ -70,6 +72,7 @@ None recorded.
 
 | Path | Action | Role | Required | Notes |
 |---|---|---|---|---|
+| `src/Tally/Infrastructure/Ingest/Pdf/IStatementAdapter.cs` | `modify` | bind Extract to exact released AccountDetail | `true` |  |
 | `src/Tally/Infrastructure/Ingest/Pdf/PdfTextLayoutAStatementAdapter.cs` | `create` | layout A probe and extraction | `true` |  |
 | `tests/Tally.Tests/Ingest/Adapters/LayoutAStatementAdapterTests.cs` | `test` | private golden-fixture tests | `true` |  |
 
@@ -77,9 +80,12 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| IStatementAdapter | `consumes` | DM-INGEST-FORMAT-EVIDENCE |  |
 | PdfDocumentEvidence | `consumes` | DM-INGEST-FORMAT-EVIDENCE |  |
+| VerifiedLedgerAccountDetail | `consumes` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS | Exact public AccountDetail. |
+| FinancialNormalizer | `consumes` | DM-INGEST-IMPORT-MANIFEST | Applies AccountClass conversion. |
+| StatementReconciler | `consumes` | DM-INGEST-IMPORT-MANIFEST | Verifies controls. |
 | PrivateStatementFixtureSet | `consumes` | EXT-INGEST-OWNER-BANK-STATEMENT |  |
+| CorrectedIStatementAdapterContract | `produces` | DM-INGEST-FORMAT-EVIDENCE | Extract consumes AccountDetail and emits FinancialEvidence/control inputs. |
 | PdfTextLayoutAStatementAdapter | `produces` | DM-INGEST-FORMAT-EVIDENCE |  |
 
 ### Verification
@@ -106,7 +112,9 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1as` (verified)
+- `depends-on:compile` -> [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md): The adapter consumes the gate-validated exact public AccountDetail contract.
 - `depends-on:compile` -> [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md): The adapter implements IStatementAdapter over PdfDocumentEvidence and uses the private fixture helper.
+- `depends-on:compile` -> [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md): Golden verification composes extracted FinancialEvidence and controls with the existing FinancialNormalizer and StatementReconciler.
 - `governed-by` -> DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam
 - `implements` -> FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts
 - `implements` -> FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval

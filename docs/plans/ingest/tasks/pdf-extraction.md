@@ -22,6 +22,7 @@ Extract deterministic passive PDF evidence under Native-AOT and resource bounds 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
+| DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling | `design_decision` | `governed-by` | `true` |
 | DD-INGEST-DOCUMENT-EXTRACTION: Managed in-process PDF extraction with PdfPig | `design_decision` | `governed-by` | `true` |
 | DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence | `data_model` | `touches` | `true` |
 | FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants | `requirement` | `implements` | `true` |
@@ -62,7 +63,8 @@ Extract deterministic passive PDF evidence under Native-AOT and resource bounds 
 
 ### Constraints
 
-- Hard limits are checked before allocation or continued parsing where the source makes that possible; cancellation is propagated at every async boundary.
+- Hard limits are checked before allocation or continued parsing where possible; cancellation propagates at every async boundary.
+- Private test sourcePath locators are ignored repository-relative paths strictly below docs/statements; manifest and sources are owner-only, and no fixture data, financial contents, locator values, or paths enter runtime state, logs, receipts, graph files, committed output, test names, snapshots, or failures.
 
 ### Notes
 
@@ -84,10 +86,10 @@ Extract deterministic passive PDF evidence under Native-AOT and resource bounds 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | IngestError | `consumes` | DM-INGEST-ERROR-STATUS-CONTRACTS |  |
-| PrivateFixtureExpectationManifest | `consumes` | EXT-INGEST-OWNER-BANK-STATEMENT | Validated by TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES and supplied via TALLY_INGEST_PRIVATE_FIXTURE_MANIFEST. |
+| PrivateFixtureExpectationManifest | `consumes` | EXT-INGEST-OWNER-BANK-STATEMENT | Gate-validated ignored repository-relative sourcePath locators strictly below owner-only docs/statements; no locator or fixture value enters output/state. |
 | PdfStatementTextExtractor.ExtractAsync | `produces` | DM-INGEST-FORMAT-EVIDENCE |  |
 | PdfDocumentEvidence | `produces` | DM-INGEST-FORMAT-EVIDENCE |  |
-| IStatementAdapter | `produces` | DM-INGEST-FORMAT-EVIDENCE |  |
+| IStatementAdapter | `produces` | DM-INGEST-FORMAT-EVIDENCE | Layout A later corrects Extract to consume exact AccountDetail and emit FinancialEvidence/control inputs. |
 | PrivateStatementFixtureSet | `produces` | EXT-INGEST-OWNER-BANK-STATEMENT |  |
 
 ### Verification
@@ -117,6 +119,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `bead-ref` -> `bd-1j2` (verified)
 - `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Extractor failures use the stable IngestError contract.
 - `depends-on:compile` -> [TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES](../tasks/gate-evidence-private-fixtures.md): Fixture-dependent extractor tests consume the validated private expectation manifest.
+- `governed-by` -> DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling
 - `governed-by` -> DD-INGEST-DOCUMENT-EXTRACTION: Managed in-process PDF extraction with PdfPig
 - `implements` -> FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants
 - `touches` -> DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence

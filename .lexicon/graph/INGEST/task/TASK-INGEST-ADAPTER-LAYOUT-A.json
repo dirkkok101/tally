@@ -9,7 +9,7 @@
     "Encode only the structural detection, row boundaries, financial semantics, exclusions, and source controls proven by the private layout A fixtures."
   ],
   "objective": [
-    "Produce deterministic layout A statement evidence and normalized source records without a generic template or fallback parser."
+    "Produce deterministic layout A statement evidence that feeds the governed normalization and reconciliation policies without a generic template or fallback parser."
   ],
   "planning_state": "ready",
   "priority": 0,
@@ -33,6 +33,16 @@
   ],
   "dependencies": [
     {
+      "id": "01KYD6HQE35DYNYJK3ESMWFQTV",
+      "target": "TASK-INGEST-GATE-INT-LEDGER-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "The adapter consumes the gate-validated exact public AccountDetail contract."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-25T17:53:11.6204483+00:00"
+    },
+    {
       "id": "01KXTM5NS4777D0NDXEFKWK73E",
       "target": "TASK-INGEST-PDF-EXTRACTION",
       "dependency_type": "compile",
@@ -41,112 +51,167 @@
       ],
       "sort_order": 0,
       "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KYD76HV4VDSS9FZDA7Z0ZYF5",
+      "target": "TASK-INGEST-PREVIEW-DOMAIN",
+      "dependency_type": "compile",
+      "reason": [
+        "Golden verification composes extracted FinancialEvidence and controls with the existing FinancialNormalizer and StatementReconciler."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-25T18:04:34.0213710+00:00"
     }
   ],
   "files": [
     {
-      "id": "01KXTM5NS4QG5XC2E9KDEKFEY0",
+      "id": "01KYD56WZT9SJJZ03QZC3B5ABK",
+      "path": "src/Tally/Infrastructure/Ingest/Pdf/IStatementAdapter.cs",
+      "action": "modify",
+      "role": "bind Extract to exact released AccountDetail",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T17:29:48.2820193+00:00"
+    },
+    {
+      "id": "01KYD56WZVCK69Q1JA308WQF1P",
       "path": "src/Tally/Infrastructure/Ingest/Pdf/PdfTextLayoutAStatementAdapter.cs",
       "action": "create",
       "role": "layout A probe and extraction",
       "required": 1,
-      "sort_order": 0,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "sort_order": 1,
+      "created_at": "2026-07-25T17:29:48.2820193+00:00"
     },
     {
-      "id": "01KXTM5NS44X28RZYQSQTD4ZSA",
+      "id": "01KYD56WZVZS7TDA5CK8ERRX8Y",
       "path": "tests/Tally.Tests/Ingest/Adapters/LayoutAStatementAdapterTests.cs",
       "action": "test",
       "role": "private golden-fixture tests",
       "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "sort_order": 2,
+      "created_at": "2026-07-25T17:29:48.2820193+00:00"
     }
   ],
   "interfaces": [
     {
-      "id": "01KXTM5NS4T26P4ETMN8RNDG6V",
-      "name": "IStatementAdapter",
-      "direction": "consumes",
-      "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
-      "sort_order": 0,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
-    },
-    {
-      "id": "01KXTM5NS4MYQ5K4N5NCVMZJY0",
+      "id": "01KYD8GWMM79F9PA627QTP9S43",
       "name": "PdfDocumentEvidence",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
-      "sort_order": 1,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "sort_order": 0,
+      "created_at": "2026-07-25T18:27:41.3317486+00:00"
     },
     {
-      "id": "01KXTM5NS4GR4A6RA4CRFJ24HT",
+      "id": "01KYD8GWMN54729185ZMSGVNW6",
+      "name": "VerifiedLedgerAccountDetail",
+      "direction": "consumes",
+      "contract_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
+      "notes": [
+        "Exact public AccountDetail."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-25T18:27:41.3317486+00:00"
+    },
+    {
+      "id": "01KYD8GWMNNZT7W8PGC0A671KY",
+      "name": "FinancialNormalizer",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-IMPORT-MANIFEST",
+      "notes": [
+        "Applies AccountClass conversion."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-25T18:27:41.3317486+00:00"
+    },
+    {
+      "id": "01KYD8GWMNY1YK5E47PTRC4H79",
+      "name": "StatementReconciler",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-IMPORT-MANIFEST",
+      "notes": [
+        "Verifies controls."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-25T18:27:41.3317486+00:00"
+    },
+    {
+      "id": "01KYD8GWMNW865RVJFCDNSJREB",
       "name": "PrivateStatementFixtureSet",
       "direction": "consumes",
       "contract_ref_code": "EXT-INGEST-OWNER-BANK-STATEMENT",
-      "sort_order": 2,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "sort_order": 4,
+      "created_at": "2026-07-25T18:27:41.3317486+00:00"
     },
     {
-      "id": "01KXTM5NS4FE520FGF00DS9MXY",
+      "id": "01KYD8GWMNFGY7TG5PD3V2ND5K",
+      "name": "CorrectedIStatementAdapterContract",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+      "notes": [
+        "Extract consumes AccountDetail and emits FinancialEvidence/control inputs."
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-25T18:27:41.3317486+00:00"
+    },
+    {
+      "id": "01KYD8GWMNRATPHZMZJJCSW153",
       "name": "PdfTextLayoutAStatementAdapter",
       "direction": "produces",
       "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
-      "sort_order": 3,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "sort_order": 6,
+      "created_at": "2026-07-25T18:27:41.3317486+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KXTM5NS4K6CK761SMQY7J60R",
+      "id": "01KYD8HCM4D09VP64YG2SJH928",
       "kind": "acceptance_check",
       "text": [
-        "Descriptor advertises exactly pdf-text-layout-a-v1, its adapter/extraction/manifest versions, media type, and hard limits."
+        "Descriptor is exactly pdf-text-layout-a-v1 with reviewed versions, media type, and bounds."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-25T18:27:57.6995036+00:00"
     },
     {
-      "id": "01KXTM5NS4EDXS5T0S2WNX2S83",
+      "id": "01KYD8HCM53665KPCN6GV9G2T4",
       "kind": "acceptance_check",
       "text": [
-        "Probe selects exact_match only from layout A structural evidence and returns no_match for every layout B and unsupported fixture; filename and extension never contribute."
+        "Probe exact-matches only layout A structure and no-matches layout B/unsupported evidence; filenames and extensions are irrelevant."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-25T18:27:57.6995036+00:00"
     },
     {
-      "id": "01KXTM5NS489BVJCR6N0K0JEAV",
+      "id": "01KYD8HCM5CD4SYJC7RY93T3NJ",
       "kind": "acceptance_check",
       "text": [
-        "Extract accounts for every layout A source record in source order, preserves raw evidence privately, distinguishes transaction and non-transaction records, and exposes all variant controls."
+        "Extract emits ordered complete FinancialEvidence and reconciliation inputs and accounts for every record/control."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-25T18:27:57.6995036+00:00"
     },
     {
-      "id": "01KXTM5NS4SSGCVEH11HXPBT18",
+      "id": "01KYD8HCM5VJBY0K7WPRMG6Z0G",
       "kind": "acceptance_check",
       "text": [
-        "Layout A date, account-class, owner-economic sign, zero-movement exclusion, amount, description, source-reference, and statement-period rules reproduce every private expected fact exactly in integer minor units."
+        "FinancialNormalizer with selected AccountDetail.AccountClass plus StatementReconciler reproduces every private expected fact in integer minor units."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-25T18:27:57.6995036+00:00"
     },
     {
-      "id": "01KXTM5NS44EH7M8GESCF2NF96",
+      "id": "01KYD8HCM5ZS8TKSB17TXTMCRV",
       "kind": "acceptance_check",
       "text": [
-        "Two extraction runs over every assigned fixture produce identical ordered evidence and stable source-context positions; malformed or drifted structures fail closed."
+        "Two runs are identical; malformed or drifted structures fail closed."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-25T18:27:57.6995036+00:00"
     },
     {
       "id": "01KXTM5NS4NE0C26ZC9YQDG266",
