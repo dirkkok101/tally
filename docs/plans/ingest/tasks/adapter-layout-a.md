@@ -45,7 +45,7 @@ Produce deterministic layout A statement evidence that feeds the governed normal
 
 - Descriptor is exactly pdf-text-layout-a-v1 with reviewed versions, media type, and bounds.
 - Probe exact-matches only layout A structure and no-matches layout B/unsupported evidence; filenames and extensions are irrelevant.
-- Extract emits ordered complete FinancialEvidence and reconciliation inputs and accounts for every record/control.
+- Extract accounts for every record/control, emits ordered FinancialEvidence/reconciliation inputs, validates selected AccountDetail, and fingerprints only versioned normalized statement account metadata (never paths, IDs, rows, or financial values).
 - FinancialNormalizer with selected AccountDetail.AccountClass plus StatementReconciler reproduces every private expected fact in integer minor units.
 - Two runs are identical; malformed or drifted structures fail closed.
 

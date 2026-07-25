@@ -164,54 +164,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KYD8HCM4D09VP64YG2SJH928",
+      "id": "01KYD9EVBTV770HC02XXMC2W4H",
       "kind": "acceptance_check",
       "text": [
         "Descriptor is exactly pdf-text-layout-a-v1 with reviewed versions, media type, and bounds."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-25T18:27:57.6995036+00:00"
+      "created_at": "2026-07-25T18:44:03.0655596+00:00"
     },
     {
-      "id": "01KYD8HCM53665KPCN6GV9G2T4",
+      "id": "01KYD9EVBVAACWN85AZQHD4BXB",
       "kind": "acceptance_check",
       "text": [
         "Probe exact-matches only layout A structure and no-matches layout B/unsupported evidence; filenames and extensions are irrelevant."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-25T18:27:57.6995036+00:00"
+      "created_at": "2026-07-25T18:44:03.0655596+00:00"
     },
     {
-      "id": "01KYD8HCM5CD4SYJC7RY93T3NJ",
+      "id": "01KYD9EVBVN2WDWDFTHSPZN42G",
       "kind": "acceptance_check",
       "text": [
-        "Extract emits ordered complete FinancialEvidence and reconciliation inputs and accounts for every record/control."
+        "Extract accounts for every record/control, emits ordered FinancialEvidence/reconciliation inputs, validates selected AccountDetail, and fingerprints only versioned normalized statement account metadata (never paths, IDs, rows, or financial values)."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-25T18:27:57.6995036+00:00"
+      "created_at": "2026-07-25T18:44:03.0655596+00:00"
     },
     {
-      "id": "01KYD8HCM5VJBY0K7WPRMG6Z0G",
+      "id": "01KYD9EVBVPCN0MXFSWN8R4238",
       "kind": "acceptance_check",
       "text": [
         "FinancialNormalizer with selected AccountDetail.AccountClass plus StatementReconciler reproduces every private expected fact in integer minor units."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-25T18:27:57.6995036+00:00"
+      "created_at": "2026-07-25T18:44:03.0655596+00:00"
     },
     {
-      "id": "01KYD8HCM5ZS8TKSB17TXTMCRV",
+      "id": "01KYD9EVBVY98JC6VGGR46K4AK",
       "kind": "acceptance_check",
       "text": [
         "Two runs are identical; malformed or drifted structures fail closed."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-25T18:27:57.6995036+00:00"
+      "created_at": "2026-07-25T18:44:03.0655596+00:00"
     },
     {
       "id": "01KXTM5NS4NE0C26ZC9YQDG266",

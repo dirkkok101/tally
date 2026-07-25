@@ -1,0 +1,9 @@
+{
+  "id": "01KYDA31QW4D7MRCV037RM04T6",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "version": "0.13",
+  "changes": [
+    "Defined a privacy-safe Layout A account metadata fingerprint over versioned normalized statement metadata while excluding locators, account IDs, transaction rows, and financial values."
+  ],
+  "created_at": "2026-07-25T18:55:04.9570044+00:00"
+}
