@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Evidence;
+using Tally.Contracts.Ledger.Transactions;
 
 namespace Tally.Contracts.Ingest;
 
@@ -90,23 +91,12 @@ public sealed record CompletedMetadataReceipt(
     [property: JsonRequired] string CompletedAt);
 
 // DM-INGEST-LEDGER-COMMIT-CONTRACT
-public sealed record FrozenLedgerRecordInput(
-    [property: JsonRequired] string AccountId,
-    [property: JsonRequired] string SignedAmount,
-    [property: JsonRequired] string CurrencyCode,
-    [property: JsonRequired] string TransactionDate,
-    string? PostingDate,
-    [property: JsonRequired] string OriginalDescription,
-    string? InstrumentId,
-    string? CardholderId,
-    [property: JsonRequired] RegisterEvidenceInput InitialEvidence);
-
 public sealed record FrozenLedgerRecordRequest(
     [property: JsonRequired] string LedgerContractVersion,
     [property: JsonRequired] string OperationId,
     [property: JsonRequired] string IdempotencyKey,
     [property: JsonRequired] SafeActor Actor,
-    [property: JsonRequired] FrozenLedgerRecordInput Input);
+    [property: JsonRequired] RecordTransactionInput Input);
 
 public sealed record LedgerImmutableVerification(
     [property: JsonRequired] string TransactionId,

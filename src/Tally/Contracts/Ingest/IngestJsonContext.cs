@@ -36,7 +36,6 @@ namespace Tally.Contracts.Ingest;
 [JsonSerializable(typeof(CandidateReceipt))]
 [JsonSerializable(typeof(ImportReceipt))]
 [JsonSerializable(typeof(CompletedMetadataReceipt))]
-[JsonSerializable(typeof(FrozenLedgerRecordInput))]
 [JsonSerializable(typeof(FrozenLedgerRecordRequest))]
 [JsonSerializable(typeof(LedgerImmutableVerification))]
 public partial class IngestJsonContext : JsonSerializerContext;

@@ -7,6 +7,7 @@ using System.Text.Json.Serialization.Metadata;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ingest;
 using Tally.Contracts.Ledger.Evidence;
+using Tally.Contracts.Ledger.Transactions;
 using Tally.Features.Ingest.Contract;
 using Xunit;
 
@@ -178,14 +179,16 @@ public sealed class IngestContractModelTests
 
     // DD-INGEST-LEDGER-PUBLIC-INTEGRATION / DM-INGEST-LEDGER-COMMIT-CONTRACT
     [Fact]
-    public void FrozenLedgerRecordInput_matches_the_released_record_transaction_shape()
+    public void FrozenLedgerRecordRequest_uses_the_released_record_transaction_input_directly()
     {
-        var inputProperties = IngestJsonContext.Default.GetTypeInfo(typeof(FrozenLedgerRecordInput))!.Properties.Select(p => p.Name).ToArray();
+        var inputProperties = LedgerJsonContext.Default.RecordTransactionInput.Properties.Select(p => p.Name).ToArray();
 
+        Assert.Equal(typeof(RecordTransactionInput), typeof(FrozenLedgerRecordRequest).GetProperty("Input")!.PropertyType);
+        Assert.Null(typeof(FrozenLedgerRecordRequest).Assembly.GetType("Tally.Contracts.Ingest.FrozenLedgerRecordInput"));
         Assert.Equal(
             ["accountId", "signedAmount", "currencyCode", "transactionDate", "postingDate", "originalDescription", "instrumentId", "cardholderId", "initialEvidence"],
             inputProperties);
-        Assert.Equal(typeof(RegisterEvidenceInput), typeof(FrozenLedgerRecordInput).GetProperty("InitialEvidence")!.PropertyType);
+        Assert.Equal(typeof(RegisterEvidenceInput), typeof(RecordTransactionInput).GetProperty("InitialEvidence")!.PropertyType);
         Assert.DoesNotContain("sourceReference", inputProperties);
         Assert.DoesNotContain("provenance", inputProperties);
     }
@@ -292,7 +295,7 @@ public sealed class IngestContractModelTests
 
     private static FrozenLedgerRecordRequest SampleFrozenLedgerRecordRequest() => new(
         "1.0", "ledger.transaction.record", "idem-1", SampleActor(),
-        new FrozenLedgerRecordInput(
+        new RecordTransactionInput(
             "acc-1", "-12.34", "ZAR", "2026-07-01", null, "Owner-safe statement line", null, null,
             new RegisterEvidenceInput(
                 EvidenceKind.StatementRow,
