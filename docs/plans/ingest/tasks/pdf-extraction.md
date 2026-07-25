@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-PDF-EXTRACTION`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-01-FORMAT-CORE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `10`
 - **Dialect:** `default`

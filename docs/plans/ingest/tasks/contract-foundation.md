@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-CONTRACT-FOUNDATION`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-00-FOUNDATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `20`
 - **Dialect:** `default`

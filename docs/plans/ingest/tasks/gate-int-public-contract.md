@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-GATE-INT-PUBLIC-CONTRACT`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `10`
 - **Dialect:** `default`

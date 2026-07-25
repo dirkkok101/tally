@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-ABANDON-CLEANUP`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-03-COMMIT-RECOVERY`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `40`
 - **Dialect:** `default`
@@ -16,7 +16,7 @@ Make incomplete state terminal only after lock release, preserve prior canonical
 
 ## Objective
 
-Deliver ingest.abandon, ingest.cleanup, and startup cleanup after acquiring the artifact-cleanup lock without deleting sources, recoverable manifests, receipts, or Ledger data.
+Deliver ingest.abandon, ingest.cleanup, and startup cleanup after acquiring the artifact-cleanup lock without deleting sources, recoverable manifests or receipts, or Ledger data; explicit owner cleanup may remove only the selected completed metadata receipt or abandoned tombstone and eligible artifacts.
 
 ## References
 

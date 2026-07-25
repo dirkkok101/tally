@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-COMMIT-SAGA`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-03-COMMIT-RECOVERY`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `10`
 - **Dialect:** `default`
@@ -44,14 +44,14 @@ Deliver ingest.commit so every candidate is accepted once, returned as an exact 
 - Before the lock or first mutation, validate batchId, manifest revision/digest, approval, compatible versions, active account, candidate identities, and canonical manifest integrity.
 - BatchCommitLock is owner-only and non-reentrant for the same batch across concurrent OS invocations; process loss releases it and different batches remain independent.
 - In manifest order, CommitStateStore durably records attempting plus the frozen public input and envelope before LedgerContractClient.RecordTransactionAsync runs outside every INGEST transaction.
-- A result is terminal only when GetTransactionAsync with IncludeHistory=false matches transactionId, all immutable request facts, and exactly one InitialEvidence record; mutable projections are ignored.
-- Exact Duplicates invoke no write; any stable Ledger, verification, or receipt failure atomically appends BatchErrorEvent at the durable stop frontier and halts.
-- After every candidate is terminal, ImportReceipt reports exact counts, canonical references, and verified completion; CommitOperationModule remains unregistered until the public-contract gate.
+- An accepted or Exact Duplicate result that carries a canonical transaction reference is terminal only when GetTransactionAsync with IncludeHistory=false matches transactionId, all immutable request facts, and exactly one InitialEvidence record; mutable projections are ignored.
+- A structured conflicted or rejected result is terminal only after the complete reference-free outcome is durably recorded; unresolved remains non-terminal. Exact Duplicates invoke no new write, and any stable Ledger, verification, or receipt failure atomically appends BatchErrorEvent at the durable stop frontier and halts.
+- After every candidate is terminal, ImportReceipt reports exact outcome counts, canonical references only for reference-bearing outcomes, and verified completion; CommitOperationModule remains unregistered until the public-contract gate.
 
 ### Failure Criteria
 
 - Do NOT use a whole-batch or distributed transaction, hold SQLite across a Ledger call, or keep progress only in memory.
-- Do NOT regenerate or translate the frozen request, evidence, actor, or key; reread the source; choose another manifest; or skip public get verification.
+- Do NOT regenerate or translate the frozen request, evidence, actor, or key; reread the source; choose another manifest; or skip public get verification for an accepted or Exact Duplicate reference-bearing outcome.
 - Do NOT compare History, lifecycle, category, pool, reconciliation, actor, or recorded time as terminal facts.
 - Do NOT call private Ledger code, infer partial error guidance, continue after a conflict, mark attempting terminal, or advance before durable receipt/error state.
 

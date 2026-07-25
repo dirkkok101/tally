@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-PREVIEW-WORKFLOW`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-02-PREVIEW-REVIEW`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `30`
 - **Dialect:** `default`

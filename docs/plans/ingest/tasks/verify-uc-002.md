@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-VERIFY-UC-002`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `40`
 - **Dialect:** `default`

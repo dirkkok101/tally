@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-STATUS-WORKFLOW`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-03-COMMIT-RECOVERY`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `30`
 - **Dialect:** `default`

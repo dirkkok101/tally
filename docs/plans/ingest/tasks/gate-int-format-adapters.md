@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-GATE-INT-FORMAT-ADAPTERS`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-01-FORMAT-CORE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `40`
 - **Dialect:** `default`

@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-RESUME-WORKFLOW`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-03-COMMIT-RECOVERY`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `20`
 - **Dialect:** `default`
@@ -44,7 +44,7 @@ Deliver ingest.resume so repeated recovery converges without a second canonical 
 ### Acceptance Checks
 
 - Resume requires one batchId, acquires the same BatchCommitLock, loads only the frozen approved manifest/requests/keys and durable receipt, and never rereads or reparses the source.
-- Terminal accepted, exact_duplicate, conflicted, and rejected candidates are skipped only after any stored canonical reference still validates; pending, attempting, or unresolved candidates replay the exact stored request/key in original order.
+- Terminal accepted and Exact Duplicate candidates are skipped only after their stored canonical reference still validates; terminal conflicted and rejected candidates are skipped from their complete durable structured outcomes without requiring a canonical reference; pending, attempting, or unresolved candidates replay the exact stored request/key in original order.
 - Fault injection before Ledger call, after Ledger commit, before INGEST receipt durability, after receipt durability, and between candidates produces a recoverable durable frontier and stops further candidates.
 - A crash after Ledger commit but before receipt durability replays the original key and records the original public result with no second transaction.
 - Changed request bytes, manifest digest, candidate identity, adapter/manifest/Ledger compatibility, canonical detail, or reused key with changed facts returns stable conflict and does not continue.

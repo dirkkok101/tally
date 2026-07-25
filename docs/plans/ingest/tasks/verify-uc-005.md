@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-VERIFY-UC-005`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `70`
 - **Dialect:** `default`
@@ -38,8 +38,8 @@ Prove an owner can recover from or safely terminate every failed ingestion witho
 
 ### Acceptance Checks
 
-- Every failure returns stable code/category, batchId and candidateId, mutation possibility, last durable state, and retry/resume/abandon/correct-source guidance with one stdout result and metadata-only stderr.
-- When payload would be needed to explain an error, the result uses batchId, candidateId, and sourceRecordId instead and canary data is absent from every output/log.
+- Every failure returns stable code/category, batchId and candidateId when each identity has been created and is available, mutation possibility, last durable state, and retry/resume/abandon/correct-source guidance with one stdout result and metadata-only stderr.
+- When payload would be needed to explain an error, the result uses every available batchId, candidateId, and sourceRecordId instead and canary data is absent from every output/log; a pre-identity failure does not fabricate an unavailable identifier.
 - Permission-establishment failure persists no sensitive artifact and performs no Ledger mutation.
 - Status proves pre-commit failures have no committable manifest/effect and commit-stage failures preserve exact completed outcomes plus unresolved frontier.
 - A simulated crash leaves only known durable/recoverable artifacts; next startup after acquiring the artifact-cleanup lock removes disposable residue and retains required state.

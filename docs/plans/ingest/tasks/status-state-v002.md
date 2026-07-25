@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-STATUS-STATE-V002`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-00-FOUNDATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `40`
 - **Dialect:** `default`
@@ -99,12 +99,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2i0` | `verified` | 2026-07-25T14:29:46.6734855+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-2i0` (verified)
 - `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): BatchErrorEventStore persists complete IngestError contract values.
 - `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md): V002 upgrades the protected V001 ingest.db foundation.
 - `governed-by` -> DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction

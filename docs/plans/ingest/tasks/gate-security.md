@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-GATE-SECURITY`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `20`
 - **Dialect:** `default`
