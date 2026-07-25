@@ -1,0 +1,11 @@
+{
+  "id": "01KYCH68HH1PEC1R73W58R47JA",
+  "entity_type": "test_case",
+  "entity_id": "01KXTF4Y3MT9YDGQK8JPP4095H",
+  "ref_code": "TC-INGEST-SOURCE-RECONCILIATION-CONTRACT",
+  "repo_path": "tests/Tally.Tests/Ingest/Preview/ReconciliationAndManifestTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "613cfdcccafac61457c1211f82b8675e0ba96bc1d8911ac207a08f28377c5da7",
+  "last_verified_at": "2026-07-25T11:39:55.8256275+00:00",
+  "created_at": "2026-07-25T11:39:55.8256275+00:00"
+}

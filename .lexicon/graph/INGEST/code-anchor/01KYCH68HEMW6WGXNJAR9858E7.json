@@ -1,0 +1,11 @@
+{
+  "id": "01KYCH68HEMW6WGXNJAR9858E7",
+  "entity_type": "data_model",
+  "entity_id": "01KXTHWTD61VVVD80GRQKHKJ52",
+  "ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+  "repo_path": "src/Tally/Features/Ingest/Contract/IngestOperationIds.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "4430c1f9232d6ed355d79f31697031ebace600b37f8cd7dfc26e028ded62556c",
+  "last_verified_at": "2026-07-25T11:39:55.8227074+00:00",
+  "created_at": "2026-07-25T11:39:55.8227074+00:00"
+}

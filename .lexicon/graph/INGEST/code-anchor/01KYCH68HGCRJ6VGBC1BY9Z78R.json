@@ -1,0 +1,11 @@
+{
+  "id": "01KYCH68HGCRJ6VGBC1BY9Z78R",
+  "entity_type": "test_case",
+  "entity_id": "01KXTF4XT50N2ACSKZCWDZC4XQ",
+  "ref_code": "TC-INGEST-FINANCIAL-NORMALIZATION-CONTRACT",
+  "repo_path": "tests/Tally.Tests/Ingest/Preview/ReconciliationAndManifestTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "613cfdcccafac61457c1211f82b8675e0ba96bc1d8911ac207a08f28377c5da7",
+  "last_verified_at": "2026-07-25T11:39:55.8247155+00:00",
+  "created_at": "2026-07-25T11:39:55.8247155+00:00"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "01KYCH68HH6ZX4F4AEPFP6RN54",
+  "entity_type": "test_case",
+  "entity_id": "01KXTJ0AE3MFPKV4CPF4GD2PQY",
+  "ref_code": "TC-INGEST-STATE-STORE-CONFORMANCE",
+  "repo_path": "tests/Tally.Tests/Ingest/Security/IngestArtifactProtectionTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "5d8f858d237005cd3a19b6b29defdd4c858f65e1ea6ee04710215aa820906948",
+  "last_verified_at": "2026-07-25T11:39:55.8257395+00:00",
+  "created_at": "2026-07-25T11:39:55.8257395+00:00"
+}

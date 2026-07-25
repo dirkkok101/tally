@@ -1,0 +1,11 @@
+{
+  "id": "01KYCH68HB4GTQFSXMJWY61FZ9",
+  "entity_type": "data_model",
+  "entity_id": "01KXTHWT1G93XYFNQBE5E8R4FY",
+  "ref_code": "DM-INGEST-IMPORT-RECEIPT",
+  "repo_path": "src/Tally/Contracts/Ingest/IngestErrorContracts.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "f9bc288b95592941476b222da5b739128d2adb9e04ae5f139f93a5bc99f61edc",
+  "last_verified_at": "2026-07-25T11:39:55.8194483+00:00",
+  "created_at": "2026-07-25T11:39:55.8194483+00:00"
+}

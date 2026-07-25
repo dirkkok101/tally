@@ -1,0 +1,11 @@
+{
+  "id": "01KYCH68HFZ9PV4R3SAE0M7ZZK",
+  "entity_type": "data_model",
+  "entity_id": "01KXTHWRNZ9BAB4P7V2RNMTKMA",
+  "ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+  "repo_path": "src/Tally/Contracts/Ingest/IngestReceiptContracts.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "a8b079718b311073eba916c0e92319018238db948eb03fec03d72a05e1dbb624",
+  "last_verified_at": "2026-07-25T11:39:55.8236465+00:00",
+  "created_at": "2026-07-25T11:39:55.8236465+00:00"
+}

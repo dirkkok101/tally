@@ -1,0 +1,11 @@
+{
+  "id": "01KYCH68HEF2ZQKNE88BEVPM8G",
+  "entity_type": "data_model",
+  "entity_id": "01KXTHWTD61VVVD80GRQKHKJ52",
+  "ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+  "repo_path": "src/Tally/Infrastructure/Ingest/Storage/Migrations/IngestMigrationV001.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "5f468a8d4c4f6566031b527f84eb93f794c01bb66cea5b06fb0d3593ee30cc0c",
+  "last_verified_at": "2026-07-25T11:39:55.8229837+00:00",
+  "created_at": "2026-07-25T11:39:55.8229837+00:00"
+}

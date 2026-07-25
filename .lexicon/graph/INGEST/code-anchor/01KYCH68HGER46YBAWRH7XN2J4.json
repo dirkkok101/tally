@@ -1,0 +1,11 @@
+{
+  "id": "01KYCH68HGER46YBAWRH7XN2J4",
+  "entity_type": "test_case",
+  "entity_id": "01KXTJ0AV78TA1TXWZMK9VQSRC",
+  "ref_code": "TC-INGEST-LEDGER-PUBLIC-CONFORMANCE",
+  "repo_path": "tests/Tally.Tests/Ingest/LedgerContract/LedgerIngestPrerequisiteTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "c57945fffd9acaccace7b1cd10d54609c9b1c1f56ee96362f15df5d37f20c328",
+  "last_verified_at": "2026-07-25T11:39:55.8249211+00:00",
+  "created_at": "2026-07-25T11:39:55.8249211+00:00"
+}

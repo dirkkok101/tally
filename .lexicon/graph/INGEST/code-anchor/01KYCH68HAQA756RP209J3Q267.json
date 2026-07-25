@@ -1,0 +1,11 @@
+{
+  "id": "01KYCH68HAQA756RP209J3Q267",
+  "entity_type": "data_model",
+  "entity_id": "01KXTHWSBZWXX66S4X6DF2XG8Y",
+  "ref_code": "DM-INGEST-IMPORT-MANIFEST",
+  "repo_path": "src/Tally/Contracts/Ingest/IngestOperationContracts.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "b555e1638f1db3f9912a6fe53646196e97a0f21e4e098171c1212594613a8570",
+  "last_verified_at": "2026-07-25T11:39:55.8188464+00:00",
+  "created_at": "2026-07-25T11:39:55.8188464+00:00"
+}

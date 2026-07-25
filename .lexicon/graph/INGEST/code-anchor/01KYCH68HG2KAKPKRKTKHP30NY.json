@@ -1,0 +1,11 @@
+{
+  "id": "01KYCH68HG2KAKPKRKTKHP30NY",
+  "entity_type": "test_case",
+  "entity_id": "01KXTF4WZES1WGCEWCZFEV3Y2N",
+  "ref_code": "TC-INGEST-CONTRACT-DISCOVERY-CONTRACT",
+  "repo_path": "tests/Tally.Tests/Ingest/Contract/IngestContractModelTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "b65b62538eb817ef5dfff1c515ab24338918095e2d0702f98f40ea73e6148bde",
+  "last_verified_at": "2026-07-25T11:39:55.8242781+00:00",
+  "created_at": "2026-07-25T11:39:55.8242781+00:00"
+}

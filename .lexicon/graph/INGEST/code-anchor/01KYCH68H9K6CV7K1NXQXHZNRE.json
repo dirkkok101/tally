@@ -1,0 +1,11 @@
+{
+  "id": "01KYCH68H9K6CV7K1NXQXHZNRE",
+  "entity_type": "design_decision",
+  "entity_id": "01KXTH9565ARERVH83K6KPSJ82",
+  "ref_code": "DD-INGEST-DOCUMENT-EXTRACTION",
+  "repo_path": "src/Tally/Tally.csproj",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "666003de5a6c27730990f2e402d764e963c467c09e9e9cb0b25d756faaa7dcb0",
+  "last_verified_at": "2026-07-25T11:39:55.8179443+00:00",
+  "created_at": "2026-07-25T11:39:55.8179443+00:00"
+}
