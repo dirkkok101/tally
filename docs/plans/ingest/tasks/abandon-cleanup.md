@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-ABANDON-CLEANUP`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-03-COMMIT-RECOVERY`
-- **State:** `ready`
+- **State:** `planned`
 - **Priority:** `1`
 - **Sort Order:** `40`
 - **Dialect:** `default`
@@ -16,7 +16,7 @@ Make incomplete state terminal only after lock release, preserve prior canonical
 
 ## Objective
 
-Deliver ingest.abandon, ingest.cleanup, and safe startup cleanup without deleting sources, recoverable manifests, receipts, or Ledger data.
+Deliver ingest.abandon, ingest.cleanup, and startup cleanup after acquiring the artifact-cleanup lock without deleting sources, recoverable manifests, receipts, or Ledger data.
 
 ## References
 
@@ -33,13 +33,14 @@ Deliver ingest.abandon, ingest.cleanup, and safe startup cleanup without deletin
 | [TASK-INGEST-COMMIT-SAGA](../tasks/commit-saga.md) | `compile` | Abandon and compaction consume BatchCommitLock and durable candidate outcomes. |
 | [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | RecoveryStateStore uses protected ingest.db and artifact enforcement. |
 | [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Consumes ImportReceipt. |
+| [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md) | `compile` | Recovery mutations append complete stable errors and clean V002 snapshots safely. |
 
 ## Recipe
 
 ### Acceptance Checks
 
 - Abandon requires an incomplete non-terminal batch, exact durable state, explicit reason, and an unheld BatchCommitLock; it atomically marks abandoned, blocks future commit/resume, preserves prior Ledger transaction references/counts, and compacts sensitive state to a metadata tombstone.
-- A completed batch compacts manifest rows, descriptions, amounts, balances, controls, evidence, and frozen requests only after every terminal canonical reference verifies; CompletedMetadataReceipt retains stable identities, versions, outcome categories, safe refs, Ledger refs, counts, and completedAt.
+- A completed batch compacts manifest rows, descriptions, amounts, balances, controls, evidence, and frozen requests only after every terminal canonical reference verifies; CompletedMetadataReceipt retains stable identities, versions, outcome categories, batch and candidate references, Ledger refs, counts, and completedAt.
 - Cleanup rejects active, approved, committing, interrupted-but-recoverable, locked, ambiguous, or mismatched expectedTerminalStatus targets with retained_for_recovery; it removes only the selected completed receipt or abandoned tombstone/artifacts.
 - StartupIngestCleanup inspects only known INGEST lock/atomic artifact names, verifies no live lock and durable disposability, and removes stale artifacts; unknown files, sources, manifests required for resume, receipts, and Ledger data are untouched.
 - Every success, expected failure, simulated crash, abandon, cleanup, and startup path leaves no extraction temporary and leaves caller-owned source bytes unchanged.
@@ -67,6 +68,7 @@ Deliver ingest.abandon, ingest.cleanup, and safe startup cleanup without deletin
 ### Notes
 
 - Removal impact: completed sensitive state is replaced by a metadata-only receipt; abandoned sensitive state is replaced by a terminal tombstone, so replay prevention and prior-effect evidence are retained.
+- Abandon and cleanup append complete BatchErrorEvent metadata for retained batch failures and remove expired or targeted ephemeral status snapshots without exposing or deleting durable workflow evidence outside the authorized cleanup transition.
 
 ### File Contracts
 
@@ -91,6 +93,7 @@ Deliver ingest.abandon, ingest.cleanup, and safe startup cleanup without deletin
 | RecoveryStateStore | `produces` | DM-INGEST-STATE-STORE |  |
 | StartupIngestCleanup | `produces` | DD-INGEST-ARTIFACT-SECURITY |  |
 | RecoveryCleanupOperationModule | `produces` | DM-INGEST-OPERATION-CONTRACTS |  |
+| BatchErrorEventStore.AppendAsync | `consumes` | DM-INGEST-ERROR-STATUS-CONTRACTS | Append complete safe recovery errors in the caller transaction |
 
 ### Verification
 
@@ -119,6 +122,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-INGEST-COMMIT-SAGA](../tasks/commit-saga.md): Abandon and compaction consume BatchCommitLock and durable candidate outcomes.
 - `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Consumes ImportReceipt.
 - `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md): RecoveryStateStore uses protected ingest.db and artifact enforcement.
+- `depends-on:compile` -> [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md): Recovery mutations append complete stable errors and clean V002 snapshots safely.
 - `governed-by` -> DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling
 - `implements` -> FR-INGEST-ARTIFACT-CLEANUP: Abandon and clean up ingestion artifacts safely
 - `verifies` -> TC-INGEST-ARTIFACT-CLEANUP-CONTRACT: Verify abandon and artifact cleanup

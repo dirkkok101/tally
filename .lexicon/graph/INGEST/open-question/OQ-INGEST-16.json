@@ -6,7 +6,11 @@
   "context": [
     "Discovered by TASK-INGEST-GATE-INT-LEDGER-CONTRACT (bd-2dg). A whole-payload equality check between the record result and the get result fails on the history member alone; the gate normalizes history out before comparing. The resume/receipt logic in FR-INGEST-DURABLE-RECEIPT-RESUME needs the same rule stated explicitly so it does not treat a healthy commit as unverified."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "Terminal verification uses ledger.transaction.get with IncludeHistory=false and compares only transactionId plus the immutable request facts and the exactly matching initial evidence record. History and mutable or generated projections and recorded metadata are excluded."
+  ],
+  "owner": "INGEST design",
   "disposition": "unspecified",
   "created_at": "2026-07-25T09:32:13.5981919+00:00",
   "links": [
@@ -23,6 +27,13 @@
       "target": "FR-INGEST-DURABLE-RECEIPT-RESUME",
       "rel": "see-also",
       "created_at": "2026-07-25T09:32:13.5989688+00:00"
+    },
+    {
+      "id": "01KYCRZAMAFSFRW06PGCN5ET8V",
+      "target_type": "task",
+      "target": "TASK-INGEST-GATE-INT-LEDGER-CONTRACT",
+      "rel": "see-also",
+      "created_at": "2026-07-25T13:55:57.1955382+00:00"
     }
   ]
 }

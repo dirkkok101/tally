@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-PDF-EXTRACTION`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-01-FORMAT-CORE`
-- **State:** `ready`
+- **State:** `planned`
 - **Priority:** `0`
 - **Sort Order:** `10`
 - **Dialect:** `default`
@@ -16,7 +16,7 @@ Pin the spike-proven upstream package, convert one immutable byte buffer to orde
 
 ## Objective
 
-Extract deterministic passive PDF evidence under Native-AOT and resource bounds without source mutation, child processes, disk extraction, or a speculative parser port.
+Extract deterministic passive PDF evidence under Native-AOT and resource bounds without source mutation, spawned executables, disk extraction, or a speculative parser port.
 
 ## References
 

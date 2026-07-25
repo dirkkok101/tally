@@ -15,6 +15,13 @@
   "created_at": "2026-07-18T15:17:06.9081723+00:00",
   "links": [
     {
+      "id": "01KYCRZBTFSZ7XQG57ZCDMC4M4",
+      "target_type": "task",
+      "target": "TASK-INGEST-PREVIEW-WORKFLOW",
+      "rel": "see-also",
+      "created_at": "2026-07-25T13:55:58.4166911+00:00"
+    },
+    {
       "id": "01KXTWTX6W99SE39R21SJCYDQE",
       "target_type": "use_case",
       "target": "UC-INGEST-004",

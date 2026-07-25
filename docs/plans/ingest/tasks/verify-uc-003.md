@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-VERIFY-UC-003`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `ready`
+- **State:** `planned`
 - **Priority:** `0`
 - **Sort Order:** `50`
 - **Dialect:** `default`
@@ -56,7 +56,7 @@ Prove an approved batch commits each candidate once and every interruption resum
 
 ### Constraints
 
-- Each crash case uses an isolated real data root and records canonical transaction IDs only as safe evidence.
+- Each crash case uses an isolated real data root and records canonical transaction IDs only as metadata-only evidence.
 
 ### Notes
 

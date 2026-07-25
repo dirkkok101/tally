@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-GATE-INT-PUBLIC-CONTRACT`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `ready`
+- **State:** `planned`
 - **Priority:** `0`
 - **Sort Order:** `10`
 - **Dialect:** `default`
@@ -59,7 +59,7 @@ No graph references recorded.
 - IngestOperationBundle
 - Eight-operation snapshot
 - Published INGEST contract tests
-- Prefix-safe shared registry inventory
+- Collision-free shared registry inventory
 
 ### Constraints
 

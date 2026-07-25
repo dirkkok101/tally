@@ -8,7 +8,7 @@
   "main_flow": "1. INGEST compares the Source Fingerprint, selected account, adapter version, and LEDGER contract version with prior batch evidence. 2. A match across all four components is Exact Replay regardless of filename and returns the prior batch or receipt without reparsing or mutation. 3. When the adapter provides identity-grade cross-file evidence, already committed identities with identical facts are reported as Exact Duplicates and are not written again. 4. New proven identities remain eligible candidates. 5. Similar, overlapping, corrected, account-changed, or version-changed records without an Exact Replay key match or identity-grade evidence are surfaced for a new preview or as blocking Overlap Conflicts according to the recorded evidence. 6. The owner receives a preview accounting for prior, new, and conflicted outcomes before any commit.",
   "alt_flows": [
     "1a. Prior provenance is unavailable or incompatible -> do not claim automatic deduplication",
-    "2a. Content is changed despite a familiar filename -> treat it as a new preview, not exact replay",
+    "2a. Content is changed despite a familiar filename -> treat it as a new preview, not Exact Replay",
     "3a. A reused identity carries different facts -> return stable conflict and preserve the original transaction",
     "5a. Same-amount/date/description records lack exact identity -> never silently collapse them as duplicates"
   ],

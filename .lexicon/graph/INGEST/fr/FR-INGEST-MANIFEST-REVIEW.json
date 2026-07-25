@@ -20,8 +20,8 @@
     "commit cannot use changed facts or a different revision"
   ],
   "acceptance_criteria": [
-    "Given a completed preview, when the manifest is inspected, then it exposes safe batch identity, source fingerprint, selected account, adapter and LEDGER contract versions, ordered source-record outcomes, candidate facts, exclusions, exact duplicates, overlap conflicts, validation results, and reconciliation evidence.",
-    "Given a manifest whose transaction-bearing records are all accepted or proven exact duplicates and whose required controls reconcile, when the owner explicitly approves that exact revision, then its approval state and actor are recorded without LEDGER mutation.",
+    "Given a completed preview, when the manifest is inspected, then it exposes batchId, Source Fingerprint, selected account, adapter and LEDGER contract versions, ordered source-record outcomes, candidate facts, exclusions, Exact Duplicates, Overlap Conflicts, validation results, and Reconciliation Evidence.",
+    "Given a manifest whose transaction-bearing records are all accepted or proven Exact Duplicates and whose required controls reconcile, when the owner explicitly approves that exact revision, then its approval state and actor are recorded without LEDGER mutation.",
     "Given any blocked record, unresolved overlap, failed control, incompatible version, or missing required fact, when approval is attempted, then INGEST rejects approval and preserves the uncommittable manifest.",
     "Given an attempted change to amount, currency, date, original description, sign, or provenance, when review is performed, then INGEST rejects inline editing and requires a corrected source or adapter plus a new preview.",
     "Given a changed account decision, duplicate disposition, adapter version, or LEDGER contract version, when the batch is reconsidered, then INGEST creates a new manifest revision and invalidates approval of prior revisions for commit."

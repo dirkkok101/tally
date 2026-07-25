@@ -20,7 +20,7 @@
     "omitted, duplicated, or sign-inverted rows cannot be approved silently"
   ],
   "acceptance_criteria": [
-    "Given a qualified statement, when preview completes, then every source record has exactly one accepted-candidate, exact-duplicate, excluded-non-transaction, or blocked outcome with a stable reason.",
+    "Given a qualified statement, when preview completes, then every source record has exactly one accepted-candidate, Exact Duplicate, excluded-non-transaction, or blocked outcome with a stable reason.",
     "Given any supported initial fixture, when its normalized non-zero movements are summed with its opening economic balance, then the result equals its closing economic balance exactly in minor units.",
     "Given a supported variant that supplies running balances, when records are normalized, then every consecutive running-balance transition reconciles exactly to its signed movement.",
     "Given a source control that the detected variant exposes, when preview completes, then the manifest records and verifies that control exactly.",
@@ -28,7 +28,7 @@
     "Given a control type that the source does not expose, when preview completes, then the manifest reports that control as unavailable rather than fabricating a value."
   ],
   "security_criteria": [
-    "Reconciliation output may expose counts, Boolean outcomes, and safe identifiers, but diagnostics must not expose raw rows, descriptions, balances, or amounts."
+    "Reconciliation output may expose counts, Boolean outcomes, batchId, candidateId, and sourceRecordId, but diagnostics must not expose raw rows, descriptions, balances, or amounts."
   ],
   "status": "active",
   "created_at": "2026-07-18T11:12:00.2536347+00:00",

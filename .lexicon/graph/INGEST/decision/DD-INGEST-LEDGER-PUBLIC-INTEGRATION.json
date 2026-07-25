@@ -7,19 +7,19 @@
     "Preserve the discoverable cross-module contract without a child process or private handler coupling."
   ],
   "decision": [
-    "Use one concrete LedgerContractClient that resolves released LEDGER operation descriptors and invokes the same typed operation executor used by the CLI. Preview discovers version compatibility and reads the selected account. Commit invokes ledger.transaction.record with provenance kind statement_import, the frozen request, and a stable INGEST candidate idempotency key; every success is verified through ledger.transaction.get before terminal receipt durability. INGEST never references LedgerDb, SQL, storage paths, feature handlers, or private domain types."
+    "Use one concrete LedgerContractClient that resolves released LEDGER operation descriptors and invokes the shared typed operation executor. Preview freezes the exact released RecordTransactionInput shape. InitialEvidence is EvidenceKind.statement_row; LogicalIdentityDigest is the stable lowercase 64-hex candidateId; OpaqueExternalReference is the existing ingest:{candidateId} sourceReference; ContentFingerprint is the stable lowercase 64-hex sourceRecordId; Observation repeats accountId, signedAmountMinor, currencyCode, transactionDate, postingDate, null v1 instrument/cardholder IDs, and a lowercase SHA-256 over the UTF-8 normalized OriginalDescription. Actor, contract version, operation ID, and the ingest:{candidateId} idempotency key remain in the frozen request envelope. Commit passes that byte-equivalent frozen input without client-side reshaping. For accepted and Exact Duplicate outcomes that carry a canonical transaction reference, ledger.transaction.get uses IncludeHistory=false and terminal verification compares transactionId plus only the frozen immutable financial, attribution, and InitialEvidence facts. It requires exactly one matching initial evidence record and ignores History, lifecycle/category/pool/reconciliation projections, recorded actor, and recorded time. A structured conflicted or rejected outcome is terminal only after its complete outcome is durably recorded with no canonical reference required; an unresolved outcome is non-terminal. INGEST never references LedgerDb, SQL, storage paths, feature handlers, or private domain types."
   ],
   "rationale": [
-    "This is the deepest available in-process boundary: callers know only released operation IDs, schemas, errors, versions, and results, while avoiding self-spawn process overhead and lost cancellation. Direct handler calls make compatibility and black-box tests dishonest. Direct storage access violates C2 and NG5. A transport interface with one implementation is speculative; the concrete client is sufficient."
+    "The passing 12-case LedgerIngestPrerequisiteTests contract proves the released input and evidence result shapes. CandidateId already carries the versioned account, source-row, and immutable-fact identity; sourceRecordId carries the versioned source, structural-position, raw-evidence, and immutable-facts identity. Freezing those values during preview preserves the approved request and closes the commit/resume crash window. Comparing mutable projections or optional History would turn a healthy canonical write into a false failure."
   ],
   "alternatives": [
-    "A: direct LedgerDb or SQL, rejected as forbidden private coupling. B: direct LEDGER handler calls, rejected because they bypass released schemas and compatibility. C: spawn the CLI as a child process, rejected as unnecessary process and cancellation complexity. D: invoke the same public operation executor in-process through a concrete client, chosen."
+    "A: retain sourceReference and provenance fields that LEDGER does not publish, rejected because the request cannot cross the public contract. B: translate an INGEST-only request into InitialEvidence inside LedgerContractClient, rejected because commit/resume would not replay the persisted public request byte-equivalently. C: freeze the exact public RecordTransactionInput with derived statement evidence during preview, chosen. D: compare the complete TransactionDetail including History and mutable projections, rejected because record and get legitimately differ and later projections can change."
   ],
   "consequences": [
-    "Cross-module tests can enforce that INGEST references only public contracts and operation infrastructure. LEDGER version/schema changes are visible before parsing or mutation. The concrete client must not translate or weaken LEDGER errors."
+    "FrozenLedgerRecordRequest and its tests must use the released InitialEvidence and Observation shape. Preview identity code owns all evidence derivation. Commit and resume send the stored public input unchanged. Reference-bearing accepted and Exact Duplicate outcomes round-trip through the immutable verification tuple and matching evidence only; they must not normalize an incompatible request or require History. Conflicted and rejected outcomes prove terminality through their complete durable structured result without fabricating or requiring a canonical reference."
   ],
   "status_notes": [
-    "Accepted design. Planning must create only public-contract integration at the recorded paths and forbid private LEDGER references."
+    "Accepted correction resolving OQ-INGEST-15 and OQ-INGEST-16 against the released contract and 12 passing prerequisite cases."
   ],
   "status": "accepted",
   "metadata": "{\"expected_paths\":[\"src/Tally/Integration/Ledger/LedgerContractClient.cs\",\"src/Tally/Features/Ingest/Commit/**\",\"tests/Tally.Tests/Ingest/LedgerContract/**\"]}",
@@ -73,6 +73,20 @@
       "target": "NFR-INGEST-PUBLIC-CONTRACT-COMPATIBILITY",
       "rel": "implements",
       "created_at": "2026-07-18T12:09:44.1011054+00:00"
+    },
+    {
+      "id": "01KYCQXMJQHD58RN8SGQW4F59B",
+      "target_type": "open_question",
+      "target": "OQ-INGEST-15",
+      "rel": "see-also",
+      "created_at": "2026-07-25T13:37:33.2718505+00:00"
+    },
+    {
+      "id": "01KYCQXMJR8N5F3REN14J7GXT2",
+      "target_type": "open_question",
+      "target": "OQ-INGEST-16",
+      "rel": "see-also",
+      "created_at": "2026-07-25T13:37:33.2721297+00:00"
     },
     {
       "id": "01KXTJ5QJPG9W9XY23ZCKGTK8X",

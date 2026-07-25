@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-REVIEW-WORKFLOW`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-02-PREVIEW-REVIEW`
-- **State:** `ready`
+- **State:** `planned`
 - **Priority:** `1`
 - **Sort Order:** `40`
 - **Dialect:** `default`
@@ -22,7 +22,7 @@ Deliver ingest.inspect and ingest.approve with immutable revision, compatibility
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with exact replay and blocked overlap | `design_decision` | `governed-by` | `true` |
+| DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap | `design_decision` | `governed-by` | `true` |
 | DM-INGEST-IMPORT-MANIFEST: ImportBatchAndManifestRevision | `data_model` | `touches` | `true` |
 | FR-INGEST-MANIFEST-REVIEW: Review and approve an immutable manifest revision | `requirement` | `implements` | `true` |
 | TC-INGEST-MANIFEST-REVIEW-CONTRACT: Verify immutable manifest review and approval | `test_case` | `verifies` | `true` |
@@ -35,6 +35,7 @@ Deliver ingest.inspect and ingest.approve with immutable revision, compatibility
 | [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Consumes ImportManifestContract. |
 | [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md) | `compile` | Consumes ManifestCanonicalizer. |
 | [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Consumes IngestDatabase. |
+| [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md) | `compile` | Review mutations append complete stable batch errors through the V002 store. |
 
 ## Recipe
 
@@ -68,7 +69,7 @@ Deliver ingest.inspect and ingest.approve with immutable revision, compatibility
 
 ### Notes
 
-None recorded.
+- Append complete BatchErrorEvent metadata atomically when a batch-addressable inspect or approval transition fails; do not derive later status guidance from a code.
 
 ### File Contracts
 
@@ -92,6 +93,7 @@ None recorded.
 | PreviewStateStore | `consumes` | DM-INGEST-STATE-STORE |  |
 | ReviewStateStore | `produces` | DM-INGEST-STATE-STORE |  |
 | ReviewOperationModule | `produces` | DM-INGEST-OPERATION-CONTRACTS |  |
+| BatchErrorEventStore.AppendAsync | `consumes` | DM-INGEST-ERROR-STATUS-CONTRACTS | Append complete safe review errors in the caller transaction |
 
 ### Verification
 
@@ -121,7 +123,8 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md): Consumes ManifestCanonicalizer.
 - `depends-on:compile` -> [TASK-INGEST-PREVIEW-WORKFLOW](../tasks/preview-workflow.md): Inspect and approve consume persisted immutable manifests created by preview.
 - `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md): Consumes IngestDatabase.
-- `governed-by` -> DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with exact replay and blocked overlap
+- `depends-on:compile` -> [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md): Review mutations append complete stable batch errors through the V002 store.
+- `governed-by` -> DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap
 - `implements` -> FR-INGEST-MANIFEST-REVIEW: Review and approve an immutable manifest revision
 - `touches` -> DM-INGEST-IMPORT-MANIFEST: ImportBatchAndManifestRevision
 - `verifies` -> TC-INGEST-MANIFEST-REVIEW-CONTRACT: Verify immutable manifest review and approval

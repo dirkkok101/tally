@@ -1,0 +1,330 @@
+{
+  "id": "01KYCR3SQJ5ZXDJ4EYPP1FAWD2",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ57FSS5HGH1WQNMKD6E8",
+  "ref_code": "TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION",
+  "slug": "LEDGER-EVIDENCE-CONTRACT-CORRECTION",
+  "title": "Align frozen Ledger evidence with the released contract",
+  "description": [
+    "Correct the already-landed INGEST contract and identity foundation to freeze the exact public RecordTransactionInput and derive statement evidence before downstream client or workflow implementation."
+  ],
+  "objective": [
+    "Frozen INGEST Ledger requests use the released InitialEvidence contract with deterministic candidate-derived identity and a named immutable verification tuple."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 35,
+  "created_at": "2026-07-25T13:40:55.1552870+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYCTX815MKWK3PKSRE71FFHX",
+      "bead_id": "bd-17k",
+      "verification_status": "verified",
+      "verified_at": "2026-07-25T14:29:46.1493080+00:00",
+      "created_at": "2026-07-25T14:29:46.1493080+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KYCR3SQMSHQRHVVWS6KRSMSG",
+      "target": "DD-INGEST-LEDGER-PUBLIC-INTEGRATION",
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYCRCMJTDQCNMWMD2ZE9VDT3",
+      "target": "TASK-INGEST-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "The correction revises the already-landed frozen request contracts."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:45:44.7956986+00:00"
+    },
+    {
+      "id": "01KYCRCNNQJPME8W56A18HN4DS",
+      "target": "TASK-INGEST-GATE-INT-LEDGER-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "The released Ledger request and evidence shape must be proven before INGEST freezes it."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-25T13:45:45.9130517+00:00"
+    },
+    {
+      "id": "01KYCRCN4DYWBR39NFV2GRX2Q2",
+      "target": "TASK-INGEST-PREVIEW-DOMAIN",
+      "dependency_type": "compile",
+      "reason": [
+        "The correction extends the already-landed IngestIdentity implementation without concurrent file overlap."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-25T13:45:45.3580628+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYCR3SQNPYVC3QK74W03YWVB",
+      "path": "src/Tally/Contracts/Ingest/IngestReceiptContracts.cs",
+      "action": "modify",
+      "role": "exact frozen public request and verification contracts",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    },
+    {
+      "id": "01KYCR3SQN3VXE9TK13QTNYACG",
+      "path": "src/Tally/Contracts/Ingest/IngestJsonContext.cs",
+      "action": "modify",
+      "role": "source-generated metadata for corrected contracts",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    },
+    {
+      "id": "01KYCR3SQNN192QCZKC5CAKH76",
+      "path": "src/Tally/Domain/Ingest/Identity/IngestIdentity.cs",
+      "action": "modify",
+      "role": "statement evidence derivation",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    },
+    {
+      "id": "01KYCR3SQNQ0SMYM3G440050QD",
+      "path": "tests/Tally.Tests/Ingest/Identity/IngestIdentityTests.cs",
+      "action": "test",
+      "role": "evidence identity and drift cases",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    },
+    {
+      "id": "01KYCR3SQNYKDP97FMPWE921V6",
+      "path": "tests/Tally.Tests/Ingest/Contract/IngestContractModelTests.cs",
+      "action": "test",
+      "role": "released shape and JSON contract cases",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYCRN65TD5YCVRB9Q4CSCDRS",
+      "name": "FrozenLedgerRecordRequest",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+      "notes": [
+        "Corrects the exact released record input already produced by contract foundation"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:50:24.9539226+00:00"
+    },
+    {
+      "id": "01KYCRN65VSV5XGM8AQXQRE8EW",
+      "name": "LedgerImmutableVerification",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+      "notes": [
+        "Terminal immutable comparison tuple"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-25T13:50:24.9539226+00:00"
+    },
+    {
+      "id": "01KYCRN65VGTP726TQP79WFRWE",
+      "name": "IngestIdentity.StatementEvidence",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+      "notes": [
+        "Deterministic RegisterEvidenceInput derivation"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-25T13:50:24.9539226+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYCR3SQM3PQ4VMS0DM34NWE5",
+      "kind": "acceptance_check",
+      "text": [
+        "FrozenLedgerRecordInput has the exact released RecordTransactionInput fields including InitialEvidence; obsolete SourceReference and Provenance members do not exist outside InitialEvidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    },
+    {
+      "id": "01KYCR3SQMEZ8M41D0DP978XWR",
+      "kind": "acceptance_check",
+      "text": [
+        "IngestIdentity derives statement evidence deterministically: candidateId is LogicalIdentityDigest, ingest:{candidateId} is OpaqueExternalReference and idempotency key, sourceRecordId is ContentFingerprint, and Observation repeats normalized financial facts plus the lowercase SHA-256 UTF-8 normalized-description fingerprint."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    },
+    {
+      "id": "01KYCR3SQM21TPW7GEJYQBXHVD",
+      "kind": "acceptance_check",
+      "text": [
+        "Two constructions from identical candidate facts serialize byte-equivalently through IngestJsonContext; a changed candidate fact changes the candidate/evidence identity and frozen request."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    },
+    {
+      "id": "01KYCR3SQMZ8MH1PJE2VVFQZD1",
+      "kind": "acceptance_check",
+      "text": [
+        "Focused contract tests prove the exact public shape and immutable verification tuple without relying on History or other mutable TransactionDetail projections."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    },
+    {
+      "id": "01KYCR3SQN0AMSD2DCFX8FBE9B",
+      "kind": "constraint",
+      "text": [
+        "Use only released Tally.Contracts.Ledger records and source-generated JSON; no private Ledger namespace."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    },
+    {
+      "id": "01KYCR3SQNCEY2B51JYFP2CX86",
+      "kind": "expected_output",
+      "text": [
+        "Corrected FrozenLedgerRecordRequest contracts and JSON metadata"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    },
+    {
+      "id": "01KYCR3SQNWTX85GDKT39RKJA0",
+      "kind": "expected_output",
+      "text": [
+        "Deterministic statement evidence identity and immutable verification tuple"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    },
+    {
+      "id": "01KYCR3SQNZ51JDCJKQYJRK2Y8",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT retain or translate the rejected sourceReference plus provenance pseudo-contract inside LedgerContractClient — per DD-INGEST-LEDGER-PUBLIC-INTEGRATION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    },
+    {
+      "id": "01KYCR3SQNEVJ9JSJ6XB4PSWR9",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT derive evidence at commit/resume time or hash private source paths, filenames, manifest revisions, compatible version metadata, or raw financial payloads into public references."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    },
+    {
+      "id": "01KYCR3SQNHJ86EEKP6VM25QZE",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT compare History, lifecycle, reconciliation, category, pool, actor, or recorded time as frozen terminal facts — rejected per DD-INGEST-LEDGER-PUBLIC-INTEGRATION."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYCRCGXB1WQ1P78VZJ1FPCRS",
+      "target_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXTHWTD61VVVD80GRQKHKJ52",
+      "target_title": "LedgerCommitContractSnapshot",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:45:41.0357510+00:00"
+    },
+    {
+      "id": "01KYCRCHF6SYAQD4WVDVQ7X0JS",
+      "target_ref_code": "TC-INGEST-LEDGER-PUBLIC-CONFORMANCE",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTJ0AV78TA1TXWZMK9VQSRC",
+      "target_title": "Verify INGEST uses only the public LEDGER contract",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-25T13:45:41.6067490+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYCR3SQM4YBEA7CNCWRJZ0QS",
+      "target": "FR-INGEST-APPROVED-BATCH-COMMIT",
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    },
+    {
+      "id": "01KYCR3SQMJ9H8ENASQN3PMJBW",
+      "target": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYCR3SQPCNDH3VAD3RN6XJRT",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach exact shape, deterministic derivation, serialization, and projection-exclusion cases."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    },
+    {
+      "id": "01KYCR3SQP4CW3FX373ZMHKKPY",
+      "gate_type": "branch-review",
+      "description": [
+        "Reviewer confirms no private Ledger type or obsolete pseudo-contract remains."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYCR3SQNA6EWPJEKPG7F5VJ2",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~IngestIdentityTests",
+      "expected_result": "exit 0; at least 15 identity and evidence-derivation cases are discovered and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    },
+    {
+      "id": "01KYCR3SQPKMBQ243F66GY0TZK",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~IngestContractModelTests",
+      "expected_result": "exit 0; at least 17 contract shape and source-generated JSON cases are discovered and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 1,
+      "created_at": "2026-07-25T13:40:55.1552870+00:00"
+    }
+  ]
+}

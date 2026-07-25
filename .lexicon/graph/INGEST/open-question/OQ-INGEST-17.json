@@ -6,7 +6,11 @@
   "context": [
     "TASK-INGEST-STATUS-WORKFLOW is blocked: V001 persists only candidate_receipt.error_code, has no batch-level last-error metadata or paging snapshot, while FR-INGEST-FAILURE-STATUS requires exact durable guidance and the task requires no-skip/no-duplicate paging under a stable snapshot. Resolve the schema/policy and reconcile the bead before implementation."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "V002 adds append-only complete BatchErrorEvent metadata written atomically by mutation workflows and ephemeral materialized status snapshots with 15-minute protected cursors. First-page status may write only snapshot state; it never mutates durable workflow state. Later pages read immutable ordinal membership and fail closed on invalid, expired, unknown, or generation-mismatched cursors."
+  ],
+  "owner": "INGEST design",
   "disposition": "unspecified",
   "created_at": "2026-07-25T11:30:55.3859705+00:00",
   "links": [
@@ -16,6 +20,13 @@
       "target": "FR-INGEST-FAILURE-STATUS",
       "rel": "see-also",
       "created_at": "2026-07-25T11:30:55.3866087+00:00"
+    },
+    {
+      "id": "01KYCRZA3A5S6M6AV3KMXM3708",
+      "target_type": "task",
+      "target": "TASK-INGEST-STATUS-WORKFLOW",
+      "rel": "see-also",
+      "created_at": "2026-07-25T13:55:56.6508998+00:00"
     }
   ]
 }

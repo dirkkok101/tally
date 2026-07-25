@@ -5,14 +5,14 @@
 - **Ref:** `TASK-INGEST-LEDGER-PUBLIC-CLIENT`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-02-PREVIEW-REVIEW`
-- **State:** `ready`
+- **State:** `planned`
 - **Priority:** `0`
 - **Sort Order:** `10`
 - **Dialect:** `default`
 
 ## Summary
 
-Use the shared typed operation executor for account lookup and transaction record/get; expose no transport abstraction and no private LEDGER implementation.
+Use the shared typed operation executor for account lookup and exact released transaction record/get contracts; the client performs no request translation, transport abstraction, or private LEDGER coupling.
 
 ## Objective
 
@@ -32,22 +32,24 @@ Provide one concrete LedgerContractClient that preserves released schemas, error
 |---|---|---|
 | [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md) | `compile` | The prerequisite gate proves every operation and contract consumed by the client. |
 | [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | The client consumes FrozenLedgerRecordRequest and stable INGEST compatibility errors. |
+| [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](../tasks/ledger-evidence-contract-correction.md) | `compile` | The client consumes the corrected exact public frozen request and verification tuple. |
 
 ## Recipe
 
 ### Acceptance Checks
 
 - LedgerContractClient.GetAccountAsync invokes ledger.account.get through OperationRegistry and returns the released AccountDetail without inferring or translating account identity, class, currency, or lifecycle.
-- RecordTransactionAsync invokes ledger.transaction.record with the persisted FrozenLedgerRecordRequest, provenance kind statement_import, sourceReference and idempotency key derived by INGEST; GetTransactionAsync invokes ledger.transaction.get for round-trip verification.
-- Unsupported Ledger contract versions fail before source parsing or mutation; all public stable errors and exits are preserved without translation to weaker generic failures.
-- Cancellation propagates into the shared executor; the client neither spawns a process nor catches an unexpected exception to expose it as payload.
-- Architecture tests reject references to LedgerDb, Infrastructure/Storage/Ledger, Features/Ledger handlers, private Ledger domain types, SQL, or storage paths.
+- RecordTransactionAsync serializes the persisted FrozenLedgerRecordRequest.Input through LedgerJsonContext as the exact released RecordTransactionInput and places its actor, contract version, operation ID, and idempotency key in the shared envelope without reshaping InitialEvidence.
+- GetTransactionAsync invokes ledger.transaction.get with IncludeHistory=false and returns the released TransactionDetail; the client does not add History or normalize projections before the commit saga applies LedgerImmutableVerification.
+- Unsupported Ledger contract versions fail before source parsing or mutation; every published stable error and exit is preserved without translation to a weaker generic failure.
+- Cancellation reaches the shared executor; architecture tests reject LedgerDb, SQL, storage paths, feature handlers, private Ledger domain types, spawned executables, and a one-implementation transport interface.
 
 ### Failure Criteria
 
-- Do NOT open LedgerDb/SQL or call feature handlers directly — rejected per DD-INGEST-LEDGER-PUBLIC-INTEGRATION.
-- Do NOT spawn the CLI as a child process or add an ILedgerTransport interface with one implementation — rejected alternatives per DD-INGEST-LEDGER-PUBLIC-INTEGRATION.
-- Do NOT duplicate or weaken LEDGER account, money, date, provenance, source-reference, or idempotency validation.
+- Do NOT open LedgerDb or SQL or call feature handlers directly — rejected per DD-INGEST-LEDGER-PUBLIC-INTEGRATION.
+- Do NOT spawn the CLI as a child process or add an ILedgerTransport interface with one implementation — rejected per DD-INGEST-LEDGER-PUBLIC-INTEGRATION.
+- Do NOT translate obsolete sourceReference/provenance fields into InitialEvidence inside the client; preview already froze the exact public input.
+- Do NOT compare or remove History inside the client or duplicate Ledger validation.
 
 ### Expected Outputs
 
@@ -74,14 +76,15 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| VerifiedLedgerOperationRegistry | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Validated by the local prerequisite gate |
-| VerifiedLedgerAccountDetail | `consumes` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS | Validated external AccountDetail contract |
-| VerifiedLedgerTransactionDetail | `consumes` | DM-LEDGER-TRANSACTION-CONTRACTS | Validated external TransactionDetail contract |
-| LedgerIngestContractPrerequisite | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Upstream gate evidence |
-| FrozenLedgerRecordRequest | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Frozen INGEST public request |
+| VerifiedLedgerOperationRegistry | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Validated by the prerequisite gate |
+| VerifiedLedgerAccountDetail | `consumes` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS | Validated external AccountDetail |
+| VerifiedLedgerTransactionDetail | `consumes` | DM-LEDGER-TRANSACTION-CONTRACTS | Validated external TransactionDetail |
+| LedgerIngestContractPrerequisite | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Twelve-case upstream proof |
+| FrozenLedgerRecordRequest | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Exact persisted released request envelope |
+| LedgerImmutableVerification | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Comparison tuple owned by the commit saga |
 | LedgerContractClient.GetAccountAsync | `produces` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS | Public account lookup |
-| LedgerContractClient.RecordTransactionAsync | `produces` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Public idempotent write |
-| LedgerContractClient.GetTransactionAsync | `produces` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Public canonical verification |
+| LedgerContractClient.RecordTransactionAsync | `produces` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Exact public idempotent write |
+| LedgerContractClient.GetTransactionAsync | `produces` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Public IncludeHistory=false verification read |
 
 ### Verification
 
@@ -109,6 +112,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `bead-ref` -> `bd-2sg` (verified)
 - `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): The client consumes FrozenLedgerRecordRequest and stable INGEST compatibility errors.
 - `depends-on:compile` -> [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md): The prerequisite gate proves every operation and contract consumed by the client.
+- `depends-on:compile` -> [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](../tasks/ledger-evidence-contract-correction.md): The client consumes the corrected exact public frozen request and verification tuple.
 - `governed-by` -> DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor
 - `implements` -> FR-INGEST-APPROVED-BATCH-COMMIT: Commit approved candidates through public LEDGER operations
 - `verifies` -> TC-INGEST-LEDGER-PUBLIC-CONFORMANCE: Verify INGEST uses only the public LEDGER contract

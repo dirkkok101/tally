@@ -83,6 +83,15 @@
       "created_at": "2026-07-18T12:56:24.4112574+00:00"
     }
   ],
+  "links": [
+    {
+      "id": "01KYCRZF8RDZ1NB1ANBF4T5RKF",
+      "target_type": "use_case",
+      "target": "UC-INGEST-001",
+      "rel": "see-also",
+      "created_at": "2026-07-25T13:56:01.9461029+00:00"
+    }
+  ],
   "recipe_items": [
     {
       "id": "01KXTMS8JV350ZZF21PYFV32SP",
@@ -145,14 +154,14 @@
       "created_at": "2026-07-18T12:56:24.4112574+00:00"
     },
     {
-      "id": "01KXTMS8JW21RYRKDPJASRBVCC",
+      "id": "01KYCRWA8ZE8NFPDCSFW525CE4",
       "kind": "constraint",
       "text": [
-        "The test fails loudly with a safe diagnostic when the external private fixture manifest is unavailable."
+        "The test fails loudly with a metadata-only diagnostic when the external private fixture manifest is unavailable."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-25T13:54:18.5272400+00:00"
     },
     {
       "id": "01KXTMS8JWP9X27XTMTRYD29HG",

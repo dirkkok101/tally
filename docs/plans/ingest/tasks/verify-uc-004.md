@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-VERIFY-UC-004`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `ready`
+- **State:** `planned`
 - **Priority:** `0`
 - **Sort Order:** `60`
 - **Dialect:** `default`
@@ -84,7 +84,7 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Attach safe batch/candidate IDs and public canonical counts for each replay/overlap outcome. | `true` |
+| `test-evidence` | Attach batchId and candidateId and public canonical counts for each replay/overlap outcome. | `true` |
 
 ## Bead References
 

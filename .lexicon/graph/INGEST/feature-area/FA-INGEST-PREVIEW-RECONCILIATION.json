@@ -4,7 +4,7 @@
   "ref_code": "FA-INGEST-PREVIEW-RECONCILIATION",
   "name": "Preview and Reconciliation",
   "description": [
-    "Source snapshotting, account validation, normalization, source-record accounting, controls, exact replay, overlap blocking, and immutable manifest creation."
+    "Source snapshotting, account validation, normalization, source-record accounting, controls, Exact Replay, overlap blocking, and immutable manifest creation."
   ],
   "created_at": "2026-07-18T12:06:14.5820325+00:00",
   "links": [

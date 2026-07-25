@@ -3,6 +3,8 @@
   "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
   "condition": "At discovery and design, if machine-readable exports from both banks cover all three initial accounts and every required canonical field, defer PDF and Excel parsing and adopt the normalized CSV path.",
   "monitored": 1,
-  "evaluation_state": "unassessed",
+  "evaluation_state": "clear",
+  "evaluation_evidence": "Current INGEST discovery and owner evidence cover three PDF fixtures in two variants; no machine-readable export set covering all three initial accounts is recorded, so the normalized-export deferral condition is false.",
+  "evaluated_at": "2026-07-25T13:47:11.5623995+00:00",
   "created_at": "2026-07-18T09:45:07.4549478+00:00"
 }

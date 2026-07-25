@@ -2,7 +2,7 @@
   "id": "01KXT9WAJ7NS92S088KBD2HVHV",
   "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
   "ref_code": "OQ-INGEST-5",
-  "question": "Which completeness and reconciliation evidence does each format expose?",
+  "question": "Which completeness and Reconciliation Evidence does each format expose?",
   "context": [
     "Resolved by executable reconciliation of every initial fixture. The graph retains only structural controls and Boolean conclusions, never raw financial values."
   ],

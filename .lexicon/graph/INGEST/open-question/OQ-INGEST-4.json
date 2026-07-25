@@ -2,13 +2,16 @@
   "id": "01KXT9WA99RY6Z0CCPQKCGAETE",
   "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
   "ref_code": "OQ-INGEST-4",
-  "question": "What constitutes stable source-row identity across repeated files, overlapping statement windows, corrected statements, and files renamed by the owner?",
+  "question": "What constitutes stable Source Row Identity across repeated files, overlapping statement windows, corrected statements, and files renamed by the owner?",
   "context": [
     "Fixture evidence disproves tuple-only identity: no explicit source transaction ID is present and one statement repeats a date-description-amount tuple. Content fingerprint plus row ordinal handles exact-file replay, but overlapping and corrected statement behavior still requires representative fixtures and remains open."
   ],
-  "status": "open",
+  "status": "deferred",
+  "decision": [
+    "V1 claims no cross-file transaction identity. Exact source replay is automatic; any different source with an overlapping account and date window blocks. Future identity-grade evidence may reopen and supersede this rule, but it does not block the fail-closed v1 design."
+  ],
   "owner": "INGEST design and future fixture evidence",
-  "disposition": "unspecified",
+  "disposition": "non_blocking",
   "created_at": "2026-07-18T09:45:50.1228908+00:00",
   "links": [
     {

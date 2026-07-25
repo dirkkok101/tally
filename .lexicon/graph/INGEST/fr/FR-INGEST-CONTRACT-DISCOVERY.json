@@ -20,7 +20,7 @@
     "every statement workflow uses compatible structured operations and predictable recovery"
   ],
   "acceptance_criteria": [
-    "Given a compatible Tally executable, when the client requests INGEST help or schema discovery, then it returns the versioned operations preview, inspect, approve, commit, resume, status, abandon, and cleanup with their input/result schemas, supported Format Variants, safe limits, stable errors, and exit categories without reading a source or mutating LEDGER.",
+    "Given a compatible Tally executable, when the client requests INGEST help or schema discovery, then it returns the versioned operations preview, inspect, approve, commit, resume, status, abandon, and cleanup with their input/result schemas, supported Format Variants, numeric resource limits, stable errors, and exit categories without reading a source or mutating LEDGER.",
     "Given any INGEST operation, when a valid request completes, then exactly one structured business result is written to stdout, metadata-only diagnostics use stderr, and the documented exit category matches the result.",
     "Given an unknown operation, malformed input, or forbidden unknown field, when invocation is attempted, then INGEST returns a stable usage or validation error before source processing or LEDGER mutation.",
     "Given incompatible INGEST, adapter, or LEDGER contract versions, when compatibility is checked, then INGEST returns a stable compatibility failure before source processing or mutation."

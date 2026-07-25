@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-PREVIEW-WORKFLOW`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-02-PREVIEW-REVIEW`
-- **State:** `ready`
+- **State:** `planned`
 - **Priority:** `0`
 - **Sort Order:** `30`
 - **Dialect:** `default`
@@ -22,7 +22,7 @@ Deliver ingest.preview as a deterministic no-LEDGER-mutation workflow that persi
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with exact replay and blocked overlap | `design_decision` | `governed-by` | `true` |
+| DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap | `design_decision` | `governed-by` | `true` |
 | FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval | `requirement` | `implements` | `true` |
 | FR-INGEST-STATEMENT-PREVIEW: Preview a statement without financial mutation | `requirement` | `implements` | `true` |
 | TC-INGEST-STATEMENT-PREVIEW-CONTRACT: Verify deterministic statement preview | `test_case` | `verifies` | `true` |
@@ -31,20 +31,21 @@ Deliver ingest.preview as a deterministic no-LEDGER-mutation workflow that persi
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Preview persists one atomic manifest transaction through IngestDatabase. |
 | [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](../tasks/gate-int-format-adapters.md) | `compile` | Preview consumes only the qualified StatementAdapterRegistry. |
 | [TASK-INGEST-LEDGER-PUBLIC-CLIENT](../tasks/ledger-public-client.md) | `compile` | Preview validates the selected account through LedgerContractClient.GetAccountAsync. |
 | [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md) | `compile` | Preview composes the deterministic identity, normalization, reconciliation, manifest, and overlap policies. |
-| [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Consumes IngestOperationContracts. |
+| [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md) | `compile` | Preview persists complete batch-addressable failure metadata through the V002 store. |
+| [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Preview persists through IngestDatabase. |
+| [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Preview consumes IngestOperationContracts. |
 
 ## Recipe
 
 ### Acceptance Checks
 
 - Preview validates contract versions, selected account identifier, path schema, and advertised limits before opening the source; LedgerContractClient confirms exactly one active ZAR account and statement metadata must agree without inference.
-- CallerOwnedSourceReader opens read-only, captures safe before/after metadata, reads no more than the byte limit into one immutable buffer, computes SHA-256 over those exact bytes, and returns source_changed if metadata or bytes change.
+- CallerOwnedSourceReader opens read-only, captures file size and last-write timestamp before and after reading, reads no more than the byte limit into one immutable buffer, computes SHA-256 over those exact bytes, and returns source_changed if metadata or bytes change.
 - PreviewStateStore checks the complete Exact Replay key first: Source Fingerprint, selected account, adapter version, and LEDGER contract version. An active or completed match returns the prior manifest, status, or receipt without reparsing or mutation; any changed key component requires a new preview before overlap evaluation.
-- A new source runs the real extractor and exactly one registered adapter, normalizes/accounts/reconciles every record, blocks any ambiguity or overlap, canonicalizes the complete ordered manifest, and persists batch, revision, records, candidates, controls, and safe status in one INGEST transaction.
+- A new source runs the real extractor and exactly one registered adapter, normalizes/accounts/reconciles every record, blocks any ambiguity or overlap, canonicalizes the complete ordered manifest, and persists batch, revision, records, candidates, controls, and metadata-only status in one INGEST transaction.
 - Success returns stable batchId and manifestRevisionId; any failure creates no committable manifest; every path leaves the source byte-for-byte unchanged and invokes no ledger.transaction.record.
 - PreviewOperationModule exposes a typed handler binding for ingest.preview but is not added to the global registry until GATE-INT-PUBLIC-CONTRACT.
 
@@ -69,7 +70,7 @@ Deliver ingest.preview as a deterministic no-LEDGER-mutation workflow that persi
 
 ### Notes
 
-None recorded.
+- Construct FrozenLedgerRecordRequest and InitialEvidence only through the corrected IngestIdentity derivation; append every batch-addressable stable preview failure as a complete BatchErrorEvent in the same transaction as the non-committable batch state.
 
 ### File Contracts
 
@@ -98,18 +99,19 @@ None recorded.
 | OverlapPolicy | `consumes` | DM-INGEST-IMPORT-MANIFEST |  |
 | PreviewStateStore | `produces` | DM-INGEST-STATE-STORE |  |
 | PreviewOperationModule | `produces` | DM-INGEST-OPERATION-CONTRACTS |  |
+| BatchErrorEventStore.AppendAsync | `consumes` | DM-INGEST-ERROR-STATUS-CONTRACTS | Append complete safe errors in the preview transaction |
 
 ### Verification
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~PreviewWorkflowTests` | exit 0; at least 18 account, source-change, exact-replay, unsupported, ambiguity, overlap, reconciliation, atomic-persistence, no-Ledger-mutation, and source-preservation cases are discovered and 0 tests fail | `true` | 600 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~PreviewWorkflowTests` | exit 0; at least 18 account, source-change, Exact Replay, unsupported, ambiguity, overlap, reconciliation, atomic-persistence, no-Ledger-mutation, and source-preservation cases are discovered and 0 tests fail | `true` | 600 |
 
 ### Review Gates
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Attach stable manifest digests, exact replay, atomic rollback, source hash, and no-Ledger-write evidence. | `true` |
+| `test-evidence` | Attach stable manifest digests, Exact Replay, atomic rollback, source hash, and no-Ledger-write evidence. | `true` |
 | `branch-review` | Reviewer traces every preview step to the public account, format, domain, and state interfaces. | `true` |
 
 ## Bead References
@@ -123,12 +125,13 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1of` (verified)
-- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Consumes IngestOperationContracts.
+- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Preview consumes IngestOperationContracts.
 - `depends-on:compile` -> [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](../tasks/gate-int-format-adapters.md): Preview consumes only the qualified StatementAdapterRegistry.
 - `depends-on:compile` -> [TASK-INGEST-LEDGER-PUBLIC-CLIENT](../tasks/ledger-public-client.md): Preview validates the selected account through LedgerContractClient.GetAccountAsync.
 - `depends-on:compile` -> [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md): Preview composes the deterministic identity, normalization, reconciliation, manifest, and overlap policies.
-- `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md): Preview persists one atomic manifest transaction through IngestDatabase.
-- `governed-by` -> DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with exact replay and blocked overlap
+- `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md): Preview persists through IngestDatabase.
+- `depends-on:compile` -> [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md): Preview persists complete batch-addressable failure metadata through the V002 store.
+- `governed-by` -> DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap
 - `implements` -> FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval
 - `implements` -> FR-INGEST-STATEMENT-PREVIEW: Preview a statement without financial mutation
 - `verifies` -> TC-INGEST-STATEMENT-PREVIEW-CONTRACT: Verify deterministic statement preview

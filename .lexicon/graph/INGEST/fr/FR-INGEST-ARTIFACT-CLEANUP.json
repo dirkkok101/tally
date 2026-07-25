@@ -20,8 +20,8 @@
     "private artifacts do not accumulate and resumable state is not destroyed accidentally"
   ],
   "acceptance_criteria": [
-    "Given preview, commit, failure, or abandonment reaches a safe boundary, when temporary extraction data is no longer required, then INGEST removes it deterministically and retains no caller-owned source copy.",
-    "Given a crash left known temporary artifacts, when the next safe INGEST invocation starts, then cleanup identifies and removes only orphaned INGEST temporaries without touching sources, manifests required for resume, receipts, or LEDGER data.",
+    "Given preview, commit, failure, or abandonment reaches a boundary where no unresolved candidate can still require temporary extraction data, when cleanup runs, then INGEST removes those temporaries deterministically and retains no caller-owned source copy.",
+    "Given a crash left known temporary artifacts, when the next INGEST invocation acquires the artifact-cleanup lock before workflow processing, then cleanup identifies and removes only orphaned INGEST temporaries without touching sources, manifests required for resume, receipts, or LEDGER data.",
     "Given an incomplete batch, when the owner explicitly abandons it, then INGEST records abandonment, prevents future commit or resume for that manifest revision, removes disposable temporaries, leaves prior canonical transactions unchanged, and leaves the source untouched.",
     "Given an incomplete manifest or receipt still required for review or resume, when cleanup is requested, then INGEST rejects destructive cleanup with a stable retained-for-recovery result.",
     "Given a completed metadata-only receipt or safely abandoned batch, when the owner explicitly requests cleanup, then INGEST removes only the selected retained INGEST artifacts and reports the result without deleting any canonical transaction or caller-owned source."

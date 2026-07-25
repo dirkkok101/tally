@@ -25,9 +25,7 @@ Provide an owner-only ingest.db with deterministic schema evolution and no acces
 | DD-INGEST-APPLICATION-ARCHITECTURE: Single-process vertical slices with isolated ingestion state | `design_decision` | `governed-by` | `true` |
 | DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling | `design_decision` | `governed-by` | `true` |
 | DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction | `design_decision` | `governed-by` | `true` |
-| DIAG-INGEST-STATE-ER: INGEST durable state model | `design_diagram` | `touches` | `false` |
 | DM-INGEST-STATE-STORE: IngestStateStore | `data_model` | `touches` | `true` |
-| FA-INGEST-RECOVERY-CLEANUP: Recovery and Cleanup | `feature_area` | `touches` | `false` |
 | FR-INGEST-ARTIFACT-CLEANUP: Abandon and clean up ingestion artifacts safely | `requirement` | `implements` | `true` |
 | NFR-INGEST-LOCAL-DATA-PROTECTION: Protect local statement and ingestion data | `nfr` | `satisfies` | `true` |
 | TC-INGEST-ARTIFACT-PROTECTION: Verify source and artifact privacy boundaries | `test_case` | `verifies` | `true` |
@@ -121,9 +119,7 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `governed-by` -> DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction
 - `implements` -> FR-INGEST-ARTIFACT-CLEANUP: Abandon and clean up ingestion artifacts safely
 - `satisfies` -> NFR-INGEST-LOCAL-DATA-PROTECTION: Protect local statement and ingestion data
-- `touches` -> DIAG-INGEST-STATE-ER: INGEST durable state model
 - `touches` -> DM-INGEST-STATE-STORE: IngestStateStore
-- `touches` -> FA-INGEST-RECOVERY-CLEANUP: Recovery and Cleanup
 - `verifies` -> TC-INGEST-ARTIFACT-PROTECTION: Verify source and artifact privacy boundaries
 - `verifies` -> TC-INGEST-STATE-STORE-CONFORMANCE: Verify INGEST SQLite state and retention
 

@@ -1,0 +1,9 @@
+{
+  "id": "01KYCZ3R8BC75NRHDFQKDRZ33P",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "version": "0.9",
+  "changes": [
+    "Reconciled PLAN-INGEST-V1 authority after blocked-frontier review: reference-bearing accepted and exact-duplicate outcomes require canonical Ledger round-trip evidence, reference-free conflicted and rejected outcomes remain terminal without fabricated references, exact replay identity excludes manifest schema, and documented sensitive CLI fields remain owner-invoked only. Full review 20260725T153209233Z-318c6161 passed across 80 targets and 19 leaves with zero findings."
+  ],
+  "created_at": "2026-07-25T15:43:13.6758526+00:00"
+}

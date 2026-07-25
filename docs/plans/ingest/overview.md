@@ -9,14 +9,14 @@
 
 | Ref | Title | Status | Coverage | Sub-Plans | Tasks |
 |---|---|---|---|---:|---:|
-| Statement Ingestion v1 implementation | Statement Ingestion v1 implementation | `active` | `warn` | 5 | 25 |
+| Statement Ingestion v1 implementation | Statement Ingestion v1 implementation | `active` | `warn` | 5 | 27 |
 
 ## PLAN-INGEST-V1: Statement Ingestion v1 implementation
 
 - **Ref:** `PLAN-INGEST-V1`
 - **Status:** `active`
 - **Created:** `2026-07-18T12:37:46.5229149+00:00`
-- **Updated:** `2026-07-18T13:19:04.8128998+00:00`
+- **Updated:** `2026-07-18T12:37:46.5229149+00:00`
 
 ### Description
 
@@ -24,9 +24,9 @@ Greenfield implementation plan from MD-INGEST-MASTER; 0% of designed application
 C1: Run inside the self-contained Tally CLI without a required daemon, cloud parser, bank API, or separate service. The first release supports only formats evidenced by the three initial accounts.
 C2: Discover and invoke versioned public LEDGER operations and schemas. INGEST must never open the ledger database directly, call private implementation APIs, or duplicate canonical financial validation.
 C3: Keep source files, temporary extraction data, candidate batches, manifests, and receipts local and owner-only. Persisted directories use mode 0700 and files mode 0600 where the platform supports them; logs contain metadata rather than statement payloads; temporary artifacts have deterministic cleanup.
-C4: No candidate transaction may be committed while a required mapping, required field, reconciliation check, or duplicate conflict remains unresolved. LEDGER mutation requires an explicit commit step after preview.
+C4: No Candidate Transaction may be committed while a required mapping, required field, reconciliation check, or duplicate conflict remains unresolved. LEDGER mutation requires an explicit commit step after preview.
 C5: Currency, signed amount, transaction date, and account mapping follow the resolved LEDGER evidence gates OQ-LEDGER-1 through OQ-LEDGER-4. An adapter must fail closed rather than invent a missing or ambiguous value.
-C6: Every candidate batch records its source-adapter version and the discovered LEDGER contract version. An unsupported adapter version, format variant, or LEDGER contract fails before mutation.
+C6: Every candidate batch records its Source Adapter version and the discovered LEDGER contract version. An unsupported adapter version, Format Variant, or LEDGER contract fails before mutation.
 C7: Do not introduce a generic parser abstraction beyond representative fixtures from the initial accounts. Unsupported or changed layouts are reported explicitly and remain uncommitted.
 C8: Preview requires the caller to supply one active canonical LEDGER account identity. Statement metadata validates that selection; missing, conflicting, multi-account, or ambiguous metadata blocks commit rather than selecting an account from a filename or masked text.
 C9: Commit uses only the exact immutable Import Manifest revision explicitly approved after preview. Source-derived amount, currency, date, description, and provenance cannot be edited inside INGEST; any changed mapping or eligibility decision produces a new preview and manifest revision.
@@ -40,7 +40,7 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 
 | Ref | Title | Sort | Tasks |
 |---|---|---:|---:|
-| [SP-INGEST-00-FOUNDATION](sub-plans/00-foundation.md) | Public prerequisites and local foundations | 0 | 4 |
+| [SP-INGEST-00-FOUNDATION](sub-plans/00-foundation.md) | Public prerequisites and local foundations | 0 | 6 |
 | [SP-INGEST-01-FORMAT-CORE](sub-plans/01-format-core.md) | Qualified PDF extraction and adapters | 1 | 4 |
 | [SP-INGEST-02-PREVIEW-REVIEW](sub-plans/02-preview-review.md) | Preview, reconciliation, and approval | 2 | 4 |
 | [SP-INGEST-03-COMMIT-RECOVERY](sub-plans/03-commit-recovery.md) | Candidate commit and durable recovery | 3 | 4 |
@@ -51,28 +51,30 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | Ref | Title | State | Priority | Sub-Plan |
 |---|---|---|---:|---|
 | [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](tasks/gate-int-ledger-contract.md) | Prove the public LEDGER prerequisite | `ready` | 0 | SP-INGEST-00-FOUNDATION: Public prerequisites and local foundations |
-| [TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES](tasks/gate-evidence-private-fixtures.md) | Prepare and validate private statement evidence | `ready` | 0 | SP-INGEST-00-FOUNDATION: Public prerequisites and local foundations |
-| [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | Define the INGEST operation and business contracts | `ready` | 0 | SP-INGEST-00-FOUNDATION: Public prerequisites and local foundations |
+| [TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES](tasks/gate-evidence-private-fixtures.md) | Prepare and validate private statement evidence | `planned` | 0 | SP-INGEST-00-FOUNDATION: Public prerequisites and local foundations |
+| [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | Define the INGEST operation and business contracts | `planned` | 0 | SP-INGEST-00-FOUNDATION: Public prerequisites and local foundations |
 | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | Create the protected INGEST SQLite foundation | `ready` | 0 | SP-INGEST-00-FOUNDATION: Public prerequisites and local foundations |
-| [TASK-INGEST-PDF-EXTRACTION](tasks/pdf-extraction.md) | Implement bounded in-process PDF extraction | `ready` | 0 | SP-INGEST-01-FORMAT-CORE: Qualified PDF extraction and adapters |
+| [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](tasks/ledger-evidence-contract-correction.md) | Align frozen Ledger evidence with the released contract | `planned` | 0 | SP-INGEST-00-FOUNDATION: Public prerequisites and local foundations |
+| [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md) | Add durable errors and status snapshot schema | `planned` | 0 | SP-INGEST-00-FOUNDATION: Public prerequisites and local foundations |
+| [TASK-INGEST-PDF-EXTRACTION](tasks/pdf-extraction.md) | Implement bounded in-process PDF extraction | `planned` | 0 | SP-INGEST-01-FORMAT-CORE: Qualified PDF extraction and adapters |
 | [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | Implement the qualified layout A adapter | `ready` | 0 | SP-INGEST-01-FORMAT-CORE: Qualified PDF extraction and adapters |
 | [TASK-INGEST-ADAPTER-LAYOUT-B](tasks/adapter-layout-b.md) | Implement the qualified layout B adapter | `ready` | 0 | SP-INGEST-01-FORMAT-CORE: Qualified PDF extraction and adapters |
-| [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](tasks/gate-int-format-adapters.md) | Prove the qualified adapter set | `ready` | 0 | SP-INGEST-01-FORMAT-CORE: Qualified PDF extraction and adapters |
-| [TASK-INGEST-LEDGER-PUBLIC-CLIENT](tasks/ledger-public-client.md) | Implement the concrete public LEDGER client | `ready` | 0 | SP-INGEST-02-PREVIEW-REVIEW: Preview, reconciliation, and approval |
+| [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](tasks/gate-int-format-adapters.md) | Prove the qualified adapter set | `planned` | 0 | SP-INGEST-01-FORMAT-CORE: Qualified PDF extraction and adapters |
+| [TASK-INGEST-LEDGER-PUBLIC-CLIENT](tasks/ledger-public-client.md) | Implement the concrete public LEDGER client | `planned` | 0 | SP-INGEST-02-PREVIEW-REVIEW: Preview, reconciliation, and approval |
 | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | Implement deterministic identity and reconciliation policies | `ready` | 0 | SP-INGEST-02-PREVIEW-REVIEW: Preview, reconciliation, and approval |
-| [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | Implement passive preview and immutable manifest persistence | `ready` | 0 | SP-INGEST-02-PREVIEW-REVIEW: Preview, reconciliation, and approval |
-| [TASK-INGEST-REVIEW-WORKFLOW](tasks/review-workflow.md) | Implement immutable inspect and approval | `ready` | 1 | SP-INGEST-02-PREVIEW-REVIEW: Preview, reconciliation, and approval |
-| [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | Implement the idempotent candidate commit saga | `ready` | 0 | SP-INGEST-03-COMMIT-RECOVERY: Candidate commit and durable recovery |
-| [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md) | Implement deterministic interrupted-commit resume | `ready` | 0 | SP-INGEST-03-COMMIT-RECOVERY: Candidate commit and durable recovery |
-| [TASK-INGEST-STATUS-WORKFLOW](tasks/status-workflow.md) | Implement safe batch status and failure reporting | `ready` | 1 | SP-INGEST-03-COMMIT-RECOVERY: Candidate commit and durable recovery |
-| [TASK-INGEST-ABANDON-CLEANUP](tasks/abandon-cleanup.md) | Implement safe abandon, compaction, and cleanup | `ready` | 1 | SP-INGEST-03-COMMIT-RECOVERY: Candidate commit and durable recovery |
-| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | Wire and prove the complete INGEST public contract | `ready` | 0 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
-| [TASK-INGEST-GATE-SECURITY](tasks/gate-security.md) | Validate INGEST local financial-data security | `ready` | 0 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
-| [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md) | Verify preview and qualification workflow | `ready` | 1 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
-| [TASK-INGEST-VERIFY-UC-002](tasks/verify-uc-002.md) | Verify immutable review and approval workflow | `ready` | 1 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
-| [TASK-INGEST-VERIFY-UC-003](tasks/verify-uc-003.md) | Verify commit and resume workflow | `ready` | 0 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
-| [TASK-INGEST-VERIFY-UC-004](tasks/verify-uc-004.md) | Verify replay and overlap safety workflow | `ready` | 0 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
-| [TASK-INGEST-VERIFY-UC-005](tasks/verify-uc-005.md) | Verify failure handling and cleanup workflow | `ready` | 1 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
+| [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | Implement passive preview and immutable manifest persistence | `planned` | 0 | SP-INGEST-02-PREVIEW-REVIEW: Preview, reconciliation, and approval |
+| [TASK-INGEST-REVIEW-WORKFLOW](tasks/review-workflow.md) | Implement immutable inspect and approval | `planned` | 1 | SP-INGEST-02-PREVIEW-REVIEW: Preview, reconciliation, and approval |
+| [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | Implement the idempotent candidate commit saga | `planned` | 0 | SP-INGEST-03-COMMIT-RECOVERY: Candidate commit and durable recovery |
+| [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md) | Implement deterministic interrupted-commit resume | `planned` | 0 | SP-INGEST-03-COMMIT-RECOVERY: Candidate commit and durable recovery |
+| [TASK-INGEST-STATUS-WORKFLOW](tasks/status-workflow.md) | Implement safe batch status and failure reporting | `planned` | 1 | SP-INGEST-03-COMMIT-RECOVERY: Candidate commit and durable recovery |
+| [TASK-INGEST-ABANDON-CLEANUP](tasks/abandon-cleanup.md) | Implement safe abandon, compaction, and cleanup | `planned` | 1 | SP-INGEST-03-COMMIT-RECOVERY: Candidate commit and durable recovery |
+| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | Wire and prove the complete INGEST public contract | `planned` | 0 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
+| [TASK-INGEST-GATE-SECURITY](tasks/gate-security.md) | Validate INGEST local financial-data security | `planned` | 0 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
+| [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md) | Verify preview and qualification workflow | `planned` | 1 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
+| [TASK-INGEST-VERIFY-UC-002](tasks/verify-uc-002.md) | Verify immutable review and approval workflow | `planned` | 1 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
+| [TASK-INGEST-VERIFY-UC-003](tasks/verify-uc-003.md) | Verify commit and resume workflow | `planned` | 0 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
+| [TASK-INGEST-VERIFY-UC-004](tasks/verify-uc-004.md) | Verify replay and overlap safety workflow | `planned` | 0 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
+| [TASK-INGEST-VERIFY-UC-005](tasks/verify-uc-005.md) | Verify failure handling and cleanup workflow | `planned` | 1 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
 | [TASK-INGEST-VERIFY-UC-006](tasks/verify-uc-006.md) | Verify agent contract discovery and invocation | `ready` | 1 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
 | [TASK-INGEST-GATE-MODULE](tasks/gate-module.md) | Complete the INGEST v1 module gate | `ready` | 0 | SP-INGEST-04-VERIFICATION: Public integration and workflow gates |
 
@@ -82,9 +84,10 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 |---|---|---|---|
 | [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | [TASK-INGEST-REVIEW-WORKFLOW](tasks/review-workflow.md) | `compile` | Commit consumes exact immutable approvals and manifests from ReviewStateStore. |
 | [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | [TASK-INGEST-LEDGER-PUBLIC-CLIENT](tasks/ledger-public-client.md) | `compile` | The saga invokes only LedgerContractClient record/get methods. |
-| [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `compile` | CommitStateStore and BatchCommitLock require protected ingest.db and artifact primitives. |
-| [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | `compile` | Commit revalidates stable candidate identity and canonical manifest digest. |
-| [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `compile` | Consumes ImportReceipt and FrozenLedgerRecordRequest. |
+| [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md) | `compile` | Commit stop frontiers append complete stable errors atomically through the V002 store. |
+| [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `compile` | Commit consumes ImportReceipt and FrozenLedgerRecordRequest. |
+| [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](tasks/ledger-evidence-contract-correction.md) | `compile` | Commit consumes LedgerImmutableVerification. |
+| [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `compile` | Commit persists through IngestDatabase. |
 | [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | `compile` | Consumes PreviewOperationModule and qualified format/state dependencies. |
 | [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | [TASK-INGEST-REVIEW-WORKFLOW](tasks/review-workflow.md) | `compile` | Consumes ReviewOperationModule. |
 | [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | `compile` | Consumes CommitOperationModule. |
@@ -95,6 +98,7 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](tasks/gate-int-format-adapters.md) | `compile` | Consumes StatementAdapterRegistry. |
 | [TASK-INGEST-LEDGER-PUBLIC-CLIENT](tasks/ledger-public-client.md) | [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](tasks/gate-int-ledger-contract.md) | `compile` | The prerequisite gate proves every operation and contract consumed by the client. |
 | [TASK-INGEST-LEDGER-PUBLIC-CLIENT](tasks/ledger-public-client.md) | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `compile` | The client consumes FrozenLedgerRecordRequest and stable INGEST compatibility errors. |
+| [TASK-INGEST-LEDGER-PUBLIC-CLIENT](tasks/ledger-public-client.md) | [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](tasks/ledger-evidence-contract-correction.md) | `compile` | The client consumes the corrected exact public frozen request and verification tuple. |
 | [TASK-INGEST-PDF-EXTRACTION](tasks/pdf-extraction.md) | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `compile` | Extractor failures use the stable IngestError contract. |
 | [TASK-INGEST-PDF-EXTRACTION](tasks/pdf-extraction.md) | [TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES](tasks/gate-evidence-private-fixtures.md) | `compile` | Fixture-dependent extractor tests consume the validated private expectation manifest. |
 | [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | [TASK-INGEST-PDF-EXTRACTION](tasks/pdf-extraction.md) | `compile` | The adapter implements IStatementAdapter over PdfDocumentEvidence and uses the private fixture helper. |
@@ -104,20 +108,27 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | [TASK-INGEST-GATE-SECURITY](tasks/gate-security.md) | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `compile` | Consumes IngestArtifactProtection.EnsureOwnerOnly. |
 | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `compile` | Pure policies construct the canonical manifest and error contract records. |
 | [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md) | [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | `compile` | Resume reuses CandidateCommitSaga, BatchCommitLock, and CommitStateStore. |
+| [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md) | [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md) | `compile` | Resume failures append complete stable errors through the V002 store. |
 | [TASK-INGEST-ADAPTER-LAYOUT-B](tasks/adapter-layout-b.md) | [TASK-INGEST-PDF-EXTRACTION](tasks/pdf-extraction.md) | `compile` | The adapter implements IStatementAdapter over PdfDocumentEvidence and uses the private fixture helper. |
-| [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `compile` | Preview persists one atomic manifest transaction through IngestDatabase. |
 | [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](tasks/gate-int-format-adapters.md) | `compile` | Preview consumes only the qualified StatementAdapterRegistry. |
 | [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | [TASK-INGEST-LEDGER-PUBLIC-CLIENT](tasks/ledger-public-client.md) | `compile` | Preview validates the selected account through LedgerContractClient.GetAccountAsync. |
 | [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | `compile` | Preview composes the deterministic identity, normalization, reconciliation, manifest, and overlap policies. |
-| [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `compile` | Consumes IngestOperationContracts. |
+| [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md) | `compile` | Preview persists complete batch-addressable failure metadata through the V002 store. |
+| [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `compile` | Preview persists through IngestDatabase. |
+| [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `compile` | Preview consumes IngestOperationContracts. |
 | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](tasks/gate-int-ledger-contract.md) | `compile` | The shared Tally solution and data-root conventions must exist before the separate INGEST store is added. |
 | [TASK-INGEST-STATUS-WORKFLOW](tasks/status-workflow.md) | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `compile` | Status consumes IngestError, BatchStatus, and ImportReceipt contracts. |
-| [TASK-INGEST-STATUS-WORKFLOW](tasks/status-workflow.md) | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `compile` | StatusStateStore reads the V001 INGEST schema. |
+| [TASK-INGEST-STATUS-WORKFLOW](tasks/status-workflow.md) | [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md) | `compile` | Status requires the V002 error events, store generation, and snapshot tables. |
+| [TASK-INGEST-STATUS-WORKFLOW](tasks/status-workflow.md) | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `compile` | Status builds on the protected ingest.db and V001 tables; TASK-INGEST-STATUS-STATE-V002 supplies the corrected error and snapshot extension. |
 | [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md) | [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | UC verification exercises the complete published INGEST contract. |
 | [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md) | [TASK-INGEST-PDF-EXTRACTION](tasks/pdf-extraction.md) | `compile` | Consumes PrivateStatementFixtureSet. |
+| [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](tasks/ledger-evidence-contract-correction.md) | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `compile` | The correction revises the already-landed frozen request contracts. |
+| [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](tasks/ledger-evidence-contract-correction.md) | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | `compile` | The correction extends the already-landed IngestIdentity implementation without concurrent file overlap. |
+| [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](tasks/ledger-evidence-contract-correction.md) | [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](tasks/gate-int-ledger-contract.md) | `compile` | The released Ledger request and evidence shape must be proven before INGEST freezes it. |
 | [TASK-INGEST-ABANDON-CLEANUP](tasks/abandon-cleanup.md) | [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | `compile` | Abandon and compaction consume BatchCommitLock and durable candidate outcomes. |
 | [TASK-INGEST-ABANDON-CLEANUP](tasks/abandon-cleanup.md) | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `compile` | RecoveryStateStore uses protected ingest.db and artifact enforcement. |
 | [TASK-INGEST-ABANDON-CLEANUP](tasks/abandon-cleanup.md) | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `compile` | Consumes ImportReceipt. |
+| [TASK-INGEST-ABANDON-CLEANUP](tasks/abandon-cleanup.md) | [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md) | `compile` | Recovery mutations append complete stable errors and clean V002 snapshots safely. |
 | [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](tasks/gate-int-format-adapters.md) | [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | `compile` | The gate consumes PdfTextLayoutAStatementAdapter. |
 | [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](tasks/gate-int-format-adapters.md) | [TASK-INGEST-ADAPTER-LAYOUT-B](tasks/adapter-layout-b.md) | `compile` | The gate consumes PdfTextLayoutBStatementAdapter. |
 | [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](tasks/gate-int-format-adapters.md) | [TASK-INGEST-PDF-EXTRACTION](tasks/pdf-extraction.md) | `compile` | Consumes PdfStatementTextExtractor.ExtractAsync. |
@@ -125,6 +136,9 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | [TASK-INGEST-REVIEW-WORKFLOW](tasks/review-workflow.md) | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `compile` | Consumes ImportManifestContract. |
 | [TASK-INGEST-REVIEW-WORKFLOW](tasks/review-workflow.md) | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | `compile` | Consumes ManifestCanonicalizer. |
 | [TASK-INGEST-REVIEW-WORKFLOW](tasks/review-workflow.md) | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `compile` | Consumes IngestDatabase. |
+| [TASK-INGEST-REVIEW-WORKFLOW](tasks/review-workflow.md) | [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md) | `compile` | Review mutations append complete stable batch errors through the V002 store. |
+| [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md) | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `compile` | V002 upgrades the protected V001 ingest.db foundation. |
+| [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md) | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `compile` | BatchErrorEventStore persists complete IngestError contract values. |
 | [TASK-INGEST-VERIFY-UC-002](tasks/verify-uc-002.md) | [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | UC verification exercises published preview/inspect/approve/commit operations. |
 | [TASK-INGEST-VERIFY-UC-003](tasks/verify-uc-003.md) | [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | UC verification exercises published commit/resume/status and public Ledger operations. |
 | [TASK-INGEST-VERIFY-UC-004](tasks/verify-uc-004.md) | [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](tasks/gate-int-public-contract.md) | `compile` | UC verification exercises the complete published preview/commit/status contract. |
@@ -144,8 +158,8 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 ### Coverage
 
 - **Status:** `warn`
-- **Required refs:** 106
-- **Covered refs:** 106
+- **Required refs:** 112
+- **Covered refs:** 112
 - **Gaps:** 0
 
 #### Covered References
@@ -169,14 +183,17 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam | `design_decision` | `governed-by` | [TASK-INGEST-ADAPTER-LAYOUT-B](tasks/adapter-layout-b.md) | `true` |
 | DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam | `design_decision` | `governed-by` | [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](tasks/gate-int-format-adapters.md) | `true` |
 | DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor | `design_decision` | `governed-by` | [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](tasks/gate-int-ledger-contract.md) | `true` |
+| DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor | `design_decision` | `governed-by` | [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](tasks/ledger-evidence-contract-correction.md) | `true` |
 | DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor | `design_decision` | `governed-by` | [TASK-INGEST-LEDGER-PUBLIC-CLIENT](tasks/ledger-public-client.md) | `true` |
-| DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with exact replay and blocked overlap | `design_decision` | `governed-by` | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | `true` |
-| DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with exact replay and blocked overlap | `design_decision` | `governed-by` | [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | `true` |
-| DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with exact replay and blocked overlap | `design_decision` | `governed-by` | [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md) | `true` |
-| DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with exact replay and blocked overlap | `design_decision` | `governed-by` | [TASK-INGEST-REVIEW-WORKFLOW](tasks/review-workflow.md) | `true` |
+| DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap | `design_decision` | `governed-by` | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | `true` |
+| DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap | `design_decision` | `governed-by` | [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | `true` |
+| DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap | `design_decision` | `governed-by` | [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md) | `true` |
+| DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap | `design_decision` | `governed-by` | [TASK-INGEST-REVIEW-WORKFLOW](tasks/review-workflow.md) | `true` |
 | DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction | `design_decision` | `governed-by` | [TASK-INGEST-GATE-SECURITY](tasks/gate-security.md) | `true` |
 | DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction | `design_decision` | `governed-by` | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `true` |
+| DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction | `design_decision` | `governed-by` | [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md) | `true` |
 | DIAG-INGEST-BATCH-STATE: Import batch lifecycle | `design_diagram` | `touches` | [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md) | `true` |
+| DM-INGEST-ERROR-STATUS-CONTRACTS: IngestErrorAndStatusContracts | `data_model` | `touches` | [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md) | `true` |
 | DM-INGEST-ERROR-STATUS-CONTRACTS: IngestErrorAndStatusContracts | `data_model` | `touches` | [TASK-INGEST-STATUS-WORKFLOW](tasks/status-workflow.md) | `true` |
 | DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence | `data_model` | `touches` | [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | `true` |
 | DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence | `data_model` | `touches` | [TASK-INGEST-ADAPTER-LAYOUT-B](tasks/adapter-layout-b.md) | `true` |
@@ -185,18 +202,20 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | DM-INGEST-IMPORT-MANIFEST: ImportBatchAndManifestRevision | `data_model` | `touches` | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | `true` |
 | DM-INGEST-IMPORT-MANIFEST: ImportBatchAndManifestRevision | `data_model` | `touches` | [TASK-INGEST-REVIEW-WORKFLOW](tasks/review-workflow.md) | `true` |
 | DM-INGEST-IMPORT-RECEIPT: ImportReceiptAndCandidateOutcome | `data_model` | `touches` | [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md) | `true` |
+| DM-INGEST-LEDGER-COMMIT-CONTRACT: LedgerCommitContractSnapshot | `data_model` | `touches` | [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](tasks/ledger-evidence-contract-correction.md) | `true` |
 | DM-INGEST-OPERATION-CONTRACTS: IngestOperationContracts | `data_model` | `touches` | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `true` |
 | DM-INGEST-STATE-STORE: IngestStateStore | `data_model` | `touches` | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `true` |
+| DM-INGEST-STATE-STORE: IngestStateStore | `data_model` | `touches` | [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md) | `true` |
 | FA-INGEST-CONTRACT-FORMATS: Contract and Formats | `feature_area` | `touches` | [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](tasks/gate-int-format-adapters.md) | `true` |
 | FA-INGEST-RECOVERY-CLEANUP: Recovery and Cleanup | `feature_area` | `touches` | [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md) | `true` |
 | FR-INGEST-APPROVED-BATCH-COMMIT: Commit approved candidates through public LEDGER operations | `requirement` | `implements` | [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | `true` |
 | FR-INGEST-ARTIFACT-CLEANUP: Abandon and clean up ingestion artifacts safely | `requirement` | `implements` | [TASK-INGEST-ABANDON-CLEANUP](tasks/abandon-cleanup.md) | `true` |
 | FR-INGEST-CONTRACT-DISCOVERY: Discover the INGEST command contract | `requirement` | `implements` | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `true` |
 | FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit | `requirement` | `implements` | [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | `true` |
-| FR-INGEST-FAILURE-STATUS: Report blocked and failed ingestion safely | `requirement` | `implements` | [TASK-INGEST-STATUS-WORKFLOW](tasks/status-workflow.md) | `true` |
+| FR-INGEST-FAILURE-STATUS: Report blocked and failed ingestion safely | `requirement` | `implements` | [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md) | `true` |
 | FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts | `requirement` | `implements` | [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | `true` |
 | FR-INGEST-MANIFEST-REVIEW: Review and approve an immutable manifest revision | `requirement` | `implements` | [TASK-INGEST-REVIEW-WORKFLOW](tasks/review-workflow.md) | `true` |
-| FR-INGEST-REPLAY-OVERLAP-SAFETY: Handle exact replay and uncertain overlap safely | `requirement` | `implements` | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | `true` |
+| FR-INGEST-REPLAY-OVERLAP-SAFETY: Handle Exact Replay and uncertain overlap safely | `requirement` | `implements` | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | `true` |
 | FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval | `requirement` | `implements` | [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | `true` |
 | FR-INGEST-STATEMENT-PREVIEW: Preview a statement without financial mutation | `requirement` | `implements` | [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | `true` |
 | FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants | `requirement` | `implements` | [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | `true` |
@@ -209,7 +228,6 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity | `nfr` | `satisfies` | [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](tasks/gate-int-format-adapters.md) | `true` |
 | NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity | `nfr` | `satisfies` | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | `true` |
 | NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity | `nfr` | `satisfies` | [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md) | `true` |
-| NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY: Recover every interrupted commit deterministically | `nfr` | `satisfies` | [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | `true` |
 | NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY: Recover every interrupted commit deterministically | `nfr` | `satisfies` | [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md) | `true` |
 | NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY: Recover every interrupted commit deterministically | `nfr` | `satisfies` | [TASK-INGEST-VERIFY-UC-003](tasks/verify-uc-003.md) | `true` |
 | NFR-INGEST-LOCAL-DATA-PROTECTION: Protect local statement and ingestion data | `nfr` | `satisfies` | [TASK-INGEST-GATE-SECURITY](tasks/gate-security.md) | `true` |
@@ -224,13 +242,13 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | TC-INGEST-ARTIFACT-CLEANUP-CONTRACT: Verify abandon and artifact cleanup | `test_case` | `verifies` | [TASK-INGEST-VERIFY-UC-005](tasks/verify-uc-005.md) | `true` |
 | TC-INGEST-ARTIFACT-PROTECTION: Verify source and artifact privacy boundaries | `test_case` | `verifies` | [TASK-INGEST-GATE-SECURITY](tasks/gate-security.md) | `true` |
 | TC-INGEST-ARTIFACT-PROTECTION: Verify source and artifact privacy boundaries | `test_case` | `verifies` | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `true` |
-| TC-INGEST-COMMIT-RECOVERY-MATRIX: Verify every candidate commit crash window | `test_case` | `verifies` | [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | `true` |
 | TC-INGEST-COMMIT-RECOVERY-MATRIX: Verify every candidate commit crash window | `test_case` | `verifies` | [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md) | `true` |
 | TC-INGEST-COMMIT-RECOVERY-MATRIX: Verify every candidate commit crash window | `test_case` | `verifies` | [TASK-INGEST-VERIFY-UC-003](tasks/verify-uc-003.md) | `true` |
 | TC-INGEST-CONTRACT-DISCOVERY-CONTRACT: Verify INGEST contract discovery | `test_case` | `verifies` | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `true` |
 | TC-INGEST-CONTRACT-DISCOVERY-CONTRACT: Verify INGEST contract discovery | `test_case` | `verifies` | [TASK-INGEST-VERIFY-UC-006](tasks/verify-uc-006.md) | `true` |
 | TC-INGEST-DURABLE-RECEIPT-RESUME-CONTRACT: Verify durable receipt and interrupted resume | `test_case` | `verifies` | [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md) | `true` |
 | TC-INGEST-DURABLE-RECEIPT-RESUME-CONTRACT: Verify durable receipt and interrupted resume | `test_case` | `verifies` | [TASK-INGEST-VERIFY-UC-003](tasks/verify-uc-003.md) | `true` |
+| TC-INGEST-FAILURE-STATUS-CONTRACT: Verify safe failure and status reporting | `test_case` | `verifies` | [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md) | `true` |
 | TC-INGEST-FAILURE-STATUS-CONTRACT: Verify safe failure and status reporting | `test_case` | `verifies` | [TASK-INGEST-STATUS-WORKFLOW](tasks/status-workflow.md) | `true` |
 | TC-INGEST-FAILURE-STATUS-CONTRACT: Verify safe failure and status reporting | `test_case` | `verifies` | [TASK-INGEST-VERIFY-UC-005](tasks/verify-uc-005.md) | `true` |
 | TC-INGEST-FINANCIAL-NORMALIZATION-CONTRACT: Verify exact financial normalization | `test_case` | `verifies` | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | `true` |
@@ -238,6 +256,7 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | TC-INGEST-LAYOUT-A-ADAPTER: Verify qualified layout A adapter | `test_case` | `verifies` | [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | `true` |
 | TC-INGEST-LAYOUT-B-ADAPTER: Verify qualified layout B adapter | `test_case` | `verifies` | [TASK-INGEST-ADAPTER-LAYOUT-B](tasks/adapter-layout-b.md) | `true` |
 | TC-INGEST-LEDGER-PUBLIC-CONFORMANCE: Verify INGEST uses only the public LEDGER contract | `test_case` | `verifies` | [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](tasks/gate-int-ledger-contract.md) | `true` |
+| TC-INGEST-LEDGER-PUBLIC-CONFORMANCE: Verify INGEST uses only the public LEDGER contract | `test_case` | `verifies` | [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](tasks/ledger-evidence-contract-correction.md) | `true` |
 | TC-INGEST-LEDGER-PUBLIC-CONFORMANCE: Verify INGEST uses only the public LEDGER contract | `test_case` | `verifies` | [TASK-INGEST-LEDGER-PUBLIC-CLIENT](tasks/ledger-public-client.md) | `true` |
 | TC-INGEST-MANIFEST-REVIEW-CONTRACT: Verify immutable manifest review and approval | `test_case` | `verifies` | [TASK-INGEST-REVIEW-WORKFLOW](tasks/review-workflow.md) | `true` |
 | TC-INGEST-MANIFEST-REVIEW-CONTRACT: Verify immutable manifest review and approval | `test_case` | `verifies` | [TASK-INGEST-VERIFY-UC-002](tasks/verify-uc-002.md) | `true` |
@@ -249,6 +268,7 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | TC-INGEST-SOURCE-RECONCILIATION-CONTRACT: Verify complete source reconciliation | `test_case` | `verifies` | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | `true` |
 | TC-INGEST-SOURCE-RECONCILIATION-CONTRACT: Verify complete source reconciliation | `test_case` | `verifies` | [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md) | `true` |
 | TC-INGEST-STATE-STORE-CONFORMANCE: Verify INGEST SQLite state and retention | `test_case` | `verifies` | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `true` |
+| TC-INGEST-STATE-STORE-CONFORMANCE: Verify INGEST SQLite state and retention | `test_case` | `verifies` | [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md) | `true` |
 | TC-INGEST-STATEMENT-PREVIEW-CONTRACT: Verify deterministic statement preview | `test_case` | `verifies` | [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | `true` |
 | TC-INGEST-STATEMENT-PREVIEW-CONTRACT: Verify deterministic statement preview | `test_case` | `verifies` | [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md) | `true` |
 | TC-INGEST-VARIANT-QUALIFICATION-CONTRACT: Verify supported variant qualification | `test_case` | `verifies` | [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md) | `true` |
@@ -258,18 +278,6 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | UC-INGEST-004: Re-import a repeated or overlapping statement safely | `use_case` | `covers` | [TASK-INGEST-VERIFY-UC-004](tasks/verify-uc-004.md) | `true` |
 | UC-INGEST-005: Handle and clean up a failed ingestion | `use_case` | `covers` | [TASK-INGEST-VERIFY-UC-005](tasks/verify-uc-005.md) | `true` |
 | UC-INGEST-006: Discover and invoke the INGEST agent contract | `use_case` | `covers` | [TASK-INGEST-VERIFY-UC-006](tasks/verify-uc-006.md) | `true` |
-
-#### Optional References
-
-| Ref | Type | Relationship | Task | Required |
-|---|---|---|---|---|
-| DIAG-INGEST-PREVIEW-COMMIT-SEQUENCE: Preview approval commit and receipt sequence | `design_diagram` | `touches` | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | `false` |
-| DIAG-INGEST-STATE-ER: INGEST durable state model | `design_diagram` | `touches` | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `false` |
-| EXT-INGEST-OWNER-BANK-STATEMENT: Owner-Supplied Bank Statement | `external_dependency` | `references` | [TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES](tasks/gate-evidence-private-fixtures.md) | `true` |
-| FA-INGEST-RECOVERY-CLEANUP: Recovery and Cleanup | `feature_area` | `touches` | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `false` |
-| RISK-INGEST-004: Raw statements or extracted temporary data can leak through permissions, logs, crash artifacts, or indefinite retention. | `risk` | `references` | [TASK-INGEST-GATE-SECURITY](tasks/gate-security.md) | `false` |
-| RISK-INGEST-007: A malformed or adversarial document can exhaust local CPU, memory, disk, decompression, or parser time, or attempt active-content and external-resource execution. | `risk` | `references` | [TASK-INGEST-GATE-SECURITY](tasks/gate-security.md) | `false` |
-| TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract | `task` | `blocked-by` | [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](tasks/gate-int-ledger-contract.md) | `true` |
 
 #### Loose Tasks
 
@@ -285,6 +293,12 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 - [TASK-INGEST-VERIFY-UC-005](tasks/verify-uc-005.md): Task has no implements refs.
 - [TASK-INGEST-VERIFY-UC-006](tasks/verify-uc-006.md): Task has no implements refs.
 
+#### Tasks Without Bead Refs
+
+- [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](tasks/ledger-evidence-contract-correction.md): Task has no bead refs.
+- [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md): Task has no bead refs.
+
 #### Coverage Warnings
 
 - 11 loose task(s) have no implements refs.
+- 2 task(s) have no bead refs.

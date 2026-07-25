@@ -20,7 +20,7 @@
     "asset and credit-account movements mean the same thing throughout Tally"
   ],
   "acceptance_criteria": [
-    "Given a transaction-bearing source record with complete evidence, when it is normalized, then the candidate preserves the selected account, original description, exact base-10 amount, ZAR, transaction date, optional distinct posting date, adapter version, source fingerprint, source-context record identity, and source reference without precision loss.",
+    "Given a transaction-bearing source record with complete evidence, when it is normalized, then the candidate preserves the selected account, original description, exact base-10 amount, ZAR, transaction date, optional distinct posting date, adapter version, Source Fingerprint, source-context record identity, and source reference without precision loss.",
     "Given an asset or liability statement movement, when its signed amount is normalized, then positive means the owner economic position improved and negative means it worsened: asset increases and liability reductions are positive; asset decreases and liability increases are negative.",
     "Given a source transaction date that includes its year, when it is normalized, then that exact calendar date is the Effective Date.",
     "Given a source row with zero monetary movement, when it is accounted for, then it is retained as an explicitly excluded non-transaction record with a stable reason and no zero-amount LEDGER candidate is created.",

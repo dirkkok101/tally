@@ -1,0 +1,9 @@
+{
+  "id": "01KYCV2PJDPHA376QGMGSGP67W",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "version": "0.8",
+  "changes": [
+    "Recompiled PLAN-INGEST-V1 in structural UPDATE mode: 27 verified beads, 2 new correction beads, preserved closed work, refreshed all bead contracts, and INGEST frontier 3 (private fixture, Ledger evidence correction, V002 status state)."
+  ],
+  "created_at": "2026-07-25T14:32:44.8785999+00:00"
+}

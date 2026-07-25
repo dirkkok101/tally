@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-VERIFY-UC-002`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `ready`
+- **State:** `planned`
 - **Priority:** `1`
 - **Sort Order:** `40`
 - **Dialect:** `default`
@@ -81,7 +81,7 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Attach safe revision/digest/approval state and zero-mutation evidence for every path. | `true` |
+| `test-evidence` | Attach batchId, manifest-revision digest, and approval state and zero-mutation evidence for every path. | `true` |
 
 ## Bead References
 

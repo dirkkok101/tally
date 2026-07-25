@@ -65,6 +65,15 @@
       "created_at": "2026-07-18T12:56:24.4112574+00:00"
     }
   ],
+  "links": [
+    {
+      "id": "01KYCRZFVPEAHZY9H22QA30GPJ",
+      "target_type": "use_case",
+      "target": "UC-INGEST-002",
+      "rel": "see-also",
+      "created_at": "2026-07-25T13:56:02.5518448+00:00"
+    }
+  ],
   "recipe_items": [
     {
       "id": "01KXTMS8JXZTG92QWX5F3S11BR",
@@ -183,14 +192,14 @@
   ],
   "review_gates": [
     {
-      "id": "01KXTMS8JYMQ3EYWFWR05AJT6G",
+      "id": "01KYCRWMKZNYZHQFP0585CAQ6A",
       "gate_type": "test-evidence",
       "description": [
-        "Attach safe revision/digest/approval state and zero-mutation evidence for every path."
+        "Attach batchId, manifest-revision digest, and approval state and zero-mutation evidence for every path."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-25T13:54:29.1193141+00:00"
     }
   ],
   "verification_steps": [

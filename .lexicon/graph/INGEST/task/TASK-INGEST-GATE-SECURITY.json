@@ -261,59 +261,37 @@
       "created_at": "2026-07-18T12:53:26.3581626+00:00"
     },
     {
-      "id": "01KXTMKTPT3EMCK1TMP5V5HX1D",
+      "id": "01KYCRVT69ZWS5K4QSWVZCCERF",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT weaken canary assertions, redact after logging, or treat process isolation as sufficient — prevent payload entry at each boundary."
+        "Do NOT weaken canary assertions, redact after logging, or treat OS invocation isolation as establishing protection — prevent payload entry at each boundary."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+      "created_at": "2026-07-25T13:54:02.0573634+00:00"
     },
     {
-      "id": "01KXTMKTPTZ3MB48XEXQCKMWRE",
+      "id": "01KYCRVT6AGTKF9WNZKQGG05PT",
       "kind": "failure_criterion",
       "text": [
         "Do NOT skip owner-only mode checks on supported hosts or continue after failure."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+      "created_at": "2026-07-25T13:54:02.0573634+00:00"
     },
     {
-      "id": "01KXTMKTPT9YJWWEHE6P1V2GYD",
+      "id": "01KYCRVT6AP2NRJTQ1Z02Q2D3E",
       "kind": "failure_criterion",
       "text": [
         "Do NOT persist test fixture paths/content or emit them when a security assertion fails."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T12:53:26.3581626+00:00"
+      "created_at": "2026-07-25T13:54:02.0573634+00:00"
     }
   ],
   "references": [
-    {
-      "id": "01KXTMKTPV7JBKGJBP097E7X7V",
-      "target_ref_code": "RISK-INGEST-004",
-      "target_entity_type": "risk",
-      "target_entity_id": "01KXT9W8KSHECEANS9W814PFQM",
-      "target_title": "Raw statements or extracted temporary data can leak through permissions, logs, crash artifacts, or indefinite retention.",
-      "relationship": "references",
-      "required": 0,
-      "sort_order": 4,
-      "created_at": "2026-07-18T12:53:26.3581626+00:00"
-    },
-    {
-      "id": "01KXTMKTPVA9Y7HBEC90D569Y3",
-      "target_ref_code": "RISK-INGEST-007",
-      "target_entity_type": "risk",
-      "target_entity_id": "01KXTBCV7NP205SPZGBTSJTXE9",
-      "target_title": "A malformed or adversarial document can exhaust local CPU, memory, disk, decompression, or parser time, or attempt active-content and external-resource execution.",
-      "relationship": "references",
-      "required": 0,
-      "sort_order": 5,
-      "created_at": "2026-07-18T12:53:26.3581626+00:00"
-    },
     {
       "id": "01KXTMKTPVPXDZFEVYYRNR92GT",
       "target_ref_code": "NFR-INGEST-LOCAL-DATA-PROTECTION",

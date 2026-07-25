@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-VERIFY-UC-001`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `ready`
+- **State:** `planned`
 - **Priority:** `1`
 - **Sort Order:** `30`
 - **Dialect:** `default`
@@ -59,7 +59,7 @@ Prove an owner can preview each qualified statement into one reconciled immutabl
 
 ### Constraints
 
-- The test fails loudly with a safe diagnostic when the external private fixture manifest is unavailable.
+- The test fails loudly with a metadata-only diagnostic when the external private fixture manifest is unavailable.
 
 ### Notes
 

@@ -4,7 +4,7 @@
   "ref_code": "DD-INGEST-DOCUMENT-EXTRACTION",
   "title": "Managed in-process PDF extraction with PdfPig",
   "description": [
-    "Choose the passive PDF text and glyph-position extraction dependency for the two qualified INGEST format variants inside the self-contained Native-AOT Tally CLI."
+    "Choose the passive PDF text and glyph-position extraction dependency for the two qualified INGEST Format Variants inside the self-contained Native-AOT Tally CLI."
   ],
   "decision": [
     "Pin the upstream PdfPig package at version 0.1.14 for the first qualified adapter set. A concrete PdfStatementTextExtractor reads caller-owned bytes inside the Tally process and returns ordered page, glyph, text, and coordinate evidence to the two format-specific adapters. It never executes active content, follows external links, renders pages, performs OCR, or mutates the source. Unsupported encryption, scans, malformed structures, ambiguous layouts, changed layouts, and configured resource bounds fail closed. Package version and extraction-policy version are included in the adapter compatibility identity. Do not introduce a generic PDF parser port until a second real implementation exists."

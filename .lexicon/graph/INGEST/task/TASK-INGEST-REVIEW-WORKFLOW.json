@@ -71,6 +71,16 @@
       ],
       "sort_order": 3,
       "created_at": "2026-07-18T12:58:28.7371123+00:00"
+    },
+    {
+      "id": "01KYCRCS9CV222SZHSR8W0ZC9S",
+      "target": "TASK-INGEST-STATUS-STATE-V002",
+      "dependency_type": "compile",
+      "reason": [
+        "Review mutations append complete stable batch errors through the V002 store."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-25T13:45:49.6132505+00:00"
     }
   ],
   "files": [
@@ -140,52 +150,63 @@
   ],
   "interfaces": [
     {
-      "id": "01KXTMAH8T9VFZ53A22D0DFGEM",
+      "id": "01KYCRE3HR3A8H9BHRWBV28STZ",
       "name": "ImportManifestContract",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-IMPORT-MANIFEST",
       "sort_order": 0,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-25T13:46:32.8873102+00:00"
     },
     {
-      "id": "01KXTMAH8TS1VC28ETRKA7P1WC",
+      "id": "01KYCRE3HRRT9QX753DVQ3JHXD",
       "name": "IngestDatabase",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-STATE-STORE",
       "sort_order": 1,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-25T13:46:32.8873102+00:00"
     },
     {
-      "id": "01KXTMAH8T44JBQWGJVSF9WRVH",
+      "id": "01KYCRE3HRNWAMXFHDM64QNFB0",
       "name": "ManifestCanonicalizer",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-IMPORT-MANIFEST",
       "sort_order": 2,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-25T13:46:32.8873102+00:00"
     },
     {
-      "id": "01KXTMAH8TXGD5NAPAD1KGSV56",
+      "id": "01KYCRE3HR09GB538E192XV61H",
       "name": "PreviewStateStore",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-STATE-STORE",
       "sort_order": 3,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-25T13:46:32.8873102+00:00"
     },
     {
-      "id": "01KXTMAH8TK549PPP9PWMFZVWH",
+      "id": "01KYCRE3HRK3RCD9WKSST1XNHS",
       "name": "ReviewStateStore",
       "direction": "produces",
       "contract_ref_code": "DM-INGEST-STATE-STORE",
       "sort_order": 4,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-25T13:46:32.8873102+00:00"
     },
     {
-      "id": "01KXTMAH8T22JRC8PSJN9GKABQ",
+      "id": "01KYCRE3HRWKJ2YBGPXH145MCA",
       "name": "ReviewOperationModule",
       "direction": "produces",
       "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
       "sort_order": 5,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-25T13:46:32.8873102+00:00"
+    },
+    {
+      "id": "01KYCRE3HR6EWT6DYC37BRZQF2",
+      "name": "BatchErrorEventStore.AppendAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
+      "notes": [
+        "Append complete safe review errors in the caller transaction"
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-25T13:46:32.8873102+00:00"
     }
   ],
   "recipe_items": [
@@ -348,6 +369,16 @@
       "required": 1,
       "sort_order": 3,
       "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KYCRE3HQBRE4E6EV3CZKHWX6",
+      "kind": "note",
+      "text": [
+        "Append complete BatchErrorEvent metadata atomically when a batch-addressable inspect or approval transition fails; do not derive later status guidance from a code."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:46:32.8873102+00:00"
     }
   ],
   "references": [

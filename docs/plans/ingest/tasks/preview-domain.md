@@ -23,11 +23,10 @@ Turn qualified source evidence into deterministic immutable candidate meaning wi
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | DD-INGEST-APPLICATION-ARCHITECTURE: Single-process vertical slices with isolated ingestion state | `design_decision` | `governed-by` | `true` |
-| DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with exact replay and blocked overlap | `design_decision` | `governed-by` | `true` |
-| DIAG-INGEST-PREVIEW-COMMIT-SEQUENCE: Preview approval commit and receipt sequence | `design_diagram` | `touches` | `false` |
+| DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap | `design_decision` | `governed-by` | `true` |
 | DM-INGEST-IMPORT-MANIFEST: ImportBatchAndManifestRevision | `data_model` | `touches` | `true` |
 | FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts | `requirement` | `implements` | `true` |
-| FR-INGEST-REPLAY-OVERLAP-SAFETY: Handle exact replay and uncertain overlap safely | `requirement` | `implements` | `true` |
+| FR-INGEST-REPLAY-OVERLAP-SAFETY: Handle Exact Replay and uncertain overlap safely | `requirement` | `implements` | `true` |
 | FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval | `requirement` | `implements` | `true` |
 | NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity | `nfr` | `satisfies` | `true` |
 | TC-INGEST-FINANCIAL-NORMALIZATION-CONTRACT: Verify exact financial normalization | `test_case` | `verifies` | `true` |
@@ -104,13 +103,13 @@ None recorded.
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~IngestIdentityTests\|FullyQualifiedName~FinancialNormalizationTests\|FullyQualifiedName~ReconciliationAndManifestTests'` | exit 0; at least 35 identity, tuple-collision, sign, date, zero-movement, accounting, control, canonicalization, exact-replay, and overlap cases are discovered and 0 tests fail | `true` | 360 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~IngestIdentityTests\|FullyQualifiedName~FinancialNormalizationTests\|FullyQualifiedName~ReconciliationAndManifestTests'` | exit 0; at least 35 identity, tuple-collision, sign, date, zero-movement, accounting, control, canonicalization, Exact Replay, and overlap cases are discovered and 0 tests fail | `true` | 360 |
 
 ### Review Gates
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Attach stable identity vectors and exact minor-unit reconciliation evidence. | `true` |
+| `test-evidence` | Attach stable identity vectors and exact minor-unit Reconciliation Evidence. | `true` |
 | `branch-review` | Reviewer confirms Domain/Ingest has no side-effecting infrastructure references. | `true` |
 
 ## Bead References
@@ -126,12 +125,11 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `bead-ref` -> `bd-2gk` (verified)
 - `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Pure policies construct the canonical manifest and error contract records.
 - `governed-by` -> DD-INGEST-APPLICATION-ARCHITECTURE: Single-process vertical slices with isolated ingestion state
-- `governed-by` -> DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with exact replay and blocked overlap
+- `governed-by` -> DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap
 - `implements` -> FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts
-- `implements` -> FR-INGEST-REPLAY-OVERLAP-SAFETY: Handle exact replay and uncertain overlap safely
+- `implements` -> FR-INGEST-REPLAY-OVERLAP-SAFETY: Handle Exact Replay and uncertain overlap safely
 - `implements` -> FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval
 - `satisfies` -> NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity
-- `touches` -> DIAG-INGEST-PREVIEW-COMMIT-SEQUENCE: Preview approval commit and receipt sequence
 - `touches` -> DM-INGEST-IMPORT-MANIFEST: ImportBatchAndManifestRevision
 - `verifies` -> TC-INGEST-FINANCIAL-NORMALIZATION-CONTRACT: Verify exact financial normalization
 - `verifies` -> TC-INGEST-REPLAY-OVERLAP-SAFETY-CONTRACT: Verify replay and overlap safety

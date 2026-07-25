@@ -9,7 +9,7 @@
     "Pin the spike-proven upstream package, convert one immutable byte buffer to ordered page/glyph evidence, and define the one real format-adapter seam."
   ],
   "objective": [
-    "Extract deterministic passive PDF evidence under Native-AOT and resource bounds without source mutation, child processes, disk extraction, or a speculative parser port."
+    "Extract deterministic passive PDF evidence under Native-AOT and resource bounds without source mutation, spawned executables, disk extraction, or a speculative parser port."
   ],
   "planning_state": "ready",
   "priority": 0,
@@ -284,44 +284,44 @@
       "created_at": "2026-07-18T12:45:42.5606427+00:00"
     },
     {
-      "id": "01KXTM5NS1QYXCTWXJJT77BBV5",
+      "id": "01KYCRVY8KG00P1ETRXY0AFRR4",
       "kind": "failure_criterion",
       "text": [
         "Do NOT use legacy UglyToad.PdfPig 1.7.0-custom-5, Poppler, a child process, or a custom parser — rejected per DD-INGEST-DOCUMENT-EXTRACTION."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-25T13:54:06.2270096+00:00"
     },
     {
-      "id": "01KXTM5NS1GX80XCA97R8VWPMM",
+      "id": "01KYCRVY8MWP4NG2WN4RB2E3FG",
       "kind": "failure_criterion",
       "text": [
         "Do NOT introduce a generic PDF parser interface; PdfStatementTextExtractor remains concrete until a second real production implementation exists."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-25T13:54:06.2270096+00:00"
     },
     {
-      "id": "01KXTM5NS1JNZ8ZSBAXSTFZJ8N",
+      "id": "01KYCRVY8M1EQHXMQF9Z0M0NM4",
       "kind": "failure_criterion",
       "text": [
         "Do NOT place source paths in process arguments, logs, test names, snapshots, or failure messages — per DD-INGEST-ARTIFACT-SECURITY."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-25T13:54:06.2270096+00:00"
     },
     {
-      "id": "01KXTM5NS13TQ4XC1JCSNXW2JP",
+      "id": "01KYCRVY8ME3F87Z567WHXDWSZ",
       "kind": "failure_criterion",
       "text": [
         "Do NOT commit fixture bytes, fixture manifests, filenames, expected private facts, or extracted text."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-25T13:54:06.2270096+00:00"
     },
     {
       "id": "01KXTM5NS2SR37WSA3QX0W9Q8K",

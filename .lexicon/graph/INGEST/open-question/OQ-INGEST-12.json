@@ -20,6 +20,13 @@
       "target": "DD-INGEST-ARTIFACT-SECURITY",
       "rel": "see-also",
       "created_at": "2026-07-18T15:17:06.1495496+00:00"
+    },
+    {
+      "id": "01KYCRZCDR6F3SRACDBSGS8PK8",
+      "target_type": "task",
+      "target": "TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES",
+      "rel": "see-also",
+      "created_at": "2026-07-25T13:55:59.0332070+00:00"
     }
   ]
 }

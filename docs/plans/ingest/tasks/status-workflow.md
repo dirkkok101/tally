@@ -5,18 +5,18 @@
 - **Ref:** `TASK-INGEST-STATUS-WORKFLOW`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-03-COMMIT-RECOVERY`
-- **State:** `ready`
+- **State:** `planned`
 - **Priority:** `1`
 - **Sort Order:** `30`
 - **Dialect:** `default`
 
 ## Summary
 
-Read one detailed batch or a stable cursor page of retained summaries and map every expected failure to metadata-only durable-state guidance.
+Read one detailed batch or a protected 15-minute metadata snapshot page and return only complete durable safe-error guidance and immutable snapshot membership.
 
 ## Objective
 
-Deliver ingest.status with deterministic paging, mutation certainty, unresolved frontier, and safe retry/resume actions without source access.
+Deliver ingest.status with deterministic paging, mutation certainty, unresolved frontier, and permitted retry or resume actions without source access.
 
 ## References
 
@@ -32,24 +32,27 @@ Deliver ingest.status with deterministic paging, mutation certainty, unresolved 
 | Depends On | Type | Reason |
 |---|---|---|
 | [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Status consumes IngestError, BatchStatus, and ImportReceipt contracts. |
-| [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | StatusStateStore reads the V001 INGEST schema. |
+| [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md) | `compile` | Status requires the V002 error events, store generation, and snapshot tables. |
+| [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Status builds on the protected ingest.db and V001 tables; TASK-INGEST-STATUS-STATE-V002 supplies the corrected error and snapshot extension. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- With batchId, status returns BatchStatusDetail for the exact batch: safe summary, manifest revision, approval, receipt state, terminal counts, unresolved frontier, last stable error, retained artifact kinds, and next allowed operations without rereading the source.
-- Without batchId, limit defaults to 50, accepts only 1 through 100, cursor is opaque and tamper-rejected, results order by updatedAt descending then batchId, and nextCursor neither skips nor duplicates rows under a stable snapshot.
-- Pre-commit source/permission/resource/compatibility/reconciliation failures report mutationPossibility=none and no committable manifest; overlap identifies only safe source-context IDs and requires repreview.
-- Commit-stage failures report mutationPossibility=possible or confirmed from durable evidence, the exact approved manifest, completed outcomes, unresolved frontier, and resume or abandon guidance.
-- Every expected failure uses one stable IngestError code/category/retryAction; stdout has one structured result and diagnostics never contain stack trace, parser exception, path, row, description, amount, balance, full identifier, manifest, or request.
+- With batchId, status returns BatchStatusDetail from retained INGEST state without source or Ledger access: metadata-only summary, manifest revision, approval, receipt state, terminal counts, unresolved frontier, latest complete BatchErrorEvent, retained artifact kinds, and next allowed operations.
+- Without batchId, limit defaults to 50 and accepts only 1 through 100; the first request uses BEGIN IMMEDIATE to materialize all retained metadata-only summaries into one 15-minute status_snapshot ordered by updatedAt descending then batchId.
+- Later pages read only status_snapshot_item by immutable ordinal. The opaque cursor binds cursor version, contract version, snapshotId, next ordinal, page size, store generation, and expiry to the protected snapshot header; malformed, unknown, expired, mismatched, or out-of-range cursors fail closed.
+- Concurrent batch updates after first-page materialization neither enter nor reorder that snapshot, so every valid cursor page returns each frozen member exactly once with no skip or duplicate.
+- Pre-commit failures report mutationPossibility=none and no committable manifest; commit-stage failures report possible or confirmed only from durable evidence, exact completed outcomes, unresolved frontier, and resume or abandon guidance.
+- Every expected batch failure returns the exact durable code, category, safeMessage, candidateId, mutationPossibility, durableState, retryAction, and field from BatchErrorEvent; no field is inferred from candidate_receipt.error_code.
 - StatusOperationModule binds ingest.status but global registration waits for the public-contract gate.
 
 ### Failure Criteria
 
-- Do NOT query or mutate Ledger, reread the source, use offset paging, expose raw exceptions/payloads, or return an ambiguous boolean for mutation possibility.
-- Do NOT modify durable state in StatusHandler — adapted read-only query rule per PAT-CORE-API-QUERIES.
-- Do NOT invent retry guidance inconsistent with the durable batch state.
+- Do NOT query or mutate Ledger, reread the source, use live offset/keyset paging, expose raw exceptions or payloads, or return an ambiguous mutation boolean.
+- Do NOT modify durable workflow, error, manifest, receipt, candidate, or store-generation state in StatusHandler; the sole permitted first-page write is metadata-only ephemeral snapshot creation and expired-snapshot deletion per DD-INGEST-STATE-STORE.
+- Do NOT reconstruct missing error metadata from a code or emit retry guidance inconsistent with the latest complete durable BatchErrorEvent.
+- Do NOT place source paths, rows, descriptions, amounts, balances, full identifiers, manifests, requests, or stack traces in snapshot rows, cursors, results, diagnostics, or tests.
 
 ### Expected Outputs
 
@@ -82,22 +85,24 @@ None recorded.
 |---|---|---|---|
 | BatchStatusSummary | `consumes` | DM-INGEST-ERROR-STATUS-CONTRACTS |  |
 | IngestError | `consumes` | DM-INGEST-ERROR-STATUS-CONTRACTS |  |
+| BatchErrorEventStore.LatestAsync | `consumes` | DM-INGEST-ERROR-STATUS-CONTRACTS |  |
 | ImportReceipt | `consumes` | DM-INGEST-IMPORT-RECEIPT |  |
-| IngestDatabase | `consumes` | DM-INGEST-STATE-STORE |  |
-| StatusStateStore | `produces` | DM-INGEST-STATE-STORE |  |
+| IngestSchemaVersion2 | `consumes` | DM-INGEST-STATE-STORE |  |
+| StatusStateStore | `produces` | DM-INGEST-STATE-STORE | Detail reads and first/later snapshot page operations |
+| IngestStatusCursorPayload | `produces` | DM-INGEST-ERROR-STATUS-CONTRACTS | Opaque protected snapshot cursor |
 | StatusOperationModule | `produces` | DM-INGEST-OPERATION-CONTRACTS |  |
 
 ### Verification
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~StatusWorkflowTests` | exit 0; at least 20 detail, empty, default/max/invalid limit, cursor, stable ordering, mutation certainty, retry guidance, payload exclusion, and read-only cases are discovered and 0 tests fail | `true` | 420 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~StatusWorkflowTests` | exit 0; at least 24 detail, complete-error, empty, default/max/invalid limit, snapshot creation, concurrent-update stability, expiry, generation, tamper, ordering, payload-exclusion, and durable-state-read-only cases are discovered and 0 tests fail | `true` | 480 |
 
 ### Review Gates
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Attach deterministic paging and representative pre/post-mutation safe error envelopes. | `true` |
+| `test-evidence` | Attach deterministic paging and representative pre/post-mutation metadata-only error envelopes. | `true` |
 | `self-review` | Confirm every status field derives from durable state and the handler performs no mutation. | `true` |
 
 ## Bead References
@@ -112,7 +117,8 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 
 - `bead-ref` -> `bd-1tv` (verified)
 - `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Status consumes IngestError, BatchStatus, and ImportReceipt contracts.
-- `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md): StatusStateStore reads the V001 INGEST schema.
+- `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md): Status builds on the protected ingest.db and V001 tables; TASK-INGEST-STATUS-STATE-V002 supplies the corrected error and snapshot extension.
+- `depends-on:compile` -> [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md): Status requires the V002 error events, store generation, and snapshot tables.
 - `governed-by` -> DD-INGEST-CLI-OPERATION-CONTRACT: Eight explicit workflow operations from one registry
 - `implements` -> FR-INGEST-FAILURE-STATUS: Report blocked and failed ingestion safely
 - `touches` -> DM-INGEST-ERROR-STATUS-CONTRACTS: IngestErrorAndStatusContracts

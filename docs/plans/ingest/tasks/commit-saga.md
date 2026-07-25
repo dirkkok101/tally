@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-COMMIT-SAGA`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-03-COMMIT-RECOVERY`
-- **State:** `ready`
+- **State:** `planned`
 - **Priority:** `0`
 - **Sort Order:** `10`
 - **Dialect:** `default`
@@ -25,8 +25,6 @@ Deliver ingest.commit so every candidate is accepted once, returned as an exact 
 | DD-INGEST-COMMIT-RECOVERY: Per-batch locked idempotent candidate saga | `design_decision` | `governed-by` | `true` |
 | FR-INGEST-APPROVED-BATCH-COMMIT: Commit approved candidates through public LEDGER operations | `requirement` | `implements` | `true` |
 | FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit | `requirement` | `implements` | `true` |
-| NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY: Recover every interrupted commit deterministically | `nfr` | `satisfies` | `true` |
-| TC-INGEST-COMMIT-RECOVERY-MATRIX: Verify every candidate commit crash window | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
@@ -34,28 +32,28 @@ Deliver ingest.commit so every candidate is accepted once, returned as an exact 
 |---|---|---|
 | [TASK-INGEST-REVIEW-WORKFLOW](../tasks/review-workflow.md) | `compile` | Commit consumes exact immutable approvals and manifests from ReviewStateStore. |
 | [TASK-INGEST-LEDGER-PUBLIC-CLIENT](../tasks/ledger-public-client.md) | `compile` | The saga invokes only LedgerContractClient record/get methods. |
-| [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | CommitStateStore and BatchCommitLock require protected ingest.db and artifact primitives. |
-| [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md) | `compile` | Commit revalidates stable candidate identity and canonical manifest digest. |
-| [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Consumes ImportReceipt and FrozenLedgerRecordRequest. |
+| [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md) | `compile` | Commit stop frontiers append complete stable errors atomically through the V002 store. |
+| [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Commit consumes ImportReceipt and FrozenLedgerRecordRequest. |
+| [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](../tasks/ledger-evidence-contract-correction.md) | `compile` | Commit consumes LedgerImmutableVerification. |
+| [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Commit persists through IngestDatabase. |
 
 ## Recipe
 
 ### Acceptance Checks
 
-- Commit validates exact batch, manifest revision/digest, active approval, compatible adapter/manifest/Ledger versions, active selected account, candidate identity, and canonical manifest integrity before acquiring the lock or causing the first mutation.
-- BatchCommitLock is owner-only, non-reentrant across processes, rejects concurrent commit/resume for one batch, and is released by process loss; different batches may proceed independently.
-- For each frozen accepted candidate in deterministic manifest order, CommitStateStore durably records attempting plus the exact request and idempotency key before LedgerContractClient.RecordTransactionAsync runs outside any INGEST transaction.
-- A successful record result becomes terminal only after GetTransactionAsync round-trips account, signed amount, currency, dates, description, source reference, provenance, and transaction ID exactly and CommitStateStore durably records accepted before the next candidate.
-- An exact_duplicate candidate records its prior canonical reference and invokes no write; a stable Ledger validation, compatibility, idempotency, round-trip, or receipt-write conflict records the safe frontier and stops continuation.
-- When every candidate is terminal, the complete ImportReceipt reports exact counts/canonical references and verified completion; no candidate is labeled merely processed.
-- CommitOperationModule binds ingest.commit but is not globally registered until the public-contract gate.
+- Before the lock or first mutation, validate batchId, manifest revision/digest, approval, compatible versions, active account, candidate identities, and canonical manifest integrity.
+- BatchCommitLock is owner-only and non-reentrant for the same batch across concurrent OS invocations; process loss releases it and different batches remain independent.
+- In manifest order, CommitStateStore durably records attempting plus the frozen public input and envelope before LedgerContractClient.RecordTransactionAsync runs outside every INGEST transaction.
+- A result is terminal only when GetTransactionAsync with IncludeHistory=false matches transactionId, all immutable request facts, and exactly one InitialEvidence record; mutable projections are ignored.
+- Exact Duplicates invoke no write; any stable Ledger, verification, or receipt failure atomically appends BatchErrorEvent at the durable stop frontier and halts.
+- After every candidate is terminal, ImportReceipt reports exact counts, canonical references, and verified completion; CommitOperationModule remains unregistered until the public-contract gate.
 
 ### Failure Criteria
 
-- Do NOT use a whole-batch/distributed transaction, hold SQLite across a Ledger call, or keep progress only in memory — rejected per DD-INGEST-COMMIT-RECOVERY.
-- Do NOT regenerate a request/key, reread the source, use a new manifest revision, or skip public transaction.get verification.
-- Do NOT call private Ledger storage/handlers or continue after an unsafe/conflicting result.
-- Do NOT mark attempting as terminal or advance before durable receipt state.
+- Do NOT use a whole-batch or distributed transaction, hold SQLite across a Ledger call, or keep progress only in memory.
+- Do NOT regenerate or translate the frozen request, evidence, actor, or key; reread the source; choose another manifest; or skip public get verification.
+- Do NOT compare History, lifecycle, category, pool, reconciliation, actor, or recorded time as terminal facts.
+- Do NOT call private Ledger code, infer partial error guidance, continue after a conflict, mark attempting terminal, or advance before durable receipt/error state.
 
 ### Expected Outputs
 
@@ -93,8 +91,10 @@ None recorded.
 |---|---|---|---|
 | ImportReceipt | `consumes` | DM-INGEST-IMPORT-RECEIPT |  |
 | FrozenLedgerRecordRequest | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT |  |
+| LedgerImmutableVerification | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT |  |
 | IngestDatabase | `consumes` | DM-INGEST-STATE-STORE |  |
 | ReviewStateStore | `consumes` | DM-INGEST-STATE-STORE |  |
+| BatchErrorEventStore.AppendAsync | `consumes` | DM-INGEST-ERROR-STATUS-CONTRACTS | Atomic safe failure metadata |
 | LedgerContractClient.RecordTransactionAsync | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT |  |
 | LedgerContractClient.GetTransactionAsync | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT |  |
 | BatchCommitLock | `produces` | DD-INGEST-COMMIT-RECOVERY |  |
@@ -126,16 +126,15 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2i6` (verified)
-- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Consumes ImportReceipt and FrozenLedgerRecordRequest.
+- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Commit consumes ImportReceipt and FrozenLedgerRecordRequest.
+- `depends-on:compile` -> [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](../tasks/ledger-evidence-contract-correction.md): Commit consumes LedgerImmutableVerification.
 - `depends-on:compile` -> [TASK-INGEST-LEDGER-PUBLIC-CLIENT](../tasks/ledger-public-client.md): The saga invokes only LedgerContractClient record/get methods.
-- `depends-on:compile` -> [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md): Commit revalidates stable candidate identity and canonical manifest digest.
 - `depends-on:compile` -> [TASK-INGEST-REVIEW-WORKFLOW](../tasks/review-workflow.md): Commit consumes exact immutable approvals and manifests from ReviewStateStore.
-- `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md): CommitStateStore and BatchCommitLock require protected ingest.db and artifact primitives.
+- `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md): Commit persists through IngestDatabase.
+- `depends-on:compile` -> [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md): Commit stop frontiers append complete stable errors atomically through the V002 store.
 - `governed-by` -> DD-INGEST-COMMIT-RECOVERY: Per-batch locked idempotent candidate saga
 - `implements` -> FR-INGEST-APPROVED-BATCH-COMMIT: Commit approved candidates through public LEDGER operations
 - `implements` -> FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit
-- `satisfies` -> NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY: Recover every interrupted commit deterministically
-- `verifies` -> TC-INGEST-COMMIT-RECOVERY-MATRIX: Verify every candidate commit crash window
 
 ## Navigation
 

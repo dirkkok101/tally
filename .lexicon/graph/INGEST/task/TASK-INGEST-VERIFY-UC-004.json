@@ -92,6 +92,15 @@
       "created_at": "2026-07-18T12:58:21.0981827+00:00"
     }
   ],
+  "links": [
+    {
+      "id": "01KYCRZGZPKSHWG9QD1GX4XAA5",
+      "target_type": "use_case",
+      "target": "UC-INGEST-004",
+      "rel": "see-also",
+      "created_at": "2026-07-25T13:56:03.7037042+00:00"
+    }
+  ],
   "recipe_items": [
     {
       "id": "01KXV0NWX0X15KEYV0K3XG1JZQ",
@@ -220,14 +229,14 @@
   ],
   "review_gates": [
     {
-      "id": "01KXTMS8JZTC5644RSS1S9E8S3",
+      "id": "01KYCRWPSV0S3A8HNXNWF5CKMA",
       "gate_type": "test-evidence",
       "description": [
-        "Attach safe batch/candidate IDs and public canonical counts for each replay/overlap outcome."
+        "Attach batchId and candidateId and public canonical counts for each replay/overlap outcome."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-25T13:54:31.3549076+00:00"
     }
   ],
   "verification_steps": [

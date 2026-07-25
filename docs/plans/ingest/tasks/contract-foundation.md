@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-CONTRACT-FOUNDATION`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-00-FOUNDATION`
-- **State:** `ready`
+- **State:** `planned`
 - **Priority:** `0`
 - **Sort Order:** `20`
 - **Dialect:** `default`
@@ -16,7 +16,7 @@ Create source-generated public records, stable errors, operation IDs, manifest/r
 
 ## Objective
 
-Produce the typed Native-AOT-safe contract foundation for all eight INGEST operations without registering incomplete handlers.
+Produce typed source-generated contract records for all eight INGEST operations without registering incomplete handlers.
 
 ## References
 
@@ -39,7 +39,7 @@ Produce the typed Native-AOT-safe contract foundation for all eight INGEST opera
 
 - IngestOperationIds contains exactly ingest.preview, ingest.inspect, ingest.approve, ingest.commit, ingest.resume, ingest.status, ingest.abandon, and ingest.cleanup with no generic operation.
 - Concrete request/result records match DM-INGEST-OPERATION-CONTRACTS, use closed enums for finite states, carry explicit contract versions, and expose sourcePath only inside PreviewRequest.
-- IngestError exposes category, mutationPossibility none|possible|confirmed, retryAction, safe identifiers, and durable state but cannot carry source paths, rows, amounts, balances, full bank identifiers, raw requests, manifests, stack traces, or parser exceptions.
+- IngestError exposes category, mutationPossibility none|possible|confirmed, retryAction, batchId, candidateId, and sourceRecordId, and durable state but cannot carry source paths, rows, amounts, balances, full bank identifiers, raw requests, manifests, stack traces, or parser exceptions.
 - Manifest and receipt records preserve stable identifiers and immutable facts while CompletedMetadataReceipt excludes descriptions, amounts, balances, evidence, controls, and frozen requests.
 - IngestJsonContext contains source-generated metadata for every contract type, rejects unknown fields, and produces byte-identical logical JSON across repeated serialization.
 

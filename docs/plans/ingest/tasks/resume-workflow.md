@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-RESUME-WORKFLOW`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-03-COMMIT-RECOVERY`
-- **State:** `ready`
+- **State:** `planned`
 - **Priority:** `0`
 - **Sort Order:** `20`
 - **Dialect:** `default`
@@ -23,7 +23,7 @@ Deliver ingest.resume so repeated recovery converges without a second canonical 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | DD-INGEST-COMMIT-RECOVERY: Per-batch locked idempotent candidate saga | `design_decision` | `governed-by` | `true` |
-| DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with exact replay and blocked overlap | `design_decision` | `governed-by` | `true` |
+| DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap | `design_decision` | `governed-by` | `true` |
 | DIAG-INGEST-BATCH-STATE: Import batch lifecycle | `design_diagram` | `touches` | `true` |
 | DM-INGEST-IMPORT-RECEIPT: ImportReceiptAndCandidateOutcome | `data_model` | `touches` | `true` |
 | FA-INGEST-RECOVERY-CLEANUP: Recovery and Cleanup | `feature_area` | `touches` | `true` |
@@ -37,6 +37,7 @@ Deliver ingest.resume so repeated recovery converges without a second canonical 
 | Depends On | Type | Reason |
 |---|---|---|
 | [TASK-INGEST-COMMIT-SAGA](../tasks/commit-saga.md) | `compile` | Resume reuses CandidateCommitSaga, BatchCommitLock, and CommitStateStore. |
+| [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md) | `compile` | Resume failures append complete stable errors through the V002 store. |
 
 ## Recipe
 
@@ -68,7 +69,7 @@ Deliver ingest.resume so repeated recovery converges without a second canonical 
 
 ### Notes
 
-None recorded.
+- Resume replays the exact corrected public input and verifies LedgerImmutableVerification; every stable stop appends a complete BatchErrorEvent atomically with its frontier.
 
 ### File Contracts
 
@@ -88,6 +89,7 @@ None recorded.
 | BatchCommitLock | `consumes` | DD-INGEST-COMMIT-RECOVERY |  |
 | CommitStateStore | `consumes` | DM-INGEST-STATE-STORE |  |
 | ResumeOperationModule | `produces` | DM-INGEST-OPERATION-CONTRACTS |  |
+| BatchErrorEventStore.AppendAsync | `consumes` | DM-INGEST-ERROR-STATUS-CONTRACTS | Append complete safe resume errors in the durable stop transaction |
 
 ### Verification
 
@@ -114,8 +116,9 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 
 - `bead-ref` -> `bd-3ey` (verified)
 - `depends-on:compile` -> [TASK-INGEST-COMMIT-SAGA](../tasks/commit-saga.md): Resume reuses CandidateCommitSaga, BatchCommitLock, and CommitStateStore.
+- `depends-on:compile` -> [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md): Resume failures append complete stable errors through the V002 store.
 - `governed-by` -> DD-INGEST-COMMIT-RECOVERY: Per-batch locked idempotent candidate saga
-- `governed-by` -> DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with exact replay and blocked overlap
+- `governed-by` -> DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap
 - `implements` -> FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit
 - `satisfies` -> NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY: Recover every interrupted commit deterministically
 - `touches` -> DIAG-INGEST-BATCH-STATE: Import batch lifecycle

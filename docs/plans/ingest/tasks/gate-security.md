@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-GATE-SECURITY`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `ready`
+- **State:** `planned`
 - **Priority:** `0`
 - **Sort Order:** `20`
 - **Dialect:** `default`
@@ -27,8 +27,6 @@ Prove that hostile/malformed input and every success/failure/crash path disclose
 | DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction | `design_decision` | `governed-by` | `true` |
 | NFR-INGEST-BOUNDED-PARSING: Bound passive statement processing | `nfr` | `satisfies` | `true` |
 | NFR-INGEST-LOCAL-DATA-PROTECTION: Protect local statement and ingestion data | `nfr` | `satisfies` | `true` |
-| RISK-INGEST-004: Raw statements or extracted temporary data can leak through permissions, logs, crash artifacts, or indefinite retention. | `risk` | `references` | `false` |
-| RISK-INGEST-007: A malformed or adversarial document can exhaust local CPU, memory, disk, decompression, or parser time, or attempt active-content and external-resource execution. | `risk` | `references` | `false` |
 | TC-INGEST-ARTIFACT-PROTECTION: Verify source and artifact privacy boundaries | `test_case` | `verifies` | `true` |
 | TC-INGEST-PDF-EXTRACTION-AOT: Verify PdfPig Native-AOT extraction conformance | `test_case` | `verifies` | `true` |
 
@@ -53,7 +51,7 @@ Prove that hostile/malformed input and every success/failure/crash path disclose
 
 ### Failure Criteria
 
-- Do NOT weaken canary assertions, redact after logging, or treat process isolation as sufficient — prevent payload entry at each boundary.
+- Do NOT weaken canary assertions, redact after logging, or treat OS invocation isolation as establishing protection — prevent payload entry at each boundary.
 - Do NOT skip owner-only mode checks on supported hosts or continue after failure.
 - Do NOT persist test fixture paths/content or emit them when a security assertion fails.
 
@@ -119,8 +117,6 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `governed-by` -> DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling
 - `governed-by` -> DD-INGEST-DOCUMENT-EXTRACTION: Managed in-process PDF extraction with PdfPig
 - `governed-by` -> DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction
-- `references` -> RISK-INGEST-004: Raw statements or extracted temporary data can leak through permissions, logs, crash artifacts, or indefinite retention.
-- `references` -> RISK-INGEST-007: A malformed or adversarial document can exhaust local CPU, memory, disk, decompression, or parser time, or attempt active-content and external-resource execution.
 - `satisfies` -> NFR-INGEST-BOUNDED-PARSING: Bound passive statement processing
 - `satisfies` -> NFR-INGEST-LOCAL-DATA-PROTECTION: Protect local statement and ingestion data
 - `verifies` -> TC-INGEST-ARTIFACT-PROTECTION: Verify source and artifact privacy boundaries

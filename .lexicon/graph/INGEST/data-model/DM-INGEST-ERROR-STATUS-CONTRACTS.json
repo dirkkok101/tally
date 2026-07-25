@@ -4,14 +4,17 @@
   "ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
   "name": "IngestErrorAndStatusContracts",
   "description": [
-    "Stable safe workflow, parser, compatibility, resource, overlap, and recovery outcomes."
+    "Stable safe workflow errors, append-only durable error events, batch status projections, and opaque snapshot cursor contracts."
   ],
   "schema_def": [
     "IngestError {code, category: usage|validation|unsupported|unsafe_source|compatibility|permission|resource|reconciliation|overlap|ledger|interrupted|conflict|unexpected, safeMessage, batchId?, candidateId?, mutationPossibility: none|possible|confirmed, durableState?, retryAction: none|retry|repreview|resume|abandon|correct_source, field?}",
+    "BatchErrorEvent {errorEventId, batchId, sequence, code, category, safeMessage, candidateId?, mutationPossibility, durableState?, retryAction, field?, recordedAt}; append-only; complete safe metadata is written atomically with the workflow transition and latest sequence is lastStableError.",
     "BatchStatusSummary {batchId, status, adapterId?, createdAt, updatedAt, outcomeCounts, nextAllowedOperations[]}",
     "BatchStatusDetail {summary, manifestRevisionId?, approved, receiptStatus?, terminalCounts, unresolvedFrontier, lastStableError?, retainedArtifactKinds[]}",
+    "IngestStatusCursorPayload {cursorVersion: 1, contractVersion, snapshotId, nextOrdinal, pageSize: 1..100, storeGeneration, expiresAt}; opaque base64url public value validated against the stored header.",
+    "StatusSnapshot {snapshotId, contractVersion, storeGeneration, createdAt, expiresAt, totalCount}; ephemeral metadata-only query state. StatusSnapshotItem {snapshotId, ordinal, batchStatusSummaryJson}; immutable membership ordered by updatedAt descending then batchId.",
     "",
-    "Errors and status never contain source paths, statement rows, descriptions, amounts, balances, full bank identifiers, requests, manifests, stack traces, or parser exceptions. Exit categories mirror the shared Tally contract; structured code remains authoritative."
+    "Errors and status snapshots never contain source paths, statement rows, descriptions, amounts, balances, full bank identifiers, requests, manifests, stack traces, or parser exceptions. Exit categories mirror the shared Tally contract; structured code remains authoritative."
   ],
   "created_at": "2026-07-18T12:05:55.5851342+00:00",
   "links": [

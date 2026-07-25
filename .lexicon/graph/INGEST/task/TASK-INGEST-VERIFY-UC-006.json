@@ -65,6 +65,15 @@
       "created_at": "2026-07-18T12:56:24.4112574+00:00"
     }
   ],
+  "links": [
+    {
+      "id": "01KYCRZJ4WEATB8BJ8VA17DZK0",
+      "target_type": "use_case",
+      "target": "UC-INGEST-006",
+      "rel": "see-also",
+      "created_at": "2026-07-25T13:56:04.8927894+00:00"
+    }
+  ],
   "recipe_items": [
     {
       "id": "01KXTMS8K0VS9G1WPHVPTTX1JD",

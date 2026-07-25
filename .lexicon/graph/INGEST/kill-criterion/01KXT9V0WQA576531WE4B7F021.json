@@ -3,6 +3,8 @@
   "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
   "condition": "At discovery and planning, if a representative format cannot reconcile every extracted row, required field, and available source total deterministically, mark that format unsupported and do not provide automatic commit for it.",
   "monitored": 1,
-  "evaluation_state": "unassessed",
+  "evaluation_state": "clear",
+  "evaluation_evidence": "Discovery fixture evidence records exact every-row and available-control reconciliation for all three representative PDFs; the private-manifest execution gate preserves that requirement and refuses unsupported or incomplete evidence.",
+  "evaluated_at": "2026-07-25T13:47:12.2028878+00:00",
   "created_at": "2026-07-18T09:45:07.7362146+00:00"
 }

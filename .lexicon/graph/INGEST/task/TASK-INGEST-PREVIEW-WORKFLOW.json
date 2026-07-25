@@ -33,14 +33,14 @@
   ],
   "dependencies": [
     {
-      "id": "01KXTMX01S8RGGE0C5BRXZDCFS",
+      "id": "01KYCS3N46S81KJNX6ZYKBPH0W",
       "target": "TASK-INGEST-CONTRACT-FOUNDATION",
       "dependency_type": "compile",
       "reason": [
-        "Consumes IngestOperationContracts."
+        "Preview consumes IngestOperationContracts."
       ],
-      "sort_order": 4,
-      "created_at": "2026-07-18T12:58:26.7464625+00:00"
+      "sort_order": 8,
+      "created_at": "2026-07-25T13:58:19.0151502+00:00"
     },
     {
       "id": "01KXTMAH8TDJ0ZE6QG5TGHEK25",
@@ -73,14 +73,24 @@
       "created_at": "2026-07-18T12:48:21.7802577+00:00"
     },
     {
-      "id": "01KXTMAH8S1PE4063R861B3NYW",
+      "id": "01KYCS3MKK5WSZT46DWGE4DPNH",
       "target": "TASK-INGEST-STATE-FOUNDATION",
       "dependency_type": "compile",
       "reason": [
-        "Preview persists one atomic manifest transaction through IngestDatabase."
+        "Preview persists through IngestDatabase."
       ],
-      "sort_order": 0,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "sort_order": 7,
+      "created_at": "2026-07-25T13:58:18.4842803+00:00"
+    },
+    {
+      "id": "01KYCRCRQBM6H5H238VW85DYJK",
+      "target": "TASK-INGEST-STATUS-STATE-V002",
+      "dependency_type": "compile",
+      "reason": [
+        "Preview persists complete batch-addressable failure metadata through the V002 store."
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-25T13:45:49.0358186+00:00"
     }
   ],
   "files": [
@@ -150,154 +160,165 @@
   ],
   "interfaces": [
     {
-      "id": "01KXTMAH8SPCANAR7A7KYEQBWA",
+      "id": "01KYCRE2J8VJQBS5C57WY8KAW0",
       "name": "IngestOperationContracts",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
       "sort_order": 0,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-25T13:46:31.8784008+00:00"
     },
     {
-      "id": "01KXTMAH8SY2KNZ2EEKQ97GJT7",
+      "id": "01KYCRE2J837P6KGTXFDJ1XZJQ",
       "name": "IngestDatabase",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-STATE-STORE",
       "sort_order": 1,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-25T13:46:31.8784008+00:00"
     },
     {
-      "id": "01KXTMAH8SSHHRW1KHS3ZBKRX1",
+      "id": "01KYCRE2J8TAMZ4GDBSEN38WQT",
       "name": "StatementAdapterRegistry",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
       "sort_order": 2,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-25T13:46:31.8784008+00:00"
     },
     {
-      "id": "01KXTMAH8SNRW9J91AHC2HH5JV",
+      "id": "01KYCRE2J85TYKQHT77ABDQG27",
       "name": "LedgerContractClient.GetAccountAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS",
       "sort_order": 3,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-25T13:46:31.8784008+00:00"
     },
     {
-      "id": "01KXTMAH8S5NT1S95ZVJN4V1FS",
+      "id": "01KYCRE2J9JT4FFXE8KS78KCAR",
       "name": "IngestIdentity",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-IMPORT-MANIFEST",
       "sort_order": 4,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-25T13:46:31.8784008+00:00"
     },
     {
-      "id": "01KXTMAH8SS4E7BT8SSCZ90T54",
+      "id": "01KYCRE2J9E1BGE78A51221RHT",
       "name": "FinancialNormalizer",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-IMPORT-MANIFEST",
       "sort_order": 5,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-25T13:46:31.8784008+00:00"
     },
     {
-      "id": "01KXTMAH8SBJJNK1FTF7GG4XD4",
+      "id": "01KYCRE2J9S0EF8XPTCQX4CYN0",
       "name": "StatementReconciler",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-IMPORT-MANIFEST",
       "sort_order": 6,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-25T13:46:31.8784008+00:00"
     },
     {
-      "id": "01KXTMAH8SSNTG8CWBHYPAAQP3",
+      "id": "01KYCRE2J9E9YD0J44SZYN7NRP",
       "name": "ManifestCanonicalizer",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-IMPORT-MANIFEST",
       "sort_order": 7,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-25T13:46:31.8784008+00:00"
     },
     {
-      "id": "01KXTMAH8SBJW9F8YS4B1HRE3H",
+      "id": "01KYCRE2J9R3R8GZXQTPB909YX",
       "name": "OverlapPolicy",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-IMPORT-MANIFEST",
       "sort_order": 8,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-25T13:46:31.8784008+00:00"
     },
     {
-      "id": "01KXTMAH8S4DP1TC91FZVMJ5AD",
+      "id": "01KYCRE2J9TPZQZF9BGEXYQ2SA",
       "name": "PreviewStateStore",
       "direction": "produces",
       "contract_ref_code": "DM-INGEST-STATE-STORE",
       "sort_order": 9,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-25T13:46:31.8784008+00:00"
     },
     {
-      "id": "01KXTMAH8S89HT7FF92VJN3W1E",
+      "id": "01KYCRE2J9FSW5T9N85SMFZT6B",
       "name": "PreviewOperationModule",
       "direction": "produces",
       "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
       "sort_order": 10,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-25T13:46:31.8784008+00:00"
+    },
+    {
+      "id": "01KYCRE2J9B5ATBVRFKB70KDFV",
+      "name": "BatchErrorEventStore.AppendAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
+      "notes": [
+        "Append complete safe errors in the preview transaction"
+      ],
+      "sort_order": 11,
+      "created_at": "2026-07-25T13:46:31.8784008+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KXTZVVT7BQAP0X5PFM4F7NYT",
+      "id": "01KYCRW08W16F48TBXAHT4GEF8",
       "kind": "acceptance_check",
       "text": [
         "Preview validates contract versions, selected account identifier, path schema, and advertised limits before opening the source; LedgerContractClient confirms exactly one active ZAR account and statement metadata must agree without inference."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T16:10:03.9755958+00:00"
+      "created_at": "2026-07-25T13:54:08.2845033+00:00"
     },
     {
-      "id": "01KXTZVVT88815635QKFGEA0RA",
+      "id": "01KYCRW08YM6QSXAKP37HF6EM7",
       "kind": "acceptance_check",
       "text": [
-        "CallerOwnedSourceReader opens read-only, captures safe before/after metadata, reads no more than the byte limit into one immutable buffer, computes SHA-256 over those exact bytes, and returns source_changed if metadata or bytes change."
+        "CallerOwnedSourceReader opens read-only, captures file size and last-write timestamp before and after reading, reads no more than the byte limit into one immutable buffer, computes SHA-256 over those exact bytes, and returns source_changed if metadata or bytes change."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T16:10:03.9755958+00:00"
+      "created_at": "2026-07-25T13:54:08.2845033+00:00"
     },
     {
-      "id": "01KXTZVVT884YGZ6K0N39VZYQH",
+      "id": "01KYCRW08YDKT0VHNY5S7KPG9X",
       "kind": "acceptance_check",
       "text": [
         "PreviewStateStore checks the complete Exact Replay key first: Source Fingerprint, selected account, adapter version, and LEDGER contract version. An active or completed match returns the prior manifest, status, or receipt without reparsing or mutation; any changed key component requires a new preview before overlap evaluation."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T16:10:03.9755958+00:00"
+      "created_at": "2026-07-25T13:54:08.2845033+00:00"
     },
     {
-      "id": "01KXTZVVT8865X9ECH3D4C43TX",
+      "id": "01KYCRW08YDMQE38854C26S0AM",
       "kind": "acceptance_check",
       "text": [
-        "A new source runs the real extractor and exactly one registered adapter, normalizes/accounts/reconciles every record, blocks any ambiguity or overlap, canonicalizes the complete ordered manifest, and persists batch, revision, records, candidates, controls, and safe status in one INGEST transaction."
+        "A new source runs the real extractor and exactly one registered adapter, normalizes/accounts/reconciles every record, blocks any ambiguity or overlap, canonicalizes the complete ordered manifest, and persists batch, revision, records, candidates, controls, and metadata-only status in one INGEST transaction."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T16:10:03.9755958+00:00"
+      "created_at": "2026-07-25T13:54:08.2845033+00:00"
     },
     {
-      "id": "01KXTZVVT8FQTXH96F0K5TY1MV",
+      "id": "01KYCRW08YS6XPDCTCA8JYF0GA",
       "kind": "acceptance_check",
       "text": [
         "Success returns stable batchId and manifestRevisionId; any failure creates no committable manifest; every path leaves the source byte-for-byte unchanged and invokes no ledger.transaction.record."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T16:10:03.9755958+00:00"
+      "created_at": "2026-07-25T13:54:08.2845033+00:00"
     },
     {
-      "id": "01KXTZVVT87H3917T7YV2P5XSP",
+      "id": "01KYCRW08YWR5DNB3RJ9JDZGN1",
       "kind": "acceptance_check",
       "text": [
         "PreviewOperationModule exposes a typed handler binding for ingest.preview but is not added to the global registry until GATE-INT-PUBLIC-CONTRACT."
       ],
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-18T16:10:03.9755958+00:00"
+      "created_at": "2026-07-25T13:54:08.2845033+00:00"
     },
     {
       "id": "01KXTMAH8SP7TEFPWXG2ZM687N",
@@ -398,6 +419,16 @@
       "required": 1,
       "sort_order": 3,
       "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KYCRW2B4Y302RQDFZX8FC3H5",
+      "kind": "note",
+      "text": [
+        "Construct FrozenLedgerRecordRequest and InitialEvidence only through the corrected IngestIdentity derivation; append every batch-addressable stable preview failure as a complete BatchErrorEvent in the same transaction as the non-committable batch state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:54:10.4041268+00:00"
     }
   ],
   "references": [
@@ -430,7 +461,7 @@
       "id": "01KXTMAH8SX2JW0HGJP6VP6AFJ",
       "gate_type": "test-evidence",
       "description": [
-        "Attach stable manifest digests, exact replay, atomic rollback, source hash, and no-Ledger-write evidence."
+        "Attach stable manifest digests, Exact Replay, atomic rollback, source hash, and no-Ledger-write evidence."
       ],
       "required": 1,
       "sort_order": 0,
@@ -452,7 +483,7 @@
       "id": "01KXTMAH8SJNVWQ8WP7KYXM0SF",
       "phase": "after",
       "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~PreviewWorkflowTests",
-      "expected_result": "exit 0; at least 18 account, source-change, exact-replay, unsupported, ambiguity, overlap, reconciliation, atomic-persistence, no-Ledger-mutation, and source-preservation cases are discovered and 0 tests fail",
+      "expected_result": "exit 0; at least 18 account, source-change, Exact Replay, unsupported, ambiguity, overlap, reconciliation, atomic-persistence, no-Ledger-mutation, and source-preservation cases are discovered and 0 tests fail",
       "required": 1,
       "timeout_seconds": 600,
       "sort_order": 0,

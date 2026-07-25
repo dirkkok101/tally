@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-00-FOUNDATION`
-- **State:** `ready`
+- **State:** `planned`
 - **Priority:** `0`
 - **Sort Order:** `15`
 - **Dialect:** `default`
@@ -23,7 +23,6 @@ Provide a complete, machine-readable, private fixture expectation contract witho
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling | `design_decision` | `governed-by` | `true` |
-| EXT-INGEST-OWNER-BANK-STATEMENT: Owner-Supplied Bank Statement | `external_dependency` | `references` | `true` |
 
 ## Dependencies
 
@@ -33,11 +32,11 @@ No task dependencies recorded.
 
 ### Acceptance Checks
 
-- docs/statements remains ignored and contains exactly the three owner-supplied readable PDF fixtures already assessed during discovery; this gate neither renames nor modifies them.
-- docs/statements/.ingest-fixture-manifest.json is ignored JSON schemaVersion 1 with exactly three fixture objects and exactly two distinct supported variantId values.
-- Each fixture object contains a repository-relative sourcePath below docs/statements plus expected statementPeriod, accountEvidence, orderedRecords, and reconciliation controls sufficient to assert every source row, exact available balance control, and variant identity; absolute paths are prohibited and all values remain private.
-- Every manifest sourcePath is repository-relative, stays below docs/statements, resolves to one readable file, and appears only once; no statement filename, path, content, amount, balance, record, or expected fact is emitted by verification.
-- The manifest is supplied to fixture-dependent tests through TALLY_INGEST_PRIVATE_FIXTURE_MANIFEST; another worktree or agent must receive that environment variable rather than reconstructing private facts.
+- docs/statements remains ignored and contains exactly three owner-supplied readable regular PDF fixtures; the directory and every fixture grant no group or other permissions, and the gate neither renames nor modifies a source.
+- docs/statements/.ingest-fixture-manifest.json is ignored owner-only JSON schemaVersion 1 with exactly three fixture objects and exactly two distinct supported variantId values.
+- Each fixture contains a repository-relative sourcePath plus private expected statementPeriod, accountEvidence, orderedRecords, and controls independently reconciled against every source row and available balance control.
+- Every sourcePath is unique, non-absolute, contains no dot or parent traversal segment, names a regular non-symlink PDF, and canonicalizes strictly below the canonical docs/statements root; the manifest, directory, and source files grant no group or other permissions.
+- Verification emits only its exit status and documented structural counts; no filename, locator value, statement content, amount, balance, record, account fact, or expected value enters Git, Lex, logs, test output, or diagnostics.
 
 ### Failure Criteria
 
@@ -76,8 +75,8 @@ No task dependencies recorded.
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `test -s docs/statements/.ingest-fixture-manifest.json && jq -e '(.schemaVersion == 1) and (.fixtures[0] != null) and (.fixtures[1] != null) and (.fixtures[2] != null) and (.fixtures[3] == null) and all(.fixtures[]; (.variantId == "pdf-text-layout-a-v1" or .variantId == "pdf-text-layout-b-v1") and (.sourcePath != null) and (.expected.statementPeriod != null) and (.expected.accountEvidence != null) and (.expected.orderedRecords != null) and (.expected.controls != null)) and any(.fixtures[]; .variantId == "pdf-text-layout-a-v1") and any(.fixtures[]; .variantId == "pdf-text-layout-b-v1") and (.fixtures[0].sourcePath != .fixtures[1].sourcePath) and (.fixtures[0].sourcePath != .fixtures[2].sourcePath) and (.fixtures[1].sourcePath != .fixtures[2].sourcePath)' docs/statements/.ingest-fixture-manifest.json >/dev/null` | exit 0 with no stdout; schemaVersion, exactly three unique fixtures, exactly two supported variants, and all required expected-fact structures are present | `true` | 30 |
-| `after` | `while IFS= read -r fixture_path; do if [[ "$fixture_path" != docs/statements/* ]]; then exit 1; fi; if [[ "${fixture_path##*.}" != [Pp][Dd][Ff] ]]; then exit 1; fi; if ! test -r "$fixture_path"; then exit 1; fi; done < <(jq -er '.fixtures[].sourcePath' docs/statements/.ingest-fixture-manifest.json)` | exit 0 with no stdout; every privately consumed source path stays below docs/statements, names a PDF, and resolves to a readable file | `true` | 30 |
+| `after` | `test -s docs/statements/.ingest-fixture-manifest.json && jq -e '(.schemaVersion == 1) and (.fixtures[0] != null) and (.fixtures[1] != null) and (.fixtures[2] != null) and (.fixtures[3] == null) and (.fixtures[0].sourcePath != .fixtures[1].sourcePath) and (.fixtures[0].sourcePath != .fixtures[2].sourcePath) and (.fixtures[1].sourcePath != .fixtures[2].sourcePath) and (.fixtures[0].expected.statementPeriod != null) and (.fixtures[1].expected.statementPeriod != null) and (.fixtures[2].expected.statementPeriod != null) and (.fixtures[0].expected.accountEvidence != null) and (.fixtures[1].expected.accountEvidence != null) and (.fixtures[2].expected.accountEvidence != null) and (.fixtures[0].expected.orderedRecords != null) and (.fixtures[1].expected.orderedRecords != null) and (.fixtures[2].expected.orderedRecords != null) and (.fixtures[0].expected.controls != null) and (.fixtures[1].expected.controls != null) and (.fixtures[2].expected.controls != null)' docs/statements/.ingest-fixture-manifest.json >/dev/null` | exit 0 with no stdout; schemaVersion, exactly three unique fixtures, and all expected-fact structures are present | `true` | 30 |
+| `after` | `if ! root=$(realpath -e docs/statements); then exit 1; fi; while IFS= read -r p; do if [[ "$p" == /* ]]; then exit 1; fi; if [[ "$p" != docs/statements/* ]]; then exit 1; fi; if [[ "$p" == */../* ]]; then exit 1; fi; if [[ "$p" == */./* ]]; then exit 1; fi; if test -L "$p"; then exit 1; fi; if ! test -f "$p"; then exit 1; fi; if ! test -r "$p"; then exit 1; fi; if ! resolved=$(realpath -e "$p"); then exit 1; fi; if [[ "$resolved" != "$root"/* ]]; then exit 1; fi; if ! mode=$(stat -c %a "$p"); then exit 1; fi; if (( (8#$mode & 077) != 0 )); then exit 1; fi; done < <(jq -er '.fixtures[].sourcePath' docs/statements/.ingest-fixture-manifest.json); shopt -s nullglob nocaseglob; pdfs=(docs/statements/*.pdf); ((${#pdfs[@]} == 3)); manifest_mode=$(stat -c %a docs/statements/.ingest-fixture-manifest.json); root_mode=$(stat -c %a docs/statements); (( (8#$manifest_mode & 077) == 0 && (8#$root_mode & 077) == 0 ))` | exit 0 with no stdout; exactly three regular non-symlink PDFs are referenced strictly below the canonical owner-only root and every private file is owner-only | `true` | 30 |
 | `after` | `git check-ignore -q docs/statements/.ingest-fixture-manifest.json && test -z "$(git ls-files -- docs/statements)"` | exit 0 with no stdout; the private manifest is ignored and no file below docs/statements is tracked | `true` | 30 |
 
 ### Review Gates
@@ -99,7 +98,6 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 
 - `bead-ref` -> `bd-3k6` (verified)
 - `governed-by` -> DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling
-- `references` -> EXT-INGEST-OWNER-BANK-STATEMENT: Owner-Supplied Bank Statement
 
 ## Navigation
 

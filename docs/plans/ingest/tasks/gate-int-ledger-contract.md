@@ -23,7 +23,6 @@ Prove that the released LEDGER registry exposes the exact account-read and idemp
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor | `design_decision` | `governed-by` | `true` |
-| TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract | `task` | `blocked-by` | `true` |
 | TC-INGEST-LEDGER-PUBLIC-CONFORMANCE: Verify INGEST uses only the public LEDGER contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -101,7 +100,6 @@ No task dependencies recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2dg` (verified)
-- `blocked-by` -> TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract
 - `governed-by` -> DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor
 - `verifies` -> TC-INGEST-LEDGER-PUBLIC-CONFORMANCE: Verify INGEST uses only the public LEDGER contract
 

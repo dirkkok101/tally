@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-GATE-INT-FORMAT-ADAPTERS`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-01-FORMAT-CORE`
-- **State:** `ready`
+- **State:** `planned`
 - **Priority:** `0`
 - **Sort Order:** `40`
 - **Dialect:** `default`
@@ -46,7 +46,7 @@ Prove exclusive detection, deterministic extraction, exact private fixture expec
 
 - StatementAdapterRegistry explicitly contains exactly one PdfTextLayoutAStatementAdapter and one PdfTextLayoutBStatementAdapter in deterministic order; no reflection scan, plugin, fallback, third variant, or user configuration exists.
 - Every one of the three private fixtures produces exactly one exact_match and the variant ID declared by the ignored private fixture manifest; zero or multiple matches return a stable unsupported result.
-- Each fixture is extracted twice through the real PdfPig extractor and selected adapter with identical ordered source records, dispositions, controls, and safe digests.
+- Each fixture is extracted twice through the real PdfPig extractor and selected adapter with identical ordered source records, dispositions, controls, and SHA-256 digests.
 - Every transaction-bearing source record is accepted, proven Exact Duplicate by fixture evidence, or blocked; non-transaction exclusions carry stable reasons; all available opening, closing, running-balance, total, and record-count controls match exactly.
 - One-over-limit and malformed sources fail before state or LEDGER mutation; measured direct extraction plus adapter work stays below 5 seconds and 256 MiB peak RSS per fixture on the supported release host.
 

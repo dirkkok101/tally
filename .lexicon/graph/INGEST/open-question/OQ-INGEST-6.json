@@ -2,7 +2,7 @@
   "id": "01KXT9WAVY9SEV65V3WR11Z7HC",
   "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
   "ref_code": "OQ-INGEST-6",
-  "question": "Must commit be atomic for an entire import batch, or may it commit rows independently with a deterministic resume receipt?",
+  "question": "Must commit be atomic for an entire Import Batch, or may it commit rows independently with a deterministic resume receipt?",
   "context": [
     "Determine whether existing LEDGER structured and idempotent write operations are sufficient or whether a project-shaping batch contract decision is required."
   ],

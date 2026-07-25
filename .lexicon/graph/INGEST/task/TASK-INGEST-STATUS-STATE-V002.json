@@ -1,0 +1,343 @@
+{
+  "id": "01KYCR4R70WHV6CY7589YW3HY1",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "sub_plan_id": "01KXTKQ57FSS5HGH1WQNMKD6E8",
+  "ref_code": "TASK-INGEST-STATUS-STATE-V002",
+  "slug": "STATUS-STATE-V002",
+  "title": "Add durable errors and status snapshot schema",
+  "description": [
+    "Extend the landed immutable V001 INGEST store through V002 with complete durable safe error events and protected ephemeral status snapshot tables before any workflow consumes them."
+  ],
+  "objective": [
+    "ingest.db version 2 durably records complete last-error metadata and provides the schema primitives for stable metadata-only status snapshots without editing V001."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 40,
+  "created_at": "2026-07-25T13:41:26.3693548+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYCTX8HHCDX4CPVAQVNG536A",
+      "bead_id": "bd-2i0",
+      "verification_status": "verified",
+      "verified_at": "2026-07-25T14:29:46.6734855+00:00",
+      "created_at": "2026-07-25T14:29:46.6734855+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KYCR4R72C1DDB81MB47EAZXK",
+      "target": "DD-INGEST-STATE-STORE",
+      "created_at": "2026-07-25T13:41:26.3693548+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYCRCPW2TQG901FSCD5KM53M",
+      "target": "TASK-INGEST-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "BatchErrorEventStore persists complete IngestError contract values."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-25T13:45:47.1397017+00:00"
+    },
+    {
+      "id": "01KYCRCP7KC2PPW0J0BP8DKS1T",
+      "target": "TASK-INGEST-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "V002 upgrades the protected V001 ingest.db foundation."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:45:46.4843863+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYCR4R73MS8AEW0V7F1YNSV2",
+      "path": "src/Tally/Infrastructure/Ingest/Storage/Migrations/IngestMigrationV002.cs",
+      "action": "create",
+      "role": "version-2 schema migration",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:41:26.3693548+00:00"
+    },
+    {
+      "id": "01KYCR4R73PSS25J9K5R804NCW",
+      "path": "src/Tally/Infrastructure/Ingest/Storage/IngestSchemaMigrator.cs",
+      "action": "modify",
+      "role": "ordered V001 then V002 migration runner",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-25T13:41:26.3693548+00:00"
+    },
+    {
+      "id": "01KYCR4R73HTSK8ZGWKTMFWHZH",
+      "path": "src/Tally/Infrastructure/Ingest/Storage/BatchErrorEventStore.cs",
+      "action": "create",
+      "role": "atomic complete error event persistence",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-25T13:41:26.3693548+00:00"
+    },
+    {
+      "id": "01KYCR4R73GSTNV7PTYYA9MSRT",
+      "path": "tests/Tally.Tests/Ingest/Storage/IngestDatabaseFoundationTests.cs",
+      "action": "test",
+      "role": "version-2 migration and invariant coverage",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-25T13:41:26.3693548+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYCR4R740QX7JJMNZ599HHZP",
+      "name": "IngestSchemaVersion2",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-STATE-STORE",
+      "notes": [
+        "V002 durable error and ephemeral snapshot tables"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:41:26.3693548+00:00"
+    },
+    {
+      "id": "01KYCR4R74RBQ8BR46C81T5G9N",
+      "name": "BatchErrorEventStore.AppendAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
+      "notes": [
+        "Caller-transaction complete safe error append"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-25T13:41:26.3693548+00:00"
+    },
+    {
+      "id": "01KYCR4R74AHCJT5GFGKSETPV8",
+      "name": "BatchErrorEventStore.LatestAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
+      "notes": [
+        "Highest durable per-batch error sequence"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-25T13:41:26.3693548+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYCRW489Q4R8ZZ6YQXXB5F3A",
+      "kind": "acceptance_check",
+      "text": [
+        "IngestMigrationV001.cs remains byte-for-byte unchanged; IngestMigrationV002.cs upgrades both a new version-0 database and an existing version-1 database to user_version 2 in ordered transactions."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:54:12.3614907+00:00"
+    },
+    {
+      "id": "01KYCRW48AABNZ6Z4YGW2RR92B",
+      "kind": "acceptance_check",
+      "text": [
+        "V002 creates one store-generation row, append-only batch_error_event with complete IngestError metadata and unique per-batch sequence, and metadata-only status_snapshot plus status_snapshot_item with immutable ordinal membership and cascade expiry cleanup."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-25T13:54:12.3614907+00:00"
+    },
+    {
+      "id": "01KYCRW48AE5AREEPTCFNZEFJY",
+      "kind": "acceptance_check",
+      "text": [
+        "BatchErrorEventStore.AppendAsync writes the complete metadata-only error event in the caller-owned workflow transaction; LatestAsync returns the highest sequence without deriving missing guidance from error_code."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-25T13:54:12.3614907+00:00"
+    },
+    {
+      "id": "01KYCRW48AQCD9H0DWWVP1FK7K",
+      "kind": "acceptance_check",
+      "text": [
+        "Real SQLite tests prove constraints, foreign keys, owner protection, migration replay, V001 compatibility, error append/read order, snapshot immutability, and absence of prohibited payload columns."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-25T13:54:12.3614907+00:00"
+    },
+    {
+      "id": "01KYCR4R73D2N2F4FCM91HWZQQ",
+      "kind": "constraint",
+      "text": [
+        "Raw Microsoft.Data.Sqlite, snake_case SQL, foreign keys, WAL, synchronous FULL, explicit transactions, and CancellationToken propagation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:41:26.3693548+00:00"
+    },
+    {
+      "id": "01KYCR4R739TEN7367SJR0PK4A",
+      "kind": "expected_output",
+      "text": [
+        "IngestMigrationV002 and version-2 migrator"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:41:26.3693548+00:00"
+    },
+    {
+      "id": "01KYCR4R7304JX61ZK46MSNDD3",
+      "kind": "expected_output",
+      "text": [
+        "BatchErrorEventStore durable append/read primitive"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-25T13:41:26.3693548+00:00"
+    },
+    {
+      "id": "01KYCR4R734KBCDFXJ2J9E646V",
+      "kind": "expected_output",
+      "text": [
+        "Protected ephemeral status snapshot schema"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-25T13:41:26.3693548+00:00"
+    },
+    {
+      "id": "01KYCRW69ZD18DN08XWW0RGRA1",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT modify IngestMigrationV001.cs or rebuild/drop V001 tables — immutable migration rule per DD-INGEST-STATE-STORE."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:54:14.4628538+00:00"
+    },
+    {
+      "id": "01KYCRW6A0DJ13D80TZCFFJZRZ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT persist source paths, statement rows, descriptions, amounts, balances, full identifiers, manifests, frozen requests, exceptions, or stack traces in error or snapshot tables."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-25T13:54:14.4628538+00:00"
+    },
+    {
+      "id": "01KYCRW6A0DEFBWD718AB7YB69",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT make StatusHandler or BatchErrorEventStore infer category, mutation possibility, durable state, retry action, metadata-only message, or field from a partial code."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-25T13:54:14.4628538+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYCRCJ10R9ESR9M3J5YXD0JV",
+      "target_ref_code": "DM-INGEST-STATE-STORE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXTHWSPAYJP1YS5JKDP4ZPN0",
+      "target_title": "IngestStateStore",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:45:42.1773026+00:00"
+    },
+    {
+      "id": "01KYCRCJNBJ45Z0N9NQVFP72WN",
+      "target_ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXTHWTR02Y3S3QB2FTQ8WDYT",
+      "target_title": "IngestErrorAndStatusContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-25T13:45:42.8282985+00:00"
+    },
+    {
+      "id": "01KYCRCK9VTAQB3VGJHA0NKHJ2",
+      "target_ref_code": "TC-INGEST-STATE-STORE-CONFORMANCE",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTJ0AE3MFPKV4CPF4GD2PQY",
+      "target_title": "Verify INGEST SQLite state and retention",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-25T13:45:43.4846406+00:00"
+    },
+    {
+      "id": "01KYCRCKZ0YCV598F3AXTQ4VHW",
+      "target_ref_code": "TC-INGEST-FAILURE-STATUS-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTF4ZJ8JCMA6CB7RK9DZ62M",
+      "target_title": "Verify safe failure and status reporting",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-25T13:45:44.1617067+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYCR4R72RDKG1ZWD72HDT71S",
+      "target": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+      "created_at": "2026-07-25T13:41:26.3693548+00:00"
+    },
+    {
+      "id": "01KYCR4R727X397BNDACE91RH3",
+      "target": "FR-INGEST-FAILURE-STATUS",
+      "created_at": "2026-07-25T13:41:26.3693548+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYCR4R74A89RY70PRBX4H35R",
+      "gate_type": "test-evidence",
+      "description": [
+        "Attach version-0 and version-1 upgrade, append-only error, snapshot, and prohibited-column evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:41:26.3693548+00:00"
+    },
+    {
+      "id": "01KYCR4R744BBR239AZF9H4BCN",
+      "gate_type": "branch-review",
+      "description": [
+        "Reviewer confirms V001 is unchanged and V002 contains no financial payload columns."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-25T13:41:26.3693548+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYCR4R74NQ16E1NRJ8WEGBW2",
+      "phase": "before",
+      "command": "git diff --exit-code HEAD -- src/Tally/Infrastructure/Ingest/Storage/Migrations/IngestMigrationV001.cs",
+      "expected_result": "exit 0 with no output; V001 is unchanged",
+      "required": 1,
+      "timeout_seconds": 30,
+      "sort_order": 0,
+      "created_at": "2026-07-25T13:41:26.3693548+00:00"
+    },
+    {
+      "id": "01KYCR4R74FNMDCRG4W2F54CTX",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~IngestDatabaseFoundationTests",
+      "expected_result": "exit 0; at least 24 V001/V002 migration, error-event, snapshot-schema, constraint, and protection cases are discovered and 0 tests fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 1,
+      "created_at": "2026-07-25T13:41:26.3693548+00:00"
+    }
+  ]
+}

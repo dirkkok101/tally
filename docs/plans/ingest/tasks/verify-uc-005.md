@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-VERIFY-UC-005`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-04-VERIFICATION`
-- **State:** `ready`
+- **State:** `planned`
 - **Priority:** `1`
 - **Sort Order:** `70`
 - **Dialect:** `default`
@@ -38,11 +38,11 @@ Prove an owner can recover from or safely terminate every failed ingestion witho
 
 ### Acceptance Checks
 
-- Every failure returns stable code/category, safe IDs, mutation possibility, last durable state, and retry/resume/abandon/correct-source guidance with one stdout result and metadata-only stderr.
-- When payload would be needed to explain an error, the result uses safe correlation/record IDs instead and canary data is absent from every output/log.
+- Every failure returns stable code/category, batchId and candidateId, mutation possibility, last durable state, and retry/resume/abandon/correct-source guidance with one stdout result and metadata-only stderr.
+- When payload would be needed to explain an error, the result uses batchId, candidateId, and sourceRecordId instead and canary data is absent from every output/log.
 - Permission-establishment failure persists no sensitive artifact and performs no Ledger mutation.
 - Status proves pre-commit failures have no committable manifest/effect and commit-stage failures preserve exact completed outcomes plus unresolved frontier.
-- A simulated crash leaves only known durable/recoverable artifacts; next safe startup removes disposable residue and retains required state.
+- A simulated crash leaves only known durable/recoverable artifacts; next startup after acquiring the artifact-cleanup lock removes disposable residue and retains required state.
 - Cleanup rejects ambiguous/locked/recoverable targets; abandon prevents commit/resume but preserves prior effects; terminal cleanup removes only selected INGEST artifacts and leaves source/Ledger unchanged.
 
 ### Failure Criteria
@@ -86,7 +86,7 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `test-evidence` | Attach safe error/status envelopes and before/after artifact/source/Ledger inventories. | `true` |
+| `test-evidence` | Attach metadata-only error/status envelopes and before/after artifact/source/Ledger inventories. | `true` |
 
 ## Bead References
 

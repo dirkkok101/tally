@@ -378,17 +378,6 @@
       "created_at": "2026-07-18T12:48:21.7802577+00:00"
     },
     {
-      "id": "01KXTMAH8RKTW6BDQNYWDF4FYQ",
-      "target_ref_code": "DIAG-INGEST-PREVIEW-COMMIT-SEQUENCE",
-      "target_entity_type": "design_diagram",
-      "target_entity_id": "01KXTHY33RWZRYD48H6S2WA3MJ",
-      "target_title": "Preview approval commit and receipt sequence",
-      "relationship": "touches",
-      "required": 0,
-      "sort_order": 2,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
-    },
-    {
       "id": "01KXTMAH8RMW9WE44NS44MBC1S",
       "target_ref_code": "TC-INGEST-FINANCIAL-NORMALIZATION-CONTRACT",
       "target_entity_type": "test_case",
@@ -444,7 +433,7 @@
       "id": "01KXTMAH8RQ7SEXNY927465HRP",
       "gate_type": "test-evidence",
       "description": [
-        "Attach stable identity vectors and exact minor-unit reconciliation evidence."
+        "Attach stable identity vectors and exact minor-unit Reconciliation Evidence."
       ],
       "required": 1,
       "sort_order": 0,
@@ -466,7 +455,7 @@
       "id": "01KXTMAH8R7W4Q88A32E7YZF0X",
       "phase": "after",
       "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~IngestIdentityTests|FullyQualifiedName~FinancialNormalizationTests|FullyQualifiedName~ReconciliationAndManifestTests'",
-      "expected_result": "exit 0; at least 35 identity, tuple-collision, sign, date, zero-movement, accounting, control, canonicalization, exact-replay, and overlap cases are discovered and 0 tests fail",
+      "expected_result": "exit 0; at least 35 identity, tuple-collision, sign, date, zero-movement, accounting, control, canonicalization, Exact Replay, and overlap cases are discovered and 0 tests fail",
       "required": 1,
       "timeout_seconds": 360,
       "sort_order": 0,

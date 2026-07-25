@@ -8,7 +8,7 @@
   "likelihood": "High",
   "impact": "High",
   "mitigation": [
-    "Detect explicit format variants, version adapters, retain regression fixtures, and reject unrecognized layout changes before LEDGER mutation."
+    "Detect explicit Format Variants, version adapters, retain regression fixtures, and reject unrecognized layout changes before LEDGER mutation."
   ],
   "created_at": "2026-07-18T09:45:47.8721874+00:00"
 }

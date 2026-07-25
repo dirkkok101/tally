@@ -1,0 +1,9 @@
+{
+  "id": "01KYCTWDXFC33XQVPD1MFD6642",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "version": "0.7",
+  "changes": [
+    "Corrected active design and PLAN-INGEST-V1 for the released Ledger InitialEvidence and immutable round-trip contract, V002 durable error metadata and 15-minute status snapshots, owner-authorized ignored private fixture constraints, and rejected receipt-outcome consistency. Documentation review 20260725T141929788Z-250e6128 passed with zero findings; the plan has 27 tasks and full required coverage."
+  ],
+  "created_at": "2026-07-25T14:29:19.4090092+00:00"
+}

@@ -27,7 +27,7 @@
     "Given every candidate has a Terminal Candidate Outcome, when commit or resume completes, then INGEST returns one complete receipt with exact outcome counts and canonical references and marks no candidate merely processed."
   ],
   "security_criteria": [
-    "Receipts are owner-only sensitive artifacts; structured status may expose safe identifiers and outcome categories but not raw financial payloads."
+    "Receipts are owner-only sensitive artifacts; structured status may expose batchId, candidateId, canonical transaction references, and outcome categories but not raw financial payloads."
   ],
   "status": "active",
   "created_at": "2026-07-18T11:13:07.2224880+00:00",

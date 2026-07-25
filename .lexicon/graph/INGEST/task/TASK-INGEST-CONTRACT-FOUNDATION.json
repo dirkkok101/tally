@@ -9,7 +9,7 @@
     "Create source-generated public records, stable errors, operation IDs, manifest/receipt views, and compatibility metadata used identically by every later slice."
   ],
   "objective": [
-    "Produce the typed Native-AOT-safe contract foundation for all eight INGEST operations without registering incomplete handlers."
+    "Produce typed source-generated contract records for all eight INGEST operations without registering incomplete handlers."
   ],
   "planning_state": "ready",
   "priority": 0,
@@ -176,54 +176,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXTM0RWJ4334P61AD1WS7V04",
+      "id": "01KYCRVM5V2T85QM4GRGDMV1B0",
       "kind": "acceptance_check",
       "text": [
         "IngestOperationIds contains exactly ingest.preview, ingest.inspect, ingest.approve, ingest.commit, ingest.resume, ingest.status, ingest.abandon, and ingest.cleanup with no generic operation."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+      "created_at": "2026-07-25T13:53:55.8990402+00:00"
     },
     {
-      "id": "01KXTM0RWJTPQBE8V4BHZR3F1W",
+      "id": "01KYCRVM5XMP0GSV493Z7Z0HSV",
       "kind": "acceptance_check",
       "text": [
         "Concrete request/result records match DM-INGEST-OPERATION-CONTRACTS, use closed enums for finite states, carry explicit contract versions, and expose sourcePath only inside PreviewRequest."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+      "created_at": "2026-07-25T13:53:55.8990402+00:00"
     },
     {
-      "id": "01KXTM0RWJSF19GXGGG5F12VR4",
+      "id": "01KYCRVM5XZ5AJVDA1D7R0CSZ1",
       "kind": "acceptance_check",
       "text": [
-        "IngestError exposes category, mutationPossibility none|possible|confirmed, retryAction, safe identifiers, and durable state but cannot carry source paths, rows, amounts, balances, full bank identifiers, raw requests, manifests, stack traces, or parser exceptions."
+        "IngestError exposes category, mutationPossibility none|possible|confirmed, retryAction, batchId, candidateId, and sourceRecordId, and durable state but cannot carry source paths, rows, amounts, balances, full bank identifiers, raw requests, manifests, stack traces, or parser exceptions."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+      "created_at": "2026-07-25T13:53:55.8990402+00:00"
     },
     {
-      "id": "01KXTM0RWJ0PQS7MFGP0AC3FPC",
+      "id": "01KYCRVM5X7KQ49X12REB58M9M",
       "kind": "acceptance_check",
       "text": [
         "Manifest and receipt records preserve stable identifiers and immutable facts while CompletedMetadataReceipt excludes descriptions, amounts, balances, evidence, controls, and frozen requests."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+      "created_at": "2026-07-25T13:53:55.8990402+00:00"
     },
     {
-      "id": "01KXTM0RWJ3XAB4C6YFWBB4TAR",
+      "id": "01KYCRVM5X5ZXDJTS48W1QRXV6",
       "kind": "acceptance_check",
       "text": [
         "IngestJsonContext contains source-generated metadata for every contract type, rejects unknown fields, and produces byte-identical logical JSON across repeated serialization."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T12:43:01.9014692+00:00"
+      "created_at": "2026-07-25T13:53:55.8990402+00:00"
     },
     {
       "id": "01KXTM0RWKHWW31FZ3306GSKSG",

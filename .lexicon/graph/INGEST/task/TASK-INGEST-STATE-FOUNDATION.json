@@ -312,28 +312,6 @@
       "created_at": "2026-07-18T12:43:01.9014692+00:00"
     },
     {
-      "id": "01KXTM0RWP8M3SFY9BJYSZDVW0",
-      "target_ref_code": "DIAG-INGEST-STATE-ER",
-      "target_entity_type": "design_diagram",
-      "target_entity_id": "01KXTHY3QWETJBKB5DVWQR30E5",
-      "target_title": "INGEST durable state model",
-      "relationship": "touches",
-      "required": 0,
-      "sort_order": 2,
-      "created_at": "2026-07-18T12:43:01.9014692+00:00"
-    },
-    {
-      "id": "01KXTM0RWPHSCW2RWGNMMWSQA0",
-      "target_ref_code": "FA-INGEST-RECOVERY-CLEANUP",
-      "target_entity_type": "feature_area",
-      "target_entity_id": "01KXTHXE19R5BDNBP7H26FZHJ8",
-      "target_title": "Recovery and Cleanup",
-      "relationship": "touches",
-      "required": 0,
-      "sort_order": 3,
-      "created_at": "2026-07-18T12:43:01.9014692+00:00"
-    },
-    {
       "id": "01KXTM0RWPG19WJKNKBJW6PMHR",
       "target_ref_code": "TC-INGEST-STATE-STORE-CONFORMANCE",
       "target_entity_type": "test_case",

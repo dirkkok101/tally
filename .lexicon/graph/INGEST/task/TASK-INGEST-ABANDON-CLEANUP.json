@@ -9,7 +9,7 @@
     "Make incomplete state terminal only after lock release, preserve prior canonical effects, compact sensitive state, and delete only state-proven disposable INGEST artifacts."
   ],
   "objective": [
-    "Deliver ingest.abandon, ingest.cleanup, and safe startup cleanup without deleting sources, recoverable manifests, receipts, or Ledger data."
+    "Deliver ingest.abandon, ingest.cleanup, and startup cleanup after acquiring the artifact-cleanup lock without deleting sources, recoverable manifests or receipts, or Ledger data; explicit owner cleanup may remove only the selected completed metadata receipt or abandoned tombstone and eligible artifacts."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -61,6 +61,16 @@
       ],
       "sort_order": 1,
       "created_at": "2026-07-18T12:51:07.3836449+00:00"
+    },
+    {
+      "id": "01KYCRCWA2W0PCX6A0S0CK1A42",
+      "target": "TASK-INGEST-STATUS-STATE-V002",
+      "dependency_type": "compile",
+      "reason": [
+        "Recovery mutations append complete stable errors and clean V002 snapshots safely."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-25T13:45:52.7074265+00:00"
     }
   ],
   "files": [
@@ -130,122 +140,133 @@
   ],
   "interfaces": [
     {
-      "id": "01KXTMFJZYEP4ASE4MA19K9P7K",
+      "id": "01KYCRE5NQNT1G88SQJC5W3N6C",
       "name": "ImportReceipt",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-IMPORT-RECEIPT",
       "sort_order": 0,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:46:35.0601853+00:00"
     },
     {
-      "id": "01KXTMFJZZVE52G9X28V2HYKZS",
+      "id": "01KYCRE5NQAKSBHDC7TBHXM0PN",
       "name": "IngestDatabase",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-STATE-STORE",
       "sort_order": 1,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:46:35.0601853+00:00"
     },
     {
-      "id": "01KXTMFJZZY5NVGN7KBK182D99",
+      "id": "01KYCRE5NQ1K3JREKSPJPBDC3P",
       "name": "IngestArtifactProtection.EnsureOwnerOnly",
       "direction": "consumes",
       "contract_ref_code": "DD-INGEST-ARTIFACT-SECURITY",
       "sort_order": 2,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:46:35.0601853+00:00"
     },
     {
-      "id": "01KXTMFJZZ7JJE3XK2SJQM9MV5",
+      "id": "01KYCRE5NQ79F9Q10Y3HT4V7JG",
       "name": "BatchCommitLock",
       "direction": "consumes",
       "contract_ref_code": "DD-INGEST-COMMIT-RECOVERY",
       "sort_order": 3,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:46:35.0601853+00:00"
     },
     {
-      "id": "01KXTMFJZZM858YTHQBJ4HNTCQ",
+      "id": "01KYCRE5NQFXKS7AX4DY1VMG64",
       "name": "RecoveryStateStore",
       "direction": "produces",
       "contract_ref_code": "DM-INGEST-STATE-STORE",
       "sort_order": 4,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:46:35.0601853+00:00"
     },
     {
-      "id": "01KXTMFJZZ37P6K2ZNAQB3KHY9",
+      "id": "01KYCRE5NQMADCFYGTBQ9DQZ6K",
       "name": "StartupIngestCleanup",
       "direction": "produces",
       "contract_ref_code": "DD-INGEST-ARTIFACT-SECURITY",
       "sort_order": 5,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:46:35.0601853+00:00"
     },
     {
-      "id": "01KXTMFJZZYTKXG1G5KH3YTDRD",
+      "id": "01KYCRE5NQHEN7R0MEY3BFA3FE",
       "name": "RecoveryCleanupOperationModule",
       "direction": "produces",
       "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
       "sort_order": 6,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:46:35.0601853+00:00"
+    },
+    {
+      "id": "01KYCRE5NQWBXPEQKCC8NPTSD9",
+      "name": "BatchErrorEventStore.AppendAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
+      "notes": [
+        "Append complete safe recovery errors in the caller transaction"
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-25T13:46:35.0601853+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KXTMFJZY2RW0YD9W5M5CNGSD",
+      "id": "01KYCRVJ3Z1TRDA4BAAFB5REBH",
       "kind": "acceptance_check",
       "text": [
         "Abandon requires an incomplete non-terminal batch, exact durable state, explicit reason, and an unheld BatchCommitLock; it atomically marks abandoned, blocks future commit/resume, preserves prior Ledger transaction references/counts, and compacts sensitive state to a metadata tombstone."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:53:53.7910603+00:00"
     },
     {
-      "id": "01KXTMFJZYTRGK7F9EE2AZCP7C",
+      "id": "01KYCRVJ405354ES0WWP7M248X",
       "kind": "acceptance_check",
       "text": [
-        "A completed batch compacts manifest rows, descriptions, amounts, balances, controls, evidence, and frozen requests only after every terminal canonical reference verifies; CompletedMetadataReceipt retains stable identities, versions, outcome categories, safe refs, Ledger refs, counts, and completedAt."
+        "A completed batch compacts manifest rows, descriptions, amounts, balances, controls, evidence, and frozen requests only after every terminal canonical reference verifies; CompletedMetadataReceipt retains stable identities, versions, outcome categories, batch and candidate references, Ledger refs, counts, and completedAt."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:53:53.7910603+00:00"
     },
     {
-      "id": "01KXTMFJZYM6ECFJP5PQGSXSF1",
+      "id": "01KYCRVJ40WK83B6SZAAA2PR38",
       "kind": "acceptance_check",
       "text": [
         "Cleanup rejects active, approved, committing, interrupted-but-recoverable, locked, ambiguous, or mismatched expectedTerminalStatus targets with retained_for_recovery; it removes only the selected completed receipt or abandoned tombstone/artifacts."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:53:53.7910603+00:00"
     },
     {
-      "id": "01KXTMFJZY2CWMPEWGQC3S5QW2",
+      "id": "01KYCRVJ40PQW68DHMZEX2F3KM",
       "kind": "acceptance_check",
       "text": [
         "StartupIngestCleanup inspects only known INGEST lock/atomic artifact names, verifies no live lock and durable disposability, and removes stale artifacts; unknown files, sources, manifests required for resume, receipts, and Ledger data are untouched."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:53:53.7910603+00:00"
     },
     {
-      "id": "01KXTMFJZY0HC2J5KT59TEAGTX",
+      "id": "01KYCRVJ41WT9XDJZGT0QYDSQH",
       "kind": "acceptance_check",
       "text": [
         "Every success, expected failure, simulated crash, abandon, cleanup, and startup path leaves no extraction temporary and leaves caller-owned source bytes unchanged."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:53:53.7910603+00:00"
     },
     {
-      "id": "01KXTMFJZY52XFZZ8A2KPMC0CV",
+      "id": "01KYCRVJ418SN65CW1MR441VA8",
       "kind": "acceptance_check",
       "text": [
         "RecoveryCleanupOperationModule binds ingest.abandon and ingest.cleanup but global registration waits for the public-contract gate."
       ],
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:53:53.7910603+00:00"
     },
     {
       "id": "01KXTMFJZY6XQ8TA3DCPAYZVVQ",
@@ -348,14 +369,24 @@
       "created_at": "2026-07-18T12:51:07.3836449+00:00"
     },
     {
-      "id": "01KXTMFJZYQA95VRZXGB69A6NC",
+      "id": "01KYCRE5NN1T34X0XTDVPAPZ0Y",
       "kind": "note",
       "text": [
         "Removal impact: completed sensitive state is replaced by a metadata-only receipt; abandoned sensitive state is replaced by a terminal tombstone, so replay prevention and prior-effect evidence are retained."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:46:35.0601853+00:00"
+    },
+    {
+      "id": "01KYCRE5NQVKCWFC3S49HVV0SW",
+      "kind": "note",
+      "text": [
+        "Abandon and cleanup append complete BatchErrorEvent metadata for retained batch failures and remove expired or targeted ephemeral status snapshots without exposing or deleting durable workflow evidence outside the authorized cleanup transition."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-25T13:46:35.0601853+00:00"
     }
   ],
   "references": [

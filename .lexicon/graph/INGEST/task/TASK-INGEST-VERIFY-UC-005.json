@@ -83,66 +83,75 @@
       "created_at": "2026-07-18T12:56:24.4112574+00:00"
     }
   ],
+  "links": [
+    {
+      "id": "01KYCRZHJ6ZMSHQYP25MEF8F0J",
+      "target_type": "use_case",
+      "target": "UC-INGEST-005",
+      "rel": "see-also",
+      "created_at": "2026-07-25T13:56:04.2952395+00:00"
+    }
+  ],
   "recipe_items": [
     {
-      "id": "01KXTMS8K0F9ZHPA74FSHCKKJR",
+      "id": "01KYCX62MAT0H7BWYXDS17CDWY",
       "kind": "acceptance_check",
       "text": [
-        "Every failure returns stable code/category, safe IDs, mutation possibility, last durable state, and retry/resume/abandon/correct-source guidance with one stdout result and metadata-only stderr."
+        "Every failure returns stable code/category, batchId and candidateId when each identity has been created and is available, mutation possibility, last durable state, and retry/resume/abandon/correct-source guidance with one stdout result and metadata-only stderr."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-25T15:09:32.6817502+00:00"
     },
     {
-      "id": "01KXTMS8K0H5EMADAMW5ZAR4F5",
+      "id": "01KYCX62MBT5DRHXVXX4E7VDV2",
       "kind": "acceptance_check",
       "text": [
-        "When payload would be needed to explain an error, the result uses safe correlation/record IDs instead and canary data is absent from every output/log."
+        "When payload would be needed to explain an error, the result uses every available batchId, candidateId, and sourceRecordId instead and canary data is absent from every output/log; a pre-identity failure does not fabricate an unavailable identifier."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-25T15:09:32.6817502+00:00"
     },
     {
-      "id": "01KXTMS8K0HRR3B3GFD6MBE0WN",
+      "id": "01KYCX62MBJ7RCT4JFGMZPHXXK",
       "kind": "acceptance_check",
       "text": [
         "Permission-establishment failure persists no sensitive artifact and performs no Ledger mutation."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-25T15:09:32.6817502+00:00"
     },
     {
-      "id": "01KXTMS8K0ZZRBGB7RW78K7TVX",
+      "id": "01KYCX62MBEWBT2GN7CC997WBV",
       "kind": "acceptance_check",
       "text": [
         "Status proves pre-commit failures have no committable manifest/effect and commit-stage failures preserve exact completed outcomes plus unresolved frontier."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-25T15:09:32.6817502+00:00"
     },
     {
-      "id": "01KXTMS8K0G23J7NHX73M6E3MK",
+      "id": "01KYCX62MB508PNVQHY4V4S99Z",
       "kind": "acceptance_check",
       "text": [
-        "A simulated crash leaves only known durable/recoverable artifacts; next safe startup removes disposable residue and retains required state."
+        "A simulated crash leaves only known durable/recoverable artifacts; next startup after acquiring the artifact-cleanup lock removes disposable residue and retains required state."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-25T15:09:32.6817502+00:00"
     },
     {
-      "id": "01KXTMS8K0R2P2DHECAXDEQXGF",
+      "id": "01KYCX62MB0XCANK3SPSG6QDAQ",
       "kind": "acceptance_check",
       "text": [
         "Cleanup rejects ambiguous/locked/recoverable targets; abandon prevents commit/resume but preserves prior effects; terminal cleanup removes only selected INGEST artifacts and leaves source/Ledger unchanged."
       ],
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-25T15:09:32.6817502+00:00"
     },
     {
       "id": "01KXTMS8K0AYWNXJQ8MYQRW69H",
@@ -233,14 +242,14 @@
   ],
   "review_gates": [
     {
-      "id": "01KXTMS8K0M9SZ777KX2PF5CX2",
+      "id": "01KYCRWRWEH2MFWEEYH4E3MD33",
       "gate_type": "test-evidence",
       "description": [
-        "Attach safe error/status envelopes and before/after artifact/source/Ledger inventories."
+        "Attach metadata-only error/status envelopes and before/after artifact/source/Ledger inventories."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-25T13:54:33.4862981+00:00"
     }
   ],
   "verification_steps": [

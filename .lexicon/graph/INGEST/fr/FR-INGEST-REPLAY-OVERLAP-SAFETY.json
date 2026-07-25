@@ -3,7 +3,7 @@
   "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
   "type": "functional",
   "ref_code": "FR-INGEST-REPLAY-OVERLAP-SAFETY",
-  "title": "Handle exact replay and uncertain overlap safely",
+  "title": "Handle Exact Replay and uncertain overlap safely",
   "description": [
     "Return prior outcomes for exact source replay, suppress only identity-grade duplicate candidates, and block merely similar or overlapping records. Implements G5 and UC-INGEST-004."
   ],
@@ -27,7 +27,7 @@
     "Given reuse of an exact identity with different immutable facts, when preview or commit checks it, then INGEST returns a stable conflict, preserves the original effect, and makes no new mutation for that candidate."
   ],
   "security_criteria": [
-    "Duplicate and conflict diagnostics must use safe batch and candidate identifiers rather than statement descriptions or amounts."
+    "Duplicate and conflict diagnostics must use batchId and candidateId rather than statement descriptions or amounts."
   ],
   "status": "active",
   "created_at": "2026-07-18T11:13:06.6289502+00:00",

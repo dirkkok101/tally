@@ -6,7 +6,11 @@
   "context": [
     "Discovered by TASK-INGEST-GATE-INT-LEDGER-CONTRACT (bd-2dg). RecordTransactionInput exposes AccountId, SignedAmount, CurrencyCode, TransactionDate, PostingDate?, OriginalDescription, InstrumentId?, CardholderId?, InitialEvidence. TransactionDetail returns Evidence[] (TransactionEvidenceDetail). There is no sourceReference or provenance member on either. Statement provenance round-trips through evidence and is proven by Statement_provenance_round_trips_through_initial_evidence. Downstream commit beads (FR-INGEST-APPROVED-BATCH-COMMIT, FR-INGEST-DURABLE-RECEIPT-RESUME) freeze this request byte-for-byte, so the DM must name the real fields."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "Reconcile to the exact shipped RecordTransactionInput. Preview freezes InitialEvidence with statement_row kind; candidateId as LogicalIdentityDigest; ingest:{candidateId} as OpaqueExternalReference and idempotency key; sourceRecordId as ContentFingerprint; and a complete normalized EvidenceObservation including a SHA-256 description fingerprint. The client sends the persisted public input without translation."
+  ],
+  "owner": "INGEST design",
   "disposition": "unspecified",
   "created_at": "2026-07-25T09:32:06.1746774+00:00",
   "links": [
@@ -30,6 +34,13 @@
       "target": "FR-INGEST-DURABLE-RECEIPT-RESUME",
       "rel": "see-also",
       "created_at": "2026-07-25T09:32:06.1829598+00:00"
+    },
+    {
+      "id": "01KYCRZB75ZHDTW5TJK20403TB",
+      "target_type": "task",
+      "target": "TASK-INGEST-GATE-INT-LEDGER-CONTRACT",
+      "rel": "see-also",
+      "created_at": "2026-07-25T13:55:57.7986039+00:00"
     }
   ]
 }

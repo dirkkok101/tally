@@ -6,10 +6,10 @@
   "slug": "STATUS-WORKFLOW",
   "title": "Implement safe batch status and failure reporting",
   "description": [
-    "Read one detailed batch or a stable cursor page of retained summaries and map every expected failure to metadata-only durable-state guidance."
+    "Read one detailed batch or a protected 15-minute metadata snapshot page and return only complete durable safe-error guidance and immutable snapshot membership."
   ],
   "objective": [
-    "Deliver ingest.status with deterministic paging, mutation certainty, unresolved frontier, and safe retry/resume actions without source access."
+    "Deliver ingest.status with deterministic paging, mutation certainty, unresolved frontier, and permitted retry or resume actions without source access."
   ],
   "planning_state": "ready",
   "priority": 1,
@@ -43,14 +43,24 @@
       "created_at": "2026-07-18T12:51:07.3836449+00:00"
     },
     {
-      "id": "01KXTMFJZYRAABG21JT7VTSQ5R",
+      "id": "01KYCRDK3Z7C8BTR959KRD1977",
       "target": "TASK-INGEST-STATE-FOUNDATION",
       "dependency_type": "compile",
       "reason": [
-        "StatusStateStore reads the V001 INGEST schema."
+        "Status builds on the protected ingest.db and V001 tables; TASK-INGEST-STATUS-STATE-V002 supplies the corrected error and snapshot extension."
       ],
-      "sort_order": 1,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "sort_order": 3,
+      "created_at": "2026-07-25T13:46:16.0639020+00:00"
+    },
+    {
+      "id": "01KYCRCVQDQP5HEARM09DBD39W",
+      "target": "TASK-INGEST-STATUS-STATE-V002",
+      "dependency_type": "compile",
+      "reason": [
+        "Status requires the V002 error events, store generation, and snapshot tables."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-25T13:45:52.1108928+00:00"
     }
   ],
   "files": [
@@ -102,114 +112,146 @@
   ],
   "interfaces": [
     {
-      "id": "01KXTMFJZXM7NKS2ZHJGJ5Z509",
+      "id": "01KYCR8C2AR1YGXH9WHR7G54GR",
       "name": "BatchStatusSummary",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
       "sort_order": 0,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:43:24.9996204+00:00"
     },
     {
-      "id": "01KXTMFJZX6R7ZSDNRN27KVH9E",
+      "id": "01KYCR8C2A5XPX4TGZRY2CE6WC",
       "name": "IngestError",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
       "sort_order": 1,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:43:24.9996204+00:00"
     },
     {
-      "id": "01KXTMFJZX32WR5NZF6344ZBVJ",
+      "id": "01KYCR8C2ATDBCRB9VM0YYKTJX",
+      "name": "BatchErrorEventStore.LatestAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
+      "sort_order": 2,
+      "created_at": "2026-07-25T13:43:24.9996204+00:00"
+    },
+    {
+      "id": "01KYCR8C2A54EPVXR41FDBHC6D",
       "name": "ImportReceipt",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-IMPORT-RECEIPT",
-      "sort_order": 2,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "sort_order": 3,
+      "created_at": "2026-07-25T13:43:24.9996204+00:00"
     },
     {
-      "id": "01KXTMFJZXH6AE39QKJPJEPPD8",
-      "name": "IngestDatabase",
+      "id": "01KYCR8C2A9QZA2YJSQ3X85176",
+      "name": "IngestSchemaVersion2",
       "direction": "consumes",
       "contract_ref_code": "DM-INGEST-STATE-STORE",
-      "sort_order": 3,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "sort_order": 4,
+      "created_at": "2026-07-25T13:43:24.9996204+00:00"
     },
     {
-      "id": "01KXTMFJZX1B3EQYFX9XT7N87K",
+      "id": "01KYCR8C2A6HC1A0YADNH9TBQF",
       "name": "StatusStateStore",
       "direction": "produces",
       "contract_ref_code": "DM-INGEST-STATE-STORE",
-      "sort_order": 4,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "notes": [
+        "Detail reads and first/later snapshot page operations"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-25T13:43:24.9996204+00:00"
     },
     {
-      "id": "01KXTMFJZXXP691XF5DF215EF5",
+      "id": "01KYCR8C2AA7P36Y4BDG6H8YAP",
+      "name": "IngestStatusCursorPayload",
+      "direction": "produces",
+      "contract_ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
+      "notes": [
+        "Opaque protected snapshot cursor"
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-25T13:43:24.9996204+00:00"
+    },
+    {
+      "id": "01KYCR8C2A0FXFWN2C47RGQXR9",
       "name": "StatusOperationModule",
       "direction": "produces",
       "contract_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
-      "sort_order": 5,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "sort_order": 7,
+      "created_at": "2026-07-25T13:43:24.9996204+00:00"
     }
   ],
   "recipe_items": [
     {
-      "id": "01KXTMFJZW93JPG6340JYZ8XAW",
+      "id": "01KYCRW89E386NMQT03QGRZXYQ",
       "kind": "acceptance_check",
       "text": [
-        "With batchId, status returns BatchStatusDetail for the exact batch: safe summary, manifest revision, approval, receipt state, terminal counts, unresolved frontier, last stable error, retained artifact kinds, and next allowed operations without rereading the source."
+        "With batchId, status returns BatchStatusDetail from retained INGEST state without source or Ledger access: metadata-only summary, manifest revision, approval, receipt state, terminal counts, unresolved frontier, latest complete BatchErrorEvent, retained artifact kinds, and next allowed operations."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:54:16.4943984+00:00"
     },
     {
-      "id": "01KXTMFJZWFRCET60QNZS7VNHR",
+      "id": "01KYCRW89FMD2YK7DTZ2S4A2HZ",
       "kind": "acceptance_check",
       "text": [
-        "Without batchId, limit defaults to 50, accepts only 1 through 100, cursor is opaque and tamper-rejected, results order by updatedAt descending then batchId, and nextCursor neither skips nor duplicates rows under a stable snapshot."
+        "Without batchId, limit defaults to 50 and accepts only 1 through 100; the first request uses BEGIN IMMEDIATE to materialize all retained metadata-only summaries into one 15-minute status_snapshot ordered by updatedAt descending then batchId."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:54:16.4943984+00:00"
     },
     {
-      "id": "01KXTMFJZWV8HVV0N1VKEVY85K",
+      "id": "01KYCRW89FBP9M7JH7W42S1WC0",
       "kind": "acceptance_check",
       "text": [
-        "Pre-commit source/permission/resource/compatibility/reconciliation failures report mutationPossibility=none and no committable manifest; overlap identifies only safe source-context IDs and requires repreview."
+        "Later pages read only status_snapshot_item by immutable ordinal. The opaque cursor binds cursor version, contract version, snapshotId, next ordinal, page size, store generation, and expiry to the protected snapshot header; malformed, unknown, expired, mismatched, or out-of-range cursors fail closed."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:54:16.4943984+00:00"
     },
     {
-      "id": "01KXTMFJZWAFPB3B9K9V0AYMWM",
+      "id": "01KYCRW89FPT5DW3N455RD3VYT",
       "kind": "acceptance_check",
       "text": [
-        "Commit-stage failures report mutationPossibility=possible or confirmed from durable evidence, the exact approved manifest, completed outcomes, unresolved frontier, and resume or abandon guidance."
+        "Concurrent batch updates after first-page materialization neither enter nor reorder that snapshot, so every valid cursor page returns each frozen member exactly once with no skip or duplicate."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:54:16.4943984+00:00"
     },
     {
-      "id": "01KXTMFJZWHE3TNH2C9AJ27D2G",
+      "id": "01KYCRW89FDTR2VH6NVJTN19G5",
       "kind": "acceptance_check",
       "text": [
-        "Every expected failure uses one stable IngestError code/category/retryAction; stdout has one structured result and diagnostics never contain stack trace, parser exception, path, row, description, amount, balance, full identifier, manifest, or request."
+        "Pre-commit failures report mutationPossibility=none and no committable manifest; commit-stage failures report possible or confirmed only from durable evidence, exact completed outcomes, unresolved frontier, and resume or abandon guidance."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:54:16.4943984+00:00"
     },
     {
-      "id": "01KXTMFJZWWA31K6HB6WG6FQ2T",
+      "id": "01KYCRW89F8K4Q3BSYCKHC64D4",
+      "kind": "acceptance_check",
+      "text": [
+        "Every expected batch failure returns the exact durable code, category, safeMessage, candidateId, mutationPossibility, durableState, retryAction, and field from BatchErrorEvent; no field is inferred from candidate_receipt.error_code."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-25T13:54:16.4943984+00:00"
+    },
+    {
+      "id": "01KYCRW89FFAHZB72SK7BYZZ7Z",
       "kind": "acceptance_check",
       "text": [
         "StatusOperationModule binds ingest.status but global registration waits for the public-contract gate."
       ],
       "required": 1,
-      "sort_order": 5,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "sort_order": 6,
+      "created_at": "2026-07-25T13:54:16.4943984+00:00"
     },
     {
       "id": "01KXTMFJZXVTMQVV5DVFAHJTDM",
@@ -262,34 +304,44 @@
       "created_at": "2026-07-18T12:51:07.3836449+00:00"
     },
     {
-      "id": "01KXTMFJZWTBJN8VGQSCQZM4JE",
+      "id": "01KYCR8C2ANSZQMT7GFZKY11KJ",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT query or mutate Ledger, reread the source, use offset paging, expose raw exceptions/payloads, or return an ambiguous boolean for mutation possibility."
+        "Do NOT query or mutate Ledger, reread the source, use live offset/keyset paging, expose raw exceptions or payloads, or return an ambiguous mutation boolean."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:43:24.9996204+00:00"
     },
     {
-      "id": "01KXTMFJZWERA63TNRAB6F84F1",
+      "id": "01KYCR8C2AA2VNYC98NAT0VEE6",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT modify durable state in StatusHandler — adapted read-only query rule per PAT-CORE-API-QUERIES."
+        "Do NOT modify durable workflow, error, manifest, receipt, candidate, or store-generation state in StatusHandler; the sole permitted first-page write is metadata-only ephemeral snapshot creation and expired-snapshot deletion per DD-INGEST-STATE-STORE."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:43:24.9996204+00:00"
     },
     {
-      "id": "01KXTMFJZW1JY52C1RT1NCEBW6",
+      "id": "01KYCR8C2AJ23FEP5GNX5MCHX3",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT invent retry guidance inconsistent with the durable batch state."
+        "Do NOT reconstruct missing error metadata from a code or emit retry guidance inconsistent with the latest complete durable BatchErrorEvent."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:43:24.9996204+00:00"
+    },
+    {
+      "id": "01KYCR8C2ACVPWJXQ4T89B3NBJ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT place source paths, rows, descriptions, amounts, balances, full identifiers, manifests, requests, or stack traces in snapshot rows, cursors, results, diagnostics, or tests."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-25T13:43:24.9996204+00:00"
     }
   ],
   "references": [
@@ -325,36 +377,36 @@
   ],
   "review_gates": [
     {
-      "id": "01KXTMFJZX35RPF7PCG6CFR5BD",
+      "id": "01KYCRWJHAYWKDKZJVMKA2K2E1",
       "gate_type": "test-evidence",
       "description": [
-        "Attach deterministic paging and representative pre/post-mutation safe error envelopes."
+        "Attach deterministic paging and representative pre/post-mutation metadata-only error envelopes."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:54:26.9864816+00:00"
     },
     {
-      "id": "01KXTMFJZX65P8QDVFA5KHHBSB",
+      "id": "01KYCRWJHC21038A6XBCYT5Z4A",
       "gate_type": "self-review",
       "description": [
         "Confirm every status field derives from durable state and the handler performs no mutation."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:54:26.9864816+00:00"
     }
   ],
   "verification_steps": [
     {
-      "id": "01KXTMFJZX1TS59C4E2HZJ03XF",
+      "id": "01KYCR8C2AXEC9TPCVWHG335FQ",
       "phase": "after",
       "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~StatusWorkflowTests",
-      "expected_result": "exit 0; at least 20 detail, empty, default/max/invalid limit, cursor, stable ordering, mutation certainty, retry guidance, payload exclusion, and read-only cases are discovered and 0 tests fail",
+      "expected_result": "exit 0; at least 24 detail, complete-error, empty, default/max/invalid limit, snapshot creation, concurrent-update stability, expiry, generation, tamper, ordering, payload-exclusion, and durable-state-read-only cases are discovered and 0 tests fail",
       "required": 1,
-      "timeout_seconds": 420,
+      "timeout_seconds": 480,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:51:07.3836449+00:00"
+      "created_at": "2026-07-25T13:43:24.9996204+00:00"
     }
   ]
 }
