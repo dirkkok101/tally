@@ -1,0 +1,9 @@
+{
+  "id": "01KYD0BBMW7Y3F75D6VB2PD47Y",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "version": "0.10",
+  "changes": [
+    "Corrected TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION after implementation preflight exposed one landed preview-domain consumer outside its file reservation. Added that test file and its 19-case focused verification; delta review 20260725T160211779Z-124a5187 passed with zero findings."
+  ],
+  "created_at": "2026-07-25T16:04:51.4856290+00:00"
+}

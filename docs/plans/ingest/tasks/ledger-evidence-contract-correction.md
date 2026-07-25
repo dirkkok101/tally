@@ -5,7 +5,7 @@
 - **Ref:** `TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION`
 - **Plan:** `PLAN-INGEST-V1`
 - **Sub-Plan:** `SP-INGEST-00-FOUNDATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `35`
 - **Dialect:** `default`
@@ -73,6 +73,7 @@ None recorded.
 | `src/Tally/Domain/Ingest/Identity/IngestIdentity.cs` | `modify` | statement evidence derivation | `true` |  |
 | `tests/Tally.Tests/Ingest/Identity/IngestIdentityTests.cs` | `test` | evidence identity and drift cases | `true` |  |
 | `tests/Tally.Tests/Ingest/Contract/IngestContractModelTests.cs` | `test` | released shape and JSON contract cases | `true` |  |
+| `tests/Tally.Tests/Ingest/Preview/ReconciliationAndManifestTests.cs` | `test` | update the landed frozen-request consumer to the released InitialEvidence shape | `true` | Existing preview-domain coverage must compile against the corrected contract without a compatibility shim. |
 
 ### Interface Contracts
 
@@ -88,6 +89,7 @@ None recorded.
 |---|---|---|---|---:|
 | `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~IngestIdentityTests` | exit 0; at least 15 identity and evidence-derivation cases are discovered and 0 tests fail | `true` | 360 |
 | `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~IngestContractModelTests` | exit 0; at least 17 contract shape and source-generated JSON cases are discovered and 0 tests fail | `true` | 360 |
+| `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ReconciliationAndManifestTests` | exit 0; at least 19 preview-domain consumer cases are discovered and 0 tests fail | `true` | 360 |
 
 ### Review Gates
 
@@ -98,12 +100,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-17k` | `verified` | 2026-07-25T14:29:46.1493080+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-17k` (verified)
 - `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): The correction revises the already-landed frozen request contracts.
 - `depends-on:compile` -> [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md): The released Ledger request and evidence shape must be proven before INGEST freezes it.
 - `depends-on:compile` -> [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md): The correction extends the already-landed IngestIdentity implementation without concurrent file overlap.
