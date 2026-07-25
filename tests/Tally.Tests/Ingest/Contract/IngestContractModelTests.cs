@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ingest;
+using Tally.Contracts.Ledger.Evidence;
 using Tally.Features.Ingest.Contract;
 using Xunit;
 
@@ -175,19 +176,50 @@ public sealed class IngestContractModelTests
         }
     }
 
-    // DM-INGEST-LEDGER-COMMIT-CONTRACT / OQ-INGEST-15 (not resolved here): INGEST's own frozen
-    // snapshot carries sourceReference and provenance, which the shipped LEDGER RecordTransactionInput
-    // does not expose. This is INGEST's persisted record, not a reshaping of the LEDGER type.
+    // DD-INGEST-LEDGER-PUBLIC-INTEGRATION / DM-INGEST-LEDGER-COMMIT-CONTRACT
     [Fact]
-    public void FrozenLedgerRecordRequest_models_ingests_own_persisted_snapshot()
+    public void FrozenLedgerRecordInput_matches_the_released_record_transaction_shape()
     {
-        var request = SampleFrozenLedgerRecordRequest();
         var inputProperties = IngestJsonContext.Default.GetTypeInfo(typeof(FrozenLedgerRecordInput))!.Properties.Select(p => p.Name).ToArray();
 
-        Assert.Equal("ledger.transaction.record", request.OperationId);
-        Assert.Equal("Tally.Contracts.Ingest", typeof(FrozenLedgerRecordRequest).Namespace);
-        Assert.Contains("sourceReference", inputProperties);
-        Assert.Contains("provenance", inputProperties);
+        Assert.Equal(
+            ["accountId", "signedAmount", "currencyCode", "transactionDate", "postingDate", "originalDescription", "instrumentId", "cardholderId", "initialEvidence"],
+            inputProperties);
+        Assert.Equal(typeof(RegisterEvidenceInput), typeof(FrozenLedgerRecordInput).GetProperty("InitialEvidence")!.PropertyType);
+        Assert.DoesNotContain("sourceReference", inputProperties);
+        Assert.DoesNotContain("provenance", inputProperties);
+    }
+
+    // DD-INGEST-LEDGER-PUBLIC-INTEGRATION: terminal equality is restricted to immutable request/evidence facts.
+    [Fact]
+    public void LedgerImmutableVerification_excludes_mutable_ledger_projections()
+    {
+        var verificationType = typeof(FrozenLedgerRecordRequest).Assembly.GetType("Tally.Contracts.Ingest.LedgerImmutableVerification");
+
+        Assert.NotNull(verificationType);
+        var properties = IngestJsonContext.Default.GetTypeInfo(verificationType!)!.Properties.Select(p => p.Name).ToArray();
+        Assert.Equal(
+            ["transactionId", "accountId", "signedAmount", "currencyCode", "transactionDate", "postingDate", "originalDescription", "instrumentId", "cardholderId", "initialEvidence"],
+            properties);
+        foreach (var forbidden in new[] { "history", "lifecycle", "category", "pool", "reconciliation", "actor", "recordedAt" })
+        {
+            Assert.DoesNotContain(forbidden, properties, StringComparer.OrdinalIgnoreCase);
+        }
+    }
+
+    // DM-INGEST-LEDGER-COMMIT-CONTRACT: the exact frozen request is byte-stable through source-generated JSON.
+    [Fact]
+    public void FrozenLedgerRecordRequest_serializes_byte_identically_across_repeated_calls()
+    {
+        var request = SampleFrozenLedgerRecordRequest();
+
+        var first = JsonSerializer.Serialize(request, IngestJsonContext.Default.FrozenLedgerRecordRequest);
+        var second = JsonSerializer.Serialize(request, IngestJsonContext.Default.FrozenLedgerRecordRequest);
+
+        Assert.Equal(first, second);
+        Assert.Contains("\"initialEvidence\"", first, StringComparison.Ordinal);
+        Assert.DoesNotContain("sourceReference", first, StringComparison.Ordinal);
+        Assert.DoesNotContain("provenance", first, StringComparison.Ordinal);
     }
 
     // Success criterion 5: source-generated metadata exists for every contract type.
@@ -260,5 +292,12 @@ public sealed class IngestContractModelTests
 
     private static FrozenLedgerRecordRequest SampleFrozenLedgerRecordRequest() => new(
         "1.0", "ledger.transaction.record", "idem-1", SampleActor(),
-        new FrozenLedgerRecordInput("acc-1", "-12.34", "ZAR", "2026-07-01", null, "Owner-safe statement line", "src-ref-1", new ImportProvenance(ImportProvenanceKind.StatementImport, "src-ref-1")));
+        new FrozenLedgerRecordInput(
+            "acc-1", "-12.34", "ZAR", "2026-07-01", null, "Owner-safe statement line", null, null,
+            new RegisterEvidenceInput(
+                EvidenceKind.StatementRow,
+                new string('a', 64),
+                $"ingest:{new string('a', 64)}",
+                new string('b', 64),
+                new EvidenceObservation("acc-1", -1234, "ZAR", "2026-07-01", null, null, null, new string('c', 64)))));
 }

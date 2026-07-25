@@ -1,5 +1,6 @@
 using Tally.Contracts.Common;
 using Tally.Contracts.Ingest;
+using Tally.Domain.Ingest.Identity;
 using Tally.Domain.Ingest.Manifests;
 using Tally.Domain.Ingest.Overlap;
 using Tally.Domain.Ingest.Reconciliation;
@@ -166,23 +167,39 @@ public sealed class ReconciliationAndManifestTests
         [],
         [new("opening_to_closing", true, null)]);
 
-    private static ImportCandidate Candidate(long amount) => new(
-        "candidate-a",
-        "record-a",
-        "account",
-        amount,
-        "ZAR",
-        "2026-07-01",
-        null,
-        "Description",
-        "ingest:candidate-a",
-        new(ImportProvenanceKind.StatementImport, "ingest:candidate-a"),
-        "ingest:candidate-a",
-        new(
-            "ledger-1",
-            "ledger.transaction.record",
-            "ingest:candidate-a",
-            new SafeActor("owner", "owner"),
-            new("account", (amount / 100m).ToString("0.00", System.Globalization.CultureInfo.InvariantCulture), "ZAR", "2026-07-01", null, "Description", "ingest:candidate-a", new(ImportProvenanceKind.StatementImport, "ingest:candidate-a"))),
-        null);
+    private static ImportCandidate Candidate(long amount)
+    {
+        var input = new CandidateIdentityInput("account", "record-a", amount, "ZAR", "2026-07-01", null, "Description");
+        var identity = IngestIdentity.Candidate(input);
+        var evidence = IngestIdentity.StatementEvidence(input);
+
+        return new ImportCandidate(
+            identity.CandidateId,
+            input.SourceRecordId,
+            input.AccountId,
+            input.SignedAmountMinor,
+            input.CurrencyCode,
+            input.TransactionDate,
+            input.PostingDate,
+            input.OriginalDescription,
+            identity.OpaqueExternalReference,
+            new(ImportProvenanceKind.StatementImport, identity.OpaqueExternalReference),
+            identity.IdempotencyKey,
+            new(
+                "ledger-1",
+                "ledger.transaction.record",
+                identity.IdempotencyKey,
+                new SafeActor("owner", "owner"),
+                new(
+                    input.AccountId,
+                    (amount / 100m).ToString("0.00", System.Globalization.CultureInfo.InvariantCulture),
+                    input.CurrencyCode,
+                    input.TransactionDate,
+                    input.PostingDate,
+                    input.OriginalDescription,
+                    null,
+                    null,
+                    evidence)),
+            null);
+    }
 }

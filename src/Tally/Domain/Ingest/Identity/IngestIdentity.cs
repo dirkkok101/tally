@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using Tally.Contracts.Ledger.Evidence;
 
 namespace Tally.Domain.Ingest.Identity;
 
@@ -9,7 +10,7 @@ public sealed record BatchIdentityInput(string SourceFingerprint, string Selecte
 
 public sealed record CandidateIdentityInput(string AccountId, string SourceRecordId, long SignedAmountMinor, string CurrencyCode, string TransactionDate, string? PostingDate, string OriginalDescription);
 
-public sealed record CandidateIdentity(string CandidateId, string SourceReference, string IdempotencyKey);
+public sealed record CandidateIdentity(string CandidateId, string OpaqueExternalReference, string IdempotencyKey);
 
 public static class IngestIdentity
 {
@@ -19,11 +20,36 @@ public static class IngestIdentity
 
     public static CandidateIdentity Candidate(CandidateIdentityInput input)
     {
-        var candidateId = Hash("candidate-v1", input.AccountId, input.SourceRecordId, input.SignedAmountMinor.ToString(System.Globalization.CultureInfo.InvariantCulture), input.CurrencyCode, input.TransactionDate, input.PostingDate ?? string.Empty, input.OriginalDescription);
+        var candidateId = Hash("candidate-v1", input.AccountId, input.SourceRecordId, input.SignedAmountMinor.ToString(System.Globalization.CultureInfo.InvariantCulture), input.CurrencyCode, input.TransactionDate, input.PostingDate ?? string.Empty, input.OriginalDescription.Normalize(NormalizationForm.FormC));
         return new CandidateIdentity(candidateId, $"ingest:{candidateId}", $"ingest:{candidateId}");
     }
 
+    public static RegisterEvidenceInput StatementEvidence(CandidateIdentityInput input)
+    {
+        var candidate = Candidate(input);
+        return new RegisterEvidenceInput(
+            EvidenceKind.StatementRow,
+            candidate.CandidateId,
+            candidate.OpaqueExternalReference,
+            input.SourceRecordId,
+            new EvidenceObservation(
+                input.AccountId,
+                input.SignedAmountMinor,
+                input.CurrencyCode,
+                input.TransactionDate,
+                input.PostingDate,
+                null,
+                null,
+                DescriptionFingerprint(input.OriginalDescription)));
+    }
+
     public static bool HasImmutableFactConflict(string existingCandidateId, CandidateIdentity current) => !StringComparer.Ordinal.Equals(existingCandidateId, current.CandidateId);
+
+    private static string DescriptionFingerprint(string description)
+    {
+        ArgumentNullException.ThrowIfNull(description);
+        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(description.Normalize(NormalizationForm.FormC)))).ToLowerInvariant();
+    }
 
     private static string Hash(string version, params string[] values)
     {

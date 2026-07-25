@@ -1,4 +1,5 @@
 using Tally.Contracts.Ingest;
+using Tally.Contracts.Ledger.Evidence;
 using Tally.Domain.Ingest.Identity;
 using Xunit;
 
@@ -6,6 +7,54 @@ namespace Tally.Tests.Ingest.Identity;
 
 public sealed class IngestIdentityTests
 {
+    // DD-INGEST-LEDGER-PUBLIC-INTEGRATION / DM-INGEST-LEDGER-COMMIT-CONTRACT
+    [Fact]
+    public void DD_INGEST_LEDGER_PUBLIC_INTEGRATION_statement_evidence_uses_candidate_and_source_record_identity()
+    {
+        var input = new CandidateIdentityInput(
+            "acc-1", "source-record-1", -1234, "ZAR", "2026-07-01", "2026-07-02", "Owner-safe statement line");
+        var candidate = IngestIdentity.Candidate(input);
+        var evidence = IngestIdentity.StatementEvidence(input);
+        Assert.Equal(EvidenceKind.StatementRow, evidence.Kind);
+        Assert.Equal(candidate.CandidateId, evidence.LogicalIdentityDigest);
+        Assert.Equal($"ingest:{candidate.CandidateId}", evidence.OpaqueExternalReference);
+        Assert.Equal(input.SourceRecordId, evidence.ContentFingerprint);
+        Assert.Equal(input.AccountId, evidence.Observation!.AccountId);
+        Assert.Equal(input.SignedAmountMinor, evidence.Observation.SignedAmountMinor);
+        Assert.Equal(input.CurrencyCode, evidence.Observation.CurrencyCode);
+        Assert.Equal(input.TransactionDate, evidence.Observation.TransactionDate);
+        Assert.Equal(input.PostingDate, evidence.Observation.PostingDate);
+        Assert.Null(evidence.Observation.InstrumentId);
+        Assert.Null(evidence.Observation.CardholderId);
+        Assert.Equal("3760508c7822faef6a9b015f7443d0764668ce02e1f949c2c70f0e527cfa4c2a", evidence.Observation.DescriptionFingerprint);
+    }
+
+    // DD-INGEST-LEDGER-PUBLIC-INTEGRATION: every immutable candidate fact participates in evidence identity.
+    [Fact]
+    public void DD_INGEST_LEDGER_PUBLIC_INTEGRATION_changed_candidate_fact_changes_evidence_identity()
+    {
+        var baseline = new CandidateIdentityInput("acc-1", "source-record-1", -1234, "ZAR", "2026-07-01", null, "Description");
+        var changed = baseline with { SignedAmountMinor = -1235 };
+        var first = IngestIdentity.StatementEvidence(baseline);
+        var second = IngestIdentity.StatementEvidence(changed);
+
+        Assert.NotEqual(first.LogicalIdentityDigest, second.LogicalIdentityDigest);
+        Assert.NotEqual(first.Observation!.SignedAmountMinor, second.Observation!.SignedAmountMinor);
+    }
+
+    // DM-INGEST-LEDGER-COMMIT-CONTRACT: Unicode-equivalent normalized descriptions are the same immutable fact.
+    [Fact]
+    public void DM_INGEST_LEDGER_COMMIT_CONTRACT_normalizes_description_before_identity_and_evidence_hashing()
+    {
+        var composed = new CandidateIdentityInput("acc-1", "source-record-1", -1234, "ZAR", "2026-07-01", null, "Caf\u00e9");
+        var decomposed = composed with { OriginalDescription = "Cafe\u0301" };
+
+        Assert.Equal(IngestIdentity.Candidate(composed), IngestIdentity.Candidate(decomposed));
+        Assert.Equal(
+            IngestIdentity.StatementEvidence(composed).Observation!.DescriptionFingerprint,
+            IngestIdentity.StatementEvidence(decomposed).Observation!.DescriptionFingerprint);
+    }
+
     // DD-INGEST-MANIFEST-IDENTITY-OVERLAP: batch identity is the complete Exact Replay key.
     [Fact]
     public void DD_INGEST_MANIFEST_IDENTITY_OVERLAP_batch_identity_has_a_stable_canonical_vector()
@@ -96,8 +145,8 @@ public sealed class IngestIdentityTests
     {
         var candidate = IngestIdentity.Candidate(new("acc", "source-record", amount, "ZAR", "2026-07-01", "2026-07-02", "Description"));
 
-        Assert.Equal($"ingest:{candidate.CandidateId}", candidate.SourceReference);
-        Assert.Equal(candidate.SourceReference, candidate.IdempotencyKey);
+        Assert.Equal($"ingest:{candidate.CandidateId}", candidate.OpaqueExternalReference);
+        Assert.Equal(candidate.OpaqueExternalReference, candidate.IdempotencyKey);
         Assert.Equal(64, candidate.CandidateId.Length);
     }
 

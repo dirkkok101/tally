@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Tally.Contracts.Common;
+using Tally.Contracts.Ledger.Evidence;
 
 namespace Tally.Contracts.Ingest;
 
@@ -89,11 +90,6 @@ public sealed record CompletedMetadataReceipt(
     [property: JsonRequired] string CompletedAt);
 
 // DM-INGEST-LEDGER-COMMIT-CONTRACT
-// NOTE (OQ-INGEST-15, not resolved by this bead): this is INGEST's own persisted snapshot of the
-// request it will send to ledger.transaction.record, not the shipped LEDGER RecordTransactionInput
-// type. It is modeled exactly as the data model specifies and does not reference or reshape the
-// LEDGER contract type.
-
 public sealed record FrozenLedgerRecordInput(
     [property: JsonRequired] string AccountId,
     [property: JsonRequired] string SignedAmount,
@@ -101,8 +97,9 @@ public sealed record FrozenLedgerRecordInput(
     [property: JsonRequired] string TransactionDate,
     string? PostingDate,
     [property: JsonRequired] string OriginalDescription,
-    [property: JsonRequired] string SourceReference,
-    [property: JsonRequired] ImportProvenance Provenance);
+    string? InstrumentId,
+    string? CardholderId,
+    [property: JsonRequired] RegisterEvidenceInput InitialEvidence);
 
 public sealed record FrozenLedgerRecordRequest(
     [property: JsonRequired] string LedgerContractVersion,
@@ -110,3 +107,15 @@ public sealed record FrozenLedgerRecordRequest(
     [property: JsonRequired] string IdempotencyKey,
     [property: JsonRequired] SafeActor Actor,
     [property: JsonRequired] FrozenLedgerRecordInput Input);
+
+public sealed record LedgerImmutableVerification(
+    [property: JsonRequired] string TransactionId,
+    [property: JsonRequired] string AccountId,
+    [property: JsonRequired] string SignedAmount,
+    [property: JsonRequired] string CurrencyCode,
+    [property: JsonRequired] string TransactionDate,
+    string? PostingDate,
+    [property: JsonRequired] string OriginalDescription,
+    string? InstrumentId,
+    string? CardholderId,
+    [property: JsonRequired] RegisterEvidenceInput InitialEvidence);
