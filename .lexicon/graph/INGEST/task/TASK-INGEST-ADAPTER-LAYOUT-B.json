@@ -6,10 +6,10 @@
   "slug": "ADAPTER-LAYOUT-B",
   "title": "Implement the qualified layout B adapter",
   "description": [
-    "Encode only the structural detection, row boundaries, financial semantics, exclusions, and source controls proven by the private layout B fixture, including permission encryption and yearless dates."
+    "Extend bounded PDF evidence only with the managed line and glyph provenance required by the proven Layout B rule, then implement that rule exactly for both authorized private fixtures."
   ],
   "objective": [
-    "Produce deterministic layout B statement evidence that feeds the governed normalization and reconciliation policies without a generic template or fallback parser."
+    "Produce deterministic Layout B statement evidence that feeds governed normalization and reconciliation without a generic parser, source-dependent behavior, or unreviewed heuristics."
   ],
   "planning_state": "ready",
   "priority": 0,
@@ -45,22 +45,49 @@
   ],
   "files": [
     {
-      "id": "01KXTM5NS5HYQFQTZTBEF2PYQQ",
+      "id": "01KYFB0FY9Y75AHB6D2Q15EHWY",
+      "path": "src/Tally/Infrastructure/Ingest/Pdf/PdfDocumentEvidence.cs",
+      "action": "modify",
+      "role": "add managed line and glyph provenance evidence",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-26T13:49:38.6319232+00:00"
+    },
+    {
+      "id": "01KYFB0FY9AHTKQWTBH9E41834",
+      "path": "src/Tally/Infrastructure/Ingest/Pdf/PdfStatementTextExtractor.cs",
+      "action": "modify",
+      "role": "capture bounded PdfPig managed line evidence and provenance",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-26T13:49:38.6319232+00:00"
+    },
+    {
+      "id": "01KYFB0FY9HJVV9BHPNVHZZCBS",
+      "path": "tests/Tally.Tests/Ingest/PdfExtraction/PdfStatementTextExtractorTests.cs",
+      "action": "test",
+      "role": "prove deterministic bounded evidence and safe failures",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-26T13:49:38.6319232+00:00"
+    },
+    {
+      "id": "01KYFB0FY99S2FYBW083Y1AQ9E",
       "path": "src/Tally/Infrastructure/Ingest/Pdf/PdfTextLayoutBStatementAdapter.cs",
       "action": "create",
       "role": "layout B probe and extraction",
       "required": 1,
-      "sort_order": 0,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "sort_order": 3,
+      "created_at": "2026-07-26T13:49:38.6319232+00:00"
     },
     {
-      "id": "01KXTM5NS5Y18T84TWHR3Y453F",
+      "id": "01KYFB0FY9JYDKZZ88S8A1Y8KB",
       "path": "tests/Tally.Tests/Ingest/Adapters/LayoutBStatementAdapterTests.cs",
       "action": "test",
-      "role": "private golden-fixture tests",
+      "role": "private golden and structural negative tests",
       "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "sort_order": 4,
+      "created_at": "2026-07-26T13:49:38.6319232+00:00"
     }
   ],
   "interfaces": [
@@ -86,124 +113,154 @@
   ],
   "recipe_items": [
     {
-      "id": "01KYD8HD6A1MQ1KX25EQS60ZH3",
+      "id": "01KYFB0FY87AV6ZQP1QEW7R0Z3",
       "kind": "acceptance_check",
       "text": [
         "Descriptor is exactly pdf-text-layout-b-v1 with reviewed versions, media type, and bounds."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-25T18:27:58.2823453+00:00"
+      "created_at": "2026-07-26T13:49:38.6319232+00:00"
     },
     {
-      "id": "01KYD8HD6BCMKJYXHBPXSN6MCW",
+      "id": "01KYFB0FY9KDZ04BE8K11HV894",
       "kind": "acceptance_check",
       "text": [
-        "Probe exact-matches only layout B structure and no-matches layout A/unsupported evidence."
+        "Passive extraction emits deterministic managed DefaultPageSegmenter line evidence plus finite glyph baselineY and textSequence provenance without persisting or logging source text."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-25T18:27:58.2823453+00:00"
+      "created_at": "2026-07-26T13:49:38.6319232+00:00"
     },
     {
-      "id": "01KYD8HD6BKWMYSV0E0PD0S6Z5",
+      "id": "01KYFB0FY9AK1Y1JAMXP6P7ZVY",
       "kind": "acceptance_check",
       "text": [
-        "Extract emits ordered complete FinancialEvidence and reconciliation inputs and accounts for every record/control."
+        "Probe requires one Date, Details, Amount header per page, exactly two content-order period dates, unique controls and metadata, and complete one-to-one yearless row associations under the reviewed 0.1, 0.33, 0.75, and 5-point rules."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-25T18:27:58.2823453+00:00"
+      "created_at": "2026-07-26T13:49:38.6319232+00:00"
     },
     {
-      "id": "01KYD8HD6BM6K5N0T3VNV89E1C",
+      "id": "01KYFB0FY9ZJGN7ZGTV5FK2756",
       "kind": "acceptance_check",
       "text": [
-        "FinancialNormalizer resolves a yearless date only when exactly one in-period date exists."
+        "Extract emits ordered complete FinancialEvidence using each final signed movement, uniquely resolved in-period date, exact description band, source-only OriginalTextEvidence, stable SourceRecordID, controls, and metadata fingerprint."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-25T18:27:58.2823453+00:00"
+      "created_at": "2026-07-26T13:49:38.6319232+00:00"
     },
     {
-      "id": "01KYD8HD6B9NQJK32WE57K1ARH",
+      "id": "01KYFB0FY973JR8ST8JY5YTQM0",
       "kind": "acceptance_check",
       "text": [
-        "FinancialNormalizer with selected AccountDetail.AccountClass plus StatementReconciler reproduces every private expected fact in integer minor units."
+        "FinancialNormalizer with selected AccountDetail.AccountClass plus StatementReconciler reproduces every private expected fact and opening and closing control in integer minor units."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-25T18:27:58.2823453+00:00"
+      "created_at": "2026-07-26T13:49:38.6319232+00:00"
     },
     {
-      "id": "01KYD8HD6BWMASDP2GD5V5Q87C",
+      "id": "01KYFB0FY9ARC4Y15ZHJBCDA8G",
       "kind": "acceptance_check",
       "text": [
-        "Two runs are identical; password-required, scan-only, malformed, or drifted structures fail closed."
+        "Two runs are identical; Layout A, ambiguous dates or associations, duplicate or missing headers, controls, or metadata, password-required, scan-only, malformed, and drifted structures fail closed."
       ],
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-25T18:27:58.2823453+00:00"
+      "created_at": "2026-07-26T13:49:38.6319232+00:00"
     },
     {
-      "id": "01KXTM5NS51JVH8F5FJ1M3ABK6",
+      "id": "01KYFB0FY99V63PVVAJ56X462J",
       "kind": "constraint",
       "text": [
-        "All private expected facts come through PrivateStatementFixtureSet and remain outside source control."
+        "All private expected facts come only through PrivateStatementFixtureSet from ignored owner-only repository-relative locators strictly below docs/statements."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-26T13:49:38.6319232+00:00"
     },
     {
-      "id": "01KXTM5NS5BVVB4KBEHT9KCGYM",
+      "id": "01KYFB0FY98BEBRV91WYTPY03H",
+      "kind": "constraint",
+      "text": [
+        "Managed line text and source glyph evidence remain in memory and must never enter diagnostics or durable state."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-26T13:49:38.6319232+00:00"
+    },
+    {
+      "id": "01KYFB0FY9KZ1SKKVVK9BZX723",
+      "kind": "expected_output",
+      "text": [
+        "Extended bounded PdfDocumentEvidence and PdfStatementTextExtractor"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-26T13:49:38.6319232+00:00"
+    },
+    {
+      "id": "01KYFB0FY9336VHNDF5Z5RE62Z",
       "kind": "expected_output",
       "text": [
         "PdfTextLayoutBStatementAdapter"
       ],
       "required": 1,
-      "sort_order": 0,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "sort_order": 1,
+      "created_at": "2026-07-26T13:49:38.6319232+00:00"
     },
     {
-      "id": "01KXTM5NS5Z0RDXJJ0X1RN7Y94",
+      "id": "01KYFB0FY97GNPDRY996D16W2A",
       "kind": "expected_output",
       "text": [
-        "LayoutBStatementAdapterTests"
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
-    },
-    {
-      "id": "01KXTM5NS5YEPXK45BN2JCM5FP",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT add conditional branches for layout A or future banks — rejected single-parser alternative per DD-INGEST-FORMAT-ADAPTERS."
-      ],
-      "required": 1,
-      "sort_order": 0,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
-    },
-    {
-      "id": "01KXTM5NS5MX6YGGXYEJGM38XV",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT guess a year, use filename/extension, fuzzy-match rows, or fall back to OCR/template configuration."
-      ],
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
-    },
-    {
-      "id": "01KXTM5NS56DW87YK74DY4CHKH",
-      "kind": "failure_criterion",
-      "text": [
-        "Do NOT commit private fixtures, expected facts, filenames, extracted text, or payload snapshots."
+        "Extraction and Layout B adapter tests"
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-26T13:49:38.6319232+00:00"
+    },
+    {
+      "id": "01KYFB1W036JMTVSQ2BER4038Y",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add Layout A or future-bank branches, a generic parser, filename detection, executable invocation, OCR, templates, or manifest-derived behavior."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-26T13:50:23.7471858+00:00"
+    },
+    {
+      "id": "01KYFB1W04YQW397PVPZ04A8J8",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT guess dates, associate nearest text without the full reviewed uniqueness predicate, omit source-glyph provenance, or weaken golden assertions."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-26T13:50:23.7471858+00:00"
+    },
+    {
+      "id": "01KYFB1W04ET72R2JVS9H5WPEF",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT commit, log, paste, or expose private fixtures, expected facts, filenames, locators, extracted text, financial values, or payload snapshots."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-26T13:50:23.7471858+00:00"
+    },
+    {
+      "id": "01KYFB0FY9CNWC00PHZ730SWTP",
+      "kind": "note",
+      "text": [
+        "Implement exactly the rule resolved by OQ-INGEST-19 and governed by DD-INGEST-FORMAT-ADAPTERS; any additional heuristic requires another design correction."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-26T13:49:38.6319232+00:00"
     }
   ],
   "references": [

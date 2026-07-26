@@ -6,9 +6,11 @@
   "context": [
     "Blocks DD-INGEST-FORMAT-ADAPTERS and TASK-INGEST-ADAPTER-LAYOUT-B. Sanitized in-process spikes against both owner-authorized Layout B fixtures proved exact transaction-date anchor counts after excluding full statement-period dates and proved the existing format discriminator rejects Layout A. They disproved baseline-only visual lines, fixed coordinate grids, midpoint date bands, nearest monotonic rows, PdfPig content-order text, nearest-neighbour word lines, and Docstrum lines as exact row reconstruction rules: none uniquely reconstructed every description, movement, control, metadata field, and source-evidence span without manifest facts. Remaining gap: prove a bounded managed fixed-layout reconstruction with stable glyph-span provenance and structural predicates for transaction rows, controls, and metadata; do not implement or relax golden assertions before that proof."
   ],
-  "status": "open",
-  "disposition": "blocking",
-  "blocking_stage": "design",
+  "status": "resolved",
+  "decision": [
+    "Use bounded PdfPig NearestNeighbourWordExtractor plus DefaultPageSegmenter evidence captured in process during passive extraction, together with glyph StartBaseLine.Y and TextSequence provenance. Require exactly one Date, Details, Amount header per page and exactly two distinct full statement-period dates in content order. Treat only managed lines starting with a yearless day and month and ending in a signed monetary token as candidate rows. Resolve the date uniquely inside the period. Group glyphs at 0.1 PDF-point baseline tolerance; derive the description band from header coordinates using 0.33 of Date-to-Details as its left bound and 0.75 of Details-to-Amount as its right bound; accept only one nonempty description band within 5 PDF points of the managed-row bottom whose normalized text is contained in normalized managed-row text. The final signed monetary token is the source movement. Require unique opening and closing managed-line controls and exact integer reconciliation. Derive metadata only from ordered managed lines containing account or card after monetary-token removal. Reject every missing, duplicate, or ambiguous association. This one rule reproduced both authorized Layout B fixtures exactly and repeatably without filename, external process, template, OCR, or manifest-fact dependencies."
+  ],
+  "disposition": "non_blocking",
   "created_at": "2026-07-26T12:40:33.4653126+00:00",
   "links": [
     {
