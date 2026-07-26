@@ -6,10 +6,12 @@
   "context": [
     "bd-1as private golden verification accounted for all 16 ordered dates, running balances, and controls, but exactly two rows cannot produce normalization-ready FinancialEvidence without borrowing a distant statement-control line. OCR, adjacent-row guessing, blank descriptions, and weakened assertions are prohibited. The adapter fails closed when row-band description ownership is absent or ambiguous."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "Dirk selected a source re-export with extractable descriptions. Layout A remains in the v1 supported set, and execution may resume only when the authorized ignored private fixture re-export satisfies the existing unique row-band description evidence contract. Out-of-band descriptions, OCR, borrowing, blank values, and weakened assertions remain prohibited."
+  ],
   "owner": "Dirk",
-  "disposition": "blocking",
-  "blocking_stage": "execute",
+  "disposition": "non_blocking",
   "created_at": "2026-07-25T21:13:18.6075972+00:00",
   "links": [
     {
