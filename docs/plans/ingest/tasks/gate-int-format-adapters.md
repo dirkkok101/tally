@@ -24,12 +24,10 @@ Prove exclusive detection, deterministic extraction, exact private fixture expec
 |---|---|---|---|
 | DD-INGEST-DOCUMENT-EXTRACTION: Managed in-process PDF extraction with PdfPig | `design_decision` | `governed-by` | `true` |
 | DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam | `design_decision` | `governed-by` | `true` |
+| DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly | `design_decision` | `governed-by` | `true` |
 | DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence | `data_model` | `touches` | `true` |
-| FA-INGEST-CONTRACT-FORMATS: Contract and Formats | `feature_area` | `touches` | `true` |
 | FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval | `requirement` | `implements` | `true` |
 | FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants | `requirement` | `implements` | `true` |
-| NFR-INGEST-BOUNDED-PARSING: Bound passive statement processing | `nfr` | `satisfies` | `true` |
-| NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity | `nfr` | `satisfies` | `true` |
 | TC-INGEST-ADAPTER-GOLDEN-FIXTURES: Verify both qualified adapters against golden fixtures | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -45,15 +43,17 @@ Prove exclusive detection, deterministic extraction, exact private fixture expec
 ### Acceptance Checks
 
 - StatementAdapterRegistry explicitly contains exactly one PdfTextLayoutAStatementAdapter and one PdfTextLayoutBStatementAdapter in deterministic order; no reflection scan, plugin, fallback, third variant, or user configuration exists.
-- Every one of the three private fixtures produces exactly one exact_match and the variant ID declared by the ignored private fixture manifest; zero or multiple matches return a stable unsupported result.
-- Each fixture is extracted twice through the real PdfPig extractor and selected adapter with identical ordered source records, dispositions, controls, and SHA-256 digests.
-- Every transaction-bearing source record is accepted, proven Exact Duplicate by fixture evidence, or blocked; non-transaction exclusions carry stable reasons; all available opening, closing, running-balance, total, and record-count controls match exactly.
-- One-over-limit and malformed sources fail before state or LEDGER mutation; measured direct extraction plus adapter work stays below 5 seconds and 256 MiB peak RSS per fixture on the supported release host.
+- Every one of the three private fixtures produces exactly one exact_match and the variant ID declared by the ignored private fixture manifest; zero or multiple adapter matches return a stable unsupported result.
+- Each fixture is extracted twice through the real PdfPig extractor and selected adapter with identical ordered source records, description-evidence kinds, dispositions, controls, and SHA-256 digests; digest values remain inside assertions and are not printed.
+- A unique source description emits SourceText; a structurally complete Layout A row with zero description candidates emits SourceAbsentMarker and exact description 'Description unavailable in source statement'; multiple candidates block. OriginalTextEvidence contains only source glyph text.
+- Every transaction-bearing source record is accepted or blocked, non-transaction exclusions carry stable reasons, and all available opening, closing, running-balance, total, and record-count controls match exactly.
+- One-over-limit and malformed sources fail before state or Ledger mutation; measured direct extraction plus adapter work stays below 5 seconds and 256 MiB peak RSS per fixture on the supported release host.
 
 ### Failure Criteria
 
-- Do NOT advertise a format from filename/extension or partial fixture success.
-- Do NOT add OCR, generic tables, regex templates, dynamic plugins, or best-effort fallback — rejected per both governing decisions.
+- Do NOT advertise a format from filename, extension, or partial fixture success.
+- Do NOT add OCR, generic tables, regex templates, dynamic plugins, or best-effort fallback; the rejected alternatives remain prohibited by DD-INGEST-DOCUMENT-EXTRACTION and DD-INGEST-FORMAT-ADAPTERS.
+- Do NOT use out-of-band expected descriptions, blank values, or neighboring text for a zero-candidate source row; assert the exact typed marker from DD-INGEST-SOURCE-DESCRIPTION-ABSENCE.
 - Do NOT print or persist private fixture paths, descriptions, amounts, balances, records, or expected facts.
 
 ### Expected Outputs
@@ -117,12 +117,10 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md): Consumes PdfStatementTextExtractor.ExtractAsync.
 - `governed-by` -> DD-INGEST-DOCUMENT-EXTRACTION: Managed in-process PDF extraction with PdfPig
 - `governed-by` -> DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam
+- `governed-by` -> DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly
 - `implements` -> FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval
 - `implements` -> FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants
-- `satisfies` -> NFR-INGEST-BOUNDED-PARSING: Bound passive statement processing
-- `satisfies` -> NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity
 - `touches` -> DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence
-- `touches` -> FA-INGEST-CONTRACT-FORMATS: Contract and Formats
 - `verifies` -> TC-INGEST-ADAPTER-GOLDEN-FIXTURES: Verify both qualified adapters against golden fixtures
 
 ## Navigation

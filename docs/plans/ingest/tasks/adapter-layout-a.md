@@ -23,13 +23,10 @@ Produce deterministic layout A statement evidence that feeds the governed normal
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam | `design_decision` | `governed-by` | `true` |
+| DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly | `design_decision` | `governed-by` | `true` |
 | DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence | `data_model` | `touches` | `true` |
 | FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts | `requirement` | `implements` | `true` |
-| FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval | `requirement` | `implements` | `true` |
 | FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants | `requirement` | `implements` | `true` |
-| NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity | `nfr` | `satisfies` | `true` |
-| TC-INGEST-ADAPTER-GOLDEN-FIXTURES: Verify both qualified adapters against golden fixtures | `test_case` | `verifies` | `true` |
-| TC-INGEST-LAYOUT-A-ADAPTER: Verify qualified layout A adapter | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
@@ -43,17 +40,17 @@ Produce deterministic layout A statement evidence that feeds the governed normal
 
 ### Acceptance Checks
 
-- Descriptor is exactly pdf-text-layout-a-v1 with reviewed versions, media type, and bounds.
-- Probe exact-matches only layout A structure and no-matches layout B/unsupported evidence; filenames and extensions are irrelevant.
-- Extract accounts for every record/control, emits ordered FinancialEvidence/reconciliation inputs, validates selected AccountDetail, and fingerprints only versioned normalized statement account metadata (never paths, IDs, rows, or financial values).
-- FinancialNormalizer with selected AccountDetail.AccountClass plus StatementReconciler reproduces every private expected fact in integer minor units.
-- Two runs are identical; malformed or drifted structures fail closed.
+- Descriptor is pdf-text-layout-a-v1 with reviewed versions, media type, and bounds; Probe uses Layout A structure only and no-matches Layout B or unsupported evidence without filenames or extensions.
+- Extract preserves source order, accounts for every record and control, emits FinancialEvidence, DescriptionEvidenceKind, and reconciliation inputs, and validates selected AccountDetail.
+- Exact date, transaction-amount, and running-balance anchors own each row: one description candidate emits SourceText; zero emits SourceAbsentMarker and 'Description unavailable in source statement'; multiple candidates no-match.
+- OriginalTextEvidence contains source glyphs only. metadataFingerprint uses adapterVersion and normalized Layout A account or card lines after monetary-token removal and excludes paths, IDs, rows, and financial values.
+- Golden verification compares private expected descriptions only for SourceText and asserts the fixed marker for SourceAbsentMarker; FinancialNormalizer and StatementReconciler reproduce all other expected facts and controls twice.
 
 ### Failure Criteria
 
-- Do NOT add conditional branches for layout B or future banks — rejected single-parser alternative per DD-INGEST-FORMAT-ADAPTERS.
-- Do NOT use filename, extension, fuzzy matching, user-authored regex/template configuration, or fallback guesses.
-- Do NOT commit private fixtures, expected facts, filenames, extracted text, or payload snapshots.
+- Do NOT add other-layout branches, filename or fuzzy detection, configuration, OCR, neighboring text, or out-of-band descriptions; DD-INGEST-FORMAT-ADAPTERS rejects those paths.
+- Do NOT emit blank Ledger descriptions or classify multiple candidates as absence; DD-INGEST-SOURCE-DESCRIPTION-ABSENCE permits only the exact zero-candidate marker.
+- Do NOT commit or output private fixtures, facts, filenames, extracted text, or payload snapshots.
 
 ### Expected Outputs
 
@@ -72,9 +69,9 @@ None recorded.
 
 | Path | Action | Role | Required | Notes |
 |---|---|---|---|---|
-| `src/Tally/Infrastructure/Ingest/Pdf/IStatementAdapter.cs` | `modify` | bind Extract to exact released AccountDetail | `true` |  |
-| `src/Tally/Infrastructure/Ingest/Pdf/PdfTextLayoutAStatementAdapter.cs` | `create` | layout A probe and extraction | `true` |  |
-| `tests/Tally.Tests/Ingest/Adapters/LayoutAStatementAdapterTests.cs` | `test` | private golden-fixture tests | `true` |  |
+| `src/Tally/Infrastructure/Ingest/Pdf/IStatementAdapter.cs` | `modify` | add typed description evidence | `true` |  |
+| `src/Tally/Infrastructure/Ingest/Pdf/PdfTextLayoutAStatementAdapter.cs` | `modify` | Layout A probe and extraction | `true` |  |
+| `tests/Tally.Tests/Ingest/Adapters/LayoutAStatementAdapterTests.cs` | `test` | synthetic and private golden-fixture tests | `true` |  |
 
 ### Interface Contracts
 
@@ -116,13 +113,10 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md): The adapter implements IStatementAdapter over PdfDocumentEvidence and uses the private fixture helper.
 - `depends-on:compile` -> [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md): Golden verification composes extracted FinancialEvidence and controls with the existing FinancialNormalizer and StatementReconciler.
 - `governed-by` -> DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam
+- `governed-by` -> DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly
 - `implements` -> FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts
-- `implements` -> FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval
 - `implements` -> FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants
-- `satisfies` -> NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity
 - `touches` -> DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence
-- `verifies` -> TC-INGEST-ADAPTER-GOLDEN-FIXTURES: Verify both qualified adapters against golden fixtures
-- `verifies` -> TC-INGEST-LAYOUT-A-ADAPTER: Verify qualified layout A adapter
 
 ## Navigation
 

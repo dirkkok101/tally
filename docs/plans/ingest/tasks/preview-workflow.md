@@ -23,9 +23,9 @@ Deliver ingest.preview as a deterministic no-LEDGER-mutation workflow that persi
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap | `design_decision` | `governed-by` | `true` |
+| DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly | `design_decision` | `governed-by` | `true` |
 | FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval | `requirement` | `implements` | `true` |
 | FR-INGEST-STATEMENT-PREVIEW: Preview a statement without financial mutation | `requirement` | `implements` | `true` |
-| TC-INGEST-STATEMENT-PREVIEW-CONTRACT: Verify deterministic statement preview | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
@@ -42,18 +42,18 @@ Deliver ingest.preview as a deterministic no-LEDGER-mutation workflow that persi
 
 ### Acceptance Checks
 
-- Preview validates contract versions, selected account identifier, path schema, and advertised limits before opening the source; LedgerContractClient confirms exactly one active ZAR account and statement metadata must agree without inference.
-- CallerOwnedSourceReader opens read-only, captures file size and last-write timestamp before and after reading, reads no more than the byte limit into one immutable buffer, computes SHA-256 over those exact bytes, and returns source_changed if metadata or bytes change.
-- PreviewStateStore checks the complete Exact Replay key first: Source Fingerprint, selected account, adapter version, and LEDGER contract version. An active or completed match returns the prior manifest, status, or receipt without reparsing or mutation; any changed key component requires a new preview before overlap evaluation.
-- A new source runs the real extractor and exactly one registered adapter, normalizes/accounts/reconciles every record, blocks any ambiguity or overlap, canonicalizes the complete ordered manifest, and persists batch, revision, records, candidates, controls, and metadata-only status in one INGEST transaction.
-- Success returns stable batchId and manifestRevisionId; any failure creates no committable manifest; every path leaves the source byte-for-byte unchanged and invokes no ledger.transaction.record.
-- PreviewOperationModule exposes a typed handler binding for ingest.preview but is not added to the global registry until GATE-INT-PUBLIC-CONTRACT.
+- Preview validates versions, account ID, path schema, and limits before opening the source; LedgerContractClient confirms one active ZAR account and statement metadata agrees without inference. CallerOwnedSourceReader performs one bounded read-only snapshot and rejects any before or after metadata or byte change.
+- PreviewStateStore checks Source Fingerprint, selected account, adapter version, and Ledger contract version first. An active or completed Exact Replay returns prior durable state without parsing or mutation; a changed key starts a new preview.
+- A new source runs one registered adapter, normalizes and reconciles every record, blocks ambiguity or overlap, canonicalizes the manifest, and persists all preview state atomically.
+- PreviewManifestMapper preserves SourceText after reviewed normalization and maps SourceAbsentMarker to exact OriginalDescription 'Description unavailable in source statement'. That same string feeds candidate identity, InitialEvidence descriptionFingerprint, the frozen Ledger request, and immutable verification; it is never source glyph evidence.
+- Success returns stable batchId and manifestRevisionId; failures create no committable manifest; every path preserves source bytes and makes zero ledger.transaction.record calls.
+- PreviewOperationModule binds ingest.preview but global registration waits for GATE-INT-PUBLIC-CONTRACT.
 
 ### Failure Criteria
 
-- Do NOT infer the account from filename or masked statement text, reread after manifest freeze, or mutate LEDGER — per C8/C12 and DD-INGEST-MANIFEST-IDENTITY-OVERLAP.
-- Do NOT persist partial candidate/manifests outside one SQLite transaction or retain a source copy/extracted temporary.
-- Do NOT call adapters through reflection/plugins or bypass StatementAdapterRegistry.
+- Do NOT infer accounts from filenames or masked text, reread after freeze, mutate Ledger, or persist partial state or a source copy.
+- Do NOT bypass StatementAdapterRegistry with reflection or plugins.
+- Do NOT replace SourceAbsentMarker with blank, null, owner text, OCR, or neighboring text; DD-INGEST-SOURCE-DESCRIPTION-ABSENCE fixes the derivation.
 - Do NOT place parsing, reconciliation, identity, or finance policy inside PreviewHandler.
 
 ### Expected Outputs
@@ -70,7 +70,7 @@ Deliver ingest.preview as a deterministic no-LEDGER-mutation workflow that persi
 
 ### Notes
 
-- Construct FrozenLedgerRecordRequest and InitialEvidence only through the corrected IngestIdentity derivation; append every batch-addressable stable preview failure as a complete BatchErrorEvent in the same transaction as the non-committable batch state.
+None recorded.
 
 ### File Contracts
 
@@ -132,9 +132,9 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md): Preview persists through IngestDatabase.
 - `depends-on:compile` -> [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md): Preview persists complete batch-addressable failure metadata through the V002 store.
 - `governed-by` -> DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap
+- `governed-by` -> DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly
 - `implements` -> FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval
 - `implements` -> FR-INGEST-STATEMENT-PREVIEW: Preview a statement without financial mutation
-- `verifies` -> TC-INGEST-STATEMENT-PREVIEW-CONTRACT: Verify deterministic statement preview
 
 ## Navigation
 

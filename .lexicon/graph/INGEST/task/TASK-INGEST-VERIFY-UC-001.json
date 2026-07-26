@@ -24,6 +24,13 @@
       "created_at": "2026-07-18T16:56:54.4936184+00:00"
     }
   ],
+  "decisions": [
+    {
+      "id": "01KYEZ1SRVB782ETZEXQAYB36D",
+      "target": "DD-INGEST-SOURCE-DESCRIPTION-ABSENCE",
+      "created_at": "2026-07-26T10:20:38.5554686+00:00"
+    }
+  ],
   "dependencies": [
     {
       "id": "01KXTMS8JXWR2DTPAVCCWTZEYG",
@@ -94,64 +101,74 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXTMS8JV350ZZF21PYFV32SP",
+      "id": "01KYEZBXC5ES0CQYDCS8NW38C3",
       "kind": "acceptance_check",
       "text": [
         "Main scenario discovers the contract, supplies one private source and explicit active account, selects exactly one qualified adapter, normalizes every record, verifies every available control, freezes one immutable revision, and returns preview with zero ledger.transaction.record calls."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-26T10:26:09.9246111+00:00"
     },
     {
-      "id": "01KXTMS8JWKR6BZ2KDSZT2MRP6",
+      "id": "01KYEZBXC78NTEW11Y71X4YRF7",
       "kind": "acceptance_check",
       "text": [
-        "Each of the three fixtures run twice with identical ordered outcomes, candidate facts, controls, and manifest identity within 5 seconds and 256 MiB peak RSS; before/after source hashes match."
+        "Each of the three fixtures runs twice with identical ordered outcomes, candidate facts, controls, and manifest identity within 5 seconds and 256 MiB peak RSS; before and after source hashes match."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-26T10:26:09.9246111+00:00"
     },
     {
-      "id": "01KXTMS8JWAM0R18C9DCCCMGBH",
+      "id": "01KYEZBXC7TZPX9TJR95D2RDD1",
       "kind": "acceptance_check",
       "text": [
-        "Unreadable/source-changed input returns stable source failure with no committable manifest; conflicting/missing/ambiguous account blocks without inference."
+        "A uniquely owned source description is preserved; a structurally complete Layout A row with zero candidates returns exact OriginalDescription 'Description unavailable in source statement' through preview and the frozen Ledger request; multiple candidates block."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-26T10:26:09.9246111+00:00"
     },
     {
-      "id": "01KXTMS8JW636HM8EQYW5X1Q9Q",
+      "id": "01KYEZBXC72GB1NXKEKJ2C9974",
       "kind": "acceptance_check",
       "text": [
-        "Unsupported, password-required, scan-only, active/external, ambiguous-variant, malformed, or over-limit input fails closed with no mutation."
+        "Unreadable or source-changed input returns stable source failure with no committable manifest; conflicting, missing, or ambiguous account blocks without inference."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-26T10:26:09.9246111+00:00"
     },
     {
-      "id": "01KXTMS8JWSJ7ZGBQEYG4KVH3N",
+      "id": "01KYEZBXC7WXRJDFGFB7Z1C4ZR",
       "kind": "acceptance_check",
       "text": [
-        "Missing/ambiguous amount, currency, sign, date, description, provenance, identity, or row boundary blocks rather than guesses."
+        "Unsupported, password-required, scan-only, active-content, external-content, ambiguous-variant, malformed, or over-limit input fails closed with no mutation."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-26T10:26:09.9246111+00:00"
     },
     {
-      "id": "01KXTMS8JWA6Q15CAWXY9SW52Z",
+      "id": "01KYEZBXC7E32WWMX9JVB8ZCG1",
       "kind": "acceptance_check",
       "text": [
-        "Unexplained records or any opening/closing/running/source-control mismatch leaves the manifest uncommittable."
+        "Missing or ambiguous amount, currency, sign, date, provenance, identity, row boundary, or description ownership blocks rather than guesses; provable zero-candidate Layout A description absence follows DD-INGEST-SOURCE-DESCRIPTION-ABSENCE."
       ],
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-26T10:26:09.9246111+00:00"
+    },
+    {
+      "id": "01KYEZBXC7JJT6QRY513PG4Q4M",
+      "kind": "acceptance_check",
+      "text": [
+        "Unexplained records or any opening, closing, running-balance, or source-control mismatch leaves the manifest uncommittable."
+      ],
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-26T10:26:09.9246111+00:00"
     },
     {
       "id": "01KYCRWA8ZE8NFPDCSFW525CE4",
@@ -174,24 +191,34 @@
       "created_at": "2026-07-18T12:56:24.4112574+00:00"
     },
     {
-      "id": "01KXTMS8JW1TXD00A9V9MFQAJD",
+      "id": "01KYEZ1SRX5VWDJ1MMA0ZQ56ZG",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT inspect internal handlers/stores to assert success; use published operations and public Ledger observations only."
+        "Do NOT inspect internal handlers or stores to assert success; use published operations and public Ledger observations only."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-26T10:20:38.5554686+00:00"
     },
     {
-      "id": "01KXTMS8JW4J6JQ9T3N4KF2RYN",
+      "id": "01KYEZ1SRXXGGRFMN4F0FJT0R3",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT treat source description absence as permission for OCR, out-of-band text, blanks, or neighboring-row borrowing."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-26T10:20:38.5554686+00:00"
+    },
+    {
+      "id": "01KYEZ1SRXSZVWF0E8E0KR3N78",
       "kind": "failure_criterion",
       "text": [
         "Do NOT print or commit private fixture paths, content, or facts."
       ],
       "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "sort_order": 2,
+      "created_at": "2026-07-26T10:20:38.5554686+00:00"
     }
   ],
   "references": [
@@ -271,6 +298,17 @@
       "required": 1,
       "sort_order": 6,
       "created_at": "2026-07-18T12:56:24.4112574+00:00"
+    },
+    {
+      "id": "01KYEZ1TC0XXAVW17XAF9NY8CC",
+      "target_ref_code": "TC-INGEST-LAYOUT-A-ADAPTER",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXTMY4MXN5FARG0A58DD0FX7",
+      "target_title": "Verify qualified layout A adapter",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-26T10:20:39.1694441+00:00"
     }
   ],
   "review_gates": [

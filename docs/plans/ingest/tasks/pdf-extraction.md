@@ -12,11 +12,11 @@
 
 ## Summary
 
-Pin the spike-proven upstream package, convert one immutable byte buffer to ordered page/glyph evidence, and define the one real format-adapter seam.
+Pin the proven PDF package and turn one immutable byte buffer into ordered evidence behind the real adapter seam.
 
 ## Objective
 
-Extract deterministic passive PDF evidence under Native-AOT and resource bounds without source mutation, spawned executables, disk extraction, or a speculative parser port.
+Extract deterministic bounded PDF evidence under Native-AOT without mutation, child executable invocation, disk extraction, or a parser port.
 
 ## References
 

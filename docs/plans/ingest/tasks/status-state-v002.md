@@ -12,11 +12,11 @@
 
 ## Summary
 
-Extend the landed immutable V001 INGEST store through V002 with complete durable safe error events and protected ephemeral status snapshot tables before any workflow consumes them.
+Add V002 durable safe-error events and protected metadata-only paging snapshots without changing V001.
 
 ## Objective
 
-ingest.db version 2 durably records complete last-error metadata and provides the schema primitives for stable metadata-only status snapshots without editing V001.
+ingest.db v2 stores complete last-error metadata and stable status-snapshot primitives.
 
 ## References
 

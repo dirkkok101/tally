@@ -29,6 +29,11 @@
       "id": "01KXTM5NS456VFHFK9YJH4DE0R",
       "target": "DD-INGEST-FORMAT-ADAPTERS",
       "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KYEYZRMM3X8Q16S76CTSZR5E",
+      "target": "DD-INGEST-SOURCE-DESCRIPTION-ABSENCE",
+      "created_at": "2026-07-26T10:19:31.8597525+00:00"
     }
   ],
   "dependencies": [
@@ -65,31 +70,31 @@
   ],
   "files": [
     {
-      "id": "01KYD56WZT9SJJZ03QZC3B5ABK",
+      "id": "01KYEZC6V26QCD9YYH1F8HMGXZ",
       "path": "src/Tally/Infrastructure/Ingest/Pdf/IStatementAdapter.cs",
       "action": "modify",
-      "role": "bind Extract to exact released AccountDetail",
+      "role": "add typed description evidence",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-25T17:29:48.2820193+00:00"
+      "created_at": "2026-07-26T10:26:19.6167458+00:00"
     },
     {
-      "id": "01KYD56WZVCK69Q1JA308WQF1P",
+      "id": "01KYEZC6V2VJ3YH9HDMDC8CX3Y",
       "path": "src/Tally/Infrastructure/Ingest/Pdf/PdfTextLayoutAStatementAdapter.cs",
-      "action": "create",
-      "role": "layout A probe and extraction",
+      "action": "modify",
+      "role": "Layout A probe and extraction",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-25T17:29:48.2820193+00:00"
+      "created_at": "2026-07-26T10:26:19.6167458+00:00"
     },
     {
-      "id": "01KYD56WZVZS7TDA5CK8ERRX8Y",
+      "id": "01KYEZC6V2G4PQEN1KC5NKKTJE",
       "path": "tests/Tally.Tests/Ingest/Adapters/LayoutAStatementAdapterTests.cs",
       "action": "test",
-      "role": "private golden-fixture tests",
+      "role": "synthetic and private golden-fixture tests",
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-25T17:29:48.2820193+00:00"
+      "created_at": "2026-07-26T10:26:19.6167458+00:00"
     }
   ],
   "interfaces": [
@@ -173,74 +178,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KYDHKRBDY6CM2Q28NCNCPZBH",
+      "id": "01KYEZC6V1RHRCVNZ59FDPWPCN",
       "kind": "acceptance_check",
       "text": [
-        "Descriptor is exactly pdf-text-layout-a-v1 with reviewed versions, media type, and bounds."
+        "Descriptor is pdf-text-layout-a-v1 with reviewed versions, media type, and bounds; Probe uses Layout A structure only and no-matches Layout B or unsupported evidence without filenames or extensions."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-25T21:06:32.4293019+00:00"
+      "created_at": "2026-07-26T10:26:19.6167458+00:00"
     },
     {
-      "id": "01KYDHKRBFZZ7PECS6CGAT2BHG",
+      "id": "01KYEZC6V2APV1P60YT6CRZT60",
       "kind": "acceptance_check",
       "text": [
-        "Probe exact-matches only layout A structure and no-matches layout B/unsupported evidence; filenames and extensions are irrelevant."
+        "Extract preserves source order, accounts for every record and control, emits FinancialEvidence, DescriptionEvidenceKind, and reconciliation inputs, and validates selected AccountDetail."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-25T21:06:32.4293019+00:00"
+      "created_at": "2026-07-26T10:26:19.6167458+00:00"
     },
     {
-      "id": "01KYDHKRBF4WFP3JFR2R31XVWH",
+      "id": "01KYEZC6V2J4EBPKFFX4EM666E",
       "kind": "acceptance_check",
       "text": [
-        "Extract accounts for every record/control, emits ordered FinancialEvidence/reconciliation inputs, and validates selected AccountDetail."
+        "Exact date, transaction-amount, and running-balance anchors own each row: one description candidate emits SourceText; zero emits SourceAbsentMarker and 'Description unavailable in source statement'; multiple candidates no-match."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-25T21:06:32.4293019+00:00"
+      "created_at": "2026-07-26T10:26:19.6167458+00:00"
     },
     {
-      "id": "01KYDHKRBFVMVK302EG8HMXRJF",
+      "id": "01KYEZC6V2YET1A0YRYK8MWHZE",
       "kind": "acceptance_check",
       "text": [
-        "Layout A rows use date/amount/balance anchors; a separately rendered description is accepted only from the unique description-only visual line within that row vertical midpoint band, and missing or ambiguous ownership fails closed."
+        "OriginalTextEvidence contains source glyphs only. metadataFingerprint uses adapterVersion and normalized Layout A account or card lines after monetary-token removal and excludes paths, IDs, rows, and financial values."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-25T21:06:32.4293019+00:00"
+      "created_at": "2026-07-26T10:26:19.6167458+00:00"
     },
     {
-      "id": "01KYDHKRBFZMFRVJ7EH6N5KZFK",
+      "id": "01KYEZC6V2A7JQFFQ472DVSTGE",
       "kind": "acceptance_check",
       "text": [
-        "Metadata fingerprint uses canonical UTF-8 adapterVersion + LF + LF-joined normalized Layout A visual account/card lines with monetary tokens removed and no trailing LF; it rejects absent metadata and never includes paths, IDs, rows, or financial values."
+        "Golden verification compares private expected descriptions only for SourceText and asserts the fixed marker for SourceAbsentMarker; FinancialNormalizer and StatementReconciler reproduce all other expected facts and controls twice."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-25T21:06:32.4293019+00:00"
-    },
-    {
-      "id": "01KYDHKRBF9B5QVHHSRPT555N6",
-      "kind": "acceptance_check",
-      "text": [
-        "FinancialNormalizer with selected AccountDetail.AccountClass plus StatementReconciler reproduces every private expected fact in integer minor units."
-      ],
-      "required": 1,
-      "sort_order": 5,
-      "created_at": "2026-07-25T21:06:32.4293019+00:00"
-    },
-    {
-      "id": "01KYDHKRBFG4APPATRDHTEY9G9",
-      "kind": "acceptance_check",
-      "text": [
-        "Two runs are identical; malformed or drifted structures fail closed."
-      ],
-      "required": 1,
-      "sort_order": 6,
-      "created_at": "2026-07-25T21:06:32.4293019+00:00"
+      "created_at": "2026-07-26T10:26:19.6167458+00:00"
     },
     {
       "id": "01KXTM5NS4NE0C26ZC9YQDG266",
@@ -273,58 +258,37 @@
       "created_at": "2026-07-18T12:45:42.5606427+00:00"
     },
     {
-      "id": "01KXTM5NS4YM8C1WN7WQ9R6DBJ",
+      "id": "01KYEZ9HW30JMH2ZNCQ8SDK9YY",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT add conditional branches for layout B or future banks — rejected single-parser alternative per DD-INGEST-FORMAT-ADAPTERS."
+        "Do NOT add other-layout branches, filename or fuzzy detection, configuration, OCR, neighboring text, or out-of-band descriptions; DD-INGEST-FORMAT-ADAPTERS rejects those paths."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-26T10:24:52.6092564+00:00"
     },
     {
-      "id": "01KXTM5NS4H6YVAX5S8W57XK08",
+      "id": "01KYEZ9HW358ZQYNYEF2HZVYGB",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT use filename, extension, fuzzy matching, user-authored regex/template configuration, or fallback guesses."
+        "Do NOT emit blank Ledger descriptions or classify multiple candidates as absence; DD-INGEST-SOURCE-DESCRIPTION-ABSENCE permits only the exact zero-candidate marker."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-26T10:24:52.6092564+00:00"
     },
     {
-      "id": "01KXTM5NS4MAQHTCKDM4VJNGRC",
+      "id": "01KYEZ9HW31CD09B7NCPTCW349",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT commit private fixtures, expected facts, filenames, extracted text, or payload snapshots."
+        "Do NOT commit or output private fixtures, facts, filenames, extracted text, or payload snapshots."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
-    },
-    {
-      "id": "01KYDJ0DD6WZ7QKTBW73KW5F8M",
-      "kind": "note",
-      "text": [
-        "Execution is blocked by OQ-INGEST-18: the authorized Layout A fixture has two nonzero rows with no extractable description evidence; blank, borrowed, or guessed descriptions violate FR-INGEST-FINANCIAL-NORMALIZATION."
-      ],
-      "required": 1,
-      "sort_order": 0,
-      "created_at": "2026-07-25T21:13:27.2061038+00:00"
+      "created_at": "2026-07-26T10:24:52.6092564+00:00"
     }
   ],
   "references": [
-    {
-      "id": "01KXTM5NS4GVWHPP69H7EWTF5J",
-      "target_ref_code": "NFR-INGEST-DETERMINISTIC-INTEGRITY",
-      "target_entity_type": "nfr",
-      "target_entity_id": "01KXTEXKEK06KD4EXFGC1A8FKG",
-      "target_title": "Preserve deterministic extraction and financial integrity",
-      "relationship": "satisfies",
-      "required": 1,
-      "sort_order": 0,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
-    },
     {
       "id": "01KXTM5NS467KRWVS46KYGYQNA",
       "target_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
@@ -335,39 +299,12 @@
       "required": 1,
       "sort_order": 1,
       "created_at": "2026-07-18T12:45:42.5606427+00:00"
-    },
-    {
-      "id": "01KXTM5NS4BAGNSS3TFYECHC88",
-      "target_ref_code": "TC-INGEST-ADAPTER-GOLDEN-FIXTURES",
-      "target_entity_type": "test_case",
-      "target_entity_id": "01KXTJ09R1WGDS1MNGV12F4NRC",
-      "target_title": "Verify both qualified adapters against golden fixtures",
-      "relationship": "verifies",
-      "required": 1,
-      "sort_order": 2,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
-    },
-    {
-      "id": "01KXTN3TA02WXWYX2F1CDKJNPW",
-      "target_ref_code": "TC-INGEST-LAYOUT-A-ADAPTER",
-      "target_entity_type": "test_case",
-      "target_entity_id": "01KXTMY4MXN5FARG0A58DD0FX7",
-      "target_title": "Verify qualified layout A adapter",
-      "relationship": "verifies",
-      "required": 1,
-      "sort_order": 3,
-      "created_at": "2026-07-18T13:02:10.2415493+00:00"
     }
   ],
   "requirements": [
     {
       "id": "01KXTM5NS44VER3QPJ2QDAKZN5",
       "target": "FR-INGEST-FINANCIAL-NORMALIZATION",
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
-    },
-    {
-      "id": "01KXTM5NS4SV01TDJSN566Y0RS",
-      "target": "FR-INGEST-SOURCE-RECONCILIATION",
       "created_at": "2026-07-18T12:45:42.5606427+00:00"
     },
     {

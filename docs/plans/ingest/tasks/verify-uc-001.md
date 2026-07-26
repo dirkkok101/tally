@@ -22,9 +22,11 @@ Prove an owner can preview each qualified statement into one reconciled immutabl
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
+| DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly | `design_decision` | `governed-by` | `true` |
 | NFR-INGEST-BOUNDED-PARSING: Bound passive statement processing | `nfr` | `satisfies` | `true` |
 | NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity | `nfr` | `satisfies` | `true` |
 | TC-INGEST-FINANCIAL-NORMALIZATION-CONTRACT: Verify exact financial normalization | `test_case` | `verifies` | `true` |
+| TC-INGEST-LAYOUT-A-ADAPTER: Verify qualified layout A adapter | `test_case` | `verifies` | `true` |
 | TC-INGEST-SOURCE-RECONCILIATION-CONTRACT: Verify complete source reconciliation | `test_case` | `verifies` | `true` |
 | TC-INGEST-STATEMENT-PREVIEW-CONTRACT: Verify deterministic statement preview | `test_case` | `verifies` | `true` |
 | TC-INGEST-VARIANT-QUALIFICATION-CONTRACT: Verify supported variant qualification | `test_case` | `verifies` | `true` |
@@ -42,15 +44,17 @@ Prove an owner can preview each qualified statement into one reconciled immutabl
 ### Acceptance Checks
 
 - Main scenario discovers the contract, supplies one private source and explicit active account, selects exactly one qualified adapter, normalizes every record, verifies every available control, freezes one immutable revision, and returns preview with zero ledger.transaction.record calls.
-- Each of the three fixtures run twice with identical ordered outcomes, candidate facts, controls, and manifest identity within 5 seconds and 256 MiB peak RSS; before/after source hashes match.
-- Unreadable/source-changed input returns stable source failure with no committable manifest; conflicting/missing/ambiguous account blocks without inference.
-- Unsupported, password-required, scan-only, active/external, ambiguous-variant, malformed, or over-limit input fails closed with no mutation.
-- Missing/ambiguous amount, currency, sign, date, description, provenance, identity, or row boundary blocks rather than guesses.
-- Unexplained records or any opening/closing/running/source-control mismatch leaves the manifest uncommittable.
+- Each of the three fixtures runs twice with identical ordered outcomes, candidate facts, controls, and manifest identity within 5 seconds and 256 MiB peak RSS; before and after source hashes match.
+- A uniquely owned source description is preserved; a structurally complete Layout A row with zero candidates returns exact OriginalDescription 'Description unavailable in source statement' through preview and the frozen Ledger request; multiple candidates block.
+- Unreadable or source-changed input returns stable source failure with no committable manifest; conflicting, missing, or ambiguous account blocks without inference.
+- Unsupported, password-required, scan-only, active-content, external-content, ambiguous-variant, malformed, or over-limit input fails closed with no mutation.
+- Missing or ambiguous amount, currency, sign, date, provenance, identity, row boundary, or description ownership blocks rather than guesses; provable zero-candidate Layout A description absence follows DD-INGEST-SOURCE-DESCRIPTION-ABSENCE.
+- Unexplained records or any opening, closing, running-balance, or source-control mismatch leaves the manifest uncommittable.
 
 ### Failure Criteria
 
-- Do NOT inspect internal handlers/stores to assert success; use published operations and public Ledger observations only.
+- Do NOT inspect internal handlers or stores to assert success; use published operations and public Ledger observations only.
+- Do NOT treat source description absence as permission for OCR, out-of-band text, blanks, or neighboring-row borrowing.
 - Do NOT print or commit private fixture paths, content, or facts.
 
 ### Expected Outputs
@@ -105,9 +109,11 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 - `covers` -> UC-INGEST-001: Preview and qualify a local statement
 - `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC verification exercises the complete published INGEST contract.
 - `depends-on:compile` -> [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md): Consumes PrivateStatementFixtureSet.
+- `governed-by` -> DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly
 - `satisfies` -> NFR-INGEST-BOUNDED-PARSING: Bound passive statement processing
 - `satisfies` -> NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity
 - `verifies` -> TC-INGEST-FINANCIAL-NORMALIZATION-CONTRACT: Verify exact financial normalization
+- `verifies` -> TC-INGEST-LAYOUT-A-ADAPTER: Verify qualified layout A adapter
 - `verifies` -> TC-INGEST-SOURCE-RECONCILIATION-CONTRACT: Verify complete source reconciliation
 - `verifies` -> TC-INGEST-STATEMENT-PREVIEW-CONTRACT: Verify deterministic statement preview
 - `verifies` -> TC-INGEST-VARIANT-QUALIFICATION-CONTRACT: Verify supported variant qualification

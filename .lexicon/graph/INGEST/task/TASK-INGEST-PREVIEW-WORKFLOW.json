@@ -29,6 +29,11 @@
       "id": "01KXTMAH8R03YKW18W3HXAZV7T",
       "target": "DD-INGEST-MANIFEST-IDENTITY-OVERLAP",
       "created_at": "2026-07-18T12:48:21.7802577+00:00"
+    },
+    {
+      "id": "01KYEZ0K9XYMSH31MB95YW07Q7",
+      "target": "DD-INGEST-SOURCE-DESCRIPTION-ABSENCE",
+      "created_at": "2026-07-26T10:19:59.1643938+00:00"
     }
   ],
   "dependencies": [
@@ -261,64 +266,64 @@
   ],
   "recipe_items": [
     {
-      "id": "01KYCRW08W16F48TBXAHT4GEF8",
+      "id": "01KYEZ8KB07ZCHRQ62XJFEFTWH",
       "kind": "acceptance_check",
       "text": [
-        "Preview validates contract versions, selected account identifier, path schema, and advertised limits before opening the source; LedgerContractClient confirms exactly one active ZAR account and statement metadata must agree without inference."
+        "Preview validates versions, account ID, path schema, and limits before opening the source; LedgerContractClient confirms one active ZAR account and statement metadata agrees without inference. CallerOwnedSourceReader performs one bounded read-only snapshot and rejects any before or after metadata or byte change."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-25T13:54:08.2845033+00:00"
+      "created_at": "2026-07-26T10:24:21.3439445+00:00"
     },
     {
-      "id": "01KYCRW08YM6QSXAKP37HF6EM7",
+      "id": "01KYEZ8KB26PJENGQEDJPWC03H",
       "kind": "acceptance_check",
       "text": [
-        "CallerOwnedSourceReader opens read-only, captures file size and last-write timestamp before and after reading, reads no more than the byte limit into one immutable buffer, computes SHA-256 over those exact bytes, and returns source_changed if metadata or bytes change."
+        "PreviewStateStore checks Source Fingerprint, selected account, adapter version, and Ledger contract version first. An active or completed Exact Replay returns prior durable state without parsing or mutation; a changed key starts a new preview."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-25T13:54:08.2845033+00:00"
+      "created_at": "2026-07-26T10:24:21.3439445+00:00"
     },
     {
-      "id": "01KYCRW08YDKT0VHNY5S7KPG9X",
+      "id": "01KYEZ8KB265R8BX9H7EY8VDBW",
       "kind": "acceptance_check",
       "text": [
-        "PreviewStateStore checks the complete Exact Replay key first: Source Fingerprint, selected account, adapter version, and LEDGER contract version. An active or completed match returns the prior manifest, status, or receipt without reparsing or mutation; any changed key component requires a new preview before overlap evaluation."
+        "A new source runs one registered adapter, normalizes and reconciles every record, blocks ambiguity or overlap, canonicalizes the manifest, and persists all preview state atomically."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-25T13:54:08.2845033+00:00"
+      "created_at": "2026-07-26T10:24:21.3439445+00:00"
     },
     {
-      "id": "01KYCRW08YDMQE38854C26S0AM",
+      "id": "01KYEZ8KB2KV95194CWT348QGP",
       "kind": "acceptance_check",
       "text": [
-        "A new source runs the real extractor and exactly one registered adapter, normalizes/accounts/reconciles every record, blocks any ambiguity or overlap, canonicalizes the complete ordered manifest, and persists batch, revision, records, candidates, controls, and metadata-only status in one INGEST transaction."
+        "PreviewManifestMapper preserves SourceText after reviewed normalization and maps SourceAbsentMarker to exact OriginalDescription 'Description unavailable in source statement'. That same string feeds candidate identity, InitialEvidence descriptionFingerprint, the frozen Ledger request, and immutable verification; it is never source glyph evidence."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-25T13:54:08.2845033+00:00"
+      "created_at": "2026-07-26T10:24:21.3439445+00:00"
     },
     {
-      "id": "01KYCRW08YS6XPDCTCA8JYF0GA",
+      "id": "01KYEZ8KB22VHT5NYH63XDRY49",
       "kind": "acceptance_check",
       "text": [
-        "Success returns stable batchId and manifestRevisionId; any failure creates no committable manifest; every path leaves the source byte-for-byte unchanged and invokes no ledger.transaction.record."
+        "Success returns stable batchId and manifestRevisionId; failures create no committable manifest; every path preserves source bytes and makes zero ledger.transaction.record calls."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-25T13:54:08.2845033+00:00"
+      "created_at": "2026-07-26T10:24:21.3439445+00:00"
     },
     {
-      "id": "01KYCRW08YWR5DNB3RJ9JDZGN1",
+      "id": "01KYEZ8KB2M4DW9HGAT5FZYG5K",
       "kind": "acceptance_check",
       "text": [
-        "PreviewOperationModule exposes a typed handler binding for ingest.preview but is not added to the global registry until GATE-INT-PUBLIC-CONTRACT."
+        "PreviewOperationModule binds ingest.preview but global registration waits for GATE-INT-PUBLIC-CONTRACT."
       ],
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-25T13:54:08.2845033+00:00"
+      "created_at": "2026-07-26T10:24:21.3439445+00:00"
     },
     {
       "id": "01KXTMAH8SP7TEFPWXG2ZM687N",
@@ -381,67 +386,44 @@
       "created_at": "2026-07-18T12:48:21.7802577+00:00"
     },
     {
-      "id": "01KXTMAH8RQY8HGZ6ZA16FFJ25",
+      "id": "01KYEZ8KB22T8DQ7KWM8W6G5C8",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT infer the account from filename or masked statement text, reread after manifest freeze, or mutate LEDGER — per C8/C12 and DD-INGEST-MANIFEST-IDENTITY-OVERLAP."
+        "Do NOT infer accounts from filenames or masked text, reread after freeze, mutate Ledger, or persist partial state or a source copy."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-26T10:24:21.3439445+00:00"
     },
     {
-      "id": "01KXTMAH8RM30EH7R7EXYZT3TG",
+      "id": "01KYEZ8KB2MBNFZFZ3AMGK92ZJ",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT persist partial candidate/manifests outside one SQLite transaction or retain a source copy/extracted temporary."
+        "Do NOT bypass StatementAdapterRegistry with reflection or plugins."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-26T10:24:21.3439445+00:00"
     },
     {
-      "id": "01KXTMAH8RVM7TVEYJQ1M4QPNT",
+      "id": "01KYEZ8KB2BXF6E4AACAWTW58J",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT call adapters through reflection/plugins or bypass StatementAdapterRegistry."
+        "Do NOT replace SourceAbsentMarker with blank, null, owner text, OCR, or neighboring text; DD-INGEST-SOURCE-DESCRIPTION-ABSENCE fixes the derivation."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-26T10:24:21.3439445+00:00"
     },
     {
-      "id": "01KXTMAH8RKEN6HZKE1XEAZ6GX",
+      "id": "01KYEZ8KB2PR1XMA4S3D2YHE3Z",
       "kind": "failure_criterion",
       "text": [
         "Do NOT place parsing, reconciliation, identity, or finance policy inside PreviewHandler."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
-    },
-    {
-      "id": "01KYCRW2B4Y302RQDFZX8FC3H5",
-      "kind": "note",
-      "text": [
-        "Construct FrozenLedgerRecordRequest and InitialEvidence only through the corrected IngestIdentity derivation; append every batch-addressable stable preview failure as a complete BatchErrorEvent in the same transaction as the non-committable batch state."
-      ],
-      "required": 1,
-      "sort_order": 0,
-      "created_at": "2026-07-25T13:54:10.4041268+00:00"
-    }
-  ],
-  "references": [
-    {
-      "id": "01KXTMAH8S9269SDAVK30DE8WT",
-      "target_ref_code": "TC-INGEST-STATEMENT-PREVIEW-CONTRACT",
-      "target_entity_type": "test_case",
-      "target_entity_id": "01KXTF4XGN7EGTA20FHTKK9Y8T",
-      "target_title": "Verify deterministic statement preview",
-      "relationship": "verifies",
-      "required": 1,
-      "sort_order": 5,
-      "created_at": "2026-07-18T12:48:21.7802577+00:00"
+      "created_at": "2026-07-26T10:24:21.3439445+00:00"
     }
   ],
   "requirements": [

@@ -1,0 +1,9 @@
+{
+  "id": "01KYEZDCM06EAVAY46HAYAE7S3",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "version": "0.15",
+  "changes": [
+    "Replanned PLAN-INGEST-V1 in place for DD-INGEST-SOURCE-DESCRIPTION-ABSENCE. Updated Layout A implementation, preview mapping, adapter convergence, and UC-001 recipes; classified existing adapter files as modifications; preserved compile dependencies and all 27 stable task identities. Plan coverage has 111 of 111 required refs, zero gaps, no missing recipes or verification, all affected contexts fit 2,500 tokens, lint is clean, and self-review passed at fingerprint d90969add2270d3832a8bee8bd892a873c3cda6df1f0d27ca4545e53e3a88d57."
+  ],
+  "created_at": "2026-07-26T10:26:58.3048972+00:00"
+}

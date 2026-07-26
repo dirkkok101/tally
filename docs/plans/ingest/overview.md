@@ -160,8 +160,8 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 ### Coverage
 
 - **Status:** `warn`
-- **Required refs:** 113
-- **Covered refs:** 113
+- **Required refs:** 111
+- **Covered refs:** 111
 - **Gaps:** 0
 
 #### Covered References
@@ -192,6 +192,10 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap | `design_decision` | `governed-by` | [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | `true` |
 | DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap | `design_decision` | `governed-by` | [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md) | `true` |
 | DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap | `design_decision` | `governed-by` | [TASK-INGEST-REVIEW-WORKFLOW](tasks/review-workflow.md) | `true` |
+| DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly | `design_decision` | `governed-by` | [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | `true` |
+| DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly | `design_decision` | `governed-by` | [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](tasks/gate-int-format-adapters.md) | `true` |
+| DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly | `design_decision` | `governed-by` | [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | `true` |
+| DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly | `design_decision` | `governed-by` | [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md) | `true` |
 | DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction | `design_decision` | `governed-by` | [TASK-INGEST-GATE-SECURITY](tasks/gate-security.md) | `true` |
 | DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction | `design_decision` | `governed-by` | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `true` |
 | DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction | `design_decision` | `governed-by` | [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md) | `true` |
@@ -209,7 +213,6 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | DM-INGEST-OPERATION-CONTRACTS: IngestOperationContracts | `data_model` | `touches` | [TASK-INGEST-CONTRACT-FOUNDATION](tasks/contract-foundation.md) | `true` |
 | DM-INGEST-STATE-STORE: IngestStateStore | `data_model` | `touches` | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `true` |
 | DM-INGEST-STATE-STORE: IngestStateStore | `data_model` | `touches` | [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md) | `true` |
-| FA-INGEST-CONTRACT-FORMATS: Contract and Formats | `feature_area` | `touches` | [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](tasks/gate-int-format-adapters.md) | `true` |
 | FA-INGEST-RECOVERY-CLEANUP: Recovery and Cleanup | `feature_area` | `touches` | [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md) | `true` |
 | FR-INGEST-APPROVED-BATCH-COMMIT: Commit approved candidates through public LEDGER operations | `requirement` | `implements` | [TASK-INGEST-COMMIT-SAGA](tasks/commit-saga.md) | `true` |
 | FR-INGEST-ARTIFACT-CLEANUP: Abandon and clean up ingestion artifacts safely | `requirement` | `implements` | [TASK-INGEST-ABANDON-CLEANUP](tasks/abandon-cleanup.md) | `true` |
@@ -219,16 +222,13 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts | `requirement` | `implements` | [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | `true` |
 | FR-INGEST-MANIFEST-REVIEW: Review and approve an immutable manifest revision | `requirement` | `implements` | [TASK-INGEST-REVIEW-WORKFLOW](tasks/review-workflow.md) | `true` |
 | FR-INGEST-REPLAY-OVERLAP-SAFETY: Handle Exact Replay and uncertain overlap safely | `requirement` | `implements` | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | `true` |
-| FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval | `requirement` | `implements` | [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | `true` |
+| FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval | `requirement` | `implements` | [TASK-INGEST-ADAPTER-LAYOUT-B](tasks/adapter-layout-b.md) | `true` |
 | FR-INGEST-STATEMENT-PREVIEW: Preview a statement without financial mutation | `requirement` | `implements` | [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | `true` |
 | FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants | `requirement` | `implements` | [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | `true` |
 | NFR-INGEST-AGENT-OPERABILITY: Keep agent invocation deterministic and inspectable | `nfr` | `satisfies` | [TASK-INGEST-VERIFY-UC-006](tasks/verify-uc-006.md) | `true` |
-| NFR-INGEST-BOUNDED-PARSING: Bound passive statement processing | `nfr` | `satisfies` | [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](tasks/gate-int-format-adapters.md) | `true` |
 | NFR-INGEST-BOUNDED-PARSING: Bound passive statement processing | `nfr` | `satisfies` | [TASK-INGEST-GATE-SECURITY](tasks/gate-security.md) | `true` |
 | NFR-INGEST-BOUNDED-PARSING: Bound passive statement processing | `nfr` | `satisfies` | [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md) | `true` |
-| NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity | `nfr` | `satisfies` | [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | `true` |
 | NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity | `nfr` | `satisfies` | [TASK-INGEST-ADAPTER-LAYOUT-B](tasks/adapter-layout-b.md) | `true` |
-| NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity | `nfr` | `satisfies` | [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](tasks/gate-int-format-adapters.md) | `true` |
 | NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity | `nfr` | `satisfies` | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | `true` |
 | NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity | `nfr` | `satisfies` | [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md) | `true` |
 | NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY: Recover every interrupted commit deterministically | `nfr` | `satisfies` | [TASK-INGEST-RESUME-WORKFLOW](tasks/resume-workflow.md) | `true` |
@@ -237,7 +237,6 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | NFR-INGEST-LOCAL-DATA-PROTECTION: Protect local statement and ingestion data | `nfr` | `satisfies` | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `true` |
 | NFR-INGEST-LOCAL-DATA-PROTECTION: Protect local statement and ingestion data | `nfr` | `satisfies` | [TASK-INGEST-VERIFY-UC-005](tasks/verify-uc-005.md) | `true` |
 | NFR-INGEST-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries | `nfr` | `satisfies` | [TASK-INGEST-VERIFY-UC-006](tasks/verify-uc-006.md) | `true` |
-| TC-INGEST-ADAPTER-GOLDEN-FIXTURES: Verify both qualified adapters against golden fixtures | `test_case` | `verifies` | [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | `true` |
 | TC-INGEST-ADAPTER-GOLDEN-FIXTURES: Verify both qualified adapters against golden fixtures | `test_case` | `verifies` | [TASK-INGEST-ADAPTER-LAYOUT-B](tasks/adapter-layout-b.md) | `true` |
 | TC-INGEST-ADAPTER-GOLDEN-FIXTURES: Verify both qualified adapters against golden fixtures | `test_case` | `verifies` | [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](tasks/gate-int-format-adapters.md) | `true` |
 | TC-INGEST-APPROVED-BATCH-COMMIT-CONTRACT: Verify approved batch commit through LEDGER | `test_case` | `verifies` | [TASK-INGEST-VERIFY-UC-003](tasks/verify-uc-003.md) | `true` |
@@ -256,7 +255,7 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | TC-INGEST-FAILURE-STATUS-CONTRACT: Verify safe failure and status reporting | `test_case` | `verifies` | [TASK-INGEST-VERIFY-UC-005](tasks/verify-uc-005.md) | `true` |
 | TC-INGEST-FINANCIAL-NORMALIZATION-CONTRACT: Verify exact financial normalization | `test_case` | `verifies` | [TASK-INGEST-PREVIEW-DOMAIN](tasks/preview-domain.md) | `true` |
 | TC-INGEST-FINANCIAL-NORMALIZATION-CONTRACT: Verify exact financial normalization | `test_case` | `verifies` | [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md) | `true` |
-| TC-INGEST-LAYOUT-A-ADAPTER: Verify qualified layout A adapter | `test_case` | `verifies` | [TASK-INGEST-ADAPTER-LAYOUT-A](tasks/adapter-layout-a.md) | `true` |
+| TC-INGEST-LAYOUT-A-ADAPTER: Verify qualified layout A adapter | `test_case` | `verifies` | [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md) | `true` |
 | TC-INGEST-LAYOUT-B-ADAPTER: Verify qualified layout B adapter | `test_case` | `verifies` | [TASK-INGEST-ADAPTER-LAYOUT-B](tasks/adapter-layout-b.md) | `true` |
 | TC-INGEST-LEDGER-PUBLIC-CONFORMANCE: Verify INGEST uses only the public LEDGER contract | `test_case` | `verifies` | [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](tasks/gate-int-ledger-contract.md) | `true` |
 | TC-INGEST-LEDGER-PUBLIC-CONFORMANCE: Verify INGEST uses only the public LEDGER contract | `test_case` | `verifies` | [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](tasks/ledger-evidence-contract-correction.md) | `true` |
@@ -272,7 +271,6 @@ Global implementation constraints: target net10.0 with nullable and warnings-as-
 | TC-INGEST-SOURCE-RECONCILIATION-CONTRACT: Verify complete source reconciliation | `test_case` | `verifies` | [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md) | `true` |
 | TC-INGEST-STATE-STORE-CONFORMANCE: Verify INGEST SQLite state and retention | `test_case` | `verifies` | [TASK-INGEST-STATE-FOUNDATION](tasks/state-foundation.md) | `true` |
 | TC-INGEST-STATE-STORE-CONFORMANCE: Verify INGEST SQLite state and retention | `test_case` | `verifies` | [TASK-INGEST-STATUS-STATE-V002](tasks/status-state-v002.md) | `true` |
-| TC-INGEST-STATEMENT-PREVIEW-CONTRACT: Verify deterministic statement preview | `test_case` | `verifies` | [TASK-INGEST-PREVIEW-WORKFLOW](tasks/preview-workflow.md) | `true` |
 | TC-INGEST-STATEMENT-PREVIEW-CONTRACT: Verify deterministic statement preview | `test_case` | `verifies` | [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md) | `true` |
 | TC-INGEST-VARIANT-QUALIFICATION-CONTRACT: Verify supported variant qualification | `test_case` | `verifies` | [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md) | `true` |
 | UC-INGEST-001: Preview and qualify a local statement | `use_case` | `covers` | [TASK-INGEST-VERIFY-UC-001](tasks/verify-uc-001.md) | `true` |

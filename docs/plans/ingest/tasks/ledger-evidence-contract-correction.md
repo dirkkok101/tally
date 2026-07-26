@@ -12,11 +12,11 @@
 
 ## Summary
 
-Correct the already-landed INGEST contract and identity foundation to freeze the exact public RecordTransactionInput and derive statement evidence before downstream client or workflow implementation.
+Align the landed INGEST request and identity contracts to the released RecordTransactionInput before client and workflow work.
 
 ## Objective
 
-Frozen INGEST Ledger requests use the released InitialEvidence contract with deterministic candidate-derived identity and a named immutable verification tuple.
+Freeze released InitialEvidence with deterministic candidate identity and immutable verification.
 
 ## References
 
@@ -40,16 +40,16 @@ Frozen INGEST Ledger requests use the released InitialEvidence contract with det
 
 ### Acceptance Checks
 
-- FrozenLedgerRecordRequest.Input is the exact released RecordTransactionInput directly, including InitialEvidence; no INGEST-only FrozenLedgerRecordInput wrapper exists and obsolete SourceReference and Provenance members do not exist outside InitialEvidence.
-- IngestIdentity derives statement evidence deterministically: candidateId is LogicalIdentityDigest, ingest:{candidateId} is OpaqueExternalReference and idempotency key, sourceRecordId is ContentFingerprint, and Observation repeats normalized financial facts plus the lowercase SHA-256 UTF-8 normalized-description fingerprint.
-- Two constructions from identical candidate facts serialize byte-equivalently through IngestJsonContext; a changed candidate fact changes the candidate/evidence identity and frozen request.
-- Focused contract tests prove the exact public shape and immutable verification tuple without relying on History or other mutable TransactionDetail projections.
+- FrozenLedgerRecordRequest.Input is the released RecordTransactionInput with InitialEvidence; obsolete wrappers, SourceReference, and Provenance do not remain.
+- IngestIdentity deterministically maps candidateId to logical identity and idempotency/reference, sourceRecordId to content fingerprint, and normalized facts to Observation including the lowercase SHA-256 description fingerprint.
+- Identical facts serialize byte-equivalently through IngestJsonContext; changing an identity fact changes the candidate, evidence, and request.
+- Focused tests prove the public shape and immutable verification tuple excludes History and mutable TransactionDetail projections.
 
 ### Failure Criteria
 
-- Do NOT retain or translate the rejected sourceReference plus provenance pseudo-contract inside LedgerContractClient — per DD-INGEST-LEDGER-PUBLIC-INTEGRATION.
-- Do NOT derive evidence at commit/resume time or hash private source paths, filenames, manifest revisions, compatible version metadata, or raw financial payloads into public references.
-- Do NOT compare History, lifecycle, reconciliation, category, pool, actor, or recorded time as frozen terminal facts — rejected per DD-INGEST-LEDGER-PUBLIC-INTEGRATION.
+- Do NOT retain or translate the rejected pseudo-contract in LedgerContractClient — per DD-INGEST-LEDGER-PUBLIC-INTEGRATION.
+- Do NOT derive evidence during commit/resume or hash private locators, version metadata, or raw payloads into public references.
+- Do NOT treat History, lifecycle, reconciliation, category, pool, actor, or recorded time as frozen terminal facts.
 
 ### Expected Outputs
 

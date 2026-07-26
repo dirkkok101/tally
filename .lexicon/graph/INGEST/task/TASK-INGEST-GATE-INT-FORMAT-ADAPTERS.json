@@ -34,6 +34,11 @@
       "id": "01KXTM5NS5ZZR3HSSBHS4EGHZ5",
       "target": "DD-INGEST-FORMAT-ADAPTERS",
       "created_at": "2026-07-18T12:45:42.5606427+00:00"
+    },
+    {
+      "id": "01KYEZ1C41QVDVSBQXP679Y9BA",
+      "target": "DD-INGEST-SOURCE-DESCRIPTION-ABSENCE",
+      "created_at": "2026-07-26T10:20:24.5769120+00:00"
     }
   ],
   "dependencies": [
@@ -141,54 +146,64 @@
   ],
   "recipe_items": [
     {
-      "id": "01KYCRVP7PYK8P31HF67RV6K2R",
+      "id": "01KYEZ33624W7PK47VXZPG7BW0",
       "kind": "acceptance_check",
       "text": [
         "StatementAdapterRegistry explicitly contains exactly one PdfTextLayoutAStatementAdapter and one PdfTextLayoutBStatementAdapter in deterministic order; no reflection scan, plugin, fallback, third variant, or user configuration exists."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-25T13:53:58.0066502+00:00"
+      "created_at": "2026-07-26T10:21:20.9614014+00:00"
     },
     {
-      "id": "01KYCRVP7QQB078WJSXYB24FVB",
+      "id": "01KYEZ33647EYTP4Q52M3AHKKN",
       "kind": "acceptance_check",
       "text": [
-        "Every one of the three private fixtures produces exactly one exact_match and the variant ID declared by the ignored private fixture manifest; zero or multiple matches return a stable unsupported result."
+        "Every one of the three private fixtures produces exactly one exact_match and the variant ID declared by the ignored private fixture manifest; zero or multiple adapter matches return a stable unsupported result."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-25T13:53:58.0066502+00:00"
+      "created_at": "2026-07-26T10:21:20.9614014+00:00"
     },
     {
-      "id": "01KYCRVP7RA2W9GQMM2PK3314Y",
+      "id": "01KYEZ336413RV41GGKA65MQFV",
       "kind": "acceptance_check",
       "text": [
-        "Each fixture is extracted twice through the real PdfPig extractor and selected adapter with identical ordered source records, dispositions, controls, and SHA-256 digests."
+        "Each fixture is extracted twice through the real PdfPig extractor and selected adapter with identical ordered source records, description-evidence kinds, dispositions, controls, and SHA-256 digests; digest values remain inside assertions and are not printed."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-25T13:53:58.0066502+00:00"
+      "created_at": "2026-07-26T10:21:20.9614014+00:00"
     },
     {
-      "id": "01KYCRVP7R277K57G2DXW11XN5",
+      "id": "01KYEZ33643NB3385Y0HVXFX5R",
       "kind": "acceptance_check",
       "text": [
-        "Every transaction-bearing source record is accepted, proven Exact Duplicate by fixture evidence, or blocked; non-transaction exclusions carry stable reasons; all available opening, closing, running-balance, total, and record-count controls match exactly."
+        "A unique source description emits SourceText; a structurally complete Layout A row with zero description candidates emits SourceAbsentMarker and exact description 'Description unavailable in source statement'; multiple candidates block. OriginalTextEvidence contains only source glyph text."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-25T13:53:58.0066502+00:00"
+      "created_at": "2026-07-26T10:21:20.9614014+00:00"
     },
     {
-      "id": "01KYCRVP7RY6GNTB30SB1C6RSP",
+      "id": "01KYEZ3364XN7K3JS4X497BCDX",
       "kind": "acceptance_check",
       "text": [
-        "One-over-limit and malformed sources fail before state or LEDGER mutation; measured direct extraction plus adapter work stays below 5 seconds and 256 MiB peak RSS per fixture on the supported release host."
+        "Every transaction-bearing source record is accepted or blocked, non-transaction exclusions carry stable reasons, and all available opening, closing, running-balance, total, and record-count controls match exactly."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-25T13:53:58.0066502+00:00"
+      "created_at": "2026-07-26T10:21:20.9614014+00:00"
+    },
+    {
+      "id": "01KYEZ336433STEZ9YN1K7FYFS",
+      "kind": "acceptance_check",
+      "text": [
+        "One-over-limit and malformed sources fail before state or Ledger mutation; measured direct extraction plus adapter work stays below 5 seconds and 256 MiB peak RSS per fixture on the supported release host."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-26T10:21:20.9614014+00:00"
     },
     {
       "id": "01KXTM5NS65P4T4W0NAY5CNJQH",
@@ -231,59 +246,47 @@
       "created_at": "2026-07-18T12:45:42.5606427+00:00"
     },
     {
-      "id": "01KXTM5NS6KHY0A4H6SNS6EQ45",
+      "id": "01KYEZ1C44VEVBCYYVYEEJ0PDP",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT advertise a format from filename/extension or partial fixture success."
+        "Do NOT advertise a format from filename, extension, or partial fixture success."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-26T10:20:24.5769120+00:00"
     },
     {
-      "id": "01KXTM5NS61M3MV059FGDV61CP",
+      "id": "01KYEZ1C44WT9XCC1CQBT27VER",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT add OCR, generic tables, regex templates, dynamic plugins, or best-effort fallback — rejected per both governing decisions."
+        "Do NOT add OCR, generic tables, regex templates, dynamic plugins, or best-effort fallback; the rejected alternatives remain prohibited by DD-INGEST-DOCUMENT-EXTRACTION and DD-INGEST-FORMAT-ADAPTERS."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "created_at": "2026-07-26T10:20:24.5769120+00:00"
     },
     {
-      "id": "01KXTM5NS63T9511XPRY0X5MEZ",
+      "id": "01KYEZ1C44ZD0JAQA6PNXYK1DV",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use out-of-band expected descriptions, blank values, or neighboring text for a zero-candidate source row; assert the exact typed marker from DD-INGEST-SOURCE-DESCRIPTION-ABSENCE."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-26T10:20:24.5769120+00:00"
+    },
+    {
+      "id": "01KYEZ1C44RBXWZ585WDE39N6Z",
       "kind": "failure_criterion",
       "text": [
         "Do NOT print or persist private fixture paths, descriptions, amounts, balances, records, or expected facts."
       ],
       "required": 1,
-      "sort_order": 2,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
+      "sort_order": 3,
+      "created_at": "2026-07-26T10:20:24.5769120+00:00"
     }
   ],
   "references": [
-    {
-      "id": "01KXTM5NS68QFZQ5J11399T8PV",
-      "target_ref_code": "NFR-INGEST-BOUNDED-PARSING",
-      "target_entity_type": "nfr",
-      "target_entity_id": "01KXTEXM19R263D66YHS6EFCCS",
-      "target_title": "Bound passive statement processing",
-      "relationship": "satisfies",
-      "required": 1,
-      "sort_order": 0,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
-    },
-    {
-      "id": "01KXTM5NS61TQDNK8FXBBM1QVE",
-      "target_ref_code": "NFR-INGEST-DETERMINISTIC-INTEGRITY",
-      "target_entity_type": "nfr",
-      "target_entity_id": "01KXTEXKEK06KD4EXFGC1A8FKG",
-      "target_title": "Preserve deterministic extraction and financial integrity",
-      "relationship": "satisfies",
-      "required": 1,
-      "sort_order": 1,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
-    },
     {
       "id": "01KXTM5NS69BAB4JZCPZQ9BTNY",
       "target_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
@@ -293,17 +296,6 @@
       "relationship": "touches",
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T12:45:42.5606427+00:00"
-    },
-    {
-      "id": "01KXTM5NS6FDVDX8G5XFRQW219",
-      "target_ref_code": "FA-INGEST-CONTRACT-FORMATS",
-      "target_entity_type": "feature_area",
-      "target_entity_id": "01KXTHXCW2GCHZ4A1Y7DVE2A5F",
-      "target_title": "Contract and Formats",
-      "relationship": "touches",
-      "required": 1,
-      "sort_order": 3,
       "created_at": "2026-07-18T12:45:42.5606427+00:00"
     },
     {
