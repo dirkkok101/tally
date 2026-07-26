@@ -2,13 +2,13 @@
   "id": "01KYDJ050EA2CMHZSCF9GA2FA6",
   "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
   "ref_code": "OQ-INGEST-18",
-  "question": "The authorized Layout A fixture contains two nonzero transaction-bearing rows for which PdfPig exposes no description evidence in the deterministic row band, while FR-INGEST-FINANCIAL-NORMALIZATION requires missing descriptions to block. Should the owner provide a source export with extractable descriptions, provide authoritative out-of-band descriptions under a newly reviewed provenance contract, or remove Layout A from the v1 supported set?",
+  "question": "How must INGEST represent a structurally complete Layout A transaction when the fixed source statement provides no description glyph evidence?",
   "context": [
-    "bd-1as private golden verification accounted for all 16 ordered dates, running balances, and controls, but exactly two rows cannot produce normalization-ready FinancialEvidence without borrowing a distant statement-control line. OCR, adjacent-row guessing, blank descriptions, and weakened assertions are prohibited. The adapter fails closed when row-band description ownership is absent or ambiguous."
+    "The authorized private fixture set matches the owner's only production statement formats. Layout A reconciles ordered dates, movements, running balances, and controls, but some structurally complete rows have zero description-only candidates. Re-export, out-of-band facts, OCR, neighboring-text borrowing, blanks, and removal of the required layout are not acceptable."
   ],
   "status": "resolved",
   "decision": [
-    "Dirk selected a source re-export with extractable descriptions. Layout A remains in the v1 supported set, and execution may resume only when the authorized ignored private fixture re-export satisfies the existing unique row-band description evidence contract. Out-of-band descriptions, OCR, borrowing, blank values, and weakened assertions remain prohibited."
+    "Keep Layout A in v1 and apply DD-INGEST-SOURCE-DESCRIPTION-ABSENCE. A zero-candidate description band emits the typed source_absent_marker evidence state and exact non-financial marker 'Description unavailable in source statement'; unique source text remains source_text and multiple candidates block. The marker flows unchanged into Ledger OriginalDescription, its description fingerprint, and immutable record/get verification."
   ],
   "owner": "Dirk",
   "disposition": "non_blocking",

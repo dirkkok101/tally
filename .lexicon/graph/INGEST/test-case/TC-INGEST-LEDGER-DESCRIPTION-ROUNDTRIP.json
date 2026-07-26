@@ -1,0 +1,18 @@
+{
+  "id": "01KYEYSQ3BSGT6A51JZSPPTR8K",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "TC-INGEST-LEDGER-DESCRIPTION-ROUNDTRIP",
+  "slug": "LEDGER-DESCRIPTION-ROUNDTRIP",
+  "title": "Verify Ledger description round-trip prerequisite",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "passing",
+  "preconditions": "The released Ledger RecordTransactionInput and shared public LedgerContractClient are available.",
+  "steps": "Run LedgerContractClientTests through the public operation executor; record one valid non-empty control-free OriginalDescription and InitialEvidence, read the transaction with IncludeHistory=false, and compare the immutable input and evidence fields byte-exactly.",
+  "expected": "Ledger accepts the valid description, returns the same OriginalDescription and InitialEvidence on get, preserves idempotent replay, and exposes no private Ledger handler, store, SQL, or domain type.",
+  "implementation_ref": "tests/Tally.Tests/Ingest/LedgerContract/LedgerContractClientTests.cs",
+  "owner": "INGEST implementation",
+  "created_at": "2026-07-26T10:16:13.6763569+00:00"
+}

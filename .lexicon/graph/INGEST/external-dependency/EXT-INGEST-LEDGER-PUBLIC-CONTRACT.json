@@ -4,11 +4,11 @@
   "ref_code": "EXT-INGEST-LEDGER-PUBLIC-CONTRACT",
   "name": "LEDGER Public Contract",
   "description": [
-    "Outbound internal-module integration used to discover versioned schemas, record canonical transactions with stable idempotency identities, and verify structured results. INGEST never accesses private LEDGER storage; runtime compatibility remains assumed until cross-module published-binary tests exist."
+    "Claim: released ledger.transaction.record requires a non-empty control-free OriginalDescription and ledger.transaction.get with IncludeHistory=false returns it and InitialEvidence exactly. Evidence: passing TC-INGEST-LEDGER-DESCRIPTION-ROUNDTRIP through the shared public LedgerContractClient."
   ],
   "type": "api",
   "owner": "LEDGER",
-  "metadata": "{\"gate_type\":\"api\",\"validation_basis\":\"client_contract\",\"validation_status\":\"assumed\"}",
+  "metadata": "{\"gate_type\":\"api\",\"validation_basis\":\"client_contract\",\"validation_status\":\"validated\"}",
   "created_at": "2026-07-18T10:12:49.9416847+00:00",
   "links": [
     {
@@ -38,6 +38,13 @@
       "target": "FR-LEDGER-TRANSACTION-RECORDING",
       "rel": "depends-on",
       "created_at": "2026-07-18T10:17:16.3584758+00:00"
+    },
+    {
+      "id": "01KYEYSQQ526A5YAMYVZZ7DN88",
+      "target_type": "test_case",
+      "target": "TC-INGEST-LEDGER-DESCRIPTION-ROUNDTRIP",
+      "rel": "validated_by",
+      "created_at": "2026-07-26T10:16:14.3091603+00:00"
     }
   ]
 }

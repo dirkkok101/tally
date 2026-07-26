@@ -4,10 +4,19 @@
   "ref_code": "EXT-INGEST-OWNER-BANK-STATEMENT",
   "name": "Owner-Supplied Bank Statement",
   "description": [
-    "Caller-owned private local PDF statements. The initial evidence set contains three text-native fixtures across two layout variants; one has permission encryption but remains extractable without an opening password."
+    "Claim: the owner-authorized ignored fixture set represents the only production statement formats and includes a Layout A source-absence description state. Evidence: the accepted linked DD-INGEST-SOURCE-DESCRIPTION-ABSENCE rationale records the sanitized PdfPig 0.1.14 spike result."
   ],
   "type": "data",
   "owner": "Personal Finance Owner",
   "metadata": "{\"gate_type\":\"data\",\"validation_basis\":\"source_and_client\",\"validation_status\":\"validated\"}",
-  "created_at": "2026-07-18T10:12:49.6645717+00:00"
+  "created_at": "2026-07-18T10:12:49.6645717+00:00",
+  "links": [
+    {
+      "id": "01KYEYSR9SN6XHWN688NS0CKCA",
+      "target_type": "design_decision",
+      "target": "DD-INGEST-SOURCE-DESCRIPTION-ABSENCE",
+      "rel": "validates",
+      "created_at": "2026-07-26T10:16:14.9052344+00:00"
+    }
+  ]
 }

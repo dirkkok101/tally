@@ -1,0 +1,9 @@
+{
+  "id": "01KYEYVT3Z0WCMNGGY9MA647HC",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "version": "0.14",
+  "changes": [
+    "Corrected Layout A description absence semantics for the fixed production statement format: accepted DD-INGEST-SOURCE-DESCRIPTION-ABSENCE, resolved OQ-INGEST-18, added typed source_text/source_absent_marker evidence, specified exact Ledger OriginalDescription and InitialEvidence round-trip derivation, and updated focused tests without out-of-band financial facts. Lint, naming, links, coverage, the new decision path check, and the 13-case Ledger client proof are green; only pre-existing Agent Host and host OS dependency gates remain pending later execution beads."
+  ],
+  "created_at": "2026-07-26T10:17:22.3047386+00:00"
+}

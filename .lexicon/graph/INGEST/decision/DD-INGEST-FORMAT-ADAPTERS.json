@@ -16,15 +16,22 @@
     "A: one conditional parser, rejected because detection and extraction drift together. B: user-authored regex or template rules, rejected because unreviewed configuration would own financial semantics. C: dynamic plugins or child processes, rejected as unsupported deployment and security complexity. D: two explicit adapters behind IStatementAdapter, chosen because two real implementations exist."
   ],
   "consequences": [
-    "Every advertised variant needs representative golden fixtures, exclusive detection, deterministic bounded extraction, and versioned identity. A new format is a new adapter plus evidence. AccountDetail stays authoritative. metadataFingerprint is lowercase SHA-256 over canonical UTF-8 bytes: adapterVersion, one LF, then normalized layout-specific account-metadata fields joined by LF with no trailing LF. Each field is normalized with Unicode FormKC, invariant lowercase, and whitespace collapse before hashing. Layout A reconstructs visual lines in source page/line order, selects only lines containing the case-insensitive lexical marker account or card, removes monetary tokens, and rejects extraction if no metadata field remains. Layout A transaction rows are anchored by the date, amount, and balance columns. When a description is rendered on a separate baseline, the adapter assigns only the unique description-only visual line inside that row vertical midpoint band; absent or ambiguous descriptions reject rather than borrowing from an adjacent row. Original text evidence contains both the anchored row line and any assigned description line. Paths, filenames, selected accountId, transaction rows, and financial values are excluded from metadataFingerprint."
+    "Every advertised variant needs representative golden fixtures, exclusive detection, deterministic bounded extraction, and versioned identity. A new format is a new adapter plus evidence. AccountDetail stays authoritative. metadataFingerprint is lowercase SHA-256 over canonical UTF-8 bytes: adapterVersion, one LF, then normalized layout-specific account-metadata fields joined by LF with no trailing LF. Each field is normalized with Unicode FormKC, invariant lowercase, and whitespace collapse before hashing. Layout A reconstructs visual lines in source page/line order, selects only lines containing the case-insensitive lexical marker account or card, removes monetary tokens, and rejects extraction if no metadata field remains. Layout A transaction rows are anchored by date, transaction amount, and running balance columns. Exactly one description-only visual line inside the row vertical midpoint band supplies source_text; zero candidates uses the typed fixed marker governed by DD-INGEST-SOURCE-DESCRIPTION-ABSENCE; multiple candidates reject. Original text evidence contains only anchored source lines and any assigned source description line. Paths, filenames, selected accountId, transaction rows, and financial values are excluded from metadataFingerprint."
   ],
   "status_notes": [
-    "Accepted; bd-1as private evidence proved that two transaction-bearing rows lack a unique in-band description. The design now requires deterministic row-band ownership and fail-closed rejection; OQ-INGEST-18 owns the resulting product decision."
+    "Accepted; the production fixture evidence and owner clarification supersede the re-export assumption. Deterministic zero-candidate description absence follows DD-INGEST-SOURCE-DESCRIPTION-ABSENCE while ambiguous ownership remains fail-closed."
   ],
   "status": "accepted",
   "metadata": "{\"expected_paths\":[\"src/Tally/Infrastructure/Ingest/Pdf/IStatementAdapter.cs\",\"src/Tally/Infrastructure/Ingest/Pdf/PdfTextLayoutAStatementAdapter.cs\",\"src/Tally/Infrastructure/Ingest/Pdf/PdfTextLayoutBStatementAdapter.cs\",\"tests/Tally.Tests/Ingest/Adapters/**\"]}",
   "created_at": "2026-07-18T12:03:09.4376158+00:00",
   "links": [
+    {
+      "id": "01KYEYMZ51EQB87DX52F0TBCX9",
+      "target_type": "design_decision",
+      "target": "DD-INGEST-SOURCE-DESCRIPTION-ABSENCE",
+      "rel": "see-also",
+      "created_at": "2026-07-26T10:13:38.0814504+00:00"
+    },
     {
       "id": "01KXTJ3EFGABZBJSD0JYYN5K7J",
       "target_type": "requirement",
