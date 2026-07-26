@@ -14,6 +14,7 @@ public sealed class PdfTextLayoutAStatementAdapter : IStatementAdapter
 {
     private const string VariantId = "pdf-text-layout-a-v1";
     private const string AdapterVersion = "1.0.0";
+    private const string SourceDescriptionUnavailableMarker = "Description unavailable in source statement";
 
     private static readonly Regex StatementPeriodDate = new(
         @"\b(?<day>\d{1,2})\s+(?<month>January|February|March|April|May|June|July|August|September|October|November|December)\s+(?<year>\d{4})",
@@ -55,7 +56,12 @@ public sealed class PdfTextLayoutAStatementAdapter : IStatementAdapter
     {
         var content = ExtractContent(evidence);
         var lines = VisualLines(evidence).ToArray();
-        var periodDates = StatementPeriodDate.Matches(content).Count;
+        var periodDates = StatementPeriodDate.Matches(content)
+            .Cast<Match>()
+            .Select(ParseFullDate)
+            .Distinct()
+            .Take(3)
+            .Count();
         var rowExtraction = ExtractRowCandidates(lines);
         var hasControls = MoneyWithDirection.Matches(content).Count >= 2 &&
             lines.Any(line => line.Text.Contains("opening balance", StringComparison.OrdinalIgnoreCase)) &&
@@ -122,6 +128,7 @@ public sealed class PdfTextLayoutAStatementAdapter : IStatementAdapter
                 ordinal,
                 "statement-transaction",
                 row.RawEvidence,
+                row.DescriptionEvidenceKind,
                 null,
                 financialEvidence,
                 runningBalanceMinor,
@@ -202,19 +209,25 @@ public sealed class PdfTextLayoutAStatementAdapter : IStatementAdapter
             anchors.Add(new(line, balance, date, description));
         }
 
+        if (anchors.Count < 2)
+        {
+            return new([], false);
+        }
+
         var rows = new List<RowCandidate>(anchors.Count);
         for (var index = 0; index < anchors.Count; index++)
         {
             var anchor = anchors[index];
             var description = anchor.Description;
+            var descriptionEvidenceKind = DescriptionEvidenceKind.SourceText;
             VisualLine? descriptionLine = null;
             if (description.Length == 0)
             {
                 var upperBound = index == 0
-                    ? double.PositiveInfinity
+                    ? anchor.Line.Bottom + ((anchor.Line.Bottom - anchors[index + 1].Line.Bottom) / 2d)
                     : (anchors[index - 1].Line.Bottom + anchor.Line.Bottom) / 2d;
                 var lowerBound = index == anchors.Count - 1
-                    ? double.NegativeInfinity
+                    ? anchor.Line.Bottom - ((anchors[index - 1].Line.Bottom - anchor.Line.Bottom) / 2d)
                     : (anchor.Line.Bottom + anchors[index + 1].Line.Bottom) / 2d;
                 var candidates = lines.Skip(headerIndex + 1)
                     .Where(candidate => candidate != anchor.Line &&
@@ -222,25 +235,34 @@ public sealed class PdfTextLayoutAStatementAdapter : IStatementAdapter
                         candidate.Bottom <= upperBound && candidate.Bottom >= lowerBound &&
                         IsDescriptionOnlyLine(candidate))
                     .ToArray();
-                if (candidates.Length != 1)
+                if (candidates.Length > 1)
                 {
                     return new([], false);
                 }
 
-                descriptionLine = candidates[0];
-                description = CollapseWhitespace(descriptionLine.Text);
+                if (candidates.Length == 0)
+                {
+                    description = SourceDescriptionUnavailableMarker;
+                    descriptionEvidenceKind = DescriptionEvidenceKind.SourceAbsentMarker;
+                }
+                else
+                {
+                    descriptionLine = candidates[0];
+                    description = CollapseWhitespace(descriptionLine.Text);
+                }
             }
 
             var rawEvidence = descriptionLine is null
-                ? anchor.Line.Text
+                ? anchor.Line.SourceText
                 : descriptionLine.Bottom > anchor.Line.Bottom
-                    ? string.Concat(descriptionLine.Text, "\n", anchor.Line.Text)
-                    : string.Concat(anchor.Line.Text, "\n", descriptionLine.Text);
+                    ? string.Concat(descriptionLine.SourceText, "\n", anchor.Line.SourceText)
+                    : string.Concat(anchor.Line.SourceText, "\n", descriptionLine.SourceText);
             rows.Add(new(
                 anchor.Line.PageNumber,
                 anchor.Balance,
                 anchor.Date,
                 description,
+                descriptionEvidenceKind,
                 rawEvidence));
         }
 
@@ -422,7 +444,12 @@ public sealed class PdfTextLayoutAStatementAdapter : IStatementAdapter
                     previous = glyph;
                 }
 
-                yield return new(page.PageNumber, row.Average(glyph => glyph.Bottom), builder.ToString(), positions);
+                yield return new(
+                    page.PageNumber,
+                    row.Average(glyph => glyph.Bottom),
+                    builder.ToString(),
+                    string.Concat(ordered.Select(glyph => glyph.Value)),
+                    positions);
             }
         }
     }
@@ -447,13 +474,19 @@ public sealed class PdfTextLayoutAStatementAdapter : IStatementAdapter
         Match Balance,
         Match Date,
         string Description,
+        DescriptionEvidenceKind DescriptionEvidenceKind,
         string RawEvidence);
 
     private sealed record RowExtraction(IReadOnlyList<RowCandidate> Rows, bool Complete);
 
     private sealed record StatementControls(long OpeningBalanceMinor, long ClosingBalanceMinor);
 
-    private sealed record VisualLine(int PageNumber, double Bottom, string Text, IReadOnlyList<TextPosition> Positions);
+    private sealed record VisualLine(
+        int PageNumber,
+        double Bottom,
+        string Text,
+        string SourceText,
+        IReadOnlyList<TextPosition> Positions);
 
     private sealed record TextPosition(int Start, int End, double Left);
 }

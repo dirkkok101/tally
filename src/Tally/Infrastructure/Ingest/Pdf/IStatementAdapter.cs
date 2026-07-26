@@ -42,12 +42,19 @@ public sealed record StatementAccountEvidence(
     string MetadataFingerprint,
     bool Matched);
 
+public enum DescriptionEvidenceKind
+{
+    SourceText,
+    SourceAbsentMarker
+}
+
 public sealed record SourceRecordEvidence(
     string SourceRecordId,
     int PageNumber,
     int RecordOrdinal,
     string RecordKind,
     string OriginalTextEvidence,
+    DescriptionEvidenceKind DescriptionEvidenceKind,
     string? SourceReference,
     FinancialEvidence FinancialEvidence,
     long? RunningBalanceMinor,

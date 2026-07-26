@@ -31,6 +31,7 @@ public sealed class LayoutAStatementAdapterTests
         Assert.NotNull(method);
         Assert.Equal(typeof(AccountDetail), method.GetParameters()[1].ParameterType);
         Assert.Equal(typeof(FinancialEvidence), typeof(SourceRecordEvidence).GetProperty(nameof(SourceRecordEvidence.FinancialEvidence))!.PropertyType);
+        Assert.Equal(typeof(DescriptionEvidenceKind), typeof(SourceRecordEvidence).GetProperty(nameof(SourceRecordEvidence.DescriptionEvidenceKind))!.PropertyType);
         Assert.Equal(typeof(StatementPeriod), typeof(ExtractedStatement).GetProperty(nameof(ExtractedStatement.StatementPeriod))!.PropertyType);
         Assert.NotNull(typeof(StatementAccountEvidence).GetProperty("MetadataFingerprint"));
     }
@@ -174,7 +175,27 @@ public sealed class LayoutAStatementAdapterTests
             ("Second row", 55d, 554d)), Account("account-a", AccountClass.Asset, "ZAR"));
 
         Assert.Equal(["First row", "Second row"], statement.OrderedRecords.Select(record => record.FinancialEvidence.Description));
+        Assert.All(statement.OrderedRecords, record => Assert.Equal(DescriptionEvidenceKind.SourceText, record.DescriptionEvidenceKind));
         Assert.All(statement.OrderedRecords, record => Assert.Contains('\n', record.OriginalTextEvidence));
+    }
+
+    [Fact]
+    public void Extract_DD_INGEST_SOURCE_DESCRIPTION_ABSENCE_emits_the_fixed_marker_when_no_description_candidate_is_owned()
+    {
+        var adapter = new PdfTextLayoutAStatementAdapter();
+        var statement = adapter.Extract(Evidence(
+            "Account Card ****1234",
+            "Statement period 01 January 2026 31 January 2026",
+            "Opening balance 100.00Cr",
+            "Closing balance 120.00Cr",
+            "Date Description Amount Balance",
+            "01 Jan             10.00Cr 110.00Cr",
+            "02 Jan             10.00Cr 120.00Cr"), Account("account-a", AccountClass.Asset, "ZAR"));
+
+        Assert.All(statement.OrderedRecords, record =>
+            Assert.Equal("Description unavailable in source statement", record.FinancialEvidence.Description));
+        Assert.All(statement.OrderedRecords, record => Assert.Equal(DescriptionEvidenceKind.SourceAbsentMarker, record.DescriptionEvidenceKind));
+        Assert.All(statement.OrderedRecords, record => Assert.DoesNotContain("Description unavailable in source statement", record.OriginalTextEvidence));
     }
 
     [Fact]
@@ -216,6 +237,8 @@ public sealed class LayoutAStatementAdapterTests
             if (outcome == VariantProbeOutcome.ExactMatch)
             {
                 selectedCount++;
+                Assert.True(fixture.VariantId == adapter.Descriptor.VariantId,
+                    "Private Layout A variant identity did not match the public descriptor.");
                 VerifyPrivateFixture(adapter, extraction.Evidence!, fixture);
             }
             else
@@ -266,7 +289,11 @@ public sealed class LayoutAStatementAdapterTests
                 "Private Layout A record order did not match the authorized expectation.");
             Assert.True(actual.FinancialEvidence.CurrencyCode == expectedRecord.GetProperty("currency").GetString(),
                 "Private Layout A record currency did not match the authorized expectation.");
-            recordsMatch &= actual.FinancialEvidence.Description == expectedRecord.GetProperty("description").GetString();
+            var expectedDescription = expectedRecord.GetProperty("description").GetString();
+            recordsMatch &= actual.DescriptionEvidenceKind == DescriptionEvidenceKind.SourceText
+                ? actual.FinancialEvidence.Description == expectedDescription
+                : string.IsNullOrEmpty(expectedDescription) &&
+                    actual.FinancialEvidence.Description == "Description unavailable in source statement";
             recordsMatch &= actual.FinancialEvidence.TransactionDate == expectedRecord.GetProperty("transactionDate").GetString();
             recordsMatch &= signedMinor == expectedSignedMinor;
             recordsMatch &= actual.RunningBalanceMinor == expectedRunningMinor;
@@ -275,11 +302,6 @@ public sealed class LayoutAStatementAdapterTests
         }
 
         Assert.True(recordsMatch, "Private Layout A records did not match the authorized expectation.");
-        Assert.True(sourceRecordIdsMatch,
-            "Private Layout A source record identity did not match the authorized expectation.");
-        Assert.True(first.AccountEvidence.MetadataFingerprint == expectedFingerprint,
-            "Private Layout A metadata fingerprint did not match the authorized expectation.");
-
         var controls = expected.GetProperty("controls");
         var opening = ParseExpectedMinor(controls.GetProperty("openingEconomicBalance").GetString()!);
         var closing = ParseExpectedMinor(controls.GetProperty("closingEconomicBalance").GetString()!);
@@ -288,6 +310,10 @@ public sealed class LayoutAStatementAdapterTests
             "Private Layout A controls did not reconcile to the authorized expectation.");
         Assert.True(StatementsAreEquivalent(first, second),
             "Private Layout A repeated extraction was not deterministic.");
+        Assert.True(first.AccountEvidence.MetadataFingerprint == expectedFingerprint,
+            "Private Layout A metadata fingerprint did not match the authorized expectation.");
+        Assert.True(sourceRecordIdsMatch,
+            "Private Layout A source record identity did not match the authorized expectation.");
     }
 
     private static AccountClass InferAccountClass(System.Text.Json.JsonElement expected)
