@@ -1,0 +1,22 @@
+{
+  "id": "01KYF71ZXR7A6F4GPA2HH2QTMZ",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "ref_code": "OQ-INGEST-19",
+  "question": "Which deterministic in-process glyph reconstruction and row-boundary rule maps both authorized Layout B fixtures to exactly their manifest rows and controls without filename, external-process, or fixture-data dependencies?",
+  "context": [
+    "Blocks DD-INGEST-FORMAT-ADAPTERS and TASK-INGEST-ADAPTER-LAYOUT-B. Sanitized in-process spikes against both owner-authorized Layout B fixtures proved exact transaction-date anchor counts after excluding full statement-period dates and proved the existing format discriminator rejects Layout A. They disproved baseline-only visual lines, fixed coordinate grids, midpoint date bands, nearest monotonic rows, PdfPig content-order text, nearest-neighbour word lines, and Docstrum lines as exact row reconstruction rules: none uniquely reconstructed every description, movement, control, metadata field, and source-evidence span without manifest facts. Remaining gap: prove a bounded managed fixed-layout reconstruction with stable glyph-span provenance and structural predicates for transaction rows, controls, and metadata; do not implement or relax golden assertions before that proof."
+  ],
+  "status": "open",
+  "disposition": "blocking",
+  "blocking_stage": "design",
+  "created_at": "2026-07-26T12:40:33.4653126+00:00",
+  "links": [
+    {
+      "id": "01KYF71ZXTGSHNC1HZNYXDTRP1",
+      "target_type": "design_decision",
+      "target": "DD-INGEST-FORMAT-ADAPTERS",
+      "rel": "see-also",
+      "created_at": "2026-07-26T12:40:33.4660560+00:00"
+    }
+  ]
+}
