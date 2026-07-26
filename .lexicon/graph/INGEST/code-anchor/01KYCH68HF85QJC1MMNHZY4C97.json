@@ -5,7 +5,7 @@
   "ref_code": "DM-INGEST-OPERATION-CONTRACTS",
   "repo_path": "src/Tally/Contracts/Ingest/IngestErrorContracts.cs",
   "anchor_kind": "implementation",
-  "last_verified_hash": "f9bc288b95592941476b222da5b739128d2adb9e04ae5f139f93a5bc99f61edc",
-  "last_verified_at": "2026-07-25T11:39:55.8230748+00:00",
+  "last_verified_hash": "59fbaaeefb1de0fa74f71214401158172675f91c725a1abc1b003caa1819e8ae",
+  "last_verified_at": "2026-07-26T08:19:15.9785940+00:00",
   "created_at": "2026-07-25T11:39:55.8230748+00:00"
 }

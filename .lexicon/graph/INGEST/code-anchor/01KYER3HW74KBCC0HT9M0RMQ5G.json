@@ -1,0 +1,11 @@
+{
+  "id": "01KYER3HW74KBCC0HT9M0RMQ5G",
+  "entity_type": "design_decision",
+  "entity_id": "01KXTHRZSG001M37D7BN4BY6SH",
+  "ref_code": "DD-INGEST-LEDGER-PUBLIC-INTEGRATION",
+  "repo_path": "src/Tally/Integration/Ledger/LedgerContractClient.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "1a723f29eae1daa180848e650cb1e79f871314388d68018eeb400e565beed75b",
+  "last_verified_at": "2026-07-26T08:19:15.9758874+00:00",
+  "created_at": "2026-07-26T08:19:15.9758874+00:00"
+}

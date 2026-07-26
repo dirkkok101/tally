@@ -1,0 +1,11 @@
+{
+  "id": "01KYER3HWC5GB2R1PS08NR1JT2",
+  "entity_type": "test_case",
+  "entity_id": "01KXTF4ZJ8JCMA6CB7RK9DZ62M",
+  "ref_code": "TC-INGEST-FAILURE-STATUS-CONTRACT",
+  "repo_path": "tests/Tally.Tests/Ingest/Recovery/StatusWorkflowTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "efa404f760e305986bbb2b7dc72586570263cfae9d8df2d1600b670057f2878d",
+  "last_verified_at": "2026-07-26T08:19:15.9801592+00:00",
+  "created_at": "2026-07-26T08:19:15.9801592+00:00"
+}

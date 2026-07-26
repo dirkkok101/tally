@@ -5,7 +5,7 @@
   "ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
   "repo_path": "src/Tally/Contracts/Ingest/IngestJsonContext.cs",
   "anchor_kind": "implementation",
-  "last_verified_hash": "53bc696ff06c58711864305d5f1089207edc42dd3ab60c7e7d4276874eca39c7",
-  "last_verified_at": "2026-07-25T11:39:55.8181256+00:00",
+  "last_verified_hash": "4f3b6e5c155a333a98648ca2819281e11618759603c5650265a79cdd4b9202fe",
+  "last_verified_at": "2026-07-26T08:19:15.9760844+00:00",
   "created_at": "2026-07-25T11:39:55.8181256+00:00"
 }

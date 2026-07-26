@@ -1,0 +1,11 @@
+{
+  "id": "01KYER3HWBQ089XMJS9HG3XCQ9",
+  "entity_type": "data_model",
+  "entity_id": "01KXTHWSPAYJP1YS5JKDP4ZPN0",
+  "ref_code": "DM-INGEST-STATE-STORE",
+  "repo_path": "src/Tally/Infrastructure/Ingest/Storage/Migrations/IngestMigrationV002.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "f9764b6342a9e904b699ec0dc2069882de05201f504afdd471e62f5c485f09de",
+  "last_verified_at": "2026-07-26T08:19:15.9793561+00:00",
+  "created_at": "2026-07-26T08:19:15.9793561+00:00"
+}

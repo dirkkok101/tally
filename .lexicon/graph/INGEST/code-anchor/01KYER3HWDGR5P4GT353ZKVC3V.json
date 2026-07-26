@@ -1,0 +1,11 @@
+{
+  "id": "01KYER3HWDGR5P4GT353ZKVC3V",
+  "entity_type": "test_case",
+  "entity_id": "01KXTJ0AV78TA1TXWZMK9VQSRC",
+  "ref_code": "TC-INGEST-LEDGER-PUBLIC-CONFORMANCE",
+  "repo_path": "tests/Tally.Tests/Ingest/Preview/ReconciliationAndManifestTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "9f85e63d77cef551518293b84e3315589670049390b34d556bdb7cf400562b53",
+  "last_verified_at": "2026-07-26T08:19:15.9814960+00:00",
+  "created_at": "2026-07-26T08:19:15.9814960+00:00"
+}

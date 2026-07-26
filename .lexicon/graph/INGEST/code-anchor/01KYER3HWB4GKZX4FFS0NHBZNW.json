@@ -1,0 +1,11 @@
+{
+  "id": "01KYER3HWB4GKZX4FFS0NHBZNW",
+  "entity_type": "data_model",
+  "entity_id": "01KXTHWSPAYJP1YS5JKDP4ZPN0",
+  "ref_code": "DM-INGEST-STATE-STORE",
+  "repo_path": "src/Tally/Infrastructure/Ingest/Storage/BatchErrorEventStore.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "e29c15cfc8881ae05bf17680c7efd13c1be0a6a1243bd8ae9ebe296883e0ccaa",
+  "last_verified_at": "2026-07-26T08:19:15.9791423+00:00",
+  "created_at": "2026-07-26T08:19:15.9791423+00:00"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "01KYER3HW7SSPRQVYDVAYCSTT3",
+  "entity_type": "design_decision",
+  "entity_id": "01KXTHQRFWVREEFMZGKHKR45E5",
+  "ref_code": "DD-INGEST-FORMAT-ADAPTERS",
+  "repo_path": "src/Tally/Infrastructure/Ingest/Pdf/IStatementAdapter.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "ac47369a6c10baff3d345eefd28753fc02c9bec066edbe9a88ad4d388c16fca8",
+  "last_verified_at": "2026-07-26T08:19:15.9755185+00:00",
+  "created_at": "2026-07-26T08:19:15.9755185+00:00"
+}

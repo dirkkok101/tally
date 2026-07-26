@@ -5,7 +5,7 @@
   "ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
   "repo_path": "src/Tally/Contracts/Ingest/IngestReceiptContracts.cs",
   "anchor_kind": "implementation",
-  "last_verified_hash": "a8b079718b311073eba916c0e92319018238db948eb03fec03d72a05e1dbb624",
-  "last_verified_at": "2026-07-25T11:39:55.8225803+00:00",
+  "last_verified_hash": "5fa1f0226550df664df5d1a380bbf6238e8107cc77be058ed69282c2fa2822d9",
+  "last_verified_at": "2026-07-26T08:19:15.9782890+00:00",
   "created_at": "2026-07-25T11:39:55.8225803+00:00"
 }

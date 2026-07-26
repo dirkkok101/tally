@@ -5,7 +5,7 @@
   "ref_code": "TC-INGEST-CONTRACT-DISCOVERY-CONTRACT",
   "repo_path": "tests/Tally.Tests/Ingest/Contract/IngestContractModelTests.cs",
   "anchor_kind": "test",
-  "last_verified_hash": "b65b62538eb817ef5dfff1c515ab24338918095e2d0702f98f40ea73e6148bde",
-  "last_verified_at": "2026-07-25T11:39:55.8242781+00:00",
+  "last_verified_hash": "15ed7eeabc91fc98b8a524ce552a3715f2e5b0675b353a1cc7e5b564b99692c4",
+  "last_verified_at": "2026-07-26T08:19:15.9800311+00:00",
   "created_at": "2026-07-25T11:39:55.8242781+00:00"
 }

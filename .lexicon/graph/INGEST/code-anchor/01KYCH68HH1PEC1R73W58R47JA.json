@@ -5,7 +5,7 @@
   "ref_code": "TC-INGEST-SOURCE-RECONCILIATION-CONTRACT",
   "repo_path": "tests/Tally.Tests/Ingest/Preview/ReconciliationAndManifestTests.cs",
   "anchor_kind": "test",
-  "last_verified_hash": "613cfdcccafac61457c1211f82b8675e0ba96bc1d8911ac207a08f28377c5da7",
-  "last_verified_at": "2026-07-25T11:39:55.8256275+00:00",
+  "last_verified_hash": "9f85e63d77cef551518293b84e3315589670049390b34d556bdb7cf400562b53",
+  "last_verified_at": "2026-07-26T08:19:15.9823890+00:00",
   "created_at": "2026-07-25T11:39:55.8256275+00:00"
 }
