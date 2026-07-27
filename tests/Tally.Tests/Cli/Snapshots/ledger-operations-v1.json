@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "schemaFingerprint": "2d4bdb0e3abd034b027587580b58588ed58890bfdb63d876f0c72614dea0b79f",
+  "schemaFingerprint": "fcc5aa1458a22d2746fbcbc632207318c3145b4a78bdebab457eed2731d47348",
   "operationIds": [
     "ledger.account.archive",
     "ledger.account.create",

@@ -36,7 +36,22 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
         Assert.False(string.IsNullOrWhiteSpace(descriptor.Example));
         Assert.Equal("1.0", descriptor.MinimumContractVersion);
         Assert.Equal("1.0", descriptor.MaximumContractVersion);
-        Assert.Equal(descriptor.Kind == "mutation", descriptor.RequiresIdempotencyKey);
+        if (descriptor.OperationId.StartsWith("budget.", StringComparison.Ordinal))
+        {
+            // BUDGET: command+idempotency for mutations; query without idempotency for reads.
+            if (descriptor.RequiresIdempotencyKey)
+            {
+                Assert.True(descriptor.Kind is "command" or "mutation");
+            }
+            else
+            {
+                Assert.Equal("query", descriptor.Kind);
+            }
+        }
+        else
+        {
+            Assert.Equal(descriptor.Kind == "mutation", descriptor.RequiresIdempotencyKey);
+        }
         Assert.Equal(schema.Errors.Count, schema.Errors.Select(error => error.Code).Distinct(StringComparer.Ordinal).Count());
         Assert.Contains(schema.Errors, error => error.Code == "contract.incompatible" && error.ExitCode == 7);
         AssertObjectSchema(schema.RequestSchema, descriptor.RequestTypeInfo.Properties.Select(property => property.Name));
@@ -53,17 +68,19 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
         var descriptors = OperationRegistry.Create().Descriptors;
         var ledger = descriptors.Where(d => d.OperationId.StartsWith("ledger.", StringComparison.Ordinal)).ToArray();
         var ingest = descriptors.Where(d => d.OperationId.StartsWith("ingest.", StringComparison.Ordinal)).ToArray();
+        var budget = descriptors.Where(d => d.OperationId.StartsWith("budget.", StringComparison.Ordinal)).ToArray();
         var system = descriptors.Where(d => d.OperationId.StartsWith("system.", StringComparison.Ordinal)).ToArray();
 
-        // Additive registry: preserve existing ledger.* inventory and add exactly eight ingest.* operations.
+        // Additive registry: preserve ledger/ingest/system inventory and add exactly six budget.* operations.
         Assert.Equal(68, ledger.Length);
         Assert.Equal(8, ingest.Length);
+        Assert.Equal(6, budget.Length);
         Assert.Equal(6, system.Length);
-        Assert.Equal(82, descriptors.Count);
-        Assert.Equal(82, descriptors.Select(descriptor => descriptor.OperationId).Distinct(StringComparer.Ordinal).Count());
-        Assert.Equal(82, descriptors.Select(descriptor => descriptor.CliPath).Distinct(StringComparer.Ordinal).Count());
+        Assert.Equal(88, descriptors.Count);
+        Assert.Equal(88, descriptors.Select(descriptor => descriptor.OperationId).Distinct(StringComparer.Ordinal).Count());
+        Assert.Equal(88, descriptors.Select(descriptor => descriptor.CliPath).Distinct(StringComparer.Ordinal).Count());
         Assert.Equal(descriptors.Select(descriptor => descriptor.OperationId).Order(StringComparer.Ordinal), descriptors.Select(descriptor => descriptor.OperationId));
-        Assert.Equal("ingest.abandon", descriptors[0].OperationId);
+        Assert.Equal("budget.insights.evidence.get", descriptors[0].OperationId);
         Assert.Equal("system.version", descriptors[^1].OperationId);
     }
 
@@ -82,11 +99,13 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
             .OrderBy(descriptor => descriptor.OperationId, StringComparer.Ordinal)
             .ToArray();
         Assert.Equal(74, bundled.Length);
-        var nonIngest = OperationRegistry.Create().Descriptors
-            .Where(descriptor => !descriptor.OperationId.StartsWith("ingest.", StringComparison.Ordinal))
+        var ledgerSystem = OperationRegistry.Create().Descriptors
+            .Where(descriptor =>
+                !descriptor.OperationId.StartsWith("ingest.", StringComparison.Ordinal)
+                && !descriptor.OperationId.StartsWith("budget.", StringComparison.Ordinal))
             .ToArray();
         Assert.Equal(
-            JsonSerializer.Serialize(nonIngest.Select(descriptor => descriptor.ToSchema()).ToArray(), LedgerJsonContext.Default.OperationSchemaArray),
+            JsonSerializer.Serialize(ledgerSystem.Select(descriptor => descriptor.ToSchema()).ToArray(), LedgerJsonContext.Default.OperationSchemaArray),
             JsonSerializer.Serialize(bundled.Select(descriptor => descriptor.ToSchema()).ToArray(), LedgerJsonContext.Default.OperationSchemaArray));
     }
 
@@ -111,7 +130,9 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
         // retryDisposition vocabulary and are covered by ingest-scoped inventory tests.
         var schema = JsonSerializer.Serialize(
             OperationRegistry.Create().Descriptors
-                .Where(descriptor => !descriptor.OperationId.StartsWith("ingest.", StringComparison.Ordinal))
+                .Where(descriptor =>
+                    !descriptor.OperationId.StartsWith("ingest.", StringComparison.Ordinal)
+                    && !descriptor.OperationId.StartsWith("budget.", StringComparison.Ordinal))
                 .Select(descriptor => descriptor.ToSchema())
                 .ToArray(),
             LedgerJsonContext.Default.OperationSchemaArray);
@@ -202,15 +223,17 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
         var expectedIds = snapshot.RootElement.GetProperty("operationIds").EnumerateArray()
             .Select(item => item.GetString()).ToArray();
         var registry = OperationRegistry.Create();
-        var nonIngest = registry.Descriptors
-            .Where(descriptor => !descriptor.OperationId.StartsWith("ingest.", StringComparison.Ordinal))
+        var ledgerSystem = registry.Descriptors
+            .Where(descriptor =>
+                !descriptor.OperationId.StartsWith("ingest.", StringComparison.Ordinal)
+                && !descriptor.OperationId.StartsWith("budget.", StringComparison.Ordinal))
             .ToArray();
-        var nonIngestSchema = JsonSerializer.Serialize(
-            nonIngest.Select(descriptor => descriptor.ToSchema()).ToArray(),
+        var ledgerSystemSchema = JsonSerializer.Serialize(
+            ledgerSystem.Select(descriptor => descriptor.ToSchema()).ToArray(),
             LedgerJsonContext.Default.OperationSchemaArray);
-        var fingerprint = Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(nonIngestSchema)));
+        var fingerprint = Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(ledgerSystemSchema)));
 
-        Assert.Equal(nonIngest.Select(descriptor => descriptor.OperationId), expectedIds);
+        Assert.Equal(ledgerSystem.Select(descriptor => descriptor.OperationId), expectedIds);
         Assert.Equal(fingerprint, snapshot.RootElement.GetProperty("schemaFingerprint").GetString());
     }
 

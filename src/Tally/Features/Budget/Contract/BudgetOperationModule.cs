@@ -26,7 +26,7 @@ public sealed class BudgetOperationModule
             BudgetJsonContext.Default.CreateDraftBudgetPlanInput,
             BudgetJsonContext.Default.CreateDraftBudgetPlanResult,
             "BudgetOperationModule.DraftCreate",
-            (_, _) => new BudgetStubHandler(BudgetOperationIds.DraftCreate, mutating: true),
+            (_, _) => new BudgetStubOperationHandler(BudgetOperationIds.DraftCreate, mutating: true),
             "tally budget plan draft create --input -",
             DraftCreateErrors),
         new(
@@ -37,7 +37,7 @@ public sealed class BudgetOperationModule
             BudgetJsonContext.Default.GetBudgetPlanRevisionInput,
             BudgetJsonContext.Default.BudgetPlanRevisionDetail,
             "BudgetOperationModule.RevisionGet",
-            (_, _) => new BudgetStubHandler(BudgetOperationIds.RevisionGet, mutating: false),
+            (_, _) => new BudgetStubOperationHandler(BudgetOperationIds.RevisionGet, mutating: false),
             "tally budget plan revision get --input -",
             RevisionGetErrors),
         new(
@@ -48,7 +48,7 @@ public sealed class BudgetOperationModule
             BudgetJsonContext.Default.ListBudgetPlanRevisionsInput,
             BudgetJsonContext.Default.ListBudgetPlanRevisionsResult,
             "BudgetOperationModule.RevisionList",
-            (_, _) => new BudgetStubHandler(BudgetOperationIds.RevisionList, mutating: false),
+            (_, _) => new BudgetStubOperationHandler(BudgetOperationIds.RevisionList, mutating: false),
             "tally budget plan revision list --input -",
             RevisionListErrors),
         new(
@@ -59,7 +59,7 @@ public sealed class BudgetOperationModule
             BudgetJsonContext.Default.ActivateBudgetPlanRevisionInput,
             BudgetJsonContext.Default.ActivateBudgetPlanRevisionResult,
             "BudgetOperationModule.RevisionActivate",
-            (_, _) => new BudgetStubHandler(BudgetOperationIds.RevisionActivate, mutating: true),
+            (_, _) => new BudgetStubOperationHandler(BudgetOperationIds.RevisionActivate, mutating: true),
             "tally budget plan revision activate --input -",
             RevisionActivateErrors),
         new(
@@ -70,7 +70,7 @@ public sealed class BudgetOperationModule
             BudgetJsonContext.Default.GetBudgetPositionInput,
             BudgetJsonContext.Default.GetBudgetPositionResult,
             "BudgetOperationModule.PositionGet",
-            (_, _) => new BudgetStubHandler(BudgetOperationIds.PositionGet, mutating: false),
+            (_, _) => new BudgetStubOperationHandler(BudgetOperationIds.PositionGet, mutating: false),
             "tally budget position get --input -",
             PositionGetErrors),
         new(
@@ -81,7 +81,7 @@ public sealed class BudgetOperationModule
             BudgetJsonContext.Default.GetBudgetInsightEvidenceInput,
             BudgetJsonContext.Default.GetBudgetInsightEvidenceResult,
             "BudgetOperationModule.InsightsEvidenceGet",
-            (_, _) => new BudgetStubHandler(BudgetOperationIds.InsightsEvidenceGet, mutating: false),
+            (_, _) => new BudgetStubOperationHandler(BudgetOperationIds.InsightsEvidenceGet, mutating: false),
             "tally budget insights evidence get --input -",
             InsightsEvidenceErrors)
     ];
@@ -165,7 +165,7 @@ public sealed class BudgetOperationModule
 /// Contract-only stub: validates envelope/version requirements and never opens stores.
 /// Real handlers land in later feature beads.
 /// </summary>
-internal sealed class BudgetStubHandler(string operationId, bool mutating) : IOperationHandler
+internal sealed class BudgetStubOperationHandler(string operationId, bool mutating) : IOperationHandler
 {
     public Task<CommandResult<JsonElement>> HandleAsync(OperationRequest request, CancellationToken cancellationToken)
     {

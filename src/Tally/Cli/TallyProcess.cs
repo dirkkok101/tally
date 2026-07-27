@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Tally.Application;
 using Tally.Bootstrap;
+using Tally.Contracts.Budget;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Actuals;
 using Tally.Contracts.Ledger.Reconciliation;
@@ -222,6 +223,26 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
         CommitErrors.VersionIncompatible or StatusErrors.CursorInvalid or StatusErrors.ContractMismatch or StatusErrors.GenerationMismatch
             => Error(7, code, "compatibility", "The ingest request is not compatible with this executable contract."),
         PreviewErrors.Unexpected => Error(10, code, "unexpected", "The ingest operation could not be completed."),
+        // BUDGET published domain errors (ErrorSchema lists on BudgetOperationModule).
+        BudgetErrors.InvalidInput or BudgetErrors.InvalidPeriod or BudgetErrors.InvalidAmount
+            or BudgetErrors.UnknownField or BudgetErrors.ActorRequired or BudgetErrors.IdempotencyRequired
+            or BudgetErrors.RevisionPeriodMismatch
+            => Error(3, code, "validation", "The budget request is invalid."),
+        BudgetErrors.NotFound or BudgetErrors.PlanNotFound or BudgetErrors.RevisionNotFound
+            or BudgetErrors.CategoryUnknown
+            => Error(4, code, "not_found", "The budget target was not found."),
+        BudgetErrors.Conflict or BudgetErrors.IdempotencyConflict or BudgetErrors.SourceStateChanged
+            => Error(5, code, "conflict", "The budget request conflicts with current state."),
+        BudgetErrors.CategoryInactive or BudgetErrors.NoActiveBudgetPlanRevision
+            => Error(6, code, "lifecycle", "The budget lifecycle does not allow the operation."),
+        BudgetErrors.UnsupportedVersion or BudgetErrors.LedgerIncompatible
+            => Error(7, code, "compatibility", "The budget request is not compatible with this executable contract."),
+        BudgetErrors.Integrity
+            => Error(8, code, "integrity", "The budget request could not preserve its integrity contract."),
+        BudgetErrors.LedgerUnavailable or BudgetErrors.ResourceLimit
+            => Error(9, code, "host", "The budget operation could not access a required host resource."),
+        BudgetErrors.Unexpected
+            => Error(10, code, "host", "The budget operation could not be completed."),
         _ => UnexpectedFailure()
     };
 

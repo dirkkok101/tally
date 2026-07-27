@@ -50,13 +50,14 @@ static async Task<ProcessResult> RunAsync(string[] args, CancellationToken cance
         ? LedgerServices.Create()
         : LedgerServices.Create(database);
 
-    // Bootstrap process for LedgerContractClient; then attach INGEST modules that consume it.
+    // Bootstrap process for LedgerContractClient; then attach INGEST + BUDGET modules that consume it.
     var bootstrapProcess = new TallyProcess(registry, services);
     if (database is not null && !string.IsNullOrWhiteSpace(dataRoot) && OperatingSystem.IsLinux())
     {
         var ledgerClient = new LedgerContractClient(registry, bootstrapProcess);
         var ingest = IngestOperationBundle.CreateServices(dataRoot, ledgerClient);
-        services = services with { Ingest = ingest.Operations };
+        var budget = await BudgetOperationBundle.CreateServicesAsync(dataRoot, ledgerClient, cancellationToken: cancellationToken);
+        services = services with { Ingest = ingest.Operations, Budget = budget.Operations };
     }
 
     var process = new TallyProcess(registry, services);

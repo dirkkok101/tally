@@ -47,7 +47,8 @@ public sealed record LedgerServices(
     ReconciliationOperationBundle? Reconciliation,
     RelationshipActualsOperationBundle? RelationshipActuals,
     RecoveryGuidanceOperationBundle? RecoveryGuidance,
-    IngestOperationBundle? Ingest = null)
+    IngestOperationBundle? Ingest = null,
+    BudgetOperationBundle? Budget = null)
 {
     public static LedgerServices Create() => new(
         new SystemOperationModule(),

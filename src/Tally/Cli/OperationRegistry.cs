@@ -418,6 +418,21 @@ public sealed class OperationRegistry
             return descriptor.HandlerFactory(services, registry);
         }
 
+        if (descriptor.OperationId.StartsWith("budget.", StringComparison.Ordinal))
+        {
+            var budgetDescriptor = services.Budget?.Descriptors
+                .SingleOrDefault(candidate => candidate.OperationId == descriptor.OperationId);
+            if (budgetDescriptor is not null)
+            {
+                return budgetDescriptor.HandlerFactory(services, registry);
+            }
+
+            // Descriptor-template factories keep inventory/handler-binding proofs offline without a data root.
+            return CompositeDescriptorTemplates.TryGetValue(descriptor.OperationId, out var budgetTemplate)
+                ? budgetTemplate.HandlerFactory(services, registry)
+                : new FoundationOperationHandler();
+        }
+
         if (descriptor.OperationId.StartsWith("ingest.", StringComparison.Ordinal))
         {
             var ingestDescriptor = services.Ingest?.Descriptors
@@ -474,6 +489,7 @@ public sealed class OperationRegistry
             .Concat(restore.Descriptors)
             .Concat(storageEvolution.Descriptors)
             .Concat(IngestOperationBundle.CreateDescriptorTemplates().Descriptors)
+            .Concat(BudgetOperationBundle.CreateDescriptorTemplates().Descriptors)
             .ToDictionary(descriptor => descriptor.OperationId, StringComparer.Ordinal);
     }
 
@@ -488,6 +504,7 @@ public sealed class OperationRegistry
         "ledger.evidence.register","ledger.evidence.get","ledger.evidence.link-supporting","ledger.reconciliation.candidates","ledger.reconciliation.apply","ledger.reconciliation.decision.get","ledger.reconciliation.decision.confirm","ledger.reconciliation.decision.reject","ledger.reconciliation.decision.revoke","ledger.reconciliation.decision.replace","ledger.reconciliation.coverage.complete","ledger.reconciliation.coverage.get","ledger.reconciliation.scope.register",
         "ledger.transfer.confirm","ledger.transfer.revoke","ledger.transfer.replace","ledger.refund.confirm","ledger.refund.revoke","ledger.refund.replace","ledger.relationship.get","ledger.actuals.query","ledger.backup.create","ledger.backup.verify","ledger.restore.prepare","ledger.restore.activate","ledger.storage.status","ledger.storage.evolution.prepare","ledger.storage.evolution.activate",
         "ingest.preview","ingest.inspect","ingest.approve","ingest.commit","ingest.resume","ingest.status","ingest.abandon","ingest.cleanup",
+        "budget.plan.draft.create","budget.plan.revision.get","budget.plan.revision.list","budget.plan.revision.activate","budget.position.get","budget.insights.evidence.get",
         "system.schema.list","system.schema.show","system.version","system.guidance.list","system.guidance.check","system.guidance.install"
     ];
 }

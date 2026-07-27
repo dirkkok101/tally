@@ -9,7 +9,7 @@ namespace Tally.Tests.Cli;
 public sealed class CliContractTests
 {
     // TC-LEDGER-CONTRACT-DISCOVERY-CONTRACT
-    [Fact] public void TC_LEDGER_STATEMENT_SCOPE_REGISTRATION_registry_contains_exactly_74_provider_neutral_operations() => Assert.Equal(82, OperationRegistry.Create().Descriptors.Count);
+    [Fact] public void TC_LEDGER_STATEMENT_SCOPE_REGISTRATION_registry_contains_exactly_74_provider_neutral_operations() => Assert.Equal(88, OperationRegistry.Create().Descriptors.Count);
     // TC-LEDGER-CONTRACT-DISCOVERY-CONTRACT
     [Fact]
     public void Schema_list_has_a_stable_independent_contract_inventory()
@@ -19,8 +19,8 @@ public sealed class CliContractTests
         var operationIds = first.Descriptors.Select(x => x.OperationId).ToArray();
 
         Assert.Equal(operationIds.OrderBy(x => x, StringComparer.Ordinal), operationIds);
-        Assert.Equal(82, operationIds.Distinct(StringComparer.Ordinal).Count());
-        Assert.Equal("ingest.abandon", operationIds[0]);
+        Assert.Equal(88, operationIds.Distinct(StringComparer.Ordinal).Count());
+        Assert.Equal("budget.insights.evidence.get", operationIds[0]);
         Assert.Equal("system.version", operationIds[^1]);
         Assert.Equal(first.SchemaListJson(), second.SchemaListJson());
     }
