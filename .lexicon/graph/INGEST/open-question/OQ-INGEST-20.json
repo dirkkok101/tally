@@ -7,6 +7,6 @@
     "Found by /lex:review-work on PLAN-INGEST-V1 residual wave (2026-07-27); CandidateCommitSaga.ValidateReviewState order vs EnsureReceiptAsync Abandoned short-circuit; CommitSagaTests.Commit_against_already_abandoned_batch asserts the disjunction per the bead's own failure criteria."
   ],
   "status": "open",
-  "disposition": "unspecified",
+  "disposition": "non_blocking",
   "created_at": "2026-07-27T12:22:03.7492527+00:00"
 }

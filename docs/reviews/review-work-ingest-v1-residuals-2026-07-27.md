@@ -98,7 +98,10 @@ Graph gates: `lex coverage` healthy (11/11), `decision path-check` healthy (0 mi
 
 ## Flow attestation
 
-See end-of-review result in session log: attestation attempted after this report; the lifecycle chain still lacks the brainstorm receipt (`flow status` handoff = brainstorm), which suppressed attestation on the prior run as well.
+`lex flow attest review-work --module INGEST --provider claude-code --plan PLAN-INGEST-V1` was attempted twice:
+
+1. Blocked with `open_question_unspecified` — resolved by setting OQ-INGEST-20 `disposition=non_blocking` (it is tracked by bd-ankc and does not block the lifecycle).
+2. Blocked with LEX-006 "Earlier stage 'Brainstorm' must complete before 'Plan'" — the same missing-brainstorm-receipt condition that suppressed attestation on the first review run. Both review axes, the fresh gates, and the proof harvest stand; the terminal receipt requires the module's earlier stage receipts to be restored first.
 
 ## Actionable result
 
