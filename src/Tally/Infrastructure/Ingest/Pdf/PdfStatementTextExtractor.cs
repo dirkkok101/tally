@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using Tally.Contracts.Ingest;
 using UglyToad.PdfPig;
+using UglyToad.PdfPig.DocumentLayoutAnalysis.PageSegmenter;
+using UglyToad.PdfPig.DocumentLayoutAnalysis.WordExtractor;
 using UglyToad.PdfPig.Exceptions;
 
 namespace Tally.Infrastructure.Ingest.Pdf;
@@ -10,6 +12,18 @@ namespace Tally.Infrastructure.Ingest.Pdf;
 // DD-INGEST-DOCUMENT-EXTRACTION
 public sealed class PdfStatementTextExtractor
 {
+    private static readonly NearestNeighbourWordExtractor WordExtractor = new(
+        new NearestNeighbourWordExtractor.NearestNeighbourWordExtractorOptions
+        {
+            MaxDegreeOfParallelism = 1
+        });
+
+    private static readonly DefaultPageSegmenter PageSegmenter = new(
+        new DefaultPageSegmenter.DefaultPageSegmenterOptions
+        {
+            MaxDegreeOfParallelism = 1
+        });
+
     public ValueTask<PdfExtractionResult> ExtractAsync(
         ImmutableArray<byte> source,
         PdfExtractionLimits limits,
@@ -100,7 +114,8 @@ public sealed class PdfStatementTextExtractor
                     }
 
                     var rectangle = letter.BoundingBox;
-                    if (!CoordinatesAreFinite(rectangle.Left, rectangle.Bottom, rectangle.Right, rectangle.Top))
+                    var baselineY = letter.StartBaseLine.Y;
+                    if (!CoordinatesAreFinite(rectangle.Left, rectangle.Bottom, rectangle.Right, rectangle.Top, baselineY))
                     {
                         return ValueTask.FromResult(Failure(
                             "INGEST-PDF-MALFORMED",
@@ -114,10 +129,21 @@ public sealed class PdfStatementTextExtractor
                         rectangle.Bottom,
                         rectangle.Right,
                         rectangle.Top,
-                        glyphs.Count));
+                        glyphs.Count,
+                        baselineY,
+                        letter.TextSequence));
                 }
 
-                pages.Add(new PdfPageEvidence(pageNumber, page.Width, page.Height, glyphs));
+                var managedLines = CaptureManagedLines(page.Letters, glyphCount, limits, timer, cancellationToken);
+                if (managedLines is null)
+                {
+                    return ValueTask.FromResult(Failure(
+                        "INGEST-PDF-RESOURCE-TIME",
+                        IngestErrorCategory.Resource,
+                        "The statement exceeded the configured processing-time limit."));
+                }
+
+                pages.Add(new PdfPageEvidence(pageNumber, page.Width, page.Height, glyphs, managedLines));
             }
 
             if (glyphCount == 0)
@@ -160,6 +186,65 @@ public sealed class PdfStatementTextExtractor
                 IngestErrorCategory.UnsafeSource,
                 "The statement is not a readable PDF document."));
         }
+    }
+
+    private static List<PdfManagedLineEvidence>? CaptureManagedLines(
+        IReadOnlyList<UglyToad.PdfPig.Content.Letter> letters,
+        long currentGlyphCount,
+        PdfExtractionLimits limits,
+        Stopwatch timer,
+        CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        if (timer.Elapsed >= limits.MaxDuration)
+        {
+            return null;
+        }
+
+        // Bounded passive extraction only: deterministic single-threaded PdfPig layout analysis.
+        var words = WordExtractor.GetWords(letters).ToArray();
+        if (timer.Elapsed >= limits.MaxDuration)
+        {
+            return null;
+        }
+
+        var blocks = PageSegmenter.GetBlocks(words);
+        var managed = new List<PdfManagedLineEvidence>();
+        var blockOrder = 0;
+        foreach (var block in blocks)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (timer.Elapsed >= limits.MaxDuration)
+            {
+                return null;
+            }
+
+            var lineOrder = 0;
+            foreach (var line in block.TextLines)
+            {
+                var box = line.BoundingBox;
+                if (!CoordinatesAreFinite(box.Left, box.Bottom, box.Right, box.Top))
+                {
+                    continue;
+                }
+
+                managed.Add(new PdfManagedLineEvidence(
+                    blockOrder,
+                    lineOrder,
+                    line.Text ?? string.Empty,
+                    box.Left,
+                    box.Bottom,
+                    box.Right,
+                    box.Top));
+                lineOrder++;
+            }
+
+            blockOrder++;
+        }
+
+        // Glyph budget already enforced; managed line count is derived from the same page letters.
+        _ = currentGlyphCount;
+        return managed;
     }
 
     private static bool CoordinatesAreFinite(params double[] values) => values.All(double.IsFinite);

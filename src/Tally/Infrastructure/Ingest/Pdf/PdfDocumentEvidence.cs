@@ -22,13 +22,25 @@ public sealed record PdfGlyphEvidence(
     double Bottom,
     double Right,
     double Top,
-    int ContentOrder);
+    int ContentOrder,
+    double BaselineY,
+    int TextSequence);
+
+public sealed record PdfManagedLineEvidence(
+    int BlockOrder,
+    int LineOrder,
+    string Text,
+    double Left,
+    double Bottom,
+    double Right,
+    double Top);
 
 public sealed record PdfPageEvidence(
     int PageNumber,
     double Width,
     double Height,
-    IReadOnlyList<PdfGlyphEvidence> OrderedGlyphs);
+    IReadOnlyList<PdfGlyphEvidence> OrderedGlyphs,
+    IReadOnlyList<PdfManagedLineEvidence> ManagedLines);
 
 public sealed record PdfDocumentEvidence(
     string SourceFingerprint,

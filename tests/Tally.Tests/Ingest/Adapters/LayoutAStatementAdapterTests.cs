@@ -371,12 +371,12 @@ public sealed class LayoutAStatementAdapterTests
             var bottom = 700d - (lineIndex * 20d);
             foreach (var character in string.Concat(lines[lineIndex], " "))
             {
-                glyphs.Add(new PdfGlyphEvidence(character.ToString(), left, bottom, left + 5d, bottom + 10d, glyphs.Count));
+                glyphs.Add(new PdfGlyphEvidence(character.ToString(), left, bottom, left + 5d, bottom + 10d, glyphs.Count, bottom, glyphs.Count));
                 left += 5d;
             }
         }
 
-        return new PdfDocumentEvidence("synthetic", 1, [new PdfPageEvidence(1, 612, 792, glyphs)]);
+        return new PdfDocumentEvidence("synthetic", 1, [new PdfPageEvidence(1, 612, 792, glyphs, [])]);
     }
 
     private static PdfDocumentEvidence Evidence(params (string Text, double Left, double Bottom)[] lines)
@@ -387,12 +387,12 @@ public sealed class LayoutAStatementAdapterTests
             var left = line.Left;
             foreach (var character in string.Concat(line.Text, " "))
             {
-                glyphs.Add(new PdfGlyphEvidence(character.ToString(), left, line.Bottom, left + 5d, line.Bottom + 10d, glyphs.Count));
+                glyphs.Add(new PdfGlyphEvidence(character.ToString(), left, line.Bottom, left + 5d, line.Bottom + 10d, glyphs.Count, line.Bottom, glyphs.Count));
                 left += 5d;
             }
         }
 
-        return new PdfDocumentEvidence("synthetic", 1, [new PdfPageEvidence(1, 612, 792, glyphs)]);
+        return new PdfDocumentEvidence("synthetic", 1, [new PdfPageEvidence(1, 612, 792, glyphs, [])]);
     }
 
     private static string FindRepositoryRoot()

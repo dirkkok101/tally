@@ -37,6 +37,15 @@ public sealed class PdfStatementTextExtractorTests
             Assert.True(double.IsFinite(glyph.Bottom));
             Assert.True(double.IsFinite(glyph.Right));
             Assert.True(double.IsFinite(glyph.Top));
+            Assert.True(double.IsFinite(glyph.BaselineY));
+        });
+        Assert.NotEmpty(page.ManagedLines);
+        Assert.All(page.ManagedLines, line =>
+        {
+            Assert.True(double.IsFinite(line.Left));
+            Assert.True(double.IsFinite(line.Bottom));
+            Assert.True(double.IsFinite(line.Right));
+            Assert.True(double.IsFinite(line.Top));
         });
     }
 
@@ -240,6 +249,19 @@ public sealed class PdfStatementTextExtractorTests
                 Append(hash, glyph.Right.ToString("R", CultureInfo.InvariantCulture));
                 Append(hash, glyph.Top.ToString("R", CultureInfo.InvariantCulture));
                 Append(hash, glyph.ContentOrder.ToString(CultureInfo.InvariantCulture));
+                Append(hash, glyph.BaselineY.ToString("R", CultureInfo.InvariantCulture));
+                Append(hash, glyph.TextSequence.ToString(CultureInfo.InvariantCulture));
+            }
+
+            foreach (var line in page.ManagedLines)
+            {
+                Append(hash, line.BlockOrder.ToString(CultureInfo.InvariantCulture));
+                Append(hash, line.LineOrder.ToString(CultureInfo.InvariantCulture));
+                Append(hash, line.Text);
+                Append(hash, line.Left.ToString("R", CultureInfo.InvariantCulture));
+                Append(hash, line.Bottom.ToString("R", CultureInfo.InvariantCulture));
+                Append(hash, line.Right.ToString("R", CultureInfo.InvariantCulture));
+                Append(hash, line.Top.ToString("R", CultureInfo.InvariantCulture));
             }
         }
 
