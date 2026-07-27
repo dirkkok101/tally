@@ -129,8 +129,8 @@ public sealed class StatusWorkflowTests : IAsyncLifetime
         await InsertBatchAsync("batch-1", BatchStatus.Interrupted, "2026-07-25T10:00:00Z");
         await InsertManifestAsync("batch-1", true);
         await ExecuteAsync("INSERT INTO import_candidate VALUES ('candidate-1', 'revision-batch-1', 'record-1', '{}', '{}', 'key-1', 0);");
-        await ExecuteAsync("INSERT INTO import_receipt VALUES ('receipt-1', 'batch-1', 2, '{}', NULL);");
-        await ExecuteAsync("INSERT INTO candidate_receipt VALUES ('receipt-1', 'candidate-1', 6, NULL, 'PARTIAL-CODE', NULL, NULL);");
+        await ExecuteAsync("INSERT INTO import_receipt VALUES ('receipt-1', 'batch-1', 2, '{}', NULL, '2026-07-25T10:00:00Z', '2026-07-25T10:00:00Z');");
+        await ExecuteAsync("INSERT INTO candidate_receipt VALUES ('receipt-1', 'candidate-1', 6, NULL, 'PARTIAL-CODE', NULL, NULL, 0);");
 
         var result = await HandlerAsync(new IngestStatusInput("batch-1"));
 
@@ -386,15 +386,15 @@ public sealed class StatusWorkflowTests : IAsyncLifetime
         """);
 
     private Task InsertReceiptAsync() => ExecuteAsync("""
-        INSERT INTO import_receipt VALUES ('receipt-1', 'batch-1', 2, '{}', NULL);
+        INSERT INTO import_receipt VALUES ('receipt-1', 'batch-1', 2, '{}', NULL, '2026-07-25T10:00:00Z', '2026-07-25T10:00:00Z');
         INSERT INTO candidate_receipt VALUES
-            ('receipt-1', 'candidate-1', 0, NULL, NULL, NULL, NULL),
-            ('receipt-1', 'candidate-2', 2, 'ledger-safe-2', NULL, '2026-07-25T10:02:00Z', '2026-07-25T10:02:01Z'),
-            ('receipt-1', 'candidate-3', 3, 'ledger-safe-3', NULL, '2026-07-25T10:03:00Z', '2026-07-25T10:03:01Z'),
-            ('receipt-1', 'candidate-4', 4, NULL, 'conflict', '2026-07-25T10:04:00Z', '2026-07-25T10:04:01Z'),
-            ('receipt-1', 'candidate-5', 5, NULL, 'rejected', '2026-07-25T10:05:00Z', '2026-07-25T10:05:01Z'),
-            ('receipt-1', 'candidate-6', 1, NULL, NULL, '2026-07-25T10:06:00Z', NULL),
-            ('receipt-1', 'candidate-7', 6, NULL, NULL, '2026-07-25T10:07:00Z', NULL);
+            ('receipt-1', 'candidate-1', 0, NULL, NULL, NULL, NULL, 0),
+            ('receipt-1', 'candidate-2', 2, 'ledger-safe-2', NULL, '2026-07-25T10:02:00Z', '2026-07-25T10:02:01Z', 1),
+            ('receipt-1', 'candidate-3', 3, 'ledger-safe-3', NULL, '2026-07-25T10:03:00Z', '2026-07-25T10:03:01Z', 1),
+            ('receipt-1', 'candidate-4', 4, NULL, 'conflict', '2026-07-25T10:04:00Z', '2026-07-25T10:04:01Z', 1),
+            ('receipt-1', 'candidate-5', 5, NULL, 'rejected', '2026-07-25T10:05:00Z', '2026-07-25T10:05:01Z', 1),
+            ('receipt-1', 'candidate-6', 1, NULL, NULL, '2026-07-25T10:06:00Z', NULL, 1),
+            ('receipt-1', 'candidate-7', 6, NULL, NULL, '2026-07-25T10:07:00Z', NULL, 1);
         """);
 
     private async Task AppendErrorAsync(string eventId, IngestError error, string recordedAt)

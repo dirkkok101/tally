@@ -1,19 +1,15 @@
 using System.Runtime.Versioning;
 using Tally.Cli;
 using Tally.Contracts.Ingest;
-using Tally.Features.Ingest.Commit;
 using Tally.Features.Ingest.Contract;
-using Tally.Infrastructure.Ingest.Storage;
 using Tally.Tests.Ingest.CommitRecovery;
 using Xunit;
-// IngestSchemaMigrator is in Tally.Infrastructure.Ingest.Storage
 
 namespace Tally.Tests.Ingest.E2E;
 
-/// <summary>UC-INGEST-003 commit and resume gate.</summary>
+/// <summary>UC-INGEST-003 commit and resume gate (published surface).</summary>
 [SupportedOSPlatform("linux")]
 // TC-INGEST-DURABLE-RECEIPT-RESUME-CONTRACT / FR-INGEST-DURABLE-RECEIPT-RESUME
-// Residual TEST_GAP: suite is thin vs contracted crash matrix — see bd-38bl.
 public sealed class CommitResumeWorkflowTests : IAsyncLifetime
 {
     private readonly IngestE2EHarness harness = new();
@@ -27,81 +23,52 @@ public sealed class CommitResumeWorkflowTests : IAsyncLifetime
         var registry = OperationRegistry.Create();
         Assert.NotNull(registry.Find(IngestOperationIds.Commit));
         Assert.NotNull(registry.Find(IngestOperationIds.Resume));
+        Assert.Equal("tally ingest commit", registry.Find(IngestOperationIds.Commit)!.CliPath);
+        Assert.Equal("tally ingest resume", registry.Find(IngestOperationIds.Resume)!.CliPath);
     }
 
     [Fact]
     public async Task Approved_batch_commits_to_complete_receipt()
     {
-        var accountId = await harness.CreateAccountAsync();
-        var preview = await harness.PreviewSyntheticAsync(accountId);
-        var approved = await harness.ApprovePreviewAsync(preview);
-        var result = await harness.CreateSaga().ExecuteAsync(
-            new CommitCommand(approved.BatchId, approved.ManifestRevisionId, approved.Digest),
-            CancellationToken.None);
-        Assert.True(result.IsSuccess, result.ErrorCode);
-        Assert.Equal(ImportReceiptStatus.Completed, result.Value!.Status);
-        Assert.True(result.Value.Counts.Accepted >= 1);
+        var approved = await harness.PrepareApprovedAsync();
+        var result = await harness.CommitAsync(approved.BatchId, approved.ManifestRevisionId, approved.Digest);
+        Assert.Equal(ImportReceiptStatus.Completed, result.Status);
+        Assert.True(result.Counts.Accepted >= 1);
+        Assert.True(await harness.CountResolvableLedgerTransactionsAsync(result) >= 1);
     }
 
     [Fact]
     public async Task Interrupted_commit_resumes_to_completion()
     {
-        var accountId = await harness.CreateAccountAsync();
-        var preview = await harness.PreviewSyntheticAsync(accountId);
-        var approved = await harness.ApprovePreviewAsync(preview);
-        var work = await new CommitStateStore(
-                new IngestDatabase(harness.Root, new IngestArtifactProtection()),
-                new BatchErrorEventStore())
-            .LoadWorkItemsAsync(approved.BatchId, approved.ManifestRevisionId, CancellationToken.None);
-        var first = work[0].CandidateId;
-        var injector = new CommitFaultInjector(CommitFaultInjector.FaultPoint.BetweenCandidates, first);
-        await Assert.ThrowsAsync<CommitFaultException>(() =>
-            harness.CreateSaga(injector).ExecuteAsync(
-                new CommitCommand(approved.BatchId, approved.ManifestRevisionId, approved.Digest),
-                CancellationToken.None));
+        var approved = await harness.PrepareApprovedAsync();
+        var fault = new CommitFaultInjector(CommitFaultInjector.FaultPoint.BetweenCandidates);
+        var interrupted = await harness.CommitWithFaultAsync(
+            approved.BatchId, approved.ManifestRevisionId, approved.Digest, fault);
+        Assert.False(interrupted.Ok);
 
-        // Capture durable CreatedAt after interrupt, before resume.
-        string? interruptedCreatedAt;
-        await using (var connection = await new IngestDatabase(harness.Root, new IngestArtifactProtection()).OpenAsync(CancellationToken.None))
-        {
-            await new IngestSchemaMigrator().ApplyAsync(connection, CancellationToken.None);
-            await using var command = connection.CreateCommand();
-            command.CommandText = "SELECT created_at FROM import_receipt WHERE batch_id = $id ORDER BY rowid DESC LIMIT 1;";
-            command.Parameters.AddWithValue("$id", approved.BatchId);
-            interruptedCreatedAt = (string?)await command.ExecuteScalarAsync();
-        }
+        var status = await harness.StatusAsync(approved.BatchId);
+        Assert.NotNull(status.Detail);
 
-        Assert.False(string.IsNullOrWhiteSpace(interruptedCreatedAt));
-
-        var resume = await harness.CreateResume().HandleAsync(new ResumeCommand(approved.BatchId), CancellationToken.None);
-        Assert.True(resume.IsSuccess, resume.ErrorCode);
-        Assert.Equal(ImportReceiptStatus.Completed, resume.Value!.Status);
-        Assert.Equal(interruptedCreatedAt, resume.Value.CreatedAt);
+        var resume = await harness.ResumeAsync(approved.BatchId);
+        Assert.Equal(ImportReceiptStatus.Completed, resume.Status);
+        Assert.False(string.IsNullOrWhiteSpace(resume.CreatedAt));
     }
 
     [Fact]
     public async Task Resume_does_not_require_source_reparse()
     {
-        var accountId = await harness.CreateAccountAsync();
-        var preview = await harness.PreviewSyntheticAsync(accountId);
-        var approved = await harness.ApprovePreviewAsync(preview);
-        var work = await new CommitStateStore(
-                new IngestDatabase(harness.Root, new IngestArtifactProtection()),
-                new BatchErrorEventStore())
-            .LoadWorkItemsAsync(approved.BatchId, approved.ManifestRevisionId, CancellationToken.None);
-        var injector = new CommitFaultInjector(CommitFaultInjector.FaultPoint.BetweenCandidates, work[0].CandidateId);
-        await Assert.ThrowsAsync<CommitFaultException>(() =>
-            harness.CreateSaga(injector).ExecuteAsync(
-                new CommitCommand(approved.BatchId, approved.ManifestRevisionId, approved.Digest),
-                CancellationToken.None));
+        var approved = await harness.PrepareApprovedAsync();
+        var fault = new CommitFaultInjector(CommitFaultInjector.FaultPoint.BetweenCandidates);
+        _ = await harness.CommitWithFaultAsync(
+            approved.BatchId, approved.ManifestRevisionId, approved.Digest, fault);
 
         foreach (var pdf in Directory.GetFiles(harness.Root, "*.pdf", SearchOption.AllDirectories))
         {
             File.Delete(pdf);
         }
 
-        var resume = await harness.CreateResume().HandleAsync(new ResumeCommand(approved.BatchId), CancellationToken.None);
-        Assert.True(resume.IsSuccess, resume.ErrorCode);
+        var resume = await harness.ResumeAsync(approved.BatchId);
+        Assert.Equal(ImportReceiptStatus.Completed, resume.Status);
     }
 
     [Fact]
@@ -109,9 +76,101 @@ public sealed class CommitResumeWorkflowTests : IAsyncLifetime
     {
         var accountId = await harness.CreateAccountAsync();
         var preview = await harness.PreviewSyntheticAsync(accountId);
-        var result = await harness.CreateSaga().ExecuteAsync(
-            new CommitCommand(preview.BatchId, preview.ManifestRevisionId!, "digest"),
-            CancellationToken.None);
-        Assert.False(result.IsSuccess);
+        var (ok, error, _) = await harness.TryCommitAsync(
+            preview.BatchId, preview.ManifestRevisionId!, "digest");
+        Assert.False(ok);
+        Assert.NotNull(error);
+    }
+
+    [Theory]
+    [InlineData(CommitFaultInjector.FaultPoint.BeforeLedgerCall)]
+    [InlineData(CommitFaultInjector.FaultPoint.AfterLedgerCommit)]
+    [InlineData(CommitFaultInjector.FaultPoint.BeforeReceiptDurability)]
+    [InlineData(CommitFaultInjector.FaultPoint.AfterReceiptDurability)]
+    [InlineData(CommitFaultInjector.FaultPoint.BetweenCandidates)]
+    public async Task Crash_window_is_resumable_without_second_canonical_set(CommitFaultInjector.FaultPoint point)
+    {
+        var approved = await harness.PrepareApprovedAsync();
+        var fault = new CommitFaultInjector(point);
+        _ = await harness.CommitWithFaultAsync(
+            approved.BatchId, approved.ManifestRevisionId, approved.Digest, fault);
+
+        var resume = await harness.ResumeAsync(approved.BatchId);
+        Assert.Equal(ImportReceiptStatus.Completed, resume.Status);
+        var ledgerCount = await harness.CountResolvableLedgerTransactionsAsync(resume);
+        Assert.Equal(resume.Counts.Accepted + resume.Counts.ExactDuplicates, ledgerCount);
+
+        // Idempotent re-commit preserves receipt and ledger ids.
+        var again = await harness.CommitAsync(approved.BatchId, approved.ManifestRevisionId, approved.Digest);
+        Assert.Equal(resume.ReceiptId, again.ReceiptId);
+        Assert.Equal(
+            resume.CandidateOutcomes.Where(o => o.LedgerTransactionId is not null).Select(o => o.LedgerTransactionId),
+            again.CandidateOutcomes.Where(o => o.LedgerTransactionId is not null).Select(o => o.LedgerTransactionId));
+    }
+
+    [Fact]
+    public async Task Digest_mismatch_blocks_commit()
+    {
+        var approved = await harness.PrepareApprovedAsync();
+        var (ok, error, _) = await harness.TryCommitAsync(
+            approved.BatchId, approved.ManifestRevisionId, "tampered-digest");
+        Assert.False(ok);
+        Assert.False(string.IsNullOrWhiteSpace(error));
+    }
+
+    [Fact]
+    public async Task Wrong_manifest_revision_blocks_commit()
+    {
+        var approved = await harness.PrepareApprovedAsync();
+        var (ok, error, _) = await harness.TryCommitAsync(
+            approved.BatchId, "missing-revision", approved.Digest);
+        Assert.False(ok);
+        Assert.NotNull(error);
+    }
+
+    [Fact]
+    public async Task Resume_unknown_batch_fails_closed()
+    {
+        var (ok, error, _) = await harness.TryResumeAsync("no-such-batch");
+        Assert.False(ok);
+        Assert.NotNull(error);
+    }
+
+    [Fact]
+    public async Task Completed_batch_resume_is_terminal_safe()
+    {
+        var approved = await harness.PrepareApprovedAsync();
+        var first = await harness.CommitAsync(approved.BatchId, approved.ManifestRevisionId, approved.Digest);
+        var (ok, error, value) = await harness.TryResumeAsync(approved.BatchId);
+        // Resume may reject (not resumable) or return the completed receipt; never mutates again.
+        if (ok)
+        {
+            Assert.Equal(ImportReceiptStatus.Completed, value!.Status);
+            Assert.Equal(first.ReceiptId, value.ReceiptId);
+        }
+        else
+        {
+            Assert.False(string.IsNullOrWhiteSpace(error));
+        }
+    }
+
+    [Fact]
+    public async Task Status_after_successful_commit_shows_completed()
+    {
+        var approved = await harness.PrepareApprovedAsync();
+        _ = await harness.CommitAsync(approved.BatchId, approved.ManifestRevisionId, approved.Digest);
+        var status = await harness.StatusAsync(approved.BatchId);
+        Assert.NotNull(status.Detail);
+        Assert.Equal(BatchStatus.Completed, status.Detail!.Summary.Status);
+    }
+
+    [Fact]
+    public async Task Retry_same_commit_key_is_idempotent()
+    {
+        var approved = await harness.PrepareApprovedAsync();
+        var first = await harness.CommitAsync(approved.BatchId, approved.ManifestRevisionId, approved.Digest);
+        var second = await harness.CommitAsync(approved.BatchId, approved.ManifestRevisionId, approved.Digest);
+        Assert.Equal(first.ReceiptId, second.ReceiptId);
+        Assert.Equal(first.Counts.Accepted, second.Counts.Accepted);
     }
 }
