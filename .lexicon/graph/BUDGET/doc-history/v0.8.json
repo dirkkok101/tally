@@ -1,0 +1,9 @@
+{
+  "id": "01KYH9WYCGYPNNTK0YRFHTQ5SC",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "version": "0.8",
+  "changes": [
+    "Compiled PLAN-BUDGET-V1: 24 beads, 68 blocks edges, frontier 2 (contract + ledger-contract roots); review runs 082f2e22 (full) and d58c3df4 (delta) clean; bd-2av resolved via UC-BUDGET-004 failure-path disambiguation."
+  ],
+  "created_at": "2026-07-27T08:08:42.6417454+00:00"
+}

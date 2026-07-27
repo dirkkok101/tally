@@ -16,7 +16,7 @@
     "A: query BUDGET and LEDGER tables in joined SQL, rejected because stores and ownership are separate. B: persist monthly materialized positions, rejected as stale derived history. C: pure in-memory calculation over a cited complete snapshot, chosen."
   ],
   "consequences": [
-    "Unbudgeted and Uncategorized values carry actual only; planned, Remaining, and Over are not applicable. Negative refund-heavy actuals are preserved. No Active revision returns before a LEDGER call. Any pagination or reconciliation failure returns no partial totals. The calculation schema version becomes provenance and compatibility metadata."
+    "Unbudgeted and Uncategorized values carry actual only; planned, Remaining, and Over are not applicable. Negative refund-heavy actuals are preserved. A period with no Budget Plan returns the explicit No Budget Plan state and a plan with no Active revision returns the explicit No Active Budget Plan Revision state, each before a LEDGER call. Any pagination or reconciliation failure returns no partial totals. The calculation schema version becomes provenance and compatibility metadata."
   ],
   "status_notes": [
     "Accepted. Calculation tests must assert full-set reconciliation and deterministic ordering at the public result surface."

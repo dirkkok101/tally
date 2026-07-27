@@ -11,10 +11,19 @@
   "objective": [
     "Published descriptors, category lifecycle, snapshot actuals, date mapping, compatibility, and private-boundary guards satisfy every BUDGET consumer."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 2,
   "created_at": "2026-07-19T16:46:47.8408153+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYH9DAHYS86VW7ZE92J40748",
+      "bead_id": "bd-1d4j",
+      "verification_status": "verified",
+      "verified_at": "2026-07-27T08:00:10.8145783+00:00",
+      "created_at": "2026-07-27T08:00:10.8145783+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXXMBV13HPSKFNNNCQYK9BAD",

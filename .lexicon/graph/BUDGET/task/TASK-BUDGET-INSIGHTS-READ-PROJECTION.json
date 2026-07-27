@@ -11,10 +11,19 @@
   "objective": [
     "INSIGHTS can consume one coherent plan-state and dated actual member result from one public LEDGER snapshot. BoundRevision includes the canonical BudgetPosition from that same snapshot; plan-absence states include no plan or position and reconcile members to the public LEDGER total without a second read or duplicate calculation."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 3,
   "created_at": "2026-07-19T16:49:38.4689007+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYH9DDPD914KWY8ENZ7D1B2D",
+      "bead_id": "bd-38wp",
+      "verification_status": "verified",
+      "verified_at": "2026-07-27T08:00:14.0294241+00:00",
+      "created_at": "2026-07-27T08:00:14.0294241+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXXMH1N774C3PP949357CHBA",
@@ -86,49 +95,49 @@
   ],
   "files": [
     {
-      "id": "01KXZERXS1VDXS02H52PQ68T7K",
+      "id": "01KYHA1KRNAZWBWSD8D8EBT098",
       "path": "src/Tally/Contracts/Budget/Projection/BudgetReadCapabilityDescriptor.cs",
       "action": "create",
       "role": "read-only consumer capability",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T09:47:34.0480632+00:00"
+      "created_at": "2026-07-27T08:11:15.6042841+00:00"
     },
     {
-      "id": "01KXZERXS1P6959QZRNXVHQJZV",
+      "id": "01KYHA1KRPWFVP0Y9AV9KVCGTD",
       "path": "src/Tally/Contracts/Budget/Insights/BudgetInsightEvidence.cs",
-      "action": "create",
-      "role": "coherent plan-state position and dated-member result",
+      "action": "modify",
+      "role": "coherent plan-state position and dated-member result (type created by TASK-BUDGET-CONTRACT-FOUNDATION)",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T09:47:34.0480632+00:00"
+      "created_at": "2026-07-27T08:11:15.6042841+00:00"
     },
     {
-      "id": "01KXZERXS1XTZ0NE8F4K63Z59T",
+      "id": "01KYHA1KRP0H128A29TKDYHHWV",
       "path": "src/Tally/Features/Budget/Projection/BudgetReadProjectionModule.cs",
       "action": "create",
       "role": "read-only descriptor binding",
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T09:47:34.0480632+00:00"
+      "created_at": "2026-07-27T08:11:15.6042841+00:00"
     },
     {
-      "id": "01KXZERXS1JKASQJZY8YB2PT39",
+      "id": "01KYHA1KRPQ5ABTKSJV6TGBZKZ",
       "path": "src/Tally/Features/Budget/Projection/GetBudgetInsightEvidenceQuery.cs",
       "action": "create",
       "role": "single-snapshot producer composition for bound and absent plan states",
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T09:47:34.0480632+00:00"
+      "created_at": "2026-07-27T08:11:15.6042841+00:00"
     },
     {
-      "id": "01KXZERXS1K15XPXM2KE5255JM",
+      "id": "01KYHA1KRPYPDMAQ93JSEMS0YY",
       "path": "tests/Tally.Tests/Budget/InsightsContract/BudgetInsightsContractTests.cs",
       "action": "test",
       "role": "read parity plan-state coherence and mutation exclusion",
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-20T09:47:34.0480632+00:00"
+      "created_at": "2026-07-27T08:11:15.6042841+00:00"
     }
   ],
   "interfaces": [

@@ -11,10 +11,19 @@
   "objective": [
     "UC-BUDGET-005 proves deterministic discovery, bounded owner/delegated invocation, fail-closed mutation authority, replay, and metadata-only failures."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 5,
   "created_at": "2026-07-19T16:52:54.5452616+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYH9DJBBZQM3C7TVCC776X2K",
+      "bead_id": "bd-1070",
+      "verification_status": "verified",
+      "verified_at": "2026-07-27T08:00:18.7958646+00:00",
+      "created_at": "2026-07-27T08:00:18.7958646+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXXMQ14PT1HSAGPC33TG7F4A",

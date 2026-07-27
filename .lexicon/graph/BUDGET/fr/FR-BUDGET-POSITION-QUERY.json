@@ -37,7 +37,8 @@
     "Given LEDGER corrections, allocation changes, relationship changes, voids, or supersessions after an earlier query, when a new position is requested, then current corrected actuals are recomputed under a new cited snapshot while the selected plan revision remains unchanged.",
     "Given a position is returned, when its schema is inspected, then it contains no pace, forecast, trend, anomaly, recommendation, narrative, alert, or spending-control decision.",
     "Given a position query completes, when durable BUDGET state is inspected, then no separate actual or report snapshot was persisted by BUDGET.",
-    "Given an Unbudgeted or Uncategorized position, when its values are returned, then Planned, Remaining, and Over are explicitly not applicable rather than zero, while its exact actual value remains present."
+    "Given an Unbudgeted or Uncategorized position, when its values are returned, then Planned, Remaining, and Over are explicitly not applicable rather than zero, while its exact actual value remains present.",
+    "Given a valid period with no Budget Plan and no revision selector, when Get Budget Position is requested, then BUDGET returns the explicit No Budget Plan state and does not fabricate a plan, revision, or position."
   ],
   "security_criteria": [
     "A position is owner-readable financial data and may be emitted only by the explicit structured data-return operation."

@@ -11,10 +11,19 @@
   "objective": [
     "Owners receive one exact provenance-bound position for an explicit or Active revision, with no partial or retained financial projection."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 2,
   "created_at": "2026-07-19T16:49:38.4689007+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYH9DBKT0284HB44YD3BCAG4",
+      "bead_id": "bd-1ns6",
+      "verification_status": "verified",
+      "verified_at": "2026-07-27T08:00:11.8985178+00:00",
+      "created_at": "2026-07-27T08:00:11.8985178+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXXMH1N6YKFPC6EF1EY314VZ",
@@ -165,54 +174,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXXMH1N6AMP5CZ1Q701S98Y2",
+      "id": "01KYHATBGM3K57XMN910WQWZZ6",
       "kind": "acceptance_check",
       "text": [
-        "Without a selector, load the period's Active revision or return NoActiveBudgetPlanRevision before Ledger; with a selector, require that readable revision belongs to the supplied period and ZAR before Ledger."
+        "Without a selector, resolve the period's plan state before Ledger: a period with no Budget Plan returns the explicit NoBudgetPlan state, a plan with no Active revision returns NoActiveBudgetPlanRevision, and the two states are never collapsed; with a selector, require that readable revision belongs to the supplied period and ZAR before Ledger."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+      "created_at": "2026-07-27T08:24:46.3557373+00:00"
     },
     {
-      "id": "01KXXMH1N6ZP9WPHD167K16C83",
+      "id": "01KYHATBGN136JS39J6DQK5TGF",
       "kind": "acceptance_check",
       "text": [
         "Query current public category and actual evidence for exactly [startInclusive,endExclusive) mapped to inclusive Ledger dates, consume one complete snapshot, then calculate once."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+      "created_at": "2026-07-27T08:24:46.3557373+00:00"
     },
     {
-      "id": "01KXXMH1N6KCGYT79G8XYCWPV1",
+      "id": "01KYHATBGN44GQJTEHXXZSXVNX",
       "kind": "acceptance_check",
       "text": [
         "Return revision status, period, category contract, Ledger contract/snapshot/generation, calculation schema, ordered category positions, Uncategorized last, and exact totals."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+      "created_at": "2026-07-27T08:24:46.3557373+00:00"
     },
     {
-      "id": "01KXXMH1N631TA8KD7EW0QQQD1",
+      "id": "01KYHATBGN2DKP9H7DXGBJ7Y08",
       "kind": "acceptance_check",
       "text": [
         "No matching actuals preserves all planned values with exact zero actuals; later Ledger correction yields a new cited snapshot while the revision stays unchanged."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+      "created_at": "2026-07-27T08:24:46.3557373+00:00"
     },
     {
-      "id": "01KXXMH1N6DEFZWS3MXMQXK57C",
+      "id": "01KYHATBGNKZRG1RZZXCHNGCRX",
       "kind": "acceptance_check",
       "text": [
         "Any revision mismatch, Ledger incompatibility/unavailability/expiry/integrity, unknown category, cancellation, overflow, or resource failure returns no partial position and persists no actual/cursor/position/report."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+      "created_at": "2026-07-27T08:24:46.3557373+00:00"
     },
     {
       "id": "01KXXMH1N6MKRKA2PYARKRHXHZ",
@@ -316,14 +325,14 @@
   ],
   "verification_steps": [
     {
-      "id": "01KXXMH1N6DQK8AT037JF5WVZ2",
+      "id": "01KYHBZEA85PAERRY8KBWD2G7J",
       "phase": "after",
       "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~GetBudgetPositionQueryTests",
-      "expected_result": "exit 0; at least 24 active/explicit selection, mismatch-before-Ledger, no-active, no-actuals, correction, snapshot, category, expiry, integrity, overflow, cancellation, and no-retention cases are discovered and 0 fail",
+      "expected_result": "exit 0; at least 25 active/explicit selection, mismatch-before-Ledger, missing-plan, no-active, no-actuals, correction, snapshot, category, expiry, integrity, overflow, cancellation, and no-retention cases are discovered and 0 fail",
       "required": 1,
-      "timeout_seconds": 540,
+      "timeout_seconds": 300,
       "sort_order": 0,
-      "created_at": "2026-07-19T16:49:38.4689007+00:00"
+      "created_at": "2026-07-27T08:45:01.6400660+00:00"
     }
   ]
 }

@@ -7,7 +7,9 @@
   "postconditions": "The owner can reconstruct plan intent and activation history without treating a superseded revision as deleted or changing current LEDGER state.",
   "main_flow": "1. BUDGET lists the period's Draft, Active, and Superseded revisions and indicates whether the period is Closed. 2. The owner selects a revision. 3. BUDGET returns exact Category Budget Entries, historical stable category identities, lifecycle state, totals, owner action, reason, and timestamps. 4. Archived or renamed categories remain attributable without becoming valid for new entries.",
   "alt_flows": [
-    "An unknown period or revision returns Not Found without leaking other data.",
+    "A syntactically invalid Budget Period returns a stable validation error before any plan read.",
+    "A valid Budget Period with no Budget Plan returns the explicit No Budget Plan state rather than Not Found.",
+    "An unknown Budget Plan Revision identifier returns a stable Not Found result without leaking other data.",
     "Missing or inconsistent revision evidence returns an integrity failure rather than inferred history."
   ],
   "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner needs to understand what was planned, when it changed, and which revision governed a period.\",\"status\":\"draft\"}",

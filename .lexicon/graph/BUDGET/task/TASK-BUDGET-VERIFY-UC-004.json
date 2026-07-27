@@ -11,10 +11,19 @@
   "objective": [
     "UC-BUDGET-004 proves deterministic complete history, immutable intent, supplemental category lifecycle, and missing/integrity errors that expose no financial payloads."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 1,
   "sort_order": 4,
   "created_at": "2026-07-19T16:52:54.5452616+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYH9DGVG7RQPC3MYMV64VQPG",
+      "bead_id": "bd-25xk",
+      "verification_status": "verified",
+      "verified_at": "2026-07-27T08:00:17.2644103+00:00",
+      "created_at": "2026-07-27T08:00:17.2644103+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXXMQ14N4NN1J4NJHYAG0HHM",

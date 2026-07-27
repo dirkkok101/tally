@@ -11,10 +11,19 @@
   "objective": [
     "Every actual and planned amount reconciles deterministically into Budgeted, ZeroBudget, Unbudgeted, or Uncategorized without interpretation."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 1,
   "created_at": "2026-07-19T16:49:38.4689007+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYH9D902MJCG378X4QFF5AH4",
+      "bead_id": "bd-qlk",
+      "verification_status": "verified",
+      "verified_at": "2026-07-27T08:00:09.2186028+00:00",
+      "created_at": "2026-07-27T08:00:09.2186028+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXXMH1N5Y9B6BXS2652HFSEQ",

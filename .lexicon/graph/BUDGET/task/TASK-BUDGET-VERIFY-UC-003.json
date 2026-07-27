@@ -11,10 +11,19 @@
   "objective": [
     "UC-BUDGET-003 proves revision binding, once-only bucket accounting, exact provenance, no partials, read parity, and no retention."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 3,
   "created_at": "2026-07-19T16:52:54.5452616+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYH9DESCWMYG4FWV1GPGAA4V",
+      "bead_id": "bd-sp63",
+      "verification_status": "verified",
+      "verified_at": "2026-07-27T08:00:15.1484110+00:00",
+      "created_at": "2026-07-27T08:00:15.1484110+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXXMQ14MVG6JV39D18DXS59C",
@@ -121,54 +130,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXXMQ14N1W9MAE247R3VPZKS",
+      "id": "01KYHBYPVZPS73SSETN583H8E5",
       "kind": "acceptance_check",
       "text": [
         "Active/default and explicit Draft/Active/Superseded selection bind before Ledger and return exact plan/snapshot/category/calculation provenance."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+      "created_at": "2026-07-27T08:44:37.6314423+00:00"
     },
     {
-      "id": "01KXXMQ14NS0V63X3GXNWR29Z6",
+      "id": "01KYHBYPW004QNCR8WAK5V1DWE",
       "kind": "acceptance_check",
       "text": [
         "Positive, zero, omitted, uncategorized, negative-refund, and no-actual cases account every ordinal once and reconcile bucket/category/total values."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+      "created_at": "2026-07-27T08:44:37.6314423+00:00"
     },
     {
-      "id": "01KXXMQ14NGD0M7G71NTXQPSSV",
+      "id": "01KYHBYPW06FE53WHT2NPZV7TQ",
       "kind": "acceptance_check",
       "text": [
-        "No Active returns explicit state; unavailable/incompatible/expired/integrity/overflow/mismatch returns no partial totals or retained derived state."
+        "No Budget Plan and No Active each return their explicit distinct state; unavailable/incompatible/expired/integrity/overflow/mismatch returns no partial totals or retained derived state."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+      "created_at": "2026-07-27T08:44:37.6314423+00:00"
     },
     {
-      "id": "01KXXMQ14N6FGRZXZHQ9GTK667",
+      "id": "01KYHBYPW07KXGWP56GW995NWE",
       "kind": "acceptance_check",
       "text": [
         "Concurrent activation cannot change an explicitly bound query; repeated identical inputs are deterministic and current corrections cite a new snapshot."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+      "created_at": "2026-07-27T08:44:37.6314423+00:00"
     },
     {
-      "id": "01KXXMQ14N2WTMGHQ5YTPVRGFF",
+      "id": "01KYHBYPW044D2872VVNQTJKTK",
       "kind": "acceptance_check",
       "text": [
         "INSIGHTS receives the exact same read result and no mutation capability, analytics field, report, or consumer state."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+      "created_at": "2026-07-27T08:44:37.6314423+00:00"
     },
     {
       "id": "01KXXMQ14NT6QB4373MMNF4B23",
@@ -251,14 +260,14 @@
   ],
   "verification_steps": [
     {
-      "id": "01KXXMQ14NEXHHQCZAT1C82HZF",
+      "id": "01KYHBZDPAY67WNT70098XMSQH",
       "phase": "after",
       "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetUc003PositionTests",
-      "expected_result": "exit 0; at least 22 selection, four-bucket, zero, negative, no-actual, no-active, snapshot, mismatch, failure, concurrency, parity, and no-retention cases are discovered and 0 fail",
+      "expected_result": "exit 0; at least 23 selection, four-bucket, zero, negative, no-actual, missing-plan, no-active, snapshot, mismatch, failure, concurrency, parity, and no-retention cases are discovered and 0 fail",
       "required": 1,
       "timeout_seconds": 720,
       "sort_order": 0,
-      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+      "created_at": "2026-07-27T08:45:01.0023672+00:00"
     }
   ]
 }

@@ -11,10 +11,19 @@
   "objective": [
     "BUDGET v1 is reproducibly buildable, tested, exact, locally secure, externally validated, and ready for work review."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 7,
   "created_at": "2026-07-19T16:52:54.5452616+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYH9DKAJXK1BCPD5R9E2SZBT",
+      "bead_id": "bd-3u23",
+      "verification_status": "verified",
+      "verified_at": "2026-07-27T08:00:19.7946530+00:00",
+      "created_at": "2026-07-27T08:00:19.7946530+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXXMQ14SF43697EW4JS0DYA0",

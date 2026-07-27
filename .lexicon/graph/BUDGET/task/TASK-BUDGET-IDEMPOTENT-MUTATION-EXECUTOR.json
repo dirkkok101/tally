@@ -11,10 +11,19 @@
   "objective": [
     "Create Draft and Activate retries commit at most once and replay the original logical result without retaining financial payloads."
   ],
-  "planning_state": "planned",
+  "planning_state": "ready",
   "priority": 0,
   "sort_order": 2,
   "created_at": "2026-07-19T16:48:30.2936612+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYH9DB39YC64KV1C8HDPE36E",
+      "bead_id": "bd-1heq",
+      "verification_status": "verified",
+      "verified_at": "2026-07-27T08:00:11.3691464+00:00",
+      "created_at": "2026-07-27T08:00:11.3691464+00:00"
+    }
+  ],
   "decisions": [
     {
       "id": "01KXXMEZ2QDYK2FC82A97WRJCW",
