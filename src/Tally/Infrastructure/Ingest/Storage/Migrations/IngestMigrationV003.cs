@@ -13,11 +13,17 @@ public sealed class IngestMigrationV003
             ALTER TABLE import_receipt ADD COLUMN created_at TEXT;
             ALTER TABLE import_receipt ADD COLUMN updated_at TEXT;
 
-            -- Best-effort backfill from completed_at or a stable placeholder so columns are readable.
+            -- Backfill from real provenance: the owning batch's timestamps (FK guarantees the row),
+            -- preferring completed_at as the last known transition for updated_at.
             UPDATE import_receipt
-            SET created_at = COALESCE(completed_at, '1970-01-01T00:00:00Z'),
-                updated_at = COALESCE(completed_at, '1970-01-01T00:00:00Z')
-            WHERE created_at IS NULL OR updated_at IS NULL;
+            SET created_at = COALESCE(
+                    (SELECT b.created_at FROM ingest_batch b WHERE b.batch_id = import_receipt.batch_id),
+                    completed_at,
+                    '1970-01-01T00:00:00Z'),
+                updated_at = COALESCE(
+                    completed_at,
+                    (SELECT b.updated_at FROM ingest_batch b WHERE b.batch_id = import_receipt.batch_id),
+                    '1970-01-01T00:00:00Z');
             """;
 
         await IngestDatabase.ExecuteAsync(connection, sql, cancellationToken, transaction);

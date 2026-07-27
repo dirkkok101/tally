@@ -99,6 +99,15 @@ public sealed class IngestDatabaseFoundationTests : IAsyncLifetime
         {
             await new IngestMigrationV001().ApplyAsync(connection, transaction, CancellationToken.None);
             await new IngestMigrationV002().ApplyAsync(connection, transaction, CancellationToken.None);
+            await ExecuteAsync(connection, """
+                INSERT INTO ingest_batch (batch_id, source_fingerprint, selected_account_id, adapter_identity,
+                    ledger_contract_version, manifest_schema_version, status, created_at, updated_at)
+                VALUES ('b-1', 'fp', 'acc', 'layout-a@1', '1.0', '1', 4, '2026-07-01T08:00:00Z', '2026-07-01T09:00:00Z');
+                INSERT INTO import_receipt (receipt_id, batch_id, status, summary_json, completed_at)
+                VALUES ('r-done', 'b-1', 3, '{}', '2026-07-01T09:00:00Z');
+                INSERT INTO import_receipt (receipt_id, batch_id, status, summary_json, completed_at)
+                VALUES ('r-inflight', 'b-1', 2, '{"unresolved":1}', NULL);
+                """, transaction);
             await ExecuteAsync(connection, "PRAGMA user_version = 2;", transaction);
             await transaction.CommitAsync();
         }
@@ -109,6 +118,18 @@ public sealed class IngestDatabaseFoundationTests : IAsyncLifetime
         var columns = await ColumnNamesAsync(connection, "import_receipt");
         Assert.Contains("created_at", columns);
         Assert.Contains("updated_at", columns);
+
+        // Backfill uses real batch provenance, never a fabricated epoch (bd-2vft).
+        Assert.Equal("2026-07-01T08:00:00Z", await ScalarStringAsync(connection,
+            "SELECT created_at FROM import_receipt WHERE receipt_id = 'r-done';"));
+        Assert.Equal("2026-07-01T09:00:00Z", await ScalarStringAsync(connection,
+            "SELECT updated_at FROM import_receipt WHERE receipt_id = 'r-done';"));
+        Assert.Equal("2026-07-01T08:00:00Z", await ScalarStringAsync(connection,
+            "SELECT created_at FROM import_receipt WHERE receipt_id = 'r-inflight';"));
+        Assert.Equal("2026-07-01T09:00:00Z", await ScalarStringAsync(connection,
+            "SELECT updated_at FROM import_receipt WHERE receipt_id = 'r-inflight';"));
+        Assert.Equal(0L, await ScalarLongAsync(connection,
+            "SELECT COUNT(*) FROM import_receipt WHERE created_at IS NULL OR updated_at IS NULL;"));
     }
 
     // bd-3gib / candidate_receipt attempt_count
@@ -121,6 +142,17 @@ public sealed class IngestDatabaseFoundationTests : IAsyncLifetime
             await new IngestMigrationV001().ApplyAsync(connection, transaction, CancellationToken.None);
             await new IngestMigrationV002().ApplyAsync(connection, transaction, CancellationToken.None);
             await new IngestMigrationV003().ApplyAsync(connection, transaction, CancellationToken.None);
+            await ExecuteAsync(connection, """
+                INSERT INTO ingest_batch (batch_id, source_fingerprint, selected_account_id, adapter_identity,
+                    ledger_contract_version, manifest_schema_version, status, created_at, updated_at)
+                VALUES ('b-1', 'fp', 'acc', 'layout-a@1', '1.0', '1', 2, '2026-07-01T08:00:00Z', '2026-07-01T09:00:00Z');
+                INSERT INTO import_receipt (receipt_id, batch_id, status, summary_json, completed_at, created_at, updated_at)
+                VALUES ('r-1', 'b-1', 1, '{}', NULL, '2026-07-01T08:00:00Z', '2026-07-01T09:00:00Z');
+                INSERT INTO candidate_receipt (receipt_id, candidate_id, outcome, ledger_transaction_id, error_code, attempted_at, terminal_at)
+                VALUES ('r-1', 'c-attempted', 2, 'tx-1', NULL, '2026-07-01T08:30:00Z', '2026-07-01T08:31:00Z');
+                INSERT INTO candidate_receipt (receipt_id, candidate_id, outcome, ledger_transaction_id, error_code, attempted_at, terminal_at)
+                VALUES ('r-1', 'c-pending', 0, NULL, NULL, NULL, NULL);
+                """, transaction);
             await ExecuteAsync(connection, "PRAGMA user_version = 3;", transaction);
             await transaction.CommitAsync();
         }
@@ -130,6 +162,12 @@ public sealed class IngestDatabaseFoundationTests : IAsyncLifetime
         Assert.Equal(4L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
         var columns = await ColumnNamesAsync(connection, "candidate_receipt");
         Assert.Contains("attempt_count", columns);
+
+        // Already-attempted rows backfill to 1; never-attempted rows keep the contracted 0 (bd-3gib).
+        Assert.Equal(1L, await ScalarLongAsync(connection,
+            "SELECT attempt_count FROM candidate_receipt WHERE candidate_id = 'c-attempted';"));
+        Assert.Equal(0L, await ScalarLongAsync(connection,
+            "SELECT attempt_count FROM candidate_receipt WHERE candidate_id = 'c-pending';"));
     }
 
     // DD-INGEST-STATE-STORE
@@ -338,6 +376,7 @@ public sealed class IngestDatabaseFoundationTests : IAsyncLifetime
     private static async Task ExecuteAsync(SqliteConnection connection, string sql, SqliteTransaction? transaction = null) { await using var command = connection.CreateCommand(); command.CommandText = sql; command.Transaction = transaction; await command.ExecuteNonQueryAsync(); }
     private static async Task<object?> ScalarAsync(SqliteConnection connection, string sql) { await using var command = connection.CreateCommand(); command.CommandText = sql; return await command.ExecuteScalarAsync(); }
     private static async Task<long> ScalarLongAsync(SqliteConnection connection, string sql) => Convert.ToInt64(await ScalarAsync(connection, sql), System.Globalization.CultureInfo.InvariantCulture);
+    private static async Task<string?> ScalarStringAsync(SqliteConnection connection, string sql) => (string?)await ScalarAsync(connection, sql);
     private static async Task<string[]> TableNamesAsync(SqliteConnection connection) { await using var command = connection.CreateCommand(); command.CommandText = "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY name;"; await using var reader = await command.ExecuteReaderAsync(); var names = new List<string>(); while (await reader.ReadAsync()) { names.Add(reader.GetString(0)); } return names.ToArray(); }
     private static async Task<string[]> ColumnNamesAsync(SqliteConnection connection, string table) { await using var command = connection.CreateCommand(); command.CommandText = $"PRAGMA table_info({table});"; await using var reader = await command.ExecuteReaderAsync(); var names = new List<string>(); while (await reader.ReadAsync()) { names.Add(reader.GetString(1)); } return names.ToArray(); }
 }

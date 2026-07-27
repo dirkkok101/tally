@@ -191,11 +191,25 @@ public sealed class CommitStateStore(IngestDatabase database, BatchErrorEventSto
                     var receiptId = reader.GetString(0);
                     var status = (ImportReceiptStatus)reader.GetInt32(1);
                     var completedAt = reader.IsDBNull(3) ? null : reader.GetString(3);
-                    var createdAt = reader.IsDBNull(4) ? now : reader.GetString(4);
-                    var updatedAt = reader.IsDBNull(5) ? now : reader.GetString(5);
+                    // V003 backfills every row and both insert paths stamp the columns; a NULL here is
+                    // a schema-integrity violation, never a value to re-fabricate.
+                    var createdAt = reader.IsDBNull(4)
+                        ? throw new InvalidOperationException("import_receipt.created_at is missing; the ingest schema is corrupt.")
+                        : reader.GetString(4);
+                    var updatedAt = reader.IsDBNull(5)
+                        ? throw new InvalidOperationException("import_receipt.updated_at is missing; the ingest schema is corrupt.")
+                        : reader.GetString(5);
                     await reader.DisposeAsync();
 
                     if (status is ImportReceiptStatus.Completed or ImportReceiptStatus.Abandoned)
+                    {
+                        await transaction.CommitAsync(cancellationToken);
+                        return new ReceiptHeader(receiptId, status, createdAt, updatedAt, completedAt);
+                    }
+
+                    // Already-committing re-entry is not a state transition: skip the no-op flip so
+                    // updated_at keeps reflecting real transitions only.
+                    if (status is ImportReceiptStatus.Committing)
                     {
                         await transaction.CommitAsync(cancellationToken);
                         return new ReceiptHeader(receiptId, status, createdAt, updatedAt, completedAt);
@@ -339,15 +353,17 @@ public sealed class CommitStateStore(IngestDatabase database, BatchErrorEventSto
             }
 
             var terminalColumn = CandidateCommitStates.IsTerminal(state) ? terminalAt : null;
+            // Terminal implies at least one attempt: a fresh insert here must not read back as attempt_count 0.
             const string upsertSql = """
                 INSERT INTO candidate_receipt (
-                    receipt_id, candidate_id, outcome, ledger_transaction_id, error_code, attempted_at, terminal_at)
-                VALUES ($receiptId, $candidateId, $outcome, $ledgerId, $errorCode, $attemptedAt, $terminalAt)
+                    receipt_id, candidate_id, outcome, ledger_transaction_id, error_code, attempted_at, terminal_at, attempt_count)
+                VALUES ($receiptId, $candidateId, $outcome, $ledgerId, $errorCode, $attemptedAt, $terminalAt, 1)
                 ON CONFLICT(receipt_id, candidate_id) DO UPDATE SET
                     outcome = excluded.outcome,
                     ledger_transaction_id = excluded.ledger_transaction_id,
                     error_code = excluded.error_code,
-                    terminal_at = excluded.terminal_at;
+                    terminal_at = excluded.terminal_at,
+                    attempt_count = MAX(candidate_receipt.attempt_count, 1);
                 """;
             await using (var command = connection.CreateCommand())
             {

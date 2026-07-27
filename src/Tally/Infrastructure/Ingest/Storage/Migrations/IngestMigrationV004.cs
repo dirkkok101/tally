@@ -11,6 +11,11 @@ public sealed class IngestMigrationV004
     {
         const string sql = """
             ALTER TABLE candidate_receipt ADD COLUMN attempt_count INTEGER NOT NULL DEFAULT 0;
+
+            -- Pre-V004 rows that were already attempted must not read back as "never attempted" (0).
+            UPDATE candidate_receipt
+            SET attempt_count = 1
+            WHERE attempted_at IS NOT NULL;
             """;
 
         await IngestDatabase.ExecuteAsync(connection, sql, cancellationToken, transaction);
