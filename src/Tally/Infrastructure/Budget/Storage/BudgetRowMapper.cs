@@ -159,3 +159,11 @@ public static class BudgetRowMapper
         return encoded.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
     }
 }
+
+public sealed record BudgetPlanRevisionSummaryRow(
+    string RevisionId,
+    int RevisionNumber,
+    BudgetRevisionStatus Status,
+    string CreatedAtUtc,
+    long PlannedTotalMinorUnits,
+    int EntryCount);

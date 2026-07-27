@@ -8,7 +8,7 @@ using Tally.Contracts.Ledger.Categories;
 using Tally.Domain.Budget.Periods;
 using Tally.Domain.Budget.Plans;
 using System.Globalization;
-using Tally.Domain.Ledger;
+using Tally.Domain.Budget;
 using Tally.Infrastructure.Budget.Storage;
 
 namespace Tally.Features.Budget.Contract;
@@ -81,7 +81,7 @@ public static partial class BudgetContractMapper
         expectedBudgetActualTotalMinorUnits = 0;
         errorCode = null;
 
-        if (!Money.TryParse(actuals.Totals.BudgetActual, out var totalMoney, out _))
+        if (!BudgetMoney.TryParse(actuals.Totals.BudgetActual, out var totalMoney, out _))
         {
             errorCode = BudgetErrors.Integrity;
             return false;
@@ -95,7 +95,7 @@ public static partial class BudgetContractMapper
         {
             foreach (var item in actuals.Items)
             {
-                if (!Money.TryParse(item.Contribution.BudgetActual, out var contribution, out _))
+                if (!BudgetMoney.TryParse(item.Contribution.BudgetActual, out var contribution, out _))
                 {
                     errorCode = BudgetErrors.Integrity;
                     members = [];

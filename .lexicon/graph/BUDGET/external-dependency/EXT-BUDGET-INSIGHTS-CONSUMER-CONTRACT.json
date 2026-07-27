@@ -8,6 +8,6 @@
   ],
   "type": "client",
   "owner": "INSIGHTS",
-  "metadata": "{\"gate_type\":\"parity\",\"validation_basis\":\"client_contract\",\"validation_status\":\"assumed\"}",
+  "metadata": "{\"gate_type\":\"parity\",\"validation_basis\":\"client_contract\",\"validation_status\":\"validated\"}",
   "created_at": "2026-07-19T14:31:32.9103284+00:00"
 }

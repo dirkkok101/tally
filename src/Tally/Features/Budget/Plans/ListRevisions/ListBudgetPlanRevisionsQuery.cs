@@ -1,6 +1,4 @@
-using System.Globalization;
 using System.Runtime.Versioning;
-using Microsoft.Data.Sqlite;
 using Tally.Application;
 using Tally.Contracts.Budget;
 using Tally.Contracts.Budget.Plans;
@@ -98,15 +96,16 @@ public sealed class ListBudgetPlanRevisionsQuery
         }
 
         // Fetch one extra row to decide whether a next page exists without silent truncation.
-        var rows = await ListRevisionSummariesAsync(
+        var rows = await store.ListRevisionSummariesAsync(
             connection,
+            null,
             plan.PlanId,
             statusFilter,
             limit + 1,
             cancellationToken);
 
         string? nextCursor = null;
-        IReadOnlyList<RevisionSummaryRow> page = rows;
+        IReadOnlyList<BudgetPlanRevisionSummaryRow> page = rows;
         if (rows.Count > limit)
         {
             page = rows.Take(limit).ToArray();
@@ -149,59 +148,4 @@ public sealed class ListBudgetPlanRevisionsQuery
         return true;
     }
 
-    private static async Task<IReadOnlyList<RevisionSummaryRow>> ListRevisionSummariesAsync(
-        SqliteConnection connection,
-        string planId,
-        string? statusFilter,
-        int fetchLimit,
-        CancellationToken cancellationToken)
-    {
-        await using var command = connection.CreateCommand();
-        command.CommandText = """
-            SELECT
-                r.revision_id,
-                r.revision_number,
-                r.status,
-                r.created_at_utc,
-                COALESCE(SUM(e.planned_minor_units), 0) AS planned_total,
-                COUNT(e.category_id) AS entry_count
-            FROM budget_plan_revision r
-            LEFT JOIN budget_plan_entry e ON e.revision_id = r.revision_id
-            WHERE r.plan_id = $plan_id
-              AND ($status IS NULL OR r.status = $status)
-            GROUP BY
-                r.revision_id,
-                r.revision_number,
-                r.status,
-                r.created_at_utc
-            ORDER BY r.created_at_utc ASC, r.revision_id ASC
-            LIMIT $limit;
-            """;
-        command.Parameters.AddWithValue("$plan_id", planId);
-        command.Parameters.AddWithValue("$status", (object?)statusFilter ?? DBNull.Value);
-        command.Parameters.AddWithValue("$limit", fetchLimit);
-
-        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
-        var rows = new List<RevisionSummaryRow>();
-        while (await reader.ReadAsync(cancellationToken))
-        {
-            rows.Add(new RevisionSummaryRow(
-                reader.GetString(0),
-                reader.GetInt32(1),
-                BudgetRowMapper.ParseStatus(reader.GetString(2)),
-                reader.GetString(3),
-                Convert.ToInt64(reader.GetValue(4), CultureInfo.InvariantCulture),
-                Convert.ToInt32(reader.GetValue(5), CultureInfo.InvariantCulture)));
-        }
-
-        return rows;
-    }
-
-    private sealed record RevisionSummaryRow(
-        string RevisionId,
-        int RevisionNumber,
-        BudgetRevisionStatus Status,
-        string CreatedAtUtc,
-        long PlannedTotalMinorUnits,
-        int EntryCount);
 }

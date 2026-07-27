@@ -7,7 +7,7 @@ using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Categories;
 using Tally.Domain.Budget.Periods;
 using Tally.Domain.Budget.Plans;
-using Tally.Domain.Ledger;
+using Tally.Domain.Budget;
 using Tally.Features.Budget.Contract;
 using Tally.Infrastructure.Budget.Storage;
 using Tally.Infrastructure.Budget.Storage.Idempotency;
@@ -198,9 +198,9 @@ public sealed class ActivateBudgetPlanRevisionCommand
                     return BudgetMutationWorkResult.Failure(BudgetErrors.Conflict);
                 }
 
-                var activateEventId = LedgerId.New().ToString();
+                var activateEventId = BudgetIdentity.New().ToString();
                 string? supersedeEventId = BudgetPlanLifecycle.RequiresSupersession(priorActiveRevisionId)
-                    ? LedgerId.New().ToString()
+                    ? BudgetIdentity.New().ToString()
                     : null;
 
                 await store.ActivateRevisionAsync(

@@ -6,7 +6,7 @@ using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Categories;
 using Tally.Domain.Budget.Periods;
 using Tally.Domain.Budget.Plans;
-using Tally.Domain.Ledger;
+using Tally.Domain.Budget;
 using Tally.Features.Budget.Contract;
 using Tally.Infrastructure.Budget.Storage;
 using Tally.Infrastructure.Budget.Storage.Idempotency;
@@ -155,7 +155,7 @@ public sealed class CreateBudgetDraftCommand
                 string? priorActiveRevisionId;
                 if (planRow is null)
                 {
-                    planId = LedgerId.New().ToString();
+                    planId = BudgetIdentity.New().ToString();
                     priorActiveRevisionId = null;
                     await store.InsertPlanAsync(
                         connection,
@@ -176,8 +176,8 @@ public sealed class CreateBudgetDraftCommand
                 }
 
                 var revisionNumber = await store.NextRevisionNumberAsync(connection, transaction, planId, ct);
-                var revisionId = LedgerId.New().ToString();
-                var eventId = LedgerId.New().ToString();
+                var revisionId = BudgetIdentity.New().ToString();
+                var eventId = BudgetIdentity.New().ToString();
                 var eventSequence = await store.NextEventSequenceAsync(connection, transaction, planId, ct);
 
                 var revisionRow = new BudgetPlanRevisionRow(
@@ -444,7 +444,7 @@ public sealed class CreateBudgetDraftCommand
         {
             if (input is null
                 || string.IsNullOrWhiteSpace(input.CategoryId)
-                || !LedgerId.TryParse(input.CategoryId.Trim(), out var categoryId, out _))
+                || !BudgetIdentity.TryParse(input.CategoryId.Trim(), out var categoryId, out _))
             {
                 // Display-name-only or malformed identifiers are rejected before mutation.
                 error = BudgetErrors.InvalidInput;

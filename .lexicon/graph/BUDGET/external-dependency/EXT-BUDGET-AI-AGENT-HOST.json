@@ -8,6 +8,6 @@
   ],
   "type": "client",
   "owner": "Agent Host",
-  "metadata": "{\"gate_type\":\"workflow\",\"validation_basis\":\"client_contract\",\"validation_status\":\"assumed\"}",
+  "metadata": "{\"gate_type\":\"workflow\",\"validation_basis\":\"client_contract\",\"validation_status\":\"validated\"}",
   "created_at": "2026-07-19T14:31:32.0593337+00:00"
 }

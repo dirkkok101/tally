@@ -110,15 +110,15 @@ public sealed class BudgetOperationBundle
         ListBudgetPlanRevisionsQuery revisionList,
         GetBudgetPositionQuery positionGet,
         GetBudgetInsightEvidenceQuery insightsEvidence) => operationId switch
-    {
-        BudgetOperationIds.DraftCreate => new BudgetDraftCreateOperationHandler(draftCreate),
-        BudgetOperationIds.RevisionGet => new BudgetRevisionGetOperationHandler(revisionGet),
-        BudgetOperationIds.RevisionList => new BudgetRevisionListOperationHandler(revisionList),
-        BudgetOperationIds.RevisionActivate => new BudgetRevisionActivateOperationHandler(revisionActivate),
-        BudgetOperationIds.PositionGet => new BudgetPositionGetOperationHandler(positionGet),
-        BudgetOperationIds.InsightsEvidenceGet => new BudgetInsightsEvidenceGetOperationHandler(insightsEvidence),
-        _ => new FoundationOperationHandler()
-    };
+        {
+            BudgetOperationIds.DraftCreate => new BudgetDraftCreateOperationHandler(draftCreate),
+            BudgetOperationIds.RevisionGet => new BudgetRevisionGetOperationHandler(revisionGet),
+            BudgetOperationIds.RevisionList => new BudgetRevisionListOperationHandler(revisionList),
+            BudgetOperationIds.RevisionActivate => new BudgetRevisionActivateOperationHandler(revisionActivate),
+            BudgetOperationIds.PositionGet => new BudgetPositionGetOperationHandler(positionGet),
+            BudgetOperationIds.InsightsEvidenceGet => new BudgetInsightsEvidenceGetOperationHandler(insightsEvidence),
+            _ => new FoundationOperationHandler()
+        };
 }
 
 /// <summary>Complete BUDGET public-contract composition produced by explicit registration.</summary>

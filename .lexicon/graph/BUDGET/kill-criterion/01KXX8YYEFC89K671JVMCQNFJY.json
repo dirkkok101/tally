@@ -3,6 +3,8 @@
   "module_id": "01KXR4WNPW86216H643PZ6KA36",
   "condition": "Stop and reframe the release if owner validation shows that useful first-release budgeting requires automatic rollover, income-percentage allocation, sinking funds, shared approvals, multi-currency conversion, or another policy engine that exceeds the M complexity ceiling; checked at PRD and re-check before plan.",
   "monitored": 1,
-  "evaluation_state": "unassessed",
+  "evaluation_state": "clear",
+  "evaluation_evidence": "M policy ceiling held: registry publishes exactly six BUDGET CLI operations; composition scans find zero policy-engine/rollover/income-percentage/sinking-fund/shared-approval/multi-currency conversion surfaces.",
+  "evaluated_at": "2026-07-27T14:27:58.1162859+00:00",
   "created_at": "2026-07-19T13:27:31.0243615+00:00"
 }

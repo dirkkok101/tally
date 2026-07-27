@@ -8,6 +8,6 @@
   ],
   "type": "api",
   "owner": "LEDGER",
-  "metadata": "{\"gate_type\":\"api\",\"validation_basis\":\"client_contract\",\"validation_status\":\"assumed\"}",
+  "metadata": "{\"gate_type\":\"api\",\"validation_basis\":\"client_contract\",\"validation_status\":\"validated\"}",
   "created_at": "2026-07-19T14:31:31.6119174+00:00"
 }
