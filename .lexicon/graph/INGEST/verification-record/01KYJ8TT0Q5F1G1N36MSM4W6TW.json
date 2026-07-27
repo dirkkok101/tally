@@ -1,0 +1,12 @@
+{
+  "id": "01KYJ8TT0Q5F1G1N36MSM4W6TW",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-INGEST-FAILURE-STATUS",
+  "subject_entity_id": "01KXTEW4ZA4BMSXPQ943XQ7BPG",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-INGEST-FAILURE-STATUS-CONTRACT",
+  "commit_sha": "3303afb3a3f0bab891c124a0c9df6eee4ed1c063",
+  "bead_id": "bd-1tv",
+  "verified_at": "2026-07-27T17:09:18.4862814+00:00"
+}

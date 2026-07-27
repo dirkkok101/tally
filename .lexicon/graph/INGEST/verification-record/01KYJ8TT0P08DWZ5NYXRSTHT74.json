@@ -1,0 +1,12 @@
+{
+  "id": "01KYJ8TT0P08DWZ5NYXRSTHT74",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-INGEST-APPROVED-BATCH-COMMIT",
+  "subject_entity_id": "01KXTEW4BXFGWKZRQD2SKNV36Q",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-INGEST-APPROVED-BATCH-COMMIT-CONTRACT",
+  "commit_sha": "3303afb3a3f0bab891c124a0c9df6eee4ed1c063",
+  "bead_id": "bd-2i6",
+  "verified_at": "2026-07-27T17:09:18.4862814+00:00"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "01KYJ8TT0QWZNYQABEG6W008S0",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-INGEST-PUBLIC-CONTRACT-COMPATIBILITY",
+  "subject_entity_id": "01KXTEXMM1MP9RB4PYFRHADBR3",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-INGEST-PUBLISHED-CONTRACT-MATRIX",
+  "commit_sha": "3303afb3a3f0bab891c124a0c9df6eee4ed1c063",
+  "bead_id": "bd-2jn",
+  "verified_at": "2026-07-27T17:09:18.4862814+00:00"
+}
