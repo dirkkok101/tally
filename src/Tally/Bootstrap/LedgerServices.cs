@@ -1,4 +1,5 @@
 using System.Runtime.Versioning;
+using Tally.Bootstrap.Features;
 using Tally.Composition.Ledger;
 using Tally.Features.System.Contract;
 using Tally.Features.System.Guidance;
@@ -45,13 +46,14 @@ public sealed record LedgerServices(
     CatalogueTransactionOperationBundle? CatalogueTransactions,
     ReconciliationOperationBundle? Reconciliation,
     RelationshipActualsOperationBundle? RelationshipActuals,
-    RecoveryGuidanceOperationBundle? RecoveryGuidance)
+    RecoveryGuidanceOperationBundle? RecoveryGuidance,
+    IngestOperationBundle? Ingest = null)
 {
     public static LedgerServices Create() => new(
         new SystemOperationModule(),
         CreateGuidance(),
         null, null, null, null, null, null, null, null, null, null, null, null, null,
-        null, null, null, null);
+        null, null, null, null, null);
 
     [SupportedOSPlatform("linux")]
     public static LedgerServices Create(LedgerDb database)

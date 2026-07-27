@@ -48,15 +48,22 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
     }
 
     [Fact]
-    public void TC_LEDGER_STATEMENT_SCOPE_REGISTRATION_has_the_exact_74_id_and_path_inventory()
+    public void TC_LEDGER_STATEMENT_SCOPE_REGISTRATION_has_prefix_scoped_ledger_and_ingest_inventory()
     {
         var descriptors = OperationRegistry.Create().Descriptors;
+        var ledger = descriptors.Where(d => d.OperationId.StartsWith("ledger.", StringComparison.Ordinal)).ToArray();
+        var ingest = descriptors.Where(d => d.OperationId.StartsWith("ingest.", StringComparison.Ordinal)).ToArray();
+        var system = descriptors.Where(d => d.OperationId.StartsWith("system.", StringComparison.Ordinal)).ToArray();
 
-        Assert.Equal(74, descriptors.Count);
-        Assert.Equal(74, descriptors.Select(descriptor => descriptor.OperationId).Distinct(StringComparer.Ordinal).Count());
-        Assert.Equal(74, descriptors.Select(descriptor => descriptor.CliPath).Distinct(StringComparer.Ordinal).Count());
+        // Additive registry: preserve existing ledger.* inventory and add exactly eight ingest.* operations.
+        Assert.Equal(68, ledger.Length);
+        Assert.Equal(8, ingest.Length);
+        Assert.Equal(6, system.Length);
+        Assert.Equal(82, descriptors.Count);
+        Assert.Equal(82, descriptors.Select(descriptor => descriptor.OperationId).Distinct(StringComparer.Ordinal).Count());
+        Assert.Equal(82, descriptors.Select(descriptor => descriptor.CliPath).Distinct(StringComparer.Ordinal).Count());
         Assert.Equal(descriptors.Select(descriptor => descriptor.OperationId).Order(StringComparer.Ordinal), descriptors.Select(descriptor => descriptor.OperationId));
-        Assert.Equal("ledger.account.archive", descriptors[0].OperationId);
+        Assert.Equal("ingest.abandon", descriptors[0].OperationId);
         Assert.Equal("system.version", descriptors[^1].OperationId);
     }
 
@@ -75,8 +82,11 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
             .OrderBy(descriptor => descriptor.OperationId, StringComparer.Ordinal)
             .ToArray();
         Assert.Equal(74, bundled.Length);
+        var nonIngest = OperationRegistry.Create().Descriptors
+            .Where(descriptor => !descriptor.OperationId.StartsWith("ingest.", StringComparison.Ordinal))
+            .ToArray();
         Assert.Equal(
-            JsonSerializer.Serialize(OperationRegistry.Create().Descriptors.Select(descriptor => descriptor.ToSchema()).ToArray(), LedgerJsonContext.Default.OperationSchemaArray),
+            JsonSerializer.Serialize(nonIngest.Select(descriptor => descriptor.ToSchema()).ToArray(), LedgerJsonContext.Default.OperationSchemaArray),
             JsonSerializer.Serialize(bundled.Select(descriptor => descriptor.ToSchema()).ToArray(), LedgerJsonContext.Default.OperationSchemaArray));
     }
 
@@ -97,7 +107,14 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
     [Fact]
     public void NFR_LEDGER_AGENT_CONTRACT_STABILITY_is_provider_neutral_and_contains_no_private_surface()
     {
-        var schema = OperationRegistry.Create().SchemaListJson();
+        // Prefix-scoped: ledger/system contracts only. INGEST schemas intentionally publish
+        // retryDisposition vocabulary and are covered by ingest-scoped inventory tests.
+        var schema = JsonSerializer.Serialize(
+            OperationRegistry.Create().Descriptors
+                .Where(descriptor => !descriptor.OperationId.StartsWith("ingest.", StringComparison.Ordinal))
+                .Select(descriptor => descriptor.ToSchema())
+                .ToArray(),
+            LedgerJsonContext.Default.OperationSchemaArray);
 
         foreach (var forbidden in new[]
                  {
@@ -185,9 +202,15 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
         var expectedIds = snapshot.RootElement.GetProperty("operationIds").EnumerateArray()
             .Select(item => item.GetString()).ToArray();
         var registry = OperationRegistry.Create();
-        var fingerprint = Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(registry.SchemaListJson())));
+        var nonIngest = registry.Descriptors
+            .Where(descriptor => !descriptor.OperationId.StartsWith("ingest.", StringComparison.Ordinal))
+            .ToArray();
+        var nonIngestSchema = JsonSerializer.Serialize(
+            nonIngest.Select(descriptor => descriptor.ToSchema()).ToArray(),
+            LedgerJsonContext.Default.OperationSchemaArray);
+        var fingerprint = Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(nonIngestSchema)));
 
-        Assert.Equal(registry.Descriptors.Select(descriptor => descriptor.OperationId), expectedIds);
+        Assert.Equal(nonIngest.Select(descriptor => descriptor.OperationId), expectedIds);
         Assert.Equal(fingerprint, snapshot.RootElement.GetProperty("schemaFingerprint").GetString());
     }
 

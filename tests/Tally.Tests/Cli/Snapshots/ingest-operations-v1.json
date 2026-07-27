@@ -1,0 +1,10 @@
+[
+  "ingest.abandon",
+  "ingest.approve",
+  "ingest.cleanup",
+  "ingest.commit",
+  "ingest.inspect",
+  "ingest.preview",
+  "ingest.resume",
+  "ingest.status"
+]

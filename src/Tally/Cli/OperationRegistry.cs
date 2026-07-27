@@ -4,6 +4,7 @@ using System.Text.Json.Schema;
 using System.Text.Json.Serialization.Metadata;
 using Tally.Application;
 using Tally.Bootstrap;
+using Tally.Bootstrap.Features;
 using Tally.Composition.Ledger;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Accounts;
@@ -417,6 +418,21 @@ public sealed class OperationRegistry
             return descriptor.HandlerFactory(services, registry);
         }
 
+        if (descriptor.OperationId.StartsWith("ingest.", StringComparison.Ordinal))
+        {
+            var ingestDescriptor = services.Ingest?.Descriptors
+                .SingleOrDefault(candidate => candidate.OperationId == descriptor.OperationId);
+            if (ingestDescriptor is not null)
+            {
+                return ingestDescriptor.HandlerFactory(services, registry);
+            }
+
+            // Descriptor-template factories keep inventory/handler-binding proofs offline without a data root.
+            return CompositeDescriptorTemplates.TryGetValue(descriptor.OperationId, out var template)
+                ? template.HandlerFactory(services, registry)
+                : new FoundationOperationHandler();
+        }
+
         var runtimeDescriptors = descriptor.OperationId switch
         {
             var operationId when operationId.StartsWith("ledger.reconciliation.", StringComparison.Ordinal) =>
@@ -457,6 +473,7 @@ public sealed class OperationRegistry
             .Concat(backup.Descriptors)
             .Concat(restore.Descriptors)
             .Concat(storageEvolution.Descriptors)
+            .Concat(IngestOperationBundle.CreateDescriptorTemplates().Descriptors)
             .ToDictionary(descriptor => descriptor.OperationId, StringComparer.Ordinal);
     }
 
@@ -470,6 +487,7 @@ public sealed class OperationRegistry
         "ledger.transaction.record","ledger.transaction.get","ledger.transaction.void","ledger.transaction.supersede","ledger.transaction.category.assign","ledger.transaction.category.correct","ledger.transaction.attribution.assign","ledger.transaction.attribution.correct","ledger.transaction.pool.assign","ledger.transaction.pool.correct",
         "ledger.evidence.register","ledger.evidence.get","ledger.evidence.link-supporting","ledger.reconciliation.candidates","ledger.reconciliation.apply","ledger.reconciliation.decision.get","ledger.reconciliation.decision.confirm","ledger.reconciliation.decision.reject","ledger.reconciliation.decision.revoke","ledger.reconciliation.decision.replace","ledger.reconciliation.coverage.complete","ledger.reconciliation.coverage.get","ledger.reconciliation.scope.register",
         "ledger.transfer.confirm","ledger.transfer.revoke","ledger.transfer.replace","ledger.refund.confirm","ledger.refund.revoke","ledger.refund.replace","ledger.relationship.get","ledger.actuals.query","ledger.backup.create","ledger.backup.verify","ledger.restore.prepare","ledger.restore.activate","ledger.storage.status","ledger.storage.evolution.prepare","ledger.storage.evolution.activate",
+        "ingest.preview","ingest.inspect","ingest.approve","ingest.commit","ingest.resume","ingest.status","ingest.abandon","ingest.cleanup",
         "system.schema.list","system.schema.show","system.version","system.guidance.list","system.guidance.check","system.guidance.install"
     ];
 }
