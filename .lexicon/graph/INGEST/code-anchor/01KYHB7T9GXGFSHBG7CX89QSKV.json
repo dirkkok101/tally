@@ -1,0 +1,11 @@
+{
+  "id": "01KYHB7T9GXGFSHBG7CX89QSKV",
+  "entity_type": "data_model",
+  "entity_id": "01KXTHWRNZ9BAB4P7V2RNMTKMA",
+  "ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+  "repo_path": "src/Tally/Features/Ingest/Preview/PreviewManifestMapper.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "fa256d6bb6bd8cec6903fc4d9ac2affb01971acbf76afd4078fd313fc92cd74e",
+  "last_verified_at": "2026-07-27T08:32:07.4722496+00:00",
+  "created_at": "2026-07-27T08:32:07.4722496+00:00"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "01KYHB7T9A1E8R37TW9ZJX3MVE",
+  "entity_type": "design_decision",
+  "entity_id": "01KXTHS03EDX6S5S1QP19Y3KQ5",
+  "ref_code": "DD-INGEST-COMMIT-RECOVERY",
+  "repo_path": "src/Tally/Infrastructure/Ingest/Storage/BatchCommitLock.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "bc1c485385670d89de8659f0a942cb6055ebd01544605f483fbea8dafd30f02d",
+  "last_verified_at": "2026-07-27T08:32:07.4668878+00:00",
+  "created_at": "2026-07-27T08:32:07.4668878+00:00"
+}

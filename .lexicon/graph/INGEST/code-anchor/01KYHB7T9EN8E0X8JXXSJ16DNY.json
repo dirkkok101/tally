@@ -1,0 +1,11 @@
+{
+  "id": "01KYHB7T9EN8E0X8JXXSJ16DNY",
+  "entity_type": "data_model",
+  "entity_id": "01KXTHWSBZWXX66S4X6DF2XG8Y",
+  "ref_code": "DM-INGEST-IMPORT-MANIFEST",
+  "repo_path": "src/Tally/Features/Ingest/Review/InspectHandler.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "a0acaa79820a137061a1c5e714164bc38153d9e14b46a235068b5e5f9cb75842",
+  "last_verified_at": "2026-07-27T08:32:07.4705444+00:00",
+  "created_at": "2026-07-27T08:32:07.4705444+00:00"
+}

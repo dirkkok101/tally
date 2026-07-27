@@ -1,0 +1,11 @@
+{
+  "id": "01KYHB7T9MM7JVQZ22RMT6PXCD",
+  "entity_type": "test_case",
+  "entity_id": "01KXTJ0B755W6A58QQR2NBNYZK",
+  "ref_code": "TC-INGEST-COMMIT-RECOVERY-MATRIX",
+  "repo_path": "tests/Tally.Tests/Ingest/E2E/CommitResumeWorkflowTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "57bd76e951db2a61cc98e35b571723ca2b4ed48eaed57ef04ce88b5ae493dd02",
+  "last_verified_at": "2026-07-27T08:32:07.4764042+00:00",
+  "created_at": "2026-07-27T08:32:07.4764042+00:00"
+}

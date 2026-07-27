@@ -1,0 +1,11 @@
+{
+  "id": "01KYHB7T9Q2EJGAWMWA3ZX5PH6",
+  "entity_type": "test_case",
+  "entity_id": "01KXTJ0A38FMCTWB1M28PFZZ8N",
+  "ref_code": "TC-INGEST-PUBLISHED-CONTRACT-MATRIX",
+  "repo_path": "tests/Tally.Tests/Ingest/E2E/AgentContractWorkflowTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "2b92532cedfb0ee2b2ac3251f7db85f508220d07d06b3075af8a661d760c17b7",
+  "last_verified_at": "2026-07-27T08:32:07.4791103+00:00",
+  "created_at": "2026-07-27T08:32:07.4791103+00:00"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "01KYHB7T9QCYWP4WN2EHAQ2981",
+  "entity_type": "test_case",
+  "entity_id": "01KXTF4YNP89X6YHMDB0QFK5EP",
+  "ref_code": "TC-INGEST-REPLAY-OVERLAP-SAFETY-CONTRACT",
+  "repo_path": "tests/Tally.Tests/Ingest/E2E/ReplayOverlapWorkflowTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "a6ffab3ffc0dda04128935d3587a5aed2c02c58f39770f02315e09359a84420b",
+  "last_verified_at": "2026-07-27T08:32:07.4792340+00:00",
+  "created_at": "2026-07-27T08:32:07.4792340+00:00"
+}

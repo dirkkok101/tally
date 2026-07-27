@@ -1,0 +1,11 @@
+{
+  "id": "01KYHB7T9JD27BA1BRY4WT8BF4",
+  "entity_type": "test_case",
+  "entity_id": "01KXTJ09R1WGDS1MNGV12F4NRC",
+  "ref_code": "TC-INGEST-ADAPTER-GOLDEN-FIXTURES",
+  "repo_path": "tests/Tally.Tests/Ingest/PdfExtraction/PdfStatementTextExtractorTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "edae1ca0b69d7ed2dfd64fe485526e6541905cb315f95fc436884a14cfb59400",
+  "last_verified_at": "2026-07-27T08:32:07.4747235+00:00",
+  "created_at": "2026-07-27T08:32:07.4747235+00:00"
+}

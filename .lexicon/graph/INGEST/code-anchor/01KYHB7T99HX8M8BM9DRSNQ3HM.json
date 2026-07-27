@@ -1,0 +1,11 @@
+{
+  "id": "01KYHB7T99HX8M8BM9DRSNQ3HM",
+  "entity_type": "design_decision",
+  "entity_id": "01KXTHQQNAGDGN6TFK18JZR8R9",
+  "ref_code": "DD-INGEST-APPLICATION-ARCHITECTURE",
+  "repo_path": "src/Tally/Bootstrap/Features/IngestExtensions.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "eea7675765ac684f7b1be737408708f9c9245ea93436112ed2da31cf60c54cf7",
+  "last_verified_at": "2026-07-27T08:32:07.4658922+00:00",
+  "created_at": "2026-07-27T08:32:07.4658922+00:00"
+}

@@ -5,7 +5,7 @@
   "ref_code": "DD-INGEST-DOCUMENT-EXTRACTION",
   "repo_path": "src/Tally/Infrastructure/Ingest/Pdf/PdfStatementTextExtractor.cs",
   "anchor_kind": "implementation",
-  "last_verified_hash": "311bd18fb90c7069bedd973008daf629cc9128a2c284a8d601c7d15c44896bae",
-  "last_verified_at": "2026-07-26T08:19:15.9744054+00:00",
+  "last_verified_hash": "1b80b1834ee07c2a41f404e743b93212da19966490b43cfca42c91fbcafc7796",
+  "last_verified_at": "2026-07-27T08:32:07.4670222+00:00",
   "created_at": "2026-07-26T08:19:15.9744054+00:00"
 }

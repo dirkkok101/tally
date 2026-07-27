@@ -1,0 +1,11 @@
+{
+  "id": "01KYHB7T9M4HPNPC2PXA7JH9SF",
+  "entity_type": "test_case",
+  "entity_id": "01KXTF4Z9GHA36PVY94QXKXHF1",
+  "ref_code": "TC-INGEST-DURABLE-RECEIPT-RESUME-CONTRACT",
+  "repo_path": "tests/Tally.Tests/Ingest/E2E/CommitResumeWorkflowTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "57bd76e951db2a61cc98e35b571723ca2b4ed48eaed57ef04ce88b5ae493dd02",
+  "last_verified_at": "2026-07-27T08:32:07.4769543+00:00",
+  "created_at": "2026-07-27T08:32:07.4769543+00:00"
+}

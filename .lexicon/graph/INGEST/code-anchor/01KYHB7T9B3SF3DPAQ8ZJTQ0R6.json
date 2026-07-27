@@ -1,0 +1,11 @@
+{
+  "id": "01KYHB7T9B3SF3DPAQ8ZJTQ0R6",
+  "entity_type": "design_decision",
+  "entity_id": "01KXTHQRFWVREEFMZGKHKR45E5",
+  "ref_code": "DD-INGEST-FORMAT-ADAPTERS",
+  "repo_path": "src/Tally/Infrastructure/Ingest/Pdf/PdfTextLayoutBStatementAdapter.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "7abc012430e3495c9cc178f7b206119e5bea2c35893ab4fa1199e20711f22b61",
+  "last_verified_at": "2026-07-27T08:32:07.4673788+00:00",
+  "created_at": "2026-07-27T08:32:07.4673788+00:00"
+}

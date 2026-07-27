@@ -1,0 +1,11 @@
+{
+  "id": "01KYHB7T9NDCJT7ASHTKJ32MZ3",
+  "entity_type": "test_case",
+  "entity_id": "01KXTMY504HQSHE29XQ0CJ3DR3",
+  "ref_code": "TC-INGEST-LAYOUT-B-ADAPTER",
+  "repo_path": "tests/Tally.Tests/Ingest/Adapters/LayoutBStatementAdapterTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "ac58e6efaedab34d19f2e2d0b2feaa0ed94b43625cc5d30aedc56feac8e67747",
+  "last_verified_at": "2026-07-27T08:32:07.4777467+00:00",
+  "created_at": "2026-07-27T08:32:07.4777467+00:00"
+}

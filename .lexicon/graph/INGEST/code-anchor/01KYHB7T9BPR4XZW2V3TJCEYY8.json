@@ -1,0 +1,11 @@
+{
+  "id": "01KYHB7T9BPR4XZW2V3TJCEYY8",
+  "entity_type": "design_decision",
+  "entity_id": "01KYEYKHSXPWYM9VFS23HVFBBJ",
+  "ref_code": "DD-INGEST-SOURCE-DESCRIPTION-ABSENCE",
+  "repo_path": "tests/Tally.Tests/Ingest/Adapters/LayoutAStatementAdapterTests.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "30f72567572199c3915c1a9ff7f89ad314689a01bc881e2c9daa097260af6654",
+  "last_verified_at": "2026-07-27T08:32:07.4679027+00:00",
+  "created_at": "2026-07-27T08:32:07.4679027+00:00"
+}

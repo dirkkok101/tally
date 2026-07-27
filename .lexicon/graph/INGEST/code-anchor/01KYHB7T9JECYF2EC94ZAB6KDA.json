@@ -1,0 +1,11 @@
+{
+  "id": "01KYHB7T9JECYF2EC94ZAB6KDA",
+  "entity_type": "test_case",
+  "entity_id": "01KXTJ09R1WGDS1MNGV12F4NRC",
+  "ref_code": "TC-INGEST-ADAPTER-GOLDEN-FIXTURES",
+  "repo_path": "tests/Tally.Tests/Ingest/Adapters/LayoutBStatementAdapterTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "ac58e6efaedab34d19f2e2d0b2feaa0ed94b43625cc5d30aedc56feac8e67747",
+  "last_verified_at": "2026-07-27T08:32:07.4745901+00:00",
+  "created_at": "2026-07-27T08:32:07.4745901+00:00"
+}

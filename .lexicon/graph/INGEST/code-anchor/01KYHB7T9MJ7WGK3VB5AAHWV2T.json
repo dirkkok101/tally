@@ -1,0 +1,11 @@
+{
+  "id": "01KYHB7T9MJ7WGK3VB5AAHWV2T",
+  "entity_type": "test_case",
+  "entity_id": "01KXTJ0B755W6A58QQR2NBNYZK",
+  "ref_code": "TC-INGEST-COMMIT-RECOVERY-MATRIX",
+  "repo_path": "tests/Tally.Tests/Ingest/CommitRecovery/ResumeCrashMatrixTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "bef8cc35f1bac27dbb3467a14447957eff1dd6a85a7c5fd4a304fcfd962bfd06",
+  "last_verified_at": "2026-07-27T08:32:07.4762718+00:00",
+  "created_at": "2026-07-27T08:32:07.4762718+00:00"
+}

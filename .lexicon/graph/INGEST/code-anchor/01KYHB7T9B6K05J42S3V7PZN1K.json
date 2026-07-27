@@ -1,0 +1,11 @@
+{
+  "id": "01KYHB7T9B6K05J42S3V7PZN1K",
+  "entity_type": "design_decision",
+  "entity_id": "01KYEYKHSXPWYM9VFS23HVFBBJ",
+  "ref_code": "DD-INGEST-SOURCE-DESCRIPTION-ABSENCE",
+  "repo_path": "src/Tally/Infrastructure/Ingest/Pdf/IStatementAdapter.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "a7104791b2fc2a30b4e5af94b96e945f5c35812b84412244115aad8eac70cd67",
+  "last_verified_at": "2026-07-27T08:32:07.4675424+00:00",
+  "created_at": "2026-07-27T08:32:07.4675424+00:00"
+}

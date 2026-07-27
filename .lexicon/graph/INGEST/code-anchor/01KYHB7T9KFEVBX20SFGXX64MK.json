@@ -1,0 +1,11 @@
+{
+  "id": "01KYHB7T9KFEVBX20SFGXX64MK",
+  "entity_type": "test_case",
+  "entity_id": "01KXTF4ZVVXAWMSCVZ8GY6C60J",
+  "ref_code": "TC-INGEST-ARTIFACT-CLEANUP-CONTRACT",
+  "repo_path": "tests/Tally.Tests/Ingest/Recovery/StartupCleanupTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "dce33658618326621471c18be3dd0056b77fc294d6cbf4298ca049787f3222b7",
+  "last_verified_at": "2026-07-27T08:32:07.4753387+00:00",
+  "created_at": "2026-07-27T08:32:07.4753387+00:00"
+}

@@ -5,7 +5,7 @@
   "ref_code": "DM-INGEST-IMPORT-MANIFEST",
   "repo_path": "src/Tally/Domain/Ingest/Identity/IngestIdentity.cs",
   "anchor_kind": "implementation",
-  "last_verified_hash": "4d3373f56fdf58b4c1dc9cdbd4dce5a57a987044f717ce60d29b96f16bd1aa8c",
-  "last_verified_at": "2026-07-26T08:19:15.9774457+00:00",
+  "last_verified_hash": "ace6447d15df5df523dffdfb311a5a7be57ab7d3f1c15cc80e92a9be78020a77",
+  "last_verified_at": "2026-07-27T08:32:07.4703107+00:00",
   "created_at": "2026-07-25T11:39:55.8190190+00:00"
 }

@@ -1,0 +1,11 @@
+{
+  "id": "01KYHB7T9K5DF0X4YS1NSTG8XR",
+  "entity_type": "test_case",
+  "entity_id": "01KXTJ0BJRAHTKQR6012CNCT09",
+  "ref_code": "TC-INGEST-ARTIFACT-PROTECTION",
+  "repo_path": "tests/Tally.Tests/Ingest/Security/IngestSecurityBoundaryTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "b13ee9695001a7ae7606003062b0f63c63d030b40b289a5698febf22fb91ca67",
+  "last_verified_at": "2026-07-27T08:32:07.4756685+00:00",
+  "created_at": "2026-07-27T08:32:07.4756685+00:00"
+}

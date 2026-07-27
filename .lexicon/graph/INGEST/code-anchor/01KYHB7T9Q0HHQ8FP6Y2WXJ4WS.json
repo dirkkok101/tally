@@ -1,0 +1,11 @@
+{
+  "id": "01KYHB7T9Q0HHQ8FP6Y2WXJ4WS",
+  "entity_type": "test_case",
+  "entity_id": "01KXTF4XGN7EGTA20FHTKK9Y8T",
+  "ref_code": "TC-INGEST-STATEMENT-PREVIEW-CONTRACT",
+  "repo_path": "tests/Tally.Tests/Ingest/E2E/PreviewQualificationWorkflowTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "f4f8b3b72c794e15ecadcc07bac216d20f049dd75e01f42046233b65de92a62a",
+  "last_verified_at": "2026-07-27T08:32:07.4797531+00:00",
+  "created_at": "2026-07-27T08:32:07.4797531+00:00"
+}

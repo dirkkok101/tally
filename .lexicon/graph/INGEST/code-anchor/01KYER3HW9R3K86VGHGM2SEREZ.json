@@ -5,7 +5,7 @@
   "ref_code": "DM-INGEST-FORMAT-EVIDENCE",
   "repo_path": "src/Tally/Infrastructure/Ingest/Pdf/PdfDocumentEvidence.cs",
   "anchor_kind": "implementation",
-  "last_verified_hash": "288c114307009ded79202ebc6392ade4674eaaec73c2d87baf18d008e62a2afa",
-  "last_verified_at": "2026-07-26T08:19:15.9770567+00:00",
+  "last_verified_hash": "d516e314c3ae82aa2377686656d64e6eeb1982988d7126e9b5a7d2b38327a317",
+  "last_verified_at": "2026-07-27T08:32:07.4700122+00:00",
   "created_at": "2026-07-26T08:19:15.9770567+00:00"
 }

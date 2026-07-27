@@ -1,0 +1,11 @@
+{
+  "id": "01KYHB7T9MWM2SXJY8P7PVASJC",
+  "entity_type": "test_case",
+  "entity_id": "01KXTF4Z9GHA36PVY94QXKXHF1",
+  "ref_code": "TC-INGEST-DURABLE-RECEIPT-RESUME-CONTRACT",
+  "repo_path": "tests/Tally.Tests/Ingest/CommitRecovery/CommitFaultInjector.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "3d61bfae21ee2d0766a01d8eebc2592743e79ecefcb63bda8c6c627772e692e4",
+  "last_verified_at": "2026-07-27T08:32:07.4766725+00:00",
+  "created_at": "2026-07-27T08:32:07.4766725+00:00"
+}

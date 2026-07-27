@@ -5,7 +5,7 @@
   "ref_code": "TC-INGEST-SOURCE-RECONCILIATION-CONTRACT",
   "repo_path": "tests/Tally.Tests/Ingest/Identity/IngestIdentityTests.cs",
   "anchor_kind": "test",
-  "last_verified_hash": "49b057ece386a3ed71e1cff983c19d183a20154151ff32d6c6f72b4fbca04e7c",
-  "last_verified_at": "2026-07-26T08:19:15.9822698+00:00",
+  "last_verified_hash": "ae11da3f303e2be43d4ea609947a279ad6c3c0f08f31b473cb58d53d76fff619",
+  "last_verified_at": "2026-07-27T08:32:07.4795785+00:00",
   "created_at": "2026-07-25T11:39:55.8254039+00:00"
 }
