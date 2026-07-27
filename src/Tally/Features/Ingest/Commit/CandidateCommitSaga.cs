@@ -31,9 +31,11 @@ public sealed class CandidateCommitSaga(
     CommitStateStore commitStore,
     BatchCommitLock batchLock,
     LedgerContractClient ledgerClient,
-    TimeProvider? timeProvider = null)
+    TimeProvider? timeProvider = null,
+    ICommitFaultHook? faultHook = null)
 {
     private readonly TimeProvider clock = timeProvider ?? TimeProvider.System;
+    private readonly ICommitFaultHook faults = faultHook ?? NoopCommitFaultHook.Instance;
 
     public async Task<CommandResult<ImportReceipt>> ExecuteAsync(
         CommitCommand command,
@@ -214,6 +216,7 @@ public sealed class CandidateCommitSaga(
 
             // Durable attempting state + frozen request already stored — never hold SQLite across Ledger.
             await commitStore.MarkAttemptingAsync(receiptHeader.ReceiptId, item.CandidateId, now, cancellationToken);
+            await faults.BeforeLedgerCallAsync(command.BatchId, item.CandidateId, cancellationToken);
 
             var recorded = await ledgerClient.RecordTransactionAsync(item.FrozenRequest, cancellationToken);
             if (!recorded.IsSuccess || recorded.Value is null)
@@ -225,6 +228,7 @@ public sealed class CandidateCommitSaga(
                 var terminalState = isConflict
                     ? CandidateReceiptState.Conflicted
                     : CandidateReceiptState.Rejected;
+                await faults.BeforeReceiptDurabilityAsync(command.BatchId, item.CandidateId, cancellationToken);
                 await commitStore.MarkTerminalAsync(
                     receiptHeader.ReceiptId,
                     item.CandidateId,
@@ -233,6 +237,7 @@ public sealed class CandidateCommitSaga(
                     errorCode,
                     now,
                     cancellationToken);
+                await faults.AfterReceiptDurabilityAsync(command.BatchId, item.CandidateId, cancellationToken);
 
                 stopCode = isConflict ? CommitErrors.LedgerConflict : CommitErrors.LedgerRejected;
                 stopCandidate = item.CandidateId;
@@ -246,6 +251,12 @@ public sealed class CandidateCommitSaga(
                 break;
             }
 
+            await faults.AfterLedgerCommitAsync(
+                command.BatchId,
+                item.CandidateId,
+                recorded.Value.TransactionId,
+                cancellationToken);
+
             var fetched = await ledgerClient.GetTransactionAsync(
                 recorded.Value.TransactionId,
                 item.FrozenRequest.LedgerContractVersion,
@@ -255,6 +266,7 @@ public sealed class CandidateCommitSaga(
                 fetched.Value is null ||
                 !LedgerImmutableFactsMatch(fetched.Value, item.FrozenRequest, recorded.Value.TransactionId))
             {
+                await faults.BeforeReceiptDurabilityAsync(command.BatchId, item.CandidateId, cancellationToken);
                 await commitStore.MarkTerminalAsync(
                     receiptHeader.ReceiptId,
                     item.CandidateId,
@@ -263,6 +275,7 @@ public sealed class CandidateCommitSaga(
                     CommitErrors.VerificationFailed,
                     now,
                     cancellationToken);
+                await faults.AfterReceiptDurabilityAsync(command.BatchId, item.CandidateId, cancellationToken);
                 stopCode = CommitErrors.VerificationFailed;
                 stopCandidate = item.CandidateId;
                 stopCategory = IngestErrorCategory.Ledger;
@@ -273,6 +286,7 @@ public sealed class CandidateCommitSaga(
                 break;
             }
 
+            await faults.BeforeReceiptDurabilityAsync(command.BatchId, item.CandidateId, cancellationToken);
             await commitStore.MarkTerminalAsync(
                 receiptHeader.ReceiptId,
                 item.CandidateId,
@@ -281,6 +295,8 @@ public sealed class CandidateCommitSaga(
                 null,
                 now,
                 cancellationToken);
+            await faults.AfterReceiptDurabilityAsync(command.BatchId, item.CandidateId, cancellationToken);
+            await faults.BetweenCandidatesAsync(command.BatchId, item.CandidateId, cancellationToken);
         }
 
         var finalNow = clock.GetUtcNow().UtcDateTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture);

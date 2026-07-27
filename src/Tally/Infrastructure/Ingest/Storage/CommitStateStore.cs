@@ -30,11 +30,74 @@ public sealed class CommitStateStore(IngestDatabase database, BatchErrorEventSto
         string UpdatedAt,
         string? CompletedAt);
 
+    public sealed record ResumeTarget(
+        string BatchId,
+        string? ManifestRevisionId,
+        string? ManifestDigest,
+        bool Approved,
+        BatchStatus BatchStatus);
+
     private async Task<SqliteConnection> OpenMigratedAsync(CancellationToken cancellationToken)
     {
         var connection = await database.OpenAsync(cancellationToken);
         await new IngestSchemaMigrator().ApplyAsync(connection, cancellationToken);
         return connection;
+    }
+
+    public async Task<ResumeTarget?> ResolveResumeTargetAsync(string batchId, CancellationToken cancellationToken)
+    {
+        await using var connection = await OpenMigratedAsync(cancellationToken);
+        const string batchSql = """
+            SELECT status
+            FROM ingest_batch
+            WHERE batch_id = $batchId;
+            """;
+        await using var batchCommand = connection.CreateCommand();
+        batchCommand.CommandText = batchSql;
+        batchCommand.Parameters.AddWithValue("$batchId", batchId);
+        var statusValue = await batchCommand.ExecuteScalarAsync(cancellationToken);
+        if (statusValue is null or DBNull)
+        {
+            return null;
+        }
+
+        var status = (BatchStatus)Convert.ToInt32(statusValue, CultureInfo.InvariantCulture);
+
+        // Prefer the actively approved revision; fall back to the latest revision for completed receipts.
+        const string approvalSql = """
+            SELECT m.manifest_revision_id, m.canonical_digest
+            FROM manifest_approval a
+            JOIN manifest_revision m ON m.manifest_revision_id = a.manifest_revision_id
+            WHERE m.batch_id = $batchId AND a.active = 1
+            ORDER BY a.approved_at DESC
+            LIMIT 1;
+            """;
+        await using var approvalCommand = connection.CreateCommand();
+        approvalCommand.CommandText = approvalSql;
+        approvalCommand.Parameters.AddWithValue("$batchId", batchId);
+        await using var reader = await approvalCommand.ExecuteReaderAsync(cancellationToken);
+        if (await reader.ReadAsync(cancellationToken))
+        {
+            return new ResumeTarget(batchId, reader.GetString(0), reader.GetString(1), true, status);
+        }
+
+        const string latestSql = """
+            SELECT manifest_revision_id, canonical_digest
+            FROM manifest_revision
+            WHERE batch_id = $batchId
+            ORDER BY revision_number DESC
+            LIMIT 1;
+            """;
+        await using var latestCommand = connection.CreateCommand();
+        latestCommand.CommandText = latestSql;
+        latestCommand.Parameters.AddWithValue("$batchId", batchId);
+        await using var latestReader = await latestCommand.ExecuteReaderAsync(cancellationToken);
+        if (!await latestReader.ReadAsync(cancellationToken))
+        {
+            return new ResumeTarget(batchId, null, null, false, status);
+        }
+
+        return new ResumeTarget(batchId, latestReader.GetString(0), latestReader.GetString(1), false, status);
     }
 
     public async Task<IReadOnlyList<CandidateWorkItem>> LoadWorkItemsAsync(
