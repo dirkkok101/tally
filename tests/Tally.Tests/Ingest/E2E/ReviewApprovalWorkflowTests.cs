@@ -2,6 +2,7 @@ using System.Runtime.Versioning;
 using Tally.Cli;
 using Tally.Contracts.Ingest;
 using Tally.Features.Ingest.Contract;
+using Tally.Features.Ingest.Review;
 using Xunit;
 
 namespace Tally.Tests.Ingest.E2E;
@@ -57,8 +58,7 @@ public sealed class ReviewApprovalWorkflowTests : IAsyncLifetime
         var (ok, error, _) = await harness.TryApproveAsync(
             preview.BatchId, preview.ManifestRevisionId!, "wrong-digest");
         Assert.False(ok);
-        // Domain code mapping for INGEST is incomplete in TallyProcess (host.unexpected) — filed bd discovered-from.
-        Assert.False(string.IsNullOrWhiteSpace(error));
+        Assert.Equal(ApproveErrors.DigestMismatch, error);
     }
 
     [Fact]

@@ -6,6 +6,10 @@ using Tally.Contracts.Ledger.Actuals;
 using Tally.Contracts.Ledger.Reconciliation;
 using Tally.Contracts.Ledger.Recovery;
 using Tally.Contracts.System;
+using Tally.Features.Ingest.Commit;
+using Tally.Features.Ingest.Preview;
+using Tally.Features.Ingest.Recovery;
+using Tally.Features.Ingest.Review;
 
 namespace Tally.Cli;
 
@@ -185,6 +189,39 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
         "LEDGER-IDEMPOTENCY-001" or "operation.conflict" => Error(5, code, "conflict", "The operation conflicts with existing state."),
         "operation.review_required" => Error(8, code, "integrity", "The operation requires explicit review before any financial effect changes."),
         "host.unavailable" => Error(9, code, "host", "The requested operation is not available in this foundation."),
+        // INGEST published domain errors (ErrorSchema lists on operation modules).
+        // Source-reader codes are string-literal so the process mapper stays platform-agnostic
+        // (CallerOwnedSourceReader is [SupportedOSPlatform("linux")] for IO, not for the code contract).
+        PreviewErrors.InvalidInput or PreviewErrors.AccountInactive or PreviewErrors.AccountCurrency
+            or "INGEST-PREVIEW-SOURCE-PATH-INVALID"
+            or InspectErrors.InvalidInput
+            or ApproveErrors.InvalidInput or ApproveErrors.NotCommittable or ApproveErrors.Blocked
+            or CommitErrors.InvalidInput or CommitErrors.NotApproved or CommitErrors.NotCommittable or CommitErrors.AccountInactive or CommitErrors.LedgerRejected
+            or ResumeErrors.InvalidInput or ResumeErrors.NotResumable
+            or StatusErrors.InvalidInput
+            or AbandonErrors.InvalidInput or AbandonErrors.NotAbandonable
+            or CleanupErrors.InvalidInput or CleanupErrors.RetainedForRecovery
+            => Error(3, code, "validation", "The ingest request is invalid."),
+        PreviewErrors.AccountNotFound or InspectErrors.NotFound or ApproveErrors.NotFound or CommitErrors.NotFound
+            or ResumeErrors.NotFound or StatusErrors.BatchNotFound or StatusErrors.SnapshotNotFound
+            or AbandonErrors.NotFound or CleanupErrors.NotFound
+            => Error(4, code, "not_found", "The ingest target was not found."),
+        ApproveErrors.DigestMismatch or CommitErrors.DigestMismatch or CommitErrors.LockHeld or CommitErrors.LedgerConflict
+            or StatusErrors.SnapshotBusy or AbandonErrors.LockHeld or CleanupErrors.LockHeld
+            => Error(5, code, "conflict", "The ingest request conflicts with current state."),
+        PreviewErrors.Unsupported or PreviewErrors.AmbiguousAdapter
+            => Error(5, code, "unsupported", "The statement source is not supported by this executable."),
+        "INGEST-PREVIEW-SOURCE-UNREADABLE" or "INGEST-PREVIEW-SOURCE-CHANGED"
+            => Error(5, code, "unsafe_source", "The statement source could not be read safely."),
+        PreviewErrors.OverlapBlocked => Error(5, code, "overlap", "The preview is blocked by overlap policy."),
+        PreviewErrors.ReconciliationBlocked => Error(5, code, "reconciliation", "The preview is blocked by reconciliation policy."),
+        "INGEST-PREVIEW-SOURCE-TOO-LARGE" => Error(6, code, "resource", "The statement source exceeds safe resource limits."),
+        StatusErrors.SnapshotExpired => Error(6, code, "lifecycle", "The ingest status snapshot has expired."),
+        CommitErrors.VerificationFailed => Error(6, code, "ledger", "The commit could not verify ledger outcomes."),
+        CommitErrors.Interrupted => Error(6, code, "interrupted", "The commit was interrupted and may be resumed."),
+        CommitErrors.VersionIncompatible or StatusErrors.CursorInvalid or StatusErrors.ContractMismatch or StatusErrors.GenerationMismatch
+            => Error(7, code, "compatibility", "The ingest request is not compatible with this executable contract."),
+        PreviewErrors.Unexpected => Error(10, code, "unexpected", "The ingest operation could not be completed."),
         _ => UnexpectedFailure()
     };
 

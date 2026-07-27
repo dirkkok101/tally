@@ -112,8 +112,9 @@ public sealed class ReplayOverlapWorkflowTests : IAsyncLifetime
         }
         else
         {
-            // Fail-closed published path (often host.unexpected until ErrorForHandler maps INGEST codes).
+            // Fail-closed published path: domain codes surface via ErrorForHandler (not host.unexpected).
             Assert.False(string.IsNullOrWhiteSpace(error));
+            Assert.NotEqual("host.unexpected", error);
             Assert.NotEqual(first.BatchId, second?.BatchId);
         }
     }
