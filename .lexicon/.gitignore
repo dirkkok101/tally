@@ -6,6 +6,8 @@ export-state.json
 migration-state.json
 review-state.json
 review-runs/
+review-runs-legacy/
+review-prepared/
 *.bak
 migrations/
 backups/
