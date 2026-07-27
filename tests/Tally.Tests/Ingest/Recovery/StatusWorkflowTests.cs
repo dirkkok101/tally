@@ -11,6 +11,7 @@ using Xunit;
 
 namespace Tally.Tests.Ingest.Recovery;
 
+// TC-INGEST-FAILURE-STATUS-CONTRACT / FR-INGEST-FAILURE-STATUS
 [SupportedOSPlatform("linux")]
 public sealed class StatusWorkflowTests : IAsyncLifetime
 {

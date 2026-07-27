@@ -11,6 +11,8 @@ namespace Tally.Tests.Ingest.E2E;
 
 /// <summary>UC-INGEST-003 commit and resume gate.</summary>
 [SupportedOSPlatform("linux")]
+// TC-INGEST-DURABLE-RECEIPT-RESUME-CONTRACT / FR-INGEST-DURABLE-RECEIPT-RESUME
+// Residual TEST_GAP: suite is thin vs contracted crash matrix — see bd-38bl.
 public sealed class CommitResumeWorkflowTests : IAsyncLifetime
 {
     private readonly IngestE2EHarness harness = new();

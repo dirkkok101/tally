@@ -7,6 +7,7 @@ using Xunit;
 namespace Tally.Tests.Ingest.E2E;
 
 /// <summary>NFR agent operability — discovery and invocation of the eight ingest operations.</summary>
+// TC-INGEST-CONTRACT-DISCOVERY-CONTRACT / NFR-INGEST-AGENT-OPERABILITY / FR-INGEST-CONTRACT-DISCOVERY
 [SupportedOSPlatform("linux")]
 public sealed class AgentContractWorkflowTests
 {

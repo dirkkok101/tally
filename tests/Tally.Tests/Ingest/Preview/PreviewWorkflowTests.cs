@@ -18,6 +18,8 @@ using Xunit;
 
 namespace Tally.Tests.Ingest.Preview;
 
+// TC-INGEST-STATEMENT-PREVIEW-CONTRACT / FR-INGEST-STATEMENT-PREVIEW
+// NFR-INGEST-DETERMINISTIC-INTEGRITY
 [SupportedOSPlatform("linux")]
 public sealed class PreviewWorkflowTests : IAsyncLifetime
 {

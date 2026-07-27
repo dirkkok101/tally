@@ -12,6 +12,8 @@ namespace Tally.Tests.Ingest.E2E;
 
 /// <summary>UC-INGEST failure handling, abandon, and cleanup gate.</summary>
 [SupportedOSPlatform("linux")]
+// TC-INGEST-ARTIFACT-CLEANUP-CONTRACT / FR-INGEST-ARTIFACT-CLEANUP
+// Residual TEST_GAP: suite is thin vs contracted case matrix — see bd-38bl.
 public sealed class FailureCleanupWorkflowTests : IAsyncLifetime
 {
     private readonly IngestE2EHarness harness = new();

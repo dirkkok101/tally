@@ -10,6 +10,8 @@ namespace Tally.Tests.Ingest.E2E;
 
 /// <summary>UC-INGEST-004 replay and overlap safety gate.</summary>
 [SupportedOSPlatform("linux")]
+// TC-INGEST-REPLAY-OVERLAP-SAFETY-CONTRACT / FR-INGEST-REPLAY-OVERLAP-SAFETY
+// Residual TEST_GAP: suite is thin vs contracted case matrix — see bd-38bl.
 public sealed class ReplayOverlapWorkflowTests : IAsyncLifetime
 {
     private readonly IngestE2EHarness harness = new();

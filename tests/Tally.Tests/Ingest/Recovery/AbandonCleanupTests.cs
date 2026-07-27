@@ -23,6 +23,8 @@ using Xunit;
 
 namespace Tally.Tests.Ingest.Recovery;
 
+// TC-INGEST-ARTIFACT-CLEANUP-CONTRACT / FR-INGEST-ARTIFACT-CLEANUP
+
 [SupportedOSPlatform("linux")]
 public sealed class AbandonCleanupTests : IAsyncLifetime
 {

@@ -8,6 +8,8 @@ using Xunit;
 
 namespace Tally.Tests.Ingest.Contract;
 
+// TC-INGEST-PUBLISHED-CONTRACT-MATRIX / TC-INGEST-CONTRACT-DISCOVERY-CONTRACT
+// FR-INGEST-CONTRACT-DISCOVERY / NFR-INGEST-PUBLIC-CONTRACT-COMPATIBILITY
 [SupportedOSPlatform("linux")]
 public sealed class IngestPublicContractInventoryTests
 {

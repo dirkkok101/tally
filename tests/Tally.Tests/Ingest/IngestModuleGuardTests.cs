@@ -8,6 +8,8 @@ namespace Tally.Tests.Ingest;
 /// <summary>
 /// Final module-gate architecture and privacy guards for PLAN-INGEST-V1.
 /// </summary>
+// TC-INGEST-PUBLISHED-CONTRACT-MATRIX / NFR-INGEST-PUBLIC-CONTRACT-COMPATIBILITY
+// TC-INGEST-LEDGER-PUBLIC-CONFORMANCE
 [SupportedOSPlatform("linux")]
 public sealed class IngestModuleGuardTests
 {

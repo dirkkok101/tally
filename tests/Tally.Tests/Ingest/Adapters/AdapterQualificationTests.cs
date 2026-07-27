@@ -9,6 +9,8 @@ using Xunit;
 
 namespace Tally.Tests.Ingest.Adapters;
 
+// TC-INGEST-VARIANT-QUALIFICATION-CONTRACT / FR-INGEST-VARIANT-QUALIFICATION
+// TC-INGEST-ADAPTER-GOLDEN-FIXTURES / DD-INGEST-FORMAT-ADAPTERS
 public sealed class AdapterQualificationTests
 {
     [Fact]

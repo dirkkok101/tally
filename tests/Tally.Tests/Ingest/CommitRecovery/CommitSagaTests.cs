@@ -23,6 +23,8 @@ using Xunit;
 
 namespace Tally.Tests.Ingest.CommitRecovery;
 
+// TC-INGEST-APPROVED-BATCH-COMMIT-CONTRACT / FR-INGEST-APPROVED-BATCH-COMMIT
+// TC-INGEST-DURABLE-RECEIPT-RESUME-CONTRACT / FR-INGEST-DURABLE-RECEIPT-RESUME
 [SupportedOSPlatform("linux")]
 public sealed class CommitSagaTests : IAsyncLifetime
 {

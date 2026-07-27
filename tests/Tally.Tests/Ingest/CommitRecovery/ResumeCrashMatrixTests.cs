@@ -22,6 +22,8 @@ using Xunit;
 
 namespace Tally.Tests.Ingest.CommitRecovery;
 
+// TC-INGEST-COMMIT-RECOVERY-MATRIX / TC-INGEST-DURABLE-RECEIPT-RESUME-CONTRACT
+// NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY / FR-INGEST-DURABLE-RECEIPT-RESUME
 [SupportedOSPlatform("linux")]
 public sealed class ResumeCrashMatrixTests : IAsyncLifetime
 {

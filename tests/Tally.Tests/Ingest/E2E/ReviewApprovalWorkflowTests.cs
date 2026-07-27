@@ -10,6 +10,8 @@ namespace Tally.Tests.Ingest.E2E;
 
 /// <summary>UC-INGEST-002 immutable review and approval gate.</summary>
 [SupportedOSPlatform("linux")]
+// TC-INGEST-MANIFEST-REVIEW-CONTRACT / FR-INGEST-MANIFEST-REVIEW
+// Residual TEST_GAP: suite is thin vs contracted case matrix — see bd-38bl.
 public sealed class ReviewApprovalWorkflowTests : IAsyncLifetime
 {
     private readonly IngestE2EHarness harness = new();
