@@ -5,7 +5,7 @@
   "ref_code": "TC-INGEST-DURABLE-RECEIPT-RESUME-CONTRACT",
   "repo_path": "tests/Tally.Tests/Ingest/E2E/CommitResumeWorkflowTests.cs",
   "anchor_kind": "test",
-  "last_verified_hash": "0fff76bd63bcd214c65fb555209e882d8294cadfa260bf2a5eba05ebce11cc33",
-  "last_verified_at": "2026-07-27T09:42:48.2386732+00:00",
+  "last_verified_hash": "5124d24eeb4b97e5f2eb8e9cc7eba5fda8279076944835c5cf6b8510893e8829",
+  "last_verified_at": "2026-07-27T13:53:56.1268981+00:00",
   "created_at": "2026-07-27T08:32:07.4769543+00:00"
 }

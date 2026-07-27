@@ -5,7 +5,7 @@
   "ref_code": "DD-INGEST-APPLICATION-ARCHITECTURE",
   "repo_path": "src/Tally/Bootstrap/Features/IngestExtensions.cs",
   "anchor_kind": "implementation",
-  "last_verified_hash": "eea7675765ac684f7b1be737408708f9c9245ea93436112ed2da31cf60c54cf7",
-  "last_verified_at": "2026-07-27T08:32:07.4658922+00:00",
+  "last_verified_hash": "cd5a1099aec86bb2796e47545ec5bd207cd71061c2d0767bb08fee18a1a3da9e",
+  "last_verified_at": "2026-07-27T13:53:56.1205262+00:00",
   "created_at": "2026-07-27T08:32:07.4658922+00:00"
 }

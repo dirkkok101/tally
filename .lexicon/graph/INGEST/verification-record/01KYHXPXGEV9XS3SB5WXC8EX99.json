@@ -1,0 +1,12 @@
+{
+  "id": "01KYHXPXGEV9XS3SB5WXC8EX99",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-INGEST-AGENT-OPERABILITY",
+  "subject_entity_id": "01KXTEXMX0NBEEWGM1H36BCV8N",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-INGEST-CONTRACT-DISCOVERY-CONTRACT",
+  "commit_sha": "bba7044781cc94af808fd956697759bd96a426b9",
+  "bead_id": "bd-3a6",
+  "verified_at": "2026-07-27T13:54:56.6530031+00:00"
+}

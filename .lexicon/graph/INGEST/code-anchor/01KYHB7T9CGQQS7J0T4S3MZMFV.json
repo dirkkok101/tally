@@ -5,7 +5,7 @@
   "ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
   "repo_path": "src/Tally/Infrastructure/Ingest/Storage/CommitStateStore.cs",
   "anchor_kind": "implementation",
-  "last_verified_hash": "2f9bcf82de4e32d6ba458b8482e826aabb2efd243674ebb3e7781f4b3f5ff709",
-  "last_verified_at": "2026-07-27T08:32:07.4689223+00:00",
+  "last_verified_hash": "9325115da3755f288066b378bb4e29a0aebf1dfdf0915196b81ba610cb7cd5d6",
+  "last_verified_at": "2026-07-27T13:53:56.1226486+00:00",
   "created_at": "2026-07-27T08:32:07.4689223+00:00"
 }

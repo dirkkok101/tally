@@ -1,0 +1,12 @@
+{
+  "id": "01KYHXPXGEGZK5BGN1E6MYRCBC",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-INGEST-BOUNDED-PARSING",
+  "subject_entity_id": "01KXTEXM19R263D66YHS6EFCCS",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-INGEST-PDF-EXTRACTION-AOT",
+  "commit_sha": "bba7044781cc94af808fd956697759bd96a426b9",
+  "bead_id": "bd-1j2",
+  "verified_at": "2026-07-27T13:54:56.6530031+00:00"
+}

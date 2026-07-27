@@ -1,0 +1,12 @@
+{
+  "id": "01KYHXPXGE6M53V2HYXAY0P0GX",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-INGEST-SOURCE-RECONCILIATION",
+  "subject_entity_id": "01KXTET37W4S00Y3TXEHNDD4E7",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-INGEST-SOURCE-RECONCILIATION-CONTRACT",
+  "commit_sha": "bba7044781cc94af808fd956697759bd96a426b9",
+  "bead_id": "bd-2gk",
+  "verified_at": "2026-07-27T13:54:56.6530031+00:00"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "01KYHXPXGEQMZWTJ0FCYJ51N1C",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-INGEST-VARIANT-QUALIFICATION",
+  "subject_entity_id": "01KXTET2CB2091VPAWG1R4X5PC",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-INGEST-VARIANT-QUALIFICATION-CONTRACT",
+  "commit_sha": "bba7044781cc94af808fd956697759bd96a426b9",
+  "bead_id": "bd-1m0",
+  "verified_at": "2026-07-27T13:54:56.6530031+00:00"
+}

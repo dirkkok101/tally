@@ -1,0 +1,12 @@
+{
+  "id": "01KYHXPXGDG5GX3C172VAXG78G",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-INGEST-CONTRACT-DISCOVERY",
+  "subject_entity_id": "01KXTET22M5H584RXAPGJPS6J4",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-INGEST-CONTRACT-DISCOVERY-CONTRACT",
+  "commit_sha": "bba7044781cc94af808fd956697759bd96a426b9",
+  "bead_id": "bd-3a6",
+  "verified_at": "2026-07-27T13:54:56.6530031+00:00"
+}

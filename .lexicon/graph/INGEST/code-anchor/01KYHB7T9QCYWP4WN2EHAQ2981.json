@@ -5,7 +5,7 @@
   "ref_code": "TC-INGEST-REPLAY-OVERLAP-SAFETY-CONTRACT",
   "repo_path": "tests/Tally.Tests/Ingest/E2E/ReplayOverlapWorkflowTests.cs",
   "anchor_kind": "test",
-  "last_verified_hash": "972e9986793652eb69c2fe3690de60fe77beb64efff3f7b5bc521f579d8b7fa1",
-  "last_verified_at": "2026-07-27T09:42:48.2397136+00:00",
+  "last_verified_hash": "35cf7fb7b41647af386e293f0916a0e7e86d905b03fb63b224b889a1aacbef42",
+  "last_verified_at": "2026-07-27T13:53:56.1280510+00:00",
   "created_at": "2026-07-27T08:32:07.4792340+00:00"
 }

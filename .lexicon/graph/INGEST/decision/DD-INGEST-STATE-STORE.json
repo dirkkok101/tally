@@ -19,12 +19,26 @@
     "A new V002 migration and migration-runner upgrade must land before status. All failure-producing mutation stores append BatchErrorEvent atomically. Status first pages may write only ephemeral snapshot rows and delete expired snapshots; detail lookup and later pages remain read-only. Snapshot rows contain no source path, statement row, description, amount, balance, full identifier, manifest, frozen request, or stack trace. Cleanup removes or invalidates snapshots before changing store generation."
   ],
   "status_notes": [
-    "Accepted correction resolving OQ-INGEST-17; V001 is immutable and V002 owns error and paging state."
+    "Accepted correction resolving OQ-INGEST-17; V001 is immutable and V002 owns error and paging state. Amended by review-work on PLAN-INGEST-V1 (2026-07-27): V003 adds durable import_receipt created_at/updated_at provenance and V004 adds candidate_receipt.attempt_count — both required by DM-INGEST-IMPORT-RECEIPT's published createdAt/updatedAt/attemptNumber fields; user_version is now 4. See DM-INGEST-STATE-STORE schema_def for column detail."
   ],
   "status": "accepted",
   "metadata": "{\"expected_paths\":[\"src/Tally/Infrastructure/Ingest/Storage/**\",\"src/Tally/Features/Ingest/Recovery/**\",\"tests/Tally.Tests/Ingest/Storage/**\"]}",
   "created_at": "2026-07-18T12:03:49.3371270+00:00",
   "links": [
+    {
+      "id": "01KYHRBTAGWX0KWKVRG1AP7VN5",
+      "target_type": "data_model",
+      "target": "DM-INGEST-IMPORT-RECEIPT",
+      "rel": "see-also",
+      "created_at": "2026-07-27T12:21:30.0647064+00:00"
+    },
+    {
+      "id": "01KYHRBTAGTVZXRAV5AC2MSC99",
+      "target_type": "data_model",
+      "target": "DM-INGEST-STATE-STORE",
+      "rel": "see-also",
+      "created_at": "2026-07-27T12:21:30.0649126+00:00"
+    },
     {
       "id": "01KXTJ3P23EFGNZ3WKZAFB8D3Z",
       "target_type": "requirement",

@@ -1,0 +1,12 @@
+{
+  "id": "01KYHXPXGEEWMKW67X0K49DZNR",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-INGEST-STATEMENT-PREVIEW",
+  "subject_entity_id": "01KXTET2NG1S9P87E2XKP4RN19",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-INGEST-STATEMENT-PREVIEW-CONTRACT",
+  "commit_sha": "bba7044781cc94af808fd956697759bd96a426b9",
+  "bead_id": "bd-1of",
+  "verified_at": "2026-07-27T13:54:56.6530031+00:00"
+}

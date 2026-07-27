@@ -1,0 +1,12 @@
+{
+  "id": "01KYHXPXGEM542VGG4XM3KA58A",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-INGEST-DETERMINISTIC-INTEGRITY",
+  "subject_entity_id": "01KXTEXKEK06KD4EXFGC1A8FKG",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-INGEST-FINANCIAL-NORMALIZATION-CONTRACT",
+  "commit_sha": "bba7044781cc94af808fd956697759bd96a426b9",
+  "bead_id": "bd-2gk",
+  "verified_at": "2026-07-27T13:54:56.6530031+00:00"
+}
