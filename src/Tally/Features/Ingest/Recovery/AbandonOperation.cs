@@ -51,6 +51,18 @@ public sealed class AbandonHandler(
             return CommandResult<AbandonBatchResult>.Failure(AbandonErrors.LockHeld);
         }
 
+        // Re-load under the batch lock so PriorLedgerEffectCount reflects concurrent commit progress.
+        var locked = await store.LoadBatchAsync(command.BatchId, cancellationToken);
+        if (locked is null)
+        {
+            return CommandResult<AbandonBatchResult>.Failure(AbandonErrors.NotFound);
+        }
+
+        if (locked.Status is BatchStatus.Completed or BatchStatus.Abandoned or BatchStatus.Cleaned)
+        {
+            return CommandResult<AbandonBatchResult>.Failure(AbandonErrors.NotAbandonable);
+        }
+
         var now = clock.GetUtcNow().UtcDateTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture);
         var abandoned = await store.AbandonAsync(command.BatchId, command.Reason, now, cancellationToken);
         if (!abandoned)
@@ -62,6 +74,6 @@ public sealed class AbandonHandler(
             command.BatchId,
             BatchStatus.Abandoned,
             RetainedMetadata: true,
-            snapshot.PriorLedgerEffectCount));
+            locked.PriorLedgerEffectCount));
     }
 }

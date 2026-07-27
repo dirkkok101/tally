@@ -1,5 +1,7 @@
 using System.Globalization;
 using System.Runtime.Versioning;
+using System.Text;
+using System.Text.Json;
 using Microsoft.Data.Sqlite;
 using Tally.Contracts.Ingest;
 
@@ -201,9 +203,7 @@ public sealed class RecoveryStateStore(IngestDatabase database, BatchErrorEventS
                 SET status = $status, summary_json = $summary, completed_at = $completedAt
                 WHERE batch_id = $batchId;
                 """;
-            var summary = string.Create(
-                CultureInfo.InvariantCulture,
-                $"{{\"reason\":{JsonEscape(reason)},\"tombstone\":true,\"abandonedAt\":{JsonEscape(updatedAt)}}}");
+            var summary = BuildAbandonTombstoneSummary(reason, updatedAt);
             await using (var command = connection.CreateCommand())
             {
                 command.Transaction = transaction;
@@ -390,8 +390,21 @@ public sealed class RecoveryStateStore(IngestDatabase database, BatchErrorEventS
         }
     }
 
-    private static string JsonEscape(string value) =>
-        "\"" + value.Replace("\\", "\\\\", StringComparison.Ordinal).Replace("\"", "\\\"", StringComparison.Ordinal) + "\"";
+    /// <summary>AOT-safe JSON object for abandon tombstones (handles control chars in reason).</summary>
+    private static string BuildAbandonTombstoneSummary(string reason, string abandonedAt)
+    {
+        using var stream = new MemoryStream();
+        using (var writer = new Utf8JsonWriter(stream))
+        {
+            writer.WriteStartObject();
+            writer.WriteString("reason", reason);
+            writer.WriteBoolean("tombstone", true);
+            writer.WriteString("abandonedAt", abandonedAt);
+            writer.WriteEndObject();
+        }
+
+        return Encoding.UTF8.GetString(stream.ToArray());
+    }
 
     public async Task AppendErrorAsync(
         string batchId,

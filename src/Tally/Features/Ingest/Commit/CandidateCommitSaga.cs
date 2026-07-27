@@ -123,6 +123,12 @@ public sealed class CandidateCommitSaga(
             return CommandResult<ImportReceipt>.Success(completed);
         }
 
+        // Abandoned batches are terminal: never load compacted work items (`frozen_ledger_request_json = '{}'`).
+        if (receiptHeader.Status is ImportReceiptStatus.Abandoned)
+        {
+            return CommandResult<ImportReceipt>.Failure(CommitErrors.NotCommittable);
+        }
+
         var workItems = await commitStore.LoadWorkItemsAsync(
             command.BatchId,
             command.ManifestRevisionId,
@@ -136,6 +142,8 @@ public sealed class CandidateCommitSaga(
         string stopMessage = "Commit stopped at a durable frontier.";
         string stopDurable = "commit_interrupted";
 
+        try
+        {
         foreach (var item in workItems)
         {
             if (CandidateCommitStates.IsTerminal(item.CommitState))
@@ -154,11 +162,20 @@ public sealed class CandidateCommitSaga(
                         recheck.Value is null ||
                         !LedgerImmutableFactsMatch(recheck.Value, item.FrozenRequest, item.LedgerTransactionId))
                     {
+                        await commitStore.MarkTerminalAsync(
+                            receiptHeader.ReceiptId,
+                            item.CandidateId,
+                            CandidateReceiptState.Unresolved,
+                            item.LedgerTransactionId,
+                            CommitErrors.VerificationFailed,
+                            now,
+                            cancellationToken);
                         stopCode = CommitErrors.VerificationFailed;
                         stopCandidate = item.CandidateId;
                         stopCategory = IngestErrorCategory.Ledger;
                         stopMessage = "A terminal candidate failed immutable re-verification.";
                         stopDurable = "commit_verification_failed";
+                        stopMutation = MutationPossibility.Possible;
                         stopRetry = IngestRetryAction.Abandon;
                         break;
                     }
@@ -194,6 +211,8 @@ public sealed class CandidateCommitSaga(
                     stopCategory = IngestErrorCategory.Ledger;
                     stopMessage = "Exact-duplicate verification failed.";
                     stopDurable = "commit_verification_failed";
+                    stopMutation = MutationPossibility.None;
+                    stopRetry = IngestRetryAction.Abandon;
                     break;
                 }
 
@@ -298,6 +317,40 @@ public sealed class CandidateCommitSaga(
             await faults.AfterReceiptDurabilityAsync(command.BatchId, item.CandidateId, cancellationToken);
             await faults.BetweenCandidatesAsync(command.BatchId, item.CandidateId, cancellationToken);
         }
+        }
+        catch (Exception exception) when (exception is not OperationCanceledException)
+        {
+            // Process crash simulation / unexpected host faults: persist an interrupted frontier
+            // so status/resume/abandon see recoverable state, then rethrow to preserve process-loss semantics.
+            var crashNow = clock.GetUtcNow().UtcDateTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture);
+            await commitStore.AppendStopErrorAsync(
+                command.BatchId,
+                stopCandidate,
+                CommitErrors.Interrupted,
+                IngestErrorCategory.Interrupted,
+                "Commit interrupted before a terminal frontier was recorded.",
+                "commit_interrupted",
+                IngestRetryAction.Resume,
+                MutationPossibility.Possible,
+                crashNow,
+                cancellationToken);
+            var crashReceipt = await commitStore.BuildReceiptAsync(
+                receiptHeader.ReceiptId,
+                command.BatchId,
+                command.ManifestRevisionId,
+                ImportReceiptStatus.Interrupted,
+                receiptHeader.CreatedAt,
+                crashNow,
+                null,
+                cancellationToken);
+            await commitStore.InterruptReceiptAsync(
+                receiptHeader.ReceiptId,
+                command.BatchId,
+                crashReceipt,
+                crashNow,
+                cancellationToken);
+            throw;
+        }
 
         var finalNow = clock.GetUtcNow().UtcDateTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture);
         if (stopCode is not null)
@@ -401,15 +454,16 @@ public sealed class CandidateCommitSaga(
             return false;
         }
 
-        if (detail.Evidence.Count != 1)
+        // Ledger may return additional linked evidence over time; match the initial identity, not cardinality.
+        var expected = request.Input.InitialEvidence;
+        var evidence = detail.Evidence.FirstOrDefault(item =>
+            string.Equals(item.LogicalIdentityDigest, expected.LogicalIdentityDigest, StringComparison.Ordinal));
+        if (evidence is null)
         {
             return false;
         }
 
-        var evidence = detail.Evidence[0];
-        var expected = request.Input.InitialEvidence;
         return evidence.Kind == expected.Kind
-            && string.Equals(evidence.LogicalIdentityDigest, expected.LogicalIdentityDigest, StringComparison.Ordinal)
             && string.Equals(evidence.OpaqueExternalReference, expected.OpaqueExternalReference, StringComparison.Ordinal)
             && string.Equals(evidence.ContentFingerprint, expected.ContentFingerprint, StringComparison.Ordinal)
             && EvidenceObservationEquals(evidence.Observation, expected.Observation);
