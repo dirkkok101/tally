@@ -99,9 +99,14 @@ Graph machine gates used:
 - Production DI omission is a recurring composition risk: module services registered only in test harnesses. Recommend a CORE or INGEST pattern rule for “published process must compose feature services when data root is active” on the next plan that adds a feature module — not authored here to avoid unsupervised pattern scope creep without existing PAT home.
 - Resume frontier lie (terminal without Unresolved rewrite) is now fixed; crash-matrix already covers interrupt windows.
 
+## Flow attestation
+
+`lex flow attest review-work --module INGEST --provider codex --plan PLAN-INGEST-V1` **blocked** with LEX-006: earlier stage Brainstorm must complete before Plan (missing brainstorm receipt on the lifecycle chain). Work-review axes and proof harvest still stand; terminal lifecycle handoff needs a fresh `lex flow status` after framing receipts exist.
+
 ## Actionable result
 
 1. **Ship code quality:** PASS for PLAN-INGEST-V1 implementation after `dc205ef`.
 2. **Spec:** FR/NFR proof current; clear UC E2E depth debt via `bd-38bl` before treating VERIFY beads as black-box guarantees.
 3. **Optional hardening:** `bd-t8zs`, `bd-2vft`, `bd-3gib`.
 4. **Do not** invent single-file anchors for the three unresolved multi-path decisions without graph contract updates.
+5. **Lifecycle:** restore/attest brainstorm (and any intervening stage receipts) before `flow attest review-work` can succeed.
