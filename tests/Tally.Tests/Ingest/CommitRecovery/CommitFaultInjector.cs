@@ -4,13 +4,15 @@ namespace Tally.Tests.Ingest.CommitRecovery;
 
 /// <summary>
 /// Test-only crash-point harness for DD-INGEST-COMMIT-RECOVERY recovery matrix.
-/// Throws <see cref="CommitFaultException"/> once when the configured boundary is hit.
+/// Throws <see cref="CommitFaultException"/> once when the configured boundary is hit,
+/// or runs an optional <see cref="BeforeBatchLock"/> action for concurrent-abandon races.
 /// </summary>
 public sealed class CommitFaultInjector : ICommitFaultHook
 {
     public enum FaultPoint
     {
         None,
+        BeforeBatchLock,
         BeforeLedgerCall,
         AfterLedgerCommit,
         BeforeReceiptDurability,
@@ -19,12 +21,18 @@ public sealed class CommitFaultInjector : ICommitFaultHook
     }
 
     private int hits;
+    private readonly Func<string, CancellationToken, Task>? beforeBatchLockAction;
 
-    public CommitFaultInjector(FaultPoint point, string? candidateId = null, int fireOnOccurrence = 1)
+    public CommitFaultInjector(
+        FaultPoint point,
+        string? candidateId = null,
+        int fireOnOccurrence = 1,
+        Func<string, CancellationToken, Task>? beforeBatchLockAction = null)
     {
         Point = point;
         CandidateId = candidateId;
         FireOnOccurrence = fireOnOccurrence;
+        this.beforeBatchLockAction = beforeBatchLockAction;
     }
 
     public FaultPoint Point { get; }
@@ -32,7 +40,21 @@ public sealed class CommitFaultInjector : ICommitFaultHook
     public int FireOnOccurrence { get; }
     public int LedgerCallCount { get; private set; }
     public int FaultsThrown { get; private set; }
+    public int BeforeBatchLockCount { get; private set; }
     public IList<string> ObservedCandidates { get; } = new List<string>();
+
+    public async Task BeforeBatchLockAsync(string batchId, CancellationToken cancellationToken)
+    {
+        BeforeBatchLockCount++;
+        ObservedCandidates.Add($"{FaultPoint.BeforeBatchLock}:{batchId}");
+        if (beforeBatchLockAction is not null)
+        {
+            await beforeBatchLockAction(batchId, cancellationToken);
+            return;
+        }
+
+        await MaybeFault(FaultPoint.BeforeBatchLock, batchId);
+    }
 
     public Task BeforeLedgerCallAsync(string batchId, string candidateId, CancellationToken cancellationToken)
     {

@@ -14,6 +14,7 @@ using Tally.Domain.Ingest.Commit;
 using Tally.Features.Ingest.Commit;
 using Tally.Features.Ingest.Contract;
 using Tally.Features.Ingest.Preview;
+using Tally.Features.Ingest.Recovery;
 using Tally.Features.Ingest.Review;
 using Tally.Infrastructure.Ingest.Pdf;
 using Tally.Infrastructure.Ingest.Storage;
@@ -434,7 +435,58 @@ public sealed class CommitSagaTests : IAsyncLifetime
         Assert.True(attemptingIndex > 0 && recordIndex > attemptingIndex);
     }
 
-    private CandidateCommitSaga CreateSaga()
+    [Fact]
+    public async Task Commit_against_already_abandoned_batch_returns_not_committable_or_not_approved()
+    {
+        var prepared = await PrepareApprovedAsync();
+        var abandon = await CreateAbandon().HandleAsync(
+            new AbandonCommand(prepared.BatchId, "pre-commit-abandon"),
+            CancellationToken.None);
+        Assert.True(abandon.IsSuccess, abandon.ErrorCode);
+
+        var result = await CreateSaga().ExecuteAsync(
+            new CommitCommand(prepared.BatchId, prepared.ManifestRevisionId, prepared.Digest),
+            CancellationToken.None);
+
+        // Pre-lock NotApproved (approval deactivated) or post-lock NotCommittable (Abandoned receipt) are both stable.
+        Assert.True(
+            result.ErrorCode is CommitErrors.NotApproved or CommitErrors.NotCommittable,
+            result.ErrorCode);
+        Assert.Equal(0, await CountCandidateReceiptsAsync());
+        var receiptStatus = await TryReadReceiptStatusAsync(prepared.BatchId);
+        Assert.True(
+            receiptStatus is null or ImportReceiptStatus.Abandoned,
+            $"unexpected receipt status {receiptStatus}");
+    }
+
+    [Fact]
+    public async Task Commit_racing_abandon_via_BeforeBatchLock_fails_closed_with_no_work_item_mutation()
+    {
+        var prepared = await PrepareApprovedAsync();
+        var injector = new CommitFaultInjector(
+            CommitFaultInjector.FaultPoint.None,
+            beforeBatchLockAction: async (batchId, ct) =>
+            {
+                Assert.Equal(prepared.BatchId, batchId);
+                var abandon = await CreateAbandon().HandleAsync(
+                    new AbandonCommand(batchId, "race-before-lock"),
+                    ct);
+                Assert.True(abandon.IsSuccess, abandon.ErrorCode);
+            });
+
+        var result = await CreateSaga(injector).ExecuteAsync(
+            new CommitCommand(prepared.BatchId, prepared.ManifestRevisionId, prepared.Digest),
+            CancellationToken.None);
+
+        Assert.Equal(1, injector.BeforeBatchLockCount);
+        Assert.True(
+            result.ErrorCode is CommitErrors.NotApproved or CommitErrors.NotCommittable,
+            result.ErrorCode);
+        Assert.Equal(0, await CountCandidateReceiptsAsync());
+        Assert.Equal(0, injector.LedgerCallCount);
+    }
+
+    private CandidateCommitSaga CreateSaga(ICommitFaultHook? faultHook = null)
     {
         var protection = new IngestArtifactProtection();
         var database = new IngestDatabase(root, protection);
@@ -444,7 +496,26 @@ public sealed class CommitSagaTests : IAsyncLifetime
             new CommitStateStore(database, errors),
             new BatchCommitLock(database, protection),
             ledger,
+            time,
+            faultHook);
+    }
+
+    private AbandonHandler CreateAbandon()
+    {
+        var protection = new IngestArtifactProtection();
+        var database = new IngestDatabase(root, protection);
+        return new AbandonHandler(
+            new RecoveryStateStore(database, new BatchErrorEventStore()),
+            new BatchCommitLock(database, protection),
             time);
+    }
+
+    private async Task<int> CountCandidateReceiptsAsync()
+    {
+        await using var connection = await OpenIngestAsync();
+        await using var command = connection.CreateCommand();
+        command.CommandText = "SELECT COUNT(*) FROM candidate_receipt;";
+        return Convert.ToInt32(await command.ExecuteScalarAsync());
     }
 
     private async Task<PreparedBatch> PrepareApprovedAsync(string? accountId = null)

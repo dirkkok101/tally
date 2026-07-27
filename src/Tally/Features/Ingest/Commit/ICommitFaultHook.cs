@@ -6,6 +6,9 @@ namespace Tally.Features.Ingest.Commit;
 /// </summary>
 public interface ICommitFaultHook
 {
+    /// <summary>Fires after pre-lock fast-fail checks and immediately before <c>BatchCommitLock</c> acquisition.</summary>
+    Task BeforeBatchLockAsync(string batchId, CancellationToken cancellationToken);
+
     Task BeforeLedgerCallAsync(string batchId, string candidateId, CancellationToken cancellationToken);
 
     Task AfterLedgerCommitAsync(string batchId, string candidateId, string transactionId, CancellationToken cancellationToken);
@@ -20,6 +23,9 @@ public interface ICommitFaultHook
 public sealed class NoopCommitFaultHook : ICommitFaultHook
 {
     public static NoopCommitFaultHook Instance { get; } = new();
+
+    public Task BeforeBatchLockAsync(string batchId, CancellationToken cancellationToken) =>
+        Task.CompletedTask;
 
     public Task BeforeLedgerCallAsync(string batchId, string candidateId, CancellationToken cancellationToken) =>
         Task.CompletedTask;

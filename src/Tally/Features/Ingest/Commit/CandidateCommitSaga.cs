@@ -96,10 +96,49 @@ public sealed class CandidateCommitSaga(
             return CommandResult<ImportReceipt>.Failure(CommitErrors.AccountInactive);
         }
 
+        // Test seam: inject concurrent abandon (or other pre-lock mutations) without racing OS locks.
+        await faults.BeforeBatchLockAsync(command.BatchId, cancellationToken);
+
         await using var held = await batchLock.TryAcquireAsync(command.BatchId, cancellationToken);
         if (held is null)
         {
             return CommandResult<ImportReceipt>.Failure(CommitErrors.LockHeld);
+        }
+
+        // Authoritative re-validation under the batch lock — never trust pre-lock review state.
+        var underLock = await reviewStore.LoadAsync(command.BatchId, command.ManifestRevisionId, cancellationToken);
+        if (underLock is null)
+        {
+            return CommandResult<ImportReceipt>.Failure(CommitErrors.NotFound);
+        }
+
+        if (!string.Equals(underLock.CanonicalDigest, command.ManifestDigest, StringComparison.Ordinal))
+        {
+            return CommandResult<ImportReceipt>.Failure(CommitErrors.DigestMismatch);
+        }
+
+        if (!underLock.Approval.Approved)
+        {
+            return CommandResult<ImportReceipt>.Failure(CommitErrors.NotApproved);
+        }
+
+        if (!underLock.Committable ||
+            underLock.Outcomes.Any(outcome => outcome.Disposition == SourceRecordDisposition.Blocked) ||
+            underLock.Controls.Any(control => string.Equals(control.Detail, "Mismatched", StringComparison.Ordinal)))
+        {
+            return CommandResult<ImportReceipt>.Failure(CommitErrors.NotCommittable);
+        }
+
+        if (underLock.Candidates.Count == 0)
+        {
+            return CommandResult<ImportReceipt>.Failure(CommitErrors.NotCommittable);
+        }
+
+        var lockedFirst = underLock.Candidates[0].FrozenLedgerRequest;
+        if (!string.Equals(lockedFirst.LedgerContractVersion, underLock.LedgerContractVersion, StringComparison.Ordinal) ||
+            !string.Equals(underLock.LedgerContractVersion, "1.0", StringComparison.Ordinal))
+        {
+            return CommandResult<ImportReceipt>.Failure(CommitErrors.VersionIncompatible);
         }
 
         var now = clock.GetUtcNow().UtcDateTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture);
