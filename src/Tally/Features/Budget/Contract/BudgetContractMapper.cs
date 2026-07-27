@@ -7,7 +7,7 @@ namespace Tally.Features.Budget.Contract;
 /// Pure domain-to-contract mapping root for BUDGET (DD-BUDGET-APPLICATION-ARCHITECTURE).
 /// No I/O, no TimeProvider, no Ledger access — only pure transforms.
 /// </summary>
-public static class BudgetContractMapper
+public static partial class BudgetContractMapper
 {
     public static long SumPlannedMinorUnits(IReadOnlyList<BudgetPlanEntryInput> entries)
     {
