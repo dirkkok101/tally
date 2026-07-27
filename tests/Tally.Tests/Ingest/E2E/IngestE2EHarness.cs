@@ -62,10 +62,16 @@ public sealed class IngestE2EHarness : IAsyncDisposable
         }
     }
 
-    /// <summary>Rebuild the published ingest process, optionally with a commit fault hook.</summary>
+    /// <summary>
+    /// Rebuild the published ingest process through the PRODUCTION composition root
+    /// (IngestOperationBundle.CreateServices, same two-phase wiring as Program.cs), overriding
+    /// only the PDF extractor stub, the clock, and an optional commit fault hook.
+    /// </summary>
     public void RebindIngest(ICommitFaultHook? faultHook = null)
     {
-        process = new TallyProcess(Registry, ledgerServices with { Ingest = BuildIngestBundle(faultHook) });
+        var services = IngestOperationBundle.CreateServices(
+            Root, Ledger, Time, new StubLayoutAExtractor(), faultHook);
+        process = new TallyProcess(Registry, ledgerServices with { Ingest = services.Operations });
         Ledger = new LedgerContractClient(Registry, process);
     }
 
@@ -87,10 +93,10 @@ public sealed class IngestE2EHarness : IAsyncDisposable
         return JsonSerializer.Deserialize(resultEnvelope.Result!.Value, LedgerJsonContext.Default.AccountDetail)!.AccountId;
     }
 
-    public async Task<PreviewImportResult> PreviewSyntheticAsync(string accountId, string? fingerprint = null)
+    public async Task<PreviewImportResult> PreviewSyntheticAsync(string accountId, string? contentMarker = null)
     {
         var path = Path.Combine(Root, $"src-{Guid.NewGuid():N}.pdf");
-        await File.WriteAllBytesAsync(path, CreateLayoutAPdf(fingerprint));
+        await File.WriteAllBytesAsync(path, CreateLayoutAPdf(contentMarker));
         return await PreviewPathAsync(accountId, path);
     }
 
@@ -374,66 +380,38 @@ public sealed class IngestE2EHarness : IAsyncDisposable
         var args = cliArgs.Concat(["--input", "-"]).ToArray();
         var result = await process.RunAsync(args, json, CancellationToken.None);
         var resultEnvelope = JsonSerializer.Deserialize(result.Stdout, LedgerJsonContext.Default.ResultEnvelope);
-        if (result.ExitCode != 0 || resultEnvelope?.Outcome != "success" || resultEnvelope.Result is null)
+        if (resultEnvelope is null || resultEnvelope.Outcome is not ("success" or "error"))
         {
-            return (false, resultEnvelope?.Error?.Code ?? $"exit:{result.ExitCode}", default);
+            Assert.Fail($"published surface produced no contract envelope (exit {result.ExitCode}).");
         }
 
-        var value = JsonSerializer.Deserialize(resultEnvelope.Result.Value, resultInfo);
+        if (result.ExitCode != 0 || resultEnvelope.Outcome != "success")
+        {
+            var code = resultEnvelope.Error?.Code;
+            Assert.False(string.IsNullOrWhiteSpace(code), $"error envelope carried no stable code (exit {result.ExitCode}).");
+            return (false, code, default);
+        }
+
+        Assert.NotNull(resultEnvelope.Result);
+        var value = JsonSerializer.Deserialize(resultEnvelope.Result!.Value, resultInfo);
+        Assert.NotNull(value);
         return (true, null, value);
     }
 
-    private IngestOperationBundle BuildIngestBundle(ICommitFaultHook? faultHook)
+    private static PdfDocumentEvidence LayoutAEvidence(string fingerprint, string marker)
     {
-        var protection = new IngestArtifactProtection();
-        var database = new IngestDatabase(Root, protection);
-        var errors = new BatchErrorEventStore();
-        var previewStore = new PreviewStateStore(database, errors);
-        var reviewStore = new ReviewStateStore(database);
-        var commitStore = new CommitStateStore(database, errors);
-        var recoveryStore = new RecoveryStateStore(database, errors);
-        var batchLock = new BatchCommitLock(database, protection);
-        var adapters = StatementAdapterRegistry.CreateDefault();
-
-        var previewHandler = new PreviewHandler(
-            new CallerOwnedSourceReader(),
-            new LedgerPreviewAccountDirectory(async (accountId, version, actor, ct) =>
-            {
-                var result = await Ledger.GetAccountAsync(accountId, version, actor, ct);
-                return result.IsSuccess ? result.Value : null;
-            }),
-            new StubLayoutAExtractor(LayoutAEvidence()),
-            adapters,
-            previewStore,
-            Time);
-        var inspectHandler = new InspectHandler(reviewStore);
-        var approveHandler = new ApproveHandler(reviewStore, Time);
-        var saga = new CandidateCommitSaga(reviewStore, commitStore, batchLock, Ledger, Time, faultHook);
-        var resumeHandler = new ResumeHandler(commitStore, saga);
-        var statusHandler = new StatusHandler(new StatusStateStore(database, errors), Time);
-        var abandonHandler = new AbandonHandler(recoveryStore, batchLock, Time);
-        var cleanupHandler = new CleanupHandler(recoveryStore, batchLock, Time);
-
-        return new IngestOperationBundle(
-            new PreviewOperationModule(previewHandler),
-            new ReviewOperationModule(inspectHandler, approveHandler),
-            new CommitOperationModule(saga),
-            new ResumeOperationModule(resumeHandler),
-            new StatusOperationModule(statusHandler),
-            new RecoveryCleanupOperationModule(abandonHandler, cleanupHandler));
-    }
-
-    private static PdfDocumentEvidence LayoutAEvidence(string fingerprint = "synthetic-e2e")
-    {
+        // Fixed-width columns: the layout-A adapter classifies money tokens by x-position
+        // relative to the header's "Balance" column, so the description field is padded to a
+        // constant width and the content marker varies freely inside it (max 25 chars).
         string[] lines =
         [
             "Account Card ****1234",
             "Statement period 01 January 2026 31 January 2026",
             "Opening balance 100.00Cr",
             "Closing balance 120.00Cr",
-            "Date Description Amount Balance",
-            "01 Jan First row 10.00Cr 110.00Cr",
-            "02 Jan Second row 10.00Cr 120.00Cr"
+            "Date   Description".PadRight(43) + "Amount     Balance",
+            "01 Jan First row".PadRight(43) + "10.00Cr    110.00Cr",
+            $"02 Jan Second row {marker}".PadRight(43) + "10.00Cr    120.00Cr"
         ];
         var glyphs = new List<PdfGlyphEvidence>();
         for (var lineIndex = 0; lineIndex < lines.Length; lineIndex++)
@@ -451,15 +429,23 @@ public sealed class IngestE2EHarness : IAsyncDisposable
         return new PdfDocumentEvidence(fingerprint, 1, [new PdfPageEvidence(1, 612, 792, glyphs, [])]);
     }
 
-    private sealed class StubLayoutAExtractor(PdfDocumentEvidence evidence) : IPreviewPdfExtractor
+    /// <summary>
+    /// Derives evidence CONTENT from the actual source bytes (the marker embedded by
+    /// CreateLayoutAPdf), so changed bytes produce changed statement rows — not merely a
+    /// changed fingerprint. Overlap and replay gates depend on this distinction.
+    /// </summary>
+    private sealed class StubLayoutAExtractor : IPreviewPdfExtractor
     {
         public ValueTask<PdfExtractionResult> ExtractAsync(
             ImmutableArray<byte> source,
             PdfExtractionLimits limits,
             CancellationToken cancellationToken)
         {
+            var text = Encoding.ASCII.GetString(source.AsSpan());
+            var match = System.Text.RegularExpressions.Regex.Match(text, @"02 Jan Second row (.+?) 10\.00Cr");
+            var marker = match.Success ? match.Groups[1].Value : "layout-a";
             var fp = Convert.ToHexStringLower(SHA256.HashData(source.AsSpan()));
-            return ValueTask.FromResult(new PdfExtractionResult(evidence with { SourceFingerprint = fp }, null));
+            return ValueTask.FromResult(new PdfExtractionResult(LayoutAEvidence(fp, marker), null));
         }
     }
 }

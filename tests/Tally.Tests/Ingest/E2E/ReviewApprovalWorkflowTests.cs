@@ -1,6 +1,7 @@
 using System.Runtime.Versioning;
 using Tally.Cli;
 using Tally.Contracts.Ingest;
+using Tally.Features.Ingest.Commit;
 using Tally.Features.Ingest.Contract;
 using Tally.Features.Ingest.Review;
 using Xunit;
@@ -80,7 +81,7 @@ public sealed class ReviewApprovalWorkflowTests : IAsyncLifetime
         var (ok, error, _) = await harness.TryApproveAsync(
             preview.BatchId, "missing-revision", inspect.CanonicalDigest);
         Assert.False(ok);
-        Assert.NotNull(error);
+        Assert.Equal(ApproveErrors.NotFound, error);
     }
 
     [Fact]
@@ -92,7 +93,7 @@ public sealed class ReviewApprovalWorkflowTests : IAsyncLifetime
         var (ok, error, _) = await harness.TryApproveAsync(
             "not-a-batch", preview.ManifestRevisionId!, inspect.CanonicalDigest);
         Assert.False(ok);
-        Assert.NotNull(error);
+        Assert.Equal(ApproveErrors.NotFound, error);
     }
 
     [Fact]
@@ -100,21 +101,25 @@ public sealed class ReviewApprovalWorkflowTests : IAsyncLifetime
     {
         var (ok, error, _) = await harness.TryInspectAsync("missing-batch", "missing-revision");
         Assert.False(ok);
-        Assert.NotNull(error);
+        Assert.Equal(InspectErrors.NotFound, error);
     }
 
     [Fact]
-    public async Task Double_approve_is_idempotent_or_stable()
+    public async Task Double_approve_succeeds_as_stable_re_approval()
     {
         var accountId = await harness.CreateAccountAsync();
         var preview = await harness.PreviewSyntheticAsync(accountId);
         var approved = await harness.ApprovePreviewAsync(preview);
-        var (ok, _, _) = await harness.TryApproveAsync(
+        // Re-approve of the identical frozen digest deactivates the prior approval and records a
+        // fresh active one — deterministic success, never a second live approval.
+        var (ok, error, value) = await harness.TryApproveAsync(
             approved.BatchId, approved.ManifestRevisionId, approved.Digest);
-        // Second approve may succeed as re-approve or reject; either is stable published behaviour.
-        Assert.True(ok || !ok);
+        Assert.True(ok, error);
+        Assert.Equal(approved.BatchId, value!.BatchId);
+        Assert.Equal(approved.ManifestRevisionId, value.ManifestRevisionId);
         var inspect = await harness.InspectAsync(approved.BatchId, approved.ManifestRevisionId);
         Assert.True(inspect.ApprovalState.Approved);
+        Assert.Equal(approved.Digest, inspect.CanonicalDigest);
     }
 
     [Fact]
@@ -126,7 +131,7 @@ public sealed class ReviewApprovalWorkflowTests : IAsyncLifetime
         var (ok, error, _) = await harness.TryCommitAsync(
             preview.BatchId, "wrong-revision", inspect.CanonicalDigest);
         Assert.False(ok);
-        Assert.NotNull(error);
+        Assert.Equal(CommitErrors.NotFound, error);
     }
 
     [Fact]
@@ -138,6 +143,6 @@ public sealed class ReviewApprovalWorkflowTests : IAsyncLifetime
         var (ok, error, _) = await harness.TryCommitAsync(
             preview.BatchId, preview.ManifestRevisionId!, inspect.CanonicalDigest);
         Assert.False(ok);
-        Assert.False(string.IsNullOrWhiteSpace(error));
+        Assert.Equal(CommitErrors.NotApproved, error);
     }
 }

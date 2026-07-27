@@ -2,7 +2,9 @@ using System.Runtime.Versioning;
 using Tally.Cli;
 using Tally.Contracts.Ingest;
 using Tally.Domain.Ingest.Overlap;
+using Tally.Features.Ingest.Commit;
 using Tally.Features.Ingest.Contract;
+using Tally.Features.Ingest.Preview;
 using Xunit;
 
 namespace Tally.Tests.Ingest.E2E;
@@ -74,7 +76,7 @@ public sealed class ReplayOverlapWorkflowTests : IAsyncLifetime
         var (ok, error, _) = await harness.TryCommitAsync(
             approved.BatchId, approved.ManifestRevisionId, "tampered");
         Assert.False(ok);
-        Assert.False(string.IsNullOrWhiteSpace(error));
+        Assert.Equal(CommitErrors.DigestMismatch, error);
     }
 
     [Fact]
@@ -88,35 +90,28 @@ public sealed class ReplayOverlapWorkflowTests : IAsyncLifetime
         await File.WriteAllBytesAsync(pathB, bytes);
         var first = await harness.PreviewPathAsync(accountId, pathA);
         var second = await harness.PreviewPathAsync(accountId, pathB);
-        // Fingerprint-based identity: either ExactReplayOf or same batch id for identical content+account.
+        // Fingerprint-based identity: identical content + account MUST link, regardless of filename.
         Assert.True(
-            second.BatchId == first.BatchId ||
-            second.ExactReplayOf is not null ||
-            second.Status is BatchStatus.Previewed or BatchStatus.Completed);
+            second.BatchId == first.BatchId || second.ExactReplayOf is not null,
+            $"expected exact replay linkage, got batch={second.BatchId} replayOf={second.ExactReplayOf}");
     }
 
     [Fact]
-    public async Task Changed_bytes_under_familiar_name_forces_new_preview_batch()
+    public async Task Changed_bytes_over_same_period_blocks_overlap_fail_closed()
     {
         var accountId = await harness.CreateAccountAsync();
         var path1 = Path.Combine(harness.Root, $"mutate-a-{Guid.NewGuid():N}.pdf");
         var path2 = Path.Combine(harness.Root, $"mutate-b-{Guid.NewGuid():N}.pdf");
         await File.WriteAllBytesAsync(path1, IngestE2EHarness.CreateLayoutAPdf("v1"));
-        await File.WriteAllBytesAsync(path2, IngestE2EHarness.CreateLayoutAPdf("v2-changed-bytes-distinct"));
+        await File.WriteAllBytesAsync(path2, IngestE2EHarness.CreateLayoutAPdf("v2-changed"));
         var first = await harness.PreviewPathAsync(accountId, path1);
-        var (ok, error, second) = await harness.TryPreviewPathAsync(accountId, path2);
-        if (ok)
-        {
-            Assert.NotEqual(first.BatchId, second!.BatchId);
-            Assert.Null(second.ExactReplayOf);
-        }
-        else
-        {
-            // Fail-closed published path: domain codes surface via ErrorForHandler (not host.unexpected).
-            Assert.False(string.IsNullOrWhiteSpace(error));
-            Assert.NotEqual("host.unexpected", error);
-            Assert.NotEqual(first.BatchId, second?.BatchId);
-        }
+        // The stub extractor derives statement rows from the bytes, so v2 is genuinely different
+        // content over the same period and account: not an Exact Replay, so the overlap policy
+        // blocks it fail-closed rather than minting a plausible second batch.
+        var (ok, error, _) = await harness.TryPreviewPathAsync(accountId, path2);
+        Assert.False(ok);
+        Assert.Equal(PreviewErrors.OverlapBlocked, error);
+        Assert.NotNull(first.BatchId);
     }
 
     [Fact]
@@ -143,7 +138,9 @@ public sealed class ReplayOverlapWorkflowTests : IAsyncLifetime
         var ledgerBefore = await harness.CountResolvableLedgerTransactionsAsync(receipt);
 
         var again = await harness.PreviewPathAsync(accountId, path);
-        Assert.True(again.ExactReplayOf is not null || again.BatchId == preview.BatchId || again.Status == BatchStatus.Previewed);
+        Assert.True(
+            again.ExactReplayOf is not null || again.BatchId == preview.BatchId,
+            $"expected exact replay linkage, got batch={again.BatchId} replayOf={again.ExactReplayOf}");
         // No automatic second ledger set from the mere re-preview.
         var reCommit = await harness.CommitAsync(approved.BatchId, approved.ManifestRevisionId, approved.Digest);
         Assert.Equal(ledgerBefore, await harness.CountResolvableLedgerTransactionsAsync(reCommit));
@@ -154,9 +151,19 @@ public sealed class ReplayOverlapWorkflowTests : IAsyncLifetime
     {
         var accountId = await harness.CreateAccountAsync();
         var preview = await harness.PreviewSyntheticAsync(accountId);
-        var status = await harness.StatusAsync();
-        Assert.True(
-            status.Items is { Count: > 0 } || status.Detail is not null ||
-            (await harness.StatusAsync(preview.BatchId)).Detail is not null);
+        var before = await harness.InspectAsync(preview.BatchId, preview.ManifestRevisionId!);
+
+        var listing = await harness.StatusAsync();
+        Assert.NotNull(listing.Items);
+        Assert.Contains(listing.Items!, item => item.BatchId == preview.BatchId);
+
+        var detail = await harness.StatusAsync(preview.BatchId);
+        Assert.NotNull(detail.Detail);
+        Assert.Equal(BatchStatus.Previewed, detail.Detail!.Summary.Status);
+
+        // Status is read-only: the frozen manifest is bit-identical after both queries.
+        var after = await harness.InspectAsync(preview.BatchId, preview.ManifestRevisionId!);
+        Assert.Equal(before.CanonicalDigest, after.CanonicalDigest);
+        Assert.False(after.ApprovalState.Approved);
     }
 }

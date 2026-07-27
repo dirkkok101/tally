@@ -47,7 +47,12 @@ public sealed class IngestOperationBundle(
         new StatusOperationModule(null!),
         new RecoveryCleanupOperationModule(null!, null!));
 
-    public static IngestServices CreateServices(string dataRoot, LedgerContractClient ledgerClient, TimeProvider? timeProvider = null)
+    public static IngestServices CreateServices(
+        string dataRoot,
+        LedgerContractClient ledgerClient,
+        TimeProvider? timeProvider = null,
+        IPreviewPdfExtractor? pdfExtractor = null,
+        ICommitFaultHook? commitFaultHook = null)
     {
         var protection = new IngestArtifactProtection();
         var database = new IngestDatabase(dataRoot, protection);
@@ -67,13 +72,13 @@ public sealed class IngestOperationBundle(
                 var result = await ledgerClient.GetAccountAsync(accountId, version, actor, ct);
                 return result.IsSuccess ? result.Value : null;
             }),
-            new PreviewPdfExtractorAdapter(new PdfStatementTextExtractor()),
+            pdfExtractor ?? new PreviewPdfExtractorAdapter(new PdfStatementTextExtractor()),
             adapters,
             previewStore,
             clock);
         var inspectHandler = new InspectHandler(reviewStore);
         var approveHandler = new ApproveHandler(reviewStore, clock);
-        var saga = new CandidateCommitSaga(reviewStore, commitStore, batchLock, ledgerClient, clock);
+        var saga = new CandidateCommitSaga(reviewStore, commitStore, batchLock, ledgerClient, clock, commitFaultHook);
         var resumeHandler = new ResumeHandler(commitStore, saga);
         var statusHandler = new StatusHandler(new StatusStateStore(database, errors), clock);
         var abandonHandler = new AbandonHandler(recoveryStore, batchLock, clock);

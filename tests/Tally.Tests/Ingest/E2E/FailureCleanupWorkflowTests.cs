@@ -2,6 +2,7 @@ using System.Runtime.Versioning;
 using Tally.Cli;
 using Tally.Contracts.Ingest;
 using Tally.Features.Ingest.Contract;
+using Tally.Features.Ingest.Recovery;
 using Tally.Tests.Ingest.CommitRecovery;
 using Xunit;
 
@@ -45,7 +46,7 @@ public sealed class FailureCleanupWorkflowTests : IAsyncLifetime
         var preview = await harness.PreviewSyntheticAsync(accountId);
         var (ok, error, _) = await harness.TryCleanupAsync(preview.BatchId, BatchStatus.Completed);
         Assert.False(ok);
-        Assert.False(string.IsNullOrWhiteSpace(error));
+        Assert.Equal(CleanupErrors.RetainedForRecovery, error);
     }
 
     [Fact]
@@ -53,8 +54,10 @@ public sealed class FailureCleanupWorkflowTests : IAsyncLifetime
     {
         var approved = await harness.PrepareApprovedAsync();
         var fault = new CommitFaultInjector(CommitFaultInjector.FaultPoint.BetweenCandidates);
-        _ = await harness.CommitWithFaultAsync(
+        var interrupted = await harness.CommitWithFaultAsync(
             approved.BatchId, approved.ManifestRevisionId, approved.Digest, fault);
+        Assert.False(interrupted.Ok);
+        Assert.True(fault.FaultsThrown >= 1);
 
         var abandon = await harness.AbandonAsync(approved.BatchId, "stop-after-partial");
         Assert.True(abandon.PriorLedgerEffectCount >= 1);
@@ -87,7 +90,7 @@ public sealed class FailureCleanupWorkflowTests : IAsyncLifetime
     {
         var (ok, error, _) = await harness.TryAbandonAsync("missing", "reason");
         Assert.False(ok);
-        Assert.False(string.IsNullOrWhiteSpace(error));
+        Assert.Equal(AbandonErrors.NotFound, error);
     }
 
     [Fact]
@@ -95,7 +98,7 @@ public sealed class FailureCleanupWorkflowTests : IAsyncLifetime
     {
         var (ok, error, _) = await harness.TryCleanupAsync("missing", BatchStatus.Abandoned);
         Assert.False(ok);
-        Assert.NotNull(error);
+        Assert.Equal(CleanupErrors.NotFound, error);
     }
 
     [Fact]
@@ -105,7 +108,7 @@ public sealed class FailureCleanupWorkflowTests : IAsyncLifetime
         var preview = await harness.PreviewSyntheticAsync(accountId);
         var (ok, error, _) = await harness.TryAbandonAsync(preview.BatchId, "");
         Assert.False(ok);
-        Assert.NotNull(error);
+        Assert.Equal(AbandonErrors.InvalidInput, error);
     }
 
     [Fact]
@@ -123,13 +126,18 @@ public sealed class FailureCleanupWorkflowTests : IAsyncLifetime
     {
         var approved = await harness.PrepareApprovedAsync();
         var fault = new CommitFaultInjector(CommitFaultInjector.FaultPoint.BetweenCandidates);
-        _ = await harness.CommitWithFaultAsync(
+        var interrupted = await harness.CommitWithFaultAsync(
             approved.BatchId, approved.ManifestRevisionId, approved.Digest, fault);
+        Assert.False(interrupted.Ok);
+        Assert.True(fault.FaultsThrown >= 1);
+
         var status = await harness.StatusAsync(approved.BatchId);
         Assert.NotNull(status.Detail);
-        Assert.True(
-            status.Detail!.Summary.Status is BatchStatus.Interrupted or BatchStatus.Committing,
-            status.Detail.Summary.Status.ToString());
+        Assert.Equal(BatchStatus.Interrupted, status.Detail!.Summary.Status);
+        // BetweenCandidates interrupts before the next attempt starts: the durable frontier is
+        // the accepted terminal work plus an Interrupted receipt (remaining candidates are pending).
+        Assert.Equal(ImportReceiptStatus.Interrupted, status.Detail.ReceiptStatus);
+        Assert.True(status.Detail.TerminalCounts.AcceptedCandidates >= 1);
     }
 
     [Fact]
@@ -137,14 +145,18 @@ public sealed class FailureCleanupWorkflowTests : IAsyncLifetime
     {
         var approved = await harness.PrepareApprovedAsync();
         var fault = new CommitFaultInjector(CommitFaultInjector.FaultPoint.BetweenCandidates);
-        _ = await harness.CommitWithFaultAsync(
+        var interrupted = await harness.CommitWithFaultAsync(
             approved.BatchId, approved.ManifestRevisionId, approved.Digest, fault);
+        Assert.False(interrupted.Ok);
+        Assert.True(fault.FaultsThrown >= 1);
+
+        // BetweenCandidates fires after the first accepted write, so at least one durable
+        // ledger effect must be visible to abandon — and must survive cleanup.
         var abandon = await harness.AbandonAsync(approved.BatchId, "preserve-ledger");
-        var prior = abandon.PriorLedgerEffectCount;
-        _ = await harness.CleanupAsync(approved.BatchId, BatchStatus.Abandoned);
-        Assert.True(prior >= 0);
-        // Ledger remains independently queryable; prior effect count is the public signal.
-        Assert.True(prior >= 1 || prior == 0);
+        Assert.True(abandon.PriorLedgerEffectCount >= 1);
+
+        var cleanup = await harness.CleanupAsync(approved.BatchId, BatchStatus.Abandoned);
+        Assert.Equal(BatchStatus.Cleaned, cleanup.Status);
     }
 
     [Fact]
@@ -155,7 +167,7 @@ public sealed class FailureCleanupWorkflowTests : IAsyncLifetime
         _ = await harness.AbandonAsync(preview.BatchId, "first");
         var (ok, error, _) = await harness.TryAbandonAsync(preview.BatchId, "second");
         Assert.False(ok);
-        Assert.False(string.IsNullOrWhiteSpace(error));
+        Assert.Equal(AbandonErrors.NotAbandonable, error);
     }
 
     [Fact]
@@ -165,7 +177,7 @@ public sealed class FailureCleanupWorkflowTests : IAsyncLifetime
         _ = await harness.CommitAsync(approved.BatchId, approved.ManifestRevisionId, approved.Digest);
         var (ok, error, _) = await harness.TryAbandonAsync(approved.BatchId, "too-late");
         Assert.False(ok);
-        Assert.False(string.IsNullOrWhiteSpace(error));
+        Assert.Equal(AbandonErrors.NotAbandonable, error);
     }
 
     [Fact]
@@ -176,6 +188,6 @@ public sealed class FailureCleanupWorkflowTests : IAsyncLifetime
         _ = await harness.AbandonAsync(preview.BatchId, "x");
         var (ok, error, _) = await harness.TryCleanupAsync(preview.BatchId, BatchStatus.Completed);
         Assert.False(ok);
-        Assert.NotNull(error);
+        Assert.Equal(CleanupErrors.RetainedForRecovery, error);
     }
 }

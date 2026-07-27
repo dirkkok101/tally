@@ -1,6 +1,7 @@
 using System.Runtime.Versioning;
 using Tally.Cli;
 using Tally.Contracts.Ingest;
+using Tally.Features.Ingest.Commit;
 using Tally.Features.Ingest.Contract;
 using Tally.Tests.Ingest.CommitRecovery;
 using Xunit;
@@ -45,6 +46,7 @@ public sealed class CommitResumeWorkflowTests : IAsyncLifetime
         var interrupted = await harness.CommitWithFaultAsync(
             approved.BatchId, approved.ManifestRevisionId, approved.Digest, fault);
         Assert.False(interrupted.Ok);
+        Assert.True(fault.FaultsThrown >= 1);
 
         var status = await harness.StatusAsync(approved.BatchId);
         Assert.NotNull(status.Detail);
@@ -59,8 +61,10 @@ public sealed class CommitResumeWorkflowTests : IAsyncLifetime
     {
         var approved = await harness.PrepareApprovedAsync();
         var fault = new CommitFaultInjector(CommitFaultInjector.FaultPoint.BetweenCandidates);
-        _ = await harness.CommitWithFaultAsync(
+        var interrupted = await harness.CommitWithFaultAsync(
             approved.BatchId, approved.ManifestRevisionId, approved.Digest, fault);
+        Assert.False(interrupted.Ok);
+        Assert.True(fault.FaultsThrown >= 1);
 
         foreach (var pdf in Directory.GetFiles(harness.Root, "*.pdf", SearchOption.AllDirectories))
         {
@@ -76,10 +80,11 @@ public sealed class CommitResumeWorkflowTests : IAsyncLifetime
     {
         var accountId = await harness.CreateAccountAsync();
         var preview = await harness.PreviewSyntheticAsync(accountId);
+        var inspect = await harness.InspectAsync(preview.BatchId, preview.ManifestRevisionId!);
         var (ok, error, _) = await harness.TryCommitAsync(
-            preview.BatchId, preview.ManifestRevisionId!, "digest");
+            preview.BatchId, preview.ManifestRevisionId!, inspect.CanonicalDigest);
         Assert.False(ok);
-        Assert.NotNull(error);
+        Assert.Equal(CommitErrors.NotApproved, error);
     }
 
     [Theory]
@@ -92,8 +97,11 @@ public sealed class CommitResumeWorkflowTests : IAsyncLifetime
     {
         var approved = await harness.PrepareApprovedAsync();
         var fault = new CommitFaultInjector(point);
-        _ = await harness.CommitWithFaultAsync(
+        var interrupted = await harness.CommitWithFaultAsync(
             approved.BatchId, approved.ManifestRevisionId, approved.Digest, fault);
+        // The crash must actually happen — a fault that never fires proves nothing about resume.
+        Assert.False(interrupted.Ok);
+        Assert.True(fault.FaultsThrown >= 1);
 
         var resume = await harness.ResumeAsync(approved.BatchId);
         Assert.Equal(ImportReceiptStatus.Completed, resume.Status);
@@ -115,7 +123,7 @@ public sealed class CommitResumeWorkflowTests : IAsyncLifetime
         var (ok, error, _) = await harness.TryCommitAsync(
             approved.BatchId, approved.ManifestRevisionId, "tampered-digest");
         Assert.False(ok);
-        Assert.False(string.IsNullOrWhiteSpace(error));
+        Assert.Equal(CommitErrors.DigestMismatch, error);
     }
 
     [Fact]
@@ -125,7 +133,7 @@ public sealed class CommitResumeWorkflowTests : IAsyncLifetime
         var (ok, error, _) = await harness.TryCommitAsync(
             approved.BatchId, "missing-revision", approved.Digest);
         Assert.False(ok);
-        Assert.NotNull(error);
+        Assert.Equal(CommitErrors.NotFound, error);
     }
 
     [Fact]
@@ -133,7 +141,7 @@ public sealed class CommitResumeWorkflowTests : IAsyncLifetime
     {
         var (ok, error, _) = await harness.TryResumeAsync("no-such-batch");
         Assert.False(ok);
-        Assert.NotNull(error);
+        Assert.Equal(ResumeErrors.NotFound, error);
     }
 
     [Fact]
@@ -141,17 +149,14 @@ public sealed class CommitResumeWorkflowTests : IAsyncLifetime
     {
         var approved = await harness.PrepareApprovedAsync();
         var first = await harness.CommitAsync(approved.BatchId, approved.ManifestRevisionId, approved.Digest);
+        // Resume of a completed batch deterministically returns the completed receipt unchanged.
         var (ok, error, value) = await harness.TryResumeAsync(approved.BatchId);
-        // Resume may reject (not resumable) or return the completed receipt; never mutates again.
-        if (ok)
-        {
-            Assert.Equal(ImportReceiptStatus.Completed, value!.Status);
-            Assert.Equal(first.ReceiptId, value.ReceiptId);
-        }
-        else
-        {
-            Assert.False(string.IsNullOrWhiteSpace(error));
-        }
+        Assert.True(ok, error);
+        Assert.Equal(ImportReceiptStatus.Completed, value!.Status);
+        Assert.Equal(first.ReceiptId, value.ReceiptId);
+        Assert.Equal(
+            await harness.CountResolvableLedgerTransactionsAsync(first),
+            await harness.CountResolvableLedgerTransactionsAsync(value));
     }
 
     [Fact]
