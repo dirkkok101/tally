@@ -296,7 +296,8 @@ public sealed class CommitSagaTests : IAsyncLifetime
         Assert.Equal("command", descriptor.Kind);
         Assert.Equal(typeof(CommitBatchInput), descriptor.RequestTypeInfo.Type);
         Assert.Equal(typeof(ImportReceipt), descriptor.ResultTypeInfo.Type);
-        Assert.Null(registry.Find(IngestOperationIds.Commit));
+        // After GATE-INT-PUBLIC-CONTRACT, commit is globally registered.
+        Assert.NotNull(registry.Find(IngestOperationIds.Commit));
     }
 
     [Fact]

@@ -250,7 +250,8 @@ public sealed class ResumeCrashMatrixTests : IAsyncLifetime
         Assert.Equal(IngestOperationIds.Resume, descriptor.OperationId);
         Assert.Equal(typeof(ResumeBatchInput), descriptor.RequestTypeInfo.Type);
         Assert.Equal(typeof(ImportReceipt), descriptor.ResultTypeInfo.Type);
-        Assert.Null(registry.Find(IngestOperationIds.Resume));
+        // After GATE-INT-PUBLIC-CONTRACT, resume is globally registered.
+        Assert.NotNull(registry.Find(IngestOperationIds.Resume));
     }
 
     [Fact]

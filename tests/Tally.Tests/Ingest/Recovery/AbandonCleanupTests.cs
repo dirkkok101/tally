@@ -260,8 +260,9 @@ public sealed class AbandonCleanupTests : IAsyncLifetime
         Assert.Equal(2, module.Descriptors.Count);
         Assert.Contains(module.Descriptors, d => d.OperationId == IngestOperationIds.Abandon);
         Assert.Contains(module.Descriptors, d => d.OperationId == IngestOperationIds.Cleanup);
-        Assert.Null(registry.Find(IngestOperationIds.Abandon));
-        Assert.Null(registry.Find(IngestOperationIds.Cleanup));
+        // After GATE-INT-PUBLIC-CONTRACT, abandon/cleanup are globally registered.
+        Assert.NotNull(registry.Find(IngestOperationIds.Abandon));
+        Assert.NotNull(registry.Find(IngestOperationIds.Cleanup));
     }
 
     [Fact]
