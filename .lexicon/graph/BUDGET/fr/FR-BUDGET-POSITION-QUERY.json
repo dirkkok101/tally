@@ -25,7 +25,7 @@
     "Given a period has no Active revision and no revision selector, when Get Budget Position is requested, then BUDGET returns the explicit No Active Budget Plan Revision state and does not fabricate a zero plan.",
     "Given a selected plan and no matching LEDGER actuals, when the position is returned, then every planned value is preserved, actual totals are exact zero, and the state remains distinct from an empty or absent plan.",
     "Given LEDGER actuals assigned to a category with a positive planned entry, when the position is calculated, then those actuals appear exactly once in that category budgeted position.",
-    "Given LEDGER actuals assigned to a category with a Zero Budget entry, when the position is calculated, then those actuals appear exactly once in that category Zero Budget position.",
+    "Given LEDGER actuals assigned to a category with a Zero Budget entry, when the position is calculated, then those actuals appear exactly once in that category Zero Budget Position.",
     "Given LEDGER actuals assigned to a valid category omitted from the selected revision, when the position is calculated, then those actuals appear exactly once as Unbudgeted Spend for that stable category.",
     "Given LEDGER actuals without a current Spend Category assignment, when the position is calculated, then those actuals appear exactly once as Uncategorized Spend and no category or planned amount is invented.",
     "Given any selected plan and LEDGER snapshot, when category and total values are returned, then planned totals equal the exact sum of explicit entries and actual totals equal the exact sum of budgeted, Zero Budget, Unbudgeted Spend, and Uncategorized Spend actuals.",

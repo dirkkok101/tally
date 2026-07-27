@@ -137,44 +137,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXZCVXCMZCCGJ0461BX5Q1P7",
+      "id": "01KYH5Z3T4CV29TKF532XWZNYG",
       "kind": "acceptance_check",
       "text": [
         "The descriptor inventory contains exactly six BUDGET operation IDs with versioned request, result, error, mutability, idempotency, authority, limit, compatibility, and exit metadata; system.schema.list/show remain shared operations."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T09:14:14.8044922+00:00"
+      "created_at": "2026-07-27T06:59:59.4278185+00:00"
     },
     {
-      "id": "01KXZCVXCNHF3RN8PJQG2MTY2G",
+      "id": "01KYH5Z3T5VJH3N7Z215643BGD",
       "kind": "acceptance_check",
       "text": [
         "Source-generated JSON rejects unknown fields; malformed, incompatible, missing-actor, and missing-idempotency requests fail before handler or storage effects."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T09:14:14.8044922+00:00"
+      "created_at": "2026-07-27T06:59:59.4278185+00:00"
     },
     {
-      "id": "01KXZCVXCNF4KF8SZWBKZV4D2R",
+      "id": "01KYH5Z3T5QDABYD71ZS5J8SNB",
       "kind": "acceptance_check",
       "text": [
-        "Money uses canonical ZAR minor-unit-safe wire rules, IDs are opaque ULIDs, states are closed enums, and actor comes only from the trusted common envelope."
+        "Money uses canonical ZAR minor-unit integer wire rules, IDs are opaque ULIDs, states are closed enums, and actor comes only from the trusted common envelope."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T09:14:14.8044922+00:00"
+      "created_at": "2026-07-27T06:59:59.4278185+00:00"
     },
     {
-      "id": "01KXZCVXCN7BXCJXKHKKH3G0V4",
+      "id": "01KYH5Z3T5H9B0661JGNQD6XS4",
       "kind": "acceptance_check",
       "text": [
         "Schema discovery and unknown-operation handling perform no BudgetStateStore or Ledger read."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T09:14:14.8044922+00:00"
+      "created_at": "2026-07-27T06:59:59.4278185+00:00"
     },
     {
       "id": "01KXXMY86EHFH5G31GSSMB9MR6",

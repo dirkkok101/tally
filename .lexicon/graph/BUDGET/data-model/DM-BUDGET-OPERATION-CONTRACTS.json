@@ -4,7 +4,7 @@
   "ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
   "name": "BudgetOperationContracts",
   "description": [
-    "Concrete versioned request, result, authority, idempotency, limit, and stable error contracts for the six public BUDGET operations plus shared contract discovery."
+    "Concrete versioned request, result, authority, idempotency, limit, and stable error contracts for the six Public Budget Operations plus shared contract discovery."
   ],
   "schema_def": [
     "All operations use the common Public Budget Operation envelope, owner or delegated authority metadata, versioned request/result/error fingerprints, deterministic limits, stable exit categories, and metadata-only diagnostics.",

@@ -146,74 +146,74 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXXMQ14SEDKDSQB4C380YMGE",
+      "id": "01KYH5Z5QK7BDHJ500VZN55GZ1",
       "kind": "acceptance_check",
       "text": [
         "Release restore/build, format verification, full tests, and linux-x64 Native-AOT publish exit 0 with zero build, trim, reflection, dynamic-code, or descriptor warnings."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+      "created_at": "2026-07-27T07:00:01.3951054+00:00"
     },
     {
-      "id": "01KXXMQ14SRMV6Z271TAGF88M4",
+      "id": "01KYH5Z5QMJPEVXRJCMDTEGY9N",
       "kind": "acceptance_check",
       "text": [
         "Current BudgetGraphQualityEvidence confirms nonzero named-suite discovery, all requirements/tests/paths, intentional CLI-only endpoint status, dependency evidence, and no forbidden surface."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+      "created_at": "2026-07-27T07:00:01.3951054+00:00"
     },
     {
-      "id": "01KXXMQ14S62PJMS7W01D4W60W",
+      "id": "01KYH5Z5QMC0HJK16ANDZD6XBD",
       "kind": "acceptance_check",
       "text": [
         "Ledger, Agent Host, Host OS, and INSIGHTS statuses change from assumed to validated through lex CLI only after their named evidence succeeds; otherwise this gate fails."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+      "created_at": "2026-07-27T07:00:01.3951054+00:00"
     },
     {
-      "id": "01KXXMQ14S28B1V8KFNA3CV30B",
+      "id": "01KYH5Z5QMW7AB7HN3JKKBYC1C",
       "kind": "acceptance_check",
       "text": [
         "All five kill criteria are rechecked: public Ledger seam, persistence value, M policy ceiling, <=15-minute monthly maintenance, and exact once-only reconciliation."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+      "created_at": "2026-07-27T07:00:01.3951054+00:00"
     },
     {
-      "id": "01KXXMQ14SSDSR1CHF3CKEKX0B",
+      "id": "01KYH5Z5QMFGZVS7XW4CY9NKRE",
       "kind": "acceptance_check",
       "text": [
-        "The completion report records commands, counts, safe fingerprints, dependency statuses, kill checks, and commit IDs without financial payloads."
+        "The completion report records commands, counts, content fingerprints, dependency statuses, kill checks, and commit IDs without financial payloads."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+      "created_at": "2026-07-27T07:00:01.3951054+00:00"
     },
     {
-      "id": "01KXXMQ14SEHKSNT43DQ7QTP72",
+      "id": "01KYH5Z5QM3JWCEQQ7431TGKFJ",
       "kind": "expected_output",
       "text": [
         "VerifiedBudgetV1Module"
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+      "created_at": "2026-07-27T07:00:01.3951054+00:00"
     },
     {
-      "id": "01KXXMQ14S92F1B38EFVJNKCPE",
+      "id": "01KYH5Z5QMB6CM68V8NZJWCSXD",
       "kind": "expected_output",
       "text": [
-        "Safe module completion report"
+        "Module completion report containing no financial payloads"
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+      "created_at": "2026-07-27T07:00:01.3951054+00:00"
     },
     {
       "id": "01KXXMQ14SZ64M7KVMNJ1678RD",
@@ -252,14 +252,14 @@
   ],
   "review_gates": [
     {
-      "id": "01KXXMQ14TGJ0TB1C2V4QVN36F",
+      "id": "01KYH5Z5QM08Z9T2QQ1G47MQAV",
       "gate_type": "ci",
       "description": [
-        "The module script and safe reports reproduce from a clean checkout with generated owner-local fixtures."
+        "The module script and reports that contain no financial payloads reproduce from a clean checkout with generated owner-local fixtures."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+      "created_at": "2026-07-27T07:00:01.3951054+00:00"
     }
   ],
   "verification_steps": [

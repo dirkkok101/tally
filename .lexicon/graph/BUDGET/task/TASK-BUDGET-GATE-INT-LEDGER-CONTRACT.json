@@ -109,44 +109,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXXMBV13T5H584JWHET2T096",
+      "id": "01KYH5Z53MN5VQGYXVR086YX52",
       "kind": "acceptance_check",
       "text": [
         "The released registry exposes compatible ledger.category.list/get and ledger.actuals.query descriptors with every required field."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+      "created_at": "2026-07-27T07:00:00.7563743+00:00"
     },
     {
-      "id": "01KXXMBV13S29B7W8HHGWD9T34",
+      "id": "01KYH5Z53N3D2BZZ5A159738WZ",
       "kind": "acceptance_check",
       "text": [
         "A January half-open period maps to inclusive January 1 through January 31, consumes every page once, and reconciles exact totals."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+      "created_at": "2026-07-27T07:00:00.7563743+00:00"
     },
     {
-      "id": "01KXXMBV13MXEA03DJ9N2Y7S2N",
+      "id": "01KYH5Z53NDV4N24AB9B2J6ZJG",
       "kind": "acceptance_check",
       "text": [
         "Active and archived assigned categories remain stable IDs; unknown IDs, duplicate or missing ordinals, changed generation, expiry, and incompatible contracts yield no partial evidence."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+      "created_at": "2026-07-27T07:00:00.7563743+00:00"
     },
     {
-      "id": "01KXXMBV13ST3QWZPGM9J6Q8A4",
+      "id": "01KYH5Z53N1NCA5CJAA9T8E0P3",
       "kind": "acceptance_check",
       "text": [
-        "Architecture scans find zero BUDGET references to LedgerDb, storage paths, private handlers, private domain types, SQL, or storage configuration."
+        "Architecture scans find no BUDGET references to LedgerDb, storage paths, private handlers, private domain types, SQL, or storage configuration."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-19T16:46:47.8408153+00:00"
+      "created_at": "2026-07-27T07:00:00.7563743+00:00"
     },
     {
       "id": "01KXXMBV138FW2ZP0VT218TZYY",

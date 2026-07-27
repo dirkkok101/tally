@@ -24,7 +24,7 @@
     "Given exact non-negative ZAR Category Budget Entries, when a draft is created, then every submitted category identifier and amount round-trips exactly and the draft total equals their exact base-10 sum.",
     "Given a ZAR 0.00 Category Budget Entry, when the draft is read, then that category is returned as explicit Zero Budget.",
     "Given an active Spend Category omitted from the request, when the draft is read, then no entry is invented and the category remains Unbudgeted.",
-    "Given an empty entry collection, when a draft is created, then an explicit empty draft is returned and remains distinct from No Budget Plan and an all-Zero Budget draft.",
+    "Given an empty entry collection, when a draft is created, then an explicit empty draft is returned and remains distinct from No Budget Plan and an all-zero Budget draft.",
     "Given an existing Draft, Active, or Superseded revision and newly submitted complete content, when the owner revises the plan, then a new Draft revision is created and the source revision remains unchanged.",
     "Given a negative amount, duplicate category identifier, malformed amount, or incomplete request, when Create Draft is invoked, then validation fails before any plan mutation.",
     "Given an unknown, inactive, archived, or stale Spend Category reference, when Create Draft is invoked, then the entire request fails before any revision is created.",

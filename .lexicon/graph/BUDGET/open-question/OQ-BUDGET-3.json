@@ -2,7 +2,7 @@
   "id": "01KXX8Z3VV4EQFSQMKAKDPJM5R",
   "module_id": "01KXR4WNPW86216H643PZ6KA36",
   "ref_code": "OQ-BUDGET-3",
-  "question": "Must every active Spend Category appear in a plan, or are omitted categories intentionally Unbudgeted while explicit zero means no planned spend?",
+  "question": "Must every active Spend Category appear in a plan, or are omitted categories intentionally Unbudgeted while explicit zero means no Planned Spend?",
   "context": [
     "The brainstorm selects explicit zero-versus-omitted semantics, but discovery must validate whether plan completeness is optional or mandatory."
   ],

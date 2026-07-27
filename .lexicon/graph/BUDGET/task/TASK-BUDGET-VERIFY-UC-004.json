@@ -9,7 +9,7 @@
     "Validation-only UC task with no implements refs; trace UC-BUDGET-004 success and both failure paths through published reads."
   ],
   "objective": [
-    "UC-BUDGET-004 proves deterministic complete history, immutable intent, supplemental category lifecycle, and safe missing/integrity errors."
+    "UC-BUDGET-004 proves deterministic complete history, immutable intent, supplemental category lifecycle, and missing/integrity errors that expose no financial payloads."
   ],
   "planning_state": "planned",
   "priority": 1,

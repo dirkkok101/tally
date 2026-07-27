@@ -12,7 +12,7 @@
     "C4: Period state is derived from the host TimeProvider current DateOnly. Caller-supplied or persisted lifecycle authority is forbidden.",
     "C5: Draft creation and activation are replay-safe by idempotency key plus canonical request hash. Replays return the event-time immutable outcome and conflicts perform no mutation.",
     "C6: BUDGET reads category lifecycle and snapshot actuals only through released ledger.category.list/get and ledger.actuals.query operations via the shared concrete LedgerContractClient; it never opens Ledger storage or duplicates finance semantics.",
-    "C7: The BUDGET actuals interval is [startInclusive,endExclusive); it maps to Ledger inclusive filters with from=startInclusive and to=endExclusive.AddDays(-1).",
+    "C7: The Budget Actuals interval is [startInclusive,endExclusive); it maps to Ledger inclusive filters with from=startInclusive and to=endExclusive.AddDays(-1).",
     "C8: Archived assigned categories remain bucketed by plan membership, unknown category identities are integrity failures, and selected revisions must belong to the requested period and currency before any Ledger read.",
     "C9: Position calculation is pure, deterministic, ordered by category ID with Uncategorized last, complete before publication, checked for overflow, and retains no actual, cursor, position, or report payload.",
     "C10: budget.db is a separate owner-only raw-SQLite store using 0700 directories, 0600 files, foreign_keys ON, WAL, synchronous FULL, user_version migrations, and BEGIN IMMEDIATE for mutations.",

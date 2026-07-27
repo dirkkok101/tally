@@ -3,7 +3,7 @@
   "module_id": "01KXR4WNPW86216H643PZ6KA36",
   "ref_code": "TC-BUDGET-POSITION-QUERY-CONTRACT",
   "slug": "position-query-contract",
-  "title": "Verify exact budget position contract",
+  "title": "Verify exact Budget Position contract",
   "level": "integration",
   "surface": "contract",
   "scenario": "happy",

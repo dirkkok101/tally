@@ -4,7 +4,7 @@
   "ref_code": "C15",
   "title": "Distinct empty planning states",
   "description": [
-    "No Budget Plan, no Active Budget Plan Revision, an active plan with no Category Budget Entries, an all-Zero Budget plan, and an active plan with no actuals are distinct structured states and must never be collapsed into one another."
+    "No Budget Plan, no Active Budget Plan Revision, an active plan with no Category Budget Entries, an all-zero Budget Plan, and an active plan with no actuals are distinct structured states and must never be collapsed into one another."
   ],
   "type": "business",
   "created_at": "2026-07-19T14:27:55.7144972+00:00"

@@ -2,7 +2,7 @@
   "id": "01KXXCH3MMMVSVD62ZBDJWANYJ",
   "module_id": "01KXR4WNPW86216H643PZ6KA36",
   "ref_code": "A1",
-  "title": "Calendar-month budget period",
+  "title": "Calendar-month Budget Period",
   "description": [
     "Validated for v1: Budget Period is the Ledger Effective Date interval from the first calendar date inclusive to the first calendar date of the next month exclusive; variable pay cycles and locale-derived boundaries are out of scope."
   ],

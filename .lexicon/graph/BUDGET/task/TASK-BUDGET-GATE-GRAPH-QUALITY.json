@@ -229,54 +229,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXXMQ14QBEPNQD90R0VBT685",
+      "id": "01KYH5Z4FTSVH8SB8YVB6GP835",
       "kind": "acceptance_check",
       "text": [
         "Lex coverage reports all 11 active FRs covered, all 18 planned test cases linked, zero orphan tests, and zero gaps."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+      "created_at": "2026-07-27T07:00:00.1220841+00:00"
     },
     {
-      "id": "01KXXMQ14QTWJK1KHSXTNHEHA8",
+      "id": "01KYH5Z4FVQ77V0C9FNTZE9KAT",
       "kind": "acceptance_check",
       "text": [
         "Decision path-check reports all 34 expected paths matched; link suggestions are empty; the three known endpoint heuristics are recorded as non-applicable because the accepted design is local CLI-only."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+      "created_at": "2026-07-27T07:00:00.1220841+00:00"
     },
     {
-      "id": "01KXXMQ14QBEWN3ADWCS7AY8GQ",
+      "id": "01KYH5Z4FV8GS4RTCEY76WFS9C",
       "kind": "acceptance_check",
       "text": [
         "Every named feature, Ledger, contract, recovery, security, performance, INSIGHTS, and UC test class has nonzero discovery before aggregate totals are accepted."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+      "created_at": "2026-07-27T07:00:00.1220841+00:00"
     },
     {
-      "id": "01KXXMQ14QT5THZEJG07EXJRCX",
+      "id": "01KYH5Z4FV5E9EHWSPRQNPS7AA",
       "kind": "acceptance_check",
       "text": [
-        "External dependency check shows evidence-linked statuses and the report records exact commands, counts, ref-codes, and safe fingerprints without finance payloads."
+        "External dependency check shows evidence-linked statuses and the report records exact commands, counts, ref-codes, and content fingerprints without finance payloads."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+      "created_at": "2026-07-27T07:00:00.1220841+00:00"
     },
     {
-      "id": "01KXXMQ14Q8MSRTCDNH56264Z0",
+      "id": "01KYH5Z4FVDCGE2VD5KV7HK9RG",
       "kind": "acceptance_check",
       "text": [
         "Plan coverage/audit, task contracts, dependency edges, context budgets, placeholder scans, and forbidden-surface scans are clean."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-19T16:52:54.5452616+00:00"
+      "created_at": "2026-07-27T07:00:00.1220841+00:00"
     },
     {
       "id": "01KXXMQ14Q2M99JM9D3DREW5JF",

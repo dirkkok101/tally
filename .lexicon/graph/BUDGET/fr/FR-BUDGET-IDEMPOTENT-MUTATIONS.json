@@ -25,7 +25,7 @@
     "Given an existing idempotency key and different normalized logical input, when the key is reused, then BUDGET returns a stable conflict and plan state remains unchanged.",
     "Given interruption before durable commit, when the same mutation is retried, then either the mutation commits exactly once or the pre-operation state remains authoritative.",
     "Given interruption after durable commit but before the caller receives the result, when the same mutation is retried, then the committed prior result is returned without creating another revision or activation.",
-    "Given an idempotency outcome is inspected, when diagnostics are emitted, then only safe identifiers, fingerprints, status, and timing metadata appear outside the explicit data result."
+    "Given an idempotency outcome is inspected, when diagnostics are emitted, then only opaque identifiers, fingerprints, status names, and timing metadata appear outside the explicit data result, and no amount, category name, or other financial payload field appears."
   ],
   "security_criteria": [
     "Idempotency records retain fingerprints and outcome metadata without duplicating financial request payloads into diagnostics."
