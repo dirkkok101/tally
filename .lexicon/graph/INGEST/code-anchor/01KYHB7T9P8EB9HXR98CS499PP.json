@@ -5,7 +5,7 @@
   "ref_code": "TC-INGEST-MANIFEST-REVIEW-CONTRACT",
   "repo_path": "tests/Tally.Tests/Ingest/E2E/ReviewApprovalWorkflowTests.cs",
   "anchor_kind": "test",
-  "last_verified_hash": "423134f834116f2c3f4a11306e9ecb43828428cea2003231502dc584e4a5b2d6",
-  "last_verified_at": "2026-07-27T08:32:07.4783353+00:00",
+  "last_verified_hash": "6c56a58bcde4ca4d8d9b703c32f78d6c5eabc84a94421bd3416653c86a00a1ae",
+  "last_verified_at": "2026-07-27T09:42:48.2393647+00:00",
   "created_at": "2026-07-27T08:32:07.4783353+00:00"
 }

@@ -5,7 +5,7 @@
   "ref_code": "TC-INGEST-ARTIFACT-CLEANUP-CONTRACT",
   "repo_path": "tests/Tally.Tests/Ingest/Recovery/AbandonCleanupTests.cs",
   "anchor_kind": "test",
-  "last_verified_hash": "9dda05fe12b8c484d8370847891e3edc06c16cf40f22859fd36ce877169a076e",
-  "last_verified_at": "2026-07-27T08:32:07.4751656+00:00",
+  "last_verified_hash": "74a73697291fc5f0266c5b9824876bddfab1fd812d8cfe43611113aae81bce85",
+  "last_verified_at": "2026-07-27T09:42:48.2380379+00:00",
   "created_at": "2026-07-27T08:32:07.4751656+00:00"
 }

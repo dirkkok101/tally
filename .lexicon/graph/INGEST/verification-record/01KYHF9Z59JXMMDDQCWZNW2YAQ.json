@@ -1,0 +1,12 @@
+{
+  "id": "01KYHF9Z59JXMMDDQCWZNW2YAQ",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-INGEST-ARTIFACT-CLEANUP",
+  "subject_entity_id": "01KXTEW59363CH1PSG2HC1X0BB",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-INGEST-ARTIFACT-CLEANUP-CONTRACT",
+  "commit_sha": "de17599d52a60a1890a14d9b5d24330bc3ce2647",
+  "bead_id": "bd-557",
+  "verified_at": "2026-07-27T09:43:12.2964067+00:00"
+}

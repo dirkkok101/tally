@@ -5,7 +5,7 @@
   "ref_code": "TC-INGEST-ADAPTER-GOLDEN-FIXTURES",
   "repo_path": "tests/Tally.Tests/Ingest/Adapters/AdapterQualificationTests.cs",
   "anchor_kind": "test",
-  "last_verified_hash": "34925adcc79453285947489d309f5ab74fe2100df93d89f771fab9106b03b4e0",
-  "last_verified_at": "2026-07-27T08:32:07.4743490+00:00",
+  "last_verified_hash": "b329007b6e2b6ed0eac8b19780d77c589033ecee912d1ba2c7907b2c9bfddf20",
+  "last_verified_at": "2026-07-27T09:42:48.2375804+00:00",
   "created_at": "2026-07-27T08:32:07.4743490+00:00"
 }

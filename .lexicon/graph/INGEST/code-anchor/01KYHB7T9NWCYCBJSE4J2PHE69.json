@@ -5,7 +5,7 @@
   "ref_code": "TC-INGEST-FAILURE-STATUS-CONTRACT",
   "repo_path": "tests/Tally.Tests/Ingest/E2E/FailureCleanupWorkflowTests.cs",
   "anchor_kind": "test",
-  "last_verified_hash": "965b105553d2cf71c84a152f5fc2fcba0a4d6c6d8e923e819467e707bf9d73dc",
-  "last_verified_at": "2026-07-27T08:32:07.4770563+00:00",
+  "last_verified_hash": "d6cb1da30124dbd2936fe60f0cea513ba8e1f1f72fda54e3e4b6f45ff42531cd",
+  "last_verified_at": "2026-07-27T09:42:48.2387329+00:00",
   "created_at": "2026-07-27T08:32:07.4770563+00:00"
 }

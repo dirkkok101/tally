@@ -1,0 +1,12 @@
+{
+  "id": "01KYHF9Z5950YZS5B8V6T10W5N",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+  "subject_entity_id": "01KXTEW4MN1E1RHCCKRQVJW6ER",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-INGEST-COMMIT-RECOVERY-MATRIX",
+  "commit_sha": "de17599d52a60a1890a14d9b5d24330bc3ce2647",
+  "bead_id": "bd-3ey",
+  "verified_at": "2026-07-27T09:43:12.2964067+00:00"
+}

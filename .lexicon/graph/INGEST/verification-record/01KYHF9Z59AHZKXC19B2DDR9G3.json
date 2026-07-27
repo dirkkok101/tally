@@ -1,0 +1,12 @@
+{
+  "id": "01KYHF9Z59AHZKXC19B2DDR9G3",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY",
+  "subject_entity_id": "01KXTEXMB56QHCK46RMFVHPJBG",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-INGEST-COMMIT-RECOVERY-MATRIX",
+  "commit_sha": "de17599d52a60a1890a14d9b5d24330bc3ce2647",
+  "bead_id": "bd-3ey",
+  "verified_at": "2026-07-27T09:43:12.2964067+00:00"
+}
