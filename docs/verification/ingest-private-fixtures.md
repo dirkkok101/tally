@@ -16,3 +16,5 @@ Outcome (2026-07-25, owner worktree):
 Verification: rerunning the private-fixture gate requires the owner-local
 fixture set and is only possible on the owner's machine; the module gate
 (bd-1vr) consumed this evidence via metadata-only fingerprints.
+
+Re-attested with machine-parseable commit trailer on 2026-07-27.
