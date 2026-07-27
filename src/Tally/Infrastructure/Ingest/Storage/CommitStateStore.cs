@@ -118,10 +118,7 @@ public sealed class CommitStateStore(IngestDatabase database, BatchErrorEventSto
                 COALESCE(o.disposition, 0) AS disposition,
                 r.ledger_transaction_id,
                 r.error_code,
-                CASE
-                    WHEN r.attempted_at IS NULL THEN 0
-                    ELSE 1
-                END AS attempt_flag
+                COALESCE(r.attempt_count, 0) AS attempt_count
             FROM import_candidate c
             LEFT JOIN source_record_outcome o
                 ON o.manifest_revision_id = c.manifest_revision_id
@@ -279,14 +276,15 @@ public sealed class CommitStateStore(IngestDatabase database, BatchErrorEventSto
 
             const string upsertSql = """
                 INSERT INTO candidate_receipt (
-                    receipt_id, candidate_id, outcome, ledger_transaction_id, error_code, attempted_at, terminal_at)
-                VALUES ($receiptId, $candidateId, $outcome, NULL, NULL, $attemptedAt, NULL)
+                    receipt_id, candidate_id, outcome, ledger_transaction_id, error_code, attempted_at, terminal_at, attempt_count)
+                VALUES ($receiptId, $candidateId, $outcome, NULL, NULL, $attemptedAt, NULL, 1)
                 ON CONFLICT(receipt_id, candidate_id) DO UPDATE SET
                     outcome = excluded.outcome,
                     ledger_transaction_id = NULL,
                     error_code = NULL,
                     attempted_at = excluded.attempted_at,
-                    terminal_at = NULL;
+                    terminal_at = NULL,
+                    attempt_count = candidate_receipt.attempt_count + 1;
                 """;
             await using (var command = connection.CreateCommand())
             {
@@ -559,7 +557,7 @@ public sealed class CommitStateStore(IngestDatabase database, BatchErrorEventSto
             outcomes.Add(new CandidateReceipt(
                 item.CandidateId,
                 state,
-                Math.Max(1, item.AttemptNumber),
+                item.AttemptNumber,
                 item.FrozenRequest.OperationId,
                 item.FrozenRequest.LedgerContractVersion,
                 item.IdempotencyKey,

@@ -5,7 +5,7 @@ namespace Tally.Infrastructure.Ingest.Storage;
 
 public sealed class IngestSchemaMigrator
 {
-    private const int CurrentVersion = 3;
+    private const int CurrentVersion = 4;
 
     public async Task ApplyAsync(SqliteConnection connection, CancellationToken cancellationToken)
     {
@@ -35,6 +35,9 @@ public sealed class IngestSchemaMigrator
                         break;
                     case 3:
                         await new IngestMigrationV003().ApplyAsync(connection, transaction, cancellationToken);
+                        break;
+                    case 4:
+                        await new IngestMigrationV004().ApplyAsync(connection, transaction, cancellationToken);
                         break;
                     default:
                         throw new InvalidOperationException("The ingest database schema version is not supported by this runtime.");

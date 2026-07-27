@@ -436,6 +436,36 @@ public sealed class CommitSagaTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Attempt_number_is_zero_before_attempt_and_increments_on_each_MarkAttempting()
+    {
+        var prepared = await PrepareApprovedAsync();
+        var protection = new IngestArtifactProtection();
+        var database = new IngestDatabase(root, protection);
+        var store = new CommitStateStore(database, new BatchErrorEventStore());
+        var work = await store.LoadWorkItemsAsync(prepared.BatchId, prepared.ManifestRevisionId, CancellationToken.None);
+        Assert.All(work, item => Assert.Equal(0, item.AttemptNumber));
+
+        var receipt = await store.EnsureReceiptAsync(
+            prepared.BatchId, prepared.ManifestRevisionId, "2026-07-27T12:00:00Z", CancellationToken.None);
+        var candidateId = work[0].CandidateId;
+
+        await store.MarkAttemptingAsync(receipt.ReceiptId, candidateId, "2026-07-27T12:00:01Z", CancellationToken.None);
+        work = await store.LoadWorkItemsAsync(prepared.BatchId, prepared.ManifestRevisionId, CancellationToken.None);
+        Assert.Equal(1, work.Single(w => w.CandidateId == candidateId).AttemptNumber);
+
+        await store.MarkAttemptingAsync(receipt.ReceiptId, candidateId, "2026-07-27T12:00:02Z", CancellationToken.None);
+        work = await store.LoadWorkItemsAsync(prepared.BatchId, prepared.ManifestRevisionId, CancellationToken.None);
+        Assert.Equal(2, work.Single(w => w.CandidateId == candidateId).AttemptNumber);
+
+        await store.MarkAttemptingAsync(receipt.ReceiptId, candidateId, "2026-07-27T12:00:03Z", CancellationToken.None);
+        work = await store.LoadWorkItemsAsync(prepared.BatchId, prepared.ManifestRevisionId, CancellationToken.None);
+        Assert.Equal(3, work.Single(w => w.CandidateId == candidateId).AttemptNumber);
+
+        // Unattempted sibling remains 0.
+        Assert.Contains(work, w => w.CandidateId != candidateId && w.AttemptNumber == 0);
+    }
+
+    [Fact]
     public async Task EnsureReceipt_resume_preserves_created_at_and_summary_json()
     {
         var prepared = await PrepareApprovedAsync();

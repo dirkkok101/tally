@@ -57,24 +57,24 @@ public sealed class IngestDatabaseFoundationTests : IAsyncLifetime
 
     // DM-INGEST-STATE-STORE
     [Fact]
-    public async Task V003_advances_user_version()
+    public async Task V004_advances_user_version()
     {
         await using var connection = await OpenAsync();
         await new IngestSchemaMigrator().ApplyAsync(connection, CancellationToken.None);
 
-        Assert.Equal(3L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
+        Assert.Equal(4L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
     }
 
     // DD-INGEST-STATE-STORE
     [Fact]
-    public async Task Reapplying_v003_is_idempotent()
+    public async Task Reapplying_v004_is_idempotent()
     {
         await using var connection = await OpenAsync();
         var migrator = new IngestSchemaMigrator();
         await migrator.ApplyAsync(connection, CancellationToken.None);
         await migrator.ApplyAsync(connection, CancellationToken.None);
 
-        Assert.Equal(3L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
+        Assert.Equal(4L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
         Assert.Equal(12, (await TableNamesAsync(connection)).Length);
     }
 
@@ -83,7 +83,7 @@ public sealed class IngestDatabaseFoundationTests : IAsyncLifetime
     public async Task A_newer_user_version_returns_a_stable_compatibility_failure()
     {
         await using var connection = await OpenAsync();
-        await ExecuteAsync(connection, "PRAGMA user_version = 4;");
+        await ExecuteAsync(connection, "PRAGMA user_version = 5;");
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => new IngestSchemaMigrator().ApplyAsync(connection, CancellationToken.None));
 
@@ -105,10 +105,31 @@ public sealed class IngestDatabaseFoundationTests : IAsyncLifetime
 
         await new IngestSchemaMigrator().ApplyAsync(connection, CancellationToken.None);
 
-        Assert.Equal(3L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
+        Assert.Equal(4L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
         var columns = await ColumnNamesAsync(connection, "import_receipt");
         Assert.Contains("created_at", columns);
         Assert.Contains("updated_at", columns);
+    }
+
+    // bd-3gib / candidate_receipt attempt_count
+    [Fact]
+    public async Task V004_adds_attempt_count_column_defaulting_to_zero()
+    {
+        await using var connection = await OpenAsync();
+        await using (var transaction = (SqliteTransaction)await connection.BeginTransactionAsync())
+        {
+            await new IngestMigrationV001().ApplyAsync(connection, transaction, CancellationToken.None);
+            await new IngestMigrationV002().ApplyAsync(connection, transaction, CancellationToken.None);
+            await new IngestMigrationV003().ApplyAsync(connection, transaction, CancellationToken.None);
+            await ExecuteAsync(connection, "PRAGMA user_version = 3;", transaction);
+            await transaction.CommitAsync();
+        }
+
+        await new IngestSchemaMigrator().ApplyAsync(connection, CancellationToken.None);
+
+        Assert.Equal(4L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
+        var columns = await ColumnNamesAsync(connection, "candidate_receipt");
+        Assert.Contains("attempt_count", columns);
     }
 
     // DD-INGEST-STATE-STORE
@@ -144,7 +165,7 @@ public sealed class IngestDatabaseFoundationTests : IAsyncLifetime
 
         await new IngestSchemaMigrator().ApplyAsync(connection, CancellationToken.None);
 
-        Assert.Equal(3L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
+        Assert.Equal(4L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
         Assert.Equal(1L, await ScalarLongAsync(connection, "SELECT COUNT(*) FROM ingest_batch WHERE batch_id = 'batch-1';"));
     }
 
