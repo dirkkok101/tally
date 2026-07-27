@@ -1,0 +1,11 @@
+{
+  "id": "01KYHZNK704A3TKHHSVMEMDWPV",
+  "entity_type": "test_case",
+  "entity_id": "01KXXFJR373WM0RZY04CR54W1Y",
+  "ref_code": "TC-BUDGET-CATEGORY-LIFECYCLE-CONTRACT",
+  "repo_path": "tests/Tally.Tests/Budget/LedgerContract/LedgerBudgetActualsProjectionTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "43afb1dcfc22e540a1081ab25fac3257dc6735dc876d38824f317b049d4ef676",
+  "last_verified_at": "2026-07-27T14:29:10.4965500+00:00",
+  "created_at": "2026-07-27T14:29:10.4965500+00:00"
+}

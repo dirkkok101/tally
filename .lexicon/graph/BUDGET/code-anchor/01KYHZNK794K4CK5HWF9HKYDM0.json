@@ -1,0 +1,11 @@
+{
+  "id": "01KYHZNK794K4CK5HWF9HKYDM0",
+  "entity_type": "test_case",
+  "entity_id": "01KXXFJZKTQ57Q1N8K9RSXVBNT",
+  "ref_code": "TC-BUDGET-STRUCTURED-INVOCATION-CONTRACT",
+  "repo_path": "tests/Tally.Tests/Budget/Acceptance/BudgetUc005AgentContractTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "7d5e9bbc39598dab4a0403a8ba7db6dca5153c5b95f9826412e2bb88d53cbcc8",
+  "last_verified_at": "2026-07-27T14:29:10.5055730+00:00",
+  "created_at": "2026-07-27T14:29:10.5055730+00:00"
+}

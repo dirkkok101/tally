@@ -1,0 +1,11 @@
+{
+  "id": "01KYHZNK73SP43MXWP14PXE785",
+  "entity_type": "test_case",
+  "entity_id": "01KXXFJSE69T4XK1H7T9335SE2",
+  "ref_code": "TC-BUDGET-IDEMPOTENT-MUTATIONS-CONTRACT",
+  "repo_path": "tests/Tally.Tests/Budget/Idempotency/BudgetMutationExecutorTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "9bab91f94bbd18640c19f17df27419876e03158ff77623733ba6f58103eaaaa6",
+  "last_verified_at": "2026-07-27T14:29:10.4991975+00:00",
+  "created_at": "2026-07-27T14:29:10.4991975+00:00"
+}

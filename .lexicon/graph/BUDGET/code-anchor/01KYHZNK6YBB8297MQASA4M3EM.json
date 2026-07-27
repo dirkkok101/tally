@@ -1,0 +1,11 @@
+{
+  "id": "01KYHZNK6YBB8297MQASA4M3EM",
+  "entity_type": "test_case",
+  "entity_id": "01KXXFMM418W05CKA3QVN4W3AX",
+  "ref_code": "TC-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+  "repo_path": "tests/Tally.Tests/Budget/Plans/ActivateBudgetPlanRevisionCommandTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "4663d05e2ddaeed8e9c4f56932c9d64172f43a64e7a1926fd20332625574b87e",
+  "last_verified_at": "2026-07-27T14:29:10.4944646+00:00",
+  "created_at": "2026-07-27T14:29:10.4944646+00:00"
+}

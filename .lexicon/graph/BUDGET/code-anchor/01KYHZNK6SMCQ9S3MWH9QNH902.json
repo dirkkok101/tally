@@ -1,0 +1,11 @@
+{
+  "id": "01KYHZNK6SMCQ9S3MWH9QNH902",
+  "entity_type": "data_model",
+  "entity_id": "01KXXJD70VEXEC9XJW661AYMPD",
+  "ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
+  "repo_path": "src/Tally/Contracts/Budget/Plans/BudgetPlanContracts.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "fdbd7bedf0b42f549e715d7eff6e866ee4a6b94a0cd9189a1cb7df04f57d0066",
+  "last_verified_at": "2026-07-27T14:29:10.4899009+00:00",
+  "created_at": "2026-07-27T14:29:10.4899009+00:00"
+}

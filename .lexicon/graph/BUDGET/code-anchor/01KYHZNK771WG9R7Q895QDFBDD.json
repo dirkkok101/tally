@@ -1,0 +1,11 @@
+{
+  "id": "01KYHZNK771WG9R7Q895QDFBDD",
+  "entity_type": "test_case",
+  "entity_id": "01KXXFJJYHJ0K2F400NTD9ST19",
+  "ref_code": "TC-BUDGET-PLAN-IDENTITY-CONTRACT",
+  "repo_path": "tests/Tally.Tests/Budget/Periods/BudgetPeriodTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "83c26df1001318c550e68396a32f893d79136dd6e11284f0643a1f665ab31cd9",
+  "last_verified_at": "2026-07-27T14:29:10.5032398+00:00",
+  "created_at": "2026-07-27T14:29:10.5032398+00:00"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "01KYHZNK79T5JSESNT6XZ3KBME",
+  "entity_type": "test_case",
+  "entity_id": "01KXXFMNXK6519SXMH7JYSDJYR",
+  "ref_code": "TC-BUDGET-SELF-CONTAINED-LOCAL-OPERATION",
+  "repo_path": "tests/Tally.Tests/Budget/Acceptance/BudgetUc005AgentContractTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "7d5e9bbc39598dab4a0403a8ba7db6dca5153c5b95f9826412e2bb88d53cbcc8",
+  "last_verified_at": "2026-07-27T14:29:10.5050014+00:00",
+  "created_at": "2026-07-27T14:29:10.5050014+00:00"
+}

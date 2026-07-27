@@ -1,0 +1,11 @@
+{
+  "id": "01KYHZNK74ATDWWYTF3P89M6G2",
+  "entity_type": "test_case",
+  "entity_id": "01KXXFJTN75M32B91FMS1967PH",
+  "ref_code": "TC-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+  "repo_path": "tests/Tally.Tests/Budget/LedgerContract/LedgerBudgetCategoryLifecycleTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "8dfb84db3f4168a7d137c0cf04fafaedbeef4da17c2efabcb50e514fb2f09e18",
+  "last_verified_at": "2026-07-27T14:29:10.5004750+00:00",
+  "created_at": "2026-07-27T14:29:10.5004750+00:00"
+}

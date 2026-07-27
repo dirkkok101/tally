@@ -1,0 +1,11 @@
+{
+  "id": "01KYHZNK73FEDAH1525MHF8H0P",
+  "entity_type": "test_case",
+  "entity_id": "01KXXFJX5HB8EG5SKYF9ASDS6P",
+  "ref_code": "TC-BUDGET-INSIGHTS-PROJECTION-CONTRACT",
+  "repo_path": "tests/Tally.Tests/Budget/InsightsContract/BudgetInsightsContractTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "fbc2d57d23c3a28c55339fbf58d9966b98f35f7987b9674894a983d59f49c13e",
+  "last_verified_at": "2026-07-27T14:29:10.4997245+00:00",
+  "created_at": "2026-07-27T14:29:10.4997245+00:00"
+}

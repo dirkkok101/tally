@@ -1,0 +1,11 @@
+{
+  "id": "01KYHZNK783PD5E3H9MCNF3RFK",
+  "entity_type": "test_case",
+  "entity_id": "01KXXFMNG4CT13XZKM3DCKTMV5",
+  "ref_code": "TC-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY",
+  "repo_path": "tests/Tally.Tests/Budget/LedgerContract/BudgetLedgerBoundaryArchitectureTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "1027e041f545bf9ce67ac666445a2e3c7088f3e052cb65c45ccf091d0b15b8db",
+  "last_verified_at": "2026-07-27T14:29:10.5042789+00:00",
+  "created_at": "2026-07-27T14:29:10.5042789+00:00"
+}

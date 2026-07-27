@@ -1,0 +1,11 @@
+{
+  "id": "01KYHZNK71CER26R2AD2TCKX6M",
+  "entity_type": "test_case",
+  "entity_id": "01KXXFJYD4MPDR2RD18XQAQ6MN",
+  "ref_code": "TC-BUDGET-CONTRACT-DISCOVERY-CONTRACT",
+  "repo_path": "tests/Tally.Tests/Budget/Contract/BudgetOperationContractTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "39dfafa71a07b80b2a8fe846b98ce9f0224bb57018fd20d752af32a83dbe2e09",
+  "last_verified_at": "2026-07-27T14:29:10.4976440+00:00",
+  "created_at": "2026-07-27T14:29:10.4976440+00:00"
+}

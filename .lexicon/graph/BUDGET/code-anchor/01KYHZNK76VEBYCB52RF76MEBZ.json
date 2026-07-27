@@ -1,0 +1,11 @@
+{
+  "id": "01KYHZNK76VEBYCB52RF76MEBZ",
+  "entity_type": "test_case",
+  "entity_id": "01KXXFJM6K9R9S8XY028BDYQ51",
+  "ref_code": "TC-BUDGET-PLAN-DRAFT-CONTRACT",
+  "repo_path": "tests/Tally.Tests/Budget/Plans/CreateBudgetDraftCommandTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "b6d734aeba60f552944471d513c729cc92d52bead32a0bf0723adf8f80b174bd",
+  "last_verified_at": "2026-07-27T14:29:10.5023134+00:00",
+  "created_at": "2026-07-27T14:29:10.5023134+00:00"
+}

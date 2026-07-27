@@ -1,0 +1,11 @@
+{
+  "id": "01KYHZNK6RKK05PXA0DATBSAJZ",
+  "entity_type": "data_model",
+  "entity_id": "01KXXJD70ZX2H07DVSF5RCCPQM",
+  "ref_code": "DM-BUDGET-LIFECYCLE-IDEMPOTENCY",
+  "repo_path": "src/Tally/Infrastructure/Budget/Storage/BudgetSchema.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "24d3fc86d5e24f94ebf8c60106689847c05805e04abfefb616a82c1e06afa27c",
+  "last_verified_at": "2026-07-27T14:29:10.4885391+00:00",
+  "created_at": "2026-07-27T14:29:10.4885391+00:00"
+}

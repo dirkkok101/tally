@@ -1,0 +1,11 @@
+{
+  "id": "01KYHZNK75PZYJ95E3D73NV9S8",
+  "entity_type": "test_case",
+  "entity_id": "01KXXFJNFT199Y2RKCVHRCVW12",
+  "ref_code": "TC-BUDGET-PLAN-ACTIVATION-CONTRACT",
+  "repo_path": "tests/Tally.Tests/Budget/Plans/ActivateBudgetPlanRevisionCommandTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "4663d05e2ddaeed8e9c4f56932c9d64172f43a64e7a1926fd20332625574b87e",
+  "last_verified_at": "2026-07-27T14:29:10.5017986+00:00",
+  "created_at": "2026-07-27T14:29:10.5017986+00:00"
+}

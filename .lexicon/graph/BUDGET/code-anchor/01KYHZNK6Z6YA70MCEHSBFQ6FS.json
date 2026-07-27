@@ -1,0 +1,11 @@
+{
+  "id": "01KYHZNK6Z6YA70MCEHSBFQ6FS",
+  "entity_type": "test_case",
+  "entity_id": "01KXXFMMHH32VCB6XAHQFY0QHW",
+  "ref_code": "TC-BUDGET-ATTRIBUTABLE-HISTORY",
+  "repo_path": "tests/Tally.Tests/Budget/Acceptance/BudgetUc002ActivationTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "f0a678521a59a36363a38d1cebd8694954f3dc2f569015fdb4a63a1295548ce6",
+  "last_verified_at": "2026-07-27T14:29:10.4950716+00:00",
+  "created_at": "2026-07-27T14:29:10.4950716+00:00"
+}
