@@ -565,6 +565,32 @@ public sealed class CommitSagaTests : IAsyncLifetime
         Assert.Equal(0, injector.LedgerCallCount);
     }
 
+    [Fact]
+    public async Task Commit_racing_approval_revocation_is_caught_only_by_post_lock_revalidation()
+    {
+        var prepared = await PrepareApprovedAsync();
+        var injector = new CommitFaultInjector(
+            CommitFaultInjector.FaultPoint.None,
+            beforeBatchLockAction: async (batchId, ct) =>
+            {
+                // Revoke approval WITHOUT abandoning: no Abandoned receipt exists, so only the
+                // post-lock re-validation (bd-t8zs) can stop this commit before mutation.
+                await using var connection = await OpenIngestAsync();
+                await using var revoke = connection.CreateCommand();
+                revoke.CommandText = "UPDATE manifest_approval SET active = 0 WHERE manifest_revision_id = $revisionId;";
+                revoke.Parameters.AddWithValue("$revisionId", prepared.ManifestRevisionId);
+                Assert.True(await revoke.ExecuteNonQueryAsync(ct) >= 1);
+            });
+
+        var result = await CreateSaga(injector).ExecuteAsync(
+            new CommitCommand(prepared.BatchId, prepared.ManifestRevisionId, prepared.Digest),
+            CancellationToken.None);
+
+        Assert.Equal(CommitErrors.NotApproved, result.ErrorCode);
+        Assert.Equal(0, await CountCandidateReceiptsAsync());
+        Assert.Equal(0, injector.LedgerCallCount);
+    }
+
     private CandidateCommitSaga CreateSaga(ICommitFaultHook? faultHook = null)
     {
         var protection = new IngestArtifactProtection();
