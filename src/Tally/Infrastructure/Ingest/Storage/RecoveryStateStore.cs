@@ -193,14 +193,14 @@ public sealed class RecoveryStateStore(IngestDatabase database, BatchErrorEventS
             }
 
             const string tombstoneSql = """
-                INSERT INTO import_receipt (receipt_id, batch_id, status, summary_json, completed_at)
-                VALUES ($id, $batchId, $status, $summary, $completedAt)
+                INSERT INTO import_receipt (receipt_id, batch_id, status, summary_json, completed_at, created_at, updated_at)
+                VALUES ($id, $batchId, $status, $summary, $completedAt, $createdAt, $updatedAt)
                 ON CONFLICT(receipt_id) DO NOTHING;
                 """;
-            // Upsert latest receipt to abandoned if present; otherwise insert tombstone.
+            // Preserve created_at on UPDATE; stamp both timestamps on fresh tombstone INSERT.
             const string updateReceiptSql = """
                 UPDATE import_receipt
-                SET status = $status, summary_json = $summary, completed_at = $completedAt
+                SET status = $status, summary_json = $summary, completed_at = $completedAt, updated_at = $updatedAt
                 WHERE batch_id = $batchId;
                 """;
             var summary = BuildAbandonTombstoneSummary(reason, updatedAt);
@@ -211,6 +211,7 @@ public sealed class RecoveryStateStore(IngestDatabase database, BatchErrorEventS
                 command.Parameters.AddWithValue("$status", (int)ImportReceiptStatus.Abandoned);
                 command.Parameters.AddWithValue("$summary", summary);
                 command.Parameters.AddWithValue("$completedAt", updatedAt);
+                command.Parameters.AddWithValue("$updatedAt", updatedAt);
                 command.Parameters.AddWithValue("$batchId", batchId);
                 var updated = await command.ExecuteNonQueryAsync(cancellationToken);
                 if (updated == 0)
@@ -222,6 +223,8 @@ public sealed class RecoveryStateStore(IngestDatabase database, BatchErrorEventS
                     command.Parameters.AddWithValue("$status", (int)ImportReceiptStatus.Abandoned);
                     command.Parameters.AddWithValue("$summary", summary);
                     command.Parameters.AddWithValue("$completedAt", updatedAt);
+                    command.Parameters.AddWithValue("$createdAt", updatedAt);
+                    command.Parameters.AddWithValue("$updatedAt", updatedAt);
                     await command.ExecuteNonQueryAsync(cancellationToken);
                 }
             }

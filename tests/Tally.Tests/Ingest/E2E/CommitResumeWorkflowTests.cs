@@ -6,6 +6,7 @@ using Tally.Features.Ingest.Contract;
 using Tally.Infrastructure.Ingest.Storage;
 using Tally.Tests.Ingest.CommitRecovery;
 using Xunit;
+// IngestSchemaMigrator is in Tally.Infrastructure.Ingest.Storage
 
 namespace Tally.Tests.Ingest.E2E;
 
@@ -59,9 +60,23 @@ public sealed class CommitResumeWorkflowTests : IAsyncLifetime
                 new CommitCommand(approved.BatchId, approved.ManifestRevisionId, approved.Digest),
                 CancellationToken.None));
 
+        // Capture durable CreatedAt after interrupt, before resume.
+        string? interruptedCreatedAt;
+        await using (var connection = await new IngestDatabase(harness.Root, new IngestArtifactProtection()).OpenAsync(CancellationToken.None))
+        {
+            await new IngestSchemaMigrator().ApplyAsync(connection, CancellationToken.None);
+            await using var command = connection.CreateCommand();
+            command.CommandText = "SELECT created_at FROM import_receipt WHERE batch_id = $id ORDER BY rowid DESC LIMIT 1;";
+            command.Parameters.AddWithValue("$id", approved.BatchId);
+            interruptedCreatedAt = (string?)await command.ExecuteScalarAsync();
+        }
+
+        Assert.False(string.IsNullOrWhiteSpace(interruptedCreatedAt));
+
         var resume = await harness.CreateResume().HandleAsync(new ResumeCommand(approved.BatchId), CancellationToken.None);
         Assert.True(resume.IsSuccess, resume.ErrorCode);
         Assert.Equal(ImportReceiptStatus.Completed, resume.Value!.Status);
+        Assert.Equal(interruptedCreatedAt, resume.Value.CreatedAt);
     }
 
     [Fact]

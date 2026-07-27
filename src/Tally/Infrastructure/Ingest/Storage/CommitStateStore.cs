@@ -177,7 +177,7 @@ public sealed class CommitStateStore(IngestDatabase database, BatchErrorEventSto
         try
         {
             const string existingSql = """
-                SELECT receipt_id, status, summary_json, completed_at
+                SELECT receipt_id, status, summary_json, completed_at, created_at, updated_at
                 FROM import_receipt
                 WHERE batch_id = $batchId
                 ORDER BY rowid DESC
@@ -194,37 +194,40 @@ public sealed class CommitStateStore(IngestDatabase database, BatchErrorEventSto
                     var receiptId = reader.GetString(0);
                     var status = (ImportReceiptStatus)reader.GetInt32(1);
                     var completedAt = reader.IsDBNull(3) ? null : reader.GetString(3);
+                    var createdAt = reader.IsDBNull(4) ? now : reader.GetString(4);
+                    var updatedAt = reader.IsDBNull(5) ? now : reader.GetString(5);
                     await reader.DisposeAsync();
 
                     if (status is ImportReceiptStatus.Completed or ImportReceiptStatus.Abandoned)
                     {
                         await transaction.CommitAsync(cancellationToken);
-                        return new ReceiptHeader(receiptId, status, now, now, completedAt);
+                        return new ReceiptHeader(receiptId, status, createdAt, updatedAt, completedAt);
                     }
 
+                    // Promote is a pure status flip — never wipe summary_json or re-stamp created_at.
                     const string promoteSql = """
                         UPDATE import_receipt
-                        SET status = $status, summary_json = $summary
+                        SET status = $status, updated_at = $updatedAt
                         WHERE receipt_id = $id;
                         """;
                     await using var promote = connection.CreateCommand();
                     promote.Transaction = transaction;
                     promote.CommandText = promoteSql;
                     promote.Parameters.AddWithValue("$status", (int)ImportReceiptStatus.Committing);
-                    promote.Parameters.AddWithValue("$summary", "{}");
+                    promote.Parameters.AddWithValue("$updatedAt", now);
                     promote.Parameters.AddWithValue("$id", receiptId);
                     await promote.ExecuteNonQueryAsync(cancellationToken);
 
                     await SetBatchStatusAsync(connection, transaction, batchId, BatchStatus.Committing, now, cancellationToken);
                     await transaction.CommitAsync(cancellationToken);
-                    return new ReceiptHeader(receiptId, ImportReceiptStatus.Committing, now, now, null);
+                    return new ReceiptHeader(receiptId, ImportReceiptStatus.Committing, createdAt, now, null);
                 }
             }
 
             var newId = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
             const string insertSql = """
-                INSERT INTO import_receipt (receipt_id, batch_id, status, summary_json, completed_at)
-                VALUES ($id, $batchId, $status, $summary, NULL);
+                INSERT INTO import_receipt (receipt_id, batch_id, status, summary_json, completed_at, created_at, updated_at)
+                VALUES ($id, $batchId, $status, $summary, NULL, $createdAt, $updatedAt);
                 """;
             await using (var insert = connection.CreateCommand())
             {
@@ -234,6 +237,8 @@ public sealed class CommitStateStore(IngestDatabase database, BatchErrorEventSto
                 insert.Parameters.AddWithValue("$batchId", batchId);
                 insert.Parameters.AddWithValue("$status", (int)ImportReceiptStatus.Committing);
                 insert.Parameters.AddWithValue("$summary", "{}");
+                insert.Parameters.AddWithValue("$createdAt", now);
+                insert.Parameters.AddWithValue("$updatedAt", now);
                 await insert.ExecuteNonQueryAsync(cancellationToken);
             }
 
@@ -382,7 +387,7 @@ public sealed class CommitStateStore(IngestDatabase database, BatchErrorEventSto
         {
             const string sql = """
                 UPDATE import_receipt
-                SET status = $status, summary_json = $summary, completed_at = $completedAt
+                SET status = $status, summary_json = $summary, completed_at = $completedAt, updated_at = $updatedAt
                 WHERE receipt_id = $id;
                 """;
             await using (var command = connection.CreateCommand())
@@ -392,6 +397,7 @@ public sealed class CommitStateStore(IngestDatabase database, BatchErrorEventSto
                 command.Parameters.AddWithValue("$status", (int)ImportReceiptStatus.Completed);
                 command.Parameters.AddWithValue("$summary", JsonSerializer.Serialize(receipt, IngestJsonContext.Default.ImportReceipt));
                 command.Parameters.AddWithValue("$completedAt", completedAt);
+                command.Parameters.AddWithValue("$updatedAt", completedAt);
                 command.Parameters.AddWithValue("$id", receiptId);
                 await command.ExecuteNonQueryAsync(cancellationToken);
             }
@@ -419,7 +425,7 @@ public sealed class CommitStateStore(IngestDatabase database, BatchErrorEventSto
         {
             const string sql = """
                 UPDATE import_receipt
-                SET status = $status, summary_json = $summary
+                SET status = $status, summary_json = $summary, updated_at = $updatedAt
                 WHERE receipt_id = $id;
                 """;
             await using (var command = connection.CreateCommand())
@@ -428,6 +434,7 @@ public sealed class CommitStateStore(IngestDatabase database, BatchErrorEventSto
                 command.CommandText = sql;
                 command.Parameters.AddWithValue("$status", (int)ImportReceiptStatus.Interrupted);
                 command.Parameters.AddWithValue("$summary", JsonSerializer.Serialize(receipt, IngestJsonContext.Default.ImportReceipt));
+                command.Parameters.AddWithValue("$updatedAt", updatedAt);
                 command.Parameters.AddWithValue("$id", receiptId);
                 await command.ExecuteNonQueryAsync(cancellationToken);
             }

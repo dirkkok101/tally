@@ -436,6 +436,55 @@ public sealed class CommitSagaTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task EnsureReceipt_resume_preserves_created_at_and_summary_json()
+    {
+        var prepared = await PrepareApprovedAsync();
+        var protection = new IngestArtifactProtection();
+        var database = new IngestDatabase(root, protection);
+        var store = new CommitStateStore(database, new BatchErrorEventStore());
+        var t0 = "2026-07-27T10:00:00Z";
+        var t1 = "2026-07-27T11:00:00Z";
+
+        var first = await store.EnsureReceiptAsync(prepared.BatchId, prepared.ManifestRevisionId, t0, CancellationToken.None);
+        Assert.Equal(t0, first.CreatedAt);
+        Assert.Equal(t0, first.UpdatedAt);
+
+        var interruptedSummary = """{"status":"Interrupted","note":"frontier"}""";
+        await using (var connection = await OpenIngestAsync())
+        {
+            await using var update = connection.CreateCommand();
+            update.CommandText = """
+                UPDATE import_receipt
+                SET status = $status, summary_json = $summary, updated_at = $updatedAt
+                WHERE receipt_id = $id;
+                """;
+            update.Parameters.AddWithValue("$status", (int)ImportReceiptStatus.Interrupted);
+            update.Parameters.AddWithValue("$summary", interruptedSummary);
+            update.Parameters.AddWithValue("$updatedAt", t0);
+            update.Parameters.AddWithValue("$id", first.ReceiptId);
+            await update.ExecuteNonQueryAsync();
+        }
+
+        var second = await store.EnsureReceiptAsync(prepared.BatchId, prepared.ManifestRevisionId, t1, CancellationToken.None);
+        Assert.Equal(first.ReceiptId, second.ReceiptId);
+        Assert.Equal(t0, second.CreatedAt);
+        Assert.Equal(t1, second.UpdatedAt);
+        Assert.Equal(ImportReceiptStatus.Committing, second.Status);
+
+        await using (var connection = await OpenIngestAsync())
+        {
+            await using var read = connection.CreateCommand();
+            read.CommandText = "SELECT summary_json, created_at, updated_at FROM import_receipt WHERE receipt_id = $id;";
+            read.Parameters.AddWithValue("$id", first.ReceiptId);
+            await using var reader = await read.ExecuteReaderAsync();
+            Assert.True(await reader.ReadAsync());
+            Assert.Equal(interruptedSummary, reader.GetString(0));
+            Assert.Equal(t0, reader.GetString(1));
+            Assert.Equal(t1, reader.GetString(2));
+        }
+    }
+
+    [Fact]
     public async Task Commit_against_already_abandoned_batch_returns_not_committable_or_not_approved()
     {
         var prepared = await PrepareApprovedAsync();
