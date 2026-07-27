@@ -67,19 +67,25 @@ public sealed class ActualsQueryHandler(QuerySnapshotStore store)
 
     private static ActualsQueryResult WithCursor(SnapshotPage page)
     {
-        if (page.NextOrdinal is null) return page.Result;
+        // Surface contract + generation for BUDGET composition without requiring cursor decode (TC-BUDGET-LEDGER-COMPOSITION-CONTRACT).
+        var stamped = page.Result with
+        {
+            LedgerContractVersion = QuerySnapshotStore.ContractVersion,
+            StoreGenerationFingerprint = page.GenerationFingerprint
+        };
+        if (page.NextOrdinal is null) return stamped;
         var cursor = new ActualsCursorPayload(
             CursorVersion,
             QuerySnapshotStore.ContractVersion,
-            page.Result.SnapshotId,
+            stamped.SnapshotId,
             page.NextOrdinal.Value,
             page.PageSize,
             page.FilterHash,
             page.GenerationFingerprint,
             page.HierarchyFingerprint,
-            page.Result.ExpiresAt);
+            stamped.ExpiresAt);
         var bytes = JsonSerializer.SerializeToUtf8Bytes(cursor, ActualsJsonContext.Default.ActualsCursorPayload);
-        return page.Result with { Cursor = Encode(bytes) };
+        return stamped with { Cursor = Encode(bytes) };
     }
 
     private static bool TryDecode(string value, out ActualsCursorPayload? cursor, out string? error)

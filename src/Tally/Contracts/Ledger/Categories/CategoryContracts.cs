@@ -21,8 +21,35 @@ public sealed record ReactivateCategoryInput([property: JsonRequired] string Cat
 
 public sealed record CategoryLifecycleHistoryItem(string LifecycleEventId, CategoryLifecycleAction Action, string? PreviousName, string? NewName, string? Reason, string Actor, string OccurredAt, string? PreviousLifecycleEventId);
 public sealed record CategoryParentHistoryItem(string ParentEventId, CategoryParentAction Action, string? ParentCategoryId, string Reason, string Actor, string OccurredAt, string? PreviousParentEventId);
-public sealed record CategoryDetail(string CategoryId, string Name, CategoryStatus Status, string? ParentCategoryId, int Depth, IReadOnlyList<string> AncestryIds, string CreatedActor, string CreatedAt, IReadOnlyList<CategoryLifecycleHistoryItem> LifecycleHistory, IReadOnlyList<CategoryParentHistoryItem> ParentHistory);
-public sealed record CategorySummary(string CategoryId, string Name, CategoryStatus Status, string? ParentCategoryId, int Depth, IReadOnlyList<string> AncestryIds);
-public sealed record CategoryListResult(IReadOnlyList<CategorySummary> Items);
+public sealed record CategoryDetail(
+    string CategoryId,
+    string Name,
+    CategoryStatus Status,
+    string? ParentCategoryId,
+    int Depth,
+    IReadOnlyList<string> AncestryIds,
+    string CreatedActor,
+    string CreatedAt,
+    IReadOnlyList<CategoryLifecycleHistoryItem> LifecycleHistory,
+    IReadOnlyList<CategoryParentHistoryItem> ParentHistory,
+    // BUDGET composition: released category contract version for compatibility checks (DM-BUDGET-LEDGER-COMPOSITION-CONTRACT).
+    string LedgerContractVersion = CategoryContractVersions.Current);
+public sealed record CategorySummary(
+    string CategoryId,
+    string Name,
+    CategoryStatus Status,
+    string? ParentCategoryId,
+    int Depth,
+    IReadOnlyList<string> AncestryIds,
+    string LedgerContractVersion = CategoryContractVersions.Current);
+public sealed record CategoryListResult(
+    IReadOnlyList<CategorySummary> Items,
+    string LedgerContractVersion = CategoryContractVersions.Current);
+
+/// <summary>Stable category wire-contract version exposed to BUDGET composition (FR-BUDGET-CATEGORY-LIFECYCLE).</summary>
+public static class CategoryContractVersions
+{
+    public const string Current = "1.0";
+}
 public sealed record CategoryLifecycleResult(CategoryDetail Category, string LifecycleEventId);
 public sealed record CategoryReparentResult(CategoryDetail Category, string ParentEventId);

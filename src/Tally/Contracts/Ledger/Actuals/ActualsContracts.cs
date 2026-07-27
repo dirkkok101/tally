@@ -105,7 +105,16 @@ public sealed record ActualsQueryResult(
     IReadOnlyList<ActualsPageItem> Items,
     ActualsTotalsResult Totals,
     IReadOnlyList<ActualsGroupResult> Groups,
-    string? Cursor);
+    string? Cursor,
+    // BUDGET composition evidence (DM-BUDGET-LEDGER-COMPOSITION-CONTRACT): contract version + store generation for page/atomicity checks.
+    string LedgerContractVersion = ActualsContractVersions.Current,
+    string? StoreGenerationFingerprint = null);
+
+/// <summary>Stable actuals wire-contract version exposed to BUDGET composition (FR-BUDGET-LEDGER-COMPOSITION).</summary>
+public static class ActualsContractVersions
+{
+    public const string Current = "1.0";
+}
 
 public sealed record ActualsCursorPayload(
     int CursorVersion,
