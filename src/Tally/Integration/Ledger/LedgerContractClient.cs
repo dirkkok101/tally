@@ -1,10 +1,15 @@
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 using Tally.Cli;
+using Tally.Contracts.Budget;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ingest;
 using Tally.Contracts.Ledger.Accounts;
+using Tally.Contracts.Ledger.Actuals;
+using Tally.Contracts.Ledger.Categories;
 using Tally.Contracts.Ledger.Transactions;
+using Tally.Domain.Budget.Periods;
 
 namespace Tally.Integration.Ledger;
 
@@ -18,6 +23,9 @@ public sealed class LedgerContractClient(OperationRegistry registry, TallyProces
     private const string AccountGet = "ledger.account.get";
     private const string TransactionRecord = "ledger.transaction.record";
     private const string TransactionGet = "ledger.transaction.get";
+    private const string CategoryList = "ledger.category.list";
+    private const string CategoryGet = "ledger.category.get";
+    private const string ActualsQuery = "ledger.actuals.query";
 
     public Task<LedgerContractResult<AccountDetail>> GetAccountAsync(
         string accountId,
@@ -69,6 +77,170 @@ public sealed class LedgerContractClient(OperationRegistry registry, TallyProces
             LedgerJsonContext.Default.TransactionDetail,
             cancellationToken);
 
+    /// <summary>
+    /// BUDGET category catalogue evidence via released <c>ledger.category.list</c>
+    /// (DM-BUDGET-LEDGER-COMPOSITION-CONTRACT).
+    /// </summary>
+    public Task<LedgerContractResult<CategoryListResult>> ListBudgetCategoriesAsync(
+        string contractVersion,
+        SafeActor actor,
+        CancellationToken cancellationToken,
+        CategoryStatus? status = null)
+    {
+        if (!IsCompatible(CategoryList, contractVersion, typeof(ListCategoriesInput), typeof(CategoryListResult)))
+        {
+            return Task.FromResult(BudgetIncompatible<CategoryListResult>());
+        }
+
+        return ExecuteAsync(
+            CategoryList,
+            contractVersion,
+            actor,
+            new ListCategoriesInput(Status: status),
+            null,
+            LedgerJsonContext.Default.ListCategoriesInput,
+            LedgerJsonContext.Default.CategoryListResult,
+            cancellationToken);
+    }
+
+    /// <summary>
+    /// BUDGET category identity and lifecycle evidence via released <c>ledger.category.get</c>
+    /// (DM-BUDGET-LEDGER-COMPOSITION-CONTRACT).
+    /// </summary>
+    public Task<LedgerContractResult<CategoryDetail>> GetBudgetCategoryAsync(
+        string categoryId,
+        string contractVersion,
+        SafeActor actor,
+        CancellationToken cancellationToken,
+        bool includeHistory = false)
+    {
+        if (!IsCompatible(CategoryGet, contractVersion, typeof(GetCategoryInput), typeof(CategoryDetail)))
+        {
+            return Task.FromResult(BudgetIncompatible<CategoryDetail>());
+        }
+
+        return ExecuteAsync(
+            CategoryGet,
+            contractVersion,
+            actor,
+            new GetCategoryInput(categoryId, includeHistory),
+            null,
+            LedgerJsonContext.Default.GetCategoryInput,
+            LedgerJsonContext.Default.CategoryDetail,
+            cancellationToken);
+    }
+
+    /// <summary>
+    /// BUDGET period actuals: maps half-open <see cref="BudgetPeriod"/> to LEDGER inclusive dates,
+    /// drains every page under one snapshot/generation, and returns the complete set or no partial.
+    /// </summary>
+    public async Task<LedgerContractResult<ActualsQueryResult>> QueryBudgetActualsAsync(
+        BudgetPeriod period,
+        string contractVersion,
+        SafeActor actor,
+        CancellationToken cancellationToken,
+        int? pageSize = null)
+    {
+        if (!IsCompatible(ActualsQuery, contractVersion, typeof(QueryActualsInput), typeof(ActualsQueryResult)))
+        {
+            return BudgetIncompatible<ActualsQueryResult>();
+        }
+
+        var effectiveFrom = period.FormatStartInclusive();
+        var effectiveTo = period.EndExclusive.AddDays(-1)
+            .ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+        var filter = new ActualsFilterInput(
+            EffectiveFrom: effectiveFrom,
+            EffectiveTo: effectiveTo,
+            LifecycleStates: [TransactionLifecycleStatus.Active]);
+
+        var first = await ExecuteAsync(
+            ActualsQuery,
+            contractVersion,
+            actor,
+            new QueryActualsInput(filter, pageSize),
+            null,
+            ActualsJsonContext.Default.QueryActualsInput,
+            ActualsJsonContext.Default.ActualsQueryResult,
+            cancellationToken);
+
+        if (!first.IsSuccess || first.Value is null)
+        {
+            // Expected Ledger failure or incompatibility — no partial position evidence.
+            return first;
+        }
+
+        var pages = new List<ActualsQueryResult> { first.Value };
+        var cursor = first.Value.Cursor;
+        while (cursor is not null)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var next = await ExecuteAsync(
+                ActualsQuery,
+                contractVersion,
+                actor,
+                new QueryActualsInput(Cursor: cursor),
+                null,
+                ActualsJsonContext.Default.QueryActualsInput,
+                ActualsJsonContext.Default.ActualsQueryResult,
+                cancellationToken);
+
+            if (!next.IsSuccess || next.Value is null)
+            {
+                // Drop any prior pages — no partial position on expiry/cursor/generation failure.
+                return new(next.ExitCode, default, next.Error, next.StandardError);
+            }
+
+            pages.Add(next.Value);
+            cursor = next.Value.Cursor;
+        }
+
+        var anchor = pages[0];
+        for (var i = 1; i < pages.Count; i++)
+        {
+            var page = pages[i];
+            if (!string.Equals(page.SnapshotId, anchor.SnapshotId, StringComparison.Ordinal)
+                || !string.Equals(page.StoreGenerationFingerprint, anchor.StoreGenerationFingerprint, StringComparison.Ordinal)
+                || !string.Equals(page.LedgerContractVersion, anchor.LedgerContractVersion, StringComparison.Ordinal)
+                || page.TotalCount != anchor.TotalCount
+                || !string.Equals(page.Totals.BudgetActual, anchor.Totals.BudgetActual, StringComparison.Ordinal)
+                || !string.Equals(page.Totals.NetAccountMovement, anchor.Totals.NetAccountMovement, StringComparison.Ordinal)
+                || !string.Equals(page.Totals.ExternalSpend, anchor.Totals.ExternalSpend, StringComparison.Ordinal))
+            {
+                return BudgetIntegrity<ActualsQueryResult>(
+                    "Budget actuals pages do not share one snapshot and generation evidence.");
+            }
+        }
+
+        var items = pages.SelectMany(page => page.Items).ToArray();
+        if (items.Length != anchor.TotalCount)
+        {
+            return BudgetIntegrity<ActualsQueryResult>(
+                "Budget actuals page membership does not match the full-set total count.");
+        }
+
+        if (items.Select(item => item.TransactionId).Distinct(StringComparer.Ordinal).Count() != items.Length)
+        {
+            return BudgetIntegrity<ActualsQueryResult>(
+                "Budget actuals pages returned a duplicated transaction member.");
+        }
+
+        var ordinals = items.Select(item => item.Ordinal).Order().ToArray();
+        if (!ordinals.SequenceEqual(Enumerable.Range(0, anchor.TotalCount)))
+        {
+            return BudgetIntegrity<ActualsQueryResult>(
+                "Budget actuals ordinals are incomplete or duplicated across pages.");
+        }
+
+        var complete = anchor with
+        {
+            Items = items,
+            Cursor = null
+        };
+        return new(0, complete, null, first.StandardError);
+    }
+
     private async Task<LedgerContractResult<TResult>> ExecuteAsync<TInput, TResult>(
         string operationId,
         string contractVersion,
@@ -115,6 +287,15 @@ public sealed class LedgerContractClient(OperationRegistry registry, TallyProces
         return new(processResult.ExitCode, value, null, processResult.Stderr);
     }
 
+    private bool IsCompatible(string operationId, string contractVersion, Type requestType, Type resultType)
+    {
+        var descriptor = registry.Find(operationId);
+        return descriptor is not null
+            && descriptor.RequestTypeInfo.Type == requestType
+            && descriptor.ResultTypeInfo.Type == resultType
+            && SupportsVersion(descriptor, contractVersion);
+    }
+
     private static bool SupportsVersion(OperationDescriptor descriptor, string contractVersion) =>
         Version.TryParse(contractVersion, out var requested)
         && Version.TryParse(descriptor.MinimumContractVersion, out var minimum)
@@ -127,4 +308,19 @@ public sealed class LedgerContractClient(OperationRegistry registry, TallyProces
         default,
         new ProcessError("contract.incompatible", "compatibility", "The Ledger contract version or operation is not supported."),
         "tally: contract.incompatible");
+
+    private static LedgerContractResult<T> BudgetIncompatible<T>() => new(
+        7,
+        default,
+        new ProcessError(
+            BudgetErrors.LedgerIncompatible,
+            "compatibility",
+            "The Ledger contract version or operation is not supported for BUDGET composition."),
+        $"tally: {BudgetErrors.LedgerIncompatible}");
+
+    private static LedgerContractResult<T> BudgetIntegrity<T>(string message) => new(
+        8,
+        default,
+        new ProcessError(BudgetErrors.Integrity, "integrity", message),
+        $"tally: {BudgetErrors.Integrity}");
 }
