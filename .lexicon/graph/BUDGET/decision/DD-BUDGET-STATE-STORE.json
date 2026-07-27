@@ -19,10 +19,10 @@
     "BudgetStateStore and migrations remain concrete. Real temporary SQLite is required in integration tests. The data root and directories use 0700 and database, WAL, SHM, lock, and recognized temporary files use 0600 where supported. Host volume protection remains an external deployment gate; no custom encryption is claimed."
   ],
   "status_notes": [
-    "Accepted. The store is BUDGET-owned and is never read by other modules."
+    "Accepted. Store is BUDGET-owned and never read by other modules. Recovery is restart inspection plus same-key mutation replay against owner-only budget.db — no separate Features/Budget/Recovery CLI surface. Evidence: Infrastructure Storage/idempotency, tests/Tally.Tests/Budget/Recovery/**, and scripts/verify-budget-recovery.sh."
   ],
   "status": "accepted",
-  "metadata": "{\"expected_paths\":[\"src/Tally/Infrastructure/Budget/Storage/**\",\"src/Tally/Features/Budget/Recovery/**\",\"tests/Tally.Tests/Budget/Storage/**\",\"tests/Tally.Tests/Budget/Security/**\"]}",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Infrastructure/Budget/Storage/**\",\"tests/Tally.Tests/Budget/Recovery/**\",\"tests/Tally.Tests/Budget/Storage/**\",\"tests/Tally.Tests/Budget/Security/**\"]}",
   "created_at": "2026-07-19T16:12:35.3046138+00:00",
   "links": [
     {

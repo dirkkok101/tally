@@ -24,5 +24,28 @@
     "Platform constraints: target .NET 10 Native-AOT and linux-x64; use file-scoped namespaces, nullable reference types, primary constructors, explicit DI, CancellationToken propagation, source-generated JSON, raw Microsoft.Data.Sqlite, structured metadata-only logging, and zero warnings. Existing shared process and client files are extended additively. No direct graph JSON editing, raw exported Markdown authoring, or hidden product capability is in scope."
   ],
   "status": "active",
-  "created_at": "2026-07-19T16:38:41.0975932+00:00"
+  "created_at": "2026-07-19T16:38:41.0975932+00:00",
+  "links": [
+    {
+      "id": "01KYHWJ041YMVD7KK1M4SZW7YW",
+      "target_type": "module_design",
+      "target": "MD-BUDGET-MASTER",
+      "rel": "see-also",
+      "created_at": "2026-07-27T13:34:46.9145041+00:00"
+    },
+    {
+      "id": "01KYHWJ1AJACXSNXPEC9J87X95",
+      "target_type": "plan",
+      "target": "PLAN-INGEST-V1",
+      "rel": "see-also",
+      "created_at": "2026-07-27T13:34:48.1473399+00:00"
+    },
+    {
+      "id": "01KYHWJ0Q7SFTM7FEEKJ5CP29G",
+      "target_type": "plan",
+      "target": "PLAN-LEDGER-V1",
+      "rel": "see-also",
+      "created_at": "2026-07-27T13:34:47.5283419+00:00"
+    }
+  ]
 }

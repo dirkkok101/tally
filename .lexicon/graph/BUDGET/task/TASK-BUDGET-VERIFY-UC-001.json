@@ -110,6 +110,15 @@
       "created_at": "2026-07-19T16:52:54.5452616+00:00"
     }
   ],
+  "links": [
+    {
+      "id": "01KYHWJ1Z9Y5AJFEV4TEX959Q5",
+      "target_type": "use_case",
+      "target": "UC-BUDGET-001",
+      "rel": "see-also",
+      "created_at": "2026-07-27T13:34:48.8096585+00:00"
+    }
+  ],
   "recipe_items": [
     {
       "id": "01KXXMQ14J75497RTK1PA9ZAFE",
