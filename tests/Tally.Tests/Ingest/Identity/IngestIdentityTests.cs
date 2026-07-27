@@ -17,7 +17,7 @@ public sealed class IngestIdentityTests
         var evidence = IngestIdentity.StatementEvidence(input);
         Assert.Equal(EvidenceKind.StatementRow, evidence.Kind);
         Assert.Equal(candidate.CandidateId, evidence.LogicalIdentityDigest);
-        Assert.Equal($"ingest:{candidate.CandidateId}", evidence.OpaqueExternalReference);
+        Assert.Equal(IngestIdentity.ToLedgerSafeOpaqueReference(candidate.CandidateId), evidence.OpaqueExternalReference);
         Assert.Equal(input.SourceRecordId, evidence.ContentFingerprint);
         Assert.Equal(input.AccountId, evidence.Observation!.AccountId);
         Assert.Equal(input.SignedAmountMinor, evidence.Observation.SignedAmountMinor);
@@ -145,7 +145,7 @@ public sealed class IngestIdentityTests
     {
         var candidate = IngestIdentity.Candidate(new("acc", "source-record", amount, "ZAR", "2026-07-01", "2026-07-02", "Description"));
 
-        Assert.Equal($"ingest:{candidate.CandidateId}", candidate.OpaqueExternalReference);
+        Assert.Equal(IngestIdentity.ToLedgerSafeOpaqueReference(candidate.CandidateId), candidate.OpaqueExternalReference);
         Assert.Equal(candidate.OpaqueExternalReference, candidate.IdempotencyKey);
         Assert.Equal(64, candidate.CandidateId.Length);
     }

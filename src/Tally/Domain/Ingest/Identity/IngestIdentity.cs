@@ -21,7 +21,30 @@ public static class IngestIdentity
     public static CandidateIdentity Candidate(CandidateIdentityInput input)
     {
         var candidateId = Hash("candidate-v1", input.AccountId, input.SourceRecordId, input.SignedAmountMinor.ToString(System.Globalization.CultureInfo.InvariantCulture), input.CurrencyCode, input.TransactionDate, input.PostingDate ?? string.Empty, input.OriginalDescription.Normalize(NormalizationForm.FormC));
-        return new CandidateIdentity(candidateId, $"ingest:{candidateId}", $"ingest:{candidateId}");
+        // Ledger OpaqueExternalReference forbids 9+ consecutive digits (IsSafeOpaqueReference).
+        // Raw hex digests routinely contain such runs; hyphenate so statement evidence is recordable.
+        var opaque = ToLedgerSafeOpaqueReference(candidateId);
+        return new CandidateIdentity(candidateId, opaque, opaque);
+    }
+
+    /// <summary>
+    /// Formats a 64-char hex candidate id as a ledger-safe opaque external reference.
+    /// </summary>
+    public static string ToLedgerSafeOpaqueReference(string candidateId)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(candidateId);
+        if (candidateId.Length != 64 || candidateId.Any(static c => c is not (>= '0' and <= '9' or >= 'a' and <= 'f')))
+        {
+            throw new ArgumentException("Candidate id must be a 64-character lowercase hex digest.", nameof(candidateId));
+        }
+
+        var groups = new string[16];
+        for (var i = 0; i < 16; i++)
+        {
+            groups[i] = candidateId.Substring(i * 4, 4);
+        }
+
+        return "ingest:" + string.Join('-', groups);
     }
 
     public static RegisterEvidenceInput StatementEvidence(CandidateIdentityInput input)
