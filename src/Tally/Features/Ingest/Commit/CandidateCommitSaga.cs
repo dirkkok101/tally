@@ -34,6 +34,8 @@ public sealed class CandidateCommitSaga(
     TimeProvider? timeProvider = null,
     ICommitFaultHook? faultHook = null)
 {
+    private const string SupportedLedgerContractVersion = "1.0";
+
     private readonly TimeProvider clock = timeProvider ?? TimeProvider.System;
     private readonly ICommitFaultHook faults = faultHook ?? NoopCommitFaultHook.Instance;
 
@@ -50,40 +52,12 @@ public sealed class CandidateCommitSaga(
         }
 
         var stored = await reviewStore.LoadAsync(command.BatchId, command.ManifestRevisionId, cancellationToken);
-        if (stored is null)
+        if (ValidateReviewState(stored, command) is { } preLockError)
         {
-            return CommandResult<ImportReceipt>.Failure(CommitErrors.NotFound);
+            return CommandResult<ImportReceipt>.Failure(preLockError);
         }
 
-        if (!string.Equals(stored.CanonicalDigest, command.ManifestDigest, StringComparison.Ordinal))
-        {
-            return CommandResult<ImportReceipt>.Failure(CommitErrors.DigestMismatch);
-        }
-
-        if (!stored.Approval.Approved)
-        {
-            return CommandResult<ImportReceipt>.Failure(CommitErrors.NotApproved);
-        }
-
-        if (!stored.Committable ||
-            stored.Outcomes.Any(outcome => outcome.Disposition == SourceRecordDisposition.Blocked) ||
-            stored.Controls.Any(control => string.Equals(control.Detail, "Mismatched", StringComparison.Ordinal)))
-        {
-            return CommandResult<ImportReceipt>.Failure(CommitErrors.NotCommittable);
-        }
-
-        if (stored.Candidates.Count == 0)
-        {
-            return CommandResult<ImportReceipt>.Failure(CommitErrors.NotCommittable);
-        }
-
-        var firstRequest = stored.Candidates[0].FrozenLedgerRequest;
-        if (!string.Equals(firstRequest.LedgerContractVersion, stored.LedgerContractVersion, StringComparison.Ordinal) ||
-            !string.Equals(stored.LedgerContractVersion, "1.0", StringComparison.Ordinal))
-        {
-            return CommandResult<ImportReceipt>.Failure(CommitErrors.VersionIncompatible);
-        }
-
+        var firstRequest = stored!.Candidates[0].FrozenLedgerRequest;
         var account = await ledgerClient.GetAccountAsync(
             stored.SelectedAccountId,
             stored.LedgerContractVersion,
@@ -105,40 +79,13 @@ public sealed class CandidateCommitSaga(
             return CommandResult<ImportReceipt>.Failure(CommitErrors.LockHeld);
         }
 
-        // Authoritative re-validation under the batch lock — never trust pre-lock review state.
+        // Re-validation under the batch lock: repeats every cheap in-process review check with the
+        // same error codes. The account-active Ledger read is deliberately point-in-time (pre-lock
+        // only) — bd-t8zs excludes re-issuing Ledger I/O for it as part of lock-window validation.
         var underLock = await reviewStore.LoadAsync(command.BatchId, command.ManifestRevisionId, cancellationToken);
-        if (underLock is null)
+        if (ValidateReviewState(underLock, command) is { } underLockError)
         {
-            return CommandResult<ImportReceipt>.Failure(CommitErrors.NotFound);
-        }
-
-        if (!string.Equals(underLock.CanonicalDigest, command.ManifestDigest, StringComparison.Ordinal))
-        {
-            return CommandResult<ImportReceipt>.Failure(CommitErrors.DigestMismatch);
-        }
-
-        if (!underLock.Approval.Approved)
-        {
-            return CommandResult<ImportReceipt>.Failure(CommitErrors.NotApproved);
-        }
-
-        if (!underLock.Committable ||
-            underLock.Outcomes.Any(outcome => outcome.Disposition == SourceRecordDisposition.Blocked) ||
-            underLock.Controls.Any(control => string.Equals(control.Detail, "Mismatched", StringComparison.Ordinal)))
-        {
-            return CommandResult<ImportReceipt>.Failure(CommitErrors.NotCommittable);
-        }
-
-        if (underLock.Candidates.Count == 0)
-        {
-            return CommandResult<ImportReceipt>.Failure(CommitErrors.NotCommittable);
-        }
-
-        var lockedFirst = underLock.Candidates[0].FrozenLedgerRequest;
-        if (!string.Equals(lockedFirst.LedgerContractVersion, underLock.LedgerContractVersion, StringComparison.Ordinal) ||
-            !string.Equals(underLock.LedgerContractVersion, "1.0", StringComparison.Ordinal))
-        {
-            return CommandResult<ImportReceipt>.Failure(CommitErrors.VersionIncompatible);
+            return CommandResult<ImportReceipt>.Failure(underLockError);
         }
 
         var now = clock.GetUtcNow().UtcDateTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture);
@@ -506,6 +453,50 @@ public sealed class CandidateCommitSaga(
             && string.Equals(evidence.OpaqueExternalReference, expected.OpaqueExternalReference, StringComparison.Ordinal)
             && string.Equals(evidence.ContentFingerprint, expected.ContentFingerprint, StringComparison.Ordinal)
             && EvidenceObservationEquals(evidence.Observation, expected.Observation);
+    }
+
+    /// <summary>
+    /// The single source of the cheap in-process commit preconditions, shared by the pre-lock
+    /// fast-fail pass and the authoritative re-validation under the batch lock (bd-t8zs).
+    /// Returns the published error code, or null when the manifest is committable.
+    /// </summary>
+    private static string? ValidateReviewState(ReviewStateStore.StoredManifest? manifest, CommitCommand command)
+    {
+        if (manifest is null)
+        {
+            return CommitErrors.NotFound;
+        }
+
+        if (!string.Equals(manifest.CanonicalDigest, command.ManifestDigest, StringComparison.Ordinal))
+        {
+            return CommitErrors.DigestMismatch;
+        }
+
+        if (!manifest.Approval.Approved)
+        {
+            return CommitErrors.NotApproved;
+        }
+
+        if (!manifest.Committable ||
+            manifest.Outcomes.Any(outcome => outcome.Disposition == SourceRecordDisposition.Blocked) ||
+            manifest.Controls.Any(control => string.Equals(control.Detail, "Mismatched", StringComparison.Ordinal)))
+        {
+            return CommitErrors.NotCommittable;
+        }
+
+        if (manifest.Candidates.Count == 0)
+        {
+            return CommitErrors.NotCommittable;
+        }
+
+        var firstRequest = manifest.Candidates[0].FrozenLedgerRequest;
+        if (!string.Equals(firstRequest.LedgerContractVersion, manifest.LedgerContractVersion, StringComparison.Ordinal) ||
+            !string.Equals(manifest.LedgerContractVersion, SupportedLedgerContractVersion, StringComparison.Ordinal))
+        {
+            return CommitErrors.VersionIncompatible;
+        }
+
+        return null;
     }
 
     private static bool EvidenceObservationEquals(
