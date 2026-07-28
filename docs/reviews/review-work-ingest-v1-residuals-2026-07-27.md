@@ -101,7 +101,9 @@ Graph gates: `lex coverage` healthy (11/11), `decision path-check` healthy (0 mi
 `lex flow attest review-work --module INGEST --provider claude-code --plan PLAN-INGEST-V1` was attempted twice:
 
 1. Blocked with `open_question_unspecified` — resolved by setting OQ-INGEST-20 `disposition=non_blocking` (it is tracked by bd-ankc and does not block the lifecycle).
-2. Blocked with LEX-006 "Earlier stage 'Brainstorm' must complete before 'Plan'" — the same missing-brainstorm-receipt condition that suppressed attestation on the first review run. Both review axes, the fresh gates, and the proof harvest stand; the terminal receipt requires the module's earlier stage receipts to be restored first.
+2. Blocked with LEX-006 "Earlier stage 'Brainstorm' must complete before 'Plan'" — the same missing-brainstorm-receipt condition that suppressed attestation on the first review run.
+
+**Resolved 2026-07-28: `SR-INGEST-REVIEW-WORK-e17d9249f02dfa06` attested — review_passed, spec passed, quality passed, reviewed commit `53f2ab2`.** The full unblock chain: stage receipts restored for brainstorm/discovery/prd/design (binary-validated against the graph); two content-review runs (10 contradiction findings → 6 in-schedule JUDGMENT findings filed as beads and owner-suppressed with tracking beads bd-3cdd bd-2usg bd-14k4 bd-138j bd-160f bd-30me; clean re-runs published); bd-3k6 anchored with a parseable `Refs:` trailer (its gate leaves no tracked changes by design); closed-bead descriptions compacted and blocked INSIGHTS beads deferred to 2026-08-04 to fit lex's 128K beads-evidence bound; the 14 proof test cases marked `passing` (they were still `planned`); design receipt refreshed; proof harvest re-recorded at `53f2ab2` with a fresh 528/528 gate.
 
 ## Actionable result
 
