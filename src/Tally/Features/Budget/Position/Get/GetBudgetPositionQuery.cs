@@ -73,75 +73,92 @@ public sealed class GetBudgetPositionQuery
         }
 
         // ── Bind immutable revision before any public Ledger call ────────────
+        // Active pointer + revision + entries share one SQLite transaction so a concurrent
+        // activation cannot interleave mid-bind (bd-nqp9).
         BudgetPlanRow? plan;
         BudgetPlanRevisionRow revision;
         IReadOnlyList<BudgetPlanEntryRow> entries;
 
         {
             await using var connection = await store.OpenMigratedAsync(cancellationToken);
-
-            if (!string.IsNullOrWhiteSpace(input.RevisionId))
+            await using var bindTx = store.BeginImmediate(connection);
+            try
             {
-                var revisionId = input.RevisionId.Trim();
-                var loaded = await store.GetRevisionAsync(connection, null, revisionId, cancellationToken);
-                if (loaded is null)
+                if (!string.IsNullOrWhiteSpace(input.RevisionId))
                 {
-                    return CommandResult<GetBudgetPositionResult>.Failure(BudgetErrors.RevisionNotFound);
+                    var revisionId = input.RevisionId.Trim();
+                    var loaded = await store.GetRevisionAsync(connection, bindTx, revisionId, cancellationToken);
+                    if (loaded is null)
+                    {
+                        await bindTx.RollbackAsync(cancellationToken);
+                        return CommandResult<GetBudgetPositionResult>.Failure(BudgetErrors.RevisionNotFound);
+                    }
+
+                    plan = await store.GetPlanAsync(connection, bindTx, loaded.PlanId, cancellationToken);
+                    if (plan is null)
+                    {
+                        await bindTx.RollbackAsync(cancellationToken);
+                        return CommandResult<GetBudgetPositionResult>.Failure(BudgetErrors.Integrity);
+                    }
+
+                    // Explicit revision must belong to the supplied period and ZAR before Ledger.
+                    if (!string.Equals(plan.CurrencyCode, period.CurrencyCode, StringComparison.Ordinal)
+                        || !string.Equals(plan.PeriodStart, period.FormatStartInclusive(), StringComparison.Ordinal)
+                        || !string.Equals(plan.PeriodEndExclusive, period.FormatEndExclusive(), StringComparison.Ordinal))
+                    {
+                        await bindTx.RollbackAsync(cancellationToken);
+                        return CommandResult<GetBudgetPositionResult>.Failure(BudgetErrors.RevisionPeriodMismatch);
+                    }
+
+                    revision = loaded;
+                    entries = await store.GetEntriesAsync(connection, bindTx, revisionId, cancellationToken);
+                }
+                else
+                {
+                    plan = await store.GetPlanByPeriodAsync(
+                        connection,
+                        bindTx,
+                        period.CurrencyCode,
+                        period.FormatStartInclusive(),
+                        cancellationToken);
+
+                    if (plan is null)
+                    {
+                        await bindTx.RollbackAsync(cancellationToken);
+                        // Explicit No Budget Plan — success with null position; never fabricate a zero plan.
+                        return CommandResult<GetBudgetPositionResult>.Success(
+                            BudgetContractMapper.ToPositionResult(
+                                position: null,
+                                hasActiveBudgetPlanRevision: false));
+                    }
+
+                    if (string.IsNullOrWhiteSpace(plan.ActiveRevisionId))
+                    {
+                        await bindTx.RollbackAsync(cancellationToken);
+                        return CommandResult<GetBudgetPositionResult>.Failure(
+                            BudgetErrors.NoActiveBudgetPlanRevision);
+                    }
+
+                    var active = await store.GetRevisionAsync(
+                        connection, bindTx, plan.ActiveRevisionId, cancellationToken);
+                    if (active is null)
+                    {
+                        await bindTx.RollbackAsync(cancellationToken);
+                        return CommandResult<GetBudgetPositionResult>.Failure(BudgetErrors.Integrity);
+                    }
+
+                    revision = active;
+                    entries = await store.GetEntriesAsync(
+                        connection, bindTx, plan.ActiveRevisionId, cancellationToken);
                 }
 
-                plan = await store.GetPlanAsync(connection, null, loaded.PlanId, cancellationToken);
-                if (plan is null)
-                {
-                    return CommandResult<GetBudgetPositionResult>.Failure(BudgetErrors.Integrity);
-                }
-
-                // Explicit revision must belong to the supplied period and ZAR before Ledger.
-                if (!string.Equals(plan.CurrencyCode, period.CurrencyCode, StringComparison.Ordinal)
-                    || !string.Equals(plan.PeriodStart, period.FormatStartInclusive(), StringComparison.Ordinal)
-                    || !string.Equals(plan.PeriodEndExclusive, period.FormatEndExclusive(), StringComparison.Ordinal))
-                {
-                    return CommandResult<GetBudgetPositionResult>.Failure(BudgetErrors.RevisionPeriodMismatch);
-                }
-
-                revision = loaded;
-                entries = await store.GetEntriesAsync(connection, null, revisionId, cancellationToken);
+                await bindTx.CommitAsync(cancellationToken);
             }
-            else
+            catch
             {
-                plan = await store.GetPlanByPeriodAsync(
-                    connection,
-                    null,
-                    period.CurrencyCode,
-                    period.FormatStartInclusive(),
-                    cancellationToken);
-
-                if (plan is null)
-                {
-                    // Explicit No Budget Plan — success with null position; never fabricate a zero plan.
-                    // Distinct from NoActiveBudgetPlanRevision (plan exists, pointer absent).
-                    return CommandResult<GetBudgetPositionResult>.Success(
-                        BudgetContractMapper.ToPositionResult(
-                            position: null,
-                            hasActiveBudgetPlanRevision: false));
-                }
-
-                if (string.IsNullOrWhiteSpace(plan.ActiveRevisionId))
-                {
-                    // Plan exists with only Drafts (or cleared pointer) — fail before Ledger.
-                    return CommandResult<GetBudgetPositionResult>.Failure(
-                        BudgetErrors.NoActiveBudgetPlanRevision);
-                }
-
-                var active = await store.GetRevisionAsync(
-                    connection, null, plan.ActiveRevisionId, cancellationToken);
-                if (active is null)
-                {
-                    return CommandResult<GetBudgetPositionResult>.Failure(BudgetErrors.Integrity);
-                }
-
-                revision = active;
-                entries = await store.GetEntriesAsync(
-                    connection, null, plan.ActiveRevisionId, cancellationToken);
+                try { await bindTx.RollbackAsync(CancellationToken.None); }
+                catch { /* best-effort */ }
+                throw;
             }
         }
         // Connection closed after bind — no further BUDGET writes; position is not retained.

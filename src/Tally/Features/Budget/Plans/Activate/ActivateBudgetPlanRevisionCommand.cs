@@ -559,14 +559,29 @@ public sealed class ActivateBudgetPlanRevisionCommand
             return false;
         }
 
-        return BudgetPeriodResolver.Resolve(
-            start.Year,
-            start.Month,
-            plan.CurrencyCode,
-            timeProvider,
-            out period,
-            out periodState,
-            out error);
+        if (!BudgetPeriodResolver.Resolve(
+                start.Year,
+                start.Month,
+                plan.CurrencyCode,
+                timeProvider,
+                out period,
+                out periodState,
+                out error))
+        {
+            return false;
+        }
+
+        // Use durable plan boundaries as authority — do not invent a different half-open end (bd-nqp9).
+        if (!string.Equals(period.FormatStartInclusive(), plan.PeriodStart, StringComparison.Ordinal)
+            || !string.Equals(period.FormatEndExclusive(), plan.PeriodEndExclusive, StringComparison.Ordinal))
+        {
+            error = BudgetErrors.Integrity;
+            period = default;
+            periodState = default;
+            return false;
+        }
+
+        return true;
     }
 
     private sealed record CategoryValidationResult(

@@ -372,10 +372,29 @@ public static class BudgetPositionCalculator
         }
     }
 
-    private static InvalidOperationException Integrity(string detail, Exception? inner = null) =>
-        inner is null
+    private static InvalidOperationException Integrity(string detail, Exception? inner = null)
+    {
+        // First phrase is the amount-free reason token (bd-nqp9); full prose stays in Message.
+        var reason = detail.Split(':', 2)[0].Trim();
+        if (string.IsNullOrWhiteSpace(reason))
+        {
+            reason = "unspecified";
+        }
+
+        var token = string.Concat(reason.Select(c => char.IsLetterOrDigit(c) ? char.ToLowerInvariant(c) : '_'))
+            .Trim('_');
+        var exception = inner is null
             ? new InvalidOperationException($"{IntegrityErrorCode}: {detail}")
             : new InvalidOperationException($"{IntegrityErrorCode}: {detail}", inner);
+        exception.Data[IntegrityReasonDataKey] = token;
+        return exception;
+    }
+
+    /// <summary>Exception.Data key for amount-free calculator integrity reasons.</summary>
+    public const string IntegrityReasonDataKey = "BudgetIntegrityReason";
+
+    public static string? TryGetIntegrityReason(Exception exception) =>
+        exception.Data[IntegrityReasonDataKey] as string;
 }
 
 /// <summary>
