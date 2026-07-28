@@ -79,7 +79,7 @@ public sealed class BudgetOperationBundle
         var revisionGet = new GetBudgetPlanRevisionQuery(state.Store, ledgerClient, clock);
         var revisionList = new ListBudgetPlanRevisionsQuery(state.Store, clock);
         var positionGet = new GetBudgetPositionQuery(state.Store, ledgerClient, clock);
-        var insightsEvidence = new GetBudgetInsightEvidenceQuery(state.Store, ledgerClient, revisionGet, clock);
+        var insightsEvidence = new GetBudgetInsightEvidenceQuery(state.Store, ledgerClient, timeProvider: clock);
 
         var template = BudgetOperationModule.CreateDescriptorTemplates();
         var descriptors = template.Descriptors

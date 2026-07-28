@@ -46,6 +46,8 @@ public sealed record BudgetInsightEvidence(
     [property: JsonRequired] long BudgetActualTotalMinorUnits,
     [property: JsonRequired] LedgerSnapshotEvidence Ledger,
     string? CalculationSchemaVersion,
+    /// <summary>Released LEDGER category contract version cited by supplemental evidence (DM-BUDGET-INSIGHTS-READ-CONTRACT).</summary>
+    string? CategoryContractVersion,
     [property: JsonRequired] string BindingFingerprint);
 
 public sealed record GetBudgetInsightEvidenceResult(
@@ -70,7 +72,9 @@ public static class BudgetInsightEvidenceBinding
         string? calculationSchemaVersion,
         LedgerSnapshotEvidence ledger,
         long budgetActualTotalMinorUnits,
-        IReadOnlyList<BudgetActualMember> actualMembers)
+        IReadOnlyList<BudgetActualMember> actualMembers,
+        string? categoryContractVersion = null,
+        IReadOnlyList<CategoryLifecycleEvidence>? categoryEvidence = null)
     {
         ArgumentNullException.ThrowIfNull(ledger);
         ArgumentNullException.ThrowIfNull(actualMembers);
@@ -97,6 +101,15 @@ public static class BudgetInsightEvidenceBinding
             else
             {
                 writer.WriteNull("calculationSchemaVersion");
+            }
+
+            if (categoryContractVersion is not null)
+            {
+                writer.WriteString("categoryContractVersion", categoryContractVersion);
+            }
+            else
+            {
+                writer.WriteNull("categoryContractVersion");
             }
 
             writer.WritePropertyName("ledger");
@@ -127,6 +140,27 @@ public static class BudgetInsightEvidenceBinding
 
                 writer.WriteNumber("budgetActualMinorUnits", member.BudgetActualMinorUnits);
                 writer.WriteEndObject();
+            }
+
+            writer.WriteEndArray();
+
+            writer.WritePropertyName("categoryEvidence");
+            writer.WriteStartArray();
+            if (categoryEvidence is not null)
+            {
+                foreach (var item in categoryEvidence.OrderBy(e => e.CategoryId, StringComparer.Ordinal))
+                {
+                    writer.WriteStartObject();
+                    writer.WriteString("categoryId", item.CategoryId);
+                    writer.WriteString("lifecycle", item.Lifecycle switch
+                    {
+                        CategoryLifecycleStatus.Active => "active",
+                        CategoryLifecycleStatus.Archived => "archived",
+                        _ => "unknown"
+                    });
+                    writer.WriteString("categoryContractVersion", item.CategoryContractVersion);
+                    writer.WriteEndObject();
+                }
             }
 
             writer.WriteEndArray();

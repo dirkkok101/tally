@@ -4,8 +4,8 @@ using Tally.Application;
 using Tally.Contracts.Budget;
 using Tally.Contracts.Budget.Plans;
 using Tally.Contracts.Common;
-using Tally.Contracts.Ledger.Categories;
 using Tally.Domain.Budget.Periods;
+using Tally.Features.Budget.Categories;
 using Tally.Features.Budget.Contract;
 using Tally.Infrastructure.Budget.Storage;
 using Tally.Integration.Ledger;
@@ -22,18 +22,26 @@ namespace Tally.Features.Budget.Plans.GetRevision;
 public sealed class GetBudgetPlanRevisionQuery
 {
     private readonly BudgetStateStore store;
-    private readonly LedgerContractClient ledger;
+    private readonly BudgetCategoryEvidenceResolver categoryEvidence;
     private readonly TimeProvider timeProvider;
 
     public GetBudgetPlanRevisionQuery(
         BudgetStateStore store,
         LedgerContractClient ledger,
         TimeProvider? timeProvider = null)
+        : this(store, new BudgetCategoryEvidenceResolver(ledger), timeProvider)
+    {
+    }
+
+    public GetBudgetPlanRevisionQuery(
+        BudgetStateStore store,
+        BudgetCategoryEvidenceResolver categoryEvidence,
+        TimeProvider? timeProvider = null)
     {
         ArgumentNullException.ThrowIfNull(store);
-        ArgumentNullException.ThrowIfNull(ledger);
+        ArgumentNullException.ThrowIfNull(categoryEvidence);
         this.store = store;
-        this.ledger = ledger;
+        this.categoryEvidence = categoryEvidence;
         this.timeProvider = timeProvider ?? TimeProvider.System;
     }
 
@@ -199,78 +207,15 @@ public sealed class GetBudgetPlanRevisionQuery
         SafeActor actor,
         CancellationToken cancellationToken)
     {
-        if (entries.Count == 0)
-        {
-            return CategoryEnrichmentResult.Ok([]);
-        }
-
-        // Prefer one catalogue page for all statuses so archived historical targets remain evidence-bearing.
-        var listed = await ledger.ListBudgetCategoriesAsync(
-            CategoryContractVersions.Current,
+        var resolved = await categoryEvidence.ResolveAsync(
+            entries.Select(e => e.CategoryId).ToArray(),
+            BudgetCategoryEvidenceResolver.Mode.EnrichSupplemental,
             actor,
             cancellationToken);
-
-        if (!listed.IsSuccess || listed.Value is null)
-        {
-            return CategoryEnrichmentResult.Fail(BudgetContractMapper.MapLedgerCompositionError(listed.Error));
-        }
-
-        var byId = listed.Value.Items.ToDictionary(item => item.CategoryId, StringComparer.Ordinal);
-        var evidence = new List<CategoryLifecycleEvidence>(entries.Count);
-
-        foreach (var entry in entries.OrderBy(e => e.CategoryId, StringComparer.Ordinal))
-        {
-            if (byId.TryGetValue(entry.CategoryId, out var summary))
-            {
-                evidence.Add(new CategoryLifecycleEvidence(
-                    summary.CategoryId,
-                    summary.Name,
-                    MapLifecycle(summary.Status),
-                    summary.LedgerContractVersion));
-                continue;
-            }
-
-            // Not in the full catalogue — resolve individually for precise unknown evidence.
-            var got = await ledger.GetBudgetCategoryAsync(
-                entry.CategoryId,
-                CategoryContractVersions.Current,
-                actor,
-                cancellationToken);
-
-            if (!got.IsSuccess || got.Value is null)
-            {
-                if (got.Error is not null
-                    && (string.Equals(got.Error.Code, BudgetErrors.LedgerIncompatible, StringComparison.Ordinal)
-                        || string.Equals(got.Error.Category, "compatibility", StringComparison.Ordinal)))
-                {
-                    return CategoryEnrichmentResult.Fail(BudgetErrors.LedgerIncompatible);
-                }
-
-                // Historical entry with no current Ledger identity remains readable as unknown.
-                evidence.Add(new CategoryLifecycleEvidence(
-                    entry.CategoryId,
-                    CurrentDisplayName: null,
-                    CategoryLifecycleStatus.Unknown,
-                    CategoryContractVersions.Current));
-                continue;
-            }
-
-            evidence.Add(new CategoryLifecycleEvidence(
-                got.Value.CategoryId,
-                got.Value.Name,
-                MapLifecycle(got.Value.Status),
-                got.Value.LedgerContractVersion));
-        }
-
-        return CategoryEnrichmentResult.Ok(evidence);
+        return resolved.ErrorCode is null
+            ? CategoryEnrichmentResult.Ok(resolved.Evidence)
+            : CategoryEnrichmentResult.Fail(resolved.ErrorCode);
     }
-
-    private static CategoryLifecycleStatus MapLifecycle(CategoryStatus status) => status switch
-    {
-        CategoryStatus.Active => CategoryLifecycleStatus.Active,
-        CategoryStatus.Archived => CategoryLifecycleStatus.Archived,
-        _ => CategoryLifecycleStatus.Unknown
-    };
 
     private sealed record CategoryEnrichmentResult(
         string? ErrorCode,

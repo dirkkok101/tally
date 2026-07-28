@@ -74,7 +74,7 @@ public sealed class BudgetInsightsContractTests : IAsyncLifetime
         activateCommand = new ActivateBudgetPlanRevisionCommand(executor, ledger, clock);
         revisionQuery = new GetBudgetPlanRevisionQuery(store, ledger, clock);
         positionQuery = new GetBudgetPositionQuery(store, ledger, clock);
-        evidenceQuery = new GetBudgetInsightEvidenceQuery(store, ledger, revisionQuery, clock);
+        evidenceQuery = new GetBudgetInsightEvidenceQuery(store, ledger, timeProvider: clock);
 
         accountId = (await CreateAccountAsync()).AccountId;
     }
@@ -418,14 +418,17 @@ public sealed class BudgetInsightsContractTests : IAsyncLifetime
         Assert.Equal(evidence.BudgetActualTotalMinorUnits, evidence.Position!.Totals.ActualMinorUnits);
         Assert.Equal(900, evidence.BudgetActualTotalMinorUnits);
 
-        // Binding fingerprint recomputes identically.
+        // Binding fingerprint recomputes identically (includes category evidence).
+        Assert.Equal(CategoryContractVersions.Current, evidence.CategoryContractVersion);
         var recomputed = BudgetInsightEvidenceBinding.ComputeBindingFingerprint(
             evidence.PlanState,
             evidence.Revision!.RevisionId,
             evidence.CalculationSchemaVersion,
             evidence.Ledger,
             evidence.BudgetActualTotalMinorUnits,
-            evidence.ActualMembers);
+            evidence.ActualMembers,
+            evidence.CategoryContractVersion,
+            evidence.Revision.CategoryLifecycle);
         Assert.Equal(evidence.BindingFingerprint, recomputed);
         _ = t3;
     }

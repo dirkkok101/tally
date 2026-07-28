@@ -6,11 +6,10 @@ using Tally.Contracts.Budget.Plans;
 using Tally.Contracts.Budget.Position;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Actuals;
-using Tally.Contracts.Ledger.Categories;
 using Tally.Domain.Budget.Periods;
 using Tally.Domain.Budget.Position;
+using Tally.Features.Budget.Categories;
 using Tally.Features.Budget.Contract;
-using Tally.Features.Budget.Plans.GetRevision;
 using Tally.Infrastructure.Budget.Storage;
 using Tally.Integration.Ledger;
 
@@ -36,37 +35,21 @@ public sealed class GetBudgetInsightEvidenceQuery
 
     private readonly BudgetStateStore store;
     private readonly LedgerContractClient ledger;
-    private readonly GetBudgetPlanRevisionQuery revisionQuery;
+    private readonly BudgetCategoryEvidenceResolver categoryEvidence;
     private readonly TimeProvider timeProvider;
 
     public GetBudgetInsightEvidenceQuery(
         BudgetStateStore store,
         LedgerContractClient ledger,
-        GetBudgetPlanRevisionQuery revisionQuery,
+        BudgetCategoryEvidenceResolver? categoryEvidence = null,
         TimeProvider? timeProvider = null)
     {
         ArgumentNullException.ThrowIfNull(store);
         ArgumentNullException.ThrowIfNull(ledger);
-        ArgumentNullException.ThrowIfNull(revisionQuery);
         this.store = store;
         this.ledger = ledger;
-        this.revisionQuery = revisionQuery;
+        this.categoryEvidence = categoryEvidence ?? new BudgetCategoryEvidenceResolver(ledger);
         this.timeProvider = timeProvider ?? TimeProvider.System;
-    }
-
-    /// <summary>
-    /// Convenience constructor that composes <see cref="GetBudgetPlanRevisionQuery"/> from the same stores.
-    /// </summary>
-    public GetBudgetInsightEvidenceQuery(
-        BudgetStateStore store,
-        LedgerContractClient ledger,
-        TimeProvider? timeProvider = null)
-        : this(
-            store,
-            ledger,
-            new GetBudgetPlanRevisionQuery(store, ledger, timeProvider),
-            timeProvider)
-    {
     }
 
     public async Task<CommandResult<GetBudgetInsightEvidenceResult>> HandleAsync(
@@ -115,32 +98,16 @@ public sealed class GetBudgetInsightEvidenceQuery
             return CommandResult<GetBudgetInsightEvidenceResult>.Failure(planBind.ErrorCode);
         }
 
-        BudgetPlanRevisionDetail? revisionDetail = null;
         Domain.Budget.Plans.BudgetPlanRevision? domainRevision = null;
-
         if (planBind.PlanState == BudgetInsightPlanState.BoundRevision)
         {
             domainRevision = planBind.DomainRevision
                 ?? throw new InvalidOperationException("BoundRevision requires a domain revision.");
-
-            // Shared owner revision DTO — exact plan detail parity with budget.plan.revision.get.
-            var revisionResult = await revisionQuery.HandleAsync(
-                new GetBudgetPlanRevisionInput(
-                    BudgetOperationIds.ContractVersion,
-                    domainRevision.RevisionId),
-                actor,
-                cancellationToken);
-
-            if (!revisionResult.IsSuccess || revisionResult.Value is null)
-            {
-                return CommandResult<GetBudgetInsightEvidenceResult>.Failure(
-                    revisionResult.ErrorCode ?? BudgetErrors.Unexpected);
-            }
-
-            revisionDetail = revisionResult.Value;
         }
 
         // ── One complete public LEDGER actuals snapshot for every valid state ─
+        // Category evidence is resolved once after actuals (bd-b5fl) — never a second
+        // catalogue read via GetBudgetPlanRevisionQuery (DD-BUDGET-INSIGHTS-READ-PROJECTION).
         cancellationToken.ThrowIfCancellationRequested();
 
         var actualsResult = await ledger.QueryBudgetActualsAsync(
@@ -199,13 +166,30 @@ public sealed class GetBudgetInsightEvidenceQuery
 
         BudgetPosition? position = null;
         string? calculationSchemaVersion = null;
+        BudgetPlanRevisionDetail? revisionDetail = null;
+        string? categoryContractVersion = null;
+        IReadOnlyList<CategoryLifecycleEvidence> boundCategoryEvidence = [];
 
         if (planBind.PlanState == BudgetInsightPlanState.BoundRevision)
         {
-            // Category evidence + pure calculator only for BoundRevision over the same members.
-            var categoryResult = await ResolveKnownCategoriesAsync(
-                domainRevision!,
-                members,
+            // Single catalogue resolution for plan entries + actual members (no second list).
+            var requiredIds = new List<string>();
+            foreach (var entry in domainRevision!.Entries)
+            {
+                requiredIds.Add(entry.CategoryId);
+            }
+
+            foreach (var member in members)
+            {
+                if (member.CategoryId is not null)
+                {
+                    requiredIds.Add(member.CategoryId);
+                }
+            }
+
+            var categoryResult = await categoryEvidence.ResolveAsync(
+                requiredIds,
+                BudgetCategoryEvidenceResolver.Mode.ResolveKnown,
                 actor,
                 cancellationToken);
 
@@ -214,16 +198,19 @@ public sealed class GetBudgetInsightEvidenceQuery
                 return CommandResult<GetBudgetInsightEvidenceResult>.Failure(categoryResult.ErrorCode);
             }
 
+            categoryContractVersion = categoryResult.CategoryContractVersion;
+            boundCategoryEvidence = categoryResult.Evidence;
             var periodDetail = BudgetContractMapper.ToPeriodDetail(period, periodState);
+            revisionDetail = ToRevisionDetail(domainRevision, periodDetail, boundCategoryEvidence);
 
             try
             {
                 position = BudgetPositionCalculator.CalculatePosition(
-                    domainRevision!,
+                    domainRevision,
                     periodDetail,
                     ledgerSnapshot,
                     members,
-                    categoryResult.Evidence,
+                    boundCategoryEvidence,
                     expectedTotal);
 
                 calculationSchemaVersion = position.CalculationSchemaVersion;
@@ -266,7 +253,9 @@ public sealed class GetBudgetInsightEvidenceQuery
             calculationSchemaVersion,
             ledgerSnapshot,
             expectedTotal,
-            members);
+            members,
+            categoryContractVersion,
+            boundCategoryEvidence);
 
         var evidence = new BudgetInsightEvidence(
             PlanState: planBind.PlanState,
@@ -276,10 +265,63 @@ public sealed class GetBudgetInsightEvidenceQuery
             BudgetActualTotalMinorUnits: expectedTotal,
             Ledger: ledgerSnapshot,
             CalculationSchemaVersion: calculationSchemaVersion,
+            CategoryContractVersion: categoryContractVersion,
             BindingFingerprint: bindingFingerprint);
 
         return CommandResult<GetBudgetInsightEvidenceResult>.Success(
             new GetBudgetInsightEvidenceResult(evidence));
+    }
+
+    private static BudgetPlanRevisionDetail ToRevisionDetail(
+        Domain.Budget.Plans.BudgetPlanRevision domain,
+        BudgetPeriodDetail periodDetail,
+        IReadOnlyList<CategoryLifecycleEvidence> evidence)
+    {
+        var byId = evidence.ToDictionary(e => e.CategoryId, StringComparer.Ordinal);
+        var entryDetails = domain.Entries
+            .OrderBy(e => e.CategoryId, StringComparer.Ordinal)
+            .Select(e =>
+            {
+                byId.TryGetValue(e.CategoryId, out var row);
+                return new BudgetPlanEntryDetail(
+                    e.CategoryId,
+                    e.PlannedMinorUnits,
+                    row?.CurrentDisplayName,
+                    row?.Lifecycle);
+            })
+            .ToArray();
+
+        // Plan-entry evidence only on the revision DTO (subset of full known set).
+        var planEvidence = domain.Entries
+            .Select(e => byId.TryGetValue(e.CategoryId, out var row) ? row : null)
+            .Where(e => e is not null)
+            .Cast<CategoryLifecycleEvidence>()
+            .OrderBy(e => e.CategoryId, StringComparer.Ordinal)
+            .ToArray();
+
+        return new BudgetPlanRevisionDetail(
+            domain.PlanId,
+            domain.RevisionId,
+            domain.RevisionNumber,
+            domain.Status,
+            periodDetail,
+            domain.ActorKind,
+            domain.ActorLabel,
+            domain.ActorRunId,
+            domain.Reason,
+            Domain.Budget.Plans.BudgetPlanRevision.FormatUtc(domain.CreatedAtUtc),
+            domain.CategoryContractVersion,
+            domain.PayloadHash,
+            domain.ActivatedAtUtc is null
+                ? null
+                : Domain.Budget.Plans.BudgetPlanRevision.FormatUtc(domain.ActivatedAtUtc.Value),
+            domain.SupersededAtUtc is null
+                ? null
+                : Domain.Budget.Plans.BudgetPlanRevision.FormatUtc(domain.SupersededAtUtc.Value),
+            domain.SupersededByRevisionId,
+            entryDetails,
+            domain.PlannedTotalMinorUnits(),
+            planEvidence);
     }
 
     private static bool TryResolveMemberLimit(int? requested, out int limit, out string? error)
@@ -367,92 +409,6 @@ public sealed class GetBudgetInsightEvidenceQuery
         return PlanBindResult.Bound(BudgetContractMapper.ToDomainRevision(active, activeEntries));
     }
 
-    private async Task<CategoryResolutionResult> ResolveKnownCategoriesAsync(
-        Domain.Budget.Plans.BudgetPlanRevision domainRevision,
-        IReadOnlyList<BudgetActualMember> members,
-        SafeActor actor,
-        CancellationToken cancellationToken)
-    {
-        var listed = await ledger.ListBudgetCategoriesAsync(
-            CategoryContractVersions.Current,
-            actor,
-            cancellationToken);
-
-        if (!listed.IsSuccess || listed.Value is null)
-        {
-            return CategoryResolutionResult.Fail(
-                BudgetContractMapper.MapLedgerCompositionError(listed.Error));
-        }
-
-        var knownById = BudgetContractMapper.MapCategoryListEvidence(listed.Value)
-            .ToDictionary(e => e.CategoryId, StringComparer.Ordinal);
-
-        var requiredIds = new HashSet<string>(StringComparer.Ordinal);
-        foreach (var entry in domainRevision.Entries)
-        {
-            requiredIds.Add(entry.CategoryId);
-        }
-
-        foreach (var member in members)
-        {
-            if (member.CategoryId is not null)
-            {
-                requiredIds.Add(member.CategoryId);
-            }
-        }
-
-        foreach (var categoryId in requiredIds.OrderBy(id => id, StringComparer.Ordinal))
-        {
-            if (knownById.ContainsKey(categoryId))
-            {
-                continue;
-            }
-
-            cancellationToken.ThrowIfCancellationRequested();
-            var got = await ledger.GetBudgetCategoryAsync(
-                categoryId,
-                CategoryContractVersions.Current,
-                actor,
-                cancellationToken);
-
-            if (!got.IsSuccess || got.Value is null)
-            {
-                var code = BudgetContractMapper.MapLedgerCompositionError(got.Error);
-                if (string.Equals(code, BudgetErrors.LedgerUnavailable, StringComparison.Ordinal)
-                    || string.Equals(code, BudgetErrors.SourceStateChanged, StringComparison.Ordinal))
-                {
-                    if (got.Error is not null
-                        && (string.Equals(got.Error.Category, "not_found", StringComparison.Ordinal)
-                            || got.Error.Code.Contains("NOT-FOUND", StringComparison.OrdinalIgnoreCase)
-                            || got.Error.Code.Contains("not_found", StringComparison.OrdinalIgnoreCase)))
-                    {
-                        return CategoryResolutionResult.Fail(BudgetErrors.Integrity);
-                    }
-                }
-
-                if (string.Equals(code, BudgetErrors.LedgerIncompatible, StringComparison.Ordinal)
-                    || string.Equals(code, BudgetErrors.Integrity, StringComparison.Ordinal)
-                    || string.Equals(code, BudgetErrors.SourceStateChanged, StringComparison.Ordinal))
-                {
-                    return CategoryResolutionResult.Fail(code);
-                }
-
-                return CategoryResolutionResult.Fail(BudgetErrors.Integrity);
-            }
-
-            var evidence = BudgetContractMapper.MapCategoryDetailEvidence(got.Value);
-            if (evidence.Lifecycle == CategoryLifecycleStatus.Unknown)
-            {
-                return CategoryResolutionResult.Fail(BudgetErrors.Integrity);
-            }
-
-            knownById[categoryId] = evidence;
-        }
-
-        return CategoryResolutionResult.Ok(
-            knownById.Values.OrderBy(e => e.CategoryId, StringComparer.Ordinal).ToArray());
-    }
-
     private sealed record PlanBindResult(
         BudgetInsightPlanState PlanState,
         Domain.Budget.Plans.BudgetPlanRevision? DomainRevision,
@@ -466,16 +422,5 @@ public sealed class GetBudgetInsightEvidenceQuery
 
         public static PlanBindResult Fail(string errorCode) =>
             new(BudgetInsightPlanState.NoBudgetPlan, null, errorCode);
-    }
-
-    private sealed record CategoryResolutionResult(
-        string? ErrorCode,
-        IReadOnlyList<CategoryLifecycleEvidence> Evidence)
-    {
-        public static CategoryResolutionResult Ok(IReadOnlyList<CategoryLifecycleEvidence> evidence) =>
-            new(null, evidence);
-
-        public static CategoryResolutionResult Fail(string errorCode) =>
-            new(errorCode, []);
     }
 }
