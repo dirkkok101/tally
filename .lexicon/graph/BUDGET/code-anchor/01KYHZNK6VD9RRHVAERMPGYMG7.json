@@ -5,7 +5,7 @@
   "ref_code": "DM-BUDGET-PERIOD-PLAN",
   "repo_path": "src/Tally/Features/Budget/Contract/BudgetContractMapper.Position.cs",
   "anchor_kind": "implementation",
-  "last_verified_hash": "0b62543cdc6d1dcc7dd7f8b8cc555e65d412a9f64d1dde65c8b0a97862c8a60e",
-  "last_verified_at": "2026-07-27T14:29:10.4915521+00:00",
+  "last_verified_hash": "8fd1569662168a3117c3032f91e0659fafce7306ee846a8699032479f5921127",
+  "last_verified_at": "2026-07-28T06:38:54.7604889+00:00",
   "created_at": "2026-07-27T14:29:10.4915521+00:00"
 }

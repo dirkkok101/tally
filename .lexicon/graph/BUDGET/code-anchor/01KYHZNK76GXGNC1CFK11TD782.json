@@ -5,7 +5,7 @@
   "ref_code": "TC-BUDGET-PLAN-HISTORY-CONTRACT",
   "repo_path": "tests/Tally.Tests/Budget/Plans/BudgetPlanReadQueryTests.cs",
   "anchor_kind": "test",
-  "last_verified_hash": "f29ebdca6bc127141774bd0eeb35ef1cca14747d2288e8a54cea8ef5b50439e2",
-  "last_verified_at": "2026-07-27T14:29:10.5027941+00:00",
+  "last_verified_hash": "d104b3c1a0bd6b172055bc0446261e244f02ea712ed8ae01e30640dadb155175",
+  "last_verified_at": "2026-07-28T06:38:54.7677833+00:00",
   "created_at": "2026-07-27T14:29:10.5027941+00:00"
 }

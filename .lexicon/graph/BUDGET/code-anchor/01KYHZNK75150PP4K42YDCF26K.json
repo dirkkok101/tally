@@ -5,7 +5,7 @@
   "ref_code": "TC-BUDGET-PERSONAL-SCALE-PERFORMANCE",
   "repo_path": "tests/Tally.Tests/Budget/Performance/BudgetPersonalScalePerformanceTests.cs",
   "anchor_kind": "test",
-  "last_verified_hash": "f3208d976044de13f86d3e4bdf7057b0ebcda75b89b9dd9d9588eb762efe8551",
-  "last_verified_at": "2026-07-27T14:29:10.5012293+00:00",
+  "last_verified_hash": "b38be3bb11a6b321c99843aa4768b44821ac9817107d33d286f7dc37e0b5e2fe",
+  "last_verified_at": "2026-07-28T06:38:54.7666209+00:00",
   "created_at": "2026-07-27T14:29:10.5012293+00:00"
 }

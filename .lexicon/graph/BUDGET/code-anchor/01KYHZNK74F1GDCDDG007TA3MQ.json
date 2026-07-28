@@ -5,7 +5,7 @@
   "ref_code": "TC-BUDGET-LOCAL-DATA-PROTECTION",
   "repo_path": "tests/Tally.Tests/Budget/Security/BudgetSecurityGateTests.cs",
   "anchor_kind": "test",
-  "last_verified_hash": "66103864bb6987552db2ffeb9d220e408504069fbf9f455b299e690856508d7d",
-  "last_verified_at": "2026-07-27T14:29:10.5009617+00:00",
+  "last_verified_hash": "69362aa20ffa1705738e0a970d7f3bcaa095e5377125e54b74ee4e12c0d8eaa7",
+  "last_verified_at": "2026-07-28T06:38:54.7662519+00:00",
   "created_at": "2026-07-27T14:29:10.5009617+00:00"
 }

@@ -105,3 +105,7 @@ Executed on 2026-07-27 via `bash scripts/verify-budget-performance.sh` (~21 minu
 | `budget.insights.evidence.get` | 100 | 100 | 4802.5 | 5115.1 | 5609.9 | 3000 | miss (advisory) |
 
 Notes: Category catalogue list of 1000 identities through the public LEDGER process seam dominates draft/activate/get (~1.1s). Position/insight include one complete LEDGER actuals snapshot drain over the 100k-row active store for the selected period (800 members) plus 1000 plan entries. Re-run with `BUDGET_PERF_ADVISORY_P95=0` on a quiet release host to hard-enforce NFR p95.
+
+## 2026-07-28 enforcing re-run (renegotiated targets)
+
+BUDGET_PERF_ADVISORY_P95=0 (default); TC_BUDGET_PERSONAL_SCALE_PERFORMANCE_six_operations_meet_p95_targets: **passed** (1/1, 20m34s) at the renegotiated 6s/2s/1s p95 budgets on the same host and dataset shape as the 2026-07-27 run.

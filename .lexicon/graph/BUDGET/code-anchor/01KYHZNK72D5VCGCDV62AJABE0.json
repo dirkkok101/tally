@@ -5,7 +5,7 @@
   "ref_code": "TC-BUDGET-CONTRACT-DISCOVERY-CONTRACT",
   "repo_path": "tests/Tally.Tests/Budget/Process/BudgetProcessContractTests.cs",
   "anchor_kind": "test",
-  "last_verified_hash": "55ff6443f73c6926c16fd77064c7c67e4727ffebf9fa25d1c1b3246df4b5f4c1",
-  "last_verified_at": "2026-07-27T14:29:10.4981700+00:00",
+  "last_verified_hash": "39ee2add85ca8a546d1baa8e1034a64c9f14ab1cdd4acaaece1798f3089c8fdd",
+  "last_verified_at": "2026-07-28T06:38:54.7644843+00:00",
   "created_at": "2026-07-27T14:29:10.4981700+00:00"
 }

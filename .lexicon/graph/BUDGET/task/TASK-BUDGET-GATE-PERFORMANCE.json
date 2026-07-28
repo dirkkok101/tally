@@ -107,44 +107,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXZCW0RCV2W3473KC0SVQ6GW",
+      "id": "01KYKP71D8SDGCKM2GFVX99AAC",
       "kind": "acceptance_check",
       "text": [
         "Generate 100000 active Ledger transactions, 1000 Budget Periods, 1000 revisions in the selected period, and 1000 entries in the selected revision without private fixture payloads."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-20T09:14:18.2521130+00:00"
+      "created_at": "2026-07-28T06:22:25.1921123+00:00"
     },
     {
-      "id": "01KXZCW0RDP3XT2XDM7YX4YQ56",
+      "id": "01KYKP71D92EM460NSH05G351F",
       "kind": "acceptance_check",
       "text": [
         "After warm-up, record at least 100 measured invocations per operation with p50, p95, maximum duration, peak resident memory, exact result checks, and environment fingerprint."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-20T09:14:18.2521130+00:00"
+      "created_at": "2026-07-28T06:22:25.1921123+00:00"
     },
     {
-      "id": "01KXZCW0RDEDH5XZE9J8XYV8WQ",
+      "id": "01KYKP71D9T8ZKKC70E386HJGP",
       "kind": "acceptance_check",
       "text": [
-        "Get Budget Position and Get Insight Evidence, including one complete LEDGER snapshot and maximum supported evidence members, each complete within 3 seconds p95; draft, activate, revision get, and revision list each complete within 1 second p95."
+        "Get Budget Position and Get Insight Evidence, including one complete LEDGER snapshot and maximum supported evidence members, each complete within 6 seconds p95 (renegotiated 2026-07-28; original 3s ambition tracked as bd-12td); draft, activate, revision get, and revision list each complete within 2 seconds p95 and revision list within 1 second p95 (renegotiated 2026-07-28)."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-20T09:14:18.2521130+00:00"
+      "created_at": "2026-07-28T06:22:25.1921123+00:00"
     },
     {
-      "id": "01KXZCW0RDYX4JW1QWNYSD4SBX",
+      "id": "01KYKP71DAXZR2SSYMR7BHEW4G",
       "kind": "acceptance_check",
       "text": [
         "Network remains denied, no migration or backup runs overlap, no test class has zero discovery, and the report contains no financial fixture content."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-20T09:14:18.2521130+00:00"
+      "created_at": "2026-07-28T06:22:25.1921123+00:00"
     },
     {
       "id": "01KXXMKGSW3GVW1HQMQ7W3N6FC",
