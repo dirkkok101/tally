@@ -204,12 +204,15 @@ public static partial class BudgetContractMapper
     /// <summary>
     /// Maps a public LEDGER composition failure into a stable BUDGET domain error code.
     /// Snapshot expiry / generation races become <see cref="BudgetErrors.SourceStateChanged"/>;
-    /// compatibility stays <see cref="BudgetErrors.LedgerIncompatible"/>; other failures are unavailable.
+    /// compatibility stays <see cref="BudgetErrors.LedgerIncompatible"/>; only explicitly-known
+    /// transient host codes stay <see cref="BudgetErrors.LedgerUnavailable"/>. Unrecognized
+    /// codes fail closed as <see cref="BudgetErrors.Integrity"/> — never a retryable host class.
     /// </summary>
     public static string MapLedgerCompositionError(ProcessError? error)
     {
         if (error is null)
         {
+            // Process-level failure without a structured error envelope: transient host class.
             return BudgetErrors.LedgerUnavailable;
         }
 
@@ -235,11 +238,39 @@ public static partial class BudgetContractMapper
             return BudgetErrors.SourceStateChanged;
         }
 
-        return BudgetErrors.LedgerUnavailable;
+        // Explicitly-known transient codes keep the retryable host class.
+        if (string.Equals(error.Code, BudgetErrors.LedgerUnavailable, StringComparison.Ordinal)
+            || string.Equals(error.Code, "host.unavailable", StringComparison.Ordinal)
+            || string.Equals(error.Code, ActualsErrors.SnapshotBusy, StringComparison.Ordinal))
+        {
+            return BudgetErrors.LedgerUnavailable;
+        }
+
+        // Unrecognized ledger failure: fail closed rather than advertise a retryable host class.
+        return BudgetErrors.Integrity;
     }
 
     /// <summary>
-    /// True when an exception is the calculator's integrity failure (overflow, unknown category, etc.).
+    /// Maps a failed per-category LEDGER resolve during mutation validation:
+    /// compatibility surfaces as <see cref="BudgetErrors.LedgerIncompatible"/>;
+    /// everything else is a precise <see cref="BudgetErrors.CategoryUnknown"/>.
+    /// </summary>
+    public static string MapMissingCategory(ProcessError? error)
+    {
+        if (error is not null
+            && (string.Equals(error.Code, BudgetErrors.LedgerIncompatible, StringComparison.Ordinal)
+                || string.Equals(error.Category, "compatibility", StringComparison.Ordinal)))
+        {
+            return BudgetErrors.LedgerIncompatible;
+        }
+
+        return BudgetErrors.CategoryUnknown;
+    }
+
+    /// <summary>
+    /// True when an exception is a detected BUDGET integrity failure — the calculator's
+    /// (overflow, unknown category, etc.) or a mutation slice's violated post-condition —
+    /// signalled by a message prefixed with <see cref="BudgetErrors.Integrity"/>.
     /// </summary>
     public static bool IsPositionIntegrityFailure(Exception exception) =>
         exception is InvalidOperationException

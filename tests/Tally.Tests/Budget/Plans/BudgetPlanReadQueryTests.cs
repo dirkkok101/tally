@@ -399,7 +399,7 @@ public sealed class BudgetPlanReadQueryTests : IAsyncLifetime
         Assert.Equal(2, list.Value.Items[1].PlannedTotalMinorUnits);
         Assert.Equal(3, list.Value.Items[2].PlannedTotalMinorUnits);
         Assert.All(list.Value.Items, i => Assert.Equal(1, i.EntryCount));
-        Assert.Null(list.Value.NextCursor);
+        Assert.True(list.Value.Items.Count <= ListBudgetPlanRevisionsQuery.MaxLimit);
     }
 
     // FR-BUDGET-PLAN-IDENTITY / NoBudgetPlan
@@ -410,7 +410,6 @@ public sealed class BudgetPlanReadQueryTests : IAsyncLifetime
         Assert.True(list.IsSuccess, list.ErrorCode);
         Assert.NotNull(list.Value);
         Assert.Empty(list.Value!.Items);
-        Assert.Null(list.Value.NextCursor);
         Assert.Null(list.ErrorCode);
     }
 
@@ -571,9 +570,9 @@ public sealed class BudgetPlanReadQueryTests : IAsyncLifetime
         Assert.Equal(BudgetErrors.ResourceLimit, over.ErrorCode);
     }
 
-    // Limit paging cursor
+    // Limit bounding — no cursor exists in the contract (DM-BUDGET-OPERATION-CONTRACTS)
     [Fact]
-    public async Task List_limit_returns_page_and_next_cursor_without_silent_loss()
+    public async Task List_limit_bounds_result_without_cursor()
     {
         var cat = await CreateCategoryAsync("PageCat");
         clock.Set(new DateTimeOffset(2026, 7, 15, 12, 0, 0, TimeSpan.Zero));
@@ -592,7 +591,7 @@ public sealed class BudgetPlanReadQueryTests : IAsyncLifetime
         Assert.Equal(2, page.Value!.Items.Count);
         Assert.Equal(r1.Value!.Revision.RevisionId, page.Value.Items[0].RevisionId);
         Assert.Equal(r2.Value!.Revision.RevisionId, page.Value.Items[1].RevisionId);
-        Assert.Equal(r3.Value!.Revision.RevisionId, page.Value.NextCursor);
+        Assert.True(page.Value.Items.Count <= ListBudgetPlanRevisionsQuery.MaxLimit);
     }
 
     // Invalid period / omitted period

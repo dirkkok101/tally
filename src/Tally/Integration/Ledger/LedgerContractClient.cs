@@ -171,11 +171,27 @@ public sealed class LedgerContractClient(OperationRegistry registry, TallyProces
             return first;
         }
 
+        if (!string.Equals(first.Value.LedgerContractVersion, contractVersion, StringComparison.Ordinal))
+        {
+            return BudgetIntegrity<ActualsQueryResult>(
+                "Budget actuals pages do not carry the requested Ledger contract version.");
+        }
+
+        // Iteration cap from the first page's evidence: a well-behaved drain never needs more.
+        var effectivePageSize = Math.Max(1, pageSize ?? first.Value.Items.Count);
+        var maxPages = (first.Value.TotalCount / effectivePageSize) + 2;
+
         var pages = new List<ActualsQueryResult> { first.Value };
         var cursor = first.Value.Cursor;
         while (cursor is not null)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            if (pages.Count >= maxPages)
+            {
+                return BudgetIntegrity<ActualsQueryResult>(
+                    "Budget actuals pagination exceeded the bounded page count for the reported total.");
+            }
+
             var next = await ExecuteAsync(
                 ActualsQuery,
                 contractVersion,
@@ -231,6 +247,24 @@ public sealed class LedgerContractClient(OperationRegistry registry, TallyProces
         {
             return BudgetIntegrity<ActualsQueryResult>(
                 "Budget actuals ordinals are incomplete or duplicated across pages.");
+        }
+
+        var startInclusive = period.StartInclusive;
+        var endInclusive = period.EndExclusive.AddDays(-1);
+        foreach (var item in items)
+        {
+            if (!DateOnly.TryParseExact(
+                    item.EffectiveDate,
+                    "yyyy-MM-dd",
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out var effectiveDate)
+                || effectiveDate < startInclusive
+                || effectiveDate > endInclusive)
+            {
+                return BudgetIntegrity<ActualsQueryResult>(
+                    "Budget actuals returned a member outside the requested period window.");
+            }
         }
 
         var complete = anchor with

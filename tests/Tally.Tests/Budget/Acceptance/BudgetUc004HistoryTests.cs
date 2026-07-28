@@ -12,6 +12,7 @@ using Tally.Contracts.Ledger.Categories;
 using Tally.Domain.Budget.Plans;
 using Tally.Domain.Ledger;
 using Tally.Features.Budget.Contract;
+using Tally.Features.Budget.Plans.ListRevisions;
 using Tally.Infrastructure.Budget.Storage;
 using Tally.Infrastructure.Storage;
 using Tally.Integration.Ledger;
@@ -94,7 +95,7 @@ public sealed class BudgetUc004HistoryTests : IAsyncLifetime
         Assert.Equal(1, list.Items[0].PlannedTotalMinorUnits);
         Assert.Equal(2, list.Items[1].PlannedTotalMinorUnits);
         Assert.Equal(3, list.Items[2].PlannedTotalMinorUnits);
-        Assert.Null(list.NextCursor);
+        Assert.True(list.Items.Count <= ListBudgetPlanRevisionsQuery.MaxLimit);
     }
 
     // ── Lifecycle ────────────────────────────────────────────────────────────
@@ -135,7 +136,6 @@ public sealed class BudgetUc004HistoryTests : IAsyncLifetime
     {
         var list = await ListSuccessAsync(2026, 7);
         Assert.Empty(list.Items);
-        Assert.Null(list.NextCursor);
     }
 
     // FR-BUDGET-PLAN-HISTORY / no-active distinction

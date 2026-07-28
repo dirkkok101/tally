@@ -15,16 +15,16 @@ public readonly record struct BudgetIdentity
 
     public string Value { get; }
 
-    public static BudgetIdentity New()
+    public static BudgetIdentity New(DateTimeOffset timestamp)
     {
         Span<byte> bytes = stackalloc byte[16];
-        var timestamp = (ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        bytes[0] = (byte)(timestamp >> 40);
-        bytes[1] = (byte)(timestamp >> 32);
-        bytes[2] = (byte)(timestamp >> 24);
-        bytes[3] = (byte)(timestamp >> 16);
-        bytes[4] = (byte)(timestamp >> 8);
-        bytes[5] = (byte)timestamp;
+        var milliseconds = (ulong)timestamp.ToUnixTimeMilliseconds();
+        bytes[0] = (byte)(milliseconds >> 40);
+        bytes[1] = (byte)(milliseconds >> 32);
+        bytes[2] = (byte)(milliseconds >> 24);
+        bytes[3] = (byte)(milliseconds >> 16);
+        bytes[4] = (byte)(milliseconds >> 8);
+        bytes[5] = (byte)milliseconds;
         RandomNumberGenerator.Fill(bytes[6..]);
 
         Span<char> result = stackalloc char[26];

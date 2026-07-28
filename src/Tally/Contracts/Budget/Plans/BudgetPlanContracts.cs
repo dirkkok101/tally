@@ -123,6 +123,7 @@ public sealed record ActivateBudgetPlanRevisionResult(
     [property: JsonRequired] BudgetPlanRevisionDetail Activated,
     BudgetPlanRevisionSummary? Superseded);
 
+// Bounded at ListBudgetPlanRevisionsQuery.MaxLimit by design — no cursor input exists
+// to consume one (DM-BUDGET-OPERATION-CONTRACTS: {period?, status?, limit} only).
 public sealed record ListBudgetPlanRevisionsResult(
-    [property: JsonRequired] IReadOnlyList<BudgetPlanRevisionSummary> Items,
-    string? NextCursor);
+    [property: JsonRequired] IReadOnlyList<BudgetPlanRevisionSummary> Items);

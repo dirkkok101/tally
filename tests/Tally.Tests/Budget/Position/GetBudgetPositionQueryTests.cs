@@ -753,13 +753,13 @@ public sealed class GetBudgetPositionQueryTests : IAsyncLifetime
         Assert.Equal(BudgetErrors.LedgerIncompatible, code);
     }
 
-    // FR-BUDGET-LEDGER-COMPOSITION / unavailable default
+    // FR-BUDGET-LEDGER-COMPOSITION / transient null stays unavailable; unrecognized codes fail closed
     [Fact]
-    public void MapLedgerCompositionError_null_or_unknown_is_LedgerUnavailable()
+    public void MapLedgerCompositionError_null_is_LedgerUnavailable_and_unknown_fails_closed_as_Integrity()
     {
         Assert.Equal(BudgetErrors.LedgerUnavailable, BudgetContractMapper.MapLedgerCompositionError(null));
         Assert.Equal(
-            BudgetErrors.LedgerUnavailable,
+            BudgetErrors.Integrity,
             BudgetContractMapper.MapLedgerCompositionError(
                 new ProcessError(ActualsErrors.InvalidFilter, "validation", "bad page")));
     }

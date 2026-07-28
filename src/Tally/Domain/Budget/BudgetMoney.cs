@@ -45,20 +45,9 @@ public readonly record struct BudgetMoney
         }
 
         ulong absolute = 0;
-        for (var index = start; index < integralEnd; index++)
+        try
         {
-            var digit = value[index] - '0';
-            if (digit is < 0 or > 9)
-            {
-                return false;
-            }
-
-            absolute = checked(absolute * 10 + (ulong)digit);
-        }
-
-        if (decimalIndex >= 0)
-        {
-            for (var index = decimalIndex + 1; index < value.Length; index++)
+            for (var index = start; index < integralEnd; index++)
             {
                 var digit = value[index] - '0';
                 if (digit is < 0 or > 9)
@@ -68,10 +57,29 @@ public readonly record struct BudgetMoney
 
                 absolute = checked(absolute * 10 + (ulong)digit);
             }
+
+            if (decimalIndex >= 0)
+            {
+                for (var index = decimalIndex + 1; index < value.Length; index++)
+                {
+                    var digit = value[index] - '0';
+                    if (digit is < 0 or > 9)
+                    {
+                        return false;
+                    }
+
+                    absolute = checked(absolute * 10 + (ulong)digit);
+                }
+            }
+            else
+            {
+                absolute = checked(absolute * 100);
+            }
         }
-        else
+        catch (OverflowException)
         {
-            absolute = checked(absolute * 100);
+            // Try contract: values beyond ulong accumulation are invalid, never thrown.
+            return false;
         }
 
         if (absolute > long.MaxValue)

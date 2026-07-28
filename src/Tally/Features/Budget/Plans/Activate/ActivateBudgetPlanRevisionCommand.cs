@@ -152,114 +152,129 @@ public sealed class ActivateBudgetPlanRevisionCommand
             BudgetOperationIds.RevisionActivate,
             requestHash);
 
-        var activatedAtUtc = BudgetPlanRevision.FormatUtc(timeProvider.GetUtcNow());
+        var activatedAt = timeProvider.GetUtcNow();
+        var activatedAtUtc = BudgetPlanRevision.FormatUtc(activatedAt);
 
-        var execution = await executor.ExecuteAsync(
-            identity,
-            async (connection, transaction, ct) =>
-            {
-                var revision = await store.GetRevisionAsync(connection, transaction, revisionId, ct);
-                if (revision is null)
+        try
+        {
+            var execution = await executor.ExecuteAsync(
+                identity,
+                async (connection, transaction, ct) =>
                 {
-                    return BudgetMutationWorkResult.Failure(BudgetErrors.RevisionNotFound);
-                }
-
-                var plan = await store.GetPlanAsync(connection, transaction, revision.PlanId, ct);
-                if (plan is null)
-                {
-                    return BudgetMutationWorkResult.Failure(BudgetErrors.PlanNotFound);
-                }
-
-                if (!TryResolvePlanPeriod(plan, timeProvider, out _, out var livePeriodState, out var livePeriodError))
-                {
-                    return BudgetMutationWorkResult.Failure(livePeriodError ?? BudgetErrors.InvalidPeriod);
-                }
-
-                var liveEligibility = BudgetPlanLifecycle.ValidateActivationEligibility(
-                    revision.Status,
-                    livePeriodState);
-                if (liveEligibility is not null)
-                {
-                    return BudgetMutationWorkResult.Failure(liveEligibility);
-                }
-
-                if (!string.Equals(
-                        revision.CategoryContractVersion,
-                        CategoryContractVersions.Current,
-                        StringComparison.Ordinal))
-                {
-                    return BudgetMutationWorkResult.Failure(BudgetErrors.LedgerIncompatible);
-                }
-
-                var priorActiveRevisionId = plan.ActiveRevisionId;
-                // Cannot activate a draft that is already the plan's active pointer (should be non-Draft).
-                if (string.Equals(priorActiveRevisionId, revisionId, StringComparison.Ordinal))
-                {
-                    return BudgetMutationWorkResult.Failure(BudgetErrors.Conflict);
-                }
-
-                var activateEventId = BudgetIdentity.New().ToString();
-                string? supersedeEventId = BudgetPlanLifecycle.RequiresSupersession(priorActiveRevisionId)
-                    ? BudgetIdentity.New().ToString()
-                    : null;
-
-                await store.ActivateRevisionAsync(
-                    connection,
-                    transaction,
-                    plan.PlanId,
-                    revisionId,
-                    activatedAtUtc,
-                    reason,
-                    actorKind,
-                    actorLabel,
-                    actorRunId,
-                    activateEventId,
-                    supersedeEventId,
-                    ct);
-
-                // Post-condition: exactly one Active on this plan and pointer matches.
-                var planAfter = await store.GetPlanAsync(connection, transaction, plan.PlanId, ct)
-                    ?? throw new InvalidOperationException("Plan disappeared during activation.");
-                if (!string.Equals(planAfter.ActiveRevisionId, revisionId, StringComparison.Ordinal))
-                {
-                    throw new InvalidOperationException("Activation must set active_revision_id to the activated revision.");
-                }
-
-                var activated = await store.GetRevisionAsync(connection, transaction, revisionId, ct)
-                    ?? throw new InvalidOperationException("Activated revision disappeared during activation.");
-                if (activated.Status != BudgetRevisionStatus.Active)
-                {
-                    throw new InvalidOperationException("Activated revision must be Active after mutation.");
-                }
-
-                if (priorActiveRevisionId is not null)
-                {
-                    var prior = await store.GetRevisionAsync(connection, transaction, priorActiveRevisionId, ct)
-                        ?? throw new InvalidOperationException("Prior Active revision disappeared during supersession.");
-                    if (prior.Status != BudgetRevisionStatus.Superseded)
+                    var revision = await store.GetRevisionAsync(connection, transaction, revisionId, ct);
+                    if (revision is null)
                     {
-                        throw new InvalidOperationException("Prior Active revision must be Superseded after replacement.");
+                        return BudgetMutationWorkResult.Failure(BudgetErrors.RevisionNotFound);
                     }
-                }
 
-                var eventIds = BudgetPlanLifecycle.OrderedActivationEventIds(supersedeEventId, activateEventId);
+                    var plan = await store.GetPlanAsync(connection, transaction, revision.PlanId, ct);
+                    if (plan is null)
+                    {
+                        return BudgetMutationWorkResult.Failure(BudgetErrors.PlanNotFound);
+                    }
 
-                return BudgetMutationWorkResult.Success(new BudgetMutationWorkOutcome(
-                    plan.PlanId,
-                    revisionId,
-                    priorActiveRevisionId,
-                    eventIds,
-                    activatedAtUtc,
-                    activatedAtUtc));
-            },
-            cancellationToken);
+                    if (!TryResolvePlanPeriod(plan, timeProvider, out _, out var livePeriodState, out var livePeriodError))
+                    {
+                        return BudgetMutationWorkResult.Failure(livePeriodError ?? BudgetErrors.InvalidPeriod);
+                    }
 
-        return await MapExecutionResultAsync(
-            execution,
-            period,
-            periodState,
-            categoryEvidence,
-            cancellationToken);
+                    var liveEligibility = BudgetPlanLifecycle.ValidateActivationEligibility(
+                        revision.Status,
+                        livePeriodState);
+                    if (liveEligibility is not null)
+                    {
+                        return BudgetMutationWorkResult.Failure(liveEligibility);
+                    }
+
+                    if (!string.Equals(
+                            revision.CategoryContractVersion,
+                            CategoryContractVersions.Current,
+                            StringComparison.Ordinal))
+                    {
+                        return BudgetMutationWorkResult.Failure(BudgetErrors.LedgerIncompatible);
+                    }
+
+                    var priorActiveRevisionId = plan.ActiveRevisionId;
+                    // Cannot activate a draft that is already the plan's active pointer (should be non-Draft).
+                    if (string.Equals(priorActiveRevisionId, revisionId, StringComparison.Ordinal))
+                    {
+                        return BudgetMutationWorkResult.Failure(BudgetErrors.Conflict);
+                    }
+
+                    var activateEventId = BudgetIdentity.New(activatedAt).ToString();
+                    string? supersedeEventId = BudgetPlanLifecycle.RequiresSupersession(priorActiveRevisionId)
+                        ? BudgetIdentity.New(activatedAt).ToString()
+                        : null;
+
+                    await store.ActivateRevisionAsync(
+                        connection,
+                        transaction,
+                        plan.PlanId,
+                        revisionId,
+                        activatedAtUtc,
+                        reason,
+                        actorKind,
+                        actorLabel,
+                        actorRunId,
+                        activateEventId,
+                        supersedeEventId,
+                        ct);
+
+                    // Post-condition: exactly one Active on this plan and pointer matches.
+                    var planAfter = await store.GetPlanAsync(connection, transaction, plan.PlanId, ct)
+                        ?? throw new InvalidOperationException(
+                            $"{BudgetErrors.Integrity}: Plan disappeared during activation.");
+                    if (!string.Equals(planAfter.ActiveRevisionId, revisionId, StringComparison.Ordinal))
+                    {
+                        throw new InvalidOperationException(
+                            $"{BudgetErrors.Integrity}: Activation must set active_revision_id to the activated revision.");
+                    }
+
+                    var activated = await store.GetRevisionAsync(connection, transaction, revisionId, ct)
+                        ?? throw new InvalidOperationException(
+                            $"{BudgetErrors.Integrity}: Activated revision disappeared during activation.");
+                    if (activated.Status != BudgetRevisionStatus.Active)
+                    {
+                        throw new InvalidOperationException(
+                            $"{BudgetErrors.Integrity}: Activated revision must be Active after mutation.");
+                    }
+
+                    if (priorActiveRevisionId is not null)
+                    {
+                        var prior = await store.GetRevisionAsync(connection, transaction, priorActiveRevisionId, ct)
+                            ?? throw new InvalidOperationException(
+                                $"{BudgetErrors.Integrity}: Prior Active revision disappeared during supersession.");
+                        if (prior.Status != BudgetRevisionStatus.Superseded)
+                        {
+                            throw new InvalidOperationException(
+                                $"{BudgetErrors.Integrity}: Prior Active revision must be Superseded after replacement.");
+                        }
+                    }
+
+                    var eventIds = BudgetPlanLifecycle.OrderedActivationEventIds(supersedeEventId, activateEventId);
+
+                    return BudgetMutationWorkResult.Success(new BudgetMutationWorkOutcome(
+                        plan.PlanId,
+                        revisionId,
+                        priorActiveRevisionId,
+                        eventIds,
+                        activatedAtUtc,
+                        activatedAtUtc));
+                },
+                cancellationToken);
+
+            return await MapExecutionResultAsync(
+                execution,
+                period,
+                periodState,
+                categoryEvidence,
+                cancellationToken);
+        }
+        catch (InvalidOperationException ex) when (BudgetContractMapper.IsPositionIntegrityFailure(ex))
+        {
+            // Detected integrity breach fails closed as BUDGET-INTEGRITY (exit 8), never host.unexpected.
+            return CommandResult<ActivateBudgetPlanRevisionResult>.Failure(BudgetErrors.Integrity);
+        }
     }
 
     private async Task<CommandResult<ActivateBudgetPlanRevisionResult>> MapExecutionResultAsync(
@@ -350,18 +365,18 @@ public sealed class ActivateBudgetPlanRevisionCommand
             new ActivateBudgetPlanRevisionResult(activated, superseded));
     }
 
-    private async Task<BudgetPlanRevisionSummary?> LoadSupersededSummaryAsync(
+    private async Task<BudgetPlanRevisionSummary> LoadSupersededSummaryAsync(
         string priorRevisionId,
         BudgetPeriodDetail periodDetail,
         CancellationToken cancellationToken)
     {
         var store = executor.StateStore;
         await using var connection = await store.OpenMigratedAsync(cancellationToken);
-        var prior = await store.GetRevisionAsync(connection, null, priorRevisionId, cancellationToken);
-        if (prior is null)
-        {
-            return null;
-        }
+        var prior = await store.GetRevisionAsync(connection, null, priorRevisionId, cancellationToken)
+            // A cited prior Active revision must remain readable; a missing row is store corruption,
+            // not the no-prior-revision case.
+            ?? throw new InvalidOperationException(
+                $"{BudgetErrors.Integrity}: Prior Active revision cited by activation was not found.");
 
         var entries = await store.GetEntriesAsync(connection, null, priorRevisionId, cancellationToken);
         long total = 0;
@@ -398,7 +413,7 @@ public sealed class ActivateBudgetPlanRevisionCommand
 
         if (!listed.IsSuccess || listed.Value is null)
         {
-            return CategoryValidationResult.Fail(MapLedgerFailure(listed));
+            return CategoryValidationResult.Fail(BudgetContractMapper.MapLedgerCompositionError(listed.Error));
         }
 
         if (!string.Equals(
@@ -427,7 +442,7 @@ public sealed class ActivateBudgetPlanRevisionCommand
 
                 if (!got.IsSuccess || got.Value is null)
                 {
-                    return CategoryValidationResult.Fail(MapMissingCategory(got));
+                    return CategoryValidationResult.Fail(BudgetContractMapper.MapMissingCategory(got.Error));
                 }
 
                 if (got.Value.Status != CategoryStatus.Active)
@@ -506,39 +521,6 @@ public sealed class ActivateBudgetPlanRevisionCommand
             out period,
             out periodState,
             out error);
-    }
-
-    private static string MapLedgerFailure<T>(LedgerContractResult<T> result)
-    {
-        if (result.Error is null)
-        {
-            return BudgetErrors.LedgerUnavailable;
-        }
-
-        if (string.Equals(result.Error.Code, BudgetErrors.LedgerIncompatible, StringComparison.Ordinal)
-            || string.Equals(result.Error.Category, "compatibility", StringComparison.Ordinal))
-        {
-            return BudgetErrors.LedgerIncompatible;
-        }
-
-        if (string.Equals(result.Error.Code, BudgetErrors.Integrity, StringComparison.Ordinal))
-        {
-            return BudgetErrors.Integrity;
-        }
-
-        return BudgetErrors.LedgerUnavailable;
-    }
-
-    private static string MapMissingCategory(LedgerContractResult<CategoryDetail> result)
-    {
-        if (result.Error is not null
-            && (string.Equals(result.Error.Code, BudgetErrors.LedgerIncompatible, StringComparison.Ordinal)
-                || string.Equals(result.Error.Category, "compatibility", StringComparison.Ordinal)))
-        {
-            return BudgetErrors.LedgerIncompatible;
-        }
-
-        return BudgetErrors.CategoryUnknown;
     }
 
     private sealed record CategoryValidationResult(

@@ -101,13 +101,19 @@ public sealed class BudgetOperationModule
         new(BudgetErrors.Conflict, "conflict", 5),
         new(BudgetErrors.IdempotencyConflict, "conflict", 5),
         new(BudgetErrors.LedgerIncompatible, "compatibility", 7),
+        new(BudgetErrors.Integrity, "integrity", 8),
         new(BudgetErrors.Unexpected, "host", 10)
     ];
 
     private static readonly IReadOnlyList<ErrorSchema> RevisionGetErrors =
     [
         new(BudgetErrors.InvalidInput, "validation", 3),
+        new(BudgetErrors.ActorRequired, "validation", 3),
         new(BudgetErrors.RevisionNotFound, "not_found", 4),
+        new(BudgetErrors.UnsupportedVersion, "compatibility", 7),
+        new(BudgetErrors.LedgerUnavailable, "host", 9),
+        new(BudgetErrors.LedgerIncompatible, "compatibility", 7),
+        new(BudgetErrors.Integrity, "integrity", 8),
         new(BudgetErrors.Unexpected, "host", 10)
     ];
 
@@ -115,6 +121,7 @@ public sealed class BudgetOperationModule
     [
         new(BudgetErrors.InvalidInput, "validation", 3),
         new(BudgetErrors.InvalidPeriod, "validation", 3),
+        new(BudgetErrors.UnsupportedVersion, "compatibility", 7),
         new(BudgetErrors.ResourceLimit, "host", 9),
         new(BudgetErrors.Unexpected, "host", 10)
     ];
@@ -122,14 +129,18 @@ public sealed class BudgetOperationModule
     private static readonly IReadOnlyList<ErrorSchema> RevisionActivateErrors =
     [
         new(BudgetErrors.InvalidInput, "validation", 3),
+        new(BudgetErrors.InvalidPeriod, "validation", 3),
         new(BudgetErrors.ActorRequired, "validation", 3),
         new(BudgetErrors.IdempotencyRequired, "validation", 3),
+        new(BudgetErrors.PlanNotFound, "not_found", 4),
         new(BudgetErrors.RevisionNotFound, "not_found", 4),
         new(BudgetErrors.CategoryInactive, "lifecycle", 6),
         new(BudgetErrors.CategoryUnknown, "not_found", 4),
         new(BudgetErrors.Conflict, "conflict", 5),
         new(BudgetErrors.IdempotencyConflict, "conflict", 5),
+        new(BudgetErrors.LedgerUnavailable, "host", 9),
         new(BudgetErrors.LedgerIncompatible, "compatibility", 7),
+        new(BudgetErrors.Integrity, "integrity", 8),
         new(BudgetErrors.Unexpected, "host", 10)
     ];
 

@@ -212,7 +212,7 @@ public sealed class GetBudgetPlanRevisionQuery
 
         if (!listed.IsSuccess || listed.Value is null)
         {
-            return CategoryEnrichmentResult.Fail(MapLedgerFailure(listed));
+            return CategoryEnrichmentResult.Fail(BudgetContractMapper.MapLedgerCompositionError(listed.Error));
         }
 
         var byId = listed.Value.Items.ToDictionary(item => item.CategoryId, StringComparer.Ordinal);
@@ -271,27 +271,6 @@ public sealed class GetBudgetPlanRevisionQuery
         CategoryStatus.Archived => CategoryLifecycleStatus.Archived,
         _ => CategoryLifecycleStatus.Unknown
     };
-
-    private static string MapLedgerFailure<T>(LedgerContractResult<T> result)
-    {
-        if (result.Error is null)
-        {
-            return BudgetErrors.LedgerUnavailable;
-        }
-
-        if (string.Equals(result.Error.Code, BudgetErrors.LedgerIncompatible, StringComparison.Ordinal)
-            || string.Equals(result.Error.Category, "compatibility", StringComparison.Ordinal))
-        {
-            return BudgetErrors.LedgerIncompatible;
-        }
-
-        if (string.Equals(result.Error.Code, BudgetErrors.Integrity, StringComparison.Ordinal))
-        {
-            return BudgetErrors.Integrity;
-        }
-
-        return BudgetErrors.LedgerUnavailable;
-    }
 
     private sealed record CategoryEnrichmentResult(
         string? ErrorCode,

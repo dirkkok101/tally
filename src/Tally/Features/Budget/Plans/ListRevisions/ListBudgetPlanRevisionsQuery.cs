@@ -92,27 +92,18 @@ public sealed class ListBudgetPlanRevisionsQuery
         {
             // Explicit No Budget Plan: success with empty items — not NotFound, empty plan, or zero plan.
             return CommandResult<ListBudgetPlanRevisionsResult>.Success(
-                new ListBudgetPlanRevisionsResult([], NextCursor: null));
+                new ListBudgetPlanRevisionsResult([]));
         }
 
-        // Fetch one extra row to decide whether a next page exists without silent truncation.
         var rows = await store.ListRevisionSummariesAsync(
             connection,
             null,
             plan.PlanId,
             statusFilter,
-            limit + 1,
+            limit,
             cancellationToken);
 
-        string? nextCursor = null;
-        IReadOnlyList<BudgetPlanRevisionSummaryRow> page = rows;
-        if (rows.Count > limit)
-        {
-            page = rows.Take(limit).ToArray();
-            nextCursor = rows[limit].RevisionId;
-        }
-
-        var items = page
+        var items = rows
             .Select(row => new BudgetPlanRevisionSummary(
                 plan.PlanId,
                 row.RevisionId,
@@ -125,7 +116,7 @@ public sealed class ListBudgetPlanRevisionsQuery
             .ToArray();
 
         return CommandResult<ListBudgetPlanRevisionsResult>.Success(
-            new ListBudgetPlanRevisionsResult(items, nextCursor));
+            new ListBudgetPlanRevisionsResult(items));
     }
 
     private static bool TryResolveLimit(int? requested, out int limit, out string? error)

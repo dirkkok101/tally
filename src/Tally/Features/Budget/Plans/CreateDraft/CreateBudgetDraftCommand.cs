@@ -23,8 +23,6 @@ namespace Tally.Features.Budget.Plans.CreateDraft;
 [SupportedOSPlatform("linux")]
 public sealed class CreateBudgetDraftCommand
 {
-    private const int MaxReasonLength = 1024;
-
     private readonly BudgetMutationExecutor executor;
     private readonly LedgerContractClient ledger;
     private readonly TimeProvider timeProvider;
@@ -67,7 +65,7 @@ public sealed class CreateBudgetDraftCommand
             return CommandResult<CreateDraftBudgetPlanResult>.Failure(BudgetErrors.UnsupportedVersion);
         }
 
-        if (!TryNormalizeReason(input.Reason, out var reason))
+        if (!BudgetPlanLifecycle.TryNormalizeReason(input.Reason, out var reason))
         {
             return CommandResult<CreateDraftBudgetPlanResult>.Failure(BudgetErrors.InvalidInput);
         }
@@ -136,113 +134,124 @@ public sealed class CreateBudgetDraftCommand
             BudgetOperationIds.DraftCreate,
             requestHash);
 
-        var createdAtUtc = BudgetPlanRevision.FormatUtc(timeProvider.GetUtcNow());
+        var createdAt = timeProvider.GetUtcNow();
+        var createdAtUtc = BudgetPlanRevision.FormatUtc(createdAt);
         var payloadHash = BudgetPlanRevision.ComputePayloadHash(categoryContractVersion, domainEntries);
         var store = executor.StateStore;
 
-        var execution = await executor.ExecuteAsync(
-            identity,
-            async (connection, transaction, ct) =>
-            {
-                var planRow = await store.GetPlanByPeriodAsync(
-                    connection,
-                    transaction,
-                    period.CurrencyCode,
-                    period.FormatStartInclusive(),
-                    ct);
-
-                string planId;
-                string? priorActiveRevisionId;
-                if (planRow is null)
+        try
+        {
+            var execution = await executor.ExecuteAsync(
+                identity,
+                async (connection, transaction, ct) =>
                 {
-                    planId = BudgetIdentity.New().ToString();
-                    priorActiveRevisionId = null;
-                    await store.InsertPlanAsync(
+                    var planRow = await store.GetPlanByPeriodAsync(
                         connection,
                         transaction,
-                        new BudgetPlanRow(
-                            planId,
-                            period.FormatStartInclusive(),
-                            period.FormatEndExclusive(),
-                            period.CurrencyCode,
-                            ActiveRevisionId: null,
-                            createdAtUtc),
+                        period.CurrencyCode,
+                        period.FormatStartInclusive(),
                         ct);
-                }
-                else
-                {
-                    planId = planRow.PlanId;
-                    priorActiveRevisionId = planRow.ActiveRevisionId;
-                }
 
-                var revisionNumber = await store.NextRevisionNumberAsync(connection, transaction, planId, ct);
-                var revisionId = BudgetIdentity.New().ToString();
-                var eventId = BudgetIdentity.New().ToString();
-                var eventSequence = await store.NextEventSequenceAsync(connection, transaction, planId, ct);
+                    string planId;
+                    string? priorActiveRevisionId;
+                    if (planRow is null)
+                    {
+                        planId = BudgetIdentity.New(createdAt).ToString();
+                        priorActiveRevisionId = null;
+                        await store.InsertPlanAsync(
+                            connection,
+                            transaction,
+                            new BudgetPlanRow(
+                                planId,
+                                period.FormatStartInclusive(),
+                                period.FormatEndExclusive(),
+                                period.CurrencyCode,
+                                ActiveRevisionId: null,
+                                createdAtUtc),
+                            ct);
+                    }
+                    else
+                    {
+                        planId = planRow.PlanId;
+                        priorActiveRevisionId = planRow.ActiveRevisionId;
+                    }
 
-                var revisionRow = new BudgetPlanRevisionRow(
-                    revisionId,
-                    planId,
-                    revisionNumber,
-                    BudgetRevisionStatus.Draft,
-                    actorKind,
-                    actorLabel,
-                    actorRunId,
-                    reason,
-                    createdAtUtc,
-                    categoryContractVersion,
-                    payloadHash,
-                    ActivatedAtUtc: null,
-                    SupersededAtUtc: null,
-                    SupersededByRevisionId: null);
+                    var revisionNumber = await store.NextRevisionNumberAsync(connection, transaction, planId, ct);
+                    var revisionId = BudgetIdentity.New(createdAt).ToString();
+                    var eventId = BudgetIdentity.New(createdAt).ToString();
+                    var eventSequence = await store.NextEventSequenceAsync(connection, transaction, planId, ct);
 
-                var entryRows = domainEntries
-                    .OrderBy(e => e.CategoryId, StringComparer.Ordinal)
-                    .Select(e => new BudgetPlanEntryRow(revisionId, e.CategoryId, e.PlannedMinorUnits))
-                    .ToArray();
+                    var revisionRow = new BudgetPlanRevisionRow(
+                        revisionId,
+                        planId,
+                        revisionNumber,
+                        BudgetRevisionStatus.Draft,
+                        actorKind,
+                        actorLabel,
+                        actorRunId,
+                        reason,
+                        createdAtUtc,
+                        categoryContractVersion,
+                        payloadHash,
+                        ActivatedAtUtc: null,
+                        SupersededAtUtc: null,
+                        SupersededByRevisionId: null);
 
-                var draftEvent = new BudgetLifecycleEventRow(
-                    eventId,
-                    planId,
-                    revisionId,
-                    "DraftCreated",
-                    actorKind,
-                    actorLabel,
-                    actorRunId,
-                    reason,
-                    createdAtUtc,
-                    PriorStatus: null,
-                    ResultingStatus: BudgetRowMapper.FormatStatus(BudgetRevisionStatus.Draft),
-                    ReplacementRevisionId: null,
-                    eventSequence);
+                    var entryRows = domainEntries
+                        .OrderBy(e => e.CategoryId, StringComparer.Ordinal)
+                        .Select(e => new BudgetPlanEntryRow(revisionId, e.CategoryId, e.PlannedMinorUnits))
+                        .ToArray();
 
-                await store.InsertDraftRevisionAsync(
-                    connection, transaction, revisionRow, entryRows, draftEvent, ct);
+                    var draftEvent = new BudgetLifecycleEventRow(
+                        eventId,
+                        planId,
+                        revisionId,
+                        "DraftCreated",
+                        actorKind,
+                        actorLabel,
+                        actorRunId,
+                        reason,
+                        createdAtUtc,
+                        PriorStatus: null,
+                        ResultingStatus: BudgetRowMapper.FormatStatus(BudgetRevisionStatus.Draft),
+                        ReplacementRevisionId: null,
+                        eventSequence);
 
-                // Re-read plan to prove active pointer was not mutated by draft insert.
-                var planAfter = await store.GetPlanAsync(connection, transaction, planId, ct)
-                    ?? throw new InvalidOperationException("Plan disappeared during draft creation.");
-                if (!string.Equals(planAfter.ActiveRevisionId, priorActiveRevisionId, StringComparison.Ordinal))
-                {
-                    throw new InvalidOperationException("Draft creation must not change active_revision_id.");
-                }
+                    await store.InsertDraftRevisionAsync(
+                        connection, transaction, revisionRow, entryRows, draftEvent, ct);
 
-                return BudgetMutationWorkResult.Success(new BudgetMutationWorkOutcome(
-                    planId,
-                    revisionId,
-                    priorActiveRevisionId,
-                    [eventId],
-                    createdAtUtc,
-                    createdAtUtc));
-            },
-            cancellationToken);
+                    // Re-read plan to prove active pointer was not mutated by draft insert.
+                    var planAfter = await store.GetPlanAsync(connection, transaction, planId, ct)
+                        ?? throw new InvalidOperationException(
+                            $"{BudgetErrors.Integrity}: Plan disappeared during draft creation.");
+                    if (!string.Equals(planAfter.ActiveRevisionId, priorActiveRevisionId, StringComparison.Ordinal))
+                    {
+                        throw new InvalidOperationException(
+                            $"{BudgetErrors.Integrity}: Draft creation must not change active_revision_id.");
+                    }
 
-        return MapExecutionResult(
-            execution,
-            period,
-            periodState,
-            plannedTotal,
-            categoryEvidence);
+                    return BudgetMutationWorkResult.Success(new BudgetMutationWorkOutcome(
+                        planId,
+                        revisionId,
+                        priorActiveRevisionId,
+                        [eventId],
+                        createdAtUtc,
+                        createdAtUtc));
+                },
+                cancellationToken);
+
+            return MapExecutionResult(
+                execution,
+                period,
+                periodState,
+                plannedTotal,
+                categoryEvidence);
+        }
+        catch (InvalidOperationException ex) when (BudgetContractMapper.IsPositionIntegrityFailure(ex))
+        {
+            // Detected integrity breach fails closed as BUDGET-INTEGRITY (exit 8), never host.unexpected.
+            return CommandResult<CreateDraftBudgetPlanResult>.Failure(BudgetErrors.Integrity);
+        }
     }
 
     private async Task<CategoryValidationResult> ValidateCategoriesAsync(
@@ -262,7 +271,7 @@ public sealed class CreateBudgetDraftCommand
 
         if (!listed.IsSuccess || listed.Value is null)
         {
-            return CategoryValidationResult.Fail(MapLedgerFailure(listed));
+            return CategoryValidationResult.Fail(BudgetContractMapper.MapLedgerCompositionError(listed.Error));
         }
 
         if (!string.Equals(
@@ -293,7 +302,7 @@ public sealed class CreateBudgetDraftCommand
 
                 if (!got.IsSuccess || got.Value is null)
                 {
-                    return CategoryValidationResult.Fail(MapMissingCategory(got));
+                    return CategoryValidationResult.Fail(BudgetContractMapper.MapMissingCategory(got.Error));
                 }
 
                 if (got.Value.Status != CategoryStatus.Active)
@@ -391,10 +400,12 @@ public sealed class CreateBudgetDraftCommand
             durableTotal = checked(durableTotal + entry.PlannedMinorUnits);
         }
 
-        if (durableTotal != plannedTotal && execution.Disposition == BudgetMutationDisposition.Committed)
+        if (durableTotal != plannedTotal)
         {
-            // Replay may re-use a prior total from the original request; committed must match exactly.
-            throw new InvalidOperationException("Durable draft total does not match the validated request total.");
+            // Replay implies a byte-identical request by hash, so a mismatch on either
+            // disposition means the durable rows no longer reconcile — store corruption.
+            throw new InvalidOperationException(
+                $"{BudgetErrors.Integrity}: Durable draft total does not match the validated request total.");
         }
 
         var periodDetail = new BudgetPeriodDetail(
@@ -471,58 +482,6 @@ public sealed class CreateBudgetDraftCommand
             .OrderBy(e => e.CategoryId, StringComparer.Ordinal)
             .ToArray();
         return true;
-    }
-
-    private static bool TryNormalizeReason(string? reason, out string normalized)
-    {
-        normalized = reason?.Trim() ?? string.Empty;
-        if (normalized.Length is 0 or > MaxReasonLength)
-        {
-            return false;
-        }
-
-        foreach (var ch in normalized)
-        {
-            if (char.IsControl(ch))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private static string MapLedgerFailure<T>(LedgerContractResult<T> result)
-    {
-        if (result.Error is null)
-        {
-            return BudgetErrors.LedgerUnavailable;
-        }
-
-        if (string.Equals(result.Error.Code, BudgetErrors.LedgerIncompatible, StringComparison.Ordinal)
-            || string.Equals(result.Error.Category, "compatibility", StringComparison.Ordinal))
-        {
-            return BudgetErrors.LedgerIncompatible;
-        }
-
-        if (string.Equals(result.Error.Code, BudgetErrors.Integrity, StringComparison.Ordinal))
-        {
-            return BudgetErrors.Integrity;
-        }
-
-        return BudgetErrors.LedgerUnavailable;
-    }
-
-    private static string MapMissingCategory(LedgerContractResult<CategoryDetail> result)
-    {
-        if (result.Error is not null
-            && (string.Equals(result.Error.Code, BudgetErrors.LedgerIncompatible, StringComparison.Ordinal)
-                || string.Equals(result.Error.Category, "compatibility", StringComparison.Ordinal)))
-        {
-            return BudgetErrors.LedgerIncompatible;
-        }
-
-        return BudgetErrors.CategoryUnknown;
     }
 
     private sealed record CategoryValidationResult(
