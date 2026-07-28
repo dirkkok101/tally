@@ -1,0 +1,12 @@
+{
+  "id": "01KYKQ5Y6B3YYRD8QH7GC4AM48",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-BUDGET-PLAN-ACTIVATION",
+  "subject_entity_id": "01KXXF597PDNTRR8B1XMRNR245",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+  "commit_sha": "aba0d54559e70e0930d5793582a7c3af8890a4d4",
+  "bead_id": "bd-a42z",
+  "verified_at": "2026-07-28T06:39:17.7057767+00:00"
+}

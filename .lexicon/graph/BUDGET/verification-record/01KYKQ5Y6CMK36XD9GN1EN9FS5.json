@@ -1,0 +1,12 @@
+{
+  "id": "01KYKQ5Y6CMK36XD9GN1EN9FS5",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE",
+  "subject_entity_id": "01KXXFE157SBSM3AC1PPRFPY0N",
+  "verdict": "passed",
+  "proof_kind": "benchmark",
+  "proof_ref": "docs/verification/budget-performance.md",
+  "commit_sha": "aba0d54559e70e0930d5793582a7c3af8890a4d4",
+  "bead_id": "bd-1w97",
+  "verified_at": "2026-07-28T06:39:17.7057767+00:00"
+}

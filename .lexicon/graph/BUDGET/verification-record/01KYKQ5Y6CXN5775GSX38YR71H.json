@@ -1,0 +1,12 @@
+{
+  "id": "01KYKQ5Y6CXN5775GSX38YR71H",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-BUDGET-LOCAL-DATA-PROTECTION",
+  "subject_entity_id": "01KXXFDZREHAMKSGRREYYVEPG4",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-BUDGET-LOCAL-DATA-PROTECTION",
+  "commit_sha": "aba0d54559e70e0930d5793582a7c3af8890a4d4",
+  "bead_id": "bd-1eq9",
+  "verified_at": "2026-07-28T06:39:17.7057767+00:00"
+}

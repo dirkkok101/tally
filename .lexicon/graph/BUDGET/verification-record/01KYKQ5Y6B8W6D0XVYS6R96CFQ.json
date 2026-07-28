@@ -1,0 +1,12 @@
+{
+  "id": "01KYKQ5Y6B8W6D0XVYS6R96CFQ",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-BUDGET-LEDGER-COMPOSITION",
+  "subject_entity_id": "01KXXF92J52M61D2Z38JQSJJYM",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+  "commit_sha": "aba0d54559e70e0930d5793582a7c3af8890a4d4",
+  "bead_id": "bd-2h45",
+  "verified_at": "2026-07-28T06:39:17.7057767+00:00"
+}

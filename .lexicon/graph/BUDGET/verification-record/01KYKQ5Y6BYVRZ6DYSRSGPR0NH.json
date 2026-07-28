@@ -1,0 +1,12 @@
+{
+  "id": "01KYKQ5Y6BYVRZ6DYSRSGPR0NH",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-BUDGET-PLAN-DRAFT",
+  "subject_entity_id": "01KXXF58SXMVNKMBXHX6DJDSYJ",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-BUDGET-PLAN-DRAFT-CONTRACT",
+  "commit_sha": "aba0d54559e70e0930d5793582a7c3af8890a4d4",
+  "bead_id": "bd-2bla",
+  "verified_at": "2026-07-28T06:39:17.7057767+00:00"
+}

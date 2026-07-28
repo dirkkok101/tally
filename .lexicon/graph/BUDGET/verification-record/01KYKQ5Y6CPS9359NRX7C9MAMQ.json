@@ -1,0 +1,12 @@
+{
+  "id": "01KYKQ5Y6CPS9359NRX7C9MAMQ",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-BUDGET-EXACT-FINANCIAL-INTEGRITY",
+  "subject_entity_id": "01KXXFDYF56XK8J7V4E0EP2E0N",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-BUDGET-EXACT-FINANCIAL-INTEGRITY",
+  "commit_sha": "aba0d54559e70e0930d5793582a7c3af8890a4d4",
+  "bead_id": "bd-qlk",
+  "verified_at": "2026-07-28T06:39:17.7057767+00:00"
+}

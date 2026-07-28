@@ -1,0 +1,12 @@
+{
+  "id": "01KYKQ5Y6BEGKVN2R80BB47XEQ",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-BUDGET-IDEMPOTENT-MUTATIONS",
+  "subject_entity_id": "01KXXF900MG25JA48NB873H40R",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-BUDGET-IDEMPOTENT-MUTATIONS-CONTRACT",
+  "commit_sha": "aba0d54559e70e0930d5793582a7c3af8890a4d4",
+  "bead_id": "bd-a42z",
+  "verified_at": "2026-07-28T06:39:17.7057767+00:00"
+}

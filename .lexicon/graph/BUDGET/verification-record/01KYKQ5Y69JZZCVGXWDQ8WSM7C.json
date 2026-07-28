@@ -1,0 +1,12 @@
+{
+  "id": "01KYKQ5Y69JZZCVGXWDQ8WSM7C",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-BUDGET-CATEGORY-LIFECYCLE",
+  "subject_entity_id": "01KXXF8WZZHM32V66ZMXVP94WC",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-BUDGET-CATEGORY-LIFECYCLE-CONTRACT",
+  "commit_sha": "aba0d54559e70e0930d5793582a7c3af8890a4d4",
+  "bead_id": "bd-a42z",
+  "verified_at": "2026-07-28T06:39:17.7057767+00:00"
+}

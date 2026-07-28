@@ -1,0 +1,12 @@
+{
+  "id": "01KYKQ5Y6BA034F8WPF7E00S10",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-BUDGET-STRUCTURED-INVOCATION",
+  "subject_entity_id": "01KXXFBAZHEXT50QKDFH4FHDY9",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-BUDGET-LOCAL-DATA-PROTECTION",
+  "commit_sha": "aba0d54559e70e0930d5793582a7c3af8890a4d4",
+  "bead_id": "bd-2spz",
+  "verified_at": "2026-07-28T06:39:17.7057767+00:00"
+}

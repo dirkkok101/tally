@@ -1,0 +1,12 @@
+{
+  "id": "01KYKQ5Y6CWPTWC0Z5TX4RYWV2",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-BUDGET-ATTRIBUTABLE-HISTORY",
+  "subject_entity_id": "01KXXFDZAR0JDCGFNS6P5GSRB6",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-BUDGET-ATTRIBUTABLE-HISTORY",
+  "commit_sha": "aba0d54559e70e0930d5793582a7c3af8890a4d4",
+  "bead_id": "bd-25xk",
+  "verified_at": "2026-07-28T06:39:17.7057767+00:00"
+}

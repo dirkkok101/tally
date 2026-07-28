@@ -1,0 +1,12 @@
+{
+  "id": "01KYKQ5Y6B8XHJE5Z92TPNDM94",
+  "subject_type": "nfr",
+  "subject_ref_code": "NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+  "subject_entity_id": "01KXXFDYWYCESY48TM7S12KXVV",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-BUDGET-ATOMIC-DURABLE-MUTATIONS",
+  "commit_sha": "aba0d54559e70e0930d5793582a7c3af8890a4d4",
+  "bead_id": "bd-nb1",
+  "verified_at": "2026-07-28T06:39:17.7057767+00:00"
+}

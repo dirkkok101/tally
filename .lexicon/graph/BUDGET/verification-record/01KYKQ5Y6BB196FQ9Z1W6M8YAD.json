@@ -1,0 +1,12 @@
+{
+  "id": "01KYKQ5Y6BB196FQ9Z1W6M8YAD",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-BUDGET-POSITION-QUERY",
+  "subject_entity_id": "01KXXFAZDV5ETFQAPK518P3W60",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-BUDGET-EXACT-FINANCIAL-INTEGRITY",
+  "commit_sha": "aba0d54559e70e0930d5793582a7c3af8890a4d4",
+  "bead_id": "bd-1ns6",
+  "verified_at": "2026-07-28T06:39:17.7057767+00:00"
+}

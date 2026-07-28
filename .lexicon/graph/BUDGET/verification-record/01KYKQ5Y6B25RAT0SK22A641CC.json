@@ -1,0 +1,12 @@
+{
+  "id": "01KYKQ5Y6B25RAT0SK22A641CC",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-BUDGET-INSIGHTS-PROJECTION",
+  "subject_entity_id": "01KXXFB6A6PTQGRFMBVQ4J2N3G",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-BUDGET-INSIGHTS-PROJECTION-CONTRACT",
+  "commit_sha": "aba0d54559e70e0930d5793582a7c3af8890a4d4",
+  "bead_id": "bd-38wp",
+  "verified_at": "2026-07-28T06:39:17.7057767+00:00"
+}
