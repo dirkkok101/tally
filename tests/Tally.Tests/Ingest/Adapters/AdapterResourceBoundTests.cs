@@ -7,6 +7,7 @@ using Xunit;
 
 namespace Tally.Tests.Ingest.Adapters;
 
+[Collection(ProcessMemoryCollection.Name)]
 public sealed class AdapterResourceBoundTests
 {
     [Fact]

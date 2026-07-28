@@ -10,6 +10,7 @@ using Xunit;
 
 namespace Tally.Tests.Ingest.PdfExtraction;
 
+[Collection(ProcessMemoryCollection.Name)]
 public sealed class PdfStatementTextExtractorTests
 {
     private static readonly PdfExtractionLimits TestLimits = new(
