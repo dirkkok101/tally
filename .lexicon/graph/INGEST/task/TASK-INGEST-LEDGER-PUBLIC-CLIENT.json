@@ -65,58 +65,58 @@
   ],
   "files": [
     {
-      "id": "01KYD29JMK4BXSEHB2SFTDKXHZ",
+      "id": "01KYM9G8V8KC2ZZ9EDJN7HX0CP",
       "path": "src/Tally/Contracts/Ingest/IngestReceiptContracts.cs",
       "action": "modify",
-      "role": "replace the INGEST-only frozen input wrapper with the released RecordTransactionInput",
+      "role": "freeze the released RecordTransactionInput inside the thin FrozenLedgerRecordRequest envelope (version, operation, idempotency key, actor) — released input embedded verbatim per TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-25T16:38:50.2569317+00:00"
+      "created_at": "2026-07-28T11:59:30.6634830+00:00"
     },
     {
-      "id": "01KYD29JMKA2Q174YCM174K4XR",
+      "id": "01KYM9G8V8TBAWRPKX89W0Z274",
       "path": "src/Tally/Contracts/Ingest/IngestJsonContext.cs",
       "action": "modify",
       "role": "source-generated frozen request metadata for the released nested input",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-25T16:38:50.2569317+00:00"
+      "created_at": "2026-07-28T11:59:30.6634830+00:00"
     },
     {
-      "id": "01KYD29JMK3SC3ACJQQK6ZQQJP",
+      "id": "01KYM9G8V9T9ACS7SQJCS2CGPF",
       "path": "src/Tally/Integration/Ledger/LedgerContractClient.cs",
       "action": "create",
       "role": "public operation executor client",
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-25T16:38:50.2569317+00:00"
+      "created_at": "2026-07-28T11:59:30.6634830+00:00"
     },
     {
-      "id": "01KYD29JMKM77JWVQC2Q9TWAQ6",
+      "id": "01KYM9G8V9Y02RWGKVTH656GTX",
       "path": "tests/Tally.Tests/Ingest/Contract/IngestContractModelTests.cs",
       "action": "test",
       "role": "exact released frozen input type and byte stability",
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-25T16:38:50.2569317+00:00"
+      "created_at": "2026-07-28T11:59:30.6634830+00:00"
     },
     {
-      "id": "01KYD29JMKJAAFSVCDJK7KG03H",
+      "id": "01KYM9G8V9HKMDPGTC3MVC93XP",
       "path": "tests/Tally.Tests/Ingest/LedgerContract/LedgerContractClientTests.cs",
       "action": "test",
       "role": "account record and get contract tests",
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-25T16:38:50.2569317+00:00"
+      "created_at": "2026-07-28T11:59:30.6634830+00:00"
     },
     {
-      "id": "01KYD29JMKEMQ7ZNM930GC4BA3",
+      "id": "01KYM9G8V9HGCA7G33KP2N573V",
       "path": "tests/Tally.Tests/Ingest/LedgerContract/LedgerBoundaryArchitectureTests.cs",
       "action": "test",
       "role": "private reference guards",
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-25T16:38:50.2569317+00:00"
+      "created_at": "2026-07-28T11:59:30.6634830+00:00"
     }
   ],
   "interfaces": [

@@ -5,16 +5,23 @@
   "title": "Handle and clean up a failed ingestion",
   "preconditions": "The attempted source and any durable batch identifier are known; structured diagnostics are available without financial payloads.",
   "postconditions": "The owner can prove the last durable state, safely retry/resume or abandon, and remove retained artifacts without deleting canonical LEDGER transactions or the caller-owned source.",
-  "main_flow": "1. The owner or Agent Host inspects the stable error category, affected batch/candidate identifiers, whether any LEDGER mutation occurred, and whether retry is meaningful. 2. INGEST leaves the caller-owned source unchanged. 3. INGEST preserves only the owner-only manifest/receipt state needed for review or safe resume. 4. The owner may abandon an incomplete batch explicitly. 5. INGEST removes temporary extraction artifacts after success, failure, abandonment, or safe startup recovery. 6. Completed metadata receipts remain available until explicit owner cleanup under the validated first-release retention policy.",
+  "main_flow": "1. The owner or Agent Host inspects the stable error category, affected batch/candidate identifiers, whether any LEDGER mutation occurred, and whether retry is meaningful. 2. INGEST leaves the caller-owned source unchanged. 3. INGEST preserves only the owner-only manifest/receipt state needed for review or safe resume. 4. The owner may abandon an incomplete batch explicitly. 5. INGEST removes owner-only batch working artifacts after success, failure, abandonment, or safe startup recovery; statement extraction itself is memory-only per DD-INGEST-ARTIFACT-SECURITY and creates no temporary extraction files. 6. Completed metadata receipts remain available until explicit owner cleanup under the validated first-release retention policy.",
   "alt_flows": [
     "1a. Error output would require statement payloads to explain -> return safe identifiers and metadata instead",
     "3a. Owner-only permission cannot be established -> do not persist sensitive artifacts or continue mutation",
-    "5a. Crash prevents immediate temporary cleanup -> retry deterministic cleanup on the next safe invocation",
+    "5a. Crash prevents immediate batch-artifact cleanup -> retry deterministic cleanup on the next safe invocation",
     "6a. Cleanup target is ambiguous or still required for resume -> reject deletion and preserve recoverability"
   ],
   "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"Preview, review, commit, or resume returns an unsupported, blocked, malformed, permission, compatibility, or resource-limit outcome.\",\"status\":\"draft\"}",
   "created_at": "2026-07-18T10:11:17.7592928+00:00",
   "links": [
+    {
+      "id": "01KYM9ACNXDS3DCVBCNGMANZ3H",
+      "target_type": "design_decision",
+      "target": "DD-INGEST-ARTIFACT-SECURITY",
+      "rel": "see-also",
+      "created_at": "2026-07-28T11:56:17.9816802+00:00"
+    },
     {
       "id": "01KXTBNTCHACQ51ZYZ1FHHE5G9",
       "target_type": "external_dependency",

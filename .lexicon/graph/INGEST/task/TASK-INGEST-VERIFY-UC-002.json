@@ -76,54 +76,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXTMS8JXZTG92QWX5F3S11BR",
+      "id": "01KYM9EGNSS417N2RTPKYD517V",
       "kind": "acceptance_check",
       "text": [
         "Main scenario previews, inspects the complete exact revision, verifies candidates/exclusions/duplicates/conflicts/controls/versions, approves its digest with actor attribution, and observes approved state with no Ledger transaction."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-28T11:58:33.1453814+00:00"
     },
     {
-      "id": "01KXTMS8JXB87CP07HD86HTCRJ",
+      "id": "01KYM9EGNTW6CXB3HTX4TCRF61",
       "kind": "acceptance_check",
       "text": [
         "An unexplained row, failed control, ambiguous semantic duplicate, overlap, missing fact, or unsupported finance meaning keeps approval blocked."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-28T11:58:33.1453814+00:00"
     },
     {
-      "id": "01KXTMS8JXZ5EJK2HF7FPK5WEQ",
+      "id": "01KYM9EGNTMZD66Q0H6ZV0NEQ5",
       "kind": "acceptance_check",
       "text": [
-        "Attempted edits to amount, currency, date, description, sign, account, or provenance are rejected and require corrected source/adapter plus a new preview."
+        "Attempted edits to amount, currency, date, description, sign, or provenance are rejected and require corrected source/adapter plus a new preview; the selected account is a preview input, not an editable review fact — choosing a different account requires a new preview of the same source (per FR-INGEST-MANIFEST-REVIEW and DD-INGEST-MANIFEST-IDENTITY-OVERLAP), and in-review account edits are rejected."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-28T11:58:33.1453814+00:00"
     },
     {
-      "id": "01KXTMS8JXWVNPMZ5C8VT9NKWG",
+      "id": "01KYM9EGNTAPS1J165G7SSW039",
       "kind": "acceptance_check",
       "text": [
         "Adapter, manifest, Ledger contract, account state, or digest change invalidates the old approval and requires a compatible new revision."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-28T11:58:33.1453814+00:00"
     },
     {
-      "id": "01KXTMS8JX9R05TAK1ZF1NDV2B",
+      "id": "01KYM9EGNT3PNGZX33VWPPV8BM",
       "kind": "acceptance_check",
       "text": [
         "Commit with absent approval or an approval for another revision is rejected before mutation."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-18T12:56:24.4112574+00:00"
+      "created_at": "2026-07-28T11:58:33.1453814+00:00"
     },
     {
       "id": "01KXTMS8JY6JF7D01RSVQ8355V",

@@ -7,7 +7,7 @@
     "Every candidate-granular crash point must resume from durable manifest, receipt, and LEDGER idempotency state without duplicate effects."
   ],
   "category": "reliability",
-  "target": "100% of injected interruption points before LEDGER call, after LEDGER commit, before receipt durability, after receipt durability, and between candidates recover to a complete receipt in which each candidate is accepted once, returned as the exact prior result, explicitly rejected, unresolved, or conflicted; zero second canonical transactions.",
+  "target": "100% of injected interruption points before LEDGER call, after LEDGER commit, before receipt durability, after receipt durability, and between candidates recover to a durably complete accounting in which each candidate is accepted once, returned as the exact prior result, explicitly rejected, conflicted, or held unresolved with its frozen request for replay-safe resume; unresolved candidates keep the receipt resumable rather than Completed (a receipt reports Completed only when every candidate is terminal, per TASK-INGEST-COMMIT-SAGA); zero second canonical transactions.",
   "load_condition": "Every candidate outcome class, batches with multiple candidates, lost stdout, process termination, receipt write failure, and repeated resume.",
   "measurement": "Published-process fault-injection matrix with direct LEDGER reference round-trip and receipt/cardinality assertions.",
   "rationale": [

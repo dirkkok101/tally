@@ -146,64 +146,64 @@
   ],
   "recipe_items": [
     {
-      "id": "01KYEZ33624W7PK47VXZPG7BW0",
+      "id": "01KYM9DD6NF7D8M15RJC6PQ0B5",
       "kind": "acceptance_check",
       "text": [
         "StatementAdapterRegistry explicitly contains exactly one PdfTextLayoutAStatementAdapter and one PdfTextLayoutBStatementAdapter in deterministic order; no reflection scan, plugin, fallback, third variant, or user configuration exists."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-26T10:21:20.9614014+00:00"
+      "created_at": "2026-07-28T11:57:56.8213327+00:00"
     },
     {
-      "id": "01KYEZ33647EYTP4Q52M3AHKKN",
+      "id": "01KYM9DD6PNAE4WR3224SR0NGP",
       "kind": "acceptance_check",
       "text": [
         "Every one of the three private fixtures produces exactly one exact_match and the variant ID declared by the ignored private fixture manifest; zero or multiple adapter matches return a stable unsupported result."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-26T10:21:20.9614014+00:00"
+      "created_at": "2026-07-28T11:57:56.8213327+00:00"
     },
     {
-      "id": "01KYEZ336413RV41GGKA65MQFV",
+      "id": "01KYM9DD6QDNQ420KB33YYJQDS",
       "kind": "acceptance_check",
       "text": [
         "Each fixture is extracted twice through the real PdfPig extractor and selected adapter with identical ordered source records, description-evidence kinds, dispositions, controls, and SHA-256 digests; digest values remain inside assertions and are not printed."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-26T10:21:20.9614014+00:00"
+      "created_at": "2026-07-28T11:57:56.8213327+00:00"
     },
     {
-      "id": "01KYEZ33643NB3385Y0HVXFX5R",
+      "id": "01KYM9DD6QT3BMZD02ECQNZ866",
       "kind": "acceptance_check",
       "text": [
-        "A unique source description emits SourceText; a structurally complete Layout A row with zero description candidates emits SourceAbsentMarker and exact description 'Description unavailable in source statement'; multiple candidates block. OriginalTextEvidence contains only source glyph text."
+        "A unique source description emits SourceText; a structurally complete Layout A row with zero description candidates emits SourceAbsentMarker and exact description 'Description unavailable in source statement'; multiple description candidates no-match the document (unsupported, matching TASK-INGEST-ADAPTER-LAYOUT-A and the shipped adapter). OriginalTextEvidence contains only source glyph text."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-26T10:21:20.9614014+00:00"
+      "created_at": "2026-07-28T11:57:56.8213327+00:00"
     },
     {
-      "id": "01KYEZ3364XN7K3JS4X497BCDX",
+      "id": "01KYM9DD6QGTZVH0ZA7TTQFYFM",
       "kind": "acceptance_check",
       "text": [
         "Every transaction-bearing source record is accepted or blocked, non-transaction exclusions carry stable reasons, and all available opening, closing, running-balance, total, and record-count controls match exactly."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-26T10:21:20.9614014+00:00"
+      "created_at": "2026-07-28T11:57:56.8213327+00:00"
     },
     {
-      "id": "01KYEZ336433STEZ9YN1K7FYFS",
+      "id": "01KYM9DD6Q2Y55ES07J15141CB",
       "kind": "acceptance_check",
       "text": [
         "One-over-limit and malformed sources fail before state or Ledger mutation; measured direct extraction plus adapter work stays below 5 seconds and 256 MiB peak RSS per fixture on the supported release host."
       ],
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-26T10:21:20.9614014+00:00"
+      "created_at": "2026-07-28T11:57:56.8213327+00:00"
     },
     {
       "id": "01KXTM5NS65P4T4W0NAY5CNJQH",
