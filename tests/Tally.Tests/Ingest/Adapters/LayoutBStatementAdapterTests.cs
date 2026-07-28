@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Tally.Contracts.Ingest;
 using Tally.Contracts.Ledger.Accounts;
+using Tally.Domain.Ingest.Identity;
 using Tally.Domain.Ingest.Normalization;
 using Tally.Domain.Ingest.Reconciliation;
 using Tally.Infrastructure.Ingest.Pdf;
@@ -148,6 +149,40 @@ public sealed class LayoutBStatementAdapterTests
         Assert.Equal(first.AccountEvidence.MetadataFingerprint, second.AccountEvidence.MetadataFingerprint);
         Assert.Equal(first.OrderedRecords.Count, second.OrderedRecords.Count);
         Assert.True(first.OrderedRecords.SequenceEqual(second.OrderedRecords));
+    }
+
+    [Fact]
+    public void Extract_pins_source_record_identity_position_format_and_raw_evidence_normalization()
+    {
+        // DD-INGEST-MANIFEST-IDENTITY-OVERLAP: sourceRecordId = f(source fingerprint, stable
+        // structural position, raw-evidence fingerprint, immutable-facts schema tag). This pin
+        // freezes Layout B's structural-position format (p:<page>:b:<block>:l:<line>:o:<ordinal>)
+        // and raw-evidence normalization (managed row text, Unicode FormC, UTF-8 SHA-256, schema
+        // tag financial-evidence-v1) so identities stay stable for byte-identical sources. Any
+        // change to block/line derivation or normalization that moves these digests is an
+        // identity-schema decision, never a parsing side effect (bd-boxl). Expected digests were
+        // computed independently of IngestIdentity.
+        var adapter = new PdfTextLayoutBStatementAdapter();
+        var statement = adapter.Extract(SyntheticLayoutB(), Account("account-b", AccountClass.Asset, "ZAR"));
+
+        Assert.Equal(2, statement.OrderedRecords.Count);
+        Assert.Equal(
+            ["02 Jan First purchase 10.00", "03 Jan Second purchase 10.00"],
+            statement.OrderedRecords.Select(record => record.OriginalTextEvidence));
+        Assert.Equal(
+            "e918f42f581c31bd2dcb3c60bc788009566ed5bea1a366f685c4cec71842445b",
+            statement.OrderedRecords[0].SourceRecordId);
+        Assert.Equal(
+            "17f9bb114927d27014c82b21a5d5bec951513a02e55ba8b880fdab0c640cc2b1",
+            statement.OrderedRecords[1].SourceRecordId);
+        // Component-level pin so a future failure localizes to position format vs raw hash.
+        Assert.Equal(
+            IngestIdentity.SourceRecordId(new(
+                "synthetic-b",
+                "p:1:b:1:l:0:o:0",
+                "20c6ec385116efe6b06be95110c6a7742878b2baa3a750fe321bb7a01730343c",
+                "financial-evidence-v1")),
+            statement.OrderedRecords[0].SourceRecordId);
     }
 
     [Fact]
