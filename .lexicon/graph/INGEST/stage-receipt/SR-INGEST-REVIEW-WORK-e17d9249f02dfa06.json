@@ -1,0 +1,1892 @@
+{
+  "id": "01KYKEZ24YVXERC9M80E3RPDVK",
+  "ref_code": "SR-INGEST-REVIEW-WORK-e17d9249f02dfa06",
+  "module_id": "01KXR4WNGS1NHZZBWGHJTC2A5K",
+  "plan_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+  "plan_ref": "PLAN-INGEST-V1",
+  "receipt_kind": "terminal_review",
+  "stage_id": "review_work",
+  "stage_result": "review_passed",
+  "specification_verdict": "passed",
+  "quality_verdict": "passed",
+  "reviewed_commit_sha": "53f2ab2f5c426a94274934fb3ee85871ab1e44c9",
+  "reviewed_code_sha256": "923798e72e972a2995d0a2f8a4395c339a40b4a4861e834d8656b7592a9aaa3e",
+  "manifest_version": "v1",
+  "manifest_sha256": "8e60d10f41198a8b89851255d136373c298289d0df54a65e28ec602c6a7cc9d6",
+  "skill_id": "/lex:review-work",
+  "skill_version": "0.5.12",
+  "skill_sha256": "9f8a5f4f56f17959edd8b976810fd83527e320f30ea721070918c5b7fcdc3186",
+  "producer_provider": "claude_code",
+  "repository_sha256": "cff6e777643abe35b32b09154c48410052503a78a7c06422f7ff2ae3c046b7b6",
+  "membership_sha256": "69850ac8ec04bf70ad4dda46fb6187956929d21c7fe637054d3abb0dca3e3d34",
+  "content_sha256": "399779095b73f7c98aefcaa5e720c05902acb1b3dc3750fc857d45bd9bbf8718",
+  "audit_sha256": "198461496c557162142f5adc7387627f2fd32ee0cd24d06c5e29443ec72bfa33",
+  "input_sha256": "323bb909e971648f268fe5240d878e90388071c30c507c983354df6fe0b02a5d",
+  "idempotency_sha256": "e17d9249f02dfa06f2e3f2aaa8fa3eabd3e6331370b19aa4b52641cb7c97a22d",
+  "created_at": "2026-07-28T04:15:43.7753762+00:00",
+  "inputs": [
+    {
+      "source_entity_type": "use_case",
+      "source_entity_id": "01KXTBAWYS1QTV921NYSVFHR4B",
+      "source_ref_code": "UC-INGEST-001",
+      "role": "reviewed_target",
+      "sort_order": 0,
+      "content_sha256": "deb7cb9d320f171b46bdb801270764896447b442425d206dc7e96800fe69dad3",
+      "audit_head_sha256": "87895f8a7e6f824c1ce64f2eaeb03ba0e92bea1ce0ea4e4a13b1150e0f38f8ac"
+    },
+    {
+      "source_entity_type": "use_case",
+      "source_entity_id": "01KXTBAX9RM2HSKQTNAHK5GHSD",
+      "source_ref_code": "UC-INGEST-002",
+      "role": "reviewed_target",
+      "sort_order": 1,
+      "content_sha256": "508d22d770805c20de6b39b7bbb82fd5e936b742c29c988107058deceda3ab28",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "use_case",
+      "source_entity_id": "01KXTBAXJXHS18R1AFM4AQ08PX",
+      "source_ref_code": "UC-INGEST-003",
+      "role": "reviewed_target",
+      "sort_order": 2,
+      "content_sha256": "e98c895fff10faf3defa530a80f625a41fb8a3f36ee881f568077da4bbd18e8e",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "use_case",
+      "source_entity_id": "01KXTBAXV2P75FGP5PH9A24Q27",
+      "source_ref_code": "UC-INGEST-004",
+      "role": "reviewed_target",
+      "sort_order": 3,
+      "content_sha256": "c348bf36e4daa2894d4785923949d6a49cc34525748754b99ea081a4b74a8692",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "use_case",
+      "source_entity_id": "01KXTBAY3YGDTXKEJH46PNXJRH",
+      "source_ref_code": "UC-INGEST-005",
+      "role": "reviewed_target",
+      "sort_order": 4,
+      "content_sha256": "c27b31a783ae016849a73e35cd835a6b5a9d9758eb04c5f92788612be76957ec",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "use_case",
+      "source_entity_id": "01KXTBAYDJ6SK8HAVF7JYNVWZ5",
+      "source_ref_code": "UC-INGEST-006",
+      "role": "reviewed_target",
+      "sort_order": 5,
+      "content_sha256": "e7fd861f55f97ade19b5e38429038a78e5b5a43074996d506fd9d75ba5053d96",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "glossary_term",
+      "source_entity_id": "01KXT9X1SM6WK2JGD6AVTHHHP0",
+      "source_ref_code": "01KXT9X1SM6WK2JGD6AVTHHHP0",
+      "role": "reviewed_target",
+      "sort_order": 6,
+      "content_sha256": "d32670d6af129b8bca6bd8888ae29549e2a2a1481bd66c04e1ee6ff2a6758fd6",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "glossary_term",
+      "source_entity_id": "01KXT9X21M0C9WMH5RH1YYEEGN",
+      "source_ref_code": "01KXT9X21M0C9WMH5RH1YYEEGN",
+      "role": "reviewed_target",
+      "sort_order": 7,
+      "content_sha256": "7e854102762ed3963befa69d3dddb9a0be9d4d4886acc7891de5a697a4ff5480",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "glossary_term",
+      "source_entity_id": "01KXT9X2AE4R12X15ATXYE9N5P",
+      "source_ref_code": "01KXT9X2AE4R12X15ATXYE9N5P",
+      "role": "reviewed_target",
+      "sort_order": 8,
+      "content_sha256": "8ce212835f4c97ffeded9fd4bbee0a338b78f8dc00bf24cbc672ab2dc9e96315",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "glossary_term",
+      "source_entity_id": "01KXT9X2KD3C71M2SSP0PFCG1Y",
+      "source_ref_code": "01KXT9X2KD3C71M2SSP0PFCG1Y",
+      "role": "reviewed_target",
+      "sort_order": 9,
+      "content_sha256": "e7e827f270f959f3ba095a78751e951c6abcb167916edffb318e555a9bdd5104",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "glossary_term",
+      "source_entity_id": "01KXT9X2VMW8B53FQ1WYVHZBNR",
+      "source_ref_code": "01KXT9X2VMW8B53FQ1WYVHZBNR",
+      "role": "reviewed_target",
+      "sort_order": 10,
+      "content_sha256": "b37955c2f5f033c5d16e4d2e1deaaa6b06e58a987824adf05760b51387c38490",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "glossary_term",
+      "source_entity_id": "01KXT9X3370YRHX4A777DDC6SX",
+      "source_ref_code": "01KXT9X3370YRHX4A777DDC6SX",
+      "role": "reviewed_target",
+      "sort_order": 11,
+      "content_sha256": "2d49009884fd4d394b3be079100107a28259fd79bf6784a556a510143fb71651",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "glossary_term",
+      "source_entity_id": "01KXT9X3CA5X503R0GYC98Y7PG",
+      "source_ref_code": "01KXT9X3CA5X503R0GYC98Y7PG",
+      "role": "reviewed_target",
+      "sort_order": 12,
+      "content_sha256": "d69598f5ab8974606a558b454baf831dec97981e1464cdf01ebc83cd8a6ae88e",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "glossary_term",
+      "source_entity_id": "01KXT9X3NGG84ACA281EA7Y35Y",
+      "source_ref_code": "01KXT9X3NGG84ACA281EA7Y35Y",
+      "role": "reviewed_target",
+      "sort_order": 13,
+      "content_sha256": "3a47459fc187dc639484c75f01e30ff214d36ea2f2009bfc796068ff6da8067e",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "glossary_term",
+      "source_entity_id": "01KXT9X3XZG6KF444XMFKYJTK8",
+      "source_ref_code": "01KXT9X3XZG6KF444XMFKYJTK8",
+      "role": "reviewed_target",
+      "sort_order": 14,
+      "content_sha256": "063e153c14ada41aee9228051fefff4e1005c6edee8f771d4de220a1f548013f",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "glossary_term",
+      "source_entity_id": "01KXTBD8FPX10F5ZTYP1Q1N4H4",
+      "source_ref_code": "01KXTBD8FPX10F5ZTYP1Q1N4H4",
+      "role": "reviewed_target",
+      "sort_order": 15,
+      "content_sha256": "250e61a1ff830aa1e39c233e63a91c9158b292a20560380e77977cacb50c8530",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "glossary_term",
+      "source_entity_id": "01KXTBD8S0G6WKVCBR04625Z8W",
+      "source_ref_code": "01KXTBD8S0G6WKVCBR04625Z8W",
+      "role": "reviewed_target",
+      "sort_order": 16,
+      "content_sha256": "0a6ee52511926ea57e6cb836229e13bf6191f49c46cc7b36a6698d7c7fbe90ab",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "glossary_term",
+      "source_entity_id": "01KXTBD91MADGVF2YY2YZEJFJY",
+      "source_ref_code": "01KXTBD91MADGVF2YY2YZEJFJY",
+      "role": "reviewed_target",
+      "sort_order": 17,
+      "content_sha256": "dae155b92986a73a0e1bced38e8f3dec7716692f054dd1df119fd286fb295423",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "glossary_term",
+      "source_entity_id": "01KXTBD9B91WV1F3KN57NMS87A",
+      "source_ref_code": "01KXTBD9B91WV1F3KN57NMS87A",
+      "role": "reviewed_target",
+      "sort_order": 18,
+      "content_sha256": "093742aa07dcc4e06df6ff0e00be0d39f6715f539c0470ea9c4d5cb42e8b81e3",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "glossary_term",
+      "source_entity_id": "01KXTBD9KZY8J5R77R1PE1NXYK",
+      "source_ref_code": "01KXTBD9KZY8J5R77R1PE1NXYK",
+      "role": "reviewed_target",
+      "sort_order": 19,
+      "content_sha256": "575e4b7a41098cdd65b6498e2396d52260b24c87b5ab1f5d3bff98fe472a1100",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "glossary_term",
+      "source_entity_id": "01KXTBD9WXJSWWZB0J7ZCNKMST",
+      "source_ref_code": "01KXTBD9WXJSWWZB0J7ZCNKMST",
+      "role": "reviewed_target",
+      "sort_order": 20,
+      "content_sha256": "8b557f74eb1e9aca291d079164ea24e91e0137f75718ff5839aa05317c93ff7a",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "external_dependency",
+      "source_entity_id": "01KXTBDQKQJWJP1GH8FCAPPTB2",
+      "source_ref_code": "EXT-INGEST-AI-AGENT-HOST",
+      "role": "reviewed_target",
+      "sort_order": 21,
+      "content_sha256": "2caa1d1ed23782bf850f510fd2e0e01ba7b663f7640d3caf91e618b0e49fde27",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "external_dependency",
+      "source_entity_id": "01KXTBNCCB0QE6MG17MQHVWH3E",
+      "source_ref_code": "EXT-INGEST-HOST-OS-SECURITY",
+      "role": "reviewed_target",
+      "sort_order": 22,
+      "content_sha256": "f8170e19d70e623d0a53fe396952753a8ae224167a1d9481ca04ef5100fc3f82",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "external_dependency",
+      "source_entity_id": "01KXTBDR4MBEN9H7RBZGF4HPY2",
+      "source_ref_code": "EXT-INGEST-LEDGER-PUBLIC-CONTRACT",
+      "role": "reviewed_target",
+      "sort_order": 23,
+      "content_sha256": "65e564e5dab7e545dfa7119683aa74f1648a5a1b55c45c77edf1fdd0c918dd0a",
+      "audit_head_sha256": "b6528f03658360a079c53ad209097fce430a79e8eac71a51079105750f88744c"
+    },
+    {
+      "source_entity_type": "external_dependency",
+      "source_entity_id": "01KXTBDQVZ84JC6NZYEXGTQ1ER",
+      "source_ref_code": "EXT-INGEST-OWNER-BANK-STATEMENT",
+      "role": "reviewed_target",
+      "sort_order": 24,
+      "content_sha256": "e81c1807cc9638f22b0b354036387dd8437064eec2f1a38e2c204ccfa6b032c6",
+      "audit_head_sha256": "67455588bd9c19efa064741f30cc962158e842365a4ec452cd3cafd0654b9513"
+    },
+    {
+      "source_entity_type": "requirement",
+      "source_entity_id": "01KXTEW4BXFGWKZRQD2SKNV36Q",
+      "source_ref_code": "FR-INGEST-APPROVED-BATCH-COMMIT",
+      "role": "reviewed_target",
+      "sort_order": 25,
+      "content_sha256": "96665105b96e0f3734181e515a202ce0e5f2b8f3a5518ffc900d56aa4ff35d0c",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "requirement",
+      "source_entity_id": "01KXTEW59363CH1PSG2HC1X0BB",
+      "source_ref_code": "FR-INGEST-ARTIFACT-CLEANUP",
+      "role": "reviewed_target",
+      "sort_order": 26,
+      "content_sha256": "4fd6fa0df95d5287d9dd8edd7d48668901ed1de643c63e347cdfa616b6a150c2",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "requirement",
+      "source_entity_id": "01KXTET22M5H584RXAPGJPS6J4",
+      "source_ref_code": "FR-INGEST-CONTRACT-DISCOVERY",
+      "role": "reviewed_target",
+      "sort_order": 27,
+      "content_sha256": "74e2059237497043d681c6b747fa6368eb9470cd6cf993a54bbfb1798f695d4c",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "requirement",
+      "source_entity_id": "01KXTEW4MN1E1RHCCKRQVJW6ER",
+      "source_ref_code": "FR-INGEST-DURABLE-RECEIPT-RESUME",
+      "role": "reviewed_target",
+      "sort_order": 28,
+      "content_sha256": "dd47102907e99a4c99e122f03a22fa20f17d4354a5e3c48afe4a25923c4a8190",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "requirement",
+      "source_entity_id": "01KXTEW4ZA4BMSXPQ943XQ7BPG",
+      "source_ref_code": "FR-INGEST-FAILURE-STATUS",
+      "role": "reviewed_target",
+      "sort_order": 29,
+      "content_sha256": "c99de5ebf355c6b8842eb0802e71352e7f056d1088cbc9ec79a5a4a72e7030ee",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "requirement",
+      "source_entity_id": "01KXTET2Y0H2DJEFWA1T1A3EB1",
+      "source_ref_code": "FR-INGEST-FINANCIAL-NORMALIZATION",
+      "role": "reviewed_target",
+      "sort_order": 30,
+      "content_sha256": "5b8afac26120c7ce28316df4c1d97240504205d432bd4fea1d203279853a4dbf",
+      "audit_head_sha256": "cabe6591da93ba20e158f456e30f324b2bc1266ba37183609af159958ab96579"
+    },
+    {
+      "source_entity_type": "requirement",
+      "source_entity_id": "01KXTEW3RG300XXE7DTZHZZMQW",
+      "source_ref_code": "FR-INGEST-MANIFEST-REVIEW",
+      "role": "reviewed_target",
+      "sort_order": 31,
+      "content_sha256": "8ed6b48f92fa99426b8691053b9fc6031f1cb23f5691bd2178ad6ef1643234dd",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "requirement",
+      "source_entity_id": "01KXTEW423P09NB6YXCJ9NA2GY",
+      "source_ref_code": "FR-INGEST-REPLAY-OVERLAP-SAFETY",
+      "role": "reviewed_target",
+      "sort_order": 32,
+      "content_sha256": "6a816fac5a4b142b4ddd0900e090d091715ee495feb0a372a30bfa9476b1a773",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "requirement",
+      "source_entity_id": "01KXTET37W4S00Y3TXEHNDD4E7",
+      "source_ref_code": "FR-INGEST-SOURCE-RECONCILIATION",
+      "role": "reviewed_target",
+      "sort_order": 33,
+      "content_sha256": "c6437ca0df8817cd9b55990a52afa7bbf1b206aa5179c3fb7b0ccaa083370d52",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "requirement",
+      "source_entity_id": "01KXTET2NG1S9P87E2XKP4RN19",
+      "source_ref_code": "FR-INGEST-STATEMENT-PREVIEW",
+      "role": "reviewed_target",
+      "sort_order": 34,
+      "content_sha256": "63a3b66745646020a49b8ce3fb01b22d5ba9af84319dbb327a04abf91878350e",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "requirement",
+      "source_entity_id": "01KXTET2CB2091VPAWG1R4X5PC",
+      "source_ref_code": "FR-INGEST-VARIANT-QUALIFICATION",
+      "role": "reviewed_target",
+      "sort_order": 35,
+      "content_sha256": "c43cb47c0837b4ccd7d21beb051f2724819ba146a23fb45f01525b0a41e258a4",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "nfr",
+      "source_entity_id": "01KXTEXMX0NBEEWGM1H36BCV8N",
+      "source_ref_code": "NFR-INGEST-AGENT-OPERABILITY",
+      "role": "reviewed_target",
+      "sort_order": 36,
+      "content_sha256": "66249ed07dd284d9a7179ca6fe0f994ff3b0e03d6ba496955f0d2855dc9e0f97",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "nfr",
+      "source_entity_id": "01KXTEXM19R263D66YHS6EFCCS",
+      "source_ref_code": "NFR-INGEST-BOUNDED-PARSING",
+      "role": "reviewed_target",
+      "sort_order": 37,
+      "content_sha256": "2d1e9e462062d1737e6ca48d05d1bb7cbbcbd0c1ac4cb347d19719957258b290",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "nfr",
+      "source_entity_id": "01KXTEXKEK06KD4EXFGC1A8FKG",
+      "source_ref_code": "NFR-INGEST-DETERMINISTIC-INTEGRITY",
+      "role": "reviewed_target",
+      "sort_order": 38,
+      "content_sha256": "cc5ac5dc8f2a622f224c5b322ba07f662676c27bf9724aa8bb933fca527bf6da",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "nfr",
+      "source_entity_id": "01KXTEXMB56QHCK46RMFVHPJBG",
+      "source_ref_code": "NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY",
+      "role": "reviewed_target",
+      "sort_order": 39,
+      "content_sha256": "187bbc825faf7b7e9d2ee46e9ab9ef2a4789e616bcec7945c0c8bca71d827cac",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "nfr",
+      "source_entity_id": "01KXTEXKRBE0ATCQV50F506QED",
+      "source_ref_code": "NFR-INGEST-LOCAL-DATA-PROTECTION",
+      "role": "reviewed_target",
+      "sort_order": 40,
+      "content_sha256": "f5e60e61733c79688667b22f1cfd33a0a997e971f33561abb721ae1684eceb10",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "nfr",
+      "source_entity_id": "01KXTEXMM1MP9RB4PYFRHADBR3",
+      "source_ref_code": "NFR-INGEST-PUBLIC-CONTRACT-COMPATIBILITY",
+      "role": "reviewed_target",
+      "sort_order": 41,
+      "content_sha256": "2102d06e01cd2746f1f72abd89ae7fd46dfd5b1ccb82747c414fc51b2f857543",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "success_metric",
+      "source_entity_id": "01KXTBE7C7S8GTH1BVP5SEC398",
+      "source_ref_code": "01KXTBE7C7S8GTH1BVP5SEC398",
+      "role": "reviewed_target",
+      "sort_order": 42,
+      "content_sha256": "3a45f8f68903e1a8e5baba2bf8f0eb00cecb0b55f9fa2813c166f68009e04916",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "success_metric",
+      "source_entity_id": "01KXTBE7N3VQYN8WVXY9WV9C7M",
+      "source_ref_code": "01KXTBE7N3VQYN8WVXY9WV9C7M",
+      "role": "reviewed_target",
+      "sort_order": 43,
+      "content_sha256": "fa8711bc77857f62c3a3fd47fd74c83d8f8f6ea32e59e204357a8ece5d4f6d68",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "success_metric",
+      "source_entity_id": "01KXTBE7XNJ7PR6GWNTG4T6SAC",
+      "source_ref_code": "01KXTBE7XNJ7PR6GWNTG4T6SAC",
+      "role": "reviewed_target",
+      "sort_order": 44,
+      "content_sha256": "8d5e7ea2349b9970dca961ff9f8594258af7695311f4ae3b0b8c092a78efc032",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "success_metric",
+      "source_entity_id": "01KXTBE862F426AZ34T3T52GED",
+      "source_ref_code": "01KXTBE862F426AZ34T3T52GED",
+      "role": "reviewed_target",
+      "sort_order": 45,
+      "content_sha256": "3740e7b298c7e7eca2e813b85582beebc5990d7a027ffa70fb4e83aa1f952101",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "success_metric",
+      "source_entity_id": "01KXTBE8F4EMC69WX9JRF1WXAP",
+      "source_ref_code": "01KXTBE8F4EMC69WX9JRF1WXAP",
+      "role": "reviewed_target",
+      "sort_order": 46,
+      "content_sha256": "ff9084dcad5d08b02a7dcb8432ccbc1efa90b254488412360773b63f08e790ee",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "module_design",
+      "source_entity_id": "01KXTHPAXZJFKG8XTQWBS81Q53",
+      "source_ref_code": "MD-INGEST-MASTER",
+      "role": "reviewed_target",
+      "sort_order": 47,
+      "content_sha256": "a36fe2ff7cee94d8737a1391183b05fb74a9c50805270270dfd693adca39e8e3",
+      "audit_head_sha256": "3681d4f952e1ecdf562e48add475c35d9964a65184521eb9ef6c134308c5bbd2"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KXTHQQNAGDGN6TFK18JZR8R9",
+      "source_ref_code": "DD-INGEST-APPLICATION-ARCHITECTURE",
+      "role": "reviewed_target",
+      "sort_order": 48,
+      "content_sha256": "741f26d45ea119954020909cb15194c1202d3d980eac3e4a7478c42da443908b",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KXTHS0D4Y49485KSQNYYF551",
+      "source_ref_code": "DD-INGEST-ARTIFACT-SECURITY",
+      "role": "reviewed_target",
+      "sort_order": 49,
+      "content_sha256": "638fd306b5c4c437c4ee7e4c564681add849380a12026fd55adaf23e7efbd50b",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KXTHQR1TWR65KAKS1CSBQ7XE",
+      "source_ref_code": "DD-INGEST-CLI-OPERATION-CONTRACT",
+      "role": "reviewed_target",
+      "sort_order": 50,
+      "content_sha256": "03fea65f1a81050aaf93c7b1c91fc9fed095ea672c1a3d0cb7163cfe08a64c00",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KXTHS03EDX6S5S1QP19Y3KQ5",
+      "source_ref_code": "DD-INGEST-COMMIT-RECOVERY",
+      "role": "reviewed_target",
+      "sort_order": 51,
+      "content_sha256": "5d67188eaa84cf795dd5ad9b640f78e5c469ef029ab1d71671e2e74a3f8c2d47",
+      "audit_head_sha256": "d0d0068258bff338bb0d77383654b09e20649e71c0847e4565cbbeb63b4c86c1"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KXTH9565ARERVH83K6KPSJ82",
+      "source_ref_code": "DD-INGEST-DOCUMENT-EXTRACTION",
+      "role": "reviewed_target",
+      "sort_order": 52,
+      "content_sha256": "194be5bd426829c3c16c9a41ddc39167faea5df614c4777140ee342454554c35",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KXTHQRFWVREEFMZGKHKR45E5",
+      "source_ref_code": "DD-INGEST-FORMAT-ADAPTERS",
+      "role": "reviewed_target",
+      "sort_order": 53,
+      "content_sha256": "4125961b6272a307d880f2646de0df023b1c622f82a729dc8054083dcc07deeb",
+      "audit_head_sha256": "567eb53f5b3127dbf9142579860e2a133348f44e6642760398331d9bb9f42882"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KXTHRZSG001M37D7BN4BY6SH",
+      "source_ref_code": "DD-INGEST-LEDGER-PUBLIC-INTEGRATION",
+      "role": "reviewed_target",
+      "sort_order": 54,
+      "content_sha256": "8faf15cfd41e8320bf19b2c6491d2e1b245fd5ed5e91ef8d8a64354f0adef8cb",
+      "audit_head_sha256": "f6432acbf14271f0bab305522ec1b7b2270dc971bb430f905cbe48c58588ff59"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KXTHQRXPYZZZA5AP8PGNJWBS",
+      "source_ref_code": "DD-INGEST-MANIFEST-IDENTITY-OVERLAP",
+      "role": "reviewed_target",
+      "sort_order": 55,
+      "content_sha256": "8ebe83903b3a94a3ab1e2c265ca6b93eec6d353996e1cea229d08c4db34273b9",
+      "audit_head_sha256": "2aab34a634bf2b11e2badd487561315daa202dfa6c11bbc6856a8dfd093f5bc9"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KYEYKHSXPWYM9VFS23HVFBBJ",
+      "source_ref_code": "DD-INGEST-SOURCE-DESCRIPTION-ABSENCE",
+      "role": "reviewed_target",
+      "sort_order": 56,
+      "content_sha256": "e1d452e6abfc41d4c02d39d925678400d13eee63ae73a1f44f7f206b9cf62847",
+      "audit_head_sha256": "d1fb15d772a9121769d71db4d61f28912ada2233733c9a1fb0881bd63f38c153"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KXTHRZEQT7CMKEAHBXTV4J1P",
+      "source_ref_code": "DD-INGEST-STATE-STORE",
+      "role": "reviewed_target",
+      "sort_order": 57,
+      "content_sha256": "4d438a939da6e4855632ba3235a95fc9fa4b443e418e9fdb59dfff9c676a20c0",
+      "audit_head_sha256": "3c77f9d9a8a6fc9123ca628be25318ccbf975df02c4e7eab389379de7591e5c5"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KXTHWTR02Y3S3QB2FTQ8WDYT",
+      "source_ref_code": "DM-INGEST-ERROR-STATUS-CONTRACTS",
+      "role": "reviewed_target",
+      "sort_order": 58,
+      "content_sha256": "dbdf15001b79d0a98fd0f70973521c672db434c7aa295329de7ad4f4faffaa7d",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KXTHWS004PTKCD4PTYVTE0BR",
+      "source_ref_code": "DM-INGEST-FORMAT-EVIDENCE",
+      "role": "reviewed_target",
+      "sort_order": 59,
+      "content_sha256": "f46e289704742cc0e12490f6b52a1787d5caa2ed20b6a847c63879b1e9a5bc1f",
+      "audit_head_sha256": "cbe2ed31a263c0788f99be927b2e9a996a57c0dcc26f65d5a52e489b11e0f521"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KXTHWSBZWXX66S4X6DF2XG8Y",
+      "source_ref_code": "DM-INGEST-IMPORT-MANIFEST",
+      "role": "reviewed_target",
+      "sort_order": 60,
+      "content_sha256": "b921ed102dbf4486fe2a877d09ffd10712d1464c1141318b82aba9bc4c35781f",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KXTHWT1G93XYFNQBE5E8R4FY",
+      "source_ref_code": "DM-INGEST-IMPORT-RECEIPT",
+      "role": "reviewed_target",
+      "sort_order": 61,
+      "content_sha256": "f1e412ffc391531a12ccee2d721a22c489073dac65d259b9694ea12dc9a10590",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KXTHWTD61VVVD80GRQKHKJ52",
+      "source_ref_code": "DM-INGEST-LEDGER-COMMIT-CONTRACT",
+      "role": "reviewed_target",
+      "sort_order": 62,
+      "content_sha256": "dfa7f6ef420da91635df5aac913cb97b80f5989a72424562fbb0be78cd093782",
+      "audit_head_sha256": "af13da4dc78e96592794e92b6e64652d6e579c1e9f45b8504cdfba9ff3e94842"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KXTHWRNZ9BAB4P7V2RNMTKMA",
+      "source_ref_code": "DM-INGEST-OPERATION-CONTRACTS",
+      "role": "reviewed_target",
+      "sort_order": 63,
+      "content_sha256": "77a93e12e201869bdb983e97170cc80e6b0b2fcf1c44a2797495d54446ef2661",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KXTHWSPAYJP1YS5JKDP4ZPN0",
+      "source_ref_code": "DM-INGEST-STATE-STORE",
+      "role": "reviewed_target",
+      "sort_order": 64,
+      "content_sha256": "41dea253ce48cc9f9b4e7ca0c4bdcd4a267adcd9f2e4a53ae3d2124f877c832f",
+      "audit_head_sha256": "a6e2f2ad9a4dd5da2e536229a1115cb6fb98d7b57f2b61ff0afa57cfb7deef75"
+    },
+    {
+      "source_entity_type": "feature_area",
+      "source_entity_id": "01KXTHXCW2GCHZ4A1Y7DVE2A5F",
+      "source_ref_code": "FA-INGEST-CONTRACT-FORMATS",
+      "role": "reviewed_target",
+      "sort_order": 65,
+      "content_sha256": "d5e9efe6bb568fda7674af43795ea8729a44c1694e9c2fca82de75227294090b",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "feature_area",
+      "source_entity_id": "01KXTHXD9NHNF036C8V6ZXY121",
+      "source_ref_code": "FA-INGEST-PREVIEW-RECONCILIATION",
+      "role": "reviewed_target",
+      "sort_order": 66,
+      "content_sha256": "042645876ca7b08d1d2e169d796f5371ee06b5c1bd2573abafe25d3b458d6f33",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "feature_area",
+      "source_entity_id": "01KXTHXE19R5BDNBP7H26FZHJ8",
+      "source_ref_code": "FA-INGEST-RECOVERY-CLEANUP",
+      "role": "reviewed_target",
+      "sort_order": 67,
+      "content_sha256": "bb511e333c8d61ea71e2b4698097031b2738117cdee261ce279cac8353d41f50",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "feature_area",
+      "source_entity_id": "01KXTHXDP44MSQBCAN4ZXS7SXE",
+      "source_ref_code": "FA-INGEST-REVIEW-COMMIT",
+      "role": "reviewed_target",
+      "sort_order": 68,
+      "content_sha256": "99170966d0be8239b0d468b24b2f806c0f1a31447b4ee5ada622549818750ca1",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_diagram",
+      "source_entity_id": "01KXTHY3E527K6D544C6TEC49D",
+      "source_ref_code": "DIAG-INGEST-BATCH-STATE",
+      "role": "reviewed_target",
+      "sort_order": 69,
+      "content_sha256": "07387870709a83309d859d496b5f99219de33a5cdfe56f6976bacebe83c3601b",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_diagram",
+      "source_entity_id": "01KXTHY2S2M9FPAKX0W2DVPKPY",
+      "source_ref_code": "DIAG-INGEST-COMPONENTS",
+      "role": "reviewed_target",
+      "sort_order": 70,
+      "content_sha256": "5c0c781d3dd4d047e9ac8fa0a109bcb2f9fa46631d47ff500d114c4f39128337",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_diagram",
+      "source_entity_id": "01KXTHY33RWZRYD48H6S2WA3MJ",
+      "source_ref_code": "DIAG-INGEST-PREVIEW-COMMIT-SEQUENCE",
+      "role": "reviewed_target",
+      "sort_order": 71,
+      "content_sha256": "662d0d42dd7df628dff83f4c23a9ca92b7d94eb7d96ced237fbb3a8b92cdb55c",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_diagram",
+      "source_entity_id": "01KXTHY3QWETJBKB5DVWQR30E5",
+      "source_ref_code": "DIAG-INGEST-STATE-ER",
+      "role": "reviewed_target",
+      "sort_order": 72,
+      "content_sha256": "986dab5204e627436b894b5bd197061aedea70d694d0ee9ec2b5c96944222c6a",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTJ09R1WGDS1MNGV12F4NRC",
+      "source_ref_code": "TC-INGEST-ADAPTER-GOLDEN-FIXTURES",
+      "role": "reviewed_target",
+      "sort_order": 73,
+      "content_sha256": "1c755ba9e45680697bd9cceec6bca7b128fa8c6d40e5984f9518675f65897bf4",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTF4YZYXZJ2DR61B2F7MMER",
+      "source_ref_code": "TC-INGEST-APPROVED-BATCH-COMMIT-CONTRACT",
+      "role": "reviewed_target",
+      "sort_order": 74,
+      "content_sha256": "ed737bb4c7b5d4dddcdaf283a855aaedc3728e9396edd04ba11fba541fb1bb8b",
+      "audit_head_sha256": "77885381dc99d4a431b44cf56502a122b9e173113c41cec166890002d570dbd1"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTF4ZVVXAWMSCVZ8GY6C60J",
+      "source_ref_code": "TC-INGEST-ARTIFACT-CLEANUP-CONTRACT",
+      "role": "reviewed_target",
+      "sort_order": 75,
+      "content_sha256": "44e5a373f2f9f59c3e89ed58c945060617017d0fc741446e13a5b85e74a120bc",
+      "audit_head_sha256": "360b6f59bac59f1c7c482d5fa87f33040c7aeb7a8a7fa497cab3353c4c0890ee"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTJ0BJRAHTKQR6012CNCT09",
+      "source_ref_code": "TC-INGEST-ARTIFACT-PROTECTION",
+      "role": "reviewed_target",
+      "sort_order": 76,
+      "content_sha256": "228427154581af44e54ac8c2aa45afc4bf7c59da3c5f56bccda08ecfd78396e3",
+      "audit_head_sha256": "d2797fae20c2a773b5376cf4cebfa76182f8aca2287985d424feb6d1ff6340d8"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTJ0B755W6A58QQR2NBNYZK",
+      "source_ref_code": "TC-INGEST-COMMIT-RECOVERY-MATRIX",
+      "role": "reviewed_target",
+      "sort_order": 77,
+      "content_sha256": "1b19c9e834e87c7d8aab6b822c329d9098528539ee4ab2fefe3404c984d5c7f5",
+      "audit_head_sha256": "84c0608b09bf3f5d8159c20e18df29e00eacc24870d2a8098f1282f89cbcb621"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTF4WZES1WGCEWCZFEV3Y2N",
+      "source_ref_code": "TC-INGEST-CONTRACT-DISCOVERY-CONTRACT",
+      "role": "reviewed_target",
+      "sort_order": 78,
+      "content_sha256": "bf99a58048ea25b40600014ae0a29ad4b4231d12ba4ab885f3cd1fb158282998",
+      "audit_head_sha256": "05e8c67103938d0bf320bc739baeaccfae014519f8c03615bc4ca2c7e41f3d4e"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTF4Z9GHA36PVY94QXKXHF1",
+      "source_ref_code": "TC-INGEST-DURABLE-RECEIPT-RESUME-CONTRACT",
+      "role": "reviewed_target",
+      "sort_order": 79,
+      "content_sha256": "f9d0bd5bb4264f527e9c071c1223510a73ebea5da0f79150edb1fb2659a4bcd5",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTF4ZJ8JCMA6CB7RK9DZ62M",
+      "source_ref_code": "TC-INGEST-FAILURE-STATUS-CONTRACT",
+      "role": "reviewed_target",
+      "sort_order": 80,
+      "content_sha256": "0bb12629091093c43a2395dc772d183c37e42fc2e4ae4d76d85040c06aad4366",
+      "audit_head_sha256": "82e0d2c1b632875a467ccc6b79ed4452aef0b4903008bf0b4c15ca4fec695562"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTF4XT50N2ACSKZCWDZC4XQ",
+      "source_ref_code": "TC-INGEST-FINANCIAL-NORMALIZATION-CONTRACT",
+      "role": "reviewed_target",
+      "sort_order": 81,
+      "content_sha256": "1c196e9b5299ef1b92d37879a1e0e8c5b608855d7dca33fcc41561eb8430c546",
+      "audit_head_sha256": "188bbf382fa7d1406e9876c4d8790b4b272712c75ac050b0577c46faf60134f9"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTMY4MXN5FARG0A58DD0FX7",
+      "source_ref_code": "TC-INGEST-LAYOUT-A-ADAPTER",
+      "role": "reviewed_target",
+      "sort_order": 82,
+      "content_sha256": "f04ee160bdfdd43294bf8c92afc3ef3451788ecd2e0763b202cfbab9569f2c37",
+      "audit_head_sha256": "71e82ecdb85e31d2230a980200d2a2e235d069aa578fb64fba89d5d37ff12814"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTMY504HQSHE29XQ0CJ3DR3",
+      "source_ref_code": "TC-INGEST-LAYOUT-B-ADAPTER",
+      "role": "reviewed_target",
+      "sort_order": 83,
+      "content_sha256": "244a1afc6a3aa1e6e5524f94afbe49d75599373673ebaa82ee4c722889a73c24",
+      "audit_head_sha256": "d8bf15edb271a90055c32e87da38129a6f1b68c4834f2b50804ac4cc609ace6a"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KYEYSQ3BSGT6A51JZSPPTR8K",
+      "source_ref_code": "TC-INGEST-LEDGER-DESCRIPTION-ROUNDTRIP",
+      "role": "reviewed_target",
+      "sort_order": 84,
+      "content_sha256": "63d0ed042525a4ae622ddbe2c207e3c76e5729dee3a561ae5a27a81cbb4ed6ab",
+      "audit_head_sha256": "e19c2bf2a55d7bc56b13e9a1c7843fd008ec6f525a77418a234525c47063050e"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTJ0AV78TA1TXWZMK9VQSRC",
+      "source_ref_code": "TC-INGEST-LEDGER-PUBLIC-CONFORMANCE",
+      "role": "reviewed_target",
+      "sort_order": 85,
+      "content_sha256": "8e8d80838b9ba4e6247081639dc80b992a3f1486b66c771f2646f807441ab53b",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTF4YD29EY0EG4389FTR7T7",
+      "source_ref_code": "TC-INGEST-MANIFEST-REVIEW-CONTRACT",
+      "role": "reviewed_target",
+      "sort_order": 86,
+      "content_sha256": "9be4be843217843243b2cbee1fb17bdff41c2501297c94729ea0425f67daed1e",
+      "audit_head_sha256": "71277696846c4e88cef93c3fc91ef669469eada97d6c49d7e468bd7165813699"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTJ09C7WM75QS1CE2XGD3AA",
+      "source_ref_code": "TC-INGEST-PDF-EXTRACTION-AOT",
+      "role": "reviewed_target",
+      "sort_order": 87,
+      "content_sha256": "d5f0adcdaf67ca3577229d494ef7853ef42e4c7e79e01ed0002dfe3584839272",
+      "audit_head_sha256": "2eb205c3501ad10c832712da813cbfa094da179b7668261fb8d1c4d6156df579"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTJ0A38FMCTWB1M28PFZZ8N",
+      "source_ref_code": "TC-INGEST-PUBLISHED-CONTRACT-MATRIX",
+      "role": "reviewed_target",
+      "sort_order": 88,
+      "content_sha256": "46ef6182001f9c0b7551841a5550d003f2f3a085f67b3efa3d735285b910c5ef",
+      "audit_head_sha256": "c8ef958a53e62307131f8912ee1a80fcc9ef53e7b0e03194834b6af74fad770a"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTF4YNP89X6YHMDB0QFK5EP",
+      "source_ref_code": "TC-INGEST-REPLAY-OVERLAP-SAFETY-CONTRACT",
+      "role": "reviewed_target",
+      "sort_order": 89,
+      "content_sha256": "55bfc1f72d4531d65120441825868d9fb2f1dd5c9e492ba41cc66b9a00a84100",
+      "audit_head_sha256": "739001020a6382846f762688aabc574ff3195673b8b47d9bad2d948ba4b1e225"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTF4Y3MT9YDGQK8JPP4095H",
+      "source_ref_code": "TC-INGEST-SOURCE-RECONCILIATION-CONTRACT",
+      "role": "reviewed_target",
+      "sort_order": 90,
+      "content_sha256": "56c28ebf66d724614682dc7128341baf945fa68ba24b73336d7d56ec9ea473ba",
+      "audit_head_sha256": "535a73e50e9649de1373ef40ddbc20d45be3b8797eca9d4385d0d21e59f4c79e"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTJ0AE3MFPKV4CPF4GD2PQY",
+      "source_ref_code": "TC-INGEST-STATE-STORE-CONFORMANCE",
+      "role": "reviewed_target",
+      "sort_order": 91,
+      "content_sha256": "9f9112e703ecc70093918b1b724abac119368f7b394208b4f965e8a593531faa",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTF4XGN7EGTA20FHTKK9Y8T",
+      "source_ref_code": "TC-INGEST-STATEMENT-PREVIEW-CONTRACT",
+      "role": "reviewed_target",
+      "sort_order": 92,
+      "content_sha256": "4d8fa6b23d9cf947b0fffc91ec882cb13574409e5bfe07c9ad88f4661b0bc625",
+      "audit_head_sha256": "2aec9144f0ab3095995aa9ab44687e5658690f124ba2f03f73cca73792c5e0dd"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXTF4X7TFYEAWEX1MV53206B",
+      "source_ref_code": "TC-INGEST-VARIANT-QUALIFICATION-CONTRACT",
+      "role": "reviewed_target",
+      "sort_order": 93,
+      "content_sha256": "249f86491741f89915533781e0db53ba76577659940da13d2c81862d2474846c",
+      "audit_head_sha256": "e6ec9b096d2da74532e8b11f6ddab63dda32e64d638853d62305d6635ab23a68"
+    },
+    {
+      "source_entity_type": "adr",
+      "source_entity_id": "01KXR2E3Y3HMG3XPZHM0SNNAEZ",
+      "source_ref_code": "ADR-CORE-0004",
+      "role": "reviewed_target",
+      "sort_order": 94,
+      "content_sha256": "ef9741f731cb467c06cbdc5f07ac962a399b8d0da723c3b8dbd5dcd1bf0174b1",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "adr",
+      "source_entity_id": "01KXR2E3Y7DB71F8178QX5C3FA",
+      "source_ref_code": "ADR-CORE-0010",
+      "role": "reviewed_target",
+      "sort_order": 95,
+      "content_sha256": "07c064876c1150bc301051fbb18de92e9531d28896e225946b67ea097a9eb986",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "adr",
+      "source_entity_id": "01KXR2E3YC0GAWZKWHNS60A0CG",
+      "source_ref_code": "ADR-CORE-0016",
+      "role": "reviewed_target",
+      "sort_order": 96,
+      "content_sha256": "acd71cb19f6e1128771a23fc8cdedde5d9ee378dcaa3d7cc26bcd835282f734f",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "adr",
+      "source_entity_id": "01KXR2E3YE3P5DYP6ZWHT6MR3R",
+      "source_ref_code": "ADR-CORE-0018",
+      "role": "reviewed_target",
+      "sort_order": 97,
+      "content_sha256": "c8b26731f3aee98a628e34bf1a93bde548a4e19d2fdfef7cc2b71d4078ccb358",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "adr",
+      "source_entity_id": "01KXR2E3YGXF1B0J0MC6S0EPAH",
+      "source_ref_code": "ADR-CORE-0020",
+      "role": "reviewed_target",
+      "sort_order": 98,
+      "content_sha256": "4bb43ffcad99829ac48d128c846e2cf826c912bcaba67f79f2f52bdcd1a76dd6",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "adr",
+      "source_entity_id": "01KXR2E3YHHJX75J3BATYF9GWQ",
+      "source_ref_code": "ADR-CORE-0021",
+      "role": "reviewed_target",
+      "sort_order": 99,
+      "content_sha256": "af8af0ce1f0edb4a6262384f38d4e7f9352261438c174cb712431d85a8154756",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "adr",
+      "source_entity_id": "01KXR2E3YJHZFG7A2PEFST47E8",
+      "source_ref_code": "ADR-CORE-0022",
+      "role": "reviewed_target",
+      "sort_order": 100,
+      "content_sha256": "2852a619a9a63d7ed61f829a629c402fa2a84e16fe7520f428a56e3170119bbd",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "adr",
+      "source_entity_id": "01KXR2E3YKCP5BKYH14H09RFQ7",
+      "source_ref_code": "ADR-CORE-0024",
+      "role": "reviewed_target",
+      "sort_order": 101,
+      "content_sha256": "a155b9716601460a265e6e2db2a78d4aeba10066b408137fd93bf6ee0c321464",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "adr",
+      "source_entity_id": "01KXR2E3YMRWHJF2BNS9MBBY1C",
+      "source_ref_code": "ADR-CORE-0025",
+      "role": "reviewed_target",
+      "sort_order": 102,
+      "content_sha256": "63aa48f27f0ecb3a2052ca6cac967e52d80eeecc344b3e632d0842f8132c174d",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "adr",
+      "source_entity_id": "01KXR2E3YNSXG4RQ3ZW1S6H3R4",
+      "source_ref_code": "ADR-CORE-0027",
+      "role": "reviewed_target",
+      "sort_order": 103,
+      "content_sha256": "6d8244d83bc666b9262a66632af78a216323830bee968b89ba2508dffbac5a56",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "pattern",
+      "source_entity_id": "01KXR2EKKDGRSZWNXQJA2RT1G8",
+      "source_ref_code": "PAT-CORE-API-COMMANDS",
+      "role": "reviewed_target",
+      "sort_order": 104,
+      "content_sha256": "b8271f0d03a13185a283cfe1ae9ff6728e2a974df168726064647babe7021ffa",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "pattern",
+      "source_entity_id": "01KXR2EKKFQXWARRRSVSK0RE4Y",
+      "source_ref_code": "PAT-CORE-API-DTO-MAPPER",
+      "role": "reviewed_target",
+      "sort_order": 105,
+      "content_sha256": "1c3464eb8f0b5494be2529b35b0274e17d0a8b0bd393dc4a4e449106af83dc20",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "pattern",
+      "source_entity_id": "01KXR2EKKNY0VHF3WJJQGV2KB1",
+      "source_ref_code": "PAT-CORE-API-ENTITY-MAPPER",
+      "role": "reviewed_target",
+      "sort_order": 106,
+      "content_sha256": "ff864cb578cbcb30e2bda20560b723686f885a8cbee24e8216fdcfc57a3e493b",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "pattern",
+      "source_entity_id": "01KXR2EKKZEN7RZK6DBBXQACH2",
+      "source_ref_code": "PAT-CORE-API-QUERIES",
+      "role": "reviewed_target",
+      "sort_order": 107,
+      "content_sha256": "2395f88f74c821afffe4951f6feb6370744a267eace0c4fdcb3d5000f7c3e5ce",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "pattern",
+      "source_entity_id": "01KXR2EKKZ1952VPHJC6WY1T4S",
+      "source_ref_code": "PAT-CORE-API-REQUESTS",
+      "role": "reviewed_target",
+      "sort_order": 108,
+      "content_sha256": "96accd53f0c95b6349c9bf5ddd806eaf9adcc2c20b66760675870e2f6a94fa12",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "pattern",
+      "source_entity_id": "01KXR2EKM1XVWPKAM919E4BCHD",
+      "source_ref_code": "PAT-CORE-API-SERVICE-REGISTRATION",
+      "role": "reviewed_target",
+      "sort_order": 109,
+      "content_sha256": "283972d62ddc8a1a9822a009e54b34bbb176a5cd7f79e4951a2c69e3f927a1ff",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "pattern",
+      "source_entity_id": "01KXR2EKM6AWQ5BP8X42YRSA8J",
+      "source_ref_code": "PAT-CORE-API-VERTICAL-SLICE",
+      "role": "reviewed_target",
+      "sort_order": 110,
+      "content_sha256": "26aa8b3dcce097a186e0396d9a4e0e602d59b3527e9fef9ff98c6a9f9c3149fa",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "plan",
+      "source_entity_id": "01KXTKQ4WTTJ0A3GBEF7PXPS2Y",
+      "source_ref_code": "PLAN-INGEST-V1",
+      "role": "reviewed_target",
+      "sort_order": 111,
+      "content_sha256": "b059431012d7d968a018dc5770990e8dd6be1a9f883a03a67d47e76753312014",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTMFJZQBADM33R8PHFNFVV9",
+      "source_ref_code": "TASK-INGEST-ABANDON-CLEANUP",
+      "role": "reviewed_target",
+      "sort_order": 112,
+      "content_sha256": "fd102db57fe1edb14b148b8b35e970029956c8752a1cbb1a6ca622f324759428",
+      "audit_head_sha256": "db98cc7112672af2e15c1fbff4948982f671109e626144b062f836452e66196a"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTM5NRZ07WFV3SZ906FBCBR",
+      "source_ref_code": "TASK-INGEST-ADAPTER-LAYOUT-A",
+      "role": "reviewed_target",
+      "sort_order": 113,
+      "content_sha256": "34f27ed8ce75f50600941dbb09d3a59a9e0efb5750a1986234620545901b1c40",
+      "audit_head_sha256": "4a91ebbf6872651081b0279bcf3a54ef47e318c5cc1e682673d8a7eaef98de9b"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTM5NRZ8P6N498029ZYDXGD",
+      "source_ref_code": "TASK-INGEST-ADAPTER-LAYOUT-B",
+      "role": "reviewed_target",
+      "sort_order": 114,
+      "content_sha256": "1bd86f89160ec10e4c86123209e52bc99d1633a25cbc842f334306ee976587bf",
+      "audit_head_sha256": "cd2ed21a2e5ba35b8dcd265f330a883f71c106b7fe11d4b737eed438174962e9"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTMFJZN6WHPQ2QAYA72TYZZ",
+      "source_ref_code": "TASK-INGEST-COMMIT-SAGA",
+      "role": "reviewed_target",
+      "sort_order": 115,
+      "content_sha256": "f9b2afd4cdd71b7b1e7dc8d08f44aef75529a69f701960446caf1cd087e2a6da",
+      "audit_head_sha256": "8080d52bd02f2a691f9888919066806ff303cecb1cab4a58d0e6412e692bfb94"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTM0RWC8VR2ZCCA4XT5753G",
+      "source_ref_code": "TASK-INGEST-CONTRACT-FOUNDATION",
+      "role": "reviewed_target",
+      "sort_order": 116,
+      "content_sha256": "14a11a93e6b4477312c25a6ff340ef531c248c8e965880a0966f4127a652af77",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTN93YFFHZDR6AM38BJD0V8",
+      "source_ref_code": "TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES",
+      "role": "reviewed_target",
+      "sort_order": 117,
+      "content_sha256": "f52c84d3e3d415e488df44cebedabf16962d821b38bf290954ca9005319281e8",
+      "audit_head_sha256": "a15ae511771576a3d2de88b67a0283db8e548a7d877cb19a2a201f85d28d77ab"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTM5NS02J2S6RZBAFJWZXW9",
+      "source_ref_code": "TASK-INGEST-GATE-INT-FORMAT-ADAPTERS",
+      "role": "reviewed_target",
+      "sort_order": 118,
+      "content_sha256": "35c070b8ccefd13ef4c368b82c1b1d4b4ce5a6187f090001f06fde21d8c9ab17",
+      "audit_head_sha256": "8e134292c83d307b7862b7ee740ddeb06df8ab5093a6f336056664a282a3d89f"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTM0RWAR9XRZN5CMAYTH997",
+      "source_ref_code": "TASK-INGEST-GATE-INT-LEDGER-CONTRACT",
+      "role": "reviewed_target",
+      "sort_order": 119,
+      "content_sha256": "c73213fcf2cb81461ef5deb125c2e1cbab0df1f62c8d5471306c655980611642",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTMKTPKSZ51KNVAZQJZRAMG",
+      "source_ref_code": "TASK-INGEST-GATE-INT-PUBLIC-CONTRACT",
+      "role": "reviewed_target",
+      "sort_order": 120,
+      "content_sha256": "03cab26eb55a4f2ebc33c7f3388f7a06a575b7a5e181dbf44fbb788b4dca46b3",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTMS8JT8WBSTHHHQ19DAMAY",
+      "source_ref_code": "TASK-INGEST-GATE-MODULE",
+      "role": "reviewed_target",
+      "sort_order": 121,
+      "content_sha256": "19813cb4ca04a96cec034a50258205884b0aec25998b6d8a2ec4268bfba813f9",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTMKTPN6HDN8HA3N1XGG0RE",
+      "source_ref_code": "TASK-INGEST-GATE-SECURITY",
+      "role": "reviewed_target",
+      "sort_order": 122,
+      "content_sha256": "c8c205fe6a0203c937eb9ce992de53efabdecb762480763a6848b3e8fe0cfd22",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KYCR3SQJ5ZXDJ4EYPP1FAWD2",
+      "source_ref_code": "TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION",
+      "role": "reviewed_target",
+      "sort_order": 123,
+      "content_sha256": "df083a03d4332ed7a18ad17a4681fe6368307e7d262ebbc42127eaaec78f9b8b",
+      "audit_head_sha256": "6ead703eb06cedc3b05662cf8d74bc990e57b3da05e4053b084b31e4d68ef5d9"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTMAH8HS44VZDF52WXTAH1G",
+      "source_ref_code": "TASK-INGEST-LEDGER-PUBLIC-CLIENT",
+      "role": "reviewed_target",
+      "sort_order": 124,
+      "content_sha256": "9e8ab5cb6e705d695acb4115182f740b3d5166f93fc9a5bb89497b40950986da",
+      "audit_head_sha256": "4e3f8bc9bd1b8d2b0e75d523af47b869fe6bc5be2a5bbd2f3fab7ddebd8f0110"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTM5NRX5EK74QWKJPJMR790",
+      "source_ref_code": "TASK-INGEST-PDF-EXTRACTION",
+      "role": "reviewed_target",
+      "sort_order": 125,
+      "content_sha256": "728e7d2ff42dfbcd7295ad24e8f302758c4da7328f3a4ddc67248370d557c4bc",
+      "audit_head_sha256": "11e08bd5e330d22c2075b6a1b6592ce4a75868ab0470c05579c7dad7f36ae875"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTMAH8KHBTH5TXTWA02D20X",
+      "source_ref_code": "TASK-INGEST-PREVIEW-DOMAIN",
+      "role": "reviewed_target",
+      "sort_order": 126,
+      "content_sha256": "1829680697b6f9c5540d6c8c092ce888714fb6ab4c4cf72fdf9251320edf0f5c",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTMAH8KME2GKZFNBWJ1PCS2",
+      "source_ref_code": "TASK-INGEST-PREVIEW-WORKFLOW",
+      "role": "reviewed_target",
+      "sort_order": 127,
+      "content_sha256": "af9915f33e7d50aae24ed21c783b3b5254258ef762bede23a256e602336fc17c",
+      "audit_head_sha256": "abf03d80db00fbfbae2db92a234aeeb312c2ec4ccd4620f958b30be08b7c1836"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTMFJZP6HM0TQHXEGSDS414",
+      "source_ref_code": "TASK-INGEST-RESUME-WORKFLOW",
+      "role": "reviewed_target",
+      "sort_order": 128,
+      "content_sha256": "1f45c29900ef484ae45a810af5d76376fddc93299c6afb1dfe1f13e5172a7cd2",
+      "audit_head_sha256": "399744f88dfcfea26ed9e3c95ea10d4c82d349035aac0de680c2ba5a0944581e"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTMAH8M6QY4DXC1MFKQAZFA",
+      "source_ref_code": "TASK-INGEST-REVIEW-WORKFLOW",
+      "role": "reviewed_target",
+      "sort_order": 129,
+      "content_sha256": "aa0964818f398d2bcf35397cbed576a7b59ff3239b679457bc591abde067c74a",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTM0RWDQH7Z9MV4VP207KKA",
+      "source_ref_code": "TASK-INGEST-STATE-FOUNDATION",
+      "role": "reviewed_target",
+      "sort_order": 130,
+      "content_sha256": "6350cddd9f5cc65455995c991530a949863af32161233ea1e51e13af189f2e54",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KYCR4R70WHV6CY7589YW3HY1",
+      "source_ref_code": "TASK-INGEST-STATUS-STATE-V002",
+      "role": "reviewed_target",
+      "sort_order": 131,
+      "content_sha256": "efedadc16b1e8bb904268293566ded0395d3c090fa416962c66c5546d40a5df7",
+      "audit_head_sha256": "6f22b982a0ea696f0d70d75c3bb33284a7e3f04a326f0bcc9f3c74ed164a8708"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTMFJZPM48W2NQH6FDCB488",
+      "source_ref_code": "TASK-INGEST-STATUS-WORKFLOW",
+      "role": "reviewed_target",
+      "sort_order": 132,
+      "content_sha256": "eba8c3164b19af4190d3332b11754f5a0e226ef70e02228ce483cf6a282dda61",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTMS8JQJMZ2YGYP0HN3R8D8",
+      "source_ref_code": "TASK-INGEST-VERIFY-UC-001",
+      "role": "reviewed_target",
+      "sort_order": 133,
+      "content_sha256": "09a65d22e54c12042bddfcec1b5ebc88bfb465d757f679a43d43fabd25cd8d57",
+      "audit_head_sha256": "abbd3b9e35e66791f461fcfe47351eca3d71144acc80a7a657ee68c2109ba1fb"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTMS8JS8MQG6SJAFE8R8B69",
+      "source_ref_code": "TASK-INGEST-VERIFY-UC-002",
+      "role": "reviewed_target",
+      "sort_order": 134,
+      "content_sha256": "81ad0006d4385187a4644506f6f549a334ab503e5bf6b884043518199b2de22a",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTMS8JS61DX2QJTTH0J10ZZ",
+      "source_ref_code": "TASK-INGEST-VERIFY-UC-003",
+      "role": "reviewed_target",
+      "sort_order": 135,
+      "content_sha256": "c2f9d5c14cbb3121aead15921dcb2775b2334768de806230a1e2fb06c2be7afe",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTMS8JSSA63XKNVJTSSG51R",
+      "source_ref_code": "TASK-INGEST-VERIFY-UC-004",
+      "role": "reviewed_target",
+      "sort_order": 136,
+      "content_sha256": "7e78cff4bf365780e3617de351ef29087064ae0d6739fc3e10f19dbbb6398dd8",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTMS8JSASZKR5VKFA9KNFGJ",
+      "source_ref_code": "TASK-INGEST-VERIFY-UC-005",
+      "role": "reviewed_target",
+      "sort_order": 137,
+      "content_sha256": "456b47bf6a223e26f11bab40b68805ed3a62a3882a8362c1db65edfc4977a09c",
+      "audit_head_sha256": "1d7e5986b88397758bfea621160eb165056c990a297889e0d7485a6332ec7c2c"
+    },
+    {
+      "source_entity_type": "task",
+      "source_entity_id": "01KXTMS8JTF1TSSY5Z0R4M64WF",
+      "source_ref_code": "TASK-INGEST-VERIFY-UC-006",
+      "role": "reviewed_target",
+      "sort_order": 138,
+      "content_sha256": "a6675dc4eebfcded83f2cc8638415f0e472f89794dd8c9890095b5d0b5a3d3d5",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHF9Z58QWT0MFNTNYZB9G2Q",
+      "source_ref_code": "01KYHF9Z58QWT0MFNTNYZB9G2Q",
+      "role": "verification",
+      "sort_order": 139,
+      "content_sha256": "2025801a01b77b71a27763005d2caf33052c862312adaf4df2dbbda771887e23",
+      "audit_head_sha256": "9f23c67edcbab4b99bf739180a73e533655f08371eb2dde99265cd4e95387d5c"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHF9Z593AGCS7FM2ASXV8S0",
+      "source_ref_code": "01KYHF9Z593AGCS7FM2ASXV8S0",
+      "role": "verification",
+      "sort_order": 140,
+      "content_sha256": "996b148bac0d4a9dab946a6c2d035f6fd29458b8b17b647bd9f54592b0234a58",
+      "audit_head_sha256": "cfd5889a5373b21729ac170e8dbd500dc984ebd66163fc28f348c2ea1f718573"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHF9Z5950YZS5B8V6T10W5N",
+      "source_ref_code": "01KYHF9Z5950YZS5B8V6T10W5N",
+      "role": "verification",
+      "sort_order": 141,
+      "content_sha256": "3db33ac8b0240438ee082595f84b7a8eb528ea863b7cb9982eaffa9561b3d855",
+      "audit_head_sha256": "e8a454d7c0e737dda6d1a5f7388a266ccc146db82de62bd30810f45f7e17e5ff"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHF9Z595F1G1A4K2D15HR2Q",
+      "source_ref_code": "01KYHF9Z595F1G1A4K2D15HR2Q",
+      "role": "verification",
+      "sort_order": 142,
+      "content_sha256": "ccc729426578a5db37dee8035356cd0d0a190e20f2f30a1b0244069c41e2951a",
+      "audit_head_sha256": "9f5b65fa30df893fb4049512454a437880c62c18252b006a26520bbf27453a78"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHF9Z596ATJ81FS0VQ47RDQ",
+      "source_ref_code": "01KYHF9Z596ATJ81FS0VQ47RDQ",
+      "role": "verification",
+      "sort_order": 143,
+      "content_sha256": "91fb21878ae1e5e3ef98126eb896f39c19b819c9dafc147b0559ae482c72cb3e",
+      "audit_head_sha256": "eb780351d4739d7484ab7c6d9cfa7b307fd9a953ca684784bf6059720526a85e"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHF9Z59717N25TG696PSS9F",
+      "source_ref_code": "01KYHF9Z59717N25TG696PSS9F",
+      "role": "verification",
+      "sort_order": 144,
+      "content_sha256": "7c702f8ecd4645cbe866edac7048b15d8716f8c1f4eeb50edf661e93f81a6b94",
+      "audit_head_sha256": "555fabf1de300188fc2e2d1143b262bf5028f07cbab1fb17e26e996bcf6997c6"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHF9Z59AHZKXC19B2DDR9G3",
+      "source_ref_code": "01KYHF9Z59AHZKXC19B2DDR9G3",
+      "role": "verification",
+      "sort_order": 145,
+      "content_sha256": "1a5367fc8526e05742b38cf40408f324d0f1f6c24a7206a6b15b714861e87c55",
+      "audit_head_sha256": "57d93556d1d0f740634498c724cb1f0ae892a8f346b6522241c3d09410ebfbb7"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHF9Z59HH78G13S0K8737GX",
+      "source_ref_code": "01KYHF9Z59HH78G13S0K8737GX",
+      "role": "verification",
+      "sort_order": 146,
+      "content_sha256": "685625fdaec0b7a83f4abc4c8abee13bd96cb3653b60fc0544d26a0fc8216fac",
+      "audit_head_sha256": "cff20395c117289e0af6c478b9056cda85b19cca7d51cd01a72b93c149587074"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHF9Z59JXMMDDQCWZNW2YAQ",
+      "source_ref_code": "01KYHF9Z59JXMMDDQCWZNW2YAQ",
+      "role": "verification",
+      "sort_order": 147,
+      "content_sha256": "d43b8541a859f715814d15f1323ee3e14bd297cde39f7484a0d9b14696b5e289",
+      "audit_head_sha256": "6a19fe102632a966d85d79f3a80dd852c9f1b465de0001f3c01c9afb370d5be9"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHF9Z59S7X8CANCPPWRMQ5J",
+      "source_ref_code": "01KYHF9Z59S7X8CANCPPWRMQ5J",
+      "role": "verification",
+      "sort_order": 148,
+      "content_sha256": "f6ffe53c4705e7c5f3d30ff3f01af895955ca176a15e7672a4fb1fe5ea8484c2",
+      "audit_head_sha256": "a7ce8b899912d14186d22d9aa432eda31c0026cd03f5fc252531540cefcfa20b"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHF9Z59TJ5P85NTSVD0RS38",
+      "source_ref_code": "01KYHF9Z59TJ5P85NTSVD0RS38",
+      "role": "verification",
+      "sort_order": 149,
+      "content_sha256": "e29aad5aa4ec925f8a2f61df111bd51834db49dd84d0fac535ff680d8f9fd2d1",
+      "audit_head_sha256": "da42cf622e527fccd12187b046a21f54f43ccb7d002ce02236816e97d8cca387"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHF9Z59TVA0JFWPP993KRBB",
+      "source_ref_code": "01KYHF9Z59TVA0JFWPP993KRBB",
+      "role": "verification",
+      "sort_order": 150,
+      "content_sha256": "42ae37e6ab50dc18037138914b9832867a4ac050ea5eb3f7ad9ca570bf492d61",
+      "audit_head_sha256": "a2d165c83da84db60798fa7845685350c76a5d3a1c95a74df583d6987fda2ae8"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHF9Z59W6CNBBFGCCSK0YWA",
+      "source_ref_code": "01KYHF9Z59W6CNBBFGCCSK0YWA",
+      "role": "verification",
+      "sort_order": 151,
+      "content_sha256": "a8bb8bbbee76d2920e9ce20022284d012add48c418a29f9ef6ece3e1023ac486",
+      "audit_head_sha256": "7cccf11d970858c4e11561e151e63f888a0c584e455380331c4547b2f817146c"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHF9Z59X7BQGFC24T86E4MG",
+      "source_ref_code": "01KYHF9Z59X7BQGFC24T86E4MG",
+      "role": "verification",
+      "sort_order": 152,
+      "content_sha256": "50e89001792dd328b04ccffb0cb261ed1c80987caa548972748cfc8847912141",
+      "audit_head_sha256": "bed2fbf0fc4a1b2da4be9f738b5730cc918058466bcdfd047ad97f94fe74594c"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHF9Z59XYN82514YYB3Q4QP",
+      "source_ref_code": "01KYHF9Z59XYN82514YYB3Q4QP",
+      "role": "verification",
+      "sort_order": 153,
+      "content_sha256": "be22189d33ee73a69956757d0d6b3b5ffb55bf5daeb2ed237f7d968b5cce3c23",
+      "audit_head_sha256": "ed91d077aca92d10bba54f43bda2050ede2f95148e32ebefdc9cf797c1586de5"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHF9Z59Y4KDW464YFYJSGEB",
+      "source_ref_code": "01KYHF9Z59Y4KDW464YFYJSGEB",
+      "role": "verification",
+      "sort_order": 154,
+      "content_sha256": "8b922b2315f07505a521d271824850c58b7b721638e7773752a9b85b75b015e9",
+      "audit_head_sha256": "664b01d1960feaefb31f246177700ef18779512e603a6972fc3ec1e2b5d8b575"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHF9Z59YVYBA17YWJGEBPBX",
+      "source_ref_code": "01KYHF9Z59YVYBA17YWJGEBPBX",
+      "role": "verification",
+      "sort_order": 155,
+      "content_sha256": "9104506d536d8a4ff35ebc2df4a2f455a4d9db3b475354ce4a7280b5101e1450",
+      "audit_head_sha256": "9f7147f3805e4df58aed975acbd2482103de0d2a2a12b6a77303002e95a98ad0"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHXPXGD1Z868DMF3PTPJTWW",
+      "source_ref_code": "01KYHXPXGD1Z868DMF3PTPJTWW",
+      "role": "verification",
+      "sort_order": 156,
+      "content_sha256": "da57532f70f52fb102620121719a6bc0ed1d71ca20ada5486faf3a58994f7ade",
+      "audit_head_sha256": "b1c4818d1a9a80c5fc5e2b30c7a7706618f4d095b46d75c13060de5b09187289"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHXPXGD6SZW8X9NAAG5Z24X",
+      "source_ref_code": "01KYHXPXGD6SZW8X9NAAG5Z24X",
+      "role": "verification",
+      "sort_order": 157,
+      "content_sha256": "452ec6d2421c429484b9f4ca105629d70d04f11795b890940817def7b96c5dd3",
+      "audit_head_sha256": "dac54f53d083073add06c5dcd64efb0df8e35f507114281b295c38c6a87419d5"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHXPXGDCR77H0N3BDBKY4VC",
+      "source_ref_code": "01KYHXPXGDCR77H0N3BDBKY4VC",
+      "role": "verification",
+      "sort_order": 158,
+      "content_sha256": "463e58978e1edd92369702b162a1ec428692fa579a4f5eb2accf9c1475642f57",
+      "audit_head_sha256": "cc4ab875156c87fcd12b90012010606868f1b0fa7b10beee9d4e163c16d984cc"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHXPXGDG5GX3C172VAXG78G",
+      "source_ref_code": "01KYHXPXGDG5GX3C172VAXG78G",
+      "role": "verification",
+      "sort_order": 159,
+      "content_sha256": "fd4ec62c78c215736ef6299fd612771385d508b32cf77f4a46432b116a273894",
+      "audit_head_sha256": "6e6ac5d60978b3f34ea79e5d5d1a8f652756483f7ec717ae7f00ca95623d129c"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHXPXGDHBAG4PAF6EKB5E9N",
+      "source_ref_code": "01KYHXPXGDHBAG4PAF6EKB5E9N",
+      "role": "verification",
+      "sort_order": 160,
+      "content_sha256": "018ea3ac0394cdd937f4f82059d2452f068d7ac3071144fd5d9577281f640934",
+      "audit_head_sha256": "67fefc40bfbaccfb49e0650b24777da5d9a0618658586e8aebe224b5dbac12e6"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHXPXGDQMKM3KJ4VQB49AV1",
+      "source_ref_code": "01KYHXPXGDQMKM3KJ4VQB49AV1",
+      "role": "verification",
+      "sort_order": 161,
+      "content_sha256": "3f4e1bc983c3516cbae1f4ac053f505790aaa9428369d07d02b86f9dd0a7cad6",
+      "audit_head_sha256": "5c8fb8246b7a16e72251669250f199eca995a9b0247385771f96776cda94617d"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHXPXGDXTMM384JX8RJG3B3",
+      "source_ref_code": "01KYHXPXGDXTMM384JX8RJG3B3",
+      "role": "verification",
+      "sort_order": 162,
+      "content_sha256": "10659eb7e0d0a7a0e8bef8b1b4cbf9328841a7a5728ebbf3247aaacd56d9cd0d",
+      "audit_head_sha256": "89ba3b8438ceb9035d990d9e1d2a09578b00214f4afa3d428e5d1e1f914d98da"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHXPXGE10RX44CV3702QC02",
+      "source_ref_code": "01KYHXPXGE10RX44CV3702QC02",
+      "role": "verification",
+      "sort_order": 163,
+      "content_sha256": "c3bf7e6a975f67fd1377a458229b633096b8036d500d782eed4eeca94b8ee894",
+      "audit_head_sha256": "a9f1c52f3a57ce4be963e24dee44f27e4b19030dd5fffa3aadafef88698b20e2"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHXPXGE4Y7TJV2J05743JNT",
+      "source_ref_code": "01KYHXPXGE4Y7TJV2J05743JNT",
+      "role": "verification",
+      "sort_order": 164,
+      "content_sha256": "4dfc9c32b627198b969581b892a5f63e51fca38212bf7f9e2d240cc38f518eb3",
+      "audit_head_sha256": "8bf7d00cb5221857248093ee23ae7aa148bc29393fc7857ee63417d103c959fc"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHXPXGE6M53V2HYXAY0P0GX",
+      "source_ref_code": "01KYHXPXGE6M53V2HYXAY0P0GX",
+      "role": "verification",
+      "sort_order": 165,
+      "content_sha256": "0b27d61122ede98e33121f9e2955b2a48ab36559564bead3cf6805257b075dba",
+      "audit_head_sha256": "33a70fae61ac6cd0a5cad991fac892a9197c50e317b5be81f430bf8ff6ef6ffa"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHXPXGE8XK6AD8YXT9XYN27",
+      "source_ref_code": "01KYHXPXGE8XK6AD8YXT9XYN27",
+      "role": "verification",
+      "sort_order": 166,
+      "content_sha256": "07c0c06e2e660edc16b183ed81326e2ce044be872e446fc83976972d30ab5e04",
+      "audit_head_sha256": "1287f471476358dfe8a7b3ac3ce916e44215fffd1b13db43b709391c72bb3c7d"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHXPXGEEWMKW67X0K49DZNR",
+      "source_ref_code": "01KYHXPXGEEWMKW67X0K49DZNR",
+      "role": "verification",
+      "sort_order": 167,
+      "content_sha256": "d2996d1cf0b22717c79fe1a42fff3b5305a3fd953208b3b1cc0340b9b15f4c85",
+      "audit_head_sha256": "9e5b3c3f8b0b5efd80fe24d9ec8797248f816044a278068d3f29a41465e130d2"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHXPXGEGZK5BGN1E6MYRCBC",
+      "source_ref_code": "01KYHXPXGEGZK5BGN1E6MYRCBC",
+      "role": "verification",
+      "sort_order": 168,
+      "content_sha256": "3d8a604afffe99ff0458ce778262343e8b2145ba604e79914959c0d795c695eb",
+      "audit_head_sha256": "fb076fade6e6e722e57b3ce87fe577ba68efebb8da556bc629be8c7927de8558"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHXPXGEM542VGG4XM3KA58A",
+      "source_ref_code": "01KYHXPXGEM542VGG4XM3KA58A",
+      "role": "verification",
+      "sort_order": 169,
+      "content_sha256": "c4cd4b4c3598950e748e395b93be66422339c5398d6017999571e5e624a7ead3",
+      "audit_head_sha256": "b1a2fc3cf601d41861dc35732e60066f1d7c88315e560d21a2b6adedc49bcc6c"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHXPXGEMR2WTVA2D8WBHBAB",
+      "source_ref_code": "01KYHXPXGEMR2WTVA2D8WBHBAB",
+      "role": "verification",
+      "sort_order": 170,
+      "content_sha256": "83bca072ba965be2e3b7551df77abc2b750627ced786decfff5d653b23e00096",
+      "audit_head_sha256": "952be3f75f32fd595e8c886baba90f076962893842e030bcbc63d37bafe159df"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHXPXGEQMZWTJ0FCYJ51N1C",
+      "source_ref_code": "01KYHXPXGEQMZWTJ0FCYJ51N1C",
+      "role": "verification",
+      "sort_order": 171,
+      "content_sha256": "285eea7bebb9214d7069d2ff68640c796ef2b8ecc84e49e6f09313c31409791c",
+      "audit_head_sha256": "4c088511aa2c45db20a4a5abfd9b32614372bb1823cce26d99f13e2d900322f7"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYHXPXGEV9XS3SB5WXC8EX99",
+      "source_ref_code": "01KYHXPXGEV9XS3SB5WXC8EX99",
+      "role": "verification",
+      "sort_order": 172,
+      "content_sha256": "ae6e1590d07d2d01dce59295805d881f11dccf0080257302ac211af872483769",
+      "audit_head_sha256": "144a809b4c0cc58e984628e050fb1c72b9eca700f9f54a3ff2b342e8a071b791"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYJ8TT0P08DWZ5NYXRSTHT74",
+      "source_ref_code": "01KYJ8TT0P08DWZ5NYXRSTHT74",
+      "role": "verification",
+      "sort_order": 173,
+      "content_sha256": "d5d23d645df957dbc8825bd8fd1d52defd9a5883d370294626c8def21951b164",
+      "audit_head_sha256": "50356fec6f4250b1ba12c72c2aeb40b3d881072e6bd4872a1a4c343dcf80dd67"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYJ8TT0Q2KX6RZ2RJPV2TM76",
+      "source_ref_code": "01KYJ8TT0Q2KX6RZ2RJPV2TM76",
+      "role": "verification",
+      "sort_order": 174,
+      "content_sha256": "4c6d740ec1c077ab89004b49c15b97ad1e6ea4642289adec53f8a75f6ccc47b7",
+      "audit_head_sha256": "84ce8c0e393abc5ac2588c04e867decd97187a81085d650b8337b18a68106cbf"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYJ8TT0Q4WAP8AR15CAC812X",
+      "source_ref_code": "01KYJ8TT0Q4WAP8AR15CAC812X",
+      "role": "verification",
+      "sort_order": 175,
+      "content_sha256": "9eb669aa8d9fb10bacf140ea5c486aaabbdfc93182d499e4174ce3a8345255e1",
+      "audit_head_sha256": "d4ff60e7113f909f0a47aa0af1bbf157306db5ad17c7c05650fa8c4b4f156116"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYJ8TT0Q519MPCVD2BA1B6JV",
+      "source_ref_code": "01KYJ8TT0Q519MPCVD2BA1B6JV",
+      "role": "verification",
+      "sort_order": 176,
+      "content_sha256": "2e21b10952c82d3594db19d927c282608677701c035618fde7c0f485d711d064",
+      "audit_head_sha256": "eae28f7d78d9ad39d7dc633c771a7684d3f6ac42e5ee4a73efb26f70feade026"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYJ8TT0Q5F1G1N36MSM4W6TW",
+      "source_ref_code": "01KYJ8TT0Q5F1G1N36MSM4W6TW",
+      "role": "verification",
+      "sort_order": 177,
+      "content_sha256": "cf42ba253751fb08d8c4d576797dd07bfad91b4627bb4edae3e83f553444d222",
+      "audit_head_sha256": "be709f45e834a76aba3ec213567e73f46c2a5ced289c49646475421bfe2dc8d6"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYJ8TT0Q97WYEQKVX2QQ796Y",
+      "source_ref_code": "01KYJ8TT0Q97WYEQKVX2QQ796Y",
+      "role": "verification",
+      "sort_order": 178,
+      "content_sha256": "7f5e92e72ede115ef4bb07ea845e773e16049ccb19366fd5bc31ec58accb82e3",
+      "audit_head_sha256": "e1662d55afe730b71ea58d5fcd01e5dbe9b136d08faf0c2c9092a7486246366d"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYJ8TT0QD99DK44T988M92WV",
+      "source_ref_code": "01KYJ8TT0QD99DK44T988M92WV",
+      "role": "verification",
+      "sort_order": 179,
+      "content_sha256": "e582c7cdc2919fbef9bb0d29f06be93a0ba83d9b30299b777c7c754b5283dfe4",
+      "audit_head_sha256": "b41e30dc74264db6e11c909a2f7701ceee2fd64df0be8aafb412c17ebbee44c7"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYJ8TT0QDXQG6JB225M0TYN5",
+      "source_ref_code": "01KYJ8TT0QDXQG6JB225M0TYN5",
+      "role": "verification",
+      "sort_order": 180,
+      "content_sha256": "4202e510c5c82859e0ca1e38aded53449b7eeee14d73a0183ed632161137e642",
+      "audit_head_sha256": "27d1fb59d716fca0a67e519d24a4f0a6288ed834d91d80ac10c1417df68518fc"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYJ8TT0QE73MXMDEVMH3JQQ1",
+      "source_ref_code": "01KYJ8TT0QE73MXMDEVMH3JQQ1",
+      "role": "verification",
+      "sort_order": 181,
+      "content_sha256": "a0fed711b1f1036e880bfaac0a56819c69631429d61cd9315f98bb2de758d5de",
+      "audit_head_sha256": "df23ee0fa02dbdb5e2359ed30f5ef1c242d92608619947861827e90ad946ac1a"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYJ8TT0QEMAJ42VFSA65B7VW",
+      "source_ref_code": "01KYJ8TT0QEMAJ42VFSA65B7VW",
+      "role": "verification",
+      "sort_order": 182,
+      "content_sha256": "62e88399d8de5626c228056f97f64cb109e5b171875ad0e281f1a6e452600dd5",
+      "audit_head_sha256": "371abf2a004a28d6d75e27eee2be87a7895937ae6403e8e729a7fb1b551a51ee"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYJ8TT0QG3PDC97CKBTECZFV",
+      "source_ref_code": "01KYJ8TT0QG3PDC97CKBTECZFV",
+      "role": "verification",
+      "sort_order": 183,
+      "content_sha256": "369d5d55d7beb7189e4f59d8d0ab32d344166ae6c6b666c3abd4e0539d8af555",
+      "audit_head_sha256": "432c9a80ab51b1d65141304a6a23331435ce12337107e4d7c8a4807f23ee3674"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYJ8TT0QPW5NYH7ABWJP1XQA",
+      "source_ref_code": "01KYJ8TT0QPW5NYH7ABWJP1XQA",
+      "role": "verification",
+      "sort_order": 184,
+      "content_sha256": "1f7cf6adc20beb638f2aa0d2c8ca84857a07b68793628928ccd7a005c743d121",
+      "audit_head_sha256": "728845ca52c07aa0fa2e279e18a9574648ad5bb115464f593eba2bd33d59fbc6"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYJ8TT0QS6J2J407TJQJRC8M",
+      "source_ref_code": "01KYJ8TT0QS6J2J407TJQJRC8M",
+      "role": "verification",
+      "sort_order": 185,
+      "content_sha256": "d22970f5b5f4dbcc175bda516d79b9cfb67a9510922ffec764f7c50f7221de72",
+      "audit_head_sha256": "2b4db1bfd4f0fa9e045393786adde362b7247dd63df80bfaa560b3e586030170"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYJ8TT0QW0FSEK6WT7R6MYCP",
+      "source_ref_code": "01KYJ8TT0QW0FSEK6WT7R6MYCP",
+      "role": "verification",
+      "sort_order": 186,
+      "content_sha256": "3be52394b464b413a78b7c2d0c7da642fec45e1c87b5ee22a33654df9eccc66b",
+      "audit_head_sha256": "4d2984047db759b24a19f41b7a7667deaf23de6f7a385d624246337189a77a8c"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYJ8TT0QWZNYQABEG6W008S0",
+      "source_ref_code": "01KYJ8TT0QWZNYQABEG6W008S0",
+      "role": "verification",
+      "sort_order": 187,
+      "content_sha256": "1531f5d791ab406e297935140bee357b9c705e26f8a146e91d2414f9e587d9d8",
+      "audit_head_sha256": "ce1e0cdf6756881f1a42307f65566ffd4f462b9da61938d9d06831855f8175f6"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYJ8TT0QX87SEXRA0DG2QVAP",
+      "source_ref_code": "01KYJ8TT0QX87SEXRA0DG2QVAP",
+      "role": "verification",
+      "sort_order": 188,
+      "content_sha256": "02c322734645e62e66b9c05f8470df5f06d94fbc767f8772668f5b3a73c68d6d",
+      "audit_head_sha256": "e07a997fefe8c76b6118fe34ceeb2579cdd498a6aeb837c46bb59d29cf2c96f3"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYJ8TT0QY4R5AG6AMFZP1J4K",
+      "source_ref_code": "01KYJ8TT0QY4R5AG6AMFZP1J4K",
+      "role": "verification",
+      "sort_order": 189,
+      "content_sha256": "384a44a6dbbbcb084d0a737ca4257e3c45c1f52dfdee703667b4a26c41eaf27c",
+      "audit_head_sha256": "dd84d743e2f461158e2012108d17fbb207a3f9add9e10118811afbb195a09fbd"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYKEYA3EMP3CYP0D42S4E794",
+      "source_ref_code": "01KYKEYA3EMP3CYP0D42S4E794",
+      "role": "verification",
+      "sort_order": 190,
+      "content_sha256": "54afc8a62745f6d6b5d9749e4292df3bc3ac952fde4adf8dbf3c0ede328076ad",
+      "audit_head_sha256": "bd332dc22fb4de44c48aa60ebcc67c2330387ebe2242456c5a4678ae849ec8e4"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYKEYA3F0AMSC85NS4184HCF",
+      "source_ref_code": "01KYKEYA3F0AMSC85NS4184HCF",
+      "role": "verification",
+      "sort_order": 191,
+      "content_sha256": "3bb7a3965d1db8788e28dbe837837db0ef2bf899eeb211bc3397de2778f815aa",
+      "audit_head_sha256": "f256215f17ee31b28fdab3fdcd204b21014a292651428f462fe5602f661d6752"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYKEYA3F1A34PS2A2SQ4Q2NH",
+      "source_ref_code": "01KYKEYA3F1A34PS2A2SQ4Q2NH",
+      "role": "verification",
+      "sort_order": 192,
+      "content_sha256": "803497589db279ac2b0bca2cd2a4ba601f1219c37cfaad113b8c314521a216e1",
+      "audit_head_sha256": "a4d88dcc3bff596bacf3e8c44fd86d2d3b192aefa2ea969ead16b1343c7c8e2a"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYKEYA3F2KS6HARV1Q5QRS8T",
+      "source_ref_code": "01KYKEYA3F2KS6HARV1Q5QRS8T",
+      "role": "verification",
+      "sort_order": 193,
+      "content_sha256": "23635e950fd9241f8513e1890db2982662a0a744374078b84bc2262f5919c464",
+      "audit_head_sha256": "6370dfc87dc6d72bb8d5a61c2e3c07fd2b6607c91a7fb5fe1011c6d94f622011"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYKEYA3F3CB9CZD6JZMNAY6X",
+      "source_ref_code": "01KYKEYA3F3CB9CZD6JZMNAY6X",
+      "role": "verification",
+      "sort_order": 194,
+      "content_sha256": "02336e1268f11d3525719f44fa892cbcaba2d1e7c629adfc3112060632690543",
+      "audit_head_sha256": "e4a59af9fb8660454c732cde40c5b3ab93e0169159953d079f4d1fcc5a4433fb"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYKEYA3F3ZTJ4M7RTZMNRVHV",
+      "source_ref_code": "01KYKEYA3F3ZTJ4M7RTZMNRVHV",
+      "role": "verification",
+      "sort_order": 195,
+      "content_sha256": "867ff372d09019441e55ba3c071bdefe41bb87df6295bdfeea3a791a8f420e30",
+      "audit_head_sha256": "bebee60f62e77f4834e5a8a4094fce796535648555d19465e7d9f77ee8d87a29"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYKEYA3F493WJZH91YTZQ3DT",
+      "source_ref_code": "01KYKEYA3F493WJZH91YTZQ3DT",
+      "role": "verification",
+      "sort_order": 196,
+      "content_sha256": "5b59ab83098c48e2cfec16117f17f9077ad7ec57f0875203f156fdbeca3cdf40",
+      "audit_head_sha256": "bd1ae883db50a0901ea65f6497adaddce8641fe391169e131ed910d88b3270a0"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYKEYA3F4FWSEG4BSPF8QG74",
+      "source_ref_code": "01KYKEYA3F4FWSEG4BSPF8QG74",
+      "role": "verification",
+      "sort_order": 197,
+      "content_sha256": "13050fa740cfccc38f472060fcae003876f4f3f7c5b59ea01f42ee1a48f5f71e",
+      "audit_head_sha256": "553e3e785e256adf6776d0fb6f4c3196c19a9e44f8866e879c782af38226a28c"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYKEYA3F8K8ZVTM4FSKGJZZV",
+      "source_ref_code": "01KYKEYA3F8K8ZVTM4FSKGJZZV",
+      "role": "verification",
+      "sort_order": 198,
+      "content_sha256": "f528ec7cbb705644f3f9d5012f6743aca30a667dd420b876c8ac3c64c38c84ba",
+      "audit_head_sha256": "e27d409600aa9c0e70361eeb9bd41ddf7308fca963f2ab8f1e584ea8c707fdee"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYKEYA3FAZHB602R8FJ45NZB",
+      "source_ref_code": "01KYKEYA3FAZHB602R8FJ45NZB",
+      "role": "verification",
+      "sort_order": 199,
+      "content_sha256": "d8082d9ae1785a4927f82e1e0c40727c49eef7649d9bc7859e30bc515549364a",
+      "audit_head_sha256": "d6c1062ada977298eab2c5308f9b0f7d4067ca5e7f0f7d237c42211f1a866d75"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYKEYA3FCXWC5MH213CAWMJF",
+      "source_ref_code": "01KYKEYA3FCXWC5MH213CAWMJF",
+      "role": "verification",
+      "sort_order": 200,
+      "content_sha256": "f48504f2c609f3f79ab944619d470a19322a19fe425e1413e1071a963ff57131",
+      "audit_head_sha256": "22603517d7c73fb05d9aa2dfd147d694d4cfb772cdde6c0e4b61a6c93401ce3f"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYKEYA3FJ8FBK1WHTDTRJDZ7",
+      "source_ref_code": "01KYKEYA3FJ8FBK1WHTDTRJDZ7",
+      "role": "verification",
+      "sort_order": 201,
+      "content_sha256": "a70247d33212ccec74a6c592ea4a7f8b84fce450bf73e1ca894b0b5801f15a90",
+      "audit_head_sha256": "6ae898713ee787717daf864cf8393018cac8a7cacc32fa4280061db0a492a23c"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYKEYA3FPMA14T3R8144BQVA",
+      "source_ref_code": "01KYKEYA3FPMA14T3R8144BQVA",
+      "role": "verification",
+      "sort_order": 202,
+      "content_sha256": "a3fd6e8c67227c493d32ceadeaebe06b0bd343bc4fda5139bd7fc9894bfe35f1",
+      "audit_head_sha256": "234433f86257de8ee3457779475124e7a11177e211d3c3d2d0dff2cf3c174deb"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYKEYA3FPZPEREWAY67NGBH8",
+      "source_ref_code": "01KYKEYA3FPZPEREWAY67NGBH8",
+      "role": "verification",
+      "sort_order": 203,
+      "content_sha256": "a8dd8846ea3cd06c9377dda2a25aa246b0933df02d6af456d3480789dd21ed9c",
+      "audit_head_sha256": "59f81d91d6df2718ed6250e9551a0d6b3ef3d3f3630bf512ea4886da560102ab"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYKEYA3FSQX87ZY3GG0043PG",
+      "source_ref_code": "01KYKEYA3FSQX87ZY3GG0043PG",
+      "role": "verification",
+      "sort_order": 204,
+      "content_sha256": "100f57c362df2f0cbf5eb0063dcd8a370df29ea0b110225ba494730f74c7c390",
+      "audit_head_sha256": "cb05077617cd11ec0ebf2d54bd78003c745ece555717a73103e25dfe051cace1"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYKEYA3FT1QH7HEJ0Q6S4X3Z",
+      "source_ref_code": "01KYKEYA3FT1QH7HEJ0Q6S4X3Z",
+      "role": "verification",
+      "sort_order": 205,
+      "content_sha256": "c9579031c711329184a7082b73c2312fd18ab9db6e7ef8413097c1ddb93cd994",
+      "audit_head_sha256": "f1b9085288ce213848dffe3ef2b304a11ec717dd8228abebeb908fc7613b7cda"
+    },
+    {
+      "source_entity_type": "verification_record",
+      "source_entity_id": "01KYKEYA3FXFYYZ1Z7ZGM4CQSY",
+      "source_ref_code": "01KYKEYA3FXFYYZ1Z7ZGM4CQSY",
+      "role": "verification",
+      "sort_order": 206,
+      "content_sha256": "df65791786ba46af62e6d4d94398062b874ee80bc96399008bcc684235de87d3",
+      "audit_head_sha256": "c936cff4ad0d695712b3a3907475a3864eff153d5c4509db29789970dda89f22"
+    }
+  ]
+}
