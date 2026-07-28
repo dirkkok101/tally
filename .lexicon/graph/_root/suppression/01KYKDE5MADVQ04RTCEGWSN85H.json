@@ -1,0 +1,11 @@
+{
+  "id": "01KYKDE5MADVQ04RTCEGWSN85H",
+  "ref_code": "TASK-INGEST-ADAPTER-LAYOUT-A",
+  "field_name": "contradicts:TASK-INGEST-GATE-INT-FORMAT-ADAPTERS",
+  "agent_slug": "contradiction",
+  "fingerprint": "15a8dc5942b7e234259421f187d8773da5ff6e3e6303e3b0f06cc49f46bfa115",
+  "reason": [
+    "Tracked as bd-160f: closed task recipes disagree on multi-candidate failure mode; DD-INGEST-SOURCE-DESCRIPTION-ABSENCE governs the shipped behavior"
+  ],
+  "created_at": "2026-07-28T03:49:01.7073294+00:00"
+}

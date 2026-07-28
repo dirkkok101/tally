@@ -1,0 +1,11 @@
+{
+  "id": "01KYKDE51D2ZPJ8YZYQQRKMW7T",
+  "ref_code": "NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY",
+  "field_name": "contradicts:TASK-INGEST-COMMIT-SAGA",
+  "agent_slug": "contradiction",
+  "fingerprint": "72d87ce6f4b77605af845df3a0553eabca5bd3dbd41bb6fa4a5cadb60a9a5678",
+  "reason": [
+    "Tracked as bd-138j: NFR unresolved-state wording vs saga completion wording; clarification deferred"
+  ],
+  "created_at": "2026-07-28T03:49:01.1021180+00:00"
+}

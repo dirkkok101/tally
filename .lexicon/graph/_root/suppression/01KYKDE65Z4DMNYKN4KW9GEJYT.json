@@ -1,0 +1,11 @@
+{
+  "id": "01KYKDE65Z4DMNYKN4KW9GEJYT",
+  "ref_code": "TASK-INGEST-LEDGER-PUBLIC-CLIENT",
+  "field_name": "contradicts:TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION",
+  "agent_slug": "contradiction",
+  "fingerprint": "920011f80ed3bfe8a41d30a1ee97d2ba4e5634fbc4751f41287a63af94f03640",
+  "reason": [
+    "Tracked as bd-30me: sequencing tension between closed task recipes; superseded by the executed contract correction"
+  ],
+  "created_at": "2026-07-28T03:49:02.2721968+00:00"
+}

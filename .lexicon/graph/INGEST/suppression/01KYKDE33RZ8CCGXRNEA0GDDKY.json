@@ -1,0 +1,11 @@
+{
+  "id": "01KYKDE33RZ8CCGXRNEA0GDDKY",
+  "ref_code": "DD-INGEST-ARTIFACT-SECURITY",
+  "field_name": "contradicts:UC-INGEST-005",
+  "agent_slug": "contradiction",
+  "fingerprint": "891e28a87fb323f3a5cf5fb2c7a38f9575f0a372ab58bc85d97f7cb2f33e0643",
+  "reason": [
+    "Tracked as bd-3cdd: UC-INGEST-005 cleanup step predates the accepted memory-only extraction decision; wording fix deferred"
+  ],
+  "created_at": "2026-07-28T03:48:59.1293114+00:00"
+}
