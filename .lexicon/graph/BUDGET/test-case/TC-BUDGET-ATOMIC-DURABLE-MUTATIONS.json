@@ -8,7 +8,7 @@
   "surface": "persistence",
   "scenario": "edge",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "Create Draft and Activate Plan Revision can be interrupted at every boundary before and after validation, idempotency, revision durability, supersession, activation, and result delivery.",
   "steps": "Inject each interruption and restart BUDGET to verify NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS.",
   "expected": "Each case exposes either the complete mutation exactly once or the unchanged prior state; no partial revision, missing outcome, duplicate draft, or multiply active period exists.",

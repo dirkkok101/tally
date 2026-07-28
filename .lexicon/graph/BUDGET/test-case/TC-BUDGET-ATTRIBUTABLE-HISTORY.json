@@ -8,7 +8,7 @@
   "surface": "persistence",
   "scenario": "happy",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "A plan can undergo repeated draft creation, activation, supersession, category rename/archive, and period closure under distinct actor reasons and timestamps.",
   "steps": "Exercise the lifecycle and inspect every event and immutable revision required by NFR-BUDGET-ATTRIBUTABLE-HISTORY.",
   "expected": "Every required stable reference, actor, reason, timestamp, prior state, resulting state, and replacement reference is present; historical plan payload hashes remain unchanged.",

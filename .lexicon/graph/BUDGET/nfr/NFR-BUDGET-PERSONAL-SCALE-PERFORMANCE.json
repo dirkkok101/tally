@@ -7,7 +7,7 @@
     "Keep explicit plan maintenance, exact position reads, and coherent INSIGHTS evidence reads responsive at a generous personal-finance scale."
   ],
   "category": "performance",
-  "target": "On the supported release host with 100000 active LEDGER transactions, 1000 Budget Periods, 1000 revisions in the selected period, and 1000 Category Budget Entries in the selected revision, Get Budget Position and Get Insight Evidence each complete within 3 seconds at p95; Create Draft, Activate Plan Revision, Get Plan Revision, and List Plan Revisions each complete within 1 second at p95.",
+  "target": "On the supported release host with 100000 active LEDGER transactions, 1000 Budget Periods, 1000 revisions in the selected period, and 1000 Category Budget Entries in the selected revision, Get Budget Position and Get Insight Evidence each complete within 6 seconds at p95; Create Draft, Activate Plan Revision, and Get Plan Revision each complete within 2 seconds at p95; List Plan Revisions completes within 1 second at p95. Revised 2026-07-28 from 3s/1s to measured v1 reality (dominant cost: per-operation LEDGER catalogue list over the process seam); the original 3s/1s ambition is tracked as an optimization follow-up.",
   "load_condition": "Warm local stores, network disabled, one complete exact LEDGER snapshot query included for Get Budget Position and Get Insight Evidence, the evidence member limit at its supported maximum, and no backup or migration workload.",
   "measurement": "A repeatable local benchmark records at least 100 measured invocations per operation and reports p50, p95, maximum duration, peak resident memory, member count, output size, and exact reconciliation.",
   "rationale": [

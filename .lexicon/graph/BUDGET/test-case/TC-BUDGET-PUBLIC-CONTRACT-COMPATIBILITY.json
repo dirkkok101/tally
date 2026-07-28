@@ -8,7 +8,7 @@
   "surface": "contract",
   "scenario": "edge",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "Version-compatible and one-version-incompatible Agent Host, BUDGET, LEDGER, and INSIGHTS contract fixtures are available, and private LEDGER types are excluded from the test compile boundary.",
   "steps": "Inspect every operation schema and exercise every compatibility pairing required by NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY.",
   "expected": "All metadata is present and deterministic; compatible pairs work; incompatible pairs fail before mutation or partial financial output; no private LEDGER dependency compiles.",

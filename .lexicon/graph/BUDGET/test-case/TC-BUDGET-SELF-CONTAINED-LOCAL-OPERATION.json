@@ -8,7 +8,7 @@
   "surface": "contract",
   "scenario": "edge",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "Network access is disabled and no Tally daemon, watcher, scheduler, service, port, or background process is running.",
   "steps": "Execute every accepted workflow and operational failure path required by NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION, then inspect process and network state.",
   "expected": "Every workflow completes non-interactively and leaves no network dependency or background resource before or after invocation.",

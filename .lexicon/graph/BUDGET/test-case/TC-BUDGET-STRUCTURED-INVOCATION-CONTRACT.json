@@ -8,7 +8,7 @@
   "surface": "contract",
   "scenario": "happy",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "Valid, malformed, forbidden-field, expected-failure, interrupted-delivery, and metadata-canary invocations are available with stdout, stderr, exit, log, process, and temporary-artifact capture.",
   "steps": "Invoke the relevant Public Budget Operations and exercise every acceptance criterion of FR-BUDGET-STRUCTURED-INVOCATION, including its validation, lifecycle, compatibility, authority, replay, and unavailable paths where applicable.",
   "expected": "Every acceptance criterion of FR-BUDGET-STRUCTURED-INVOCATION holds; all documented errors are stable; every rejected or failed mutation leaves the required prior state unchanged; no prohibited side effect occurs.",

@@ -8,7 +8,7 @@
   "surface": "contract",
   "scenario": "happy",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "The self-contained executable exposes every Public Budget Operation and supports schema, help, repeat, and unknown-operation requests.",
   "steps": "Invoke the relevant Public Budget Operations and exercise every acceptance criterion of FR-BUDGET-CONTRACT-DISCOVERY, including its validation, lifecycle, compatibility, authority, replay, and unavailable paths where applicable.",
   "expected": "Every acceptance criterion of FR-BUDGET-CONTRACT-DISCOVERY holds; all documented errors are stable; every rejected or failed mutation leaves the required prior state unchanged; no prohibited side effect occurs.",

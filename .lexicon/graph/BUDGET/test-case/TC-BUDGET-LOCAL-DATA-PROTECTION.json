@@ -8,7 +8,7 @@
   "surface": "persistence",
   "scenario": "security",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "Seeded canary financial values pass through success, failure, crash, replay, history, and position workflows while all files, processes, logs, diagnostics, Git state, and temporary locations are observable.",
   "steps": "Run the workflows and inspect every boundary named by NFR-BUDGET-LOCAL-DATA-PROTECTION.",
   "expected": "All durable artifacts are owner-only where supported; no canary payload appears outside explicit structured data results; no tracked or shared temporary financial artifact remains.",

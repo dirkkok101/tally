@@ -8,7 +8,7 @@
   "surface": "contract",
   "scenario": "happy",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "Representative absent, empty, all-zero, budgeted, unbudgeted, uncategorized, refund-heavy, corrected, Draft, Active, and Superseded plan-position fixtures are available.",
   "steps": "Invoke the relevant Public Budget Operations and exercise every acceptance criterion of FR-BUDGET-POSITION-QUERY, including its validation, lifecycle, compatibility, authority, replay, and unavailable paths where applicable.",
   "expected": "Every acceptance criterion of FR-BUDGET-POSITION-QUERY holds; all documented errors are stable; every rejected or failed mutation leaves the required prior state unchanged; no prohibited side effect occurs.",

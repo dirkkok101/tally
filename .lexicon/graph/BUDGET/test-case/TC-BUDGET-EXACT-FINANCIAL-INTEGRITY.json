@@ -8,7 +8,7 @@
   "surface": "component",
   "scenario": "edge",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "Property generators and fixtures cover exact positive, zero, negative-refund, omitted, uncategorized, boundary, and high-scale ZAR values.",
   "steps": "Exercise every arithmetic and bucket-accounting invariant in NFR-BUDGET-EXACT-FINANCIAL-INTEGRITY across generated plan and LEDGER actual combinations.",
   "expected": "Every amount round-trips exactly; every entry and actual is counted once; all plan, actual, Remaining, and Over equations reconcile with zero floating-point drift.",

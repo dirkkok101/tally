@@ -8,7 +8,7 @@
   "surface": "contract",
   "scenario": "happy",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "Version-compatible and incompatible public LEDGER category and snapshot actuals seams can return multi-page, expired, corrected, refund, transfer, lifecycle, and failure cases.",
   "steps": "Invoke the relevant Public Budget Operations and exercise every acceptance criterion of FR-BUDGET-LEDGER-COMPOSITION, including its validation, lifecycle, compatibility, authority, replay, and unavailable paths where applicable.",
   "expected": "Every acceptance criterion of FR-BUDGET-LEDGER-COMPOSITION holds; all documented errors are stable; every rejected or failed mutation leaves the required prior state unchanged; no prohibited side effect occurs.",
