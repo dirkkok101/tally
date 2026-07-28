@@ -86,7 +86,7 @@ public sealed class AbandonCleanupTests : IAsyncLifetime
         var commit = await CreateSaga().ExecuteAsync(
             new CommitCommand(prepared.BatchId, prepared.ManifestRevisionId, prepared.Digest),
             CancellationToken.None);
-        Assert.Equal(CommitErrors.NotApproved, commit.ErrorCode);
+        Assert.Equal(CommitErrors.NotCommittable, commit.ErrorCode);
     }
 
     [Fact]
