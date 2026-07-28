@@ -5,7 +5,7 @@
   "ref_code": "TC-BUDGET-CATEGORY-LIFECYCLE-CONTRACT",
   "repo_path": "tests/Tally.Tests/Budget/Plans/CreateBudgetDraftCommandTests.cs",
   "anchor_kind": "test",
-  "last_verified_hash": "b6d734aeba60f552944471d513c729cc92d52bead32a0bf0723adf8f80b174bd",
-  "last_verified_at": "2026-07-27T14:29:10.4972027+00:00",
+  "last_verified_hash": "c583c71dc26bdfdb21b2ea48702fb38f7649cdb0fe69c5746577bf291930bd65",
+  "last_verified_at": "2026-07-28T11:26:09.7784164+00:00",
   "created_at": "2026-07-27T14:29:10.4972027+00:00"
 }

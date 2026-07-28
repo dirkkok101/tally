@@ -5,7 +5,7 @@
   "ref_code": "DD-INGEST-LEDGER-PUBLIC-INTEGRATION",
   "repo_path": "src/Tally/Integration/Ledger/LedgerContractClient.cs",
   "anchor_kind": "implementation",
-  "last_verified_hash": "fdd8d00135103d10471ea66baddbf23110a60899cb3b43715a3c176516b832c4",
-  "last_verified_at": "2026-07-27T13:53:56.1217149+00:00",
+  "last_verified_hash": "273020479cb5ce765c9b020023359ed210c82db1473277b391f4d26dff63e142",
+  "last_verified_at": "2026-07-28T11:26:10.8408561+00:00",
   "created_at": "2026-07-26T08:19:15.9758874+00:00"
 }

@@ -5,7 +5,7 @@
   "ref_code": "TC-BUDGET-ATOMIC-DURABLE-MUTATIONS",
   "repo_path": "tests/Tally.Tests/Budget/Plans/ActivateBudgetPlanRevisionCommandTests.cs",
   "anchor_kind": "test",
-  "last_verified_hash": "4663d05e2ddaeed8e9c4f56932c9d64172f43a64e7a1926fd20332625574b87e",
-  "last_verified_at": "2026-07-27T14:29:10.4944646+00:00",
+  "last_verified_hash": "d6e6b061d9e267137ee06160dfae8e5d128fd413f2602158791775a77294b2a6",
+  "last_verified_at": "2026-07-28T11:26:09.7769193+00:00",
   "created_at": "2026-07-27T14:29:10.4944646+00:00"
 }

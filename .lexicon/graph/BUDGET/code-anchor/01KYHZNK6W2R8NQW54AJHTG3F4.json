@@ -5,7 +5,7 @@
   "ref_code": "DM-BUDGET-REVISION-ENTRY",
   "repo_path": "src/Tally/Contracts/Budget/Insights/BudgetInsightEvidence.cs",
   "anchor_kind": "implementation",
-  "last_verified_hash": "d0865871e56ae55e2803040e8c04f88f6520504cf1fd85684019e3811c31e9f4",
-  "last_verified_at": "2026-07-27T14:29:10.4925548+00:00",
+  "last_verified_hash": "fba9327a193e2db0a7b9632766006b9678f4fab62f63f6d0455d404787858365",
+  "last_verified_at": "2026-07-28T11:26:09.7761083+00:00",
   "created_at": "2026-07-27T14:29:10.4925548+00:00"
 }

@@ -5,7 +5,7 @@
   "ref_code": "DM-BUDGET-STATE-STORE",
   "repo_path": "src/Tally/Infrastructure/Budget/Storage/BudgetSchema.cs",
   "anchor_kind": "implementation",
-  "last_verified_hash": "24d3fc86d5e24f94ebf8c60106689847c05805e04abfefb616a82c1e06afa27c",
-  "last_verified_at": "2026-07-27T14:29:10.4933724+00:00",
+  "last_verified_hash": "d5765a6f405872599a4d506d1e1a68223f79729220cf25915806f5f8135000ae",
+  "last_verified_at": "2026-07-28T11:26:09.7762688+00:00",
   "created_at": "2026-07-27T14:29:10.4933724+00:00"
 }

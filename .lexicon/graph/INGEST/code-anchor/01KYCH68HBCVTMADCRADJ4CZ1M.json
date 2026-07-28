@@ -5,7 +5,7 @@
   "ref_code": "DM-INGEST-IMPORT-MANIFEST",
   "repo_path": "src/Tally/Domain/Ingest/Reconciliation/StatementReconciler.cs",
   "anchor_kind": "implementation",
-  "last_verified_hash": "239085b04a92a20cba56e9b96dda180809e0a9c6427e22760634c8aa9dfa1c4a",
-  "last_verified_at": "2026-07-25T11:39:55.8192343+00:00",
+  "last_verified_hash": "9611d5d69b89e4123cc808571d4f14da7f0410baadda328376f28097e5a85b92",
+  "last_verified_at": "2026-07-28T11:26:10.8431714+00:00",
   "created_at": "2026-07-25T11:39:55.8192343+00:00"
 }

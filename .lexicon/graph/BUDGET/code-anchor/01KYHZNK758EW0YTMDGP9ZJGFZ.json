@@ -5,7 +5,7 @@
   "ref_code": "TC-BUDGET-PLAN-ACTIVATION-CONTRACT",
   "repo_path": "tests/Tally.Tests/Budget/Acceptance/BudgetUc002ActivationTests.cs",
   "anchor_kind": "test",
-  "last_verified_hash": "f0a678521a59a36363a38d1cebd8694954f3dc2f569015fdb4a63a1295548ce6",
-  "last_verified_at": "2026-07-27T14:29:10.5015166+00:00",
+  "last_verified_hash": "2ffd299f937100df690f64a82ef2f216337510881f17d5e963ab04b0b4933a3b",
+  "last_verified_at": "2026-07-28T11:26:09.7806231+00:00",
   "created_at": "2026-07-27T14:29:10.5015166+00:00"
 }
