@@ -190,6 +190,7 @@ public sealed class CommitStateStore(IngestDatabase database, BatchErrorEventSto
                 {
                     var receiptId = reader.GetString(0);
                     var status = (ImportReceiptStatus)reader.GetInt32(1);
+                    var summaryJson = reader.GetString(2);
                     var completedAt = reader.IsDBNull(3) ? null : reader.GetString(3);
                     // V003 backfills every row and both insert paths stamp the columns; a NULL here is
                     // a schema-integrity violation, never a value to re-fabricate.
@@ -200,6 +201,25 @@ public sealed class CommitStateStore(IngestDatabase database, BatchErrorEventSto
                         ? throw new InvalidOperationException("import_receipt.updated_at is missing; the ingest schema is corrupt.")
                         : reader.GetString(5);
                     await reader.DisposeAsync();
+
+                    // The lookup above is batch-scoped, which is safe only while a batch can never
+                    // carry more than one manifest revision alongside a receipt. That invariant holds
+                    // today: revision ids are the deterministic canonical digest
+                    // (ManifestCanonicalizer.Canonicalize), candidate ids are deterministic content
+                    // hashes retained even after abandon (RecoveryStateStore.AbandonAsync compacts but
+                    // keeps import_candidate rows), PreviewHandler short-circuits re-previews of
+                    // batches in statuses Previewed..Completed to the existing revision
+                    // (PreviewStateStore.FindExactReplayAsync), and ReviewStateStore.ApproveAsync
+                    // rejects approval unless the batch is Previewed or Approved. Guard the invariant
+                    // anyway: a receipt persisted for a different revision must never be returned as
+                    // this revision's receipt.
+                    var storedRevisionId = ReadSummaryManifestRevisionId(summaryJson);
+                    if (storedRevisionId is not null &&
+                        !string.Equals(storedRevisionId, manifestRevisionId, StringComparison.Ordinal))
+                    {
+                        throw new InvalidOperationException(
+                            $"import_receipt {receiptId} was persisted for manifest revision {storedRevisionId}; refusing to reuse it for revision {manifestRevisionId}. Cross-revision receipt reuse is a state-integrity violation.");
+                    }
 
                     if (status is ImportReceiptStatus.Completed or ImportReceiptStatus.Abandoned)
                     {
@@ -597,6 +617,23 @@ public sealed class CommitStateStore(IngestDatabase database, BatchErrorEventSto
             createdAt,
             updatedAt,
             completedAt);
+    }
+
+    /// <summary>
+    /// Reads the manifest revision id recorded in a receipt's summary. Completed and interrupted
+    /// receipts store the full serialized <see cref="ImportReceipt"/>; fresh committing receipts
+    /// store "{}" and abandon tombstones store a reason object — both without the property, so
+    /// those return null (no revision identity to check). summary_json is always writer-produced
+    /// JSON; a parse failure is database corruption and is allowed to throw.
+    /// </summary>
+    private static string? ReadSummaryManifestRevisionId(string summaryJson)
+    {
+        using var document = JsonDocument.Parse(summaryJson);
+        return document.RootElement.ValueKind == JsonValueKind.Object &&
+            document.RootElement.TryGetProperty("manifestRevisionId", out var revision) &&
+            revision.ValueKind == JsonValueKind.String
+                ? revision.GetString()
+                : null;
     }
 
     private static async Task SetBatchStatusAsync(
