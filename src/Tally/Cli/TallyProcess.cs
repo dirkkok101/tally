@@ -34,7 +34,7 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
             var handler = invocation.Descriptor!.HandlerFactory(services, registry);
             var request = new OperationRequest(invocation.UseRequestInput ? requestEnvelope!.Input : invocation.HandlerInput, requestEnvelope?.Actor, requestEnvelope?.IdempotencyKey);
             var result = await handler.HandleAsync(request, cancellationToken);
-            return result.IsSuccess ? Success(invocation.Descriptor.OperationId, result.Value!) : ErrorForHandler(result.ErrorCode!);
+            return result.IsSuccess ? Success(invocation.Descriptor.OperationId, result.Value!) : ErrorForHandler(result.ErrorCode!, invocation.Descriptor);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { throw; }
         catch { return UnexpectedFailure(); }
@@ -96,7 +96,40 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
     private static ProcessResult Success(string operationId, JsonElement result) => new(0, JsonSerializer.Serialize(new ResultEnvelope("1.0", operationId, "success", result, null), LedgerJsonContext.Default.ResultEnvelope), string.Empty);
     private static ProcessResult Error(int exitCode, string code, string category, string message) => new(exitCode, JsonSerializer.Serialize(new ResultEnvelope("1.0", "system.process", "error", null, new ProcessError(code, category, message)), LedgerJsonContext.Default.ResultEnvelope), "tally: " + code);
     public static ProcessResult UnexpectedFailure() => Error(10, "host.unexpected", "host", "The operation could not be completed.");
-    private static ProcessResult ErrorForHandler(string code) => code switch
+
+    // The invoked descriptor's declared DomainErrors are the published contract source
+    // (DD-LEDGER/INGEST/BUDGET-CLI-OPERATION-CONTRACT: codes, exits, and categories are the
+    // compatibility commitment — message prose is not). Declared codes map from the ErrorSchema;
+    // the switch below remains only as fallback for codes a handler emits that are not declared
+    // on the invoked descriptor (host codes, cross-cutting codes, idempotency, drift).
+    private static ProcessResult ErrorForHandler(string code, OperationDescriptor? descriptor = null) =>
+        descriptor?.DomainErrors?.FirstOrDefault(declared => string.Equals(declared.Code, code, StringComparison.Ordinal)) is { } schema
+            ? Error(schema.ExitCode, code, schema.Category, CategoryMessage(schema.Category))
+            : FallbackErrorForHandler(code);
+
+    // Deterministic, metadata-only message per published category — no per-code prose.
+    private static string CategoryMessage(string category) => category switch
+    {
+        "usage" => "The request usage is invalid.",
+        "validation" => "The request input is invalid.",
+        "not_found" => "The requested target was not found.",
+        "conflict" => "The request conflicts with current state.",
+        "lifecycle" => "The lifecycle state does not allow the operation.",
+        "compatibility" => "The request is not compatible with this executable contract.",
+        "integrity" => "The operation could not preserve its integrity contract.",
+        "host" => "The host could not safely complete the operation.",
+        "unsupported" => "The statement source is not supported by this executable.",
+        "unsafe_source" => "The statement source could not be read safely.",
+        "overlap" => "The preview is blocked by overlap policy.",
+        "reconciliation" => "The preview is blocked by reconciliation policy.",
+        "resource" => "The statement source exceeds safe resource limits.",
+        "ledger" => "The commit could not verify ledger outcomes.",
+        "interrupted" => "The commit was interrupted and may be resumed.",
+        "unexpected" => "The operation could not be completed.",
+        _ => "The operation could not be completed."
+    };
+
+    private static ProcessResult FallbackErrorForHandler(string code) => code switch
     {
         "operation.not_found" => Error(4, code, "not_found", "The requested operation is not part of the public contract."),
         "validation.invalid_input" => Error(3, code, "validation", "Input does not match the published schema."),
@@ -117,6 +150,7 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
         "LEDGER-SPEND-POOL-DUPLICATE" => Error(5, code, "conflict", "The Spend Pool conflicts with active catalogue state."),
         "LEDGER-SPEND-POOL-ARCHIVED" or "LEDGER-SPEND-POOL-ALREADY-ARCHIVED" or "LEDGER-SPEND-POOL-ALREADY-ACTIVE" => Error(6, code, "lifecycle", "The Spend Pool lifecycle does not allow the operation."),
         "LEDGER-TRANSACTION-INVALID" or "LEDGER-TRANSACTION-EVIDENCE-INCOMPATIBLE" or "amount.invalid" or "amount.zero" or "currency.unsupported" or "date.invalid" => Error(3, code, "validation", "The transaction input is invalid."),
+        "LEDGER-TRANSACTION-CORRECTION-INVALID" => Error(3, code, "validation", "The transaction correction input is invalid."),
         "LEDGER-TRANSACTION-NOT-FOUND" => Error(4, code, "not_found", "The transaction was not found."),
         "LEDGER-TRANSACTION-EVIDENCE-CONFLICT" => Error(5, code, "conflict", "The transaction evidence conflicts with existing state."),
         "LEDGER-EVIDENCE-LINK-INVALID" => Error(3, code, "validation", "The evidence link input is invalid."),

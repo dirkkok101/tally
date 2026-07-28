@@ -15,7 +15,7 @@ public sealed class ReconciliationErrorProcessTests
     {
         var mapper = typeof(TallyProcess).GetMethod("ErrorForHandler", BindingFlags.NonPublic | BindingFlags.Static);
 
-        var result = Assert.IsType<ProcessResult>(mapper!.Invoke(null, [code]));
+        var result = Assert.IsType<ProcessResult>(mapper!.Invoke(null, [code, null]));
 
         Assert.Equal(exitCode, result.ExitCode);
         Assert.Equal("tally: " + code, result.Stderr);

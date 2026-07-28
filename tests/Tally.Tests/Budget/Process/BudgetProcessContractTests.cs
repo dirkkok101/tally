@@ -93,7 +93,7 @@ public sealed class BudgetProcessContractTests : IAsyncLifetime
     public void Declared_budget_errors_map_to_their_public_process_contract(string code, int exitCode, string category)
     {
         var mapper = typeof(TallyProcess).GetMethod("ErrorForHandler", BindingFlags.NonPublic | BindingFlags.Static);
-        var result = Assert.IsType<ProcessResult>(mapper!.Invoke(null, [code]));
+        var result = Assert.IsType<ProcessResult>(mapper!.Invoke(null, [code, null]));
 
         Assert.Equal(exitCode, result.ExitCode);
         Assert.Equal("tally: " + code, result.Stderr);
