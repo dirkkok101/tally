@@ -33,7 +33,62 @@ public sealed class BudgetMutationExecutor
     public BudgetMutationFaultPoint FaultPoint { get; set; } = BudgetMutationFaultPoint.None;
 
     /// <summary>
+    /// Read-only probe for a completed outcome before live revalidation / LEDGER calls
+    /// (DD-BUDGET-IDEMPOTENT-MUTATIONS). Returns null on Miss so callers may continue.
+    /// </summary>
+    public async Task<BudgetMutationExecutionResult?> TryProbeAsync(
+        BudgetMutationIdentity identity,
+        CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(identity);
+        if (!TryValidateIdentity(identity, out var rejected))
+        {
+            return rejected;
+        }
+
+        var keyDigest = BudgetMutationCanonicalizer.DigestKey(identity.IdempotencyKey);
+        await using var connection = await stateStore.OpenMigratedAsync(cancellationToken);
+        await using var transaction = stateStore.BeginImmediate(connection);
+        try
+        {
+            var existing = await idempotencyStore.FindAsync(connection, transaction, keyDigest, cancellationToken);
+            var lookup = idempotencyStore.Resolve(
+                existing,
+                identity.ContractVersion,
+                identity.OperationId,
+                identity.RequestHash);
+
+            switch (lookup.Disposition)
+            {
+                case BudgetIdempotencyDisposition.Replay:
+                {
+                    var snapshot = await RehydrateAsync(connection, transaction, lookup.Record!, cancellationToken);
+                    await transaction.RollbackAsync(cancellationToken);
+                    return BudgetMutationExecutionResult.Replayed(snapshot, lookup.Record!);
+                }
+                case BudgetIdempotencyDisposition.Conflict:
+                {
+                    await transaction.RollbackAsync(cancellationToken);
+                    return BudgetMutationExecutionResult.Conflict(lookup.Record!);
+                }
+                case BudgetIdempotencyDisposition.Miss:
+                    await transaction.RollbackAsync(cancellationToken);
+                    return null;
+                default:
+                    throw new InvalidOperationException($"Unknown idempotency disposition '{lookup.Disposition}'.");
+            }
+        }
+        catch
+        {
+            try { await transaction.RollbackAsync(CancellationToken.None); }
+            catch { /* best-effort */ }
+            throw;
+        }
+    }
+
+    /// <summary>
     /// Execute a mutation under module-wide idempotency. Missing keys fail before BEGIN IMMEDIATE.
+    /// Prefer <see cref="TryProbeAsync"/> first when live revalidation would otherwise re-fail a completed key.
     /// </summary>
     public async Task<BudgetMutationExecutionResult> ExecuteAsync(
         BudgetMutationIdentity identity,
@@ -43,18 +98,9 @@ public sealed class BudgetMutationExecutor
         ArgumentNullException.ThrowIfNull(identity);
         ArgumentNullException.ThrowIfNull(mutate);
 
-        // Validation must run before any writer transaction (FR-BUDGET-IDEMPOTENT-MUTATIONS).
-        if (string.IsNullOrWhiteSpace(identity.IdempotencyKey))
+        if (!TryValidateIdentity(identity, out var rejected))
         {
-            return BudgetMutationExecutionResult.Rejected(BudgetErrors.IdempotencyRequired);
-        }
-
-        if (string.IsNullOrWhiteSpace(identity.ContractVersion)
-            || string.IsNullOrWhiteSpace(identity.OperationId)
-            || string.IsNullOrWhiteSpace(identity.RequestHash)
-            || identity.RequestHash.Length != 64)
-        {
-            return BudgetMutationExecutionResult.Rejected(BudgetErrors.InvalidInput);
+            return rejected!;
         }
 
         var keyDigest = BudgetMutationCanonicalizer.DigestKey(identity.IdempotencyKey);
@@ -130,6 +176,10 @@ public sealed class BudgetMutationExecutor
 
             await idempotencyStore.CommitAsync(connection, transaction, record, cancellationToken);
 
+            // Rehydrate inside the same writer transaction so a post-commit busy/permission
+            // race cannot fail a mutation that already durably committed (bd-fxa3).
+            var committed = await RehydrateAsync(connection, transaction, record, cancellationToken);
+
             if (FaultPoint == BudgetMutationFaultPoint.BeforeCommit)
             {
                 throw new BudgetMutationFaultException(BudgetMutationFaultPoint.BeforeCommit);
@@ -143,12 +193,6 @@ public sealed class BudgetMutationExecutor
                 throw new BudgetMutationFaultException(BudgetMutationFaultPoint.AfterCommit);
             }
 
-            // Rehydrate from durable rows so committed and replay paths share one shape
-            // (event-time revision/entries/lifecycle only — no live enrichment).
-            await using var readConnection = await stateStore.OpenMigratedAsync(cancellationToken);
-            await using var readTx = stateStore.BeginImmediate(readConnection);
-            var committed = await RehydrateAsync(readConnection, readTx, record, cancellationToken);
-            await readTx.RollbackAsync(cancellationToken);
             return BudgetMutationExecutionResult.Committed(committed, record);
         }
         catch (BudgetMutationFaultException)
@@ -178,6 +222,28 @@ public sealed class BudgetMutationExecutor
 
             throw;
         }
+    }
+
+    private static bool TryValidateIdentity(BudgetMutationIdentity identity, out BudgetMutationExecutionResult? rejected)
+    {
+        // Validation must run before any writer transaction (FR-BUDGET-IDEMPOTENT-MUTATIONS).
+        if (string.IsNullOrWhiteSpace(identity.IdempotencyKey))
+        {
+            rejected = BudgetMutationExecutionResult.Rejected(BudgetErrors.IdempotencyRequired);
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(identity.ContractVersion)
+            || string.IsNullOrWhiteSpace(identity.OperationId)
+            || string.IsNullOrWhiteSpace(identity.RequestHash)
+            || identity.RequestHash.Length != 64)
+        {
+            rejected = BudgetMutationExecutionResult.Rejected(BudgetErrors.InvalidInput);
+            return false;
+        }
+
+        rejected = null;
+        return true;
     }
 
     private async Task<BudgetMutationSnapshot> RehydrateAsync(

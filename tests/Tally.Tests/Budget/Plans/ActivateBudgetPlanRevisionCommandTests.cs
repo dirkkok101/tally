@@ -531,6 +531,31 @@ public sealed class ActivateBudgetPlanRevisionCommandTests : IAsyncLifetime
         Assert.Equal(1L, await CountAsync("SELECT COUNT(*) FROM budget_plan_revision WHERE status = 'Active';"));
     }
 
+    // bd-2zge: replay response unifies categoryEvidence cardinality with first commit
+    [Fact]
+    public async Task Activate_replay_includes_category_evidence_for_each_entry()
+    {
+        var a = await CreateCategoryAsync("ReplayEvA");
+        var b = await CreateCategoryAsync("ReplayEvB");
+        var draft = await CreateDraftAsync(
+            Period(2026, 7),
+            [Entry(a.CategoryId, 1), Entry(b.CategoryId, 2)],
+            "draft-ev");
+        var key = "idem-activate-evidence";
+        var first = await ActivateAsync(draft.Value!.Revision.RevisionId, "go", key: key);
+        Assert.True(first.IsSuccess, first.ErrorCode);
+        Assert.Equal(2, first.Value!.Activated.CategoryLifecycle.Count);
+
+        // Archive so live revalidation would fail; probe must still replay with evidence rows.
+        await ArchiveCategoryAsync(a.CategoryId);
+        var second = await ActivateAsync(draft.Value.Revision.RevisionId, "go", key: key);
+        Assert.True(second.IsSuccess, second.ErrorCode);
+        Assert.Equal(2, second.Value!.Activated.CategoryLifecycle.Count);
+        Assert.Equal(
+            first.Value.Activated.CategoryLifecycle.Select(e => e.CategoryId).Order(StringComparer.Ordinal),
+            second.Value.Activated.CategoryLifecycle.Select(e => e.CategoryId).Order(StringComparer.Ordinal));
+    }
+
     // FR-BUDGET-IDEMPOTENT-MUTATIONS / replay after later supersession
     [Fact]
     public async Task Replay_after_later_replacement_returns_event_time_active_and_original_events()

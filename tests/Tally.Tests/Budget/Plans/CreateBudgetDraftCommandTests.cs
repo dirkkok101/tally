@@ -518,6 +518,25 @@ public sealed class CreateBudgetDraftCommandTests : IAsyncLifetime
         Assert.Equal(1L, await CountAsync("SELECT COUNT(*) FROM budget_lifecycle_event;"));
     }
 
+    // bd-2zge / DD-BUDGET-IDEMPOTENT-MUTATIONS: probe before live revalidation
+    [Fact]
+    public async Task Replay_succeeds_after_referenced_category_is_archived()
+    {
+        var cat = await CreateCategoryAsync("ReplayArchive");
+        var key = "idem-replay-after-archive";
+        var first = await HandleAsync(Period(2026, 7), [Entry(cat.CategoryId, 42)], "replay-arch", key: key);
+        Assert.True(first.IsSuccess);
+        await ArchiveCategoryAsync(cat.CategoryId);
+
+        // Live validation would return CategoryInactive; probe must short-circuit first.
+        var second = await HandleAsync(Period(2026, 7), [Entry(cat.CategoryId, 42)], "replay-arch", key: key);
+        Assert.True(second.IsSuccess, second.ErrorCode);
+        Assert.Equal(first.Value!.Revision.RevisionId, second.Value!.Revision.RevisionId);
+        Assert.Equal(1L, await CountAsync("SELECT COUNT(*) FROM budget_plan_revision;"));
+        Assert.Single(second.Value.Revision.CategoryLifecycle);
+        Assert.Equal(cat.CategoryId, second.Value.Revision.CategoryLifecycle[0].CategoryId);
+    }
+
     // FR-BUDGET-IDEMPOTENT-MUTATIONS / conflict
     [Fact]
     public async Task Same_key_with_different_content_conflicts_without_plan_change()

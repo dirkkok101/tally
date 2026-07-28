@@ -106,6 +106,34 @@ public sealed class ActivateBudgetPlanRevisionCommand
                 periodError ?? BudgetErrors.InvalidPeriod);
         }
 
+        var requestHash = BudgetMutationCanonicalizer.HashActivateRequest(new BudgetActivateLogicalRequest(
+            input.ContractVersion,
+            BudgetOperationIds.RevisionActivate,
+            actorKind,
+            actorLabel,
+            actorRunId,
+            reason,
+            revisionId));
+
+        var identity = new BudgetMutationIdentity(
+            idempotencyKey,
+            input.ContractVersion,
+            BudgetOperationIds.RevisionActivate,
+            requestHash);
+
+        // Probe BEFORE live category revalidation so a completed activation still replays
+        // with a unified response shape after later category drift / LEDGER outage (bd-2zge).
+        var probed = await executor.TryProbeAsync(identity, cancellationToken);
+        if (probed is not null)
+        {
+            return await MapExecutionResultAsync(
+                probed,
+                period,
+                periodState,
+                BuildEventTimeCategoryEvidence(probed.Snapshot?.Entries ?? [], preRevision.CategoryContractVersion),
+                cancellationToken);
+        }
+
         // Lifecycle eligibility (Draft/open period) is enforced inside the mutation so
         // completed activations can still replay after the revision becomes Active/Superseded
         // or the period later closes. Category revalidation applies only to first-time Draft activation.
@@ -136,21 +164,6 @@ public sealed class ActivateBudgetPlanRevisionCommand
 
             categoryEvidence = categoryValidation.Evidence;
         }
-
-        var requestHash = BudgetMutationCanonicalizer.HashActivateRequest(new BudgetActivateLogicalRequest(
-            input.ContractVersion,
-            BudgetOperationIds.RevisionActivate,
-            actorKind,
-            actorLabel,
-            actorRunId,
-            reason,
-            revisionId));
-
-        var identity = new BudgetMutationIdentity(
-            idempotencyKey,
-            input.ContractVersion,
-            BudgetOperationIds.RevisionActivate,
-            requestHash);
 
         var activatedAt = timeProvider.GetUtcNow();
         var activatedAtUtc = BudgetPlanRevision.FormatUtc(activatedAt);
@@ -263,11 +276,19 @@ public sealed class ActivateBudgetPlanRevisionCommand
                 },
                 cancellationToken);
 
+            // Prefer live-validated evidence on first commit; fall back to event-time IDs so
+            // committed and replayed responses share the same categoryEvidence cardinality.
+            var mappedEvidence = categoryEvidence.Count > 0
+                ? categoryEvidence
+                : BuildEventTimeCategoryEvidence(
+                    execution.Snapshot?.Entries ?? [],
+                    execution.Snapshot?.Revision.CategoryContractVersion ?? preRevision.CategoryContractVersion);
+
             return await MapExecutionResultAsync(
                 execution,
                 period,
                 periodState,
-                categoryEvidence,
+                mappedEvidence,
                 cancellationToken);
         }
         catch (InvalidOperationException ex) when (BudgetContractMapper.IsPositionIntegrityFailure(ex))
@@ -276,6 +297,22 @@ public sealed class ActivateBudgetPlanRevisionCommand
             return CommandResult<ActivateBudgetPlanRevisionResult>.Failure(BudgetErrors.Integrity);
         }
     }
+
+    /// <summary>
+    /// Event-time category evidence for activate commit/replay: cites durable entry IDs and the
+    /// revision's category contract version without requiring a live Active catalogue.
+    /// </summary>
+    private static IReadOnlyList<CategoryLifecycleEvidence> BuildEventTimeCategoryEvidence(
+        IReadOnlyList<BudgetPlanEntryRow> entries,
+        string categoryContractVersion) =>
+        entries
+            .OrderBy(e => e.CategoryId, StringComparer.Ordinal)
+            .Select(e => new CategoryLifecycleEvidence(
+                e.CategoryId,
+                CurrentDisplayName: null,
+                CategoryLifecycleStatus.Active,
+                categoryContractVersion))
+            .ToArray();
 
     private async Task<CommandResult<ActivateBudgetPlanRevisionResult>> MapExecutionResultAsync(
         BudgetMutationExecutionResult execution,
@@ -301,6 +338,15 @@ public sealed class ActivateBudgetPlanRevisionCommand
         var snapshot = execution.Snapshot
             ?? throw new InvalidOperationException("Successful activation mutation must produce a snapshot.");
         var revision = snapshot.Revision;
+        // Unify cardinality: when live evidence was skipped (post-activate replay path),
+        // still expose one evidence row per durable entry.
+        if (categoryEvidence.Count == 0 && snapshot.Entries.Count > 0)
+        {
+            categoryEvidence = BuildEventTimeCategoryEvidence(
+                snapshot.Entries,
+                revision.CategoryContractVersion);
+        }
+
         var evidenceById = categoryEvidence.ToDictionary(e => e.CategoryId, StringComparer.Ordinal);
 
         var entryDetails = snapshot.Entries

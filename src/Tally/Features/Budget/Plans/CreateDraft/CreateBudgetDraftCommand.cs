@@ -103,19 +103,12 @@ public sealed class CreateBudgetDraftCommand
             return CommandResult<CreateDraftBudgetPlanResult>.Failure(BudgetErrors.InvalidAmount);
         }
 
-        var categoryValidation = await ValidateCategoriesAsync(domainEntries, actor, cancellationToken);
-        if (categoryValidation.ErrorCode is not null)
-        {
-            return CommandResult<CreateDraftBudgetPlanResult>.Failure(categoryValidation.ErrorCode);
-        }
-
-        var categoryContractVersion = categoryValidation.CategoryContractVersion
-            ?? CategoryContractVersions.Current;
-        var categoryEvidence = categoryValidation.Evidence;
         var actorKind = actor.Kind.Trim();
         var actorLabel = actor.Label.Trim();
         var actorRunId = string.IsNullOrWhiteSpace(actor.RunId) ? null : actor.RunId.Trim();
 
+        // Hash + probe BEFORE live category revalidation so a completed draft still replays
+        // after later category archival or LEDGER outage (DD-BUDGET-IDEMPOTENT-MUTATIONS / bd-2zge).
         var requestHash = BudgetMutationCanonicalizer.HashDraftRequest(new BudgetDraftLogicalRequest(
             input.ContractVersion,
             BudgetOperationIds.DraftCreate,
@@ -133,6 +126,28 @@ public sealed class CreateBudgetDraftCommand
             input.ContractVersion,
             BudgetOperationIds.DraftCreate,
             requestHash);
+
+        var probed = await executor.TryProbeAsync(identity, cancellationToken);
+        if (probed is not null)
+        {
+            return MapExecutionResult(
+                probed,
+                period,
+                periodState,
+                plannedTotal,
+                // Replay is event-time only — no live category enrichment (same as mutate path without LEDGER).
+                BuildEventTimeCategoryEvidence(domainEntries, CategoryContractVersions.Current));
+        }
+
+        var categoryValidation = await ValidateCategoriesAsync(domainEntries, actor, cancellationToken);
+        if (categoryValidation.ErrorCode is not null)
+        {
+            return CommandResult<CreateDraftBudgetPlanResult>.Failure(categoryValidation.ErrorCode);
+        }
+
+        var categoryContractVersion = categoryValidation.CategoryContractVersion
+            ?? CategoryContractVersions.Current;
+        var categoryEvidence = categoryValidation.Evidence;
 
         var createdAt = timeProvider.GetUtcNow();
         var createdAtUtc = BudgetPlanRevision.FormatUtc(createdAt);
@@ -440,6 +455,22 @@ public sealed class CreateBudgetDraftCommand
 
         return CommandResult<CreateDraftBudgetPlanResult>.Success(new CreateDraftBudgetPlanResult(detail));
     }
+
+    /// <summary>
+    /// Event-time category evidence for replay: cites durable category IDs and the revision's
+    /// category contract version without a live LEDGER round-trip.
+    /// </summary>
+    private static IReadOnlyList<CategoryLifecycleEvidence> BuildEventTimeCategoryEvidence(
+        IReadOnlyList<BudgetPlanEntry> entries,
+        string categoryContractVersion) =>
+        entries
+            .OrderBy(e => e.CategoryId, StringComparer.Ordinal)
+            .Select(e => new CategoryLifecycleEvidence(
+                e.CategoryId,
+                CurrentDisplayName: null,
+                CategoryLifecycleStatus.Active,
+                categoryContractVersion))
+            .ToArray();
 
     private static bool TryNormalizeEntries(
         IReadOnlyList<BudgetPlanEntryInput> inputs,
