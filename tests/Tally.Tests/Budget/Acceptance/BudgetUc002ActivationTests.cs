@@ -374,6 +374,49 @@ public sealed class BudgetUc002ActivationTests : IAsyncLifetime
             "SELECT COUNT(*) FROM budget_idempotency_record WHERE operation_id = 'budget.plan.revision.activate';"));
     }
 
+    // ── Period boundary (DD-BUDGET-TRUSTED-PERIOD-TIME) ──────────────────────
+
+    // UC-BUDGET-002 / DD-BUDGET-TRUSTED-PERIOD-TIME / exact StartInclusive instant is Current
+    [Fact]
+    public async Task Activation_exactly_at_period_start_inclusive_instant_succeeds()
+    {
+        var cat = await CreateCategoryAsync("Uc002BoundaryStart");
+        var draft = await CreateDraftAsync(2026, 7, [(cat, 5)], "boundary-start");
+
+        // Exact StartInclusive instant (2026-07-01T00:00:00Z): half-open boundary classifies Current.
+        clock.Set(new DateTimeOffset(2026, 7, 1, 0, 0, 0, TimeSpan.Zero));
+
+        var result = await ActivateAsync(draft.RevisionId, "at-start", NextKey());
+
+        AssertSuccess(result, BudgetOperationIds.RevisionActivate);
+        using var doc = JsonDocument.Parse(result.Stdout);
+        var activated = doc.RootElement.GetProperty("result").GetProperty("activated");
+        Assert.Equal("current", activated.GetProperty("period").GetProperty("state").GetString());
+        Assert.Equal("active", activated.GetProperty("status").GetString());
+        Assert.Equal(1L, await BudgetCountAsync("SELECT COUNT(*) FROM budget_plan_revision WHERE status = 'Active';"));
+    }
+
+    // UC-BUDGET-002 / DD-BUDGET-TRUSTED-PERIOD-TIME / exact EndExclusive instant is Closed
+    [Fact]
+    public async Task Activation_exactly_at_period_end_exclusive_instant_fails_as_closed()
+    {
+        var cat = await CreateCategoryAsync("Uc002BoundaryEnd");
+        var draft = await CreateDraftAsync(2026, 7, [(cat, 5)], "boundary-end");
+
+        // Exact EndExclusive instant (2026-08-01T00:00:00Z): half-open boundary classifies Closed.
+        clock.Set(new DateTimeOffset(2026, 8, 1, 0, 0, 0, TimeSpan.Zero));
+
+        var eventsBefore = await BudgetCountAsync("SELECT COUNT(*) FROM budget_lifecycle_event;");
+        var result = await ActivateAsync(draft.RevisionId, "at-end", NextKey());
+
+        AssertDomainError(result, 3, BudgetErrors.InvalidPeriod);
+        Assert.Equal(eventsBefore, await BudgetCountAsync("SELECT COUNT(*) FROM budget_lifecycle_event;"));
+        Assert.Equal("Draft", await BudgetTextAsync(
+            $"SELECT status FROM budget_plan_revision WHERE revision_id = '{draft.RevisionId}';"));
+        Assert.Null(await BudgetTextAsync(
+            $"SELECT active_revision_id FROM budget_plan WHERE plan_id = '{draft.PlanId}';"));
+    }
+
     // ── Authority ────────────────────────────────────────────────────────────
 
     [Fact]

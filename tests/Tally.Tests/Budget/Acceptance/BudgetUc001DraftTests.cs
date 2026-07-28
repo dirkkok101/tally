@@ -658,6 +658,44 @@ public sealed class BudgetUc001DraftTests : IAsyncLifetime
         Assert.Equal(1L, await BudgetCountAsync("SELECT COUNT(*) FROM budget_plan_revision;"));
     }
 
+    // ── Concurrency (published surface) ──────────────────────────────────────
+
+    // UC-BUDGET-001 / concurrent draft mutation — distinct keys settle as two sequenced revisions
+    // (no shared active-slot resource, so both mutations commit rather than one winning a conflict).
+    [Fact]
+    public async Task Concurrent_draft_creates_for_same_period_settle_as_two_distinct_sequenced_revisions()
+    {
+        var cat = await CreateCategoryAsync("Uc001Concurrent");
+
+        var t1 = DraftCreateAsync(PeriodJson(2026, 7), EntriesJson((cat, 10)), "concurrent-a", NextKey());
+        var t2 = DraftCreateAsync(PeriodJson(2026, 7), EntriesJson((cat, 20)), "concurrent-b", NextKey());
+        await Task.WhenAll(t1, t2);
+        var r1 = await t1;
+        var r2 = await t2;
+
+        AssertSuccess(r1, BudgetOperationIds.DraftCreate);
+        AssertSuccess(r2, BudgetOperationIds.DraftCreate);
+        using var d1 = JsonDocument.Parse(r1.Stdout);
+        using var d2 = JsonDocument.Parse(r2.Stdout);
+        var rev1 = d1.RootElement.GetProperty("result").GetProperty("revision");
+        var rev2 = d2.RootElement.GetProperty("result").GetProperty("revision");
+
+        // Same plan (shared period identity); two distinct revisions with dense sequential numbering.
+        Assert.Equal(rev1.GetProperty("planId").GetString(), rev2.GetProperty("planId").GetString());
+        Assert.NotEqual(rev1.GetProperty("revisionId").GetString(), rev2.GetProperty("revisionId").GetString());
+        var numbers = new[]
+        {
+            rev1.GetProperty("revisionNumber").GetInt32(),
+            rev2.GetProperty("revisionNumber").GetInt32()
+        }.OrderBy(n => n).ToArray();
+        Assert.Equal([1, 2], numbers);
+
+        Assert.Equal(1L, await BudgetCountAsync("SELECT COUNT(*) FROM budget_plan;"));
+        Assert.Equal(2L, await BudgetCountAsync("SELECT COUNT(*) FROM budget_plan_revision;"));
+        Assert.Equal(0L, await BudgetCountAsync(
+            "SELECT COUNT(*) FROM budget_plan WHERE active_revision_id IS NOT NULL;"));
+    }
+
     // ── Helpers ──────────────────────────────────────────────────────────────
 
     private async Task<ProcessResult> DraftCreateAsync(

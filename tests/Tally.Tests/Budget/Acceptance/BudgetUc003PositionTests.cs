@@ -355,6 +355,124 @@ public sealed class BudgetUc003PositionTests : IAsyncLifetime
         Assert.Equal(2, position.CategoryPositions.Count);
     }
 
+    // ── Zero-entry ACTIVE plan ────────────────────────────────────────────────
+
+    // UC-BUDGET-003 / DD-BUDGET-EXACT-POSITION-CALCULATION / zero-entry active plan, no actuals
+    [Fact]
+    public async Task Position_over_zero_entry_active_plan_with_no_actuals_is_exact_zero_and_empty()
+    {
+        var draft = await CreateDraftAsync(Period(2026, 7), [], "empty-active");
+        await ActivateAsync(draft.RevisionId, "activate-empty");
+
+        var result = await GetPositionSuccessAsync(Period(2026, 7));
+
+        Assert.True(result.HasActiveBudgetPlanRevision);
+        Assert.NotNull(result.Position);
+        var position = result.Position!;
+        Assert.Equal(BudgetRevisionStatus.Active, position.RevisionStatus);
+        Assert.Empty(position.CategoryPositions);
+        Assert.Equal(0, position.Totals.PlannedMinorUnits);
+        Assert.Equal(0, position.Totals.ActualMinorUnits);
+        Assert.Equal(0, position.Totals.RemainingMinorUnits);
+        Assert.Equal(0, position.Totals.OverMinorUnits);
+        Assert.Equal(0, position.Totals.BudgetedActualMinorUnits);
+        Assert.Equal(0, position.Totals.ZeroBudgetActualMinorUnits);
+        Assert.Equal(0, position.Totals.UnbudgetedActualMinorUnits);
+        Assert.Equal(0, position.Totals.UncategorizedActualMinorUnits);
+        Assert.Equal(BudgetCategoryPositionKind.Uncategorized, position.UncategorizedPosition.Kind);
+        Assert.Equal(0, position.UncategorizedPosition.ActualMinorUnits);
+    }
+
+    // UC-BUDGET-003 / DD-BUDGET-EXACT-POSITION-CALCULATION / zero-entry active plan with actuals
+    [Fact]
+    public async Task Position_over_zero_entry_active_plan_buckets_unbudgeted_and_uncategorized_actuals()
+    {
+        var stray = await CreateCategoryAsync("ZeroPlanUnbudgeted");
+        var draft = await CreateDraftAsync(Period(2026, 7), [], "empty-active-with-actuals");
+        await ActivateAsync(draft.RevisionId, "activate-empty-2");
+        var assigned = await RecordAsync("-3.00", "2026-07-05", "unbudgeted-spend");
+        await AssignCategoryAsync(assigned.TransactionId, stray.CategoryId);
+        await RecordAsync("-1.50", "2026-07-06", "uncategorized-spend");
+
+        var result = await GetPositionSuccessAsync(Period(2026, 7));
+
+        Assert.NotNull(result.Position);
+        var position = result.Position!;
+        Assert.Equal(0, position.Totals.PlannedMinorUnits);
+        var row = Assert.Single(position.CategoryPositions);
+        Assert.Equal(BudgetCategoryPositionKind.Unbudgeted, row.Kind);
+        Assert.Equal(stray.CategoryId, row.CategoryId);
+        Assert.Equal(300, row.ActualMinorUnits);
+        Assert.Null(row.PlannedMinorUnits);
+        Assert.Null(row.RemainingMinorUnits);
+        Assert.Null(row.OverMinorUnits);
+        Assert.Equal(150, position.UncategorizedPosition.ActualMinorUnits);
+        Assert.Equal(300, position.Totals.UnbudgetedActualMinorUnits);
+        Assert.Equal(150, position.Totals.UncategorizedActualMinorUnits);
+        Assert.Equal(450, position.Totals.ActualMinorUnits);
+    }
+
+    // ── Category archived after activation ───────────────────────────────────
+
+    // UC-BUDGET-003 / archived-after-activation category keeps its Budgeted bucket with Archived evidence
+    [Fact]
+    public async Task Position_after_category_archived_post_activation_keeps_budgeted_bucket_with_archived_lifecycle()
+    {
+        var cat = await CreateCategoryAsync("ArchiveAfterActivate");
+        var draft = await CreateDraftAsync(Period(2026, 7), [Entry(cat.CategoryId, 4_000)], "archive-after");
+        await ActivateAsync(draft.RevisionId, "activate-archive");
+        var tx = await RecordAsync("-6.00", "2026-07-12", "post-archive-spend");
+        await AssignCategoryAsync(tx.TransactionId, cat.CategoryId);
+
+        await ArchiveCategoryAsync(cat.CategoryId);
+
+        var result = await GetPositionSuccessAsync(Period(2026, 7));
+
+        Assert.NotNull(result.Position);
+        var position = result.Position!;
+        var row = Assert.Single(position.CategoryPositions);
+        Assert.Equal(BudgetCategoryPositionKind.Budgeted, row.Kind);
+        Assert.Equal(cat.CategoryId, row.CategoryId);
+        Assert.Equal(4_000, row.PlannedMinorUnits);
+        Assert.Equal(600, row.ActualMinorUnits);
+        Assert.Equal(3_400, row.RemainingMinorUnits);
+        Assert.Equal(0, row.OverMinorUnits);
+        Assert.Equal(CategoryLifecycleStatus.Archived, row.CurrentLifecycle);
+        Assert.Equal("ArchiveAfterActivate", row.CurrentDisplayName);
+    }
+
+    // ── Ledger read failure fail-closed (DD-BUDGET-LEDGER-PUBLIC-COMPOSITION) ─
+
+    // UC-BUDGET-003 / DD-BUDGET-LEDGER-PUBLIC-COMPOSITION / ledger read failure fails closed, no partial position
+    [Fact]
+    public async Task Ledger_read_failure_during_position_get_fails_closed_with_no_partial_position()
+    {
+        var cat = await CreateCategoryAsync("LedgerFaultCat");
+        var draft = await CreateDraftAsync(Period(2026, 7), [Entry(cat.CategoryId, 1_000)], "ledger-fault");
+        await ActivateAsync(draft.RevisionId, "activate-fault");
+
+        var ledgerDbPath = LedgerDatabasePath();
+        var original = await File.ReadAllBytesAsync(ledgerDbPath);
+        try
+        {
+            // No fault-injection seam exists at the published position.get surface for LEDGER reads
+            // (bd-2vne gap 4) — corrupt the real underlying LEDGER database file so the composed
+            // category/actuals reads fail mid-request, exercising the actual fail-closed path.
+            await File.WriteAllBytesAsync(ledgerDbPath, "not-a-sqlite-database"u8.ToArray());
+
+            var result = await GetPositionAsync(Period(2026, 7));
+
+            Assert.Equal(8, result.ExitCode);
+            Assert.Equal(BudgetErrors.Integrity, result.ErrorCode);
+            Assert.Equal("integrity", result.ErrorCategory);
+            Assert.Null(result.Value);
+        }
+        finally
+        {
+            await File.WriteAllBytesAsync(ledgerDbPath, original);
+        }
+    }
+
     // ── Missing plan / no-active ─────────────────────────────────────────────
 
     // UC-BUDGET-003 / missing-plan
@@ -899,6 +1017,20 @@ public sealed class BudgetUc003PositionTests : IAsyncLifetime
             NextKey(),
             LedgerJsonContext.Default.CreateCategoryInput,
             LedgerJsonContext.Default.CategoryDetail);
+
+    private async Task ArchiveCategoryAsync(string categoryId) =>
+        _ = await ExecuteSuccessAsync(
+            "ledger.category.archive",
+            new ArchiveCategoryInput(categoryId, "uc003-archive"),
+            NextKey(),
+            LedgerJsonContext.Default.ArchiveCategoryInput,
+            LedgerJsonContext.Default.CategoryLifecycleResult);
+
+    private string LedgerDatabasePath()
+    {
+        var current = File.ReadAllText(Path.Combine(root, "CURRENT")).Trim();
+        return Path.Combine(root, "generations", current, "ledger.db");
+    }
 
     private async Task<TransactionDetail> RecordAsync(string amount, string date, string description)
     {

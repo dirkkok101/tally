@@ -594,6 +594,30 @@ public sealed class BudgetPlanReadQueryTests : IAsyncLifetime
         Assert.True(page.Value.Items.Count <= ListBudgetPlanRevisionsQuery.MaxLimit);
     }
 
+    // DM-BUDGET-OPERATION-CONTRACTS / bounded list — exact row-count-equals-limit boundary
+    [Fact]
+    public async Task List_exact_boundary_returns_all_rows_when_row_count_equals_requested_limit()
+    {
+        var cat = await CreateCategoryAsync("ExactLimitCat");
+        clock.Set(new DateTimeOffset(2026, 7, 15, 12, 0, 0, TimeSpan.Zero));
+        var r1 = await CreateDraftAsync(Period(2026, 7), [Entry(cat.CategoryId, 1)], "e1", key: "k-e1");
+        clock.Set(new DateTimeOffset(2026, 7, 15, 12, 0, 1, TimeSpan.Zero));
+        var r2 = await CreateDraftAsync(Period(2026, 7), [Entry(cat.CategoryId, 2)], "e2", key: "k-e2");
+        Assert.True(r1.IsSuccess && r2.IsSuccess);
+
+        var exact = await listRevisions.HandleAsync(
+            new ListBudgetPlanRevisionsInput(BudgetOperationIds.ContractVersion, Period(2026, 7), null, 2),
+            CancellationToken.None);
+
+        Assert.True(exact.IsSuccess, exact.ErrorCode);
+        Assert.Equal(2, exact.Value!.Items.Count);
+        Assert.Equal(
+            new[] { r1.Value!.Revision.RevisionId, r2.Value!.Revision.RevisionId },
+            exact.Value.Items.Select(i => i.RevisionId));
+        // Bounded contract carries no continuation cursor — nothing signals more remain (DM-BUDGET-OPERATION-CONTRACTS).
+        Assert.True(exact.Value.Items.Count <= ListBudgetPlanRevisionsQuery.MaxLimit);
+    }
+
     // Invalid period / omitted period
     [Fact]
     public async Task List_rejects_invalid_or_omitted_period_before_state_read()
