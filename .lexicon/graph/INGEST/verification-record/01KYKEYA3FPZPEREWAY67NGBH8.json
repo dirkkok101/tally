@@ -1,0 +1,12 @@
+{
+  "id": "01KYKEYA3FPZPEREWAY67NGBH8",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-INGEST-FINANCIAL-NORMALIZATION",
+  "subject_entity_id": "01KXTET2Y0H2DJEFWA1T1A3EB1",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-INGEST-FINANCIAL-NORMALIZATION-CONTRACT",
+  "commit_sha": "53f2ab2f5c426a94274934fb3ee85871ab1e44c9",
+  "bead_id": "bd-2gk",
+  "verified_at": "2026-07-28T04:15:19.1501700+00:00"
+}

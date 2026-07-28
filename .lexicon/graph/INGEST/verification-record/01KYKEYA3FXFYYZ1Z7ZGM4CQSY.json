@@ -1,0 +1,12 @@
+{
+  "id": "01KYKEYA3FXFYYZ1Z7ZGM4CQSY",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-INGEST-REPLAY-OVERLAP-SAFETY",
+  "subject_entity_id": "01KXTEW423P09NB6YXCJ9NA2GY",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-INGEST-REPLAY-OVERLAP-SAFETY-CONTRACT",
+  "commit_sha": "53f2ab2f5c426a94274934fb3ee85871ab1e44c9",
+  "bead_id": "bd-k94",
+  "verified_at": "2026-07-28T04:15:19.1501700+00:00"
+}

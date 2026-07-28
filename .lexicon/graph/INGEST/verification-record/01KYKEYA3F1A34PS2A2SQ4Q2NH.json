@@ -1,0 +1,12 @@
+{
+  "id": "01KYKEYA3F1A34PS2A2SQ4Q2NH",
+  "subject_type": "fr",
+  "subject_ref_code": "FR-INGEST-MANIFEST-REVIEW",
+  "subject_entity_id": "01KXTEW3RG300XXE7DTZHZZMQW",
+  "verdict": "passed",
+  "proof_kind": "test",
+  "proof_ref": "TC-INGEST-MANIFEST-REVIEW-CONTRACT",
+  "commit_sha": "53f2ab2f5c426a94274934fb3ee85871ab1e44c9",
+  "bead_id": "bd-37p",
+  "verified_at": "2026-07-28T04:15:19.1501700+00:00"
+}
