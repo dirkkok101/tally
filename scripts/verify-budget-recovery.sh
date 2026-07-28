@@ -19,7 +19,8 @@ discovered_count() {
 
 require_cutpoint() {
     local cutpoint="$1"
-    if ! grep -Fq "$cutpoint" <<< "$test_list"; then
+    local haystack="$2"
+    if ! grep -Fq "$cutpoint" <<< "$haystack"; then
         printf 'budget recovery verification did not discover cutpoint "%s"\n' "$cutpoint" >&2
         exit 1
     fi
@@ -35,13 +36,18 @@ test_list="$(dotnet test "$test_project" --list-tests --no-build --filter "$filt
 test_count="$(printf '%s\n' "$test_list" | discovered_count)"
 
 # 9 draft + 10 activate theory cases + 3 facts = 22 minimum.
-if (( test_count < 20 )); then
-    printf 'budget recovery verification discovered only %s tests; at least 20 are required\n' "$test_count" >&2
+if (( test_count < 22 )); then
+    printf 'budget recovery verification discovered only %s tests; at least 22 are required\n' "$test_count" >&2
     exit 1
 fi
 printf 'budget recovery verification discovered %s tests\n' "$test_count"
 
 section "Named draft cutpoints"
+draft_list="$(grep -F 'Draft_cutpoint_restart_is_prior_or_complete' <<< "$test_list" || true)"
+if [[ -z "${draft_list// }" ]]; then
+    printf 'budget recovery verification did not discover any Draft_cutpoint_restart_is_prior_or_complete cases\n' >&2
+    exit 1
+fi
 for cutpoint in \
     before_validation \
     after_validation \
@@ -53,11 +59,16 @@ for cutpoint in \
     commit \
     result_delivery
 do
-    require_cutpoint "$cutpoint"
+    require_cutpoint "$cutpoint" "$draft_list"
 done
 printf 'draft cutpoints present\n'
 
 section "Named activation cutpoints"
+activate_list="$(grep -F 'Activate_cutpoint_restart_is_prior_or_complete' <<< "$test_list" || true)"
+if [[ -z "${activate_list// }" ]]; then
+    printf 'budget recovery verification did not discover any Activate_cutpoint_restart_is_prior_or_complete cases\n' >&2
+    exit 1
+fi
 for cutpoint in \
     before_validation \
     after_validation \
@@ -70,7 +81,7 @@ for cutpoint in \
     commit \
     result_delivery
 do
-    require_cutpoint "$cutpoint"
+    require_cutpoint "$cutpoint" "$activate_list"
 done
 printf 'activation cutpoints present\n'
 

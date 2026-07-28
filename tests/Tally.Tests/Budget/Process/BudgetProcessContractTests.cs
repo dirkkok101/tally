@@ -54,31 +54,39 @@ public sealed class BudgetProcessContractTests : IAsyncLifetime
 
     // ── Error mapping partition ──────────────────────────────────────────────
 
-    public static TheoryData<string, int, string> DeclaredBudgetErrors => new()
+    /// <summary>
+    /// Registry-driven, mirroring <c>IngestErrorProcessTests.DeclaredIngestErrors</c>
+    /// (tests/Tally.Tests/Process/IngestErrorProcessTests.cs:40-56): a hand-copied list drifts
+    /// silently when a code is added to BUDGET's ErrorSchema without mapping it.
+    /// </summary>
+    public static TheoryData<string, int, string> DeclaredBudgetErrors
     {
-        { BudgetErrors.InvalidInput, 3, "validation" },
-        { BudgetErrors.InvalidPeriod, 3, "validation" },
-        { BudgetErrors.InvalidAmount, 3, "validation" },
-        { BudgetErrors.UnknownField, 3, "validation" },
-        { BudgetErrors.ActorRequired, 3, "validation" },
-        { BudgetErrors.IdempotencyRequired, 3, "validation" },
-        { BudgetErrors.RevisionPeriodMismatch, 3, "validation" },
-        { BudgetErrors.NotFound, 4, "not_found" },
-        { BudgetErrors.PlanNotFound, 4, "not_found" },
-        { BudgetErrors.RevisionNotFound, 4, "not_found" },
-        { BudgetErrors.CategoryUnknown, 4, "not_found" },
-        { BudgetErrors.Conflict, 5, "conflict" },
-        { BudgetErrors.IdempotencyConflict, 5, "conflict" },
-        { BudgetErrors.SourceStateChanged, 5, "conflict" },
-        { BudgetErrors.CategoryInactive, 6, "lifecycle" },
-        { BudgetErrors.NoActiveBudgetPlanRevision, 6, "lifecycle" },
-        { BudgetErrors.UnsupportedVersion, 7, "compatibility" },
-        { BudgetErrors.LedgerIncompatible, 7, "compatibility" },
-        { BudgetErrors.Integrity, 8, "integrity" },
-        { BudgetErrors.LedgerUnavailable, 9, "host" },
-        { BudgetErrors.ResourceLimit, 9, "host" },
-        { BudgetErrors.Unexpected, 10, "host" }
-    };
+        get
+        {
+            var data = new TheoryData<string, int, string>();
+            var declared = OperationRegistry.Create().Descriptors
+                .Where(descriptor => descriptor.OperationId.StartsWith("budget.", StringComparison.Ordinal))
+                .SelectMany(descriptor => descriptor.DomainErrors ?? [])
+                .DistinctBy(schema => schema.Code, StringComparer.Ordinal);
+            foreach (var schema in declared)
+            {
+                data.Add(schema.Code, schema.ExitCode, schema.Category);
+            }
+
+            return data;
+        }
+    }
+
+    [Fact]
+    public void Registry_declares_budget_domain_errors()
+    {
+        // Guard the guard: an empty enumeration would turn the theory below into a no-op.
+        // Floor is the registry-driven distinct-code count today (20): BudgetOperationModule's
+        // six DomainErrors lists union to 20 unique codes — BudgetErrors.NotFound is declared in
+        // BudgetErrors but never attached to any operation's DomainErrors, so it is legitimately
+        // absent from this registry-driven enumeration (unlike the hand-copied list it replaces).
+        Assert.True(DeclaredBudgetErrors.Count() >= 20);
+    }
 
     [Theory]
     [MemberData(nameof(DeclaredBudgetErrors))]

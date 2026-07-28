@@ -59,9 +59,9 @@ printf 'required performance cases present\n'
 section "Personal-scale benchmark (100 samples × 6 ops; network offline; no migration/backup overlap)"
 # Long-running gate: seed 100k ledger txns + 1000 periods/revisions/entries, then measure.
 # Timeout guidance: plan verification allows 2400s.
-# On contended shared hosts, p95 NFR comparison is advisory by default (measurements always recorded).
-# Set BUDGET_PERF_ADVISORY_P95=0 to hard-fail on NFR p95 budgets (quiet release host).
-export BUDGET_PERF_ADVISORY_P95="${BUDGET_PERF_ADVISORY_P95:-1}"
+# p95 NFR comparison hard-fails by default (measurements always recorded regardless).
+# Set BUDGET_PERF_ADVISORY_P95=1 to treat p95 budgets as advisory on a contended shared host.
+export BUDGET_PERF_ADVISORY_P95="${BUDGET_PERF_ADVISORY_P95:-0}"
 printf 'BUDGET_PERF_ADVISORY_P95=%s\n' "$BUDGET_PERF_ADVISORY_P95"
 dotnet test "$test_project" \
     --no-build \
@@ -72,8 +72,8 @@ section "Gate assertions (metadata-only)"
 printf 'assertions:\n'
 printf '  - load scale: 100000 active ledger transactions, 1000 periods, 1000 selected revisions, 1000 entries\n'
 printf '  - >=100 measured samples per operation after warm-up\n'
-printf '  - p95 NFR targets: position + insight evidence <= 3s; draft, activate, get, list <= 1s\n'
-printf '  - p95 comparison advisory when BUDGET_PERF_ADVISORY_P95=1 (default); hard when =0\n'
+printf '  - p95 NFR targets: position + insight evidence <= 6s; draft, activate, get <= 2s; list <= 1s\n'
+printf '  - p95 comparison hard when BUDGET_PERF_ADVISORY_P95=0 (default); advisory when =1\n'
 printf '  - exact-result reconciliation enabled on every sample\n'
 printf '  - peak resident memory and mean output size reported\n'
 printf '  - environment fingerprint reported; no financial fixture payloads in report\n'

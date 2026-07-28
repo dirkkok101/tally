@@ -187,7 +187,10 @@ public sealed class BudgetPublishedContractTests
         if (binary is null)
         {
             // Inventory still proves the contract; AOT publish is verified by verify-budget-contract.sh.
-            Assert.True(true);
+            // xunit 2.9.3 has no dynamic Assert.Skip/[SkippableFact] in this repo; warn loudly
+            // instead of silently passing.
+            Console.Error.WriteLine(
+                "SKIPPED: TALLY_PUBLISHED_BINARY not set; published-binary case runs under the gate scripts.");
             return;
         }
 

@@ -55,11 +55,22 @@ for class_name in BudgetPublishedContractTests BudgetProcessContractTests; do
 done
 
 section "Inventory: exactly six BUDGET ops + three INSIGHTS capability reads"
+contract_test_log="$(mktemp "${TMPDIR:-/tmp}/tally-budget-contract-tests.XXXXXX.log")"
 TALLY_PUBLISHED_BINARY="$publish_root/tally" \
     dotnet test "$test_project" \
     --no-build \
     --filter 'FullyQualifiedName~BudgetPublishedContractTests' \
-    --logger "console;verbosity=minimal"
+    --logger "console;verbosity=minimal" | tee "$contract_test_log"
+# No dynamic Assert.Skip/[SkippableFact] exists in this xunit v2 suite — the published-binary
+# case warns via stderr instead of skipping. TALLY_PUBLISHED_BINARY is set above, so nothing
+# should be reported skipped here; guard against that silently drifting.
+contract_skipped="$(grep -oE 'Skipped:\s*[0-9]+' "$contract_test_log" | tail -1 | grep -oE '[0-9]+' || true)"
+rm -f "$contract_test_log"
+if [[ "${contract_skipped:-0}" != "0" ]]; then
+    printf 'budget contract verification: %s tests reported Skipped (expected 0)\n' "$contract_skipped" >&2
+    exit 1
+fi
+printf 'budget contract test run: Skipped: 0\n'
 
 section "Process version/error and coherent-evidence partitions"
 TALLY_PUBLISHED_BINARY="$publish_root/tally" \

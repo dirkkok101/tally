@@ -505,7 +505,11 @@ public sealed class BudgetSecurityGateTests : IAsyncLifetime
         var binary = FindPublishedBinary();
         if (binary is null)
         {
-            Assert.True(true);
+            // xunit 2.9.3 has no dynamic Assert.Skip/[SkippableFact] in this repo; warn loudly
+            // instead of silently passing. The published-binary case runs under the gate scripts
+            // (verify-budget-security.sh), which set TALLY_PUBLISHED_BINARY.
+            Console.Error.WriteLine(
+                "SKIPPED: TALLY_PUBLISHED_BINARY not set; published-binary case runs under the gate scripts.");
             return;
         }
 
@@ -552,7 +556,7 @@ public sealed class BudgetSecurityGateTests : IAsyncLifetime
                 Envelope(
                     """{"contractVersion":"1.0","period":{"year":2026,"month":7,"currencyCode":"ZAR"}}""",
                     idempotencyKey: null));
-            Assert.True(list.ExitCode is 0 or 4 or 6, $"unexpected budget list exit {list.ExitCode}");
+            Assert.Equal(0, list.ExitCode); // Empty-store revision list is contracted success.
             AssertNoCanaries(list, PathCanary, NameCanary, AmountCanary, ReasonCanary);
 
             var budgetDb = Path.Combine(dataRoot, "budget", "budget.db");
@@ -575,7 +579,10 @@ public sealed class BudgetSecurityGateTests : IAsyncLifetime
         var binary = FindPublishedBinary();
         if (binary is null)
         {
-            Assert.True(true);
+            // See TC_BUDGET_SELF_CONTAINED_published_binary_budget_read_opens_no_socket_or_child
+            // for why this warns instead of asserting a no-op pass.
+            Console.Error.WriteLine(
+                "SKIPPED: TALLY_PUBLISHED_BINARY not set; published-binary case runs under the gate scripts.");
             return;
         }
 

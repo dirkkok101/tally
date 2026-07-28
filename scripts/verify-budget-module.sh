@@ -159,14 +159,23 @@ if (( full_count == 0 )); then
     fail "Budget filter discovered zero tests"
 fi
 
+declare -A suite_floor=(
+    [BudgetUc001DraftTests]=28
+    [BudgetUc002ActivationTests]=26
+    [BudgetUc003PositionTests]=27
+    [BudgetUc004HistoryTests]=15
+    [BudgetUc005AgentContractTests]=21
+)
+
 discovery_fail=0
 for class_name in "${named_suites[@]}"; do
     count="$(class_discovered_count "$class_name" "$full_list")"
-    if (( count < 1 )); then
-        fail "named suite ${class_name} discovered ${count} tests (need ≥1)"
+    floor="${suite_floor[$class_name]:-1}"
+    if (( count < floor )); then
+        fail "named suite ${class_name} discovered ${count} tests (need ≥${floor})"
         discovery_fail=$((discovery_fail + 1))
     else
-        printf '  %s: %s\n' "$class_name" "$count"
+        printf '  %s: %s (floor %s)\n' "$class_name" "$count" "$floor"
     fi
 done
 printf 'named suites: %s classes; aggregate Budget discovery=%s\n' \
@@ -216,8 +225,15 @@ for script in \
     scripts/verify-budget-contract.sh \
     scripts/verify-budget-recovery.sh \
     scripts/verify-budget-security.sh \
-    scripts/verify-budget-graph.sh
+    scripts/verify-budget-graph.sh \
+    scripts/verify-budget-performance.sh
 do
+    # Performance gate is ~21 minutes; allow CI to opt out explicitly (never silently).
+    if [[ "$script" == "scripts/verify-budget-performance.sh" && "${BUDGET_MODULE_SKIP_PERF:-0}" == "1" ]]; then
+        printf '\n---- %s ----\n' "$script"
+        printf 'perf gate SKIPPED by BUDGET_MODULE_SKIP_PERF\n'
+        continue
+    fi
     if [[ ! -x "$script" && -f "$script" ]]; then
         chmod +x "$script"
     fi

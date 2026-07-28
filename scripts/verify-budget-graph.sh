@@ -465,14 +465,23 @@ if (( full_count == 0 )); then
     fail "Budget filter discovered zero tests"
 fi
 
+declare -A suite_floor=(
+    [BudgetUc001DraftTests]=28
+    [BudgetUc002ActivationTests]=26
+    [BudgetUc003PositionTests]=27
+    [BudgetUc004HistoryTests]=15
+    [BudgetUc005AgentContractTests]=21
+)
+
 discovery_rows=()
 for class_name in "${named_suites[@]}"; do
     count="$(class_discovered_count "$class_name" "$full_list")"
+    floor="${suite_floor[$class_name]:-1}"
     discovery_rows+=("${class_name}|${count}")
-    if (( count < 1 )); then
-        fail "named suite ${class_name} discovered ${count} tests (need ≥1)"
+    if (( count < floor )); then
+        fail "named suite ${class_name} discovered ${count} tests (need ≥${floor})"
     else
-        printf '  %s: %s\n' "$class_name" "$count"
+        printf '  %s: %s (floor %s)\n' "$class_name" "$count" "$floor"
     fi
 done
 printf 'named suites: %s classes; aggregate Budget discovery=%s (not used as sole evidence)\n' \

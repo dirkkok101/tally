@@ -96,6 +96,44 @@ public sealed class BudgetGraphEvidenceGuardTests
         Assert.All(NamedSuites, name => Assert.Contains(name, names));
     }
 
+    /// <summary>
+    /// Reverse of <see cref="All_named_budget_suites_exist_in_the_test_assembly"/>: the inventory
+    /// was previously one-directional (NamedSuites ⊆ assembly), so a new Budget test class could
+    /// silently ship without a discovery floor. Unlike <c>BudgetModuleGuardTests.NamedSuites</c>,
+    /// this suite's list omits exactly one existing class — <c>BudgetModuleGuardTests</c> itself,
+    /// the module gate's own guard suite — so the sets match modulo that known difference.
+    /// </summary>
+    [Fact]
+    public void Every_budget_test_class_in_the_assembly_is_a_named_graph_suite_or_the_known_module_guard()
+    {
+        const string knownOmitted = "BudgetModuleGuardTests";
+
+        var actual = ActualBudgetTestClassNames();
+        var expected = NamedSuites.ToHashSet(StringComparer.Ordinal);
+
+        Assert.Contains(knownOmitted, actual);
+        Assert.DoesNotContain(knownOmitted, expected);
+
+        var unlisted = actual.Except(expected).Except([knownOmitted]).Order(StringComparer.Ordinal).ToArray();
+        var absent = expected.Except(actual).Order(StringComparer.Ordinal).ToArray();
+        Assert.True(
+            unlisted.Length == 0 && absent.Length == 0,
+            $"NamedSuites drift beyond the known {knownOmitted} omission — present but unlisted: "
+                + $"[{string.Join(", ", unlisted)}]; listed but absent from the assembly: [{string.Join(", ", absent)}]");
+    }
+
+    private static HashSet<string> ActualBudgetTestClassNames() =>
+        typeof(BudgetGraphEvidenceGuardTests).Assembly
+            .GetTypes()
+            .Where(type =>
+                type.IsPublic
+                && type.Name.EndsWith("Tests", StringComparison.Ordinal)
+                && type.Namespace is not null
+                && (type.Namespace == "Tally.Tests.Budget"
+                    || type.Namespace.StartsWith("Tally.Tests.Budget.", StringComparison.Ordinal)))
+            .Select(type => type.Name)
+            .ToHashSet(StringComparer.Ordinal);
+
     [Fact]
     public void Named_suite_source_files_exist_under_tests_Budget()
     {

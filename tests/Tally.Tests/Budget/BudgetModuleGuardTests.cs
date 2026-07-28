@@ -97,6 +97,38 @@ public sealed class BudgetModuleGuardTests
         Assert.All(NamedSuites, name => Assert.Contains(name, names));
     }
 
+    /// <summary>
+    /// Reverse of <see cref="All_named_module_gate_suites_exist_in_the_test_assembly"/>: the
+    /// inventory was previously one-directional (NamedSuites ⊆ assembly), so a new Budget test
+    /// class could silently ship without a discovery floor. NamedSuites already lists every
+    /// Budget test class (this guard suite included), so the sets must match exactly.
+    /// </summary>
+    [Fact]
+    public void Every_budget_test_class_in_the_assembly_is_a_named_module_gate_suite()
+    {
+        var actual = ActualBudgetTestClassNames();
+        var expected = NamedSuites.ToHashSet(StringComparer.Ordinal);
+
+        var unlisted = actual.Except(expected).Order(StringComparer.Ordinal).ToArray();
+        var absent = expected.Except(actual).Order(StringComparer.Ordinal).ToArray();
+        Assert.True(
+            unlisted.Length == 0 && absent.Length == 0,
+            $"NamedSuites drift — present but unlisted: [{string.Join(", ", unlisted)}]; "
+                + $"listed but absent from the assembly: [{string.Join(", ", absent)}]");
+    }
+
+    private static HashSet<string> ActualBudgetTestClassNames() =>
+        typeof(BudgetModuleGuardTests).Assembly
+            .GetTypes()
+            .Where(type =>
+                type.IsPublic
+                && type.Name.EndsWith("Tests", StringComparison.Ordinal)
+                && type.Namespace is not null
+                && (type.Namespace == "Tally.Tests.Budget"
+                    || type.Namespace.StartsWith("Tally.Tests.Budget.", StringComparison.Ordinal)))
+            .Select(type => type.Name)
+            .ToHashSet(StringComparer.Ordinal);
+
     [Fact]
     public void Named_suite_source_files_exist_under_tests_Budget()
     {

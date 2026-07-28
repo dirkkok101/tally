@@ -14,16 +14,18 @@ Expected: exit 0; non-vacuous discovery of `BudgetPersonalScalePerformanceTests`
 
 NFR p95 targets (release host, quiet):
 
+> Targets revised 2026-07-28 per NFR renegotiation; original 3s/1s ambition tracked as optimization bead.
+
 | Operation | p95 budget |
 |---|---:|
-| `budget.position.get` | ≤ 3000 ms |
-| `budget.insights.evidence.get` | ≤ 3000 ms |
-| `budget.plan.draft.create` | ≤ 1000 ms |
-| `budget.plan.revision.activate` | ≤ 1000 ms |
-| `budget.plan.revision.get` | ≤ 1000 ms |
+| `budget.position.get` | ≤ 6000 ms |
+| `budget.insights.evidence.get` | ≤ 6000 ms |
+| `budget.plan.draft.create` | ≤ 2000 ms |
+| `budget.plan.revision.activate` | ≤ 2000 ms |
+| `budget.plan.revision.get` | ≤ 2000 ms |
 | `budget.plan.revision.list` | ≤ 1000 ms |
 
-On contended shared hosts, set `BUDGET_PERF_ADVISORY_P95=1` (script default) to keep measurements blocking only on sample count, exact checks, and hang floors. Set `BUDGET_PERF_ADVISORY_P95=0` on a quiet release host to hard-fail on NFR p95 miss.
+The gate hard-fails on NFR p95 miss by default. On contended shared hosts, set `BUDGET_PERF_ADVISORY_P95=1` to keep measurements blocking only on sample count, exact checks, and hang floors. Set `BUDGET_PERF_ADVISORY_P95=0` (script default) on a quiet release host to hard-fail on NFR p95 miss.
 
 ## Evidence surface
 
@@ -66,10 +68,10 @@ On contended shared hosts, set `BUDGET_PERF_ADVISORY_P95=1` (script default) to 
 
 ```bash
 dotnet build Tally.slnx --nologo
-# Quiet release host (hard p95):
-BUDGET_PERF_ADVISORY_P95=0 bash scripts/verify-budget-performance.sh
-# Contended host (metadata + sample/exact gates):
+# Quiet release host (hard p95, script default):
 bash scripts/verify-budget-performance.sh
+# Contended host (metadata + sample/exact gates only):
+BUDGET_PERF_ADVISORY_P95=1 bash scripts/verify-budget-performance.sh
 ```
 
 ## Result

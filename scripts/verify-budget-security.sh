@@ -89,11 +89,22 @@ done
 printf 'required case families present\n'
 
 section "Security matrix (in-process + published NativeAOT binary)"
+security_test_log="$(mktemp "${TMPDIR:-/tmp}/tally-budget-sec-tests.XXXXXX.log")"
 TALLY_PUBLISHED_BINARY="$publish_root/tally" \
     dotnet test "$test_project" \
     --no-build \
     --filter "$filter" \
-    --logger "console;verbosity=normal"
+    --logger "console;verbosity=normal" | tee "$security_test_log"
+# No dynamic Assert.Skip/[SkippableFact] exists in this xunit v2 suite — the published-binary
+# cases warn via stderr instead of skipping. TALLY_PUBLISHED_BINARY is set above, so nothing
+# should be reported skipped here; guard against that silently drifting.
+security_skipped="$(grep -oE 'Skipped:\s*[0-9]+' "$security_test_log" | tail -1 | grep -oE '[0-9]+' || true)"
+rm -f "$security_test_log"
+if [[ "${security_skipped:-0}" != "0" ]]; then
+    printf 'budget security verification: %s tests reported Skipped (expected 0)\n' "$security_skipped" >&2
+    exit 1
+fi
+printf 'budget security test run: Skipped: 0\n'
 
 section "Filesystem mode spot-check via published binary"
 data_root="$(mktemp -d "${TMPDIR:-/tmp}/tally-budget-sec-modes.XXXXXX")"
@@ -106,16 +117,46 @@ trap 'modes_cleanup; cleanup' EXIT
 printf '%s' '{"contractVersion":"1.0","actor":{"kind":"automation","label":"budget-sec-gate"},"input":{}}' \
     | TALLY_DATA_ROOT="$data_root" "$publish_root/tally" version --input - >/dev/null
 
-# Force budget store open via list (empty lifecycle is fine).
+# Seed a real canary: create a category, then a draft revision carrying a known
+# reason and amount, so the spot-check below has something that could actually leak.
+# (A canary loop over an unseeded store can never fail — this seeds first.)
+canary_reason="CANARY_BUDGET_REASON_7f3a"
+canary_amount="999888777"
+
+category_out="$(printf '%s' '{"contractVersion":"1.0","actor":{"kind":"automation","label":"budget-sec-gate"},"idempotencyKey":"budget-sec-gate-canary-category","input":{"name":"CanarySpotCheckCategory"}}' \
+    | TALLY_DATA_ROOT="$data_root" "$publish_root/tally" ledger category create --input -)"
+canary_category_id="$(printf '%s' "$category_out" | python3 -c 'import json,sys; print(json.load(sys.stdin)["result"]["categoryId"])')"
+
+draft_out="$(printf '%s' "{\"contractVersion\":\"1.0\",\"actor\":{\"kind\":\"automation\",\"label\":\"budget-sec-gate\"},\"idempotencyKey\":\"budget-sec-gate-canary-draft\",\"input\":{\"contractVersion\":\"1.0\",\"period\":{\"year\":2026,\"month\":7,\"currencyCode\":\"ZAR\"},\"entries\":[{\"categoryId\":\"${canary_category_id}\",\"plannedMinorUnits\":${canary_amount}}],\"reason\":\"${canary_reason}\"}}" \
+    | TALLY_DATA_ROOT="$data_root" "$publish_root/tally" budget plan draft create --input -)"
+if ! grep -Fq '"outcome":"success"' <<<"$draft_out"; then
+    printf 'budget security spot-check failed to seed canary draft: %s\n' "$draft_out" >&2
+    exit 1
+fi
+
+# Force budget store open via list (canary-bearing period is now non-vacuous).
 list_out="$(printf '%s' '{"contractVersion":"1.0","actor":{"kind":"automation","label":"budget-sec-gate"},"input":{"contractVersion":"1.0","period":{"year":2026,"month":7,"currencyCode":"ZAR"}}}' \
     | TALLY_DATA_ROOT="$data_root" "$publish_root/tally" budget plan revision list --input - 2>/tmp/tally-budget-sec-stderr.$$ || true)"
 list_err="$(cat /tmp/tally-budget-sec-stderr.$$ 2>/dev/null || true)"
 rm -f /tmp/tally-budget-sec-stderr.$$
 
-# Canary absence on this probe surface.
-for canary in CANARY_BUDGET 999888777 PRIVATE_BUDGET; do
-    if grep -Fq "$canary" <<<"$list_out$list_err"; then
-        printf 'budget security mode spot-check leaked canary token %s\n' "$canary" >&2
+# Deliberately failing call: activate a bogus revision id. A failed lookup has
+# no legitimate reason to reference the seeded canary tokens at all.
+fail_out="$(printf '%s' '{"contractVersion":"1.0","actor":{"kind":"automation","label":"budget-sec-gate"},"idempotencyKey":"budget-sec-gate-canary-fail","input":{"contractVersion":"1.0","revisionId":"01NOTFOUNDREVISION0000000000","reason":"activate-bogus"}}' \
+    | TALLY_DATA_ROOT="$data_root" "$publish_root/tally" budget plan revision activate --input - 2>/tmp/tally-budget-sec-fail-stderr.$$ || true)"
+fail_err="$(cat /tmp/tally-budget-sec-fail-stderr.$$ 2>/dev/null || true)"
+rm -f /tmp/tally-budget-sec-fail-stderr.$$
+
+# Canary tokens must never reach stderr or a failing call's error envelope.
+# The amount may legitimately appear in the list call's structured stdout
+# success payload (PlannedTotalMinorUnits) — that is the only allowed channel.
+for canary in "$canary_reason" "$canary_amount" CANARY_BUDGET PRIVATE_BUDGET; do
+    if grep -Fq "$canary" <<<"$list_err"; then
+        printf 'budget security spot-check leaked canary token %s into list stderr\n' "$canary" >&2
+        exit 1
+    fi
+    if grep -Fq "$canary" <<<"$fail_out$fail_err"; then
+        printf 'budget security spot-check leaked canary token %s via failing activate call\n' "$canary" >&2
         exit 1
     fi
 done
