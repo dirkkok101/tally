@@ -1,9 +1,12 @@
 using Tally.Contracts.Common;
 using Tally.Contracts.Ingest;
+using Tally.Contracts.Ledger.Accounts;
 using Tally.Domain.Ingest.Identity;
 using Tally.Domain.Ingest.Manifests;
 using Tally.Domain.Ingest.Overlap;
 using Tally.Domain.Ingest.Reconciliation;
+using Tally.Features.Ingest.Preview;
+using Tally.Infrastructure.Ingest.Pdf;
 using Xunit;
 
 namespace Tally.Tests.Ingest.Preview;
@@ -65,6 +68,85 @@ public sealed class ReconciliationAndManifestTests
 
         Assert.False(result.FullyReconciled);
         Assert.Contains(result.Controls, control => control.Name == "record_accounting" && control.State == ReconciliationControlState.Mismatched);
+    }
+
+    // FR-INGEST-SOURCE-RECONCILIATION / bd-3nzn: excluded zero-movement rows are accounted (accepted+excluded==total).
+    // Synthetic Layout A statement: opening→closing with two accepted movements and two zero-movement exclusions.
+    [Fact]
+    public void FR_INGEST_SOURCE_RECONCILIATION_layout_a_zero_movement_rows_pass_record_accounting()
+    {
+        var adapter = new PdfTextLayoutAStatementAdapter();
+        var account = new AccountDetail(
+            "account-a",
+            "institution",
+            "display",
+            AccountType.Cheque,
+            AccountClass.Asset,
+            "masked",
+            "ZAR",
+            AccountStatus.Active,
+            "actor",
+            "2026-01-01T00:00:00Z",
+            null,
+            []);
+        var statement = adapter.Extract(LayoutAZeroMovementEvidence(), account);
+        var mapped = PreviewManifestMapper.Map(
+            "synthetic-zero-movement",
+            account,
+            statement,
+            "ledger-1",
+            new SafeActor("owner", "owner"));
+
+        Assert.Equal(4, statement.OrderedRecords.Count);
+        Assert.Equal(2, mapped.Counts.AcceptedCandidates);
+        Assert.Equal(2, mapped.Counts.ExcludedNonTransactions);
+        Assert.Equal(0, mapped.Counts.Blocked);
+        Assert.Equal(
+            statement.OrderedRecords.Count,
+            mapped.Counts.AcceptedCandidates +
+            mapped.Counts.ExcludedNonTransactions +
+            mapped.Counts.ExactDuplicates +
+            mapped.Counts.Blocked);
+        Assert.Contains(
+            mapped.Reconciliation.Controls,
+            control => control.Name == "record_accounting" && control.Satisfied);
+        Assert.True(mapped.Reconciliation.FullyReconciled);
+        Assert.True(mapped.Committable);
+        Assert.All(
+            mapped.Outcomes.Where(outcome => outcome.Disposition == SourceRecordDisposition.ExcludedNonTransaction),
+            outcome => Assert.Equal("zero_movement", outcome.ReasonCode));
+    }
+
+    private static PdfDocumentEvidence LayoutAZeroMovementEvidence()
+    {
+        string[] lines =
+        [
+            "Account Card ****1234",
+            "Statement period 01 January 2026 31 January 2026",
+            "Opening balance 100.00Cr",
+            "Closing balance 120.00Cr",
+            "Date Description Amount Balance",
+            "01 Jan First row 10.00Cr 110.00Cr",
+            // 0.00Cr is one glyph shorter than 10.00Cr; keep amount/balance column alignment
+            // so the Layout A probe still finds transaction left of balance (see ExtractRowCandidates).
+            "02 Jan Zero rowx 0.00Cr 110.00Cr",
+            "03 Jan Second row 10.00Cr 120.00Cr",
+            "04 Jan Zero rowy 0.00Cr 120.00Cr"
+        ];
+        var glyphs = new List<PdfGlyphEvidence>();
+        for (var lineIndex = 0; lineIndex < lines.Length; lineIndex++)
+        {
+            var left = 20d;
+            var bottom = 700d - (lineIndex * 20d);
+            foreach (var character in string.Concat(lines[lineIndex], " "))
+            {
+                glyphs.Add(new PdfGlyphEvidence(
+                    character.ToString(), left, bottom, left + 5d, bottom + 10d, glyphs.Count, bottom, glyphs.Count));
+                left += 5d;
+            }
+        }
+
+        return new PdfDocumentEvidence("synthetic-zero-movement", 1, [new PdfPageEvidence(1, 612, 792, glyphs, [])]);
     }
 
     // DD-INGEST-MANIFEST-IDENTITY-OVERLAP

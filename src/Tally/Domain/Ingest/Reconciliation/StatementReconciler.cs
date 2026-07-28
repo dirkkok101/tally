@@ -14,7 +14,11 @@ public static class StatementReconciler
     {
         var controls = new List<ReconciliationControlResult>();
         var ids = new HashSet<string>(StringComparer.Ordinal);
-        var accounted = records.All(record => !string.IsNullOrWhiteSpace(record.SourceRecordId) && record.MovementMinor is not null && ids.Add(record.SourceRecordId));
+        // FR-INGEST-SOURCE-RECONCILIATION: every source record is accounted exactly once when it has a
+        // stable unique id. Explicit outcomes without a movement (excluded-non-transaction, blocked,
+        // exact-duplicate) still count — only missing/blank or duplicate ids fail this control.
+        // Opening/closing and running-balance controls use MovementMinor separately and already skip nulls.
+        var accounted = records.All(record => !string.IsNullOrWhiteSpace(record.SourceRecordId) && ids.Add(record.SourceRecordId));
         controls.Add(new("record_accounting", accounted ? ReconciliationControlState.Satisfied : ReconciliationControlState.Mismatched));
         if (openingBalanceMinor is null || closingBalanceMinor is null)
             controls.Add(new("opening_to_closing", ReconciliationControlState.Unavailable));
