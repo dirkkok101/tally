@@ -114,7 +114,7 @@ public sealed class BudgetStateStoreTests : IAsyncLifetime
             "budget_plan_entry",
             "budget_plan_revision"
         ], await TableNamesAsync(connection));
-        Assert.Equal(1L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
+        Assert.Equal(BudgetSchema.CurrentVersion, await ScalarLongAsync(connection, "PRAGMA user_version;"));
     }
 
     // DM-BUDGET-STATE-STORE
@@ -159,7 +159,7 @@ public sealed class BudgetStateStoreTests : IAsyncLifetime
         await BudgetSchema.ApplyAsync(connection, CancellationToken.None);
         await BudgetSchema.ApplyAsync(connection, CancellationToken.None);
 
-        Assert.Equal(1L, await ScalarLongAsync(connection, "PRAGMA user_version;"));
+        Assert.Equal(BudgetSchema.CurrentVersion, await ScalarLongAsync(connection, "PRAGMA user_version;"));
         Assert.Equal(5, (await TableNamesAsync(connection)).Length);
     }
 
@@ -168,7 +168,7 @@ public sealed class BudgetStateStoreTests : IAsyncLifetime
     public async Task Newer_user_version_is_rejected()
     {
         await using var connection = await OpenAsync();
-        await ExecuteAsync(connection, "PRAGMA user_version = 2;");
+        await ExecuteAsync(connection, $"PRAGMA user_version = {BudgetSchema.CurrentVersion + 1};");
 
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(() =>
             BudgetSchema.ApplyAsync(connection, CancellationToken.None));

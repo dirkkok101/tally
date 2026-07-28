@@ -8,7 +8,7 @@ namespace Tally.Infrastructure.Budget.Storage;
 /// </summary>
 public static class BudgetSchema
 {
-    public const int CurrentVersion = 1;
+    public const int CurrentVersion = 2;
 
     public static async Task ApplyAsync(SqliteConnection connection, CancellationToken cancellationToken)
     {
@@ -34,6 +34,9 @@ public static class BudgetSchema
                 {
                     case 1:
                         await ApplyV001Async(connection, transaction, cancellationToken);
+                        break;
+                    case 2:
+                        await ApplyV002LifecycleColumnGuardsAsync(connection, transaction, cancellationToken);
                         break;
                     default:
                         throw new InvalidOperationException("The budget database schema version is not supported by this runtime.");
@@ -209,6 +212,37 @@ public static class BudgetSchema
             BEFORE DELETE ON budget_idempotency_record
             BEGIN
                 SELECT RAISE(ABORT, 'budget_idempotency_record rows are immutable');
+            END;
+            """;
+
+        await ExecuteAsync(connection, sql, cancellationToken, transaction);
+    }
+
+    /// <summary>
+    /// Lifecycle timestamps and replacement references are only writable during the legal
+    /// status transition that introduces them (bd-27ye).
+    /// </summary>
+    private static async Task ApplyV002LifecycleColumnGuardsAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        CancellationToken cancellationToken)
+    {
+        const string sql = """
+            CREATE TRIGGER budget_plan_revision_lifecycle_columns_guard
+            BEFORE UPDATE OF activated_at_utc, superseded_at_utc, superseded_by_revision_id
+            ON budget_plan_revision
+            BEGIN
+                SELECT RAISE(ABORT, 'budget_plan_revision lifecycle columns are transition-scoped')
+                WHERE NOT (
+                    (OLD.status = 'Draft' AND NEW.status = 'Active'
+                        AND NEW.activated_at_utc IS NOT NULL
+                        AND NEW.superseded_at_utc IS NULL
+                        AND NEW.superseded_by_revision_id IS NULL)
+                    OR (OLD.status = 'Active' AND NEW.status = 'Superseded'
+                        AND NEW.superseded_at_utc IS NOT NULL
+                        AND NEW.superseded_by_revision_id IS NOT NULL
+                        AND OLD.activated_at_utc IS NEW.activated_at_utc)
+                );
             END;
             """;
 

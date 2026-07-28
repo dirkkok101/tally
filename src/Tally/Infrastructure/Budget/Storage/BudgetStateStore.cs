@@ -46,8 +46,15 @@ public sealed class BudgetStateStore
     public async Task<SqliteConnection> OpenAsync(CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
+        // Path safety BEFORE open/create (bd-27ye): owner-only directories, no symlink DB path,
+        // and existing files must already be 0600 — never touch an unsafe target first.
         artifactProtection.EnsureDataRoot(Paths.DataRoot);
         artifactProtection.EnsureDataRoot(Paths.BudgetDirectory);
+        RejectUnsafeDatabasePath(Paths.DatabasePath);
+        if (File.Exists(Paths.DatabasePath))
+        {
+            artifactProtection.RequireOwnerOnlyArtifact(Paths.DatabasePath);
+        }
 
         var connection = new SqliteConnection(new SqliteConnectionStringBuilder
         {
@@ -72,6 +79,30 @@ public sealed class BudgetStateStore
         {
             await connection.DisposeAsync();
             throw;
+        }
+    }
+
+    /// <summary>
+    /// Fail closed if the database path is a symbolic link or otherwise not a regular owner file candidate.
+    /// </summary>
+    private static void RejectUnsafeDatabasePath(string databasePath)
+    {
+        // ResolveLinkTarget returns non-null when path is a symlink (even if the target is missing).
+        if (File.Exists(databasePath) || Directory.Exists(databasePath))
+        {
+            try
+            {
+                if (File.ResolveLinkTarget(databasePath, returnFinalTarget: false) is not null)
+                {
+                    throw new InvalidOperationException(
+                        "The budget database path must not be a symbolic link.");
+                }
+            }
+            catch (IOException ex)
+            {
+                throw new InvalidOperationException(
+                    "The budget database path is not a safe regular file.", ex);
+            }
         }
     }
 
