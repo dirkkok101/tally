@@ -515,7 +515,7 @@ public sealed class CommitSagaTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Commit_against_already_abandoned_batch_returns_not_committable_or_not_approved()
+    public async Task Commit_against_already_abandoned_batch_returns_not_committable()
     {
         var prepared = await PrepareApprovedAsync();
         var abandon = await CreateAbandon().HandleAsync(
@@ -527,10 +527,8 @@ public sealed class CommitSagaTests : IAsyncLifetime
             new CommitCommand(prepared.BatchId, prepared.ManifestRevisionId, prepared.Digest),
             CancellationToken.None);
 
-        // Pre-lock NotApproved (approval deactivated) or post-lock NotCommittable (Abandoned receipt) are both stable.
-        Assert.True(
-            result.ErrorCode is CommitErrors.NotApproved or CommitErrors.NotCommittable,
-            result.ErrorCode);
+        // Abandoned batches are terminal: the batch-status guard reports NotCommittable (bd-ankc).
+        Assert.Equal(CommitErrors.NotCommittable, result.ErrorCode);
         Assert.Equal(0, await CountCandidateReceiptsAsync());
         var receiptStatus = await TryReadReceiptStatusAsync(prepared.BatchId);
         Assert.True(
@@ -558,9 +556,7 @@ public sealed class CommitSagaTests : IAsyncLifetime
             CancellationToken.None);
 
         Assert.Equal(1, injector.BeforeBatchLockCount);
-        Assert.True(
-            result.ErrorCode is CommitErrors.NotApproved or CommitErrors.NotCommittable,
-            result.ErrorCode);
+        Assert.Equal(CommitErrors.NotCommittable, result.ErrorCode);
         Assert.Equal(0, await CountCandidateReceiptsAsync());
         Assert.Equal(0, injector.LedgerCallCount);
     }

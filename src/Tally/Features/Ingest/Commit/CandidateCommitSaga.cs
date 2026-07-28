@@ -472,6 +472,13 @@ public sealed class CandidateCommitSaga(
             return CommitErrors.DigestMismatch;
         }
 
+        // An abandoned batch is terminal (bd-ankc / OQ-INGEST-20): report NotCommittable, not the
+        // incidental NotApproved from abandon's approval deactivation — callers must not retry.
+        if (manifest.BatchStatus is BatchStatus.Abandoned or BatchStatus.Cleaned)
+        {
+            return CommitErrors.NotCommittable;
+        }
+
         if (!manifest.Approval.Approved)
         {
             return CommitErrors.NotApproved;
