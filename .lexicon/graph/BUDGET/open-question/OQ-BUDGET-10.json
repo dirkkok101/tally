@@ -6,7 +6,10 @@
   "context": [
     "LEDGER now exposes stable category nodes plus exact and subtree actuals after the owner required hierarchy. BUDGET already stores Category Budget Entries, but the current flat-category contract does not define roll-up scope or prevent overlapping parent/descendant entries. Resolve before BUDGET implementation so planned and actual totals cannot double count. Candidate safe shapes are exact-node entries only, non-overlapping subtree entries only, or an explicit per-entry scope with overlap rejection."
   ],
-  "status": "open",
+  "status": "resolved",
+  "decision": [
+    "Resolved by DD-BUDGET-EXACT-POSITION-CALCULATION: a Budget Entry governs only its exact assigned category (direct assignment); there is no subtree inheritance. A non-null assigned category omitted from the plan is Unbudgeted regardless of hierarchy, so parent and descendant entries may coexist and each governs only itself."
+  ],
   "owner": "BUDGET design",
   "disposition": "unspecified",
   "created_at": "2026-07-21T11:16:22.0414781+00:00"
