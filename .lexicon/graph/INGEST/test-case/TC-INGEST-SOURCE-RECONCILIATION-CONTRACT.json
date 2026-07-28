@@ -8,7 +8,7 @@
   "surface": "service",
   "scenario": "unhappy",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "Qualified fixtures and mutations with omitted, duplicated, sign-inverted, control-mismatched, and unexplained records are available.",
   "steps": "Preview each source and injected mutation, verify row accounting, opening and closing equations, and running-balance transitions where supplied.",
   "expected": "Every acceptance criterion of FR-INGEST-SOURCE-RECONCILIATION holds; all qualified fixtures reconcile and every corrupted case stays unapproved and uncommittable.",

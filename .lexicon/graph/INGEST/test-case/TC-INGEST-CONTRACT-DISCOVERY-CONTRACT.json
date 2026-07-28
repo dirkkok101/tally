@@ -8,7 +8,7 @@
   "surface": "contract",
   "scenario": "happy",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "A published compatible Tally binary and incompatible-version fixtures are available.",
   "steps": "Invoke help and schema discovery, then exercise valid, malformed, unknown-field, and incompatible-version requests through the published process contract.",
   "expected": "Every acceptance criterion of FR-INGEST-CONTRACT-DISCOVERY holds, with one stdout envelope, metadata-only stderr, stable exits, and no source read or mutation.",

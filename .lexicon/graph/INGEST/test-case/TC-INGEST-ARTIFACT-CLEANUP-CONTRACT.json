@@ -8,7 +8,7 @@
   "surface": "persistence",
   "scenario": "security",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "Success, failure, crash, incomplete, completed, and abandoned INGEST artifact trees exist beside protected caller-owned sources and LEDGER data.",
   "steps": "Run automatic startup cleanup, explicit abandon, rejected resumable cleanup, and explicit completed cleanup while inventorying permissions and hashes.",
   "expected": "Every acceptance criterion of FR-INGEST-ARTIFACT-CLEANUP holds; only eligible INGEST artifacts are removed, protected state remains, and permissions are owner-only.",

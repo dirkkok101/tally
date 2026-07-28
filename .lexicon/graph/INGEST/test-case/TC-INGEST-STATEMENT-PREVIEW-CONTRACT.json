@@ -8,7 +8,7 @@
   "surface": "contract",
   "scenario": "edge",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "Qualified source fixtures, active and archived account doubles, and mutation counters are available.",
   "steps": "Preview unchanged and changed sources against valid, missing, archived, conflicting, and ambiguous accounts, then repeat identical previews.",
   "expected": "Every acceptance criterion of FR-INGEST-STATEMENT-PREVIEW holds; identical preview is deterministic, source hashes remain unchanged, and LEDGER mutation count stays zero.",

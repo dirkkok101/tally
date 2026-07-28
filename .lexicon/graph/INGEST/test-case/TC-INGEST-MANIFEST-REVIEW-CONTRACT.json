@@ -8,7 +8,7 @@
   "surface": "contract",
   "scenario": "unhappy",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "Committable and blocked manifest revisions with changed facts, decisions, and versions are available.",
   "steps": "Inspect, approve, mutate decisions, attempt source-fact edits, and request commit approval for exact and mismatched revisions.",
   "expected": "Every acceptance criterion of FR-INGEST-MANIFEST-REVIEW holds; only one exact fully reconciled revision can be approved and any change creates a new revision.",

@@ -8,7 +8,7 @@
   "surface": "service",
   "scenario": "edge",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "Fixtures cover renamed Exact Replay, identical tuples at different positions, proven exact identity, uncertain overlap, and identity reuse with changed facts.",
   "steps": "Preview each fixture against prior batch and canonical provenance and observe duplicate, candidate, replay, and conflict outcomes.",
   "expected": "Every acceptance criterion of FR-INGEST-REPLAY-OVERLAP-SAFETY holds; Exact Replay has no new effect, tuple collisions remain distinct, and uncertain overlap blocks.",

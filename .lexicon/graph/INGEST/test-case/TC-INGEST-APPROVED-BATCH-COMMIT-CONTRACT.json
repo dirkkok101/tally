@@ -8,7 +8,7 @@
   "surface": "contract",
   "scenario": "unhappy",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "A compatible public LEDGER test contract, approved and unapproved manifests, Exact Duplicates, and stable failure responses are available.",
   "steps": "Commit each manifest through the public process boundary, inspect calls and durable outcomes, and round-trip returned canonical references.",
   "expected": "Every acceptance criterion of FR-INGEST-APPROVED-BATCH-COMMIT holds; only frozen accepted candidates reach the public LEDGER operation and unsafe failure stops continuation.",

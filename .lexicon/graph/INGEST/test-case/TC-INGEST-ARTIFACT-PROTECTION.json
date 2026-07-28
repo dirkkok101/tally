@@ -8,7 +8,7 @@
   "surface": "contract",
   "scenario": "security",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "steps": "Inject unique canaries into source path, rows, descriptions, amounts, balances, identifiers, requests, and manifests; exercise success, expected failure, unexpected parser failure, cancellation, crash, abandonment, startup, compaction, and cleanup; inspect arguments, stdout policy, stderr, logs, diagnostics, files, permissions, and source hashes.",
   "expected": "No canary appears in process arguments, stderr, logs, crash diagnostics, or telemetry; sensitive stdout appears only in the documented business fields of explicit owner-invoked preview, inspect, commit, resume, or status results; directories/files use 0700/0600; sources are unchanged; no source copy or extraction temporary remains.",
   "created_at": "2026-07-18T12:07:51.1295585+00:00",

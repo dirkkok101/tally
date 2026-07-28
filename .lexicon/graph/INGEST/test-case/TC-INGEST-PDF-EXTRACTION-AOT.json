@@ -8,7 +8,7 @@
   "surface": "contract",
   "scenario": "performance",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "steps": "Publish the linux-x64 self-contained Native-AOT Tally binary with PdfPig pinned; inject each qualified private fixture through the test-only fixture provider; preview every fixture twice while measuring wall time and peak RSS; compare page/glyph evidence digests; include the permission-encrypted fixture.",
   "expected": "Every fixture yields non-empty deterministic evidence twice; the encrypted fixture needs no opening password; each run is under 5 seconds and 256 MiB; no trim/AOT failure, source argument, external process, or fixture disclosure occurs.",
   "created_at": "2026-07-18T12:07:48.8731646+00:00",

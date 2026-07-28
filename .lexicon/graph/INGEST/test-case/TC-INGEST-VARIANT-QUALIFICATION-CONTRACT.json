@@ -8,7 +8,7 @@
   "surface": "contract",
   "scenario": "edge",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "The three private fixtures are available outside tracked test artifacts together with redacted structural equivalents and unsupported or over-limit adversarial fixtures.",
   "steps": "Run variant detection and passive bounded preview across qualified, permission-encrypted, changed-layout, active-content, scan-only, password, malformed, and over-limit cases.",
   "expected": "Every acceptance criterion of FR-INGEST-VARIANT-QUALIFICATION holds; only the two evidenced PDF variants qualify and all unsafe or unsupported cases fail before mutation.",

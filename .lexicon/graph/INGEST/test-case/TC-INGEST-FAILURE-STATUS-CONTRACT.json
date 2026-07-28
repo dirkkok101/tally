@@ -8,7 +8,7 @@
   "surface": "contract",
   "scenario": "unhappy",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "Fixtures trigger every documented source, parser, account, reconciliation, overlap, compatibility, resource, LEDGER, and interruption category.",
   "steps": "Run each failure through the published process contract and inspect result, stderr, durable batch state, and mutation counters.",
   "expected": "Every acceptance criterion of FR-INGEST-FAILURE-STATUS holds, including stable next-action metadata, no payload disclosure, and correct last durable frontier.",

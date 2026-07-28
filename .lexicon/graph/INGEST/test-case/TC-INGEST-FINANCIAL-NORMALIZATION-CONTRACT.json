@@ -8,7 +8,7 @@
   "surface": "service",
   "scenario": "edge",
   "automation": "automated",
-  "status": "planned",
+  "status": "passing",
   "preconditions": "Redacted fixtures cover asset and liability movements, full and yearless dates, zero movements, exact decimal boundaries, ambiguous fields, unique source descriptions, and the reviewed Layout A source-absent description state.",
   "steps": "Normalize every case through each qualified adapter; inspect candidate, excluded, and blocked outcomes in exact minor units; then freeze and round-trip the exact Ledger request and InitialEvidence for source_text and source_absent_marker descriptions.",
   "expected": "Every acceptance criterion of FR-INGEST-FINANCIAL-NORMALIZATION holds, including owner-economic polarity, unique year derivation, explicit zero-row exclusion, fail-closed ambiguity, the exact source-absence marker, deterministic candidate and evidence fingerprints, and byte-exact Ledger OriginalDescription round-trip.",
