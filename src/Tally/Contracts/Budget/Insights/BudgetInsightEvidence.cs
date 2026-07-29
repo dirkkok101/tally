@@ -29,7 +29,11 @@ public sealed record BudgetActualMember(
     [property: JsonRequired] string TransactionId,
     [property: JsonRequired] string EffectiveDate,
     string? CategoryId,
-    [property: JsonRequired] long BudgetActualMinorUnits);
+    [property: JsonRequired] long BudgetActualMinorUnits,
+    /// <summary>Frozen Spend Category ancestry root-first with the assigned category last; empty when unset.</summary>
+    [property: JsonRequired] IReadOnlyList<string> AncestryIds,
+    /// <summary>Effective Spend Category that governed the actual, or null for unbudgeted/uncategorized.</summary>
+    string? EffectiveCategoryId);
 
 /// <summary>
 /// Coherent plan-state + dated-member evidence from one public LEDGER snapshot

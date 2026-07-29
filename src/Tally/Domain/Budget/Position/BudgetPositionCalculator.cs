@@ -14,7 +14,7 @@ namespace Tally.Domain.Budget.Position;
 public static class BudgetPositionCalculator
 {
     /// <summary>Provenance schema for calculator output (DM-BUDGET-POSITION-PROJECTION).</summary>
-    public const string CalculationSchemaVersion = "budget-position-v1";
+    public const string CalculationSchemaVersion = "budget-position-v2";
 
     public const string IntegrityErrorCode = BudgetErrors.Integrity;
 
@@ -111,6 +111,8 @@ public static class BudgetPositionCalculator
 
                 var (remaining, over) = Variance(planned, actual);
                 var evidence = known[categoryId];
+                // Flat exact-identity partition (v2 fields): all exact-match actual is direct;
+                // envelope absorption is owned by TASK-BUDGET-ENVELOPE-RESOLUTION.
                 positions.Add(new CategoryPosition(
                     CategoryId: categoryId,
                     CurrentDisplayName: evidence.CurrentDisplayName,
@@ -119,7 +121,10 @@ public static class BudgetPositionCalculator
                     PlannedMinorUnits: planned,
                     ActualMinorUnits: actual,
                     RemainingMinorUnits: remaining,
-                    OverMinorUnits: over));
+                    OverMinorUnits: over,
+                    DirectActualMinorUnits: actual,
+                    DescendantActualMinorUnits: 0,
+                    AbsorbedCategoryIds: null));
             }
 
             // Remaining non-null category actuals are Unbudgeted (omitted from plan).
@@ -135,7 +140,10 @@ public static class BudgetPositionCalculator
                     PlannedMinorUnits: null,
                     ActualMinorUnits: actual,
                     RemainingMinorUnits: null,
-                    OverMinorUnits: null));
+                    OverMinorUnits: null,
+                    DirectActualMinorUnits: actual,
+                    DescendantActualMinorUnits: 0,
+                    AbsorbedCategoryIds: null));
             }
 
             positions.Sort(static (left, right) =>
@@ -169,7 +177,10 @@ public static class BudgetPositionCalculator
                 PlannedMinorUnits: null,
                 ActualMinorUnits: uncategorizedActual,
                 RemainingMinorUnits: null,
-                OverMinorUnits: null);
+                OverMinorUnits: null,
+                DirectActualMinorUnits: uncategorizedActual,
+                DescendantActualMinorUnits: 0,
+                AbsorbedCategoryIds: null);
 
             return new BudgetPositionCalculation(
                 CategoryPositions: positions,

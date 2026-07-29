@@ -35,7 +35,13 @@ public sealed record CategoryPosition(
     long? PlannedMinorUnits,
     [property: JsonRequired] long ActualMinorUnits,
     long? RemainingMinorUnits,
-    long? OverMinorUnits);
+    long? OverMinorUnits,
+    /// <summary>Budget Actuals whose exact assigned Spend Category equals this row category.</summary>
+    [property: JsonRequired] long DirectActualMinorUnits,
+    /// <summary>Budget Actuals absorbed from descendant Spend Categories with no nearer plan entry.</summary>
+    [property: JsonRequired] long DescendantActualMinorUnits,
+    /// <summary>Absorbed descendant Spend Category identifiers (ordinal order); null/empty when none.</summary>
+    IReadOnlyList<string>? AbsorbedCategoryIds);
 
 public sealed record BudgetPositionTotals(
     [property: JsonRequired] long PlannedMinorUnits,

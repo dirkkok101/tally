@@ -291,7 +291,7 @@ public sealed class BudgetPositionCalculatorTests
     [Fact]
     public void Calculation_schema_version_is_stable_provenance_constant()
     {
-        Assert.Equal("budget-position-v1", BudgetPositionCalculator.CalculationSchemaVersion);
+        Assert.Equal("budget-position-v2", BudgetPositionCalculator.CalculationSchemaVersion);
     }
 
     // ── Full-set reconciliation ──────────────────────────────────────────────
@@ -739,7 +739,7 @@ public sealed class BudgetPositionCalculatorTests
         string transactionId,
         string? categoryId,
         long amount) =>
-        new(ordinal, transactionId, "2026-07-15", categoryId, amount);
+        new(ordinal, transactionId, "2026-07-15", categoryId, amount, AncestryIds: [], EffectiveCategoryId: null);
 
     private static CategoryLifecycleEvidence Known(
         string categoryId,

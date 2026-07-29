@@ -104,12 +104,15 @@ public static partial class BudgetContractMapper
                 }
 
                 membershipSum = checked(membershipSum + contribution.MinorUnits);
+                // Ancestry/effective envelope provenance is populated by TASK-BUDGET-ENVELOPE-ANCESTRY-COMPOSITION.
                 mapped.Add(new BudgetActualMember(
                     item.Ordinal,
                     item.TransactionId,
                     item.EffectiveDate,
                     item.CategoryId,
-                    contribution.MinorUnits));
+                    contribution.MinorUnits,
+                    AncestryIds: [],
+                    EffectiveCategoryId: null));
             }
         }
         catch (OverflowException)

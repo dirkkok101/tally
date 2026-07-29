@@ -714,8 +714,8 @@ public sealed class BudgetInsightsContractTests : IAsyncLifetime
             "gen-1");
         BudgetActualMember[] members =
         [
-            new(0, "tx-a", "2026-07-01", "cat-1", 100),
-            new(1, "tx-b", "2026-07-02", null, -25)
+            new(0, "tx-a", "2026-07-01", "cat-1", 100, AncestryIds: [], EffectiveCategoryId: null),
+            new(1, "tx-b", "2026-07-02", null, -25, AncestryIds: [], EffectiveCategoryId: null)
         ];
 
         var a = BudgetInsightEvidenceBinding.ComputeBindingFingerprint(
