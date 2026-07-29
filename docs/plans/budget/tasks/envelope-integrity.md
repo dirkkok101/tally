@@ -94,12 +94,15 @@ Malformed frozen ancestry and Int64 overflow return the stable integrity failure
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-113k` | `verified` | 2026-07-29T12:46:26.5181614+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-113k` (verified)
 - `depends-on:compile` -> [TASK-BUDGET-ENVELOPE-CONTRACTS](../tasks/envelope-contracts.md): Ancestry validation reads BudgetActualMember.AncestryIds, which that task adds to the record.
 - `depends-on:compile` -> [TASK-BUDGET-ENVELOPE-RESOLUTION](../tasks/envelope-resolution.md): Integrity validation guards the resolution path and shares its ancestry scan.
 - `governed-by` -> DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION: Nearest-ancestor Category Budget Entry resolution over frozen Spend Category ancestry

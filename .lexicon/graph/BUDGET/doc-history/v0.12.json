@@ -1,0 +1,9 @@
+{
+  "id": "01KYPYW7FTNN723AEQSDKTXPHS",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "version": "0.12",
+  "changes": [
+    "Compiled PLAN-BUDGET-V1 for bd-3lrk: 5 new beads (bd-1xlf, bd-tuey, bd-3uzt, bd-113k, bd-zsby), 29 beads total with the 24 v1 beads skipped idempotently. 7 compile edges emitted to br, no cycles, frontier is bd-1xlf alone which matches the lex dependency root. All five enriched to the full runtime-agnostic contract template and labelled; bd-zsby carries gate and verify-budget-uc-003."
+  ],
+  "created_at": "2026-07-29T12:51:31.4511284+00:00"
+}

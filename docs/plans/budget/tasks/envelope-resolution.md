@@ -109,12 +109,15 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3uzt` | `verified` | 2026-07-29T12:46:25.8820168+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-3uzt` (verified)
 - `depends-on:compile` -> [TASK-BUDGET-ENVELOPE-ANCESTRY-COMPOSITION](../tasks/envelope-ancestry-composition.md): Resolution reads AncestryIds, which is only populated once the mapper carries it from the snapshot.
 - `depends-on:compile` -> [TASK-BUDGET-ENVELOPE-CONTRACTS](../tasks/envelope-contracts.md): Resolution writes the partition fields that task adds to CategoryPosition.
 - `governed-by` -> DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION: Nearest-ancestor Category Budget Entry resolution over frozen Spend Category ancestry

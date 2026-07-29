@@ -391,15 +391,6 @@ Platform constraints: target .NET 10 Native-AOT and linux-x64; use file-scoped n
 - [TASK-BUDGET-VERIFY-UC-004](tasks/verify-uc-004.md): Task has no implements refs.
 - [TASK-BUDGET-VERIFY-UC-005](tasks/verify-uc-005.md): Task has no implements refs.
 
-#### Tasks Without Bead Refs
-
-- [TASK-BUDGET-ENVELOPE-ANCESTRY-COMPOSITION](tasks/envelope-ancestry-composition.md): Task has no bead refs.
-- [TASK-BUDGET-ENVELOPE-CONTRACTS](tasks/envelope-contracts.md): Task has no bead refs.
-- [TASK-BUDGET-ENVELOPE-INTEGRITY](tasks/envelope-integrity.md): Task has no bead refs.
-- [TASK-BUDGET-ENVELOPE-RESOLUTION](tasks/envelope-resolution.md): Task has no bead refs.
-- [TASK-BUDGET-GATE-INT-ENVELOPE-PROVENANCE](tasks/gate-int-envelope-provenance.md): Task has no bead refs.
-
 #### Coverage Warnings
 
 - 13 loose task(s) have no implements refs.
-- 5 task(s) have no bead refs.

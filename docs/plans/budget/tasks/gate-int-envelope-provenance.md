@@ -94,12 +94,15 @@ The published BUDGET operations report the effective Spend Category per Budget A
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-zsby` | `verified` | 2026-07-29T12:46:27.1134647+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-zsby` (verified)
 - `covers` -> UC-BUDGET-003: Inspect exact Budget Position
 - `depends-on:compile` -> [TASK-BUDGET-ENVELOPE-INTEGRITY](../tasks/envelope-integrity.md): The module gate runs the full BUDGET verification suite, which includes the integrity behaviour this task proves.
 - `depends-on:compile` -> [TASK-BUDGET-ENVELOPE-RESOLUTION](../tasks/envelope-resolution.md): The gate proves resolution behavior through the published contract and cannot pass before resolution exists.

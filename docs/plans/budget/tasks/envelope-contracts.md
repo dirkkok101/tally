@@ -93,12 +93,15 @@ No task dependencies recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1xlf` | `verified` | 2026-07-29T12:46:24.5274691+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-1xlf` (verified)
 - `governed-by` -> DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION: Nearest-ancestor Category Budget Entry resolution over frozen Spend Category ancestry
 - `implements` -> FR-BUDGET-POSITION-QUERY: Calculate exact Budget Positions
 - `touches` -> DM-BUDGET-POSITION-PROJECTION: BudgetPositionProjection

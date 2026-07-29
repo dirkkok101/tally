@@ -88,12 +88,15 @@ Every materialized Budget Actual member carries the frozen Spend Category ancest
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-tuey` | `verified` | 2026-07-29T12:46:25.1979651+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
+- `bead-ref` -> `bd-tuey` (verified)
 - `depends-on:compile` -> [TASK-BUDGET-ENVELOPE-CONTRACTS](../tasks/envelope-contracts.md): The mapper assigns BudgetActualMember.AncestryIds, which that task adds to the record.
 - `governed-by` -> DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION: Nearest-ancestor Category Budget Entry resolution over frozen Spend Category ancestry
 - `governed-by` -> DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations
