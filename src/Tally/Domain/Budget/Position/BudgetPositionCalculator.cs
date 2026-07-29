@@ -263,23 +263,19 @@ public static class BudgetPositionCalculator
             return null;
         }
 
+        // Ancestry is validated before resolution: non-empty, self-last, distinct, known.
+        // Scan self → root (final index toward zero); first planned element wins.
         var ancestry = member.AncestryIds;
-        if (ancestry is { Count: > 0 })
+        for (var i = ancestry.Count - 1; i >= 0; i--)
         {
-            for (var i = ancestry.Count - 1; i >= 0; i--)
+            var candidate = ancestry[i];
+            if (plannedByCategory.ContainsKey(candidate))
             {
-                var candidate = ancestry[i];
-                if (plannedByCategory.ContainsKey(candidate))
-                {
-                    return candidate;
-                }
+                return candidate;
             }
-
-            return null;
         }
 
-        // Flat / empty-ancestry fallback: exact CategoryId identity (budget-position-v1 parity).
-        return plannedByCategory.ContainsKey(member.CategoryId) ? member.CategoryId : null;
+        return null;
     }
 
     /// <summary>
@@ -438,6 +434,15 @@ public static class BudgetPositionCalculator
                     throw Integrity(
                         $"Actual membership references unknown category identifier '{member.CategoryId}'.");
                 }
+
+                // Ancestry mirrors the LEDGER ActualsCalculator invariant
+                // (DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION / TC-BUDGET-ENVELOPE-ANCESTRY-INTEGRITY).
+                ValidateCategorizedAncestry(member, known);
+            }
+            else if (member.AncestryIds is { Count: > 0 })
+            {
+                throw Integrity(
+                    "Uncategorized actual membership carries a non-empty frozen Spend Category ancestry.");
             }
         }
 
@@ -448,6 +453,48 @@ public static class BudgetPositionCalculator
             {
                 throw Integrity(
                     $"Actual membership is missing ordinal {expected} (expected dense 0..{count - 1}).");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Categorized member ancestry must be non-empty, end with the assigned Spend Category,
+    /// contain distinct identifiers, and resolve every element in known evidence.
+    /// </summary>
+    private static void ValidateCategorizedAncestry(
+        BudgetActualMember member,
+        IReadOnlyDictionary<string, CategoryLifecycleEvidence> known)
+    {
+        var ancestry = member.AncestryIds;
+        if (ancestry is null || ancestry.Count == 0)
+        {
+            throw Integrity(
+                "Categorized actual membership has empty frozen Spend Category ancestry.");
+        }
+
+        if (!string.Equals(ancestry[^1], member.CategoryId, StringComparison.Ordinal))
+        {
+            throw Integrity(
+                "Categorized actual membership frozen ancestry does not end with the assigned Spend Category identifier.");
+        }
+
+        var seen = new HashSet<string>(ancestry.Count, StringComparer.Ordinal);
+        foreach (var ancestryId in ancestry)
+        {
+            if (string.IsNullOrWhiteSpace(ancestryId))
+            {
+                throw Integrity("Frozen Spend Category ancestry contains a blank identifier.");
+            }
+
+            if (!seen.Add(ancestryId))
+            {
+                throw Integrity("Frozen Spend Category ancestry contains a repeated identifier.");
+            }
+
+            if (!known.ContainsKey(ancestryId))
+            {
+                throw Integrity(
+                    $"Frozen Spend Category ancestry references unknown category identifier '{ancestryId}'.");
             }
         }
     }

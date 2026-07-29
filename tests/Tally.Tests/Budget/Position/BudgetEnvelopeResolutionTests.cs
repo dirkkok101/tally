@@ -377,15 +377,15 @@ public sealed class BudgetEnvelopeResolutionTests
     }
 
     [Fact]
-    public void Empty_ancestry_falls_back_to_exact_category_identity()
+    public void Flat_single_element_ancestry_is_exact_identity()
     {
-        // Preserves budget-position-v1 exact-identity when AncestryIds is empty.
+        // Flat taxonomy: ancestry equals [self]; scan yields exact CategoryId or Unbudgeted.
         var result = Calculate(
             entries: [Entry(Root, 500)],
             members:
             [
-                Member(0, "tx-1", Root, 40, []),
-                Member(1, "tx-2", Child, 60, [])
+                Member(0, "tx-1", Root, 40, [Root]),
+                Member(1, "tx-2", Child, 60, [Child])
             ],
             known: [Known(Root), Known(Child)]);
 
