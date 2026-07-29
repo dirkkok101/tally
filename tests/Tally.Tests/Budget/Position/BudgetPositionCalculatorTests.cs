@@ -739,7 +739,16 @@ public sealed class BudgetPositionCalculatorTests
         string transactionId,
         string? categoryId,
         long amount) =>
-        new(ordinal, transactionId, "2026-07-15", categoryId, amount, AncestryIds: [], EffectiveCategoryId: null);
+        // Flat taxonomy ancestry: root-first self-last; uncategorized is empty
+        // (LEDGER ActualsCalculator invariant; DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION).
+        new(
+            ordinal,
+            transactionId,
+            "2026-07-15",
+            categoryId,
+            amount,
+            AncestryIds: categoryId is null ? [] : [categoryId],
+            EffectiveCategoryId: null);
 
     private static CategoryLifecycleEvidence Known(
         string categoryId,

@@ -42,8 +42,13 @@ public static class BudgetPositionCalculator
 
         ValidateMembership(actualMembers, known);
 
-        // Sum actuals per stable category and uncategorized, each member once.
-        var actualByCategory = new Dictionary<string, long>(StringComparer.Ordinal);
+        // Nearest-ancestor envelope resolution (DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION):
+        // each member resolves to at most one governing plan entry; partition is direct vs descendant.
+        var directByEnvelope = new Dictionary<string, long>(StringComparer.Ordinal);
+        var descendantByEnvelope = new Dictionary<string, long>(StringComparer.Ordinal);
+        var absorbedByEnvelope = new Dictionary<string, List<string>>(StringComparer.Ordinal);
+        var absorbedSeenByEnvelope = new Dictionary<string, HashSet<string>>(StringComparer.Ordinal);
+        var unbudgetedByCategory = new Dictionary<string, long>(StringComparer.Ordinal);
         long uncategorizedActual = 0;
         long membershipActualTotal = 0;
 
@@ -59,13 +64,59 @@ public static class BudgetPositionCalculator
                     continue;
                 }
 
-                if (actualByCategory.TryGetValue(member.CategoryId, out var existing))
+                var effectiveCategoryId = ResolveEnvelope(member, plannedByCategory);
+                if (effectiveCategoryId is null)
                 {
-                    actualByCategory[member.CategoryId] = checked(existing + member.BudgetActualMinorUnits);
+                    // Unbudgeted: keyed by exact assigned Spend Category; never absorbs.
+                    if (unbudgetedByCategory.TryGetValue(member.CategoryId, out var existingUnbudgeted))
+                    {
+                        unbudgetedByCategory[member.CategoryId] =
+                            checked(existingUnbudgeted + member.BudgetActualMinorUnits);
+                    }
+                    else
+                    {
+                        unbudgetedByCategory[member.CategoryId] = member.BudgetActualMinorUnits;
+                    }
+
+                    continue;
+                }
+
+                if (string.Equals(member.CategoryId, effectiveCategoryId, StringComparison.Ordinal))
+                {
+                    if (directByEnvelope.TryGetValue(effectiveCategoryId, out var existingDirect))
+                    {
+                        directByEnvelope[effectiveCategoryId] =
+                            checked(existingDirect + member.BudgetActualMinorUnits);
+                    }
+                    else
+                    {
+                        directByEnvelope[effectiveCategoryId] = member.BudgetActualMinorUnits;
+                    }
                 }
                 else
                 {
-                    actualByCategory[member.CategoryId] = member.BudgetActualMinorUnits;
+                    if (descendantByEnvelope.TryGetValue(effectiveCategoryId, out var existingDescendant))
+                    {
+                        descendantByEnvelope[effectiveCategoryId] =
+                            checked(existingDescendant + member.BudgetActualMinorUnits);
+                    }
+                    else
+                    {
+                        descendantByEnvelope[effectiveCategoryId] = member.BudgetActualMinorUnits;
+                    }
+
+                    // Absorbed identifiers in ascending member-ordinal first-seen order.
+                    if (!absorbedSeenByEnvelope.TryGetValue(effectiveCategoryId, out var seen))
+                    {
+                        seen = new HashSet<string>(StringComparer.Ordinal);
+                        absorbedSeenByEnvelope[effectiveCategoryId] = seen;
+                        absorbedByEnvelope[effectiveCategoryId] = [];
+                    }
+
+                    if (seen.Add(member.CategoryId))
+                    {
+                        absorbedByEnvelope[effectiveCategoryId].Add(member.CategoryId);
+                    }
                 }
             }
         }
@@ -82,7 +133,7 @@ public static class BudgetPositionCalculator
         }
 
         // Every explicit plan entry produces a Budgeted or ZeroBudget row (including zeros).
-        var positions = new List<CategoryPosition>(plannedByCategory.Count + actualByCategory.Count);
+        var positions = new List<CategoryPosition>(plannedByCategory.Count + unbudgetedByCategory.Count);
         long budgetedActualSubtotal = 0;
         long zeroBudgetActualSubtotal = 0;
         long unbudgetedActualSubtotal = 0;
@@ -93,8 +144,11 @@ public static class BudgetPositionCalculator
             foreach (var (categoryId, planned) in plannedByCategory)
             {
                 plannedTotal = checked(plannedTotal + planned);
-                actualByCategory.TryGetValue(categoryId, out var actual);
-                actualByCategory.Remove(categoryId);
+                directByEnvelope.TryGetValue(categoryId, out var direct);
+                descendantByEnvelope.TryGetValue(categoryId, out var descendant);
+                var actual = checked(direct + descendant);
+                absorbedByEnvelope.TryGetValue(categoryId, out var absorbedList);
+                IReadOnlyList<string>? absorbed = absorbedList is { Count: > 0 } ? absorbedList : null;
 
                 var kind = planned > 0
                     ? BudgetCategoryPositionKind.Budgeted
@@ -111,8 +165,6 @@ public static class BudgetPositionCalculator
 
                 var (remaining, over) = Variance(planned, actual);
                 var evidence = known[categoryId];
-                // Flat exact-identity partition (v2 fields): all exact-match actual is direct;
-                // envelope absorption is owned by TASK-BUDGET-ENVELOPE-RESOLUTION.
                 positions.Add(new CategoryPosition(
                     CategoryId: categoryId,
                     CurrentDisplayName: evidence.CurrentDisplayName,
@@ -122,13 +174,13 @@ public static class BudgetPositionCalculator
                     ActualMinorUnits: actual,
                     RemainingMinorUnits: remaining,
                     OverMinorUnits: over,
-                    DirectActualMinorUnits: actual,
-                    DescendantActualMinorUnits: 0,
-                    AbsorbedCategoryIds: null));
+                    DirectActualMinorUnits: direct,
+                    DescendantActualMinorUnits: descendant,
+                    AbsorbedCategoryIds: absorbed));
             }
 
-            // Remaining non-null category actuals are Unbudgeted (omitted from plan).
-            foreach (var (categoryId, actual) in actualByCategory)
+            // Unbudgeted: exact assigned Spend Category, no absorption, no aggregated ancestors.
+            foreach (var (categoryId, actual) in unbudgetedByCategory)
             {
                 unbudgetedActualSubtotal = checked(unbudgetedActualSubtotal + actual);
                 var evidence = known[categoryId];
@@ -191,6 +243,43 @@ public static class BudgetPositionCalculator
         {
             throw Integrity("Checked Int64 arithmetic overflowed while calculating Budget Position.", ex);
         }
+    }
+
+    /// <summary>
+    /// Resolve the governing Category Budget Entry for one actual by scanning frozen ancestry
+    /// from self toward root (last index → 0). Returns the nearest planned category id, or
+    /// <c>null</c> when the outcome is Unbudgeted Spend / Uncategorized Spend
+    /// (DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION / EffectiveCategoryId).
+    /// </summary>
+    public static string? ResolveEnvelope(
+        BudgetActualMember member,
+        IReadOnlyDictionary<string, long> plannedByCategory)
+    {
+        ArgumentNullException.ThrowIfNull(member);
+        ArgumentNullException.ThrowIfNull(plannedByCategory);
+
+        if (member.CategoryId is null)
+        {
+            return null;
+        }
+
+        var ancestry = member.AncestryIds;
+        if (ancestry is { Count: > 0 })
+        {
+            for (var i = ancestry.Count - 1; i >= 0; i--)
+            {
+                var candidate = ancestry[i];
+                if (plannedByCategory.ContainsKey(candidate))
+                {
+                    return candidate;
+                }
+            }
+
+            return null;
+        }
+
+        // Flat / empty-ancestry fallback: exact CategoryId identity (budget-position-v1 parity).
+        return plannedByCategory.ContainsKey(member.CategoryId) ? member.CategoryId : null;
     }
 
     /// <summary>
