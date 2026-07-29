@@ -507,10 +507,16 @@ Honest summary: the *engineering* documentation is unusually deep, and the
 - **The executable contract itself** — `tally help` and `tally schema show
   <operation-id>` are the authoritative, always-current reference for all 88
   operations. Prefer them over any prose.
+- **`docs/prd/<module>/prd.md`** — product requirements for the three shipped
+  modules: problem statement, goals and non-goals, functional and non-functional
+  requirements, use cases, success metrics, risks, and kill criteria.
+- **`docs/designs/<module>/`** — a design workspace per shipped module. Start at
+  `README.md`, then `design.md` (module narrative), `architecture.md`,
+  `data-model.md`, `glossary.md`, plus `features/`, `decisions/` (each design
+  decision with its rationale and status), and `diagrams/` (Mermaid).
 - **`docs/plans/`** — implementation plans for all five modules (Ledger, Ingest,
-  Budget, Insights, Classify), exported from the design graph: 27 sub-plans and
-  189 tasks with constraints and acceptance criteria. This is the bulk of the
-  written documentation.
+  Budget, Insights, Classify): 27 sub-plans and 189 tasks with constraints and
+  acceptance criteria.
 - **`docs/verification/`** — what each module verification gate proves, and how.
 - **`docs/reviews/`, `docs/diagnosis/`, `docs/validation/`** — adversarial review
   records, bug diagnoses, and resolved open questions.
@@ -525,12 +531,13 @@ re-export, never the Markdown.
 
 **Known gaps**
 
-- **PRDs, technical designs, ADRs, patterns, and architecture narratives are not
-  exported.** `docs/prd/`, `docs/designs/`, `docs/adr/`, `docs/patterns/`, and
-  `docs/architecture/` are empty scaffolding — the content lives in the lex graph
-  and is only readable via `lex` (`lex fr list --module LEDGER --json`,
-  `lex adr list --module CORE --json`, …). Reading the design rationale currently
-  requires the `lex` toolchain.
+- **ADRs, patterns, and architecture narratives are not exported.**
+  `docs/adr/`, `docs/patterns/`, and `docs/architecture/` are empty — the 30
+  accepted ADRs, 33 patterns, and 17 architecture docs live in the graph and are
+  readable only via `lex` (`lex adr list --module CORE --json`,
+  `lex pattern list --module CORE --json`, …).
+- PRD and design exports cover Ledger, Ingest, and Budget. Insights (still in
+  implementation) has plans exported but no PRD or design export yet.
 - No task-oriented user guides beyond this README — no "import your first
   statement end to end" tutorial, no reconciliation walkthrough.
 - No published release binaries, no CI workflow in the repo, and no changelog.
