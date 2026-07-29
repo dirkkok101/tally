@@ -18,8 +18,11 @@ public sealed class UC006ExternalOrchestratorContractWorkflowTests(PublishedTall
         var version = await SuccessWithoutStore(["version"], null, "system.version");
         var help = await SuccessWithoutStore(["help"], null, "system.schema.list");
 
+        Assert.Equal("tally", version.GetProperty("product").GetString());
+        Assert.Equal(Tally.ProductVersion.Current, version.GetProperty("version").GetString());
         Assert.Equal("1.0", version.GetProperty("contractVersion").GetString());
         Assert.Equal("1.0", version.GetProperty("compatibility").GetString());
+        Assert.StartsWith("0.3.", version.GetProperty("version").GetString(), StringComparison.Ordinal);
         Assert.Equal(88, help.GetProperty("operations").GetArrayLength());
         Assert.False(Directory.Exists(Path.Combine(dataRoot, ".agents")));
         Assert.False(Directory.Exists(Path.Combine(dataRoot, ".claude")));

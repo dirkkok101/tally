@@ -3,6 +3,7 @@ using Tally.Cli;
 using Tally.Contracts.Common;
 using Tally.Contracts.System;
 using Xunit;
+// ProductVersion lives in root Tally namespace
 
 namespace Tally.Tests.Cli;
 
@@ -44,6 +45,12 @@ public sealed class CliContractTests
         var result = await Run("version");
         Assert.Equal(0, result.ExitCode);
         AssertEnvelope(result, "system.version", "success");
+        using var document = JsonDocument.Parse(result.Stdout);
+        var payload = document.RootElement.GetProperty("result");
+        Assert.Equal(ProductVersion.ProductName, payload.GetProperty("product").GetString());
+        Assert.Equal(ProductVersion.Current, payload.GetProperty("version").GetString());
+        Assert.Equal(ProductVersion.ContractVersion, payload.GetProperty("contractVersion").GetString());
+        Assert.Equal(ProductVersion.Compatibility, payload.GetProperty("compatibility").GetString());
     }
     // TC-LEDGER-CONTRACT-DISCOVERY-CONTRACT
     [Fact]

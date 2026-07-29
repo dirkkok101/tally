@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "bundleVersion": "1.0.0",
-  "minimumExecutableVersion": "1.0",
-  "maximumExecutableVersion": "1.0",
+  "minimumExecutableVersion": "0.1.0",
+  "maximumExecutableVersion": "0.99.99",
   "minimumContractVersion": "1.0",
   "maximumContractVersion": "1.0",
   "operationIds": [

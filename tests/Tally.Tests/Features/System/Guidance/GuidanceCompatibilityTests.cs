@@ -65,8 +65,8 @@ public sealed class GuidanceCompatibilityTests : IAsyncLifetime
 
         Assert.All(result.Bundles, bundle =>
         {
-            Assert.Equal("1.0", bundle.MinimumExecutableVersion);
-            Assert.Equal("1.0", bundle.MaximumExecutableVersion);
+            Assert.Equal("0.1.0", bundle.MinimumExecutableVersion);
+            Assert.Equal("0.99.99", bundle.MaximumExecutableVersion);
             Assert.Equal("1.0", bundle.MinimumContractVersion);
             Assert.Equal("1.0", bundle.MaximumContractVersion);
             Assert.All(bundle.OperationIds, operationId => Assert.NotNull(registry.Find(operationId)));

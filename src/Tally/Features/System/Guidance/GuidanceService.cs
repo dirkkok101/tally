@@ -11,8 +11,9 @@ namespace Tally.Features.System.Guidance;
 
 public sealed class GuidanceService()
 {
-    private const string ExecutableVersion = "1.0";
-    private const string ContractVersion = "1.0";
+    // Product executable line (0.3.x today); contract line stays independent.
+    private static string ExecutableVersion => ProductVersion.Current;
+    private static string ContractVersion => ProductVersion.ContractVersion;
     private const string InstalledManifestName = ".tally-guidance.json";
     private static readonly string[] SupportedHosts = ["claude-code", "codex"];
     private static readonly string[] ForbiddenContent = ["mailbox", "mime", "whatsapp", "delivery", "schedule", "recipient", "acknowledgement", "sqlite", "file access"];
