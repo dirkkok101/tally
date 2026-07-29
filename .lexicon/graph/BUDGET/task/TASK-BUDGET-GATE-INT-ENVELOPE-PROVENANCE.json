@@ -314,34 +314,34 @@
   ],
   "verification_steps": [
     {
-      "id": "01KYPXEA9806GD2ACFYXFVG676",
+      "id": "01KYQ5HAQT54GQ62Y4D3DERWHY",
       "phase": "after",
       "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetEnvelopeProvenanceTests",
       "expected_result": "All BudgetEnvelopeProvenanceTests pass, exit code 0, at least 3 tests run",
       "required": 1,
       "timeout_seconds": 900,
       "sort_order": 0,
-      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+      "created_at": "2026-07-29T14:47:54.3615509+00:00"
     },
     {
-      "id": "01KYPXEA98P76FPSMMXJZKF4QJ",
+      "id": "01KYQ5HAQV5B9CJ4D2EYX9FH44",
       "phase": "after",
       "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetUc003PositionTests",
       "expected_result": "All BudgetUc003PositionTests pass unchanged, exit code 0, at least 31 tests run",
       "required": 1,
       "timeout_seconds": 900,
       "sort_order": 1,
-      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+      "created_at": "2026-07-29T14:47:54.3615509+00:00"
     },
     {
-      "id": "01KYPXEA98YS4EY6RCGS2S7TJH",
+      "id": "01KYQ5HAQV6EG6ZVA4E4CE5DMR",
       "phase": "after",
-      "command": "scripts/verify-budget-module.sh",
-      "expected_result": "Script exits 0 with every discovered BUDGET gate suite passing",
+      "command": "bash scripts/verify-budget-fast.sh",
+      "expected_result": "Script exits 0 within hard wall-clock limit; core envelope suites discovered and green",
       "required": 1,
-      "timeout_seconds": 1800,
+      "timeout_seconds": 120,
       "sort_order": 2,
-      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+      "created_at": "2026-07-29T14:47:54.3615509+00:00"
     }
   ]
 }

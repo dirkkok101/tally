@@ -112,3 +112,14 @@ references, supersedes, see-also); `lex link suggest --module <CODE>
 - Do NOT skip `lex link create` for cross-entity references.
 - Do NOT bypass the skills' availability checks.
 <!-- LEX-MANAGED-END -->
+
+## BUDGET verification tiers
+
+| Gate | Command | When |
+|---|---|---|
+| **Fast (default per bead)** | `bash scripts/verify-budget-fast.sh` | `/lex:execute` feature beads, local iteration; target &lt;60s |
+| **Extended fast** | `BUDGET_FAST_EXTENDED=1 bash scripts/verify-budget-fast.sh` | Optional query + provenance process smokes |
+| **Module (ship only)** | `bash scripts/verify-budget-module.sh` | `TASK-BUDGET-GATE-MODULE` / release completion only |
+
+Do **not** run `verify-budget-module.sh` as the default per-bead verification step (AOT + ~685 tests + personal-scale perf ≈ 30 min). Details: `docs/verification/budget-fast.md`.
+

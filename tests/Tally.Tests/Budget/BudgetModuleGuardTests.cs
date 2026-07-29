@@ -26,12 +26,15 @@ public sealed class BudgetModuleGuardTests
         "BudgetPlanReadQueryTests",
         "BudgetPeriodTests",
         "BudgetPositionCalculatorTests",
+        "BudgetEnvelopeResolutionTests",
+        "BudgetEnvelopeIntegrityTests",
         "GetBudgetPositionQueryTests",
         "BudgetMutationExecutorTests",
         "BudgetStateStoreTests",
         "BudgetHistoryInvariantTests",
         "BudgetProcessContractTests",
         "BudgetOperationContractTests",
+        "BudgetContractShapeTests",
         "BudgetLedgerBoundaryArchitectureTests",
         "BudgetLedgerContractClientTests",
         "LedgerBudgetActualsProjectionTests",
@@ -45,6 +48,7 @@ public sealed class BudgetModuleGuardTests
         "BudgetUc001DraftTests",
         "BudgetUc002ActivationTests",
         "BudgetUc003PositionTests",
+        "BudgetEnvelopeProvenanceTests",
         "BudgetUc004HistoryTests",
         "BudgetUc005AgentContractTests",
         "BudgetGraphEvidenceGuardTests",
@@ -53,6 +57,7 @@ public sealed class BudgetModuleGuardTests
 
     private static readonly string[] RequiredGateScripts =
     [
+        "verify-budget-fast.sh",
         "verify-budget-module.sh",
         "verify-budget-graph.sh",
         "verify-budget-contract.sh",

@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
-# VerifiedBudgetV1Module — TASK-BUDGET-GATE-MODULE
+# VerifiedBudgetV1Module — TASK-BUDGET-GATE-MODULE (ship / plan completion only).
 # Converges build, AOT, Budget tests, specialized gates, deps, and kill criteria.
 # Metadata-only (no financial payloads).
+#
+# NOT the per-bead / edit-cycle default — that is scripts/verify-budget-fast.sh
+# (pure envelope + calculator suites; target <60s). See docs/verification/budget-fast.md.
 set -euo pipefail
 
 repository_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -124,12 +127,15 @@ named_suites=(
     BudgetPlanReadQueryTests
     BudgetPeriodTests
     BudgetPositionCalculatorTests
+    BudgetEnvelopeResolutionTests
+    BudgetEnvelopeIntegrityTests
     GetBudgetPositionQueryTests
     BudgetMutationExecutorTests
     BudgetStateStoreTests
     BudgetHistoryInvariantTests
     BudgetProcessContractTests
     BudgetOperationContractTests
+    BudgetContractShapeTests
     BudgetLedgerBoundaryArchitectureTests
     BudgetLedgerContractClientTests
     LedgerBudgetActualsProjectionTests
@@ -143,6 +149,7 @@ named_suites=(
     BudgetUc001DraftTests
     BudgetUc002ActivationTests
     BudgetUc003PositionTests
+    BudgetEnvelopeProvenanceTests
     BudgetUc004HistoryTests
     BudgetUc005AgentContractTests
     BudgetGraphEvidenceGuardTests
@@ -163,6 +170,10 @@ declare -A suite_floor=(
     [BudgetUc001DraftTests]=28
     [BudgetUc002ActivationTests]=26
     [BudgetUc003PositionTests]=27
+    [BudgetEnvelopeProvenanceTests]=3
+    [BudgetEnvelopeResolutionTests]=10
+    [BudgetEnvelopeIntegrityTests]=5
+    [BudgetContractShapeTests]=4
     [BudgetUc004HistoryTests]=15
     [BudgetUc005AgentContractTests]=21
 )

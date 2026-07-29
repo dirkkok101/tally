@@ -2,12 +2,18 @@
 
 Status: **passed** on 2026-07-27 (commit `9c581d9` / `9c581d974a6c97c1f939456e22872e914f3e112b`).
 
-The BUDGET completion gate is executed by `bash scripts/verify-budget-module.sh`. The script requires Release restore/build, formatting, linux-x64 Native-AOT publish, non-vacuous Budget suite discovery and execution, contract/recovery/security/graph specialized gates, external-dependency validation, kill-criterion clearance, and clean git whitespace. This report is **metadata-only** and must not contain financial payloads.
+The BUDGET **completion / ship** gate is executed by `bash scripts/verify-budget-module.sh`. The script requires Release restore/build, formatting, linux-x64 Native-AOT publish, non-vacuous Budget suite discovery and execution, contract/recovery/security/graph specialized gates, external-dependency validation, kill-criterion clearance, and clean git whitespace. This report is **metadata-only** and must not contain financial payloads.
+
+**Per-bead / edit-cycle verification is not this script.** Use `bash scripts/verify-budget-fast.sh` (see `docs/verification/budget-fast.md`). The module script is reserved for `TASK-BUDGET-GATE-MODULE` and release completion.
 
 ## Gate command
 
 ```bash
+# Ship / plan completion only (slow by design)
 bash scripts/verify-budget-module.sh
+
+# Per-bead default (target <60s)
+bash scripts/verify-budget-fast.sh
 ```
 
 Expected: exit 0; nonzero discovery for all named Budget suites; 0 build/test failures; four external dependencies `validated`; five kill criteria `clear`.

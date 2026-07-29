@@ -83,7 +83,7 @@ The published BUDGET operations report the effective Spend Category per Budget A
 |---|---|---|---|---:|
 | `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetEnvelopeProvenanceTests` | All BudgetEnvelopeProvenanceTests pass, exit code 0, at least 3 tests run | `true` | 900 |
 | `after` | `dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetUc003PositionTests` | All BudgetUc003PositionTests pass unchanged, exit code 0, at least 31 tests run | `true` | 900 |
-| `after` | `scripts/verify-budget-module.sh` | Script exits 0 with every discovered BUDGET gate suite passing | `true` | 1800 |
+| `after` | `bash scripts/verify-budget-fast.sh` | Script exits 0 within hard wall-clock limit; core envelope suites discovered and green | `true` | 120 |
 
 ### Review Gates
 
