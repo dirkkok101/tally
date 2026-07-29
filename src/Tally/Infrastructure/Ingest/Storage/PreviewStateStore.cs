@@ -132,6 +132,68 @@ public sealed class PreviewStateStore(IngestDatabase database, BatchErrorEventSt
         return windows;
     }
 
+    /// <summary>
+    /// Economic-fact keys for accepted candidates on the selected account whose transaction date
+    /// is one of <paramref name="boundaryDates"/>. Used to mark shared boundary rows as exact
+    /// duplicates when consecutive inclusive periods touch at an endpoint.
+    /// </summary>
+    public async Task<IReadOnlySet<string>> ListAcceptedEconomicKeysAsync(
+        string selectedAccountId,
+        IReadOnlyCollection<DateOnly> boundaryDates,
+        CancellationToken cancellationToken)
+    {
+        var keys = new HashSet<string>(StringComparer.Ordinal);
+        if (boundaryDates.Count == 0)
+        {
+            return keys;
+        }
+
+        var dateSet = boundaryDates
+            .Select(date => date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture))
+            .ToHashSet(StringComparer.Ordinal);
+
+        await using var connection = await OpenMigratedAsync(cancellationToken);
+        const string sql = """
+            SELECT c.immutable_facts_json
+            FROM import_candidate c
+            JOIN manifest_revision m ON m.manifest_revision_id = c.manifest_revision_id
+            JOIN ingest_batch b ON b.batch_id = m.batch_id
+            WHERE b.selected_account_id = $accountId
+              AND b.status IN (0, 1, 2, 3, 4);
+            """;
+        await using var command = connection.CreateCommand();
+        command.CommandText = sql;
+        command.Parameters.AddWithValue("$accountId", selectedAccountId);
+        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+        while (await reader.ReadAsync(cancellationToken))
+        {
+            var json = reader.GetString(0);
+            ImportCandidate? candidate;
+            try
+            {
+                candidate = JsonSerializer.Deserialize(json, IngestJsonContext.Default.ImportCandidate);
+            }
+            catch (JsonException)
+            {
+                continue;
+            }
+
+            if (candidate is null || !dateSet.Contains(candidate.TransactionDate))
+            {
+                continue;
+            }
+
+            keys.Add(OverlapPolicy.EconomicFactKey(
+                candidate.AccountId,
+                candidate.SignedAmountMinor,
+                candidate.CurrencyCode,
+                candidate.TransactionDate,
+                candidate.OriginalDescription));
+        }
+
+        return keys;
+    }
+
     public async Task<StoredPreview> PersistPreviewAsync(
         string sourceFingerprint,
         string selectedAccountId,

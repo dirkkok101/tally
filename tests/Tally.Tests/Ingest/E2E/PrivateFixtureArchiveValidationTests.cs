@@ -7,6 +7,7 @@ using Tally.Contracts.Ledger.Accounts;
 using Tally.Domain.Ingest.Normalization;
 using Tally.Domain.Ingest.Reconciliation;
 using Tally.Features.Ingest.Contract;
+using Tally.Features.Ingest.Preview;
 using Tally.Features.Ingest.Review;
 using Tally.Infrastructure.Ingest.Pdf;
 using Tally.Tests.Ingest.Fixtures;
@@ -241,6 +242,128 @@ public sealed class PrivateFixtureArchiveValidationTests : IAsyncLifetime
         // Structural console proof only.
         Console.WriteLine(
             $"PRIVATE_ARCHIVE_PIPELINE previewed={previewed} committed={approvedCommitted} nonCommittable={nonCommittableStopped} exactReplays={exactReplays} duplicateEffectReplays={duplicateEffectReplays}");
+    }
+
+    /// <summary>
+    /// Live-import regression: all Layout A (FNB) fixtures must import onto one account in period
+    /// order. Consecutive inclusive periods that only touch at an endpoint must preview; the two
+    /// same-content June sources exact-replay; the non-committable fixture stays blocked.
+    /// Structural counts only — no private rows/paths logged.
+    /// </summary>
+    [Fact]
+    public async Task Authorized_fnb_history_imports_on_one_account_without_boundary_overlap_block()
+    {
+        var fixtures = harness.TryPrivateFixtures();
+        if (fixtures is null)
+        {
+            Assert.Null(Environment.GetEnvironmentVariable(PrivateStatementFixtureSet.ManifestEnvironmentVariable));
+            return;
+        }
+
+        var fnb = fixtures.Fixtures
+            .Where(fixture => fixture.VariantId == "pdf-text-layout-a-v1")
+            .Select(fixture =>
+            {
+                var period = fixture.Expected.GetProperty("statementPeriod");
+                return (
+                    Fixture: fixture,
+                    Start: period.GetProperty("startDate").GetString()!,
+                    End: period.GetProperty("endDate").GetString()!);
+            })
+            .OrderBy(item => item.Start, StringComparer.Ordinal)
+            .ThenBy(item => item.End, StringComparer.Ordinal)
+            .ThenBy(item => item.Fixture.SourceSha256, StringComparer.Ordinal)
+            .ToArray();
+
+        Assert.Equal(13, fnb.Length);
+        harness.RebindIngestWithRealPdfExtractor();
+        var accountId = await harness.CreateAccountAsync(AccountType.Cheque, institution: "FnbHistory");
+
+        var previewed = 0;
+        var committed = 0;
+        var exactContentReplays = 0;
+        var nonCommittable = 0;
+        var samePeriodBlocked = 0;
+        var committedBatches = new HashSet<string>(StringComparer.Ordinal);
+        var seenPeriods = new HashSet<string>(StringComparer.Ordinal);
+        var ledgerEffects = 0;
+
+        foreach (var item in fnb)
+        {
+            var sourcePath = Path.Combine(harness.Root, $"fnb-history-{previewed:D2}.pdf");
+            await File.WriteAllBytesAsync(sourcePath, item.Fixture.SourceBytes.ToArray());
+            var periodKey = item.Start + ".." + item.End;
+
+            var (ok, error, preview) = await harness.TryPreviewPathAsync(accountId, sourcePath);
+            if (!ok)
+            {
+                // Same inclusive period with different source bytes remains fail-closed.
+                // Consecutive endpoint-only contact must never take this path.
+                Assert.Equal(PreviewErrors.OverlapBlocked, error);
+                Assert.True(seenPeriods.Contains(periodKey), "unexpected overlap block on a new period");
+                samePeriodBlocked++;
+                previewed++;
+                continue;
+            }
+
+            Assert.NotNull(preview);
+            previewed++;
+            seenPeriods.Add(periodKey);
+
+            if (!string.IsNullOrWhiteSpace(preview!.ExactReplayOf)
+                || committedBatches.Contains(preview.BatchId))
+            {
+                exactContentReplays++;
+                continue;
+            }
+
+            var inspect = await harness.InspectAsync(preview.BatchId, preview.ManifestRevisionId!);
+            if (!(preview.ReconciliationSummary?.FullyReconciled ?? false))
+            {
+                var blocked = await harness.TryApproveAsync(
+                    preview.BatchId,
+                    preview.ManifestRevisionId!,
+                    inspect.CanonicalDigest);
+                Assert.False(blocked.Ok);
+                nonCommittable++;
+                continue;
+            }
+
+            var approve = await harness.TryApproveAsync(
+                preview.BatchId,
+                preview.ManifestRevisionId!,
+                inspect.CanonicalDigest);
+            if (!approve.Ok)
+            {
+                Assert.Equal(ApproveErrors.NotCommittable, approve.Error);
+                nonCommittable++;
+                continue;
+            }
+
+            var receipt = await harness.CommitAsync(
+                preview.BatchId,
+                preview.ManifestRevisionId!,
+                inspect.CanonicalDigest);
+            committedBatches.Add(preview.BatchId);
+            committed++;
+            ledgerEffects = await harness.CountResolvableLedgerTransactionsAsync(receipt);
+
+            var reCommit = await harness.TryCommitAsync(
+                preview.BatchId,
+                preview.ManifestRevisionId!,
+                inspect.CanonicalDigest);
+            Assert.True(reCommit.Ok, reCommit.Error);
+            Assert.Equal(ledgerEffects, await harness.CountResolvableLedgerTransactionsAsync(reCommit.Value!));
+        }
+
+        Assert.Equal(13, previewed);
+        // Two June sources share a period: second is same-period fail-closed (or exact-replay if bytes match).
+        Assert.True(samePeriodBlocked + exactContentReplays >= 1, "expected second June source handled without new import");
+        Assert.True(nonCommittable >= 1, "expected the non-committable FNB fixture to stay blocked");
+        Assert.True(committed >= 10, "expected the FNB chronological history to commit on one account");
+        Assert.Equal(13, committed + exactContentReplays + nonCommittable + samePeriodBlocked);
+        Console.WriteLine(
+            $"PRIVATE_FNB_HISTORY previewed={previewed} committed={committed} exactContentReplays={exactContentReplays} samePeriodBlocked={samePeriodBlocked} nonCommittable={nonCommittable} ledgerEffects={ledgerEffects}");
     }
 
     private static AccountDetail AccountFor(PrivateStatementFixture fixture)

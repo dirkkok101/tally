@@ -163,11 +163,8 @@ public sealed class PreviewHandler(
             }
 
             var windows = await store.ListWindowsForAccountAsync(account.AccountId, cancellationToken);
-            var overlap = OverlapPolicy.Evaluate(
-                new ExactReplayKey(fingerprint, account.AccountId, adapterVersion, command.ContractVersion),
-                start,
-                end,
-                windows);
+            var overlapKey = new ExactReplayKey(fingerprint, account.AccountId, adapterVersion, command.ContractVersion);
+            var overlap = OverlapPolicy.Evaluate(overlapKey, start, end, windows);
             if (overlap.Decision == OverlapDecision.BlockedOverlap)
             {
                 return Failure(PreviewErrors.OverlapBlocked);
@@ -175,8 +172,7 @@ public sealed class PreviewHandler(
 
             if (overlap.Decision == OverlapDecision.ExactReplay && overlap.PriorManifestRevisionId is not null)
             {
-                var key = new ExactReplayKey(fingerprint, account.AccountId, adapterVersion, command.ContractVersion);
-                var prior = await store.FindExactReplayAsync(key, cancellationToken);
+                var prior = await store.FindExactReplayAsync(overlapKey, cancellationToken);
                 if (prior is not null)
                 {
                     return Success(new PreviewImportResult(
@@ -191,12 +187,20 @@ public sealed class PreviewHandler(
                 }
             }
 
+            // Pure boundary-touch with prior same-account windows: load economic keys for the shared
+            // endpoint day(s) so shared boundary rows become exact duplicates, not second candidates.
+            var boundaryDates = OverlapPolicy.SharedBoundaryDates(start, end, windows, account.AccountId);
+            var priorBoundaryKeys = boundaryDates.Count == 0
+                ? null
+                : await store.ListAcceptedEconomicKeysAsync(account.AccountId, boundaryDates, cancellationToken);
+
             var mapped = PreviewManifestMapper.Map(
                 fingerprint,
                 account,
                 statement,
                 command.ContractVersion,
-                command.Actor);
+                command.Actor,
+                priorBoundaryKeys);
 
             if (!mapped.Committable && mapped.Counts.Blocked > 0)
             {

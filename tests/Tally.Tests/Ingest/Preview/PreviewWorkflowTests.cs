@@ -224,6 +224,69 @@ public sealed class PreviewWorkflowTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Consecutive_inclusive_periods_that_only_touch_boundary_preview_on_same_account()
+    {
+        var account = Account("acc-1");
+        var firstPath = WriteBytes("period-a.pdf", CreatePdf("period-a"));
+        var secondPath = WriteBytes("period-b.pdf", CreatePdf("period-b"));
+        // Inclusive windows: Jan 1–31 then Jan 31–Feb 28 (shared endpoint only).
+        var first = await Handler(
+                account,
+                evidence: LayoutAEvidence(
+                    "fp-period-a",
+                    "01 January 2026",
+                    "31 January 2026",
+                    "01 Jan First row 10.00Cr 110.00Cr",
+                    "31 Jan Boundary row 10.00Cr 120.00Cr"))
+            .HandleAsync(new PreviewCommand("1.0", firstPath, "acc-1", actor), CancellationToken.None);
+        Assert.True(first.IsSuccess, first.ErrorCode);
+
+        var second = await Handler(
+                account,
+                evidence: LayoutAEvidence(
+                    "fp-period-b",
+                    "31 January 2026",
+                    "28 February 2026",
+                    "31 Jan Boundary row 10.00Cr 110.00Cr",
+                    "15 Feb Later row 10.00Cr 120.00Cr"))
+            .HandleAsync(new PreviewCommand("1.0", secondPath, "acc-1", actor), CancellationToken.None);
+        Assert.True(second.IsSuccess, second.ErrorCode);
+        Assert.NotEqual(first.Value!.BatchId, second.Value!.BatchId);
+        // Shared boundary economic facts → exact-duplicate count on the later statement.
+        Assert.True(second.Value.Counts.ExactDuplicates >= 1, "shared boundary row must be exact-duplicated");
+        Assert.True(second.Value.Counts.AcceptedCandidates >= 1, "non-boundary rows on the later statement remain accepted");
+    }
+
+    [Fact]
+    public async Task Interior_overlap_on_same_account_is_still_blocked()
+    {
+        var account = Account("acc-1");
+        var firstPath = WriteBytes("interior-a.pdf", CreatePdf("interior-a"));
+        var secondPath = WriteBytes("interior-b.pdf", CreatePdf("interior-b"));
+        var first = await Handler(
+                account,
+                evidence: LayoutAEvidence(
+                    "fp-int-a",
+                    "01 January 2026",
+                    "31 January 2026",
+                    "01 Jan First row 10.00Cr 110.00Cr",
+                    "15 Jan Second row 10.00Cr 120.00Cr"))
+            .HandleAsync(new PreviewCommand("1.0", firstPath, "acc-1", actor), CancellationToken.None);
+        Assert.True(first.IsSuccess, first.ErrorCode);
+
+        var second = await Handler(
+                account,
+                evidence: LayoutAEvidence(
+                    "fp-int-b",
+                    "15 January 2026",
+                    "15 February 2026",
+                    "15 Jan Overlap row 10.00Cr 110.00Cr",
+                    "01 Feb Later row 10.00Cr 120.00Cr"))
+            .HandleAsync(new PreviewCommand("1.0", secondPath, "acc-1", actor), CancellationToken.None);
+        Assert.Equal(PreviewErrors.OverlapBlocked, second.ErrorCode);
+    }
+
+    [Fact]
     public async Task Operation_module_deserializes_preview_input()
     {
         var path = WriteBytes("module.pdf", CreatePdf("layout-a"));
@@ -371,17 +434,30 @@ public sealed class PreviewWorkflowTests : IAsyncLifetime
         null,
         []);
 
-    private static PdfDocumentEvidence LayoutAEvidence(string fingerprint = "synthetic-preview")
+    private static PdfDocumentEvidence LayoutAEvidence(string fingerprint = "synthetic-preview") =>
+        LayoutAEvidence(
+            fingerprint,
+            "01 January 2026",
+            "31 January 2026",
+            "01 Jan First row 10.00Cr 110.00Cr",
+            "02 Jan Second row 10.00Cr 120.00Cr");
+
+    private static PdfDocumentEvidence LayoutAEvidence(
+        string fingerprint,
+        string periodStartFull,
+        string periodEndFull,
+        string row1,
+        string row2)
     {
         string[] lines =
         [
             "Account Card ****1234",
-            "Statement period 01 January 2026 31 January 2026",
+            $"Statement period {periodStartFull} {periodEndFull}",
             "Opening balance 100.00Cr",
             "Closing balance 120.00Cr",
             "Date Description Amount Balance",
-            "01 Jan First row 10.00Cr 110.00Cr",
-            "02 Jan Second row 10.00Cr 120.00Cr"
+            row1,
+            row2
         ];
         var glyphs = new List<PdfGlyphEvidence>();
         for (var lineIndex = 0; lineIndex < lines.Length; lineIndex++)

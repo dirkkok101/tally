@@ -34,7 +34,8 @@ public static class PreviewManifestMapper
         AccountDetail account,
         ExtractedStatement statement,
         string ledgerContractVersion,
-        SafeActor actor)
+        SafeActor actor,
+        IReadOnlySet<string>? priorBoundaryEconomicKeys = null)
     {
         ArgumentNullException.ThrowIfNull(account);
         ArgumentNullException.ThrowIfNull(statement);
@@ -43,6 +44,7 @@ public static class PreviewManifestMapper
         var accountKind = account.AccountClass == AccountClass.Asset
             ? SourceAccountKind.Asset
             : SourceAccountKind.Liability;
+        var priorKeys = priorBoundaryEconomicKeys ?? new HashSet<string>(StringComparer.Ordinal);
         var outcomes = new List<CanonicalManifestOutcome>(statement.OrderedRecords.Count);
         var candidates = new List<ImportCandidate>();
         var sourceOutcomes = new List<SourceRecordOutcome>();
@@ -63,47 +65,66 @@ public static class PreviewManifestMapper
 
             if (normalized.Facts is { } facts && disposition == SourceRecordDisposition.AcceptedCandidate)
             {
-                var candidateInput = new CandidateIdentityInput(
+                var economicKey = Domain.Ingest.Overlap.OverlapPolicy.EconomicFactKey(
                     account.AccountId,
-                    record.SourceRecordId,
                     facts.SignedAmountMinor,
                     facts.CurrencyCode,
                     facts.TransactionDate,
-                    facts.PostingDate,
                     facts.OriginalDescription);
-                var identity = IngestIdentity.Candidate(candidateInput);
-                var registerEvidence = IngestIdentity.StatementEvidence(candidateInput);
-                candidateId = identity.CandidateId;
-                var signedAmount = FormatSignedAmount(facts.SignedAmountMinor);
-                candidates.Add(new ImportCandidate(
-                    identity.CandidateId,
-                    record.SourceRecordId,
-                    account.AccountId,
-                    facts.SignedAmountMinor,
-                    facts.CurrencyCode,
-                    facts.TransactionDate,
-                    facts.PostingDate,
-                    facts.OriginalDescription,
-                    identity.OpaqueExternalReference,
-                    new ImportProvenance(ImportProvenanceKind.StatementImport, identity.OpaqueExternalReference),
-                    identity.IdempotencyKey,
-                    new FrozenLedgerRecordRequest(
-                        ledgerContractVersion,
-                        "ledger.transaction.record",
+
+                // Consecutive inclusive periods may share an endpoint day. When a prior accepted
+                // candidate already carries the same economic facts, suppress the shared boundary row
+                // as an exact duplicate so the second statement cannot double-post.
+                if (priorKeys.Contains(economicKey))
+                {
+                    disposition = SourceRecordDisposition.ExactDuplicate;
+                    reason = "boundary_economic_exact_duplicate";
+                    duplicates++;
+                }
+                else
+                {
+                    var candidateInput = new CandidateIdentityInput(
+                        account.AccountId,
+                        record.SourceRecordId,
+                        facts.SignedAmountMinor,
+                        facts.CurrencyCode,
+                        facts.TransactionDate,
+                        facts.PostingDate,
+                        facts.OriginalDescription);
+                    var identity = IngestIdentity.Candidate(candidateInput);
+                    var registerEvidence = IngestIdentity.StatementEvidence(candidateInput);
+                    candidateId = identity.CandidateId;
+                    var signedAmount = FormatSignedAmount(facts.SignedAmountMinor);
+                    candidates.Add(new ImportCandidate(
+                        identity.CandidateId,
+                        record.SourceRecordId,
+                        account.AccountId,
+                        facts.SignedAmountMinor,
+                        facts.CurrencyCode,
+                        facts.TransactionDate,
+                        facts.PostingDate,
+                        facts.OriginalDescription,
+                        identity.OpaqueExternalReference,
+                        new ImportProvenance(ImportProvenanceKind.StatementImport, identity.OpaqueExternalReference),
                         identity.IdempotencyKey,
-                        actor,
-                        new RecordTransactionInput(
-                            account.AccountId,
-                            signedAmount,
-                            facts.CurrencyCode,
-                            facts.TransactionDate,
-                            facts.PostingDate,
-                            facts.OriginalDescription,
-                            null,
-                            null,
-                            registerEvidence)),
-                    null));
-                accepted++;
+                        new FrozenLedgerRecordRequest(
+                            ledgerContractVersion,
+                            "ledger.transaction.record",
+                            identity.IdempotencyKey,
+                            actor,
+                            new RecordTransactionInput(
+                                account.AccountId,
+                                signedAmount,
+                                facts.CurrencyCode,
+                                facts.TransactionDate,
+                                facts.PostingDate,
+                                facts.OriginalDescription,
+                                null,
+                                null,
+                                registerEvidence)),
+                        null));
+                    accepted++;
+                }
             }
             else if (disposition == SourceRecordDisposition.ExcludedNonTransaction)
             {

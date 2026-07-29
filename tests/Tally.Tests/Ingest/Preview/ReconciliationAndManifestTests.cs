@@ -221,6 +221,37 @@ public sealed class ReconciliationAndManifestTests
         Assert.Equal(OverlapDecision.BlockedOverlap, result.Decision);
     }
 
+    // Live FNB consecutive inclusive periods: prior.end == next.start is pure boundary touch, not interior overlap.
+    [Fact]
+    public void Consecutive_inclusive_periods_that_only_touch_at_endpoint_are_allowed()
+    {
+        var prior = new PreviewWindow(new("source-a", "account", "adapter", "ledger"), "revision", new(2025, 6, 28), new(2025, 7, 29));
+        var result = OverlapPolicy.Evaluate(new("source-b", "account", "adapter", "ledger"), new(2025, 7, 29), new(2025, 8, 29), [prior]);
+
+        Assert.Equal(OverlapDecision.NewPreview, result.Decision);
+        Assert.True(OverlapPolicy.IsBoundaryTouchOnly(new(2025, 7, 29), new(2025, 8, 29), new(2025, 6, 28), new(2025, 7, 29)));
+        Assert.Equal([new DateOnly(2025, 7, 29)], OverlapPolicy.SharedBoundaryDates(new(2025, 7, 29), new(2025, 8, 29), [prior], "account"));
+    }
+
+    [Fact]
+    public void Same_period_different_bytes_remains_blocked()
+    {
+        var prior = new PreviewWindow(new("source-a", "account", "adapter", "ledger"), "revision", new(2025, 6, 28), new(2025, 7, 29));
+        var result = OverlapPolicy.Evaluate(new("source-b", "account", "adapter", "ledger"), new(2025, 6, 28), new(2025, 7, 29), [prior]);
+
+        Assert.Equal(OverlapDecision.BlockedOverlap, result.Decision);
+    }
+
+    [Fact]
+    public void Economic_fact_keys_are_stable_and_independent_of_source_fingerprint()
+    {
+        var first = OverlapPolicy.EconomicFactKey("acc", -1000, "ZAR", "2025-07-29", "Payment");
+        var second = OverlapPolicy.EconomicFactKey("acc", -1000, "ZAR", "2025-07-29", "Payment");
+        var changed = OverlapPolicy.EconomicFactKey("acc", -1000, "ZAR", "2025-07-29", "Payment changed");
+        Assert.Equal(first, second);
+        Assert.NotEqual(first, changed);
+    }
+
     // DD-INGEST-MANIFEST-IDENTITY-OVERLAP: overlap safety is scoped to the selected account.
     [Fact]
     public void DD_INGEST_MANIFEST_IDENTITY_OVERLAP_different_account_overlap_starts_a_new_preview()
