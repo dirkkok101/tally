@@ -10,18 +10,15 @@ public sealed class SystemOperationModule
     public Task<CommandResult<JsonElement>> VersionAsync(JsonElement input, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        var payload = new VersionResult(
-            ProductVersion.ProductName,
-            ProductVersion.Current,
-            ProductVersion.ContractVersion,
-            ProductVersion.Compatibility);
-        return Task.FromResult(CommandResult<JsonElement>.Success(JsonSerializer.SerializeToElement(payload, LedgerJsonContext.Default.VersionResult)));
+        return Task.FromResult(CommandResult<JsonElement>.Success(JsonSerializer.SerializeToElement(
+            new VersionResult("tally", "0.3.0", "1.0", "1.0"),
+            LedgerJsonContext.Default.VersionResult)));
     }
 
     public Task<CommandResult<JsonElement>> ListAsync(IReadOnlyList<OperationSchema> operations, JsonElement input, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        return Task.FromResult(CommandResult<JsonElement>.Success(JsonSerializer.SerializeToElement(new SchemaListResult(ProductVersion.ContractVersion, operations), LedgerJsonContext.Default.SchemaListResult)));
+        return Task.FromResult(CommandResult<JsonElement>.Success(JsonSerializer.SerializeToElement(new SchemaListResult("1.0", operations), LedgerJsonContext.Default.SchemaListResult)));
     }
 
     public Task<CommandResult<JsonElement>> ShowAsync(OperationSchema? operation, JsonElement input, CancellationToken cancellationToken)
