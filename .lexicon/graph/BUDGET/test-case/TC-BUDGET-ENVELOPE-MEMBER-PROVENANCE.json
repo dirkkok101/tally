@@ -11,7 +11,7 @@
   "status": "planned",
   "steps": "Record Budget Actuals across a depth-three Spend Category tree with entries on the root and one descendant. Request the INSIGHTS read projection through the public budget.insights.evidence.get operation.",
   "expected": "Each Budget Actual member reports its frozen ancestry root-first with its assigned Spend Category as the final element, and reports the effective Spend Category identifier that governed it. Members resolving to Unbudgeted Spend or Uncategorized Spend report a null effective Spend Category identifier.",
-  "implementation_ref": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "implementation_ref": "tests/Tally.Tests/Budget/Acceptance/BudgetEnvelopeProvenanceTests.cs",
   "created_at": "2026-07-29T12:09:29.9133007+00:00",
   "links": [
     {

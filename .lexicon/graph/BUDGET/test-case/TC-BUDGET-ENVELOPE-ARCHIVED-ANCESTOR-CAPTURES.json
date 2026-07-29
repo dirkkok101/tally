@@ -11,7 +11,7 @@
   "status": "planned",
   "steps": "Place a Category Budget Entry on a parent Spend Category, archive that parent in LEDGER, and supply Budget Actuals on an active descendant that carries no entry. Calculate the Budget Position.",
   "expected": "The archived parent position absorbs the descendant Budget Actuals exactly once and reports its archived lifecycle, matching the existing rule that Spend Category lifecycle never changes bucket assignment.",
-  "implementation_ref": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "implementation_ref": "tests/Tally.Tests/Budget/Position/BudgetEnvelopeIntegrityTests.cs",
   "created_at": "2026-07-29T12:09:32.0773906+00:00",
   "links": [
     {

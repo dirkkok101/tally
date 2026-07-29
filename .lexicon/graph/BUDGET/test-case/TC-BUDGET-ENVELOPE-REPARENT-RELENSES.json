@@ -11,7 +11,7 @@
   "status": "planned",
   "steps": "Record a Budget Actual on a descendant Spend Category under a funded parent and read the Budget Position. Reparent that descendant under a different funded Spend Category through the public LEDGER operation. Read the Budget Position for the same Budget Period and revision again.",
   "expected": "The second position attributes the Budget Actual to the new funded ancestor, cites a different LEDGER snapshot identifier, and reports the same bound Budget Plan Revision identifier and status, confirming that determinism holds within one cited snapshot rather than across time.",
-  "implementation_ref": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "implementation_ref": "tests/Tally.Tests/Budget/Acceptance/BudgetEnvelopeProvenanceTests.cs",
   "created_at": "2026-07-29T12:09:32.7471722+00:00",
   "links": [
     {

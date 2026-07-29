@@ -22,15 +22,15 @@ BUDGET v1 is reproducibly buildable, tested, exact, locally secure, externally v
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| [DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam](../../../designs/budget/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
-| [NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries](../../../prd/budget/prd.md#nfr-budget-public-contract-compatibility-preserve-public-contract-boundaries) | `nfr` | `satisfies` | `true` |
-| [NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local planner](../../../prd/budget/prd.md#nfr-budget-self-contained-local-operation-operate-as-a-self-contained-local-planner) | `nfr` | `satisfies` | `true` |
+| DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam | `design_decision` | `governed-by` | `true` |
+| NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries | `nfr` | `satisfies` | `true` |
+| NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local planner | `nfr` | `satisfies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-GATE-GRAPH-QUALITY: TASK-BUDGET-GATE-GRAPH-QUALITY](gate-graph-quality.md) | `compile` | Final convergence consumes current graph and behavioral evidence. |
+| [TASK-BUDGET-GATE-GRAPH-QUALITY](../tasks/gate-graph-quality.md) | `compile` | Final convergence consumes current graph and behavioral evidence. |
 
 ## Recipe
 
@@ -78,8 +78,8 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| BudgetGraphQualityEvidence | `consumes` | [PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES](../../../patterns/core/implementation-plan-quality-gates.md) |  |
-| VerifiedBudgetV1Module | `produces` | [NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION](../../../prd/budget/prd.md#nfr-budget-self-contained-local-operation-operate-as-a-self-contained-local-planner) |  |
+| BudgetGraphQualityEvidence | `consumes` | PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES |  |
+| VerifiedBudgetV1Module | `produces` | NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION |  |
 
 ### Verification
 
@@ -104,10 +104,10 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3u23` (verified)
-- `depends-on:compile` -> [TASK-BUDGET-GATE-GRAPH-QUALITY: TASK-BUDGET-GATE-GRAPH-QUALITY](gate-graph-quality.md): Final convergence consumes current graph and behavioral evidence.
-- `governed-by` -> [DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam](../../../designs/budget/decisions/application-architecture.md)
-- `satisfies` -> [NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries](../../../prd/budget/prd.md#nfr-budget-public-contract-compatibility-preserve-public-contract-boundaries)
-- `satisfies` -> [NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local planner](../../../prd/budget/prd.md#nfr-budget-self-contained-local-operation-operate-as-a-self-contained-local-planner)
+- `depends-on:compile` -> [TASK-BUDGET-GATE-GRAPH-QUALITY](../tasks/gate-graph-quality.md): Final convergence consumes current graph and behavioral evidence.
+- `governed-by` -> DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam
+- `satisfies` -> NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries
+- `satisfies` -> NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local planner
 
 ## Navigation
 

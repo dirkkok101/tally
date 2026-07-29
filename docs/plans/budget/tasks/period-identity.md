@@ -22,18 +22,18 @@ Every BUDGET workflow resolves the same validated half-open period and trusted l
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| [DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions](../../../designs/budget/decisions/plan-revision-lifecycle.md) | `design_decision` | `governed-by` | `true` |
-| [DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider](../../../designs/budget/decisions/trusted-period-time.md) | `design_decision` | `governed-by` | `true` |
-| [DM-BUDGET-PERIOD-PLAN: BudgetPeriodAndPlan](../../../designs/budget/data-model.md#budgetperiodandplan) | `data_model` | `touches` | `true` |
-| [FA-BUDGET-PLANS-LIFECYCLE: Plans and Lifecycle](../../../designs/budget/features/plans-lifecycle/api-surface.md) | `feature_area` | `touches` | `false` |
-| [FR-BUDGET-PLAN-IDENTITY: Identify monthly Budget Plans](../../../prd/budget/prd.md#fr-budget-plan-identity-identify-monthly-budget-plans) | `requirement` | `implements` | `true` |
+| DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions | `design_decision` | `governed-by` | `true` |
+| DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider | `design_decision` | `governed-by` | `true` |
+| DM-BUDGET-PERIOD-PLAN: BudgetPeriodAndPlan | `data_model` | `touches` | `true` |
+| FA-BUDGET-PLANS-LIFECYCLE: Plans and Lifecycle | `feature_area` | `touches` | `false` |
+| FR-BUDGET-PLAN-IDENTITY: Identify monthly Budget Plans | `requirement` | `implements` | `true` |
 | TC-BUDGET-PLAN-IDENTITY-CONTRACT: Verify monthly plan identity contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-CONTRACT-FOUNDATION: TASK-BUDGET-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | The period value consumes the published period wire contract and stable errors. |
+| [TASK-BUDGET-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | The period value consumes the published period wire contract and stable errors. |
 
 ## Recipe
 
@@ -74,8 +74,8 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| BudgetPeriod | `produces` | [DM-BUDGET-PERIOD-PLAN](../../../designs/budget/data-model.md#budgetperiodandplan) |  |
-| BudgetPeriodResolver.Resolve | `produces` | [DM-BUDGET-PERIOD-PLAN](../../../designs/budget/data-model.md#budgetperiodandplan) |  |
+| BudgetPeriod | `produces` | DM-BUDGET-PERIOD-PLAN |  |
+| BudgetPeriodResolver.Resolve | `produces` | DM-BUDGET-PERIOD-PLAN |  |
 
 ### Verification
 
@@ -100,12 +100,12 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-17m` (verified)
-- `depends-on:compile` -> [TASK-BUDGET-CONTRACT-FOUNDATION: TASK-BUDGET-CONTRACT-FOUNDATION](contract-foundation.md): The period value consumes the published period wire contract and stable errors.
-- `governed-by` -> [DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions](../../../designs/budget/decisions/plan-revision-lifecycle.md)
-- `governed-by` -> [DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider](../../../designs/budget/decisions/trusted-period-time.md)
-- `implements` -> [FR-BUDGET-PLAN-IDENTITY: Identify monthly Budget Plans](../../../prd/budget/prd.md#fr-budget-plan-identity-identify-monthly-budget-plans)
-- `touches` -> [DM-BUDGET-PERIOD-PLAN: BudgetPeriodAndPlan](../../../designs/budget/data-model.md#budgetperiodandplan)
-- `touches` -> [FA-BUDGET-PLANS-LIFECYCLE: Plans and Lifecycle](../../../designs/budget/features/plans-lifecycle/api-surface.md)
+- `depends-on:compile` -> [TASK-BUDGET-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): The period value consumes the published period wire contract and stable errors.
+- `governed-by` -> DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions
+- `governed-by` -> DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider
+- `implements` -> FR-BUDGET-PLAN-IDENTITY: Identify monthly Budget Plans
+- `touches` -> DM-BUDGET-PERIOD-PLAN: BudgetPeriodAndPlan
+- `touches` -> FA-BUDGET-PLANS-LIFECYCLE: Plans and Lifecycle
 - `verifies` -> TC-BUDGET-PLAN-IDENTITY-CONTRACT: Verify monthly plan identity contract
 
 ## Navigation

@@ -22,21 +22,21 @@ UC-BUDGET-002 proves explicit atomic activation, prior supersession, category re
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| [DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references](../../../designs/budget/decisions/idempotent-mutations.md) | `design_decision` | `governed-by` | `true` |
-| [DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions](../../../designs/budget/decisions/plan-revision-lifecycle.md) | `design_decision` | `governed-by` | `true` |
-| [DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider](../../../designs/budget/decisions/trusted-period-time.md) | `design_decision` | `governed-by` | `true` |
+| DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references | `design_decision` | `governed-by` | `true` |
+| DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions | `design_decision` | `governed-by` | `true` |
+| DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider | `design_decision` | `governed-by` | `true` |
 | TC-BUDGET-ATOMIC-DURABLE-MUTATIONS: Verify atomic durable plan mutation | `test_case` | `verifies` | `true` |
 | TC-BUDGET-ATTRIBUTABLE-HISTORY: Verify attributable plan history | `test_case` | `verifies` | `true` |
 | TC-BUDGET-PLAN-ACTIVATION-CONTRACT: Verify explicit plan activation contract | `test_case` | `verifies` | `true` |
-| [UC-BUDGET-002: Activate or revise a plan](../../../prd/budget/prd.md#uc-budget-002-activate-or-revise-a-plan) | `use_case` | `covers` | `true` |
+| UC-BUDGET-002: Activate or revise a plan | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Execute the published activation boundary. |
-| [TASK-BUDGET-ACTIVATION-LIFECYCLE: TASK-BUDGET-ACTIVATION-LIFECYCLE](activation-lifecycle.md) | `compile` | Verify the complete lifecycle slice. |
-| [TASK-BUDGET-GATE-ATOMIC-RECOVERY: TASK-BUDGET-GATE-ATOMIC-RECOVERY](gate-atomic-recovery.md) | `compile` | Consume the restart cutpoint evidence. |
+| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Execute the published activation boundary. |
+| [TASK-BUDGET-ACTIVATION-LIFECYCLE](../tasks/activation-lifecycle.md) | `compile` | Verify the complete lifecycle slice. |
+| [TASK-BUDGET-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md) | `compile` | Consume the restart cutpoint evidence. |
 
 ## Recipe
 
@@ -73,9 +73,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteBudgetPublicContract | `consumes` | [DM-BUDGET-OPERATION-CONTRACTS](../../../designs/budget/data-model.md#budgetoperationcontracts) |  |
-| BudgetRecoveryGateEvidence | `consumes` | [NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS](../../../prd/budget/prd.md#nfr-budget-atomic-durable-mutations-make-plan-mutations-atomic-and-durable) |  |
-| VerifiedBudgetUc002 | `produces` | [UC-BUDGET-002](../../../prd/budget/prd.md#uc-budget-002-activate-or-revise-a-plan) |  |
+| CompleteBudgetPublicContract | `consumes` | DM-BUDGET-OPERATION-CONTRACTS |  |
+| BudgetRecoveryGateEvidence | `consumes` | NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS |  |
+| VerifiedBudgetUc002 | `produces` | UC-BUDGET-002 |  |
 
 ### Verification
 
@@ -100,13 +100,13 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-19h5` (verified)
-- `covers` -> [UC-BUDGET-002: Activate or revise a plan](../../../prd/budget/prd.md#uc-budget-002-activate-or-revise-a-plan)
-- `depends-on:compile` -> [TASK-BUDGET-ACTIVATION-LIFECYCLE: TASK-BUDGET-ACTIVATION-LIFECYCLE](activation-lifecycle.md): Verify the complete lifecycle slice.
-- `depends-on:compile` -> [TASK-BUDGET-GATE-ATOMIC-RECOVERY: TASK-BUDGET-GATE-ATOMIC-RECOVERY](gate-atomic-recovery.md): Consume the restart cutpoint evidence.
-- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Execute the published activation boundary.
-- `governed-by` -> [DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references](../../../designs/budget/decisions/idempotent-mutations.md)
-- `governed-by` -> [DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions](../../../designs/budget/decisions/plan-revision-lifecycle.md)
-- `governed-by` -> [DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider](../../../designs/budget/decisions/trusted-period-time.md)
+- `covers` -> UC-BUDGET-002: Activate or revise a plan
+- `depends-on:compile` -> [TASK-BUDGET-ACTIVATION-LIFECYCLE](../tasks/activation-lifecycle.md): Verify the complete lifecycle slice.
+- `depends-on:compile` -> [TASK-BUDGET-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md): Consume the restart cutpoint evidence.
+- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Execute the published activation boundary.
+- `governed-by` -> DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references
+- `governed-by` -> DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions
+- `governed-by` -> DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider
 - `verifies` -> TC-BUDGET-ATOMIC-DURABLE-MUTATIONS: Verify atomic durable plan mutation
 - `verifies` -> TC-BUDGET-ATTRIBUTABLE-HISTORY: Verify attributable plan history
 - `verifies` -> TC-BUDGET-PLAN-ACTIVATION-CONTRACT: Verify explicit plan activation contract

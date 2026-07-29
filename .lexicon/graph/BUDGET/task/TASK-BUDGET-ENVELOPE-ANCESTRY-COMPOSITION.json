@@ -1,0 +1,271 @@
+{
+  "id": "01KYPXEA8W6ZBH3Q25S4JVXCNN",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX16FGEYFVSRAABAC7C8D",
+  "ref_code": "TASK-BUDGET-ENVELOPE-ANCESTRY-COMPOSITION",
+  "slug": "ENVELOPE-ANCESTRY-COMPOSITION",
+  "title": "Carry frozen Spend Category ancestry from the LEDGER snapshot into BUDGET members",
+  "objective": [
+    "Every materialized Budget Actual member carries the frozen Spend Category ancestry from the cited LEDGER actuals snapshot, and every ancestry identifier resolves in the known Spend Category evidence set."
+  ],
+  "planning_state": "ready",
+  "priority": 1,
+  "sort_order": 21,
+  "created_at": "2026-07-29T12:26:26.9749025+00:00",
+  "decisions": [
+    {
+      "id": "01KYPXEA92SCQTWV0GEBXYYH3R",
+      "target": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYPXEA9476ME6ZENKSK61G11",
+      "target": "TASK-BUDGET-ENVELOPE-CONTRACTS",
+      "dependency_type": "compile",
+      "reason": [
+        "The mapper assigns BudgetActualMember.AncestryIds, which that task adds to the record."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYPXEA93R43V4WEVSJMY6J2E",
+      "path": "src/Tally/Features/Budget/Contract/BudgetContractMapper.Position.cs",
+      "action": "modify",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA93CRCV6DCGPGVWTBVC",
+      "path": "src/Tally/Features/Budget/Position/Get/GetBudgetPositionQuery.cs",
+      "action": "modify",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA938PMW06ZR675MFVC1",
+      "path": "tests/Tally.Tests/Budget/Position/GetBudgetPositionQueryTests.cs",
+      "action": "test",
+      "role": "test",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYPXEA937M0Q4NQ5TPS7Z4ED",
+      "name": "BudgetActualMember.AncestryIds",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "notes": [
+        "Field published by TASK-BUDGET-ENVELOPE-CONTRACTS"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA938Q430DPBY9A6WZCK",
+      "name": "BudgetContractMapper.TryMapActualMembers",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYPXEA92PCM8PDQ4WP8P6CAN",
+      "kind": "acceptance_check",
+      "text": [
+        "Given a LEDGER actuals snapshot whose items carry FrozenAncestryIds, when BudgetContractMapper.TryMapActualMembers runs, then each produced BudgetActualMember carries that same ancestry list in the same order rather than an empty list."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA93PA6DHK7WNTESKK1Y",
+      "kind": "acceptance_check",
+      "text": [
+        "Given a LEDGER actuals item with no assigned Spend Category, when the member is mapped, then its AncestryIds list is empty and its CategoryId is null."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA93H3PSRTT2C44F980E",
+      "kind": "acceptance_check",
+      "text": [
+        "Given a Budget Actual assigned to a Spend Category whose ancestor is archived and absent from the default category listing, when the position query assembles known Spend Category evidence, then that ancestor identifier is fetched and present so ancestry validation does not fail."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA939TF14NDK82R20A94",
+      "kind": "acceptance_check",
+      "text": [
+        "Given a Budget Position request, when the required Spend Category identifier set is assembled, then it contains every plan entry category, every member category, and every ancestry element."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA93RX1SF118KN8JH8CS",
+      "kind": "constraint",
+      "text": [
+        "One complete compatible actuals snapshot per position; no additional LEDGER actuals query is introduced."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA93E1XD3AYBXZV7QF61",
+      "kind": "constraint",
+      "text": [
+        "CancellationToken flows through every added async call."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA93C7K8MXK214EF3CC5",
+      "kind": "expected_output",
+      "text": [
+        "Mapper that carries FrozenAncestryIds into BudgetActualMember.AncestryIds"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA932CFXHMRH50WMVZFE",
+      "kind": "expected_output",
+      "text": [
+        "Required Spend Category identifier set extended with every ancestry element"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA93ZH86QW6GV6EJP0V0",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT reach into LEDGER private storage or recompute ancestry inside BUDGET — consume ancestry only from the public actuals snapshot, per DD-BUDGET-LEDGER-PUBLIC-COMPOSITION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA93H48P6JDGY987FT5J",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT issue one LEDGER actuals query per Category Budget Entry using the categoryScope subtree filter — rejected alternative B in DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION, because nested entries return overlapping membership and it breaks the single-complete-snapshot rule."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA93KYS63C8QY8ST194Y",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT resolve, bucket, or aggregate anything in this task — TASK-BUDGET-ENVELOPE-RESOLUTION owns resolution."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA93E16CNTHYEQA3FGPR",
+      "kind": "note",
+      "text": [
+        "The discard is at BudgetContractMapper.TryMapActualMembers where BudgetActualMember is constructed from item.Ordinal, item.TransactionId, item.EffectiveDate, item.CategoryId and the parsed contribution only; item.FrozenAncestryIds is currently dropped."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA931PN5Q69A0QB3Y83V",
+      "kind": "note",
+      "text": [
+        "The required identifier set is built in GetBudgetPositionQuery from plan entries and member.CategoryId; ancestry elements must be added before the per-identifier category fetch loop runs."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYPXEA94XTSWRHQX7FP25WMH",
+      "target_ref_code": "DD-BUDGET-LEDGER-PUBLIC-COMPOSITION",
+      "target_entity_type": "design_decision",
+      "target_entity_id": "01KXXJD6KEE0JVWJ62KA1MK6CY",
+      "target_title": "Consume category and actuals truth only through released LEDGER operations",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA94VJ7PS72A450JMH03",
+      "target_ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD711P2JRXFDR2N9PB4KA",
+      "target_title": "LedgerBudgetCompositionContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYPXEA9245HXHJZNXVSM6AWE",
+      "target": "FR-BUDGET-LEDGER-COMPOSITION",
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYPXEA9398FDE60D7ZAM9Q5P",
+      "gate_type": "self-review",
+      "description": [
+        "Confirm no second LEDGER actuals query was introduced and ancestry comes only from the cited snapshot"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYPXEA934Y3EVEFY5FEE1VE3",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~GetBudgetPositionQueryTests",
+      "expected_result": "All GetBudgetPositionQueryTests pass, exit code 0, at least 41 tests run",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ]
+}

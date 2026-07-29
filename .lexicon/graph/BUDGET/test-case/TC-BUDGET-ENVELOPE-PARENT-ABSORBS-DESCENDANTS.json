@@ -11,7 +11,7 @@
   "status": "planned",
   "steps": "Build a Spend Category tree of depth three. Place one Category Budget Entry with Planned Spend 600000 on the root. Supply Budget Actuals assigned to the root directly, to the depth-one child, and to the depth-two grandchild, none of which carry an entry. Calculate the Budget Position.",
   "expected": "The root Budgeted position actual equals the exact sum of all three Budget Actuals. Its direct actual equals only the root-assigned Budget Actual, its descendant actual equals the sum of the child and grandchild Budget Actuals, and its absorbed identifiers list the child and grandchild in ascending ordinal order. No Unbudgeted Spend row is produced for the child or grandchild.",
-  "implementation_ref": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "implementation_ref": "tests/Tally.Tests/Budget/Position/BudgetEnvelopeResolutionTests.cs",
   "created_at": "2026-07-29T12:09:25.7758626+00:00",
   "links": [
     {

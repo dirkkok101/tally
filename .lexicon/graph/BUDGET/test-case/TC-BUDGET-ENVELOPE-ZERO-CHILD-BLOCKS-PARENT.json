@@ -11,7 +11,7 @@
   "status": "planned",
   "steps": "Place a Category Budget Entry with Planned Spend 600000 on a parent Spend Category and a Category Budget Entry with Planned Spend 0 on its descendant. Supply Budget Actuals assigned to that descendant and to a Spend Category below it. Calculate the Budget Position.",
   "expected": "Both Budget Actuals appear exactly once in the descendant Zero Budget Position. The parent Budgeted position actual excludes them and its remaining value stays at 600000. The Zero Budget Position row reports Over equal to the absorbed total.",
-  "implementation_ref": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "implementation_ref": "tests/Tally.Tests/Budget/Position/BudgetEnvelopeResolutionTests.cs",
   "created_at": "2026-07-29T12:09:27.1761908+00:00",
   "links": [
     {

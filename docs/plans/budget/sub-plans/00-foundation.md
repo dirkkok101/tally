@@ -15,8 +15,8 @@ Prove and consume the public Ledger seam, publish exact BUDGET contracts, and es
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-BUDGET-LEDGER-BUDGET-CONTRACT: Extend Ledger budget composition contracts](../tasks/ledger-budget-contract.md) | Extend Ledger budget composition contracts | `ready` | 0 |
-| [TASK-BUDGET-GATE-INT-LEDGER-CONTRACT: Prove the Ledger budget prerequisite](../tasks/gate-int-ledger-contract.md) | Prove the Ledger budget prerequisite | `ready` | 0 |
-| [TASK-BUDGET-LEDGER-BUDGET-CLIENT: Extend the shared Ledger contract client for BUDGET](../tasks/ledger-budget-client.md) | Extend the shared Ledger contract client for BUDGET | `ready` | 0 |
-| [TASK-BUDGET-CONTRACT-FOUNDATION: Publish BUDGET operation contracts](../tasks/contract-foundation.md) | Publish BUDGET operation contracts | `ready` | 0 |
-| [TASK-BUDGET-STATE-FOUNDATION: Establish BUDGET durable state](../tasks/state-foundation.md) | Establish BUDGET durable state | `ready` | 0 |
+| [TASK-BUDGET-LEDGER-BUDGET-CONTRACT](../tasks/ledger-budget-contract.md) | Extend Ledger budget composition contracts | `ready` | 0 |
+| [TASK-BUDGET-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md) | Prove the Ledger budget prerequisite | `ready` | 0 |
+| [TASK-BUDGET-LEDGER-BUDGET-CLIENT](../tasks/ledger-budget-client.md) | Extend the shared Ledger contract client for BUDGET | `ready` | 0 |
+| [TASK-BUDGET-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | Publish BUDGET operation contracts | `ready` | 0 |
+| [TASK-BUDGET-STATE-FOUNDATION](../tasks/state-foundation.md) | Establish BUDGET durable state | `ready` | 0 |

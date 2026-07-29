@@ -22,11 +22,11 @@ The Native-AOT Tally executable discovers and invokes exactly six BUDGET operati
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| [ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning](../../../adr/core/0021-explicit-di-registration-no-reflection-scanning.md) | `adr` | `governed-by` | `true` |
-| [DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam](../../../designs/budget/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
-| [DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry](../../../designs/budget/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
-| [DM-BUDGET-OPERATION-CONTRACTS: BudgetOperationContracts](../../../designs/budget/data-model.md#budgetoperationcontracts) | `data_model` | `touches` | `true` |
-| [PAT-CORE-API-SERVICE-REGISTRATION: Service Registration Pattern — NXGN Actions API](../../../patterns/core/api-service-registration.md) | `pattern` | `governed-by` | `true` |
+| ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning | `adr` | `governed-by` | `true` |
+| DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam | `design_decision` | `governed-by` | `true` |
+| DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry | `design_decision` | `governed-by` | `true` |
+| DM-BUDGET-OPERATION-CONTRACTS: BudgetOperationContracts | `data_model` | `touches` | `true` |
+| PAT-CORE-API-SERVICE-REGISTRATION: Service Registration Pattern — NXGN Actions API | `pattern` | `governed-by` | `true` |
 | TC-BUDGET-CONTRACT-DISCOVERY-CONTRACT: Verify BUDGET contract discovery | `test_case` | `verifies` | `true` |
 | TC-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Verify BUDGET contract compatibility | `test_case` | `verifies` | `true` |
 | TC-BUDGET-STRUCTURED-INVOCATION-CONTRACT: Verify structured BUDGET invocation | `test_case` | `verifies` | `true` |
@@ -35,12 +35,12 @@ The Native-AOT Tally executable discovers and invokes exactly six BUDGET operati
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-CONTRACT-FOUNDATION: TASK-BUDGET-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | Wiring consumes descriptors and source-generated contracts. |
-| [TASK-BUDGET-DRAFT-CREATION: TASK-BUDGET-DRAFT-CREATION](draft-creation.md) | `compile` | Register the draft handler. |
-| [TASK-BUDGET-PLAN-READS: TASK-BUDGET-PLAN-READS](plan-reads.md) | `compile` | Register both plan read handlers. |
-| [TASK-BUDGET-ACTIVATION-LIFECYCLE: TASK-BUDGET-ACTIVATION-LIFECYCLE](activation-lifecycle.md) | `compile` | Register the activation handler. |
-| [TASK-BUDGET-POSITION-QUERY: TASK-BUDGET-POSITION-QUERY](position-query.md) | `compile` | Register the position handler. |
-| [TASK-BUDGET-INSIGHTS-READ-PROJECTION: TASK-BUDGET-INSIGHTS-READ-PROJECTION](insights-read-projection.md) | `compile` | Publish the exact read-only consumer capability. |
+| [TASK-BUDGET-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Wiring consumes descriptors and source-generated contracts. |
+| [TASK-BUDGET-DRAFT-CREATION](../tasks/draft-creation.md) | `compile` | Register the draft handler. |
+| [TASK-BUDGET-PLAN-READS](../tasks/plan-reads.md) | `compile` | Register both plan read handlers. |
+| [TASK-BUDGET-ACTIVATION-LIFECYCLE](../tasks/activation-lifecycle.md) | `compile` | Register the activation handler. |
+| [TASK-BUDGET-POSITION-QUERY](../tasks/position-query.md) | `compile` | Register the position handler. |
+| [TASK-BUDGET-INSIGHTS-READ-PROJECTION](../tasks/insights-read-projection.md) | `compile` | Publish the exact read-only consumer capability. |
 
 ## Recipe
 
@@ -86,14 +86,14 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| BudgetOperationModule | `consumes` | [DM-BUDGET-OPERATION-CONTRACTS](../../../designs/budget/data-model.md#budgetoperationcontracts) |  |
-| CreateBudgetDraftCommand.HandleAsync | `consumes` | [DM-BUDGET-REVISION-ENTRY](../../../designs/budget/data-model.md#budgetplanrevisionandentry) |  |
-| ActivateBudgetPlanRevisionCommand.HandleAsync | `consumes` | [DM-BUDGET-LIFECYCLE-IDEMPOTENCY](../../../designs/budget/data-model.md#budgetlifecycleandidempotency) |  |
-| GetBudgetPlanRevisionQuery.HandleAsync | `consumes` | [DM-BUDGET-REVISION-ENTRY](../../../designs/budget/data-model.md#budgetplanrevisionandentry) |  |
-| ListBudgetPlanRevisionsQuery.HandleAsync | `consumes` | [DM-BUDGET-PERIOD-PLAN](../../../designs/budget/data-model.md#budgetperiodandplan) |  |
-| GetBudgetPositionQuery.HandleAsync | `consumes` | [DM-BUDGET-POSITION-PROJECTION](../../../designs/budget/data-model.md#budgetpositionprojection) |  |
-| BudgetReadProjectionModule | `consumes` | [DM-BUDGET-INSIGHTS-READ-CONTRACT](../../../designs/budget/data-model.md#budgetreadcapabilitydescriptor) |  |
-| CompleteBudgetPublicContract | `produces` | [DM-BUDGET-OPERATION-CONTRACTS](../../../designs/budget/data-model.md#budgetoperationcontracts) |  |
+| BudgetOperationModule | `consumes` | DM-BUDGET-OPERATION-CONTRACTS |  |
+| CreateBudgetDraftCommand.HandleAsync | `consumes` | DM-BUDGET-REVISION-ENTRY |  |
+| ActivateBudgetPlanRevisionCommand.HandleAsync | `consumes` | DM-BUDGET-LIFECYCLE-IDEMPOTENCY |  |
+| GetBudgetPlanRevisionQuery.HandleAsync | `consumes` | DM-BUDGET-REVISION-ENTRY |  |
+| ListBudgetPlanRevisionsQuery.HandleAsync | `consumes` | DM-BUDGET-PERIOD-PLAN |  |
+| GetBudgetPositionQuery.HandleAsync | `consumes` | DM-BUDGET-POSITION-PROJECTION |  |
+| BudgetReadProjectionModule | `consumes` | DM-BUDGET-INSIGHTS-READ-CONTRACT |  |
+| CompleteBudgetPublicContract | `produces` | DM-BUDGET-OPERATION-CONTRACTS |  |
 
 ### Verification
 
@@ -118,17 +118,17 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-hx8` (verified)
-- `depends-on:compile` -> [TASK-BUDGET-ACTIVATION-LIFECYCLE: TASK-BUDGET-ACTIVATION-LIFECYCLE](activation-lifecycle.md): Register the activation handler.
-- `depends-on:compile` -> [TASK-BUDGET-CONTRACT-FOUNDATION: TASK-BUDGET-CONTRACT-FOUNDATION](contract-foundation.md): Wiring consumes descriptors and source-generated contracts.
-- `depends-on:compile` -> [TASK-BUDGET-DRAFT-CREATION: TASK-BUDGET-DRAFT-CREATION](draft-creation.md): Register the draft handler.
-- `depends-on:compile` -> [TASK-BUDGET-INSIGHTS-READ-PROJECTION: TASK-BUDGET-INSIGHTS-READ-PROJECTION](insights-read-projection.md): Publish the exact read-only consumer capability.
-- `depends-on:compile` -> [TASK-BUDGET-PLAN-READS: TASK-BUDGET-PLAN-READS](plan-reads.md): Register both plan read handlers.
-- `depends-on:compile` -> [TASK-BUDGET-POSITION-QUERY: TASK-BUDGET-POSITION-QUERY](position-query.md): Register the position handler.
-- `governed-by` -> [ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning](../../../adr/core/0021-explicit-di-registration-no-reflection-scanning.md)
-- `governed-by` -> [DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam](../../../designs/budget/decisions/application-architecture.md)
-- `governed-by` -> [DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry](../../../designs/budget/decisions/cli-operation-contract.md)
-- `governed-by` -> [PAT-CORE-API-SERVICE-REGISTRATION: Service Registration Pattern — NXGN Actions API](../../../patterns/core/api-service-registration.md)
-- `touches` -> [DM-BUDGET-OPERATION-CONTRACTS: BudgetOperationContracts](../../../designs/budget/data-model.md#budgetoperationcontracts)
+- `depends-on:compile` -> [TASK-BUDGET-ACTIVATION-LIFECYCLE](../tasks/activation-lifecycle.md): Register the activation handler.
+- `depends-on:compile` -> [TASK-BUDGET-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Wiring consumes descriptors and source-generated contracts.
+- `depends-on:compile` -> [TASK-BUDGET-DRAFT-CREATION](../tasks/draft-creation.md): Register the draft handler.
+- `depends-on:compile` -> [TASK-BUDGET-INSIGHTS-READ-PROJECTION](../tasks/insights-read-projection.md): Publish the exact read-only consumer capability.
+- `depends-on:compile` -> [TASK-BUDGET-PLAN-READS](../tasks/plan-reads.md): Register both plan read handlers.
+- `depends-on:compile` -> [TASK-BUDGET-POSITION-QUERY](../tasks/position-query.md): Register the position handler.
+- `governed-by` -> ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning
+- `governed-by` -> DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam
+- `governed-by` -> DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry
+- `governed-by` -> PAT-CORE-API-SERVICE-REGISTRATION: Service Registration Pattern — NXGN Actions API
+- `touches` -> DM-BUDGET-OPERATION-CONTRACTS: BudgetOperationContracts
 - `verifies` -> TC-BUDGET-CONTRACT-DISCOVERY-CONTRACT: Verify BUDGET contract discovery
 - `verifies` -> TC-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Verify BUDGET contract compatibility
 - `verifies` -> TC-BUDGET-STRUCTURED-INVOCATION-CONTRACT: Verify structured BUDGET invocation

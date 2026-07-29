@@ -11,7 +11,7 @@
   "status": "planned",
   "steps": "Place one Category Budget Entry on a parent Spend Category. Supply descendant Budget Actuals whose signed sum is negative because refunds exceed spend. Calculate the Budget Position.",
   "expected": "The parent descendant actual and row actual preserve the exact negative value without clamping or reclassification, the row stays in the Budgeted bucket, and the membership reconciliation assertion still holds.",
-  "implementation_ref": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "implementation_ref": "tests/Tally.Tests/Budget/Position/BudgetEnvelopeIntegrityTests.cs",
   "created_at": "2026-07-29T12:09:31.3710951+00:00",
   "links": [
     {

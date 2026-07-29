@@ -22,17 +22,17 @@ Published BUDGET operations meet their p95 targets with exact results, bounded m
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| [DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam](../../../designs/budget/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
-| [DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot](../../../designs/budget/decisions/exact-position-calculation.md) | `design_decision` | `governed-by` | `true` |
-| [NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE: Respond at personal-budget scale](../../../prd/budget/prd.md#nfr-budget-personal-scale-performance-respond-at-personal-budget-scale) | `nfr` | `satisfies` | `true` |
+| DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam | `design_decision` | `governed-by` | `true` |
+| DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot | `design_decision` | `governed-by` | `true` |
+| NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE: Respond at personal-budget scale | `nfr` | `satisfies` | `true` |
 | TC-BUDGET-PERSONAL-SCALE-PERFORMANCE: Measure personal-budget performance | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Benchmark the published operation boundary. |
-| [TASK-BUDGET-GATE-SECURITY: TASK-BUDGET-GATE-SECURITY](gate-security.md) | `compile` | Benchmark artifacts and execution must preserve privacy and offline isolation. |
+| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Benchmark the published operation boundary. |
+| [TASK-BUDGET-GATE-SECURITY](../tasks/gate-security.md) | `compile` | Benchmark artifacts and execution must preserve privacy and offline isolation. |
 
 ## Recipe
 
@@ -73,8 +73,8 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteBudgetPublicContract | `consumes` | [DM-BUDGET-OPERATION-CONTRACTS](../../../designs/budget/data-model.md#budgetoperationcontracts) |  |
-| BudgetPerformanceGateEvidence | `produces` | [NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE](../../../prd/budget/prd.md#nfr-budget-personal-scale-performance-respond-at-personal-budget-scale) |  |
+| CompleteBudgetPublicContract | `consumes` | DM-BUDGET-OPERATION-CONTRACTS |  |
+| BudgetPerformanceGateEvidence | `produces` | NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE |  |
 
 ### Verification
 
@@ -99,11 +99,11 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1w97` (verified)
-- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Benchmark the published operation boundary.
-- `depends-on:compile` -> [TASK-BUDGET-GATE-SECURITY: TASK-BUDGET-GATE-SECURITY](gate-security.md): Benchmark artifacts and execution must preserve privacy and offline isolation.
-- `governed-by` -> [DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam](../../../designs/budget/decisions/application-architecture.md)
-- `governed-by` -> [DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot](../../../designs/budget/decisions/exact-position-calculation.md)
-- `satisfies` -> [NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE: Respond at personal-budget scale](../../../prd/budget/prd.md#nfr-budget-personal-scale-performance-respond-at-personal-budget-scale)
+- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Benchmark the published operation boundary.
+- `depends-on:compile` -> [TASK-BUDGET-GATE-SECURITY](../tasks/gate-security.md): Benchmark artifacts and execution must preserve privacy and offline isolation.
+- `governed-by` -> DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam
+- `governed-by` -> DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot
+- `satisfies` -> NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE: Respond at personal-budget scale
 - `verifies` -> TC-BUDGET-PERSONAL-SCALE-PERFORMANCE: Measure personal-budget performance
 
 ## Navigation

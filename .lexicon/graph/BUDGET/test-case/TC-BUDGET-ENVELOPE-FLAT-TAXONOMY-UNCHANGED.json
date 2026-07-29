@@ -11,7 +11,7 @@
   "status": "planned",
   "steps": "Build a Budget Plan Revision whose Spend Categories are all root nodes with no descendants. Supply Budget Actuals across budgeted, Zero Budget, omitted, and uncategorized states. Calculate the Budget Position under `budget-position-v2`.",
   "expected": "Every bucket assignment, category ordering, row actual, direct actual, planned value, variance, and total is identical to the `budget-position-v1` result for the same inputs, and every descendant actual is exactly zero with empty absorbed identifiers.",
-  "implementation_ref": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "implementation_ref": "tests/Tally.Tests/Budget/Position/BudgetEnvelopeResolutionTests.cs",
   "created_at": "2026-07-29T12:09:29.2269313+00:00",
   "links": [
     {

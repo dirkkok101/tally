@@ -1,0 +1,338 @@
+{
+  "id": "01KYPXK5Y60HN30N9XK022FJ2C",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX16FGEYFVSRAABAC7C8D",
+  "ref_code": "TASK-BUDGET-ENVELOPE-INTEGRITY",
+  "slug": "ENVELOPE-INTEGRITY",
+  "title": "Enforce ancestry, overflow, sign, and lifecycle integrity during envelope resolution",
+  "objective": [
+    "Malformed frozen ancestry and Int64 overflow return the stable integrity failure with no partial result, while refund-negative amounts and archived ancestors resolve without reclassification."
+  ],
+  "planning_state": "ready",
+  "priority": 1,
+  "sort_order": 23,
+  "created_at": "2026-07-29T12:29:06.3764140+00:00",
+  "decisions": [
+    {
+      "id": "01KYPXK5Y8FF30DZVTZ31621VS",
+      "target": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYPXQR994246RA8Q0NE4FJWC",
+      "target": "TASK-BUDGET-ENVELOPE-CONTRACTS",
+      "dependency_type": "compile",
+      "reason": [
+        "Ancestry validation reads BudgetActualMember.AncestryIds, which that task adds to the record."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:31:36.2347497+00:00"
+    },
+    {
+      "id": "01KYPXK5YAZK0A6S00JZS34BZA",
+      "target": "TASK-BUDGET-ENVELOPE-RESOLUTION",
+      "dependency_type": "compile",
+      "reason": [
+        "Integrity validation guards the resolution path and shares its ancestry scan."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYPXK5Y9AGNH8RR98QAQTBZF",
+      "path": "src/Tally/Domain/Budget/Position/BudgetPositionCalculator.cs",
+      "action": "modify",
+      "role": "implementation",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5YAC0TJ5979JT0J0N9E",
+      "path": "tests/Tally.Tests/Budget/Position/BudgetEnvelopeIntegrityTests.cs",
+      "action": "create",
+      "role": "test",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYPXQQJ7M84WWGVXGNMS46RP",
+      "name": "BudgetActualMember.AncestryIds",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "notes": [
+        "Validated here; field declared by TASK-BUDGET-ENVELOPE-CONTRACTS"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:31:35.4950559+00:00"
+    },
+    {
+      "id": "01KYPXQQJ9KH59WXJ3N6B8Y0QM",
+      "name": "BudgetPositionCalculator.TryGetIntegrityReason",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "notes": [
+        "Amount-free integrity reason token accessor"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:31:35.4950559+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYPXK5Y8Q3ZEJVJCP20VFT4Z",
+      "kind": "acceptance_check",
+      "text": [
+        "Given a categorized member whose ancestry is empty, does not end with its assigned Spend Category identifier, repeats an identifier, or names an identifier absent from known Spend Category evidence, when the position is calculated, then BudgetErrors.Integrity is returned with an amount-free integrity reason token and no position row or totals."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5Y9WGKGX10JKM8BF1D8",
+      "kind": "acceptance_check",
+      "text": [
+        "Given an uncategorized member whose ancestry list is non-empty, when the position is calculated, then BudgetErrors.Integrity is returned with no partial totals."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5Y99YNMJ2R4B02E3Q7Z",
+      "kind": "acceptance_check",
+      "text": [
+        "Given descendant Budget Actuals whose absorbed sum exceeds Int64 range, when the position is calculated, then BudgetErrors.Integrity is returned, no position row or totals are produced, and no amount appears in the failure message."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5Y93TQRW78Q4ZHCD7Y3",
+      "kind": "acceptance_check",
+      "text": [
+        "Given a parent Category Budget Entry and descendant Budget Actuals whose signed sum is negative because refunds exceed spend, when the position is returned, then the exact negative value is preserved in both the descendant actual and the row actual, the row stays in the Budgeted bucket, and the membership reconciliation assertion still holds."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5Y9CEBB0SDX6EQC69HH",
+      "kind": "acceptance_check",
+      "text": [
+        "Given an archived ancestor Spend Category carrying a Category Budget Entry and an active descendant carrying none, when the position is calculated, then the archived ancestor row absorbs the descendant Budget Actuals exactly once and reports its archived lifecycle."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5Y9ZYP9DKXRSKWDJ4KC",
+      "kind": "constraint",
+      "text": [
+        "Integrity failures use the existing BudgetErrors.Integrity code and the existing amount-free reason-token mechanism."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5Y92HNP9W78RN6NRR63",
+      "kind": "constraint",
+      "text": [
+        "No new error code is introduced for ancestry violations."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5Y9SARA0EMPENVFGQDD",
+      "kind": "expected_output",
+      "text": [
+        "Ancestry validation mirroring the LEDGER ActualsCalculator invariant"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5Y92MQMFH3TWB1H3G6K",
+      "kind": "expected_output",
+      "text": [
+        "Checked Int64 overflow handling across the absorbed-sum path"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5Y9PHNYRM1WD6RSRDPV",
+      "kind": "expected_output",
+      "text": [
+        "Archived-ancestor and refund-sign behavior proven by test"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5Y9DRX6GFR174S2YPD9",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT clamp, zero, or reclassify a negative Budget Actual — refund-heavy negatives stay signed, per DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5Y95N2898M73VBHK5F3",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT skip an archived ancestor during resolution — Spend Category lifecycle never changes bucket assignment, per DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5Y9YH5JR7XVR47FFSDF",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT return a partial position, partial totals, or a best-effort row when integrity fails — per DD-BUDGET-EXACT-POSITION-CALCULATION overflow yields a stable integrity failure with no partial result."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5Y9D29ZP7N8JZMZ6BE5",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT include any monetary amount in an integrity failure message or reason token — amount-free diagnostics only."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5Y90M5023NW68NNHZE8",
+      "kind": "note",
+      "text": [
+        "The calculator already carries an amount-free integrity reason token mechanism via Exception.Data; reuse it rather than adding a parallel channel."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5Y90S9PWGGXTGWQ6RDK",
+      "kind": "note",
+      "text": [
+        "The LEDGER ActualsCalculator applies the same ancestry invariant to snapshot rows: non-empty with the final element equal to the category identifier when categorized, empty when uncategorized, distinct elements."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYPXK5YA86CXT6Y71524H7E3",
+      "target_ref_code": "NFR-BUDGET-EXACT-FINANCIAL-INTEGRITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXXFDYF56XK8J7V4E0EP2E0N",
+      "target_title": "Preserve exact budget arithmetic",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5YA4Z84CA5XVNBEX3CJ",
+      "target_ref_code": "TC-BUDGET-ENVELOPE-ANCESTRY-INTEGRITY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KYPWF9NNK1FN3RMES2JBR2F1",
+      "target_title": "Malformed frozen Spend Category ancestry returns the stable integrity failure",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5YAREFZSKF2G5ZY60PW",
+      "target_ref_code": "TC-BUDGET-ENVELOPE-OVERFLOW-INTEGRITY",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KYPWFCDP35MAPVKTWKZ63X8W",
+      "target_title": "Checked Int64 overflow during descendant aggregation returns no partial result",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5YAWNRJ80AWE8R9NHJK",
+      "target_ref_code": "TC-BUDGET-ENVELOPE-REFUND-SIGN-PRESERVED",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KYPWFAFAXWADXTH5HEJG79GD",
+      "target_title": "Refund-heavy descendant Budget Actuals resolve identically and stay signed",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    },
+    {
+      "id": "01KYPXK5YADPYYHQDWTFTVPQ6S",
+      "target_ref_code": "TC-BUDGET-ENVELOPE-ARCHIVED-ANCESTOR-CAPTURES",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KYPWFB5BWWGGXAZ09PSBSYG4",
+      "target_title": "Archived ancestor carrying a Category Budget Entry still governs",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYPXK5Y8TT3219HKHN4H032F",
+      "target": "FR-BUDGET-CATEGORY-LIFECYCLE",
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYPXK5YACVF11AN35QNB08D3",
+      "gate_type": "self-review",
+      "description": [
+        "Confirm no integrity failure message or reason token contains a monetary amount"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYPXK5YASCC7A73Z3TCD94FT",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetEnvelopeIntegrityTests",
+      "expected_result": "All BudgetEnvelopeIntegrityTests pass, exit code 0, at least 5 tests run",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:29:06.3764140+00:00"
+    }
+  ]
+}

@@ -15,6 +15,11 @@ Implement checked exhaustive bucketing, public position composition, and the mut
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-BUDGET-POSITION-CALCULATOR: Build the exact Budget Position calculator](../tasks/position-calculator.md) | Build the exact Budget Position calculator | `ready` | 0 |
-| [TASK-BUDGET-POSITION-QUERY: Compose exact Budget Positions through Ledger](../tasks/position-query.md) | Compose exact Budget Positions through Ledger | `ready` | 0 |
-| [TASK-BUDGET-INSIGHTS-READ-PROJECTION: Publish the read-only INSIGHTS budget projection](../tasks/insights-read-projection.md) | Publish the read-only INSIGHTS budget projection | `ready` | 1 |
+| [TASK-BUDGET-POSITION-CALCULATOR](../tasks/position-calculator.md) | Build the exact Budget Position calculator | `ready` | 0 |
+| [TASK-BUDGET-POSITION-QUERY](../tasks/position-query.md) | Compose exact Budget Positions through Ledger | `ready` | 0 |
+| [TASK-BUDGET-INSIGHTS-READ-PROJECTION](../tasks/insights-read-projection.md) | Publish the read-only INSIGHTS budget projection | `ready` | 1 |
+| [TASK-BUDGET-ENVELOPE-CONTRACTS](../tasks/envelope-contracts.md) | Publish the envelope partition and ancestry provenance contract fields | `ready` | 1 |
+| [TASK-BUDGET-ENVELOPE-ANCESTRY-COMPOSITION](../tasks/envelope-ancestry-composition.md) | Carry frozen Spend Category ancestry from the LEDGER snapshot into BUDGET members | `ready` | 1 |
+| [TASK-BUDGET-ENVELOPE-RESOLUTION](../tasks/envelope-resolution.md) | Resolve each Budget Actual to its nearest ancestor Category Budget Entry | `ready` | 1 |
+| [TASK-BUDGET-ENVELOPE-INTEGRITY](../tasks/envelope-integrity.md) | Enforce ancestry, overflow, sign, and lifecycle integrity during envelope resolution | `ready` | 1 |
+| [TASK-BUDGET-GATE-INT-ENVELOPE-PROVENANCE](../tasks/gate-int-envelope-provenance.md) | Prove envelope provenance and reparent re-lensing through the published contract | `ready` | 1 |

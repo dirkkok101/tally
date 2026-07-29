@@ -11,7 +11,7 @@
   "status": "planned",
   "steps": "Build a Spend Category tree where no element of a Budget Actual's ancestry carries a Category Budget Entry. Supply Budget Actuals on two distinct descendant Spend Categories in that unfunded tree. Calculate the Budget Position.",
   "expected": "Each Budget Actual appears exactly once as Unbudgeted Spend keyed by its own exact assigned Spend Category identifier, not by any ancestor. Planned, Remaining, and Over are null on both rows and no ancestor row is fabricated.",
-  "implementation_ref": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "implementation_ref": "tests/Tally.Tests/Budget/Position/BudgetEnvelopeResolutionTests.cs",
   "created_at": "2026-07-29T12:09:27.8305451+00:00",
   "links": [
     {

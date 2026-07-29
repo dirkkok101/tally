@@ -1,0 +1,9 @@
+{
+  "id": "01KYPXWR6NJK9SGQYYYTHKJBC6",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "version": "0.11",
+  "changes": [
+    "Plan PLAN-BUDGET-V1 extended for bd-3lrk: 5 tasks added under SP-BUDGET-02-POSITION-PROJECTION (ENVELOPE-CONTRACTS, ENVELOPE-ANCESTRY-COMPOSITION, ENVELOPE-RESOLUTION, ENVELOPE-INTEGRITY, GATE-INT-ENVELOPE-PROVENANCE), 29 tasks total. Required refs 154 to 178, zero gaps, zero blocking audit findings. Resolution was split from a single oversized task after the context-budget gate exposed it, and the produced-interface name was corrected because TASK-BUDGET-POSITION-CALCULATOR already owns BudgetPositionCalculator.Calculate."
+  ],
+  "created_at": "2026-07-29T12:34:19.9906522+00:00"
+}

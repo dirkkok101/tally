@@ -22,22 +22,22 @@ UC-BUDGET-003 proves revision binding, once-only bucket accounting, exact proven
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| [DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot](../../../designs/budget/decisions/exact-position-calculation.md) | `design_decision` | `governed-by` | `true` |
-| [DD-BUDGET-INSIGHTS-READ-PROJECTION: Reuse exact owner reads through a mutation-free INSIGHTS capability set](../../../designs/budget/decisions/insights-read-projection.md) | `design_decision` | `governed-by` | `true` |
-| [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md) | `design_decision` | `governed-by` | `true` |
+| DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot | `design_decision` | `governed-by` | `true` |
+| DD-BUDGET-INSIGHTS-READ-PROJECTION: Reuse exact owner reads through a mutation-free INSIGHTS capability set | `design_decision` | `governed-by` | `true` |
+| DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations | `design_decision` | `governed-by` | `true` |
 | TC-BUDGET-EXACT-FINANCIAL-INTEGRITY: Verify exact budget arithmetic | `test_case` | `verifies` | `true` |
 | TC-BUDGET-INSIGHTS-PROJECTION-CONTRACT: Verify read-only INSIGHTS projection contract | `test_case` | `verifies` | `true` |
 | TC-BUDGET-POSITION-QUERY-CONTRACT: Verify exact budget position contract | `test_case` | `verifies` | `true` |
-| [UC-BUDGET-003: Inspect exact budget position](../../../prd/budget/prd.md#uc-budget-003-inspect-exact-budget-position) | `use_case` | `covers` | `true` |
+| UC-BUDGET-003: Inspect exact budget position | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Execute published owner reads. |
-| [TASK-BUDGET-POSITION-QUERY: TASK-BUDGET-POSITION-QUERY](position-query.md) | `compile` | Verify complete position composition. |
-| [TASK-BUDGET-INSIGHTS-READ-PROJECTION: TASK-BUDGET-INSIGHTS-READ-PROJECTION](insights-read-projection.md) | `compile` | Verify exact read-projection parity. |
-| [TASK-BUDGET-GATE-INT-LEDGER-CONTRACT: TASK-BUDGET-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md) | `compile` | UC-003 consumes the verified released Ledger snapshot contract. |
+| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Execute published owner reads. |
+| [TASK-BUDGET-POSITION-QUERY](../tasks/position-query.md) | `compile` | Verify complete position composition. |
+| [TASK-BUDGET-INSIGHTS-READ-PROJECTION](../tasks/insights-read-projection.md) | `compile` | Verify exact read-projection parity. |
+| [TASK-BUDGET-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md) | `compile` | UC-003 consumes the verified released Ledger snapshot contract. |
 
 ## Recipe
 
@@ -75,10 +75,10 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteBudgetPublicContract | `consumes` | [DM-BUDGET-OPERATION-CONTRACTS](../../../designs/budget/data-model.md#budgetoperationcontracts) |  |
-| BudgetReadProjectionModule | `consumes` | [DM-BUDGET-INSIGHTS-READ-CONTRACT](../../../designs/budget/data-model.md#budgetreadcapabilitydescriptor) |  |
-| VerifiedLedgerBudgetContract | `consumes` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
-| VerifiedBudgetUc003 | `produces` | [UC-BUDGET-003](../../../prd/budget/prd.md#uc-budget-003-inspect-exact-budget-position) |  |
+| CompleteBudgetPublicContract | `consumes` | DM-BUDGET-OPERATION-CONTRACTS |  |
+| BudgetReadProjectionModule | `consumes` | DM-BUDGET-INSIGHTS-READ-CONTRACT |  |
+| VerifiedLedgerBudgetContract | `consumes` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
+| VerifiedBudgetUc003 | `produces` | UC-BUDGET-003 |  |
 
 ### Verification
 
@@ -103,14 +103,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-sp63` (verified)
-- `covers` -> [UC-BUDGET-003: Inspect exact budget position](../../../prd/budget/prd.md#uc-budget-003-inspect-exact-budget-position)
-- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-LEDGER-CONTRACT: TASK-BUDGET-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md): UC-003 consumes the verified released Ledger snapshot contract.
-- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Execute published owner reads.
-- `depends-on:compile` -> [TASK-BUDGET-INSIGHTS-READ-PROJECTION: TASK-BUDGET-INSIGHTS-READ-PROJECTION](insights-read-projection.md): Verify exact read-projection parity.
-- `depends-on:compile` -> [TASK-BUDGET-POSITION-QUERY: TASK-BUDGET-POSITION-QUERY](position-query.md): Verify complete position composition.
-- `governed-by` -> [DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot](../../../designs/budget/decisions/exact-position-calculation.md)
-- `governed-by` -> [DD-BUDGET-INSIGHTS-READ-PROJECTION: Reuse exact owner reads through a mutation-free INSIGHTS capability set](../../../designs/budget/decisions/insights-read-projection.md)
-- `governed-by` -> [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md)
+- `covers` -> UC-BUDGET-003: Inspect exact budget position
+- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md): UC-003 consumes the verified released Ledger snapshot contract.
+- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Execute published owner reads.
+- `depends-on:compile` -> [TASK-BUDGET-INSIGHTS-READ-PROJECTION](../tasks/insights-read-projection.md): Verify exact read-projection parity.
+- `depends-on:compile` -> [TASK-BUDGET-POSITION-QUERY](../tasks/position-query.md): Verify complete position composition.
+- `governed-by` -> DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot
+- `governed-by` -> DD-BUDGET-INSIGHTS-READ-PROJECTION: Reuse exact owner reads through a mutation-free INSIGHTS capability set
+- `governed-by` -> DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations
 - `verifies` -> TC-BUDGET-EXACT-FINANCIAL-INTEGRITY: Verify exact budget arithmetic
 - `verifies` -> TC-BUDGET-INSIGHTS-PROJECTION-CONTRACT: Verify read-only INSIGHTS projection contract
 - `verifies` -> TC-BUDGET-POSITION-QUERY-CONTRACT: Verify exact budget position contract

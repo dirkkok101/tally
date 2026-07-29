@@ -22,24 +22,24 @@ Owners receive one exact provenance-bound position for an explicit or Active rev
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| [DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot](../../../designs/budget/decisions/exact-position-calculation.md) | `design_decision` | `governed-by` | `true` |
-| [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md) | `design_decision` | `governed-by` | `true` |
-| [DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider](../../../designs/budget/decisions/trusted-period-time.md) | `design_decision` | `governed-by` | `true` |
-| [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) | `data_model` | `touches` | `true` |
-| [DM-BUDGET-POSITION-PROJECTION: BudgetPositionProjection](../../../designs/budget/data-model.md#budgetpositionprojection) | `data_model` | `touches` | `true` |
-| [FR-BUDGET-LEDGER-COMPOSITION: Compose only through public LEDGER contracts](../../../prd/budget/prd.md#fr-budget-ledger-composition-compose-only-through-public-ledger-contracts) | `requirement` | `implements` | `true` |
-| [FR-BUDGET-POSITION-QUERY: Calculate exact Budget Positions](../../../prd/budget/prd.md#fr-budget-position-query-calculate-exact-budget-positions) | `requirement` | `implements` | `true` |
+| DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot | `design_decision` | `governed-by` | `true` |
+| DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations | `design_decision` | `governed-by` | `true` |
+| DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider | `design_decision` | `governed-by` | `true` |
+| DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts | `data_model` | `touches` | `true` |
+| DM-BUDGET-POSITION-PROJECTION: BudgetPositionProjection | `data_model` | `touches` | `true` |
+| FR-BUDGET-LEDGER-COMPOSITION: Compose only through public LEDGER contracts | `requirement` | `implements` | `true` |
+| FR-BUDGET-POSITION-QUERY: Calculate exact Budget Positions | `requirement` | `implements` | `true` |
 | TC-BUDGET-POSITION-QUERY-CONTRACT: Verify exact budget position contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-POSITION-CALCULATOR: TASK-BUDGET-POSITION-CALCULATOR](position-calculator.md) | `compile` | The query delegates all bucketing and arithmetic to the pure calculator. |
-| [TASK-BUDGET-LEDGER-BUDGET-CLIENT: TASK-BUDGET-LEDGER-BUDGET-CLIENT](ledger-budget-client.md) | `compile` | Current category and actual evidence comes only from the public client. |
-| [TASK-BUDGET-STATE-FOUNDATION: TASK-BUDGET-STATE-FOUNDATION](state-foundation.md) | `compile` | Revision selection reads exact persisted plan state. |
-| [TASK-BUDGET-PERIOD-IDENTITY: TASK-BUDGET-PERIOD-IDENTITY](period-identity.md) | `compile` | Position results derive period boundaries and lifecycle from the trusted resolver. |
-| [TASK-BUDGET-CONTRACT-FOUNDATION: TASK-BUDGET-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | Position DTO mapping extends the pure BudgetContractMapper root. |
+| [TASK-BUDGET-POSITION-CALCULATOR](../tasks/position-calculator.md) | `compile` | The query delegates all bucketing and arithmetic to the pure calculator. |
+| [TASK-BUDGET-LEDGER-BUDGET-CLIENT](../tasks/ledger-budget-client.md) | `compile` | Current category and actual evidence comes only from the public client. |
+| [TASK-BUDGET-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Revision selection reads exact persisted plan state. |
+| [TASK-BUDGET-PERIOD-IDENTITY](../tasks/period-identity.md) | `compile` | Position results derive period boundaries and lifecycle from the trusted resolver. |
+| [TASK-BUDGET-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Position DTO mapping extends the pure BudgetContractMapper root. |
 
 ## Recipe
 
@@ -81,12 +81,12 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| BudgetStateStore | `consumes` | [DM-BUDGET-STATE-STORE](../../../designs/budget/data-model.md#budgetstatestore) |  |
-| LedgerContractClient.QueryBudgetActualsAsync | `consumes` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
-| BudgetPositionCalculator.Calculate | `consumes` | [DM-BUDGET-POSITION-PROJECTION](../../../designs/budget/data-model.md#budgetpositionprojection) |  |
-| BudgetPeriodResolver.Resolve | `consumes` | [DM-BUDGET-PERIOD-PLAN](../../../designs/budget/data-model.md#budgetperiodandplan) |  |
-| BudgetContractMapper | `consumes` | [DM-BUDGET-OPERATION-CONTRACTS](../../../designs/budget/data-model.md#budgetoperationcontracts) |  |
-| GetBudgetPositionQuery.HandleAsync | `produces` | [DM-BUDGET-POSITION-PROJECTION](../../../designs/budget/data-model.md#budgetpositionprojection) |  |
+| BudgetStateStore | `consumes` | DM-BUDGET-STATE-STORE |  |
+| LedgerContractClient.QueryBudgetActualsAsync | `consumes` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
+| BudgetPositionCalculator.Calculate | `consumes` | DM-BUDGET-POSITION-PROJECTION |  |
+| BudgetPeriodResolver.Resolve | `consumes` | DM-BUDGET-PERIOD-PLAN |  |
+| BudgetContractMapper | `consumes` | DM-BUDGET-OPERATION-CONTRACTS |  |
+| GetBudgetPositionQuery.HandleAsync | `produces` | DM-BUDGET-POSITION-PROJECTION |  |
 
 ### Verification
 
@@ -111,18 +111,18 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1ns6` (verified)
-- `depends-on:compile` -> [TASK-BUDGET-CONTRACT-FOUNDATION: TASK-BUDGET-CONTRACT-FOUNDATION](contract-foundation.md): Position DTO mapping extends the pure BudgetContractMapper root.
-- `depends-on:compile` -> [TASK-BUDGET-LEDGER-BUDGET-CLIENT: TASK-BUDGET-LEDGER-BUDGET-CLIENT](ledger-budget-client.md): Current category and actual evidence comes only from the public client.
-- `depends-on:compile` -> [TASK-BUDGET-PERIOD-IDENTITY: TASK-BUDGET-PERIOD-IDENTITY](period-identity.md): Position results derive period boundaries and lifecycle from the trusted resolver.
-- `depends-on:compile` -> [TASK-BUDGET-POSITION-CALCULATOR: TASK-BUDGET-POSITION-CALCULATOR](position-calculator.md): The query delegates all bucketing and arithmetic to the pure calculator.
-- `depends-on:compile` -> [TASK-BUDGET-STATE-FOUNDATION: TASK-BUDGET-STATE-FOUNDATION](state-foundation.md): Revision selection reads exact persisted plan state.
-- `governed-by` -> [DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot](../../../designs/budget/decisions/exact-position-calculation.md)
-- `governed-by` -> [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md)
-- `governed-by` -> [DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider](../../../designs/budget/decisions/trusted-period-time.md)
-- `implements` -> [FR-BUDGET-LEDGER-COMPOSITION: Compose only through public LEDGER contracts](../../../prd/budget/prd.md#fr-budget-ledger-composition-compose-only-through-public-ledger-contracts)
-- `implements` -> [FR-BUDGET-POSITION-QUERY: Calculate exact Budget Positions](../../../prd/budget/prd.md#fr-budget-position-query-calculate-exact-budget-positions)
-- `touches` -> [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts)
-- `touches` -> [DM-BUDGET-POSITION-PROJECTION: BudgetPositionProjection](../../../designs/budget/data-model.md#budgetpositionprojection)
+- `depends-on:compile` -> [TASK-BUDGET-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Position DTO mapping extends the pure BudgetContractMapper root.
+- `depends-on:compile` -> [TASK-BUDGET-LEDGER-BUDGET-CLIENT](../tasks/ledger-budget-client.md): Current category and actual evidence comes only from the public client.
+- `depends-on:compile` -> [TASK-BUDGET-PERIOD-IDENTITY](../tasks/period-identity.md): Position results derive period boundaries and lifecycle from the trusted resolver.
+- `depends-on:compile` -> [TASK-BUDGET-POSITION-CALCULATOR](../tasks/position-calculator.md): The query delegates all bucketing and arithmetic to the pure calculator.
+- `depends-on:compile` -> [TASK-BUDGET-STATE-FOUNDATION](../tasks/state-foundation.md): Revision selection reads exact persisted plan state.
+- `governed-by` -> DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot
+- `governed-by` -> DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations
+- `governed-by` -> DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider
+- `implements` -> FR-BUDGET-LEDGER-COMPOSITION: Compose only through public LEDGER contracts
+- `implements` -> FR-BUDGET-POSITION-QUERY: Calculate exact Budget Positions
+- `touches` -> DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts
+- `touches` -> DM-BUDGET-POSITION-PROJECTION: BudgetPositionProjection
 - `verifies` -> TC-BUDGET-POSITION-QUERY-CONTRACT: Verify exact budget position contract
 
 ## Navigation

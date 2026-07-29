@@ -1,0 +1,338 @@
+{
+  "id": "01KYPXEA8YJQHR3AYYAX7VT6XN",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX16FGEYFVSRAABAC7C8D",
+  "ref_code": "TASK-BUDGET-GATE-INT-ENVELOPE-PROVENANCE",
+  "slug": "GATE-INT-ENVELOPE-PROVENANCE",
+  "title": "Prove envelope provenance and reparent re-lensing through the published contract",
+  "objective": [
+    "The published BUDGET operations report the effective Spend Category per Budget Actual and re-lens a later position after a reparent under a newly cited snapshot, with the full existing position suite unchanged."
+  ],
+  "planning_state": "ready",
+  "priority": 1,
+  "sort_order": 24,
+  "created_at": "2026-07-29T12:26:26.9749025+00:00",
+  "decisions": [
+    {
+      "id": "01KYPXEA97TE4A6ZQZK930ZKH9",
+      "target": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYPXTG7HKW0QHWNHJYJ21PA8",
+      "target": "TASK-BUDGET-ENVELOPE-INTEGRITY",
+      "dependency_type": "compile",
+      "reason": [
+        "The module gate runs the full BUDGET verification suite, which includes the integrity behaviour this task proves."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:33:06.2901525+00:00"
+    },
+    {
+      "id": "01KYPXEA98T46T6FYGPRFVBS9M",
+      "target": "TASK-BUDGET-ENVELOPE-RESOLUTION",
+      "dependency_type": "compile",
+      "reason": [
+        "The gate proves resolution behavior through the published contract and cannot pass before resolution exists."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYPXEA987VVGNNT70VBRHWHD",
+      "path": "tests/Tally.Tests/Budget/InsightsContract/BudgetInsightsContractTests.cs",
+      "action": "modify",
+      "role": "test",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA984E2EKTYM46VYNQDT",
+      "path": "tests/Tally.Tests/Budget/Acceptance/BudgetEnvelopeProvenanceTests.cs",
+      "action": "create",
+      "role": "test",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA98WV7QGBCY2FF94TQN",
+      "path": "tests/Tally.Tests/Budget/Acceptance/BudgetUc003PositionTests.cs",
+      "action": "read",
+      "role": "test",
+      "required": 1,
+      "notes": [
+        "Run unchanged as regression proof"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYPXRJV39GBD87AK5AZVJM8W",
+      "name": "BudgetPositionCalculator.ResolveEnvelope",
+      "direction": "consumes",
+      "contract_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "notes": [
+        "Resolution produced by TASK-BUDGET-ENVELOPE-RESOLUTION"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:32:03.4264641+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYPXP1ARHT0JV19NEC2T78WB",
+      "kind": "acceptance_check",
+      "text": [
+        "Given Budget Actuals across a depth-three Spend Category tree with Category Budget Entries on the root and one descendant, when budget.insights.evidence.get is invoked through the published binary, then each member reports its frozen ancestry root-first with its assigned Spend Category last and reports the effective Spend Category identifier that governed it."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:30:39.9597529+00:00"
+    },
+    {
+      "id": "01KYPXP1AT4KMDKGCCNM8AFTBN",
+      "kind": "acceptance_check",
+      "text": [
+        "Given a member resolving to Unbudgeted Spend or Uncategorized Spend, when the INSIGHTS read projection is inspected, then its effective Spend Category identifier is null rather than an invented ancestor."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:30:39.9597529+00:00"
+    },
+    {
+      "id": "01KYPXP1AT9ZDZ2SQ6ZSW8PF9W",
+      "kind": "acceptance_check",
+      "text": [
+        "Given a Budget Actual on a descendant under a funded parent, when the descendant is reparented under a different funded Spend Category through ledger.category.reparent and the position is requested again for the same Budget Period and revision, then the Budget Actual is attributed to the new funded ancestor, the cited LEDGER snapshot identifier differs from the first read, and the bound revision identifier and status are unchanged."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-29T12:30:39.9597529+00:00"
+    },
+    {
+      "id": "01KYPXP1ATZVT3PZVAH9WY6STP",
+      "kind": "acceptance_check",
+      "text": [
+        "Given the complete existing position test suite, when it is run after resolution lands, then all 111 tests pass with no test modified to accommodate the new behavior."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-29T12:30:39.9597529+00:00"
+    },
+    {
+      "id": "01KYPXEA97S3E98CNWHACHZBJM",
+      "kind": "constraint",
+      "text": [
+        "Tests drive the published Native AOT binary through TALLY_PUBLISHED_BINARY, matching the existing BUDGET contract-test harness."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA9750N3F4TMK7J0KJ6K",
+      "kind": "constraint",
+      "text": [
+        "TALLY_DATA_ROOT points at a temporary owner-only directory per test."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA97XXRJSZ6PEY7N0X73",
+      "kind": "expected_output",
+      "text": [
+        "Contract-level proof of per-member envelope provenance"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA97B6Z10KM35EQV0Q71",
+      "kind": "expected_output",
+      "text": [
+        "End-to-end proof that a reparent re-lenses a later position under a new snapshot"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA976DA1BC4M4R98KZPY",
+      "kind": "expected_output",
+      "text": [
+        "Green full existing position suite"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA9736JGVAVB6AHX2MRE",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT modify an existing position test to make it pass under the new rule — unchanged flat-taxonomy behavior is the regression proof, per DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA97KFS497F63YVY7FZK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT assert that a historical position is immutable across a reparent — determinism holds within one cited snapshot, not across time, per DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION and A4."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA97BDNKGCX466DACNR0",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT exercise the behavior through in-process calculator calls only — this gate proves the published operation contract."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA986E37RF3NYVEXPDYW",
+      "kind": "note",
+      "text": [
+        "The existing suite totals 111 tests: 39 in BudgetPositionCalculatorTests, 41 in GetBudgetPositionQueryTests, and 31 in BudgetUc003PositionTests."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA98ZNVKJ4QTJ3R6RP0V",
+      "kind": "note",
+      "text": [
+        "ledger.category.reparent takes categoryId, parentCategoryId, and reason, and requires an idempotency key."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYPXEA98V80TRJQCH6PQ070W",
+      "target_ref_code": "UC-BUDGET-003",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXXCKRVRR89KQE4PZJM8JQBT",
+      "target_title": "Inspect exact Budget Position",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA984BW5DV7JBZDN5D84",
+      "target_ref_code": "FR-BUDGET-POSITION-QUERY",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXXFAZDV5ETFQAPK518P3W60",
+      "target_title": "Calculate exact Budget Positions",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA986P2KN5DE0MKN3227",
+      "target_ref_code": "TC-BUDGET-ENVELOPE-MEMBER-PROVENANCE",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KYPWF91RPV3VH9SYH5E46J7X",
+      "target_title": "INSIGHTS read projection reports frozen ancestry and effective Spend Category",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA987SX0RFFKRJYC8MBK",
+      "target_ref_code": "TC-BUDGET-ENVELOPE-REPARENT-RELENSES",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KYPWFBTAWP21WTEQTSD9TY8E",
+      "target_title": "Reparenting re-lenses a later Budget Position under a newly cited snapshot",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYPXEA97S4RT7C0BTMS3MNME",
+      "target": "FR-BUDGET-INSIGHTS-PROJECTION",
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYPXEA98K7PCJYT6FJ44YBYW",
+      "gate_type": "test-evidence",
+      "description": [
+        "Reparent re-lensing proven end-to-end with two differing cited snapshot identifiers"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA98GRH3CGWJPSN16N1X",
+      "gate_type": "self-review",
+      "description": [
+        "Confirm no pre-existing position test was edited to accommodate the new rule"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYPXEA9806GD2ACFYXFVG676",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetEnvelopeProvenanceTests",
+      "expected_result": "All BudgetEnvelopeProvenanceTests pass, exit code 0, at least 3 tests run",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA98P76FPSMMXJZKF4QJ",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetUc003PositionTests",
+      "expected_result": "All BudgetUc003PositionTests pass unchanged, exit code 0, at least 31 tests run",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA98YS4EY6RCGS2S7TJH",
+      "phase": "after",
+      "command": "scripts/verify-budget-module.sh",
+      "expected_result": "Script exits 0 with every discovered BUDGET gate suite passing",
+      "required": 1,
+      "timeout_seconds": 1800,
+      "sort_order": 2,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ]
+}

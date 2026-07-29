@@ -22,10 +22,10 @@ Published descriptors, category lifecycle, snapshot actuals, date mapping, compa
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md) | `design_decision` | `governed-by` | `true` |
-| [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) | `data_model` | `touches` | `true` |
-| [EXT-BUDGET-LEDGER-PUBLIC-CONTRACT: LEDGER Public Contract](../../../prd/budget/prd.md#ext-budget-ledger-public-contract-ledger-public-contract) | `external_dependency` | `references` | `true` |
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract](../../ledger/tasks/gate-int-public-contract.md) | `task` | `blocked-by` | `true` |
+| DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations | `design_decision` | `governed-by` | `true` |
+| DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts | `data_model` | `touches` | `true` |
+| EXT-BUDGET-LEDGER-PUBLIC-CONTRACT: LEDGER Public Contract | `external_dependency` | `references` | `true` |
+| TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract | `task` | `blocked-by` | `true` |
 | TC-BUDGET-CATEGORY-LIFECYCLE-CONTRACT: Verify category lifecycle contract | `test_case` | `verifies` | `true` |
 | TC-BUDGET-LEDGER-COMPOSITION-CONTRACT: Verify public LEDGER composition contract | `test_case` | `verifies` | `true` |
 
@@ -33,7 +33,7 @@ Published descriptors, category lifecycle, snapshot actuals, date mapping, compa
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-LEDGER-BUDGET-CONTRACT: TASK-BUDGET-LEDGER-BUDGET-CONTRACT](ledger-budget-contract.md) | `compile` | The gate executes the contracts produced by this task. |
+| [TASK-BUDGET-LEDGER-BUDGET-CONTRACT](../tasks/ledger-budget-contract.md) | `compile` | The gate executes the contracts produced by this task. |
 
 ## Recipe
 
@@ -76,9 +76,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| LedgerBudgetCategoryEvidence | `consumes` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
-| LedgerBudgetActualItem | `consumes` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
-| VerifiedLedgerBudgetContract | `produces` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
+| LedgerBudgetCategoryEvidence | `consumes` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
+| LedgerBudgetActualItem | `consumes` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
+| VerifiedLedgerBudgetContract | `produces` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
 
 ### Verification
 
@@ -103,11 +103,11 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1d4j` (verified)
-- `blocked-by` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract](../../ledger/tasks/gate-int-public-contract.md)
-- `depends-on:compile` -> [TASK-BUDGET-LEDGER-BUDGET-CONTRACT: TASK-BUDGET-LEDGER-BUDGET-CONTRACT](ledger-budget-contract.md): The gate executes the contracts produced by this task.
-- `governed-by` -> [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md)
-- `references` -> [EXT-BUDGET-LEDGER-PUBLIC-CONTRACT: LEDGER Public Contract](../../../prd/budget/prd.md#ext-budget-ledger-public-contract-ledger-public-contract)
-- `touches` -> [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts)
+- `blocked-by` -> TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract
+- `depends-on:compile` -> [TASK-BUDGET-LEDGER-BUDGET-CONTRACT](../tasks/ledger-budget-contract.md): The gate executes the contracts produced by this task.
+- `governed-by` -> DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations
+- `references` -> EXT-BUDGET-LEDGER-PUBLIC-CONTRACT: LEDGER Public Contract
+- `touches` -> DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts
 - `verifies` -> TC-BUDGET-CATEGORY-LIFECYCLE-CONTRACT: Verify category lifecycle contract
 - `verifies` -> TC-BUDGET-LEDGER-COMPOSITION-CONTRACT: Verify public LEDGER composition contract
 

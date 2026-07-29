@@ -22,20 +22,20 @@ BUDGET has one store whose immutable payloads, guarded transitions, and replay m
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| [DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references](../../../designs/budget/decisions/idempotent-mutations.md) | `design_decision` | `governed-by` | `true` |
-| [DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions](../../../designs/budget/decisions/plan-revision-lifecycle.md) | `design_decision` | `governed-by` | `true` |
-| [DD-BUDGET-STATE-STORE: Separate owner-only raw-SQLite budget state](../../../designs/budget/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
-| [DM-BUDGET-LIFECYCLE-IDEMPOTENCY: BudgetLifecycleAndIdempotency](../../../designs/budget/data-model.md#budgetlifecycleandidempotency) | `data_model` | `touches` | `true` |
-| [DM-BUDGET-PERIOD-PLAN: BudgetPeriodAndPlan](../../../designs/budget/data-model.md#budgetperiodandplan) | `data_model` | `touches` | `true` |
-| [DM-BUDGET-REVISION-ENTRY: BudgetPlanRevisionAndEntry](../../../designs/budget/data-model.md#budgetplanrevisionandentry) | `data_model` | `touches` | `true` |
-| [DM-BUDGET-STATE-STORE: BudgetStateStore](../../../designs/budget/data-model.md#budgetstatestore) | `data_model` | `touches` | `true` |
-| [TASK-LEDGER-CORE-STORAGE: Implement the SQLite runtime and storage foundation](../../ledger/tasks/core-storage.md) | `task` | `blocked-by` | `true` |
+| DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references | `design_decision` | `governed-by` | `true` |
+| DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions | `design_decision` | `governed-by` | `true` |
+| DD-BUDGET-STATE-STORE: Separate owner-only raw-SQLite budget state | `design_decision` | `governed-by` | `true` |
+| DM-BUDGET-LIFECYCLE-IDEMPOTENCY: BudgetLifecycleAndIdempotency | `data_model` | `touches` | `true` |
+| DM-BUDGET-PERIOD-PLAN: BudgetPeriodAndPlan | `data_model` | `touches` | `true` |
+| DM-BUDGET-REVISION-ENTRY: BudgetPlanRevisionAndEntry | `data_model` | `touches` | `true` |
+| DM-BUDGET-STATE-STORE: BudgetStateStore | `data_model` | `touches` | `true` |
+| TASK-LEDGER-CORE-STORAGE: Implement the SQLite runtime and storage foundation | `task` | `blocked-by` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-CONTRACT-FOUNDATION: TASK-BUDGET-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | Mapping and replay use the public contract records and enums. |
+| [TASK-BUDGET-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Mapping and replay use the public contract records and enums. |
 
 ## Recipe
 
@@ -84,9 +84,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| BudgetStateStore | `produces` | [DM-BUDGET-STATE-STORE](../../../designs/budget/data-model.md#budgetstatestore) |  |
-| BudgetRowMapper | `produces` | [DM-BUDGET-STATE-STORE](../../../designs/budget/data-model.md#budgetstatestore) |  |
-| BudgetIdempotencyStore | `produces` | [DM-BUDGET-LIFECYCLE-IDEMPOTENCY](../../../designs/budget/data-model.md#budgetlifecycleandidempotency) |  |
+| BudgetStateStore | `produces` | DM-BUDGET-STATE-STORE |  |
+| BudgetRowMapper | `produces` | DM-BUDGET-STATE-STORE |  |
+| BudgetIdempotencyStore | `produces` | DM-BUDGET-LIFECYCLE-IDEMPOTENCY |  |
 
 ### Verification
 
@@ -111,15 +111,15 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2zsp` (verified)
-- `blocked-by` -> [TASK-LEDGER-CORE-STORAGE: Implement the SQLite runtime and storage foundation](../../ledger/tasks/core-storage.md)
-- `depends-on:compile` -> [TASK-BUDGET-CONTRACT-FOUNDATION: TASK-BUDGET-CONTRACT-FOUNDATION](contract-foundation.md): Mapping and replay use the public contract records and enums.
-- `governed-by` -> [DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references](../../../designs/budget/decisions/idempotent-mutations.md)
-- `governed-by` -> [DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions](../../../designs/budget/decisions/plan-revision-lifecycle.md)
-- `governed-by` -> [DD-BUDGET-STATE-STORE: Separate owner-only raw-SQLite budget state](../../../designs/budget/decisions/state-store.md)
-- `touches` -> [DM-BUDGET-LIFECYCLE-IDEMPOTENCY: BudgetLifecycleAndIdempotency](../../../designs/budget/data-model.md#budgetlifecycleandidempotency)
-- `touches` -> [DM-BUDGET-PERIOD-PLAN: BudgetPeriodAndPlan](../../../designs/budget/data-model.md#budgetperiodandplan)
-- `touches` -> [DM-BUDGET-REVISION-ENTRY: BudgetPlanRevisionAndEntry](../../../designs/budget/data-model.md#budgetplanrevisionandentry)
-- `touches` -> [DM-BUDGET-STATE-STORE: BudgetStateStore](../../../designs/budget/data-model.md#budgetstatestore)
+- `blocked-by` -> TASK-LEDGER-CORE-STORAGE: Implement the SQLite runtime and storage foundation
+- `depends-on:compile` -> [TASK-BUDGET-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Mapping and replay use the public contract records and enums.
+- `governed-by` -> DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references
+- `governed-by` -> DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions
+- `governed-by` -> DD-BUDGET-STATE-STORE: Separate owner-only raw-SQLite budget state
+- `touches` -> DM-BUDGET-LIFECYCLE-IDEMPOTENCY: BudgetLifecycleAndIdempotency
+- `touches` -> DM-BUDGET-PERIOD-PLAN: BudgetPeriodAndPlan
+- `touches` -> DM-BUDGET-REVISION-ENTRY: BudgetPlanRevisionAndEntry
+- `touches` -> DM-BUDGET-STATE-STORE: BudgetStateStore
 
 ## Navigation
 

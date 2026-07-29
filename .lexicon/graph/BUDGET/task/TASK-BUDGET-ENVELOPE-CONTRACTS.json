@@ -1,0 +1,319 @@
+{
+  "id": "01KYPXEA8TBNZ7AFXT0DJ1995F",
+  "plan_id": "01KXXKWZP8QTCST0GB64AFYJ5M",
+  "sub_plan_id": "01KXXKX16FGEYFVSRAABAC7C8D",
+  "ref_code": "TASK-BUDGET-ENVELOPE-CONTRACTS",
+  "slug": "ENVELOPE-CONTRACTS",
+  "title": "Publish the envelope partition and ancestry provenance contract fields",
+  "objective": [
+    "The Budget Position and INSIGHTS member contracts carry the direct/descendant partition and frozen Spend Category ancestry, and the calculation schema version advances to `budget-position-v2`."
+  ],
+  "planning_state": "ready",
+  "priority": 1,
+  "sort_order": 20,
+  "created_at": "2026-07-29T12:26:26.9749025+00:00",
+  "decisions": [
+    {
+      "id": "01KYPXEA8ZRWQ63R68MCFTAJWQ",
+      "target": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYPXEA91HYZV77TCD5HPTSW8",
+      "path": "src/Tally/Contracts/Budget/Position/BudgetPositionContracts.cs",
+      "action": "modify",
+      "role": "contract",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA91J33HEK3CMFZY7A3X",
+      "path": "src/Tally/Contracts/Budget/Insights/BudgetInsightEvidence.cs",
+      "action": "modify",
+      "role": "contract",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA91PKH6H850E9RHMGKF",
+      "path": "src/Tally/Domain/Budget/Position/BudgetPositionCalculator.cs",
+      "action": "modify",
+      "role": "implementation",
+      "required": 1,
+      "notes": [
+        "CalculationSchemaVersion constant only in this task"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA914BPDSXGCSEQBRHYT",
+      "path": "src/Tally/Contracts/Budget/BudgetJsonContext.cs",
+      "action": "modify",
+      "role": "serialization",
+      "required": 0,
+      "sort_order": 3,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA9120HMB2S0YMV06WRB",
+      "path": "tests/Tally.Tests/Budget/Contract/BudgetContractShapeTests.cs",
+      "action": "create",
+      "role": "test",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYPXEA91A6DWGZKEF28WRA77",
+      "name": "CategoryPosition.DirectActualMinorUnits",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA928PS0VHVYRE4YF0P8",
+      "name": "CategoryPosition.DescendantActualMinorUnits",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA925N7W26V8AW78PWAK",
+      "name": "CategoryPosition.AbsorbedCategoryIds",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "sort_order": 2,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA92QH4ZEKSDTTW54BRB",
+      "name": "BudgetActualMember.AncestryIds",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "sort_order": 3,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA925QRSWVGWVK9X14QR",
+      "name": "BudgetActualMember.EffectiveCategoryId",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "sort_order": 4,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA921RT1FQTE9VYK9C30",
+      "name": "BudgetPositionCalculator.CalculationSchemaVersion",
+      "direction": "produces",
+      "contract_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "sort_order": 5,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYPXNYW5SGVT9EDA432XMD3C",
+      "kind": "acceptance_check",
+      "text": [
+        "Given the CategoryPosition record, when its members are inspected, then DirectActualMinorUnits and DescendantActualMinorUnits are present as required long values and AbsorbedCategoryIds is present as a nullable string list."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:30:37.4451437+00:00"
+    },
+    {
+      "id": "01KYPXNYW6J687TPKRX97482T7",
+      "kind": "acceptance_check",
+      "text": [
+        "Given the BudgetActualMember record, when its members are inspected, then AncestryIds is present as a required string list and EffectiveCategoryId is present as a nullable string."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:30:37.4451437+00:00"
+    },
+    {
+      "id": "01KYPXNYW69X77P9AKRDB9Q056",
+      "kind": "acceptance_check",
+      "text": [
+        "Given BudgetPositionCalculator.CalculationSchemaVersion, when its value is read, then it equals the literal `budget-position-v2`."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-29T12:30:37.4451437+00:00"
+    },
+    {
+      "id": "01KYPXNYW66ZWCCSZD82BWQJDS",
+      "kind": "acceptance_check",
+      "text": [
+        "Given the published budget.position.get and budget.insights.evidence.get result schemas, when tally schema show is invoked for each, then the new fields appear and the reported contractVersion remains 1.0."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-29T12:30:37.4451437+00:00"
+    },
+    {
+      "id": "01KYPXEA91MVAJBTVZD5ZFEMM1",
+      "kind": "constraint",
+      "text": [
+        "Source-generated JSON only; register any new type shape in the existing BudgetJsonContext rather than adding reflection-based serialization."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA91K4YA3KZYS016521P",
+      "kind": "constraint",
+      "text": [
+        "Int64 minor units for every new amount field; no decimal or floating-point money."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXP09WNSZ3NR4DJZPPWXMT",
+      "kind": "expected_output",
+      "text": [
+        "CategoryPosition carrying the direct/descendant partition and absorbed identifier list"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:30:38.9076208+00:00"
+    },
+    {
+      "id": "01KYPXP09XRH1S9PT0NNYGQP99",
+      "kind": "expected_output",
+      "text": [
+        "BudgetActualMember carrying frozen ancestry and the effective Spend Category identifier"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:30:38.9076208+00:00"
+    },
+    {
+      "id": "01KYPXP09X3J3HHFDE0FPFM7JT",
+      "kind": "expected_output",
+      "text": [
+        "CalculationSchemaVersion advanced to `budget-position-v2`"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-29T12:30:38.9076208+00:00"
+    },
+    {
+      "id": "01KYPXEA9140RQ0QFBDSNZW9VW",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT advance the public BUDGET contract version past 1.0 — the added result fields are additive and the calculation schema version is the compatibility signal, per DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA91G93M2CY3Y0ZCAC4R",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add a request-side flag or mode selector to choose exact-identity behavior — rejected alternative C in DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION, because a flat taxonomy is already unchanged."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA91H0Z3BZ2GW98N6VW9",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT compute or populate any resolution value in this task — the contract surface lands first and TASK-BUDGET-ENVELOPE-RESOLUTION owns the calculation."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA91NV9JSM8S9YZSQ1HJ",
+      "kind": "note",
+      "text": [
+        "AncestryIds mirrors LEDGER ActualsPageItem.FrozenAncestryIds exactly: root-first with the assigned Spend Category as the final element, and empty when the member has no assigned Spend Category."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYPXEA92NY3GESCE1C93WBGA",
+      "target_ref_code": "DM-BUDGET-POSITION-PROJECTION",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXXJD712CJ4BKM0CY1JTQYJT",
+      "target_title": "BudgetPositionProjection",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA92YJW9BGFK7PDHVAC2",
+      "target_ref_code": "FR-BUDGET-INSIGHTS-PROJECTION",
+      "target_entity_type": "requirement",
+      "target_entity_id": "01KXXFB6A6PTQGRFMBVQ4J2N3G",
+      "target_title": "Expose a read-only INSIGHTS projection",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYPXEA8ZPGQ8XN0GWWN7WKTM",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYPXEA926NC18Z2X7E7Q2JMS",
+      "gate_type": "self-review",
+      "description": [
+        "Confirm contractVersion is still 1.0 and only the calculation schema version advanced"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYPXEA927Q2518AG406QS233",
+      "phase": "after",
+      "command": "dotnet build Tally.slnx --nologo",
+      "expected_result": "Build succeeded with 0 errors and 0 warnings",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 0,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    },
+    {
+      "id": "01KYPXEA92AG4GBRR2RMXYP7TN",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~BudgetContractShapeTests",
+      "expected_result": "All discovered BudgetContractShapeTests pass, exit code 0, at least 4 tests run",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 1,
+      "created_at": "2026-07-29T12:26:26.9749025+00:00"
+    }
+  ]
+}
