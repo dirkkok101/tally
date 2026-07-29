@@ -3,7 +3,7 @@
   "module_id": "01KXR4WNPW86216H643PZ6KA36",
   "term": "Category Budget Entry",
   "definition": [
-    "An exact ZAR planned-spend amount for one stable LEDGER Spend Category identifier within one Budget Plan Revision."
+    "An exact ZAR planned-spend amount for one stable LEDGER Spend Category identifier within one Budget Plan Revision. It governs that exact Spend Category and every descendant Spend Category whose own frozen ancestry carries no nearer entry, per DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION. Parent and descendant entries may coexist in one revision. Avoid: budget line, budget item, allocation."
   ],
   "created_at": "2026-07-19T13:27:40.6498501+00:00"
 }

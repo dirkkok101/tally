@@ -1,0 +1,9 @@
+{
+  "id": "01KYPX3GBRP6GGVZWVN6BART5Z",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "version": "0.10",
+  "changes": [
+    "Discovery confirmation for bd-3lrk: verified the discovery layer against the narrowed A2 and re-resolved OQ-BUDGET-10. Found and fixed four inconsistencies — glossary Unbudgeted Spend still defined omission alone as unbudgeted, Zero Budget and Category Budget Entry were silent on ancestry governance scope, and goal G5 omitted reparent from the Spend Category mutations BUDGET must stay safe across. Both monitored kill criteria re-checked and not triggered: the public LEDGER contract already supplies frozen per-transaction ancestry, and the exactly-once reconciliation invariant is preserved by the direct/descendant partition."
+  ],
+  "created_at": "2026-07-29T12:20:32.7611010+00:00"
+}
