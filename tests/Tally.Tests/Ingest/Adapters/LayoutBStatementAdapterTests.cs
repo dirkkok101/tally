@@ -250,6 +250,7 @@ public sealed class LayoutBStatementAdapterTests
 
         var normalized = new List<ReconciliationRecord>(expectedRecords.Length);
         var recordsMatch = true;
+        var sourceRecordIdsMatch = true;
         for (var index = 0; index < expectedRecords.Length; index++)
         {
             var actual = first.OrderedRecords[index];
@@ -276,10 +277,13 @@ public sealed class LayoutBStatementAdapterTests
                 recordsMatch &= actual.RunningBalanceMinor is null;
             }
 
+            sourceRecordIdsMatch &= actual.SourceRecordId == expectedRecord.GetProperty("sourceRecordId").GetString();
             normalized.Add(new(actual.SourceRecordId, signedMinor, actual.RunningBalanceMinor, actual.SourceControlMinor));
         }
 
         Assert.True(recordsMatch, "Private Layout B records did not match the authorized expectation.");
+        Assert.True(sourceRecordIdsMatch,
+            "Private Layout B source record identity did not match the authorized expectation.");
         var controls = expected.GetProperty("controls");
         var opening = ParseExpectedMinor(controls.GetProperty("openingEconomicBalance").GetString()!);
         var closing = ParseExpectedMinor(controls.GetProperty("closingEconomicBalance").GetString()!);

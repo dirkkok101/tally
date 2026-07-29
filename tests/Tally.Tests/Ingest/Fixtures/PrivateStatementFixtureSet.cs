@@ -8,6 +8,13 @@ public sealed class PrivateStatementFixtureSet
 {
     public const string ManifestEnvironmentVariable = "TALLY_INGEST_PRIVATE_FIXTURE_MANIFEST";
 
+    /// <summary>
+    /// Authorized owner archive size after 2026-07-28 expansion (13 FNB + 7 card + 7 transaction-account).
+    /// </summary>
+    public const int AuthorizedFixtureCount = 27;
+
+    public const int AuthorizedVariantCount = 2;
+
     private PrivateStatementFixtureSet(IReadOnlyList<PrivateStatementFixture> fixtures)
     {
         Fixtures = fixtures;
@@ -62,13 +69,14 @@ public sealed class PrivateStatementFixtureSet
             schemaVersion.GetInt32() != 1 ||
             !root.TryGetProperty("fixtures", out var fixturesElement) ||
             fixturesElement.ValueKind != JsonValueKind.Array ||
-            fixturesElement.GetArrayLength() != 3)
+            fixturesElement.GetArrayLength() != AuthorizedFixtureCount)
         {
             throw new PrivateFixtureException("PRIVATE-FIXTURE-MANIFEST-SCHEMA");
         }
 
-        var fixtures = new List<PrivateStatementFixture>(3);
+        var fixtures = new List<PrivateStatementFixture>(AuthorizedFixtureCount);
         var locators = new HashSet<string>(StringComparer.Ordinal);
+        var digests = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (var fixtureElement in fixturesElement.EnumerateArray())
         {
             var locator = RequiredString(fixtureElement, "sourcePath");
@@ -79,6 +87,16 @@ public sealed class PrivateStatementFixtureSet
                 throw new PrivateFixtureException("PRIVATE-FIXTURE-DUPLICATE-LOCATOR");
             }
 
+            if (!digests.Add(expectedDigest))
+            {
+                throw new PrivateFixtureException("PRIVATE-FIXTURE-DUPLICATE-DIGEST");
+            }
+
+            if (variantId is not ("pdf-text-layout-a-v1" or "pdf-text-layout-b-v1"))
+            {
+                throw new PrivateFixtureException("PRIVATE-FIXTURE-VARIANT-ID");
+            }
+
             var sourcePath = ResolveStrictFixturePath(canonicalRepositoryRoot, canonicalFixtureRoot, locator);
             RequireOwnerOnlyPath(canonicalFixtureRoot, sourcePath);
             var sourceBytes = File.ReadAllBytes(sourcePath);
@@ -87,7 +105,11 @@ public sealed class PrivateStatementFixtureSet
             if (!fixtureElement.TryGetProperty("expected", out var expected) || expected.ValueKind != JsonValueKind.Object ||
                 !expected.TryGetProperty("accountEvidence", out var accountEvidence) || accountEvidence.ValueKind != JsonValueKind.Object ||
                 !accountEvidence.TryGetProperty("permissionEncrypted", out var permissionEncrypted) ||
-                permissionEncrypted.ValueKind is not (JsonValueKind.True or JsonValueKind.False))
+                permissionEncrypted.ValueKind is not (JsonValueKind.True or JsonValueKind.False) ||
+                !expected.TryGetProperty("statementPeriod", out var period) || period.ValueKind != JsonValueKind.Object ||
+                !period.TryGetProperty("startDate", out _) || !period.TryGetProperty("endDate", out _) ||
+                !expected.TryGetProperty("orderedRecords", out var records) || records.ValueKind != JsonValueKind.Array ||
+                !expected.TryGetProperty("controls", out var controls) || controls.ValueKind != JsonValueKind.Object)
             {
                 throw new PrivateFixtureException("PRIVATE-FIXTURE-EXPECTED-SCHEMA");
             }
@@ -96,12 +118,41 @@ public sealed class PrivateStatementFixtureSet
                 ImmutableArray.Create(sourceBytes),
                 variantId,
                 permissionEncrypted.GetBoolean(),
-                expected.Clone()));
+                expected.Clone(),
+                expectedDigest,
+                locator));
         }
 
-        if (fixtures.Select(fixture => fixture.VariantId).Distinct(StringComparer.Ordinal).Count() != 2)
+        if (fixtures.Select(fixture => fixture.VariantId).Distinct(StringComparer.Ordinal).Count() != AuthorizedVariantCount)
         {
             throw new PrivateFixtureException("PRIVATE-FIXTURE-VARIANT-COUNT");
+        }
+
+        // Cross-check inventory when present (owner archive contract): same digests, same cardinality.
+        var inventoryPath = Path.Combine(canonicalFixtureRoot, ".fixture-inventory.json");
+        if (File.Exists(inventoryPath))
+        {
+            RequireOwnerOnlyRegularFile(inventoryPath, "PRIVATE-FIXTURE-INVENTORY-PROTECTION");
+            using var inventoryDocument = JsonDocument.Parse(File.ReadAllBytes(inventoryPath));
+            var inventoryRoot = inventoryDocument.RootElement;
+            if (!inventoryRoot.TryGetProperty("fixtures", out var inventoryFixtures) ||
+                inventoryFixtures.ValueKind != JsonValueKind.Array ||
+                inventoryFixtures.GetArrayLength() != AuthorizedFixtureCount)
+            {
+                throw new PrivateFixtureException("PRIVATE-FIXTURE-INVENTORY-SCHEMA");
+            }
+
+            var inventoryDigests = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var item in inventoryFixtures.EnumerateArray())
+            {
+                inventoryDigests.Add(RequiredString(item, "sourceSha256"));
+            }
+
+            if (inventoryDigests.Count != AuthorizedFixtureCount ||
+                !digests.SetEquals(inventoryDigests))
+            {
+                throw new PrivateFixtureException("PRIVATE-FIXTURE-INVENTORY-MISMATCH");
+            }
         }
 
         return new PrivateStatementFixtureSet(fixtures);
@@ -234,12 +285,16 @@ public sealed class PrivateStatementFixture
         ImmutableArray<byte> sourceBytes,
         string variantId,
         bool permissionEncrypted,
-        JsonElement expected)
+        JsonElement expected,
+        string sourceSha256,
+        string sourcePathLocator)
     {
         SourceBytes = sourceBytes;
         VariantId = variantId;
         PermissionEncrypted = permissionEncrypted;
         Expected = expected;
+        SourceSha256 = sourceSha256;
+        SourcePathLocator = sourcePathLocator;
     }
 
     public ImmutableArray<byte> SourceBytes { get; }
@@ -249,6 +304,12 @@ public sealed class PrivateStatementFixture
     public bool PermissionEncrypted { get; }
 
     public JsonElement Expected { get; }
+
+    /// <summary>Hex SHA-256 of the source bytes (for structural assertions only).</summary>
+    public string SourceSha256 { get; }
+
+    /// <summary>Repository-relative locator used only for owner-local path resolution; never log it.</summary>
+    public string SourcePathLocator { get; }
 }
 
 public sealed class PrivateFixtureException(string errorCode) : InvalidOperationException(errorCode);

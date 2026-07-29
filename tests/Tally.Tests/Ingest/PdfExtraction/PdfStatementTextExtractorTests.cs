@@ -194,8 +194,10 @@ public sealed class PdfStatementTextExtractorTests
             return;
         }
 
-        Assert.Equal(3, fixtureSet.Fixtures.Count);
-        Assert.Equal(2, fixtureSet.Fixtures.Select(fixture => fixture.VariantId).Distinct(StringComparer.Ordinal).Count());
+        Assert.Equal(PrivateStatementFixtureSet.AuthorizedFixtureCount, fixtureSet.Fixtures.Count);
+        Assert.Equal(
+            PrivateStatementFixtureSet.AuthorizedVariantCount,
+            fixtureSet.Fixtures.Select(fixture => fixture.VariantId).Distinct(StringComparer.Ordinal).Count());
         Assert.Contains(fixtureSet.Fixtures, fixture => fixture.PermissionEncrypted);
 
         var extractor = new PdfStatementTextExtractor();

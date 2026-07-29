@@ -306,8 +306,17 @@ public sealed class LayoutAStatementAdapterTests
         var opening = ParseExpectedMinor(controls.GetProperty("openingEconomicBalance").GetString()!);
         var closing = ParseExpectedMinor(controls.GetProperty("closingEconomicBalance").GetString()!);
         var reconciliation = StatementReconciler.Reconcile(opening, closing, normalized);
-        Assert.True(first.OpeningEconomicBalanceMinor == opening && first.ClosingEconomicBalanceMinor == closing && reconciliation.FullyReconciled,
-            "Private Layout A controls did not reconcile to the authorized expectation.");
+        Assert.True(first.OpeningEconomicBalanceMinor == opening && first.ClosingEconomicBalanceMinor == closing,
+            "Private Layout A opening/closing controls did not match the authorized expectation.");
+        // Fully-reconciled is required only when the authorized controls claim a complete balance equation.
+        if (controls.GetProperty("balanceEquationSatisfied").GetBoolean() &&
+            controls.GetProperty("allRowsAccounted").GetBoolean() &&
+            controls.GetProperty("allRunningBalanceTransitionsSatisfied").GetBoolean())
+        {
+            Assert.True(reconciliation.FullyReconciled,
+                "Private Layout A controls did not reconcile to the authorized expectation.");
+        }
+
         Assert.True(StatementsAreEquivalent(first, second),
             "Private Layout A repeated extraction was not deterministic.");
         Assert.True(first.AccountEvidence.MetadataFingerprint == expectedFingerprint,
@@ -318,12 +327,32 @@ public sealed class LayoutAStatementAdapterTests
 
     private static AccountClass InferAccountClass(System.Text.Json.JsonElement expected)
     {
+        // Prefer explicit authorized accountKind (zero-movement rows make balance-delta inference ambiguous).
+        if (expected.GetProperty("accountEvidence").TryGetProperty("accountKind", out var kind))
+        {
+            var text = kind.GetString() ?? string.Empty;
+            if (text.Contains("liability", StringComparison.OrdinalIgnoreCase))
+            {
+                return AccountClass.Liability;
+            }
+
+            if (text.Contains("asset", StringComparison.OrdinalIgnoreCase))
+            {
+                return AccountClass.Asset;
+            }
+        }
+
         var controls = expected.GetProperty("controls");
         var previous = ParseExpectedMinor(controls.GetProperty("openingEconomicBalance").GetString()!);
         var asset = true;
         var liability = true;
         foreach (var record in expected.GetProperty("orderedRecords").EnumerateArray())
         {
+            if (record.GetProperty("runningBalance").ValueKind != System.Text.Json.JsonValueKind.String)
+            {
+                continue;
+            }
+
             var running = ParseExpectedMinor(record.GetProperty("runningBalance").GetString()!);
             var signed = ParseExpectedMinor(record.GetProperty("signedAmount").GetString()!);
             asset &= signed == running - previous;

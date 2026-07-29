@@ -97,15 +97,27 @@ public sealed class PdfTextLayoutBStatementAdapter : IStatementAdapter
             return false;
         }
 
-        var headers = new List<HeaderGeometry>();
+        // Trailer/summary pages (common on multi-page Layout B card statements) may omit the
+        // Date/Details/Amount header. Require a header only on pages that carry dated money rows;
+        // pages with neither a header nor any candidate money row are skipped.
+        var headersByPage = new Dictionary<int, HeaderGeometry>();
         foreach (var page in evidence.Pages.OrderBy(page => page.PageNumber))
         {
-            if (!TryFindSingleHeader(page, out var header))
+            if (TryFindSingleHeader(page, out var header))
+            {
+                headersByPage[page.PageNumber] = header;
+                continue;
+            }
+
+            if (PageHasCandidateMoneyRow(page))
             {
                 return false;
             }
+        }
 
-            headers.Add(header);
+        if (headersByPage.Count == 0)
+        {
+            return false;
         }
 
         var period = TryExtractPeriod(managed);
@@ -129,7 +141,11 @@ public sealed class PdfTextLayoutBStatementAdapter : IStatementAdapter
         var ordinal = 0;
         foreach (var page in evidence.Pages.OrderBy(page => page.PageNumber))
         {
-            var header = headers.Single(candidate => candidate.PageNumber == page.PageNumber);
+            if (!headersByPage.TryGetValue(page.PageNumber, out var header))
+            {
+                continue;
+            }
+
             foreach (var line in page.ManagedLines.OrderBy(line => line.BlockOrder).ThenBy(line => line.LineOrder))
             {
                 var text = line.Text ?? string.Empty;
@@ -268,6 +284,21 @@ public sealed class PdfTextLayoutBStatementAdapter : IStatementAdapter
             "layout-b-unique-controls"
         ];
         return true;
+    }
+
+    private static bool PageHasCandidateMoneyRow(PdfPageEvidence page)
+    {
+        foreach (var line in page.ManagedLines)
+        {
+            var text = line.Text ?? string.Empty;
+            if (SignedMonetaryToken.IsMatch(text) &&
+                (FullDateLeading.IsMatch(text) || YearlessLeading.IsMatch(text)))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static bool TryFindSingleHeader(PdfPageEvidence page, out HeaderGeometry header)

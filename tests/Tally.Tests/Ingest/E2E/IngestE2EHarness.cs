@@ -75,15 +75,29 @@ public sealed class IngestE2EHarness : IAsyncDisposable
         Ledger = new LedgerContractClient(Registry, process);
     }
 
+    /// <summary>
+    /// Production Program composition with the real PDF extractor (private-fixture pipeline only).
+    /// </summary>
+    public void RebindIngestWithRealPdfExtractor(ICommitFaultHook? faultHook = null)
+    {
+        var services = IngestOperationBundle.CreateServices(
+            Root, Ledger, Time, pdfExtractor: null, commitFaultHook: faultHook);
+        process = new TallyProcess(Registry, ledgerServices with { Ingest = services.Operations });
+        Ledger = new LedgerContractClient(Registry, process);
+    }
+
     public PrivateStatementFixtureSet? TryPrivateFixtures() =>
         PrivateStatementFixtureSet.TryLoadFromEnvironment(RepositoryRoot());
 
-    public async Task<string> CreateAccountAsync(string displayName = "E2E Bank")
+    public Task<string> CreateAccountAsync(string displayName = "E2E Bank") =>
+        CreateAccountAsync(AccountType.Cheque, institution: displayName);
+
+    public async Task<string> CreateAccountAsync(AccountType accountType, string institution = "E2E Bank")
     {
         var unique = Guid.NewGuid().ToString("N")[..8];
         var masked = $"****{Random.Shared.Next(1000, 9999)}";
         var input = JsonSerializer.SerializeToElement(
-            new CreateAccountInput($"{displayName}-{unique}", $"Primary-{unique}", AccountType.Cheque, masked, "ZAR"),
+            new CreateAccountInput($"{institution}-{unique}", $"Primary-{unique}", accountType, masked, "ZAR"),
             LedgerJsonContext.Default.CreateAccountInput);
         var envelope = new RequestEnvelope("1.0", Actor, input, $"create-{Guid.NewGuid():N}");
         var json = JsonSerializer.Serialize(envelope, LedgerJsonContext.Default.RequestEnvelope);

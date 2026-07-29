@@ -56,17 +56,16 @@ public sealed class PdfTextLayoutAStatementAdapter : IStatementAdapter
     {
         var content = ExtractContent(evidence);
         var lines = VisualLines(evidence).ToArray();
-        var periodDates = StatementPeriodDate.Matches(content)
-            .Cast<Match>()
-            .Select(ParseFullDate)
-            .Distinct()
-            .Take(3)
-            .Count();
         var rowExtraction = ExtractRowCandidates(lines);
         var hasControls = MoneyWithDirection.Matches(content).Count >= 2 &&
             lines.Any(line => line.Text.Contains("opening balance", StringComparison.OrdinalIgnoreCase)) &&
             lines.Any(line => line.Text.Contains("closing balance", StringComparison.OrdinalIgnoreCase));
-        if (periodDates != 2 || rowExtraction.Rows.Count < 2 || !rowExtraction.Complete || !hasControls)
+        // Period is resolved from labeled / same-line pairs — additional full dates elsewhere in the
+        // statement (notices, footnotes) must not disqualify an otherwise complete Layout A source.
+        if (!TryExtractStatementPeriod(lines, out _) ||
+            rowExtraction.Rows.Count < 2 ||
+            !rowExtraction.Complete ||
+            !hasControls)
         {
             return new(Descriptor.VariantId, VariantProbeOutcome.NoMatch, []);
         }
@@ -93,18 +92,30 @@ public sealed class PdfTextLayoutAStatementAdapter : IStatementAdapter
 
         var content = ExtractContent(evidence);
         var lines = VisualLines(evidence).ToArray();
-        var period = ExtractStatementPeriod(content);
+        if (!TryExtractStatementPeriod(lines, out var period))
+        {
+            throw new InvalidOperationException("INGEST-LAYOUT-A-PERIOD");
+        }
+
         var rows = ExtractRowCandidates(lines).Rows;
         var controls = ExtractStatementControls(content);
         var records = new List<SourceRecordEvidence>(rows.Count);
         var previousBalanceMinor = controls.OpeningBalanceMinor;
+        var ordinal = 0;
 
-        for (var ordinal = 0; ordinal < rows.Count; ordinal++)
+        for (var index = 0; index < rows.Count; index++)
         {
-            var row = rows[ordinal];
+            var row = rows[index];
             var runningBalanceMinor = ParseEconomicBalance(row.Balance);
             var movementMinor = checked(runningBalanceMinor - previousBalanceMinor);
-            var date = ResolveDate(row.Date, period);
+            // Yearless day/month tokens that cannot be uniquely placed inside the resolved period
+            // are not statement rows (carry-forward notices, prior-period footnotes).
+            if (!TryResolveDate(row.Date, period, out var date))
+            {
+                previousBalanceMinor = runningBalanceMinor;
+                continue;
+            }
+
             var description = CollapseWhitespace(row.Description);
 
             var financialEvidence = new FinancialEvidence(
@@ -134,6 +145,12 @@ public sealed class PdfTextLayoutAStatementAdapter : IStatementAdapter
                 runningBalanceMinor,
                 null));
             previousBalanceMinor = runningBalanceMinor;
+            ordinal++;
+        }
+
+        if (records.Count < 2)
+        {
+            throw new InvalidOperationException("INGEST-LAYOUT-A-NO-MATCH");
         }
 
         if (previousBalanceMinor != controls.ClosingBalanceMinor)
@@ -200,9 +217,11 @@ public sealed class PdfTextLayoutAStatementAdapter : IStatementAdapter
             var money = LayoutAMoney.Matches(line.Text).Cast<Match>().ToArray();
             var transaction = money.LastOrDefault(match => HorizontalPosition(line, match.Index) < balanceLeft);
             var balance = money.FirstOrDefault(match => HorizontalPosition(line, match.Index) >= balanceLeft);
+            // Skip non-row yearless-date lines (section labels, footnotes). A single incomplete
+            // dated line must not abort an otherwise complete Layout A table.
             if (transaction is null || balance is null)
             {
-                return new([], false);
+                continue;
             }
 
             var description = line.Text[date.Length..transaction.Index].Trim();
@@ -283,23 +302,57 @@ public sealed class PdfTextLayoutAStatementAdapter : IStatementAdapter
             !text.Contains("statement period", StringComparison.OrdinalIgnoreCase);
     }
 
-    private static StatementPeriod ExtractStatementPeriod(string content)
+    /// <summary>
+    /// Resolve the statement period from visual lines without requiring the whole document to
+    /// contain exactly two full dates. Prefer a period-labeled line, then any single line with
+    /// exactly two full dates. Never invent a period from opaque filenames.
+    /// </summary>
+    private static bool TryExtractStatementPeriod(IReadOnlyList<VisualLine> lines, out StatementPeriod period)
     {
-        var dates = StatementPeriodDate.Matches(content)
-            .Cast<Match>()
-            .Select(ParseFullDate)
-            .Distinct()
-            .Take(3)
-            .ToArray();
-        if (dates.Length != 2)
+        period = default!;
+
+        static DateOnly[] DistinctSortedDates(string text) =>
+            StatementPeriodDate.Matches(text)
+                .Cast<Match>()
+                .Select(ParseFullDate)
+                .Distinct()
+                .OrderBy(static date => date)
+                .ToArray();
+
+        static StatementPeriod ToPeriod(DateOnly start, DateOnly end) => new(
+            start.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+            end.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+
+        // 1) Period-labeled lines (statement period / from-to wording).
+        foreach (var line in lines)
         {
-            throw new InvalidOperationException("INGEST-LAYOUT-A-PERIOD");
+            var text = line.Text;
+            if (!text.Contains("period", StringComparison.OrdinalIgnoreCase) &&
+                !text.Contains("from", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            var labeled = DistinctSortedDates(text);
+            if (labeled.Length == 2)
+            {
+                period = ToPeriod(labeled[0], labeled[1]);
+                return true;
+            }
         }
 
-        Array.Sort(dates);
-        return new(
-            dates[0].ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-            dates[1].ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+        // 2) Any single visual line that carries exactly two full dates.
+        foreach (var line in lines)
+        {
+            var pair = DistinctSortedDates(line.Text);
+            if (pair.Length == 2)
+            {
+                period = ToPeriod(pair[0], pair[1]);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static StatementControls ExtractStatementControls(string content)
@@ -323,13 +376,14 @@ public sealed class PdfTextLayoutAStatementAdapter : IStatementAdapter
         return date;
     }
 
-    private static string ResolveDate(Match match, StatementPeriod period)
+    private static bool TryResolveDate(Match match, StatementPeriod period, out string date)
     {
+        date = string.Empty;
         var start = DateOnly.ParseExact(period.StartDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
         var end = DateOnly.ParseExact(period.EndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
         if (!int.TryParse(match.Groups["day"].Value, NumberStyles.None, CultureInfo.InvariantCulture, out var day))
         {
-            throw new InvalidOperationException("INGEST-LAYOUT-A-ROW-DATE");
+            return false;
         }
 
         var monthText = match.Groups["month"].Value;
@@ -345,10 +399,11 @@ public sealed class PdfTextLayoutAStatementAdapter : IStatementAdapter
 
         if (matches.Count != 1)
         {
-            throw new InvalidOperationException("INGEST-LAYOUT-A-ROW-DATE");
+            return false;
         }
 
-        return matches[0].ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+        date = matches[0].ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+        return true;
     }
 
     private static long ParseMinorUnits(string value)
