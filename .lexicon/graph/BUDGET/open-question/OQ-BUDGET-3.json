@@ -8,7 +8,7 @@
   ],
   "status": "resolved",
   "decision": [
-    "Categories are optional. An explicit ZAR 0.00 entry is Zero Budget; an omitted active category is Unbudgeted. Recorded as A2."
+    "Categories are optional. An explicit ZAR 0.00 entry is Zero Budget; an omitted active Spend Category is Unbudgeted Spend only when no element of the Budget Actual's frozen Spend Category ancestry carries a Category Budget Entry, per DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION. Otherwise the nearest ancestry entry governs. Recorded as A2."
   ],
   "owner": "BUDGET discovery",
   "disposition": "unspecified",

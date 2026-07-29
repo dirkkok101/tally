@@ -37,6 +37,30 @@
     "",
     "Rejected alternative C, gate the new rule behind a request flag so exact-identity behavior remains selectable: rejected because a flat taxonomy is already unchanged under the new rule, so the flag would protect nothing while doubling the calculator paths and the property-test matrix for a single-owner local product."
   ],
+  "alternatives": [
+    "A: Freeze Spend Category ancestry at classification time so a historical Budget Position never re-lenses. Rejected because it requires a new LEDGER storage column, new write-path invariants, and a migration, and because it contradicts OQ-BUDGET-8 and assumption A4, which already resolved that a Budget Position recomputes current corrected actuals from a cited snapshot. Adopting it would make BUDGET the only consumer that pins historical LEDGER truth while owning no snapshot storage.",
+    "",
+    "B: Issue one LEDGER actuals query per Category Budget Entry using the existing actuals categoryScope subtree filter. Rejected because nested entries return overlapping membership, so the same Budget Actual appears in several responses and the exactly-once guarantee would have to be reconstructed by subtracting descendant results. It also breaks the single-complete-snapshot rule by fanning one Budget Position across many snapshots with independent expiry.",
+    "",
+    "C: Gate the new rule behind a request flag so exact-identity behavior remains selectable. Rejected because a flat taxonomy is already unchanged under the new rule, so the flag would protect nothing while doubling the calculator paths and the property-test matrix for a single-owner local product.",
+    "",
+    "D (chosen): Scan the frozen Spend Category ancestry already present on every LEDGER actuals snapshot row from self toward root and take the first element carrying a Category Budget Entry, reporting a direct/descendant partition per row. Chosen because the ancestry is already materialized in the cited snapshot and currently discarded by the BUDGET contract mapper, so the rule needs no LEDGER change, no second query, no persisted derived state, and no new snapshot semantics.",
+    ""
+  ],
+  "consequences": [
+    "Reparenting a Spend Category re-lenses previously reported historical Budget Positions. A Budget Actual recorded under one funded ancestor is attributed to a different funded ancestor once the tree changes, because each Budget Position recomputes against the current hierarchy under a newly cited LEDGER snapshot. Determinism holds within one cited snapshot rather than across time. This is the accepted consequence of inheriting the OQ-BUDGET-8 and A4 recompute semantics; goal G5 therefore names reparent alongside rename, archive, and reactivation as the Spend Category mutations BUDGET must stay safe across.",
+    "",
+    "Parent row totals change meaning under unchanged field names. An ancestor Category Budget Entry now reports its own direct spend plus descendant spend that no nearer entry captured, so a consumer comparing a `budget-position-v1` value with a `budget-position-v2` value for the same period can observe a different actual without any Budget Actual having changed. CalculationSchemaVersion is the compatibility signal a consumer must branch on; the public BUDGET contract version stays 1.0 because the added result fields are additive.",
+    "",
+    "Unbudgeted Spend becomes rarer and more meaningful. A Budget Actual is Unbudgeted only when no element of its ancestry carries an entry, so the Unbudgeted rows that remain identify Spend Categories with genuinely no funding anywhere above them, which is directly actionable for the owner.",
+    "",
+    "An explicit Zero Budget descendant entry acquires blocking authority. Recording ZAR 0.00 on a descendant is no longer only a statement that nothing is planned for it; it also stops that subtree from consuming a funded ancestor envelope. Owners must therefore distinguish deliberate zero from omission when a funded ancestor exists.",
+    "",
+    "Plan authoring gains a new coexistence shape. Parent and descendant entries may appear in one Budget Plan Revision and each governs a different part of the tree, so a revision is no longer a flat set of independent category amounts in effect even though each entry remains an independent amount.",
+    "",
+    "The calculator gains one bounded ancestry validation and stays pure. Malformed ancestry and Int64 overflow return the stable integrity failure with no partial result, and the existing assertion that bucket subtotals reconcile to the membership total continues to serve as the exactly-once proof.",
+    ""
+  ],
   "status": "accepted",
   "metadata": "{\"expected_paths\":[\"src/Tally/Domain/Budget/Position/BudgetPositionCalculator.cs\",\"src/Tally/Features/Budget/Contract/BudgetContractMapper.Position.cs\",\"src/Tally/Features/Budget/Position/Get/GetBudgetPositionQuery.cs\",\"src/Tally/Contracts/Budget/Position/BudgetPositionContracts.cs\",\"src/Tally/Contracts/Budget/Insights/BudgetInsightEvidence.cs\"]}",
   "created_at": "2026-07-29T12:06:39.8365260+00:00",
