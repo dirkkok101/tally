@@ -29,6 +29,30 @@ public sealed class StatusWorkflowTests : IAsyncLifetime
         Assert.Null(result.Value.Detail);
     }
 
+    /// <summary>
+    /// StatusStateStore must apply IngestSchemaMigrator itself — unit harness pre-migration
+    /// previously masked the published Program path where status is the first ingest open.
+    /// </summary>
+    [Fact]
+    public async Task Status_store_migrates_virgin_ingest_db_without_external_pre_migration()
+    {
+        var database = new IngestDatabase(root, new IngestArtifactProtection());
+        // Intentionally skip IngestSchemaMigrator here — the store must migrate on open.
+        var handler = new StatusHandler(new StatusStateStore(database, new BatchErrorEventStore()), time);
+
+        var result = await handler.HandleAsync(new StatusQuery(null, 50, null), CancellationToken.None);
+
+        Assert.True(result.IsSuccess);
+        Assert.Empty(result.Value!.Items!);
+        Assert.Null(result.Value.NextCursor);
+
+        await using var connection = await database.OpenAsync(CancellationToken.None);
+        await using var command = connection.CreateCommand();
+        command.CommandText = "PRAGMA user_version;";
+        var version = Convert.ToInt32(await command.ExecuteScalarAsync(), System.Globalization.CultureInfo.InvariantCulture);
+        Assert.True(version >= 1);
+    }
+
     [Fact]
     public async Task Unknown_batch_returns_a_stable_not_found_error()
     {

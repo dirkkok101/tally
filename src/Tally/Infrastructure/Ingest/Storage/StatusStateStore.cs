@@ -14,9 +14,16 @@ public sealed class StatusStateStore(IngestDatabase database, BatchErrorEventSto
     public const string ContractVersion = "1.0";
     public static readonly TimeSpan SnapshotLifetime = TimeSpan.FromMinutes(15);
 
+    private async Task<SqliteConnection> OpenMigratedAsync(CancellationToken cancellationToken)
+    {
+        var connection = await database.OpenAsync(cancellationToken);
+        await new IngestSchemaMigrator().ApplyAsync(connection, cancellationToken);
+        return connection;
+    }
+
     public async Task<BatchStatusDetail?> DetailAsync(string batchId, CancellationToken cancellationToken)
     {
-        await using var connection = await database.OpenAsync(cancellationToken);
+        await using var connection = await OpenMigratedAsync(cancellationToken);
         var batch = await ReadBatchAsync(connection, null, batchId, cancellationToken);
         if (batch is null) return null;
 
@@ -39,7 +46,7 @@ public sealed class StatusStateStore(IngestDatabase database, BatchErrorEventSto
         DateTimeOffset now,
         CancellationToken cancellationToken)
     {
-        await using var connection = await database.OpenAsync(cancellationToken);
+        await using var connection = await OpenMigratedAsync(cancellationToken);
         await using var transaction = connection.BeginTransaction(deferred: false);
         var createdAt = Utc(now);
         var expiresAt = Utc(now.Add(SnapshotLifetime));
@@ -71,7 +78,7 @@ public sealed class StatusStateStore(IngestDatabase database, BatchErrorEventSto
             return StatusSnapshotReadResult.Failure(StatusErrors.SnapshotExpired);
         }
 
-        await using var connection = await database.OpenAsync(cancellationToken);
+        await using var connection = await OpenMigratedAsync(cancellationToken);
         var generation = await StoreGenerationAsync(connection, null, cancellationToken);
         if (!string.Equals(cursor.StoreGeneration, generation, StringComparison.Ordinal))
         {
