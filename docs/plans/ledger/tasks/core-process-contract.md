@@ -22,20 +22,20 @@ Produce one offline tally executable whose explicit foundation registry drives d
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| ADR-CORE-0010: CommandResult Pattern for Commands | `adr` | `governed-by` | `false` |
-| ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning | `adr` | `governed-by` | `false` |
-| ADR-CORE-0024: Vertical Slice Architecture | `adr` | `governed-by` | `false` |
-| ADR-CORE-0025: Error Handling Strategy | `adr` | `governed-by` | `false` |
-| DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry | `design_decision` | `governed-by` | `true` |
-| DIAG-LEDGER-COMPONENTS: LEDGER component architecture | `design_diagram` | `references` | `false` |
-| DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope | `data_model` | `touches` | `true` |
-| FA-LEDGER-CONTRACT-SKILLS: Contract and Skills | `feature_area` | `touches` | `false` |
-| FR-LEDGER-CONTRACT-DISCOVERY: Discover the Ledger command contract | `requirement` | `implements` | `true` |
-| FR-LEDGER-STRUCTURED-INVOCATION: Invoke Ledger operations non-interactively | `requirement` | `implements` | `true` |
-| MD-LEDGER-MASTER: Financial Ledger technical design | `module_design` | `references` | `false` |
-| NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the agent contract stable | `nfr` | `satisfies` | `true` |
-| NFR-LEDGER-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local executable | `nfr` | `satisfies` | `true` |
+| [ADR-CORE-0010: CommandResult Pattern for Commands](../../../adr/core/0010-commandresult-pattern-for-commands.md) | `adr` | `governed-by` | `false` |
+| [ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning](../../../adr/core/0021-explicit-di-registration-no-reflection-scanning.md) | `adr` | `governed-by` | `false` |
+| [ADR-CORE-0024: Vertical Slice Architecture](../../../adr/core/0024-vertical-slice-architecture.md) | `adr` | `governed-by` | `false` |
+| [ADR-CORE-0025: Error Handling Strategy](../../../adr/core/0025-error-handling-strategy.md) | `adr` | `governed-by` | `false` |
+| [DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports](../../../designs/ledger/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry](../../../designs/ledger/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DIAG-LEDGER-COMPONENTS: LEDGER component architecture](../../../designs/ledger/diagrams/components.md) | `design_diagram` | `references` | `false` |
+| [DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | `data_model` | `touches` | `true` |
+| [FA-LEDGER-CONTRACT-SKILLS: Contract and Skills](../../../designs/ledger/features/contract-skills/api-surface.md) | `feature_area` | `touches` | `false` |
+| [FR-LEDGER-CONTRACT-DISCOVERY: Discover the Ledger command contract](../../../prd/ledger/prd.md#fr-ledger-contract-discovery-discover-the-ledger-command-contract) | `requirement` | `implements` | `true` |
+| [FR-LEDGER-STRUCTURED-INVOCATION: Invoke Ledger operations non-interactively](../../../prd/ledger/prd.md#fr-ledger-structured-invocation-invoke-ledger-operations-non-interactively) | `requirement` | `implements` | `true` |
+| [MD-LEDGER-MASTER: Financial Ledger technical design](../../../designs/ledger/design.md) | `module_design` | `references` | `false` |
+| [NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the agent contract stable](../../../prd/ledger/prd.md#nfr-ledger-agent-contract-stability-keep-the-external-orchestrator-contract-stable) | `nfr` | `satisfies` | `true` |
+| [NFR-LEDGER-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local executable](../../../prd/ledger/prd.md#nfr-ledger-self-contained-local-operation-operate-as-a-self-contained-local-executable) | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-CONTRACT-DISCOVERY-CONTRACT: Verify discover the ledger command contract contract | `test_case` | `verifies` | `true` |
 | TC-LEDGER-STRUCTURED-INVOCATION-CONTRACT: Verify invoke ledger operations non-interactively contract | `test_case` | `verifies` | `true` |
 
@@ -99,12 +99,12 @@ No task dependencies recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| TallyProcess.RunAsync | `produces` | DM-LEDGER-OPERATION-DESCRIPTOR |  |
-| OperationRegistry | `produces` | DM-LEDGER-OPERATION-DESCRIPTOR |  |
-| OperationDescriptor | `produces` | DM-LEDGER-OPERATION-DESCRIPTOR |  |
+| TallyProcess.RunAsync | `produces` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) |  |
+| OperationRegistry | `produces` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) |  |
+| OperationDescriptor | `produces` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) |  |
 | ICommandHandler<TCommand,TResult> | `produces` |  |  |
 | IQueryHandler<TQuery,TResult> | `produces` |  |  |
-| CommandResult<TResult> | `produces` | ADR-CORE-0010 |  |
+| CommandResult<TResult> | `produces` | [ADR-CORE-0010](../../../adr/core/0010-commandresult-pattern-for-commands.md) |  |
 
 ### Verification
 
@@ -131,20 +131,20 @@ No task dependencies recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3sx` (verified)
-- `governed-by` -> ADR-CORE-0010: CommandResult Pattern for Commands
-- `governed-by` -> ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning
-- `governed-by` -> ADR-CORE-0024: Vertical Slice Architecture
-- `governed-by` -> ADR-CORE-0025: Error Handling Strategy
-- `governed-by` -> DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports
-- `governed-by` -> DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry
-- `implements` -> FR-LEDGER-CONTRACT-DISCOVERY: Discover the Ledger command contract
-- `implements` -> FR-LEDGER-STRUCTURED-INVOCATION: Invoke Ledger operations non-interactively
-- `references` -> DIAG-LEDGER-COMPONENTS: LEDGER component architecture
-- `references` -> MD-LEDGER-MASTER: Financial Ledger technical design
-- `satisfies` -> NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the agent contract stable
-- `satisfies` -> NFR-LEDGER-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local executable
-- `touches` -> DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope
-- `touches` -> FA-LEDGER-CONTRACT-SKILLS: Contract and Skills
+- `governed-by` -> [ADR-CORE-0010: CommandResult Pattern for Commands](../../../adr/core/0010-commandresult-pattern-for-commands.md)
+- `governed-by` -> [ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning](../../../adr/core/0021-explicit-di-registration-no-reflection-scanning.md)
+- `governed-by` -> [ADR-CORE-0024: Vertical Slice Architecture](../../../adr/core/0024-vertical-slice-architecture.md)
+- `governed-by` -> [ADR-CORE-0025: Error Handling Strategy](../../../adr/core/0025-error-handling-strategy.md)
+- `governed-by` -> [DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports](../../../designs/ledger/decisions/application-architecture.md)
+- `governed-by` -> [DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry](../../../designs/ledger/decisions/cli-operation-contract.md)
+- `implements` -> [FR-LEDGER-CONTRACT-DISCOVERY: Discover the Ledger command contract](../../../prd/ledger/prd.md#fr-ledger-contract-discovery-discover-the-ledger-command-contract)
+- `implements` -> [FR-LEDGER-STRUCTURED-INVOCATION: Invoke Ledger operations non-interactively](../../../prd/ledger/prd.md#fr-ledger-structured-invocation-invoke-ledger-operations-non-interactively)
+- `references` -> [DIAG-LEDGER-COMPONENTS: LEDGER component architecture](../../../designs/ledger/diagrams/components.md)
+- `references` -> [MD-LEDGER-MASTER: Financial Ledger technical design](../../../designs/ledger/design.md)
+- `satisfies` -> [NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the agent contract stable](../../../prd/ledger/prd.md#nfr-ledger-agent-contract-stability-keep-the-external-orchestrator-contract-stable)
+- `satisfies` -> [NFR-LEDGER-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local executable](../../../prd/ledger/prd.md#nfr-ledger-self-contained-local-operation-operate-as-a-self-contained-local-executable)
+- `touches` -> [DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope](../../../designs/ledger/data-model.md#operationdescriptorandenvelope)
+- `touches` -> [FA-LEDGER-CONTRACT-SKILLS: Contract and Skills](../../../designs/ledger/features/contract-skills/api-surface.md)
 - `verifies` -> TC-LEDGER-CONTRACT-DISCOVERY-CONTRACT: Verify discover the ledger command contract contract
 - `verifies` -> TC-LEDGER-STRUCTURED-INVOCATION-CONTRACT: Verify invoke ledger operations non-interactively contract
 

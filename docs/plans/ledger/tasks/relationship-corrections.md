@@ -22,19 +22,19 @@ Retire or replace one active financial relationship atomically only after typed 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP: Single full-amount refund relationships | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | `true` |
-| FR-LEDGER-RELATIONSHIP-CORRECTION: Revoke or replace financial relationships | `requirement` | `implements` | `true` |
+| [DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP: Single full-amount refund relationships](../../../designs/ledger/decisions/full-amount-refund-relationship.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-RELATIONSHIP-CORRECTION: Revoke or replace financial relationships](../../../prd/ledger/prd.md#fr-ledger-relationship-correction-revoke-or-replace-financial-relationships) | `requirement` | `implements` | `true` |
 | TC-LEDGER-RELATIONSHIP-CORRECTION-CONTRACT: Verify revoke or replace financial relationships contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-REFUNDS](../tasks/refunds.md) | `compile` | Correction must revalidate both transfer and refund policies and modify the shared RelationshipStore after both exist. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
-| [TASK-LEDGER-TRANSFERS](../tasks/transfers.md) | `compile` | Consumer requires TransferPolicy from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-REFUNDS: TASK-LEDGER-REFUNDS](refunds.md) | `compile` | Correction must revalidate both transfer and refund policies and modify the shared RelationshipStore after both exist. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-TRANSFERS: TASK-LEDGER-TRANSFERS](transfers.md) | `compile` | Consumer requires TransferPolicy from its producing task; direct compile edge enforces the declared interface contract. |
 
 ## Recipe
 
@@ -83,13 +83,13 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| RelationshipLifecycleOperationModule | `produces` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS | Public revoke, replace, and get operations |
-| RelationshipStore.RevokeAsync | `produces` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Public attributable retirement |
-| RelationshipStore.ReplaceAsync | `produces` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Public validated replacement |
-| RelationshipStore.ReplaceForStatementCorrectionAsync | `produces` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Internal decision-linked replacement or review block |
-| TransferPolicy | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Owned-account equality and zero-spend invariants |
-| RefundPolicy | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Same-account ZAR, sign, exact full-amount, and active-role invariants |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD | Atomic replay boundary |
+| RelationshipLifecycleOperationModule | `produces` | [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) | Public revoke, replace, and get operations |
+| RelationshipStore.RevokeAsync | `produces` | [DM-LEDGER-FINANCIAL-RELATIONSHIP](../../../designs/ledger/data-model.md#financialrelationshipandlifecycle) | Public attributable retirement |
+| RelationshipStore.ReplaceAsync | `produces` | [DM-LEDGER-FINANCIAL-RELATIONSHIP](../../../designs/ledger/data-model.md#financialrelationshipandlifecycle) | Public validated replacement |
+| RelationshipStore.ReplaceForStatementCorrectionAsync | `produces` | [DM-LEDGER-FINANCIAL-RELATIONSHIP](../../../designs/ledger/data-model.md#financialrelationshipandlifecycle) | Internal decision-linked replacement or review block |
+| TransferPolicy | `consumes` | [DM-LEDGER-FINANCIAL-RELATIONSHIP](../../../designs/ledger/data-model.md#financialrelationshipandlifecycle) | Owned-account equality and zero-spend invariants |
+| RefundPolicy | `consumes` | [DM-LEDGER-FINANCIAL-RELATIONSHIP](../../../designs/ledger/data-model.md#financialrelationshipandlifecycle) | Same-account ZAR, sign, exact full-amount, and active-role invariants |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | [DM-LEDGER-IDEMPOTENCY-RECORD](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) | Atomic replay boundary |
 
 ### Verification
 
@@ -115,13 +115,13 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2sb` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-REFUNDS](../tasks/refunds.md): Correction must revalidate both transfer and refund policies and modify the shared RelationshipStore after both exist.
-- `depends-on:compile` -> [TASK-LEDGER-TRANSFERS](../tasks/transfers.md): Consumer requires TransferPolicy from its producing task; direct compile edge enforces the declared interface contract.
-- `governed-by` -> DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP: Single full-amount refund relationships
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `implements` -> FR-LEDGER-RELATIONSHIP-CORRECTION: Revoke or replace financial relationships
-- `touches` -> DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-REFUNDS: TASK-LEDGER-REFUNDS](refunds.md): Correction must revalidate both transfer and refund policies and modify the shared RelationshipStore after both exist.
+- `depends-on:compile` -> [TASK-LEDGER-TRANSFERS: TASK-LEDGER-TRANSFERS](transfers.md): Consumer requires TransferPolicy from its producing task; direct compile edge enforces the declared interface contract.
+- `governed-by` -> [DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP: Single full-amount refund relationships](../../../designs/ledger/decisions/full-amount-refund-relationship.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `implements` -> [FR-LEDGER-RELATIONSHIP-CORRECTION: Revoke or replace financial relationships](../../../prd/ledger/prd.md#fr-ledger-relationship-correction-revoke-or-replace-financial-relationships)
+- `touches` -> [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts)
 - `verifies` -> TC-LEDGER-RELATIONSHIP-CORRECTION-CONTRACT: Verify revoke or replace financial relationships contract
 
 ## Navigation

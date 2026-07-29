@@ -507,37 +507,43 @@ Honest summary: the *engineering* documentation is unusually deep, and the
 - **The executable contract itself** — `tally help` and `tally schema show
   <operation-id>` are the authoritative, always-current reference for all 88
   operations. Prefer them over any prose.
-- **`docs/prd/<module>/prd.md`** — product requirements for the three shipped
-  modules: problem statement, goals and non-goals, functional and non-functional
-  requirements, use cases, success metrics, risks, and kill criteria.
-- **`docs/designs/<module>/`** — a design workspace per shipped module. Start at
+- **`docs/prd/<module>/prd.md`** — product requirements per module: problem
+  statement, goals and non-goals, functional and non-functional requirements, use
+  cases, success metrics, risks, and kill criteria.
+- **`docs/designs/<module>/`** — a design workspace per module. Start at
   `README.md`, then `design.md` (module narrative), `architecture.md`,
   `data-model.md`, `glossary.md`, plus `features/`, `decisions/` (each design
   decision with its rationale and status), and `diagrams/` (Mermaid).
-- **`docs/plans/`** — implementation plans for all five modules (Ledger, Ingest,
-  Budget, Insights, Classify): 27 sub-plans and 189 tasks with constraints and
-  acceptance criteria.
+- **`docs/plans/<module>/`** — implementation plans: 27 sub-plans and 189 tasks
+  with constraints and acceptance criteria, cross-linked to the requirements and
+  decisions that govern each task.
+- **`docs/adr/`** — 30 accepted architecture decision records.
+- **`docs/patterns/`** — 34 codified solution patterns with rules and examples.
+- **`docs/architecture/`** — 17 architecture narratives.
 - **`docs/verification/`** — what each module verification gate proves, and how.
 - **`docs/reviews/`, `docs/diagnosis/`, `docs/validation/`** — adversarial review
   records, bug diagnoses, and resolved open questions.
 - **`AGENTS.md`** — how the SDLC pipeline for this repo works.
+
+Each export type has a generated `README.md` index at its root, and
+`docs/.lex-export.json` records the manifest so `lex diff` can detect drift.
 
 Requirements, designs, decisions, and plans are authored in a
 [lex](#development) graph under `.lexicon/`: 79 functional requirements, 36
 non-functional requirements, 51 design decisions, 55 data models, 120 test cases,
 30 accepted ADRs, 33 patterns, and 2,303 cross-entity links across seven modules.
 Markdown under `docs/` is **generated output** — edit the graph entities and
-re-export, never the Markdown.
+re-export (`lex export --all --output docs`), never the Markdown.
+
+**Scope note.** The `core/` subtree under `docs/adr/`, `docs/patterns/`,
+`docs/architecture/`, and `docs/designs/` is the Platform Core module, which
+documents a separate NXGN product (multi-tenancy, PostgreSQL/EF Core,
+FastEndpoints, Angular). Tally treats it as **prior art only** — see
+`ADR-CORE-0030`. None of those web, Aspire, PostgreSQL, RLS, or browser
+assumptions are inherited by Tally's modules.
 
 **Known gaps**
 
-- **ADRs, patterns, and architecture narratives are not exported.**
-  `docs/adr/`, `docs/patterns/`, and `docs/architecture/` are empty — the 30
-  accepted ADRs, 33 patterns, and 17 architecture docs live in the graph and are
-  readable only via `lex` (`lex adr list --module CORE --json`,
-  `lex pattern list --module CORE --json`, …).
-- PRD and design exports cover Ledger, Ingest, and Budget. Insights (still in
-  implementation) has plans exported but no PRD or design export yet.
 - No task-oriented user guides beyond this README — no "import your first
   statement end to end" tutorial, no reconciliation walkthrough.
 - No published release binaries, no CI workflow in the repo, and no changelog.

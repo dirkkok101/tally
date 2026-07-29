@@ -22,22 +22,22 @@ GenerateInsightReportQuery returns one bounded complete report from one frozen i
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies | `design_decision` | `governed-by` | `true` |
-| DM-INSIGHTS-OPERATION-CONTRACTS: InsightsOperationContracts | `data_model` | `touches` | `true` |
-| FR-INSIGHTS-REPORT-GENERATION: Generate one deterministic Insight Report | `requirement` | `implements` | `true` |
-| FR-INSIGHTS-STRUCTURED-INVOCATION: Invoke Public INSIGHTS Operations non-interactively | `requirement` | `implements` | `true` |
-| NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity | `nfr` | `satisfies` | `true` |
+| [DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries](../../../designs/insights/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry](../../../designs/insights/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies](../../../designs/insights/decisions/deterministic-report-compiler.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INSIGHTS-OPERATION-CONTRACTS: InsightsOperationContracts](../../../designs/insights/data-model.md#insightsoperationcontracts) | `data_model` | `touches` | `true` |
+| [FR-INSIGHTS-REPORT-GENERATION: Generate one deterministic Insight Report](../../../prd/insights/prd.md#fr-insights-report-generation-generate-one-deterministic-insight-report) | `requirement` | `implements` | `true` |
+| [FR-INSIGHTS-STRUCTURED-INVOCATION: Invoke Public INSIGHTS Operations non-interactively](../../../prd/insights/prd.md#fr-insights-structured-invocation-invoke-public-insights-operations-non-interactively) | `requirement` | `implements` | `true` |
+| [NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity](../../../prd/insights/prd.md#nfr-insights-deterministic-analytical-integrity-preserve-deterministic-analytical-integrity) | `nfr` | `satisfies` | `true` |
 | TC-INSIGHTS-REPORT-GENERATION-CONTRACT: Verify deterministic Insight Report generation | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | The query implements a published request/result and stable error contract. |
-| [TASK-INSIGHTS-BUDGET-EVIDENCE-CLIENT](../tasks/budget-evidence-client.md) | `compile` | Generation consumes the single public BUDGET client. |
-| [TASK-INSIGHTS-REPORT-COMPILER](../tasks/report-compiler.md) | `compile` | Generation delegates all analytical semantics to the compiler. |
+| [TASK-INSIGHTS-CONTRACT-FOUNDATION: TASK-INSIGHTS-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | The query implements a published request/result and stable error contract. |
+| [TASK-INSIGHTS-BUDGET-EVIDENCE-CLIENT: TASK-INSIGHTS-BUDGET-EVIDENCE-CLIENT](budget-evidence-client.md) | `compile` | Generation consumes the single public BUDGET client. |
+| [TASK-INSIGHTS-REPORT-COMPILER: TASK-INSIGHTS-REPORT-COMPILER](report-compiler.md) | `compile` | Generation delegates all analytical semantics to the compiler. |
 
 ## Recipe
 
@@ -79,9 +79,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| BudgetContractClient.GetInsightEvidenceAsync | `consumes` | DM-BUDGET-INSIGHTS-READ-CONTRACT | one producer result |
-| InsightReportCompiler.Compile | `consumes` | DM-INSIGHTS-INSIGHT-REPORT | pure compilation |
-| GenerateInsightReportQuery.HandleAsync | `produces` | DM-INSIGHTS-OPERATION-CONTRACTS | insights.report.generate handler |
+| BudgetContractClient.GetInsightEvidenceAsync | `consumes` | [DM-BUDGET-INSIGHTS-READ-CONTRACT](../../../designs/budget/data-model.md#budgetreadcapabilitydescriptor) | one producer result |
+| InsightReportCompiler.Compile | `consumes` | [DM-INSIGHTS-INSIGHT-REPORT](../../../designs/insights/data-model.md#insightreport) | pure compilation |
+| GenerateInsightReportQuery.HandleAsync | `produces` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | insights.report.generate handler |
 
 ### Verification
 
@@ -106,16 +106,16 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1cr` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-BUDGET-EVIDENCE-CLIENT](../tasks/budget-evidence-client.md): Generation consumes the single public BUDGET client.
-- `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): The query implements a published request/result and stable error contract.
-- `depends-on:compile` -> [TASK-INSIGHTS-REPORT-COMPILER](../tasks/report-compiler.md): Generation delegates all analytical semantics to the compiler.
-- `governed-by` -> DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries
-- `governed-by` -> DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry
-- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies
-- `implements` -> FR-INSIGHTS-REPORT-GENERATION: Generate one deterministic Insight Report
-- `implements` -> FR-INSIGHTS-STRUCTURED-INVOCATION: Invoke Public INSIGHTS Operations non-interactively
-- `satisfies` -> NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity
-- `touches` -> DM-INSIGHTS-OPERATION-CONTRACTS: InsightsOperationContracts
+- `depends-on:compile` -> [TASK-INSIGHTS-BUDGET-EVIDENCE-CLIENT: TASK-INSIGHTS-BUDGET-EVIDENCE-CLIENT](budget-evidence-client.md): Generation consumes the single public BUDGET client.
+- `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-FOUNDATION: TASK-INSIGHTS-CONTRACT-FOUNDATION](contract-foundation.md): The query implements a published request/result and stable error contract.
+- `depends-on:compile` -> [TASK-INSIGHTS-REPORT-COMPILER: TASK-INSIGHTS-REPORT-COMPILER](report-compiler.md): Generation delegates all analytical semantics to the compiler.
+- `governed-by` -> [DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries](../../../designs/insights/decisions/application-architecture.md)
+- `governed-by` -> [DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry](../../../designs/insights/decisions/cli-operation-contract.md)
+- `governed-by` -> [DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies](../../../designs/insights/decisions/deterministic-report-compiler.md)
+- `implements` -> [FR-INSIGHTS-REPORT-GENERATION: Generate one deterministic Insight Report](../../../prd/insights/prd.md#fr-insights-report-generation-generate-one-deterministic-insight-report)
+- `implements` -> [FR-INSIGHTS-STRUCTURED-INVOCATION: Invoke Public INSIGHTS Operations non-interactively](../../../prd/insights/prd.md#fr-insights-structured-invocation-invoke-public-insights-operations-non-interactively)
+- `satisfies` -> [NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity](../../../prd/insights/prd.md#nfr-insights-deterministic-analytical-integrity-preserve-deterministic-analytical-integrity)
+- `touches` -> [DM-INSIGHTS-OPERATION-CONTRACTS: InsightsOperationContracts](../../../designs/insights/data-model.md#insightsoperationcontracts)
 - `verifies` -> TC-INSIGHTS-REPORT-GENERATION-CONTRACT: Verify deterministic Insight Report generation
 
 ## Navigation

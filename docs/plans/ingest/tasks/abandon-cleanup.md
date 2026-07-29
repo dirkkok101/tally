@@ -22,18 +22,18 @@ Deliver ingest.abandon, ingest.cleanup, and startup cleanup after acquiring the 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling | `design_decision` | `governed-by` | `true` |
-| FR-INGEST-ARTIFACT-CLEANUP: Abandon and clean up ingestion artifacts safely | `requirement` | `implements` | `true` |
+| [DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling](../../../designs/ingest/decisions/artifact-security.md) | `design_decision` | `governed-by` | `true` |
+| [FR-INGEST-ARTIFACT-CLEANUP: Abandon and clean up ingestion artifacts safely](../../../prd/ingest/prd.md#fr-ingest-artifact-cleanup-abandon-and-clean-up-ingestion-artifacts-safely) | `requirement` | `implements` | `true` |
 | TC-INGEST-ARTIFACT-CLEANUP-CONTRACT: Verify abandon and artifact cleanup | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-COMMIT-SAGA](../tasks/commit-saga.md) | `compile` | Abandon and compaction consume BatchCommitLock and durable candidate outcomes. |
-| [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | RecoveryStateStore uses protected ingest.db and artifact enforcement. |
-| [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Consumes ImportReceipt. |
-| [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md) | `compile` | Recovery mutations append complete stable errors and clean V002 snapshots safely. |
+| [TASK-INGEST-COMMIT-SAGA: TASK-INGEST-COMMIT-SAGA](commit-saga.md) | `compile` | Abandon and compaction consume BatchCommitLock and durable candidate outcomes. |
+| [TASK-INGEST-STATE-FOUNDATION: TASK-INGEST-STATE-FOUNDATION](state-foundation.md) | `compile` | RecoveryStateStore uses protected ingest.db and artifact enforcement. |
+| [TASK-INGEST-CONTRACT-FOUNDATION: TASK-INGEST-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | Consumes ImportReceipt. |
+| [TASK-INGEST-STATUS-STATE-V002: TASK-INGEST-STATUS-STATE-V002](status-state-v002.md) | `compile` | Recovery mutations append complete stable errors and clean V002 snapshots safely. |
 
 ## Recipe
 
@@ -86,14 +86,14 @@ Deliver ingest.abandon, ingest.cleanup, and startup cleanup after acquiring the 
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ImportReceipt | `consumes` | DM-INGEST-IMPORT-RECEIPT |  |
-| IngestDatabase | `consumes` | DM-INGEST-STATE-STORE |  |
-| IngestArtifactProtection.EnsureOwnerOnly | `consumes` | DD-INGEST-ARTIFACT-SECURITY |  |
-| BatchCommitLock | `consumes` | DD-INGEST-COMMIT-RECOVERY |  |
-| RecoveryStateStore | `produces` | DM-INGEST-STATE-STORE |  |
-| StartupIngestCleanup | `produces` | DD-INGEST-ARTIFACT-SECURITY |  |
-| RecoveryCleanupOperationModule | `produces` | DM-INGEST-OPERATION-CONTRACTS |  |
-| BatchErrorEventStore.AppendAsync | `consumes` | DM-INGEST-ERROR-STATUS-CONTRACTS | Append complete safe recovery errors in the caller transaction |
+| ImportReceipt | `consumes` | [DM-INGEST-IMPORT-RECEIPT](../../../designs/ingest/data-model.md#importreceiptandcandidateoutcome) |  |
+| IngestDatabase | `consumes` | [DM-INGEST-STATE-STORE](../../../designs/ingest/data-model.md#ingeststatestore) |  |
+| IngestArtifactProtection.EnsureOwnerOnly | `consumes` | [DD-INGEST-ARTIFACT-SECURITY](../../../designs/ingest/decisions/artifact-security.md) |  |
+| BatchCommitLock | `consumes` | [DD-INGEST-COMMIT-RECOVERY](../../../designs/ingest/decisions/commit-recovery.md) |  |
+| RecoveryStateStore | `produces` | [DM-INGEST-STATE-STORE](../../../designs/ingest/data-model.md#ingeststatestore) |  |
+| StartupIngestCleanup | `produces` | [DD-INGEST-ARTIFACT-SECURITY](../../../designs/ingest/decisions/artifact-security.md) |  |
+| RecoveryCleanupOperationModule | `produces` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) |  |
+| BatchErrorEventStore.AppendAsync | `consumes` | [DM-INGEST-ERROR-STATUS-CONTRACTS](../../../designs/ingest/data-model.md#ingesterrorandstatuscontracts) | Append complete safe recovery errors in the caller transaction |
 
 ### Verification
 
@@ -119,12 +119,12 @@ Deliver ingest.abandon, ingest.cleanup, and startup cleanup after acquiring the 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-557` (verified)
-- `depends-on:compile` -> [TASK-INGEST-COMMIT-SAGA](../tasks/commit-saga.md): Abandon and compaction consume BatchCommitLock and durable candidate outcomes.
-- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Consumes ImportReceipt.
-- `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md): RecoveryStateStore uses protected ingest.db and artifact enforcement.
-- `depends-on:compile` -> [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md): Recovery mutations append complete stable errors and clean V002 snapshots safely.
-- `governed-by` -> DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling
-- `implements` -> FR-INGEST-ARTIFACT-CLEANUP: Abandon and clean up ingestion artifacts safely
+- `depends-on:compile` -> [TASK-INGEST-COMMIT-SAGA: TASK-INGEST-COMMIT-SAGA](commit-saga.md): Abandon and compaction consume BatchCommitLock and durable candidate outcomes.
+- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION: TASK-INGEST-CONTRACT-FOUNDATION](contract-foundation.md): Consumes ImportReceipt.
+- `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION: TASK-INGEST-STATE-FOUNDATION](state-foundation.md): RecoveryStateStore uses protected ingest.db and artifact enforcement.
+- `depends-on:compile` -> [TASK-INGEST-STATUS-STATE-V002: TASK-INGEST-STATUS-STATE-V002](status-state-v002.md): Recovery mutations append complete stable errors and clean V002 snapshots safely.
+- `governed-by` -> [DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling](../../../designs/ingest/decisions/artifact-security.md)
+- `implements` -> [FR-INGEST-ARTIFACT-CLEANUP: Abandon and clean up ingestion artifacts safely](../../../prd/ingest/prd.md#fr-ingest-artifact-cleanup-abandon-and-clean-up-ingestion-artifacts-safely)
 - `verifies` -> TC-INGEST-ARTIFACT-CLEANUP-CONTRACT: Verify abandon and artifact cleanup
 
 ## Navigation

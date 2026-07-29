@@ -22,17 +22,17 @@ The Tally registry can represent every CLASSIFY request, result, error, limit, c
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields | `adr` | `governed-by` | `true` |
-| ADR-CORE-0010: CommandResult Pattern for Commands | `adr` | `governed-by` | `true` |
-| ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning | `adr` | `governed-by` | `true` |
-| DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry | `design_decision` | `governed-by` | `true` |
-| DM-CLASSIFY-OPERATION-CONTRACTS: ClassifyOperationContracts | `data_model` | `touches` | `true` |
-| FA-CLASSIFY-CONTRACT-VOCABULARY: Contract and Vocabulary | `feature_area` | `touches` | `true` |
-| FR-CLASSIFY-CONTRACT-DISCOVERY: Discover the CLASSIFY command contract | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-STRUCTURED-INVOCATION: Invoke CLASSIFY operations non-interactively | `requirement` | `implements` | `true` |
-| NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries | `nfr` | `satisfies` | `true` |
-| TASK-LEDGER-CORE-PROCESS-CONTRACT: Build the self-contained process and operation contract | `task` | `blocked-by` | `true` |
+| [ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields](../../../adr/core/0004-enum-over-string-constants-for-system-owned-status-fields.md) | `adr` | `governed-by` | `true` |
+| [ADR-CORE-0010: CommandResult Pattern for Commands](../../../adr/core/0010-commandresult-pattern-for-commands.md) | `adr` | `governed-by` | `true` |
+| [ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning](../../../adr/core/0021-explicit-di-registration-no-reflection-scanning.md) | `adr` | `governed-by` | `true` |
+| [DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam](../../../designs/classify/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry](../../../designs/classify/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DM-CLASSIFY-OPERATION-CONTRACTS: ClassifyOperationContracts](../../../designs/classify/data-model.md#classifyoperationcontracts) | `data_model` | `touches` | `true` |
+| [FA-CLASSIFY-CONTRACT-VOCABULARY: Contract and Vocabulary](../../../designs/classify/features/contract-vocabulary/api-surface.md) | `feature_area` | `touches` | `true` |
+| [FR-CLASSIFY-CONTRACT-DISCOVERY: Discover the CLASSIFY command contract](../../../prd/classify/prd.md#fr-classify-contract-discovery-discover-the-classify-command-contract) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-STRUCTURED-INVOCATION: Invoke CLASSIFY operations non-interactively](../../../prd/classify/prd.md#fr-classify-structured-invocation-invoke-classify-operations-non-interactively) | `requirement` | `implements` | `true` |
+| [NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries](../../../prd/classify/prd.md#nfr-classify-public-contract-compatibility-preserve-public-contract-compatibility-boundaries) | `nfr` | `satisfies` | `true` |
+| [TASK-LEDGER-CORE-PROCESS-CONTRACT: Build the self-contained process and operation contract](../../ledger/tasks/core-process-contract.md) | `task` | `blocked-by` | `true` |
 
 ## Dependencies
 
@@ -86,10 +86,10 @@ No task dependencies recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassifyOperationContracts | `produces` | DM-CLASSIFY-OPERATION-CONTRACTS |  |
-| ClassifyOperationModule | `produces` | DM-CLASSIFY-OPERATION-CONTRACTS |  |
-| ClassifyJsonContext | `produces` | DM-CLASSIFY-OPERATION-CONTRACTS |  |
-| ClassifyContractMapper | `produces` | DM-CLASSIFY-OPERATION-CONTRACTS |  |
+| ClassifyOperationContracts | `produces` | [DM-CLASSIFY-OPERATION-CONTRACTS](../../../designs/classify/data-model.md#classifyoperationcontracts) |  |
+| ClassifyOperationModule | `produces` | [DM-CLASSIFY-OPERATION-CONTRACTS](../../../designs/classify/data-model.md#classifyoperationcontracts) |  |
+| ClassifyJsonContext | `produces` | [DM-CLASSIFY-OPERATION-CONTRACTS](../../../designs/classify/data-model.md#classifyoperationcontracts) |  |
+| ClassifyContractMapper | `produces` | [DM-CLASSIFY-OPERATION-CONTRACTS](../../../designs/classify/data-model.md#classifyoperationcontracts) |  |
 
 ### Verification
 
@@ -111,17 +111,17 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `blocked-by` -> TASK-LEDGER-CORE-PROCESS-CONTRACT: Build the self-contained process and operation contract
-- `governed-by` -> ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields
-- `governed-by` -> ADR-CORE-0010: CommandResult Pattern for Commands
-- `governed-by` -> ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning
-- `governed-by` -> DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam
-- `governed-by` -> DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry
-- `implements` -> FR-CLASSIFY-CONTRACT-DISCOVERY: Discover the CLASSIFY command contract
-- `implements` -> FR-CLASSIFY-STRUCTURED-INVOCATION: Invoke CLASSIFY operations non-interactively
-- `satisfies` -> NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries
-- `touches` -> DM-CLASSIFY-OPERATION-CONTRACTS: ClassifyOperationContracts
-- `touches` -> FA-CLASSIFY-CONTRACT-VOCABULARY: Contract and Vocabulary
+- `blocked-by` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT: Build the self-contained process and operation contract](../../ledger/tasks/core-process-contract.md)
+- `governed-by` -> [ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields](../../../adr/core/0004-enum-over-string-constants-for-system-owned-status-fields.md)
+- `governed-by` -> [ADR-CORE-0010: CommandResult Pattern for Commands](../../../adr/core/0010-commandresult-pattern-for-commands.md)
+- `governed-by` -> [ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning](../../../adr/core/0021-explicit-di-registration-no-reflection-scanning.md)
+- `governed-by` -> [DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam](../../../designs/classify/decisions/application-architecture.md)
+- `governed-by` -> [DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry](../../../designs/classify/decisions/cli-operation-contract.md)
+- `implements` -> [FR-CLASSIFY-CONTRACT-DISCOVERY: Discover the CLASSIFY command contract](../../../prd/classify/prd.md#fr-classify-contract-discovery-discover-the-classify-command-contract)
+- `implements` -> [FR-CLASSIFY-STRUCTURED-INVOCATION: Invoke CLASSIFY operations non-interactively](../../../prd/classify/prd.md#fr-classify-structured-invocation-invoke-classify-operations-non-interactively)
+- `satisfies` -> [NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries](../../../prd/classify/prd.md#nfr-classify-public-contract-compatibility-preserve-public-contract-compatibility-boundaries)
+- `touches` -> [DM-CLASSIFY-OPERATION-CONTRACTS: ClassifyOperationContracts](../../../designs/classify/data-model.md#classifyoperationcontracts)
+- `touches` -> [FA-CLASSIFY-CONTRACT-VOCABULARY: Contract and Vocabulary](../../../designs/classify/features/contract-vocabulary/api-surface.md)
 
 ## Navigation
 

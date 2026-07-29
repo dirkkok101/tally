@@ -5,7 +5,7 @@
 - **Ref:** `TASK-BUDGET-LEDGER-BUDGET-CONTRACT`
 - **Plan:** `PLAN-BUDGET-V1`
 - **Sub-Plan:** `SP-BUDGET-00-FOUNDATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `1`
 - **Dialect:** `default`
@@ -22,14 +22,14 @@ Ledger publishes versioned evidence that lets BUDGET validate entries and accoun
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations | `design_decision` | `governed-by` | `true` |
-| DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts | `data_model` | `touches` | `true` |
-| FA-BUDGET-POSITION-PROJECTION: Position and Projection | `feature_area` | `touches` | `false` |
-| FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle | `requirement` | `implements` | `true` |
-| FR-BUDGET-LEDGER-COMPOSITION: Compose only through public LEDGER contracts | `requirement` | `implements` | `true` |
-| TASK-LEDGER-ACTUALS-SNAPSHOT: Implement atomic snapshot actuals pagination | `task` | `blocked-by` | `true` |
-| TASK-LEDGER-CATEGORIES: Implement Spend Category catalogue operations | `task` | `blocked-by` | `true` |
-| TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract | `task` | `blocked-by` | `true` |
+| [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md) | `design_decision` | `governed-by` | `true` |
+| [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) | `data_model` | `touches` | `true` |
+| [FA-BUDGET-POSITION-PROJECTION: Position and Projection](../../../designs/budget/features/position-projection/api-surface.md) | `feature_area` | `touches` | `false` |
+| [FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle](../../../prd/budget/prd.md#fr-budget-category-lifecycle-honor-spend-category-lifecycle) | `requirement` | `implements` | `true` |
+| [FR-BUDGET-LEDGER-COMPOSITION: Compose only through public LEDGER contracts](../../../prd/budget/prd.md#fr-budget-ledger-composition-compose-only-through-public-ledger-contracts) | `requirement` | `implements` | `true` |
+| [TASK-LEDGER-ACTUALS-SNAPSHOT: Implement atomic snapshot actuals pagination](../../ledger/tasks/actuals-snapshot.md) | `task` | `blocked-by` | `true` |
+| [TASK-LEDGER-CATEGORIES: Implement Spend Category catalogue operations](../../ledger/tasks/categories.md) | `task` | `blocked-by` | `true` |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract](../../ledger/tasks/gate-int-public-contract.md) | `task` | `blocked-by` | `true` |
 | TC-BUDGET-CATEGORY-LIFECYCLE-CONTRACT: Verify category lifecycle contract | `test_case` | `verifies` | `true` |
 | TC-BUDGET-LEDGER-COMPOSITION-CONTRACT: Verify public LEDGER composition contract | `test_case` | `verifies` | `true` |
 
@@ -82,9 +82,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| LedgerBudgetCategoryEvidence | `produces` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
-| LedgerBudgetActualsQueryRequest | `produces` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
-| LedgerBudgetActualItem | `produces` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
+| LedgerBudgetCategoryEvidence | `produces` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
+| LedgerBudgetActualsQueryRequest | `produces` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
+| LedgerBudgetActualItem | `produces` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
 
 ### Verification
 
@@ -100,20 +100,23 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2xz` | `verified` | 2026-07-27T08:00:08.1428748+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `blocked-by` -> TASK-LEDGER-ACTUALS-SNAPSHOT: Implement atomic snapshot actuals pagination
-- `blocked-by` -> TASK-LEDGER-CATEGORIES: Implement Spend Category catalogue operations
-- `blocked-by` -> TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract
-- `governed-by` -> DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations
-- `implements` -> FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle
-- `implements` -> FR-BUDGET-LEDGER-COMPOSITION: Compose only through public LEDGER contracts
-- `touches` -> DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts
-- `touches` -> FA-BUDGET-POSITION-PROJECTION: Position and Projection
+- `bead-ref` -> `bd-2xz` (verified)
+- `blocked-by` -> [TASK-LEDGER-ACTUALS-SNAPSHOT: Implement atomic snapshot actuals pagination](../../ledger/tasks/actuals-snapshot.md)
+- `blocked-by` -> [TASK-LEDGER-CATEGORIES: Implement Spend Category catalogue operations](../../ledger/tasks/categories.md)
+- `blocked-by` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract](../../ledger/tasks/gate-int-public-contract.md)
+- `governed-by` -> [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md)
+- `implements` -> [FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle](../../../prd/budget/prd.md#fr-budget-category-lifecycle-honor-spend-category-lifecycle)
+- `implements` -> [FR-BUDGET-LEDGER-COMPOSITION: Compose only through public LEDGER contracts](../../../prd/budget/prd.md#fr-budget-ledger-composition-compose-only-through-public-ledger-contracts)
+- `touches` -> [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts)
+- `touches` -> [FA-BUDGET-POSITION-PROJECTION: Position and Projection](../../../designs/budget/features/position-projection/api-surface.md)
 - `verifies` -> TC-BUDGET-CATEGORY-LIFECYCLE-CONTRACT: Verify category lifecycle contract
 - `verifies` -> TC-BUDGET-LEDGER-COMPOSITION-CONTRACT: Verify public LEDGER composition contract
 

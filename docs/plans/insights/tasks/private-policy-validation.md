@@ -22,20 +22,20 @@ Changed built-in policies can enter the released catalogue only after complete o
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-PRIVATE-POLICY-VALIDATION: Ignored private corpus with privacy-safe release receipts | `design_decision` | `governed-by` | `true` |
-| DM-INSIGHTS-POLICY-CATALOGUE: InsightPolicyCatalogue | `data_model` | `touches` | `true` |
-| DM-INSIGHTS-POLICY-VALIDATION-RECEIPT: PolicyValidationReceipt | `data_model` | `touches` | `true` |
-| EXT-INSIGHTS-PRIVATE-EVALUATION-CORPUS: Private Insight Evaluation Corpus | `external_dependency` | `references` | `true` |
-| FR-INSIGHTS-PRIVATE-POLICY-VALIDATION: Validate analytical policies against private evidence | `requirement` | `implements` | `true` |
+| [DD-INSIGHTS-PRIVATE-POLICY-VALIDATION: Ignored private corpus with privacy-safe release receipts](../../../designs/insights/decisions/private-policy-validation.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INSIGHTS-POLICY-CATALOGUE: InsightPolicyCatalogue](../../../designs/insights/data-model.md#insightpolicycatalogue) | `data_model` | `touches` | `true` |
+| [DM-INSIGHTS-POLICY-VALIDATION-RECEIPT: PolicyValidationReceipt](../../../designs/insights/data-model.md#policyvalidationreceipt) | `data_model` | `touches` | `true` |
+| [EXT-INSIGHTS-PRIVATE-EVALUATION-CORPUS: Private Insight Evaluation Corpus](../../../prd/insights/prd.md#ext-insights-private-evaluation-corpus-private-insight-evaluation-corpus) | `external_dependency` | `references` | `true` |
+| [FR-INSIGHTS-PRIVATE-POLICY-VALIDATION: Validate analytical policies against private evidence](../../../prd/insights/prd.md#fr-insights-private-policy-validation-validate-analytical-policies-against-private-evidence) | `requirement` | `implements` | `true` |
 | TC-INSIGHTS-PRIVATE-POLICY-VALIDATION: Verify private analytical policy validation | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | The harness validates released catalogue and receipt contracts. |
-| [TASK-INSIGHTS-REPORT-COMPILER](../tasks/report-compiler.md) | `compile` | Private cases exercise the real candidate compiler rather than a second evaluator. |
-| [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](../tasks/lifecycle-contract-models.md) | `compile` | The private harness emits the external aggregate PolicyValidationReceipt. |
+| [TASK-INSIGHTS-CONTRACT-FOUNDATION: TASK-INSIGHTS-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | The harness validates released catalogue and receipt contracts. |
+| [TASK-INSIGHTS-REPORT-COMPILER: TASK-INSIGHTS-REPORT-COMPILER](report-compiler.md) | `compile` | Private cases exercise the real candidate compiler rather than a second evaluator. |
+| [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS: TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](lifecycle-contract-models.md) | `compile` | The private harness emits the external aggregate PolicyValidationReceipt. |
 
 ## Recipe
 
@@ -82,10 +82,10 @@ Changed built-in policies can enter the released catalogue only after complete o
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| InsightReportCompiler.Compile | `consumes` | DM-INSIGHTS-INSIGHT-REPORT | real candidate compiler |
-| PolicyValidationReceipt | `consumes` | DM-INSIGHTS-POLICY-VALIDATION-RECEIPT | external aggregate release evidence |
-| InsightPolicyValidationHarness.ValidateAsync | `produces` | DM-INSIGHTS-POLICY-VALIDATION-RECEIPT | complete private case evaluation |
-| PolicyValidationReceiptWriter.WriteAsync | `produces` | DM-INSIGHTS-POLICY-VALIDATION-RECEIPT | owner-only aggregate receipt writer |
+| InsightReportCompiler.Compile | `consumes` | [DM-INSIGHTS-INSIGHT-REPORT](../../../designs/insights/data-model.md#insightreport) | real candidate compiler |
+| PolicyValidationReceipt | `consumes` | [DM-INSIGHTS-POLICY-VALIDATION-RECEIPT](../../../designs/insights/data-model.md#policyvalidationreceipt) | external aggregate release evidence |
+| InsightPolicyValidationHarness.ValidateAsync | `produces` | [DM-INSIGHTS-POLICY-VALIDATION-RECEIPT](../../../designs/insights/data-model.md#policyvalidationreceipt) | complete private case evaluation |
+| PolicyValidationReceiptWriter.WriteAsync | `produces` | [DM-INSIGHTS-POLICY-VALIDATION-RECEIPT](../../../designs/insights/data-model.md#policyvalidationreceipt) | owner-only aggregate receipt writer |
 
 ### Verification
 
@@ -110,14 +110,14 @@ Changed built-in policies can enter the released catalogue only after complete o
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1g7` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): The harness validates released catalogue and receipt contracts.
-- `depends-on:compile` -> [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](../tasks/lifecycle-contract-models.md): The private harness emits the external aggregate PolicyValidationReceipt.
-- `depends-on:compile` -> [TASK-INSIGHTS-REPORT-COMPILER](../tasks/report-compiler.md): Private cases exercise the real candidate compiler rather than a second evaluator.
-- `governed-by` -> DD-INSIGHTS-PRIVATE-POLICY-VALIDATION: Ignored private corpus with privacy-safe release receipts
-- `implements` -> FR-INSIGHTS-PRIVATE-POLICY-VALIDATION: Validate analytical policies against private evidence
-- `references` -> EXT-INSIGHTS-PRIVATE-EVALUATION-CORPUS: Private Insight Evaluation Corpus
-- `touches` -> DM-INSIGHTS-POLICY-CATALOGUE: InsightPolicyCatalogue
-- `touches` -> DM-INSIGHTS-POLICY-VALIDATION-RECEIPT: PolicyValidationReceipt
+- `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-FOUNDATION: TASK-INSIGHTS-CONTRACT-FOUNDATION](contract-foundation.md): The harness validates released catalogue and receipt contracts.
+- `depends-on:compile` -> [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS: TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](lifecycle-contract-models.md): The private harness emits the external aggregate PolicyValidationReceipt.
+- `depends-on:compile` -> [TASK-INSIGHTS-REPORT-COMPILER: TASK-INSIGHTS-REPORT-COMPILER](report-compiler.md): Private cases exercise the real candidate compiler rather than a second evaluator.
+- `governed-by` -> [DD-INSIGHTS-PRIVATE-POLICY-VALIDATION: Ignored private corpus with privacy-safe release receipts](../../../designs/insights/decisions/private-policy-validation.md)
+- `implements` -> [FR-INSIGHTS-PRIVATE-POLICY-VALIDATION: Validate analytical policies against private evidence](../../../prd/insights/prd.md#fr-insights-private-policy-validation-validate-analytical-policies-against-private-evidence)
+- `references` -> [EXT-INSIGHTS-PRIVATE-EVALUATION-CORPUS: Private Insight Evaluation Corpus](../../../prd/insights/prd.md#ext-insights-private-evaluation-corpus-private-insight-evaluation-corpus)
+- `touches` -> [DM-INSIGHTS-POLICY-CATALOGUE: InsightPolicyCatalogue](../../../designs/insights/data-model.md#insightpolicycatalogue)
+- `touches` -> [DM-INSIGHTS-POLICY-VALIDATION-RECEIPT: PolicyValidationReceipt](../../../designs/insights/data-model.md#policyvalidationreceipt)
 - `verifies` -> TC-INSIGHTS-PRIVATE-POLICY-VALIDATION: Verify private analytical policy validation
 
 ## Navigation

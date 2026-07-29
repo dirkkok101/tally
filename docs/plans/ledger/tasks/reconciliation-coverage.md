@@ -22,20 +22,20 @@ Return a batch summary in which every accepted row and eligible prior transactio
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | `true` |
-| FR-LEDGER-RECONCILIATION-COVERAGE: Report statement coverage and exceptions | `requirement` | `implements` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-RECONCILIATION-COVERAGE: Report statement coverage and exceptions](../../../prd/ledger/prd.md#fr-ledger-reconciliation-coverage-report-statement-coverage-and-exceptions) | `requirement` | `implements` | `true` |
 | TC-LEDGER-RECONCILIATION-COVERAGE-CONTRACT: Verify statement coverage and exception accounting | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md) | `compile` | Coverage derives current and historical outcome classes through ReconciliationStateReducer. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Coverage completion is an idempotent durable mutation. |
-| [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md) | `compile` | Coverage consumes TransactionStore to establish exact active transaction membership. |
-| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md) | `compile` | Coverage must classify corrected_from_statement outcomes and prior/active identities. |
+| [TASK-LEDGER-RECONCILIATION-DECISIONS: TASK-LEDGER-RECONCILIATION-DECISIONS](reconciliation-decisions.md) | `compile` | Coverage derives current and historical outcome classes through ReconciliationStateReducer. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Coverage completion is an idempotent durable mutation. |
+| [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md) | `compile` | Coverage consumes TransactionStore to establish exact active transaction membership. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION: TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](reconciliation-statement-correction.md) | `compile` | Coverage must classify corrected_from_statement outcomes and prior/active identities. |
 
 ## Recipe
 
@@ -78,11 +78,11 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| StatementCoveragePolicy | `produces` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| ReconciliationCoverageStore | `produces` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| ReconciliationCoverageOperationModule | `produces` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
-| ReconciliationStateReducer | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| TransactionStore | `consumes` | DM-LEDGER-TRANSACTION-FACT |  |
+| StatementCoveragePolicy | `produces` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| ReconciliationCoverageStore | `produces` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| ReconciliationCoverageOperationModule | `produces` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) |  |
+| ReconciliationStateReducer | `consumes` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| TransactionStore | `consumes` | [DM-LEDGER-TRANSACTION-FACT](../../../designs/ledger/data-model.md#transactionfact) |  |
 
 ### Verification
 
@@ -108,14 +108,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2ae` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Coverage completion is an idempotent durable mutation.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md): Coverage derives current and historical outcome classes through ReconciliationStateReducer.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md): Coverage must classify corrected_from_statement outcomes and prior/active identities.
-- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Coverage consumes TransactionStore to establish exact active transaction membership.
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
-- `implements` -> FR-LEDGER-RECONCILIATION-COVERAGE: Report statement coverage and exceptions
-- `touches` -> DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Coverage completion is an idempotent durable mutation.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-DECISIONS: TASK-LEDGER-RECONCILIATION-DECISIONS](reconciliation-decisions.md): Coverage derives current and historical outcome classes through ReconciliationStateReducer.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION: TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](reconciliation-statement-correction.md): Coverage must classify corrected_from_statement outcomes and prior/active identities.
+- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md): Coverage consumes TransactionStore to establish exact active transaction membership.
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `governed-by` -> [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md)
+- `implements` -> [FR-LEDGER-RECONCILIATION-COVERAGE: Report statement coverage and exceptions](../../../prd/ledger/prd.md#fr-ledger-reconciliation-coverage-report-statement-coverage-and-exceptions)
+- `touches` -> [DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage)
 - `verifies` -> TC-LEDGER-RECONCILIATION-COVERAGE-CONTRACT: Verify statement coverage and exception accounting
 
 ## Navigation

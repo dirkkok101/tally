@@ -22,21 +22,21 @@ Resolve ambiguity and correct decisions through explicit owner intent while reta
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | `true` |
-| FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE: Resolve and correct Reconciliation Decision | `requirement` | `implements` | `true` |
+| [DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency](../../../designs/ledger/decisions/idempotent-mutations.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE: Resolve and correct Reconciliation Decision](../../../prd/ledger/prd.md#fr-ledger-reconciliation-decision-lifecycle-resolve-and-correct-reconciliation-decision) | `requirement` | `implements` | `true` |
 | TC-LEDGER-RECONCILIATION-DECISION-LIFECYCLE-CONTRACT: Verify owner reconciliation decisions and corrections | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md) | `compile` | Decision corrections operate on active decisions and links created by apply. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Every decision transition is an idempotent mutation. |
-| [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md) | `compile` | Decision correction consumes EvidenceStore for evidence identity and links. |
-| [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md) | `compile` | Decision correction consumes TransactionStore for active compatible targets. |
+| [TASK-LEDGER-RECONCILIATION-APPLY: TASK-LEDGER-RECONCILIATION-APPLY](reconciliation-apply.md) | `compile` | Decision corrections operate on active decisions and links created by apply. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Every decision transition is an idempotent mutation. |
+| [TASK-LEDGER-EVIDENCE-REGISTRY: TASK-LEDGER-EVIDENCE-REGISTRY](evidence-registry.md) | `compile` | Decision correction consumes EvidenceStore for evidence identity and links. |
+| [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md) | `compile` | Decision correction consumes TransactionStore for active compatible targets. |
 
 ## Recipe
 
@@ -80,12 +80,12 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ReconciliationStateReducer | `produces` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| ReconciliationDecisionStore | `produces` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| ReconciliationDecisionOperationModule | `produces` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
-| ReconciliationWriteStore | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| EvidenceStore | `consumes` | DM-LEDGER-EVIDENCE-RECORD-LINK |  |
-| TransactionStore | `consumes` | DM-LEDGER-TRANSACTION-FACT |  |
+| ReconciliationStateReducer | `produces` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| ReconciliationDecisionStore | `produces` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| ReconciliationDecisionOperationModule | `produces` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) |  |
+| ReconciliationWriteStore | `consumes` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| EvidenceStore | `consumes` | [DM-LEDGER-EVIDENCE-RECORD-LINK](../../../designs/ledger/data-model.md#evidencerecordobservationandlink) |  |
+| TransactionStore | `consumes` | [DM-LEDGER-TRANSACTION-FACT](../../../designs/ledger/data-model.md#transactionfact) |  |
 
 ### Verification
 
@@ -111,15 +111,15 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3q4` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Every decision transition is an idempotent mutation.
-- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md): Decision correction consumes EvidenceStore for evidence identity and links.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md): Decision corrections operate on active decisions and links created by apply.
-- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Decision correction consumes TransactionStore for active compatible targets.
-- `governed-by` -> DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
-- `implements` -> FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE: Resolve and correct Reconciliation Decision
-- `touches` -> DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Every decision transition is an idempotent mutation.
+- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY: TASK-LEDGER-EVIDENCE-REGISTRY](evidence-registry.md): Decision correction consumes EvidenceStore for evidence identity and links.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-APPLY: TASK-LEDGER-RECONCILIATION-APPLY](reconciliation-apply.md): Decision corrections operate on active decisions and links created by apply.
+- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md): Decision correction consumes TransactionStore for active compatible targets.
+- `governed-by` -> [DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency](../../../designs/ledger/decisions/idempotent-mutations.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `governed-by` -> [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md)
+- `implements` -> [FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE: Resolve and correct Reconciliation Decision](../../../prd/ledger/prd.md#fr-ledger-reconciliation-decision-lifecycle-resolve-and-correct-reconciliation-decision)
+- `touches` -> [DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage)
 - `verifies` -> TC-LEDGER-RECONCILIATION-DECISION-LIFECYCLE-CONTRACT: Verify owner reconciliation decisions and corrections
 
 ## Navigation

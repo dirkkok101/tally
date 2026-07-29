@@ -22,19 +22,19 @@ Enable only the empirically proven deterministic reconciliation cases without we
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| OQ-LEDGER-13: Which provider-neutral compatibility fields, tolerances, and conflict rules are sufficient for an automatic deterministic match between agent-capture and statement-row evidence? | `open_question` | `blocked-by` | `true` |
+| [DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency](../../../designs/ledger/decisions/idempotent-mutations.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [OQ-LEDGER-13: Which provider-neutral compatibility fields, tolerances, and conflict rules are sufficient for an automatic deterministic match between agent-capture and statement-row evidence?](../../../prd/ledger/prd.md) | `open_question` | `blocked-by` | `true` |
 | TC-LEDGER-RECONCILIATION-POLICY-MATRIX: Prove deterministic reconciliation policy and ambiguity guards | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY](../tasks/gate-evidence-reconciliation-policy.md) | `compile` | Automatic behavior is forbidden until paired evidence resolves OQ-LEDGER-13 and defines the bounded policy matrix. |
-| [TASK-LEDGER-RECONCILIATION-PROJECTION](../tasks/reconciliation-projection.md) | `compile` | Automatic authority reuses the stable advisory projection and comparison basis. |
-| [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md) | `compile` | Activation extends the proven owner-reviewed base apply path rather than creating a second writer. |
-| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md) | `compile` | Activation extends the proven owner-approved statement-correction path with only evidence-backed automatic cases. |
+| [TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY: TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY](gate-evidence-reconciliation-policy.md) | `compile` | Automatic behavior is forbidden until paired evidence resolves OQ-LEDGER-13 and defines the bounded policy matrix. |
+| [TASK-LEDGER-RECONCILIATION-PROJECTION: TASK-LEDGER-RECONCILIATION-PROJECTION](reconciliation-projection.md) | `compile` | Automatic authority reuses the stable advisory projection and comparison basis. |
+| [TASK-LEDGER-RECONCILIATION-APPLY: TASK-LEDGER-RECONCILIATION-APPLY](reconciliation-apply.md) | `compile` | Activation extends the proven owner-reviewed base apply path rather than creating a second writer. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION: TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](reconciliation-statement-correction.md) | `compile` | Activation extends the proven owner-approved statement-correction path with only evidence-backed automatic cases. |
 
 ## Recipe
 
@@ -80,11 +80,11 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ReconciliationPolicyV1 | `produces` | DM-LEDGER-RECONCILIATION-HISTORY | Only rules recorded by OQ-LEDGER-13Resolution |
-| OQ-LEDGER-13Resolution | `consumes` | OQ-LEDGER-13 |  |
-| ManualReviewProjectionV1 | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| ReconciliationDispositionPolicy | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| StatementAuthorityPolicy | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY |  |
+| ReconciliationPolicyV1 | `produces` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) | Only rules recorded by OQ-LEDGER-13Resolution |
+| OQ-LEDGER-13Resolution | `consumes` | [OQ-LEDGER-13](../../../prd/ledger/prd.md) |  |
+| ManualReviewProjectionV1 | `consumes` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| ReconciliationDispositionPolicy | `consumes` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| StatementAuthorityPolicy | `consumes` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
 
 ### Verification
 
@@ -110,13 +110,13 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1ui` (verified)
-- `blocked-by` -> OQ-LEDGER-13: Which provider-neutral compatibility fields, tolerances, and conflict rules are sufficient for an automatic deterministic match between agent-capture and statement-row evidence?
-- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY](../tasks/gate-evidence-reconciliation-policy.md): Automatic behavior is forbidden until paired evidence resolves OQ-LEDGER-13 and defines the bounded policy matrix.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md): Activation extends the proven owner-reviewed base apply path rather than creating a second writer.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-PROJECTION](../tasks/reconciliation-projection.md): Automatic authority reuses the stable advisory projection and comparison basis.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md): Activation extends the proven owner-approved statement-correction path with only evidence-backed automatic cases.
-- `governed-by` -> DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency
-- `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
+- `blocked-by` -> [OQ-LEDGER-13: Which provider-neutral compatibility fields, tolerances, and conflict rules are sufficient for an automatic deterministic match between agent-capture and statement-row evidence?](../../../prd/ledger/prd.md)
+- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY: TASK-LEDGER-GATE-EVIDENCE-RECONCILIATION-POLICY](gate-evidence-reconciliation-policy.md): Automatic behavior is forbidden until paired evidence resolves OQ-LEDGER-13 and defines the bounded policy matrix.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-APPLY: TASK-LEDGER-RECONCILIATION-APPLY](reconciliation-apply.md): Activation extends the proven owner-reviewed base apply path rather than creating a second writer.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-PROJECTION: TASK-LEDGER-RECONCILIATION-PROJECTION](reconciliation-projection.md): Automatic authority reuses the stable advisory projection and comparison basis.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION: TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](reconciliation-statement-correction.md): Activation extends the proven owner-approved statement-correction path with only evidence-backed automatic cases.
+- `governed-by` -> [DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency](../../../designs/ledger/decisions/idempotent-mutations.md)
+- `governed-by` -> [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md)
 - `verifies` -> TC-LEDGER-RECONCILIATION-POLICY-MATRIX: Prove deterministic reconciliation policy and ambiguity guards
 
 ## Navigation

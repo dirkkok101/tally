@@ -22,17 +22,17 @@ Prove one eight-operation relationship/actuals bundle conserves exact spend acro
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE: Respond at personal-ledger scale | `nfr` | `satisfies` | `true` |
+| [NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE: Respond at personal-ledger scale](../../../prd/ledger/prd.md#nfr-ledger-personal-scale-performance-respond-at-personal-ledger-scale) | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-PERSONAL-SCALE-PERFORMANCE: Measure personal-ledger performance | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-TRANSFERS](../tasks/transfers.md) | `compile` | Consumes TransferOperationModule. |
-| [TASK-LEDGER-REFUNDS](../tasks/refunds.md) | `compile` | Consumes RefundOperationModule. |
-| [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](../tasks/relationship-corrections.md) | `compile` | Consumes RelationshipLifecycleOperationModule. |
-| [TASK-LEDGER-ACTUALS-SNAPSHOT](../tasks/actuals-snapshot.md) | `compile` | Consumes ActualsOperationModule. |
+| [TASK-LEDGER-TRANSFERS: TASK-LEDGER-TRANSFERS](transfers.md) | `compile` | Consumes TransferOperationModule. |
+| [TASK-LEDGER-REFUNDS: TASK-LEDGER-REFUNDS](refunds.md) | `compile` | Consumes RefundOperationModule. |
+| [TASK-LEDGER-RELATIONSHIP-CORRECTIONS: TASK-LEDGER-RELATIONSHIP-CORRECTIONS](relationship-corrections.md) | `compile` | Consumes RelationshipLifecycleOperationModule. |
+| [TASK-LEDGER-ACTUALS-SNAPSHOT: TASK-LEDGER-ACTUALS-SNAPSHOT](actuals-snapshot.md) | `compile` | Consumes ActualsOperationModule. |
 
 ## Recipe
 
@@ -73,11 +73,11 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| RelationshipActualsOperationBundle | `produces` | DM-LEDGER-OPERATION-DESCRIPTOR |  |
-| TransferOperationModule | `consumes` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS |  |
-| RefundOperationModule | `consumes` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS |  |
-| RelationshipLifecycleOperationModule | `consumes` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS |  |
-| ActualsOperationModule | `consumes` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS |  |
+| RelationshipActualsOperationBundle | `produces` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) |  |
+| TransferOperationModule | `consumes` | [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) |  |
+| RefundOperationModule | `consumes` | [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) |  |
+| RelationshipLifecycleOperationModule | `consumes` | [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) |  |
+| ActualsOperationModule | `consumes` | [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) |  |
 
 ### Verification
 
@@ -104,11 +104,11 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3sd` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-ACTUALS-SNAPSHOT](../tasks/actuals-snapshot.md): Consumes ActualsOperationModule.
-- `depends-on:compile` -> [TASK-LEDGER-REFUNDS](../tasks/refunds.md): Consumes RefundOperationModule.
-- `depends-on:compile` -> [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](../tasks/relationship-corrections.md): Consumes RelationshipLifecycleOperationModule.
-- `depends-on:compile` -> [TASK-LEDGER-TRANSFERS](../tasks/transfers.md): Consumes TransferOperationModule.
-- `satisfies` -> NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE: Respond at personal-ledger scale
+- `depends-on:compile` -> [TASK-LEDGER-ACTUALS-SNAPSHOT: TASK-LEDGER-ACTUALS-SNAPSHOT](actuals-snapshot.md): Consumes ActualsOperationModule.
+- `depends-on:compile` -> [TASK-LEDGER-REFUNDS: TASK-LEDGER-REFUNDS](refunds.md): Consumes RefundOperationModule.
+- `depends-on:compile` -> [TASK-LEDGER-RELATIONSHIP-CORRECTIONS: TASK-LEDGER-RELATIONSHIP-CORRECTIONS](relationship-corrections.md): Consumes RelationshipLifecycleOperationModule.
+- `depends-on:compile` -> [TASK-LEDGER-TRANSFERS: TASK-LEDGER-TRANSFERS](transfers.md): Consumes TransferOperationModule.
+- `satisfies` -> [NFR-LEDGER-PERSONAL-SCALE-PERFORMANCE: Respond at personal-ledger scale](../../../prd/ledger/prd.md#nfr-ledger-personal-scale-performance-respond-at-personal-ledger-scale)
 - `verifies` -> TC-LEDGER-PERSONAL-SCALE-PERFORMANCE: Measure personal-ledger performance
 
 ## Navigation

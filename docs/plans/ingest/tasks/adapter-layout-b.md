@@ -12,22 +12,22 @@
 
 ## Summary
 
-Encode only the structural detection, row boundaries, financial semantics, exclusions, and source controls proven by the private layout B fixture, including permission encryption and yearless dates.
+Extend bounded PDF evidence only with the managed line and glyph provenance required by the proven Layout B rule, then implement that rule exactly for both authorized private fixtures.
 
 ## Objective
 
-Produce deterministic layout B statement evidence that feeds the governed normalization and reconciliation policies without a generic template or fallback parser.
+Produce deterministic Layout B statement evidence that feeds governed normalization and reconciliation without a generic parser, source-dependent behavior, or unreviewed heuristics.
 
 ## References
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam | `design_decision` | `governed-by` | `true` |
-| DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence | `data_model` | `touches` | `true` |
-| FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts | `requirement` | `implements` | `true` |
-| FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval | `requirement` | `implements` | `true` |
-| FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants | `requirement` | `implements` | `true` |
-| NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity | `nfr` | `satisfies` | `true` |
+| [DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam](../../../designs/ingest/decisions/format-adapters.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence](../../../designs/ingest/data-model.md#formatvariantandsourceevidence) | `data_model` | `touches` | `true` |
+| [FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts](../../../prd/ingest/prd.md#fr-ingest-financial-normalization-normalize-exact-source-financial-facts) | `requirement` | `implements` | `true` |
+| [FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval](../../../prd/ingest/prd.md#fr-ingest-source-reconciliation-reconcile-every-supported-statement-before-approval) | `requirement` | `implements` | `true` |
+| [FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants](../../../prd/ingest/prd.md#fr-ingest-variant-qualification-qualify-and-detect-supported-statement-variants) | `requirement` | `implements` | `true` |
+| [NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity](../../../prd/ingest/prd.md#nfr-ingest-deterministic-integrity-preserve-deterministic-extraction-and-financial-integrity) | `nfr` | `satisfies` | `true` |
 | TC-INGEST-ADAPTER-GOLDEN-FIXTURES: Verify both qualified adapters against golden fixtures | `test_case` | `verifies` | `true` |
 | TC-INGEST-LAYOUT-B-ADAPTER: Verify qualified layout B adapter | `test_case` | `verifies` | `true` |
 
@@ -35,51 +35,56 @@ Produce deterministic layout B statement evidence that feeds the governed normal
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-ADAPTER-LAYOUT-A](../tasks/adapter-layout-a.md) | `compile` | Layout B consumes the AccountDetail-bound corrected IStatementAdapter contract produced by Layout A. |
+| [TASK-INGEST-ADAPTER-LAYOUT-A: TASK-INGEST-ADAPTER-LAYOUT-A](adapter-layout-a.md) | `compile` | Layout B consumes the AccountDetail-bound corrected IStatementAdapter contract produced by Layout A. |
 
 ## Recipe
 
 ### Acceptance Checks
 
 - Descriptor is exactly pdf-text-layout-b-v1 with reviewed versions, media type, and bounds.
-- Probe exact-matches only layout B structure and no-matches layout A/unsupported evidence.
-- Extract emits ordered complete FinancialEvidence and reconciliation inputs and accounts for every record/control.
-- FinancialNormalizer resolves a yearless date only when exactly one in-period date exists.
-- FinancialNormalizer with selected AccountDetail.AccountClass plus StatementReconciler reproduces every private expected fact in integer minor units.
-- Two runs are identical; password-required, scan-only, malformed, or drifted structures fail closed.
+- Passive extraction emits deterministic managed DefaultPageSegmenter line evidence plus finite glyph baselineY and textSequence provenance without persisting or logging source text.
+- Probe requires one Date, Details, Amount header per page, exactly two content-order period dates, unique controls and metadata, and complete one-to-one yearless row associations under the reviewed 0.1, 0.33, 0.75, and 5-point rules.
+- Extract emits ordered complete FinancialEvidence using each final signed movement, uniquely resolved in-period date, exact description band, source-only OriginalTextEvidence, stable SourceRecordID, controls, and metadata fingerprint.
+- FinancialNormalizer with selected AccountDetail.AccountClass plus StatementReconciler reproduces every private expected fact and opening and closing control in integer minor units.
+- Two runs are identical; Layout A, ambiguous dates or associations, duplicate or missing headers, controls, or metadata, password-required, scan-only, malformed, and drifted structures fail closed.
 
 ### Failure Criteria
 
-- Do NOT add conditional branches for layout A or future banks — rejected single-parser alternative per DD-INGEST-FORMAT-ADAPTERS.
-- Do NOT guess a year, use filename/extension, fuzzy-match rows, or fall back to OCR/template configuration.
-- Do NOT commit private fixtures, expected facts, filenames, extracted text, or payload snapshots.
+- Do NOT add Layout A or future-bank branches, a generic parser, filename detection, executable invocation, OCR, templates, or manifest-derived behavior.
+- Do NOT guess dates, associate nearest text without the full reviewed uniqueness predicate, omit source-glyph provenance, or weaken golden assertions.
+- Do NOT commit, log, paste, or expose private fixtures, expected facts, filenames, locators, extracted text, financial values, or payload snapshots.
 
 ### Expected Outputs
 
+- Extended bounded PdfDocumentEvidence and PdfStatementTextExtractor
 - PdfTextLayoutBStatementAdapter
-- LayoutBStatementAdapterTests
+- Extraction and Layout B adapter tests
 
 ### Constraints
 
-- All private expected facts come through PrivateStatementFixtureSet and remain outside source control.
+- All private expected facts come only through PrivateStatementFixtureSet from ignored owner-only repository-relative locators strictly below docs/statements.
+- Managed line text and source glyph evidence remain in memory and must never enter diagnostics or durable state.
 
 ### Notes
 
-None recorded.
+- Implement exactly the rule resolved by OQ-INGEST-19 and governed by DD-INGEST-FORMAT-ADAPTERS; any additional heuristic requires another design correction.
 
 ### File Contracts
 
 | Path | Action | Role | Required | Notes |
 |---|---|---|---|---|
+| `src/Tally/Infrastructure/Ingest/Pdf/PdfDocumentEvidence.cs` | `modify` | add managed line and glyph provenance evidence | `true` |  |
+| `src/Tally/Infrastructure/Ingest/Pdf/PdfStatementTextExtractor.cs` | `modify` | capture bounded PdfPig managed line evidence and provenance | `true` |  |
+| `tests/Tally.Tests/Ingest/PdfExtraction/PdfStatementTextExtractorTests.cs` | `test` | prove deterministic bounded evidence and safe failures | `true` |  |
 | `src/Tally/Infrastructure/Ingest/Pdf/PdfTextLayoutBStatementAdapter.cs` | `create` | layout B probe and extraction | `true` |  |
-| `tests/Tally.Tests/Ingest/Adapters/LayoutBStatementAdapterTests.cs` | `test` | private golden-fixture tests | `true` |  |
+| `tests/Tally.Tests/Ingest/Adapters/LayoutBStatementAdapterTests.cs` | `test` | private golden and structural negative tests | `true` |  |
 
 ### Interface Contracts
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CorrectedIStatementAdapterContract | `consumes` | DM-INGEST-FORMAT-EVIDENCE | Produced by Layout A after binding exact AccountDetail, FinancialEvidence/control inputs, PdfDocumentEvidence, private fixture injection, FinancialNormalizer, and StatementReconciler dependencies. |
-| PdfTextLayoutBStatementAdapter | `produces` | DM-INGEST-FORMAT-EVIDENCE |  |
+| CorrectedIStatementAdapterContract | `consumes` | [DM-INGEST-FORMAT-EVIDENCE](../../../designs/ingest/data-model.md#formatvariantandsourceevidence) | Produced by Layout A after binding exact AccountDetail, FinancialEvidence/control inputs, PdfDocumentEvidence, private fixture injection, FinancialNormalizer, and StatementReconciler dependencies. |
+| PdfTextLayoutBStatementAdapter | `produces` | [DM-INGEST-FORMAT-EVIDENCE](../../../designs/ingest/data-model.md#formatvariantandsourceevidence) |  |
 
 ### Verification
 
@@ -105,13 +110,13 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3c4` (verified)
-- `depends-on:compile` -> [TASK-INGEST-ADAPTER-LAYOUT-A](../tasks/adapter-layout-a.md): Layout B consumes the AccountDetail-bound corrected IStatementAdapter contract produced by Layout A.
-- `governed-by` -> DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam
-- `implements` -> FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts
-- `implements` -> FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval
-- `implements` -> FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants
-- `satisfies` -> NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity
-- `touches` -> DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence
+- `depends-on:compile` -> [TASK-INGEST-ADAPTER-LAYOUT-A: TASK-INGEST-ADAPTER-LAYOUT-A](adapter-layout-a.md): Layout B consumes the AccountDetail-bound corrected IStatementAdapter contract produced by Layout A.
+- `governed-by` -> [DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam](../../../designs/ingest/decisions/format-adapters.md)
+- `implements` -> [FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts](../../../prd/ingest/prd.md#fr-ingest-financial-normalization-normalize-exact-source-financial-facts)
+- `implements` -> [FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval](../../../prd/ingest/prd.md#fr-ingest-source-reconciliation-reconcile-every-supported-statement-before-approval)
+- `implements` -> [FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants](../../../prd/ingest/prd.md#fr-ingest-variant-qualification-qualify-and-detect-supported-statement-variants)
+- `satisfies` -> [NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity](../../../prd/ingest/prd.md#nfr-ingest-deterministic-integrity-preserve-deterministic-extraction-and-financial-integrity)
+- `touches` -> [DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence](../../../designs/ingest/data-model.md#formatvariantandsourceevidence)
 - `verifies` -> TC-INGEST-ADAPTER-GOLDEN-FIXTURES: Verify both qualified adapters against golden fixtures
 - `verifies` -> TC-INGEST-LAYOUT-B-ADAPTER: Verify qualified layout B adapter
 

@@ -22,15 +22,15 @@ Prove the base apply boundary and transaction-scoped correction effect writer ar
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md) | `design_decision` | `governed-by` | `true` |
 | TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT: Verify match-first statement reconciliation | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md) | `compile` | The seam consumes the base apply contracts, write store, and operation module. |
-| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](../tasks/reconciliation-statement-correction-effect-writer.md) | `compile` | The gate consumes StatementCorrectionEffectWriter.AppendAsync. |
+| [TASK-LEDGER-RECONCILIATION-APPLY: TASK-LEDGER-RECONCILIATION-APPLY](reconciliation-apply.md) | `compile` | The seam consumes the base apply contracts, write store, and operation module. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER: TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](reconciliation-statement-correction-effect-writer.md) | `compile` | The gate consumes StatementCorrectionEffectWriter.AppendAsync. |
 
 ## Recipe
 
@@ -68,9 +68,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ReconciliationApplyOperationModule | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
-| StatementCorrectionEffectWriter.AppendAsync | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| VerifiedStatementCorrectionPrerequisites | `produces` | DM-LEDGER-RECONCILIATION-HISTORY |  |
+| ReconciliationApplyOperationModule | `consumes` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) |  |
+| StatementCorrectionEffectWriter.AppendAsync | `consumes` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| VerifiedStatementCorrectionPrerequisites | `produces` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
 
 ### Verification
 
@@ -96,9 +96,9 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3lf` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md): The seam consumes the base apply contracts, write store, and operation module.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](../tasks/reconciliation-statement-correction-effect-writer.md): The gate consumes StatementCorrectionEffectWriter.AppendAsync.
-- `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-APPLY: TASK-LEDGER-RECONCILIATION-APPLY](reconciliation-apply.md): The seam consumes the base apply contracts, write store, and operation module.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER: TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](reconciliation-statement-correction-effect-writer.md): The gate consumes StatementCorrectionEffectWriter.AppendAsync.
+- `governed-by` -> [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md)
 - `verifies` -> TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT: Verify match-first statement reconciliation
 
 ## Navigation

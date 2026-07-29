@@ -22,17 +22,17 @@ Create exact transfer/refund relationship, relationship-lifecycle, and expiry-bo
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-SNAPSHOT-ACTUALS: Materialized coherent snapshots for dimensional actuals | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-FINANCIAL-RELATIONSHIP: FinancialRelationshipAndLifecycle | `data_model` | `touches` | `true` |
-| DM-LEDGER-QUERY-SNAPSHOT: QuerySnapshot | `data_model` | `touches` | `true` |
+| [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-SNAPSHOT-ACTUALS: Materialized coherent snapshots for dimensional actuals](../../../designs/ledger/decisions/snapshot-actuals.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-FINANCIAL-RELATIONSHIP: FinancialRelationshipAndLifecycle](../../../designs/ledger/data-model.md#financialrelationshipandlifecycle) | `data_model` | `touches` | `true` |
+| [DM-LEDGER-QUERY-SNAPSHOT: QuerySnapshot](../../../designs/ledger/data-model.md#querysnapshot) | `data_model` | `touches` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | Consumes LedgerDb and LedgerSchemaFragmentRegistry. |
+| [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md) | `compile` | Consumes LedgerDb and LedgerSchemaFragmentRegistry. |
 
 ## Recipe
 
@@ -72,9 +72,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| V001RelationshipActualsSchema | `produces` | DM-LEDGER-FINANCIAL-RELATIONSHIP |  |
-| LedgerSchemaFragmentRegistry | `consumes` | DD-LEDGER-EMBEDDED-STORAGE |  |
-| LedgerDb | `consumes` | DM-LEDGER-STORE-GENERATION |  |
+| V001RelationshipActualsSchema | `produces` | [DM-LEDGER-FINANCIAL-RELATIONSHIP](../../../designs/ledger/data-model.md#financialrelationshipandlifecycle) |  |
+| LedgerSchemaFragmentRegistry | `consumes` | [DD-LEDGER-EMBEDDED-STORAGE](../../../designs/ledger/decisions/embedded-storage.md) |  |
+| LedgerDb | `consumes` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) |  |
 
 ### Verification
 
@@ -100,12 +100,12 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-193` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumes LedgerDb and LedgerSchemaFragmentRegistry.
-- `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `governed-by` -> DD-LEDGER-SNAPSHOT-ACTUALS: Materialized coherent snapshots for dimensional actuals
-- `touches` -> DM-LEDGER-FINANCIAL-RELATIONSHIP: FinancialRelationshipAndLifecycle
-- `touches` -> DM-LEDGER-QUERY-SNAPSHOT: QuerySnapshot
+- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md): Consumes LedgerDb and LedgerSchemaFragmentRegistry.
+- `governed-by` -> [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `governed-by` -> [DD-LEDGER-SNAPSHOT-ACTUALS: Materialized coherent snapshots for dimensional actuals](../../../designs/ledger/decisions/snapshot-actuals.md)
+- `touches` -> [DM-LEDGER-FINANCIAL-RELATIONSHIP: FinancialRelationshipAndLifecycle](../../../designs/ledger/data-model.md#financialrelationshipandlifecycle)
+- `touches` -> [DM-LEDGER-QUERY-SNAPSHOT: QuerySnapshot](../../../designs/ledger/data-model.md#querysnapshot)
 
 ## Navigation
 

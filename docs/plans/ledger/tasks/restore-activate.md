@@ -22,10 +22,10 @@ Recover from a Verified Ledger Backup without changing CURRENT until every durab
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-CANDIDATE-ACTIVATION: Verified store generations with atomic pointer activation | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts | `data_model` | `touches` | `true` |
-| FR-LEDGER-SAFE-RESTORE: Restore the Ledger safely | `requirement` | `implements` | `true` |
-| NFR-LEDGER-VERIFIED-RECOVERABILITY: Prove Ledger recoverability | `nfr` | `satisfies` | `true` |
+| [DD-LEDGER-CANDIDATE-ACTIVATION: Verified store generations with atomic pointer activation](../../../designs/ledger/decisions/candidate-activation.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-SAFE-RESTORE: Restore the Ledger safely](../../../prd/ledger/prd.md#fr-ledger-safe-restore-restore-the-ledger-safely) | `requirement` | `implements` | `true` |
+| [NFR-LEDGER-VERIFIED-RECOVERABILITY: Prove Ledger recoverability](../../../prd/ledger/prd.md#nfr-ledger-verified-recoverability-prove-ledger-recoverability) | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-SAFE-RESTORE-CONTRACT: Verify restore the ledger safely contract | `test_case` | `verifies` | `true` |
 | TC-LEDGER-VERIFIED-RECOVERY-DRILL: Reproduce complete Durable Ledger State | `test_case` | `verifies` | `true` |
 
@@ -33,8 +33,8 @@ Recover from a Verified Ledger Backup without changing CURRENT until every durab
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | Consumer requires StoreGenerationManager from its producing task; direct compile edge enforces the declared interface contract. |
-| [TASK-LEDGER-DURABLE-STATE-VERIFIER](../tasks/durable-state-verifier.md) | `compile` | Consumes DurableLedgerVerifier. |
+| [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md) | `compile` | Consumer requires StoreGenerationManager from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-DURABLE-STATE-VERIFIER: TASK-LEDGER-DURABLE-STATE-VERIFIER](durable-state-verifier.md) | `compile` | Consumes DurableLedgerVerifier. |
 
 ## Recipe
 
@@ -80,12 +80,12 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| RestoreOperationModule | `produces` | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS |  |
-| RestoreService | `produces` | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS |  |
-| AuthoritativeStoreActivator | `produces` | DD-LEDGER-CANDIDATE-ACTIVATION |  |
-| IAuthoritativeStoreActivator | `consumes` | DD-LEDGER-CANDIDATE-ACTIVATION |  |
-| DurableLedgerVerifier | `consumes` | DM-LEDGER-STORE-GENERATION |  |
-| StoreGenerationManager | `consumes` | DM-LEDGER-STORE-GENERATION |  |
+| RestoreOperationModule | `produces` | [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts) |  |
+| RestoreService | `produces` | [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts) |  |
+| AuthoritativeStoreActivator | `produces` | [DD-LEDGER-CANDIDATE-ACTIVATION](../../../designs/ledger/decisions/candidate-activation.md) |  |
+| IAuthoritativeStoreActivator | `consumes` | [DD-LEDGER-CANDIDATE-ACTIVATION](../../../designs/ledger/decisions/candidate-activation.md) |  |
+| DurableLedgerVerifier | `consumes` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) |  |
+| StoreGenerationManager | `consumes` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) |  |
 
 ### Verification
 
@@ -111,12 +111,12 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-fup` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumer requires StoreGenerationManager from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-DURABLE-STATE-VERIFIER](../tasks/durable-state-verifier.md): Consumes DurableLedgerVerifier.
-- `governed-by` -> DD-LEDGER-CANDIDATE-ACTIVATION: Verified store generations with atomic pointer activation
-- `implements` -> FR-LEDGER-SAFE-RESTORE: Restore the Ledger safely
-- `satisfies` -> NFR-LEDGER-VERIFIED-RECOVERABILITY: Prove Ledger recoverability
-- `touches` -> DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts
+- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md): Consumer requires StoreGenerationManager from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-DURABLE-STATE-VERIFIER: TASK-LEDGER-DURABLE-STATE-VERIFIER](durable-state-verifier.md): Consumes DurableLedgerVerifier.
+- `governed-by` -> [DD-LEDGER-CANDIDATE-ACTIVATION: Verified store generations with atomic pointer activation](../../../designs/ledger/decisions/candidate-activation.md)
+- `implements` -> [FR-LEDGER-SAFE-RESTORE: Restore the Ledger safely](../../../prd/ledger/prd.md#fr-ledger-safe-restore-restore-the-ledger-safely)
+- `satisfies` -> [NFR-LEDGER-VERIFIED-RECOVERABILITY: Prove Ledger recoverability](../../../prd/ledger/prd.md#nfr-ledger-verified-recoverability-prove-ledger-recoverability)
+- `touches` -> [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts)
 - `verifies` -> TC-LEDGER-SAFE-RESTORE-CONTRACT: Verify restore the ledger safely contract
 - `verifies` -> TC-LEDGER-VERIFIED-RECOVERY-DRILL: Reproduce complete Durable Ledger State
 

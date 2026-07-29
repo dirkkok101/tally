@@ -22,12 +22,12 @@ Provide an owner-only ingest.db with deterministic schema evolution and no acces
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-APPLICATION-ARCHITECTURE: Single-process vertical slices with isolated ingestion state | `design_decision` | `governed-by` | `true` |
-| DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling | `design_decision` | `governed-by` | `true` |
-| DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction | `design_decision` | `governed-by` | `true` |
-| DM-INGEST-STATE-STORE: IngestStateStore | `data_model` | `touches` | `true` |
-| FR-INGEST-ARTIFACT-CLEANUP: Abandon and clean up ingestion artifacts safely | `requirement` | `implements` | `true` |
-| NFR-INGEST-LOCAL-DATA-PROTECTION: Protect local statement and ingestion data | `nfr` | `satisfies` | `true` |
+| [DD-INGEST-APPLICATION-ARCHITECTURE: Single-process vertical slices with isolated ingestion state](../../../designs/ingest/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling](../../../designs/ingest/decisions/artifact-security.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction](../../../designs/ingest/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INGEST-STATE-STORE: IngestStateStore](../../../designs/ingest/data-model.md#ingeststatestore) | `data_model` | `touches` | `true` |
+| [FR-INGEST-ARTIFACT-CLEANUP: Abandon and clean up ingestion artifacts safely](../../../prd/ingest/prd.md#fr-ingest-artifact-cleanup-abandon-and-clean-up-ingestion-artifacts-safely) | `requirement` | `implements` | `true` |
+| [NFR-INGEST-LOCAL-DATA-PROTECTION: Protect local statement and ingestion data](../../../prd/ingest/prd.md#nfr-ingest-local-data-protection-protect-local-statement-and-ingestion-data) | `nfr` | `satisfies` | `true` |
 | TC-INGEST-ARTIFACT-PROTECTION: Verify source and artifact privacy boundaries | `test_case` | `verifies` | `true` |
 | TC-INGEST-STATE-STORE-CONFORMANCE: Verify INGEST SQLite state and retention | `test_case` | `verifies` | `true` |
 
@@ -35,7 +35,7 @@ Provide an owner-only ingest.db with deterministic schema evolution and no acces
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md) | `compile` | The shared Tally solution and data-root conventions must exist before the separate INGEST store is added. |
+| [TASK-INGEST-GATE-INT-LEDGER-CONTRACT: TASK-INGEST-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md) | `compile` | The shared Tally solution and data-root conventions must exist before the separate INGEST store is added. |
 
 ## Recipe
 
@@ -84,10 +84,10 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| IngestDatabase | `produces` | DM-INGEST-STATE-STORE |  |
-| IngestSchemaMigrator.ApplyAsync | `produces` | DM-INGEST-STATE-STORE |  |
-| IngestArtifactProtection.EnsureOwnerOnly | `produces` | DD-INGEST-ARTIFACT-SECURITY |  |
-| LedgerIngestContractPrerequisite | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Shared host prerequisite; no shared store |
+| IngestDatabase | `produces` | [DM-INGEST-STATE-STORE](../../../designs/ingest/data-model.md#ingeststatestore) |  |
+| IngestSchemaMigrator.ApplyAsync | `produces` | [DM-INGEST-STATE-STORE](../../../designs/ingest/data-model.md#ingeststatestore) |  |
+| IngestArtifactProtection.EnsureOwnerOnly | `produces` | [DD-INGEST-ARTIFACT-SECURITY](../../../designs/ingest/decisions/artifact-security.md) |  |
+| LedgerIngestContractPrerequisite | `consumes` | [DM-INGEST-LEDGER-COMMIT-CONTRACT](../../../designs/ingest/data-model.md#ledgercommitcontractsnapshot) | Shared host prerequisite; no shared store |
 
 ### Verification
 
@@ -113,13 +113,13 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3l1` (verified)
-- `depends-on:compile` -> [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md): The shared Tally solution and data-root conventions must exist before the separate INGEST store is added.
-- `governed-by` -> DD-INGEST-APPLICATION-ARCHITECTURE: Single-process vertical slices with isolated ingestion state
-- `governed-by` -> DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling
-- `governed-by` -> DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction
-- `implements` -> FR-INGEST-ARTIFACT-CLEANUP: Abandon and clean up ingestion artifacts safely
-- `satisfies` -> NFR-INGEST-LOCAL-DATA-PROTECTION: Protect local statement and ingestion data
-- `touches` -> DM-INGEST-STATE-STORE: IngestStateStore
+- `depends-on:compile` -> [TASK-INGEST-GATE-INT-LEDGER-CONTRACT: TASK-INGEST-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md): The shared Tally solution and data-root conventions must exist before the separate INGEST store is added.
+- `governed-by` -> [DD-INGEST-APPLICATION-ARCHITECTURE: Single-process vertical slices with isolated ingestion state](../../../designs/ingest/decisions/application-architecture.md)
+- `governed-by` -> [DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling](../../../designs/ingest/decisions/artifact-security.md)
+- `governed-by` -> [DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction](../../../designs/ingest/decisions/state-store.md)
+- `implements` -> [FR-INGEST-ARTIFACT-CLEANUP: Abandon and clean up ingestion artifacts safely](../../../prd/ingest/prd.md#fr-ingest-artifact-cleanup-abandon-and-clean-up-ingestion-artifacts-safely)
+- `satisfies` -> [NFR-INGEST-LOCAL-DATA-PROTECTION: Protect local statement and ingestion data](../../../prd/ingest/prd.md#nfr-ingest-local-data-protection-protect-local-statement-and-ingestion-data)
+- `touches` -> [DM-INGEST-STATE-STORE: IngestStateStore](../../../designs/ingest/data-model.md#ingeststatestore)
 - `verifies` -> TC-INGEST-ARTIFACT-PROTECTION: Verify source and artifact privacy boundaries
 - `verifies` -> TC-INGEST-STATE-STORE-CONFORMANCE: Verify INGEST SQLite state and retention
 

@@ -22,18 +22,18 @@ Return stable exact and guard candidate identities, field comparisons, conflicts
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts | `data_model` | `touches` | `true` |
-| FR-LEDGER-RECONCILIATION-PROJECTION: Project reconciliation candidates | `requirement` | `implements` | `true` |
+| [DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates](../../../designs/ledger/decisions/financial-representation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-RECONCILIATION-PROJECTION: Project reconciliation candidates](../../../prd/ledger/prd.md#fr-ledger-reconciliation-projection-project-reconciliation-candidates) | `requirement` | `implements` | `true` |
 | TC-LEDGER-RECONCILIATION-PROJECTION-CONTRACT: Verify deterministic reconciliation candidate projection | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md) | `compile` | Projection reads normalized evidence through EvidenceStore. |
-| [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md) | `compile` | Projection reads canonical active transaction facts through TransactionStore. |
+| [TASK-LEDGER-EVIDENCE-REGISTRY: TASK-LEDGER-EVIDENCE-REGISTRY](evidence-registry.md) | `compile` | Projection reads normalized evidence through EvidenceStore. |
+| [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md) | `compile` | Projection reads canonical active transaction facts through TransactionStore. |
 
 ## Recipe
 
@@ -77,11 +77,11 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ManualReviewProjectionV1 | `produces` | DM-LEDGER-RECONCILIATION-HISTORY | Versioned advisory comparison only; never automatic authority |
-| ReconciliationProjectionStore | `produces` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| ReconciliationProjectionOperationModule | `produces` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
-| EvidenceStore | `consumes` | DM-LEDGER-EVIDENCE-RECORD-LINK |  |
-| TransactionStore | `consumes` | DM-LEDGER-TRANSACTION-FACT |  |
+| ManualReviewProjectionV1 | `produces` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) | Versioned advisory comparison only; never automatic authority |
+| ReconciliationProjectionStore | `produces` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| ReconciliationProjectionOperationModule | `produces` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) |  |
+| EvidenceStore | `consumes` | [DM-LEDGER-EVIDENCE-RECORD-LINK](../../../designs/ledger/data-model.md#evidencerecordobservationandlink) |  |
+| TransactionStore | `consumes` | [DM-LEDGER-TRANSACTION-FACT](../../../designs/ledger/data-model.md#transactionfact) |  |
 
 ### Verification
 
@@ -107,12 +107,12 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1zm` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md): Projection reads normalized evidence through EvidenceStore.
-- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Projection reads canonical active transaction facts through TransactionStore.
-- `governed-by` -> DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates
-- `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
-- `implements` -> FR-LEDGER-RECONCILIATION-PROJECTION: Project reconciliation candidates
-- `touches` -> DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts
+- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY: TASK-LEDGER-EVIDENCE-REGISTRY](evidence-registry.md): Projection reads normalized evidence through EvidenceStore.
+- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md): Projection reads canonical active transaction facts through TransactionStore.
+- `governed-by` -> [DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates](../../../designs/ledger/decisions/financial-representation.md)
+- `governed-by` -> [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md)
+- `implements` -> [FR-LEDGER-RECONCILIATION-PROJECTION: Project reconciliation candidates](../../../prd/ledger/prd.md#fr-ledger-reconciliation-projection-project-reconciliation-candidates)
+- `touches` -> [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts)
 - `verifies` -> TC-LEDGER-RECONCILIATION-PROJECTION-CONTRACT: Verify deterministic reconciliation candidate projection
 
 ## Navigation

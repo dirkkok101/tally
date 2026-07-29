@@ -5,7 +5,7 @@
 - **Ref:** `TASK-BUDGET-POSITION-CALCULATOR`
 - **Plan:** `PLAN-BUDGET-V1`
 - **Sub-Plan:** `SP-BUDGET-02-POSITION-PROJECTION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `1`
 - **Dialect:** `default`
@@ -22,20 +22,20 @@ Every actual and planned amount reconciles deterministically into Budgeted, Zero
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot | `design_decision` | `governed-by` | `true` |
-| DIAG-BUDGET-POSITION-SEQUENCE: Snapshot-bound Budget Position calculation | `design_diagram` | `touches` | `false` |
-| DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts | `data_model` | `touches` | `true` |
-| DM-BUDGET-POSITION-PROJECTION: BudgetPositionProjection | `data_model` | `touches` | `true` |
-| FR-BUDGET-POSITION-QUERY: Calculate exact Budget Positions | `requirement` | `implements` | `true` |
-| NFR-BUDGET-EXACT-FINANCIAL-INTEGRITY: Preserve exact budget arithmetic | `nfr` | `satisfies` | `true` |
+| [DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot](../../../designs/budget/decisions/exact-position-calculation.md) | `design_decision` | `governed-by` | `true` |
+| [DIAG-BUDGET-POSITION-SEQUENCE: Snapshot-bound Budget Position calculation](../../../designs/budget/diagrams/position-sequence.md) | `design_diagram` | `touches` | `false` |
+| [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) | `data_model` | `touches` | `true` |
+| [DM-BUDGET-POSITION-PROJECTION: BudgetPositionProjection](../../../designs/budget/data-model.md#budgetpositionprojection) | `data_model` | `touches` | `true` |
+| [FR-BUDGET-POSITION-QUERY: Calculate exact Budget Positions](../../../prd/budget/prd.md#fr-budget-position-query-calculate-exact-budget-positions) | `requirement` | `implements` | `true` |
+| [NFR-BUDGET-EXACT-FINANCIAL-INTEGRITY: Preserve exact budget arithmetic](../../../prd/budget/prd.md#nfr-budget-exact-financial-integrity-preserve-exact-budget-arithmetic) | `nfr` | `satisfies` | `true` |
 | TC-BUDGET-EXACT-FINANCIAL-INTEGRITY: Verify exact budget arithmetic | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-DRAFT-CREATION](../tasks/draft-creation.md) | `compile` | The calculator consumes immutable plan revision and entry domain types. |
-| [TASK-BUDGET-LEDGER-BUDGET-CONTRACT](../tasks/ledger-budget-contract.md) | `compile` | The calculator consumes the exact LedgerBudgetActualItem contract. |
+| [TASK-BUDGET-DRAFT-CREATION: TASK-BUDGET-DRAFT-CREATION](draft-creation.md) | `compile` | The calculator consumes immutable plan revision and entry domain types. |
+| [TASK-BUDGET-LEDGER-BUDGET-CONTRACT: TASK-BUDGET-LEDGER-BUDGET-CONTRACT](ledger-budget-contract.md) | `compile` | The calculator consumes the exact LedgerBudgetActualItem contract. |
 
 ## Recipe
 
@@ -76,9 +76,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| BudgetPlanRevision | `consumes` | DM-BUDGET-REVISION-ENTRY |  |
-| LedgerBudgetActualItem | `consumes` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
-| BudgetPositionCalculator.Calculate | `produces` | DM-BUDGET-POSITION-PROJECTION |  |
+| BudgetPlanRevision | `consumes` | [DM-BUDGET-REVISION-ENTRY](../../../designs/budget/data-model.md#budgetplanrevisionandentry) |  |
+| LedgerBudgetActualItem | `consumes` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
+| BudgetPositionCalculator.Calculate | `produces` | [DM-BUDGET-POSITION-PROJECTION](../../../designs/budget/data-model.md#budgetpositionprojection) |  |
 
 ### Verification
 
@@ -94,20 +94,23 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-qlk` | `verified` | 2026-07-27T08:00:09.2186028+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-BUDGET-DRAFT-CREATION](../tasks/draft-creation.md): The calculator consumes immutable plan revision and entry domain types.
-- `depends-on:compile` -> [TASK-BUDGET-LEDGER-BUDGET-CONTRACT](../tasks/ledger-budget-contract.md): The calculator consumes the exact LedgerBudgetActualItem contract.
-- `governed-by` -> DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot
-- `implements` -> FR-BUDGET-POSITION-QUERY: Calculate exact Budget Positions
-- `satisfies` -> NFR-BUDGET-EXACT-FINANCIAL-INTEGRITY: Preserve exact budget arithmetic
-- `touches` -> DIAG-BUDGET-POSITION-SEQUENCE: Snapshot-bound Budget Position calculation
-- `touches` -> DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts
-- `touches` -> DM-BUDGET-POSITION-PROJECTION: BudgetPositionProjection
+- `bead-ref` -> `bd-qlk` (verified)
+- `depends-on:compile` -> [TASK-BUDGET-DRAFT-CREATION: TASK-BUDGET-DRAFT-CREATION](draft-creation.md): The calculator consumes immutable plan revision and entry domain types.
+- `depends-on:compile` -> [TASK-BUDGET-LEDGER-BUDGET-CONTRACT: TASK-BUDGET-LEDGER-BUDGET-CONTRACT](ledger-budget-contract.md): The calculator consumes the exact LedgerBudgetActualItem contract.
+- `governed-by` -> [DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot](../../../designs/budget/decisions/exact-position-calculation.md)
+- `implements` -> [FR-BUDGET-POSITION-QUERY: Calculate exact Budget Positions](../../../prd/budget/prd.md#fr-budget-position-query-calculate-exact-budget-positions)
+- `satisfies` -> [NFR-BUDGET-EXACT-FINANCIAL-INTEGRITY: Preserve exact budget arithmetic](../../../prd/budget/prd.md#nfr-budget-exact-financial-integrity-preserve-exact-budget-arithmetic)
+- `touches` -> [DIAG-BUDGET-POSITION-SEQUENCE: Snapshot-bound Budget Position calculation](../../../designs/budget/diagrams/position-sequence.md)
+- `touches` -> [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts)
+- `touches` -> [DM-BUDGET-POSITION-PROJECTION: BudgetPositionProjection](../../../designs/budget/data-model.md#budgetpositionprojection)
 - `verifies` -> TC-BUDGET-EXACT-FINANCIAL-INTEGRITY: Verify exact budget arithmetic
 
 ## Navigation

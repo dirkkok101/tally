@@ -23,13 +23,13 @@ Prove an owner can inspect and approve exactly one committable immutable revisio
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | TC-INGEST-MANIFEST-REVIEW-CONTRACT: Verify immutable manifest review and approval | `test_case` | `verifies` | `true` |
-| UC-INGEST-002: Review and approve a candidate batch | `use_case` | `covers` | `true` |
+| [UC-INGEST-002: Review and approve a candidate batch](../../../prd/ingest/prd.md#uc-ingest-002-review-and-approve-a-candidate-batch) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | UC verification exercises published preview/inspect/approve/commit operations. |
+| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT: TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | UC verification exercises published preview/inspect/approve/commit operations. |
 
 ## Recipe
 
@@ -37,7 +37,7 @@ Prove an owner can inspect and approve exactly one committable immutable revisio
 
 - Main scenario previews, inspects the complete exact revision, verifies candidates/exclusions/duplicates/conflicts/controls/versions, approves its digest with actor attribution, and observes approved state with no Ledger transaction.
 - An unexplained row, failed control, ambiguous semantic duplicate, overlap, missing fact, or unsupported finance meaning keeps approval blocked.
-- Attempted edits to amount, currency, date, description, sign, account, or provenance are rejected and require corrected source/adapter plus a new preview.
+- Attempted edits to amount, currency, date, description, sign, or provenance are rejected and require corrected source/adapter plus a new preview; the selected account is a preview input, not an editable review fact — choosing a different account requires a new preview of the same source (per FR-INGEST-MANIFEST-REVIEW and DD-INGEST-MANIFEST-IDENTITY-OVERLAP), and in-review account edits are rejected.
 - Adapter, manifest, Ledger contract, account state, or digest change invalidates the old approval and requires a compatible new revision.
 - Commit with absent approval or an approval for another revision is rejected before mutation.
 
@@ -68,8 +68,8 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteIngestPublicContract | `consumes` | DM-INGEST-OPERATION-CONTRACTS |  |
-| UCIngest002Evidence | `produces` | UC-INGEST-002 |  |
+| CompleteIngestPublicContract | `consumes` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) |  |
+| UCIngest002Evidence | `produces` | [UC-INGEST-002](../../../prd/ingest/prd.md#uc-ingest-002-review-and-approve-a-candidate-batch) |  |
 
 ### Verification
 
@@ -94,8 +94,8 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1ta` (verified)
-- `covers` -> UC-INGEST-002: Review and approve a candidate batch
-- `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC verification exercises published preview/inspect/approve/commit operations.
+- `covers` -> [UC-INGEST-002: Review and approve a candidate batch](../../../prd/ingest/prd.md#uc-ingest-002-review-and-approve-a-candidate-batch)
+- `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT: TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): UC verification exercises published preview/inspect/approve/commit operations.
 - `verifies` -> TC-INGEST-MANIFEST-REVIEW-CONTRACT: Verify immutable manifest review and approval
 
 ## Navigation

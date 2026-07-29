@@ -15,13 +15,13 @@ Converge feature slices into published-binary, local-security, six use-case, and
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | Wire and prove the complete CLASSIFY contract | `planned` | 0 |
-| [TASK-CLASSIFY-GATE-SECURITY](../tasks/gate-security.md) | Validate CLASSIFY local data security | `planned` | 0 |
-| [TASK-CLASSIFY-VERIFY-UC-001](../tasks/verify-uc-001.md) | Verify eligible deterministic evaluation | `planned` | 0 |
-| [TASK-CLASSIFY-VERIFY-UC-002](../tasks/verify-uc-002.md) | Verify outcome explanation and staleness | `planned` | 1 |
-| [TASK-CLASSIFY-VERIFY-UC-003](../tasks/verify-uc-003.md) | Verify authorized apply and recovery | `planned` | 0 |
-| [TASK-CLASSIFY-VERIFY-UC-004](../tasks/verify-uc-004.md) | Verify rule management and validation | `planned` | 0 |
-| [TASK-CLASSIFY-VERIFY-UC-005](../tasks/verify-uc-005.md) | Verify bounded correction feedback | `planned` | 1 |
-| [TASK-CLASSIFY-VERIFY-UC-006](../tasks/verify-uc-006.md) | Verify agent contract discovery and invocation | `planned` | 0 |
-| [TASK-CLASSIFY-GATE-GRAPH-QUALITY](../tasks/gate-graph-quality.md) | Converge CLASSIFY graph and evidence quality | `planned` | 1 |
-| [TASK-CLASSIFY-GATE-MODULE](../tasks/gate-module.md) | Complete the CLASSIFY v1 module gate | `planned` | 0 |
+| [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete CLASSIFY contract](../tasks/gate-int-public-contract.md) | Wire and prove the complete CLASSIFY contract | `planned` | 0 |
+| [TASK-CLASSIFY-GATE-SECURITY: Validate CLASSIFY local data security](../tasks/gate-security.md) | Validate CLASSIFY local data security | `planned` | 0 |
+| [TASK-CLASSIFY-VERIFY-UC-001: Verify eligible deterministic evaluation](../tasks/verify-uc-001.md) | Verify eligible deterministic evaluation | `planned` | 0 |
+| [TASK-CLASSIFY-VERIFY-UC-002: Verify outcome explanation and staleness](../tasks/verify-uc-002.md) | Verify outcome explanation and staleness | `planned` | 1 |
+| [TASK-CLASSIFY-VERIFY-UC-003: Verify authorized apply and recovery](../tasks/verify-uc-003.md) | Verify authorized apply and recovery | `planned` | 0 |
+| [TASK-CLASSIFY-VERIFY-UC-004: Verify rule management and validation](../tasks/verify-uc-004.md) | Verify rule management and validation | `planned` | 0 |
+| [TASK-CLASSIFY-VERIFY-UC-005: Verify bounded correction feedback](../tasks/verify-uc-005.md) | Verify bounded correction feedback | `planned` | 1 |
+| [TASK-CLASSIFY-VERIFY-UC-006: Verify agent contract discovery and invocation](../tasks/verify-uc-006.md) | Verify agent contract discovery and invocation | `planned` | 0 |
+| [TASK-CLASSIFY-GATE-GRAPH-QUALITY: Converge CLASSIFY graph and evidence quality](../tasks/gate-graph-quality.md) | Converge CLASSIFY graph and evidence quality | `planned` | 1 |
+| [TASK-CLASSIFY-GATE-MODULE: Complete the CLASSIFY v1 module gate](../tasks/gate-module.md) | Complete the CLASSIFY v1 module gate | `planned` | 0 |

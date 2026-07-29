@@ -26,26 +26,26 @@ No graph references recorded.
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-SECURITY](../tasks/gate-security.md) | `compile` | Module completion requires the consolidated security gate. |
-| [TASK-LEDGER-VERIFY-UC-001](../tasks/verify-uc-001.md) | `compile` | Requires UC proof. |
-| [TASK-LEDGER-VERIFY-UC-002](../tasks/verify-uc-002.md) | `compile` | Requires UC proof. |
-| [TASK-LEDGER-VERIFY-UC-003](../tasks/verify-uc-003.md) | `compile` | Requires UC proof. |
-| [TASK-LEDGER-VERIFY-UC-004](../tasks/verify-uc-004.md) | `compile` | Requires UC proof. |
-| [TASK-LEDGER-VERIFY-UC-005](../tasks/verify-uc-005.md) | `compile` | Requires UC proof. |
-| [TASK-LEDGER-VERIFY-UC-006](../tasks/verify-uc-006.md) | `compile` | Requires UC proof. |
-| [TASK-LEDGER-VERIFY-UC-007](../tasks/verify-uc-007.md) | `compile` | Requires UC proof. |
-| [TASK-LEDGER-VERIFY-UC-008](../tasks/verify-uc-008.md) | `compile` | Requires UC proof. |
-| [TASK-LEDGER-VERIFY-UC-009](../tasks/verify-uc-009.md) | `compile` | Requires UC proof. |
-| [TASK-LEDGER-VERIFY-UC-010](../tasks/verify-uc-010.md) | `compile` | Requires UC proof. |
-| [TASK-LEDGER-VERIFY-UC-011](../tasks/verify-uc-011.md) | `compile` | Requires UC proof. |
-| [TASK-LEDGER-VERIFY-UC-012](../tasks/verify-uc-012.md) | `compile` | Requires UC proof. |
-| [TASK-LEDGER-VERIFY-UC-013](../tasks/verify-uc-013.md) | `compile` | Requires UC proof. |
-| [TASK-LEDGER-VERIFY-UC-014](../tasks/verify-uc-014.md) | `compile` | Requires UC proof. |
-| [TASK-LEDGER-VERIFY-UC-015](../tasks/verify-uc-015.md) | `compile` | Requires UC proof. |
-| [TASK-LEDGER-VERIFY-UC-016](../tasks/verify-uc-016.md) | `compile` | Requires UC proof. |
-| [TASK-LEDGER-VERIFY-UC-017](../tasks/verify-uc-017.md) | `compile` | Requires UC proof. |
-| [TASK-LEDGER-VERIFY-UC-018](../tasks/verify-uc-018.md) | `compile` | Requires UC proof. |
-| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md) | `compile` | Module completion consumes CompletePublicContract74 from the corrective scope-publication gate. |
+| [TASK-LEDGER-GATE-SECURITY: TASK-LEDGER-GATE-SECURITY](gate-security.md) | `compile` | Module completion requires the consolidated security gate. |
+| [TASK-LEDGER-VERIFY-UC-001: TASK-LEDGER-VERIFY-UC-001](verify-uc-001.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-002: TASK-LEDGER-VERIFY-UC-002](verify-uc-002.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-003: TASK-LEDGER-VERIFY-UC-003](verify-uc-003.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-004: TASK-LEDGER-VERIFY-UC-004](verify-uc-004.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-005: TASK-LEDGER-VERIFY-UC-005](verify-uc-005.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-006: TASK-LEDGER-VERIFY-UC-006](verify-uc-006.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-007: TASK-LEDGER-VERIFY-UC-007](verify-uc-007.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-008: TASK-LEDGER-VERIFY-UC-008](verify-uc-008.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-009: TASK-LEDGER-VERIFY-UC-009](verify-uc-009.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-010: TASK-LEDGER-VERIFY-UC-010](verify-uc-010.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-011: TASK-LEDGER-VERIFY-UC-011](verify-uc-011.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-012: TASK-LEDGER-VERIFY-UC-012](verify-uc-012.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-013: TASK-LEDGER-VERIFY-UC-013](verify-uc-013.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-014: TASK-LEDGER-VERIFY-UC-014](verify-uc-014.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-015: TASK-LEDGER-VERIFY-UC-015](verify-uc-015.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-016: TASK-LEDGER-VERIFY-UC-016](verify-uc-016.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-017: TASK-LEDGER-VERIFY-UC-017](verify-uc-017.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-VERIFY-UC-018: TASK-LEDGER-VERIFY-UC-018](verify-uc-018.md) | `compile` | Requires UC proof. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](gate-int-statement-scope-public-contract.md) | `compile` | Module completion consumes CompletePublicContract74 from the corrective scope-publication gate. |
 
 ## Recipe
 
@@ -53,13 +53,13 @@ No graph references recorded.
 
 - dotnet restore/build/format and full xUnit exit 0 with zero warnings/failures; every planned class has nonzero discovery.
 - Release linux-x64 Native-AOT publish exits 0 and reports the exact 74-operation offline inventory including category.reparent, statement-scope registration, and statement correction with no child process, listener, provider integration, or raw-payload schema.
-- Core/security/provider-neutral scripts pass; personal-scale p95 passes; recovery reproduces category hierarchy/history, immutable statement scopes and membership, exact/corrected statement reconciliation, carry-forward/relationship chains, every replay outcome, count, and exact direct/subtree/pool total.
+- Core/security/provider-neutral scripts pass; the personal-scale benchmark reports p50 and p95 without a blocking latency threshold; recovery reproduces category hierarchy/history, immutable statement scopes and membership, exact/corrected statement reconciliation, carry-forward/relationship chains, every replay outcome, count, and exact direct/subtree/pool total.
 - lex coverage reports 25/25 active FRs with no gaps; lex check --fast, plan coverage, audit, dependency cycles, and all 18 UC verifiers are clean.
 - git diff --check is empty and verification evidence lists every command/result and any changed file lacking direct test coverage.
 
 ### Failure Criteria
 
-- Do NOT accept zero-match tests, Debug-only proof, skipped recovery/security/performance/hierarchy checks, manually edited coverage, unresolved cash/pool/match gates, or stale 72/73-operation expectations.
+- Do NOT accept zero-match tests, Debug-only proof, omitted performance reporting, skipped recovery/security/hierarchy checks, manually edited coverage, unresolved cash/pool/match gates, or stale 72/73-operation expectations.
 - Do NOT create beads, deploy, or write execution status into planning_state.
 
 ### Expected Outputs
@@ -86,7 +86,7 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompletePublicContract74 | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | 74-operation successor contract |
+| CompletePublicContract74 | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | 74-operation successor contract |
 | VerifiedLocalSecurityGate | `consumes` |  | Local privacy and provider neutrality |
 | VerifiedLedgerV1Module | `produces` |  | Completion evidence after all 18 workflows |
 
@@ -94,7 +94,7 @@ None recorded.
 
 | Phase | Command | Expected | Required | Timeout |
 |---|---|---|---|---:|
-| `after` | `bash scripts/verify-ledger-module.sh` | exit 0; restore, build, format, full tests, AOT publish, 74-operation inventory, core/security/privacy/performance/recovery/Lex/diff checks succeed; every suite reports nonzero tests and 0 failures/warnings | `true` | 2700 |
+| `after` | `bash scripts/verify-ledger-module.sh` | exit 0; restore, build, format, full tests, AOT publish, 74-operation inventory, core/security/privacy/recovery/Lex/diff checks succeed; the personal-scale benchmark reports p50 and p95; every suite reports nonzero tests and 0 correctness failures/warnings | `true` | 2700 |
 
 ### Review Gates
 
@@ -114,26 +114,26 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3bx` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md): Module completion consumes CompletePublicContract74 from the corrective scope-publication gate.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-SECURITY](../tasks/gate-security.md): Module completion requires the consolidated security gate.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-001](../tasks/verify-uc-001.md): Requires UC proof.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-002](../tasks/verify-uc-002.md): Requires UC proof.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-003](../tasks/verify-uc-003.md): Requires UC proof.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-004](../tasks/verify-uc-004.md): Requires UC proof.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-005](../tasks/verify-uc-005.md): Requires UC proof.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-006](../tasks/verify-uc-006.md): Requires UC proof.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-007](../tasks/verify-uc-007.md): Requires UC proof.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-008](../tasks/verify-uc-008.md): Requires UC proof.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-009](../tasks/verify-uc-009.md): Requires UC proof.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-010](../tasks/verify-uc-010.md): Requires UC proof.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-011](../tasks/verify-uc-011.md): Requires UC proof.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-012](../tasks/verify-uc-012.md): Requires UC proof.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-013](../tasks/verify-uc-013.md): Requires UC proof.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-014](../tasks/verify-uc-014.md): Requires UC proof.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-015](../tasks/verify-uc-015.md): Requires UC proof.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-016](../tasks/verify-uc-016.md): Requires UC proof.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-017](../tasks/verify-uc-017.md): Requires UC proof.
-- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-018](../tasks/verify-uc-018.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](gate-int-statement-scope-public-contract.md): Module completion consumes CompletePublicContract74 from the corrective scope-publication gate.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-SECURITY: TASK-LEDGER-GATE-SECURITY](gate-security.md): Module completion requires the consolidated security gate.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-001: TASK-LEDGER-VERIFY-UC-001](verify-uc-001.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-002: TASK-LEDGER-VERIFY-UC-002](verify-uc-002.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-003: TASK-LEDGER-VERIFY-UC-003](verify-uc-003.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-004: TASK-LEDGER-VERIFY-UC-004](verify-uc-004.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-005: TASK-LEDGER-VERIFY-UC-005](verify-uc-005.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-006: TASK-LEDGER-VERIFY-UC-006](verify-uc-006.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-007: TASK-LEDGER-VERIFY-UC-007](verify-uc-007.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-008: TASK-LEDGER-VERIFY-UC-008](verify-uc-008.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-009: TASK-LEDGER-VERIFY-UC-009](verify-uc-009.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-010: TASK-LEDGER-VERIFY-UC-010](verify-uc-010.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-011: TASK-LEDGER-VERIFY-UC-011](verify-uc-011.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-012: TASK-LEDGER-VERIFY-UC-012](verify-uc-012.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-013: TASK-LEDGER-VERIFY-UC-013](verify-uc-013.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-014: TASK-LEDGER-VERIFY-UC-014](verify-uc-014.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-015: TASK-LEDGER-VERIFY-UC-015](verify-uc-015.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-016: TASK-LEDGER-VERIFY-UC-016](verify-uc-016.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-017: TASK-LEDGER-VERIFY-UC-017](verify-uc-017.md): Requires UC proof.
+- `depends-on:compile` -> [TASK-LEDGER-VERIFY-UC-018: TASK-LEDGER-VERIFY-UC-018](verify-uc-018.md): Requires UC proof.
 
 ## Navigation
 

@@ -15,10 +15,10 @@ After the owner-value gate, implement owner-only persistence, replay, reads, Res
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md) | Build the owner-only INSIGHTS SQLite generation store | `ready` | 0 |
-| [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](../tasks/idempotency-executor.md) | Implement module-wide retained-operation replay | `ready` | 0 |
-| [TASK-INSIGHTS-RETAIN-REPORT](../tasks/retain-report.md) | Retain an internally generated immutable report | `ready` | 0 |
-| [TASK-INSIGHTS-REPORT-DETAIL-READS](../tasks/report-detail-reads.md) | Read retained report details and explanations | `ready` | 1 |
-| [TASK-INSIGHTS-REPORT-HISTORY-STATUS](../tasks/report-history-status.md) | List metadata history and report store status | `ready` | 1 |
-| [TASK-INSIGHTS-RESTATE-REPORT](../tasks/restate-report.md) | Append explicit Restatements and deterministic differences | `ready` | 0 |
-| [TASK-INSIGHTS-DELETE-REPORT](../tasks/delete-report.md) | Delete one unreferenced report payload safely | `ready` | 1 |
+| [TASK-INSIGHTS-STATE-FOUNDATION: Build the owner-only INSIGHTS SQLite generation store](../tasks/state-foundation.md) | Build the owner-only INSIGHTS SQLite generation store | `ready` | 0 |
+| [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR: Implement module-wide retained-operation replay](../tasks/idempotency-executor.md) | Implement module-wide retained-operation replay | `ready` | 0 |
+| [TASK-INSIGHTS-RETAIN-REPORT: Retain an internally generated immutable report](../tasks/retain-report.md) | Retain an internally generated immutable report | `ready` | 0 |
+| [TASK-INSIGHTS-REPORT-DETAIL-READS: Read retained report details and explanations](../tasks/report-detail-reads.md) | Read retained report details and explanations | `ready` | 1 |
+| [TASK-INSIGHTS-REPORT-HISTORY-STATUS: List metadata history and report store status](../tasks/report-history-status.md) | List metadata history and report store status | `ready` | 1 |
+| [TASK-INSIGHTS-RESTATE-REPORT: Append explicit Restatements and deterministic differences](../tasks/restate-report.md) | Append explicit Restatements and deterministic differences | `ready` | 0 |
+| [TASK-INSIGHTS-DELETE-REPORT: Delete one unreferenced report payload safely](../tasks/delete-report.md) | Delete one unreferenced report payload safely | `ready` | 1 |

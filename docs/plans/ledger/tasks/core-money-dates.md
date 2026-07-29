@@ -22,18 +22,18 @@ Provide deterministic value types that reject lossy inputs and round-trip accept
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-TRANSACTION-FACT: TransactionFact | `data_model` | `touches` | `true` |
-| FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals | `requirement` | `implements` | `true` |
-| FR-LEDGER-TRANSACTION-RECORDING: Record Canonical Transaction | `requirement` | `implements` | `true` |
-| NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic | `nfr` | `satisfies` | `true` |
+| [DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates](../../../designs/ledger/decisions/financial-representation.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-TRANSACTION-FACT: TransactionFact](../../../designs/ledger/data-model.md#transactionfact) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals](../../../prd/ledger/prd.md#fr-ledger-actuals-query-query-exact-ledger-actuals) | `requirement` | `implements` | `true` |
+| [FR-LEDGER-TRANSACTION-RECORDING: Record Canonical Transaction](../../../prd/ledger/prd.md#fr-ledger-transaction-recording-record-canonical-transaction) | `requirement` | `implements` | `true` |
+| [NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic](../../../prd/ledger/prd.md#nfr-ledger-exact-financial-arithmetic-preserve-exact-financial-arithmetic) | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-EXACT-MONEY-CONFORMANCE: Verify exact money and actuals formulas | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md) | `compile` | Value types compile against common validation/result contracts. |
+| [TASK-LEDGER-CORE-PROCESS-CONTRACT: TASK-LEDGER-CORE-PROCESS-CONTRACT](core-process-contract.md) | `compile` | Value types compile against common validation/result contracts. |
 
 ## Recipe
 
@@ -77,10 +77,10 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| Money | `produces` | DD-LEDGER-FINANCIAL-REPRESENTATION |  |
-| Effective Date.Resolve | `produces` | DM-LEDGER-TRANSACTION-FACT |  |
+| Money | `produces` | [DD-LEDGER-FINANCIAL-REPRESENTATION](../../../designs/ledger/decisions/financial-representation.md) |  |
+| Effective Date.Resolve | `produces` | [DM-LEDGER-TRANSACTION-FACT](../../../designs/ledger/data-model.md#transactionfact) |  |
 | LedgerId | `produces` |  |  |
-| ExactTotals | `produces` | NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC |  |
+| ExactTotals | `produces` | [NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC](../../../prd/ledger/prd.md#nfr-ledger-exact-financial-arithmetic-preserve-exact-financial-arithmetic) |  |
 
 ### Verification
 
@@ -106,12 +106,12 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1b2` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md): Value types compile against common validation/result contracts.
-- `governed-by` -> DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates
-- `implements` -> FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals
-- `implements` -> FR-LEDGER-TRANSACTION-RECORDING: Record Canonical Transaction
-- `satisfies` -> NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic
-- `touches` -> DM-LEDGER-TRANSACTION-FACT: TransactionFact
+- `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT: TASK-LEDGER-CORE-PROCESS-CONTRACT](core-process-contract.md): Value types compile against common validation/result contracts.
+- `governed-by` -> [DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates](../../../designs/ledger/decisions/financial-representation.md)
+- `implements` -> [FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals](../../../prd/ledger/prd.md#fr-ledger-actuals-query-query-exact-ledger-actuals)
+- `implements` -> [FR-LEDGER-TRANSACTION-RECORDING: Record Canonical Transaction](../../../prd/ledger/prd.md#fr-ledger-transaction-recording-record-canonical-transaction)
+- `satisfies` -> [NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic](../../../prd/ledger/prd.md#nfr-ledger-exact-financial-arithmetic-preserve-exact-financial-arithmetic)
+- `touches` -> [DM-LEDGER-TRANSACTION-FACT: TransactionFact](../../../designs/ledger/data-model.md#transactionfact)
 - `verifies` -> TC-LEDGER-EXACT-MONEY-CONFORMANCE: Verify exact money and actuals formulas
 
 ## Navigation

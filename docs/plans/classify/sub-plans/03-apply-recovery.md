@@ -15,8 +15,8 @@ Implement explicit preview authority, cross-store replay, bounded correction fee
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-CLASSIFY-APPLY-PREVIEW](../tasks/apply-preview.md) | Authorize exact apply previews | `planned` | 0 |
-| [TASK-CLASSIFY-APPLY-RUN-SAGA](../tasks/apply-run-saga.md) | Execute the replay-safe apply saga | `planned` | 0 |
-| [TASK-CLASSIFY-FEEDBACK-PROPOSALS](../tasks/feedback-proposals.md) | Record bounded correction feedback | `planned` | 1 |
-| [TASK-CLASSIFY-ABANDON-CLEANUP](../tasks/abandon-cleanup.md) | Abandon state and clean recognized artifacts | `planned` | 1 |
-| [TASK-CLASSIFY-STATUS-WORKFLOW](../tasks/status-workflow.md) | Expose safe classification status | `planned` | 1 |
+| [TASK-CLASSIFY-APPLY-PREVIEW: Authorize exact apply previews](../tasks/apply-preview.md) | Authorize exact apply previews | `planned` | 0 |
+| [TASK-CLASSIFY-APPLY-RUN-SAGA: Execute the replay-safe apply saga](../tasks/apply-run-saga.md) | Execute the replay-safe apply saga | `planned` | 0 |
+| [TASK-CLASSIFY-FEEDBACK-PROPOSALS: Record bounded correction feedback](../tasks/feedback-proposals.md) | Record bounded correction feedback | `planned` | 1 |
+| [TASK-CLASSIFY-ABANDON-CLEANUP: Abandon state and clean recognized artifacts](../tasks/abandon-cleanup.md) | Abandon state and clean recognized artifacts | `planned` | 1 |
+| [TASK-CLASSIFY-STATUS-WORKFLOW: Expose safe classification status](../tasks/status-workflow.md) | Expose safe classification status | `planned` | 1 |

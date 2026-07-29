@@ -22,20 +22,20 @@ Prove every supported local artifact and public process surface protects financi
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection | `design_decision` | `governed-by` | `true` |
-| EXT-LEDGER-HOST-OS-SECURITY: Host OS Storage and Key Protection | `external_dependency` | `references` | `false` |
-| NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable | `nfr` | `satisfies` | `true` |
-| NFR-LEDGER-LOCAL-DATA-PROTECTION: Protect local financial data | `nfr` | `satisfies` | `true` |
+| [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md) | `design_decision` | `governed-by` | `true` |
+| [EXT-LEDGER-HOST-OS-SECURITY: Host OS Storage and Key Protection](../../../prd/ledger/prd.md#ext-ledger-host-os-security-host-os-storage-and-key-protection) | `external_dependency` | `references` | `false` |
+| [NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable](../../../prd/ledger/prd.md#nfr-ledger-atomic-durable-mutations-make-mutations-atomic-and-durable) | `nfr` | `satisfies` | `true` |
+| [NFR-LEDGER-LOCAL-DATA-PROTECTION: Protect local financial data](../../../prd/ledger/prd.md#nfr-ledger-local-data-protection-protect-local-financial-data) | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-LOCAL-DATA-PROTECTION: Verify local artifact and diagnostic protection | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Security validation exercises the complete published process and all artifact paths. |
-| [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md) | `compile` | Consumer requires TallyProcess.RunAsync from its producing task; direct compile edge enforces the declared interface contract. |
-| [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | Consumer requires IHostArtifactProtection from its producing task; direct compile edge enforces the declared interface contract. |
-| [TASK-LEDGER-RESTORE-ACTIVATE](../tasks/restore-activate.md) | `compile` | Consumer requires AuthoritativeStoreActivator from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Security validation exercises the complete published process and all artifact paths. |
+| [TASK-LEDGER-CORE-PROCESS-CONTRACT: TASK-LEDGER-CORE-PROCESS-CONTRACT](core-process-contract.md) | `compile` | Consumer requires TallyProcess.RunAsync from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md) | `compile` | Consumer requires IHostArtifactProtection from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-RESTORE-ACTIVATE: TASK-LEDGER-RESTORE-ACTIVATE](restore-activate.md) | `compile` | Consumer requires AuthoritativeStoreActivator from its producing task; direct compile edge enforces the declared interface contract. |
 
 ## Recipe
 
@@ -80,10 +80,10 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| IHostArtifactProtection | `consumes` | DD-LEDGER-EMBEDDED-STORAGE |  |
-| TallyProcess.RunAsync | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR |  |
-| AuthoritativeStoreActivator | `consumes` | DD-LEDGER-CANDIDATE-ACTIVATION |  |
-| VerifiedLocalSecurityGate | `produces` | NFR-LEDGER-LOCAL-DATA-PROTECTION |  |
+| IHostArtifactProtection | `consumes` | [DD-LEDGER-EMBEDDED-STORAGE](../../../designs/ledger/decisions/embedded-storage.md) |  |
+| TallyProcess.RunAsync | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) |  |
+| AuthoritativeStoreActivator | `consumes` | [DD-LEDGER-CANDIDATE-ACTIVATION](../../../designs/ledger/decisions/candidate-activation.md) |  |
+| VerifiedLocalSecurityGate | `produces` | [NFR-LEDGER-LOCAL-DATA-PROTECTION](../../../prd/ledger/prd.md#nfr-ledger-local-data-protection-protect-local-financial-data) |  |
 
 ### Verification
 
@@ -109,14 +109,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-112` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md): Consumer requires TallyProcess.RunAsync from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumer requires IHostArtifactProtection from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Security validation exercises the complete published process and all artifact paths.
-- `depends-on:compile` -> [TASK-LEDGER-RESTORE-ACTIVATE](../tasks/restore-activate.md): Consumer requires AuthoritativeStoreActivator from its producing task; direct compile edge enforces the declared interface contract.
-- `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
-- `references` -> EXT-LEDGER-HOST-OS-SECURITY: Host OS Storage and Key Protection
-- `satisfies` -> NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable
-- `satisfies` -> NFR-LEDGER-LOCAL-DATA-PROTECTION: Protect local financial data
+- `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT: TASK-LEDGER-CORE-PROCESS-CONTRACT](core-process-contract.md): Consumer requires TallyProcess.RunAsync from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md): Consumer requires IHostArtifactProtection from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Security validation exercises the complete published process and all artifact paths.
+- `depends-on:compile` -> [TASK-LEDGER-RESTORE-ACTIVATE: TASK-LEDGER-RESTORE-ACTIVATE](restore-activate.md): Consumer requires AuthoritativeStoreActivator from its producing task; direct compile edge enforces the declared interface contract.
+- `governed-by` -> [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md)
+- `references` -> [EXT-LEDGER-HOST-OS-SECURITY: Host OS Storage and Key Protection](../../../prd/ledger/prd.md#ext-ledger-host-os-security-host-os-storage-and-key-protection)
+- `satisfies` -> [NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable](../../../prd/ledger/prd.md#nfr-ledger-atomic-durable-mutations-make-mutations-atomic-and-durable)
+- `satisfies` -> [NFR-LEDGER-LOCAL-DATA-PROTECTION: Protect local financial data](../../../prd/ledger/prd.md#nfr-ledger-local-data-protection-protect-local-financial-data)
 - `verifies` -> TC-LEDGER-LOCAL-DATA-PROTECTION: Verify local artifact and diagnostic protection
 
 ## Navigation

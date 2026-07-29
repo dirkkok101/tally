@@ -22,20 +22,20 @@ Create, inspect, list, rename, archive, and reactivate Spend Pool with stable id
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts | `data_model` | `touches` | `true` |
-| DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment | `data_model` | `touches` | `true` |
-| FR-LEDGER-SPEND-POOL-CATALOGUE: Maintain the Spend Pool catalogue | `requirement` | `implements` | `true` |
+| [DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions](../../../designs/ledger/decisions/dimensional-attribution.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts](../../../designs/ledger/data-model.md#paymentattributionandpooloperationcontracts) | `data_model` | `touches` | `true` |
+| [DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment](../../../designs/ledger/data-model.md#spendpoolandassignment) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-SPEND-POOL-CATALOGUE: Maintain the Spend Pool catalogue](../../../prd/ledger/prd.md#fr-ledger-spend-pool-catalogue-maintain-the-spend-pool-catalogue) | `requirement` | `implements` | `true` |
 | TC-LEDGER-SPEND-POOL-CATALOGUE-CONTRACT: Verify spend-pool catalogue lifecycle | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-EVIDENCE-POOL-CARDINALITY](../tasks/gate-evidence-pool-cardinality.md) | `compile` | Pool implementation is forbidden until OQ-LEDGER-15 validates one-active-pool cardinality. |
-| [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md) | `compile` | The catalogue uses the proven process and SQLite seam. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Every catalogue mutation consumes LedgerMutationExecutor.ExecuteAsync. |
+| [TASK-LEDGER-GATE-EVIDENCE-POOL-CARDINALITY: TASK-LEDGER-GATE-EVIDENCE-POOL-CARDINALITY](gate-evidence-pool-cardinality.md) | `compile` | Pool implementation is forbidden until OQ-LEDGER-15 validates one-active-pool cardinality. |
+| [TASK-LEDGER-GATE-INT-CORE: TASK-LEDGER-GATE-INT-CORE](gate-int-core.md) | `compile` | The catalogue uses the proven process and SQLite seam. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Every catalogue mutation consumes LedgerMutationExecutor.ExecuteAsync. |
 
 ## Recipe
 
@@ -78,10 +78,10 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| SpendPoolStore | `produces` | DM-LEDGER-SPEND-POOL-ASSIGNMENT |  |
-| SpendPoolOperationModule | `produces` | DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS |  |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD |  |
-| OQ-LEDGER-15Resolution | `consumes` | OQ-LEDGER-15 |  |
+| SpendPoolStore | `produces` | [DM-LEDGER-SPEND-POOL-ASSIGNMENT](../../../designs/ledger/data-model.md#spendpoolandassignment) |  |
+| SpendPoolOperationModule | `produces` | [DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS](../../../designs/ledger/data-model.md#paymentattributionandpooloperationcontracts) |  |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | [DM-LEDGER-IDEMPOTENCY-RECORD](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) |  |
+| OQ-LEDGER-15Resolution | `consumes` | [OQ-LEDGER-15](../../../prd/ledger/prd.md) |  |
 
 ### Verification
 
@@ -106,14 +106,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3vc` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Every catalogue mutation consumes LedgerMutationExecutor.ExecuteAsync.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-POOL-CARDINALITY](../tasks/gate-evidence-pool-cardinality.md): Pool implementation is forbidden until OQ-LEDGER-15 validates one-active-pool cardinality.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md): The catalogue uses the proven process and SQLite seam.
-- `governed-by` -> DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `implements` -> FR-LEDGER-SPEND-POOL-CATALOGUE: Maintain the Spend Pool catalogue
-- `touches` -> DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts
-- `touches` -> DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Every catalogue mutation consumes LedgerMutationExecutor.ExecuteAsync.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-POOL-CARDINALITY: TASK-LEDGER-GATE-EVIDENCE-POOL-CARDINALITY](gate-evidence-pool-cardinality.md): Pool implementation is forbidden until OQ-LEDGER-15 validates one-active-pool cardinality.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CORE: TASK-LEDGER-GATE-INT-CORE](gate-int-core.md): The catalogue uses the proven process and SQLite seam.
+- `governed-by` -> [DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions](../../../designs/ledger/decisions/dimensional-attribution.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `implements` -> [FR-LEDGER-SPEND-POOL-CATALOGUE: Maintain the Spend Pool catalogue](../../../prd/ledger/prd.md#fr-ledger-spend-pool-catalogue-maintain-the-spend-pool-catalogue)
+- `touches` -> [DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts](../../../designs/ledger/data-model.md#paymentattributionandpooloperationcontracts)
+- `touches` -> [DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment](../../../designs/ledger/data-model.md#spendpoolandassignment)
 - `verifies` -> TC-LEDGER-SPEND-POOL-CATALOGUE-CONTRACT: Verify spend-pool catalogue lifecycle
 
 ## Navigation

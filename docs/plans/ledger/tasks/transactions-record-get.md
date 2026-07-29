@@ -22,20 +22,20 @@ Atomically record at most one immutable Canonical Transaction and its allowliste
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts | `data_model` | `touches` | `true` |
-| FR-LEDGER-TRANSACTION-RECORDING: Record Canonical Transaction | `requirement` | `implements` | `true` |
+| [DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates](../../../designs/ledger/decisions/financial-representation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts](../../../designs/ledger/data-model.md#transactionoperationcontracts) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-TRANSACTION-RECORDING: Record Canonical Transaction](../../../prd/ledger/prd.md#fr-ledger-transaction-recording-record-canonical-transaction) | `requirement` | `implements` | `true` |
 | TC-LEDGER-TRANSACTION-RECORDING-CONTRACT: Verify record canonical transactions contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-ACCOUNTS](../tasks/accounts.md) | `compile` | Transactions require AccountStore and archived-account policy. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
-| [TASK-LEDGER-CORE-MONEY-DATES](../tasks/core-money-dates.md) | `compile` | Consumer requires Money from its producing task; direct compile edge enforces the declared interface contract. |
-| [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md) | `compile` | Atomic transaction capture consumes EvidenceStore.RegisterInitialAsync. |
+| [TASK-LEDGER-ACCOUNTS: TASK-LEDGER-ACCOUNTS](accounts.md) | `compile` | Transactions require AccountStore and archived-account policy. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-CORE-MONEY-DATES: TASK-LEDGER-CORE-MONEY-DATES](core-money-dates.md) | `compile` | Consumer requires Money from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-EVIDENCE-REGISTRY: TASK-LEDGER-EVIDENCE-REGISTRY](evidence-registry.md) | `compile` | Atomic transaction capture consumes EvidenceStore.RegisterInitialAsync. |
 
 ## Recipe
 
@@ -82,13 +82,13 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| TransactionBaseOperationModule | `produces` | DM-LEDGER-TRANSACTION-CONTRACTS | record and get descriptors |
-| TransactionStore | `produces` | DM-LEDGER-TRANSACTION-FACT | atomic transaction/default-dimension writes |
-| TransactionDetail | `produces` | DM-LEDGER-TRANSACTION-CONTRACTS | facts and linked current state |
-| AccountStore | `consumes` | DM-LEDGER-ACCOUNT | account authority |
-| Money | `consumes` | DD-LEDGER-FINANCIAL-REPRESENTATION | exact values |
-| EvidenceStore.RegisterInitialAsync | `consumes` | DM-LEDGER-EVIDENCE-RECORD-LINK | transaction-scoped evidence primitive |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD | atomic replay |
+| TransactionBaseOperationModule | `produces` | [DM-LEDGER-TRANSACTION-CONTRACTS](../../../designs/ledger/data-model.md#transactionoperationcontracts) | record and get descriptors |
+| TransactionStore | `produces` | [DM-LEDGER-TRANSACTION-FACT](../../../designs/ledger/data-model.md#transactionfact) | atomic transaction/default-dimension writes |
+| TransactionDetail | `produces` | [DM-LEDGER-TRANSACTION-CONTRACTS](../../../designs/ledger/data-model.md#transactionoperationcontracts) | facts and linked current state |
+| AccountStore | `consumes` | [DM-LEDGER-ACCOUNT](../../../designs/ledger/data-model.md#account) | account authority |
+| Money | `consumes` | [DD-LEDGER-FINANCIAL-REPRESENTATION](../../../designs/ledger/decisions/financial-representation.md) | exact values |
+| EvidenceStore.RegisterInitialAsync | `consumes` | [DM-LEDGER-EVIDENCE-RECORD-LINK](../../../designs/ledger/data-model.md#evidencerecordobservationandlink) | transaction-scoped evidence primitive |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | [DM-LEDGER-IDEMPOTENCY-RECORD](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) | atomic replay |
 
 ### Verification
 
@@ -115,14 +115,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-84s` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-ACCOUNTS](../tasks/accounts.md): Transactions require AccountStore and archived-account policy.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-MONEY-DATES](../tasks/core-money-dates.md): Consumer requires Money from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md): Atomic transaction capture consumes EvidenceStore.RegisterInitialAsync.
-- `governed-by` -> DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `implements` -> FR-LEDGER-TRANSACTION-RECORDING: Record Canonical Transaction
-- `touches` -> DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts
+- `depends-on:compile` -> [TASK-LEDGER-ACCOUNTS: TASK-LEDGER-ACCOUNTS](accounts.md): Transactions require AccountStore and archived-account policy.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-MONEY-DATES: TASK-LEDGER-CORE-MONEY-DATES](core-money-dates.md): Consumer requires Money from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY: TASK-LEDGER-EVIDENCE-REGISTRY](evidence-registry.md): Atomic transaction capture consumes EvidenceStore.RegisterInitialAsync.
+- `governed-by` -> [DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates](../../../designs/ledger/decisions/financial-representation.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `implements` -> [FR-LEDGER-TRANSACTION-RECORDING: Record Canonical Transaction](../../../prd/ledger/prd.md#fr-ledger-transaction-recording-record-canonical-transaction)
+- `touches` -> [DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts](../../../designs/ledger/data-model.md#transactionoperationcontracts)
 - `verifies` -> TC-LEDGER-TRANSACTION-RECORDING-CONTRACT: Verify record canonical transactions contract
 
 ## Navigation

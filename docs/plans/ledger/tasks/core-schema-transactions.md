@@ -22,17 +22,17 @@ Create exact immutable transaction and correction-history tables plus independen
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-TRANSACTION-FACT: TransactionFact | `data_model` | `touches` | `true` |
-| DM-LEDGER-TRANSACTION-HISTORY: TransactionLifecycleAndAllocation | `data_model` | `touches` | `true` |
+| [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates](../../../designs/ledger/decisions/financial-representation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-TRANSACTION-FACT: TransactionFact](../../../designs/ledger/data-model.md#transactionfact) | `data_model` | `touches` | `true` |
+| [DM-LEDGER-TRANSACTION-HISTORY: TransactionLifecycleAndAllocation](../../../designs/ledger/data-model.md#transactionlifecycleandcategoryallocation) | `data_model` | `touches` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | Consumes LedgerDb and LedgerSchemaFragmentRegistry. |
+| [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md) | `compile` | Consumes LedgerDb and LedgerSchemaFragmentRegistry. |
 
 ## Recipe
 
@@ -72,9 +72,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| V001TransactionSchema | `produces` | DM-LEDGER-TRANSACTION-FACT |  |
-| LedgerSchemaFragmentRegistry | `consumes` | DD-LEDGER-EMBEDDED-STORAGE |  |
-| LedgerDb | `consumes` | DM-LEDGER-STORE-GENERATION |  |
+| V001TransactionSchema | `produces` | [DM-LEDGER-TRANSACTION-FACT](../../../designs/ledger/data-model.md#transactionfact) |  |
+| LedgerSchemaFragmentRegistry | `consumes` | [DD-LEDGER-EMBEDDED-STORAGE](../../../designs/ledger/decisions/embedded-storage.md) |  |
+| LedgerDb | `consumes` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) |  |
 
 ### Verification
 
@@ -100,12 +100,12 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2qj` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumes LedgerDb and LedgerSchemaFragmentRegistry.
-- `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
-- `governed-by` -> DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `touches` -> DM-LEDGER-TRANSACTION-FACT: TransactionFact
-- `touches` -> DM-LEDGER-TRANSACTION-HISTORY: TransactionLifecycleAndAllocation
+- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md): Consumes LedgerDb and LedgerSchemaFragmentRegistry.
+- `governed-by` -> [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md)
+- `governed-by` -> [DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates](../../../designs/ledger/decisions/financial-representation.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `touches` -> [DM-LEDGER-TRANSACTION-FACT: TransactionFact](../../../designs/ledger/data-model.md#transactionfact)
+- `touches` -> [DM-LEDGER-TRANSACTION-HISTORY: TransactionLifecycleAndAllocation](../../../designs/ledger/data-model.md#transactionlifecycleandcategoryallocation)
 
 ## Navigation
 

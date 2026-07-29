@@ -22,12 +22,12 @@ RestateInsightReportCommand creates one immutable child only when provenance, ve
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
-| DIAG-INSIGHTS-REPORT-STATE: Report retention and deletion lifecycle | `design_diagram` | `touches` | `true` |
-| DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion | `data_model` | `touches` | `true` |
-| FR-INSIGHTS-REPORT-RESTATEMENT: Create an explicit linked Restatement | `requirement` | `implements` | `true` |
-| NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable | `nfr` | `satisfies` | `true` |
+| [DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies](../../../designs/insights/decisions/deterministic-report-compiler.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion](../../../designs/insights/decisions/retention-restatement-lifecycle.md) | `design_decision` | `governed-by` | `true` |
+| [DIAG-INSIGHTS-REPORT-STATE: Report retention and deletion lifecycle](../../../designs/insights/diagrams/report-state.md) | `design_diagram` | `touches` | `true` |
+| [DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion](../../../designs/insights/data-model.md#reportsnapshotrestatementanddeletion) | `data_model` | `touches` | `true` |
+| [FR-INSIGHTS-REPORT-RESTATEMENT: Create an explicit linked Restatement](../../../prd/insights/prd.md#fr-insights-report-restatement-create-an-explicit-linked-restatement) | `requirement` | `implements` | `true` |
+| [NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable](../../../prd/insights/prd.md#nfr-insights-atomic-durable-report-state-make-retained-report-changes-atomic-and-durable) | `nfr` | `satisfies` | `true` |
 | TC-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Verify deterministic analytical integrity | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-RESTATEMENT-CONTRACT: Verify explicit Restatement and difference semantics | `test_case` | `verifies` | `true` |
 
@@ -35,9 +35,9 @@ RestateInsightReportCommand creates one immutable child only when provenance, ve
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Restate reads verified predecessors and atomically writes child and link rows. |
-| [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](../tasks/idempotency-executor.md) | `compile` | Restate resolves replay before current producer access. |
-| [TASK-INSIGHTS-GENERATE-REPORT](../tasks/generate-report.md) | `compile` | Restate reuses the approved current report path. |
+| [TASK-INSIGHTS-STATE-FOUNDATION: TASK-INSIGHTS-STATE-FOUNDATION](state-foundation.md) | `compile` | Restate reads verified predecessors and atomically writes child and link rows. |
+| [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR: TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](idempotency-executor.md) | `compile` | Restate resolves replay before current producer access. |
+| [TASK-INSIGHTS-GENERATE-REPORT: TASK-INSIGHTS-GENERATE-REPORT](generate-report.md) | `compile` | Restate reuses the approved current report path. |
 
 ## Recipe
 
@@ -81,11 +81,11 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| GenerateInsightReportQuery.HandleAsync | `consumes` | DM-INSIGHTS-INSIGHT-REPORT | current complete evidence |
-| InsightsIdempotencyExecutor.ExecuteAsync | `consumes` | DM-INSIGHTS-IDEMPOTENCY | replay before producer access |
-| InsightsStateStore | `consumes` | DM-INSIGHTS-STATE-STORE | predecessor read and atomic child/link append |
-| InsightReportDiffer.Compare | `produces` | DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE | ordered bounded differences |
-| RestateInsightReportCommand.HandleAsync | `produces` | DM-INSIGHTS-OPERATION-CONTRACTS | insights.report.restate handler |
+| GenerateInsightReportQuery.HandleAsync | `consumes` | [DM-INSIGHTS-INSIGHT-REPORT](../../../designs/insights/data-model.md#insightreport) | current complete evidence |
+| InsightsIdempotencyExecutor.ExecuteAsync | `consumes` | [DM-INSIGHTS-IDEMPOTENCY](../../../designs/insights/data-model.md#insightsidempotencyrecord) | replay before producer access |
+| InsightsStateStore | `consumes` | [DM-INSIGHTS-STATE-STORE](../../../designs/insights/data-model.md#insightsstatestore) | predecessor read and atomic child/link append |
+| InsightReportDiffer.Compare | `produces` | [DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE](../../../designs/insights/data-model.md#reportsnapshotrestatementanddeletion) | ordered bounded differences |
+| RestateInsightReportCommand.HandleAsync | `produces` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | insights.report.restate handler |
 
 ### Verification
 
@@ -110,15 +110,15 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3t2` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-GENERATE-REPORT](../tasks/generate-report.md): Restate reuses the approved current report path.
-- `depends-on:compile` -> [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](../tasks/idempotency-executor.md): Restate resolves replay before current producer access.
-- `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md): Restate reads verified predecessors and atomically writes child and link rows.
-- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies
-- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion
-- `implements` -> FR-INSIGHTS-REPORT-RESTATEMENT: Create an explicit linked Restatement
-- `satisfies` -> NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable
-- `touches` -> DIAG-INSIGHTS-REPORT-STATE: Report retention and deletion lifecycle
-- `touches` -> DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion
+- `depends-on:compile` -> [TASK-INSIGHTS-GENERATE-REPORT: TASK-INSIGHTS-GENERATE-REPORT](generate-report.md): Restate reuses the approved current report path.
+- `depends-on:compile` -> [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR: TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](idempotency-executor.md): Restate resolves replay before current producer access.
+- `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION: TASK-INSIGHTS-STATE-FOUNDATION](state-foundation.md): Restate reads verified predecessors and atomically writes child and link rows.
+- `governed-by` -> [DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies](../../../designs/insights/decisions/deterministic-report-compiler.md)
+- `governed-by` -> [DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion](../../../designs/insights/decisions/retention-restatement-lifecycle.md)
+- `implements` -> [FR-INSIGHTS-REPORT-RESTATEMENT: Create an explicit linked Restatement](../../../prd/insights/prd.md#fr-insights-report-restatement-create-an-explicit-linked-restatement)
+- `satisfies` -> [NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable](../../../prd/insights/prd.md#nfr-insights-atomic-durable-report-state-make-retained-report-changes-atomic-and-durable)
+- `touches` -> [DIAG-INSIGHTS-REPORT-STATE: Report retention and deletion lifecycle](../../../designs/insights/diagrams/report-state.md)
+- `touches` -> [DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion](../../../designs/insights/data-model.md#reportsnapshotrestatementanddeletion)
 - `verifies` -> TC-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Verify deterministic analytical integrity
 - `verifies` -> TC-INSIGHTS-RESTATEMENT-CONTRACT: Verify explicit Restatement and difference semantics
 

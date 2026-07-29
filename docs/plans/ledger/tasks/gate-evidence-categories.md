@@ -22,10 +22,10 @@ Lock hierarchical Spend Category with zero or one active Category Assignment per
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-SPEND-CATEGORY: SpendCategory | `data_model` | `touches` | `false` |
-| OQ-LEDGER-6: Validate flat, archivable categories with one active category allocation per transaction for the first release. | `open_question` | `references` | `true` |
+| [DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment](../../../designs/ledger/decisions/category-hierarchy.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-SPEND-CATEGORY: SpendCategory](../../../designs/ledger/data-model.md#spendcategory) | `data_model` | `touches` | `false` |
+| [OQ-LEDGER-6: Validate flat, archivable categories with one active category allocation per transaction for the first release.](../../../prd/ledger/prd.md) | `open_question` | `references` | `true` |
 
 ## Dependencies
 
@@ -69,8 +69,8 @@ No task dependencies recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| OQ-LEDGER-6Resolution | `produces` | OQ-LEDGER-6 | Owner-approved hierarchy and one-category policy |
-| CategoryHierarchyPolicy | `produces` | DD-LEDGER-CATEGORY-HIERARCHY | Acyclic adjacency history with direct and subtree roll-ups |
+| OQ-LEDGER-6Resolution | `produces` | [OQ-LEDGER-6](../../../prd/ledger/prd.md) | Owner-approved hierarchy and one-category policy |
+| CategoryHierarchyPolicy | `produces` | [DD-LEDGER-CATEGORY-HIERARCHY](../../../designs/ledger/decisions/category-hierarchy.md) | Acyclic adjacency history with direct and subtree roll-ups |
 
 ### Verification
 
@@ -96,10 +96,10 @@ No task dependencies recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-sz5` (verified)
-- `governed-by` -> DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history
-- `references` -> OQ-LEDGER-6: Validate flat, archivable categories with one active category allocation per transaction for the first release.
-- `touches` -> DM-LEDGER-SPEND-CATEGORY: SpendCategory
+- `governed-by` -> [DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment](../../../designs/ledger/decisions/category-hierarchy.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `references` -> [OQ-LEDGER-6: Validate flat, archivable categories with one active category allocation per transaction for the first release.](../../../prd/ledger/prd.md)
+- `touches` -> [DM-LEDGER-SPEND-CATEGORY: SpendCategory](../../../designs/ledger/data-model.md#spendcategory)
 
 ## Navigation
 

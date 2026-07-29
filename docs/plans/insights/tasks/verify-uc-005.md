@@ -22,20 +22,20 @@ UC-INSIGHTS-005 produces one attributable complete maintenance outcome or leaves
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion](../../../designs/insights/decisions/retention-restatement-lifecycle.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation](../../../designs/insights/decisions/verified-recovery-activation.md) | `design_decision` | `governed-by` | `true` |
 | TC-INSIGHTS-BACKUP-VERIFICATION: Verify complete owner-only INSIGHTS backups | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-REPORT-DELETION-DEPENDENCIES: Verify dependency-safe report deletion | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-REPORT-HISTORY-STATUS: Verify metadata-first report history and status | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-RESTORE-FAILURE-ATOMICITY: Verify separate-target restore and atomic activation | `test_case` | `verifies` | `true` |
-| UC-INSIGHTS-005: Manage retained history and recovery | `use_case` | `covers` | `true` |
+| [UC-INSIGHTS-005: Manage retained history and recovery](../../../prd/insights/prd.md#uc-insights-005-manage-retained-history-and-recovery) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | UC-005 invokes the complete published maintenance surface. |
-| [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md) | `compile` | UC-005 requires completed retained and recovery fault evidence. |
+| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT: TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | UC-005 invokes the complete published maintenance surface. |
+| [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY: TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](gate-atomic-recovery.md) | `compile` | UC-005 requires completed retained and recovery fault evidence. |
 
 ## Recipe
 
@@ -75,9 +75,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteInsightsPublicContract | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS | List, Status, Delete, Backup, Verify, Restore, and Get |
-| InsightsAtomicRecoveryEvidence | `consumes` | NFR-INSIGHTS-VERIFIED-RECOVERABILITY | fault and restart proof |
-| VerifiedInsightsUc005 | `produces` | UC-INSIGHTS-005 | maintenance/recovery workflow proof |
+| CompleteInsightsPublicContract | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | List, Status, Delete, Backup, Verify, Restore, and Get |
+| InsightsAtomicRecoveryEvidence | `consumes` | [NFR-INSIGHTS-VERIFIED-RECOVERABILITY](../../../prd/insights/prd.md#nfr-insights-verified-recoverability-verify-backup-and-restore-independently) | fault and restart proof |
+| VerifiedInsightsUc005 | `produces` | [UC-INSIGHTS-005](../../../prd/insights/prd.md#uc-insights-005-manage-retained-history-and-recovery) | maintenance/recovery workflow proof |
 
 ### Verification
 
@@ -102,11 +102,11 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-ato` (verified)
-- `covers` -> UC-INSIGHTS-005: Manage retained history and recovery
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md): UC-005 requires completed retained and recovery fault evidence.
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC-005 invokes the complete published maintenance surface.
-- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion
-- `governed-by` -> DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation
+- `covers` -> [UC-INSIGHTS-005: Manage retained history and recovery](../../../prd/insights/prd.md#uc-insights-005-manage-retained-history-and-recovery)
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY: TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](gate-atomic-recovery.md): UC-005 requires completed retained and recovery fault evidence.
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT: TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): UC-005 invokes the complete published maintenance surface.
+- `governed-by` -> [DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion](../../../designs/insights/decisions/retention-restatement-lifecycle.md)
+- `governed-by` -> [DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation](../../../designs/insights/decisions/verified-recovery-activation.md)
 - `verifies` -> TC-INSIGHTS-BACKUP-VERIFICATION: Verify complete owner-only INSIGHTS backups
 - `verifies` -> TC-INSIGHTS-REPORT-DELETION-DEPENDENCIES: Verify dependency-safe report deletion
 - `verifies` -> TC-INSIGHTS-REPORT-HISTORY-STATUS: Verify metadata-first report history and status

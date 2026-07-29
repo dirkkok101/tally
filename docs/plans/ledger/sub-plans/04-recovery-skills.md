@@ -15,9 +15,9 @@ Verify every durable state type, publish backups and candidate activation, evolv
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-LEDGER-DURABLE-STATE-VERIFIER](../tasks/durable-state-verifier.md) | Build the complete Durable Ledger State verifier | `ready` | 0 |
-| [TASK-LEDGER-BACKUP-VERIFY](../tasks/backup-verify.md) | Create and independently verify Ledger backups | `ready` | 1 |
-| [TASK-LEDGER-RESTORE-ACTIVATE](../tasks/restore-activate.md) | Implement safe restore prepare and activation | `ready` | 1 |
-| [TASK-LEDGER-STORAGE-EVOLUTION](../tasks/storage-evolution.md) | Implement safe storage evolution and status | `ready` | 1 |
-| [TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT](../tasks/recovery-status-normalized-fingerprint.md) | Expose the normalized restore fingerprint in storage status | `ready` | 0 |
-| [TASK-LEDGER-AGENT-SKILLS](../tasks/agent-skills.md) | Implement version-matched integration guidance | `ready` | 1 |
+| [TASK-LEDGER-DURABLE-STATE-VERIFIER: Build the complete Durable Ledger State verifier](../tasks/durable-state-verifier.md) | Build the complete Durable Ledger State verifier | `ready` | 0 |
+| [TASK-LEDGER-BACKUP-VERIFY: Create and independently verify Ledger backups](../tasks/backup-verify.md) | Create and independently verify Ledger backups | `ready` | 1 |
+| [TASK-LEDGER-RESTORE-ACTIVATE: Implement safe restore prepare and activation](../tasks/restore-activate.md) | Implement safe restore prepare and activation | `ready` | 1 |
+| [TASK-LEDGER-STORAGE-EVOLUTION: Implement safe storage evolution and status](../tasks/storage-evolution.md) | Implement safe storage evolution and status | `ready` | 1 |
+| [TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT: Expose the normalized restore fingerprint in storage status](../tasks/recovery-status-normalized-fingerprint.md) | Expose the normalized restore fingerprint in storage status | `ready` | 0 |
+| [TASK-LEDGER-AGENT-SKILLS: Implement version-matched integration guidance](../tasks/agent-skills.md) | Implement version-matched integration guidance | `ready` | 1 |

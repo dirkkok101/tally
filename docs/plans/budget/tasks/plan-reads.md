@@ -5,7 +5,7 @@
 - **Ref:** `TASK-BUDGET-PLAN-READS`
 - **Plan:** `PLAN-BUDGET-V1`
 - **Sub-Plan:** `SP-BUDGET-01-PLAN-LIFECYCLE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `4`
 - **Dialect:** `default`
@@ -22,14 +22,14 @@ Owners can reconstruct immutable plan intent and attributable lifecycle history 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider | `design_decision` | `governed-by` | `true` |
-| DM-BUDGET-PERIOD-PLAN: BudgetPeriodAndPlan | `data_model` | `touches` | `true` |
-| DM-BUDGET-REVISION-ENTRY: BudgetPlanRevisionAndEntry | `data_model` | `touches` | `true` |
-| FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle | `requirement` | `implements` | `true` |
-| FR-BUDGET-PLAN-HISTORY: Inspect plan state and revision history | `requirement` | `implements` | `true` |
-| FR-BUDGET-PLAN-IDENTITY: Identify monthly Budget Plans | `requirement` | `implements` | `true` |
+| [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md) | `design_decision` | `governed-by` | `true` |
+| [DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions](../../../designs/budget/decisions/plan-revision-lifecycle.md) | `design_decision` | `governed-by` | `true` |
+| [DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider](../../../designs/budget/decisions/trusted-period-time.md) | `design_decision` | `governed-by` | `true` |
+| [DM-BUDGET-PERIOD-PLAN: BudgetPeriodAndPlan](../../../designs/budget/data-model.md#budgetperiodandplan) | `data_model` | `touches` | `true` |
+| [DM-BUDGET-REVISION-ENTRY: BudgetPlanRevisionAndEntry](../../../designs/budget/data-model.md#budgetplanrevisionandentry) | `data_model` | `touches` | `true` |
+| [FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle](../../../prd/budget/prd.md#fr-budget-category-lifecycle-honor-spend-category-lifecycle) | `requirement` | `implements` | `true` |
+| [FR-BUDGET-PLAN-HISTORY: Inspect plan state and revision history](../../../prd/budget/prd.md#fr-budget-plan-history-inspect-plan-state-and-revision-history) | `requirement` | `implements` | `true` |
+| [FR-BUDGET-PLAN-IDENTITY: Identify monthly Budget Plans](../../../prd/budget/prd.md#fr-budget-plan-identity-identify-monthly-budget-plans) | `requirement` | `implements` | `true` |
 | TC-BUDGET-ATTRIBUTABLE-HISTORY: Verify attributable plan history | `test_case` | `verifies` | `true` |
 | TC-BUDGET-PLAN-HISTORY-CONTRACT: Verify plan history contract | `test_case` | `verifies` | `true` |
 
@@ -37,10 +37,10 @@ Owners can reconstruct immutable plan intent and attributable lifecycle history 
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-DRAFT-CREATION](../tasks/draft-creation.md) | `compile` | Reads consume the persisted plan and revision model. |
-| [TASK-BUDGET-LEDGER-BUDGET-CLIENT](../tasks/ledger-budget-client.md) | `compile` | Revision detail enrichment consumes the public category client. |
-| [TASK-BUDGET-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Both queries consume persisted plan and revision state. |
-| [TASK-BUDGET-PERIOD-IDENTITY](../tasks/period-identity.md) | `compile` | List results derive Current, Future, or Closed from the trusted host date. |
+| [TASK-BUDGET-DRAFT-CREATION: TASK-BUDGET-DRAFT-CREATION](draft-creation.md) | `compile` | Reads consume the persisted plan and revision model. |
+| [TASK-BUDGET-LEDGER-BUDGET-CLIENT: TASK-BUDGET-LEDGER-BUDGET-CLIENT](ledger-budget-client.md) | `compile` | Revision detail enrichment consumes the public category client. |
+| [TASK-BUDGET-STATE-FOUNDATION: TASK-BUDGET-STATE-FOUNDATION](state-foundation.md) | `compile` | Both queries consume persisted plan and revision state. |
+| [TASK-BUDGET-PERIOD-IDENTITY: TASK-BUDGET-PERIOD-IDENTITY](period-identity.md) | `compile` | List results derive Current, Future, or Closed from the trusted host date. |
 
 ## Recipe
 
@@ -82,11 +82,11 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| BudgetStateStore | `consumes` | DM-BUDGET-STATE-STORE |  |
-| LedgerContractClient.ListBudgetCategoriesAsync | `consumes` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
-| BudgetPeriodResolver.Resolve | `consumes` | DM-BUDGET-PERIOD-PLAN |  |
-| GetBudgetPlanRevisionQuery.HandleAsync | `produces` | DM-BUDGET-REVISION-ENTRY |  |
-| ListBudgetPlanRevisionsQuery.HandleAsync | `produces` | DM-BUDGET-PERIOD-PLAN |  |
+| BudgetStateStore | `consumes` | [DM-BUDGET-STATE-STORE](../../../designs/budget/data-model.md#budgetstatestore) |  |
+| LedgerContractClient.ListBudgetCategoriesAsync | `consumes` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
+| BudgetPeriodResolver.Resolve | `consumes` | [DM-BUDGET-PERIOD-PLAN](../../../designs/budget/data-model.md#budgetperiodandplan) |  |
+| GetBudgetPlanRevisionQuery.HandleAsync | `produces` | [DM-BUDGET-REVISION-ENTRY](../../../designs/budget/data-model.md#budgetplanrevisionandentry) |  |
+| ListBudgetPlanRevisionsQuery.HandleAsync | `produces` | [DM-BUDGET-PERIOD-PLAN](../../../designs/budget/data-model.md#budgetperiodandplan) |  |
 
 ### Verification
 
@@ -102,24 +102,27 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1323` | `verified` | 2026-07-27T08:00:16.7576723+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-BUDGET-DRAFT-CREATION](../tasks/draft-creation.md): Reads consume the persisted plan and revision model.
-- `depends-on:compile` -> [TASK-BUDGET-LEDGER-BUDGET-CLIENT](../tasks/ledger-budget-client.md): Revision detail enrichment consumes the public category client.
-- `depends-on:compile` -> [TASK-BUDGET-PERIOD-IDENTITY](../tasks/period-identity.md): List results derive Current, Future, or Closed from the trusted host date.
-- `depends-on:compile` -> [TASK-BUDGET-STATE-FOUNDATION](../tasks/state-foundation.md): Both queries consume persisted plan and revision state.
-- `governed-by` -> DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations
-- `governed-by` -> DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions
-- `governed-by` -> DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider
-- `implements` -> FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle
-- `implements` -> FR-BUDGET-PLAN-HISTORY: Inspect plan state and revision history
-- `implements` -> FR-BUDGET-PLAN-IDENTITY: Identify monthly Budget Plans
-- `touches` -> DM-BUDGET-PERIOD-PLAN: BudgetPeriodAndPlan
-- `touches` -> DM-BUDGET-REVISION-ENTRY: BudgetPlanRevisionAndEntry
+- `bead-ref` -> `bd-1323` (verified)
+- `depends-on:compile` -> [TASK-BUDGET-DRAFT-CREATION: TASK-BUDGET-DRAFT-CREATION](draft-creation.md): Reads consume the persisted plan and revision model.
+- `depends-on:compile` -> [TASK-BUDGET-LEDGER-BUDGET-CLIENT: TASK-BUDGET-LEDGER-BUDGET-CLIENT](ledger-budget-client.md): Revision detail enrichment consumes the public category client.
+- `depends-on:compile` -> [TASK-BUDGET-PERIOD-IDENTITY: TASK-BUDGET-PERIOD-IDENTITY](period-identity.md): List results derive Current, Future, or Closed from the trusted host date.
+- `depends-on:compile` -> [TASK-BUDGET-STATE-FOUNDATION: TASK-BUDGET-STATE-FOUNDATION](state-foundation.md): Both queries consume persisted plan and revision state.
+- `governed-by` -> [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md)
+- `governed-by` -> [DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions](../../../designs/budget/decisions/plan-revision-lifecycle.md)
+- `governed-by` -> [DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider](../../../designs/budget/decisions/trusted-period-time.md)
+- `implements` -> [FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle](../../../prd/budget/prd.md#fr-budget-category-lifecycle-honor-spend-category-lifecycle)
+- `implements` -> [FR-BUDGET-PLAN-HISTORY: Inspect plan state and revision history](../../../prd/budget/prd.md#fr-budget-plan-history-inspect-plan-state-and-revision-history)
+- `implements` -> [FR-BUDGET-PLAN-IDENTITY: Identify monthly Budget Plans](../../../prd/budget/prd.md#fr-budget-plan-identity-identify-monthly-budget-plans)
+- `touches` -> [DM-BUDGET-PERIOD-PLAN: BudgetPeriodAndPlan](../../../designs/budget/data-model.md#budgetperiodandplan)
+- `touches` -> [DM-BUDGET-REVISION-ENTRY: BudgetPlanRevisionAndEntry](../../../designs/budget/data-model.md#budgetplanrevisionandentry)
 - `verifies` -> TC-BUDGET-ATTRIBUTABLE-HISTORY: Verify attributable plan history
 - `verifies` -> TC-BUDGET-PLAN-HISTORY-CONTRACT: Verify plan history contract
 

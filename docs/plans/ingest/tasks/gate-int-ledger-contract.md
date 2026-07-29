@@ -22,7 +22,7 @@ Prove that the released LEDGER registry exposes the exact account-read and idemp
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor | `design_decision` | `governed-by` | `true` |
+| [DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor](../../../designs/ingest/decisions/ledger-public-integration.md) | `design_decision` | `governed-by` | `true` |
 | TC-INGEST-LEDGER-PUBLIC-CONFORMANCE: Verify INGEST uses only the public LEDGER contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -71,10 +71,10 @@ No task dependencies recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| VerifiedLedgerOperationRegistry | `produces` | DM-LEDGER-OPERATION-DESCRIPTOR | Validated external OperationRegistry from the blocked-by LEDGER gate |
-| VerifiedLedgerAccountDetail | `produces` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS | Validated external AccountDetail contract |
-| VerifiedLedgerTransactionDetail | `produces` | DM-LEDGER-TRANSACTION-CONTRACTS | Validated external TransactionDetail contract |
-| LedgerIngestContractPrerequisite | `produces` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Local proof that upstream public contracts satisfy INGEST |
+| VerifiedLedgerOperationRegistry | `produces` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Validated external OperationRegistry from the blocked-by LEDGER gate |
+| VerifiedLedgerAccountDetail | `produces` | [DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS](../../../designs/ledger/data-model.md#accountcategoryoperationcontracts) | Validated external AccountDetail contract |
+| VerifiedLedgerTransactionDetail | `produces` | [DM-LEDGER-TRANSACTION-CONTRACTS](../../../designs/ledger/data-model.md#transactionoperationcontracts) | Validated external TransactionDetail contract |
+| LedgerIngestContractPrerequisite | `produces` | [DM-INGEST-LEDGER-COMMIT-CONTRACT](../../../designs/ingest/data-model.md#ledgercommitcontractsnapshot) | Local proof that upstream public contracts satisfy INGEST |
 
 ### Verification
 
@@ -100,7 +100,7 @@ No task dependencies recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2dg` (verified)
-- `governed-by` -> DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor
+- `governed-by` -> [DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor](../../../designs/ingest/decisions/ledger-public-integration.md)
 - `verifies` -> TC-INGEST-LEDGER-PUBLIC-CONFORMANCE: Verify INGEST uses only the public LEDGER contract
 
 ## Navigation

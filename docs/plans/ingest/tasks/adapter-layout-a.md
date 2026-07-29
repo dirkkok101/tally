@@ -22,19 +22,19 @@ Produce deterministic layout A statement evidence that feeds the governed normal
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam | `design_decision` | `governed-by` | `true` |
-| DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly | `design_decision` | `governed-by` | `true` |
-| DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence | `data_model` | `touches` | `true` |
-| FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts | `requirement` | `implements` | `true` |
-| FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants | `requirement` | `implements` | `true` |
+| [DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam](../../../designs/ingest/decisions/format-adapters.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly](../../../designs/ingest/decisions/source-description-absence.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence](../../../designs/ingest/data-model.md#formatvariantandsourceevidence) | `data_model` | `touches` | `true` |
+| [FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts](../../../prd/ingest/prd.md#fr-ingest-financial-normalization-normalize-exact-source-financial-facts) | `requirement` | `implements` | `true` |
+| [FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants](../../../prd/ingest/prd.md#fr-ingest-variant-qualification-qualify-and-detect-supported-statement-variants) | `requirement` | `implements` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md) | `compile` | The adapter implements IStatementAdapter over PdfDocumentEvidence and uses the private fixture helper. |
-| [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md) | `compile` | The adapter consumes the gate-validated exact public AccountDetail contract. |
-| [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md) | `compile` | Golden verification composes extracted FinancialEvidence and controls with the existing FinancialNormalizer and StatementReconciler. |
+| [TASK-INGEST-PDF-EXTRACTION: TASK-INGEST-PDF-EXTRACTION](pdf-extraction.md) | `compile` | The adapter implements IStatementAdapter over PdfDocumentEvidence and uses the private fixture helper. |
+| [TASK-INGEST-GATE-INT-LEDGER-CONTRACT: TASK-INGEST-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md) | `compile` | The adapter consumes the gate-validated exact public AccountDetail contract. |
+| [TASK-INGEST-PREVIEW-DOMAIN: TASK-INGEST-PREVIEW-DOMAIN](preview-domain.md) | `compile` | Golden verification composes extracted FinancialEvidence and controls with the existing FinancialNormalizer and StatementReconciler. |
 
 ## Recipe
 
@@ -77,13 +77,13 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| PdfDocumentEvidence | `consumes` | DM-INGEST-FORMAT-EVIDENCE |  |
-| VerifiedLedgerAccountDetail | `consumes` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS | Exact public AccountDetail. |
-| FinancialNormalizer | `consumes` | DM-INGEST-IMPORT-MANIFEST | Applies AccountClass conversion. |
-| StatementReconciler | `consumes` | DM-INGEST-IMPORT-MANIFEST | Verifies controls. |
-| PrivateStatementFixtureSet | `consumes` | EXT-INGEST-OWNER-BANK-STATEMENT |  |
-| CorrectedIStatementAdapterContract | `produces` | DM-INGEST-FORMAT-EVIDENCE | Extract consumes AccountDetail and emits FinancialEvidence/control inputs. |
-| PdfTextLayoutAStatementAdapter | `produces` | DM-INGEST-FORMAT-EVIDENCE |  |
+| PdfDocumentEvidence | `consumes` | [DM-INGEST-FORMAT-EVIDENCE](../../../designs/ingest/data-model.md#formatvariantandsourceevidence) |  |
+| VerifiedLedgerAccountDetail | `consumes` | [DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS](../../../designs/ledger/data-model.md#accountcategoryoperationcontracts) | Exact public AccountDetail. |
+| FinancialNormalizer | `consumes` | [DM-INGEST-IMPORT-MANIFEST](../../../designs/ingest/data-model.md#importbatchandmanifestrevision) | Applies AccountClass conversion. |
+| StatementReconciler | `consumes` | [DM-INGEST-IMPORT-MANIFEST](../../../designs/ingest/data-model.md#importbatchandmanifestrevision) | Verifies controls. |
+| PrivateStatementFixtureSet | `consumes` | [EXT-INGEST-OWNER-BANK-STATEMENT](../../../prd/ingest/prd.md#ext-ingest-owner-bank-statement-owner-supplied-bank-statement) |  |
+| CorrectedIStatementAdapterContract | `produces` | [DM-INGEST-FORMAT-EVIDENCE](../../../designs/ingest/data-model.md#formatvariantandsourceevidence) | Extract consumes AccountDetail and emits FinancialEvidence/control inputs. |
+| PdfTextLayoutAStatementAdapter | `produces` | [DM-INGEST-FORMAT-EVIDENCE](../../../designs/ingest/data-model.md#formatvariantandsourceevidence) |  |
 
 ### Verification
 
@@ -109,14 +109,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1as` (verified)
-- `depends-on:compile` -> [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md): The adapter consumes the gate-validated exact public AccountDetail contract.
-- `depends-on:compile` -> [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md): The adapter implements IStatementAdapter over PdfDocumentEvidence and uses the private fixture helper.
-- `depends-on:compile` -> [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md): Golden verification composes extracted FinancialEvidence and controls with the existing FinancialNormalizer and StatementReconciler.
-- `governed-by` -> DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam
-- `governed-by` -> DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly
-- `implements` -> FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts
-- `implements` -> FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants
-- `touches` -> DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence
+- `depends-on:compile` -> [TASK-INGEST-GATE-INT-LEDGER-CONTRACT: TASK-INGEST-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md): The adapter consumes the gate-validated exact public AccountDetail contract.
+- `depends-on:compile` -> [TASK-INGEST-PDF-EXTRACTION: TASK-INGEST-PDF-EXTRACTION](pdf-extraction.md): The adapter implements IStatementAdapter over PdfDocumentEvidence and uses the private fixture helper.
+- `depends-on:compile` -> [TASK-INGEST-PREVIEW-DOMAIN: TASK-INGEST-PREVIEW-DOMAIN](preview-domain.md): Golden verification composes extracted FinancialEvidence and controls with the existing FinancialNormalizer and StatementReconciler.
+- `governed-by` -> [DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam](../../../designs/ingest/decisions/format-adapters.md)
+- `governed-by` -> [DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly](../../../designs/ingest/decisions/source-description-absence.md)
+- `implements` -> [FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts](../../../prd/ingest/prd.md#fr-ingest-financial-normalization-normalize-exact-source-financial-facts)
+- `implements` -> [FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants](../../../prd/ingest/prd.md#fr-ingest-variant-qualification-qualify-and-detect-supported-statement-variants)
+- `touches` -> [DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence](../../../designs/ingest/data-model.md#formatvariantandsourceevidence)
 
 ## Navigation
 

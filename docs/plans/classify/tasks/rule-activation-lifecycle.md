@@ -22,22 +22,22 @@ Only current owner-approved evidence can atomically activate an immutable succes
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history | `design_decision` | `governed-by` | `true` |
-| DIAG-CLASSIFY-RULE-LIFECYCLE: Classification rule and rule-set lifecycle | `design_diagram` | `touches` | `false` |
-| DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle | `data_model` | `touches` | `true` |
-| FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence | `requirement` | `implements` | `true` |
-| NFR-CLASSIFY-ATTRIBUTABLE-HISTORY: Retain attributable classification history | `nfr` | `satisfies` | `true` |
+| [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DIAG-CLASSIFY-RULE-LIFECYCLE: Classification rule and rule-set lifecycle](../../../designs/classify/diagrams/rule-lifecycle.md) | `design_diagram` | `touches` | `false` |
+| [DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle](../../../designs/classify/data-model.md#classificationrulelifecycle) | `data_model` | `touches` | `true` |
+| [FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules](../../../prd/classify/prd.md#fr-classify-rule-lifecycle-manage-versioned-deterministic-rules) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence](../../../prd/classify/prd.md#fr-classify-rule-validation-validate-candidate-rule-sets-against-private-evidence) | `requirement` | `implements` | `true` |
+| [NFR-CLASSIFY-ATTRIBUTABLE-HISTORY: Retain attributable classification history](../../../prd/classify/prd.md#nfr-classify-attributable-history-retain-attributable-classification-history) | `nfr` | `satisfies` | `true` |
 | TC-CLASSIFY-RULE-LIFECYCLE-CONTRACT: Verify immutable rule lifecycle | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULE-VALIDATION](../tasks/rule-validation.md) | `compile` | Activation consumes current aggregate validation evidence and immutable drafts. |
-| [TASK-CLASSIFY-RULE-DRAFT-SAVE](../tasks/rule-draft-save.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULE-DRAFT-SAVE. |
+| [TASK-CLASSIFY-RULE-VALIDATION: TASK-CLASSIFY-RULE-VALIDATION](rule-validation.md) | `compile` | Activation consumes current aggregate validation evidence and immutable drafts. |
+| [TASK-CLASSIFY-RULE-DRAFT-SAVE: TASK-CLASSIFY-RULE-DRAFT-SAVE](rule-draft-save.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULE-DRAFT-SAVE. |
 
 ## Recipe
 
@@ -87,11 +87,11 @@ Only current owner-approved evidence can atomically activate an immutable succes
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassificationValidationStore | `consumes` | DM-CLASSIFY-VALIDATION-RUN |  |
-| ClassificationRuleStore | `consumes` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| ActivateClassificationRuleCommand.HandleAsync | `produces` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| RetireClassificationRuleCommand.HandleAsync | `produces` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| RuleSetStore | `produces` | DM-CLASSIFY-RULE-LIFECYCLE |  |
+| ClassificationValidationStore | `consumes` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
+| ClassificationRuleStore | `consumes` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| ActivateClassificationRuleCommand.HandleAsync | `produces` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| RetireClassificationRuleCommand.HandleAsync | `produces` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| RuleSetStore | `produces` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
 
 ### Verification
 
@@ -113,16 +113,16 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-CLASSIFY-RULE-DRAFT-SAVE](../tasks/rule-draft-save.md): Consumes an interface produced by TASK-CLASSIFY-RULE-DRAFT-SAVE.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULE-VALIDATION](../tasks/rule-validation.md): Activation consumes current aggregate validation evidence and immutable drafts.
-- `governed-by` -> DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability
-- `governed-by` -> DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions
-- `governed-by` -> DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history
-- `implements` -> FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules
-- `implements` -> FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence
-- `satisfies` -> NFR-CLASSIFY-ATTRIBUTABLE-HISTORY: Retain attributable classification history
-- `touches` -> DIAG-CLASSIFY-RULE-LIFECYCLE: Classification rule and rule-set lifecycle
-- `touches` -> DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle
+- `depends-on:compile` -> [TASK-CLASSIFY-RULE-DRAFT-SAVE: TASK-CLASSIFY-RULE-DRAFT-SAVE](rule-draft-save.md): Consumes an interface produced by TASK-CLASSIFY-RULE-DRAFT-SAVE.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULE-VALIDATION: TASK-CLASSIFY-RULE-VALIDATION](rule-validation.md): Activation consumes current aggregate validation evidence and immutable drafts.
+- `governed-by` -> [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md)
+- `governed-by` -> [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md)
+- `governed-by` -> [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md)
+- `implements` -> [FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules](../../../prd/classify/prd.md#fr-classify-rule-lifecycle-manage-versioned-deterministic-rules)
+- `implements` -> [FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence](../../../prd/classify/prd.md#fr-classify-rule-validation-validate-candidate-rule-sets-against-private-evidence)
+- `satisfies` -> [NFR-CLASSIFY-ATTRIBUTABLE-HISTORY: Retain attributable classification history](../../../prd/classify/prd.md#nfr-classify-attributable-history-retain-attributable-classification-history)
+- `touches` -> [DIAG-CLASSIFY-RULE-LIFECYCLE: Classification rule and rule-set lifecycle](../../../designs/classify/diagrams/rule-lifecycle.md)
+- `touches` -> [DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle](../../../designs/classify/data-model.md#classificationrulelifecycle)
 - `verifies` -> TC-CLASSIFY-RULE-LIFECYCLE-CONTRACT: Verify immutable rule lifecycle
 
 ## Navigation

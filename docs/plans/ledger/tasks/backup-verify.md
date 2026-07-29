@@ -22,20 +22,20 @@ Publish one owner-only backup only after complete-state, privacy, replay, relati
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts | `data_model` | `touches` | `true` |
-| FR-LEDGER-BACKUP-VERIFICATION: Create and verify Ledger backups | `requirement` | `implements` | `true` |
-| NFR-LEDGER-LOCAL-DATA-PROTECTION: Protect local financial data | `nfr` | `satisfies` | `true` |
+| [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency](../../../designs/ledger/decisions/idempotent-mutations.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-BACKUP-VERIFICATION: Create and verify Ledger backups](../../../prd/ledger/prd.md#fr-ledger-backup-verification-create-and-verify-ledger-backups) | `requirement` | `implements` | `true` |
+| [NFR-LEDGER-LOCAL-DATA-PROTECTION: Protect local financial data](../../../prd/ledger/prd.md#nfr-ledger-local-data-protection-protect-local-financial-data) | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-BACKUP-VERIFICATION-CONTRACT: Verify create and verify ledger backups contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-DURABLE-STATE-VERIFIER](../tasks/durable-state-verifier.md) | `compile` | Consumes DurableLedgerVerifier. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Consumes ArtifactReconciler. |
-| [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | Consumes IHostArtifactProtection. |
+| [TASK-LEDGER-DURABLE-STATE-VERIFIER: TASK-LEDGER-DURABLE-STATE-VERIFIER](durable-state-verifier.md) | `compile` | Consumes DurableLedgerVerifier. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Consumes ArtifactReconciler. |
+| [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md) | `compile` | Consumes IHostArtifactProtection. |
 
 ## Recipe
 
@@ -78,11 +78,11 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| BackupOperationModule | `produces` | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS |  |
-| BackupService | `produces` | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS |  |
-| DurableLedgerVerifier | `consumes` | DM-LEDGER-STORE-GENERATION |  |
-| ArtifactReconciler | `consumes` | DD-LEDGER-IDEMPOTENT-MUTATIONS |  |
-| IHostArtifactProtection | `consumes` | DD-LEDGER-EMBEDDED-STORAGE |  |
+| BackupOperationModule | `produces` | [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts) |  |
+| BackupService | `produces` | [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts) |  |
+| DurableLedgerVerifier | `consumes` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) |  |
+| ArtifactReconciler | `consumes` | [DD-LEDGER-IDEMPOTENT-MUTATIONS](../../../designs/ledger/decisions/idempotent-mutations.md) |  |
+| IHostArtifactProtection | `consumes` | [DD-LEDGER-EMBEDDED-STORAGE](../../../designs/ledger/decisions/embedded-storage.md) |  |
 
 ### Verification
 
@@ -108,14 +108,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3j9` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumes ArtifactReconciler.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumes IHostArtifactProtection.
-- `depends-on:compile` -> [TASK-LEDGER-DURABLE-STATE-VERIFIER](../tasks/durable-state-verifier.md): Consumes DurableLedgerVerifier.
-- `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
-- `governed-by` -> DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency
-- `implements` -> FR-LEDGER-BACKUP-VERIFICATION: Create and verify Ledger backups
-- `satisfies` -> NFR-LEDGER-LOCAL-DATA-PROTECTION: Protect local financial data
-- `touches` -> DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Consumes ArtifactReconciler.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md): Consumes IHostArtifactProtection.
+- `depends-on:compile` -> [TASK-LEDGER-DURABLE-STATE-VERIFIER: TASK-LEDGER-DURABLE-STATE-VERIFIER](durable-state-verifier.md): Consumes DurableLedgerVerifier.
+- `governed-by` -> [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md)
+- `governed-by` -> [DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency](../../../designs/ledger/decisions/idempotent-mutations.md)
+- `implements` -> [FR-LEDGER-BACKUP-VERIFICATION: Create and verify Ledger backups](../../../prd/ledger/prd.md#fr-ledger-backup-verification-create-and-verify-ledger-backups)
+- `satisfies` -> [NFR-LEDGER-LOCAL-DATA-PROTECTION: Protect local financial data](../../../prd/ledger/prd.md#nfr-ledger-local-data-protection-protect-local-financial-data)
+- `touches` -> [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts)
 - `verifies` -> TC-LEDGER-BACKUP-VERIFICATION-CONTRACT: Verify create and verify ledger backups contract
 
 ## Navigation

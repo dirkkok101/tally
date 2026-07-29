@@ -22,17 +22,17 @@ Prove an owner can recover from or safely terminate every failed ingestion witho
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| NFR-INGEST-LOCAL-DATA-PROTECTION: Protect local statement and ingestion data | `nfr` | `satisfies` | `true` |
+| [NFR-INGEST-LOCAL-DATA-PROTECTION: Protect local statement and ingestion data](../../../prd/ingest/prd.md#nfr-ingest-local-data-protection-protect-local-statement-and-ingestion-data) | `nfr` | `satisfies` | `true` |
 | TC-INGEST-ARTIFACT-CLEANUP-CONTRACT: Verify abandon and artifact cleanup | `test_case` | `verifies` | `true` |
 | TC-INGEST-FAILURE-STATUS-CONTRACT: Verify safe failure and status reporting | `test_case` | `verifies` | `true` |
-| UC-INGEST-005: Handle and clean up a failed ingestion | `use_case` | `covers` | `true` |
+| [UC-INGEST-005: Handle and clean up a failed ingestion](../../../prd/ingest/prd.md#uc-ingest-005-handle-and-clean-up-a-failed-ingestion) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | UC verification exercises published status/abandon/cleanup operations. |
-| [TASK-INGEST-GATE-SECURITY](../tasks/gate-security.md) | `compile` | The workflow consumes the consolidated security canary and permission evidence. |
+| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT: TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | UC verification exercises published status/abandon/cleanup operations. |
+| [TASK-INGEST-GATE-SECURITY: TASK-INGEST-GATE-SECURITY](gate-security.md) | `compile` | The workflow consumes the consolidated security canary and permission evidence. |
 
 ## Recipe
 
@@ -72,9 +72,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteIngestPublicContract | `consumes` | DM-INGEST-OPERATION-CONTRACTS |  |
-| IngestSecurityGateEvidence | `consumes` | NFR-INGEST-LOCAL-DATA-PROTECTION |  |
-| UCIngest005Evidence | `produces` | UC-INGEST-005 |  |
+| CompleteIngestPublicContract | `consumes` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) |  |
+| IngestSecurityGateEvidence | `consumes` | [NFR-INGEST-LOCAL-DATA-PROTECTION](../../../prd/ingest/prd.md#nfr-ingest-local-data-protection-protect-local-statement-and-ingestion-data) |  |
+| UCIngest005Evidence | `produces` | [UC-INGEST-005](../../../prd/ingest/prd.md#uc-ingest-005-handle-and-clean-up-a-failed-ingestion) |  |
 
 ### Verification
 
@@ -99,10 +99,10 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-113` (verified)
-- `covers` -> UC-INGEST-005: Handle and clean up a failed ingestion
-- `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC verification exercises published status/abandon/cleanup operations.
-- `depends-on:compile` -> [TASK-INGEST-GATE-SECURITY](../tasks/gate-security.md): The workflow consumes the consolidated security canary and permission evidence.
-- `satisfies` -> NFR-INGEST-LOCAL-DATA-PROTECTION: Protect local statement and ingestion data
+- `covers` -> [UC-INGEST-005: Handle and clean up a failed ingestion](../../../prd/ingest/prd.md#uc-ingest-005-handle-and-clean-up-a-failed-ingestion)
+- `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT: TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): UC verification exercises published status/abandon/cleanup operations.
+- `depends-on:compile` -> [TASK-INGEST-GATE-SECURITY: TASK-INGEST-GATE-SECURITY](gate-security.md): The workflow consumes the consolidated security canary and permission evidence.
+- `satisfies` -> [NFR-INGEST-LOCAL-DATA-PROTECTION: Protect local statement and ingestion data](../../../prd/ingest/prd.md#nfr-ingest-local-data-protection-protect-local-statement-and-ingestion-data)
 - `verifies` -> TC-INGEST-ARTIFACT-CLEANUP-CONTRACT: Verify abandon and artifact cleanup
 - `verifies` -> TC-INGEST-FAILURE-STATUS-CONTRACT: Verify safe failure and status reporting
 

@@ -22,11 +22,11 @@ ingest.db v2 stores complete last-error metadata and stable status-snapshot prim
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction | `design_decision` | `governed-by` | `true` |
-| DM-INGEST-ERROR-STATUS-CONTRACTS: IngestErrorAndStatusContracts | `data_model` | `touches` | `true` |
-| DM-INGEST-STATE-STORE: IngestStateStore | `data_model` | `touches` | `true` |
-| FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit | `requirement` | `implements` | `true` |
-| FR-INGEST-FAILURE-STATUS: Report blocked and failed ingestion safely | `requirement` | `implements` | `true` |
+| [DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction](../../../designs/ingest/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INGEST-ERROR-STATUS-CONTRACTS: IngestErrorAndStatusContracts](../../../designs/ingest/data-model.md#ingesterrorandstatuscontracts) | `data_model` | `touches` | `true` |
+| [DM-INGEST-STATE-STORE: IngestStateStore](../../../designs/ingest/data-model.md#ingeststatestore) | `data_model` | `touches` | `true` |
+| [FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit](../../../prd/ingest/prd.md#fr-ingest-durable-receipt-resume-record-durable-outcomes-and-resume-interrupted-commit) | `requirement` | `implements` | `true` |
+| [FR-INGEST-FAILURE-STATUS: Report blocked and failed ingestion safely](../../../prd/ingest/prd.md#fr-ingest-failure-status-report-blocked-and-failed-ingestion-safely) | `requirement` | `implements` | `true` |
 | TC-INGEST-FAILURE-STATUS-CONTRACT: Verify safe failure and status reporting | `test_case` | `verifies` | `true` |
 | TC-INGEST-STATE-STORE-CONFORMANCE: Verify INGEST SQLite state and retention | `test_case` | `verifies` | `true` |
 
@@ -34,8 +34,8 @@ ingest.db v2 stores complete last-error metadata and stable status-snapshot prim
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | V002 upgrades the protected V001 ingest.db foundation. |
-| [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | BatchErrorEventStore persists complete IngestError contract values. |
+| [TASK-INGEST-STATE-FOUNDATION: TASK-INGEST-STATE-FOUNDATION](state-foundation.md) | `compile` | V002 upgrades the protected V001 ingest.db foundation. |
+| [TASK-INGEST-CONTRACT-FOUNDATION: TASK-INGEST-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | BatchErrorEventStore persists complete IngestError contract values. |
 
 ## Recipe
 
@@ -79,9 +79,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| IngestSchemaVersion2 | `produces` | DM-INGEST-STATE-STORE | V002 durable error and ephemeral snapshot tables |
-| BatchErrorEventStore.AppendAsync | `produces` | DM-INGEST-ERROR-STATUS-CONTRACTS | Caller-transaction complete safe error append |
-| BatchErrorEventStore.LatestAsync | `produces` | DM-INGEST-ERROR-STATUS-CONTRACTS | Highest durable per-batch error sequence |
+| IngestSchemaVersion2 | `produces` | [DM-INGEST-STATE-STORE](../../../designs/ingest/data-model.md#ingeststatestore) | V002 durable error and ephemeral snapshot tables |
+| BatchErrorEventStore.AppendAsync | `produces` | [DM-INGEST-ERROR-STATUS-CONTRACTS](../../../designs/ingest/data-model.md#ingesterrorandstatuscontracts) | Caller-transaction complete safe error append |
+| BatchErrorEventStore.LatestAsync | `produces` | [DM-INGEST-ERROR-STATUS-CONTRACTS](../../../designs/ingest/data-model.md#ingesterrorandstatuscontracts) | Highest durable per-batch error sequence |
 
 ### Verification
 
@@ -108,13 +108,13 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2i0` (verified)
-- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): BatchErrorEventStore persists complete IngestError contract values.
-- `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md): V002 upgrades the protected V001 ingest.db foundation.
-- `governed-by` -> DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction
-- `implements` -> FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit
-- `implements` -> FR-INGEST-FAILURE-STATUS: Report blocked and failed ingestion safely
-- `touches` -> DM-INGEST-ERROR-STATUS-CONTRACTS: IngestErrorAndStatusContracts
-- `touches` -> DM-INGEST-STATE-STORE: IngestStateStore
+- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION: TASK-INGEST-CONTRACT-FOUNDATION](contract-foundation.md): BatchErrorEventStore persists complete IngestError contract values.
+- `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION: TASK-INGEST-STATE-FOUNDATION](state-foundation.md): V002 upgrades the protected V001 ingest.db foundation.
+- `governed-by` -> [DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction](../../../designs/ingest/decisions/state-store.md)
+- `implements` -> [FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit](../../../prd/ingest/prd.md#fr-ingest-durable-receipt-resume-record-durable-outcomes-and-resume-interrupted-commit)
+- `implements` -> [FR-INGEST-FAILURE-STATUS: Report blocked and failed ingestion safely](../../../prd/ingest/prd.md#fr-ingest-failure-status-report-blocked-and-failed-ingestion-safely)
+- `touches` -> [DM-INGEST-ERROR-STATUS-CONTRACTS: IngestErrorAndStatusContracts](../../../designs/ingest/data-model.md#ingesterrorandstatuscontracts)
+- `touches` -> [DM-INGEST-STATE-STORE: IngestStateStore](../../../designs/ingest/data-model.md#ingeststatestore)
 - `verifies` -> TC-INGEST-FAILURE-STATUS-CONTRACT: Verify safe failure and status reporting
 - `verifies` -> TC-INGEST-STATE-STORE-CONFORMANCE: Verify INGEST SQLite state and retention
 

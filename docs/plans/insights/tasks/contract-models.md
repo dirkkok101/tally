@@ -22,13 +22,13 @@ Every analytical INSIGHTS data shape is represented by one deterministic Native-
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields | `adr` | `governed-by` | `true` |
-| DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries | `design_decision` | `governed-by` | `true` |
-| DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation | `data_model` | `touches` | `true` |
-| DM-INSIGHTS-COHERENT-EVIDENCE: BoundInsightEvidence | `data_model` | `touches` | `true` |
-| DM-INSIGHTS-INSIGHT-REPORT: InsightReport | `data_model` | `touches` | `true` |
-| DM-INSIGHTS-POLICY-CATALOGUE: InsightPolicyCatalogue | `data_model` | `touches` | `true` |
-| FR-INSIGHTS-CONTRACT-DISCOVERY: Discover the Public INSIGHTS Operation contract | `requirement` | `implements` | `true` |
+| [ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields](../../../adr/core/0004-enum-over-string-constants-for-system-owned-status-fields.md) | `adr` | `governed-by` | `true` |
+| [DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries](../../../designs/insights/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation](../../../designs/insights/data-model.md#analysiswindowmetricstateandexplanation) | `data_model` | `touches` | `true` |
+| [DM-INSIGHTS-COHERENT-EVIDENCE: BoundInsightEvidence](../../../designs/insights/data-model.md#boundinsightevidence) | `data_model` | `touches` | `true` |
+| [DM-INSIGHTS-INSIGHT-REPORT: InsightReport](../../../designs/insights/data-model.md#insightreport) | `data_model` | `touches` | `true` |
+| [DM-INSIGHTS-POLICY-CATALOGUE: InsightPolicyCatalogue](../../../designs/insights/data-model.md#insightpolicycatalogue) | `data_model` | `touches` | `true` |
+| [FR-INSIGHTS-CONTRACT-DISCOVERY: Discover the Public INSIGHTS Operation contract](../../../prd/insights/prd.md#fr-insights-contract-discovery-discover-the-public-insights-operation-contract) | `requirement` | `implements` | `true` |
 
 ## Dependencies
 
@@ -75,10 +75,10 @@ No task dependencies recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| InsightPolicyCatalogueContracts | `produces` | DM-INSIGHTS-POLICY-CATALOGUE | active and deferred built-in policy descriptors |
-| BoundInsightEvidence | `produces` | DM-INSIGHTS-COHERENT-EVIDENCE | validated ephemeral producer evidence |
-| AnalysisWindowMetricStateAndExplanation | `produces` | DM-INSIGHTS-ANALYTICAL-EVIDENCE | exact analytical state records |
-| InsightReport | `produces` | DM-INSIGHTS-INSIGHT-REPORT | complete bounded analytical result |
+| InsightPolicyCatalogueContracts | `produces` | [DM-INSIGHTS-POLICY-CATALOGUE](../../../designs/insights/data-model.md#insightpolicycatalogue) | active and deferred built-in policy descriptors |
+| BoundInsightEvidence | `produces` | [DM-INSIGHTS-COHERENT-EVIDENCE](../../../designs/insights/data-model.md#boundinsightevidence) | validated ephemeral producer evidence |
+| AnalysisWindowMetricStateAndExplanation | `produces` | [DM-INSIGHTS-ANALYTICAL-EVIDENCE](../../../designs/insights/data-model.md#analysiswindowmetricstateandexplanation) | exact analytical state records |
+| InsightReport | `produces` | [DM-INSIGHTS-INSIGHT-REPORT](../../../designs/insights/data-model.md#insightreport) | complete bounded analytical result |
 
 ### Verification
 
@@ -103,13 +103,13 @@ No task dependencies recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1qz` (verified)
-- `governed-by` -> ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields
-- `governed-by` -> DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries
-- `implements` -> FR-INSIGHTS-CONTRACT-DISCOVERY: Discover the Public INSIGHTS Operation contract
-- `touches` -> DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation
-- `touches` -> DM-INSIGHTS-COHERENT-EVIDENCE: BoundInsightEvidence
-- `touches` -> DM-INSIGHTS-INSIGHT-REPORT: InsightReport
-- `touches` -> DM-INSIGHTS-POLICY-CATALOGUE: InsightPolicyCatalogue
+- `governed-by` -> [ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields](../../../adr/core/0004-enum-over-string-constants-for-system-owned-status-fields.md)
+- `governed-by` -> [DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries](../../../designs/insights/decisions/application-architecture.md)
+- `implements` -> [FR-INSIGHTS-CONTRACT-DISCOVERY: Discover the Public INSIGHTS Operation contract](../../../prd/insights/prd.md#fr-insights-contract-discovery-discover-the-public-insights-operation-contract)
+- `touches` -> [DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation](../../../designs/insights/data-model.md#analysiswindowmetricstateandexplanation)
+- `touches` -> [DM-INSIGHTS-COHERENT-EVIDENCE: BoundInsightEvidence](../../../designs/insights/data-model.md#boundinsightevidence)
+- `touches` -> [DM-INSIGHTS-INSIGHT-REPORT: InsightReport](../../../designs/insights/data-model.md#insightreport)
+- `touches` -> [DM-INSIGHTS-POLICY-CATALOGUE: InsightPolicyCatalogue](../../../designs/insights/data-model.md#insightpolicycatalogue)
 
 ## Navigation
 

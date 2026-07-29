@@ -22,17 +22,17 @@ UC-INSIGHTS-002 returns the cited exact value or state, rule, provenance, limita
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies](../../../designs/insights/decisions/deterministic-report-compiler.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
 | TC-INSIGHTS-CHANNELS-CONSUMER-PARITY: Verify the CHANNELS consumer boundary | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-REPORT-EXPLANATION-CONTRACT: Verify deterministic report explanations | `test_case` | `verifies` | `true` |
-| UC-INSIGHTS-002: Inspect report evidence and explanations | `use_case` | `covers` | `true` |
+| [UC-INSIGHTS-002: Inspect report evidence and explanations](../../../prd/insights/prd.md#uc-insights-002-inspect-report-evidence-and-explanations) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | UC-002 invokes published Generate, Get, and Explain handlers. |
+| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT: TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | UC-002 invokes published Generate, Get, and Explain handlers. |
 
 ## Recipe
 
@@ -71,8 +71,8 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteInsightsPublicContract | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS | Generate, Get, and Explain |
-| VerifiedInsightsUc002 | `produces` | UC-INSIGHTS-002 | inspection and consumer parity proof |
+| CompleteInsightsPublicContract | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | Generate, Get, and Explain |
+| VerifiedInsightsUc002 | `produces` | [UC-INSIGHTS-002](../../../prd/insights/prd.md#uc-insights-002-inspect-report-evidence-and-explanations) | inspection and consumer parity proof |
 
 ### Verification
 
@@ -97,10 +97,10 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2g3` (verified)
-- `covers` -> UC-INSIGHTS-002: Inspect report evidence and explanations
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC-002 invokes published Generate, Get, and Explain handlers.
-- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies
-- `governed-by` -> DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads
+- `covers` -> [UC-INSIGHTS-002: Inspect report evidence and explanations](../../../prd/insights/prd.md#uc-insights-002-inspect-report-evidence-and-explanations)
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT: TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): UC-002 invokes published Generate, Get, and Explain handlers.
+- `governed-by` -> [DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies](../../../designs/insights/decisions/deterministic-report-compiler.md)
+- `governed-by` -> [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md)
 - `verifies` -> TC-INSIGHTS-CHANNELS-CONSUMER-PARITY: Verify the CHANNELS consumer boundary
 - `verifies` -> TC-INSIGHTS-REPORT-EXPLANATION-CONTRACT: Verify deterministic report explanations
 

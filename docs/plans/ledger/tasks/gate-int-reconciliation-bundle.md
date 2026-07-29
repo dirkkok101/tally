@@ -22,24 +22,24 @@ Expose one nine-operation ReconciliationOperationBundle with consistent schemas,
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| DIAG-LEDGER-RECONCILIATION-SEQUENCE: Match-first statement reconciliation sequence | `design_diagram` | `touches` | `true` |
-| DIAG-LEDGER-RECONCILIATION-STATE: Provider-neutral reconciliation lifecycle | `design_diagram` | `touches` | `true` |
-| FA-LEDGER-RECONCILIATION: Evidence Reconciliation and Coverage | `feature_area` | `touches` | `true` |
-| NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed | `nfr` | `satisfies` | `true` |
+| [DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry](../../../designs/ledger/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DIAG-LEDGER-RECONCILIATION-SEQUENCE: Match-first statement reconciliation sequence](../../../designs/ledger/diagrams/reconciliation-sequence.md) | `design_diagram` | `touches` | `true` |
+| [DIAG-LEDGER-RECONCILIATION-STATE: Provider-neutral reconciliation lifecycle](../../../designs/ledger/diagrams/reconciliation-state.md) | `design_diagram` | `touches` | `true` |
+| [FA-LEDGER-RECONCILIATION: Evidence Reconciliation and Coverage](../../../designs/ledger/features/reconciliation/api-surface.md) | `feature_area` | `touches` | `true` |
+| [NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed](../../../prd/ledger/prd.md#nfr-ledger-reconciliation-safety-reconcile-deterministically-and-fail-closed) | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY: Prove reconciliation effects are crash-atomic and replay-safe | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-RECONCILIATION-PROJECTION](../tasks/reconciliation-projection.md) | `compile` | Bundle consumes ReconciliationProjectionOperationModule. |
-| [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md) | `compile` | Bundle consumes ReconciliationApplyOperationModule. |
-| [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md) | `compile` | Bundle consumes ReconciliationDecisionOperationModule. |
-| [TASK-LEDGER-RECONCILIATION-COVERAGE](../tasks/reconciliation-coverage.md) | `compile` | Bundle consumes ReconciliationCoverageOperationModule. |
-| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md) | `compile` | The bundle consumes the extended reconciliation.apply correction disposition. |
-| [TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION](../tasks/reconciliation-automatic-activation.md) | `compile` | The complete reconciliation bundle proves automatic cases only after the evidence-backed policy is activated. |
+| [TASK-LEDGER-RECONCILIATION-PROJECTION: TASK-LEDGER-RECONCILIATION-PROJECTION](reconciliation-projection.md) | `compile` | Bundle consumes ReconciliationProjectionOperationModule. |
+| [TASK-LEDGER-RECONCILIATION-APPLY: TASK-LEDGER-RECONCILIATION-APPLY](reconciliation-apply.md) | `compile` | Bundle consumes ReconciliationApplyOperationModule. |
+| [TASK-LEDGER-RECONCILIATION-DECISIONS: TASK-LEDGER-RECONCILIATION-DECISIONS](reconciliation-decisions.md) | `compile` | Bundle consumes ReconciliationDecisionOperationModule. |
+| [TASK-LEDGER-RECONCILIATION-COVERAGE: TASK-LEDGER-RECONCILIATION-COVERAGE](reconciliation-coverage.md) | `compile` | Bundle consumes ReconciliationCoverageOperationModule. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION: TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](reconciliation-statement-correction.md) | `compile` | The bundle consumes the extended reconciliation.apply correction disposition. |
+| [TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION: TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION](reconciliation-automatic-activation.md) | `compile` | The complete reconciliation bundle proves automatic cases only after the evidence-backed policy is activated. |
 
 ## Recipe
 
@@ -78,12 +78,12 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ReconciliationProjectionOperationModule | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS | Projection and candidate descriptors |
-| ReconciliationApplyOperationModule | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS | Base reconciliation dispositions |
-| StatementCorrectionOperationExtension | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS | Statement-authoritative correction disposition |
-| ReconciliationDecisionOperationModule | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS | Owner decision descriptors |
-| ReconciliationCoverageOperationModule | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS | Coverage and exception descriptors |
-| ReconciliationOperationBundle | `produces` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS | Exactly nine provider-neutral reconciliation descriptors |
+| ReconciliationProjectionOperationModule | `consumes` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) | Projection and candidate descriptors |
+| ReconciliationApplyOperationModule | `consumes` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) | Base reconciliation dispositions |
+| StatementCorrectionOperationExtension | `consumes` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) | Statement-authoritative correction disposition |
+| ReconciliationDecisionOperationModule | `consumes` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) | Owner decision descriptors |
+| ReconciliationCoverageOperationModule | `consumes` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) | Coverage and exception descriptors |
+| ReconciliationOperationBundle | `produces` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) | Exactly nine provider-neutral reconciliation descriptors |
 
 ### Verification
 
@@ -109,18 +109,18 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1f1` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md): Bundle consumes ReconciliationApplyOperationModule.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION](../tasks/reconciliation-automatic-activation.md): The complete reconciliation bundle proves automatic cases only after the evidence-backed policy is activated.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-COVERAGE](../tasks/reconciliation-coverage.md): Bundle consumes ReconciliationCoverageOperationModule.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md): Bundle consumes ReconciliationDecisionOperationModule.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-PROJECTION](../tasks/reconciliation-projection.md): Bundle consumes ReconciliationProjectionOperationModule.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](../tasks/reconciliation-statement-correction.md): The bundle consumes the extended reconciliation.apply correction disposition.
-- `governed-by` -> DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry
-- `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
-- `satisfies` -> NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed
-- `touches` -> DIAG-LEDGER-RECONCILIATION-SEQUENCE: Match-first statement reconciliation sequence
-- `touches` -> DIAG-LEDGER-RECONCILIATION-STATE: Provider-neutral reconciliation lifecycle
-- `touches` -> FA-LEDGER-RECONCILIATION: Evidence Reconciliation and Coverage
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-APPLY: TASK-LEDGER-RECONCILIATION-APPLY](reconciliation-apply.md): Bundle consumes ReconciliationApplyOperationModule.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION: TASK-LEDGER-RECONCILIATION-AUTOMATIC-ACTIVATION](reconciliation-automatic-activation.md): The complete reconciliation bundle proves automatic cases only after the evidence-backed policy is activated.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-COVERAGE: TASK-LEDGER-RECONCILIATION-COVERAGE](reconciliation-coverage.md): Bundle consumes ReconciliationCoverageOperationModule.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-DECISIONS: TASK-LEDGER-RECONCILIATION-DECISIONS](reconciliation-decisions.md): Bundle consumes ReconciliationDecisionOperationModule.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-PROJECTION: TASK-LEDGER-RECONCILIATION-PROJECTION](reconciliation-projection.md): Bundle consumes ReconciliationProjectionOperationModule.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION: TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION](reconciliation-statement-correction.md): The bundle consumes the extended reconciliation.apply correction disposition.
+- `governed-by` -> [DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry](../../../designs/ledger/decisions/cli-operation-contract.md)
+- `governed-by` -> [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md)
+- `satisfies` -> [NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed](../../../prd/ledger/prd.md#nfr-ledger-reconciliation-safety-reconcile-deterministically-and-fail-closed)
+- `touches` -> [DIAG-LEDGER-RECONCILIATION-SEQUENCE: Match-first statement reconciliation sequence](../../../designs/ledger/diagrams/reconciliation-sequence.md)
+- `touches` -> [DIAG-LEDGER-RECONCILIATION-STATE: Provider-neutral reconciliation lifecycle](../../../designs/ledger/diagrams/reconciliation-state.md)
+- `touches` -> [FA-LEDGER-RECONCILIATION: Evidence Reconciliation and Coverage](../../../designs/ledger/features/reconciliation/api-surface.md)
 - `verifies` -> TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY: Prove reconciliation effects are crash-atomic and replay-safe
 
 ## Navigation

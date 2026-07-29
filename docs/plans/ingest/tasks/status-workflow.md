@@ -22,18 +22,18 @@ Deliver ingest.status with deterministic paging, mutation certainty, unresolved 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-CLI-OPERATION-CONTRACT: Eight explicit workflow operations from one registry | `design_decision` | `governed-by` | `true` |
-| DM-INGEST-ERROR-STATUS-CONTRACTS: IngestErrorAndStatusContracts | `data_model` | `touches` | `true` |
-| FR-INGEST-FAILURE-STATUS: Report blocked and failed ingestion safely | `requirement` | `implements` | `true` |
+| [DD-INGEST-CLI-OPERATION-CONTRACT: Eight explicit workflow operations from one registry](../../../designs/ingest/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INGEST-ERROR-STATUS-CONTRACTS: IngestErrorAndStatusContracts](../../../designs/ingest/data-model.md#ingesterrorandstatuscontracts) | `data_model` | `touches` | `true` |
+| [FR-INGEST-FAILURE-STATUS: Report blocked and failed ingestion safely](../../../prd/ingest/prd.md#fr-ingest-failure-status-report-blocked-and-failed-ingestion-safely) | `requirement` | `implements` | `true` |
 | TC-INGEST-FAILURE-STATUS-CONTRACT: Verify safe failure and status reporting | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Status consumes IngestError, BatchStatus, and ImportReceipt contracts. |
-| [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md) | `compile` | Status requires the V002 error events, store generation, and snapshot tables. |
-| [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Status builds on the protected ingest.db and V001 tables; TASK-INGEST-STATUS-STATE-V002 supplies the corrected error and snapshot extension. |
+| [TASK-INGEST-CONTRACT-FOUNDATION: TASK-INGEST-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | Status consumes IngestError, BatchStatus, and ImportReceipt contracts. |
+| [TASK-INGEST-STATUS-STATE-V002: TASK-INGEST-STATUS-STATE-V002](status-state-v002.md) | `compile` | Status requires the V002 error events, store generation, and snapshot tables. |
+| [TASK-INGEST-STATE-FOUNDATION: TASK-INGEST-STATE-FOUNDATION](state-foundation.md) | `compile` | Status builds on the protected ingest.db and V001 tables; TASK-INGEST-STATUS-STATE-V002 supplies the corrected error and snapshot extension. |
 
 ## Recipe
 
@@ -83,14 +83,14 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| BatchStatusSummary | `consumes` | DM-INGEST-ERROR-STATUS-CONTRACTS |  |
-| IngestError | `consumes` | DM-INGEST-ERROR-STATUS-CONTRACTS |  |
-| BatchErrorEventStore.LatestAsync | `consumes` | DM-INGEST-ERROR-STATUS-CONTRACTS |  |
-| ImportReceipt | `consumes` | DM-INGEST-IMPORT-RECEIPT |  |
-| IngestSchemaVersion2 | `consumes` | DM-INGEST-STATE-STORE |  |
-| StatusStateStore | `produces` | DM-INGEST-STATE-STORE | Detail reads and first/later snapshot page operations |
-| IngestStatusCursorPayload | `produces` | DM-INGEST-ERROR-STATUS-CONTRACTS | Opaque protected snapshot cursor |
-| StatusOperationModule | `produces` | DM-INGEST-OPERATION-CONTRACTS |  |
+| BatchStatusSummary | `consumes` | [DM-INGEST-ERROR-STATUS-CONTRACTS](../../../designs/ingest/data-model.md#ingesterrorandstatuscontracts) |  |
+| IngestError | `consumes` | [DM-INGEST-ERROR-STATUS-CONTRACTS](../../../designs/ingest/data-model.md#ingesterrorandstatuscontracts) |  |
+| BatchErrorEventStore.LatestAsync | `consumes` | [DM-INGEST-ERROR-STATUS-CONTRACTS](../../../designs/ingest/data-model.md#ingesterrorandstatuscontracts) |  |
+| ImportReceipt | `consumes` | [DM-INGEST-IMPORT-RECEIPT](../../../designs/ingest/data-model.md#importreceiptandcandidateoutcome) |  |
+| IngestSchemaVersion2 | `consumes` | [DM-INGEST-STATE-STORE](../../../designs/ingest/data-model.md#ingeststatestore) |  |
+| StatusStateStore | `produces` | [DM-INGEST-STATE-STORE](../../../designs/ingest/data-model.md#ingeststatestore) | Detail reads and first/later snapshot page operations |
+| IngestStatusCursorPayload | `produces` | [DM-INGEST-ERROR-STATUS-CONTRACTS](../../../designs/ingest/data-model.md#ingesterrorandstatuscontracts) | Opaque protected snapshot cursor |
+| StatusOperationModule | `produces` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) |  |
 
 ### Verification
 
@@ -116,12 +116,12 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1tv` (verified)
-- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Status consumes IngestError, BatchStatus, and ImportReceipt contracts.
-- `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md): Status builds on the protected ingest.db and V001 tables; TASK-INGEST-STATUS-STATE-V002 supplies the corrected error and snapshot extension.
-- `depends-on:compile` -> [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md): Status requires the V002 error events, store generation, and snapshot tables.
-- `governed-by` -> DD-INGEST-CLI-OPERATION-CONTRACT: Eight explicit workflow operations from one registry
-- `implements` -> FR-INGEST-FAILURE-STATUS: Report blocked and failed ingestion safely
-- `touches` -> DM-INGEST-ERROR-STATUS-CONTRACTS: IngestErrorAndStatusContracts
+- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION: TASK-INGEST-CONTRACT-FOUNDATION](contract-foundation.md): Status consumes IngestError, BatchStatus, and ImportReceipt contracts.
+- `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION: TASK-INGEST-STATE-FOUNDATION](state-foundation.md): Status builds on the protected ingest.db and V001 tables; TASK-INGEST-STATUS-STATE-V002 supplies the corrected error and snapshot extension.
+- `depends-on:compile` -> [TASK-INGEST-STATUS-STATE-V002: TASK-INGEST-STATUS-STATE-V002](status-state-v002.md): Status requires the V002 error events, store generation, and snapshot tables.
+- `governed-by` -> [DD-INGEST-CLI-OPERATION-CONTRACT: Eight explicit workflow operations from one registry](../../../designs/ingest/decisions/cli-operation-contract.md)
+- `implements` -> [FR-INGEST-FAILURE-STATUS: Report blocked and failed ingestion safely](../../../prd/ingest/prd.md#fr-ingest-failure-status-report-blocked-and-failed-ingestion-safely)
+- `touches` -> [DM-INGEST-ERROR-STATUS-CONTRACTS: IngestErrorAndStatusContracts](../../../designs/ingest/data-model.md#ingesterrorandstatuscontracts)
 - `verifies` -> TC-INGEST-FAILURE-STATUS-CONTRACT: Verify safe failure and status reporting
 
 ## Navigation

@@ -22,22 +22,22 @@ Prove an owner can preview each qualified statement into one reconciled immutabl
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly | `design_decision` | `governed-by` | `true` |
-| NFR-INGEST-BOUNDED-PARSING: Bound passive statement processing | `nfr` | `satisfies` | `true` |
-| NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity | `nfr` | `satisfies` | `true` |
+| [DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly](../../../designs/ingest/decisions/source-description-absence.md) | `design_decision` | `governed-by` | `true` |
+| [NFR-INGEST-BOUNDED-PARSING: Bound passive statement processing](../../../prd/ingest/prd.md#nfr-ingest-bounded-parsing-bound-passive-statement-processing) | `nfr` | `satisfies` | `true` |
+| [NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity](../../../prd/ingest/prd.md#nfr-ingest-deterministic-integrity-preserve-deterministic-extraction-and-financial-integrity) | `nfr` | `satisfies` | `true` |
 | TC-INGEST-FINANCIAL-NORMALIZATION-CONTRACT: Verify exact financial normalization | `test_case` | `verifies` | `true` |
 | TC-INGEST-LAYOUT-A-ADAPTER: Verify qualified layout A adapter | `test_case` | `verifies` | `true` |
 | TC-INGEST-SOURCE-RECONCILIATION-CONTRACT: Verify complete source reconciliation | `test_case` | `verifies` | `true` |
 | TC-INGEST-STATEMENT-PREVIEW-CONTRACT: Verify deterministic statement preview | `test_case` | `verifies` | `true` |
 | TC-INGEST-VARIANT-QUALIFICATION-CONTRACT: Verify supported variant qualification | `test_case` | `verifies` | `true` |
-| UC-INGEST-001: Preview and qualify a local statement | `use_case` | `covers` | `true` |
+| [UC-INGEST-001: Preview and qualify a local statement](../../../prd/ingest/prd.md#uc-ingest-001-preview-and-qualify-a-local-statement) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | UC verification exercises the complete published INGEST contract. |
-| [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md) | `compile` | Consumes PrivateStatementFixtureSet. |
+| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT: TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | UC verification exercises the complete published INGEST contract. |
+| [TASK-INGEST-PDF-EXTRACTION: TASK-INGEST-PDF-EXTRACTION](pdf-extraction.md) | `compile` | Consumes PrivateStatementFixtureSet. |
 
 ## Recipe
 
@@ -79,9 +79,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteIngestPublicContract | `consumes` | DM-INGEST-OPERATION-CONTRACTS |  |
-| PrivateStatementFixtureSet | `consumes` | EXT-INGEST-OWNER-BANK-STATEMENT |  |
-| UCIngest001Evidence | `produces` | UC-INGEST-001 |  |
+| CompleteIngestPublicContract | `consumes` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) |  |
+| PrivateStatementFixtureSet | `consumes` | [EXT-INGEST-OWNER-BANK-STATEMENT](../../../prd/ingest/prd.md#ext-ingest-owner-bank-statement-owner-supplied-bank-statement) |  |
+| UCIngest001Evidence | `produces` | [UC-INGEST-001](../../../prd/ingest/prd.md#uc-ingest-001-preview-and-qualify-a-local-statement) |  |
 
 ### Verification
 
@@ -106,12 +106,12 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-34o` (verified)
-- `covers` -> UC-INGEST-001: Preview and qualify a local statement
-- `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC verification exercises the complete published INGEST contract.
-- `depends-on:compile` -> [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md): Consumes PrivateStatementFixtureSet.
-- `governed-by` -> DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly
-- `satisfies` -> NFR-INGEST-BOUNDED-PARSING: Bound passive statement processing
-- `satisfies` -> NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity
+- `covers` -> [UC-INGEST-001: Preview and qualify a local statement](../../../prd/ingest/prd.md#uc-ingest-001-preview-and-qualify-a-local-statement)
+- `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT: TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): UC verification exercises the complete published INGEST contract.
+- `depends-on:compile` -> [TASK-INGEST-PDF-EXTRACTION: TASK-INGEST-PDF-EXTRACTION](pdf-extraction.md): Consumes PrivateStatementFixtureSet.
+- `governed-by` -> [DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly](../../../designs/ingest/decisions/source-description-absence.md)
+- `satisfies` -> [NFR-INGEST-BOUNDED-PARSING: Bound passive statement processing](../../../prd/ingest/prd.md#nfr-ingest-bounded-parsing-bound-passive-statement-processing)
+- `satisfies` -> [NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity](../../../prd/ingest/prd.md#nfr-ingest-deterministic-integrity-preserve-deterministic-extraction-and-financial-integrity)
 - `verifies` -> TC-INGEST-FINANCIAL-NORMALIZATION-CONTRACT: Verify exact financial normalization
 - `verifies` -> TC-INGEST-LAYOUT-A-ADAPTER: Verify qualified layout A adapter
 - `verifies` -> TC-INGEST-SOURCE-RECONCILIATION-CONTRACT: Verify complete source reconciliation

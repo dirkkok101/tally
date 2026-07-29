@@ -22,20 +22,20 @@ Assign or correct payment attribution independently and support statement correc
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts | `data_model` | `touches` | `true` |
-| DM-LEDGER-PAYMENT-ATTRIBUTION: PaymentInstrumentCardholderAndAttribution | `data_model` | `touches` | `true` |
-| FR-LEDGER-PAYMENT-ATTRIBUTION: Maintain Payment Instrument and Cardholder Attribution | `requirement` | `implements` | `true` |
+| [DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions](../../../designs/ledger/decisions/dimensional-attribution.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts](../../../designs/ledger/data-model.md#paymentattributionandpooloperationcontracts) | `data_model` | `touches` | `true` |
+| [DM-LEDGER-PAYMENT-ATTRIBUTION: PaymentInstrumentCardholderAndAttribution](../../../designs/ledger/data-model.md#paymentinstrumentcardholderandattribution) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-PAYMENT-ATTRIBUTION: Maintain Payment Instrument and Cardholder Attribution](../../../prd/ledger/prd.md#fr-ledger-payment-attribution-maintain-payment-instrument-and-cardholder-attribution) | `requirement` | `implements` | `true` |
 | TC-LEDGER-PAYMENT-ATTRIBUTION-CONTRACT: Verify payment instrument and cardholder attribution | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-PAYMENT-IDENTITIES](../tasks/payment-identities.md) | `compile` | Attribution validates local instrument and cardholder identities through PaymentIdentityStore. |
-| [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md) | `compile` | Attribution consumes TransactionStore and its atomically initialized unknown projection. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Assignment and correction consume LedgerMutationExecutor.ExecuteAsync. |
+| [TASK-LEDGER-PAYMENT-IDENTITIES: TASK-LEDGER-PAYMENT-IDENTITIES](payment-identities.md) | `compile` | Attribution validates local instrument and cardholder identities through PaymentIdentityStore. |
+| [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md) | `compile` | Attribution consumes TransactionStore and its atomically initialized unknown projection. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Assignment and correction consume LedgerMutationExecutor.ExecuteAsync. |
 
 ## Recipe
 
@@ -79,12 +79,12 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| PaymentAttributionStore | `produces` | DM-LEDGER-PAYMENT-ATTRIBUTION | Append-only attribution persistence |
-| PaymentAttributionStore.CarryForwardOrUnknownAsync | `produces` | DM-LEDGER-PAYMENT-ATTRIBUTION | Reconciliation-only compatible carry-forward or explicit unknown |
-| PaymentAttributionOperationModule | `produces` | DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS | Public assign and correct operations |
-| TransactionStore | `consumes` | DM-LEDGER-TRANSACTION-FACT | Active transaction identity |
-| PaymentIdentityStore | `consumes` | DM-LEDGER-PAYMENT-ATTRIBUTION | Identity lifecycle and account compatibility |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD | Atomic replay boundary |
+| PaymentAttributionStore | `produces` | [DM-LEDGER-PAYMENT-ATTRIBUTION](../../../designs/ledger/data-model.md#paymentinstrumentcardholderandattribution) | Append-only attribution persistence |
+| PaymentAttributionStore.CarryForwardOrUnknownAsync | `produces` | [DM-LEDGER-PAYMENT-ATTRIBUTION](../../../designs/ledger/data-model.md#paymentinstrumentcardholderandattribution) | Reconciliation-only compatible carry-forward or explicit unknown |
+| PaymentAttributionOperationModule | `produces` | [DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS](../../../designs/ledger/data-model.md#paymentattributionandpooloperationcontracts) | Public assign and correct operations |
+| TransactionStore | `consumes` | [DM-LEDGER-TRANSACTION-FACT](../../../designs/ledger/data-model.md#transactionfact) | Active transaction identity |
+| PaymentIdentityStore | `consumes` | [DM-LEDGER-PAYMENT-ATTRIBUTION](../../../designs/ledger/data-model.md#paymentinstrumentcardholderandattribution) | Identity lifecycle and account compatibility |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | [DM-LEDGER-IDEMPOTENCY-RECORD](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) | Atomic replay boundary |
 
 ### Verification
 
@@ -110,14 +110,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3nk` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Assignment and correction consume LedgerMutationExecutor.ExecuteAsync.
-- `depends-on:compile` -> [TASK-LEDGER-PAYMENT-IDENTITIES](../tasks/payment-identities.md): Attribution validates local instrument and cardholder identities through PaymentIdentityStore.
-- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Attribution consumes TransactionStore and its atomically initialized unknown projection.
-- `governed-by` -> DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `implements` -> FR-LEDGER-PAYMENT-ATTRIBUTION: Maintain Payment Instrument and Cardholder Attribution
-- `touches` -> DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts
-- `touches` -> DM-LEDGER-PAYMENT-ATTRIBUTION: PaymentInstrumentCardholderAndAttribution
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Assignment and correction consume LedgerMutationExecutor.ExecuteAsync.
+- `depends-on:compile` -> [TASK-LEDGER-PAYMENT-IDENTITIES: TASK-LEDGER-PAYMENT-IDENTITIES](payment-identities.md): Attribution validates local instrument and cardholder identities through PaymentIdentityStore.
+- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md): Attribution consumes TransactionStore and its atomically initialized unknown projection.
+- `governed-by` -> [DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions](../../../designs/ledger/decisions/dimensional-attribution.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `implements` -> [FR-LEDGER-PAYMENT-ATTRIBUTION: Maintain Payment Instrument and Cardholder Attribution](../../../prd/ledger/prd.md#fr-ledger-payment-attribution-maintain-payment-instrument-and-cardholder-attribution)
+- `touches` -> [DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts](../../../designs/ledger/data-model.md#paymentattributionandpooloperationcontracts)
+- `touches` -> [DM-LEDGER-PAYMENT-ATTRIBUTION: PaymentInstrumentCardholderAndAttribution](../../../designs/ledger/data-model.md#paymentinstrumentcardholderandattribution)
 - `verifies` -> TC-LEDGER-PAYMENT-ATTRIBUTION-CONTRACT: Verify payment instrument and cardholder attribution
 
 ## Navigation

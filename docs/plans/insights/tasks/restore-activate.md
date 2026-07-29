@@ -22,20 +22,20 @@ RestoreInsightsBackupCommand activates either one complete verified restored gen
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation | `design_decision` | `governed-by` | `true` |
-| DIAG-INSIGHTS-RECOVERY-WORKFLOW: Verified INSIGHTS restore activation | `design_diagram` | `touches` | `true` |
-| DM-INSIGHTS-RECOVERY-CONTRACTS: InsightsRecoveryManifestAndReceipts | `data_model` | `touches` | `true` |
-| FR-INSIGHTS-BACKUP-VERIFY-RESTORE: Back up, verify, and restore retained INSIGHTS state | `requirement` | `implements` | `true` |
-| NFR-INSIGHTS-VERIFIED-RECOVERABILITY: Verify backup and restore independently | `nfr` | `satisfies` | `true` |
+| [DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation](../../../designs/insights/decisions/verified-recovery-activation.md) | `design_decision` | `governed-by` | `true` |
+| [DIAG-INSIGHTS-RECOVERY-WORKFLOW: Verified INSIGHTS restore activation](../../../designs/insights/diagrams/recovery-workflow.md) | `design_diagram` | `touches` | `true` |
+| [DM-INSIGHTS-RECOVERY-CONTRACTS: InsightsRecoveryManifestAndReceipts](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts) | `data_model` | `touches` | `true` |
+| [FR-INSIGHTS-BACKUP-VERIFY-RESTORE: Back up, verify, and restore retained INSIGHTS state](../../../prd/insights/prd.md#fr-insights-backup-verify-restore-back-up-verify-and-restore-retained-insights-state) | `requirement` | `implements` | `true` |
+| [NFR-INSIGHTS-VERIFIED-RECOVERABILITY: Verify backup and restore independently](../../../prd/insights/prd.md#nfr-insights-verified-recoverability-verify-backup-and-restore-independently) | `nfr` | `satisfies` | `true` |
 | TC-INSIGHTS-RESTORE-FAILURE-ATOMICITY: Verify separate-target restore and atomic activation | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-BACKUP-VERIFY](../tasks/backup-verify.md) | `compile` | Restore reuses the independent artifact verifier. |
-| [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Restore uses generation layout, migrations, integrity, and writer coordination. |
-| [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](../tasks/idempotency-executor.md) | `compile` | Restore records and replays one outcome inside the activated candidate. |
+| [TASK-INSIGHTS-BACKUP-VERIFY: TASK-INSIGHTS-BACKUP-VERIFY](backup-verify.md) | `compile` | Restore reuses the independent artifact verifier. |
+| [TASK-INSIGHTS-STATE-FOUNDATION: TASK-INSIGHTS-STATE-FOUNDATION](state-foundation.md) | `compile` | Restore uses generation layout, migrations, integrity, and writer coordination. |
+| [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR: TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](idempotency-executor.md) | `compile` | Restore records and replays one outcome inside the activated candidate. |
 
 ## Recipe
 
@@ -79,11 +79,11 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| InsightsBackupVerifier.VerifyAsync | `consumes` | DM-INSIGHTS-RECOVERY-CONTRACTS | source and candidate verification |
-| InsightsMigrations.ApplyAsync | `consumes` | DM-INSIGHTS-STATE-STORE | compatible candidate migrations |
-| InsightsIdempotencyExecutor.ExecuteAsync | `consumes` | DM-INSIGHTS-IDEMPOTENCY | exact replay and Restore outcome |
-| InsightsRestoreActivator.ActivateAsync | `produces` | DM-INSIGHTS-RECOVERY-CONTRACTS | verified atomic generation activation |
-| RestoreInsightsBackupCommand.HandleAsync | `produces` | DM-INSIGHTS-OPERATION-CONTRACTS | insights.restore.activate handler |
+| InsightsBackupVerifier.VerifyAsync | `consumes` | [DM-INSIGHTS-RECOVERY-CONTRACTS](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts) | source and candidate verification |
+| InsightsMigrations.ApplyAsync | `consumes` | [DM-INSIGHTS-STATE-STORE](../../../designs/insights/data-model.md#insightsstatestore) | compatible candidate migrations |
+| InsightsIdempotencyExecutor.ExecuteAsync | `consumes` | [DM-INSIGHTS-IDEMPOTENCY](../../../designs/insights/data-model.md#insightsidempotencyrecord) | exact replay and Restore outcome |
+| InsightsRestoreActivator.ActivateAsync | `produces` | [DM-INSIGHTS-RECOVERY-CONTRACTS](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts) | verified atomic generation activation |
+| RestoreInsightsBackupCommand.HandleAsync | `produces` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | insights.restore.activate handler |
 
 ### Verification
 
@@ -108,14 +108,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1i6` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-BACKUP-VERIFY](../tasks/backup-verify.md): Restore reuses the independent artifact verifier.
-- `depends-on:compile` -> [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](../tasks/idempotency-executor.md): Restore records and replays one outcome inside the activated candidate.
-- `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md): Restore uses generation layout, migrations, integrity, and writer coordination.
-- `governed-by` -> DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation
-- `implements` -> FR-INSIGHTS-BACKUP-VERIFY-RESTORE: Back up, verify, and restore retained INSIGHTS state
-- `satisfies` -> NFR-INSIGHTS-VERIFIED-RECOVERABILITY: Verify backup and restore independently
-- `touches` -> DIAG-INSIGHTS-RECOVERY-WORKFLOW: Verified INSIGHTS restore activation
-- `touches` -> DM-INSIGHTS-RECOVERY-CONTRACTS: InsightsRecoveryManifestAndReceipts
+- `depends-on:compile` -> [TASK-INSIGHTS-BACKUP-VERIFY: TASK-INSIGHTS-BACKUP-VERIFY](backup-verify.md): Restore reuses the independent artifact verifier.
+- `depends-on:compile` -> [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR: TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](idempotency-executor.md): Restore records and replays one outcome inside the activated candidate.
+- `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION: TASK-INSIGHTS-STATE-FOUNDATION](state-foundation.md): Restore uses generation layout, migrations, integrity, and writer coordination.
+- `governed-by` -> [DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation](../../../designs/insights/decisions/verified-recovery-activation.md)
+- `implements` -> [FR-INSIGHTS-BACKUP-VERIFY-RESTORE: Back up, verify, and restore retained INSIGHTS state](../../../prd/insights/prd.md#fr-insights-backup-verify-restore-back-up-verify-and-restore-retained-insights-state)
+- `satisfies` -> [NFR-INSIGHTS-VERIFIED-RECOVERABILITY: Verify backup and restore independently](../../../prd/insights/prd.md#nfr-insights-verified-recoverability-verify-backup-and-restore-independently)
+- `touches` -> [DIAG-INSIGHTS-RECOVERY-WORKFLOW: Verified INSIGHTS restore activation](../../../designs/insights/diagrams/recovery-workflow.md)
+- `touches` -> [DM-INSIGHTS-RECOVERY-CONTRACTS: InsightsRecoveryManifestAndReceipts](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts)
 - `verifies` -> TC-INSIGHTS-RESTORE-FAILURE-ATOMICITY: Verify separate-target restore and atomic activation
 
 ## Navigation

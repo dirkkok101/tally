@@ -22,17 +22,17 @@ Prove a zero-context AI Agent Host can discover and safely drive every INGEST tr
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| NFR-INGEST-AGENT-OPERABILITY: Keep agent invocation deterministic and inspectable | `nfr` | `satisfies` | `true` |
-| NFR-INGEST-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries | `nfr` | `satisfies` | `true` |
+| [NFR-INGEST-AGENT-OPERABILITY: Keep agent invocation deterministic and inspectable](../../../prd/ingest/prd.md#nfr-ingest-agent-operability-keep-agent-invocation-deterministic-and-inspectable) | `nfr` | `satisfies` | `true` |
+| [NFR-INGEST-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries](../../../prd/ingest/prd.md#nfr-ingest-public-contract-compatibility-preserve-public-contract-compatibility-boundaries) | `nfr` | `satisfies` | `true` |
 | TC-INGEST-CONTRACT-DISCOVERY-CONTRACT: Verify INGEST contract discovery | `test_case` | `verifies` | `true` |
 | TC-INGEST-PUBLISHED-CONTRACT-MATRIX: Verify the published INGEST operation contract | `test_case` | `verifies` | `true` |
-| UC-INGEST-006: Discover and invoke the INGEST agent contract | `use_case` | `covers` | `true` |
+| [UC-INGEST-006: Discover and invoke the INGEST agent contract](../../../prd/ingest/prd.md#uc-ingest-006-discover-and-invoke-the-ingest-agent-contract) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | UC verification begins from the complete published descriptor-generated contract. |
+| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT: TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | UC verification begins from the complete published descriptor-generated contract. |
 
 ## Recipe
 
@@ -72,8 +72,8 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteIngestPublicContract | `consumes` | DM-INGEST-OPERATION-CONTRACTS |  |
-| UCIngest006Evidence | `produces` | UC-INGEST-006 |  |
+| CompleteIngestPublicContract | `consumes` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) |  |
+| UCIngest006Evidence | `produces` | [UC-INGEST-006](../../../prd/ingest/prd.md#uc-ingest-006-discover-and-invoke-the-ingest-agent-contract) |  |
 
 ### Verification
 
@@ -98,10 +98,10 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3a6` (verified)
-- `covers` -> UC-INGEST-006: Discover and invoke the INGEST agent contract
-- `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC verification begins from the complete published descriptor-generated contract.
-- `satisfies` -> NFR-INGEST-AGENT-OPERABILITY: Keep agent invocation deterministic and inspectable
-- `satisfies` -> NFR-INGEST-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries
+- `covers` -> [UC-INGEST-006: Discover and invoke the INGEST agent contract](../../../prd/ingest/prd.md#uc-ingest-006-discover-and-invoke-the-ingest-agent-contract)
+- `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT: TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): UC verification begins from the complete published descriptor-generated contract.
+- `satisfies` -> [NFR-INGEST-AGENT-OPERABILITY: Keep agent invocation deterministic and inspectable](../../../prd/ingest/prd.md#nfr-ingest-agent-operability-keep-agent-invocation-deterministic-and-inspectable)
+- `satisfies` -> [NFR-INGEST-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries](../../../prd/ingest/prd.md#nfr-ingest-public-contract-compatibility-preserve-public-contract-compatibility-boundaries)
 - `verifies` -> TC-INGEST-CONTRACT-DISCOVERY-CONTRACT: Verify INGEST contract discovery
 - `verifies` -> TC-INGEST-PUBLISHED-CONTRACT-MATRIX: Verify the published INGEST operation contract
 

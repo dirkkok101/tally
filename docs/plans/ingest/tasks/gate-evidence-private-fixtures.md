@@ -22,7 +22,7 @@ In the owner main worktree, provide and validate a complete machine-readable pri
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling | `design_decision` | `governed-by` | `true` |
+| [DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling](../../../designs/ingest/decisions/artifact-security.md) | `design_decision` | `governed-by` | `true` |
 
 ## Dependencies
 
@@ -72,7 +72,7 @@ No task dependencies recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| PrivateFixtureExpectationManifest | `produces` | EXT-INGEST-OWNER-BANK-STATEMENT | schemaVersion 1; three fixtures; two variants; private expected facts |
+| PrivateFixtureExpectationManifest | `produces` | [EXT-INGEST-OWNER-BANK-STATEMENT](../../../prd/ingest/prd.md#ext-ingest-owner-bank-statement-owner-supplied-bank-statement) | schemaVersion 1; three fixtures; two variants; private expected facts |
 
 ### Verification
 
@@ -100,7 +100,7 @@ No task dependencies recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3k6` (verified)
-- `governed-by` -> DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling
+- `governed-by` -> [DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling](../../../designs/ingest/decisions/artifact-security.md)
 
 ## Navigation
 

@@ -22,8 +22,8 @@ Expose exactly 73 designed operations with deterministic schemas, stable errors/
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope | `data_model` | `touches` | `true` |
-| NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the agent contract stable | `nfr` | `satisfies` | `true` |
+| [DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | `data_model` | `touches` | `true` |
+| [NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the agent contract stable](../../../prd/ledger/prd.md#nfr-ledger-agent-contract-stability-keep-the-external-orchestrator-contract-stable) | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-AGENT-CONTRACT-CONFORMANCE: Verify every agent operation contract | `test_case` | `verifies` | `true` |
 | TC-LEDGER-OFFLINE-SELF-CONTAINED: Verify offline self-contained operation | `test_case` | `verifies` | `true` |
 
@@ -31,11 +31,11 @@ Expose exactly 73 designed operations with deterministic schemas, stable errors/
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-CATALOGUE-TRANSACTION-BUNDLE](../tasks/gate-int-catalogue-transaction-bundle.md) | `compile` | Consumes CatalogueTransactionOperationBundle. |
-| [TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE](../tasks/gate-int-relationship-actuals-bundle.md) | `compile` | Consumes RelationshipActualsOperationBundle. |
-| [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md) | `compile` | Consumes OperationRegistry. |
-| [TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE](../tasks/gate-int-recovery-skill-bundle.md) | `compile` | Consumes RecoveryGuidanceOperationBundle. |
-| [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](../tasks/gate-int-reconciliation-bundle.md) | `compile` | The 73-operation public contract consumes the 9-operation reconciliation bundle. |
+| [TASK-LEDGER-GATE-INT-CATALOGUE-TRANSACTION-BUNDLE: TASK-LEDGER-GATE-INT-CATALOGUE-TRANSACTION-BUNDLE](gate-int-catalogue-transaction-bundle.md) | `compile` | Consumes CatalogueTransactionOperationBundle. |
+| [TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE: TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE](gate-int-relationship-actuals-bundle.md) | `compile` | Consumes RelationshipActualsOperationBundle. |
+| [TASK-LEDGER-CORE-PROCESS-CONTRACT: TASK-LEDGER-CORE-PROCESS-CONTRACT](core-process-contract.md) | `compile` | Consumes OperationRegistry. |
+| [TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE: TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE](gate-int-recovery-skill-bundle.md) | `compile` | Consumes RecoveryGuidanceOperationBundle. |
+| [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE: TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](gate-int-reconciliation-bundle.md) | `compile` | The 73-operation public contract consumes the 9-operation reconciliation bundle. |
 
 ## Recipe
 
@@ -78,13 +78,13 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CatalogueTransactionOperationBundle | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | 43 operations |
-| ReconciliationOperationBundle | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS | 9 operations |
-| RelationshipActualsOperationBundle | `consumes` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS | 8 operations |
-| RecoveryGuidanceOperationBundle | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | 13 operations |
-| OperationRegistry | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Explicit registry |
+| CatalogueTransactionOperationBundle | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | 43 operations |
+| ReconciliationOperationBundle | `consumes` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) | 9 operations |
+| RelationshipActualsOperationBundle | `consumes` | [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) | 8 operations |
+| RecoveryGuidanceOperationBundle | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | 13 operations |
+| OperationRegistry | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Explicit registry |
 | PublishedTallyFixture | `produces` |  | Release process fixture |
-| CompletePublicContract | `produces` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 73 provider-neutral operations |
+| CompletePublicContract | `produces` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Exactly 73 provider-neutral operations |
 
 ### Verification
 
@@ -110,13 +110,13 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2jj` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md): Consumes OperationRegistry.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CATALOGUE-TRANSACTION-BUNDLE](../tasks/gate-int-catalogue-transaction-bundle.md): Consumes CatalogueTransactionOperationBundle.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](../tasks/gate-int-reconciliation-bundle.md): The 73-operation public contract consumes the 9-operation reconciliation bundle.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE](../tasks/gate-int-recovery-skill-bundle.md): Consumes RecoveryGuidanceOperationBundle.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE](../tasks/gate-int-relationship-actuals-bundle.md): Consumes RelationshipActualsOperationBundle.
-- `satisfies` -> NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the agent contract stable
-- `touches` -> DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope
+- `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT: TASK-LEDGER-CORE-PROCESS-CONTRACT](core-process-contract.md): Consumes OperationRegistry.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CATALOGUE-TRANSACTION-BUNDLE: TASK-LEDGER-GATE-INT-CATALOGUE-TRANSACTION-BUNDLE](gate-int-catalogue-transaction-bundle.md): Consumes CatalogueTransactionOperationBundle.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE: TASK-LEDGER-GATE-INT-RECONCILIATION-BUNDLE](gate-int-reconciliation-bundle.md): The 73-operation public contract consumes the 9-operation reconciliation bundle.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE: TASK-LEDGER-GATE-INT-RECOVERY-SKILL-BUNDLE](gate-int-recovery-skill-bundle.md): Consumes RecoveryGuidanceOperationBundle.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE: TASK-LEDGER-GATE-INT-RELATIONSHIP-ACTUALS-BUNDLE](gate-int-relationship-actuals-bundle.md): Consumes RelationshipActualsOperationBundle.
+- `satisfies` -> [NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the agent contract stable](../../../prd/ledger/prd.md#nfr-ledger-agent-contract-stability-keep-the-external-orchestrator-contract-stable)
+- `touches` -> [DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope](../../../designs/ledger/data-model.md#operationdescriptorandenvelope)
 - `verifies` -> TC-LEDGER-AGENT-CONTRACT-CONFORMANCE: Verify every agent operation contract
 - `verifies` -> TC-LEDGER-OFFLINE-SELF-CONTAINED: Verify offline self-contained operation
 

@@ -22,17 +22,17 @@ Prove UC-LEDGER-004 through observable process results and durable-state invaria
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | `false` |
-| FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent | `requirement` | `verifies` | `true` |
-| FR-LEDGER-TRANSFER-CONFIRMATION: Confirm owned-account transfers | `requirement` | `verifies` | `true` |
+| [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) | `data_model` | `touches` | `false` |
+| [FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent](../../../prd/ledger/prd.md#fr-ledger-idempotent-writes-make-public-writes-idempotent) | `requirement` | `verifies` | `true` |
+| [FR-LEDGER-TRANSFER-CONFIRMATION: Confirm owned-account transfers](../../../prd/ledger/prd.md#fr-ledger-transfer-confirmation-confirm-owned-account-transfers) | `requirement` | `verifies` | `true` |
 | TC-LEDGER-TRANSFER-CONFIRMATION-CONTRACT: Verify confirm owned-account transfers contract | `test_case` | `verifies` | `true` |
-| UC-LEDGER-004: Confirm an owned-account transfer | `use_case` | `covers` | `true` |
+| [UC-LEDGER-004: Confirm an owned-account transfer](../../../prd/ledger/prd.md#uc-ledger-004-confirm-an-owned-account-transfer) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
 
 ## Recipe
 
@@ -71,8 +71,8 @@ Prove UC-LEDGER-004 through observable process results and durable-state invaria
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 72 provider-neutral operations |
-| VerifiedUC004 | `produces` | UC-LEDGER-004 | workflow verification |
+| CompletePublicContract | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Exactly 72 provider-neutral operations |
+| VerifiedUC004 | `produces` | [UC-LEDGER-004](../../../prd/ledger/prd.md#uc-ledger-004-confirm-an-owned-account-transfer) | workflow verification |
 
 ### Verification
 
@@ -98,12 +98,12 @@ Prove UC-LEDGER-004 through observable process results and durable-state invaria
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2qb` (verified)
-- `covers` -> UC-LEDGER-004: Confirm an owned-account transfer
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
-- `touches` -> DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts
-- `verifies` -> FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent
-- `verifies` -> FR-LEDGER-TRANSFER-CONFIRMATION: Confirm owned-account transfers
+- `covers` -> [UC-LEDGER-004: Confirm an owned-account transfer](../../../prd/ledger/prd.md#uc-ledger-004-confirm-an-owned-account-transfer)
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
+- `touches` -> [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts)
 - `verifies` -> TC-LEDGER-TRANSFER-CONFIRMATION-CONTRACT: Verify confirm owned-account transfers contract
+- `verifies` -> [FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent](../../../prd/ledger/prd.md#fr-ledger-idempotent-writes-make-public-writes-idempotent)
+- `verifies` -> [FR-LEDGER-TRANSFER-CONFIRMATION: Confirm owned-account transfers](../../../prd/ledger/prd.md#fr-ledger-transfer-confirmation-confirm-owned-account-transfers)
 
 ## Navigation
 

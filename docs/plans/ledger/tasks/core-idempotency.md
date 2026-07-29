@@ -22,12 +22,12 @@ Guarantee identical request and cross-key logical replay return the original eff
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| ADR-CORE-0010: CommandResult Pattern for Commands | `adr` | `governed-by` | `false` |
-| DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | `true` |
-| DIAG-LEDGER-MUTATION-SEQUENCE: Idempotent Ledger mutation sequence | `design_diagram` | `references` | `false` |
-| DM-LEDGER-IDEMPOTENCY-RECORD: IdempotencyRecord | `data_model` | `touches` | `true` |
-| FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent | `requirement` | `implements` | `true` |
-| NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable | `nfr` | `satisfies` | `true` |
+| [ADR-CORE-0010: CommandResult Pattern for Commands](../../../adr/core/0010-commandresult-pattern-for-commands.md) | `adr` | `governed-by` | `false` |
+| [DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency](../../../designs/ledger/decisions/idempotent-mutations.md) | `design_decision` | `governed-by` | `true` |
+| [DIAG-LEDGER-MUTATION-SEQUENCE: Idempotent Ledger mutation sequence](../../../designs/ledger/diagrams/mutation-sequence.md) | `design_diagram` | `references` | `false` |
+| [DM-LEDGER-IDEMPOTENCY-RECORD: IdempotencyRecord](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent](../../../prd/ledger/prd.md#fr-ledger-idempotent-writes-make-public-writes-idempotent) | `requirement` | `implements` | `true` |
+| [NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable](../../../prd/ledger/prd.md#nfr-ledger-atomic-durable-mutations-make-mutations-atomic-and-durable) | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-ATOMIC-CRASH-RECOVERY: Prove mutation crash atomicity and idempotency | `test_case` | `verifies` | `true` |
 | TC-LEDGER-IDEMPOTENT-WRITES-CONTRACT: Verify make public writes idempotent contract | `test_case` | `verifies` | `true` |
 
@@ -35,8 +35,8 @@ Guarantee identical request and cross-key logical replay return the original eff
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | IdempotencyStore requires the initialized SQLite schema and LedgerDb. |
-| [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md) | `compile` | Mutation executor consumes CommandResult and process contract primitives. |
+| [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md) | `compile` | IdempotencyStore requires the initialized SQLite schema and LedgerDb. |
+| [TASK-LEDGER-CORE-PROCESS-CONTRACT: TASK-LEDGER-CORE-PROCESS-CONTRACT](core-process-contract.md) | `compile` | Mutation executor consumes CommandResult and process contract primitives. |
 
 ## Recipe
 
@@ -84,12 +84,12 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| LedgerMutationExecutor.ExecuteAsync | `produces` | DM-LEDGER-IDEMPOTENCY-RECORD |  |
-| IdempotencyStore | `produces` | DM-LEDGER-IDEMPOTENCY-RECORD |  |
+| LedgerMutationExecutor.ExecuteAsync | `produces` | [DM-LEDGER-IDEMPOTENCY-RECORD](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) |  |
+| IdempotencyStore | `produces` | [DM-LEDGER-IDEMPOTENCY-RECORD](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) |  |
 | CanonicalRequestHasher | `produces` |  |  |
-| ArtifactReconciler | `produces` | DD-LEDGER-IDEMPOTENT-MUTATIONS |  |
-| LedgerDb | `consumes` | DM-LEDGER-STORE-GENERATION |  |
-| CommandResult<TResult> | `consumes` | ADR-CORE-0010 |  |
+| ArtifactReconciler | `produces` | [DD-LEDGER-IDEMPOTENT-MUTATIONS](../../../designs/ledger/decisions/idempotent-mutations.md) |  |
+| LedgerDb | `consumes` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) |  |
+| CommandResult<TResult> | `consumes` | [ADR-CORE-0010](../../../adr/core/0010-commandresult-pattern-for-commands.md) |  |
 
 ### Verification
 
@@ -115,14 +115,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2ne` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md): Mutation executor consumes CommandResult and process contract primitives.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): IdempotencyStore requires the initialized SQLite schema and LedgerDb.
-- `governed-by` -> ADR-CORE-0010: CommandResult Pattern for Commands
-- `governed-by` -> DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency
-- `implements` -> FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent
-- `references` -> DIAG-LEDGER-MUTATION-SEQUENCE: Idempotent Ledger mutation sequence
-- `satisfies` -> NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable
-- `touches` -> DM-LEDGER-IDEMPOTENCY-RECORD: IdempotencyRecord
+- `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT: TASK-LEDGER-CORE-PROCESS-CONTRACT](core-process-contract.md): Mutation executor consumes CommandResult and process contract primitives.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md): IdempotencyStore requires the initialized SQLite schema and LedgerDb.
+- `governed-by` -> [ADR-CORE-0010: CommandResult Pattern for Commands](../../../adr/core/0010-commandresult-pattern-for-commands.md)
+- `governed-by` -> [DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency](../../../designs/ledger/decisions/idempotent-mutations.md)
+- `implements` -> [FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent](../../../prd/ledger/prd.md#fr-ledger-idempotent-writes-make-public-writes-idempotent)
+- `references` -> [DIAG-LEDGER-MUTATION-SEQUENCE: Idempotent Ledger mutation sequence](../../../designs/ledger/diagrams/mutation-sequence.md)
+- `satisfies` -> [NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable](../../../prd/ledger/prd.md#nfr-ledger-atomic-durable-mutations-make-mutations-atomic-and-durable)
+- `touches` -> [DM-LEDGER-IDEMPOTENCY-RECORD: IdempotencyRecord](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity)
 - `verifies` -> TC-LEDGER-ATOMIC-CRASH-RECOVERY: Prove mutation crash atomicity and idempotency
 - `verifies` -> TC-LEDGER-IDEMPOTENT-WRITES-CONTRACT: Verify make public writes idempotent contract
 

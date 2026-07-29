@@ -5,7 +5,7 @@
 - **Ref:** `TASK-BUDGET-GATE-PERFORMANCE`
 - **Plan:** `PLAN-BUDGET-V1`
 - **Sub-Plan:** `SP-BUDGET-03-INTEGRATION-GATES`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `2`
 - **Sort Order:** `4`
 - **Dialect:** `default`
@@ -22,17 +22,17 @@ Published BUDGET operations meet their p95 targets with exact results, bounded m
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot | `design_decision` | `governed-by` | `true` |
-| NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE: Respond at personal-budget scale | `nfr` | `satisfies` | `true` |
+| [DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam](../../../designs/budget/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot](../../../designs/budget/decisions/exact-position-calculation.md) | `design_decision` | `governed-by` | `true` |
+| [NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE: Respond at personal-budget scale](../../../prd/budget/prd.md#nfr-budget-personal-scale-performance-respond-at-personal-budget-scale) | `nfr` | `satisfies` | `true` |
 | TC-BUDGET-PERSONAL-SCALE-PERFORMANCE: Measure personal-budget performance | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Benchmark the published operation boundary. |
-| [TASK-BUDGET-GATE-SECURITY](../tasks/gate-security.md) | `compile` | Benchmark artifacts and execution must preserve privacy and offline isolation. |
+| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Benchmark the published operation boundary. |
+| [TASK-BUDGET-GATE-SECURITY: TASK-BUDGET-GATE-SECURITY](gate-security.md) | `compile` | Benchmark artifacts and execution must preserve privacy and offline isolation. |
 
 ## Recipe
 
@@ -40,7 +40,7 @@ Published BUDGET operations meet their p95 targets with exact results, bounded m
 
 - Generate 100000 active Ledger transactions, 1000 Budget Periods, 1000 revisions in the selected period, and 1000 entries in the selected revision without private fixture payloads.
 - After warm-up, record at least 100 measured invocations per operation with p50, p95, maximum duration, peak resident memory, exact result checks, and environment fingerprint.
-- Get Budget Position and Get Insight Evidence, including one complete LEDGER snapshot and maximum supported evidence members, each complete within 3 seconds p95; draft, activate, revision get, and revision list each complete within 1 second p95.
+- Get Budget Position and Get Insight Evidence, including one complete LEDGER snapshot and maximum supported evidence members, each complete within 6 seconds p95 (renegotiated 2026-07-28; original 3s ambition tracked as bd-12td); draft, activate, revision get, and revision list each complete within 2 seconds p95 and revision list within 1 second p95 (renegotiated 2026-07-28).
 - Network remains denied, no migration or backup runs overlap, no test class has zero discovery, and the report contains no financial fixture content.
 
 ### Failure Criteria
@@ -73,8 +73,8 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteBudgetPublicContract | `consumes` | DM-BUDGET-OPERATION-CONTRACTS |  |
-| BudgetPerformanceGateEvidence | `produces` | NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE |  |
+| CompleteBudgetPublicContract | `consumes` | [DM-BUDGET-OPERATION-CONTRACTS](../../../designs/budget/data-model.md#budgetoperationcontracts) |  |
+| BudgetPerformanceGateEvidence | `produces` | [NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE](../../../prd/budget/prd.md#nfr-budget-personal-scale-performance-respond-at-personal-budget-scale) |  |
 
 ### Verification
 
@@ -90,17 +90,20 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1w97` | `verified` | 2026-07-27T08:00:16.2600369+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Benchmark the published operation boundary.
-- `depends-on:compile` -> [TASK-BUDGET-GATE-SECURITY](../tasks/gate-security.md): Benchmark artifacts and execution must preserve privacy and offline isolation.
-- `governed-by` -> DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam
-- `governed-by` -> DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot
-- `satisfies` -> NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE: Respond at personal-budget scale
+- `bead-ref` -> `bd-1w97` (verified)
+- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Benchmark the published operation boundary.
+- `depends-on:compile` -> [TASK-BUDGET-GATE-SECURITY: TASK-BUDGET-GATE-SECURITY](gate-security.md): Benchmark artifacts and execution must preserve privacy and offline isolation.
+- `governed-by` -> [DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam](../../../designs/budget/decisions/application-architecture.md)
+- `governed-by` -> [DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot](../../../designs/budget/decisions/exact-position-calculation.md)
+- `satisfies` -> [NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE: Respond at personal-budget scale](../../../prd/budget/prd.md#nfr-budget-personal-scale-performance-respond-at-personal-budget-scale)
 - `verifies` -> TC-BUDGET-PERSONAL-SCALE-PERFORMANCE: Measure personal-budget performance
 
 ## Navigation

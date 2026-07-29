@@ -22,21 +22,21 @@ Maintain stable category identities, deterministic ancestry, and append-only par
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| FR-LEDGER-CATEGORY-CATALOGUE: Maintain the Spend Category catalogue | `requirement` | `implements` | `true` |
-| NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | `true` |
+| [DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports](../../../designs/ledger/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment](../../../designs/ledger/decisions/category-hierarchy.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [FR-LEDGER-CATEGORY-CATALOGUE: Maintain the Spend Category catalogue](../../../prd/ledger/prd.md#fr-ledger-category-catalogue-maintain-the-spend-category-catalogue) | `requirement` | `implements` | `true` |
+| [NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history](../../../prd/ledger/prd.md#nfr-ledger-attributable-history-retain-attributable-correction-history) | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-CATEGORY-CATALOGUE-CONTRACT: Verify maintain the spend-category catalogue contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md) | `compile` | Category slice consumes the proven core seam. |
-| [TASK-LEDGER-GATE-EVIDENCE-CATEGORIES](../tasks/gate-evidence-categories.md) | `compile` | Category contracts cannot start until OQ-LEDGER-6 resolves. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
-| [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | Consumer requires LedgerDb from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-GATE-INT-CORE: TASK-LEDGER-GATE-INT-CORE](gate-int-core.md) | `compile` | Category slice consumes the proven core seam. |
+| [TASK-LEDGER-GATE-EVIDENCE-CATEGORIES: TASK-LEDGER-GATE-EVIDENCE-CATEGORIES](gate-evidence-categories.md) | `compile` | Category contracts cannot start until OQ-LEDGER-6 resolves. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md) | `compile` | Consumer requires LedgerDb from its producing task; direct compile edge enforces the declared interface contract. |
 
 ## Recipe
 
@@ -82,11 +82,11 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CategoryOperationModule | `produces` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS |  |
-| CategoryStore | `produces` | DM-LEDGER-SPEND-CATEGORY |  |
-| CategoryDetail | `produces` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS |  |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD |  |
-| LedgerDb | `consumes` | DM-LEDGER-STORE-GENERATION |  |
+| CategoryOperationModule | `produces` | [DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS](../../../designs/ledger/data-model.md#accountcategoryoperationcontracts) |  |
+| CategoryStore | `produces` | [DM-LEDGER-SPEND-CATEGORY](../../../designs/ledger/data-model.md#spendcategory) |  |
+| CategoryDetail | `produces` | [DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS](../../../designs/ledger/data-model.md#accountcategoryoperationcontracts) |  |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | [DM-LEDGER-IDEMPOTENCY-RECORD](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) |  |
+| LedgerDb | `consumes` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) |  |
 
 ### Verification
 
@@ -112,15 +112,15 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-34a` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumer requires LedgerDb from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CATEGORIES](../tasks/gate-evidence-categories.md): Category contracts cannot start until OQ-LEDGER-6 resolves.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md): Category slice consumes the proven core seam.
-- `governed-by` -> DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports
-- `governed-by` -> DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `implements` -> FR-LEDGER-CATEGORY-CATALOGUE: Maintain the Spend Category catalogue
-- `satisfies` -> NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md): Consumer requires LedgerDb from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CATEGORIES: TASK-LEDGER-GATE-EVIDENCE-CATEGORIES](gate-evidence-categories.md): Category contracts cannot start until OQ-LEDGER-6 resolves.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CORE: TASK-LEDGER-GATE-INT-CORE](gate-int-core.md): Category slice consumes the proven core seam.
+- `governed-by` -> [DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports](../../../designs/ledger/decisions/application-architecture.md)
+- `governed-by` -> [DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment](../../../designs/ledger/decisions/category-hierarchy.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `implements` -> [FR-LEDGER-CATEGORY-CATALOGUE: Maintain the Spend Category catalogue](../../../prd/ledger/prd.md#fr-ledger-category-catalogue-maintain-the-spend-category-catalogue)
+- `satisfies` -> [NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history](../../../prd/ledger/prd.md#nfr-ledger-attributable-history-retain-attributable-correction-history)
 - `verifies` -> TC-LEDGER-CATEGORY-CATALOGUE-CONTRACT: Verify maintain the spend-category catalogue contract
 
 ## Navigation

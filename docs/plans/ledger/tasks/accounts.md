@@ -22,19 +22,19 @@ Maintain stable masked asset and liability accounts with attributable append-onl
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain Owned Bank Account | `requirement` | `implements` | `true` |
+| [DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports](../../../designs/ledger/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain Owned Bank Account](../../../prd/ledger/prd.md#fr-ledger-account-maintenance-maintain-owned-bank-account) | `requirement` | `implements` | `true` |
 | TC-LEDGER-ACCOUNT-MAINTENANCE-CONTRACT: Verify account maintenance contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md) | `compile` | Account slice consumes the proven core seam. |
-| [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](../tasks/gate-evidence-cash-withdrawals.md) | `compile` | Account operations must know whether tracked cash is an in-scope account class. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Account mutations consume LedgerMutationExecutor.ExecuteAsync. |
-| [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | Account persistence consumes LedgerDb. |
+| [TASK-LEDGER-GATE-INT-CORE: TASK-LEDGER-GATE-INT-CORE](gate-int-core.md) | `compile` | Account slice consumes the proven core seam. |
+| [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS: TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](gate-evidence-cash-withdrawals.md) | `compile` | Account operations must know whether tracked cash is an in-scope account class. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Account mutations consume LedgerMutationExecutor.ExecuteAsync. |
+| [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md) | `compile` | Account persistence consumes LedgerDb. |
 
 ## Recipe
 
@@ -79,11 +79,11 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| AccountOperationModule | `produces` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS |  |
-| AccountStore | `produces` | DM-LEDGER-ACCOUNT |  |
-| AccountDetail | `produces` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS |  |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD |  |
-| LedgerDb | `consumes` | DM-LEDGER-STORE-GENERATION |  |
+| AccountOperationModule | `produces` | [DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS](../../../designs/ledger/data-model.md#accountcategoryoperationcontracts) |  |
+| AccountStore | `produces` | [DM-LEDGER-ACCOUNT](../../../designs/ledger/data-model.md#account) |  |
+| AccountDetail | `produces` | [DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS](../../../designs/ledger/data-model.md#accountcategoryoperationcontracts) |  |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | [DM-LEDGER-IDEMPOTENCY-RECORD](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) |  |
+| LedgerDb | `consumes` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) |  |
 
 ### Verification
 
@@ -109,13 +109,13 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-34k` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Account mutations consume LedgerMutationExecutor.ExecuteAsync.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Account persistence consumes LedgerDb.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](../tasks/gate-evidence-cash-withdrawals.md): Account operations must know whether tracked cash is an in-scope account class.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md): Account slice consumes the proven core seam.
-- `governed-by` -> DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `implements` -> FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain Owned Bank Account
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Account mutations consume LedgerMutationExecutor.ExecuteAsync.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md): Account persistence consumes LedgerDb.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS: TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](gate-evidence-cash-withdrawals.md): Account operations must know whether tracked cash is an in-scope account class.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CORE: TASK-LEDGER-GATE-INT-CORE](gate-int-core.md): Account slice consumes the proven core seam.
+- `governed-by` -> [DD-LEDGER-APPLICATION-ARCHITECTURE: Single-process provider-neutral vertical slices with selective ports](../../../designs/ledger/decisions/application-architecture.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `implements` -> [FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain Owned Bank Account](../../../prd/ledger/prd.md#fr-ledger-account-maintenance-maintain-owned-bank-account)
 - `verifies` -> TC-LEDGER-ACCOUNT-MAINTENANCE-CONTRACT: Verify account maintenance contract
 
 ## Navigation

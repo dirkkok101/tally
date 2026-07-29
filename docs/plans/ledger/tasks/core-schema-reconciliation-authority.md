@@ -22,20 +22,20 @@ Represent statement corrections, prior and active transaction identity, dimensio
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | `true` |
+| [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) | `data_model` | `touches` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](../tasks/core-schema-evidence-reconciliation.md) | `compile` | V002 upgrades the committed V001 evidence and reconciliation tables. |
-| [TASK-LEDGER-CORE-SCHEMA-CATALOGUE](../tasks/core-schema-catalogue.md) | `compile` | Correction carry-forward references category, payment, and pool catalogue identities. |
-| [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](../tasks/core-schema-transactions.md) | `compile` | Statement correction references prior, replacement, and supersession transaction records. |
-| [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](../tasks/core-schema-relationships-actuals.md) | `compile` | Statement correction optionally references invariant-preserving relationship and assignment events. |
-| [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | V002StatementAuthoritySchema consumes LedgerSchemaFragmentRegistry and cannot build before the storage foundation. |
+| [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION: TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](core-schema-evidence-reconciliation.md) | `compile` | V002 upgrades the committed V001 evidence and reconciliation tables. |
+| [TASK-LEDGER-CORE-SCHEMA-CATALOGUE: TASK-LEDGER-CORE-SCHEMA-CATALOGUE](core-schema-catalogue.md) | `compile` | Correction carry-forward references category, payment, and pool catalogue identities. |
+| [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS: TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](core-schema-transactions.md) | `compile` | Statement correction references prior, replacement, and supersession transaction records. |
+| [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS: TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](core-schema-relationships-actuals.md) | `compile` | Statement correction optionally references invariant-preserving relationship and assignment events. |
+| [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md) | `compile` | V002StatementAuthoritySchema consumes LedgerSchemaFragmentRegistry and cannot build before the storage foundation. |
 
 ## Recipe
 
@@ -76,9 +76,9 @@ Represent statement corrections, prior and active transaction identity, dimensio
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| V002StatementAuthoritySchema | `produces` | DM-LEDGER-RECONCILIATION-HISTORY | Additive statement-authority schema fragment |
-| V001EvidenceReconciliationSchema | `consumes` | DM-LEDGER-EVIDENCE-RECORD-LINK | Committed predecessor schema |
-| LedgerSchemaFragmentRegistry | `consumes` | DD-LEDGER-EMBEDDED-STORAGE | Transactional version ordering |
+| V002StatementAuthoritySchema | `produces` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) | Additive statement-authority schema fragment |
+| V001EvidenceReconciliationSchema | `consumes` | [DM-LEDGER-EVIDENCE-RECORD-LINK](../../../designs/ledger/data-model.md#evidencerecordobservationandlink) | Committed predecessor schema |
+| LedgerSchemaFragmentRegistry | `consumes` | [DD-LEDGER-EMBEDDED-STORAGE](../../../designs/ledger/decisions/embedded-storage.md) | Transactional version ordering |
 
 ### Verification
 
@@ -104,15 +104,15 @@ Represent statement corrections, prior and active transaction identity, dimensio
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-195` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-CATALOGUE](../tasks/core-schema-catalogue.md): Correction carry-forward references category, payment, and pool catalogue identities.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](../tasks/core-schema-evidence-reconciliation.md): V002 upgrades the committed V001 evidence and reconciliation tables.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](../tasks/core-schema-relationships-actuals.md): Statement correction optionally references invariant-preserving relationship and assignment events.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](../tasks/core-schema-transactions.md): Statement correction references prior, replacement, and supersession transaction records.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): V002StatementAuthoritySchema consumes LedgerSchemaFragmentRegistry and cannot build before the storage foundation.
-- `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
-- `touches` -> DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage
+- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-CATALOGUE: TASK-LEDGER-CORE-SCHEMA-CATALOGUE](core-schema-catalogue.md): Correction carry-forward references category, payment, and pool catalogue identities.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION: TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](core-schema-evidence-reconciliation.md): V002 upgrades the committed V001 evidence and reconciliation tables.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS: TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](core-schema-relationships-actuals.md): Statement correction optionally references invariant-preserving relationship and assignment events.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS: TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](core-schema-transactions.md): Statement correction references prior, replacement, and supersession transaction records.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md): V002StatementAuthoritySchema consumes LedgerSchemaFragmentRegistry and cannot build before the storage foundation.
+- `governed-by` -> [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `governed-by` -> [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md)
+- `touches` -> [DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage)
 
 ## Navigation
 

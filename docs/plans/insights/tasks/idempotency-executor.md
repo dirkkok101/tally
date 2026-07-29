@@ -22,17 +22,17 @@ InsightsIdempotencyExecutor returns prior logical outcomes for exact retries, re
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation | `design_decision` | `governed-by` | `true` |
-| DM-INSIGHTS-IDEMPOTENCY: InsightsIdempotencyRecord | `data_model` | `touches` | `true` |
-| NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable | `nfr` | `satisfies` | `true` |
+| [DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion](../../../designs/insights/decisions/retention-restatement-lifecycle.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation](../../../designs/insights/decisions/verified-recovery-activation.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INSIGHTS-IDEMPOTENCY: InsightsIdempotencyRecord](../../../designs/insights/data-model.md#insightsidempotencyrecord) | `data_model` | `touches` | `true` |
+| [NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable](../../../prd/insights/prd.md#nfr-insights-atomic-durable-report-state-make-retained-report-changes-atomic-and-durable) | `nfr` | `satisfies` | `true` |
 | TC-INSIGHTS-REPORT-RETENTION-IDEMPOTENCY: Verify retained generation and idempotent replay | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | The replay executor uses the idempotency table and caller-owned SQLite transactions. |
+| [TASK-INSIGHTS-STATE-FOUNDATION: TASK-INSIGHTS-STATE-FOUNDATION](state-foundation.md) | `compile` | The replay executor uses the idempotency table and caller-owned SQLite transactions. |
 
 ## Recipe
 
@@ -74,8 +74,8 @@ InsightsIdempotencyExecutor returns prior logical outcomes for exact retries, re
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| InsightsStateStore | `consumes` | DM-INSIGHTS-STATE-STORE | transaction and replay rows |
-| InsightsIdempotencyExecutor.ExecuteAsync | `produces` | DM-INSIGHTS-IDEMPOTENCY | new, replay, conflict, or failed reservation result |
+| InsightsStateStore | `consumes` | [DM-INSIGHTS-STATE-STORE](../../../designs/insights/data-model.md#insightsstatestore) | transaction and replay rows |
+| InsightsIdempotencyExecutor.ExecuteAsync | `produces` | [DM-INSIGHTS-IDEMPOTENCY](../../../designs/insights/data-model.md#insightsidempotencyrecord) | new, replay, conflict, or failed reservation result |
 
 ### Verification
 
@@ -100,11 +100,11 @@ InsightsIdempotencyExecutor returns prior logical outcomes for exact retries, re
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2nv` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md): The replay executor uses the idempotency table and caller-owned SQLite transactions.
-- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion
-- `governed-by` -> DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation
-- `satisfies` -> NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable
-- `touches` -> DM-INSIGHTS-IDEMPOTENCY: InsightsIdempotencyRecord
+- `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION: TASK-INSIGHTS-STATE-FOUNDATION](state-foundation.md): The replay executor uses the idempotency table and caller-owned SQLite transactions.
+- `governed-by` -> [DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion](../../../designs/insights/decisions/retention-restatement-lifecycle.md)
+- `governed-by` -> [DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation](../../../designs/insights/decisions/verified-recovery-activation.md)
+- `satisfies` -> [NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable](../../../prd/insights/prd.md#nfr-insights-atomic-durable-report-state-make-retained-report-changes-atomic-and-durable)
+- `touches` -> [DM-INSIGHTS-IDEMPOTENCY: InsightsIdempotencyRecord](../../../designs/insights/data-model.md#insightsidempotencyrecord)
 - `verifies` -> TC-INSIGHTS-REPORT-RETENTION-IDEMPOTENCY: Verify retained generation and idempotent replay
 
 ## Navigation

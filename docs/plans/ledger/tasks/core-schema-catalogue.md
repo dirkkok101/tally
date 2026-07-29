@@ -22,20 +22,20 @@ Create provider-neutral financial-dimension tables and hierarchy constraints wit
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-ACCOUNT: Account | `data_model` | `touches` | `true` |
-| DM-LEDGER-CATALOGUE-LIFECYCLE: CatalogueLifecycleEvents | `data_model` | `touches` | `true` |
-| DM-LEDGER-SPEND-CATEGORY: SpendCategory | `data_model` | `touches` | `true` |
+| [DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment](../../../designs/ledger/decisions/category-hierarchy.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-ACCOUNT: Account](../../../designs/ledger/data-model.md#account) | `data_model` | `touches` | `true` |
+| [DM-LEDGER-CATALOGUE-LIFECYCLE: CatalogueLifecycleEvents](../../../designs/ledger/data-model.md#financialdimensioncataloguelifecycleevents) | `data_model` | `touches` | `true` |
+| [DM-LEDGER-SPEND-CATEGORY: SpendCategory](../../../designs/ledger/data-model.md#spendcategory) | `data_model` | `touches` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | Consumes LedgerDb and LedgerSchemaFragmentRegistry. |
-| [TASK-LEDGER-GATE-EVIDENCE-CATEGORIES](../tasks/gate-evidence-categories.md) | `compile` | Hierarchy policy must be verified before the category schema is implemented. |
-| [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](../tasks/gate-evidence-cash-withdrawals.md) | `compile` | A tracked-cash decision could change account catalogue shape before V001 hardens. |
+| [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md) | `compile` | Consumes LedgerDb and LedgerSchemaFragmentRegistry. |
+| [TASK-LEDGER-GATE-EVIDENCE-CATEGORIES: TASK-LEDGER-GATE-EVIDENCE-CATEGORIES](gate-evidence-categories.md) | `compile` | Hierarchy policy must be verified before the category schema is implemented. |
+| [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS: TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](gate-evidence-cash-withdrawals.md) | `compile` | A tracked-cash decision could change account catalogue shape before V001 hardens. |
 
 ## Recipe
 
@@ -76,9 +76,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| V001CatalogueSchema | `produces` | DM-LEDGER-ACCOUNT |  |
-| LedgerSchemaFragmentRegistry | `consumes` | DD-LEDGER-EMBEDDED-STORAGE |  |
-| LedgerDb | `consumes` | DM-LEDGER-STORE-GENERATION |  |
+| V001CatalogueSchema | `produces` | [DM-LEDGER-ACCOUNT](../../../designs/ledger/data-model.md#account) |  |
+| LedgerSchemaFragmentRegistry | `consumes` | [DD-LEDGER-EMBEDDED-STORAGE](../../../designs/ledger/decisions/embedded-storage.md) |  |
+| LedgerDb | `consumes` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) |  |
 
 ### Verification
 
@@ -104,15 +104,15 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2i5` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumes LedgerDb and LedgerSchemaFragmentRegistry.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](../tasks/gate-evidence-cash-withdrawals.md): A tracked-cash decision could change account catalogue shape before V001 hardens.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CATEGORIES](../tasks/gate-evidence-categories.md): Hierarchy policy must be verified before the category schema is implemented.
-- `governed-by` -> DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment
-- `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `touches` -> DM-LEDGER-ACCOUNT: Account
-- `touches` -> DM-LEDGER-CATALOGUE-LIFECYCLE: CatalogueLifecycleEvents
-- `touches` -> DM-LEDGER-SPEND-CATEGORY: SpendCategory
+- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md): Consumes LedgerDb and LedgerSchemaFragmentRegistry.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS: TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](gate-evidence-cash-withdrawals.md): A tracked-cash decision could change account catalogue shape before V001 hardens.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CATEGORIES: TASK-LEDGER-GATE-EVIDENCE-CATEGORIES](gate-evidence-categories.md): Hierarchy policy must be verified before the category schema is implemented.
+- `governed-by` -> [DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment](../../../designs/ledger/decisions/category-hierarchy.md)
+- `governed-by` -> [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `touches` -> [DM-LEDGER-ACCOUNT: Account](../../../designs/ledger/data-model.md#account)
+- `touches` -> [DM-LEDGER-CATALOGUE-LIFECYCLE: CatalogueLifecycleEvents](../../../designs/ledger/data-model.md#financialdimensioncataloguelifecycleevents)
+- `touches` -> [DM-LEDGER-SPEND-CATEGORY: SpendCategory](../../../designs/ledger/data-model.md#spendcategory)
 
 ## Navigation
 

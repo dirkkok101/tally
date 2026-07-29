@@ -22,19 +22,19 @@ Prove UC-LEDGER-011 through observable process results and durable-state invaria
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | `false` |
-| FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent | `requirement` | `verifies` | `true` |
-| FR-LEDGER-RELATIONSHIP-CORRECTION: Revoke or replace financial relationships | `requirement` | `verifies` | `true` |
+| [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) | `data_model` | `touches` | `false` |
+| [FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent](../../../prd/ledger/prd.md#fr-ledger-idempotent-writes-make-public-writes-idempotent) | `requirement` | `verifies` | `true` |
+| [FR-LEDGER-RELATIONSHIP-CORRECTION: Revoke or replace financial relationships](../../../prd/ledger/prd.md#fr-ledger-relationship-correction-revoke-or-replace-financial-relationships) | `requirement` | `verifies` | `true` |
 | TC-LEDGER-ATTRIBUTABLE-HISTORY-INVARIANTS: Verify attributable financial history | `test_case` | `verifies` | `true` |
 | TC-LEDGER-RELATIONSHIP-CORRECTION-CONTRACT: Verify revoke or replace financial relationships contract | `test_case` | `verifies` | `true` |
-| UC-LEDGER-011: Revoke or replace a transfer or refund relationship | `use_case` | `covers` | `true` |
+| [UC-LEDGER-011: Revoke or replace a transfer or refund relationship](../../../prd/ledger/prd.md#uc-ledger-011-revoke-or-replace-a-transfer-or-refund-relationship) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
 
 ## Recipe
 
@@ -74,8 +74,8 @@ Prove UC-LEDGER-011 through observable process results and durable-state invaria
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract74 | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 74 provider-neutral operations |
-| VerifiedUC011 | `produces` | UC-LEDGER-011 | workflow verification |
+| CompletePublicContract74 | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Exactly 74 provider-neutral operations |
+| VerifiedUC011 | `produces` | [UC-LEDGER-011](../../../prd/ledger/prd.md#uc-ledger-011-revoke-or-replace-a-transfer-or-refund-relationship) | workflow verification |
 
 ### Verification
 
@@ -101,14 +101,14 @@ Prove UC-LEDGER-011 through observable process results and durable-state invaria
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2rp` (verified)
-- `covers` -> UC-LEDGER-011: Revoke or replace a transfer or refund relationship
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
-- `touches` -> DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts
-- `verifies` -> FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent
-- `verifies` -> FR-LEDGER-RELATIONSHIP-CORRECTION: Revoke or replace financial relationships
+- `covers` -> [UC-LEDGER-011: Revoke or replace a transfer or refund relationship](../../../prd/ledger/prd.md#uc-ledger-011-revoke-or-replace-a-transfer-or-refund-relationship)
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
+- `touches` -> [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts)
 - `verifies` -> TC-LEDGER-ATTRIBUTABLE-HISTORY-INVARIANTS: Verify attributable financial history
 - `verifies` -> TC-LEDGER-RELATIONSHIP-CORRECTION-CONTRACT: Verify revoke or replace financial relationships contract
+- `verifies` -> [FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent](../../../prd/ledger/prd.md#fr-ledger-idempotent-writes-make-public-writes-idempotent)
+- `verifies` -> [FR-LEDGER-RELATIONSHIP-CORRECTION: Revoke or replace financial relationships](../../../prd/ledger/prd.md#fr-ledger-relationship-correction-revoke-or-replace-financial-relationships)
 
 ## Navigation
 

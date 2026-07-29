@@ -22,16 +22,16 @@ Prove explicit owner decisions resolve or correct reconciliation without deletin
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE: Resolve and correct reconciliation decisions | `requirement` | `verifies` | `true` |
+| [FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE: Resolve and correct reconciliation decisions](../../../prd/ledger/prd.md#fr-ledger-reconciliation-decision-lifecycle-resolve-and-correct-reconciliation-decision) | `requirement` | `verifies` | `true` |
 | TC-LEDGER-RECONCILIATION-DECISION-LIFECYCLE-CONTRACT: Verify owner reconciliation decisions and corrections | `test_case` | `verifies` | `true` |
-| UC-LEDGER-015: Resolve or correct a reconciliation decision | `use_case` | `covers` | `true` |
+| [UC-LEDGER-015: Resolve or correct a reconciliation decision](../../../prd/ledger/prd.md#uc-ledger-015-resolve-or-correct-a-reconciliation-decision) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
 
 ## Recipe
 
@@ -69,8 +69,8 @@ None recorded.
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  |  |
-| CompletePublicContract74 | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 74 provider-neutral operations |
-| VerifiedUC015 | `produces` | UC-LEDGER-015 |  |
+| CompletePublicContract74 | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Exactly 74 provider-neutral operations |
+| VerifiedUC015 | `produces` | [UC-LEDGER-015](../../../prd/ledger/prd.md#uc-ledger-015-resolve-or-correct-a-reconciliation-decision) |  |
 
 ### Verification
 
@@ -95,11 +95,11 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-xt9` (verified)
-- `covers` -> UC-LEDGER-015: Resolve or correct a reconciliation decision
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
-- `verifies` -> FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE: Resolve and correct reconciliation decisions
+- `covers` -> [UC-LEDGER-015: Resolve or correct a reconciliation decision](../../../prd/ledger/prd.md#uc-ledger-015-resolve-or-correct-a-reconciliation-decision)
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
 - `verifies` -> TC-LEDGER-RECONCILIATION-DECISION-LIFECYCLE-CONTRACT: Verify owner reconciliation decisions and corrections
+- `verifies` -> [FR-LEDGER-RECONCILIATION-DECISION-LIFECYCLE: Resolve and correct reconciliation decisions](../../../prd/ledger/prd.md#fr-ledger-reconciliation-decision-lifecycle-resolve-and-correct-reconciliation-decision)
 
 ## Navigation
 

@@ -22,20 +22,20 @@ Backup publishes one complete verified artifact and durable receipt, while stand
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation | `design_decision` | `governed-by` | `true` |
-| DM-INSIGHTS-RECOVERY-CONTRACTS: InsightsRecoveryManifestAndReceipts | `data_model` | `touches` | `true` |
-| EXT-INSIGHTS-HOST-OS-SECURITY: Host OS Security and Storage | `external_dependency` | `references` | `true` |
-| FR-INSIGHTS-BACKUP-VERIFY-RESTORE: Back up, verify, and restore retained INSIGHTS state | `requirement` | `implements` | `true` |
-| NFR-INSIGHTS-VERIFIED-RECOVERABILITY: Verify backup and restore independently | `nfr` | `satisfies` | `true` |
+| [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation](../../../designs/insights/decisions/verified-recovery-activation.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INSIGHTS-RECOVERY-CONTRACTS: InsightsRecoveryManifestAndReceipts](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts) | `data_model` | `touches` | `true` |
+| [EXT-INSIGHTS-HOST-OS-SECURITY: Host OS Security and Storage](../../../prd/insights/prd.md#ext-insights-host-os-security-host-os-security-and-storage) | `external_dependency` | `references` | `true` |
+| [FR-INSIGHTS-BACKUP-VERIFY-RESTORE: Back up, verify, and restore retained INSIGHTS state](../../../prd/insights/prd.md#fr-insights-backup-verify-restore-back-up-verify-and-restore-retained-insights-state) | `requirement` | `implements` | `true` |
+| [NFR-INSIGHTS-VERIFIED-RECOVERABILITY: Verify backup and restore independently](../../../prd/insights/prd.md#nfr-insights-verified-recoverability-verify-backup-and-restore-independently) | `nfr` | `satisfies` | `true` |
 | TC-INSIGHTS-BACKUP-VERIFICATION: Verify complete owner-only INSIGHTS backups | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Backup reads and verifies the complete store schema and owner-only layout. |
-| [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](../tasks/idempotency-executor.md) | `compile` | Backup uses the module replay identity and crash reservation state. |
+| [TASK-INSIGHTS-STATE-FOUNDATION: TASK-INSIGHTS-STATE-FOUNDATION](state-foundation.md) | `compile` | Backup reads and verifies the complete store schema and owner-only layout. |
+| [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR: TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](idempotency-executor.md) | `compile` | Backup uses the module replay identity and crash reservation state. |
 
 ## Recipe
 
@@ -83,12 +83,12 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| InsightsStoreLayout | `consumes` | DM-INSIGHTS-STATE-STORE | recognized owner-only artifact paths |
-| InsightsStateStore | `consumes` | DM-INSIGHTS-STATE-STORE | read-consistent snapshot and terminal receipt |
-| InsightsIdempotencyExecutor.ExecuteAsync | `consumes` | DM-INSIGHTS-IDEMPOTENCY | Attempting, crash reconciliation, and terminal outcome |
-| InsightsBackupVerifier.VerifyAsync | `produces` | DM-INSIGHTS-RECOVERY-CONTRACTS | independent VerificationReceipt |
-| CreateInsightsBackupCommand.HandleAsync | `produces` | DM-INSIGHTS-OPERATION-CONTRACTS | insights.backup.create handler |
-| VerifyInsightsBackupQuery.HandleAsync | `produces` | DM-INSIGHTS-RECOVERY-CONTRACTS | insights.backup.verify handler |
+| InsightsStoreLayout | `consumes` | [DM-INSIGHTS-STATE-STORE](../../../designs/insights/data-model.md#insightsstatestore) | recognized owner-only artifact paths |
+| InsightsStateStore | `consumes` | [DM-INSIGHTS-STATE-STORE](../../../designs/insights/data-model.md#insightsstatestore) | read-consistent snapshot and terminal receipt |
+| InsightsIdempotencyExecutor.ExecuteAsync | `consumes` | [DM-INSIGHTS-IDEMPOTENCY](../../../designs/insights/data-model.md#insightsidempotencyrecord) | Attempting, crash reconciliation, and terminal outcome |
+| InsightsBackupVerifier.VerifyAsync | `produces` | [DM-INSIGHTS-RECOVERY-CONTRACTS](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts) | independent VerificationReceipt |
+| CreateInsightsBackupCommand.HandleAsync | `produces` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | insights.backup.create handler |
+| VerifyInsightsBackupQuery.HandleAsync | `produces` | [DM-INSIGHTS-RECOVERY-CONTRACTS](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts) | insights.backup.verify handler |
 
 ### Verification
 
@@ -113,14 +113,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2bm` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](../tasks/idempotency-executor.md): Backup uses the module replay identity and crash reservation state.
-- `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md): Backup reads and verifies the complete store schema and owner-only layout.
-- `governed-by` -> DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads
-- `governed-by` -> DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation
-- `implements` -> FR-INSIGHTS-BACKUP-VERIFY-RESTORE: Back up, verify, and restore retained INSIGHTS state
-- `references` -> EXT-INSIGHTS-HOST-OS-SECURITY: Host OS Security and Storage
-- `satisfies` -> NFR-INSIGHTS-VERIFIED-RECOVERABILITY: Verify backup and restore independently
-- `touches` -> DM-INSIGHTS-RECOVERY-CONTRACTS: InsightsRecoveryManifestAndReceipts
+- `depends-on:compile` -> [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR: TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](idempotency-executor.md): Backup uses the module replay identity and crash reservation state.
+- `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION: TASK-INSIGHTS-STATE-FOUNDATION](state-foundation.md): Backup reads and verifies the complete store schema and owner-only layout.
+- `governed-by` -> [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md)
+- `governed-by` -> [DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation](../../../designs/insights/decisions/verified-recovery-activation.md)
+- `implements` -> [FR-INSIGHTS-BACKUP-VERIFY-RESTORE: Back up, verify, and restore retained INSIGHTS state](../../../prd/insights/prd.md#fr-insights-backup-verify-restore-back-up-verify-and-restore-retained-insights-state)
+- `references` -> [EXT-INSIGHTS-HOST-OS-SECURITY: Host OS Security and Storage](../../../prd/insights/prd.md#ext-insights-host-os-security-host-os-security-and-storage)
+- `satisfies` -> [NFR-INSIGHTS-VERIFIED-RECOVERABILITY: Verify backup and restore independently](../../../prd/insights/prd.md#nfr-insights-verified-recoverability-verify-backup-and-restore-independently)
+- `touches` -> [DM-INSIGHTS-RECOVERY-CONTRACTS: InsightsRecoveryManifestAndReceipts](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts)
 - `verifies` -> TC-INSIGHTS-BACKUP-VERIFICATION: Verify complete owner-only INSIGHTS backups
 
 ## Navigation

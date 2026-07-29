@@ -22,11 +22,11 @@ Keep the executable schema aligned one-to-one with every published operation des
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-SKILL-COMPATIBILITY: Provider-neutral self-describing contract with optional guidance | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-SYSTEM-SKILL-CONTRACTS: SystemIntegrationGuidanceContracts | `data_model` | `touches` | `true` |
-| FA-LEDGER-CONTRACT-SKILLS: Contract and Integration Guidance | `feature_area` | `touches` | `false` |
-| FR-LEDGER-SKILL-COMPATIBILITY: Expose version-matched integration guidance | `requirement` | `implements` | `true` |
-| NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the external-orchestrator contract stable | `nfr` | `satisfies` | `true` |
+| [DD-LEDGER-SKILL-COMPATIBILITY: Provider-neutral self-describing contract with optional guidance](../../../designs/ledger/decisions/skill-compatibility.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-SYSTEM-SKILL-CONTRACTS: SystemIntegrationGuidanceContracts](../../../designs/ledger/data-model.md#systemintegrationguidancecontracts) | `data_model` | `touches` | `true` |
+| [FA-LEDGER-CONTRACT-SKILLS: Contract and Integration Guidance](../../../designs/ledger/features/contract-skills/api-surface.md) | `feature_area` | `touches` | `false` |
+| [FR-LEDGER-SKILL-COMPATIBILITY: Expose version-matched integration guidance](../../../prd/ledger/prd.md#fr-ledger-skill-compatibility-expose-version-matched-integration-guidance) | `requirement` | `implements` | `true` |
+| [NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the external-orchestrator contract stable](../../../prd/ledger/prd.md#nfr-ledger-agent-contract-stability-keep-the-external-orchestrator-contract-stable) | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-AGENT-CONTRACT-CONFORMANCE: Verify every external-orchestrator operation contract | `test_case` | `verifies` | `true` |
 | TC-LEDGER-SKILL-COMPATIBILITY-CONTRACT: Verify version-matched integration guidance | `test_case` | `verifies` | `true` |
 
@@ -34,9 +34,9 @@ Keep the executable schema aligned one-to-one with every published operation des
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md) | `compile` | Skill operations consume the proven registry, process, artifact, and idempotency seams. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Consumer requires ArtifactReconciler from its producing task; direct compile edge enforces the declared interface contract. |
-| [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md) | `compile` | Consumer requires OperationRegistry from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-GATE-INT-CORE: TASK-LEDGER-GATE-INT-CORE](gate-int-core.md) | `compile` | Skill operations consume the proven registry, process, artifact, and idempotency seams. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Consumer requires ArtifactReconciler from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-CORE-PROCESS-CONTRACT: TASK-LEDGER-CORE-PROCESS-CONTRACT](core-process-contract.md) | `compile` | Consumer requires OperationRegistry from its producing task; direct compile edge enforces the declared interface contract. |
 
 ## Recipe
 
@@ -84,10 +84,10 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| GuidanceOperationModule | `produces` | DM-LEDGER-SYSTEM-SKILL-CONTRACTS | list/check/install descriptors |
-| GuidanceService | `produces` | DM-LEDGER-SYSTEM-SKILL-CONTRACTS | optional host publication |
-| OperationRegistry | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | authoritative public contract |
-| ArtifactReconciler | `consumes` | DD-LEDGER-IDEMPOTENT-MUTATIONS | atomic optional publication |
+| GuidanceOperationModule | `produces` | [DM-LEDGER-SYSTEM-SKILL-CONTRACTS](../../../designs/ledger/data-model.md#systemintegrationguidancecontracts) | list/check/install descriptors |
+| GuidanceService | `produces` | [DM-LEDGER-SYSTEM-SKILL-CONTRACTS](../../../designs/ledger/data-model.md#systemintegrationguidancecontracts) | optional host publication |
+| OperationRegistry | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | authoritative public contract |
+| ArtifactReconciler | `consumes` | [DD-LEDGER-IDEMPOTENT-MUTATIONS](../../../designs/ledger/decisions/idempotent-mutations.md) | atomic optional publication |
 
 ### Verification
 
@@ -113,14 +113,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1ie` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires ArtifactReconciler from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md): Consumer requires OperationRegistry from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md): Skill operations consume the proven registry, process, artifact, and idempotency seams.
-- `governed-by` -> DD-LEDGER-SKILL-COMPATIBILITY: Provider-neutral self-describing contract with optional guidance
-- `implements` -> FR-LEDGER-SKILL-COMPATIBILITY: Expose version-matched integration guidance
-- `satisfies` -> NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the external-orchestrator contract stable
-- `touches` -> DM-LEDGER-SYSTEM-SKILL-CONTRACTS: SystemIntegrationGuidanceContracts
-- `touches` -> FA-LEDGER-CONTRACT-SKILLS: Contract and Integration Guidance
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Consumer requires ArtifactReconciler from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT: TASK-LEDGER-CORE-PROCESS-CONTRACT](core-process-contract.md): Consumer requires OperationRegistry from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CORE: TASK-LEDGER-GATE-INT-CORE](gate-int-core.md): Skill operations consume the proven registry, process, artifact, and idempotency seams.
+- `governed-by` -> [DD-LEDGER-SKILL-COMPATIBILITY: Provider-neutral self-describing contract with optional guidance](../../../designs/ledger/decisions/skill-compatibility.md)
+- `implements` -> [FR-LEDGER-SKILL-COMPATIBILITY: Expose version-matched integration guidance](../../../prd/ledger/prd.md#fr-ledger-skill-compatibility-expose-version-matched-integration-guidance)
+- `satisfies` -> [NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the external-orchestrator contract stable](../../../prd/ledger/prd.md#nfr-ledger-agent-contract-stability-keep-the-external-orchestrator-contract-stable)
+- `touches` -> [DM-LEDGER-SYSTEM-SKILL-CONTRACTS: SystemIntegrationGuidanceContracts](../../../designs/ledger/data-model.md#systemintegrationguidancecontracts)
+- `touches` -> [FA-LEDGER-CONTRACT-SKILLS: Contract and Integration Guidance](../../../designs/ledger/features/contract-skills/api-surface.md)
 - `verifies` -> TC-LEDGER-AGENT-CONTRACT-CONFORMANCE: Verify every external-orchestrator operation contract
 - `verifies` -> TC-LEDGER-SKILL-COMPATIBILITY-CONTRACT: Verify version-matched integration guidance
 

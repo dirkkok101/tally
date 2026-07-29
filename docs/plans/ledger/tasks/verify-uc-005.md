@@ -22,19 +22,19 @@ Prove exact membership and totals across transfers, refunds, hierarchy, dimensio
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | `false` |
-| FR-LEDGER-ACTUALS-QUERY: Query and reconcile Ledger actuals | `requirement` | `verifies` | `true` |
-| FR-LEDGER-SNAPSHOT-PAGINATION: Preserve query snapshots across pages | `requirement` | `verifies` | `true` |
+| [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) | `data_model` | `touches` | `false` |
+| [FR-LEDGER-ACTUALS-QUERY: Query and reconcile Ledger actuals](../../../prd/ledger/prd.md#fr-ledger-actuals-query-query-exact-ledger-actuals) | `requirement` | `verifies` | `true` |
+| [FR-LEDGER-SNAPSHOT-PAGINATION: Preserve query snapshots across pages](../../../prd/ledger/prd.md#fr-ledger-snapshot-pagination-preserve-query-snapshots-across-pages) | `requirement` | `verifies` | `true` |
 | TC-LEDGER-ACTUALS-QUERY-CONTRACT: Verify query and reconcile ledger actuals contract | `test_case` | `verifies` | `true` |
 | TC-LEDGER-SNAPSHOT-PAGINATION-CONTRACT: Verify preserve query snapshots across pages contract | `test_case` | `verifies` | `true` |
-| UC-LEDGER-005: Query and reconcile ledger actuals | `use_case` | `covers` | `true` |
+| [UC-LEDGER-005: Query and reconcile ledger actuals](../../../prd/ledger/prd.md#uc-ledger-005-query-exact-ledger-actuals) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md) | `compile` | The black-box actuals workflow requires the released 74-operation contract including public statement-scope registration. |
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](gate-int-statement-scope-public-contract.md) | `compile` | The black-box actuals workflow requires the released 74-operation contract including public statement-scope registration. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
 
 ## Recipe
 
@@ -72,8 +72,8 @@ Prove exact membership and totals across transfers, refunds, hierarchy, dimensio
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract74 | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 74 provider-neutral operations |
-| VerifiedUC005 | `produces` | UC-LEDGER-005 | multi-dimensional actuals workflow |
+| CompletePublicContract74 | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Exactly 74 provider-neutral operations |
+| VerifiedUC005 | `produces` | [UC-LEDGER-005](../../../prd/ledger/prd.md#uc-ledger-005-query-exact-ledger-actuals) | multi-dimensional actuals workflow |
 
 ### Verification
 
@@ -98,14 +98,14 @@ Prove exact membership and totals across transfers, refunds, hierarchy, dimensio
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3na` (verified)
-- `covers` -> UC-LEDGER-005: Query and reconcile ledger actuals
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md): The black-box actuals workflow requires the released 74-operation contract including public statement-scope registration.
-- `touches` -> DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts
-- `verifies` -> FR-LEDGER-ACTUALS-QUERY: Query and reconcile Ledger actuals
-- `verifies` -> FR-LEDGER-SNAPSHOT-PAGINATION: Preserve query snapshots across pages
+- `covers` -> [UC-LEDGER-005: Query and reconcile ledger actuals](../../../prd/ledger/prd.md#uc-ledger-005-query-exact-ledger-actuals)
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](gate-int-statement-scope-public-contract.md): The black-box actuals workflow requires the released 74-operation contract including public statement-scope registration.
+- `touches` -> [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts)
 - `verifies` -> TC-LEDGER-ACTUALS-QUERY-CONTRACT: Verify query and reconcile ledger actuals contract
 - `verifies` -> TC-LEDGER-SNAPSHOT-PAGINATION-CONTRACT: Verify preserve query snapshots across pages contract
+- `verifies` -> [FR-LEDGER-ACTUALS-QUERY: Query and reconcile Ledger actuals](../../../prd/ledger/prd.md#fr-ledger-actuals-query-query-exact-ledger-actuals)
+- `verifies` -> [FR-LEDGER-SNAPSHOT-PAGINATION: Preserve query snapshots across pages](../../../prd/ledger/prd.md#fr-ledger-snapshot-pagination-preserve-query-snapshots-across-pages)
 
 ## Navigation
 

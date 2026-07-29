@@ -22,17 +22,17 @@ Publish ledger.reconciliation.scope.register through the existing provider-neutr
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope | `data_model` | `touches` | `true` |
-| FR-LEDGER-RECONCILIATION-COVERAGE: Report statement coverage and exceptions | `requirement` | `implements` | `true` |
+| [DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry](../../../designs/ledger/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-RECONCILIATION-COVERAGE: Report statement coverage and exceptions](../../../prd/ledger/prd.md#fr-ledger-reconciliation-coverage-report-statement-coverage-and-exceptions) | `requirement` | `implements` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION](../tasks/reconciliation-scope-registration.md) | `compile` | Public composition consumes the completed scope module and contracts. |
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | The 74-operation composition extends the previously proven 73-operation root registry. |
+| [TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION: TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION](reconciliation-scope-registration.md) | `compile` | Public composition consumes the completed scope module and contracts. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | The 74-operation composition extends the previously proven 73-operation root registry. |
 
 ## Recipe
 
@@ -88,9 +88,9 @@ Publish ledger.reconciliation.scope.register through the existing provider-neutr
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ReconciliationScopeOperationModule | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS | completed scope implementation from TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | historically proven 73-operation registry |
-| StatementScopePublicComposition74 | `produces` | DM-LEDGER-OPERATION-DESCRIPTOR | committed ten-descriptor reconciliation composition and 74-operation registry |
+| ReconciliationScopeOperationModule | `consumes` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) | completed scope implementation from TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION |
+| CompletePublicContract | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | historically proven 73-operation registry |
+| StatementScopePublicComposition74 | `produces` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | committed ten-descriptor reconciliation composition and 74-operation registry |
 | PublishedTallyFixture | `consumes` |  | Release executable fixture |
 
 ### Verification
@@ -121,12 +121,12 @@ Publish ledger.reconciliation.scope.register through the existing provider-neutr
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1ge` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): The 74-operation composition extends the previously proven 73-operation root registry.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION](../tasks/reconciliation-scope-registration.md): Public composition consumes the completed scope module and contracts.
-- `governed-by` -> DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry
-- `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
-- `implements` -> FR-LEDGER-RECONCILIATION-COVERAGE: Report statement coverage and exceptions
-- `touches` -> DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): The 74-operation composition extends the previously proven 73-operation root registry.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION: TASK-LEDGER-RECONCILIATION-SCOPE-REGISTRATION](reconciliation-scope-registration.md): Public composition consumes the completed scope module and contracts.
+- `governed-by` -> [DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry](../../../designs/ledger/decisions/cli-operation-contract.md)
+- `governed-by` -> [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md)
+- `implements` -> [FR-LEDGER-RECONCILIATION-COVERAGE: Report statement coverage and exceptions](../../../prd/ledger/prd.md#fr-ledger-reconciliation-coverage-report-statement-coverage-and-exceptions)
+- `touches` -> [DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope](../../../designs/ledger/data-model.md#operationdescriptorandenvelope)
 
 ## Navigation
 

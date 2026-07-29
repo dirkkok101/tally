@@ -22,18 +22,18 @@ ExactMetricCalculator accounts for every member exactly once and returns reconci
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY: Frozen Johannesburg Analysis Windows and exact Linear Pace | `design_decision` | `governed-by` | `true` |
-| DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation | `data_model` | `touches` | `true` |
-| FR-INSIGHTS-EXACT-WINDOW-METRICS: Calculate exact Analysis Window metrics | `requirement` | `implements` | `true` |
-| NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity | `nfr` | `satisfies` | `true` |
+| [DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies](../../../designs/insights/decisions/deterministic-report-compiler.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY: Frozen Johannesburg Analysis Windows and exact Linear Pace](../../../designs/insights/decisions/trusted-window-pace-policy.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation](../../../designs/insights/data-model.md#analysiswindowmetricstateandexplanation) | `data_model` | `touches` | `true` |
+| [FR-INSIGHTS-EXACT-WINDOW-METRICS: Calculate exact Analysis Window metrics](../../../prd/insights/prd.md#fr-insights-exact-window-metrics-calculate-exact-analysis-window-metrics) | `requirement` | `implements` | `true` |
+| [NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity](../../../prd/insights/prd.md#nfr-insights-deterministic-analytical-integrity-preserve-deterministic-analytical-integrity) | `nfr` | `satisfies` | `true` |
 | TC-INSIGHTS-EXACT-METRICS-CONFORMANCE: Verify exact window metric reconciliation | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md) | `compile` | The calculator consumes evidence and produces exact analytical contracts. |
+| [TASK-INSIGHTS-CONTRACT-MODELS: TASK-INSIGHTS-CONTRACT-MODELS](contract-models.md) | `compile` | The calculator consumes evidence and produces exact analytical contracts. |
 
 ## Recipe
 
@@ -74,8 +74,8 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| BoundInsightEvidence | `consumes` | DM-INSIGHTS-COHERENT-EVIDENCE | complete validated dated members |
-| ExactMetricCalculator.Calculate | `produces` | DM-INSIGHTS-ANALYTICAL-EVIDENCE | ordered exact MetricResult collection |
+| BoundInsightEvidence | `consumes` | [DM-INSIGHTS-COHERENT-EVIDENCE](../../../designs/insights/data-model.md#boundinsightevidence) | complete validated dated members |
+| ExactMetricCalculator.Calculate | `produces` | [DM-INSIGHTS-ANALYTICAL-EVIDENCE](../../../designs/insights/data-model.md#analysiswindowmetricstateandexplanation) | ordered exact MetricResult collection |
 
 ### Verification
 
@@ -100,12 +100,12 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-mbq` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md): The calculator consumes evidence and produces exact analytical contracts.
-- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies
-- `governed-by` -> DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY: Frozen Johannesburg Analysis Windows and exact Linear Pace
-- `implements` -> FR-INSIGHTS-EXACT-WINDOW-METRICS: Calculate exact Analysis Window metrics
-- `satisfies` -> NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity
-- `touches` -> DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation
+- `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-MODELS: TASK-INSIGHTS-CONTRACT-MODELS](contract-models.md): The calculator consumes evidence and produces exact analytical contracts.
+- `governed-by` -> [DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies](../../../designs/insights/decisions/deterministic-report-compiler.md)
+- `governed-by` -> [DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY: Frozen Johannesburg Analysis Windows and exact Linear Pace](../../../designs/insights/decisions/trusted-window-pace-policy.md)
+- `implements` -> [FR-INSIGHTS-EXACT-WINDOW-METRICS: Calculate exact Analysis Window metrics](../../../prd/insights/prd.md#fr-insights-exact-window-metrics-calculate-exact-analysis-window-metrics)
+- `satisfies` -> [NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity](../../../prd/insights/prd.md#nfr-insights-deterministic-analytical-integrity-preserve-deterministic-analytical-integrity)
+- `touches` -> [DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation](../../../designs/insights/data-model.md#analysiswindowmetricstateandexplanation)
 - `verifies` -> TC-INSIGHTS-EXACT-METRICS-CONFORMANCE: Verify exact window metric reconciliation
 
 ## Navigation

@@ -22,11 +22,11 @@ Prove that hostile/malformed input and every success/failure/crash path disclose
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling | `design_decision` | `governed-by` | `true` |
-| DD-INGEST-DOCUMENT-EXTRACTION: Managed in-process PDF extraction with PdfPig | `design_decision` | `governed-by` | `true` |
-| DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction | `design_decision` | `governed-by` | `true` |
-| NFR-INGEST-BOUNDED-PARSING: Bound passive statement processing | `nfr` | `satisfies` | `true` |
-| NFR-INGEST-LOCAL-DATA-PROTECTION: Protect local statement and ingestion data | `nfr` | `satisfies` | `true` |
+| [DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling](../../../designs/ingest/decisions/artifact-security.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INGEST-DOCUMENT-EXTRACTION: Managed in-process PDF extraction with PdfPig](../../../designs/ingest/decisions/document-extraction.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction](../../../designs/ingest/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [NFR-INGEST-BOUNDED-PARSING: Bound passive statement processing](../../../prd/ingest/prd.md#nfr-ingest-bounded-parsing-bound-passive-statement-processing) | `nfr` | `satisfies` | `true` |
+| [NFR-INGEST-LOCAL-DATA-PROTECTION: Protect local statement and ingestion data](../../../prd/ingest/prd.md#nfr-ingest-local-data-protection-protect-local-statement-and-ingestion-data) | `nfr` | `satisfies` | `true` |
 | TC-INGEST-ARTIFACT-PROTECTION: Verify source and artifact privacy boundaries | `test_case` | `verifies` | `true` |
 | TC-INGEST-PDF-EXTRACTION-AOT: Verify PdfPig Native-AOT extraction conformance | `test_case` | `verifies` | `true` |
 
@@ -34,9 +34,9 @@ Prove that hostile/malformed input and every success/failure/crash path disclose
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Security is validated against the complete published eight-operation surface. |
-| [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md) | `compile` | Consumes PrivateStatementFixtureSet. |
-| [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Consumes IngestArtifactProtection.EnsureOwnerOnly. |
+| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT: TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Security is validated against the complete published eight-operation surface. |
+| [TASK-INGEST-PDF-EXTRACTION: TASK-INGEST-PDF-EXTRACTION](pdf-extraction.md) | `compile` | Consumes PrivateStatementFixtureSet. |
+| [TASK-INGEST-STATE-FOUNDATION: TASK-INGEST-STATE-FOUNDATION](state-foundation.md) | `compile` | Consumes IngestArtifactProtection.EnsureOwnerOnly. |
 
 ## Recipe
 
@@ -81,11 +81,11 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteIngestPublicContract | `consumes` | DM-INGEST-OPERATION-CONTRACTS | Published INGEST surface |
-| IngestArtifactProtection.EnsureOwnerOnly | `consumes` | DD-INGEST-ARTIFACT-SECURITY | Permission enforcement |
-| PrivateStatementFixtureSet | `consumes` | EXT-INGEST-OWNER-BANK-STATEMENT | External private fixture injection |
-| PublishedIngestTallyFixture | `consumes` | DM-INGEST-OPERATION-CONTRACTS | Published process boundary |
-| IngestSecurityGateEvidence | `produces` | NFR-INGEST-LOCAL-DATA-PROTECTION | Consolidated security proof |
+| CompleteIngestPublicContract | `consumes` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) | Published INGEST surface |
+| IngestArtifactProtection.EnsureOwnerOnly | `consumes` | [DD-INGEST-ARTIFACT-SECURITY](../../../designs/ingest/decisions/artifact-security.md) | Permission enforcement |
+| PrivateStatementFixtureSet | `consumes` | [EXT-INGEST-OWNER-BANK-STATEMENT](../../../prd/ingest/prd.md#ext-ingest-owner-bank-statement-owner-supplied-bank-statement) | External private fixture injection |
+| PublishedIngestTallyFixture | `consumes` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) | Published process boundary |
+| IngestSecurityGateEvidence | `produces` | [NFR-INGEST-LOCAL-DATA-PROTECTION](../../../prd/ingest/prd.md#nfr-ingest-local-data-protection-protect-local-statement-and-ingestion-data) | Consolidated security proof |
 
 ### Verification
 
@@ -111,14 +111,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-114` (verified)
-- `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Security is validated against the complete published eight-operation surface.
-- `depends-on:compile` -> [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md): Consumes PrivateStatementFixtureSet.
-- `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md): Consumes IngestArtifactProtection.EnsureOwnerOnly.
-- `governed-by` -> DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling
-- `governed-by` -> DD-INGEST-DOCUMENT-EXTRACTION: Managed in-process PDF extraction with PdfPig
-- `governed-by` -> DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction
-- `satisfies` -> NFR-INGEST-BOUNDED-PARSING: Bound passive statement processing
-- `satisfies` -> NFR-INGEST-LOCAL-DATA-PROTECTION: Protect local statement and ingestion data
+- `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT: TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Security is validated against the complete published eight-operation surface.
+- `depends-on:compile` -> [TASK-INGEST-PDF-EXTRACTION: TASK-INGEST-PDF-EXTRACTION](pdf-extraction.md): Consumes PrivateStatementFixtureSet.
+- `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION: TASK-INGEST-STATE-FOUNDATION](state-foundation.md): Consumes IngestArtifactProtection.EnsureOwnerOnly.
+- `governed-by` -> [DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling](../../../designs/ingest/decisions/artifact-security.md)
+- `governed-by` -> [DD-INGEST-DOCUMENT-EXTRACTION: Managed in-process PDF extraction with PdfPig](../../../designs/ingest/decisions/document-extraction.md)
+- `governed-by` -> [DD-INGEST-STATE-STORE: Separate raw-SQLite ingestion state with retention compaction](../../../designs/ingest/decisions/state-store.md)
+- `satisfies` -> [NFR-INGEST-BOUNDED-PARSING: Bound passive statement processing](../../../prd/ingest/prd.md#nfr-ingest-bounded-parsing-bound-passive-statement-processing)
+- `satisfies` -> [NFR-INGEST-LOCAL-DATA-PROTECTION: Protect local statement and ingestion data](../../../prd/ingest/prd.md#nfr-ingest-local-data-protection-protect-local-statement-and-ingestion-data)
 - `verifies` -> TC-INGEST-ARTIFACT-PROTECTION: Verify source and artifact privacy boundaries
 - `verifies` -> TC-INGEST-PDF-EXTRACTION-AOT: Verify PdfPig Native-AOT extraction conformance
 

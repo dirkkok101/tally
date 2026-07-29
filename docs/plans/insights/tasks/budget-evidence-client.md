@@ -22,20 +22,20 @@ INSIGHTS invokes exactly one compatible budget.insights.evidence.get operation t
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation | `design_decision` | `governed-by` | `true` |
-| DM-BUDGET-INSIGHTS-READ-CONTRACT: BudgetReadCapabilityDescriptor | `data_model` | `touches` | `true` |
-| EXT-INSIGHTS-BUDGET-PUBLIC-READ-CONTRACT: BUDGET Public Read Contract | `external_dependency` | `references` | `true` |
-| FR-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Bind one coherent public evidence set | `requirement` | `implements` | `true` |
-| NFR-INSIGHTS-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract and authority boundaries | `nfr` | `satisfies` | `true` |
+| [DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries](../../../designs/insights/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation](../../../designs/insights/decisions/coherent-public-evidence.md) | `design_decision` | `governed-by` | `true` |
+| [DM-BUDGET-INSIGHTS-READ-CONTRACT: BudgetReadCapabilityDescriptor](../../../designs/budget/data-model.md#budgetreadcapabilitydescriptor) | `data_model` | `touches` | `true` |
+| [EXT-INSIGHTS-BUDGET-PUBLIC-READ-CONTRACT: BUDGET Public Read Contract](../../../prd/insights/prd.md#ext-insights-budget-public-read-contract-budget-public-read-contract) | `external_dependency` | `references` | `true` |
+| [FR-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Bind one coherent public evidence set](../../../prd/insights/prd.md#fr-insights-coherent-public-evidence-bind-one-coherent-public-evidence-set) | `requirement` | `implements` | `true` |
+| [NFR-INSIGHTS-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract and authority boundaries](../../../prd/insights/prd.md#nfr-insights-public-contract-compatibility-preserve-public-contract-and-authority-boundaries) | `nfr` | `satisfies` | `true` |
 | TC-INSIGHTS-PUBLIC-CONTRACT-COMPATIBILITY: Verify public producer and consumer compatibility | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | The client returns stable INSIGHTS errors and uses source-generated process contracts. |
-| [TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE](../tasks/gate-int-budget-evidence.md) | `compile` | The public producer seam must be proven before INSIGHTS consumes it. |
+| [TASK-INSIGHTS-CONTRACT-FOUNDATION: TASK-INSIGHTS-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | The client returns stable INSIGHTS errors and uses source-generated process contracts. |
+| [TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE: TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE](gate-int-budget-evidence.md) | `compile` | The public producer seam must be proven before INSIGHTS consumes it. |
 
 ## Recipe
 
@@ -77,8 +77,8 @@ INSIGHTS invokes exactly one compatible budget.insights.evidence.get operation t
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| VerifiedBudgetInsightEvidenceContract | `consumes` | DM-BUDGET-INSIGHTS-READ-CONTRACT | proved public prerequisite |
-| BudgetContractClient.GetInsightEvidenceAsync | `produces` | DM-BUDGET-INSIGHTS-READ-CONTRACT | one typed composite result through the released registry |
+| VerifiedBudgetInsightEvidenceContract | `consumes` | [DM-BUDGET-INSIGHTS-READ-CONTRACT](../../../designs/budget/data-model.md#budgetreadcapabilitydescriptor) | proved public prerequisite |
+| BudgetContractClient.GetInsightEvidenceAsync | `produces` | [DM-BUDGET-INSIGHTS-READ-CONTRACT](../../../designs/budget/data-model.md#budgetreadcapabilitydescriptor) | one typed composite result through the released registry |
 
 ### Verification
 
@@ -103,14 +103,14 @@ INSIGHTS invokes exactly one compatible budget.insights.evidence.get operation t
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-388` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): The client returns stable INSIGHTS errors and uses source-generated process contracts.
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE](../tasks/gate-int-budget-evidence.md): The public producer seam must be proven before INSIGHTS consumes it.
-- `governed-by` -> DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries
-- `governed-by` -> DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation
-- `implements` -> FR-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Bind one coherent public evidence set
-- `references` -> EXT-INSIGHTS-BUDGET-PUBLIC-READ-CONTRACT: BUDGET Public Read Contract
-- `satisfies` -> NFR-INSIGHTS-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract and authority boundaries
-- `touches` -> DM-BUDGET-INSIGHTS-READ-CONTRACT: BudgetReadCapabilityDescriptor
+- `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-FOUNDATION: TASK-INSIGHTS-CONTRACT-FOUNDATION](contract-foundation.md): The client returns stable INSIGHTS errors and uses source-generated process contracts.
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE: TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE](gate-int-budget-evidence.md): The public producer seam must be proven before INSIGHTS consumes it.
+- `governed-by` -> [DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries](../../../designs/insights/decisions/application-architecture.md)
+- `governed-by` -> [DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation](../../../designs/insights/decisions/coherent-public-evidence.md)
+- `implements` -> [FR-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Bind one coherent public evidence set](../../../prd/insights/prd.md#fr-insights-coherent-public-evidence-bind-one-coherent-public-evidence-set)
+- `references` -> [EXT-INSIGHTS-BUDGET-PUBLIC-READ-CONTRACT: BUDGET Public Read Contract](../../../prd/insights/prd.md#ext-insights-budget-public-read-contract-budget-public-read-contract)
+- `satisfies` -> [NFR-INSIGHTS-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract and authority boundaries](../../../prd/insights/prd.md#nfr-insights-public-contract-compatibility-preserve-public-contract-and-authority-boundaries)
+- `touches` -> [DM-BUDGET-INSIGHTS-READ-CONTRACT: BudgetReadCapabilityDescriptor](../../../designs/budget/data-model.md#budgetreadcapabilitydescriptor)
 - `verifies` -> TC-INSIGHTS-PUBLIC-CONTRACT-COMPATIBILITY: Verify public producer and consumer compatibility
 
 ## Navigation

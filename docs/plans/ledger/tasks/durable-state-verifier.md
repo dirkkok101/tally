@@ -22,18 +22,18 @@ Produce one normalized real-SQLite report required before backup publication, re
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-CANDIDATE-ACTIVATION: Verified store generations with atomic pointer activation | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection | `design_decision` | `governed-by` | `true` |
-| NFR-LEDGER-VERIFIED-RECOVERABILITY: Prove Ledger recoverability | `nfr` | `satisfies` | `true` |
+| [DD-LEDGER-CANDIDATE-ACTIVATION: Verified store generations with atomic pointer activation](../../../designs/ledger/decisions/candidate-activation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md) | `design_decision` | `governed-by` | `true` |
+| [NFR-LEDGER-VERIFIED-RECOVERABILITY: Prove Ledger recoverability](../../../prd/ledger/prd.md#nfr-ledger-verified-recoverability-prove-ledger-recoverability) | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-VERIFIED-RECOVERY-DRILL: Reproduce complete Durable Ledger State | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-ACTUALS-SNAPSHOT](../tasks/actuals-snapshot.md) | `compile` | Complete-state verification uses the final actuals projection while excluding snapshots. |
-| [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | Consumes LedgerDb. |
-| [TASK-LEDGER-ACTUALS-PROJECTION](../tasks/actuals-projection.md) | `compile` | Durable state verification consumes ActualsCalculator.Calculate. |
+| [TASK-LEDGER-ACTUALS-SNAPSHOT: TASK-LEDGER-ACTUALS-SNAPSHOT](actuals-snapshot.md) | `compile` | Complete-state verification uses the final actuals projection while excluding snapshots. |
+| [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md) | `compile` | Consumes LedgerDb. |
+| [TASK-LEDGER-ACTUALS-PROJECTION: TASK-LEDGER-ACTUALS-PROJECTION](actuals-projection.md) | `compile` | Durable state verification consumes ActualsCalculator.Calculate. |
 
 ## Recipe
 
@@ -76,9 +76,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| DurableLedgerVerifier | `produces` | DM-LEDGER-STORE-GENERATION |  |
-| LedgerDb | `consumes` | DM-LEDGER-STORE-GENERATION |  |
-| ActualsCalculator.Calculate | `consumes` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS |  |
+| DurableLedgerVerifier | `produces` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) |  |
+| LedgerDb | `consumes` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) |  |
+| ActualsCalculator.Calculate | `consumes` | [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) |  |
 
 ### Verification
 
@@ -104,12 +104,12 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3ja` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-ACTUALS-PROJECTION](../tasks/actuals-projection.md): Durable state verification consumes ActualsCalculator.Calculate.
-- `depends-on:compile` -> [TASK-LEDGER-ACTUALS-SNAPSHOT](../tasks/actuals-snapshot.md): Complete-state verification uses the final actuals projection while excluding snapshots.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Consumes LedgerDb.
-- `governed-by` -> DD-LEDGER-CANDIDATE-ACTIVATION: Verified store generations with atomic pointer activation
-- `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
-- `satisfies` -> NFR-LEDGER-VERIFIED-RECOVERABILITY: Prove Ledger recoverability
+- `depends-on:compile` -> [TASK-LEDGER-ACTUALS-PROJECTION: TASK-LEDGER-ACTUALS-PROJECTION](actuals-projection.md): Durable state verification consumes ActualsCalculator.Calculate.
+- `depends-on:compile` -> [TASK-LEDGER-ACTUALS-SNAPSHOT: TASK-LEDGER-ACTUALS-SNAPSHOT](actuals-snapshot.md): Complete-state verification uses the final actuals projection while excluding snapshots.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md): Consumes LedgerDb.
+- `governed-by` -> [DD-LEDGER-CANDIDATE-ACTIVATION: Verified store generations with atomic pointer activation](../../../designs/ledger/decisions/candidate-activation.md)
+- `governed-by` -> [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md)
+- `satisfies` -> [NFR-LEDGER-VERIFIED-RECOVERABILITY: Prove Ledger recoverability](../../../prd/ledger/prd.md#nfr-ledger-verified-recoverability-prove-ledger-recoverability)
 - `verifies` -> TC-LEDGER-VERIFIED-RECOVERY-DRILL: Reproduce complete Durable Ledger State
 
 ## Navigation

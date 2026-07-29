@@ -22,19 +22,19 @@ UC-CLASSIFY-003 proves all-or-none preflight, explicit authority, at-most-once L
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-APPLY-SAGA: Expiry-bound preview and per-item idempotent Ledger saga | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-APPLY-SAGA: Expiry-bound preview and per-item idempotent Ledger saga](../../../designs/classify/decisions/apply-saga.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md) | `design_decision` | `governed-by` | `true` |
 | TC-CLASSIFY-APPLY-AUTHORIZATION-CONTRACT: Verify explicit apply authorization | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-APPLY-CRASH-RECOVERY-MATRIX: Verify every classification apply crash window | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-APPLY-EXECUTION-CONTRACT: Verify replay-safe classification apply | `test_case` | `verifies` | `true` |
-| UC-CLASSIFY-003: Apply accepted classification decisions | `use_case` | `covers` | `true` |
+| [UC-CLASSIFY-003: Apply accepted classification decisions](../../../prd/classify/prd.md#uc-classify-003-apply-accepted-classification-decisions) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-APPLY-RUN-SAGA](../tasks/apply-run-saga.md) | `compile` | The UC verifies the complete preview and apply saga. |
-| [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Acceptance invokes the published process boundary. |
+| [TASK-CLASSIFY-APPLY-RUN-SAGA: TASK-CLASSIFY-APPLY-RUN-SAGA](apply-run-saga.md) | `compile` | The UC verifies the complete preview and apply saga. |
+| [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Acceptance invokes the published process boundary. |
 
 ## Recipe
 
@@ -73,8 +73,8 @@ UC-CLASSIFY-003 proves all-or-none preflight, explicit authority, at-most-once L
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| RunClassificationApplyCommand.HandleAsync | `consumes` | DM-CLASSIFY-APPLY-RUN |  |
-| VerifiedClassifyUc003 | `produces` | UC-CLASSIFY-003 |  |
+| RunClassificationApplyCommand.HandleAsync | `consumes` | [DM-CLASSIFY-APPLY-RUN](../../../designs/classify/data-model.md#classificationapplypreviewandrun) |  |
+| VerifiedClassifyUc003 | `produces` | [UC-CLASSIFY-003](../../../prd/classify/prd.md#uc-classify-003-apply-accepted-classification-decisions) |  |
 
 ### Verification
 
@@ -96,11 +96,11 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `covers` -> UC-CLASSIFY-003: Apply accepted classification decisions
-- `depends-on:compile` -> [TASK-CLASSIFY-APPLY-RUN-SAGA](../tasks/apply-run-saga.md): The UC verifies the complete preview and apply saga.
-- `depends-on:compile` -> [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Acceptance invokes the published process boundary.
-- `governed-by` -> DD-CLASSIFY-APPLY-SAGA: Expiry-bound preview and per-item idempotent Ledger saga
-- `governed-by` -> DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract
+- `covers` -> [UC-CLASSIFY-003: Apply accepted classification decisions](../../../prd/classify/prd.md#uc-classify-003-apply-accepted-classification-decisions)
+- `depends-on:compile` -> [TASK-CLASSIFY-APPLY-RUN-SAGA: TASK-CLASSIFY-APPLY-RUN-SAGA](apply-run-saga.md): The UC verifies the complete preview and apply saga.
+- `depends-on:compile` -> [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Acceptance invokes the published process boundary.
+- `governed-by` -> [DD-CLASSIFY-APPLY-SAGA: Expiry-bound preview and per-item idempotent Ledger saga](../../../designs/classify/decisions/apply-saga.md)
+- `governed-by` -> [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md)
 - `verifies` -> TC-CLASSIFY-APPLY-AUTHORIZATION-CONTRACT: Verify explicit apply authorization
 - `verifies` -> TC-CLASSIFY-APPLY-CRASH-RECOVERY-MATRIX: Verify every classification apply crash window
 - `verifies` -> TC-CLASSIFY-APPLY-EXECUTION-CONTRACT: Verify replay-safe classification apply

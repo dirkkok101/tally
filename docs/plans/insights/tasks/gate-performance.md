@@ -22,16 +22,16 @@ Generate, Retain, Restate, Get, List, Status, and Delete meet their p95 and memo
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads | `design_decision` | `governed-by` | `true` |
-| NFR-INSIGHTS-PERSONAL-SCALE-PERFORMANCE: Respond at personal-finance scale | `nfr` | `satisfies` | `true` |
+| [DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies](../../../designs/insights/decisions/deterministic-report-compiler.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [NFR-INSIGHTS-PERSONAL-SCALE-PERFORMANCE: Respond at personal-finance scale](../../../prd/insights/prd.md#nfr-insights-personal-scale-performance-respond-at-personal-finance-scale) | `nfr` | `satisfies` | `true` |
 | TC-INSIGHTS-PERSONAL-SCALE-PERFORMANCE: Verify personal-scale performance and limits | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Benchmarks invoke the complete published operation surface. |
+| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT: TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Benchmarks invoke the complete published operation surface. |
 
 ## Recipe
 
@@ -74,8 +74,8 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteInsightsPublicContract | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS | all measured operations |
-| InsightsPerformanceGateEvidence | `produces` | NFR-INSIGHTS-PERSONAL-SCALE-PERFORMANCE | threshold and exact-result proof |
+| CompleteInsightsPublicContract | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | all measured operations |
+| InsightsPerformanceGateEvidence | `produces` | [NFR-INSIGHTS-PERSONAL-SCALE-PERFORMANCE](../../../prd/insights/prd.md#nfr-insights-personal-scale-performance-respond-at-personal-finance-scale) | threshold and exact-result proof |
 
 ### Verification
 
@@ -100,10 +100,10 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3kn` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Benchmarks invoke the complete published operation surface.
-- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies
-- `governed-by` -> DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads
-- `satisfies` -> NFR-INSIGHTS-PERSONAL-SCALE-PERFORMANCE: Respond at personal-finance scale
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT: TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Benchmarks invoke the complete published operation surface.
+- `governed-by` -> [DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies](../../../designs/insights/decisions/deterministic-report-compiler.md)
+- `governed-by` -> [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md)
+- `satisfies` -> [NFR-INSIGHTS-PERSONAL-SCALE-PERFORMANCE: Respond at personal-finance scale](../../../prd/insights/prd.md#nfr-insights-personal-scale-performance-respond-at-personal-finance-scale)
 - `verifies` -> TC-INSIGHTS-PERSONAL-SCALE-PERFORMANCE: Verify personal-scale performance and limits
 
 ## Navigation

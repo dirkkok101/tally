@@ -22,20 +22,20 @@ Commit one statement-derived replacement and every required history/carry-forwar
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| FR-LEDGER-STATEMENT-RECONCILIATION: Apply statement reconciliation outcomes | `requirement` | `implements` | `true` |
+| [DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency](../../../designs/ledger/decisions/idempotent-mutations.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [FR-LEDGER-STATEMENT-RECONCILIATION: Apply statement reconciliation outcomes](../../../prd/ledger/prd.md#fr-ledger-statement-reconciliation-apply-statement-reconciliation-outcomes) | `requirement` | `implements` | `true` |
 | TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT: Verify match-first statement reconciliation | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES](../tasks/gate-int-statement-correction-prerequisites.md) | `compile` | The correction composite consumes the prerequisite seam only after every producer interface and the V002 schema have been proven together. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Correction consumes LedgerMutationExecutor.ExecuteAsync. |
-| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](../tasks/reconciliation-statement-correction-effect-writer.md) | `compile` | The public composite consumes StatementCorrectionEffectWriter.AppendAsync. |
-| [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md) | `compile` | The public correction extends ReconciliationApplyContracts and ReconciliationApplyOperationModule. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES: TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES](gate-int-statement-correction-prerequisites.md) | `compile` | The correction composite consumes the prerequisite seam only after every producer interface and the V002 schema have been proven together. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Correction consumes LedgerMutationExecutor.ExecuteAsync. |
+| [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER: TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](reconciliation-statement-correction-effect-writer.md) | `compile` | The public composite consumes StatementCorrectionEffectWriter.AppendAsync. |
+| [TASK-LEDGER-RECONCILIATION-APPLY: TASK-LEDGER-RECONCILIATION-APPLY](reconciliation-apply.md) | `compile` | The public correction extends ReconciliationApplyContracts and ReconciliationApplyOperationModule. |
 
 ## Recipe
 
@@ -83,13 +83,13 @@ Commit one statement-derived replacement and every required history/carry-forwar
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| StatementAuthoritativeCorrectionCoordinator | `produces` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| StatementAuthorityPolicy | `produces` | DM-LEDGER-RECONCILIATION-HISTORY | Owner authority first; automatic authority remains unsupported until activation |
-| StatementCorrectionOperationExtension | `produces` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
-| StatementCorrectionEffectWriter.AppendAsync | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| ReconciliationApplyOperationModule | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD |  |
-| VerifiedStatementCorrectionPrerequisites | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY |  |
+| StatementAuthoritativeCorrectionCoordinator | `produces` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| StatementAuthorityPolicy | `produces` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) | Owner authority first; automatic authority remains unsupported until activation |
+| StatementCorrectionOperationExtension | `produces` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) |  |
+| StatementCorrectionEffectWriter.AppendAsync | `consumes` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| ReconciliationApplyOperationModule | `consumes` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) |  |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | [DM-LEDGER-IDEMPOTENCY-RECORD](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) |  |
+| VerifiedStatementCorrectionPrerequisites | `consumes` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
 
 ### Verification
 
@@ -115,14 +115,14 @@ Commit one statement-derived replacement and every required history/carry-forwar
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3ts` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Correction consumes LedgerMutationExecutor.ExecuteAsync.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES](../tasks/gate-int-statement-correction-prerequisites.md): The correction composite consumes the prerequisite seam only after every producer interface and the V002 schema have been proven together.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md): The public correction extends ReconciliationApplyContracts and ReconciliationApplyOperationModule.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](../tasks/reconciliation-statement-correction-effect-writer.md): The public composite consumes StatementCorrectionEffectWriter.AppendAsync.
-- `governed-by` -> DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
-- `implements` -> FR-LEDGER-STATEMENT-RECONCILIATION: Apply statement reconciliation outcomes
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Correction consumes LedgerMutationExecutor.ExecuteAsync.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES: TASK-LEDGER-GATE-INT-STATEMENT-CORRECTION-PREREQUISITES](gate-int-statement-correction-prerequisites.md): The correction composite consumes the prerequisite seam only after every producer interface and the V002 schema have been proven together.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-APPLY: TASK-LEDGER-RECONCILIATION-APPLY](reconciliation-apply.md): The public correction extends ReconciliationApplyContracts and ReconciliationApplyOperationModule.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER: TASK-LEDGER-RECONCILIATION-STATEMENT-CORRECTION-EFFECT-WRITER](reconciliation-statement-correction-effect-writer.md): The public composite consumes StatementCorrectionEffectWriter.AppendAsync.
+- `governed-by` -> [DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency](../../../designs/ledger/decisions/idempotent-mutations.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `governed-by` -> [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md)
+- `implements` -> [FR-LEDGER-STATEMENT-RECONCILIATION: Apply statement reconciliation outcomes](../../../prd/ledger/prd.md#fr-ledger-statement-reconciliation-apply-statement-reconciliation-outcomes)
 - `verifies` -> TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT: Verify match-first statement reconciliation
 
 ## Navigation

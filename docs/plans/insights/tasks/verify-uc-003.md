@@ -22,17 +22,17 @@ UC-INSIGHTS-003 produces exactly one immutable snapshot per successful logical r
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion](../../../designs/insights/decisions/retention-restatement-lifecycle.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
 | TC-INSIGHTS-REPORT-HISTORY-STATUS: Verify metadata-first report history and status | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-REPORT-RETENTION-IDEMPOTENCY: Verify retained generation and idempotent replay | `test_case` | `verifies` | `true` |
-| UC-INSIGHTS-003: Retain and retrieve a Report Snapshot | `use_case` | `covers` | `true` |
+| [UC-INSIGHTS-003: Retain and retrieve a Report Snapshot](../../../prd/insights/prd.md#uc-insights-003-retain-and-retrieve-a-report-snapshot) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | UC-003 invokes the complete published retained-report surface. |
+| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT: TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | UC-003 invokes the complete published retained-report surface. |
 
 ## Recipe
 
@@ -71,8 +71,8 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteInsightsPublicContract | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS | Generate, Retain, Get, and List |
-| VerifiedInsightsUc003 | `produces` | UC-INSIGHTS-003 | retained workflow proof |
+| CompleteInsightsPublicContract | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | Generate, Retain, Get, and List |
+| VerifiedInsightsUc003 | `produces` | [UC-INSIGHTS-003](../../../prd/insights/prd.md#uc-insights-003-retain-and-retrieve-a-report-snapshot) | retained workflow proof |
 
 ### Verification
 
@@ -97,10 +97,10 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3iu` (verified)
-- `covers` -> UC-INSIGHTS-003: Retain and retrieve a Report Snapshot
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC-003 invokes the complete published retained-report surface.
-- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion
-- `governed-by` -> DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads
+- `covers` -> [UC-INSIGHTS-003: Retain and retrieve a Report Snapshot](../../../prd/insights/prd.md#uc-insights-003-retain-and-retrieve-a-report-snapshot)
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT: TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): UC-003 invokes the complete published retained-report surface.
+- `governed-by` -> [DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion](../../../designs/insights/decisions/retention-restatement-lifecycle.md)
+- `governed-by` -> [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md)
 - `verifies` -> TC-INSIGHTS-REPORT-HISTORY-STATUS: Verify metadata-first report history and status
 - `verifies` -> TC-INSIGHTS-REPORT-RETENTION-IDEMPOTENCY: Verify retained generation and idempotent replay
 

@@ -15,9 +15,9 @@ Deliver transfer/refund lifecycle, correction composition, exact pool/category a
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-LEDGER-TRANSFERS](../tasks/transfers.md) | Implement owned-account transfer confirmation | `ready` | 1 |
-| [TASK-LEDGER-REFUNDS](../tasks/refunds.md) | Implement refund and reversal confirmation | `ready` | 1 |
-| [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](../tasks/relationship-corrections.md) | Implement relationship revoke and replace | `ready` | 1 |
-| [TASK-LEDGER-TRANSACTION-CORRECTIONS](../tasks/transaction-corrections.md) | Implement transaction void and supersession | `ready` | 1 |
-| [TASK-LEDGER-ACTUALS-PROJECTION](../tasks/actuals-projection.md) | Implement exact actuals projection and totals | `ready` | 1 |
-| [TASK-LEDGER-ACTUALS-SNAPSHOT](../tasks/actuals-snapshot.md) | Implement atomic snapshot actuals pagination | `ready` | 1 |
+| [TASK-LEDGER-TRANSFERS: Implement owned-account transfer confirmation](../tasks/transfers.md) | Implement owned-account transfer confirmation | `ready` | 1 |
+| [TASK-LEDGER-REFUNDS: Implement refund and reversal confirmation](../tasks/refunds.md) | Implement refund and reversal confirmation | `ready` | 1 |
+| [TASK-LEDGER-RELATIONSHIP-CORRECTIONS: Implement relationship revoke and replace](../tasks/relationship-corrections.md) | Implement relationship revoke and replace | `ready` | 1 |
+| [TASK-LEDGER-TRANSACTION-CORRECTIONS: Implement transaction void and supersession](../tasks/transaction-corrections.md) | Implement transaction void and supersession | `ready` | 1 |
+| [TASK-LEDGER-ACTUALS-PROJECTION: Implement exact actuals projection and totals](../tasks/actuals-projection.md) | Implement exact actuals projection and totals | `ready` | 1 |
+| [TASK-LEDGER-ACTUALS-SNAPSHOT: Implement atomic snapshot actuals pagination](../tasks/actuals-snapshot.md) | Implement atomic snapshot actuals pagination | `ready` | 1 |

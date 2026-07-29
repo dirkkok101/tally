@@ -22,16 +22,16 @@ Verify the committed 74-operation statement-scope public contract without changi
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope | `data_model` | `touches` | `true` |
+| [DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry](../../../designs/ledger/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | `data_model` | `touches` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-RECONCILIATION-SCOPE-PUBLIC-COMPOSITION](../tasks/reconciliation-scope-public-composition.md) | `compile` | The read-only gate verifies the committed CompletePublicContract74 producer output. |
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | The gate invokes the existing PublishedTallyFixture supplied by the prior public-contract gate. |
+| [TASK-LEDGER-RECONCILIATION-SCOPE-PUBLIC-COMPOSITION: TASK-LEDGER-RECONCILIATION-SCOPE-PUBLIC-COMPOSITION](reconciliation-scope-public-composition.md) | `compile` | The read-only gate verifies the committed CompletePublicContract74 producer output. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | The gate invokes the existing PublishedTallyFixture supplied by the prior public-contract gate. |
 
 ## Recipe
 
@@ -85,9 +85,9 @@ Verify the committed 74-operation statement-scope public contract without changi
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| StatementScopePublicComposition74 | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | committed ten-descriptor reconciliation composition and 74-operation registry |
+| StatementScopePublicComposition74 | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | committed ten-descriptor reconciliation composition and 74-operation registry |
 | PublishedTallyFixture | `consumes` |  | Release executable fixture |
-| CompletePublicContract74 | `produces` | DM-LEDGER-OPERATION-DESCRIPTOR | verified 74-operation public contract consumed by downstream gates |
+| CompletePublicContract74 | `produces` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | verified 74-operation public contract consumed by downstream gates |
 
 ### Verification
 
@@ -116,11 +116,11 @@ Verify the committed 74-operation statement-scope public contract without changi
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1ku` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): The gate invokes the existing PublishedTallyFixture supplied by the prior public-contract gate.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-SCOPE-PUBLIC-COMPOSITION](../tasks/reconciliation-scope-public-composition.md): The read-only gate verifies the committed CompletePublicContract74 producer output.
-- `governed-by` -> DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry
-- `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
-- `touches` -> DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): The gate invokes the existing PublishedTallyFixture supplied by the prior public-contract gate.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-SCOPE-PUBLIC-COMPOSITION: TASK-LEDGER-RECONCILIATION-SCOPE-PUBLIC-COMPOSITION](reconciliation-scope-public-composition.md): The read-only gate verifies the committed CompletePublicContract74 producer output.
+- `governed-by` -> [DD-LEDGER-CLI-OPERATION-CONTRACT: Explicit provider-neutral resource commands from one registry](../../../designs/ledger/decisions/cli-operation-contract.md)
+- `governed-by` -> [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md)
+- `touches` -> [DM-LEDGER-OPERATION-DESCRIPTOR: OperationDescriptorAndEnvelope](../../../designs/ledger/data-model.md#operationdescriptorandenvelope)
 
 ## Navigation
 

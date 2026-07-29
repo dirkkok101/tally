@@ -22,19 +22,19 @@ Prove ordinary correction retains history and never silently transfers evidence,
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts | `data_model` | `touches` | `false` |
-| FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent | `requirement` | `verifies` | `true` |
-| FR-LEDGER-TRANSACTION-CORRECTION: Void or supersede erroneous transactions | `requirement` | `verifies` | `true` |
+| [DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts](../../../designs/ledger/data-model.md#transactionoperationcontracts) | `data_model` | `touches` | `false` |
+| [FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent](../../../prd/ledger/prd.md#fr-ledger-idempotent-writes-make-public-writes-idempotent) | `requirement` | `verifies` | `true` |
+| [FR-LEDGER-TRANSACTION-CORRECTION: Void or supersede erroneous transactions](../../../prd/ledger/prd.md#fr-ledger-transaction-correction-void-or-supersede-erroneous-transactions) | `requirement` | `verifies` | `true` |
 | TC-LEDGER-ATTRIBUTABLE-HISTORY-INVARIANTS: Verify attributable financial history | `test_case` | `verifies` | `true` |
 | TC-LEDGER-TRANSACTION-CORRECTION-CONTRACT: Verify void or supersede erroneous transactions contract | `test_case` | `verifies` | `true` |
-| UC-LEDGER-009: Void or supersede an erroneous transaction | `use_case` | `covers` | `true` |
+| [UC-LEDGER-009: Void or supersede an erroneous transaction](../../../prd/ledger/prd.md#uc-ledger-009-void-or-supersede-an-erroneous-transaction) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
 
 ## Recipe
 
@@ -72,8 +72,8 @@ Prove ordinary correction retains history and never silently transfers evidence,
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract74 | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 74 provider-neutral operations |
-| VerifiedUC009 | `produces` | UC-LEDGER-009 | evidence-aware correction workflow |
+| CompletePublicContract74 | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Exactly 74 provider-neutral operations |
+| VerifiedUC009 | `produces` | [UC-LEDGER-009](../../../prd/ledger/prd.md#uc-ledger-009-void-or-supersede-an-erroneous-transaction) | evidence-aware correction workflow |
 
 ### Verification
 
@@ -98,14 +98,14 @@ Prove ordinary correction retains history and never silently transfers evidence,
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1ps` (verified)
-- `covers` -> UC-LEDGER-009: Void or supersede an erroneous transaction
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
-- `touches` -> DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts
-- `verifies` -> FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent
-- `verifies` -> FR-LEDGER-TRANSACTION-CORRECTION: Void or supersede erroneous transactions
+- `covers` -> [UC-LEDGER-009: Void or supersede an erroneous transaction](../../../prd/ledger/prd.md#uc-ledger-009-void-or-supersede-an-erroneous-transaction)
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
+- `touches` -> [DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts](../../../designs/ledger/data-model.md#transactionoperationcontracts)
 - `verifies` -> TC-LEDGER-ATTRIBUTABLE-HISTORY-INVARIANTS: Verify attributable financial history
 - `verifies` -> TC-LEDGER-TRANSACTION-CORRECTION-CONTRACT: Verify void or supersede erroneous transactions contract
+- `verifies` -> [FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent](../../../prd/ledger/prd.md#fr-ledger-idempotent-writes-make-public-writes-idempotent)
+- `verifies` -> [FR-LEDGER-TRANSACTION-CORRECTION: Void or supersede erroneous transactions](../../../prd/ledger/prd.md#fr-ledger-transaction-correction-void-or-supersede-erroneous-transactions)
 
 ## Navigation
 

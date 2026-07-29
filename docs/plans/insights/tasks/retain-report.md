@@ -22,12 +22,12 @@ RetainInsightReportCommand appends exactly one complete immutable ReportSnapshot
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads | `design_decision` | `governed-by` | `true` |
-| DM-INSIGHTS-IDEMPOTENCY: InsightsIdempotencyRecord | `data_model` | `touches` | `true` |
-| DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion | `data_model` | `touches` | `true` |
-| FR-INSIGHTS-REPORT-RETENTION: Retain an immutable Report Snapshot explicitly | `requirement` | `implements` | `true` |
-| NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable | `nfr` | `satisfies` | `true` |
+| [DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion](../../../designs/insights/decisions/retention-restatement-lifecycle.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INSIGHTS-IDEMPOTENCY: InsightsIdempotencyRecord](../../../designs/insights/data-model.md#insightsidempotencyrecord) | `data_model` | `touches` | `true` |
+| [DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion](../../../designs/insights/data-model.md#reportsnapshotrestatementanddeletion) | `data_model` | `touches` | `true` |
+| [FR-INSIGHTS-REPORT-RETENTION: Retain an immutable Report Snapshot explicitly](../../../prd/insights/prd.md#fr-insights-report-retention-retain-an-immutable-report-snapshot-explicitly) | `requirement` | `implements` | `true` |
+| [NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable](../../../prd/insights/prd.md#nfr-insights-atomic-durable-report-state-make-retained-report-changes-atomic-and-durable) | `nfr` | `satisfies` | `true` |
 | TC-INSIGHTS-REPORT-RETENTION-FAILURE-ATOMICITY: Verify retained-state write failure atomicity | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-REPORT-RETENTION-IDEMPOTENCY: Verify retained generation and idempotent replay | `test_case` | `verifies` | `true` |
 
@@ -35,9 +35,9 @@ RetainInsightReportCommand appends exactly one complete immutable ReportSnapshot
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Retain writes the snapshot and payload schema. |
-| [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](../tasks/idempotency-executor.md) | `compile` | Retain must resolve and reserve replay before producer access. |
-| [TASK-INSIGHTS-GENERATE-REPORT](../tasks/generate-report.md) | `compile` | Retain reuses the complete approved generation path. |
+| [TASK-INSIGHTS-STATE-FOUNDATION: TASK-INSIGHTS-STATE-FOUNDATION](state-foundation.md) | `compile` | Retain writes the snapshot and payload schema. |
+| [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR: TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](idempotency-executor.md) | `compile` | Retain must resolve and reserve replay before producer access. |
+| [TASK-INSIGHTS-GENERATE-REPORT: TASK-INSIGHTS-GENERATE-REPORT](generate-report.md) | `compile` | Retain reuses the complete approved generation path. |
 
 ## Recipe
 
@@ -79,10 +79,10 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| GenerateInsightReportQuery.HandleAsync | `consumes` | DM-INSIGHTS-INSIGHT-REPORT | one internally generated complete report |
-| InsightsIdempotencyExecutor.ExecuteAsync | `consumes` | DM-INSIGHTS-IDEMPOTENCY | replay before producer reads |
-| InsightsStateStore | `consumes` | DM-INSIGHTS-STATE-STORE | atomic snapshot and payload append |
-| RetainInsightReportCommand.HandleAsync | `produces` | DM-INSIGHTS-OPERATION-CONTRACTS | insights.report.retain handler |
+| GenerateInsightReportQuery.HandleAsync | `consumes` | [DM-INSIGHTS-INSIGHT-REPORT](../../../designs/insights/data-model.md#insightreport) | one internally generated complete report |
+| InsightsIdempotencyExecutor.ExecuteAsync | `consumes` | [DM-INSIGHTS-IDEMPOTENCY](../../../designs/insights/data-model.md#insightsidempotencyrecord) | replay before producer reads |
+| InsightsStateStore | `consumes` | [DM-INSIGHTS-STATE-STORE](../../../designs/insights/data-model.md#insightsstatestore) | atomic snapshot and payload append |
+| RetainInsightReportCommand.HandleAsync | `produces` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | insights.report.retain handler |
 
 ### Verification
 
@@ -107,15 +107,15 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-6eq` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-GENERATE-REPORT](../tasks/generate-report.md): Retain reuses the complete approved generation path.
-- `depends-on:compile` -> [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](../tasks/idempotency-executor.md): Retain must resolve and reserve replay before producer access.
-- `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md): Retain writes the snapshot and payload schema.
-- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion
-- `governed-by` -> DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads
-- `implements` -> FR-INSIGHTS-REPORT-RETENTION: Retain an immutable Report Snapshot explicitly
-- `satisfies` -> NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable
-- `touches` -> DM-INSIGHTS-IDEMPOTENCY: InsightsIdempotencyRecord
-- `touches` -> DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion
+- `depends-on:compile` -> [TASK-INSIGHTS-GENERATE-REPORT: TASK-INSIGHTS-GENERATE-REPORT](generate-report.md): Retain reuses the complete approved generation path.
+- `depends-on:compile` -> [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR: TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](idempotency-executor.md): Retain must resolve and reserve replay before producer access.
+- `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION: TASK-INSIGHTS-STATE-FOUNDATION](state-foundation.md): Retain writes the snapshot and payload schema.
+- `governed-by` -> [DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion](../../../designs/insights/decisions/retention-restatement-lifecycle.md)
+- `governed-by` -> [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md)
+- `implements` -> [FR-INSIGHTS-REPORT-RETENTION: Retain an immutable Report Snapshot explicitly](../../../prd/insights/prd.md#fr-insights-report-retention-retain-an-immutable-report-snapshot-explicitly)
+- `satisfies` -> [NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable](../../../prd/insights/prd.md#nfr-insights-atomic-durable-report-state-make-retained-report-changes-atomic-and-durable)
+- `touches` -> [DM-INSIGHTS-IDEMPOTENCY: InsightsIdempotencyRecord](../../../designs/insights/data-model.md#insightsidempotencyrecord)
+- `touches` -> [DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion](../../../designs/insights/data-model.md#reportsnapshotrestatementanddeletion)
 - `verifies` -> TC-INSIGHTS-REPORT-RETENTION-FAILURE-ATOMICITY: Verify retained-state write failure atomicity
 - `verifies` -> TC-INSIGHTS-REPORT-RETENTION-IDEMPOTENCY: Verify retained generation and idempotent replay
 

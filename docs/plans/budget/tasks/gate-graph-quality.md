@@ -5,7 +5,7 @@
 - **Ref:** `TASK-BUDGET-GATE-GRAPH-QUALITY`
 - **Plan:** `PLAN-BUDGET-V1`
 - **Sub-Plan:** `SP-BUDGET-04-ACCEPTANCE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `6`
 - **Dialect:** `default`
@@ -22,21 +22,21 @@ One reproducible marker proves the implemented BUDGET graph is complete and ever
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES: Implementation Plan Quality Gates | `pattern` | `governed-by` | `true` |
+| [PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES: Implementation Plan Quality Gates](../../../patterns/core/implementation-plan-quality-gates.md) | `pattern` | `governed-by` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Require complete public contract evidence. |
-| [TASK-BUDGET-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md) | `compile` | Require recovery evidence. |
-| [TASK-BUDGET-GATE-SECURITY](../tasks/gate-security.md) | `compile` | Require security evidence. |
-| [TASK-BUDGET-GATE-PERFORMANCE](../tasks/gate-performance.md) | `compile` | Require performance evidence. |
-| [TASK-BUDGET-VERIFY-UC-001](../tasks/verify-uc-001.md) | `compile` | Require UC-001 evidence. |
-| [TASK-BUDGET-VERIFY-UC-002](../tasks/verify-uc-002.md) | `compile` | Require UC-002 evidence. |
-| [TASK-BUDGET-VERIFY-UC-003](../tasks/verify-uc-003.md) | `compile` | Require UC-003 evidence. |
-| [TASK-BUDGET-VERIFY-UC-004](../tasks/verify-uc-004.md) | `compile` | Require UC-004 evidence. |
-| [TASK-BUDGET-VERIFY-UC-005](../tasks/verify-uc-005.md) | `compile` | Require UC-005 evidence. |
+| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Require complete public contract evidence. |
+| [TASK-BUDGET-GATE-ATOMIC-RECOVERY: TASK-BUDGET-GATE-ATOMIC-RECOVERY](gate-atomic-recovery.md) | `compile` | Require recovery evidence. |
+| [TASK-BUDGET-GATE-SECURITY: TASK-BUDGET-GATE-SECURITY](gate-security.md) | `compile` | Require security evidence. |
+| [TASK-BUDGET-GATE-PERFORMANCE: TASK-BUDGET-GATE-PERFORMANCE](gate-performance.md) | `compile` | Require performance evidence. |
+| [TASK-BUDGET-VERIFY-UC-001: TASK-BUDGET-VERIFY-UC-001](verify-uc-001.md) | `compile` | Require UC-001 evidence. |
+| [TASK-BUDGET-VERIFY-UC-002: TASK-BUDGET-VERIFY-UC-002](verify-uc-002.md) | `compile` | Require UC-002 evidence. |
+| [TASK-BUDGET-VERIFY-UC-003: TASK-BUDGET-VERIFY-UC-003](verify-uc-003.md) | `compile` | Require UC-003 evidence. |
+| [TASK-BUDGET-VERIFY-UC-004: TASK-BUDGET-VERIFY-UC-004](verify-uc-004.md) | `compile` | Require UC-004 evidence. |
+| [TASK-BUDGET-VERIFY-UC-005: TASK-BUDGET-VERIFY-UC-005](verify-uc-005.md) | `compile` | Require UC-005 evidence. |
 
 ## Recipe
 
@@ -45,7 +45,7 @@ One reproducible marker proves the implemented BUDGET graph is complete and ever
 - Lex coverage reports all 11 active FRs covered, all 18 planned test cases linked, zero orphan tests, and zero gaps.
 - Decision path-check reports all 34 expected paths matched; link suggestions are empty; the three known endpoint heuristics are recorded as non-applicable because the accepted design is local CLI-only.
 - Every named feature, Ledger, contract, recovery, security, performance, INSIGHTS, and UC test class has nonzero discovery before aggregate totals are accepted.
-- External dependency check shows evidence-linked statuses and the report records exact commands, counts, ref-codes, and safe fingerprints without finance payloads.
+- External dependency check shows evidence-linked statuses and the report records exact commands, counts, ref-codes, and content fingerprints without finance payloads.
 - Plan coverage/audit, task contracts, dependency edges, context budgets, placeholder scans, and forbidden-surface scans are clean.
 
 ### Failure Criteria
@@ -78,16 +78,16 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteBudgetPublicContract | `consumes` | DM-BUDGET-OPERATION-CONTRACTS |  |
-| BudgetRecoveryGateEvidence | `consumes` | NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS |  |
-| BudgetSecurityGateEvidence | `consumes` | NFR-BUDGET-LOCAL-DATA-PROTECTION |  |
-| BudgetPerformanceGateEvidence | `consumes` | NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE |  |
-| VerifiedBudgetUc001 | `consumes` | UC-BUDGET-001 |  |
-| VerifiedBudgetUc002 | `consumes` | UC-BUDGET-002 |  |
-| VerifiedBudgetUc003 | `consumes` | UC-BUDGET-003 |  |
-| VerifiedBudgetUc004 | `consumes` | UC-BUDGET-004 |  |
-| VerifiedBudgetUc005 | `consumes` | UC-BUDGET-005 |  |
-| BudgetGraphQualityEvidence | `produces` | PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES |  |
+| CompleteBudgetPublicContract | `consumes` | [DM-BUDGET-OPERATION-CONTRACTS](../../../designs/budget/data-model.md#budgetoperationcontracts) |  |
+| BudgetRecoveryGateEvidence | `consumes` | [NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS](../../../prd/budget/prd.md#nfr-budget-atomic-durable-mutations-make-plan-mutations-atomic-and-durable) |  |
+| BudgetSecurityGateEvidence | `consumes` | [NFR-BUDGET-LOCAL-DATA-PROTECTION](../../../prd/budget/prd.md#nfr-budget-local-data-protection-protect-local-budget-data) |  |
+| BudgetPerformanceGateEvidence | `consumes` | [NFR-BUDGET-PERSONAL-SCALE-PERFORMANCE](../../../prd/budget/prd.md#nfr-budget-personal-scale-performance-respond-at-personal-budget-scale) |  |
+| VerifiedBudgetUc001 | `consumes` | [UC-BUDGET-001](../../../prd/budget/prd.md#uc-budget-001-draft-a-monthly-category-plan) |  |
+| VerifiedBudgetUc002 | `consumes` | [UC-BUDGET-002](../../../prd/budget/prd.md#uc-budget-002-activate-or-revise-a-plan) |  |
+| VerifiedBudgetUc003 | `consumes` | [UC-BUDGET-003](../../../prd/budget/prd.md#uc-budget-003-inspect-exact-budget-position) |  |
+| VerifiedBudgetUc004 | `consumes` | [UC-BUDGET-004](../../../prd/budget/prd.md#uc-budget-004-inspect-budget-plan-and-budget-plan-revision-history) |  |
+| VerifiedBudgetUc005 | `consumes` | [UC-BUDGET-005](../../../prd/budget/prd.md#uc-budget-005-discover-and-invoke-the-agent-contract) |  |
+| BudgetGraphQualityEvidence | `produces` | [PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES](../../../patterns/core/implementation-plan-quality-gates.md) |  |
 
 ### Verification
 
@@ -103,22 +103,25 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1iz3` | `verified` | 2026-07-27T08:00:19.3067126+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-BUDGET-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md): Require recovery evidence.
-- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Require complete public contract evidence.
-- `depends-on:compile` -> [TASK-BUDGET-GATE-PERFORMANCE](../tasks/gate-performance.md): Require performance evidence.
-- `depends-on:compile` -> [TASK-BUDGET-GATE-SECURITY](../tasks/gate-security.md): Require security evidence.
-- `depends-on:compile` -> [TASK-BUDGET-VERIFY-UC-001](../tasks/verify-uc-001.md): Require UC-001 evidence.
-- `depends-on:compile` -> [TASK-BUDGET-VERIFY-UC-002](../tasks/verify-uc-002.md): Require UC-002 evidence.
-- `depends-on:compile` -> [TASK-BUDGET-VERIFY-UC-003](../tasks/verify-uc-003.md): Require UC-003 evidence.
-- `depends-on:compile` -> [TASK-BUDGET-VERIFY-UC-004](../tasks/verify-uc-004.md): Require UC-004 evidence.
-- `depends-on:compile` -> [TASK-BUDGET-VERIFY-UC-005](../tasks/verify-uc-005.md): Require UC-005 evidence.
-- `governed-by` -> PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES: Implementation Plan Quality Gates
+- `bead-ref` -> `bd-1iz3` (verified)
+- `depends-on:compile` -> [TASK-BUDGET-GATE-ATOMIC-RECOVERY: TASK-BUDGET-GATE-ATOMIC-RECOVERY](gate-atomic-recovery.md): Require recovery evidence.
+- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Require complete public contract evidence.
+- `depends-on:compile` -> [TASK-BUDGET-GATE-PERFORMANCE: TASK-BUDGET-GATE-PERFORMANCE](gate-performance.md): Require performance evidence.
+- `depends-on:compile` -> [TASK-BUDGET-GATE-SECURITY: TASK-BUDGET-GATE-SECURITY](gate-security.md): Require security evidence.
+- `depends-on:compile` -> [TASK-BUDGET-VERIFY-UC-001: TASK-BUDGET-VERIFY-UC-001](verify-uc-001.md): Require UC-001 evidence.
+- `depends-on:compile` -> [TASK-BUDGET-VERIFY-UC-002: TASK-BUDGET-VERIFY-UC-002](verify-uc-002.md): Require UC-002 evidence.
+- `depends-on:compile` -> [TASK-BUDGET-VERIFY-UC-003: TASK-BUDGET-VERIFY-UC-003](verify-uc-003.md): Require UC-003 evidence.
+- `depends-on:compile` -> [TASK-BUDGET-VERIFY-UC-004: TASK-BUDGET-VERIFY-UC-004](verify-uc-004.md): Require UC-004 evidence.
+- `depends-on:compile` -> [TASK-BUDGET-VERIFY-UC-005: TASK-BUDGET-VERIFY-UC-005](verify-uc-005.md): Require UC-005 evidence.
+- `governed-by` -> [PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES: Implementation Plan Quality Gates](../../../patterns/core/implementation-plan-quality-gates.md)
 
 ## Navigation
 

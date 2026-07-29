@@ -22,13 +22,13 @@ Deliver ingest.resume so repeated recovery converges without a second canonical 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-COMMIT-RECOVERY: Per-batch locked idempotent candidate saga | `design_decision` | `governed-by` | `true` |
-| DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap | `design_decision` | `governed-by` | `true` |
-| DIAG-INGEST-BATCH-STATE: Import batch lifecycle | `design_diagram` | `touches` | `true` |
-| DM-INGEST-IMPORT-RECEIPT: ImportReceiptAndCandidateOutcome | `data_model` | `touches` | `true` |
-| FA-INGEST-RECOVERY-CLEANUP: Recovery and Cleanup | `feature_area` | `touches` | `true` |
-| FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit | `requirement` | `implements` | `true` |
-| NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY: Recover every interrupted commit deterministically | `nfr` | `satisfies` | `true` |
+| [DD-INGEST-COMMIT-RECOVERY: Per-batch locked idempotent candidate saga](../../../designs/ingest/decisions/commit-recovery.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap](../../../designs/ingest/decisions/manifest-identity-overlap.md) | `design_decision` | `governed-by` | `true` |
+| [DIAG-INGEST-BATCH-STATE: Import batch lifecycle](../../../designs/ingest/diagrams/batch-state.md) | `design_diagram` | `touches` | `true` |
+| [DM-INGEST-IMPORT-RECEIPT: ImportReceiptAndCandidateOutcome](../../../designs/ingest/data-model.md#importreceiptandcandidateoutcome) | `data_model` | `touches` | `true` |
+| [FA-INGEST-RECOVERY-CLEANUP: Recovery and Cleanup](../../../designs/ingest/features/recovery-cleanup/api-surface.md) | `feature_area` | `touches` | `true` |
+| [FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit](../../../prd/ingest/prd.md#fr-ingest-durable-receipt-resume-record-durable-outcomes-and-resume-interrupted-commit) | `requirement` | `implements` | `true` |
+| [NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY: Recover every interrupted commit deterministically](../../../prd/ingest/prd.md#nfr-ingest-interrupted-commit-recovery-recover-every-interrupted-commit-deterministically) | `nfr` | `satisfies` | `true` |
 | TC-INGEST-COMMIT-RECOVERY-MATRIX: Verify every candidate commit crash window | `test_case` | `verifies` | `true` |
 | TC-INGEST-DURABLE-RECEIPT-RESUME-CONTRACT: Verify durable receipt and interrupted resume | `test_case` | `verifies` | `true` |
 
@@ -36,8 +36,8 @@ Deliver ingest.resume so repeated recovery converges without a second canonical 
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-COMMIT-SAGA](../tasks/commit-saga.md) | `compile` | Resume reuses CandidateCommitSaga, BatchCommitLock, and CommitStateStore. |
-| [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md) | `compile` | Resume failures append complete stable errors through the V002 store. |
+| [TASK-INGEST-COMMIT-SAGA: TASK-INGEST-COMMIT-SAGA](commit-saga.md) | `compile` | Resume reuses CandidateCommitSaga, BatchCommitLock, and CommitStateStore. |
+| [TASK-INGEST-STATUS-STATE-V002: TASK-INGEST-STATUS-STATE-V002](status-state-v002.md) | `compile` | Resume failures append complete stable errors through the V002 store. |
 
 ## Recipe
 
@@ -85,11 +85,11 @@ Deliver ingest.resume so repeated recovery converges without a second canonical 
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CandidateCommitSaga.ExecuteAsync | `consumes` | DM-INGEST-IMPORT-RECEIPT |  |
-| BatchCommitLock | `consumes` | DD-INGEST-COMMIT-RECOVERY |  |
-| CommitStateStore | `consumes` | DM-INGEST-STATE-STORE |  |
-| ResumeOperationModule | `produces` | DM-INGEST-OPERATION-CONTRACTS |  |
-| BatchErrorEventStore.AppendAsync | `consumes` | DM-INGEST-ERROR-STATUS-CONTRACTS | Append complete safe resume errors in the durable stop transaction |
+| CandidateCommitSaga.ExecuteAsync | `consumes` | [DM-INGEST-IMPORT-RECEIPT](../../../designs/ingest/data-model.md#importreceiptandcandidateoutcome) |  |
+| BatchCommitLock | `consumes` | [DD-INGEST-COMMIT-RECOVERY](../../../designs/ingest/decisions/commit-recovery.md) |  |
+| CommitStateStore | `consumes` | [DM-INGEST-STATE-STORE](../../../designs/ingest/data-model.md#ingeststatestore) |  |
+| ResumeOperationModule | `produces` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) |  |
+| BatchErrorEventStore.AppendAsync | `consumes` | [DM-INGEST-ERROR-STATUS-CONTRACTS](../../../designs/ingest/data-model.md#ingesterrorandstatuscontracts) | Append complete safe resume errors in the durable stop transaction |
 
 ### Verification
 
@@ -115,15 +115,15 @@ Deliver ingest.resume so repeated recovery converges without a second canonical 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3ey` (verified)
-- `depends-on:compile` -> [TASK-INGEST-COMMIT-SAGA](../tasks/commit-saga.md): Resume reuses CandidateCommitSaga, BatchCommitLock, and CommitStateStore.
-- `depends-on:compile` -> [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md): Resume failures append complete stable errors through the V002 store.
-- `governed-by` -> DD-INGEST-COMMIT-RECOVERY: Per-batch locked idempotent candidate saga
-- `governed-by` -> DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap
-- `implements` -> FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit
-- `satisfies` -> NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY: Recover every interrupted commit deterministically
-- `touches` -> DIAG-INGEST-BATCH-STATE: Import batch lifecycle
-- `touches` -> DM-INGEST-IMPORT-RECEIPT: ImportReceiptAndCandidateOutcome
-- `touches` -> FA-INGEST-RECOVERY-CLEANUP: Recovery and Cleanup
+- `depends-on:compile` -> [TASK-INGEST-COMMIT-SAGA: TASK-INGEST-COMMIT-SAGA](commit-saga.md): Resume reuses CandidateCommitSaga, BatchCommitLock, and CommitStateStore.
+- `depends-on:compile` -> [TASK-INGEST-STATUS-STATE-V002: TASK-INGEST-STATUS-STATE-V002](status-state-v002.md): Resume failures append complete stable errors through the V002 store.
+- `governed-by` -> [DD-INGEST-COMMIT-RECOVERY: Per-batch locked idempotent candidate saga](../../../designs/ingest/decisions/commit-recovery.md)
+- `governed-by` -> [DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap](../../../designs/ingest/decisions/manifest-identity-overlap.md)
+- `implements` -> [FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit](../../../prd/ingest/prd.md#fr-ingest-durable-receipt-resume-record-durable-outcomes-and-resume-interrupted-commit)
+- `satisfies` -> [NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY: Recover every interrupted commit deterministically](../../../prd/ingest/prd.md#nfr-ingest-interrupted-commit-recovery-recover-every-interrupted-commit-deterministically)
+- `touches` -> [DIAG-INGEST-BATCH-STATE: Import batch lifecycle](../../../designs/ingest/diagrams/batch-state.md)
+- `touches` -> [DM-INGEST-IMPORT-RECEIPT: ImportReceiptAndCandidateOutcome](../../../designs/ingest/data-model.md#importreceiptandcandidateoutcome)
+- `touches` -> [FA-INGEST-RECOVERY-CLEANUP: Recovery and Cleanup](../../../designs/ingest/features/recovery-cleanup/api-surface.md)
 - `verifies` -> TC-INGEST-COMMIT-RECOVERY-MATRIX: Verify every candidate commit crash window
 - `verifies` -> TC-INGEST-DURABLE-RECEIPT-RESUME-CONTRACT: Verify durable receipt and interrupted resume
 

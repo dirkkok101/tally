@@ -22,17 +22,17 @@ Prove an approved batch commits each candidate once and every interruption resum
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY: Recover every interrupted commit deterministically | `nfr` | `satisfies` | `true` |
+| [NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY: Recover every interrupted commit deterministically](../../../prd/ingest/prd.md#nfr-ingest-interrupted-commit-recovery-recover-every-interrupted-commit-deterministically) | `nfr` | `satisfies` | `true` |
 | TC-INGEST-APPROVED-BATCH-COMMIT-CONTRACT: Verify approved batch commit through LEDGER | `test_case` | `verifies` | `true` |
 | TC-INGEST-COMMIT-RECOVERY-MATRIX: Verify every candidate commit crash window | `test_case` | `verifies` | `true` |
 | TC-INGEST-DURABLE-RECEIPT-RESUME-CONTRACT: Verify durable receipt and interrupted resume | `test_case` | `verifies` | `true` |
-| UC-INGEST-003: Commit and resume an approved batch | `use_case` | `covers` | `true` |
+| [UC-INGEST-003: Commit and resume an approved batch](../../../prd/ingest/prd.md#uc-ingest-003-commit-and-resume-an-approved-batch) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | UC verification exercises published commit/resume/status and public Ledger operations. |
+| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT: TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | UC verification exercises published commit/resume/status and public Ledger operations. |
 
 ## Recipe
 
@@ -72,8 +72,8 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteIngestPublicContract | `consumes` | DM-INGEST-OPERATION-CONTRACTS | Published INGEST and shared Ledger operations |
-| UCIngest003Evidence | `produces` | UC-INGEST-003 | Commit and resume workflow proof |
+| CompleteIngestPublicContract | `consumes` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) | Published INGEST and shared Ledger operations |
+| UCIngest003Evidence | `produces` | [UC-INGEST-003](../../../prd/ingest/prd.md#uc-ingest-003-commit-and-resume-an-approved-batch) | Commit and resume workflow proof |
 
 ### Verification
 
@@ -98,9 +98,9 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3ly` (verified)
-- `covers` -> UC-INGEST-003: Commit and resume an approved batch
-- `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC verification exercises published commit/resume/status and public Ledger operations.
-- `satisfies` -> NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY: Recover every interrupted commit deterministically
+- `covers` -> [UC-INGEST-003: Commit and resume an approved batch](../../../prd/ingest/prd.md#uc-ingest-003-commit-and-resume-an-approved-batch)
+- `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT: TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): UC verification exercises published commit/resume/status and public Ledger operations.
+- `satisfies` -> [NFR-INGEST-INTERRUPTED-COMMIT-RECOVERY: Recover every interrupted commit deterministically](../../../prd/ingest/prd.md#nfr-ingest-interrupted-commit-recovery-recover-every-interrupted-commit-deterministically)
 - `verifies` -> TC-INGEST-APPROVED-BATCH-COMMIT-CONTRACT: Verify approved batch commit through LEDGER
 - `verifies` -> TC-INGEST-COMMIT-RECOVERY-MATRIX: Verify every candidate commit crash window
 - `verifies` -> TC-INGEST-DURABLE-RECEIPT-RESUME-CONTRACT: Verify durable receipt and interrupted resume

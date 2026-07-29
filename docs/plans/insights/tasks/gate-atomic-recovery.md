@@ -22,11 +22,11 @@ One reproducible fault matrix proves restart observes exactly one complete outco
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation | `design_decision` | `governed-by` | `true` |
-| NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable | `nfr` | `satisfies` | `true` |
-| NFR-INSIGHTS-VERIFIED-RECOVERABILITY: Verify backup and restore independently | `nfr` | `satisfies` | `true` |
+| [DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion](../../../designs/insights/decisions/retention-restatement-lifecycle.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation](../../../designs/insights/decisions/verified-recovery-activation.md) | `design_decision` | `governed-by` | `true` |
+| [NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable](../../../prd/insights/prd.md#nfr-insights-atomic-durable-report-state-make-retained-report-changes-atomic-and-durable) | `nfr` | `satisfies` | `true` |
+| [NFR-INSIGHTS-VERIFIED-RECOVERABILITY: Verify backup and restore independently](../../../prd/insights/prd.md#nfr-insights-verified-recoverability-verify-backup-and-restore-independently) | `nfr` | `satisfies` | `true` |
 | TC-INSIGHTS-BACKUP-VERIFICATION: Verify complete owner-only INSIGHTS backups | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-REPORT-RETENTION-FAILURE-ATOMICITY: Verify retained-state write failure atomicity | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-RESTORE-FAILURE-ATOMICITY: Verify separate-target restore and atomic activation | `test_case` | `verifies` | `true` |
@@ -35,11 +35,11 @@ One reproducible fault matrix proves restart observes exactly one complete outco
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-RETAIN-REPORT](../tasks/retain-report.md) | `compile` | The gate injects Retain failures. |
-| [TASK-INSIGHTS-RESTATE-REPORT](../tasks/restate-report.md) | `compile` | The gate injects Restatement failures. |
-| [TASK-INSIGHTS-DELETE-REPORT](../tasks/delete-report.md) | `compile` | The gate injects Delete failures. |
-| [TASK-INSIGHTS-BACKUP-VERIFY](../tasks/backup-verify.md) | `compile` | The gate injects Backup and Verify failures. |
-| [TASK-INSIGHTS-RESTORE-ACTIVATE](../tasks/restore-activate.md) | `compile` | The gate injects candidate and activation failures. |
+| [TASK-INSIGHTS-RETAIN-REPORT: TASK-INSIGHTS-RETAIN-REPORT](retain-report.md) | `compile` | The gate injects Retain failures. |
+| [TASK-INSIGHTS-RESTATE-REPORT: TASK-INSIGHTS-RESTATE-REPORT](restate-report.md) | `compile` | The gate injects Restatement failures. |
+| [TASK-INSIGHTS-DELETE-REPORT: TASK-INSIGHTS-DELETE-REPORT](delete-report.md) | `compile` | The gate injects Delete failures. |
+| [TASK-INSIGHTS-BACKUP-VERIFY: TASK-INSIGHTS-BACKUP-VERIFY](backup-verify.md) | `compile` | The gate injects Backup and Verify failures. |
+| [TASK-INSIGHTS-RESTORE-ACTIVATE: TASK-INSIGHTS-RESTORE-ACTIVATE](restore-activate.md) | `compile` | The gate injects candidate and activation failures. |
 
 ## Recipe
 
@@ -82,12 +82,12 @@ One reproducible fault matrix proves restart observes exactly one complete outco
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| RetainInsightReportCommand.HandleAsync | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS | retained-generation fault surface |
-| RestateInsightReportCommand.HandleAsync | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS | Restatement fault surface |
-| DeleteInsightReportCommand.HandleAsync | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS | deletion fault surface |
-| CreateInsightsBackupCommand.HandleAsync | `consumes` | DM-INSIGHTS-RECOVERY-CONTRACTS | backup saga fault surface |
-| RestoreInsightsBackupCommand.HandleAsync | `consumes` | DM-INSIGHTS-RECOVERY-CONTRACTS | restore activation fault surface |
-| InsightsAtomicRecoveryEvidence | `produces` | NFR-INSIGHTS-VERIFIED-RECOVERABILITY | complete fault-matrix proof |
+| RetainInsightReportCommand.HandleAsync | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | retained-generation fault surface |
+| RestateInsightReportCommand.HandleAsync | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | Restatement fault surface |
+| DeleteInsightReportCommand.HandleAsync | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | deletion fault surface |
+| CreateInsightsBackupCommand.HandleAsync | `consumes` | [DM-INSIGHTS-RECOVERY-CONTRACTS](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts) | backup saga fault surface |
+| RestoreInsightsBackupCommand.HandleAsync | `consumes` | [DM-INSIGHTS-RECOVERY-CONTRACTS](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts) | restore activation fault surface |
+| InsightsAtomicRecoveryEvidence | `produces` | [NFR-INSIGHTS-VERIFIED-RECOVERABILITY](../../../prd/insights/prd.md#nfr-insights-verified-recoverability-verify-backup-and-restore-independently) | complete fault-matrix proof |
 
 ### Verification
 
@@ -112,16 +112,16 @@ One reproducible fault matrix proves restart observes exactly one complete outco
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2ls` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-BACKUP-VERIFY](../tasks/backup-verify.md): The gate injects Backup and Verify failures.
-- `depends-on:compile` -> [TASK-INSIGHTS-DELETE-REPORT](../tasks/delete-report.md): The gate injects Delete failures.
-- `depends-on:compile` -> [TASK-INSIGHTS-RESTATE-REPORT](../tasks/restate-report.md): The gate injects Restatement failures.
-- `depends-on:compile` -> [TASK-INSIGHTS-RESTORE-ACTIVATE](../tasks/restore-activate.md): The gate injects candidate and activation failures.
-- `depends-on:compile` -> [TASK-INSIGHTS-RETAIN-REPORT](../tasks/retain-report.md): The gate injects Retain failures.
-- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion
-- `governed-by` -> DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads
-- `governed-by` -> DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation
-- `satisfies` -> NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable
-- `satisfies` -> NFR-INSIGHTS-VERIFIED-RECOVERABILITY: Verify backup and restore independently
+- `depends-on:compile` -> [TASK-INSIGHTS-BACKUP-VERIFY: TASK-INSIGHTS-BACKUP-VERIFY](backup-verify.md): The gate injects Backup and Verify failures.
+- `depends-on:compile` -> [TASK-INSIGHTS-DELETE-REPORT: TASK-INSIGHTS-DELETE-REPORT](delete-report.md): The gate injects Delete failures.
+- `depends-on:compile` -> [TASK-INSIGHTS-RESTATE-REPORT: TASK-INSIGHTS-RESTATE-REPORT](restate-report.md): The gate injects Restatement failures.
+- `depends-on:compile` -> [TASK-INSIGHTS-RESTORE-ACTIVATE: TASK-INSIGHTS-RESTORE-ACTIVATE](restore-activate.md): The gate injects candidate and activation failures.
+- `depends-on:compile` -> [TASK-INSIGHTS-RETAIN-REPORT: TASK-INSIGHTS-RETAIN-REPORT](retain-report.md): The gate injects Retain failures.
+- `governed-by` -> [DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion](../../../designs/insights/decisions/retention-restatement-lifecycle.md)
+- `governed-by` -> [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md)
+- `governed-by` -> [DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation](../../../designs/insights/decisions/verified-recovery-activation.md)
+- `satisfies` -> [NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable](../../../prd/insights/prd.md#nfr-insights-atomic-durable-report-state-make-retained-report-changes-atomic-and-durable)
+- `satisfies` -> [NFR-INSIGHTS-VERIFIED-RECOVERABILITY: Verify backup and restore independently](../../../prd/insights/prd.md#nfr-insights-verified-recoverability-verify-backup-and-restore-independently)
 - `verifies` -> TC-INSIGHTS-BACKUP-VERIFICATION: Verify complete owner-only INSIGHTS backups
 - `verifies` -> TC-INSIGHTS-REPORT-RETENTION-FAILURE-ATOMICITY: Verify retained-state write failure atomicity
 - `verifies` -> TC-INSIGHTS-RESTORE-FAILURE-ATOMICITY: Verify separate-target restore and atomic activation

@@ -15,7 +15,7 @@ Deliver the per-candidate idempotent saga, resume, status, abandonment, compacti
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-INGEST-COMMIT-SAGA](../tasks/commit-saga.md) | Implement the idempotent candidate commit saga | `ready` | 0 |
-| [TASK-INGEST-RESUME-WORKFLOW](../tasks/resume-workflow.md) | Implement deterministic interrupted-commit resume | `ready` | 0 |
-| [TASK-INGEST-STATUS-WORKFLOW](../tasks/status-workflow.md) | Implement safe batch status and failure reporting | `ready` | 1 |
-| [TASK-INGEST-ABANDON-CLEANUP](../tasks/abandon-cleanup.md) | Implement safe abandon, compaction, and cleanup | `ready` | 1 |
+| [TASK-INGEST-COMMIT-SAGA: Implement the idempotent candidate commit saga](../tasks/commit-saga.md) | Implement the idempotent candidate commit saga | `ready` | 0 |
+| [TASK-INGEST-RESUME-WORKFLOW: Implement deterministic interrupted-commit resume](../tasks/resume-workflow.md) | Implement deterministic interrupted-commit resume | `ready` | 0 |
+| [TASK-INGEST-STATUS-WORKFLOW: Implement safe batch status and failure reporting](../tasks/status-workflow.md) | Implement safe batch status and failure reporting | `ready` | 1 |
+| [TASK-INGEST-ABANDON-CLEANUP: Implement safe abandon, compaction, and cleanup](../tasks/abandon-cleanup.md) | Implement safe abandon, compaction, and cleanup | `ready` | 1 |

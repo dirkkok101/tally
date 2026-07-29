@@ -22,21 +22,21 @@ Register one allowlisted generic Evidence Record per logical item and return ide
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts | `data_model` | `touches` | `true` |
-| DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink | `data_model` | `touches` | `true` |
-| FR-LEDGER-EVIDENCE-REGISTRATION: Register and link generic evidence | `requirement` | `implements` | `true` |
+| [DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency](../../../designs/ledger/decisions/idempotent-mutations.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) | `data_model` | `touches` | `true` |
+| [DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink](../../../designs/ledger/data-model.md#evidencerecordobservationandlink) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-EVIDENCE-REGISTRATION: Register and link generic evidence](../../../prd/ledger/prd.md#fr-ledger-evidence-registration-register-and-link-generic-evidence) | `requirement` | `implements` | `true` |
 | TC-LEDGER-EVIDENCE-REGISTRATION-CONTRACT: Verify generic evidence registration and linkage | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md) | `compile` | Evidence consumes the complete V001 schema, process contract, and real store. |
-| [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](../tasks/core-schema-evidence-reconciliation.md) | `compile` | EvidenceStore requires the evidence tables and uniqueness constraints. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Register is a public idempotent mutation. |
+| [TASK-LEDGER-GATE-INT-CORE: TASK-LEDGER-GATE-INT-CORE](gate-int-core.md) | `compile` | Evidence consumes the complete V001 schema, process contract, and real store. |
+| [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION: TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](core-schema-evidence-reconciliation.md) | `compile` | EvidenceStore requires the evidence tables and uniqueness constraints. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Register is a public idempotent mutation. |
 
 ## Recipe
 
@@ -79,11 +79,11 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| EvidenceIdentity | `produces` | DM-LEDGER-EVIDENCE-RECORD-LINK |  |
-| EvidenceStore | `produces` | DM-LEDGER-EVIDENCE-RECORD-LINK |  |
-| EvidenceStore.RegisterInitialAsync | `produces` | DM-LEDGER-EVIDENCE-RECORD-LINK | Caller-scoped transaction primitive used by Canonical Transaction capture |
-| EvidenceRegistryOperationModule | `produces` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD |  |
+| EvidenceIdentity | `produces` | [DM-LEDGER-EVIDENCE-RECORD-LINK](../../../designs/ledger/data-model.md#evidencerecordobservationandlink) |  |
+| EvidenceStore | `produces` | [DM-LEDGER-EVIDENCE-RECORD-LINK](../../../designs/ledger/data-model.md#evidencerecordobservationandlink) |  |
+| EvidenceStore.RegisterInitialAsync | `produces` | [DM-LEDGER-EVIDENCE-RECORD-LINK](../../../designs/ledger/data-model.md#evidencerecordobservationandlink) | Caller-scoped transaction primitive used by Canonical Transaction capture |
+| EvidenceRegistryOperationModule | `produces` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) |  |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | [DM-LEDGER-IDEMPOTENCY-RECORD](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) |  |
 
 ### Verification
 
@@ -109,15 +109,15 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3qf` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Register is a public idempotent mutation.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](../tasks/core-schema-evidence-reconciliation.md): EvidenceStore requires the evidence tables and uniqueness constraints.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CORE](../tasks/gate-int-core.md): Evidence consumes the complete V001 schema, process contract, and real store.
-- `governed-by` -> DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
-- `implements` -> FR-LEDGER-EVIDENCE-REGISTRATION: Register and link generic evidence
-- `touches` -> DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts
-- `touches` -> DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Register is a public idempotent mutation.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION: TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](core-schema-evidence-reconciliation.md): EvidenceStore requires the evidence tables and uniqueness constraints.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-CORE: TASK-LEDGER-GATE-INT-CORE](gate-int-core.md): Evidence consumes the complete V001 schema, process contract, and real store.
+- `governed-by` -> [DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency](../../../designs/ledger/decisions/idempotent-mutations.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `governed-by` -> [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md)
+- `implements` -> [FR-LEDGER-EVIDENCE-REGISTRATION: Register and link generic evidence](../../../prd/ledger/prd.md#fr-ledger-evidence-registration-register-and-link-generic-evidence)
+- `touches` -> [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts)
+- `touches` -> [DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink](../../../designs/ledger/data-model.md#evidencerecordobservationandlink)
 - `verifies` -> TC-LEDGER-EVIDENCE-REGISTRATION-CONTRACT: Verify generic evidence registration and linkage
 
 ## Navigation

@@ -15,14 +15,14 @@ Converge published contract, security, performance, use-case, graph, and module 
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | Wire and prove the complete INSIGHTS public contract | `ready` | 0 |
-| [TASK-INSIGHTS-GATE-SECURITY](../tasks/gate-security.md) | Prove local INSIGHTS privacy and process isolation | `ready` | 0 |
-| [TASK-INSIGHTS-GATE-PERFORMANCE](../tasks/gate-performance.md) | Prove bounded personal-scale INSIGHTS performance | `ready` | 1 |
-| [TASK-INSIGHTS-VERIFY-UC-001](../tasks/verify-uc-001.md) | Verify on-demand Insight Report generation | `ready` | 0 |
-| [TASK-INSIGHTS-VERIFY-UC-002](../tasks/verify-uc-002.md) | Verify report evidence and explanation inspection | `ready` | 1 |
-| [TASK-INSIGHTS-VERIFY-UC-003](../tasks/verify-uc-003.md) | Verify retained generation and retrieval | `ready` | 0 |
-| [TASK-INSIGHTS-VERIFY-UC-004](../tasks/verify-uc-004.md) | Verify Restatement and corrected-report comparison | `ready` | 0 |
-| [TASK-INSIGHTS-VERIFY-UC-005](../tasks/verify-uc-005.md) | Verify retained history deletion and recovery | `ready` | 0 |
-| [TASK-INSIGHTS-VERIFY-UC-006](../tasks/verify-uc-006.md) | Verify structured contract discovery and invocation | `ready` | 0 |
-| [TASK-INSIGHTS-GATE-GRAPH-QUALITY](../tasks/gate-graph-quality.md) | Converge INSIGHTS graph and verification quality | `ready` | 1 |
-| [TASK-INSIGHTS-GATE-MODULE](../tasks/gate-module.md) | Complete the INSIGHTS v1 module gate | `ready` | 0 |
+| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete INSIGHTS public contract](../tasks/gate-int-public-contract.md) | Wire and prove the complete INSIGHTS public contract | `ready` | 0 |
+| [TASK-INSIGHTS-GATE-SECURITY: Prove local INSIGHTS privacy and process isolation](../tasks/gate-security.md) | Prove local INSIGHTS privacy and process isolation | `ready` | 0 |
+| [TASK-INSIGHTS-GATE-PERFORMANCE: Prove bounded personal-scale INSIGHTS performance](../tasks/gate-performance.md) | Prove bounded personal-scale INSIGHTS performance | `ready` | 1 |
+| [TASK-INSIGHTS-VERIFY-UC-001: Verify on-demand Insight Report generation](../tasks/verify-uc-001.md) | Verify on-demand Insight Report generation | `ready` | 0 |
+| [TASK-INSIGHTS-VERIFY-UC-002: Verify report evidence and explanation inspection](../tasks/verify-uc-002.md) | Verify report evidence and explanation inspection | `ready` | 1 |
+| [TASK-INSIGHTS-VERIFY-UC-003: Verify retained generation and retrieval](../tasks/verify-uc-003.md) | Verify retained generation and retrieval | `ready` | 0 |
+| [TASK-INSIGHTS-VERIFY-UC-004: Verify Restatement and corrected-report comparison](../tasks/verify-uc-004.md) | Verify Restatement and corrected-report comparison | `ready` | 0 |
+| [TASK-INSIGHTS-VERIFY-UC-005: Verify retained history deletion and recovery](../tasks/verify-uc-005.md) | Verify retained history deletion and recovery | `ready` | 0 |
+| [TASK-INSIGHTS-VERIFY-UC-006: Verify structured contract discovery and invocation](../tasks/verify-uc-006.md) | Verify structured contract discovery and invocation | `ready` | 0 |
+| [TASK-INSIGHTS-GATE-GRAPH-QUALITY: Converge INSIGHTS graph and verification quality](../tasks/gate-graph-quality.md) | Converge INSIGHTS graph and verification quality | `ready` | 1 |
+| [TASK-INSIGHTS-GATE-MODULE: Complete the INSIGHTS v1 module gate](../tasks/gate-module.md) | Complete the INSIGHTS v1 module gate | `ready` | 0 |

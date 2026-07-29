@@ -15,8 +15,8 @@ Hard prerequisites: extend and prove the public Ledger contract, extend the shar
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CONTRACT](../tasks/ledger-classification-contract.md) | Extend Ledger classification contracts | `planned` | 0 |
-| [TASK-CLASSIFY-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md) | Prove the Ledger classification prerequisite | `planned` | 0 |
-| [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT](../tasks/ledger-classification-client.md) | Extend the shared Ledger contract client | `planned` | 0 |
-| [TASK-CLASSIFY-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | Publish CLASSIFY operation contracts | `planned` | 0 |
-| [TASK-CLASSIFY-STATE-FOUNDATION](../tasks/state-foundation.md) | Establish CLASSIFY durable state | `planned` | 0 |
+| [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CONTRACT: Extend Ledger classification contracts](../tasks/ledger-classification-contract.md) | Extend Ledger classification contracts | `planned` | 0 |
+| [TASK-CLASSIFY-GATE-INT-LEDGER-CONTRACT: Prove the Ledger classification prerequisite](../tasks/gate-int-ledger-contract.md) | Prove the Ledger classification prerequisite | `planned` | 0 |
+| [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT: Extend the shared Ledger contract client](../tasks/ledger-classification-client.md) | Extend the shared Ledger contract client | `planned` | 0 |
+| [TASK-CLASSIFY-CONTRACT-FOUNDATION: Publish CLASSIFY operation contracts](../tasks/contract-foundation.md) | Publish CLASSIFY operation contracts | `planned` | 0 |
+| [TASK-CLASSIFY-STATE-FOUNDATION: Establish CLASSIFY durable state](../tasks/state-foundation.md) | Establish CLASSIFY durable state | `planned` | 0 |

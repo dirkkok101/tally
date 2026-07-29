@@ -15,10 +15,10 @@ Exercise all five use cases through the published boundary, converge graph evide
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-BUDGET-VERIFY-UC-001](../tasks/verify-uc-001.md) | Verify monthly draft creation | `planned` | 0 |
-| [TASK-BUDGET-VERIFY-UC-002](../tasks/verify-uc-002.md) | Verify activation and revision replacement | `planned` | 0 |
-| [TASK-BUDGET-VERIFY-UC-003](../tasks/verify-uc-003.md) | Verify exact Budget Position inspection | `planned` | 0 |
-| [TASK-BUDGET-VERIFY-UC-004](../tasks/verify-uc-004.md) | Verify Budget Plan and Budget Plan Revision history inspection | `planned` | 1 |
-| [TASK-BUDGET-VERIFY-UC-005](../tasks/verify-uc-005.md) | Verify agent contract discovery and invocation | `planned` | 0 |
-| [TASK-BUDGET-GATE-GRAPH-QUALITY](../tasks/gate-graph-quality.md) | Converge BUDGET graph and evidence quality | `planned` | 1 |
-| [TASK-BUDGET-GATE-MODULE](../tasks/gate-module.md) | Complete the BUDGET v1 module gate | `planned` | 0 |
+| [TASK-BUDGET-VERIFY-UC-001: Verify monthly draft creation](../tasks/verify-uc-001.md) | Verify monthly draft creation | `ready` | 0 |
+| [TASK-BUDGET-VERIFY-UC-002: Verify activation and revision replacement](../tasks/verify-uc-002.md) | Verify activation and revision replacement | `ready` | 0 |
+| [TASK-BUDGET-VERIFY-UC-003: Verify exact Budget Position inspection](../tasks/verify-uc-003.md) | Verify exact Budget Position inspection | `ready` | 0 |
+| [TASK-BUDGET-VERIFY-UC-004: Verify Budget Plan and Budget Plan Revision history inspection](../tasks/verify-uc-004.md) | Verify Budget Plan and Budget Plan Revision history inspection | `ready` | 1 |
+| [TASK-BUDGET-VERIFY-UC-005: Verify agent contract discovery and invocation](../tasks/verify-uc-005.md) | Verify agent contract discovery and invocation | `ready` | 0 |
+| [TASK-BUDGET-GATE-GRAPH-QUALITY: Converge BUDGET graph and evidence quality](../tasks/gate-graph-quality.md) | Converge BUDGET graph and evidence quality | `ready` | 1 |
+| [TASK-BUDGET-GATE-MODULE: Complete the BUDGET v1 module gate](../tasks/gate-module.md) | Complete the BUDGET v1 module gate | `ready` | 0 |

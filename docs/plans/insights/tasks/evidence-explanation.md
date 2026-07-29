@@ -22,12 +22,12 @@ Every requested catalogue kind has exactly one evidence state and an explanation
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies | `design_decision` | `governed-by` | `true` |
-| DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation | `data_model` | `touches` | `true` |
-| FA-INSIGHTS-REPORT-EXPLANATION: Report and Explanation | `feature_area` | `touches` | `true` |
-| FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING: Account for every evidence state | `requirement` | `implements` | `true` |
-| FR-INSIGHTS-REPORT-EXPLANATION: Explain report evidence deterministically | `requirement` | `implements` | `true` |
-| NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity | `nfr` | `satisfies` | `true` |
+| [DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies](../../../designs/insights/decisions/deterministic-report-compiler.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation](../../../designs/insights/data-model.md#analysiswindowmetricstateandexplanation) | `data_model` | `touches` | `true` |
+| [FA-INSIGHTS-REPORT-EXPLANATION: Report and Explanation](../../../designs/insights/features/report-explanation/api-surface.md) | `feature_area` | `touches` | `true` |
+| [FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING: Account for every evidence state](../../../prd/insights/prd.md#fr-insights-evidence-state-accounting-account-for-every-evidence-state) | `requirement` | `implements` | `true` |
+| [FR-INSIGHTS-REPORT-EXPLANATION: Explain report evidence deterministically](../../../prd/insights/prd.md#fr-insights-report-explanation-explain-report-evidence-deterministically) | `requirement` | `implements` | `true` |
+| [NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity](../../../prd/insights/prd.md#nfr-insights-deterministic-analytical-integrity-preserve-deterministic-analytical-integrity) | `nfr` | `satisfies` | `true` |
 | TC-INSIGHTS-EVIDENCE-STATE-ACCOUNTING: Verify complete evidence-state accounting | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-REPORT-EXPLANATION-CONTRACT: Verify deterministic report explanations | `test_case` | `verifies` | `true` |
 
@@ -35,7 +35,7 @@ Every requested catalogue kind has exactly one evidence state and an explanation
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md) | `compile` | Both policies produce the analytical evidence and explanation contracts. |
+| [TASK-INSIGHTS-CONTRACT-MODELS: TASK-INSIGHTS-CONTRACT-MODELS](contract-models.md) | `compile` | Both policies produce the analytical evidence and explanation contracts. |
 
 ## Recipe
 
@@ -80,8 +80,8 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| EvidenceStateAccountant.Account | `produces` | DM-INSIGHTS-ANALYTICAL-EVIDENCE | one state per requested kind |
-| InsightExplanationRenderer.Render | `produces` | DM-INSIGHTS-ANALYTICAL-EVIDENCE | deterministic structured and rendered explanation |
+| EvidenceStateAccountant.Account | `produces` | [DM-INSIGHTS-ANALYTICAL-EVIDENCE](../../../designs/insights/data-model.md#analysiswindowmetricstateandexplanation) | one state per requested kind |
+| InsightExplanationRenderer.Render | `produces` | [DM-INSIGHTS-ANALYTICAL-EVIDENCE](../../../designs/insights/data-model.md#analysiswindowmetricstateandexplanation) | deterministic structured and rendered explanation |
 
 ### Verification
 
@@ -106,13 +106,13 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-358` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md): Both policies produce the analytical evidence and explanation contracts.
-- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies
-- `implements` -> FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING: Account for every evidence state
-- `implements` -> FR-INSIGHTS-REPORT-EXPLANATION: Explain report evidence deterministically
-- `satisfies` -> NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity
-- `touches` -> DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation
-- `touches` -> FA-INSIGHTS-REPORT-EXPLANATION: Report and Explanation
+- `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-MODELS: TASK-INSIGHTS-CONTRACT-MODELS](contract-models.md): Both policies produce the analytical evidence and explanation contracts.
+- `governed-by` -> [DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies](../../../designs/insights/decisions/deterministic-report-compiler.md)
+- `implements` -> [FR-INSIGHTS-EVIDENCE-STATE-ACCOUNTING: Account for every evidence state](../../../prd/insights/prd.md#fr-insights-evidence-state-accounting-account-for-every-evidence-state)
+- `implements` -> [FR-INSIGHTS-REPORT-EXPLANATION: Explain report evidence deterministically](../../../prd/insights/prd.md#fr-insights-report-explanation-explain-report-evidence-deterministically)
+- `satisfies` -> [NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity](../../../prd/insights/prd.md#nfr-insights-deterministic-analytical-integrity-preserve-deterministic-analytical-integrity)
+- `touches` -> [DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation](../../../designs/insights/data-model.md#analysiswindowmetricstateandexplanation)
+- `touches` -> [FA-INSIGHTS-REPORT-EXPLANATION: Report and Explanation](../../../designs/insights/features/report-explanation/api-surface.md)
 - `verifies` -> TC-INSIGHTS-EVIDENCE-STATE-ACCOUNTING: Verify complete evidence-state accounting
 - `verifies` -> TC-INSIGHTS-REPORT-EXPLANATION-CONTRACT: Verify deterministic report explanations
 

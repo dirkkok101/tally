@@ -15,8 +15,8 @@ Implement trusted period identity, replay-safe draft creation, historical reads,
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-BUDGET-PERIOD-IDENTITY](../tasks/period-identity.md) | Implement trusted monthly period identity | `planned` | 0 |
-| [TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR](../tasks/idempotent-mutation-executor.md) | Implement replay-safe mutation execution | `planned` | 0 |
-| [TASK-BUDGET-DRAFT-CREATION](../tasks/draft-creation.md) | Create immutable Draft Budget Plan Revisions | `planned` | 0 |
-| [TASK-BUDGET-PLAN-READS](../tasks/plan-reads.md) | Read Budget Plan Revisions and Budget Period history | `planned` | 1 |
-| [TASK-BUDGET-ACTIVATION-LIFECYCLE](../tasks/activation-lifecycle.md) | Activate one Budget Plan Revision atomically | `planned` | 0 |
+| [TASK-BUDGET-PERIOD-IDENTITY: Implement trusted monthly period identity](../tasks/period-identity.md) | Implement trusted monthly period identity | `ready` | 0 |
+| [TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR: Implement replay-safe mutation execution](../tasks/idempotent-mutation-executor.md) | Implement replay-safe mutation execution | `ready` | 0 |
+| [TASK-BUDGET-DRAFT-CREATION: Create immutable Draft Budget Plan Revisions](../tasks/draft-creation.md) | Create immutable Draft Budget Plan Revisions | `ready` | 0 |
+| [TASK-BUDGET-PLAN-READS: Read Budget Plan Revisions and Budget Period history](../tasks/plan-reads.md) | Read Budget Plan Revisions and Budget Period history | `ready` | 1 |
+| [TASK-BUDGET-ACTIVATION-LIFECYCLE: Activate one Budget Plan Revision atomically](../tasks/activation-lifecycle.md) | Activate one Budget Plan Revision atomically | `ready` | 0 |

@@ -26,14 +26,14 @@ No graph references recorded.
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-GATE-SECURITY](../tasks/gate-security.md) | `compile` | Module completion requires consolidated security evidence. |
-| [TASK-INGEST-VERIFY-UC-001](../tasks/verify-uc-001.md) | `compile` | Module completion requires UC-INGEST-001 evidence. |
-| [TASK-INGEST-VERIFY-UC-002](../tasks/verify-uc-002.md) | `compile` | Module completion requires UC-INGEST-002 evidence. |
-| [TASK-INGEST-VERIFY-UC-003](../tasks/verify-uc-003.md) | `compile` | Module completion requires UC-INGEST-003 evidence. |
-| [TASK-INGEST-VERIFY-UC-004](../tasks/verify-uc-004.md) | `compile` | Module completion requires UC-INGEST-004 evidence. |
-| [TASK-INGEST-VERIFY-UC-005](../tasks/verify-uc-005.md) | `compile` | Module completion requires UC-INGEST-005 evidence. |
-| [TASK-INGEST-VERIFY-UC-006](../tasks/verify-uc-006.md) | `compile` | Module completion requires UC-INGEST-006 evidence. |
-| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Consumes CompleteIngestPublicContract. |
+| [TASK-INGEST-GATE-SECURITY: TASK-INGEST-GATE-SECURITY](gate-security.md) | `compile` | Module completion requires consolidated security evidence. |
+| [TASK-INGEST-VERIFY-UC-001: TASK-INGEST-VERIFY-UC-001](verify-uc-001.md) | `compile` | Module completion requires UC-INGEST-001 evidence. |
+| [TASK-INGEST-VERIFY-UC-002: TASK-INGEST-VERIFY-UC-002](verify-uc-002.md) | `compile` | Module completion requires UC-INGEST-002 evidence. |
+| [TASK-INGEST-VERIFY-UC-003: TASK-INGEST-VERIFY-UC-003](verify-uc-003.md) | `compile` | Module completion requires UC-INGEST-003 evidence. |
+| [TASK-INGEST-VERIFY-UC-004: TASK-INGEST-VERIFY-UC-004](verify-uc-004.md) | `compile` | Module completion requires UC-INGEST-004 evidence. |
+| [TASK-INGEST-VERIFY-UC-005: TASK-INGEST-VERIFY-UC-005](verify-uc-005.md) | `compile` | Module completion requires UC-INGEST-005 evidence. |
+| [TASK-INGEST-VERIFY-UC-006: TASK-INGEST-VERIFY-UC-006](verify-uc-006.md) | `compile` | Module completion requires UC-INGEST-006 evidence. |
+| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT: TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Consumes CompleteIngestPublicContract. |
 
 ## Recipe
 
@@ -78,14 +78,14 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteIngestPublicContract | `consumes` | DM-INGEST-OPERATION-CONTRACTS |  |
-| IngestSecurityGateEvidence | `consumes` | NFR-INGEST-LOCAL-DATA-PROTECTION |  |
-| UCIngest001Evidence | `consumes` | UC-INGEST-001 |  |
-| UCIngest002Evidence | `consumes` | UC-INGEST-002 |  |
-| UCIngest003Evidence | `consumes` | UC-INGEST-003 |  |
-| UCIngest004Evidence | `consumes` | UC-INGEST-004 |  |
-| UCIngest005Evidence | `consumes` | UC-INGEST-005 |  |
-| UCIngest006Evidence | `consumes` | UC-INGEST-006 |  |
+| CompleteIngestPublicContract | `consumes` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) |  |
+| IngestSecurityGateEvidence | `consumes` | [NFR-INGEST-LOCAL-DATA-PROTECTION](../../../prd/ingest/prd.md#nfr-ingest-local-data-protection-protect-local-statement-and-ingestion-data) |  |
+| UCIngest001Evidence | `consumes` | [UC-INGEST-001](../../../prd/ingest/prd.md#uc-ingest-001-preview-and-qualify-a-local-statement) |  |
+| UCIngest002Evidence | `consumes` | [UC-INGEST-002](../../../prd/ingest/prd.md#uc-ingest-002-review-and-approve-a-candidate-batch) |  |
+| UCIngest003Evidence | `consumes` | [UC-INGEST-003](../../../prd/ingest/prd.md#uc-ingest-003-commit-and-resume-an-approved-batch) |  |
+| UCIngest004Evidence | `consumes` | [UC-INGEST-004](../../../prd/ingest/prd.md#uc-ingest-004-re-import-a-repeated-or-overlapping-statement-safely) |  |
+| UCIngest005Evidence | `consumes` | [UC-INGEST-005](../../../prd/ingest/prd.md#uc-ingest-005-handle-and-clean-up-a-failed-ingestion) |  |
+| UCIngest006Evidence | `consumes` | [UC-INGEST-006](../../../prd/ingest/prd.md#uc-ingest-006-discover-and-invoke-the-ingest-agent-contract) |  |
 
 ### Verification
 
@@ -115,14 +115,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1vr` (verified)
-- `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Consumes CompleteIngestPublicContract.
-- `depends-on:compile` -> [TASK-INGEST-GATE-SECURITY](../tasks/gate-security.md): Module completion requires consolidated security evidence.
-- `depends-on:compile` -> [TASK-INGEST-VERIFY-UC-001](../tasks/verify-uc-001.md): Module completion requires UC-INGEST-001 evidence.
-- `depends-on:compile` -> [TASK-INGEST-VERIFY-UC-002](../tasks/verify-uc-002.md): Module completion requires UC-INGEST-002 evidence.
-- `depends-on:compile` -> [TASK-INGEST-VERIFY-UC-003](../tasks/verify-uc-003.md): Module completion requires UC-INGEST-003 evidence.
-- `depends-on:compile` -> [TASK-INGEST-VERIFY-UC-004](../tasks/verify-uc-004.md): Module completion requires UC-INGEST-004 evidence.
-- `depends-on:compile` -> [TASK-INGEST-VERIFY-UC-005](../tasks/verify-uc-005.md): Module completion requires UC-INGEST-005 evidence.
-- `depends-on:compile` -> [TASK-INGEST-VERIFY-UC-006](../tasks/verify-uc-006.md): Module completion requires UC-INGEST-006 evidence.
+- `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT: TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Consumes CompleteIngestPublicContract.
+- `depends-on:compile` -> [TASK-INGEST-GATE-SECURITY: TASK-INGEST-GATE-SECURITY](gate-security.md): Module completion requires consolidated security evidence.
+- `depends-on:compile` -> [TASK-INGEST-VERIFY-UC-001: TASK-INGEST-VERIFY-UC-001](verify-uc-001.md): Module completion requires UC-INGEST-001 evidence.
+- `depends-on:compile` -> [TASK-INGEST-VERIFY-UC-002: TASK-INGEST-VERIFY-UC-002](verify-uc-002.md): Module completion requires UC-INGEST-002 evidence.
+- `depends-on:compile` -> [TASK-INGEST-VERIFY-UC-003: TASK-INGEST-VERIFY-UC-003](verify-uc-003.md): Module completion requires UC-INGEST-003 evidence.
+- `depends-on:compile` -> [TASK-INGEST-VERIFY-UC-004: TASK-INGEST-VERIFY-UC-004](verify-uc-004.md): Module completion requires UC-INGEST-004 evidence.
+- `depends-on:compile` -> [TASK-INGEST-VERIFY-UC-005: TASK-INGEST-VERIFY-UC-005](verify-uc-005.md): Module completion requires UC-INGEST-005 evidence.
+- `depends-on:compile` -> [TASK-INGEST-VERIFY-UC-006: TASK-INGEST-VERIFY-UC-006](verify-uc-006.md): Module completion requires UC-INGEST-006 evidence.
 
 ## Navigation
 

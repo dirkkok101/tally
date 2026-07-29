@@ -22,9 +22,9 @@ Choose and record whether cash withdrawal is immediate External Spend or a trans
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions | `design_decision` | `governed-by` | `true` |
-| NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic | `nfr` | `satisfies` | `true` |
-| OQ-LEDGER-16: Should a cash withdrawal count as External Spend immediately, or as a transfer to a tracked cash account until later cash spending is recorded? | `open_question` | `references` | `true` |
+| [DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions](../../../designs/ledger/decisions/dimensional-attribution.md) | `design_decision` | `governed-by` | `true` |
+| [NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic](../../../prd/ledger/prd.md#nfr-ledger-exact-financial-arithmetic-preserve-exact-financial-arithmetic) | `nfr` | `satisfies` | `true` |
+| [OQ-LEDGER-16: Should a cash withdrawal count as External Spend immediately, or as a transfer to a tracked cash account until later cash spending is recorded?](../../../prd/ledger/prd.md) | `open_question` | `references` | `true` |
 
 ## Dependencies
 
@@ -68,7 +68,7 @@ No task dependencies recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| OQ-LEDGER-16Resolution | `produces` | OQ-LEDGER-16 | Exact cash-withdrawal spend rule or design-return result |
+| OQ-LEDGER-16Resolution | `produces` | [OQ-LEDGER-16](../../../prd/ledger/prd.md) | Exact cash-withdrawal spend rule or design-return result |
 
 ### Verification
 
@@ -94,9 +94,9 @@ No task dependencies recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-31r` (verified)
-- `governed-by` -> DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions
-- `references` -> OQ-LEDGER-16: Should a cash withdrawal count as External Spend immediately, or as a transfer to a tracked cash account until later cash spending is recorded?
-- `satisfies` -> NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic
+- `governed-by` -> [DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions](../../../designs/ledger/decisions/dimensional-attribution.md)
+- `references` -> [OQ-LEDGER-16: Should a cash withdrawal count as External Spend immediately, or as a transfer to a tracked cash account until later cash spending is recorded?](../../../prd/ledger/prd.md)
+- `satisfies` -> [NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic](../../../prd/ledger/prd.md#nfr-ledger-exact-financial-arithmetic-preserve-exact-financial-arithmetic)
 
 ## Navigation
 

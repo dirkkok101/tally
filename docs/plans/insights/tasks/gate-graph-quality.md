@@ -26,16 +26,16 @@ No graph references recorded.
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Require complete public contract evidence. |
-| [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md) | `compile` | Require retained and recovery atomicity evidence. |
-| [TASK-INSIGHTS-GATE-SECURITY](../tasks/gate-security.md) | `compile` | Require security evidence. |
-| [TASK-INSIGHTS-GATE-PERFORMANCE](../tasks/gate-performance.md) | `compile` | Require performance evidence. |
-| [TASK-INSIGHTS-VERIFY-UC-001](../tasks/verify-uc-001.md) | `compile` | Require UC-001 evidence. |
-| [TASK-INSIGHTS-VERIFY-UC-002](../tasks/verify-uc-002.md) | `compile` | Require UC-002 evidence. |
-| [TASK-INSIGHTS-VERIFY-UC-003](../tasks/verify-uc-003.md) | `compile` | Require UC-003 evidence. |
-| [TASK-INSIGHTS-VERIFY-UC-004](../tasks/verify-uc-004.md) | `compile` | Require UC-004 evidence. |
-| [TASK-INSIGHTS-VERIFY-UC-005](../tasks/verify-uc-005.md) | `compile` | Require UC-005 evidence. |
-| [TASK-INSIGHTS-VERIFY-UC-006](../tasks/verify-uc-006.md) | `compile` | Require UC-006 evidence. |
+| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT: TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Require complete public contract evidence. |
+| [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY: TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](gate-atomic-recovery.md) | `compile` | Require retained and recovery atomicity evidence. |
+| [TASK-INSIGHTS-GATE-SECURITY: TASK-INSIGHTS-GATE-SECURITY](gate-security.md) | `compile` | Require security evidence. |
+| [TASK-INSIGHTS-GATE-PERFORMANCE: TASK-INSIGHTS-GATE-PERFORMANCE](gate-performance.md) | `compile` | Require performance evidence. |
+| [TASK-INSIGHTS-VERIFY-UC-001: TASK-INSIGHTS-VERIFY-UC-001](verify-uc-001.md) | `compile` | Require UC-001 evidence. |
+| [TASK-INSIGHTS-VERIFY-UC-002: TASK-INSIGHTS-VERIFY-UC-002](verify-uc-002.md) | `compile` | Require UC-002 evidence. |
+| [TASK-INSIGHTS-VERIFY-UC-003: TASK-INSIGHTS-VERIFY-UC-003](verify-uc-003.md) | `compile` | Require UC-003 evidence. |
+| [TASK-INSIGHTS-VERIFY-UC-004: TASK-INSIGHTS-VERIFY-UC-004](verify-uc-004.md) | `compile` | Require UC-004 evidence. |
+| [TASK-INSIGHTS-VERIFY-UC-005: TASK-INSIGHTS-VERIFY-UC-005](verify-uc-005.md) | `compile` | Require UC-005 evidence. |
+| [TASK-INSIGHTS-VERIFY-UC-006: TASK-INSIGHTS-VERIFY-UC-006](verify-uc-006.md) | `compile` | Require UC-006 evidence. |
 
 ## Recipe
 
@@ -79,17 +79,17 @@ No graph references recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteInsightsPublicContract | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS | published contract evidence |
-| InsightsAtomicRecoveryEvidence | `consumes` | NFR-INSIGHTS-VERIFIED-RECOVERABILITY | recovery evidence |
-| InsightsSecurityGateEvidence | `consumes` | NFR-INSIGHTS-LOCAL-DATA-PROTECTION | security evidence |
-| InsightsPerformanceGateEvidence | `consumes` | NFR-INSIGHTS-PERSONAL-SCALE-PERFORMANCE | performance evidence |
-| VerifiedInsightsUc001 | `consumes` | UC-INSIGHTS-001 | UC-001 |
-| VerifiedInsightsUc002 | `consumes` | UC-INSIGHTS-002 | UC-002 |
-| VerifiedInsightsUc003 | `consumes` | UC-INSIGHTS-003 | UC-003 |
-| VerifiedInsightsUc004 | `consumes` | UC-INSIGHTS-004 | UC-004 |
-| VerifiedInsightsUc005 | `consumes` | UC-INSIGHTS-005 | UC-005 |
-| VerifiedInsightsUc006 | `consumes` | UC-INSIGHTS-006 | UC-006 |
-| InsightsGraphQualityEvidence | `produces` | PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES | graph and plan convergence proof |
+| CompleteInsightsPublicContract | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | published contract evidence |
+| InsightsAtomicRecoveryEvidence | `consumes` | [NFR-INSIGHTS-VERIFIED-RECOVERABILITY](../../../prd/insights/prd.md#nfr-insights-verified-recoverability-verify-backup-and-restore-independently) | recovery evidence |
+| InsightsSecurityGateEvidence | `consumes` | [NFR-INSIGHTS-LOCAL-DATA-PROTECTION](../../../prd/insights/prd.md#nfr-insights-local-data-protection-protect-local-insight-data) | security evidence |
+| InsightsPerformanceGateEvidence | `consumes` | [NFR-INSIGHTS-PERSONAL-SCALE-PERFORMANCE](../../../prd/insights/prd.md#nfr-insights-personal-scale-performance-respond-at-personal-finance-scale) | performance evidence |
+| VerifiedInsightsUc001 | `consumes` | [UC-INSIGHTS-001](../../../prd/insights/prd.md#uc-insights-001-generate-an-on-demand-insight-report) | UC-001 |
+| VerifiedInsightsUc002 | `consumes` | [UC-INSIGHTS-002](../../../prd/insights/prd.md#uc-insights-002-inspect-report-evidence-and-explanations) | UC-002 |
+| VerifiedInsightsUc003 | `consumes` | [UC-INSIGHTS-003](../../../prd/insights/prd.md#uc-insights-003-retain-and-retrieve-a-report-snapshot) | UC-003 |
+| VerifiedInsightsUc004 | `consumes` | [UC-INSIGHTS-004](../../../prd/insights/prd.md#uc-insights-004-restate-and-compare-a-corrected-report) | UC-004 |
+| VerifiedInsightsUc005 | `consumes` | [UC-INSIGHTS-005](../../../prd/insights/prd.md#uc-insights-005-manage-retained-history-and-recovery) | UC-005 |
+| VerifiedInsightsUc006 | `consumes` | [UC-INSIGHTS-006](../../../prd/insights/prd.md#uc-insights-006-discover-and-invoke-the-structured-insights-contract) | UC-006 |
+| InsightsGraphQualityEvidence | `produces` | [PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES](../../../patterns/core/implementation-plan-quality-gates.md) | graph and plan convergence proof |
 
 ### Verification
 
@@ -114,16 +114,16 @@ No graph references recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2d5` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md): Require retained and recovery atomicity evidence.
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Require complete public contract evidence.
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-PERFORMANCE](../tasks/gate-performance.md): Require performance evidence.
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-SECURITY](../tasks/gate-security.md): Require security evidence.
-- `depends-on:compile` -> [TASK-INSIGHTS-VERIFY-UC-001](../tasks/verify-uc-001.md): Require UC-001 evidence.
-- `depends-on:compile` -> [TASK-INSIGHTS-VERIFY-UC-002](../tasks/verify-uc-002.md): Require UC-002 evidence.
-- `depends-on:compile` -> [TASK-INSIGHTS-VERIFY-UC-003](../tasks/verify-uc-003.md): Require UC-003 evidence.
-- `depends-on:compile` -> [TASK-INSIGHTS-VERIFY-UC-004](../tasks/verify-uc-004.md): Require UC-004 evidence.
-- `depends-on:compile` -> [TASK-INSIGHTS-VERIFY-UC-005](../tasks/verify-uc-005.md): Require UC-005 evidence.
-- `depends-on:compile` -> [TASK-INSIGHTS-VERIFY-UC-006](../tasks/verify-uc-006.md): Require UC-006 evidence.
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY: TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](gate-atomic-recovery.md): Require retained and recovery atomicity evidence.
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT: TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Require complete public contract evidence.
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-PERFORMANCE: TASK-INSIGHTS-GATE-PERFORMANCE](gate-performance.md): Require performance evidence.
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-SECURITY: TASK-INSIGHTS-GATE-SECURITY](gate-security.md): Require security evidence.
+- `depends-on:compile` -> [TASK-INSIGHTS-VERIFY-UC-001: TASK-INSIGHTS-VERIFY-UC-001](verify-uc-001.md): Require UC-001 evidence.
+- `depends-on:compile` -> [TASK-INSIGHTS-VERIFY-UC-002: TASK-INSIGHTS-VERIFY-UC-002](verify-uc-002.md): Require UC-002 evidence.
+- `depends-on:compile` -> [TASK-INSIGHTS-VERIFY-UC-003: TASK-INSIGHTS-VERIFY-UC-003](verify-uc-003.md): Require UC-003 evidence.
+- `depends-on:compile` -> [TASK-INSIGHTS-VERIFY-UC-004: TASK-INSIGHTS-VERIFY-UC-004](verify-uc-004.md): Require UC-004 evidence.
+- `depends-on:compile` -> [TASK-INSIGHTS-VERIFY-UC-005: TASK-INSIGHTS-VERIFY-UC-005](verify-uc-005.md): Require UC-005 evidence.
+- `depends-on:compile` -> [TASK-INSIGHTS-VERIFY-UC-006: TASK-INSIGHTS-VERIFY-UC-006](verify-uc-006.md): Require UC-006 evidence.
 
 ## Navigation
 

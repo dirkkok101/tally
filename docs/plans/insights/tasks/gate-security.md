@@ -22,13 +22,13 @@ Every public, private-validation, retained-state, failure, backup, restore, and 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-PRIVATE-POLICY-VALIDATION: Ignored private corpus with privacy-safe release receipts | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation | `design_decision` | `governed-by` | `true` |
-| EXT-INSIGHTS-HOST-OS-SECURITY: Host OS Security and Storage | `external_dependency` | `references` | `true` |
-| NFR-INSIGHTS-LOCAL-DATA-PROTECTION: Protect local insight data | `nfr` | `satisfies` | `true` |
-| NFR-INSIGHTS-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local analytics module | `nfr` | `satisfies` | `true` |
+| [DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry](../../../designs/insights/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-PRIVATE-POLICY-VALIDATION: Ignored private corpus with privacy-safe release receipts](../../../designs/insights/decisions/private-policy-validation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation](../../../designs/insights/decisions/verified-recovery-activation.md) | `design_decision` | `governed-by` | `true` |
+| [EXT-INSIGHTS-HOST-OS-SECURITY: Host OS Security and Storage](../../../prd/insights/prd.md#ext-insights-host-os-security-host-os-security-and-storage) | `external_dependency` | `references` | `true` |
+| [NFR-INSIGHTS-LOCAL-DATA-PROTECTION: Protect local insight data](../../../prd/insights/prd.md#nfr-insights-local-data-protection-protect-local-insight-data) | `nfr` | `satisfies` | `true` |
+| [NFR-INSIGHTS-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local analytics module](../../../prd/insights/prd.md#nfr-insights-self-contained-local-operation-operate-as-a-self-contained-local-analytics-module) | `nfr` | `satisfies` | `true` |
 | TC-INSIGHTS-LOCAL-DATA-PROTECTION: Verify local insight privacy boundaries | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-OFFLINE-PROCESS-ISOLATION: Verify self-contained offline operation | `test_case` | `verifies` | `true` |
 
@@ -36,9 +36,9 @@ Every public, private-validation, retained-state, failure, backup, restore, and 
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Security validates the published operation and process boundary. |
-| [TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE](../tasks/gate-evidence-owner-value.md) | `compile` | Security validates the private manifest and receipt boundary. |
-| [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md) | `compile` | Security covers all retained and recovery artifact/failure paths. |
+| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT: TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Security validates the published operation and process boundary. |
+| [TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE: TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE](gate-evidence-owner-value.md) | `compile` | Security validates the private manifest and receipt boundary. |
+| [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY: TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](gate-atomic-recovery.md) | `compile` | Security covers all retained and recovery artifact/failure paths. |
 
 ## Recipe
 
@@ -82,10 +82,10 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteInsightsPublicContract | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS | all public operations |
-| VerifiedInsightsOwnerValueGate | `consumes` | DM-INSIGHTS-POLICY-VALIDATION-RECEIPT | private evidence containment |
-| InsightsAtomicRecoveryEvidence | `consumes` | NFR-INSIGHTS-VERIFIED-RECOVERABILITY | artifact and crash boundaries |
-| InsightsSecurityGateEvidence | `produces` | NFR-INSIGHTS-LOCAL-DATA-PROTECTION | local privacy and process isolation proof |
+| CompleteInsightsPublicContract | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | all public operations |
+| VerifiedInsightsOwnerValueGate | `consumes` | [DM-INSIGHTS-POLICY-VALIDATION-RECEIPT](../../../designs/insights/data-model.md#policyvalidationreceipt) | private evidence containment |
+| InsightsAtomicRecoveryEvidence | `consumes` | [NFR-INSIGHTS-VERIFIED-RECOVERABILITY](../../../prd/insights/prd.md#nfr-insights-verified-recoverability-verify-backup-and-restore-independently) | artifact and crash boundaries |
+| InsightsSecurityGateEvidence | `produces` | [NFR-INSIGHTS-LOCAL-DATA-PROTECTION](../../../prd/insights/prd.md#nfr-insights-local-data-protection-protect-local-insight-data) | local privacy and process isolation proof |
 
 ### Verification
 
@@ -110,16 +110,16 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2fg` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md): Security covers all retained and recovery artifact/failure paths.
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE](../tasks/gate-evidence-owner-value.md): Security validates the private manifest and receipt boundary.
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Security validates the published operation and process boundary.
-- `governed-by` -> DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry
-- `governed-by` -> DD-INSIGHTS-PRIVATE-POLICY-VALIDATION: Ignored private corpus with privacy-safe release receipts
-- `governed-by` -> DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads
-- `governed-by` -> DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation
-- `references` -> EXT-INSIGHTS-HOST-OS-SECURITY: Host OS Security and Storage
-- `satisfies` -> NFR-INSIGHTS-LOCAL-DATA-PROTECTION: Protect local insight data
-- `satisfies` -> NFR-INSIGHTS-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local analytics module
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-ATOMIC-RECOVERY: TASK-INSIGHTS-GATE-ATOMIC-RECOVERY](gate-atomic-recovery.md): Security covers all retained and recovery artifact/failure paths.
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE: TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE](gate-evidence-owner-value.md): Security validates the private manifest and receipt boundary.
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT: TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Security validates the published operation and process boundary.
+- `governed-by` -> [DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry](../../../designs/insights/decisions/cli-operation-contract.md)
+- `governed-by` -> [DD-INSIGHTS-PRIVATE-POLICY-VALIDATION: Ignored private corpus with privacy-safe release receipts](../../../designs/insights/decisions/private-policy-validation.md)
+- `governed-by` -> [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md)
+- `governed-by` -> [DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation](../../../designs/insights/decisions/verified-recovery-activation.md)
+- `references` -> [EXT-INSIGHTS-HOST-OS-SECURITY: Host OS Security and Storage](../../../prd/insights/prd.md#ext-insights-host-os-security-host-os-security-and-storage)
+- `satisfies` -> [NFR-INSIGHTS-LOCAL-DATA-PROTECTION: Protect local insight data](../../../prd/insights/prd.md#nfr-insights-local-data-protection-protect-local-insight-data)
+- `satisfies` -> [NFR-INSIGHTS-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local analytics module](../../../prd/insights/prd.md#nfr-insights-self-contained-local-operation-operate-as-a-self-contained-local-analytics-module)
 - `verifies` -> TC-INSIGHTS-LOCAL-DATA-PROTECTION: Verify local insight privacy boundaries
 - `verifies` -> TC-INSIGHTS-OFFLINE-PROCESS-ISOLATION: Verify self-contained offline operation
 

@@ -22,18 +22,18 @@ Register one real-SQLite V001 fragment whose constraints preserve provider-neutr
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink | `data_model` | `touches` | `true` |
-| DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage | `data_model` | `touches` | `true` |
-| NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable | `nfr` | `satisfies` | `true` |
+| [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink](../../../designs/ledger/data-model.md#evidencerecordobservationandlink) | `data_model` | `touches` | `true` |
+| [DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) | `data_model` | `touches` | `true` |
+| [NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable](../../../prd/ledger/prd.md#nfr-ledger-atomic-durable-mutations-make-mutations-atomic-and-durable) | `nfr` | `satisfies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | The fragment registers with LedgerSchemaFragmentRegistry and is exercised through LedgerDb. |
+| [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md) | `compile` | The fragment registers with LedgerSchemaFragmentRegistry and is exercised through LedgerDb. |
 
 ## Recipe
 
@@ -73,9 +73,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| V001EvidenceReconciliationSchema | `produces` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| LedgerSchemaFragmentRegistry | `consumes` | DD-LEDGER-EMBEDDED-STORAGE |  |
-| LedgerDb | `consumes` | DM-LEDGER-STORE-GENERATION |  |
+| V001EvidenceReconciliationSchema | `produces` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| LedgerSchemaFragmentRegistry | `consumes` | [DD-LEDGER-EMBEDDED-STORAGE](../../../designs/ledger/decisions/embedded-storage.md) |  |
+| LedgerDb | `consumes` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) |  |
 
 ### Verification
 
@@ -101,13 +101,13 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-35j` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): The fragment registers with LedgerSchemaFragmentRegistry and is exercised through LedgerDb.
-- `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
-- `satisfies` -> NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable
-- `touches` -> DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink
-- `touches` -> DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage
+- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md): The fragment registers with LedgerSchemaFragmentRegistry and is exercised through LedgerDb.
+- `governed-by` -> [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `governed-by` -> [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md)
+- `satisfies` -> [NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable](../../../prd/ledger/prd.md#nfr-ledger-atomic-durable-mutations-make-mutations-atomic-and-durable)
+- `touches` -> [DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink](../../../designs/ledger/data-model.md#evidencerecordobservationandlink)
+- `touches` -> [DM-LEDGER-RECONCILIATION-HISTORY: ReconciliationProjectionDecisionAndCoverage](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage)
 
 ## Navigation
 

@@ -22,21 +22,21 @@ Deliver ingest.preview as a deterministic no-LEDGER-mutation workflow that persi
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap | `design_decision` | `governed-by` | `true` |
-| DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly | `design_decision` | `governed-by` | `true` |
-| FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval | `requirement` | `implements` | `true` |
-| FR-INGEST-STATEMENT-PREVIEW: Preview a statement without financial mutation | `requirement` | `implements` | `true` |
+| [DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap](../../../designs/ingest/decisions/manifest-identity-overlap.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly](../../../designs/ingest/decisions/source-description-absence.md) | `design_decision` | `governed-by` | `true` |
+| [FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval](../../../prd/ingest/prd.md#fr-ingest-source-reconciliation-reconcile-every-supported-statement-before-approval) | `requirement` | `implements` | `true` |
+| [FR-INGEST-STATEMENT-PREVIEW: Preview a statement without financial mutation](../../../prd/ingest/prd.md#fr-ingest-statement-preview-preview-a-statement-without-financial-mutation) | `requirement` | `implements` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](../tasks/gate-int-format-adapters.md) | `compile` | Preview consumes only the qualified StatementAdapterRegistry. |
-| [TASK-INGEST-LEDGER-PUBLIC-CLIENT](../tasks/ledger-public-client.md) | `compile` | Preview validates the selected account through LedgerContractClient.GetAccountAsync. |
-| [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md) | `compile` | Preview composes the deterministic identity, normalization, reconciliation, manifest, and overlap policies. |
-| [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md) | `compile` | Preview persists complete batch-addressable failure metadata through the V002 store. |
-| [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Preview persists through IngestDatabase. |
-| [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Preview consumes IngestOperationContracts. |
+| [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS: TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](gate-int-format-adapters.md) | `compile` | Preview consumes only the qualified StatementAdapterRegistry. |
+| [TASK-INGEST-LEDGER-PUBLIC-CLIENT: TASK-INGEST-LEDGER-PUBLIC-CLIENT](ledger-public-client.md) | `compile` | Preview validates the selected account through LedgerContractClient.GetAccountAsync. |
+| [TASK-INGEST-PREVIEW-DOMAIN: TASK-INGEST-PREVIEW-DOMAIN](preview-domain.md) | `compile` | Preview composes the deterministic identity, normalization, reconciliation, manifest, and overlap policies. |
+| [TASK-INGEST-STATUS-STATE-V002: TASK-INGEST-STATUS-STATE-V002](status-state-v002.md) | `compile` | Preview persists complete batch-addressable failure metadata through the V002 store. |
+| [TASK-INGEST-STATE-FOUNDATION: TASK-INGEST-STATE-FOUNDATION](state-foundation.md) | `compile` | Preview persists through IngestDatabase. |
+| [TASK-INGEST-CONTRACT-FOUNDATION: TASK-INGEST-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | Preview consumes IngestOperationContracts. |
 
 ## Recipe
 
@@ -88,18 +88,18 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| IngestOperationContracts | `consumes` | DM-INGEST-OPERATION-CONTRACTS |  |
-| IngestDatabase | `consumes` | DM-INGEST-STATE-STORE |  |
-| StatementAdapterRegistry | `consumes` | DM-INGEST-FORMAT-EVIDENCE |  |
-| LedgerContractClient.GetAccountAsync | `consumes` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS |  |
-| IngestIdentity | `consumes` | DM-INGEST-IMPORT-MANIFEST |  |
-| FinancialNormalizer | `consumes` | DM-INGEST-IMPORT-MANIFEST |  |
-| StatementReconciler | `consumes` | DM-INGEST-IMPORT-MANIFEST |  |
-| ManifestCanonicalizer | `consumes` | DM-INGEST-IMPORT-MANIFEST |  |
-| OverlapPolicy | `consumes` | DM-INGEST-IMPORT-MANIFEST |  |
-| PreviewStateStore | `produces` | DM-INGEST-STATE-STORE |  |
-| PreviewOperationModule | `produces` | DM-INGEST-OPERATION-CONTRACTS |  |
-| BatchErrorEventStore.AppendAsync | `consumes` | DM-INGEST-ERROR-STATUS-CONTRACTS | Append complete safe errors in the preview transaction |
+| IngestOperationContracts | `consumes` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) |  |
+| IngestDatabase | `consumes` | [DM-INGEST-STATE-STORE](../../../designs/ingest/data-model.md#ingeststatestore) |  |
+| StatementAdapterRegistry | `consumes` | [DM-INGEST-FORMAT-EVIDENCE](../../../designs/ingest/data-model.md#formatvariantandsourceevidence) |  |
+| LedgerContractClient.GetAccountAsync | `consumes` | [DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS](../../../designs/ledger/data-model.md#accountcategoryoperationcontracts) |  |
+| IngestIdentity | `consumes` | [DM-INGEST-IMPORT-MANIFEST](../../../designs/ingest/data-model.md#importbatchandmanifestrevision) |  |
+| FinancialNormalizer | `consumes` | [DM-INGEST-IMPORT-MANIFEST](../../../designs/ingest/data-model.md#importbatchandmanifestrevision) |  |
+| StatementReconciler | `consumes` | [DM-INGEST-IMPORT-MANIFEST](../../../designs/ingest/data-model.md#importbatchandmanifestrevision) |  |
+| ManifestCanonicalizer | `consumes` | [DM-INGEST-IMPORT-MANIFEST](../../../designs/ingest/data-model.md#importbatchandmanifestrevision) |  |
+| OverlapPolicy | `consumes` | [DM-INGEST-IMPORT-MANIFEST](../../../designs/ingest/data-model.md#importbatchandmanifestrevision) |  |
+| PreviewStateStore | `produces` | [DM-INGEST-STATE-STORE](../../../designs/ingest/data-model.md#ingeststatestore) |  |
+| PreviewOperationModule | `produces` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) |  |
+| BatchErrorEventStore.AppendAsync | `consumes` | [DM-INGEST-ERROR-STATUS-CONTRACTS](../../../designs/ingest/data-model.md#ingesterrorandstatuscontracts) | Append complete safe errors in the preview transaction |
 
 ### Verification
 
@@ -125,16 +125,16 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1of` (verified)
-- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Preview consumes IngestOperationContracts.
-- `depends-on:compile` -> [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](../tasks/gate-int-format-adapters.md): Preview consumes only the qualified StatementAdapterRegistry.
-- `depends-on:compile` -> [TASK-INGEST-LEDGER-PUBLIC-CLIENT](../tasks/ledger-public-client.md): Preview validates the selected account through LedgerContractClient.GetAccountAsync.
-- `depends-on:compile` -> [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md): Preview composes the deterministic identity, normalization, reconciliation, manifest, and overlap policies.
-- `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md): Preview persists through IngestDatabase.
-- `depends-on:compile` -> [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md): Preview persists complete batch-addressable failure metadata through the V002 store.
-- `governed-by` -> DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap
-- `governed-by` -> DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly
-- `implements` -> FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval
-- `implements` -> FR-INGEST-STATEMENT-PREVIEW: Preview a statement without financial mutation
+- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION: TASK-INGEST-CONTRACT-FOUNDATION](contract-foundation.md): Preview consumes IngestOperationContracts.
+- `depends-on:compile` -> [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS: TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](gate-int-format-adapters.md): Preview consumes only the qualified StatementAdapterRegistry.
+- `depends-on:compile` -> [TASK-INGEST-LEDGER-PUBLIC-CLIENT: TASK-INGEST-LEDGER-PUBLIC-CLIENT](ledger-public-client.md): Preview validates the selected account through LedgerContractClient.GetAccountAsync.
+- `depends-on:compile` -> [TASK-INGEST-PREVIEW-DOMAIN: TASK-INGEST-PREVIEW-DOMAIN](preview-domain.md): Preview composes the deterministic identity, normalization, reconciliation, manifest, and overlap policies.
+- `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION: TASK-INGEST-STATE-FOUNDATION](state-foundation.md): Preview persists through IngestDatabase.
+- `depends-on:compile` -> [TASK-INGEST-STATUS-STATE-V002: TASK-INGEST-STATUS-STATE-V002](status-state-v002.md): Preview persists complete batch-addressable failure metadata through the V002 store.
+- `governed-by` -> [DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap](../../../designs/ingest/decisions/manifest-identity-overlap.md)
+- `governed-by` -> [DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly](../../../designs/ingest/decisions/source-description-absence.md)
+- `implements` -> [FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval](../../../prd/ingest/prd.md#fr-ingest-source-reconciliation-reconcile-every-supported-statement-before-approval)
+- `implements` -> [FR-INGEST-STATEMENT-PREVIEW: Preview a statement without financial mutation](../../../prd/ingest/prd.md#fr-ingest-statement-preview-preview-a-statement-without-financial-mutation)
 
 ## Navigation
 

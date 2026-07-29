@@ -22,18 +22,18 @@ UC-INSIGHTS-006 lets Agent Host automate exactly one operation per invocation wi
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry](../../../designs/insights/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
 | TC-INSIGHTS-CONTRACT-DISCOVERY: Verify INSIGHTS contract discovery | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-OFFLINE-PROCESS-ISOLATION: Verify self-contained offline operation | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-STRUCTURED-INVOCATION: Verify structured INSIGHTS invocation | `test_case` | `verifies` | `true` |
-| UC-INSIGHTS-006: Discover and invoke the structured INSIGHTS contract | `use_case` | `covers` | `true` |
+| [UC-INSIGHTS-006: Discover and invoke the structured INSIGHTS contract](../../../prd/insights/prd.md#uc-insights-006-discover-and-invoke-the-structured-insights-contract) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | UC-006 exercises the published process contract. |
-| [TASK-INSIGHTS-GATE-SECURITY](../tasks/gate-security.md) | `compile` | UC-006 consumes the completed payload and process-isolation evidence. |
+| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT: TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | UC-006 exercises the published process contract. |
+| [TASK-INSIGHTS-GATE-SECURITY: TASK-INSIGHTS-GATE-SECURITY](gate-security.md) | `compile` | UC-006 consumes the completed payload and process-isolation evidence. |
 
 ## Recipe
 
@@ -72,9 +72,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteInsightsPublicContract | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS | published descriptor and process surface |
-| InsightsSecurityGateEvidence | `consumes` | NFR-INSIGHTS-LOCAL-DATA-PROTECTION | payload and process isolation proof |
-| VerifiedInsightsUc006 | `produces` | UC-INSIGHTS-006 | discovery/invocation workflow proof |
+| CompleteInsightsPublicContract | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | published descriptor and process surface |
+| InsightsSecurityGateEvidence | `consumes` | [NFR-INSIGHTS-LOCAL-DATA-PROTECTION](../../../prd/insights/prd.md#nfr-insights-local-data-protection-protect-local-insight-data) | payload and process isolation proof |
+| VerifiedInsightsUc006 | `produces` | [UC-INSIGHTS-006](../../../prd/insights/prd.md#uc-insights-006-discover-and-invoke-the-structured-insights-contract) | discovery/invocation workflow proof |
 
 ### Verification
 
@@ -99,10 +99,10 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2bg` (verified)
-- `covers` -> UC-INSIGHTS-006: Discover and invoke the structured INSIGHTS contract
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC-006 exercises the published process contract.
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-SECURITY](../tasks/gate-security.md): UC-006 consumes the completed payload and process-isolation evidence.
-- `governed-by` -> DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry
+- `covers` -> [UC-INSIGHTS-006: Discover and invoke the structured INSIGHTS contract](../../../prd/insights/prd.md#uc-insights-006-discover-and-invoke-the-structured-insights-contract)
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT: TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): UC-006 exercises the published process contract.
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-SECURITY: TASK-INSIGHTS-GATE-SECURITY](gate-security.md): UC-006 consumes the completed payload and process-isolation evidence.
+- `governed-by` -> [DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry](../../../designs/insights/decisions/cli-operation-contract.md)
 - `verifies` -> TC-INSIGHTS-CONTRACT-DISCOVERY: Verify INSIGHTS contract discovery
 - `verifies` -> TC-INSIGHTS-OFFLINE-PROCESS-ISOLATION: Verify self-contained offline operation
 - `verifies` -> TC-INSIGHTS-STRUCTURED-INVOCATION: Verify structured INSIGHTS invocation

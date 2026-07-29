@@ -26,10 +26,10 @@ No graph references recorded.
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-BACKUP-VERIFY](../tasks/backup-verify.md) | `compile` | Consumes BackupOperationModule. |
-| [TASK-LEDGER-RESTORE-ACTIVATE](../tasks/restore-activate.md) | `compile` | Consumes RestoreOperationModule. |
-| [TASK-LEDGER-STORAGE-EVOLUTION](../tasks/storage-evolution.md) | `compile` | Consumes StorageEvolutionOperationModule. |
-| [TASK-LEDGER-AGENT-SKILLS](../tasks/agent-skills.md) | `compile` | Consumes GuidanceOperationModule while preserving schema authority. |
+| [TASK-LEDGER-BACKUP-VERIFY: TASK-LEDGER-BACKUP-VERIFY](backup-verify.md) | `compile` | Consumes BackupOperationModule. |
+| [TASK-LEDGER-RESTORE-ACTIVATE: TASK-LEDGER-RESTORE-ACTIVATE](restore-activate.md) | `compile` | Consumes RestoreOperationModule. |
+| [TASK-LEDGER-STORAGE-EVOLUTION: TASK-LEDGER-STORAGE-EVOLUTION](storage-evolution.md) | `compile` | Consumes StorageEvolutionOperationModule. |
+| [TASK-LEDGER-AGENT-SKILLS: TASK-LEDGER-AGENT-SKILLS](agent-skills.md) | `compile` | Consumes GuidanceOperationModule while preserving schema authority. |
 
 ## Recipe
 
@@ -69,11 +69,11 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| RecoveryGuidanceOperationBundle | `produces` | DM-LEDGER-OPERATION-DESCRIPTOR | 13-operation recovery/system/guidance bundle |
-| BackupOperationModule | `consumes` | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS | 2 operations |
-| RestoreOperationModule | `consumes` | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS | 2 operations |
-| StorageEvolutionOperationModule | `consumes` | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS | 3 operations |
-| GuidanceOperationModule | `consumes` | DM-LEDGER-SYSTEM-SKILL-CONTRACTS | 3 optional guidance operations |
+| RecoveryGuidanceOperationBundle | `produces` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | 13-operation recovery/system/guidance bundle |
+| BackupOperationModule | `consumes` | [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts) | 2 operations |
+| RestoreOperationModule | `consumes` | [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts) | 2 operations |
+| StorageEvolutionOperationModule | `consumes` | [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts) | 3 operations |
+| GuidanceOperationModule | `consumes` | [DM-LEDGER-SYSTEM-SKILL-CONTRACTS](../../../designs/ledger/data-model.md#systemintegrationguidancecontracts) | 3 optional guidance operations |
 
 ### Verification
 
@@ -99,10 +99,10 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-5gf` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-AGENT-SKILLS](../tasks/agent-skills.md): Consumes GuidanceOperationModule while preserving schema authority.
-- `depends-on:compile` -> [TASK-LEDGER-BACKUP-VERIFY](../tasks/backup-verify.md): Consumes BackupOperationModule.
-- `depends-on:compile` -> [TASK-LEDGER-RESTORE-ACTIVATE](../tasks/restore-activate.md): Consumes RestoreOperationModule.
-- `depends-on:compile` -> [TASK-LEDGER-STORAGE-EVOLUTION](../tasks/storage-evolution.md): Consumes StorageEvolutionOperationModule.
+- `depends-on:compile` -> [TASK-LEDGER-AGENT-SKILLS: TASK-LEDGER-AGENT-SKILLS](agent-skills.md): Consumes GuidanceOperationModule while preserving schema authority.
+- `depends-on:compile` -> [TASK-LEDGER-BACKUP-VERIFY: TASK-LEDGER-BACKUP-VERIFY](backup-verify.md): Consumes BackupOperationModule.
+- `depends-on:compile` -> [TASK-LEDGER-RESTORE-ACTIVATE: TASK-LEDGER-RESTORE-ACTIVATE](restore-activate.md): Consumes RestoreOperationModule.
+- `depends-on:compile` -> [TASK-LEDGER-STORAGE-EVOLUTION: TASK-LEDGER-STORAGE-EVOLUTION](storage-evolution.md): Consumes StorageEvolutionOperationModule.
 
 ## Navigation
 

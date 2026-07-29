@@ -5,7 +5,7 @@
 - **Ref:** `TASK-BUDGET-ACTIVATION-LIFECYCLE`
 - **Plan:** `PLAN-BUDGET-V1`
 - **Sub-Plan:** `SP-BUDGET-01-PLAN-LIFECYCLE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `5`
 - **Dialect:** `default`
@@ -22,15 +22,15 @@ Exactly one valid revision governs each current/future period and every lifecycl
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider | `design_decision` | `governed-by` | `true` |
-| DM-BUDGET-LIFECYCLE-IDEMPOTENCY: BudgetLifecycleAndIdempotency | `data_model` | `touches` | `true` |
-| DM-BUDGET-REVISION-ENTRY: BudgetPlanRevisionAndEntry | `data_model` | `touches` | `true` |
-| FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle | `requirement` | `implements` | `true` |
-| FR-BUDGET-IDEMPOTENT-MUTATIONS: Make plan mutations replay-safe | `requirement` | `implements` | `true` |
-| FR-BUDGET-PLAN-ACTIVATION: Activate one Budget Plan Revision explicitly | `requirement` | `implements` | `true` |
+| [DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references](../../../designs/budget/decisions/idempotent-mutations.md) | `design_decision` | `governed-by` | `true` |
+| [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md) | `design_decision` | `governed-by` | `true` |
+| [DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions](../../../designs/budget/decisions/plan-revision-lifecycle.md) | `design_decision` | `governed-by` | `true` |
+| [DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider](../../../designs/budget/decisions/trusted-period-time.md) | `design_decision` | `governed-by` | `true` |
+| [DM-BUDGET-LIFECYCLE-IDEMPOTENCY: BudgetLifecycleAndIdempotency](../../../designs/budget/data-model.md#budgetlifecycleandidempotency) | `data_model` | `touches` | `true` |
+| [DM-BUDGET-REVISION-ENTRY: BudgetPlanRevisionAndEntry](../../../designs/budget/data-model.md#budgetplanrevisionandentry) | `data_model` | `touches` | `true` |
+| [FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle](../../../prd/budget/prd.md#fr-budget-category-lifecycle-honor-spend-category-lifecycle) | `requirement` | `implements` | `true` |
+| [FR-BUDGET-IDEMPOTENT-MUTATIONS: Make plan mutations replay-safe](../../../prd/budget/prd.md#fr-budget-idempotent-mutations-make-plan-mutations-replay-safe) | `requirement` | `implements` | `true` |
+| [FR-BUDGET-PLAN-ACTIVATION: Activate one Budget Plan Revision explicitly](../../../prd/budget/prd.md#fr-budget-plan-activation-activate-one-budget-plan-revision-explicitly) | `requirement` | `implements` | `true` |
 | TC-BUDGET-ATOMIC-DURABLE-MUTATIONS: Verify atomic durable plan mutation | `test_case` | `verifies` | `true` |
 | TC-BUDGET-PLAN-ACTIVATION-CONTRACT: Verify explicit plan activation contract | `test_case` | `verifies` | `true` |
 
@@ -38,11 +38,11 @@ Exactly one valid revision governs each current/future period and every lifecycl
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-DRAFT-CREATION](../tasks/draft-creation.md) | `compile` | Activation consumes immutable Draft revisions. |
-| [TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR](../tasks/idempotent-mutation-executor.md) | `compile` | Activation requires atomic replay and event-time results. |
-| [TASK-BUDGET-LEDGER-BUDGET-CLIENT](../tasks/ledger-budget-client.md) | `compile` | Activation revalidates category lifecycle through the public seam. |
-| [TASK-BUDGET-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Activation loads and atomically transitions exact persisted revision, event, and active-pointer state. |
-| [TASK-BUDGET-PERIOD-IDENTITY](../tasks/period-identity.md) | `compile` | Activation derives open or Closed eligibility from trusted host time. |
+| [TASK-BUDGET-DRAFT-CREATION: TASK-BUDGET-DRAFT-CREATION](draft-creation.md) | `compile` | Activation consumes immutable Draft revisions. |
+| [TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR: TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR](idempotent-mutation-executor.md) | `compile` | Activation requires atomic replay and event-time results. |
+| [TASK-BUDGET-LEDGER-BUDGET-CLIENT: TASK-BUDGET-LEDGER-BUDGET-CLIENT](ledger-budget-client.md) | `compile` | Activation revalidates category lifecycle through the public seam. |
+| [TASK-BUDGET-STATE-FOUNDATION: TASK-BUDGET-STATE-FOUNDATION](state-foundation.md) | `compile` | Activation loads and atomically transitions exact persisted revision, event, and active-pointer state. |
+| [TASK-BUDGET-PERIOD-IDENTITY: TASK-BUDGET-PERIOD-IDENTITY](period-identity.md) | `compile` | Activation derives open or Closed eligibility from trusted host time. |
 
 ## Recipe
 
@@ -84,11 +84,11 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| BudgetMutationExecutor.ExecuteAsync | `consumes` | DM-BUDGET-LIFECYCLE-IDEMPOTENCY |  |
-| LedgerContractClient.ListBudgetCategoriesAsync | `consumes` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
-| BudgetStateStore | `consumes` | DM-BUDGET-STATE-STORE |  |
-| BudgetPeriodResolver.Resolve | `consumes` | DM-BUDGET-PERIOD-PLAN |  |
-| ActivateBudgetPlanRevisionCommand.HandleAsync | `produces` | DM-BUDGET-LIFECYCLE-IDEMPOTENCY |  |
+| BudgetMutationExecutor.ExecuteAsync | `consumes` | [DM-BUDGET-LIFECYCLE-IDEMPOTENCY](../../../designs/budget/data-model.md#budgetlifecycleandidempotency) |  |
+| LedgerContractClient.ListBudgetCategoriesAsync | `consumes` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
+| BudgetStateStore | `consumes` | [DM-BUDGET-STATE-STORE](../../../designs/budget/data-model.md#budgetstatestore) |  |
+| BudgetPeriodResolver.Resolve | `consumes` | [DM-BUDGET-PERIOD-PLAN](../../../designs/budget/data-model.md#budgetperiodandplan) |  |
+| ActivateBudgetPlanRevisionCommand.HandleAsync | `produces` | [DM-BUDGET-LIFECYCLE-IDEMPOTENCY](../../../designs/budget/data-model.md#budgetlifecycleandidempotency) |  |
 
 ### Verification
 
@@ -104,26 +104,29 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-a42z` | `verified` | 2026-07-27T08:00:17.7669234+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-BUDGET-DRAFT-CREATION](../tasks/draft-creation.md): Activation consumes immutable Draft revisions.
-- `depends-on:compile` -> [TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR](../tasks/idempotent-mutation-executor.md): Activation requires atomic replay and event-time results.
-- `depends-on:compile` -> [TASK-BUDGET-LEDGER-BUDGET-CLIENT](../tasks/ledger-budget-client.md): Activation revalidates category lifecycle through the public seam.
-- `depends-on:compile` -> [TASK-BUDGET-PERIOD-IDENTITY](../tasks/period-identity.md): Activation derives open or Closed eligibility from trusted host time.
-- `depends-on:compile` -> [TASK-BUDGET-STATE-FOUNDATION](../tasks/state-foundation.md): Activation loads and atomically transitions exact persisted revision, event, and active-pointer state.
-- `governed-by` -> DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references
-- `governed-by` -> DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations
-- `governed-by` -> DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions
-- `governed-by` -> DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider
-- `implements` -> FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle
-- `implements` -> FR-BUDGET-IDEMPOTENT-MUTATIONS: Make plan mutations replay-safe
-- `implements` -> FR-BUDGET-PLAN-ACTIVATION: Activate one Budget Plan Revision explicitly
-- `touches` -> DM-BUDGET-LIFECYCLE-IDEMPOTENCY: BudgetLifecycleAndIdempotency
-- `touches` -> DM-BUDGET-REVISION-ENTRY: BudgetPlanRevisionAndEntry
+- `bead-ref` -> `bd-a42z` (verified)
+- `depends-on:compile` -> [TASK-BUDGET-DRAFT-CREATION: TASK-BUDGET-DRAFT-CREATION](draft-creation.md): Activation consumes immutable Draft revisions.
+- `depends-on:compile` -> [TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR: TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR](idempotent-mutation-executor.md): Activation requires atomic replay and event-time results.
+- `depends-on:compile` -> [TASK-BUDGET-LEDGER-BUDGET-CLIENT: TASK-BUDGET-LEDGER-BUDGET-CLIENT](ledger-budget-client.md): Activation revalidates category lifecycle through the public seam.
+- `depends-on:compile` -> [TASK-BUDGET-PERIOD-IDENTITY: TASK-BUDGET-PERIOD-IDENTITY](period-identity.md): Activation derives open or Closed eligibility from trusted host time.
+- `depends-on:compile` -> [TASK-BUDGET-STATE-FOUNDATION: TASK-BUDGET-STATE-FOUNDATION](state-foundation.md): Activation loads and atomically transitions exact persisted revision, event, and active-pointer state.
+- `governed-by` -> [DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references](../../../designs/budget/decisions/idempotent-mutations.md)
+- `governed-by` -> [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md)
+- `governed-by` -> [DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions](../../../designs/budget/decisions/plan-revision-lifecycle.md)
+- `governed-by` -> [DD-BUDGET-TRUSTED-PERIOD-TIME: Compute period eligibility from host TimeProvider](../../../designs/budget/decisions/trusted-period-time.md)
+- `implements` -> [FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle](../../../prd/budget/prd.md#fr-budget-category-lifecycle-honor-spend-category-lifecycle)
+- `implements` -> [FR-BUDGET-IDEMPOTENT-MUTATIONS: Make plan mutations replay-safe](../../../prd/budget/prd.md#fr-budget-idempotent-mutations-make-plan-mutations-replay-safe)
+- `implements` -> [FR-BUDGET-PLAN-ACTIVATION: Activate one Budget Plan Revision explicitly](../../../prd/budget/prd.md#fr-budget-plan-activation-activate-one-budget-plan-revision-explicitly)
+- `touches` -> [DM-BUDGET-LIFECYCLE-IDEMPOTENCY: BudgetLifecycleAndIdempotency](../../../designs/budget/data-model.md#budgetlifecycleandidempotency)
+- `touches` -> [DM-BUDGET-REVISION-ENTRY: BudgetPlanRevisionAndEntry](../../../designs/budget/data-model.md#budgetplanrevisionandentry)
 - `verifies` -> TC-BUDGET-ATOMIC-DURABLE-MUTATIONS: Verify atomic durable plan mutation
 - `verifies` -> TC-BUDGET-PLAN-ACTIVATION-CONTRACT: Verify explicit plan activation contract
 

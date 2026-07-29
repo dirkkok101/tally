@@ -22,20 +22,20 @@ UC-INSIGHTS-001 succeeds end to end only for one complete coherent deterministic
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY: Frozen Johannesburg Analysis Windows and exact Linear Pace | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation](../../../designs/insights/decisions/coherent-public-evidence.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies](../../../designs/insights/decisions/deterministic-report-compiler.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY: Frozen Johannesburg Analysis Windows and exact Linear Pace](../../../designs/insights/decisions/trusted-window-pace-policy.md) | `design_decision` | `governed-by` | `true` |
 | TC-INSIGHTS-COHERENT-EVIDENCE-CONCURRENT-CORRECTION: Reject mixed producer states during concurrent correction | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Verify deterministic analytical integrity | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-REPORT-GENERATION-CONTRACT: Verify deterministic Insight Report generation | `test_case` | `verifies` | `true` |
-| UC-INSIGHTS-001: Generate an on-demand Insight Report | `use_case` | `covers` | `true` |
+| [UC-INSIGHTS-001: Generate an on-demand Insight Report](../../../prd/insights/prd.md#uc-insights-001-generate-an-on-demand-insight-report) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | UC-001 invokes the published Generate surface. |
-| [TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE](../tasks/gate-int-budget-evidence.md) | `compile` | UC-001 requires the real coherent producer prerequisite. |
+| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT: TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | UC-001 invokes the published Generate surface. |
+| [TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE: TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE](gate-int-budget-evidence.md) | `compile` | UC-001 requires the real coherent producer prerequisite. |
 
 ## Recipe
 
@@ -75,9 +75,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteInsightsPublicContract | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS | published Generate and discovery |
-| VerifiedBudgetInsightEvidenceContract | `consumes` | DM-BUDGET-INSIGHTS-READ-CONTRACT | real coherent upstream seam |
-| VerifiedInsightsUc001 | `produces` | UC-INSIGHTS-001 | complete main/failure proof |
+| CompleteInsightsPublicContract | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | published Generate and discovery |
+| VerifiedBudgetInsightEvidenceContract | `consumes` | [DM-BUDGET-INSIGHTS-READ-CONTRACT](../../../designs/budget/data-model.md#budgetreadcapabilitydescriptor) | real coherent upstream seam |
+| VerifiedInsightsUc001 | `produces` | [UC-INSIGHTS-001](../../../prd/insights/prd.md#uc-insights-001-generate-an-on-demand-insight-report) | complete main/failure proof |
 
 ### Verification
 
@@ -102,12 +102,12 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-33p` (verified)
-- `covers` -> UC-INSIGHTS-001: Generate an on-demand Insight Report
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE](../tasks/gate-int-budget-evidence.md): UC-001 requires the real coherent producer prerequisite.
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC-001 invokes the published Generate surface.
-- `governed-by` -> DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation
-- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies
-- `governed-by` -> DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY: Frozen Johannesburg Analysis Windows and exact Linear Pace
+- `covers` -> [UC-INSIGHTS-001: Generate an on-demand Insight Report](../../../prd/insights/prd.md#uc-insights-001-generate-an-on-demand-insight-report)
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE: TASK-INSIGHTS-GATE-INT-BUDGET-EVIDENCE](gate-int-budget-evidence.md): UC-001 requires the real coherent producer prerequisite.
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT: TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): UC-001 invokes the published Generate surface.
+- `governed-by` -> [DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation](../../../designs/insights/decisions/coherent-public-evidence.md)
+- `governed-by` -> [DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies](../../../designs/insights/decisions/deterministic-report-compiler.md)
+- `governed-by` -> [DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY: Frozen Johannesburg Analysis Windows and exact Linear Pace](../../../designs/insights/decisions/trusted-window-pace-policy.md)
 - `verifies` -> TC-INSIGHTS-COHERENT-EVIDENCE-CONCURRENT-CORRECTION: Reject mixed producer states during concurrent correction
 - `verifies` -> TC-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Verify deterministic analytical integrity
 - `verifies` -> TC-INSIGHTS-REPORT-GENERATION-CONTRACT: Verify deterministic Insight Report generation

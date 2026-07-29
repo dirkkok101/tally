@@ -22,21 +22,21 @@ The shared registry can describe every Public INSIGHTS Operation and policy with
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning | `adr` | `governed-by` | `true` |
-| DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry | `design_decision` | `governed-by` | `true` |
-| DM-INSIGHTS-OPERATION-CONTRACTS: InsightsOperationContracts | `data_model` | `touches` | `true` |
-| FR-INSIGHTS-CONTRACT-DISCOVERY: Discover the Public INSIGHTS Operation contract | `requirement` | `implements` | `true` |
-| FR-INSIGHTS-STRUCTURED-INVOCATION: Invoke Public INSIGHTS Operations non-interactively | `requirement` | `implements` | `true` |
-| TASK-LEDGER-CORE-PROCESS-CONTRACT: Build the self-contained process and operation contract | `task` | `blocked-by` | `true` |
+| [ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning](../../../adr/core/0021-explicit-di-registration-no-reflection-scanning.md) | `adr` | `governed-by` | `true` |
+| [DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries](../../../designs/insights/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry](../../../designs/insights/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INSIGHTS-OPERATION-CONTRACTS: InsightsOperationContracts](../../../designs/insights/data-model.md#insightsoperationcontracts) | `data_model` | `touches` | `true` |
+| [FR-INSIGHTS-CONTRACT-DISCOVERY: Discover the Public INSIGHTS Operation contract](../../../prd/insights/prd.md#fr-insights-contract-discovery-discover-the-public-insights-operation-contract) | `requirement` | `implements` | `true` |
+| [FR-INSIGHTS-STRUCTURED-INVOCATION: Invoke Public INSIGHTS Operations non-interactively](../../../prd/insights/prd.md#fr-insights-structured-invocation-invoke-public-insights-operations-non-interactively) | `requirement` | `implements` | `true` |
+| [TASK-LEDGER-CORE-PROCESS-CONTRACT: Build the self-contained process and operation contract](../../ledger/tasks/core-process-contract.md) | `task` | `blocked-by` | `true` |
 | TC-INSIGHTS-CONTRACT-DISCOVERY: Verify INSIGHTS contract discovery | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md) | `compile` | Requests, results, JSON metadata, descriptors, and mapper reference the analytical and lifecycle contract records. |
-| [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](../tasks/lifecycle-contract-models.md) | `compile` | The eleven public operations include retained-history recovery status and private-receipt contract types. |
+| [TASK-INSIGHTS-CONTRACT-MODELS: TASK-INSIGHTS-CONTRACT-MODELS](contract-models.md) | `compile` | Requests, results, JSON metadata, descriptors, and mapper reference the analytical and lifecycle contract records. |
+| [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS: TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](lifecycle-contract-models.md) | `compile` | The eleven public operations include retained-history recovery status and private-receipt contract types. |
 
 ## Recipe
 
@@ -88,13 +88,13 @@ The shared registry can describe every Public INSIGHTS Operation and policy with
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| InsightReport | `consumes` | DM-INSIGHTS-INSIGHT-REPORT | Generate operation result contract |
-| InsightHistoryContracts | `consumes` | DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE | retain restate delete and history result contracts |
-| InsightsRecoveryContracts | `consumes` | DM-INSIGHTS-RECOVERY-CONTRACTS | backup verify restore and status result contracts |
-| InsightsOperationContracts | `produces` | DM-INSIGHTS-OPERATION-CONTRACTS | all eleven versioned requests and results |
-| InsightsOperationModule | `produces` | DM-INSIGHTS-OPERATION-CONTRACTS | canonical descriptor inventory |
-| InsightsJsonContext | `produces` | DM-INSIGHTS-OPERATION-CONTRACTS | Native-AOT serialization metadata |
-| InsightsContractMapper | `produces` | DM-INSIGHTS-OPERATION-CONTRACTS | concrete pure mapper |
+| InsightReport | `consumes` | [DM-INSIGHTS-INSIGHT-REPORT](../../../designs/insights/data-model.md#insightreport) | Generate operation result contract |
+| InsightHistoryContracts | `consumes` | [DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE](../../../designs/insights/data-model.md#reportsnapshotrestatementanddeletion) | retain restate delete and history result contracts |
+| InsightsRecoveryContracts | `consumes` | [DM-INSIGHTS-RECOVERY-CONTRACTS](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts) | backup verify restore and status result contracts |
+| InsightsOperationContracts | `produces` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | all eleven versioned requests and results |
+| InsightsOperationModule | `produces` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | canonical descriptor inventory |
+| InsightsJsonContext | `produces` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | Native-AOT serialization metadata |
+| InsightsContractMapper | `produces` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | concrete pure mapper |
 
 ### Verification
 
@@ -119,15 +119,15 @@ The shared registry can describe every Public INSIGHTS Operation and policy with
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-uh9` (verified)
-- `blocked-by` -> TASK-LEDGER-CORE-PROCESS-CONTRACT: Build the self-contained process and operation contract
-- `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md): Requests, results, JSON metadata, descriptors, and mapper reference the analytical and lifecycle contract records.
-- `depends-on:compile` -> [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](../tasks/lifecycle-contract-models.md): The eleven public operations include retained-history recovery status and private-receipt contract types.
-- `governed-by` -> ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning
-- `governed-by` -> DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries
-- `governed-by` -> DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry
-- `implements` -> FR-INSIGHTS-CONTRACT-DISCOVERY: Discover the Public INSIGHTS Operation contract
-- `implements` -> FR-INSIGHTS-STRUCTURED-INVOCATION: Invoke Public INSIGHTS Operations non-interactively
-- `touches` -> DM-INSIGHTS-OPERATION-CONTRACTS: InsightsOperationContracts
+- `blocked-by` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT: Build the self-contained process and operation contract](../../ledger/tasks/core-process-contract.md)
+- `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-MODELS: TASK-INSIGHTS-CONTRACT-MODELS](contract-models.md): Requests, results, JSON metadata, descriptors, and mapper reference the analytical and lifecycle contract records.
+- `depends-on:compile` -> [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS: TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](lifecycle-contract-models.md): The eleven public operations include retained-history recovery status and private-receipt contract types.
+- `governed-by` -> [ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning](../../../adr/core/0021-explicit-di-registration-no-reflection-scanning.md)
+- `governed-by` -> [DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries](../../../designs/insights/decisions/application-architecture.md)
+- `governed-by` -> [DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry](../../../designs/insights/decisions/cli-operation-contract.md)
+- `implements` -> [FR-INSIGHTS-CONTRACT-DISCOVERY: Discover the Public INSIGHTS Operation contract](../../../prd/insights/prd.md#fr-insights-contract-discovery-discover-the-public-insights-operation-contract)
+- `implements` -> [FR-INSIGHTS-STRUCTURED-INVOCATION: Invoke Public INSIGHTS Operations non-interactively](../../../prd/insights/prd.md#fr-insights-structured-invocation-invoke-public-insights-operations-non-interactively)
+- `touches` -> [DM-INSIGHTS-OPERATION-CONTRACTS: InsightsOperationContracts](../../../designs/insights/data-model.md#insightsoperationcontracts)
 - `verifies` -> TC-INSIGHTS-CONTRACT-DISCOVERY: Verify INSIGHTS contract discovery
 
 ## Navigation

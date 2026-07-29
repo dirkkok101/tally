@@ -5,7 +5,7 @@
 - **Ref:** `TASK-BUDGET-DRAFT-CREATION`
 - **Plan:** `PLAN-BUDGET-V1`
 - **Sub-Plan:** `SP-BUDGET-01-PLAN-LIFECYCLE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `3`
 - **Dialect:** `default`
@@ -22,13 +22,13 @@ Owners can create exact current/future monthly Draft revisions without changing 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions | `design_decision` | `governed-by` | `true` |
-| DM-BUDGET-PERIOD-PLAN: BudgetPeriodAndPlan | `data_model` | `touches` | `true` |
-| DM-BUDGET-REVISION-ENTRY: BudgetPlanRevisionAndEntry | `data_model` | `touches` | `true` |
-| FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle | `requirement` | `implements` | `true` |
-| FR-BUDGET-PLAN-DRAFT: Create immutable plan drafts | `requirement` | `implements` | `true` |
-| FR-BUDGET-PLAN-IDENTITY: Identify monthly Budget Plans | `requirement` | `implements` | `true` |
+| [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md) | `design_decision` | `governed-by` | `true` |
+| [DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions](../../../designs/budget/decisions/plan-revision-lifecycle.md) | `design_decision` | `governed-by` | `true` |
+| [DM-BUDGET-PERIOD-PLAN: BudgetPeriodAndPlan](../../../designs/budget/data-model.md#budgetperiodandplan) | `data_model` | `touches` | `true` |
+| [DM-BUDGET-REVISION-ENTRY: BudgetPlanRevisionAndEntry](../../../designs/budget/data-model.md#budgetplanrevisionandentry) | `data_model` | `touches` | `true` |
+| [FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle](../../../prd/budget/prd.md#fr-budget-category-lifecycle-honor-spend-category-lifecycle) | `requirement` | `implements` | `true` |
+| [FR-BUDGET-PLAN-DRAFT: Create immutable plan drafts](../../../prd/budget/prd.md#fr-budget-plan-draft-create-immutable-plan-drafts) | `requirement` | `implements` | `true` |
+| [FR-BUDGET-PLAN-IDENTITY: Identify monthly Budget Plans](../../../prd/budget/prd.md#fr-budget-plan-identity-identify-monthly-budget-plans) | `requirement` | `implements` | `true` |
 | TC-BUDGET-CATEGORY-LIFECYCLE-CONTRACT: Verify category lifecycle contract | `test_case` | `verifies` | `true` |
 | TC-BUDGET-PLAN-DRAFT-CONTRACT: Verify immutable plan draft contract | `test_case` | `verifies` | `true` |
 
@@ -36,10 +36,10 @@ Owners can create exact current/future monthly Draft revisions without changing 
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-PERIOD-IDENTITY](../tasks/period-identity.md) | `compile` | Draft eligibility uses trusted period identity. |
-| [TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR](../tasks/idempotent-mutation-executor.md) | `compile` | Draft creation requires atomic replay execution. |
-| [TASK-BUDGET-LEDGER-BUDGET-CLIENT](../tasks/ledger-budget-client.md) | `compile` | Draft validation consumes public category lifecycle evidence. |
-| [TASK-BUDGET-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Draft creation loads and mutates typed plan, revision, entry, event, and active-pointer state. |
+| [TASK-BUDGET-PERIOD-IDENTITY: TASK-BUDGET-PERIOD-IDENTITY](period-identity.md) | `compile` | Draft eligibility uses trusted period identity. |
+| [TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR: TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR](idempotent-mutation-executor.md) | `compile` | Draft creation requires atomic replay execution. |
+| [TASK-BUDGET-LEDGER-BUDGET-CLIENT: TASK-BUDGET-LEDGER-BUDGET-CLIENT](ledger-budget-client.md) | `compile` | Draft validation consumes public category lifecycle evidence. |
+| [TASK-BUDGET-STATE-FOUNDATION: TASK-BUDGET-STATE-FOUNDATION](state-foundation.md) | `compile` | Draft creation loads and mutates typed plan, revision, entry, event, and active-pointer state. |
 
 ## Recipe
 
@@ -83,13 +83,13 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| BudgetPeriodResolver.Resolve | `consumes` | DM-BUDGET-PERIOD-PLAN |  |
-| LedgerContractClient.ListBudgetCategoriesAsync | `consumes` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
-| BudgetMutationExecutor.ExecuteAsync | `consumes` | DM-BUDGET-LIFECYCLE-IDEMPOTENCY |  |
-| BudgetStateStore | `consumes` | DM-BUDGET-STATE-STORE |  |
-| BudgetPlan | `produces` | DM-BUDGET-PERIOD-PLAN |  |
-| BudgetPlanRevision | `produces` | DM-BUDGET-REVISION-ENTRY |  |
-| CreateBudgetDraftCommand.HandleAsync | `produces` | DM-BUDGET-REVISION-ENTRY |  |
+| BudgetPeriodResolver.Resolve | `consumes` | [DM-BUDGET-PERIOD-PLAN](../../../designs/budget/data-model.md#budgetperiodandplan) |  |
+| LedgerContractClient.ListBudgetCategoriesAsync | `consumes` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
+| BudgetMutationExecutor.ExecuteAsync | `consumes` | [DM-BUDGET-LIFECYCLE-IDEMPOTENCY](../../../designs/budget/data-model.md#budgetlifecycleandidempotency) |  |
+| BudgetStateStore | `consumes` | [DM-BUDGET-STATE-STORE](../../../designs/budget/data-model.md#budgetstatestore) |  |
+| BudgetPlan | `produces` | [DM-BUDGET-PERIOD-PLAN](../../../designs/budget/data-model.md#budgetperiodandplan) |  |
+| BudgetPlanRevision | `produces` | [DM-BUDGET-REVISION-ENTRY](../../../designs/budget/data-model.md#budgetplanrevisionandentry) |  |
+| CreateBudgetDraftCommand.HandleAsync | `produces` | [DM-BUDGET-REVISION-ENTRY](../../../designs/budget/data-model.md#budgetplanrevisionandentry) |  |
 
 ### Verification
 
@@ -105,23 +105,26 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2bla` | `verified` | 2026-07-27T08:00:12.9488907+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR](../tasks/idempotent-mutation-executor.md): Draft creation requires atomic replay execution.
-- `depends-on:compile` -> [TASK-BUDGET-LEDGER-BUDGET-CLIENT](../tasks/ledger-budget-client.md): Draft validation consumes public category lifecycle evidence.
-- `depends-on:compile` -> [TASK-BUDGET-PERIOD-IDENTITY](../tasks/period-identity.md): Draft eligibility uses trusted period identity.
-- `depends-on:compile` -> [TASK-BUDGET-STATE-FOUNDATION](../tasks/state-foundation.md): Draft creation loads and mutates typed plan, revision, entry, event, and active-pointer state.
-- `governed-by` -> DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations
-- `governed-by` -> DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions
-- `implements` -> FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle
-- `implements` -> FR-BUDGET-PLAN-DRAFT: Create immutable plan drafts
-- `implements` -> FR-BUDGET-PLAN-IDENTITY: Identify monthly Budget Plans
-- `touches` -> DM-BUDGET-PERIOD-PLAN: BudgetPeriodAndPlan
-- `touches` -> DM-BUDGET-REVISION-ENTRY: BudgetPlanRevisionAndEntry
+- `bead-ref` -> `bd-2bla` (verified)
+- `depends-on:compile` -> [TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR: TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR](idempotent-mutation-executor.md): Draft creation requires atomic replay execution.
+- `depends-on:compile` -> [TASK-BUDGET-LEDGER-BUDGET-CLIENT: TASK-BUDGET-LEDGER-BUDGET-CLIENT](ledger-budget-client.md): Draft validation consumes public category lifecycle evidence.
+- `depends-on:compile` -> [TASK-BUDGET-PERIOD-IDENTITY: TASK-BUDGET-PERIOD-IDENTITY](period-identity.md): Draft eligibility uses trusted period identity.
+- `depends-on:compile` -> [TASK-BUDGET-STATE-FOUNDATION: TASK-BUDGET-STATE-FOUNDATION](state-foundation.md): Draft creation loads and mutates typed plan, revision, entry, event, and active-pointer state.
+- `governed-by` -> [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md)
+- `governed-by` -> [DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions](../../../designs/budget/decisions/plan-revision-lifecycle.md)
+- `implements` -> [FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle](../../../prd/budget/prd.md#fr-budget-category-lifecycle-honor-spend-category-lifecycle)
+- `implements` -> [FR-BUDGET-PLAN-DRAFT: Create immutable plan drafts](../../../prd/budget/prd.md#fr-budget-plan-draft-create-immutable-plan-drafts)
+- `implements` -> [FR-BUDGET-PLAN-IDENTITY: Identify monthly Budget Plans](../../../prd/budget/prd.md#fr-budget-plan-identity-identify-monthly-budget-plans)
+- `touches` -> [DM-BUDGET-PERIOD-PLAN: BudgetPeriodAndPlan](../../../designs/budget/data-model.md#budgetperiodandplan)
+- `touches` -> [DM-BUDGET-REVISION-ENTRY: BudgetPlanRevisionAndEntry](../../../designs/budget/data-model.md#budgetplanrevisionandentry)
 - `verifies` -> TC-BUDGET-CATEGORY-LIFECYCLE-CONTRACT: Verify category lifecycle contract
 - `verifies` -> TC-BUDGET-PLAN-DRAFT-CONTRACT: Verify immutable plan draft contract
 

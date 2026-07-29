@@ -22,20 +22,20 @@ Apply one attributable category decision and expose exact direct/current-ancesto
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts | `data_model` | `touches` | `true` |
-| FR-LEDGER-CATEGORY-ASSIGNMENT: Assign and correct transaction categories | `requirement` | `implements` | `true` |
-| NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | `true` |
+| [DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment](../../../designs/ledger/decisions/category-hierarchy.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts](../../../designs/ledger/data-model.md#transactionoperationcontracts) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-CATEGORY-ASSIGNMENT: Assign and correct transaction categories](../../../prd/ledger/prd.md#fr-ledger-category-assignment-assign-and-correct-transaction-categories) | `requirement` | `implements` | `true` |
+| [NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history](../../../prd/ledger/prd.md#nfr-ledger-attributable-history-retain-attributable-correction-history) | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-CATEGORY-ASSIGNMENT-CONTRACT: Verify assign and correct transaction categories contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md) | `compile` | Allocations require TransactionStore and transaction identity. |
-| [TASK-LEDGER-CATEGORIES](../tasks/categories.md) | `compile` | Allocations require active category identity and lifecycle policy. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md) | `compile` | Allocations require TransactionStore and transaction identity. |
+| [TASK-LEDGER-CATEGORIES: TASK-LEDGER-CATEGORIES](categories.md) | `compile` | Allocations require active category identity and lifecycle policy. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
 
 ## Recipe
 
@@ -81,12 +81,12 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CategoryAllocationOperationModule | `produces` | DM-LEDGER-TRANSACTION-CONTRACTS | Public assign and correct operations |
-| CategoryAllocationStore | `produces` | DM-LEDGER-TRANSACTION-HISTORY | Append-only assignment persistence |
-| CategoryAllocationStore.CarryForwardAsync | `produces` | DM-LEDGER-TRANSACTION-HISTORY | Reconciliation-only explicit carry-forward |
-| TransactionStore | `consumes` | DM-LEDGER-TRANSACTION-FACT | Active transaction identity |
-| CategoryStore | `consumes` | DM-LEDGER-SPEND-CATEGORY | Active hierarchy and ancestry |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD | Atomic replay boundary |
+| CategoryAllocationOperationModule | `produces` | [DM-LEDGER-TRANSACTION-CONTRACTS](../../../designs/ledger/data-model.md#transactionoperationcontracts) | Public assign and correct operations |
+| CategoryAllocationStore | `produces` | [DM-LEDGER-TRANSACTION-HISTORY](../../../designs/ledger/data-model.md#transactionlifecycleandcategoryallocation) | Append-only assignment persistence |
+| CategoryAllocationStore.CarryForwardAsync | `produces` | [DM-LEDGER-TRANSACTION-HISTORY](../../../designs/ledger/data-model.md#transactionlifecycleandcategoryallocation) | Reconciliation-only explicit carry-forward |
+| TransactionStore | `consumes` | [DM-LEDGER-TRANSACTION-FACT](../../../designs/ledger/data-model.md#transactionfact) | Active transaction identity |
+| CategoryStore | `consumes` | [DM-LEDGER-SPEND-CATEGORY](../../../designs/ledger/data-model.md#spendcategory) | Active hierarchy and ancestry |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | [DM-LEDGER-IDEMPOTENCY-RECORD](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) | Atomic replay boundary |
 
 ### Verification
 
@@ -112,14 +112,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3q1` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CATEGORIES](../tasks/categories.md): Allocations require active category identity and lifecycle policy.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Allocations require TransactionStore and transaction identity.
-- `governed-by` -> DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `implements` -> FR-LEDGER-CATEGORY-ASSIGNMENT: Assign and correct transaction categories
-- `satisfies` -> NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history
-- `touches` -> DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts
+- `depends-on:compile` -> [TASK-LEDGER-CATEGORIES: TASK-LEDGER-CATEGORIES](categories.md): Allocations require active category identity and lifecycle policy.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md): Allocations require TransactionStore and transaction identity.
+- `governed-by` -> [DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment](../../../designs/ledger/decisions/category-hierarchy.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `implements` -> [FR-LEDGER-CATEGORY-ASSIGNMENT: Assign and correct transaction categories](../../../prd/ledger/prd.md#fr-ledger-category-assignment-assign-and-correct-transaction-categories)
+- `satisfies` -> [NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history](../../../prd/ledger/prd.md#nfr-ledger-attributable-history-retain-attributable-correction-history)
+- `touches` -> [DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts](../../../designs/ledger/data-model.md#transactionoperationcontracts)
 - `verifies` -> TC-LEDGER-CATEGORY-ASSIGNMENT-CONTRACT: Verify assign and correct transaction categories contract
 
 ## Navigation

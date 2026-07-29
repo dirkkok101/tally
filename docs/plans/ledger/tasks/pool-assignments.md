@@ -22,21 +22,21 @@ Assign and correct transaction pools while preserving exact history and fail-clo
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts | `data_model` | `touches` | `true` |
-| DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment | `data_model` | `touches` | `true` |
-| FR-LEDGER-POOL-ASSIGNMENT: Assign and correct transaction Spend Pool | `requirement` | `implements` | `true` |
+| [DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions](../../../designs/ledger/decisions/dimensional-attribution.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts](../../../designs/ledger/data-model.md#paymentattributionandpooloperationcontracts) | `data_model` | `touches` | `true` |
+| [DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment](../../../designs/ledger/data-model.md#spendpoolandassignment) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-POOL-ASSIGNMENT: Assign and correct transaction Spend Pool](../../../prd/ledger/prd.md#fr-ledger-pool-assignment-assign-and-correct-transaction-spend-pool) | `requirement` | `implements` | `true` |
 | TC-LEDGER-POOL-ASSIGNMENT-ACTUALS-CONTRACT: Verify pool assignment and exact grouped actuals | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-EVIDENCE-POOL-CARDINALITY](../tasks/gate-evidence-pool-cardinality.md) | `compile` | Assignment cannot implement an unvalidated one-pool cardinality. |
-| [TASK-LEDGER-SPEND-POOLS](../tasks/spend-pools.md) | `compile` | Assignment validates pool identity through SpendPoolStore. |
-| [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md) | `compile` | Assignment consumes TransactionStore and the initialized unassigned projection. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Assignment and correction use transactional idempotency. |
+| [TASK-LEDGER-GATE-EVIDENCE-POOL-CARDINALITY: TASK-LEDGER-GATE-EVIDENCE-POOL-CARDINALITY](gate-evidence-pool-cardinality.md) | `compile` | Assignment cannot implement an unvalidated one-pool cardinality. |
+| [TASK-LEDGER-SPEND-POOLS: TASK-LEDGER-SPEND-POOLS](spend-pools.md) | `compile` | Assignment validates pool identity through SpendPoolStore. |
+| [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md) | `compile` | Assignment consumes TransactionStore and the initialized unassigned projection. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Assignment and correction use transactional idempotency. |
 
 ## Recipe
 
@@ -79,12 +79,12 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| PoolAssignmentStore | `produces` | DM-LEDGER-SPEND-POOL-ASSIGNMENT | Append-only assigned/unassigned persistence |
-| PoolAssignmentStore.CarryForwardAsync | `produces` | DM-LEDGER-SPEND-POOL-ASSIGNMENT | Reconciliation-only explicit carry-forward |
-| PoolAssignmentOperationModule | `produces` | DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS | Public assign and correct operations |
-| TransactionStore | `consumes` | DM-LEDGER-TRANSACTION-FACT | Active transaction identity |
-| SpendPoolStore | `consumes` | DM-LEDGER-SPEND-POOL-ASSIGNMENT | Pool lifecycle |
-| OQ-LEDGER-15Resolution | `consumes` | OQ-LEDGER-15 | Validated v1 cardinality |
+| PoolAssignmentStore | `produces` | [DM-LEDGER-SPEND-POOL-ASSIGNMENT](../../../designs/ledger/data-model.md#spendpoolandassignment) | Append-only assigned/unassigned persistence |
+| PoolAssignmentStore.CarryForwardAsync | `produces` | [DM-LEDGER-SPEND-POOL-ASSIGNMENT](../../../designs/ledger/data-model.md#spendpoolandassignment) | Reconciliation-only explicit carry-forward |
+| PoolAssignmentOperationModule | `produces` | [DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS](../../../designs/ledger/data-model.md#paymentattributionandpooloperationcontracts) | Public assign and correct operations |
+| TransactionStore | `consumes` | [DM-LEDGER-TRANSACTION-FACT](../../../designs/ledger/data-model.md#transactionfact) | Active transaction identity |
+| SpendPoolStore | `consumes` | [DM-LEDGER-SPEND-POOL-ASSIGNMENT](../../../designs/ledger/data-model.md#spendpoolandassignment) | Pool lifecycle |
+| OQ-LEDGER-15Resolution | `consumes` | [OQ-LEDGER-15](../../../prd/ledger/prd.md) | Validated v1 cardinality |
 
 ### Verification
 
@@ -110,15 +110,15 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2bd` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Assignment and correction use transactional idempotency.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-POOL-CARDINALITY](../tasks/gate-evidence-pool-cardinality.md): Assignment cannot implement an unvalidated one-pool cardinality.
-- `depends-on:compile` -> [TASK-LEDGER-SPEND-POOLS](../tasks/spend-pools.md): Assignment validates pool identity through SpendPoolStore.
-- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Assignment consumes TransactionStore and the initialized unassigned projection.
-- `governed-by` -> DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `implements` -> FR-LEDGER-POOL-ASSIGNMENT: Assign and correct transaction Spend Pool
-- `touches` -> DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts
-- `touches` -> DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Assignment and correction use transactional idempotency.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-POOL-CARDINALITY: TASK-LEDGER-GATE-EVIDENCE-POOL-CARDINALITY](gate-evidence-pool-cardinality.md): Assignment cannot implement an unvalidated one-pool cardinality.
+- `depends-on:compile` -> [TASK-LEDGER-SPEND-POOLS: TASK-LEDGER-SPEND-POOLS](spend-pools.md): Assignment validates pool identity through SpendPoolStore.
+- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md): Assignment consumes TransactionStore and the initialized unassigned projection.
+- `governed-by` -> [DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions](../../../designs/ledger/decisions/dimensional-attribution.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `implements` -> [FR-LEDGER-POOL-ASSIGNMENT: Assign and correct transaction Spend Pool](../../../prd/ledger/prd.md#fr-ledger-pool-assignment-assign-and-correct-transaction-spend-pool)
+- `touches` -> [DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS: PaymentAttributionAndPoolOperationContracts](../../../designs/ledger/data-model.md#paymentattributionandpooloperationcontracts)
+- `touches` -> [DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment](../../../designs/ledger/data-model.md#spendpoolandassignment)
 - `verifies` -> TC-LEDGER-POOL-ASSIGNMENT-ACTUALS-CONTRACT: Verify pool assignment and exact grouped actuals
 
 ## Navigation

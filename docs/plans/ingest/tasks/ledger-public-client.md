@@ -22,17 +22,17 @@ Provide one concrete LedgerContractClient that preserves released schemas, error
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor | `design_decision` | `governed-by` | `true` |
-| FR-INGEST-APPROVED-BATCH-COMMIT: Commit approved candidates through public LEDGER operations | `requirement` | `implements` | `true` |
+| [DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor](../../../designs/ingest/decisions/ledger-public-integration.md) | `design_decision` | `governed-by` | `true` |
+| [FR-INGEST-APPROVED-BATCH-COMMIT: Commit approved candidates through public LEDGER operations](../../../prd/ingest/prd.md#fr-ingest-approved-batch-commit-commit-approved-candidates-through-public-ledger-operations) | `requirement` | `implements` | `true` |
 | TC-INGEST-LEDGER-PUBLIC-CONFORMANCE: Verify INGEST uses only the public LEDGER contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md) | `compile` | The prerequisite gate proves every operation and contract consumed by the client. |
-| [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | The client consumes FrozenLedgerRecordRequest and stable INGEST compatibility errors. |
-| [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](../tasks/ledger-evidence-contract-correction.md) | `compile` | The client consumes the corrected exact public frozen RecordTransactionInput without translation. |
+| [TASK-INGEST-GATE-INT-LEDGER-CONTRACT: TASK-INGEST-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md) | `compile` | The prerequisite gate proves every operation and contract consumed by the client. |
+| [TASK-INGEST-CONTRACT-FOUNDATION: TASK-INGEST-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | The client consumes FrozenLedgerRecordRequest and stable INGEST compatibility errors. |
+| [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION: TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](ledger-evidence-contract-correction.md) | `compile` | The client consumes the corrected exact public frozen RecordTransactionInput without translation. |
 
 ## Recipe
 
@@ -68,7 +68,7 @@ Provide one concrete LedgerContractClient that preserves released schemas, error
 
 | Path | Action | Role | Required | Notes |
 |---|---|---|---|---|
-| `src/Tally/Contracts/Ingest/IngestReceiptContracts.cs` | `modify` | replace the INGEST-only frozen input wrapper with the released RecordTransactionInput | `true` |  |
+| `src/Tally/Contracts/Ingest/IngestReceiptContracts.cs` | `modify` | freeze the released RecordTransactionInput inside the thin FrozenLedgerRecordRequest envelope (version, operation, idempotency key, actor) — released input embedded verbatim per TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION | `true` |  |
 | `src/Tally/Contracts/Ingest/IngestJsonContext.cs` | `modify` | source-generated frozen request metadata for the released nested input | `true` |  |
 | `src/Tally/Integration/Ledger/LedgerContractClient.cs` | `create` | public operation executor client | `true` |  |
 | `tests/Tally.Tests/Ingest/Contract/IngestContractModelTests.cs` | `test` | exact released frozen input type and byte stability | `true` |  |
@@ -79,14 +79,14 @@ Provide one concrete LedgerContractClient that preserves released schemas, error
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| VerifiedLedgerOperationRegistry | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Validated OperationRegistry.Find descriptors plus in-process TallyProcess.RunAsync using RequestEnvelope, ProcessResult, ResultEnvelope, registry-derived arguments, and CancellationToken |
-| VerifiedLedgerAccountDetail | `consumes` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS | Validated external AccountDetail |
-| VerifiedLedgerTransactionDetail | `consumes` | DM-LEDGER-TRANSACTION-CONTRACTS | Validated external TransactionDetail |
-| LedgerIngestContractPrerequisite | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Twelve-case proof of the exact common-envelope and in-process executor seam |
-| FrozenLedgerRecordRequest | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Exact persisted released request envelope whose Input is RecordTransactionInput |
-| LedgerContractClient.GetAccountAsync | `produces` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS | Public account lookup |
-| LedgerContractClient.RecordTransactionAsync | `produces` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Exact public idempotent write |
-| LedgerContractClient.GetTransactionAsync | `produces` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Public IncludeHistory=false verification read returned untouched to the commit saga |
+| VerifiedLedgerOperationRegistry | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Validated OperationRegistry.Find descriptors plus in-process TallyProcess.RunAsync using RequestEnvelope, ProcessResult, ResultEnvelope, registry-derived arguments, and CancellationToken |
+| VerifiedLedgerAccountDetail | `consumes` | [DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS](../../../designs/ledger/data-model.md#accountcategoryoperationcontracts) | Validated external AccountDetail |
+| VerifiedLedgerTransactionDetail | `consumes` | [DM-LEDGER-TRANSACTION-CONTRACTS](../../../designs/ledger/data-model.md#transactionoperationcontracts) | Validated external TransactionDetail |
+| LedgerIngestContractPrerequisite | `consumes` | [DM-INGEST-LEDGER-COMMIT-CONTRACT](../../../designs/ingest/data-model.md#ledgercommitcontractsnapshot) | Twelve-case proof of the exact common-envelope and in-process executor seam |
+| FrozenLedgerRecordRequest | `consumes` | [DM-INGEST-LEDGER-COMMIT-CONTRACT](../../../designs/ingest/data-model.md#ledgercommitcontractsnapshot) | Exact persisted released request envelope whose Input is RecordTransactionInput |
+| LedgerContractClient.GetAccountAsync | `produces` | [DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS](../../../designs/ledger/data-model.md#accountcategoryoperationcontracts) | Public account lookup |
+| LedgerContractClient.RecordTransactionAsync | `produces` | [DM-INGEST-LEDGER-COMMIT-CONTRACT](../../../designs/ingest/data-model.md#ledgercommitcontractsnapshot) | Exact public idempotent write |
+| LedgerContractClient.GetTransactionAsync | `produces` | [DM-INGEST-LEDGER-COMMIT-CONTRACT](../../../designs/ingest/data-model.md#ledgercommitcontractsnapshot) | Public IncludeHistory=false verification read returned untouched to the commit saga |
 
 ### Verification
 
@@ -114,11 +114,11 @@ Provide one concrete LedgerContractClient that preserves released schemas, error
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2sg` (verified)
-- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): The client consumes FrozenLedgerRecordRequest and stable INGEST compatibility errors.
-- `depends-on:compile` -> [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md): The prerequisite gate proves every operation and contract consumed by the client.
-- `depends-on:compile` -> [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](../tasks/ledger-evidence-contract-correction.md): The client consumes the corrected exact public frozen RecordTransactionInput without translation.
-- `governed-by` -> DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor
-- `implements` -> FR-INGEST-APPROVED-BATCH-COMMIT: Commit approved candidates through public LEDGER operations
+- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION: TASK-INGEST-CONTRACT-FOUNDATION](contract-foundation.md): The client consumes FrozenLedgerRecordRequest and stable INGEST compatibility errors.
+- `depends-on:compile` -> [TASK-INGEST-GATE-INT-LEDGER-CONTRACT: TASK-INGEST-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md): The prerequisite gate proves every operation and contract consumed by the client.
+- `depends-on:compile` -> [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION: TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](ledger-evidence-contract-correction.md): The client consumes the corrected exact public frozen RecordTransactionInput without translation.
+- `governed-by` -> [DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor](../../../designs/ingest/decisions/ledger-public-integration.md)
+- `implements` -> [FR-INGEST-APPROVED-BATCH-COMMIT: Commit approved candidates through public LEDGER operations](../../../prd/ingest/prd.md#fr-ingest-approved-batch-commit-commit-approved-candidates-through-public-ledger-operations)
 - `verifies` -> TC-INGEST-LEDGER-PUBLIC-CONFORMANCE: Verify INGEST uses only the public LEDGER contract
 
 ## Navigation

@@ -22,10 +22,10 @@ A public caller can obtain the exact normalized current-state fingerprint requir
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-RECOVERY-FINGERPRINT-SURFACES: Separate restore and evolution fingerprints | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts | `data_model` | `touches` | `true` |
-| FR-LEDGER-SAFE-RESTORE: Restore the Ledger safely | `requirement` | `implements` | `true` |
-| FR-LEDGER-SAFE-STORAGE-EVOLUTION: Upgrade or migrate Ledger storage safely | `requirement` | `implements` | `true` |
+| [DD-LEDGER-RECOVERY-FINGERPRINT-SURFACES: Separate restore and evolution fingerprints](../../../designs/ledger/decisions/recovery-fingerprint-surfaces.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-SAFE-RESTORE: Restore the Ledger safely](../../../prd/ledger/prd.md#fr-ledger-safe-restore-restore-the-ledger-safely) | `requirement` | `implements` | `true` |
+| [FR-LEDGER-SAFE-STORAGE-EVOLUTION: Upgrade or migrate Ledger storage safely](../../../prd/ledger/prd.md#fr-ledger-safe-storage-evolution-upgrade-or-migrate-ledger-storage-safely) | `requirement` | `implements` | `true` |
 | TC-LEDGER-SAFE-RESTORE-CONTRACT: Verify restore the ledger safely contract | `test_case` | `verifies` | `true` |
 | TC-LEDGER-SAFE-STORAGE-EVOLUTION-CONTRACT: Verify upgrade or migrate ledger storage safely contract | `test_case` | `verifies` | `true` |
 
@@ -33,8 +33,8 @@ A public caller can obtain the exact normalized current-state fingerprint requir
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-STORAGE-EVOLUTION](../tasks/storage-evolution.md) | `compile` | The correction extends the existing StorageStatusResult and StorageEvolutionService implemented by the storage-evolution task. |
-| [TASK-LEDGER-RESTORE-ACTIVATE](../tasks/restore-activate.md) | `compile` | The correction exposes the normalized fingerprint already enforced by restore activation. |
+| [TASK-LEDGER-STORAGE-EVOLUTION: TASK-LEDGER-STORAGE-EVOLUTION](storage-evolution.md) | `compile` | The correction extends the existing StorageStatusResult and StorageEvolutionService implemented by the storage-evolution task. |
+| [TASK-LEDGER-RESTORE-ACTIVATE: TASK-LEDGER-RESTORE-ACTIVATE](restore-activate.md) | `compile` | The correction exposes the normalized fingerprint already enforced by restore activation. |
 
 ## Recipe
 
@@ -74,8 +74,8 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| StorageStatusResult.CurrentNormalizedFingerprint | `produces` | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS | Normalized compare-and-swap value consumed by restore.activate. |
-| MigrationCandidateBuilder.StorageSourceInspection.CurrentEquivalentVerification | `consumes` | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS | Verified report that supplies the normalized fingerprint. |
+| StorageStatusResult.CurrentNormalizedFingerprint | `produces` | [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts) | Normalized compare-and-swap value consumed by restore.activate. |
+| MigrationCandidateBuilder | `consumes` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) | Existing builder supplies StorageSourceInspection.CurrentEquivalentVerification.Report.NormalizedFingerprint. |
 
 ### Verification
 
@@ -92,18 +92,21 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2n4` | `verified` | 2026-07-23T08:51:17.3188222+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-LEDGER-RESTORE-ACTIVATE](../tasks/restore-activate.md): The correction exposes the normalized fingerprint already enforced by restore activation.
-- `depends-on:compile` -> [TASK-LEDGER-STORAGE-EVOLUTION](../tasks/storage-evolution.md): The correction extends the existing StorageStatusResult and StorageEvolutionService implemented by the storage-evolution task.
-- `governed-by` -> DD-LEDGER-RECOVERY-FINGERPRINT-SURFACES: Separate restore and evolution fingerprints
-- `implements` -> FR-LEDGER-SAFE-RESTORE: Restore the Ledger safely
-- `implements` -> FR-LEDGER-SAFE-STORAGE-EVOLUTION: Upgrade or migrate Ledger storage safely
-- `touches` -> DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts
+- `bead-ref` -> `bd-2n4` (verified)
+- `depends-on:compile` -> [TASK-LEDGER-RESTORE-ACTIVATE: TASK-LEDGER-RESTORE-ACTIVATE](restore-activate.md): The correction exposes the normalized fingerprint already enforced by restore activation.
+- `depends-on:compile` -> [TASK-LEDGER-STORAGE-EVOLUTION: TASK-LEDGER-STORAGE-EVOLUTION](storage-evolution.md): The correction extends the existing StorageStatusResult and StorageEvolutionService implemented by the storage-evolution task.
+- `governed-by` -> [DD-LEDGER-RECOVERY-FINGERPRINT-SURFACES: Separate restore and evolution fingerprints](../../../designs/ledger/decisions/recovery-fingerprint-surfaces.md)
+- `implements` -> [FR-LEDGER-SAFE-RESTORE: Restore the Ledger safely](../../../prd/ledger/prd.md#fr-ledger-safe-restore-restore-the-ledger-safely)
+- `implements` -> [FR-LEDGER-SAFE-STORAGE-EVOLUTION: Upgrade or migrate Ledger storage safely](../../../prd/ledger/prd.md#fr-ledger-safe-storage-evolution-upgrade-or-migrate-ledger-storage-safely)
+- `touches` -> [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts)
 - `verifies` -> TC-LEDGER-SAFE-RESTORE-CONTRACT: Verify restore the ledger safely contract
 - `verifies` -> TC-LEDGER-SAFE-STORAGE-EVOLUTION-CONTRACT: Verify upgrade or migrate ledger storage safely contract
 

@@ -15,7 +15,7 @@ Wire the complete public process contract and prove atomic recovery, privacy, of
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | Wire and prove the complete BUDGET contract | `planned` | 0 |
-| [TASK-BUDGET-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md) | Prove mutation durability and restart recovery | `planned` | 0 |
-| [TASK-BUDGET-GATE-SECURITY](../tasks/gate-security.md) | Validate BUDGET local data security | `planned` | 0 |
-| [TASK-BUDGET-GATE-PERFORMANCE](../tasks/gate-performance.md) | Measure BUDGET personal-scale performance | `planned` | 2 |
+| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete BUDGET contract](../tasks/gate-int-public-contract.md) | Wire and prove the complete BUDGET contract | `ready` | 0 |
+| [TASK-BUDGET-GATE-ATOMIC-RECOVERY: Prove mutation durability and restart recovery](../tasks/gate-atomic-recovery.md) | Prove mutation durability and restart recovery | `ready` | 0 |
+| [TASK-BUDGET-GATE-SECURITY: Validate BUDGET local data security](../tasks/gate-security.md) | Validate BUDGET local data security | `ready` | 0 |
+| [TASK-BUDGET-GATE-PERFORMANCE: Measure BUDGET personal-scale performance](../tasks/gate-performance.md) | Measure BUDGET personal-scale performance | `ready` | 2 |

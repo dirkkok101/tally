@@ -22,10 +22,10 @@ Produce a bounded versioned automatic match matrix while keeping explicit owner-
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed | `nfr` | `satisfies` | `true` |
-| OQ-LEDGER-13: Which provider-neutral compatibility fields, tolerances, and conflict rules are sufficient for an automatic deterministic match between agent-capture and statement-row evidence? | `open_question` | `references` | `true` |
+| [DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates](../../../designs/ledger/decisions/financial-representation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed](../../../prd/ledger/prd.md#nfr-ledger-reconciliation-safety-reconcile-deterministically-and-fail-closed) | `nfr` | `satisfies` | `true` |
+| [OQ-LEDGER-13: Which provider-neutral compatibility fields, tolerances, and conflict rules are sufficient for an automatic deterministic match between agent-capture and statement-row evidence?](../../../prd/ledger/prd.md) | `open_question` | `references` | `true` |
 
 ## Dependencies
 
@@ -70,7 +70,7 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| OQ-LEDGER-13Resolution | `produces` | OQ-LEDGER-13 | Produced only after bounded policy evidence resolves the question |
+| OQ-LEDGER-13Resolution | `produces` | [OQ-LEDGER-13](../../../prd/ledger/prd.md) | Produced only after bounded policy evidence resolves the question |
 | ReconciliationPolicyMatrixEvidence | `produces` | TC-LEDGER-RECONCILIATION-POLICY-MATRIX | Redacted executable policy matrix and invariant result |
 
 ### Verification
@@ -97,10 +97,10 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-339` (verified)
-- `governed-by` -> DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates
-- `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
-- `references` -> OQ-LEDGER-13: Which provider-neutral compatibility fields, tolerances, and conflict rules are sufficient for an automatic deterministic match between agent-capture and statement-row evidence?
-- `satisfies` -> NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed
+- `governed-by` -> [DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates](../../../designs/ledger/decisions/financial-representation.md)
+- `governed-by` -> [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md)
+- `references` -> [OQ-LEDGER-13: Which provider-neutral compatibility fields, tolerances, and conflict rules are sufficient for an automatic deterministic match between agent-capture and statement-row evidence?](../../../prd/ledger/prd.md)
+- `satisfies` -> [NFR-LEDGER-RECONCILIATION-SAFETY: Reconcile deterministically and fail closed](../../../prd/ledger/prd.md#nfr-ledger-reconciliation-safety-reconcile-deterministically-and-fail-closed)
 
 ## Navigation
 

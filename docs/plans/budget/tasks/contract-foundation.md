@@ -5,7 +5,7 @@
 - **Ref:** `TASK-BUDGET-CONTRACT-FOUNDATION`
 - **Plan:** `PLAN-BUDGET-V1`
 - **Sub-Plan:** `SP-BUDGET-00-FOUNDATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `4`
 - **Dialect:** `default`
@@ -22,17 +22,17 @@ The Tally registry can represent every BUDGET request, result, error, authority,
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields | `adr` | `governed-by` | `true` |
-| ADR-CORE-0010: CommandResult Pattern for Commands | `adr` | `governed-by` | `true` |
-| ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning | `adr` | `governed-by` | `true` |
-| DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry | `design_decision` | `governed-by` | `true` |
-| DM-BUDGET-OPERATION-CONTRACTS: BudgetOperationContracts | `data_model` | `touches` | `true` |
-| FA-BUDGET-CONTRACT-AUTHORITY: Contract and Authority | `feature_area` | `touches` | `false` |
-| FR-BUDGET-CONTRACT-DISCOVERY: Discover the BUDGET operation contract | `requirement` | `implements` | `true` |
-| FR-BUDGET-STRUCTURED-INVOCATION: Invoke BUDGET operations non-interactively | `requirement` | `implements` | `true` |
-| NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries | `nfr` | `satisfies` | `true` |
-| TASK-LEDGER-CORE-PROCESS-CONTRACT: Build the self-contained process and operation contract | `task` | `blocked-by` | `true` |
+| [ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields](../../../adr/core/0004-enum-over-string-constants-for-system-owned-status-fields.md) | `adr` | `governed-by` | `true` |
+| [ADR-CORE-0010: CommandResult Pattern for Commands](../../../adr/core/0010-commandresult-pattern-for-commands.md) | `adr` | `governed-by` | `true` |
+| [ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning](../../../adr/core/0021-explicit-di-registration-no-reflection-scanning.md) | `adr` | `governed-by` | `true` |
+| [DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam](../../../designs/budget/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry](../../../designs/budget/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DM-BUDGET-OPERATION-CONTRACTS: BudgetOperationContracts](../../../designs/budget/data-model.md#budgetoperationcontracts) | `data_model` | `touches` | `true` |
+| [FA-BUDGET-CONTRACT-AUTHORITY: Contract and Authority](../../../designs/budget/features/contract-authority/api-surface.md) | `feature_area` | `touches` | `false` |
+| [FR-BUDGET-CONTRACT-DISCOVERY: Discover the BUDGET operation contract](../../../prd/budget/prd.md#fr-budget-contract-discovery-discover-the-budget-operation-contract) | `requirement` | `implements` | `true` |
+| [FR-BUDGET-STRUCTURED-INVOCATION: Invoke BUDGET operations non-interactively](../../../prd/budget/prd.md#fr-budget-structured-invocation-invoke-budget-operations-non-interactively) | `requirement` | `implements` | `true` |
+| [NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries](../../../prd/budget/prd.md#nfr-budget-public-contract-compatibility-preserve-public-contract-boundaries) | `nfr` | `satisfies` | `true` |
+| [TASK-LEDGER-CORE-PROCESS-CONTRACT: Build the self-contained process and operation contract](../../ledger/tasks/core-process-contract.md) | `task` | `blocked-by` | `true` |
 | TC-BUDGET-CONTRACT-DISCOVERY-CONTRACT: Verify BUDGET contract discovery | `test_case` | `verifies` | `true` |
 | TC-BUDGET-STRUCTURED-INVOCATION-CONTRACT: Verify structured BUDGET invocation | `test_case` | `verifies` | `true` |
 
@@ -46,7 +46,7 @@ No task dependencies recorded.
 
 - The descriptor inventory contains exactly six BUDGET operation IDs with versioned request, result, error, mutability, idempotency, authority, limit, compatibility, and exit metadata; system.schema.list/show remain shared operations.
 - Source-generated JSON rejects unknown fields; malformed, incompatible, missing-actor, and missing-idempotency requests fail before handler or storage effects.
-- Money uses canonical ZAR minor-unit-safe wire rules, IDs are opaque ULIDs, states are closed enums, and actor comes only from the trusted common envelope.
+- Money uses canonical ZAR minor-unit integer wire rules, IDs are opaque ULIDs, states are closed enums, and actor comes only from the trusted common envelope.
 - Schema discovery and unknown-operation handling perform no BudgetStateStore or Ledger read.
 
 ### Failure Criteria
@@ -88,10 +88,10 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| BudgetOperationContracts | `produces` | DM-BUDGET-OPERATION-CONTRACTS |  |
-| BudgetOperationModule | `produces` | DM-BUDGET-OPERATION-CONTRACTS |  |
-| BudgetJsonContext | `produces` | DM-BUDGET-OPERATION-CONTRACTS |  |
-| BudgetContractMapper | `produces` | DM-BUDGET-OPERATION-CONTRACTS |  |
+| BudgetOperationContracts | `produces` | [DM-BUDGET-OPERATION-CONTRACTS](../../../designs/budget/data-model.md#budgetoperationcontracts) |  |
+| BudgetOperationModule | `produces` | [DM-BUDGET-OPERATION-CONTRACTS](../../../designs/budget/data-model.md#budgetoperationcontracts) |  |
+| BudgetJsonContext | `produces` | [DM-BUDGET-OPERATION-CONTRACTS](../../../designs/budget/data-model.md#budgetoperationcontracts) |  |
+| BudgetContractMapper | `produces` | [DM-BUDGET-OPERATION-CONTRACTS](../../../designs/budget/data-model.md#budgetoperationcontracts) |  |
 
 ### Verification
 
@@ -107,23 +107,26 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2spz` | `verified` | 2026-07-27T08:00:15.7426372+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `blocked-by` -> TASK-LEDGER-CORE-PROCESS-CONTRACT: Build the self-contained process and operation contract
-- `governed-by` -> ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields
-- `governed-by` -> ADR-CORE-0010: CommandResult Pattern for Commands
-- `governed-by` -> ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning
-- `governed-by` -> DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam
-- `governed-by` -> DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry
-- `implements` -> FR-BUDGET-CONTRACT-DISCOVERY: Discover the BUDGET operation contract
-- `implements` -> FR-BUDGET-STRUCTURED-INVOCATION: Invoke BUDGET operations non-interactively
-- `satisfies` -> NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries
-- `touches` -> DM-BUDGET-OPERATION-CONTRACTS: BudgetOperationContracts
-- `touches` -> FA-BUDGET-CONTRACT-AUTHORITY: Contract and Authority
+- `bead-ref` -> `bd-2spz` (verified)
+- `blocked-by` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT: Build the self-contained process and operation contract](../../ledger/tasks/core-process-contract.md)
+- `governed-by` -> [ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields](../../../adr/core/0004-enum-over-string-constants-for-system-owned-status-fields.md)
+- `governed-by` -> [ADR-CORE-0010: CommandResult Pattern for Commands](../../../adr/core/0010-commandresult-pattern-for-commands.md)
+- `governed-by` -> [ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning](../../../adr/core/0021-explicit-di-registration-no-reflection-scanning.md)
+- `governed-by` -> [DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam](../../../designs/budget/decisions/application-architecture.md)
+- `governed-by` -> [DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry](../../../designs/budget/decisions/cli-operation-contract.md)
+- `implements` -> [FR-BUDGET-CONTRACT-DISCOVERY: Discover the BUDGET operation contract](../../../prd/budget/prd.md#fr-budget-contract-discovery-discover-the-budget-operation-contract)
+- `implements` -> [FR-BUDGET-STRUCTURED-INVOCATION: Invoke BUDGET operations non-interactively](../../../prd/budget/prd.md#fr-budget-structured-invocation-invoke-budget-operations-non-interactively)
+- `satisfies` -> [NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries](../../../prd/budget/prd.md#nfr-budget-public-contract-compatibility-preserve-public-contract-boundaries)
+- `touches` -> [DM-BUDGET-OPERATION-CONTRACTS: BudgetOperationContracts](../../../designs/budget/data-model.md#budgetoperationcontracts)
+- `touches` -> [FA-BUDGET-CONTRACT-AUTHORITY: Contract and Authority](../../../designs/budget/features/contract-authority/api-surface.md)
 - `verifies` -> TC-BUDGET-CONTRACT-DISCOVERY-CONTRACT: Verify BUDGET contract discovery
 - `verifies` -> TC-BUDGET-STRUCTURED-INVOCATION-CONTRACT: Verify structured BUDGET invocation
 

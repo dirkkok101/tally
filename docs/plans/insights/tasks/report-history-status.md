@@ -22,19 +22,19 @@ ListInsightReportsQuery and GetInsightsStatusQuery expose deterministic safe met
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation | `design_decision` | `governed-by` | `true` |
-| DM-INSIGHTS-RECOVERY-CONTRACTS: InsightsRecoveryManifestAndReceipts | `data_model` | `touches` | `true` |
-| DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion | `data_model` | `touches` | `true` |
-| FR-INSIGHTS-REPORT-HISTORY: Inspect retained report history and status | `requirement` | `implements` | `true` |
+| [DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries](../../../designs/insights/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation](../../../designs/insights/decisions/verified-recovery-activation.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INSIGHTS-RECOVERY-CONTRACTS: InsightsRecoveryManifestAndReceipts](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts) | `data_model` | `touches` | `true` |
+| [DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion](../../../designs/insights/data-model.md#reportsnapshotrestatementanddeletion) | `data_model` | `touches` | `true` |
+| [FR-INSIGHTS-REPORT-HISTORY: Inspect retained report history and status](../../../prd/insights/prd.md#fr-insights-report-history-inspect-retained-report-history-and-status) | `requirement` | `implements` | `true` |
 | TC-INSIGHTS-REPORT-HISTORY-STATUS: Verify metadata-first report history and status | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Both queries use normalized metadata and integrity primitives. |
+| [TASK-INSIGHTS-STATE-FOUNDATION: TASK-INSIGHTS-STATE-FOUNDATION](state-foundation.md) | `compile` | Both queries use normalized metadata and integrity primitives. |
 
 ## Recipe
 
@@ -77,9 +77,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| InsightsStateStore | `consumes` | DM-INSIGHTS-STATE-STORE | metadata-only queries |
-| ListInsightReportsQuery.HandleAsync | `produces` | DM-INSIGHTS-OPERATION-CONTRACTS | insights.report.list handler |
-| GetInsightsStatusQuery.HandleAsync | `produces` | DM-INSIGHTS-RECOVERY-CONTRACTS | insights.status.get handler |
+| InsightsStateStore | `consumes` | [DM-INSIGHTS-STATE-STORE](../../../designs/insights/data-model.md#insightsstatestore) | metadata-only queries |
+| ListInsightReportsQuery.HandleAsync | `produces` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | insights.report.list handler |
+| GetInsightsStatusQuery.HandleAsync | `produces` | [DM-INSIGHTS-RECOVERY-CONTRACTS](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts) | insights.status.get handler |
 
 ### Verification
 
@@ -104,13 +104,13 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-32j` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md): Both queries use normalized metadata and integrity primitives.
-- `governed-by` -> DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries
-- `governed-by` -> DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads
-- `governed-by` -> DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation
-- `implements` -> FR-INSIGHTS-REPORT-HISTORY: Inspect retained report history and status
-- `touches` -> DM-INSIGHTS-RECOVERY-CONTRACTS: InsightsRecoveryManifestAndReceipts
-- `touches` -> DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion
+- `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION: TASK-INSIGHTS-STATE-FOUNDATION](state-foundation.md): Both queries use normalized metadata and integrity primitives.
+- `governed-by` -> [DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries](../../../designs/insights/decisions/application-architecture.md)
+- `governed-by` -> [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md)
+- `governed-by` -> [DD-INSIGHTS-VERIFIED-RECOVERY-ACTIVATION: Verified backup candidates with atomic generation activation](../../../designs/insights/decisions/verified-recovery-activation.md)
+- `implements` -> [FR-INSIGHTS-REPORT-HISTORY: Inspect retained report history and status](../../../prd/insights/prd.md#fr-insights-report-history-inspect-retained-report-history-and-status)
+- `touches` -> [DM-INSIGHTS-RECOVERY-CONTRACTS: InsightsRecoveryManifestAndReceipts](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts)
+- `touches` -> [DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion](../../../designs/insights/data-model.md#reportsnapshotrestatementanddeletion)
 - `verifies` -> TC-INSIGHTS-REPORT-HISTORY-STATUS: Verify metadata-first report history and status
 
 ## Navigation

@@ -22,16 +22,16 @@ Prove complete statement scopes account exactly for accepted evidence and eligib
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| FR-LEDGER-RECONCILIATION-COVERAGE: Report statement coverage and exceptions | `requirement` | `verifies` | `true` |
+| [FR-LEDGER-RECONCILIATION-COVERAGE: Report statement coverage and exceptions](../../../prd/ledger/prd.md#fr-ledger-reconciliation-coverage-report-statement-coverage-and-exceptions) | `requirement` | `verifies` | `true` |
 | TC-LEDGER-RECONCILIATION-COVERAGE-CONTRACT: Verify statement coverage and exception accounting | `test_case` | `verifies` | `true` |
-| UC-LEDGER-016: Review statement coverage exceptions | `use_case` | `covers` | `true` |
+| [UC-LEDGER-016: Review statement coverage exceptions](../../../prd/ledger/prd.md#uc-ledger-016-review-statement-coverage-exceptions) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
 
 ## Recipe
 
@@ -69,8 +69,8 @@ None recorded.
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  |  |
-| CompletePublicContract74 | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 74 provider-neutral operations |
-| VerifiedUC016 | `produces` | UC-LEDGER-016 |  |
+| CompletePublicContract74 | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Exactly 74 provider-neutral operations |
+| VerifiedUC016 | `produces` | [UC-LEDGER-016](../../../prd/ledger/prd.md#uc-ledger-016-review-statement-coverage-exceptions) |  |
 
 ### Verification
 
@@ -95,11 +95,11 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2ez` (verified)
-- `covers` -> UC-LEDGER-016: Review statement coverage exceptions
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
-- `verifies` -> FR-LEDGER-RECONCILIATION-COVERAGE: Report statement coverage and exceptions
+- `covers` -> [UC-LEDGER-016: Review statement coverage exceptions](../../../prd/ledger/prd.md#uc-ledger-016-review-statement-coverage-exceptions)
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
 - `verifies` -> TC-LEDGER-RECONCILIATION-COVERAGE-CONTRACT: Verify statement coverage and exception accounting
+- `verifies` -> [FR-LEDGER-RECONCILIATION-COVERAGE: Report statement coverage and exceptions](../../../prd/ledger/prd.md#fr-ledger-reconciliation-coverage-report-statement-coverage-and-exceptions)
 
 ## Navigation
 

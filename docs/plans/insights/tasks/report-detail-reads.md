@@ -22,13 +22,13 @@ GetInsightReportQuery and ExplainInsightReportQuery return only the selected imm
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads | `design_decision` | `governed-by` | `true` |
-| DM-INSIGHTS-INSIGHT-REPORT: InsightReport | `data_model` | `touches` | `true` |
-| DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion | `data_model` | `touches` | `true` |
-| FR-INSIGHTS-REPORT-EXPLANATION: Explain report evidence deterministically | `requirement` | `implements` | `true` |
-| FR-INSIGHTS-REPORT-HISTORY: Inspect retained report history and status | `requirement` | `implements` | `true` |
-| PAT-CORE-API-QUERIES: Query Pattern — NxGN Actions | `pattern` | `governed-by` | `true` |
+| [DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries](../../../designs/insights/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INSIGHTS-INSIGHT-REPORT: InsightReport](../../../designs/insights/data-model.md#insightreport) | `data_model` | `touches` | `true` |
+| [DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion](../../../designs/insights/data-model.md#reportsnapshotrestatementanddeletion) | `data_model` | `touches` | `true` |
+| [FR-INSIGHTS-REPORT-EXPLANATION: Explain report evidence deterministically](../../../prd/insights/prd.md#fr-insights-report-explanation-explain-report-evidence-deterministically) | `requirement` | `implements` | `true` |
+| [FR-INSIGHTS-REPORT-HISTORY: Inspect retained report history and status](../../../prd/insights/prd.md#fr-insights-report-history-inspect-retained-report-history-and-status) | `requirement` | `implements` | `true` |
+| [PAT-CORE-API-QUERIES: Query Pattern — NxGN Actions](../../../patterns/core/api-queries.md) | `pattern` | `governed-by` | `true` |
 | TC-INSIGHTS-REPORT-EXPLANATION-CONTRACT: Verify deterministic report explanations | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-REPORT-HISTORY-STATUS: Verify metadata-first report history and status | `test_case` | `verifies` | `true` |
 
@@ -36,7 +36,7 @@ GetInsightReportQuery and ExplainInsightReportQuery return only the selected imm
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Both queries use verified metadata and payload read primitives. |
+| [TASK-INSIGHTS-STATE-FOUNDATION: TASK-INSIGHTS-STATE-FOUNDATION](state-foundation.md) | `compile` | Both queries use verified metadata and payload read primitives. |
 
 ## Recipe
 
@@ -79,9 +79,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| InsightsStateStore | `consumes` | DM-INSIGHTS-STATE-STORE | verified selected payload and deletion evidence |
-| GetInsightReportQuery.HandleAsync | `produces` | DM-INSIGHTS-OPERATION-CONTRACTS | insights.report.get handler |
-| ExplainInsightReportQuery.HandleAsync | `produces` | DM-INSIGHTS-OPERATION-CONTRACTS | insights.report.explain handler |
+| InsightsStateStore | `consumes` | [DM-INSIGHTS-STATE-STORE](../../../designs/insights/data-model.md#insightsstatestore) | verified selected payload and deletion evidence |
+| GetInsightReportQuery.HandleAsync | `produces` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | insights.report.get handler |
+| ExplainInsightReportQuery.HandleAsync | `produces` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | insights.report.explain handler |
 
 ### Verification
 
@@ -106,14 +106,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1a7` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md): Both queries use verified metadata and payload read primitives.
-- `governed-by` -> DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries
-- `governed-by` -> DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads
-- `governed-by` -> PAT-CORE-API-QUERIES: Query Pattern — NxGN Actions
-- `implements` -> FR-INSIGHTS-REPORT-EXPLANATION: Explain report evidence deterministically
-- `implements` -> FR-INSIGHTS-REPORT-HISTORY: Inspect retained report history and status
-- `touches` -> DM-INSIGHTS-INSIGHT-REPORT: InsightReport
-- `touches` -> DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion
+- `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION: TASK-INSIGHTS-STATE-FOUNDATION](state-foundation.md): Both queries use verified metadata and payload read primitives.
+- `governed-by` -> [DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries](../../../designs/insights/decisions/application-architecture.md)
+- `governed-by` -> [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md)
+- `governed-by` -> [PAT-CORE-API-QUERIES: Query Pattern — NxGN Actions](../../../patterns/core/api-queries.md)
+- `implements` -> [FR-INSIGHTS-REPORT-EXPLANATION: Explain report evidence deterministically](../../../prd/insights/prd.md#fr-insights-report-explanation-explain-report-evidence-deterministically)
+- `implements` -> [FR-INSIGHTS-REPORT-HISTORY: Inspect retained report history and status](../../../prd/insights/prd.md#fr-insights-report-history-inspect-retained-report-history-and-status)
+- `touches` -> [DM-INSIGHTS-INSIGHT-REPORT: InsightReport](../../../designs/insights/data-model.md#insightreport)
+- `touches` -> [DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion](../../../designs/insights/data-model.md#reportsnapshotrestatementanddeletion)
 - `verifies` -> TC-INSIGHTS-REPORT-EXPLANATION-CONTRACT: Verify deterministic report explanations
 - `verifies` -> TC-INSIGHTS-REPORT-HISTORY-STATUS: Verify metadata-first report history and status
 

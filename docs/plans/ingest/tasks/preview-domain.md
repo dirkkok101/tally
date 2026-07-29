@@ -22,13 +22,13 @@ Turn qualified source evidence into deterministic immutable candidate meaning wi
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-APPLICATION-ARCHITECTURE: Single-process vertical slices with isolated ingestion state | `design_decision` | `governed-by` | `true` |
-| DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap | `design_decision` | `governed-by` | `true` |
-| DM-INGEST-IMPORT-MANIFEST: ImportBatchAndManifestRevision | `data_model` | `touches` | `true` |
-| FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts | `requirement` | `implements` | `true` |
-| FR-INGEST-REPLAY-OVERLAP-SAFETY: Handle Exact Replay and uncertain overlap safely | `requirement` | `implements` | `true` |
-| FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval | `requirement` | `implements` | `true` |
-| NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity | `nfr` | `satisfies` | `true` |
+| [DD-INGEST-APPLICATION-ARCHITECTURE: Single-process vertical slices with isolated ingestion state](../../../designs/ingest/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap](../../../designs/ingest/decisions/manifest-identity-overlap.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INGEST-IMPORT-MANIFEST: ImportBatchAndManifestRevision](../../../designs/ingest/data-model.md#importbatchandmanifestrevision) | `data_model` | `touches` | `true` |
+| [FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts](../../../prd/ingest/prd.md#fr-ingest-financial-normalization-normalize-exact-source-financial-facts) | `requirement` | `implements` | `true` |
+| [FR-INGEST-REPLAY-OVERLAP-SAFETY: Handle Exact Replay and uncertain overlap safely](../../../prd/ingest/prd.md#fr-ingest-replay-overlap-safety-handle-exact-replay-and-uncertain-overlap-safely) | `requirement` | `implements` | `true` |
+| [FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval](../../../prd/ingest/prd.md#fr-ingest-source-reconciliation-reconcile-every-supported-statement-before-approval) | `requirement` | `implements` | `true` |
+| [NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity](../../../prd/ingest/prd.md#nfr-ingest-deterministic-integrity-preserve-deterministic-extraction-and-financial-integrity) | `nfr` | `satisfies` | `true` |
 | TC-INGEST-FINANCIAL-NORMALIZATION-CONTRACT: Verify exact financial normalization | `test_case` | `verifies` | `true` |
 | TC-INGEST-REPLAY-OVERLAP-SAFETY-CONTRACT: Verify replay and overlap safety | `test_case` | `verifies` | `true` |
 | TC-INGEST-SOURCE-RECONCILIATION-CONTRACT: Verify complete source reconciliation | `test_case` | `verifies` | `true` |
@@ -37,7 +37,7 @@ Turn qualified source evidence into deterministic immutable candidate meaning wi
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Pure policies construct the canonical manifest and error contract records. |
+| [TASK-INGEST-CONTRACT-FOUNDATION: TASK-INGEST-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | Pure policies construct the canonical manifest and error contract records. |
 
 ## Recipe
 
@@ -92,12 +92,12 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ImportManifestContract | `consumes` | DM-INGEST-IMPORT-MANIFEST |  |
-| IngestIdentity | `produces` | DM-INGEST-IMPORT-MANIFEST |  |
-| FinancialNormalizer | `produces` | DM-INGEST-IMPORT-MANIFEST |  |
-| StatementReconciler | `produces` | DM-INGEST-IMPORT-MANIFEST |  |
-| ManifestCanonicalizer | `produces` | DM-INGEST-IMPORT-MANIFEST |  |
-| OverlapPolicy | `produces` | DM-INGEST-IMPORT-MANIFEST |  |
+| ImportManifestContract | `consumes` | [DM-INGEST-IMPORT-MANIFEST](../../../designs/ingest/data-model.md#importbatchandmanifestrevision) |  |
+| IngestIdentity | `produces` | [DM-INGEST-IMPORT-MANIFEST](../../../designs/ingest/data-model.md#importbatchandmanifestrevision) |  |
+| FinancialNormalizer | `produces` | [DM-INGEST-IMPORT-MANIFEST](../../../designs/ingest/data-model.md#importbatchandmanifestrevision) |  |
+| StatementReconciler | `produces` | [DM-INGEST-IMPORT-MANIFEST](../../../designs/ingest/data-model.md#importbatchandmanifestrevision) |  |
+| ManifestCanonicalizer | `produces` | [DM-INGEST-IMPORT-MANIFEST](../../../designs/ingest/data-model.md#importbatchandmanifestrevision) |  |
+| OverlapPolicy | `produces` | [DM-INGEST-IMPORT-MANIFEST](../../../designs/ingest/data-model.md#importbatchandmanifestrevision) |  |
 
 ### Verification
 
@@ -123,14 +123,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2gk` (verified)
-- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Pure policies construct the canonical manifest and error contract records.
-- `governed-by` -> DD-INGEST-APPLICATION-ARCHITECTURE: Single-process vertical slices with isolated ingestion state
-- `governed-by` -> DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap
-- `implements` -> FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts
-- `implements` -> FR-INGEST-REPLAY-OVERLAP-SAFETY: Handle Exact Replay and uncertain overlap safely
-- `implements` -> FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval
-- `satisfies` -> NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity
-- `touches` -> DM-INGEST-IMPORT-MANIFEST: ImportBatchAndManifestRevision
+- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION: TASK-INGEST-CONTRACT-FOUNDATION](contract-foundation.md): Pure policies construct the canonical manifest and error contract records.
+- `governed-by` -> [DD-INGEST-APPLICATION-ARCHITECTURE: Single-process vertical slices with isolated ingestion state](../../../designs/ingest/decisions/application-architecture.md)
+- `governed-by` -> [DD-INGEST-MANIFEST-IDENTITY-OVERLAP: Content-addressed manifests with Exact Replay and blocked overlap](../../../designs/ingest/decisions/manifest-identity-overlap.md)
+- `implements` -> [FR-INGEST-FINANCIAL-NORMALIZATION: Normalize exact source financial facts](../../../prd/ingest/prd.md#fr-ingest-financial-normalization-normalize-exact-source-financial-facts)
+- `implements` -> [FR-INGEST-REPLAY-OVERLAP-SAFETY: Handle Exact Replay and uncertain overlap safely](../../../prd/ingest/prd.md#fr-ingest-replay-overlap-safety-handle-exact-replay-and-uncertain-overlap-safely)
+- `implements` -> [FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval](../../../prd/ingest/prd.md#fr-ingest-source-reconciliation-reconcile-every-supported-statement-before-approval)
+- `satisfies` -> [NFR-INGEST-DETERMINISTIC-INTEGRITY: Preserve deterministic extraction and financial integrity](../../../prd/ingest/prd.md#nfr-ingest-deterministic-integrity-preserve-deterministic-extraction-and-financial-integrity)
+- `touches` -> [DM-INGEST-IMPORT-MANIFEST: ImportBatchAndManifestRevision](../../../designs/ingest/data-model.md#importbatchandmanifestrevision)
 - `verifies` -> TC-INGEST-FINANCIAL-NORMALIZATION-CONTRACT: Verify exact financial normalization
 - `verifies` -> TC-INGEST-REPLAY-OVERLAP-SAFETY-CONTRACT: Verify replay and overlap safety
 - `verifies` -> TC-INGEST-SOURCE-RECONCILIATION-CONTRACT: Verify complete source reconciliation

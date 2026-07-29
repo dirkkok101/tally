@@ -26,16 +26,16 @@ No graph references recorded.
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-ACCOUNTS](../tasks/accounts.md) | `compile` | Consumes AccountOperationModule. |
-| [TASK-LEDGER-CATEGORIES](../tasks/categories.md) | `compile` | Consumes CategoryOperationModule. |
-| [TASK-LEDGER-CATEGORY-ALLOCATIONS](../tasks/category-allocations.md) | `compile` | Consumes CategoryAllocationOperationModule. |
-| [TASK-LEDGER-TRANSACTION-CORRECTIONS](../tasks/transaction-corrections.md) | `compile` | Consumes final TransactionOperationModule. |
-| [TASK-LEDGER-PAYMENT-IDENTITIES](../tasks/payment-identities.md) | `compile` | The 43-operation bundle consumes payment-instrument and cardholder modules. |
-| [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md) | `compile` | The 43-operation bundle consumes payment-attribution operations. |
-| [TASK-LEDGER-SPEND-POOLS](../tasks/spend-pools.md) | `compile` | The 43-operation bundle consumes spend-pool catalogue operations. |
-| [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md) | `compile` | The 43-operation bundle consumes pool-assignment operations. |
-| [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md) | `compile` | The 43-operation bundle consumes evidence registration operations. |
-| [TASK-LEDGER-EVIDENCE-LINKING](../tasks/evidence-linking.md) | `compile` | The 43-operation bundle consumes supporting evidence linkage. |
+| [TASK-LEDGER-ACCOUNTS: TASK-LEDGER-ACCOUNTS](accounts.md) | `compile` | Consumes AccountOperationModule. |
+| [TASK-LEDGER-CATEGORIES: TASK-LEDGER-CATEGORIES](categories.md) | `compile` | Consumes CategoryOperationModule. |
+| [TASK-LEDGER-CATEGORY-ALLOCATIONS: TASK-LEDGER-CATEGORY-ALLOCATIONS](category-allocations.md) | `compile` | Consumes CategoryAllocationOperationModule. |
+| [TASK-LEDGER-TRANSACTION-CORRECTIONS: TASK-LEDGER-TRANSACTION-CORRECTIONS](transaction-corrections.md) | `compile` | Consumes final TransactionOperationModule. |
+| [TASK-LEDGER-PAYMENT-IDENTITIES: TASK-LEDGER-PAYMENT-IDENTITIES](payment-identities.md) | `compile` | The 43-operation bundle consumes payment-instrument and cardholder modules. |
+| [TASK-LEDGER-PAYMENT-ATTRIBUTION: TASK-LEDGER-PAYMENT-ATTRIBUTION](payment-attribution.md) | `compile` | The 43-operation bundle consumes payment-attribution operations. |
+| [TASK-LEDGER-SPEND-POOLS: TASK-LEDGER-SPEND-POOLS](spend-pools.md) | `compile` | The 43-operation bundle consumes spend-pool catalogue operations. |
+| [TASK-LEDGER-POOL-ASSIGNMENTS: TASK-LEDGER-POOL-ASSIGNMENTS](pool-assignments.md) | `compile` | The 43-operation bundle consumes pool-assignment operations. |
+| [TASK-LEDGER-EVIDENCE-REGISTRY: TASK-LEDGER-EVIDENCE-REGISTRY](evidence-registry.md) | `compile` | The 43-operation bundle consumes evidence registration operations. |
+| [TASK-LEDGER-EVIDENCE-LINKING: TASK-LEDGER-EVIDENCE-LINKING](evidence-linking.md) | `compile` | The 43-operation bundle consumes supporting evidence linkage. |
 
 ## Recipe
 
@@ -75,17 +75,17 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CatalogueTransactionOperationBundle | `produces` | DM-LEDGER-OPERATION-DESCRIPTOR | 43-operation dimension, transaction, and evidence bundle |
-| AccountOperationModule | `consumes` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS | 5 operations |
-| CategoryOperationModule | `consumes` | DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS | 7 operations including reparent |
-| PaymentIdentityOperationModule | `consumes` | DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS | 12 instrument/cardholder operations |
-| PaymentAttributionOperationModule | `consumes` | DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS | 2 operations |
-| SpendPoolOperationModule | `consumes` | DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS | 6 operations |
-| PoolAssignmentOperationModule | `consumes` | DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS | 2 operations |
-| CategoryAllocationOperationModule | `consumes` | DM-LEDGER-TRANSACTION-CONTRACTS | 2 operations |
-| TransactionOperationModule | `consumes` | DM-LEDGER-TRANSACTION-CONTRACTS | 4 operations |
-| EvidenceRegistryOperationModule | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS | 2 operations |
-| EvidenceLinkOperationModule | `consumes` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS | 1 operation |
+| CatalogueTransactionOperationBundle | `produces` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | 43-operation dimension, transaction, and evidence bundle |
+| AccountOperationModule | `consumes` | [DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS](../../../designs/ledger/data-model.md#accountcategoryoperationcontracts) | 5 operations |
+| CategoryOperationModule | `consumes` | [DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS](../../../designs/ledger/data-model.md#accountcategoryoperationcontracts) | 7 operations including reparent |
+| PaymentIdentityOperationModule | `consumes` | [DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS](../../../designs/ledger/data-model.md#paymentattributionandpooloperationcontracts) | 12 instrument/cardholder operations |
+| PaymentAttributionOperationModule | `consumes` | [DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS](../../../designs/ledger/data-model.md#paymentattributionandpooloperationcontracts) | 2 operations |
+| SpendPoolOperationModule | `consumes` | [DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS](../../../designs/ledger/data-model.md#paymentattributionandpooloperationcontracts) | 6 operations |
+| PoolAssignmentOperationModule | `consumes` | [DM-LEDGER-ATTRIBUTION-POOL-CONTRACTS](../../../designs/ledger/data-model.md#paymentattributionandpooloperationcontracts) | 2 operations |
+| CategoryAllocationOperationModule | `consumes` | [DM-LEDGER-TRANSACTION-CONTRACTS](../../../designs/ledger/data-model.md#transactionoperationcontracts) | 2 operations |
+| TransactionOperationModule | `consumes` | [DM-LEDGER-TRANSACTION-CONTRACTS](../../../designs/ledger/data-model.md#transactionoperationcontracts) | 4 operations |
+| EvidenceRegistryOperationModule | `consumes` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) | 2 operations |
+| EvidenceLinkOperationModule | `consumes` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) | 1 operation |
 
 ### Verification
 
@@ -111,16 +111,16 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2ve` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-ACCOUNTS](../tasks/accounts.md): Consumes AccountOperationModule.
-- `depends-on:compile` -> [TASK-LEDGER-CATEGORIES](../tasks/categories.md): Consumes CategoryOperationModule.
-- `depends-on:compile` -> [TASK-LEDGER-CATEGORY-ALLOCATIONS](../tasks/category-allocations.md): Consumes CategoryAllocationOperationModule.
-- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-LINKING](../tasks/evidence-linking.md): The 43-operation bundle consumes supporting evidence linkage.
-- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md): The 43-operation bundle consumes evidence registration operations.
-- `depends-on:compile` -> [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md): The 43-operation bundle consumes payment-attribution operations.
-- `depends-on:compile` -> [TASK-LEDGER-PAYMENT-IDENTITIES](../tasks/payment-identities.md): The 43-operation bundle consumes payment-instrument and cardholder modules.
-- `depends-on:compile` -> [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md): The 43-operation bundle consumes pool-assignment operations.
-- `depends-on:compile` -> [TASK-LEDGER-SPEND-POOLS](../tasks/spend-pools.md): The 43-operation bundle consumes spend-pool catalogue operations.
-- `depends-on:compile` -> [TASK-LEDGER-TRANSACTION-CORRECTIONS](../tasks/transaction-corrections.md): Consumes final TransactionOperationModule.
+- `depends-on:compile` -> [TASK-LEDGER-ACCOUNTS: TASK-LEDGER-ACCOUNTS](accounts.md): Consumes AccountOperationModule.
+- `depends-on:compile` -> [TASK-LEDGER-CATEGORIES: TASK-LEDGER-CATEGORIES](categories.md): Consumes CategoryOperationModule.
+- `depends-on:compile` -> [TASK-LEDGER-CATEGORY-ALLOCATIONS: TASK-LEDGER-CATEGORY-ALLOCATIONS](category-allocations.md): Consumes CategoryAllocationOperationModule.
+- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-LINKING: TASK-LEDGER-EVIDENCE-LINKING](evidence-linking.md): The 43-operation bundle consumes supporting evidence linkage.
+- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY: TASK-LEDGER-EVIDENCE-REGISTRY](evidence-registry.md): The 43-operation bundle consumes evidence registration operations.
+- `depends-on:compile` -> [TASK-LEDGER-PAYMENT-ATTRIBUTION: TASK-LEDGER-PAYMENT-ATTRIBUTION](payment-attribution.md): The 43-operation bundle consumes payment-attribution operations.
+- `depends-on:compile` -> [TASK-LEDGER-PAYMENT-IDENTITIES: TASK-LEDGER-PAYMENT-IDENTITIES](payment-identities.md): The 43-operation bundle consumes payment-instrument and cardholder modules.
+- `depends-on:compile` -> [TASK-LEDGER-POOL-ASSIGNMENTS: TASK-LEDGER-POOL-ASSIGNMENTS](pool-assignments.md): The 43-operation bundle consumes pool-assignment operations.
+- `depends-on:compile` -> [TASK-LEDGER-SPEND-POOLS: TASK-LEDGER-SPEND-POOLS](spend-pools.md): The 43-operation bundle consumes spend-pool catalogue operations.
+- `depends-on:compile` -> [TASK-LEDGER-TRANSACTION-CORRECTIONS: TASK-LEDGER-TRANSACTION-CORRECTIONS](transaction-corrections.md): Consumes final TransactionOperationModule.
 
 ## Navigation
 

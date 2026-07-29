@@ -22,19 +22,19 @@ InsightsStateStore provides atomic normalized metadata plus canonical report-pay
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| ADR-CORE-0022: EntityMapper Pure Transformer with Bulk Support | `adr` | `governed-by` | `true` |
-| DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads | `design_decision` | `governed-by` | `true` |
-| DM-INSIGHTS-STATE-STORE: InsightsStateStore | `data_model` | `touches` | `true` |
-| NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable | `nfr` | `satisfies` | `true` |
+| [ADR-CORE-0022: EntityMapper Pure Transformer with Bulk Support](../../../adr/core/0022-entitymapper-pure-transformer-with-bulk-support.md) | `adr` | `governed-by` | `true` |
+| [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INSIGHTS-STATE-STORE: InsightsStateStore](../../../designs/insights/data-model.md#insightsstatestore) | `data_model` | `touches` | `true` |
+| [NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable](../../../prd/insights/prd.md#nfr-insights-atomic-durable-report-state-make-retained-report-changes-atomic-and-durable) | `nfr` | `satisfies` | `true` |
 | TC-INSIGHTS-LOCAL-DATA-PROTECTION: Verify local insight privacy boundaries | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md) | `compile` | The store maps immutable report, history, idempotency, and recovery contracts. |
-| [TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE](../tasks/gate-evidence-owner-value.md) | `compile` | The monitored owner-value gate must pass before retained INSIGHTS state is built. |
-| [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](../tasks/lifecycle-contract-models.md) | `compile` | The state store maps lifecycle idempotency and recovery contracts. |
+| [TASK-INSIGHTS-CONTRACT-MODELS: TASK-INSIGHTS-CONTRACT-MODELS](contract-models.md) | `compile` | The store maps immutable report, history, idempotency, and recovery contracts. |
+| [TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE: TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE](gate-evidence-owner-value.md) | `compile` | The monitored owner-value gate must pass before retained INSIGHTS state is built. |
+| [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS: TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](lifecycle-contract-models.md) | `compile` | The state store maps lifecycle idempotency and recovery contracts. |
 
 ## Recipe
 
@@ -85,14 +85,14 @@ InsightsStateStore provides atomic normalized metadata plus canonical report-pay
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| VerifiedInsightsOwnerValueGate | `consumes` | DM-INSIGHTS-POLICY-VALIDATION-RECEIPT | persistence kill gate |
-| InsightHistoryContracts | `consumes` | DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE | immutable snapshot restatement and deletion records |
-| InsightsIdempotencyRecord | `consumes` | DM-INSIGHTS-IDEMPOTENCY | transactional replay records |
-| InsightsRecoveryContracts | `consumes` | DM-INSIGHTS-RECOVERY-CONTRACTS | recovery receipts and status records |
-| InsightsStoreLayout | `produces` | DM-INSIGHTS-STATE-STORE | owner-only generation layout |
-| InsightsMigrations.ApplyAsync | `produces` | DM-INSIGHTS-STATE-STORE | compatible immutable migrations |
-| InsightsRowMapper | `produces` | DM-INSIGHTS-STATE-STORE | concrete pure row mapper |
-| InsightsStateStore | `produces` | DM-INSIGHTS-STATE-STORE | single logical raw-SQLite store |
+| VerifiedInsightsOwnerValueGate | `consumes` | [DM-INSIGHTS-POLICY-VALIDATION-RECEIPT](../../../designs/insights/data-model.md#policyvalidationreceipt) | persistence kill gate |
+| InsightHistoryContracts | `consumes` | [DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE](../../../designs/insights/data-model.md#reportsnapshotrestatementanddeletion) | immutable snapshot restatement and deletion records |
+| InsightsIdempotencyRecord | `consumes` | [DM-INSIGHTS-IDEMPOTENCY](../../../designs/insights/data-model.md#insightsidempotencyrecord) | transactional replay records |
+| InsightsRecoveryContracts | `consumes` | [DM-INSIGHTS-RECOVERY-CONTRACTS](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts) | recovery receipts and status records |
+| InsightsStoreLayout | `produces` | [DM-INSIGHTS-STATE-STORE](../../../designs/insights/data-model.md#insightsstatestore) | owner-only generation layout |
+| InsightsMigrations.ApplyAsync | `produces` | [DM-INSIGHTS-STATE-STORE](../../../designs/insights/data-model.md#insightsstatestore) | compatible immutable migrations |
+| InsightsRowMapper | `produces` | [DM-INSIGHTS-STATE-STORE](../../../designs/insights/data-model.md#insightsstatestore) | concrete pure row mapper |
+| InsightsStateStore | `produces` | [DM-INSIGHTS-STATE-STORE](../../../designs/insights/data-model.md#insightsstatestore) | single logical raw-SQLite store |
 
 ### Verification
 
@@ -117,13 +117,13 @@ InsightsStateStore provides atomic normalized metadata plus canonical report-pay
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-7kn` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md): The store maps immutable report, history, idempotency, and recovery contracts.
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE](../tasks/gate-evidence-owner-value.md): The monitored owner-value gate must pass before retained INSIGHTS state is built.
-- `depends-on:compile` -> [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](../tasks/lifecycle-contract-models.md): The state store maps lifecycle idempotency and recovery contracts.
-- `governed-by` -> ADR-CORE-0022: EntityMapper Pure Transformer with Bulk Support
-- `governed-by` -> DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads
-- `satisfies` -> NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable
-- `touches` -> DM-INSIGHTS-STATE-STORE: InsightsStateStore
+- `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-MODELS: TASK-INSIGHTS-CONTRACT-MODELS](contract-models.md): The store maps immutable report, history, idempotency, and recovery contracts.
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE: TASK-INSIGHTS-GATE-EVIDENCE-OWNER-VALUE](gate-evidence-owner-value.md): The monitored owner-value gate must pass before retained INSIGHTS state is built.
+- `depends-on:compile` -> [TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS: TASK-INSIGHTS-LIFECYCLE-CONTRACT-MODELS](lifecycle-contract-models.md): The state store maps lifecycle idempotency and recovery contracts.
+- `governed-by` -> [ADR-CORE-0022: EntityMapper Pure Transformer with Bulk Support](../../../adr/core/0022-entitymapper-pure-transformer-with-bulk-support.md)
+- `governed-by` -> [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md)
+- `satisfies` -> [NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable](../../../prd/insights/prd.md#nfr-insights-atomic-durable-report-state-make-retained-report-changes-atomic-and-durable)
+- `touches` -> [DM-INSIGHTS-STATE-STORE: InsightsStateStore](../../../designs/insights/data-model.md#insightsstatestore)
 - `verifies` -> TC-INSIGHTS-LOCAL-DATA-PROTECTION: Verify local insight privacy boundaries
 
 ## Navigation

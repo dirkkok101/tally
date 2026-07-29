@@ -5,7 +5,7 @@
 - **Ref:** `TASK-BUDGET-INSIGHTS-READ-PROJECTION`
 - **Plan:** `PLAN-BUDGET-V1`
 - **Sub-Plan:** `SP-BUDGET-02-POSITION-PROJECTION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `1`
 - **Sort Order:** `3`
 - **Dialect:** `default`
@@ -22,25 +22,25 @@ INSIGHTS can consume one coherent plan-state and dated actual member result from
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-INSIGHTS-READ-PROJECTION: Reuse exact owner reads through a mutation-free INSIGHTS capability set | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation | `design_decision` | `governed-by` | `true` |
-| DM-BUDGET-INSIGHTS-READ-CONTRACT: BudgetReadCapabilityDescriptor | `data_model` | `touches` | `true` |
-| DM-BUDGET-POSITION-PROJECTION: BudgetPositionProjection | `data_model` | `touches` | `true` |
-| EXT-BUDGET-INSIGHTS-CONSUMER-CONTRACT: INSIGHTS Consumer Contract | `external_dependency` | `references` | `true` |
-| FR-BUDGET-INSIGHTS-PROJECTION: Expose a read-only INSIGHTS projection | `requirement` | `implements` | `true` |
-| NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries | `nfr` | `satisfies` | `true` |
+| [DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot](../../../designs/budget/decisions/exact-position-calculation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-BUDGET-INSIGHTS-READ-PROJECTION: Reuse exact owner reads through a mutation-free INSIGHTS capability set](../../../designs/budget/decisions/insights-read-projection.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation](../../../designs/insights/decisions/coherent-public-evidence.md) | `design_decision` | `governed-by` | `true` |
+| [DM-BUDGET-INSIGHTS-READ-CONTRACT: BudgetReadCapabilityDescriptor](../../../designs/budget/data-model.md#budgetreadcapabilitydescriptor) | `data_model` | `touches` | `true` |
+| [DM-BUDGET-POSITION-PROJECTION: BudgetPositionProjection](../../../designs/budget/data-model.md#budgetpositionprojection) | `data_model` | `touches` | `true` |
+| [EXT-BUDGET-INSIGHTS-CONSUMER-CONTRACT: INSIGHTS Consumer Contract](../../../prd/budget/prd.md#ext-budget-insights-consumer-contract-insights-consumer-contract) | `external_dependency` | `references` | `true` |
+| [FR-BUDGET-INSIGHTS-PROJECTION: Expose a read-only INSIGHTS projection](../../../prd/budget/prd.md#fr-budget-insights-projection-expose-a-read-only-insights-projection) | `requirement` | `implements` | `true` |
+| [NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries](../../../prd/budget/prd.md#nfr-budget-public-contract-compatibility-preserve-public-contract-boundaries) | `nfr` | `satisfies` | `true` |
 | TC-BUDGET-INSIGHTS-PROJECTION-CONTRACT: Verify read-only INSIGHTS projection contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-PLAN-READS](../tasks/plan-reads.md) | `compile` | The capability reuses exact revision reads. |
-| [TASK-BUDGET-POSITION-QUERY](../tasks/position-query.md) | `compile` | The capability reuses exact position reads. |
-| [TASK-BUDGET-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | The capability reuses exact owner operation descriptors and schema fingerprints from BudgetOperationModule. |
-| [TASK-BUDGET-LEDGER-BUDGET-CLIENT](../tasks/ledger-budget-client.md) | `compile` | The composite evidence operation must reuse the released single-snapshot LEDGER actuals client. |
-| [TASK-BUDGET-POSITION-CALCULATOR](../tasks/position-calculator.md) | `compile` | The composite evidence operation must reuse the canonical Budget Position calculator over the same materialized members. |
+| [TASK-BUDGET-PLAN-READS: TASK-BUDGET-PLAN-READS](plan-reads.md) | `compile` | The capability reuses exact revision reads. |
+| [TASK-BUDGET-POSITION-QUERY: TASK-BUDGET-POSITION-QUERY](position-query.md) | `compile` | The capability reuses exact position reads. |
+| [TASK-BUDGET-CONTRACT-FOUNDATION: TASK-BUDGET-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | The capability reuses exact owner operation descriptors and schema fingerprints from BudgetOperationModule. |
+| [TASK-BUDGET-LEDGER-BUDGET-CLIENT: TASK-BUDGET-LEDGER-BUDGET-CLIENT](ledger-budget-client.md) | `compile` | The composite evidence operation must reuse the released single-snapshot LEDGER actuals client. |
+| [TASK-BUDGET-POSITION-CALCULATOR: TASK-BUDGET-POSITION-CALCULATOR](position-calculator.md) | `compile` | The composite evidence operation must reuse the canonical Budget Position calculator over the same materialized members. |
 
 ## Recipe
 
@@ -80,7 +80,7 @@ None recorded.
 | Path | Action | Role | Required | Notes |
 |---|---|---|---|---|
 | `src/Tally/Contracts/Budget/Projection/BudgetReadCapabilityDescriptor.cs` | `create` | read-only consumer capability | `true` |  |
-| `src/Tally/Contracts/Budget/Insights/BudgetInsightEvidence.cs` | `create` | coherent plan-state position and dated-member result | `true` |  |
+| `src/Tally/Contracts/Budget/Insights/BudgetInsightEvidence.cs` | `modify` | coherent plan-state position and dated-member result (type created by TASK-BUDGET-CONTRACT-FOUNDATION) | `true` |  |
 | `src/Tally/Features/Budget/Projection/BudgetReadProjectionModule.cs` | `create` | read-only descriptor binding | `true` |  |
 | `src/Tally/Features/Budget/Projection/GetBudgetInsightEvidenceQuery.cs` | `create` | single-snapshot producer composition for bound and absent plan states | `true` |  |
 | `tests/Tally.Tests/Budget/InsightsContract/BudgetInsightsContractTests.cs` | `test` | read parity plan-state coherence and mutation exclusion | `true` |  |
@@ -89,14 +89,14 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| BudgetReadCapabilityDescriptor | `produces` | DM-BUDGET-INSIGHTS-READ-CONTRACT | three-operation read-only capability |
-| GetBudgetPlanRevisionQuery.HandleAsync | `consumes` | DM-BUDGET-REVISION-ENTRY | resolve explicit or active revision and plan-absence states |
-| GetBudgetPositionQuery.HandleAsync | `consumes` | DM-BUDGET-POSITION-PROJECTION | preserve existing owner read behavior |
-| GetBudgetInsightEvidenceQuery.HandleAsync | `produces` | DM-BUDGET-INSIGHTS-READ-CONTRACT | compose all three plan states |
-| LedgerContractClient.QueryBudgetActualsAsync | `consumes` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT | one complete snapshot for every valid plan state |
-| BudgetPositionCalculator.Calculate | `consumes` | DM-BUDGET-POSITION-PROJECTION | invoke only for BoundRevision over the same members |
-| BudgetOperationModule | `consumes` | DM-BUDGET-OPERATION-CONTRACTS | register stable operation descriptor |
-| BudgetReadProjectionModule | `produces` | DM-BUDGET-INSIGHTS-READ-CONTRACT | publish mutation-free consumer set |
+| BudgetReadCapabilityDescriptor | `produces` | [DM-BUDGET-INSIGHTS-READ-CONTRACT](../../../designs/budget/data-model.md#budgetreadcapabilitydescriptor) | three-operation read-only capability |
+| GetBudgetPlanRevisionQuery.HandleAsync | `consumes` | [DM-BUDGET-REVISION-ENTRY](../../../designs/budget/data-model.md#budgetplanrevisionandentry) | resolve explicit or active revision and plan-absence states |
+| GetBudgetPositionQuery.HandleAsync | `consumes` | [DM-BUDGET-POSITION-PROJECTION](../../../designs/budget/data-model.md#budgetpositionprojection) | preserve existing owner read behavior |
+| GetBudgetInsightEvidenceQuery.HandleAsync | `produces` | [DM-BUDGET-INSIGHTS-READ-CONTRACT](../../../designs/budget/data-model.md#budgetreadcapabilitydescriptor) | compose all three plan states |
+| LedgerContractClient.QueryBudgetActualsAsync | `consumes` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) | one complete snapshot for every valid plan state |
+| BudgetPositionCalculator.Calculate | `consumes` | [DM-BUDGET-POSITION-PROJECTION](../../../designs/budget/data-model.md#budgetpositionprojection) | invoke only for BoundRevision over the same members |
+| BudgetOperationModule | `consumes` | [DM-BUDGET-OPERATION-CONTRACTS](../../../designs/budget/data-model.md#budgetoperationcontracts) | register stable operation descriptor |
+| BudgetReadProjectionModule | `produces` | [DM-BUDGET-INSIGHTS-READ-CONTRACT](../../../designs/budget/data-model.md#budgetreadcapabilitydescriptor) | publish mutation-free consumer set |
 
 ### Verification
 
@@ -112,25 +112,28 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-38wp` | `verified` | 2026-07-27T08:00:14.0294241+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-BUDGET-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): The capability reuses exact owner operation descriptors and schema fingerprints from BudgetOperationModule.
-- `depends-on:compile` -> [TASK-BUDGET-LEDGER-BUDGET-CLIENT](../tasks/ledger-budget-client.md): The composite evidence operation must reuse the released single-snapshot LEDGER actuals client.
-- `depends-on:compile` -> [TASK-BUDGET-PLAN-READS](../tasks/plan-reads.md): The capability reuses exact revision reads.
-- `depends-on:compile` -> [TASK-BUDGET-POSITION-CALCULATOR](../tasks/position-calculator.md): The composite evidence operation must reuse the canonical Budget Position calculator over the same materialized members.
-- `depends-on:compile` -> [TASK-BUDGET-POSITION-QUERY](../tasks/position-query.md): The capability reuses exact position reads.
-- `governed-by` -> DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot
-- `governed-by` -> DD-BUDGET-INSIGHTS-READ-PROJECTION: Reuse exact owner reads through a mutation-free INSIGHTS capability set
-- `governed-by` -> DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation
-- `implements` -> FR-BUDGET-INSIGHTS-PROJECTION: Expose a read-only INSIGHTS projection
-- `references` -> EXT-BUDGET-INSIGHTS-CONSUMER-CONTRACT: INSIGHTS Consumer Contract
-- `satisfies` -> NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries
-- `touches` -> DM-BUDGET-INSIGHTS-READ-CONTRACT: BudgetReadCapabilityDescriptor
-- `touches` -> DM-BUDGET-POSITION-PROJECTION: BudgetPositionProjection
+- `bead-ref` -> `bd-38wp` (verified)
+- `depends-on:compile` -> [TASK-BUDGET-CONTRACT-FOUNDATION: TASK-BUDGET-CONTRACT-FOUNDATION](contract-foundation.md): The capability reuses exact owner operation descriptors and schema fingerprints from BudgetOperationModule.
+- `depends-on:compile` -> [TASK-BUDGET-LEDGER-BUDGET-CLIENT: TASK-BUDGET-LEDGER-BUDGET-CLIENT](ledger-budget-client.md): The composite evidence operation must reuse the released single-snapshot LEDGER actuals client.
+- `depends-on:compile` -> [TASK-BUDGET-PLAN-READS: TASK-BUDGET-PLAN-READS](plan-reads.md): The capability reuses exact revision reads.
+- `depends-on:compile` -> [TASK-BUDGET-POSITION-CALCULATOR: TASK-BUDGET-POSITION-CALCULATOR](position-calculator.md): The composite evidence operation must reuse the canonical Budget Position calculator over the same materialized members.
+- `depends-on:compile` -> [TASK-BUDGET-POSITION-QUERY: TASK-BUDGET-POSITION-QUERY](position-query.md): The capability reuses exact position reads.
+- `governed-by` -> [DD-BUDGET-EXACT-POSITION-CALCULATION: Pure exhaustive bucketing over one complete LEDGER snapshot](../../../designs/budget/decisions/exact-position-calculation.md)
+- `governed-by` -> [DD-BUDGET-INSIGHTS-READ-PROJECTION: Reuse exact owner reads through a mutation-free INSIGHTS capability set](../../../designs/budget/decisions/insights-read-projection.md)
+- `governed-by` -> [DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation](../../../designs/insights/decisions/coherent-public-evidence.md)
+- `implements` -> [FR-BUDGET-INSIGHTS-PROJECTION: Expose a read-only INSIGHTS projection](../../../prd/budget/prd.md#fr-budget-insights-projection-expose-a-read-only-insights-projection)
+- `references` -> [EXT-BUDGET-INSIGHTS-CONSUMER-CONTRACT: INSIGHTS Consumer Contract](../../../prd/budget/prd.md#ext-budget-insights-consumer-contract-insights-consumer-contract)
+- `satisfies` -> [NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries](../../../prd/budget/prd.md#nfr-budget-public-contract-compatibility-preserve-public-contract-boundaries)
+- `touches` -> [DM-BUDGET-INSIGHTS-READ-CONTRACT: BudgetReadCapabilityDescriptor](../../../designs/budget/data-model.md#budgetreadcapabilitydescriptor)
+- `touches` -> [DM-BUDGET-POSITION-PROJECTION: BudgetPositionProjection](../../../designs/budget/data-model.md#budgetpositionprojection)
 - `verifies` -> TC-BUDGET-INSIGHTS-PROJECTION-CONTRACT: Verify read-only INSIGHTS projection contract
 
 ## Navigation

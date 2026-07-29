@@ -22,10 +22,10 @@ Commit one explicitly owner-reviewed base reconciliation outcome without duplica
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| FR-LEDGER-STATEMENT-RECONCILIATION: Apply statement reconciliation outcomes | `requirement` | `implements` | `true` |
+| [DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency](../../../designs/ledger/decisions/idempotent-mutations.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [FR-LEDGER-STATEMENT-RECONCILIATION: Apply statement reconciliation outcomes](../../../prd/ledger/prd.md#fr-ledger-statement-reconciliation-apply-statement-reconciliation-outcomes) | `requirement` | `implements` | `true` |
 | TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY: Prove reconciliation effects are crash-atomic and replay-safe | `test_case` | `verifies` | `true` |
 | TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT: Verify match-first statement reconciliation | `test_case` | `verifies` | `true` |
 
@@ -33,10 +33,10 @@ Commit one explicitly owner-reviewed base reconciliation outcome without duplica
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md) | `compile` | Apply consumes normalized evidence identity and storage. |
-| [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md) | `compile` | Match and statement-only outcomes consume canonical TransactionStore semantics. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Every disposition commits through LedgerMutationExecutor.ExecuteAsync. |
-| [TASK-LEDGER-RECONCILIATION-PROJECTION](../tasks/reconciliation-projection.md) | `compile` | Owner-reviewed apply revalidates the advisory projection token and candidate or guard membership. |
+| [TASK-LEDGER-EVIDENCE-REGISTRY: TASK-LEDGER-EVIDENCE-REGISTRY](evidence-registry.md) | `compile` | Apply consumes normalized evidence identity and storage. |
+| [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md) | `compile` | Match and statement-only outcomes consume canonical TransactionStore semantics. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Every disposition commits through LedgerMutationExecutor.ExecuteAsync. |
+| [TASK-LEDGER-RECONCILIATION-PROJECTION: TASK-LEDGER-RECONCILIATION-PROJECTION](reconciliation-projection.md) | `compile` | Owner-reviewed apply revalidates the advisory projection token and candidate or guard membership. |
 
 ## Recipe
 
@@ -81,13 +81,13 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ReconciliationWriteStore | `produces` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| ReconciliationApplyOperationModule | `produces` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
-| ReconciliationDispositionPolicy | `produces` | DM-LEDGER-RECONCILIATION-HISTORY | Accepts explicit owner authority and rejects unsupported automatic policy |
-| ReconciliationProjectionStore | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| EvidenceStore | `consumes` | DM-LEDGER-EVIDENCE-RECORD-LINK |  |
-| TransactionStore | `consumes` | DM-LEDGER-TRANSACTION-FACT |  |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD |  |
+| ReconciliationWriteStore | `produces` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| ReconciliationApplyOperationModule | `produces` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) |  |
+| ReconciliationDispositionPolicy | `produces` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) | Accepts explicit owner authority and rejects unsupported automatic policy |
+| ReconciliationProjectionStore | `consumes` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| EvidenceStore | `consumes` | [DM-LEDGER-EVIDENCE-RECORD-LINK](../../../designs/ledger/data-model.md#evidencerecordobservationandlink) |  |
+| TransactionStore | `consumes` | [DM-LEDGER-TRANSACTION-FACT](../../../designs/ledger/data-model.md#transactionfact) |  |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | [DM-LEDGER-IDEMPOTENCY-RECORD](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) |  |
 
 ### Verification
 
@@ -113,14 +113,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-37y` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Every disposition commits through LedgerMutationExecutor.ExecuteAsync.
-- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md): Apply consumes normalized evidence identity and storage.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-PROJECTION](../tasks/reconciliation-projection.md): Owner-reviewed apply revalidates the advisory projection token and candidate or guard membership.
-- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Match and statement-only outcomes consume canonical TransactionStore semantics.
-- `governed-by` -> DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
-- `implements` -> FR-LEDGER-STATEMENT-RECONCILIATION: Apply statement reconciliation outcomes
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Every disposition commits through LedgerMutationExecutor.ExecuteAsync.
+- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY: TASK-LEDGER-EVIDENCE-REGISTRY](evidence-registry.md): Apply consumes normalized evidence identity and storage.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-PROJECTION: TASK-LEDGER-RECONCILIATION-PROJECTION](reconciliation-projection.md): Owner-reviewed apply revalidates the advisory projection token and candidate or guard membership.
+- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md): Match and statement-only outcomes consume canonical TransactionStore semantics.
+- `governed-by` -> [DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency](../../../designs/ledger/decisions/idempotent-mutations.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `governed-by` -> [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md)
+- `implements` -> [FR-LEDGER-STATEMENT-RECONCILIATION: Apply statement reconciliation outcomes](../../../prd/ledger/prd.md#fr-ledger-statement-reconciliation-apply-statement-reconciliation-outcomes)
 - `verifies` -> TC-LEDGER-RECONCILIATION-CRASH-ATOMICITY: Prove reconciliation effects are crash-atomic and replay-safe
 - `verifies` -> TC-LEDGER-STATEMENT-RECONCILIATION-CONTRACT: Verify match-first statement reconciliation
 

@@ -5,7 +5,7 @@
 - **Ref:** `TASK-BUDGET-VERIFY-UC-001`
 - **Plan:** `PLAN-BUDGET-V1`
 - **Sub-Plan:** `SP-BUDGET-04-ACCEPTANCE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `1`
 - **Dialect:** `default`
@@ -22,22 +22,22 @@ UC-BUDGET-001 proves exact current/future draft creation, lifecycle validation, 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions | `design_decision` | `governed-by` | `true` |
+| [DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references](../../../designs/budget/decisions/idempotent-mutations.md) | `design_decision` | `governed-by` | `true` |
+| [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md) | `design_decision` | `governed-by` | `true` |
+| [DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions](../../../designs/budget/decisions/plan-revision-lifecycle.md) | `design_decision` | `governed-by` | `true` |
 | TC-BUDGET-CATEGORY-LIFECYCLE-CONTRACT: Verify category lifecycle contract | `test_case` | `verifies` | `true` |
 | TC-BUDGET-IDEMPOTENT-MUTATIONS-CONTRACT: Verify replay-safe mutation contract | `test_case` | `verifies` | `true` |
 | TC-BUDGET-PLAN-DRAFT-CONTRACT: Verify immutable plan draft contract | `test_case` | `verifies` | `true` |
 | TC-BUDGET-PLAN-IDENTITY-CONTRACT: Verify monthly plan identity contract | `test_case` | `verifies` | `true` |
-| UC-BUDGET-001: Draft a monthly category plan | `use_case` | `covers` | `true` |
+| [UC-BUDGET-001: Draft a monthly category plan](../../../prd/budget/prd.md#uc-budget-001-draft-a-monthly-category-plan) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Execute the published BUDGET boundary. |
-| [TASK-BUDGET-DRAFT-CREATION](../tasks/draft-creation.md) | `compile` | Verify the complete draft slice. |
-| [TASK-BUDGET-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md) | `compile` | Use the proven category contract. |
+| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Execute the published BUDGET boundary. |
+| [TASK-BUDGET-DRAFT-CREATION: TASK-BUDGET-DRAFT-CREATION](draft-creation.md) | `compile` | Verify the complete draft slice. |
+| [TASK-BUDGET-GATE-INT-LEDGER-CONTRACT: TASK-BUDGET-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md) | `compile` | Use the proven category contract. |
 
 ## Recipe
 
@@ -74,9 +74,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteBudgetPublicContract | `consumes` | DM-BUDGET-OPERATION-CONTRACTS |  |
-| VerifiedLedgerBudgetContract | `consumes` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
-| VerifiedBudgetUc001 | `produces` | UC-BUDGET-001 |  |
+| CompleteBudgetPublicContract | `consumes` | [DM-BUDGET-OPERATION-CONTRACTS](../../../designs/budget/data-model.md#budgetoperationcontracts) |  |
+| VerifiedLedgerBudgetContract | `consumes` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
+| VerifiedBudgetUc001 | `produces` | [UC-BUDGET-001](../../../prd/budget/prd.md#uc-budget-001-draft-a-monthly-category-plan) |  |
 
 ### Verification
 
@@ -92,19 +92,22 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1lo` | `verified` | 2026-07-27T08:00:09.7405003+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `covers` -> UC-BUDGET-001: Draft a monthly category plan
-- `depends-on:compile` -> [TASK-BUDGET-DRAFT-CREATION](../tasks/draft-creation.md): Verify the complete draft slice.
-- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md): Use the proven category contract.
-- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Execute the published BUDGET boundary.
-- `governed-by` -> DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references
-- `governed-by` -> DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations
-- `governed-by` -> DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions
+- `bead-ref` -> `bd-1lo` (verified)
+- `covers` -> [UC-BUDGET-001: Draft a monthly category plan](../../../prd/budget/prd.md#uc-budget-001-draft-a-monthly-category-plan)
+- `depends-on:compile` -> [TASK-BUDGET-DRAFT-CREATION: TASK-BUDGET-DRAFT-CREATION](draft-creation.md): Verify the complete draft slice.
+- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-LEDGER-CONTRACT: TASK-BUDGET-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md): Use the proven category contract.
+- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Execute the published BUDGET boundary.
+- `governed-by` -> [DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references](../../../designs/budget/decisions/idempotent-mutations.md)
+- `governed-by` -> [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md)
+- `governed-by` -> [DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions](../../../designs/budget/decisions/plan-revision-lifecycle.md)
 - `verifies` -> TC-BUDGET-CATEGORY-LIFECYCLE-CONTRACT: Verify category lifecycle contract
 - `verifies` -> TC-BUDGET-IDEMPOTENT-MUTATIONS-CONTRACT: Verify replay-safe mutation contract
 - `verifies` -> TC-BUDGET-PLAN-DRAFT-CONTRACT: Verify immutable plan draft contract

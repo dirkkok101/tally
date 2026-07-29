@@ -22,13 +22,13 @@ Provide a real-store-tested LedgerDb, schema-fragment registry, storage metadata
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-CANDIDATE-ACTIVATION: Verified store generations with atomic pointer activation | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection | `design_decision` | `governed-by` | `true` |
-| DIAG-LEDGER-LEDGER-ER: LEDGER durable and ephemeral data model | `design_diagram` | `references` | `false` |
-| DM-LEDGER-IDEMPOTENCY-RECORD: IdempotencyRecord | `data_model` | `touches` | `true` |
-| DM-LEDGER-STORE-GENERATION: StoreGenerationAndArtifactManifest | `data_model` | `touches` | `true` |
-| NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable | `nfr` | `satisfies` | `true` |
-| NFR-LEDGER-LOCAL-DATA-PROTECTION: Protect local financial data | `nfr` | `satisfies` | `true` |
+| [DD-LEDGER-CANDIDATE-ACTIVATION: Verified store generations with atomic pointer activation](../../../designs/ledger/decisions/candidate-activation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md) | `design_decision` | `governed-by` | `true` |
+| [DIAG-LEDGER-LEDGER-ER: LEDGER durable and ephemeral data model](../../../designs/ledger/diagrams/ledger-er.md) | `design_diagram` | `references` | `false` |
+| [DM-LEDGER-IDEMPOTENCY-RECORD: IdempotencyRecord](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) | `data_model` | `touches` | `true` |
+| [DM-LEDGER-STORE-GENERATION: StoreGenerationAndArtifactManifest](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) | `data_model` | `touches` | `true` |
+| [NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable](../../../prd/ledger/prd.md#nfr-ledger-atomic-durable-mutations-make-mutations-atomic-and-durable) | `nfr` | `satisfies` | `true` |
+| [NFR-LEDGER-LOCAL-DATA-PROTECTION: Protect local financial data](../../../prd/ledger/prd.md#nfr-ledger-local-data-protection-protect-local-financial-data) | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-ATOMIC-CRASH-RECOVERY: Prove mutation crash atomicity and idempotency | `test_case` | `verifies` | `true` |
 | TC-LEDGER-LOCAL-DATA-PROTECTION: Verify local artifact and diagnostic protection | `test_case` | `verifies` | `true` |
 
@@ -36,7 +36,7 @@ Provide a real-store-tested LedgerDb, schema-fragment registry, storage metadata
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md) | `compile` | Storage project and package references require the solution/process scaffold. |
+| [TASK-LEDGER-CORE-PROCESS-CONTRACT: TASK-LEDGER-CORE-PROCESS-CONTRACT](core-process-contract.md) | `compile` | Storage project and package references require the solution/process scaffold. |
 
 ## Recipe
 
@@ -87,13 +87,13 @@ Provide a real-store-tested LedgerDb, schema-fragment registry, storage metadata
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| LedgerDb | `produces` | DM-LEDGER-STORE-GENERATION |  |
+| LedgerDb | `produces` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) |  |
 | LedgerConnectionFactory | `produces` |  |  |
-| LedgerSchemaFragmentRegistry | `produces` | DD-LEDGER-EMBEDDED-STORAGE |  |
-| V001StorageSchema | `produces` | DM-LEDGER-STORE-GENERATION |  |
-| StoreGenerationManager | `produces` | DM-LEDGER-STORE-GENERATION |  |
-| IAuthoritativeStoreActivator | `produces` | DD-LEDGER-CANDIDATE-ACTIVATION |  |
-| IHostArtifactProtection | `produces` | DD-LEDGER-EMBEDDED-STORAGE |  |
+| LedgerSchemaFragmentRegistry | `produces` | [DD-LEDGER-EMBEDDED-STORAGE](../../../designs/ledger/decisions/embedded-storage.md) |  |
+| V001StorageSchema | `produces` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) |  |
+| StoreGenerationManager | `produces` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) |  |
+| IAuthoritativeStoreActivator | `produces` | [DD-LEDGER-CANDIDATE-ACTIVATION](../../../designs/ledger/decisions/candidate-activation.md) |  |
+| IHostArtifactProtection | `produces` | [DD-LEDGER-EMBEDDED-STORAGE](../../../designs/ledger/decisions/embedded-storage.md) |  |
 
 ### Verification
 
@@ -119,14 +119,14 @@ Provide a real-store-tested LedgerDb, schema-fragment registry, storage metadata
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-23m` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md): Storage project and package references require the solution/process scaffold.
-- `governed-by` -> DD-LEDGER-CANDIDATE-ACTIVATION: Verified store generations with atomic pointer activation
-- `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
-- `references` -> DIAG-LEDGER-LEDGER-ER: LEDGER durable and ephemeral data model
-- `satisfies` -> NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable
-- `satisfies` -> NFR-LEDGER-LOCAL-DATA-PROTECTION: Protect local financial data
-- `touches` -> DM-LEDGER-IDEMPOTENCY-RECORD: IdempotencyRecord
-- `touches` -> DM-LEDGER-STORE-GENERATION: StoreGenerationAndArtifactManifest
+- `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT: TASK-LEDGER-CORE-PROCESS-CONTRACT](core-process-contract.md): Storage project and package references require the solution/process scaffold.
+- `governed-by` -> [DD-LEDGER-CANDIDATE-ACTIVATION: Verified store generations with atomic pointer activation](../../../designs/ledger/decisions/candidate-activation.md)
+- `governed-by` -> [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md)
+- `references` -> [DIAG-LEDGER-LEDGER-ER: LEDGER durable and ephemeral data model](../../../designs/ledger/diagrams/ledger-er.md)
+- `satisfies` -> [NFR-LEDGER-ATOMIC-DURABLE-MUTATIONS: Make mutations atomic and durable](../../../prd/ledger/prd.md#nfr-ledger-atomic-durable-mutations-make-mutations-atomic-and-durable)
+- `satisfies` -> [NFR-LEDGER-LOCAL-DATA-PROTECTION: Protect local financial data](../../../prd/ledger/prd.md#nfr-ledger-local-data-protection-protect-local-financial-data)
+- `touches` -> [DM-LEDGER-IDEMPOTENCY-RECORD: IdempotencyRecord](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity)
+- `touches` -> [DM-LEDGER-STORE-GENERATION: StoreGenerationAndArtifactManifest](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest)
 - `verifies` -> TC-LEDGER-ATOMIC-CRASH-RECOVERY: Prove mutation crash atomicity and idempotency
 - `verifies` -> TC-LEDGER-LOCAL-DATA-PROTECTION: Verify local artifact and diagnostic protection
 

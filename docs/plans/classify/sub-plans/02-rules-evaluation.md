@@ -15,9 +15,9 @@ Implement immutable owner-approved rules and deterministic retained outcomes aft
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-CLASSIFY-RULE-DRAFT-SAVE](../tasks/rule-draft-save.md) | Save immutable rule drafts | `planned` | 0 |
-| [TASK-CLASSIFY-RULE-VALIDATION](../tasks/rule-validation.md) | Validate candidate rule sets privately | `planned` | 0 |
-| [TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE](../tasks/rule-activation-lifecycle.md) | Activate and retire immutable rule sets | `planned` | 0 |
-| [TASK-CLASSIFY-EVALUATION-INPUT](../tasks/evaluation-input.md) | Acquire bounded Ledger evaluation input | `planned` | 1 |
-| [TASK-CLASSIFY-EVALUATION-WORKFLOW](../tasks/evaluation-workflow.md) | Evaluate and persist classification outcomes | `planned` | 0 |
-| [TASK-CLASSIFY-OUTCOME-EXPLANATION](../tasks/outcome-explanation.md) | Explain and invalidate retained outcomes | `planned` | 1 |
+| [TASK-CLASSIFY-RULE-DRAFT-SAVE: Save immutable rule drafts](../tasks/rule-draft-save.md) | Save immutable rule drafts | `planned` | 0 |
+| [TASK-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets privately](../tasks/rule-validation.md) | Validate candidate rule sets privately | `planned` | 0 |
+| [TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE: Activate and retire immutable rule sets](../tasks/rule-activation-lifecycle.md) | Activate and retire immutable rule sets | `planned` | 0 |
+| [TASK-CLASSIFY-EVALUATION-INPUT: Acquire bounded Ledger evaluation input](../tasks/evaluation-input.md) | Acquire bounded Ledger evaluation input | `planned` | 1 |
+| [TASK-CLASSIFY-EVALUATION-WORKFLOW: Evaluate and persist classification outcomes](../tasks/evaluation-workflow.md) | Evaluate and persist classification outcomes | `planned` | 0 |
+| [TASK-CLASSIFY-OUTCOME-EXPLANATION: Explain and invalidate retained outcomes](../tasks/outcome-explanation.md) | Explain and invalidate retained outcomes | `planned` | 1 |

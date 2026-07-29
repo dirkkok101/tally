@@ -26,14 +26,14 @@ No graph references recorded.
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-PREVIEW-WORKFLOW](../tasks/preview-workflow.md) | `compile` | Consumes PreviewOperationModule and qualified format/state dependencies. |
-| [TASK-INGEST-REVIEW-WORKFLOW](../tasks/review-workflow.md) | `compile` | Consumes ReviewOperationModule. |
-| [TASK-INGEST-COMMIT-SAGA](../tasks/commit-saga.md) | `compile` | Consumes CommitOperationModule. |
-| [TASK-INGEST-RESUME-WORKFLOW](../tasks/resume-workflow.md) | `compile` | Consumes ResumeOperationModule. |
-| [TASK-INGEST-STATUS-WORKFLOW](../tasks/status-workflow.md) | `compile` | Consumes StatusOperationModule. |
-| [TASK-INGEST-ABANDON-CLEANUP](../tasks/abandon-cleanup.md) | `compile` | Consumes RecoveryCleanupOperationModule. |
-| [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md) | `compile` | Consumes VerifiedLedgerOperationRegistry. |
-| [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](../tasks/gate-int-format-adapters.md) | `compile` | Consumes StatementAdapterRegistry. |
+| [TASK-INGEST-PREVIEW-WORKFLOW: TASK-INGEST-PREVIEW-WORKFLOW](preview-workflow.md) | `compile` | Consumes PreviewOperationModule and qualified format/state dependencies. |
+| [TASK-INGEST-REVIEW-WORKFLOW: TASK-INGEST-REVIEW-WORKFLOW](review-workflow.md) | `compile` | Consumes ReviewOperationModule. |
+| [TASK-INGEST-COMMIT-SAGA: TASK-INGEST-COMMIT-SAGA](commit-saga.md) | `compile` | Consumes CommitOperationModule. |
+| [TASK-INGEST-RESUME-WORKFLOW: TASK-INGEST-RESUME-WORKFLOW](resume-workflow.md) | `compile` | Consumes ResumeOperationModule. |
+| [TASK-INGEST-STATUS-WORKFLOW: TASK-INGEST-STATUS-WORKFLOW](status-workflow.md) | `compile` | Consumes StatusOperationModule. |
+| [TASK-INGEST-ABANDON-CLEANUP: TASK-INGEST-ABANDON-CLEANUP](abandon-cleanup.md) | `compile` | Consumes RecoveryCleanupOperationModule. |
+| [TASK-INGEST-GATE-INT-LEDGER-CONTRACT: TASK-INGEST-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md) | `compile` | Consumes VerifiedLedgerOperationRegistry. |
+| [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS: TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](gate-int-format-adapters.md) | `compile` | Consumes StatementAdapterRegistry. |
 
 ## Recipe
 
@@ -85,17 +85,17 @@ No graph references recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| VerifiedLedgerOperationRegistry | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Shared registry validated by the prerequisite gate |
-| PreviewOperationModule | `consumes` | DM-INGEST-OPERATION-CONTRACTS | Preview descriptor |
-| ReviewOperationModule | `consumes` | DM-INGEST-OPERATION-CONTRACTS | Inspect and approve descriptors |
-| CommitOperationModule | `consumes` | DM-INGEST-OPERATION-CONTRACTS | Commit descriptor |
-| ResumeOperationModule | `consumes` | DM-INGEST-OPERATION-CONTRACTS | Resume descriptor |
-| StatusOperationModule | `consumes` | DM-INGEST-OPERATION-CONTRACTS | Status descriptor |
-| RecoveryCleanupOperationModule | `consumes` | DM-INGEST-OPERATION-CONTRACTS | Abandon and cleanup descriptors |
-| StatementAdapterRegistry | `consumes` | DM-INGEST-FORMAT-EVIDENCE | Exactly two qualified adapters |
-| IngestOperationBundle | `produces` | DM-INGEST-OPERATION-CONTRACTS | Exactly eight descriptors |
-| CompleteIngestPublicContract | `produces` | DM-INGEST-OPERATION-CONTRACTS | Published eight-operation surface |
-| PublishedIngestTallyFixture | `produces` | DM-INGEST-OPERATION-CONTRACTS | Release binary process fixture extended for INGEST |
+| VerifiedLedgerOperationRegistry | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Shared registry validated by the prerequisite gate |
+| PreviewOperationModule | `consumes` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) | Preview descriptor |
+| ReviewOperationModule | `consumes` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) | Inspect and approve descriptors |
+| CommitOperationModule | `consumes` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) | Commit descriptor |
+| ResumeOperationModule | `consumes` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) | Resume descriptor |
+| StatusOperationModule | `consumes` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) | Status descriptor |
+| RecoveryCleanupOperationModule | `consumes` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) | Abandon and cleanup descriptors |
+| StatementAdapterRegistry | `consumes` | [DM-INGEST-FORMAT-EVIDENCE](../../../designs/ingest/data-model.md#formatvariantandsourceevidence) | Exactly two qualified adapters |
+| IngestOperationBundle | `produces` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) | Exactly eight descriptors |
+| CompleteIngestPublicContract | `produces` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) | Published eight-operation surface |
+| PublishedIngestTallyFixture | `produces` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) | Release binary process fixture extended for INGEST |
 
 ### Verification
 
@@ -122,14 +122,14 @@ No graph references recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2jn` (verified)
-- `depends-on:compile` -> [TASK-INGEST-ABANDON-CLEANUP](../tasks/abandon-cleanup.md): Consumes RecoveryCleanupOperationModule.
-- `depends-on:compile` -> [TASK-INGEST-COMMIT-SAGA](../tasks/commit-saga.md): Consumes CommitOperationModule.
-- `depends-on:compile` -> [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](../tasks/gate-int-format-adapters.md): Consumes StatementAdapterRegistry.
-- `depends-on:compile` -> [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md): Consumes VerifiedLedgerOperationRegistry.
-- `depends-on:compile` -> [TASK-INGEST-PREVIEW-WORKFLOW](../tasks/preview-workflow.md): Consumes PreviewOperationModule and qualified format/state dependencies.
-- `depends-on:compile` -> [TASK-INGEST-RESUME-WORKFLOW](../tasks/resume-workflow.md): Consumes ResumeOperationModule.
-- `depends-on:compile` -> [TASK-INGEST-REVIEW-WORKFLOW](../tasks/review-workflow.md): Consumes ReviewOperationModule.
-- `depends-on:compile` -> [TASK-INGEST-STATUS-WORKFLOW](../tasks/status-workflow.md): Consumes StatusOperationModule.
+- `depends-on:compile` -> [TASK-INGEST-ABANDON-CLEANUP: TASK-INGEST-ABANDON-CLEANUP](abandon-cleanup.md): Consumes RecoveryCleanupOperationModule.
+- `depends-on:compile` -> [TASK-INGEST-COMMIT-SAGA: TASK-INGEST-COMMIT-SAGA](commit-saga.md): Consumes CommitOperationModule.
+- `depends-on:compile` -> [TASK-INGEST-GATE-INT-FORMAT-ADAPTERS: TASK-INGEST-GATE-INT-FORMAT-ADAPTERS](gate-int-format-adapters.md): Consumes StatementAdapterRegistry.
+- `depends-on:compile` -> [TASK-INGEST-GATE-INT-LEDGER-CONTRACT: TASK-INGEST-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md): Consumes VerifiedLedgerOperationRegistry.
+- `depends-on:compile` -> [TASK-INGEST-PREVIEW-WORKFLOW: TASK-INGEST-PREVIEW-WORKFLOW](preview-workflow.md): Consumes PreviewOperationModule and qualified format/state dependencies.
+- `depends-on:compile` -> [TASK-INGEST-RESUME-WORKFLOW: TASK-INGEST-RESUME-WORKFLOW](resume-workflow.md): Consumes ResumeOperationModule.
+- `depends-on:compile` -> [TASK-INGEST-REVIEW-WORKFLOW: TASK-INGEST-REVIEW-WORKFLOW](review-workflow.md): Consumes ReviewOperationModule.
+- `depends-on:compile` -> [TASK-INGEST-STATUS-WORKFLOW: TASK-INGEST-STATUS-WORKFLOW](status-workflow.md): Consumes StatusOperationModule.
 
 ## Navigation
 

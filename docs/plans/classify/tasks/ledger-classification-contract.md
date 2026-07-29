@@ -22,14 +22,14 @@ Ledger exposes versioned evaluation and apply-preflight projections plus drift-s
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract | `design_decision` | `governed-by` | `true` |
-| DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts | `data_model` | `touches` | `true` |
-| FA-CLASSIFY-EVALUATION-EXPLANATION: Evaluation and Explanation | `feature_area` | `touches` | `false` |
-| FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection | `requirement` | `implements` | `true` |
-| TASK-LEDGER-ACTUALS-SNAPSHOT: Implement atomic snapshot actuals pagination | `task` | `blocked-by` | `true` |
-| TASK-LEDGER-CATEGORY-ALLOCATIONS: Implement category assignment and correction | `task` | `blocked-by` | `true` |
-| TASK-LEDGER-TRANSACTION-CORRECTIONS: Implement transaction void and supersession | `task` | `blocked-by` | `true` |
+| [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md) | `design_decision` | `governed-by` | `true` |
+| [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) | `data_model` | `touches` | `true` |
+| [FA-CLASSIFY-EVALUATION-EXPLANATION: Evaluation and Explanation](../../../designs/classify/features/evaluation-explanation/api-surface.md) | `feature_area` | `touches` | `false` |
+| [FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations](../../../prd/classify/prd.md#fr-classify-apply-execution-apply-authorized-decisions-through-public-ledger-operations) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection](../../../prd/classify/prd.md#fr-classify-eligible-projection-obtain-the-eligible-classification-projection) | `requirement` | `implements` | `true` |
+| [TASK-LEDGER-ACTUALS-SNAPSHOT: Implement atomic snapshot actuals pagination](../../ledger/tasks/actuals-snapshot.md) | `task` | `blocked-by` | `true` |
+| [TASK-LEDGER-CATEGORY-ALLOCATIONS: Implement category assignment and correction](../../ledger/tasks/category-allocations.md) | `task` | `blocked-by` | `true` |
+| [TASK-LEDGER-TRANSACTION-CORRECTIONS: Implement transaction void and supersession](../../ledger/tasks/transaction-corrections.md) | `task` | `blocked-by` | `true` |
 | TC-CLASSIFY-ELIGIBLE-PROJECTION-CONTRACT: Verify the eligible classification projection | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -84,10 +84,10 @@ No task dependencies recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassificationProjectionRequest | `produces` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| ClassificationProjectionDescriptor | `produces` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| ClassificationProjectionItem | `produces` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| LedgerCategoryMutationPreconditions | `produces` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
+| ClassificationProjectionRequest | `produces` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| ClassificationProjectionDescriptor | `produces` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| ClassificationProjectionItem | `produces` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| LedgerCategoryMutationPreconditions | `produces` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
 
 ### Verification
 
@@ -109,14 +109,14 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `blocked-by` -> TASK-LEDGER-ACTUALS-SNAPSHOT: Implement atomic snapshot actuals pagination
-- `blocked-by` -> TASK-LEDGER-CATEGORY-ALLOCATIONS: Implement category assignment and correction
-- `blocked-by` -> TASK-LEDGER-TRANSACTION-CORRECTIONS: Implement transaction void and supersession
-- `governed-by` -> DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract
-- `implements` -> FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations
-- `implements` -> FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection
-- `touches` -> DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts
-- `touches` -> FA-CLASSIFY-EVALUATION-EXPLANATION: Evaluation and Explanation
+- `blocked-by` -> [TASK-LEDGER-ACTUALS-SNAPSHOT: Implement atomic snapshot actuals pagination](../../ledger/tasks/actuals-snapshot.md)
+- `blocked-by` -> [TASK-LEDGER-CATEGORY-ALLOCATIONS: Implement category assignment and correction](../../ledger/tasks/category-allocations.md)
+- `blocked-by` -> [TASK-LEDGER-TRANSACTION-CORRECTIONS: Implement transaction void and supersession](../../ledger/tasks/transaction-corrections.md)
+- `governed-by` -> [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md)
+- `implements` -> [FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations](../../../prd/classify/prd.md#fr-classify-apply-execution-apply-authorized-decisions-through-public-ledger-operations)
+- `implements` -> [FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection](../../../prd/classify/prd.md#fr-classify-eligible-projection-obtain-the-eligible-classification-projection)
+- `touches` -> [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts)
+- `touches` -> [FA-CLASSIFY-EVALUATION-EXPLANATION: Evaluation and Explanation](../../../designs/classify/features/evaluation-explanation/api-surface.md)
 - `verifies` -> TC-CLASSIFY-ELIGIBLE-PROJECTION-CONTRACT: Verify the eligible classification projection
 
 ## Navigation

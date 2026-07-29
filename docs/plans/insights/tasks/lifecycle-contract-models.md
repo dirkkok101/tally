@@ -22,12 +22,12 @@ Every retained-state and recovery data shape is represented by one deterministic
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields | `adr` | `governed-by` | `true` |
-| DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries | `design_decision` | `governed-by` | `true` |
-| DM-INSIGHTS-IDEMPOTENCY: InsightsIdempotencyRecord | `data_model` | `touches` | `true` |
-| DM-INSIGHTS-POLICY-VALIDATION-RECEIPT: PolicyValidationReceipt | `data_model` | `touches` | `true` |
-| DM-INSIGHTS-RECOVERY-CONTRACTS: InsightsRecoveryManifestAndReceipts | `data_model` | `touches` | `true` |
-| DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion | `data_model` | `touches` | `true` |
+| [ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields](../../../adr/core/0004-enum-over-string-constants-for-system-owned-status-fields.md) | `adr` | `governed-by` | `true` |
+| [DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries](../../../designs/insights/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INSIGHTS-IDEMPOTENCY: InsightsIdempotencyRecord](../../../designs/insights/data-model.md#insightsidempotencyrecord) | `data_model` | `touches` | `true` |
+| [DM-INSIGHTS-POLICY-VALIDATION-RECEIPT: PolicyValidationReceipt](../../../designs/insights/data-model.md#policyvalidationreceipt) | `data_model` | `touches` | `true` |
+| [DM-INSIGHTS-RECOVERY-CONTRACTS: InsightsRecoveryManifestAndReceipts](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts) | `data_model` | `touches` | `true` |
+| [DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion](../../../designs/insights/data-model.md#reportsnapshotrestatementanddeletion) | `data_model` | `touches` | `true` |
 
 ## Dependencies
 
@@ -76,10 +76,10 @@ No task dependencies recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| InsightHistoryContracts | `produces` | DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE | immutable history and deletion models |
-| InsightsIdempotencyRecord | `produces` | DM-INSIGHTS-IDEMPOTENCY | module-wide replay record |
-| InsightsRecoveryContracts | `produces` | DM-INSIGHTS-RECOVERY-CONTRACTS | backup verification restore and status contracts |
-| PolicyValidationReceipt | `produces` | DM-INSIGHTS-POLICY-VALIDATION-RECEIPT | external aggregate evidence only |
+| InsightHistoryContracts | `produces` | [DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE](../../../designs/insights/data-model.md#reportsnapshotrestatementanddeletion) | immutable history and deletion models |
+| InsightsIdempotencyRecord | `produces` | [DM-INSIGHTS-IDEMPOTENCY](../../../designs/insights/data-model.md#insightsidempotencyrecord) | module-wide replay record |
+| InsightsRecoveryContracts | `produces` | [DM-INSIGHTS-RECOVERY-CONTRACTS](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts) | backup verification restore and status contracts |
+| PolicyValidationReceipt | `produces` | [DM-INSIGHTS-POLICY-VALIDATION-RECEIPT](../../../designs/insights/data-model.md#policyvalidationreceipt) | external aggregate evidence only |
 
 ### Verification
 
@@ -104,12 +104,12 @@ No task dependencies recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-21u` (verified)
-- `governed-by` -> ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields
-- `governed-by` -> DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries
-- `touches` -> DM-INSIGHTS-IDEMPOTENCY: InsightsIdempotencyRecord
-- `touches` -> DM-INSIGHTS-POLICY-VALIDATION-RECEIPT: PolicyValidationReceipt
-- `touches` -> DM-INSIGHTS-RECOVERY-CONTRACTS: InsightsRecoveryManifestAndReceipts
-- `touches` -> DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion
+- `governed-by` -> [ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields](../../../adr/core/0004-enum-over-string-constants-for-system-owned-status-fields.md)
+- `governed-by` -> [DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries](../../../designs/insights/decisions/application-architecture.md)
+- `touches` -> [DM-INSIGHTS-IDEMPOTENCY: InsightsIdempotencyRecord](../../../designs/insights/data-model.md#insightsidempotencyrecord)
+- `touches` -> [DM-INSIGHTS-POLICY-VALIDATION-RECEIPT: PolicyValidationReceipt](../../../designs/insights/data-model.md#policyvalidationreceipt)
+- `touches` -> [DM-INSIGHTS-RECOVERY-CONTRACTS: InsightsRecoveryManifestAndReceipts](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts)
+- `touches` -> [DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion](../../../designs/insights/data-model.md#reportsnapshotrestatementanddeletion)
 
 ## Navigation
 

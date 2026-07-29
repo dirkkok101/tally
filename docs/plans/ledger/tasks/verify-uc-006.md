@@ -22,20 +22,20 @@ Prove Hermes, another orchestrator, or a direct caller can discover and invoke a
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DM-LEDGER-SYSTEM-SKILL-CONTRACTS: SystemIntegrationGuidanceContracts | `data_model` | `touches` | `false` |
-| FR-LEDGER-CONTRACT-DISCOVERY: Discover the Ledger command contract | `requirement` | `verifies` | `true` |
-| FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent | `requirement` | `verifies` | `true` |
-| FR-LEDGER-SKILL-COMPATIBILITY: Expose version-matched integration guidance | `requirement` | `verifies` | `true` |
-| FR-LEDGER-STRUCTURED-INVOCATION: Invoke Ledger operations non-interactively | `requirement` | `verifies` | `true` |
+| [DM-LEDGER-SYSTEM-SKILL-CONTRACTS: SystemIntegrationGuidanceContracts](../../../designs/ledger/data-model.md#systemintegrationguidancecontracts) | `data_model` | `touches` | `false` |
+| [FR-LEDGER-CONTRACT-DISCOVERY: Discover the Ledger command contract](../../../prd/ledger/prd.md#fr-ledger-contract-discovery-discover-the-ledger-command-contract) | `requirement` | `verifies` | `true` |
+| [FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent](../../../prd/ledger/prd.md#fr-ledger-idempotent-writes-make-public-writes-idempotent) | `requirement` | `verifies` | `true` |
+| [FR-LEDGER-SKILL-COMPATIBILITY: Expose version-matched integration guidance](../../../prd/ledger/prd.md#fr-ledger-skill-compatibility-expose-version-matched-integration-guidance) | `requirement` | `verifies` | `true` |
+| [FR-LEDGER-STRUCTURED-INVOCATION: Invoke Ledger operations non-interactively](../../../prd/ledger/prd.md#fr-ledger-structured-invocation-invoke-ledger-operations-non-interactively) | `requirement` | `verifies` | `true` |
 | TC-LEDGER-AGENT-CONTRACT-CONFORMANCE: Verify every external-orchestrator operation contract | `test_case` | `verifies` | `true` |
 | TC-LEDGER-SKILL-COMPATIBILITY-CONTRACT: Verify version-matched integration guidance | `test_case` | `verifies` | `true` |
-| UC-LEDGER-006: Discover and invoke the external-orchestrator contract | `use_case` | `covers` | `true` |
+| [UC-LEDGER-006: Discover and invoke the external-orchestrator contract](../../../prd/ledger/prd.md#uc-ledger-006-discover-and-invoke-the-external-orchestrator-contract) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
 
 ## Recipe
 
@@ -75,8 +75,8 @@ Prove Hermes, another orchestrator, or a direct caller can discover and invoke a
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 73 provider-neutral operations |
-| VerifiedUC006 | `produces` | UC-LEDGER-006 | External Orchestrator contract workflow |
+| CompletePublicContract | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Exactly 73 provider-neutral operations |
+| VerifiedUC006 | `produces` | [UC-LEDGER-006](../../../prd/ledger/prd.md#uc-ledger-006-discover-and-invoke-the-external-orchestrator-contract) | External Orchestrator contract workflow |
 
 ### Verification
 
@@ -102,15 +102,15 @@ Prove Hermes, another orchestrator, or a direct caller can discover and invoke a
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-gpm` (verified)
-- `covers` -> UC-LEDGER-006: Discover and invoke the external-orchestrator contract
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
-- `touches` -> DM-LEDGER-SYSTEM-SKILL-CONTRACTS: SystemIntegrationGuidanceContracts
-- `verifies` -> FR-LEDGER-CONTRACT-DISCOVERY: Discover the Ledger command contract
-- `verifies` -> FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent
-- `verifies` -> FR-LEDGER-SKILL-COMPATIBILITY: Expose version-matched integration guidance
-- `verifies` -> FR-LEDGER-STRUCTURED-INVOCATION: Invoke Ledger operations non-interactively
+- `covers` -> [UC-LEDGER-006: Discover and invoke the external-orchestrator contract](../../../prd/ledger/prd.md#uc-ledger-006-discover-and-invoke-the-external-orchestrator-contract)
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
+- `touches` -> [DM-LEDGER-SYSTEM-SKILL-CONTRACTS: SystemIntegrationGuidanceContracts](../../../designs/ledger/data-model.md#systemintegrationguidancecontracts)
 - `verifies` -> TC-LEDGER-AGENT-CONTRACT-CONFORMANCE: Verify every external-orchestrator operation contract
 - `verifies` -> TC-LEDGER-SKILL-COMPATIBILITY-CONTRACT: Verify version-matched integration guidance
+- `verifies` -> [FR-LEDGER-CONTRACT-DISCOVERY: Discover the Ledger command contract](../../../prd/ledger/prd.md#fr-ledger-contract-discovery-discover-the-ledger-command-contract)
+- `verifies` -> [FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent](../../../prd/ledger/prd.md#fr-ledger-idempotent-writes-make-public-writes-idempotent)
+- `verifies` -> [FR-LEDGER-SKILL-COMPATIBILITY: Expose version-matched integration guidance](../../../prd/ledger/prd.md#fr-ledger-skill-compatibility-expose-version-matched-integration-guidance)
+- `verifies` -> [FR-LEDGER-STRUCTURED-INVOCATION: Invoke Ledger operations non-interactively](../../../prd/ledger/prd.md#fr-ledger-structured-invocation-invoke-ledger-operations-non-interactively)
 
 ## Navigation
 

@@ -22,25 +22,25 @@ Publish exactly eleven stable Public INSIGHTS Operations plus shared schema disc
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning | `adr` | `governed-by` | `true` |
-| DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry | `design_decision` | `governed-by` | `true` |
-| EXT-INSIGHTS-AI-AGENT-HOST: AI Agent Host | `external_dependency` | `references` | `true` |
-| EXT-INSIGHTS-CHANNELS-CONSUMER-CONTRACT: CHANNELS Consumer Contract | `external_dependency` | `references` | `true` |
+| [ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning](../../../adr/core/0021-explicit-di-registration-no-reflection-scanning.md) | `adr` | `governed-by` | `true` |
+| [DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries](../../../designs/insights/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry](../../../designs/insights/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [EXT-INSIGHTS-AI-AGENT-HOST: AI Agent Host](../../../prd/insights/prd.md#ext-insights-ai-agent-host-ai-agent-host) | `external_dependency` | `references` | `true` |
+| [EXT-INSIGHTS-CHANNELS-CONSUMER-CONTRACT: CHANNELS Consumer Contract](../../../prd/insights/prd.md#ext-insights-channels-consumer-contract-channels-consumer-contract) | `external_dependency` | `references` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Wiring consumes descriptors and source-generated contracts. |
-| [TASK-INSIGHTS-GENERATE-REPORT](../tasks/generate-report.md) | `compile` | Register Generate. |
-| [TASK-INSIGHTS-REPORT-DETAIL-READS](../tasks/report-detail-reads.md) | `compile` | Register Explain and Get. |
-| [TASK-INSIGHTS-REPORT-HISTORY-STATUS](../tasks/report-history-status.md) | `compile` | Register List and Status. |
-| [TASK-INSIGHTS-RETAIN-REPORT](../tasks/retain-report.md) | `compile` | Register Retain. |
-| [TASK-INSIGHTS-RESTATE-REPORT](../tasks/restate-report.md) | `compile` | Register Restate. |
-| [TASK-INSIGHTS-DELETE-REPORT](../tasks/delete-report.md) | `compile` | Register Delete. |
-| [TASK-INSIGHTS-BACKUP-VERIFY](../tasks/backup-verify.md) | `compile` | Register Backup and Verify. |
-| [TASK-INSIGHTS-RESTORE-ACTIVATE](../tasks/restore-activate.md) | `compile` | Register Restore. |
+| [TASK-INSIGHTS-CONTRACT-FOUNDATION: TASK-INSIGHTS-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | Wiring consumes descriptors and source-generated contracts. |
+| [TASK-INSIGHTS-GENERATE-REPORT: TASK-INSIGHTS-GENERATE-REPORT](generate-report.md) | `compile` | Register Generate. |
+| [TASK-INSIGHTS-REPORT-DETAIL-READS: TASK-INSIGHTS-REPORT-DETAIL-READS](report-detail-reads.md) | `compile` | Register Explain and Get. |
+| [TASK-INSIGHTS-REPORT-HISTORY-STATUS: TASK-INSIGHTS-REPORT-HISTORY-STATUS](report-history-status.md) | `compile` | Register List and Status. |
+| [TASK-INSIGHTS-RETAIN-REPORT: TASK-INSIGHTS-RETAIN-REPORT](retain-report.md) | `compile` | Register Retain. |
+| [TASK-INSIGHTS-RESTATE-REPORT: TASK-INSIGHTS-RESTATE-REPORT](restate-report.md) | `compile` | Register Restate. |
+| [TASK-INSIGHTS-DELETE-REPORT: TASK-INSIGHTS-DELETE-REPORT](delete-report.md) | `compile` | Register Delete. |
+| [TASK-INSIGHTS-BACKUP-VERIFY: TASK-INSIGHTS-BACKUP-VERIFY](backup-verify.md) | `compile` | Register Backup and Verify. |
+| [TASK-INSIGHTS-RESTORE-ACTIVATE: TASK-INSIGHTS-RESTORE-ACTIVATE](restore-activate.md) | `compile` | Register Restore. |
 
 ## Recipe
 
@@ -85,19 +85,19 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| InsightsOperationModule | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS |  |
-| GenerateInsightReportQuery.HandleAsync | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS |  |
-| ExplainInsightReportQuery.HandleAsync | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS |  |
-| GetInsightReportQuery.HandleAsync | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS |  |
-| ListInsightReportsQuery.HandleAsync | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS |  |
-| RetainInsightReportCommand.HandleAsync | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS |  |
-| RestateInsightReportCommand.HandleAsync | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS |  |
-| DeleteInsightReportCommand.HandleAsync | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS |  |
-| GetInsightsStatusQuery.HandleAsync | `consumes` | DM-INSIGHTS-RECOVERY-CONTRACTS |  |
-| CreateInsightsBackupCommand.HandleAsync | `consumes` | DM-INSIGHTS-RECOVERY-CONTRACTS |  |
-| VerifyInsightsBackupQuery.HandleAsync | `consumes` | DM-INSIGHTS-RECOVERY-CONTRACTS |  |
-| RestoreInsightsBackupCommand.HandleAsync | `consumes` | DM-INSIGHTS-RECOVERY-CONTRACTS |  |
-| CompleteInsightsPublicContract | `produces` | DM-INSIGHTS-OPERATION-CONTRACTS |  |
+| InsightsOperationModule | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) |  |
+| GenerateInsightReportQuery.HandleAsync | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) |  |
+| ExplainInsightReportQuery.HandleAsync | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) |  |
+| GetInsightReportQuery.HandleAsync | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) |  |
+| ListInsightReportsQuery.HandleAsync | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) |  |
+| RetainInsightReportCommand.HandleAsync | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) |  |
+| RestateInsightReportCommand.HandleAsync | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) |  |
+| DeleteInsightReportCommand.HandleAsync | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) |  |
+| GetInsightsStatusQuery.HandleAsync | `consumes` | [DM-INSIGHTS-RECOVERY-CONTRACTS](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts) |  |
+| CreateInsightsBackupCommand.HandleAsync | `consumes` | [DM-INSIGHTS-RECOVERY-CONTRACTS](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts) |  |
+| VerifyInsightsBackupQuery.HandleAsync | `consumes` | [DM-INSIGHTS-RECOVERY-CONTRACTS](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts) |  |
+| RestoreInsightsBackupCommand.HandleAsync | `consumes` | [DM-INSIGHTS-RECOVERY-CONTRACTS](../../../designs/insights/data-model.md#insightsrecoverymanifestandreceipts) |  |
+| CompleteInsightsPublicContract | `produces` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) |  |
 
 ### Verification
 
@@ -122,20 +122,20 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1jf` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-BACKUP-VERIFY](../tasks/backup-verify.md): Register Backup and Verify.
-- `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Wiring consumes descriptors and source-generated contracts.
-- `depends-on:compile` -> [TASK-INSIGHTS-DELETE-REPORT](../tasks/delete-report.md): Register Delete.
-- `depends-on:compile` -> [TASK-INSIGHTS-GENERATE-REPORT](../tasks/generate-report.md): Register Generate.
-- `depends-on:compile` -> [TASK-INSIGHTS-REPORT-DETAIL-READS](../tasks/report-detail-reads.md): Register Explain and Get.
-- `depends-on:compile` -> [TASK-INSIGHTS-REPORT-HISTORY-STATUS](../tasks/report-history-status.md): Register List and Status.
-- `depends-on:compile` -> [TASK-INSIGHTS-RESTATE-REPORT](../tasks/restate-report.md): Register Restate.
-- `depends-on:compile` -> [TASK-INSIGHTS-RESTORE-ACTIVATE](../tasks/restore-activate.md): Register Restore.
-- `depends-on:compile` -> [TASK-INSIGHTS-RETAIN-REPORT](../tasks/retain-report.md): Register Retain.
-- `governed-by` -> ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning
-- `governed-by` -> DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries
-- `governed-by` -> DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry
-- `references` -> EXT-INSIGHTS-AI-AGENT-HOST: AI Agent Host
-- `references` -> EXT-INSIGHTS-CHANNELS-CONSUMER-CONTRACT: CHANNELS Consumer Contract
+- `depends-on:compile` -> [TASK-INSIGHTS-BACKUP-VERIFY: TASK-INSIGHTS-BACKUP-VERIFY](backup-verify.md): Register Backup and Verify.
+- `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-FOUNDATION: TASK-INSIGHTS-CONTRACT-FOUNDATION](contract-foundation.md): Wiring consumes descriptors and source-generated contracts.
+- `depends-on:compile` -> [TASK-INSIGHTS-DELETE-REPORT: TASK-INSIGHTS-DELETE-REPORT](delete-report.md): Register Delete.
+- `depends-on:compile` -> [TASK-INSIGHTS-GENERATE-REPORT: TASK-INSIGHTS-GENERATE-REPORT](generate-report.md): Register Generate.
+- `depends-on:compile` -> [TASK-INSIGHTS-REPORT-DETAIL-READS: TASK-INSIGHTS-REPORT-DETAIL-READS](report-detail-reads.md): Register Explain and Get.
+- `depends-on:compile` -> [TASK-INSIGHTS-REPORT-HISTORY-STATUS: TASK-INSIGHTS-REPORT-HISTORY-STATUS](report-history-status.md): Register List and Status.
+- `depends-on:compile` -> [TASK-INSIGHTS-RESTATE-REPORT: TASK-INSIGHTS-RESTATE-REPORT](restate-report.md): Register Restate.
+- `depends-on:compile` -> [TASK-INSIGHTS-RESTORE-ACTIVATE: TASK-INSIGHTS-RESTORE-ACTIVATE](restore-activate.md): Register Restore.
+- `depends-on:compile` -> [TASK-INSIGHTS-RETAIN-REPORT: TASK-INSIGHTS-RETAIN-REPORT](retain-report.md): Register Retain.
+- `governed-by` -> [ADR-CORE-0021: Explicit DI Registration — No Reflection Scanning](../../../adr/core/0021-explicit-di-registration-no-reflection-scanning.md)
+- `governed-by` -> [DD-INSIGHTS-APPLICATION-ARCHITECTURE: Typed analytical compiler with concrete local boundaries](../../../designs/insights/decisions/application-architecture.md)
+- `governed-by` -> [DD-INSIGHTS-CLI-OPERATION-CONTRACT: Eleven explicit Public INSIGHTS Operations from one registry](../../../designs/insights/decisions/cli-operation-contract.md)
+- `references` -> [EXT-INSIGHTS-AI-AGENT-HOST: AI Agent Host](../../../prd/insights/prd.md#ext-insights-ai-agent-host-ai-agent-host)
+- `references` -> [EXT-INSIGHTS-CHANNELS-CONSUMER-CONTRACT: CHANNELS Consumer Contract](../../../prd/insights/prd.md#ext-insights-channels-consumer-contract-channels-consumer-contract)
 
 ## Navigation
 

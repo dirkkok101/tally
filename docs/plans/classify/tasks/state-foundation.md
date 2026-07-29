@@ -22,22 +22,22 @@ CLASSIFY has one separate owner-only SQLite state store whose immutable history 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| ADR-CORE-0020: RESTRICT-by-Default Delete Taxonomy | `adr` | `governed-by` | `true` |
-| DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history | `design_decision` | `governed-by` | `true` |
-| DIAG-CLASSIFY-STATE-ER: CLASSIFY durable state model | `design_diagram` | `touches` | `false` |
-| DM-CLASSIFY-STATE-STORE: ClassificationStateStore | `data_model` | `touches` | `true` |
-| FA-CLASSIFY-STATE-RECOVERY: State and Recovery | `feature_area` | `touches` | `true` |
-| FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts | `requirement` | `implements` | `true` |
-| NFR-CLASSIFY-ATTRIBUTABLE-HISTORY: Retain attributable classification history | `nfr` | `satisfies` | `true` |
-| TASK-LEDGER-CORE-STORAGE: Implement the SQLite runtime and storage foundation | `task` | `blocked-by` | `true` |
+| [ADR-CORE-0020: RESTRICT-by-Default Delete Taxonomy](../../../adr/core/0020-restrict-by-default-delete-taxonomy.md) | `adr` | `governed-by` | `true` |
+| [DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam](../../../designs/classify/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DIAG-CLASSIFY-STATE-ER: CLASSIFY durable state model](../../../designs/classify/diagrams/state-er.md) | `design_diagram` | `touches` | `false` |
+| [DM-CLASSIFY-STATE-STORE: ClassificationStateStore](../../../designs/classify/data-model.md#classificationstatestore) | `data_model` | `touches` | `true` |
+| [FA-CLASSIFY-STATE-RECOVERY: State and Recovery](../../../designs/classify/features/state-recovery/api-surface.md) | `feature_area` | `touches` | `true` |
+| [FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts](../../../prd/classify/prd.md#fr-classify-state-retention-cleanup-retain-attributable-state-and-clean-derived-artifacts) | `requirement` | `implements` | `true` |
+| [NFR-CLASSIFY-ATTRIBUTABLE-HISTORY: Retain attributable classification history](../../../prd/classify/prd.md#nfr-classify-attributable-history-retain-attributable-classification-history) | `nfr` | `satisfies` | `true` |
+| [TASK-LEDGER-CORE-STORAGE: Implement the SQLite runtime and storage foundation](../../ledger/tasks/core-storage.md) | `task` | `blocked-by` | `true` |
 | TC-CLASSIFY-ATTRIBUTABLE-HISTORY-INVARIANTS: Verify append-only classification history | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Idempotency results and row mapping use the public CLASSIFY result contracts. |
+| [TASK-CLASSIFY-CONTRACT-FOUNDATION: TASK-CLASSIFY-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | Idempotency results and row mapping use the public CLASSIFY result contracts. |
 
 ## Recipe
 
@@ -88,9 +88,9 @@ CLASSIFY has one separate owner-only SQLite state store whose immutable history 
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassifyStateStore | `produces` | DM-CLASSIFY-STATE-STORE |  |
-| ClassifyOperationIdempotencyStore | `produces` | DM-CLASSIFY-STATE-STORE |  |
-| ClassifyRowMapper | `produces` | DM-CLASSIFY-STATE-STORE |  |
+| ClassifyStateStore | `produces` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| ClassifyOperationIdempotencyStore | `produces` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| ClassifyRowMapper | `produces` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
 
 ### Verification
 
@@ -112,16 +112,16 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `blocked-by` -> TASK-LEDGER-CORE-STORAGE: Implement the SQLite runtime and storage foundation
-- `depends-on:compile` -> [TASK-CLASSIFY-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Idempotency results and row mapping use the public CLASSIFY result contracts.
-- `governed-by` -> ADR-CORE-0020: RESTRICT-by-Default Delete Taxonomy
-- `governed-by` -> DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam
-- `governed-by` -> DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history
-- `implements` -> FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts
-- `satisfies` -> NFR-CLASSIFY-ATTRIBUTABLE-HISTORY: Retain attributable classification history
-- `touches` -> DIAG-CLASSIFY-STATE-ER: CLASSIFY durable state model
-- `touches` -> DM-CLASSIFY-STATE-STORE: ClassificationStateStore
-- `touches` -> FA-CLASSIFY-STATE-RECOVERY: State and Recovery
+- `blocked-by` -> [TASK-LEDGER-CORE-STORAGE: Implement the SQLite runtime and storage foundation](../../ledger/tasks/core-storage.md)
+- `depends-on:compile` -> [TASK-CLASSIFY-CONTRACT-FOUNDATION: TASK-CLASSIFY-CONTRACT-FOUNDATION](contract-foundation.md): Idempotency results and row mapping use the public CLASSIFY result contracts.
+- `governed-by` -> [ADR-CORE-0020: RESTRICT-by-Default Delete Taxonomy](../../../adr/core/0020-restrict-by-default-delete-taxonomy.md)
+- `governed-by` -> [DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam](../../../designs/classify/decisions/application-architecture.md)
+- `governed-by` -> [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md)
+- `implements` -> [FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts](../../../prd/classify/prd.md#fr-classify-state-retention-cleanup-retain-attributable-state-and-clean-derived-artifacts)
+- `satisfies` -> [NFR-CLASSIFY-ATTRIBUTABLE-HISTORY: Retain attributable classification history](../../../prd/classify/prd.md#nfr-classify-attributable-history-retain-attributable-classification-history)
+- `touches` -> [DIAG-CLASSIFY-STATE-ER: CLASSIFY durable state model](../../../designs/classify/diagrams/state-er.md)
+- `touches` -> [DM-CLASSIFY-STATE-STORE: ClassificationStateStore](../../../designs/classify/data-model.md#classificationstatestore)
+- `touches` -> [FA-CLASSIFY-STATE-RECOVERY: State and Recovery](../../../designs/classify/features/state-recovery/api-surface.md)
 - `verifies` -> TC-CLASSIFY-ATTRIBUTABLE-HISTORY-INVARIANTS: Verify append-only classification history
 
 ## Navigation

@@ -22,19 +22,19 @@ Freeze released InitialEvidence with deterministic candidate identity and immuta
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor | `design_decision` | `governed-by` | `true` |
-| DM-INGEST-LEDGER-COMMIT-CONTRACT: LedgerCommitContractSnapshot | `data_model` | `touches` | `true` |
-| FR-INGEST-APPROVED-BATCH-COMMIT: Commit approved candidates through public LEDGER operations | `requirement` | `implements` | `true` |
-| FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit | `requirement` | `implements` | `true` |
+| [DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor](../../../designs/ingest/decisions/ledger-public-integration.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INGEST-LEDGER-COMMIT-CONTRACT: LedgerCommitContractSnapshot](../../../designs/ingest/data-model.md#ledgercommitcontractsnapshot) | `data_model` | `touches` | `true` |
+| [FR-INGEST-APPROVED-BATCH-COMMIT: Commit approved candidates through public LEDGER operations](../../../prd/ingest/prd.md#fr-ingest-approved-batch-commit-commit-approved-candidates-through-public-ledger-operations) | `requirement` | `implements` | `true` |
+| [FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit](../../../prd/ingest/prd.md#fr-ingest-durable-receipt-resume-record-durable-outcomes-and-resume-interrupted-commit) | `requirement` | `implements` | `true` |
 | TC-INGEST-LEDGER-PUBLIC-CONFORMANCE: Verify INGEST uses only the public LEDGER contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | The correction revises the already-landed frozen request contracts. |
-| [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md) | `compile` | The correction extends the already-landed IngestIdentity implementation without concurrent file overlap. |
-| [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md) | `compile` | The released Ledger request and evidence shape must be proven before INGEST freezes it. |
+| [TASK-INGEST-CONTRACT-FOUNDATION: TASK-INGEST-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | The correction revises the already-landed frozen request contracts. |
+| [TASK-INGEST-PREVIEW-DOMAIN: TASK-INGEST-PREVIEW-DOMAIN](preview-domain.md) | `compile` | The correction extends the already-landed IngestIdentity implementation without concurrent file overlap. |
+| [TASK-INGEST-GATE-INT-LEDGER-CONTRACT: TASK-INGEST-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md) | `compile` | The released Ledger request and evidence shape must be proven before INGEST freezes it. |
 
 ## Recipe
 
@@ -79,10 +79,10 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| LedgerIngestContractPrerequisite | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Proves exact released RecordTransactionInput and InitialEvidence. |
-| FrozenLedgerRecordRequest | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Corrects the existing contract-foundation producer so Input is RecordTransactionInput directly. |
-| LedgerImmutableVerification | `produces` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Terminal immutable comparison tuple. |
-| IngestIdentity.StatementEvidence | `produces` | DM-INGEST-LEDGER-COMMIT-CONTRACT | Deterministic RegisterEvidenceInput derivation. |
+| LedgerIngestContractPrerequisite | `consumes` | [DM-INGEST-LEDGER-COMMIT-CONTRACT](../../../designs/ingest/data-model.md#ledgercommitcontractsnapshot) | Proves exact released RecordTransactionInput and InitialEvidence. |
+| FrozenLedgerRecordRequest | `consumes` | [DM-INGEST-LEDGER-COMMIT-CONTRACT](../../../designs/ingest/data-model.md#ledgercommitcontractsnapshot) | Corrects the existing contract-foundation producer so Input is RecordTransactionInput directly. |
+| LedgerImmutableVerification | `produces` | [DM-INGEST-LEDGER-COMMIT-CONTRACT](../../../designs/ingest/data-model.md#ledgercommitcontractsnapshot) | Terminal immutable comparison tuple. |
+| IngestIdentity.StatementEvidence | `produces` | [DM-INGEST-LEDGER-COMMIT-CONTRACT](../../../designs/ingest/data-model.md#ledgercommitcontractsnapshot) | Deterministic RegisterEvidenceInput derivation. |
 
 ### Verification
 
@@ -110,13 +110,13 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-17k` (verified)
-- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): The correction revises the already-landed frozen request contracts.
-- `depends-on:compile` -> [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md): The released Ledger request and evidence shape must be proven before INGEST freezes it.
-- `depends-on:compile` -> [TASK-INGEST-PREVIEW-DOMAIN](../tasks/preview-domain.md): The correction extends the already-landed IngestIdentity implementation without concurrent file overlap.
-- `governed-by` -> DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor
-- `implements` -> FR-INGEST-APPROVED-BATCH-COMMIT: Commit approved candidates through public LEDGER operations
-- `implements` -> FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit
-- `touches` -> DM-INGEST-LEDGER-COMMIT-CONTRACT: LedgerCommitContractSnapshot
+- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION: TASK-INGEST-CONTRACT-FOUNDATION](contract-foundation.md): The correction revises the already-landed frozen request contracts.
+- `depends-on:compile` -> [TASK-INGEST-GATE-INT-LEDGER-CONTRACT: TASK-INGEST-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md): The released Ledger request and evidence shape must be proven before INGEST freezes it.
+- `depends-on:compile` -> [TASK-INGEST-PREVIEW-DOMAIN: TASK-INGEST-PREVIEW-DOMAIN](preview-domain.md): The correction extends the already-landed IngestIdentity implementation without concurrent file overlap.
+- `governed-by` -> [DD-INGEST-LEDGER-PUBLIC-INTEGRATION: Invoke LEDGER through the shared public operation executor](../../../designs/ingest/decisions/ledger-public-integration.md)
+- `implements` -> [FR-INGEST-APPROVED-BATCH-COMMIT: Commit approved candidates through public LEDGER operations](../../../prd/ingest/prd.md#fr-ingest-approved-batch-commit-commit-approved-candidates-through-public-ledger-operations)
+- `implements` -> [FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit](../../../prd/ingest/prd.md#fr-ingest-durable-receipt-resume-record-durable-outcomes-and-resume-interrupted-commit)
+- `touches` -> [DM-INGEST-LEDGER-COMMIT-CONTRACT: LedgerCommitContractSnapshot](../../../designs/ingest/data-model.md#ledgercommitcontractsnapshot)
 - `verifies` -> TC-INGEST-LEDGER-PUBLIC-CONFORMANCE: Verify INGEST uses only the public LEDGER contract
 
 ## Navigation

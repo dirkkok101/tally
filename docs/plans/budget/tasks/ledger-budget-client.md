@@ -5,7 +5,7 @@
 - **Ref:** `TASK-BUDGET-LEDGER-BUDGET-CLIENT`
 - **Plan:** `PLAN-BUDGET-V1`
 - **Sub-Plan:** `SP-BUDGET-00-FOUNDATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `3`
 - **Dialect:** `default`
@@ -22,13 +22,13 @@ BUDGET consumes released Ledger operations through one cancellation-aware client
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations | `design_decision` | `governed-by` | `true` |
-| DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts | `data_model` | `touches` | `true` |
-| FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle | `requirement` | `implements` | `true` |
-| FR-BUDGET-LEDGER-COMPOSITION: Compose only through public LEDGER contracts | `requirement` | `implements` | `true` |
-| NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries | `nfr` | `satisfies` | `true` |
-| TASK-INGEST-LEDGER-PUBLIC-CLIENT: Implement the concrete public LEDGER client | `task` | `blocked-by` | `true` |
+| [DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam](../../../designs/budget/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md) | `design_decision` | `governed-by` | `true` |
+| [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) | `data_model` | `touches` | `true` |
+| [FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle](../../../prd/budget/prd.md#fr-budget-category-lifecycle-honor-spend-category-lifecycle) | `requirement` | `implements` | `true` |
+| [FR-BUDGET-LEDGER-COMPOSITION: Compose only through public LEDGER contracts](../../../prd/budget/prd.md#fr-budget-ledger-composition-compose-only-through-public-ledger-contracts) | `requirement` | `implements` | `true` |
+| [NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries](../../../prd/budget/prd.md#nfr-budget-public-contract-compatibility-preserve-public-contract-boundaries) | `nfr` | `satisfies` | `true` |
+| [TASK-INGEST-LEDGER-PUBLIC-CLIENT: Implement the concrete public LEDGER client](../../ingest/tasks/ledger-public-client.md) | `task` | `blocked-by` | `true` |
 | TC-BUDGET-LEDGER-COMPOSITION-CONTRACT: Verify public LEDGER composition contract | `test_case` | `verifies` | `true` |
 | TC-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Verify BUDGET contract compatibility | `test_case` | `verifies` | `true` |
 
@@ -36,8 +36,8 @@ BUDGET consumes released Ledger operations through one cancellation-aware client
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md) | `compile` | Consume only the proven public seam. |
-| [TASK-BUDGET-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Use BudgetPeriod and BUDGET compatibility errors. |
+| [TASK-BUDGET-GATE-INT-LEDGER-CONTRACT: TASK-BUDGET-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md) | `compile` | Consume only the proven public seam. |
+| [TASK-BUDGET-CONTRACT-FOUNDATION: TASK-BUDGET-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | Use BudgetPeriod and BUDGET compatibility errors. |
 
 ## Recipe
 
@@ -78,10 +78,10 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| VerifiedLedgerBudgetContract | `consumes` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
-| LedgerContractClient.ListBudgetCategoriesAsync | `produces` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
-| LedgerContractClient.GetBudgetCategoryAsync | `produces` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
-| LedgerContractClient.QueryBudgetActualsAsync | `produces` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
+| VerifiedLedgerBudgetContract | `consumes` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
+| LedgerContractClient.ListBudgetCategoriesAsync | `produces` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
+| LedgerContractClient.GetBudgetCategoryAsync | `produces` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
+| LedgerContractClient.QueryBudgetActualsAsync | `produces` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
 
 ### Verification
 
@@ -97,21 +97,24 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-2h45` | `verified` | 2026-07-27T08:00:14.6197400+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `blocked-by` -> TASK-INGEST-LEDGER-PUBLIC-CLIENT: Implement the concrete public LEDGER client
-- `depends-on:compile` -> [TASK-BUDGET-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Use BudgetPeriod and BUDGET compatibility errors.
-- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md): Consume only the proven public seam.
-- `governed-by` -> DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam
-- `governed-by` -> DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations
-- `implements` -> FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle
-- `implements` -> FR-BUDGET-LEDGER-COMPOSITION: Compose only through public LEDGER contracts
-- `satisfies` -> NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries
-- `touches` -> DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts
+- `bead-ref` -> `bd-2h45` (verified)
+- `blocked-by` -> [TASK-INGEST-LEDGER-PUBLIC-CLIENT: Implement the concrete public LEDGER client](../../ingest/tasks/ledger-public-client.md)
+- `depends-on:compile` -> [TASK-BUDGET-CONTRACT-FOUNDATION: TASK-BUDGET-CONTRACT-FOUNDATION](contract-foundation.md): Use BudgetPeriod and BUDGET compatibility errors.
+- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-LEDGER-CONTRACT: TASK-BUDGET-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md): Consume only the proven public seam.
+- `governed-by` -> [DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam](../../../designs/budget/decisions/application-architecture.md)
+- `governed-by` -> [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md)
+- `implements` -> [FR-BUDGET-CATEGORY-LIFECYCLE: Honor Spend Category lifecycle](../../../prd/budget/prd.md#fr-budget-category-lifecycle-honor-spend-category-lifecycle)
+- `implements` -> [FR-BUDGET-LEDGER-COMPOSITION: Compose only through public LEDGER contracts](../../../prd/budget/prd.md#fr-budget-ledger-composition-compose-only-through-public-ledger-contracts)
+- `satisfies` -> [NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries](../../../prd/budget/prd.md#nfr-budget-public-contract-compatibility-preserve-public-contract-boundaries)
+- `touches` -> [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts)
 - `verifies` -> TC-BUDGET-LEDGER-COMPOSITION-CONTRACT: Verify public LEDGER composition contract
 - `verifies` -> TC-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Verify BUDGET contract compatibility
 

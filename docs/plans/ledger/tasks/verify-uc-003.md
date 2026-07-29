@@ -22,17 +22,17 @@ Prove one Category Assignment remains attributable and rolls up exactly through 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts | `data_model` | `touches` | `false` |
-| FR-LEDGER-CATEGORY-ASSIGNMENT: Assign and correct transaction categories | `requirement` | `verifies` | `true` |
-| FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent | `requirement` | `verifies` | `true` |
+| [DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts](../../../designs/ledger/data-model.md#transactionoperationcontracts) | `data_model` | `touches` | `false` |
+| [FR-LEDGER-CATEGORY-ASSIGNMENT: Assign and correct transaction categories](../../../prd/ledger/prd.md#fr-ledger-category-assignment-assign-and-correct-transaction-categories) | `requirement` | `verifies` | `true` |
+| [FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent](../../../prd/ledger/prd.md#fr-ledger-idempotent-writes-make-public-writes-idempotent) | `requirement` | `verifies` | `true` |
 | TC-LEDGER-CATEGORY-ASSIGNMENT-CONTRACT: Verify assign and correct transaction categories contract | `test_case` | `verifies` | `true` |
-| UC-LEDGER-003: Assign or correct a spend category | `use_case` | `covers` | `true` |
+| [UC-LEDGER-003: Assign or correct a spend category](../../../prd/ledger/prd.md#uc-ledger-003-assign-or-correct-a-spend-category) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
 
 ## Recipe
 
@@ -69,8 +69,8 @@ Prove one Category Assignment remains attributable and rolls up exactly through 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 72 provider-neutral operations |
-| VerifiedUC003 | `produces` | UC-LEDGER-003 | workflow verification |
+| CompletePublicContract | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Exactly 72 provider-neutral operations |
+| VerifiedUC003 | `produces` | [UC-LEDGER-003](../../../prd/ledger/prd.md#uc-ledger-003-assign-or-correct-a-spend-category) | workflow verification |
 
 ### Verification
 
@@ -95,12 +95,12 @@ Prove one Category Assignment remains attributable and rolls up exactly through 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3ub` (verified)
-- `covers` -> UC-LEDGER-003: Assign or correct a spend category
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
-- `touches` -> DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts
-- `verifies` -> FR-LEDGER-CATEGORY-ASSIGNMENT: Assign and correct transaction categories
-- `verifies` -> FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent
+- `covers` -> [UC-LEDGER-003: Assign or correct a spend category](../../../prd/ledger/prd.md#uc-ledger-003-assign-or-correct-a-spend-category)
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
+- `touches` -> [DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts](../../../designs/ledger/data-model.md#transactionoperationcontracts)
 - `verifies` -> TC-LEDGER-CATEGORY-ASSIGNMENT-CONTRACT: Verify assign and correct transaction categories contract
+- `verifies` -> [FR-LEDGER-CATEGORY-ASSIGNMENT: Assign and correct transaction categories](../../../prd/ledger/prd.md#fr-ledger-category-assignment-assign-and-correct-transaction-categories)
+- `verifies` -> [FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent](../../../prd/ledger/prd.md#fr-ledger-idempotent-writes-make-public-writes-idempotent)
 
 ## Navigation
 

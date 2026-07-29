@@ -5,7 +5,7 @@
 - **Ref:** `TASK-BUDGET-GATE-SECURITY`
 - **Plan:** `PLAN-BUDGET-V1`
 - **Sub-Plan:** `SP-BUDGET-03-INTEGRATION-GATES`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `3`
 - **Dialect:** `default`
@@ -22,11 +22,11 @@ Every BUDGET workflow remains owner-only, offline, non-interactive, payload-safe
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-STATE-STORE: Separate owner-only raw-SQLite budget state | `design_decision` | `governed-by` | `true` |
-| EXT-BUDGET-HOST-OS-SECURITY: Host operating-system security | `external_dependency` | `references` | `true` |
-| NFR-BUDGET-LOCAL-DATA-PROTECTION: Protect local budget data | `nfr` | `satisfies` | `true` |
-| NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local planner | `nfr` | `satisfies` | `true` |
+| [DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam](../../../designs/budget/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-BUDGET-STATE-STORE: Separate owner-only raw-SQLite budget state](../../../designs/budget/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [EXT-BUDGET-HOST-OS-SECURITY: Host operating-system security](../../../prd/budget/prd.md#ext-budget-host-os-security-host-operating-system-security) | `external_dependency` | `references` | `true` |
+| [NFR-BUDGET-LOCAL-DATA-PROTECTION: Protect local budget data](../../../prd/budget/prd.md#nfr-budget-local-data-protection-protect-local-budget-data) | `nfr` | `satisfies` | `true` |
+| [NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local planner](../../../prd/budget/prd.md#nfr-budget-self-contained-local-operation-operate-as-a-self-contained-local-planner) | `nfr` | `satisfies` | `true` |
 | TC-BUDGET-LOCAL-DATA-PROTECTION: Verify local budget privacy boundaries | `test_case` | `verifies` | `true` |
 | TC-BUDGET-SELF-CONTAINED-LOCAL-OPERATION: Verify self-contained local operation | `test_case` | `verifies` | `true` |
 
@@ -34,9 +34,9 @@ Every BUDGET workflow remains owner-only, offline, non-interactive, payload-safe
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Security validation executes every published operation. |
-| [TASK-BUDGET-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md) | `compile` | Security includes interruption and restart artifact behavior. |
-| [TASK-BUDGET-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Security inspection consumes the real BudgetStateStore and protected artifacts. |
+| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Security validation executes every published operation. |
+| [TASK-BUDGET-GATE-ATOMIC-RECOVERY: TASK-BUDGET-GATE-ATOMIC-RECOVERY](gate-atomic-recovery.md) | `compile` | Security includes interruption and restart artifact behavior. |
+| [TASK-BUDGET-STATE-FOUNDATION: TASK-BUDGET-STATE-FOUNDATION](state-foundation.md) | `compile` | Security inspection consumes the real BudgetStateStore and protected artifacts. |
 
 ## Recipe
 
@@ -79,9 +79,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteBudgetPublicContract | `consumes` | DM-BUDGET-OPERATION-CONTRACTS |  |
-| BudgetStateStore | `consumes` | DM-BUDGET-STATE-STORE |  |
-| BudgetSecurityGateEvidence | `produces` | NFR-BUDGET-LOCAL-DATA-PROTECTION |  |
+| CompleteBudgetPublicContract | `consumes` | [DM-BUDGET-OPERATION-CONTRACTS](../../../designs/budget/data-model.md#budgetoperationcontracts) |  |
+| BudgetStateStore | `consumes` | [DM-BUDGET-STATE-STORE](../../../designs/budget/data-model.md#budgetstatestore) |  |
+| BudgetSecurityGateEvidence | `produces` | [NFR-BUDGET-LOCAL-DATA-PROTECTION](../../../prd/budget/prd.md#nfr-budget-local-data-protection-protect-local-budget-data) |  |
 
 ### Verification
 
@@ -97,20 +97,23 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1eq9` | `verified` | 2026-07-27T08:00:13.4962478+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-BUDGET-GATE-ATOMIC-RECOVERY](../tasks/gate-atomic-recovery.md): Security includes interruption and restart artifact behavior.
-- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Security validation executes every published operation.
-- `depends-on:compile` -> [TASK-BUDGET-STATE-FOUNDATION](../tasks/state-foundation.md): Security inspection consumes the real BudgetStateStore and protected artifacts.
-- `governed-by` -> DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam
-- `governed-by` -> DD-BUDGET-STATE-STORE: Separate owner-only raw-SQLite budget state
-- `references` -> EXT-BUDGET-HOST-OS-SECURITY: Host operating-system security
-- `satisfies` -> NFR-BUDGET-LOCAL-DATA-PROTECTION: Protect local budget data
-- `satisfies` -> NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local planner
+- `bead-ref` -> `bd-1eq9` (verified)
+- `depends-on:compile` -> [TASK-BUDGET-GATE-ATOMIC-RECOVERY: TASK-BUDGET-GATE-ATOMIC-RECOVERY](gate-atomic-recovery.md): Security includes interruption and restart artifact behavior.
+- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Security validation executes every published operation.
+- `depends-on:compile` -> [TASK-BUDGET-STATE-FOUNDATION: TASK-BUDGET-STATE-FOUNDATION](state-foundation.md): Security inspection consumes the real BudgetStateStore and protected artifacts.
+- `governed-by` -> [DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam](../../../designs/budget/decisions/application-architecture.md)
+- `governed-by` -> [DD-BUDGET-STATE-STORE: Separate owner-only raw-SQLite budget state](../../../designs/budget/decisions/state-store.md)
+- `references` -> [EXT-BUDGET-HOST-OS-SECURITY: Host operating-system security](../../../prd/budget/prd.md#ext-budget-host-os-security-host-operating-system-security)
+- `satisfies` -> [NFR-BUDGET-LOCAL-DATA-PROTECTION: Protect local budget data](../../../prd/budget/prd.md#nfr-budget-local-data-protection-protect-local-budget-data)
+- `satisfies` -> [NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local planner](../../../prd/budget/prd.md#nfr-budget-self-contained-local-operation-operate-as-a-self-contained-local-planner)
 - `verifies` -> TC-BUDGET-LOCAL-DATA-PROTECTION: Verify local budget privacy boundaries
 - `verifies` -> TC-BUDGET-SELF-CONTAINED-LOCAL-OPERATION: Verify self-contained local operation
 

@@ -22,18 +22,18 @@ Create one attributable full-refund relationship for an eligible original transa
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP: Single full-amount refund relationships | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| FR-LEDGER-REFUND-CONFIRMATION: Confirm refunds and reversals | `requirement` | `implements` | `true` |
+| [DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP: Single full-amount refund relationships](../../../designs/ledger/decisions/full-amount-refund-relationship.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [FR-LEDGER-REFUND-CONFIRMATION: Confirm refunds and reversals](../../../prd/ledger/prd.md#fr-ledger-refund-confirmation-confirm-refunds-and-reversals) | `requirement` | `implements` | `true` |
 | TC-LEDGER-REFUND-CONFIRMATION-CONTRACT: Verify confirm refunds and reversals contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-TRANSFERS](../tasks/transfers.md) | `compile` | Refunds consume the RelationshipStore and active-role model created with transfers. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
-| [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md) | `compile` | Consumer requires TransactionStore from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-TRANSFERS: TASK-LEDGER-TRANSFERS](transfers.md) | `compile` | Refunds consume the RelationshipStore and active-role model created with transfers. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md) | `compile` | Consumer requires TransactionStore from its producing task; direct compile edge enforces the declared interface contract. |
 
 ## Recipe
 
@@ -84,11 +84,11 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| RefundOperationModule | `produces` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS | Public ledger.refund.confirm operation |
-| RefundPolicy | `produces` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Full-amount eligibility and stable errors |
-| RelationshipStore | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Existing insert, get, and active-role exclusivity guard |
-| TransactionStore | `consumes` | DM-LEDGER-TRANSACTION-FACT | Immutable original and refund transaction lookup |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD | Atomic request and logical-effect replay |
+| RefundOperationModule | `produces` | [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) | Public ledger.refund.confirm operation |
+| RefundPolicy | `produces` | [DM-LEDGER-FINANCIAL-RELATIONSHIP](../../../designs/ledger/data-model.md#financialrelationshipandlifecycle) | Full-amount eligibility and stable errors |
+| RelationshipStore | `consumes` | [DM-LEDGER-FINANCIAL-RELATIONSHIP](../../../designs/ledger/data-model.md#financialrelationshipandlifecycle) | Existing insert, get, and active-role exclusivity guard |
+| TransactionStore | `consumes` | [DM-LEDGER-TRANSACTION-FACT](../../../designs/ledger/data-model.md#transactionfact) | Immutable original and refund transaction lookup |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | [DM-LEDGER-IDEMPOTENCY-RECORD](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) | Atomic request and logical-effect replay |
 
 ### Verification
 
@@ -114,12 +114,12 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-10w` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Consumer requires TransactionStore from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-TRANSFERS](../tasks/transfers.md): Refunds consume the RelationshipStore and active-role model created with transfers.
-- `governed-by` -> DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP: Single full-amount refund relationships
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `implements` -> FR-LEDGER-REFUND-CONFIRMATION: Confirm refunds and reversals
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md): Consumer requires TransactionStore from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-TRANSFERS: TASK-LEDGER-TRANSFERS](transfers.md): Refunds consume the RelationshipStore and active-role model created with transfers.
+- `governed-by` -> [DD-LEDGER-FULL-AMOUNT-REFUND-RELATIONSHIP: Single full-amount refund relationships](../../../designs/ledger/decisions/full-amount-refund-relationship.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `implements` -> [FR-LEDGER-REFUND-CONFIRMATION: Confirm refunds and reversals](../../../prd/ledger/prd.md#fr-ledger-refund-confirmation-confirm-refunds-and-reversals)
 - `verifies` -> TC-LEDGER-REFUND-CONFIRMATION-CONTRACT: Verify confirm refunds and reversals contract
 
 ## Navigation

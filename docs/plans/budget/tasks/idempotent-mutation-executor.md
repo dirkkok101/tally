@@ -5,7 +5,7 @@
 - **Ref:** `TASK-BUDGET-IDEMPOTENT-MUTATION-EXECUTOR`
 - **Plan:** `PLAN-BUDGET-V1`
 - **Sub-Plan:** `SP-BUDGET-01-PLAN-LIFECYCLE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `2`
 - **Dialect:** `default`
@@ -22,19 +22,19 @@ Create Draft and Activate retries commit at most once and replay the original lo
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-STATE-STORE: Separate owner-only raw-SQLite budget state | `design_decision` | `governed-by` | `true` |
-| DIAG-BUDGET-MUTATION-SEQUENCE: Replay-safe draft and activation mutation | `design_diagram` | `touches` | `false` |
-| DM-BUDGET-LIFECYCLE-IDEMPOTENCY: BudgetLifecycleAndIdempotency | `data_model` | `touches` | `true` |
-| FR-BUDGET-IDEMPOTENT-MUTATIONS: Make plan mutations replay-safe | `requirement` | `implements` | `true` |
-| NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS: Make plan mutations atomic and durable | `nfr` | `satisfies` | `true` |
+| [DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references](../../../designs/budget/decisions/idempotent-mutations.md) | `design_decision` | `governed-by` | `true` |
+| [DD-BUDGET-STATE-STORE: Separate owner-only raw-SQLite budget state](../../../designs/budget/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DIAG-BUDGET-MUTATION-SEQUENCE: Replay-safe draft and activation mutation](../../../designs/budget/diagrams/mutation-sequence.md) | `design_diagram` | `touches` | `false` |
+| [DM-BUDGET-LIFECYCLE-IDEMPOTENCY: BudgetLifecycleAndIdempotency](../../../designs/budget/data-model.md#budgetlifecycleandidempotency) | `data_model` | `touches` | `true` |
+| [FR-BUDGET-IDEMPOTENT-MUTATIONS: Make plan mutations replay-safe](../../../prd/budget/prd.md#fr-budget-idempotent-mutations-make-plan-mutations-replay-safe) | `requirement` | `implements` | `true` |
+| [NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS: Make plan mutations atomic and durable](../../../prd/budget/prd.md#nfr-budget-atomic-durable-mutations-make-plan-mutations-atomic-and-durable) | `nfr` | `satisfies` | `true` |
 | TC-BUDGET-IDEMPOTENT-MUTATIONS-CONTRACT: Verify replay-safe mutation contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | The executor uses the idempotency and lifecycle tables in BudgetStateStore. |
+| [TASK-BUDGET-STATE-FOUNDATION: TASK-BUDGET-STATE-FOUNDATION](state-foundation.md) | `compile` | The executor uses the idempotency and lifecycle tables in BudgetStateStore. |
 
 ## Recipe
 
@@ -76,8 +76,8 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| BudgetStateStore | `consumes` | DM-BUDGET-STATE-STORE |  |
-| BudgetMutationExecutor.ExecuteAsync | `produces` | DM-BUDGET-LIFECYCLE-IDEMPOTENCY |  |
+| BudgetStateStore | `consumes` | [DM-BUDGET-STATE-STORE](../../../designs/budget/data-model.md#budgetstatestore) |  |
+| BudgetMutationExecutor.ExecuteAsync | `produces` | [DM-BUDGET-LIFECYCLE-IDEMPOTENCY](../../../designs/budget/data-model.md#budgetlifecycleandidempotency) |  |
 
 ### Verification
 
@@ -93,19 +93,22 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1heq` | `verified` | 2026-07-27T08:00:11.3691464+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-BUDGET-STATE-FOUNDATION](../tasks/state-foundation.md): The executor uses the idempotency and lifecycle tables in BudgetStateStore.
-- `governed-by` -> DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references
-- `governed-by` -> DD-BUDGET-STATE-STORE: Separate owner-only raw-SQLite budget state
-- `implements` -> FR-BUDGET-IDEMPOTENT-MUTATIONS: Make plan mutations replay-safe
-- `satisfies` -> NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS: Make plan mutations atomic and durable
-- `touches` -> DIAG-BUDGET-MUTATION-SEQUENCE: Replay-safe draft and activation mutation
-- `touches` -> DM-BUDGET-LIFECYCLE-IDEMPOTENCY: BudgetLifecycleAndIdempotency
+- `bead-ref` -> `bd-1heq` (verified)
+- `depends-on:compile` -> [TASK-BUDGET-STATE-FOUNDATION: TASK-BUDGET-STATE-FOUNDATION](state-foundation.md): The executor uses the idempotency and lifecycle tables in BudgetStateStore.
+- `governed-by` -> [DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references](../../../designs/budget/decisions/idempotent-mutations.md)
+- `governed-by` -> [DD-BUDGET-STATE-STORE: Separate owner-only raw-SQLite budget state](../../../designs/budget/decisions/state-store.md)
+- `implements` -> [FR-BUDGET-IDEMPOTENT-MUTATIONS: Make plan mutations replay-safe](../../../prd/budget/prd.md#fr-budget-idempotent-mutations-make-plan-mutations-replay-safe)
+- `satisfies` -> [NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS: Make plan mutations atomic and durable](../../../prd/budget/prd.md#nfr-budget-atomic-durable-mutations-make-plan-mutations-atomic-and-durable)
+- `touches` -> [DIAG-BUDGET-MUTATION-SEQUENCE: Replay-safe draft and activation mutation](../../../designs/budget/diagrams/mutation-sequence.md)
+- `touches` -> [DM-BUDGET-LIFECYCLE-IDEMPOTENCY: BudgetLifecycleAndIdempotency](../../../designs/budget/data-model.md#budgetlifecycleandidempotency)
 - `verifies` -> TC-BUDGET-IDEMPOTENT-MUTATIONS-CONTRACT: Verify replay-safe mutation contract
 
 ## Navigation

@@ -22,18 +22,18 @@ Prove Spend Pool lifecycle, assignment, unassigned behavior, and exact pool/cate
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| FR-LEDGER-POOL-ASSIGNMENT: Assign and correct transaction spend pools | `requirement` | `verifies` | `true` |
-| FR-LEDGER-SPEND-POOL-CATALOGUE: Maintain the spend-pool catalogue | `requirement` | `verifies` | `true` |
+| [FR-LEDGER-POOL-ASSIGNMENT: Assign and correct transaction spend pools](../../../prd/ledger/prd.md#fr-ledger-pool-assignment-assign-and-correct-transaction-spend-pool) | `requirement` | `verifies` | `true` |
+| [FR-LEDGER-SPEND-POOL-CATALOGUE: Maintain the spend-pool catalogue](../../../prd/ledger/prd.md#fr-ledger-spend-pool-catalogue-maintain-the-spend-pool-catalogue) | `requirement` | `verifies` | `true` |
 | TC-LEDGER-DIMENSIONAL-ACTUALS-PROPERTY: Prove exact pool and category actuals across corrections | `test_case` | `verifies` | `true` |
 | TC-LEDGER-POOL-ASSIGNMENT-ACTUALS-CONTRACT: Verify pool assignment and exact grouped actuals | `test_case` | `verifies` | `true` |
-| UC-LEDGER-018: Maintain spend pools and transaction pool assignment | `use_case` | `covers` | `true` |
+| [UC-LEDGER-018: Maintain spend pools and transaction pool assignment](../../../prd/ledger/prd.md#uc-ledger-018-maintain-spend-pool-and-transaction-pool-assignment) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
 
 ## Recipe
 
@@ -71,8 +71,8 @@ None recorded.
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  |  |
-| CompletePublicContract74 | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 74 provider-neutral operations |
-| VerifiedUC018 | `produces` | UC-LEDGER-018 |  |
+| CompletePublicContract74 | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Exactly 74 provider-neutral operations |
+| VerifiedUC018 | `produces` | [UC-LEDGER-018](../../../prd/ledger/prd.md#uc-ledger-018-maintain-spend-pool-and-transaction-pool-assignment) |  |
 
 ### Verification
 
@@ -97,13 +97,13 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3ak` (verified)
-- `covers` -> UC-LEDGER-018: Maintain spend pools and transaction pool assignment
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
-- `verifies` -> FR-LEDGER-POOL-ASSIGNMENT: Assign and correct transaction spend pools
-- `verifies` -> FR-LEDGER-SPEND-POOL-CATALOGUE: Maintain the spend-pool catalogue
+- `covers` -> [UC-LEDGER-018: Maintain spend pools and transaction pool assignment](../../../prd/ledger/prd.md#uc-ledger-018-maintain-spend-pool-and-transaction-pool-assignment)
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
 - `verifies` -> TC-LEDGER-DIMENSIONAL-ACTUALS-PROPERTY: Prove exact pool and category actuals across corrections
 - `verifies` -> TC-LEDGER-POOL-ASSIGNMENT-ACTUALS-CONTRACT: Verify pool assignment and exact grouped actuals
+- `verifies` -> [FR-LEDGER-POOL-ASSIGNMENT: Assign and correct transaction spend pools](../../../prd/ledger/prd.md#fr-ledger-pool-assignment-assign-and-correct-transaction-spend-pool)
+- `verifies` -> [FR-LEDGER-SPEND-POOL-CATALOGUE: Maintain the spend-pool catalogue](../../../prd/ledger/prd.md#fr-ledger-spend-pool-catalogue-maintain-the-spend-pool-catalogue)
 
 ## Navigation
 

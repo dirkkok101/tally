@@ -22,20 +22,20 @@ Return one immutable completed Statement Scope for public reconciliation and rec
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts | `data_model` | `touches` | `true` |
-| FR-LEDGER-RECONCILIATION-COVERAGE: Report statement coverage and exceptions | `requirement` | `implements` | `true` |
+| [DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency](../../../designs/ledger/decisions/idempotent-mutations.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-RECONCILIATION-COVERAGE: Report statement coverage and exceptions](../../../prd/ledger/prd.md#fr-ledger-reconciliation-coverage-report-statement-coverage-and-exceptions) | `requirement` | `implements` | `true` |
 | TC-LEDGER-STATEMENT-SCOPE-REGISTRATION: Verify atomic statement-scope registration | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Scope registration uses LedgerMutationExecutor and logical-effect replay. |
-| [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](../tasks/core-schema-evidence-reconciliation.md) | `compile` | The operation writes existing statement_scope and statement_scope_evidence tables. |
-| [TASK-LEDGER-ACCOUNTS](../tasks/accounts.md) | `compile` | The operation validates active owned-account identity. |
-| [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md) | `compile` | The operation validates existing statement_row evidence and observations. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Scope registration uses LedgerMutationExecutor and logical-effect replay. |
+| [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION: TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](core-schema-evidence-reconciliation.md) | `compile` | The operation writes existing statement_scope and statement_scope_evidence tables. |
+| [TASK-LEDGER-ACCOUNTS: TASK-LEDGER-ACCOUNTS](accounts.md) | `compile` | The operation validates active owned-account identity. |
+| [TASK-LEDGER-EVIDENCE-REGISTRY: TASK-LEDGER-EVIDENCE-REGISTRY](evidence-registry.md) | `compile` | The operation validates existing statement_row evidence and observations. |
 
 ## Recipe
 
@@ -79,14 +79,14 @@ Return one immutable completed Statement Scope for public reconciliation and rec
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| RegisterReconciliationScopeInput | `produces` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
-| ReconciliationScopeDetail | `produces` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| StatementScopeRegistrationPolicy | `produces` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| ReconciliationScopeStore | `produces` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| ReconciliationScopeOperationModule | `produces` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD |  |
-| EvidenceStore | `consumes` | DM-LEDGER-EVIDENCE-RECORD-LINK |  |
-| AccountStore | `consumes` | DM-LEDGER-ACCOUNT |  |
+| RegisterReconciliationScopeInput | `produces` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) |  |
+| ReconciliationScopeDetail | `produces` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| StatementScopeRegistrationPolicy | `produces` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| ReconciliationScopeStore | `produces` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| ReconciliationScopeOperationModule | `produces` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) |  |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | [DM-LEDGER-IDEMPOTENCY-RECORD](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) |  |
+| EvidenceStore | `consumes` | [DM-LEDGER-EVIDENCE-RECORD-LINK](../../../designs/ledger/data-model.md#evidencerecordobservationandlink) |  |
+| AccountStore | `consumes` | [DM-LEDGER-ACCOUNT](../../../designs/ledger/data-model.md#account) |  |
 
 ### Verification
 
@@ -113,14 +113,14 @@ Return one immutable completed Statement Scope for public reconciliation and rec
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3sw` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-ACCOUNTS](../tasks/accounts.md): The operation validates active owned-account identity.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Scope registration uses LedgerMutationExecutor and logical-effect replay.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](../tasks/core-schema-evidence-reconciliation.md): The operation writes existing statement_scope and statement_scope_evidence tables.
-- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md): The operation validates existing statement_row evidence and observations.
-- `governed-by` -> DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency
-- `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
-- `implements` -> FR-LEDGER-RECONCILIATION-COVERAGE: Report statement coverage and exceptions
-- `touches` -> DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts
+- `depends-on:compile` -> [TASK-LEDGER-ACCOUNTS: TASK-LEDGER-ACCOUNTS](accounts.md): The operation validates active owned-account identity.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Scope registration uses LedgerMutationExecutor and logical-effect replay.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION: TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](core-schema-evidence-reconciliation.md): The operation writes existing statement_scope and statement_scope_evidence tables.
+- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY: TASK-LEDGER-EVIDENCE-REGISTRY](evidence-registry.md): The operation validates existing statement_row evidence and observations.
+- `governed-by` -> [DD-LEDGER-IDEMPOTENT-MUTATIONS: Transactional request and logical-effect idempotency](../../../designs/ledger/decisions/idempotent-mutations.md)
+- `governed-by` -> [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md)
+- `implements` -> [FR-LEDGER-RECONCILIATION-COVERAGE: Report statement coverage and exceptions](../../../prd/ledger/prd.md#fr-ledger-reconciliation-coverage-report-statement-coverage-and-exceptions)
+- `touches` -> [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS: EvidenceReconciliationOperationContracts](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts)
 - `verifies` -> TC-LEDGER-STATEMENT-SCOPE-REGISTRATION: Verify atomic statement-scope registration
 
 ## Navigation

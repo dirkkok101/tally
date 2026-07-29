@@ -22,11 +22,11 @@ Upgrade supported storage exactly once while failure leaves the original complet
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-CANDIDATE-ACTIVATION: Verified store generations with atomic pointer activation | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts | `data_model` | `touches` | `true` |
-| FR-LEDGER-SAFE-STORAGE-EVOLUTION: Upgrade or migrate Ledger storage safely | `requirement` | `implements` | `true` |
-| NFR-LEDGER-VERIFIED-RECOVERABILITY: Prove Ledger recoverability | `nfr` | `satisfies` | `true` |
+| [DD-LEDGER-CANDIDATE-ACTIVATION: Verified store generations with atomic pointer activation](../../../designs/ledger/decisions/candidate-activation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-SAFE-STORAGE-EVOLUTION: Upgrade or migrate Ledger storage safely](../../../prd/ledger/prd.md#fr-ledger-safe-storage-evolution-upgrade-or-migrate-ledger-storage-safely) | `requirement` | `implements` | `true` |
+| [NFR-LEDGER-VERIFIED-RECOVERABILITY: Prove Ledger recoverability](../../../prd/ledger/prd.md#nfr-ledger-verified-recoverability-prove-ledger-recoverability) | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-SAFE-STORAGE-EVOLUTION-CONTRACT: Verify upgrade or migrate ledger storage safely contract | `test_case` | `verifies` | `true` |
 | TC-LEDGER-VERIFIED-RECOVERY-DRILL: Reproduce complete Durable Ledger State | `test_case` | `verifies` | `true` |
 
@@ -34,9 +34,9 @@ Upgrade supported storage exactly once while failure leaves the original complet
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-RESTORE-ACTIVATE](../tasks/restore-activate.md) | `compile` | Evolution reuses the verified candidate activation seam. |
-| [TASK-LEDGER-BACKUP-VERIFY](../tasks/backup-verify.md) | `compile` | Consumer requires DurableLedgerVerifier from its producing task; direct compile edge enforces the declared interface contract. |
-| [TASK-LEDGER-DURABLE-STATE-VERIFIER](../tasks/durable-state-verifier.md) | `compile` | Consumes DurableLedgerVerifier. |
+| [TASK-LEDGER-RESTORE-ACTIVATE: TASK-LEDGER-RESTORE-ACTIVATE](restore-activate.md) | `compile` | Evolution reuses the verified candidate activation seam. |
+| [TASK-LEDGER-BACKUP-VERIFY: TASK-LEDGER-BACKUP-VERIFY](backup-verify.md) | `compile` | Consumer requires DurableLedgerVerifier from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-DURABLE-STATE-VERIFIER: TASK-LEDGER-DURABLE-STATE-VERIFIER](durable-state-verifier.md) | `compile` | Consumes DurableLedgerVerifier. |
 
 ## Recipe
 
@@ -81,12 +81,12 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| StorageEvolutionOperationModule | `produces` | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS |  |
-| StorageEvolutionService | `produces` | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS |  |
-| MigrationCandidateBuilder | `produces` | DM-LEDGER-STORE-GENERATION |  |
-| BackupService | `consumes` | DM-LEDGER-RECOVERY-STORAGE-CONTRACTS |  |
-| DurableLedgerVerifier | `consumes` | DM-LEDGER-STORE-GENERATION |  |
-| AuthoritativeStoreActivator | `consumes` | DD-LEDGER-CANDIDATE-ACTIVATION |  |
+| StorageEvolutionOperationModule | `produces` | [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts) |  |
+| StorageEvolutionService | `produces` | [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts) |  |
+| MigrationCandidateBuilder | `produces` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) |  |
+| BackupService | `consumes` | [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts) |  |
+| DurableLedgerVerifier | `consumes` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) |  |
+| AuthoritativeStoreActivator | `consumes` | [DD-LEDGER-CANDIDATE-ACTIVATION](../../../designs/ledger/decisions/candidate-activation.md) |  |
 
 ### Verification
 
@@ -112,14 +112,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-4zp` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-BACKUP-VERIFY](../tasks/backup-verify.md): Consumer requires DurableLedgerVerifier from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-DURABLE-STATE-VERIFIER](../tasks/durable-state-verifier.md): Consumes DurableLedgerVerifier.
-- `depends-on:compile` -> [TASK-LEDGER-RESTORE-ACTIVATE](../tasks/restore-activate.md): Evolution reuses the verified candidate activation seam.
-- `governed-by` -> DD-LEDGER-CANDIDATE-ACTIVATION: Verified store generations with atomic pointer activation
-- `governed-by` -> DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection
-- `implements` -> FR-LEDGER-SAFE-STORAGE-EVOLUTION: Upgrade or migrate Ledger storage safely
-- `satisfies` -> NFR-LEDGER-VERIFIED-RECOVERABILITY: Prove Ledger recoverability
-- `touches` -> DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts
+- `depends-on:compile` -> [TASK-LEDGER-BACKUP-VERIFY: TASK-LEDGER-BACKUP-VERIFY](backup-verify.md): Consumer requires DurableLedgerVerifier from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-DURABLE-STATE-VERIFIER: TASK-LEDGER-DURABLE-STATE-VERIFIER](durable-state-verifier.md): Consumes DurableLedgerVerifier.
+- `depends-on:compile` -> [TASK-LEDGER-RESTORE-ACTIVATE: TASK-LEDGER-RESTORE-ACTIVATE](restore-activate.md): Evolution reuses the verified candidate activation seam.
+- `governed-by` -> [DD-LEDGER-CANDIDATE-ACTIVATION: Verified store generations with atomic pointer activation](../../../designs/ledger/decisions/candidate-activation.md)
+- `governed-by` -> [DD-LEDGER-EMBEDDED-STORAGE: Raw SQLite with host-managed at-rest protection](../../../designs/ledger/decisions/embedded-storage.md)
+- `implements` -> [FR-LEDGER-SAFE-STORAGE-EVOLUTION: Upgrade or migrate Ledger storage safely](../../../prd/ledger/prd.md#fr-ledger-safe-storage-evolution-upgrade-or-migrate-ledger-storage-safely)
+- `satisfies` -> [NFR-LEDGER-VERIFIED-RECOVERABILITY: Prove Ledger recoverability](../../../prd/ledger/prd.md#nfr-ledger-verified-recoverability-prove-ledger-recoverability)
+- `touches` -> [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts)
 - `verifies` -> TC-LEDGER-SAFE-STORAGE-EVOLUTION-CONTRACT: Verify upgrade or migrate ledger storage safely contract
 - `verifies` -> TC-LEDGER-VERIFIED-RECOVERY-DRILL: Reproduce complete Durable Ledger State
 

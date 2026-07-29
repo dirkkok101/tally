@@ -22,21 +22,21 @@ Prove exclusive detection, deterministic extraction, exact private fixture expec
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-DOCUMENT-EXTRACTION: Managed in-process PDF extraction with PdfPig | `design_decision` | `governed-by` | `true` |
-| DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam | `design_decision` | `governed-by` | `true` |
-| DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly | `design_decision` | `governed-by` | `true` |
-| DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence | `data_model` | `touches` | `true` |
-| FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval | `requirement` | `implements` | `true` |
-| FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants | `requirement` | `implements` | `true` |
+| [DD-INGEST-DOCUMENT-EXTRACTION: Managed in-process PDF extraction with PdfPig](../../../designs/ingest/decisions/document-extraction.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam](../../../designs/ingest/decisions/format-adapters.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly](../../../designs/ingest/decisions/source-description-absence.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence](../../../designs/ingest/data-model.md#formatvariantandsourceevidence) | `data_model` | `touches` | `true` |
+| [FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval](../../../prd/ingest/prd.md#fr-ingest-source-reconciliation-reconcile-every-supported-statement-before-approval) | `requirement` | `implements` | `true` |
+| [FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants](../../../prd/ingest/prd.md#fr-ingest-variant-qualification-qualify-and-detect-supported-statement-variants) | `requirement` | `implements` | `true` |
 | TC-INGEST-ADAPTER-GOLDEN-FIXTURES: Verify both qualified adapters against golden fixtures | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-ADAPTER-LAYOUT-A](../tasks/adapter-layout-a.md) | `compile` | The gate consumes PdfTextLayoutAStatementAdapter. |
-| [TASK-INGEST-ADAPTER-LAYOUT-B](../tasks/adapter-layout-b.md) | `compile` | The gate consumes PdfTextLayoutBStatementAdapter. |
-| [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md) | `compile` | Consumes PdfStatementTextExtractor.ExtractAsync. |
+| [TASK-INGEST-ADAPTER-LAYOUT-A: TASK-INGEST-ADAPTER-LAYOUT-A](adapter-layout-a.md) | `compile` | The gate consumes PdfTextLayoutAStatementAdapter. |
+| [TASK-INGEST-ADAPTER-LAYOUT-B: TASK-INGEST-ADAPTER-LAYOUT-B](adapter-layout-b.md) | `compile` | The gate consumes PdfTextLayoutBStatementAdapter. |
+| [TASK-INGEST-PDF-EXTRACTION: TASK-INGEST-PDF-EXTRACTION](pdf-extraction.md) | `compile` | Consumes PdfStatementTextExtractor.ExtractAsync. |
 
 ## Recipe
 
@@ -45,7 +45,7 @@ Prove exclusive detection, deterministic extraction, exact private fixture expec
 - StatementAdapterRegistry explicitly contains exactly one PdfTextLayoutAStatementAdapter and one PdfTextLayoutBStatementAdapter in deterministic order; no reflection scan, plugin, fallback, third variant, or user configuration exists.
 - Every one of the three private fixtures produces exactly one exact_match and the variant ID declared by the ignored private fixture manifest; zero or multiple adapter matches return a stable unsupported result.
 - Each fixture is extracted twice through the real PdfPig extractor and selected adapter with identical ordered source records, description-evidence kinds, dispositions, controls, and SHA-256 digests; digest values remain inside assertions and are not printed.
-- A unique source description emits SourceText; a structurally complete Layout A row with zero description candidates emits SourceAbsentMarker and exact description 'Description unavailable in source statement'; multiple candidates block. OriginalTextEvidence contains only source glyph text.
+- A unique source description emits SourceText; a structurally complete Layout A row with zero description candidates emits SourceAbsentMarker and exact description 'Description unavailable in source statement'; multiple description candidates no-match the document (unsupported, matching TASK-INGEST-ADAPTER-LAYOUT-A and the shipped adapter). OriginalTextEvidence contains only source glyph text.
 - Every transaction-bearing source record is accepted or blocked, non-transaction exclusions carry stable reasons, and all available opening, closing, running-balance, total, and record-count controls match exactly.
 - One-over-limit and malformed sources fail before state or Ledger mutation; measured direct extraction plus adapter work stays below 5 seconds and 256 MiB peak RSS per fixture on the supported release host.
 
@@ -82,11 +82,11 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| PdfStatementTextExtractor.ExtractAsync | `consumes` | DM-INGEST-FORMAT-EVIDENCE |  |
-| PdfTextLayoutAStatementAdapter | `consumes` | DM-INGEST-FORMAT-EVIDENCE |  |
-| PdfTextLayoutBStatementAdapter | `consumes` | DM-INGEST-FORMAT-EVIDENCE |  |
-| StatementAdapterRegistry | `produces` | DM-INGEST-FORMAT-EVIDENCE |  |
-| QualifiedStatementAdapterSet | `produces` | DM-INGEST-FORMAT-EVIDENCE |  |
+| PdfStatementTextExtractor.ExtractAsync | `consumes` | [DM-INGEST-FORMAT-EVIDENCE](../../../designs/ingest/data-model.md#formatvariantandsourceevidence) |  |
+| PdfTextLayoutAStatementAdapter | `consumes` | [DM-INGEST-FORMAT-EVIDENCE](../../../designs/ingest/data-model.md#formatvariantandsourceevidence) |  |
+| PdfTextLayoutBStatementAdapter | `consumes` | [DM-INGEST-FORMAT-EVIDENCE](../../../designs/ingest/data-model.md#formatvariantandsourceevidence) |  |
+| StatementAdapterRegistry | `produces` | [DM-INGEST-FORMAT-EVIDENCE](../../../designs/ingest/data-model.md#formatvariantandsourceevidence) |  |
+| QualifiedStatementAdapterSet | `produces` | [DM-INGEST-FORMAT-EVIDENCE](../../../designs/ingest/data-model.md#formatvariantandsourceevidence) |  |
 
 ### Verification
 
@@ -112,15 +112,15 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1m0` (verified)
-- `depends-on:compile` -> [TASK-INGEST-ADAPTER-LAYOUT-A](../tasks/adapter-layout-a.md): The gate consumes PdfTextLayoutAStatementAdapter.
-- `depends-on:compile` -> [TASK-INGEST-ADAPTER-LAYOUT-B](../tasks/adapter-layout-b.md): The gate consumes PdfTextLayoutBStatementAdapter.
-- `depends-on:compile` -> [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md): Consumes PdfStatementTextExtractor.ExtractAsync.
-- `governed-by` -> DD-INGEST-DOCUMENT-EXTRACTION: Managed in-process PDF extraction with PdfPig
-- `governed-by` -> DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam
-- `governed-by` -> DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly
-- `implements` -> FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval
-- `implements` -> FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants
-- `touches` -> DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence
+- `depends-on:compile` -> [TASK-INGEST-ADAPTER-LAYOUT-A: TASK-INGEST-ADAPTER-LAYOUT-A](adapter-layout-a.md): The gate consumes PdfTextLayoutAStatementAdapter.
+- `depends-on:compile` -> [TASK-INGEST-ADAPTER-LAYOUT-B: TASK-INGEST-ADAPTER-LAYOUT-B](adapter-layout-b.md): The gate consumes PdfTextLayoutBStatementAdapter.
+- `depends-on:compile` -> [TASK-INGEST-PDF-EXTRACTION: TASK-INGEST-PDF-EXTRACTION](pdf-extraction.md): Consumes PdfStatementTextExtractor.ExtractAsync.
+- `governed-by` -> [DD-INGEST-DOCUMENT-EXTRACTION: Managed in-process PDF extraction with PdfPig](../../../designs/ingest/decisions/document-extraction.md)
+- `governed-by` -> [DD-INGEST-FORMAT-ADAPTERS: Two explicit adapters behind one narrow real seam](../../../designs/ingest/decisions/format-adapters.md)
+- `governed-by` -> [DD-INGEST-SOURCE-DESCRIPTION-ABSENCE: Represent absent source descriptions explicitly](../../../designs/ingest/decisions/source-description-absence.md)
+- `implements` -> [FR-INGEST-SOURCE-RECONCILIATION: Reconcile every supported statement before approval](../../../prd/ingest/prd.md#fr-ingest-source-reconciliation-reconcile-every-supported-statement-before-approval)
+- `implements` -> [FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants](../../../prd/ingest/prd.md#fr-ingest-variant-qualification-qualify-and-detect-supported-statement-variants)
+- `touches` -> [DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence](../../../designs/ingest/data-model.md#formatvariantandsourceevidence)
 - `verifies` -> TC-INGEST-ADAPTER-GOLDEN-FIXTURES: Verify both qualified adapters against golden fixtures
 
 ## Navigation

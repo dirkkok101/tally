@@ -22,19 +22,19 @@ Private aggregate evidence proves exact metrics, Linear Pace, explanations, and 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-PRIVATE-POLICY-VALIDATION: Ignored private corpus with privacy-safe release receipts | `design_decision` | `governed-by` | `true` |
-| DM-INSIGHTS-POLICY-VALIDATION-RECEIPT: PolicyValidationReceipt | `data_model` | `touches` | `true` |
-| EXT-INSIGHTS-PRIVATE-EVALUATION-CORPUS: Private Insight Evaluation Corpus | `external_dependency` | `references` | `true` |
-| NFR-INSIGHTS-LOCAL-DATA-PROTECTION: Protect local insight data | `nfr` | `satisfies` | `true` |
-| OQ-INSIGHTS-10: What owner-only representative evidence horizon and canaries will prove that INSIGHTS adds value over raw Budget Position inspection without false high-severity signals? | `open_question` | `blocked-by` | `true` |
+| [DD-INSIGHTS-PRIVATE-POLICY-VALIDATION: Ignored private corpus with privacy-safe release receipts](../../../designs/insights/decisions/private-policy-validation.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INSIGHTS-POLICY-VALIDATION-RECEIPT: PolicyValidationReceipt](../../../designs/insights/data-model.md#policyvalidationreceipt) | `data_model` | `touches` | `true` |
+| [EXT-INSIGHTS-PRIVATE-EVALUATION-CORPUS: Private Insight Evaluation Corpus](../../../prd/insights/prd.md#ext-insights-private-evaluation-corpus-private-insight-evaluation-corpus) | `external_dependency` | `references` | `true` |
+| [NFR-INSIGHTS-LOCAL-DATA-PROTECTION: Protect local insight data](../../../prd/insights/prd.md#nfr-insights-local-data-protection-protect-local-insight-data) | `nfr` | `satisfies` | `true` |
+| [OQ-INSIGHTS-10: What owner-only representative evidence horizon and canaries will prove that INSIGHTS adds value over raw Budget Position inspection without false high-severity signals?](../../../prd/insights/prd.md) | `open_question` | `blocked-by` | `true` |
 | TC-INSIGHTS-PRIVATE-POLICY-VALIDATION: Verify private analytical policy validation | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-GENERATE-REPORT](../tasks/generate-report.md) | `compile` | The kill gate evaluates the real active report path. |
-| [TASK-INSIGHTS-PRIVATE-POLICY-VALIDATION](../tasks/private-policy-validation.md) | `compile` | The kill gate consumes the real manifest reader, harness, canaries, and receipt. |
+| [TASK-INSIGHTS-GENERATE-REPORT: TASK-INSIGHTS-GENERATE-REPORT](generate-report.md) | `compile` | The kill gate evaluates the real active report path. |
+| [TASK-INSIGHTS-PRIVATE-POLICY-VALIDATION: TASK-INSIGHTS-PRIVATE-POLICY-VALIDATION](private-policy-validation.md) | `compile` | The kill gate consumes the real manifest reader, harness, canaries, and receipt. |
 
 ## Recipe
 
@@ -79,9 +79,9 @@ Private aggregate evidence proves exact metrics, Linear Pace, explanations, and 
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| GenerateInsightReportQuery.HandleAsync | `consumes` | DM-INSIGHTS-INSIGHT-REPORT | real active report path |
-| InsightPolicyValidationHarness.ValidateAsync | `consumes` | DM-INSIGHTS-POLICY-VALIDATION-RECEIPT | real policy gate |
-| VerifiedInsightsOwnerValueGate | `produces` | DM-INSIGHTS-POLICY-VALIDATION-RECEIPT | privacy-safe approval or fail-closed do-less outcome |
+| GenerateInsightReportQuery.HandleAsync | `consumes` | [DM-INSIGHTS-INSIGHT-REPORT](../../../designs/insights/data-model.md#insightreport) | real active report path |
+| InsightPolicyValidationHarness.ValidateAsync | `consumes` | [DM-INSIGHTS-POLICY-VALIDATION-RECEIPT](../../../designs/insights/data-model.md#policyvalidationreceipt) | real policy gate |
+| VerifiedInsightsOwnerValueGate | `produces` | [DM-INSIGHTS-POLICY-VALIDATION-RECEIPT](../../../designs/insights/data-model.md#policyvalidationreceipt) | privacy-safe approval or fail-closed do-less outcome |
 
 ### Verification
 
@@ -106,13 +106,13 @@ Private aggregate evidence proves exact metrics, Linear Pace, explanations, and 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-gsb` (verified)
-- `blocked-by` -> OQ-INSIGHTS-10: What owner-only representative evidence horizon and canaries will prove that INSIGHTS adds value over raw Budget Position inspection without false high-severity signals?
-- `depends-on:compile` -> [TASK-INSIGHTS-GENERATE-REPORT](../tasks/generate-report.md): The kill gate evaluates the real active report path.
-- `depends-on:compile` -> [TASK-INSIGHTS-PRIVATE-POLICY-VALIDATION](../tasks/private-policy-validation.md): The kill gate consumes the real manifest reader, harness, canaries, and receipt.
-- `governed-by` -> DD-INSIGHTS-PRIVATE-POLICY-VALIDATION: Ignored private corpus with privacy-safe release receipts
-- `references` -> EXT-INSIGHTS-PRIVATE-EVALUATION-CORPUS: Private Insight Evaluation Corpus
-- `satisfies` -> NFR-INSIGHTS-LOCAL-DATA-PROTECTION: Protect local insight data
-- `touches` -> DM-INSIGHTS-POLICY-VALIDATION-RECEIPT: PolicyValidationReceipt
+- `blocked-by` -> [OQ-INSIGHTS-10: What owner-only representative evidence horizon and canaries will prove that INSIGHTS adds value over raw Budget Position inspection without false high-severity signals?](../../../prd/insights/prd.md)
+- `depends-on:compile` -> [TASK-INSIGHTS-GENERATE-REPORT: TASK-INSIGHTS-GENERATE-REPORT](generate-report.md): The kill gate evaluates the real active report path.
+- `depends-on:compile` -> [TASK-INSIGHTS-PRIVATE-POLICY-VALIDATION: TASK-INSIGHTS-PRIVATE-POLICY-VALIDATION](private-policy-validation.md): The kill gate consumes the real manifest reader, harness, canaries, and receipt.
+- `governed-by` -> [DD-INSIGHTS-PRIVATE-POLICY-VALIDATION: Ignored private corpus with privacy-safe release receipts](../../../designs/insights/decisions/private-policy-validation.md)
+- `references` -> [EXT-INSIGHTS-PRIVATE-EVALUATION-CORPUS: Private Insight Evaluation Corpus](../../../prd/insights/prd.md#ext-insights-private-evaluation-corpus-private-insight-evaluation-corpus)
+- `satisfies` -> [NFR-INSIGHTS-LOCAL-DATA-PROTECTION: Protect local insight data](../../../prd/insights/prd.md#nfr-insights-local-data-protection-protect-local-insight-data)
+- `touches` -> [DM-INSIGHTS-POLICY-VALIDATION-RECEIPT: PolicyValidationReceipt](../../../designs/insights/data-model.md#policyvalidationreceipt)
 - `verifies` -> TC-INSIGHTS-PRIVATE-POLICY-VALIDATION: Verify private analytical policy validation
 
 ## Navigation

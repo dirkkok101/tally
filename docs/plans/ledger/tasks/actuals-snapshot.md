@@ -22,21 +22,21 @@ Keep later pages bound to one category-hierarchy and ledger-generation view desp
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-SNAPSHOT-ACTUALS: Materialized coherent snapshots for dimensional actuals | `design_decision` | `governed-by` | `true` |
-| DIAG-LEDGER-ACTUALS-SNAPSHOT-SEQUENCE: Cross-process actuals snapshot pagination | `design_diagram` | `references` | `false` |
-| DM-LEDGER-QUERY-SNAPSHOT: QuerySnapshot | `data_model` | `touches` | `true` |
-| DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | `true` |
-| FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals | `requirement` | `implements` | `true` |
-| FR-LEDGER-SNAPSHOT-PAGINATION: Preserve query snapshots across pages | `requirement` | `implements` | `true` |
-| NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the agent contract stable | `nfr` | `satisfies` | `true` |
+| [DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment](../../../designs/ledger/decisions/category-hierarchy.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-SNAPSHOT-ACTUALS: Materialized coherent snapshots for dimensional actuals](../../../designs/ledger/decisions/snapshot-actuals.md) | `design_decision` | `governed-by` | `true` |
+| [DIAG-LEDGER-ACTUALS-SNAPSHOT-SEQUENCE: Cross-process actuals snapshot pagination](../../../designs/ledger/diagrams/actuals-snapshot-sequence.md) | `design_diagram` | `references` | `false` |
+| [DM-LEDGER-QUERY-SNAPSHOT: QuerySnapshot](../../../designs/ledger/data-model.md#querysnapshot) | `data_model` | `touches` | `true` |
+| [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals](../../../prd/ledger/prd.md#fr-ledger-actuals-query-query-exact-ledger-actuals) | `requirement` | `implements` | `true` |
+| [FR-LEDGER-SNAPSHOT-PAGINATION: Preserve query snapshots across pages](../../../prd/ledger/prd.md#fr-ledger-snapshot-pagination-preserve-query-snapshots-across-pages) | `requirement` | `implements` | `true` |
+| [NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the agent contract stable](../../../prd/ledger/prd.md#nfr-ledger-agent-contract-stability-keep-the-external-orchestrator-contract-stable) | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-SNAPSHOT-PAGINATION-CONTRACT: Verify preserve query snapshots across pages contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-ACTUALS-PROJECTION](../tasks/actuals-projection.md) | `compile` | Snapshot handler materializes the exact projection and totals. |
+| [TASK-LEDGER-ACTUALS-PROJECTION: TASK-LEDGER-ACTUALS-PROJECTION](actuals-projection.md) | `compile` | Snapshot handler materializes the exact projection and totals. |
 
 ## Recipe
 
@@ -81,10 +81,10 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ActualsOperationModule | `produces` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS |  |
-| ActualsQueryHandler | `produces` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS |  |
-| QuerySnapshotStore | `produces` | DM-LEDGER-QUERY-SNAPSHOT |  |
-| ActualsCalculator.Calculate | `consumes` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS |  |
+| ActualsOperationModule | `produces` | [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) |  |
+| ActualsQueryHandler | `produces` | [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) |  |
+| QuerySnapshotStore | `produces` | [DM-LEDGER-QUERY-SNAPSHOT](../../../designs/ledger/data-model.md#querysnapshot) |  |
+| ActualsCalculator.Calculate | `consumes` | [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) |  |
 | ActualsProjectionStore | `consumes` |  |  |
 
 ### Verification
@@ -111,15 +111,15 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1dt` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-ACTUALS-PROJECTION](../tasks/actuals-projection.md): Snapshot handler materializes the exact projection and totals.
-- `governed-by` -> DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment
-- `governed-by` -> DD-LEDGER-SNAPSHOT-ACTUALS: Materialized coherent snapshots for dimensional actuals
-- `implements` -> FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals
-- `implements` -> FR-LEDGER-SNAPSHOT-PAGINATION: Preserve query snapshots across pages
-- `references` -> DIAG-LEDGER-ACTUALS-SNAPSHOT-SEQUENCE: Cross-process actuals snapshot pagination
-- `satisfies` -> NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the agent contract stable
-- `touches` -> DM-LEDGER-QUERY-SNAPSHOT: QuerySnapshot
-- `touches` -> DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts
+- `depends-on:compile` -> [TASK-LEDGER-ACTUALS-PROJECTION: TASK-LEDGER-ACTUALS-PROJECTION](actuals-projection.md): Snapshot handler materializes the exact projection and totals.
+- `governed-by` -> [DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment](../../../designs/ledger/decisions/category-hierarchy.md)
+- `governed-by` -> [DD-LEDGER-SNAPSHOT-ACTUALS: Materialized coherent snapshots for dimensional actuals](../../../designs/ledger/decisions/snapshot-actuals.md)
+- `implements` -> [FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals](../../../prd/ledger/prd.md#fr-ledger-actuals-query-query-exact-ledger-actuals)
+- `implements` -> [FR-LEDGER-SNAPSHOT-PAGINATION: Preserve query snapshots across pages](../../../prd/ledger/prd.md#fr-ledger-snapshot-pagination-preserve-query-snapshots-across-pages)
+- `references` -> [DIAG-LEDGER-ACTUALS-SNAPSHOT-SEQUENCE: Cross-process actuals snapshot pagination](../../../designs/ledger/diagrams/actuals-snapshot-sequence.md)
+- `satisfies` -> [NFR-LEDGER-AGENT-CONTRACT-STABILITY: Keep the agent contract stable](../../../prd/ledger/prd.md#nfr-ledger-agent-contract-stability-keep-the-external-orchestrator-contract-stable)
+- `touches` -> [DM-LEDGER-QUERY-SNAPSHOT: QuerySnapshot](../../../designs/ledger/data-model.md#querysnapshot)
+- `touches` -> [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts)
 - `verifies` -> TC-LEDGER-SNAPSHOT-PAGINATION-CONTRACT: Verify preserve query snapshots across pages contract
 
 ## Navigation

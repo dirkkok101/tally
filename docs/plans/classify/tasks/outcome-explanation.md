@@ -22,11 +22,11 @@ The owner can reproduce a retained outcome or learn exactly why it is stale with
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract | `design_decision` | `governed-by` | `true` |
-| DM-CLASSIFY-EVALUATION-OUTCOME: ClassificationEvaluationAndOutcome | `data_model` | `touches` | `true` |
-| FR-CLASSIFY-OUTCOME-EXPLANATION: Explain a classification outcome | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate stale classification outcomes | `requirement` | `implements` | `true` |
+| [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md) | `design_decision` | `governed-by` | `true` |
+| [DM-CLASSIFY-EVALUATION-OUTCOME: ClassificationEvaluationAndOutcome](../../../designs/classify/data-model.md#classificationevaluationandoutcome) | `data_model` | `touches` | `true` |
+| [FR-CLASSIFY-OUTCOME-EXPLANATION: Explain a classification outcome](../../../prd/classify/prd.md#fr-classify-outcome-explanation-explain-a-classification-outcome) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate stale classification outcomes](../../../prd/classify/prd.md#fr-classify-outcome-invalidation-invalidate-stale-classification-outcomes) | `requirement` | `implements` | `true` |
 | TC-CLASSIFY-OUTCOME-EXPLANATION-CONTRACT: Verify bounded outcome explanation | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-OUTCOME-INVALIDATION-CONTRACT: Verify every staleness trigger | `test_case` | `verifies` | `true` |
 
@@ -34,8 +34,8 @@ The owner can reproduce a retained outcome or learn exactly why it is stale with
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-EVALUATION-WORKFLOW](../tasks/evaluation-workflow.md) | `compile` | Outcome inspection reads the retained evaluation and evidence produced by this task. |
-| [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT](../tasks/ledger-classification-client.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT. |
+| [TASK-CLASSIFY-EVALUATION-WORKFLOW: TASK-CLASSIFY-EVALUATION-WORKFLOW](evaluation-workflow.md) | `compile` | Outcome inspection reads the retained evaluation and evidence produced by this task. |
+| [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT](ledger-classification-client.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT. |
 
 ## Recipe
 
@@ -83,10 +83,10 @@ The owner can reproduce a retained outcome or learn exactly why it is stale with
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassificationEvaluationStore | `consumes` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
-| LedgerContractClient.QueryClassificationProjectionAsync | `consumes` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| GetClassificationOutcomeQuery.HandleAsync | `produces` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
-| ClassificationStalenessPolicy.Evaluate | `produces` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
+| ClassificationEvaluationStore | `consumes` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| LedgerContractClient.QueryClassificationProjectionAsync | `consumes` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| GetClassificationOutcomeQuery.HandleAsync | `produces` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| ClassificationStalenessPolicy.Evaluate | `produces` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
 
 ### Verification
 
@@ -108,13 +108,13 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-CLASSIFY-EVALUATION-WORKFLOW](../tasks/evaluation-workflow.md): Outcome inspection reads the retained evaluation and evidence produced by this task.
-- `depends-on:compile` -> [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT](../tasks/ledger-classification-client.md): Consumes an interface produced by TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT.
-- `governed-by` -> DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence
-- `governed-by` -> DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract
-- `implements` -> FR-CLASSIFY-OUTCOME-EXPLANATION: Explain a classification outcome
-- `implements` -> FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate stale classification outcomes
-- `touches` -> DM-CLASSIFY-EVALUATION-OUTCOME: ClassificationEvaluationAndOutcome
+- `depends-on:compile` -> [TASK-CLASSIFY-EVALUATION-WORKFLOW: TASK-CLASSIFY-EVALUATION-WORKFLOW](evaluation-workflow.md): Outcome inspection reads the retained evaluation and evidence produced by this task.
+- `depends-on:compile` -> [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT](ledger-classification-client.md): Consumes an interface produced by TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT.
+- `governed-by` -> [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md)
+- `governed-by` -> [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md)
+- `implements` -> [FR-CLASSIFY-OUTCOME-EXPLANATION: Explain a classification outcome](../../../prd/classify/prd.md#fr-classify-outcome-explanation-explain-a-classification-outcome)
+- `implements` -> [FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate stale classification outcomes](../../../prd/classify/prd.md#fr-classify-outcome-invalidation-invalidate-stale-classification-outcomes)
+- `touches` -> [DM-CLASSIFY-EVALUATION-OUTCOME: ClassificationEvaluationAndOutcome](../../../designs/classify/data-model.md#classificationevaluationandoutcome)
 - `verifies` -> TC-CLASSIFY-OUTCOME-EXPLANATION-CONTRACT: Verify bounded outcome explanation
 - `verifies` -> TC-CLASSIFY-OUTCOME-INVALIDATION-CONTRACT: Verify every staleness trigger
 

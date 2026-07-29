@@ -18,16 +18,16 @@ Prove UC-LEDGER-013 through the published CLI without retaining provider payload
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| FR-LEDGER-EVIDENCE-REGISTRATION: Register and link generic evidence | `requirement` | `verifies` | `true` |
+| [FR-LEDGER-EVIDENCE-REGISTRATION: Register and link generic evidence](../../../prd/ledger/prd.md#fr-ledger-evidence-registration-register-and-link-generic-evidence) | `requirement` | `verifies` | `true` |
 | TC-LEDGER-EVIDENCE-REGISTRATION-CONTRACT: Verify generic evidence registration and linkage | `test_case` | `verifies` | `true` |
-| UC-LEDGER-013: Register and link additional transaction evidence | `use_case` | `covers` | `true` |
+| [UC-LEDGER-013: Register and link additional transaction evidence](../../../prd/ledger/prd.md#uc-ledger-013-register-and-link-additional-transaction-evidence) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
 
 ## Recipe
 
@@ -63,8 +63,8 @@ None recorded.
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  |  |
-| CompletePublicContract74 | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 74 provider-neutral operations |
-| VerifiedUC013 | `produces` | UC-LEDGER-013 |  |
+| CompletePublicContract74 | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Exactly 74 provider-neutral operations |
+| VerifiedUC013 | `produces` | [UC-LEDGER-013](../../../prd/ledger/prd.md#uc-ledger-013-register-and-link-additional-transaction-evidence) |  |
 
 ### Verification
 
@@ -89,11 +89,11 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-e2o` (verified)
-- `covers` -> UC-LEDGER-013: Register and link additional transaction evidence
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
-- `verifies` -> FR-LEDGER-EVIDENCE-REGISTRATION: Register and link generic evidence
+- `covers` -> [UC-LEDGER-013: Register and link additional transaction evidence](../../../prd/ledger/prd.md#uc-ledger-013-register-and-link-additional-transaction-evidence)
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
 - `verifies` -> TC-LEDGER-EVIDENCE-REGISTRATION-CONTRACT: Verify generic evidence registration and linkage
+- `verifies` -> [FR-LEDGER-EVIDENCE-REGISTRATION: Register and link generic evidence](../../../prd/ledger/prd.md#fr-ledger-evidence-registration-register-and-link-generic-evidence)
 
 ## Navigation
 

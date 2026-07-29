@@ -22,18 +22,18 @@ Extract deterministic bounded PDF evidence under Native-AOT without mutation, ch
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling | `design_decision` | `governed-by` | `true` |
-| DD-INGEST-DOCUMENT-EXTRACTION: Managed in-process PDF extraction with PdfPig | `design_decision` | `governed-by` | `true` |
-| DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence | `data_model` | `touches` | `true` |
-| FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants | `requirement` | `implements` | `true` |
+| [DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling](../../../designs/ingest/decisions/artifact-security.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INGEST-DOCUMENT-EXTRACTION: Managed in-process PDF extraction with PdfPig](../../../designs/ingest/decisions/document-extraction.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence](../../../designs/ingest/data-model.md#formatvariantandsourceevidence) | `data_model` | `touches` | `true` |
+| [FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants](../../../prd/ingest/prd.md#fr-ingest-variant-qualification-qualify-and-detect-supported-statement-variants) | `requirement` | `implements` | `true` |
 | TC-INGEST-PDF-EXTRACTION-AOT: Verify PdfPig Native-AOT extraction conformance | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Extractor failures use the stable IngestError contract. |
-| [TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES](../tasks/gate-evidence-private-fixtures.md) | `compile` | Fixture-dependent extractor tests consume the validated private expectation manifest. |
+| [TASK-INGEST-CONTRACT-FOUNDATION: TASK-INGEST-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | Extractor failures use the stable IngestError contract. |
+| [TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES: TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES](gate-evidence-private-fixtures.md) | `compile` | Fixture-dependent extractor tests consume the validated private expectation manifest. |
 
 ## Recipe
 
@@ -85,12 +85,12 @@ Extract deterministic bounded PDF evidence under Native-AOT without mutation, ch
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| IngestError | `consumes` | DM-INGEST-ERROR-STATUS-CONTRACTS |  |
-| PrivateFixtureExpectationManifest | `consumes` | EXT-INGEST-OWNER-BANK-STATEMENT | Gate-validated ignored repository-relative sourcePath locators strictly below owner-only docs/statements; no locator or fixture value enters output/state. |
-| PdfStatementTextExtractor.ExtractAsync | `produces` | DM-INGEST-FORMAT-EVIDENCE |  |
-| PdfDocumentEvidence | `produces` | DM-INGEST-FORMAT-EVIDENCE |  |
-| IStatementAdapter | `produces` | DM-INGEST-FORMAT-EVIDENCE | Layout A later corrects Extract to consume exact AccountDetail and emit FinancialEvidence/control inputs. |
-| PrivateStatementFixtureSet | `produces` | EXT-INGEST-OWNER-BANK-STATEMENT |  |
+| IngestError | `consumes` | [DM-INGEST-ERROR-STATUS-CONTRACTS](../../../designs/ingest/data-model.md#ingesterrorandstatuscontracts) |  |
+| PrivateFixtureExpectationManifest | `consumes` | [EXT-INGEST-OWNER-BANK-STATEMENT](../../../prd/ingest/prd.md#ext-ingest-owner-bank-statement-owner-supplied-bank-statement) | Gate-validated ignored repository-relative sourcePath locators strictly below owner-only docs/statements; no locator or fixture value enters output/state. |
+| PdfStatementTextExtractor.ExtractAsync | `produces` | [DM-INGEST-FORMAT-EVIDENCE](../../../designs/ingest/data-model.md#formatvariantandsourceevidence) |  |
+| PdfDocumentEvidence | `produces` | [DM-INGEST-FORMAT-EVIDENCE](../../../designs/ingest/data-model.md#formatvariantandsourceevidence) |  |
+| IStatementAdapter | `produces` | [DM-INGEST-FORMAT-EVIDENCE](../../../designs/ingest/data-model.md#formatvariantandsourceevidence) | Layout A later corrects Extract to consume exact AccountDetail and emit FinancialEvidence/control inputs. |
+| PrivateStatementFixtureSet | `produces` | [EXT-INGEST-OWNER-BANK-STATEMENT](../../../prd/ingest/prd.md#ext-ingest-owner-bank-statement-owner-supplied-bank-statement) |  |
 
 ### Verification
 
@@ -117,12 +117,12 @@ Extract deterministic bounded PDF evidence under Native-AOT without mutation, ch
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1j2` (verified)
-- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Extractor failures use the stable IngestError contract.
-- `depends-on:compile` -> [TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES](../tasks/gate-evidence-private-fixtures.md): Fixture-dependent extractor tests consume the validated private expectation manifest.
-- `governed-by` -> DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling
-- `governed-by` -> DD-INGEST-DOCUMENT-EXTRACTION: Managed in-process PDF extraction with PdfPig
-- `implements` -> FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants
-- `touches` -> DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence
+- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION: TASK-INGEST-CONTRACT-FOUNDATION](contract-foundation.md): Extractor failures use the stable IngestError contract.
+- `depends-on:compile` -> [TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES: TASK-INGEST-GATE-EVIDENCE-PRIVATE-FIXTURES](gate-evidence-private-fixtures.md): Fixture-dependent extractor tests consume the validated private expectation manifest.
+- `governed-by` -> [DD-INGEST-ARTIFACT-SECURITY: Memory-only extraction and owner-only payload handling](../../../designs/ingest/decisions/artifact-security.md)
+- `governed-by` -> [DD-INGEST-DOCUMENT-EXTRACTION: Managed in-process PDF extraction with PdfPig](../../../designs/ingest/decisions/document-extraction.md)
+- `implements` -> [FR-INGEST-VARIANT-QUALIFICATION: Qualify and detect supported statement variants](../../../prd/ingest/prd.md#fr-ingest-variant-qualification-qualify-and-detect-supported-statement-variants)
+- `touches` -> [DM-INGEST-FORMAT-EVIDENCE: FormatVariantAndSourceEvidence](../../../designs/ingest/data-model.md#formatvariantandsourceevidence)
 - `verifies` -> TC-INGEST-PDF-EXTRACTION-AOT: Verify PdfPig Native-AOT extraction conformance
 
 ## Navigation

@@ -22,17 +22,17 @@ LinearPaceCalculator classifies supported plan evidence exactly, handles zero pl
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY: Frozen Johannesburg Analysis Windows and exact Linear Pace | `design_decision` | `governed-by` | `true` |
-| DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation | `data_model` | `touches` | `true` |
-| FR-INSIGHTS-LINEAR-PACE: Calculate a transparent linear pace state | `requirement` | `implements` | `true` |
-| NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity | `nfr` | `satisfies` | `true` |
+| [DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY: Frozen Johannesburg Analysis Windows and exact Linear Pace](../../../designs/insights/decisions/trusted-window-pace-policy.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation](../../../designs/insights/data-model.md#analysiswindowmetricstateandexplanation) | `data_model` | `touches` | `true` |
+| [FR-INSIGHTS-LINEAR-PACE: Calculate a transparent linear pace state](../../../prd/insights/prd.md#fr-insights-linear-pace-calculate-a-transparent-linear-pace-state) | `requirement` | `implements` | `true` |
+| [NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity](../../../prd/insights/prd.md#nfr-insights-deterministic-analytical-integrity-preserve-deterministic-analytical-integrity) | `nfr` | `satisfies` | `true` |
 | TC-INSIGHTS-LINEAR-PACE-CONFORMANCE: Verify linear pace formula and states | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md) | `compile` | The calculator returns ExactRational and PaceResult contracts. |
+| [TASK-INSIGHTS-CONTRACT-MODELS: TASK-INSIGHTS-CONTRACT-MODELS](contract-models.md) | `compile` | The calculator returns ExactRational and PaceResult contracts. |
 
 ## Recipe
 
@@ -74,7 +74,7 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| LinearPaceCalculator.Calculate | `produces` | DM-INSIGHTS-ANALYTICAL-EVIDENCE | one closed PaceResult |
+| LinearPaceCalculator.Calculate | `produces` | [DM-INSIGHTS-ANALYTICAL-EVIDENCE](../../../designs/insights/data-model.md#analysiswindowmetricstateandexplanation) | one closed PaceResult |
 
 ### Verification
 
@@ -99,11 +99,11 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-29y` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-MODELS](../tasks/contract-models.md): The calculator returns ExactRational and PaceResult contracts.
-- `governed-by` -> DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY: Frozen Johannesburg Analysis Windows and exact Linear Pace
-- `implements` -> FR-INSIGHTS-LINEAR-PACE: Calculate a transparent linear pace state
-- `satisfies` -> NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity
-- `touches` -> DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation
+- `depends-on:compile` -> [TASK-INSIGHTS-CONTRACT-MODELS: TASK-INSIGHTS-CONTRACT-MODELS](contract-models.md): The calculator returns ExactRational and PaceResult contracts.
+- `governed-by` -> [DD-INSIGHTS-TRUSTED-WINDOW-PACE-POLICY: Frozen Johannesburg Analysis Windows and exact Linear Pace](../../../designs/insights/decisions/trusted-window-pace-policy.md)
+- `implements` -> [FR-INSIGHTS-LINEAR-PACE: Calculate a transparent linear pace state](../../../prd/insights/prd.md#fr-insights-linear-pace-calculate-a-transparent-linear-pace-state)
+- `satisfies` -> [NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity](../../../prd/insights/prd.md#nfr-insights-deterministic-analytical-integrity-preserve-deterministic-analytical-integrity)
+- `touches` -> [DM-INSIGHTS-ANALYTICAL-EVIDENCE: AnalysisWindowMetricStateAndExplanation](../../../designs/insights/data-model.md#analysiswindowmetricstateandexplanation)
 - `verifies` -> TC-INSIGHTS-LINEAR-PACE-CONFORMANCE: Verify linear pace formula and states
 
 ## Navigation

@@ -23,14 +23,14 @@ Prove repeated or overlapping statements never create an unjustified duplicate s
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | TC-INGEST-REPLAY-OVERLAP-SAFETY-CONTRACT: Verify replay and overlap safety | `test_case` | `verifies` | `true` |
-| UC-INGEST-004: Re-import a repeated or overlapping statement safely | `use_case` | `covers` | `true` |
+| [UC-INGEST-004: Re-import a repeated or overlapping statement safely](../../../prd/ingest/prd.md#uc-ingest-004-re-import-a-repeated-or-overlapping-statement-safely) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | UC verification exercises the complete published preview/commit/status contract. |
-| [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md) | `compile` | Consumes PrivateStatementFixtureSet. |
+| [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT: TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | UC verification exercises the complete published preview/commit/status contract. |
+| [TASK-INGEST-PDF-EXTRACTION: TASK-INGEST-PDF-EXTRACTION](pdf-extraction.md) | `compile` | Consumes PrivateStatementFixtureSet. |
 
 ## Recipe
 
@@ -70,9 +70,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteIngestPublicContract | `consumes` | DM-INGEST-OPERATION-CONTRACTS | Published INGEST and shared Ledger operations |
-| PrivateStatementFixtureSet | `consumes` | EXT-INGEST-OWNER-BANK-STATEMENT | External private fixture injection |
-| UCIngest004Evidence | `produces` | UC-INGEST-004 | Replay and overlap workflow proof |
+| CompleteIngestPublicContract | `consumes` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) | Published INGEST and shared Ledger operations |
+| PrivateStatementFixtureSet | `consumes` | [EXT-INGEST-OWNER-BANK-STATEMENT](../../../prd/ingest/prd.md#ext-ingest-owner-bank-statement-owner-supplied-bank-statement) | External private fixture injection |
+| UCIngest004Evidence | `produces` | [UC-INGEST-004](../../../prd/ingest/prd.md#uc-ingest-004-re-import-a-repeated-or-overlapping-statement-safely) | Replay and overlap workflow proof |
 
 ### Verification
 
@@ -97,9 +97,9 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-k94` (verified)
-- `covers` -> UC-INGEST-004: Re-import a repeated or overlapping statement safely
-- `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC verification exercises the complete published preview/commit/status contract.
-- `depends-on:compile` -> [TASK-INGEST-PDF-EXTRACTION](../tasks/pdf-extraction.md): Consumes PrivateStatementFixtureSet.
+- `covers` -> [UC-INGEST-004: Re-import a repeated or overlapping statement safely](../../../prd/ingest/prd.md#uc-ingest-004-re-import-a-repeated-or-overlapping-statement-safely)
+- `depends-on:compile` -> [TASK-INGEST-GATE-INT-PUBLIC-CONTRACT: TASK-INGEST-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): UC verification exercises the complete published preview/commit/status contract.
+- `depends-on:compile` -> [TASK-INGEST-PDF-EXTRACTION: TASK-INGEST-PDF-EXTRACTION](pdf-extraction.md): Consumes PrivateStatementFixtureSet.
 - `verifies` -> TC-INGEST-REPLAY-OVERLAP-SAFETY-CONTRACT: Verify replay and overlap safety
 
 ## Navigation

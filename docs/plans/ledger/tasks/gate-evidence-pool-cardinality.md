@@ -22,10 +22,10 @@ Prove that explicit unassigned or one active Spend Pool per transaction covers t
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment | `data_model` | `touches` | `true` |
-| NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic | `nfr` | `satisfies` | `true` |
-| OQ-LEDGER-15: Does one active spend pool per transaction cover company-paid and personal-after-tax examples, including corrections, refunds, reversals, and mixed purchases? | `open_question` | `references` | `true` |
+| [DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions](../../../designs/ledger/decisions/dimensional-attribution.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment](../../../designs/ledger/data-model.md#spendpoolandassignment) | `data_model` | `touches` | `true` |
+| [NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic](../../../prd/ledger/prd.md#nfr-ledger-exact-financial-arithmetic-preserve-exact-financial-arithmetic) | `nfr` | `satisfies` | `true` |
+| [OQ-LEDGER-15: Does one active spend pool per transaction cover company-paid and personal-after-tax examples, including corrections, refunds, reversals, and mixed purchases?](../../../prd/ledger/prd.md) | `open_question` | `references` | `true` |
 
 ## Dependencies
 
@@ -70,7 +70,7 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| OQ-LEDGER-15Resolution | `produces` | OQ-LEDGER-15 | Produced only when one-pool cardinality is validated |
+| OQ-LEDGER-15Resolution | `produces` | [OQ-LEDGER-15](../../../prd/ledger/prd.md) | Produced only when one-pool cardinality is validated |
 
 ### Verification
 
@@ -96,10 +96,10 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-z7p` (verified)
-- `governed-by` -> DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions
-- `references` -> OQ-LEDGER-15: Does one active spend pool per transaction cover company-paid and personal-after-tax examples, including corrections, refunds, reversals, and mixed purchases?
-- `satisfies` -> NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic
-- `touches` -> DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment
+- `governed-by` -> [DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions](../../../designs/ledger/decisions/dimensional-attribution.md)
+- `references` -> [OQ-LEDGER-15: Does one active spend pool per transaction cover company-paid and personal-after-tax examples, including corrections, refunds, reversals, and mixed purchases?](../../../prd/ledger/prd.md)
+- `satisfies` -> [NFR-LEDGER-EXACT-FINANCIAL-ARITHMETIC: Preserve exact financial arithmetic](../../../prd/ledger/prd.md#nfr-ledger-exact-financial-arithmetic-preserve-exact-financial-arithmetic)
+- `touches` -> [DM-LEDGER-SPEND-POOL-ASSIGNMENT: SpendPoolAndAssignment](../../../designs/ledger/data-model.md#spendpoolandassignment)
 
 ## Navigation
 

@@ -29,15 +29,15 @@ Compose and verify the complete current schema, V001 upgrade path, process contr
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md) | `compile` | Core gate exercises the real store and generation policy. |
-| [TASK-LEDGER-CORE-MONEY-DATES](../tasks/core-money-dates.md) | `compile` | Core gate proves exact values through SQLite. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Core gate proves transactional replay and crash behavior. |
-| [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md) | `compile` | Consumer requires TallyProcess.RunAsync from its producing task; direct compile edge enforces the declared interface contract. |
-| [TASK-LEDGER-CORE-SCHEMA-CATALOGUE](../tasks/core-schema-catalogue.md) | `compile` | Consumes V001CatalogueSchema. |
-| [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](../tasks/core-schema-transactions.md) | `compile` | Consumes V001TransactionSchema. |
-| [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](../tasks/core-schema-relationships-actuals.md) | `compile` | Consumes V001RelationshipActualsSchema. |
-| [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](../tasks/core-schema-evidence-reconciliation.md) | `compile` | CompleteV001Schema consumes the evidence and reconciliation fragment. |
-| [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](../tasks/core-schema-reconciliation-authority.md) | `compile` | The proven complete schema must include the V002 statement-authority upgrade. |
+| [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md) | `compile` | Core gate exercises the real store and generation policy. |
+| [TASK-LEDGER-CORE-MONEY-DATES: TASK-LEDGER-CORE-MONEY-DATES](core-money-dates.md) | `compile` | Core gate proves exact values through SQLite. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Core gate proves transactional replay and crash behavior. |
+| [TASK-LEDGER-CORE-PROCESS-CONTRACT: TASK-LEDGER-CORE-PROCESS-CONTRACT](core-process-contract.md) | `compile` | Consumer requires TallyProcess.RunAsync from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-CORE-SCHEMA-CATALOGUE: TASK-LEDGER-CORE-SCHEMA-CATALOGUE](core-schema-catalogue.md) | `compile` | Consumes V001CatalogueSchema. |
+| [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS: TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](core-schema-transactions.md) | `compile` | Consumes V001TransactionSchema. |
+| [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS: TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](core-schema-relationships-actuals.md) | `compile` | Consumes V001RelationshipActualsSchema. |
+| [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION: TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](core-schema-evidence-reconciliation.md) | `compile` | CompleteV001Schema consumes the evidence and reconciliation fragment. |
+| [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY: TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](core-schema-reconciliation-authority.md) | `compile` | The proven complete schema must include the V002 statement-authority upgrade. |
 
 ## Recipe
 
@@ -81,17 +81,17 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| TallyProcess.RunAsync | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Provider-neutral process boundary |
-| LedgerDb | `consumes` | DM-LEDGER-STORE-GENERATION | Raw SQLite runtime |
-| V001StorageSchema | `consumes` | DM-LEDGER-STORE-GENERATION | Storage metadata fragment |
-| V001CatalogueSchema | `consumes` | DM-LEDGER-CATALOGUE-LIFECYCLE | Hierarchical financial-dimension fragment |
-| V001TransactionSchema | `consumes` | DM-LEDGER-TRANSACTION-HISTORY | Transaction and assignment fragment |
-| V001EvidenceReconciliationSchema | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY | Committed evidence predecessor |
-| V001RelationshipActualsSchema | `consumes` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS | Relationship and snapshot fragment |
-| V002StatementAuthoritySchema | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY | Additive statement-correction upgrade |
-| Money | `consumes` | DD-LEDGER-FINANCIAL-REPRESENTATION | Exact values |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD | Request and logical replay |
-| CompleteLedgerSchema | `produces` | DM-LEDGER-STORE-GENERATION | Fresh and upgraded current schema |
+| TallyProcess.RunAsync | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Provider-neutral process boundary |
+| LedgerDb | `consumes` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) | Raw SQLite runtime |
+| V001StorageSchema | `consumes` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) | Storage metadata fragment |
+| V001CatalogueSchema | `consumes` | [DM-LEDGER-CATALOGUE-LIFECYCLE](../../../designs/ledger/data-model.md#financialdimensioncataloguelifecycleevents) | Hierarchical financial-dimension fragment |
+| V001TransactionSchema | `consumes` | [DM-LEDGER-TRANSACTION-HISTORY](../../../designs/ledger/data-model.md#transactionlifecycleandcategoryallocation) | Transaction and assignment fragment |
+| V001EvidenceReconciliationSchema | `consumes` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) | Committed evidence predecessor |
+| V001RelationshipActualsSchema | `consumes` | [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) | Relationship and snapshot fragment |
+| V002StatementAuthoritySchema | `consumes` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) | Additive statement-correction upgrade |
+| Money | `consumes` | [DD-LEDGER-FINANCIAL-REPRESENTATION](../../../designs/ledger/decisions/financial-representation.md) | Exact values |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | [DM-LEDGER-IDEMPOTENCY-RECORD](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) | Request and logical replay |
+| CompleteLedgerSchema | `produces` | [DM-LEDGER-STORE-GENERATION](../../../designs/ledger/data-model.md#storegenerationandartifactmanifest) | Fresh and upgraded current schema |
 | VerifiedCoreRuntimeStorageSeam | `produces` |  | Integration evidence |
 
 ### Verification
@@ -118,15 +118,15 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2zt` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Core gate proves transactional replay and crash behavior.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-MONEY-DATES](../tasks/core-money-dates.md): Core gate proves exact values through SQLite.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT](../tasks/core-process-contract.md): Consumer requires TallyProcess.RunAsync from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-CATALOGUE](../tasks/core-schema-catalogue.md): Consumes V001CatalogueSchema.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](../tasks/core-schema-evidence-reconciliation.md): CompleteV001Schema consumes the evidence and reconciliation fragment.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](../tasks/core-schema-reconciliation-authority.md): The proven complete schema must include the V002 statement-authority upgrade.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](../tasks/core-schema-relationships-actuals.md): Consumes V001RelationshipActualsSchema.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](../tasks/core-schema-transactions.md): Consumes V001TransactionSchema.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE](../tasks/core-storage.md): Core gate exercises the real store and generation policy.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Core gate proves transactional replay and crash behavior.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-MONEY-DATES: TASK-LEDGER-CORE-MONEY-DATES](core-money-dates.md): Core gate proves exact values through SQLite.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-PROCESS-CONTRACT: TASK-LEDGER-CORE-PROCESS-CONTRACT](core-process-contract.md): Consumer requires TallyProcess.RunAsync from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-CATALOGUE: TASK-LEDGER-CORE-SCHEMA-CATALOGUE](core-schema-catalogue.md): Consumes V001CatalogueSchema.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION: TASK-LEDGER-CORE-SCHEMA-EVIDENCE-RECONCILIATION](core-schema-evidence-reconciliation.md): CompleteV001Schema consumes the evidence and reconciliation fragment.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY: TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](core-schema-reconciliation-authority.md): The proven complete schema must include the V002 statement-authority upgrade.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS: TASK-LEDGER-CORE-SCHEMA-RELATIONSHIPS-ACTUALS](core-schema-relationships-actuals.md): Consumes V001RelationshipActualsSchema.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS: TASK-LEDGER-CORE-SCHEMA-TRANSACTIONS](core-schema-transactions.md): Consumes V001TransactionSchema.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-STORAGE: TASK-LEDGER-CORE-STORAGE](core-storage.md): Core gate exercises the real store and generation policy.
 - `verifies` -> TC-LEDGER-ATOMIC-CRASH-RECOVERY: Prove mutation crash atomicity and idempotency
 - `verifies` -> TC-LEDGER-OFFLINE-SELF-CONTAINED: Verify offline self-contained operation
 

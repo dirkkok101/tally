@@ -22,20 +22,20 @@ Deliver ingest.commit so every candidate is accepted once, returned as an exact 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-COMMIT-RECOVERY: Per-batch locked idempotent candidate saga | `design_decision` | `governed-by` | `true` |
-| FR-INGEST-APPROVED-BATCH-COMMIT: Commit approved candidates through public LEDGER operations | `requirement` | `implements` | `true` |
-| FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit | `requirement` | `implements` | `true` |
+| [DD-INGEST-COMMIT-RECOVERY: Per-batch locked idempotent candidate saga](../../../designs/ingest/decisions/commit-recovery.md) | `design_decision` | `governed-by` | `true` |
+| [FR-INGEST-APPROVED-BATCH-COMMIT: Commit approved candidates through public LEDGER operations](../../../prd/ingest/prd.md#fr-ingest-approved-batch-commit-commit-approved-candidates-through-public-ledger-operations) | `requirement` | `implements` | `true` |
+| [FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit](../../../prd/ingest/prd.md#fr-ingest-durable-receipt-resume-record-durable-outcomes-and-resume-interrupted-commit) | `requirement` | `implements` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-REVIEW-WORKFLOW](../tasks/review-workflow.md) | `compile` | Commit consumes exact immutable approvals and manifests from ReviewStateStore. |
-| [TASK-INGEST-LEDGER-PUBLIC-CLIENT](../tasks/ledger-public-client.md) | `compile` | The saga invokes only LedgerContractClient record/get methods. |
-| [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md) | `compile` | Commit stop frontiers append complete stable errors atomically through the V002 store. |
-| [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Commit consumes ImportReceipt and FrozenLedgerRecordRequest. |
-| [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](../tasks/ledger-evidence-contract-correction.md) | `compile` | Commit consumes LedgerImmutableVerification. |
-| [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Commit persists through IngestDatabase. |
+| [TASK-INGEST-REVIEW-WORKFLOW: TASK-INGEST-REVIEW-WORKFLOW](review-workflow.md) | `compile` | Commit consumes exact immutable approvals and manifests from ReviewStateStore. |
+| [TASK-INGEST-LEDGER-PUBLIC-CLIENT: TASK-INGEST-LEDGER-PUBLIC-CLIENT](ledger-public-client.md) | `compile` | The saga invokes only LedgerContractClient record/get methods. |
+| [TASK-INGEST-STATUS-STATE-V002: TASK-INGEST-STATUS-STATE-V002](status-state-v002.md) | `compile` | Commit stop frontiers append complete stable errors atomically through the V002 store. |
+| [TASK-INGEST-CONTRACT-FOUNDATION: TASK-INGEST-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | Commit consumes ImportReceipt and FrozenLedgerRecordRequest. |
+| [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION: TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](ledger-evidence-contract-correction.md) | `compile` | Commit consumes LedgerImmutableVerification. |
+| [TASK-INGEST-STATE-FOUNDATION: TASK-INGEST-STATE-FOUNDATION](state-foundation.md) | `compile` | Commit persists through IngestDatabase. |
 
 ## Recipe
 
@@ -89,18 +89,18 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ImportReceipt | `consumes` | DM-INGEST-IMPORT-RECEIPT |  |
-| FrozenLedgerRecordRequest | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT |  |
-| LedgerImmutableVerification | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT |  |
-| IngestDatabase | `consumes` | DM-INGEST-STATE-STORE |  |
-| ReviewStateStore | `consumes` | DM-INGEST-STATE-STORE |  |
-| BatchErrorEventStore.AppendAsync | `consumes` | DM-INGEST-ERROR-STATUS-CONTRACTS | Atomic safe failure metadata |
-| LedgerContractClient.RecordTransactionAsync | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT |  |
-| LedgerContractClient.GetTransactionAsync | `consumes` | DM-INGEST-LEDGER-COMMIT-CONTRACT |  |
-| BatchCommitLock | `produces` | DD-INGEST-COMMIT-RECOVERY |  |
-| CommitStateStore | `produces` | DM-INGEST-STATE-STORE |  |
-| CandidateCommitSaga.ExecuteAsync | `produces` | DM-INGEST-IMPORT-RECEIPT |  |
-| CommitOperationModule | `produces` | DM-INGEST-OPERATION-CONTRACTS |  |
+| ImportReceipt | `consumes` | [DM-INGEST-IMPORT-RECEIPT](../../../designs/ingest/data-model.md#importreceiptandcandidateoutcome) |  |
+| FrozenLedgerRecordRequest | `consumes` | [DM-INGEST-LEDGER-COMMIT-CONTRACT](../../../designs/ingest/data-model.md#ledgercommitcontractsnapshot) |  |
+| LedgerImmutableVerification | `consumes` | [DM-INGEST-LEDGER-COMMIT-CONTRACT](../../../designs/ingest/data-model.md#ledgercommitcontractsnapshot) |  |
+| IngestDatabase | `consumes` | [DM-INGEST-STATE-STORE](../../../designs/ingest/data-model.md#ingeststatestore) |  |
+| ReviewStateStore | `consumes` | [DM-INGEST-STATE-STORE](../../../designs/ingest/data-model.md#ingeststatestore) |  |
+| BatchErrorEventStore.AppendAsync | `consumes` | [DM-INGEST-ERROR-STATUS-CONTRACTS](../../../designs/ingest/data-model.md#ingesterrorandstatuscontracts) | Atomic safe failure metadata |
+| LedgerContractClient.RecordTransactionAsync | `consumes` | [DM-INGEST-LEDGER-COMMIT-CONTRACT](../../../designs/ingest/data-model.md#ledgercommitcontractsnapshot) |  |
+| LedgerContractClient.GetTransactionAsync | `consumes` | [DM-INGEST-LEDGER-COMMIT-CONTRACT](../../../designs/ingest/data-model.md#ledgercommitcontractsnapshot) |  |
+| BatchCommitLock | `produces` | [DD-INGEST-COMMIT-RECOVERY](../../../designs/ingest/decisions/commit-recovery.md) |  |
+| CommitStateStore | `produces` | [DM-INGEST-STATE-STORE](../../../designs/ingest/data-model.md#ingeststatestore) |  |
+| CandidateCommitSaga.ExecuteAsync | `produces` | [DM-INGEST-IMPORT-RECEIPT](../../../designs/ingest/data-model.md#importreceiptandcandidateoutcome) |  |
+| CommitOperationModule | `produces` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) |  |
 
 ### Verification
 
@@ -126,15 +126,15 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2i6` (verified)
-- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Commit consumes ImportReceipt and FrozenLedgerRecordRequest.
-- `depends-on:compile` -> [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](../tasks/ledger-evidence-contract-correction.md): Commit consumes LedgerImmutableVerification.
-- `depends-on:compile` -> [TASK-INGEST-LEDGER-PUBLIC-CLIENT](../tasks/ledger-public-client.md): The saga invokes only LedgerContractClient record/get methods.
-- `depends-on:compile` -> [TASK-INGEST-REVIEW-WORKFLOW](../tasks/review-workflow.md): Commit consumes exact immutable approvals and manifests from ReviewStateStore.
-- `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION](../tasks/state-foundation.md): Commit persists through IngestDatabase.
-- `depends-on:compile` -> [TASK-INGEST-STATUS-STATE-V002](../tasks/status-state-v002.md): Commit stop frontiers append complete stable errors atomically through the V002 store.
-- `governed-by` -> DD-INGEST-COMMIT-RECOVERY: Per-batch locked idempotent candidate saga
-- `implements` -> FR-INGEST-APPROVED-BATCH-COMMIT: Commit approved candidates through public LEDGER operations
-- `implements` -> FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit
+- `depends-on:compile` -> [TASK-INGEST-CONTRACT-FOUNDATION: TASK-INGEST-CONTRACT-FOUNDATION](contract-foundation.md): Commit consumes ImportReceipt and FrozenLedgerRecordRequest.
+- `depends-on:compile` -> [TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION: TASK-INGEST-LEDGER-EVIDENCE-CONTRACT-CORRECTION](ledger-evidence-contract-correction.md): Commit consumes LedgerImmutableVerification.
+- `depends-on:compile` -> [TASK-INGEST-LEDGER-PUBLIC-CLIENT: TASK-INGEST-LEDGER-PUBLIC-CLIENT](ledger-public-client.md): The saga invokes only LedgerContractClient record/get methods.
+- `depends-on:compile` -> [TASK-INGEST-REVIEW-WORKFLOW: TASK-INGEST-REVIEW-WORKFLOW](review-workflow.md): Commit consumes exact immutable approvals and manifests from ReviewStateStore.
+- `depends-on:compile` -> [TASK-INGEST-STATE-FOUNDATION: TASK-INGEST-STATE-FOUNDATION](state-foundation.md): Commit persists through IngestDatabase.
+- `depends-on:compile` -> [TASK-INGEST-STATUS-STATE-V002: TASK-INGEST-STATUS-STATE-V002](status-state-v002.md): Commit stop frontiers append complete stable errors atomically through the V002 store.
+- `governed-by` -> [DD-INGEST-COMMIT-RECOVERY: Per-batch locked idempotent candidate saga](../../../designs/ingest/decisions/commit-recovery.md)
+- `implements` -> [FR-INGEST-APPROVED-BATCH-COMMIT: Commit approved candidates through public LEDGER operations](../../../prd/ingest/prd.md#fr-ingest-approved-batch-commit-commit-approved-candidates-through-public-ledger-operations)
+- `implements` -> [FR-INGEST-DURABLE-RECEIPT-RESUME: Record durable outcomes and resume interrupted commit](../../../prd/ingest/prd.md#fr-ingest-durable-receipt-resume-record-durable-outcomes-and-resume-interrupted-commit)
 
 ## Navigation
 

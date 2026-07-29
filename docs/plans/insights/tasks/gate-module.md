@@ -22,14 +22,14 @@ A clean checkout proves INSIGHTS v1 satisfies the approved design and active PRD
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| MD-INSIGHTS-MASTER: Budget Insights technical design | `module_design` | `governed-by` | `true` |
-| PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES: Implementation Plan Quality Gates | `pattern` | `governed-by` | `true` |
+| [MD-INSIGHTS-MASTER: Budget Insights technical design](../../../designs/insights/design.md) | `module_design` | `governed-by` | `true` |
+| [PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES: Implementation Plan Quality Gates](../../../patterns/core/implementation-plan-quality-gates.md) | `pattern` | `governed-by` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-GATE-GRAPH-QUALITY](../tasks/gate-graph-quality.md) | `compile` | The final module gate runs only after all contract, behavioral, nonfunctional, use-case, and graph evidence converges. |
+| [TASK-INSIGHTS-GATE-GRAPH-QUALITY: TASK-INSIGHTS-GATE-GRAPH-QUALITY](gate-graph-quality.md) | `compile` | The final module gate runs only after all contract, behavioral, nonfunctional, use-case, and graph evidence converges. |
 
 ## Recipe
 
@@ -73,8 +73,8 @@ A clean checkout proves INSIGHTS v1 satisfies the approved design and active PRD
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| InsightsGraphQualityEvidence | `consumes` | PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES | complete graph and behavioral convergence |
-| CompleteInsightsV1 | `produces` | MD-INSIGHTS-MASTER | final module proof |
+| InsightsGraphQualityEvidence | `consumes` | [PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES](../../../patterns/core/implementation-plan-quality-gates.md) | complete graph and behavioral convergence |
+| CompleteInsightsV1 | `produces` | [MD-INSIGHTS-MASTER](../../../designs/insights/design.md) | final module proof |
 
 ### Verification
 
@@ -99,9 +99,9 @@ A clean checkout proves INSIGHTS v1 satisfies the approved design and active PRD
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-881` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-GRAPH-QUALITY](../tasks/gate-graph-quality.md): The final module gate runs only after all contract, behavioral, nonfunctional, use-case, and graph evidence converges.
-- `governed-by` -> MD-INSIGHTS-MASTER: Budget Insights technical design
-- `governed-by` -> PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES: Implementation Plan Quality Gates
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-GRAPH-QUALITY: TASK-INSIGHTS-GATE-GRAPH-QUALITY](gate-graph-quality.md): The final module gate runs only after all contract, behavioral, nonfunctional, use-case, and graph evidence converges.
+- `governed-by` -> [MD-INSIGHTS-MASTER: Budget Insights technical design](../../../designs/insights/design.md)
+- `governed-by` -> [PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES: Implementation Plan Quality Gates](../../../patterns/core/implementation-plan-quality-gates.md)
 
 ## Navigation
 

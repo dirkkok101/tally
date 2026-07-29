@@ -5,7 +5,7 @@
 - **Ref:** `TASK-BUDGET-GATE-ATOMIC-RECOVERY`
 - **Plan:** `PLAN-BUDGET-V1`
 - **Sub-Plan:** `SP-BUDGET-03-INTEGRATION-GATES`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `2`
 - **Dialect:** `default`
@@ -22,13 +22,13 @@ Restart always observes one complete committed mutation exactly once or the unch
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-STATE-STORE: Separate owner-only raw-SQLite budget state | `design_decision` | `governed-by` | `true` |
-| DIAG-BUDGET-MUTATION-SEQUENCE: Replay-safe draft and activation mutation | `design_diagram` | `touches` | `false` |
-| DM-BUDGET-LIFECYCLE-IDEMPOTENCY: BudgetLifecycleAndIdempotency | `data_model` | `touches` | `true` |
-| NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS: Make plan mutations atomic and durable | `nfr` | `satisfies` | `true` |
-| NFR-BUDGET-ATTRIBUTABLE-HISTORY: Retain attributable plan history | `nfr` | `satisfies` | `true` |
+| [DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references](../../../designs/budget/decisions/idempotent-mutations.md) | `design_decision` | `governed-by` | `true` |
+| [DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions](../../../designs/budget/decisions/plan-revision-lifecycle.md) | `design_decision` | `governed-by` | `true` |
+| [DD-BUDGET-STATE-STORE: Separate owner-only raw-SQLite budget state](../../../designs/budget/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DIAG-BUDGET-MUTATION-SEQUENCE: Replay-safe draft and activation mutation](../../../designs/budget/diagrams/mutation-sequence.md) | `design_diagram` | `touches` | `false` |
+| [DM-BUDGET-LIFECYCLE-IDEMPOTENCY: BudgetLifecycleAndIdempotency](../../../designs/budget/data-model.md#budgetlifecycleandidempotency) | `data_model` | `touches` | `true` |
+| [NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS: Make plan mutations atomic and durable](../../../prd/budget/prd.md#nfr-budget-atomic-durable-mutations-make-plan-mutations-atomic-and-durable) | `nfr` | `satisfies` | `true` |
+| [NFR-BUDGET-ATTRIBUTABLE-HISTORY: Retain attributable plan history](../../../prd/budget/prd.md#nfr-budget-attributable-history-retain-attributable-plan-history) | `nfr` | `satisfies` | `true` |
 | TC-BUDGET-ATOMIC-DURABLE-MUTATIONS: Verify atomic durable plan mutation | `test_case` | `verifies` | `true` |
 | TC-BUDGET-ATTRIBUTABLE-HISTORY: Verify attributable plan history | `test_case` | `verifies` | `true` |
 
@@ -36,8 +36,8 @@ Restart always observes one complete committed mutation exactly once or the unch
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Recovery executes published mutation operations. |
-| [TASK-BUDGET-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Recovery inspects the real designed durability boundary. |
+| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Recovery executes published mutation operations. |
+| [TASK-BUDGET-STATE-FOUNDATION: TASK-BUDGET-STATE-FOUNDATION](state-foundation.md) | `compile` | Recovery inspects the real designed durability boundary. |
 
 ## Recipe
 
@@ -79,9 +79,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteBudgetPublicContract | `consumes` | DM-BUDGET-OPERATION-CONTRACTS |  |
-| BudgetStateStore | `consumes` | DM-BUDGET-STATE-STORE |  |
-| BudgetRecoveryGateEvidence | `produces` | NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS |  |
+| CompleteBudgetPublicContract | `consumes` | [DM-BUDGET-OPERATION-CONTRACTS](../../../designs/budget/data-model.md#budgetoperationcontracts) |  |
+| BudgetStateStore | `consumes` | [DM-BUDGET-STATE-STORE](../../../designs/budget/data-model.md#budgetstatestore) |  |
+| BudgetRecoveryGateEvidence | `produces` | [NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS](../../../prd/budget/prd.md#nfr-budget-atomic-durable-mutations-make-plan-mutations-atomic-and-durable) |  |
 
 ### Verification
 
@@ -97,21 +97,24 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-nb1` | `verified` | 2026-07-27T08:00:10.2656063+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Recovery executes published mutation operations.
-- `depends-on:compile` -> [TASK-BUDGET-STATE-FOUNDATION](../tasks/state-foundation.md): Recovery inspects the real designed durability boundary.
-- `governed-by` -> DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references
-- `governed-by` -> DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions
-- `governed-by` -> DD-BUDGET-STATE-STORE: Separate owner-only raw-SQLite budget state
-- `satisfies` -> NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS: Make plan mutations atomic and durable
-- `satisfies` -> NFR-BUDGET-ATTRIBUTABLE-HISTORY: Retain attributable plan history
-- `touches` -> DIAG-BUDGET-MUTATION-SEQUENCE: Replay-safe draft and activation mutation
-- `touches` -> DM-BUDGET-LIFECYCLE-IDEMPOTENCY: BudgetLifecycleAndIdempotency
+- `bead-ref` -> `bd-nb1` (verified)
+- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Recovery executes published mutation operations.
+- `depends-on:compile` -> [TASK-BUDGET-STATE-FOUNDATION: TASK-BUDGET-STATE-FOUNDATION](state-foundation.md): Recovery inspects the real designed durability boundary.
+- `governed-by` -> [DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references](../../../designs/budget/decisions/idempotent-mutations.md)
+- `governed-by` -> [DD-BUDGET-PLAN-REVISION-LIFECYCLE: Immutable revision payloads with atomic lifecycle transitions](../../../designs/budget/decisions/plan-revision-lifecycle.md)
+- `governed-by` -> [DD-BUDGET-STATE-STORE: Separate owner-only raw-SQLite budget state](../../../designs/budget/decisions/state-store.md)
+- `satisfies` -> [NFR-BUDGET-ATOMIC-DURABLE-MUTATIONS: Make plan mutations atomic and durable](../../../prd/budget/prd.md#nfr-budget-atomic-durable-mutations-make-plan-mutations-atomic-and-durable)
+- `satisfies` -> [NFR-BUDGET-ATTRIBUTABLE-HISTORY: Retain attributable plan history](../../../prd/budget/prd.md#nfr-budget-attributable-history-retain-attributable-plan-history)
+- `touches` -> [DIAG-BUDGET-MUTATION-SEQUENCE: Replay-safe draft and activation mutation](../../../designs/budget/diagrams/mutation-sequence.md)
+- `touches` -> [DM-BUDGET-LIFECYCLE-IDEMPOTENCY: BudgetLifecycleAndIdempotency](../../../designs/budget/data-model.md#budgetlifecycleandidempotency)
 - `verifies` -> TC-BUDGET-ATOMIC-DURABLE-MUTATIONS: Verify atomic durable plan mutation
 - `verifies` -> TC-BUDGET-ATTRIBUTABLE-HISTORY: Verify attributable plan history
 

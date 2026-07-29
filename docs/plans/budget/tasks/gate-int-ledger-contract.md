@@ -5,7 +5,7 @@
 - **Ref:** `TASK-BUDGET-GATE-INT-LEDGER-CONTRACT`
 - **Plan:** `PLAN-BUDGET-V1`
 - **Sub-Plan:** `SP-BUDGET-00-FOUNDATION`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `2`
 - **Dialect:** `default`
@@ -22,10 +22,10 @@ Published descriptors, category lifecycle, snapshot actuals, date mapping, compa
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations | `design_decision` | `governed-by` | `true` |
-| DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts | `data_model` | `touches` | `true` |
-| EXT-BUDGET-LEDGER-PUBLIC-CONTRACT: LEDGER Public Contract | `external_dependency` | `references` | `true` |
-| TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract | `task` | `blocked-by` | `true` |
+| [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md) | `design_decision` | `governed-by` | `true` |
+| [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) | `data_model` | `touches` | `true` |
+| [EXT-BUDGET-LEDGER-PUBLIC-CONTRACT: LEDGER Public Contract](../../../prd/budget/prd.md#ext-budget-ledger-public-contract-ledger-public-contract) | `external_dependency` | `references` | `true` |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract](../../ledger/tasks/gate-int-public-contract.md) | `task` | `blocked-by` | `true` |
 | TC-BUDGET-CATEGORY-LIFECYCLE-CONTRACT: Verify category lifecycle contract | `test_case` | `verifies` | `true` |
 | TC-BUDGET-LEDGER-COMPOSITION-CONTRACT: Verify public LEDGER composition contract | `test_case` | `verifies` | `true` |
 
@@ -33,7 +33,7 @@ Published descriptors, category lifecycle, snapshot actuals, date mapping, compa
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-LEDGER-BUDGET-CONTRACT](../tasks/ledger-budget-contract.md) | `compile` | The gate executes the contracts produced by this task. |
+| [TASK-BUDGET-LEDGER-BUDGET-CONTRACT: TASK-BUDGET-LEDGER-BUDGET-CONTRACT](ledger-budget-contract.md) | `compile` | The gate executes the contracts produced by this task. |
 
 ## Recipe
 
@@ -42,7 +42,7 @@ Published descriptors, category lifecycle, snapshot actuals, date mapping, compa
 - The released registry exposes compatible ledger.category.list/get and ledger.actuals.query descriptors with every required field.
 - A January half-open period maps to inclusive January 1 through January 31, consumes every page once, and reconciles exact totals.
 - Active and archived assigned categories remain stable IDs; unknown IDs, duplicate or missing ordinals, changed generation, expiry, and incompatible contracts yield no partial evidence.
-- Architecture scans find zero BUDGET references to LedgerDb, storage paths, private handlers, private domain types, SQL, or storage configuration.
+- Architecture scans find no BUDGET references to LedgerDb, storage paths, private handlers, private domain types, SQL, or storage configuration.
 
 ### Failure Criteria
 
@@ -76,9 +76,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| LedgerBudgetCategoryEvidence | `consumes` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
-| LedgerBudgetActualItem | `consumes` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
-| VerifiedLedgerBudgetContract | `produces` | DM-BUDGET-LEDGER-COMPOSITION-CONTRACT |  |
+| LedgerBudgetCategoryEvidence | `consumes` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
+| LedgerBudgetActualItem | `consumes` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
+| VerifiedLedgerBudgetContract | `produces` | [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts) |  |
 
 ### Verification
 
@@ -94,17 +94,20 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1d4j` | `verified` | 2026-07-27T08:00:10.8145783+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `blocked-by` -> TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract
-- `depends-on:compile` -> [TASK-BUDGET-LEDGER-BUDGET-CONTRACT](../tasks/ledger-budget-contract.md): The gate executes the contracts produced by this task.
-- `governed-by` -> DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations
-- `references` -> EXT-BUDGET-LEDGER-PUBLIC-CONTRACT: LEDGER Public Contract
-- `touches` -> DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts
+- `bead-ref` -> `bd-1d4j` (verified)
+- `blocked-by` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract](../../ledger/tasks/gate-int-public-contract.md)
+- `depends-on:compile` -> [TASK-BUDGET-LEDGER-BUDGET-CONTRACT: TASK-BUDGET-LEDGER-BUDGET-CONTRACT](ledger-budget-contract.md): The gate executes the contracts produced by this task.
+- `governed-by` -> [DD-BUDGET-LEDGER-PUBLIC-COMPOSITION: Consume category and actuals truth only through released LEDGER operations](../../../designs/budget/decisions/ledger-public-composition.md)
+- `references` -> [EXT-BUDGET-LEDGER-PUBLIC-CONTRACT: LEDGER Public Contract](../../../prd/budget/prd.md#ext-budget-ledger-public-contract-ledger-public-contract)
+- `touches` -> [DM-BUDGET-LEDGER-COMPOSITION-CONTRACT: LedgerBudgetCompositionContracts](../../../designs/budget/data-model.md#ledgerbudgetcompositioncontracts)
 - `verifies` -> TC-BUDGET-CATEGORY-LIFECYCLE-CONTRACT: Verify category lifecycle contract
 - `verifies` -> TC-BUDGET-LEDGER-COMPOSITION-CONTRACT: Verify public LEDGER composition contract
 

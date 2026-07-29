@@ -22,16 +22,16 @@ Produce typed source-generated contract records for all eight INGEST operations 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INGEST-CLI-OPERATION-CONTRACT: Eight explicit workflow operations from one registry | `design_decision` | `governed-by` | `true` |
-| DM-INGEST-OPERATION-CONTRACTS: IngestOperationContracts | `data_model` | `touches` | `true` |
-| FR-INGEST-CONTRACT-DISCOVERY: Discover the INGEST command contract | `requirement` | `implements` | `true` |
+| [DD-INGEST-CLI-OPERATION-CONTRACT: Eight explicit workflow operations from one registry](../../../designs/ingest/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DM-INGEST-OPERATION-CONTRACTS: IngestOperationContracts](../../../designs/ingest/data-model.md#ingestoperationcontracts) | `data_model` | `touches` | `true` |
+| [FR-INGEST-CONTRACT-DISCOVERY: Discover the INGEST command contract](../../../prd/ingest/prd.md#fr-ingest-contract-discovery-discover-the-ingest-command-contract) | `requirement` | `implements` | `true` |
 | TC-INGEST-CONTRACT-DISCOVERY-CONTRACT: Verify INGEST contract discovery | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md) | `compile` | The common envelope and public Ledger contract types must exist before INGEST contract records compile. |
+| [TASK-INGEST-GATE-INT-LEDGER-CONTRACT: TASK-INGEST-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md) | `compile` | The common envelope and public Ledger contract types must exist before INGEST contract records compile. |
 
 ## Recipe
 
@@ -81,14 +81,14 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| IngestOperationIds | `produces` | DM-INGEST-OPERATION-CONTRACTS |  |
-| IngestOperationContracts | `produces` | DM-INGEST-OPERATION-CONTRACTS |  |
-| IngestError | `produces` | DM-INGEST-ERROR-STATUS-CONTRACTS |  |
-| BatchStatusSummary | `produces` | DM-INGEST-ERROR-STATUS-CONTRACTS |  |
-| ImportManifestContract | `produces` | DM-INGEST-IMPORT-MANIFEST |  |
-| ImportReceipt | `produces` | DM-INGEST-IMPORT-RECEIPT |  |
-| FrozenLedgerRecordRequest | `produces` | DM-INGEST-LEDGER-COMMIT-CONTRACT |  |
-| IngestJsonContext | `produces` | DM-INGEST-OPERATION-CONTRACTS |  |
+| IngestOperationIds | `produces` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) |  |
+| IngestOperationContracts | `produces` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) |  |
+| IngestError | `produces` | [DM-INGEST-ERROR-STATUS-CONTRACTS](../../../designs/ingest/data-model.md#ingesterrorandstatuscontracts) |  |
+| BatchStatusSummary | `produces` | [DM-INGEST-ERROR-STATUS-CONTRACTS](../../../designs/ingest/data-model.md#ingesterrorandstatuscontracts) |  |
+| ImportManifestContract | `produces` | [DM-INGEST-IMPORT-MANIFEST](../../../designs/ingest/data-model.md#importbatchandmanifestrevision) |  |
+| ImportReceipt | `produces` | [DM-INGEST-IMPORT-RECEIPT](../../../designs/ingest/data-model.md#importreceiptandcandidateoutcome) |  |
+| FrozenLedgerRecordRequest | `produces` | [DM-INGEST-LEDGER-COMMIT-CONTRACT](../../../designs/ingest/data-model.md#ledgercommitcontractsnapshot) |  |
+| IngestJsonContext | `produces` | [DM-INGEST-OPERATION-CONTRACTS](../../../designs/ingest/data-model.md#ingestoperationcontracts) |  |
 
 ### Verification
 
@@ -114,10 +114,10 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-twx` (verified)
-- `depends-on:compile` -> [TASK-INGEST-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md): The common envelope and public Ledger contract types must exist before INGEST contract records compile.
-- `governed-by` -> DD-INGEST-CLI-OPERATION-CONTRACT: Eight explicit workflow operations from one registry
-- `implements` -> FR-INGEST-CONTRACT-DISCOVERY: Discover the INGEST command contract
-- `touches` -> DM-INGEST-OPERATION-CONTRACTS: IngestOperationContracts
+- `depends-on:compile` -> [TASK-INGEST-GATE-INT-LEDGER-CONTRACT: TASK-INGEST-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md): The common envelope and public Ledger contract types must exist before INGEST contract records compile.
+- `governed-by` -> [DD-INGEST-CLI-OPERATION-CONTRACT: Eight explicit workflow operations from one registry](../../../designs/ingest/decisions/cli-operation-contract.md)
+- `implements` -> [FR-INGEST-CONTRACT-DISCOVERY: Discover the INGEST command contract](../../../prd/ingest/prd.md#fr-ingest-contract-discovery-discover-the-ingest-command-contract)
+- `touches` -> [DM-INGEST-OPERATION-CONTRACTS: IngestOperationContracts](../../../designs/ingest/data-model.md#ingestoperationcontracts)
 - `verifies` -> TC-INGEST-CONTRACT-DISCOVERY-CONTRACT: Verify INGEST contract discovery
 
 ## Navigation

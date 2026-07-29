@@ -22,17 +22,17 @@ Prove stable category identity and deterministic acyclic ancestry across every l
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts | `data_model` | `touches` | `false` |
-| FR-LEDGER-CATEGORY-CATALOGUE: Maintain the spend-category catalogue | `requirement` | `verifies` | `true` |
-| FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent | `requirement` | `verifies` | `true` |
+| [DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts](../../../designs/ledger/data-model.md#accountcategoryoperationcontracts) | `data_model` | `touches` | `false` |
+| [FR-LEDGER-CATEGORY-CATALOGUE: Maintain the spend-category catalogue](../../../prd/ledger/prd.md#fr-ledger-category-catalogue-maintain-the-spend-category-catalogue) | `requirement` | `verifies` | `true` |
+| [FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent](../../../prd/ledger/prd.md#fr-ledger-idempotent-writes-make-public-writes-idempotent) | `requirement` | `verifies` | `true` |
 | TC-LEDGER-CATEGORY-CATALOGUE-CONTRACT: Verify maintain the spend-category catalogue contract | `test_case` | `verifies` | `true` |
-| UC-LEDGER-008: Maintain the spend-category catalogue | `use_case` | `covers` | `true` |
+| [UC-LEDGER-008: Maintain the spend-category catalogue](../../../prd/ledger/prd.md#uc-ledger-008-maintain-the-spend-category-catalogue) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
 
 ## Recipe
 
@@ -70,8 +70,8 @@ Prove stable category identity and deterministic acyclic ancestry across every l
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 72 provider-neutral operations |
-| VerifiedUC008 | `produces` | UC-LEDGER-008 | workflow verification |
+| CompletePublicContract | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Exactly 72 provider-neutral operations |
+| VerifiedUC008 | `produces` | [UC-LEDGER-008](../../../prd/ledger/prd.md#uc-ledger-008-maintain-the-spend-category-catalogue) | workflow verification |
 
 ### Verification
 
@@ -96,12 +96,12 @@ Prove stable category identity and deterministic acyclic ancestry across every l
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3cs` (verified)
-- `covers` -> UC-LEDGER-008: Maintain the spend-category catalogue
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
-- `touches` -> DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts
-- `verifies` -> FR-LEDGER-CATEGORY-CATALOGUE: Maintain the spend-category catalogue
-- `verifies` -> FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent
+- `covers` -> [UC-LEDGER-008: Maintain the spend-category catalogue](../../../prd/ledger/prd.md#uc-ledger-008-maintain-the-spend-category-catalogue)
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
+- `touches` -> [DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts](../../../designs/ledger/data-model.md#accountcategoryoperationcontracts)
 - `verifies` -> TC-LEDGER-CATEGORY-CATALOGUE-CONTRACT: Verify maintain the spend-category catalogue contract
+- `verifies` -> [FR-LEDGER-CATEGORY-CATALOGUE: Maintain the spend-category catalogue](../../../prd/ledger/prd.md#fr-ledger-category-catalogue-maintain-the-spend-category-catalogue)
+- `verifies` -> [FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent](../../../prd/ledger/prd.md#fr-ledger-idempotent-writes-make-public-writes-idempotent)
 
 ## Navigation
 

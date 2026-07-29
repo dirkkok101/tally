@@ -5,7 +5,7 @@
 - **Ref:** `TASK-BUDGET-VERIFY-UC-005`
 - **Plan:** `PLAN-BUDGET-V1`
 - **Sub-Plan:** `SP-BUDGET-04-ACCEPTANCE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `5`
 - **Dialect:** `default`
@@ -22,21 +22,21 @@ UC-BUDGET-005 proves deterministic discovery, bounded owner/delegated invocation
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry | `design_decision` | `governed-by` | `true` |
-| DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references | `design_decision` | `governed-by` | `true` |
-| EXT-BUDGET-AI-AGENT-HOST: AI Agent Host | `external_dependency` | `references` | `true` |
+| [DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam](../../../designs/budget/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry](../../../designs/budget/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references](../../../designs/budget/decisions/idempotent-mutations.md) | `design_decision` | `governed-by` | `true` |
+| [EXT-BUDGET-AI-AGENT-HOST: AI Agent Host](../../../prd/budget/prd.md#ext-budget-ai-agent-host-ai-agent-host) | `external_dependency` | `references` | `true` |
 | TC-BUDGET-CONTRACT-DISCOVERY-CONTRACT: Verify BUDGET contract discovery | `test_case` | `verifies` | `true` |
 | TC-BUDGET-SELF-CONTAINED-LOCAL-OPERATION: Verify self-contained local operation | `test_case` | `verifies` | `true` |
 | TC-BUDGET-STRUCTURED-INVOCATION-CONTRACT: Verify structured BUDGET invocation | `test_case` | `verifies` | `true` |
-| UC-BUDGET-005: Discover and invoke the agent contract | `use_case` | `covers` | `true` |
+| [UC-BUDGET-005: Discover and invoke the agent contract](../../../prd/budget/prd.md#uc-budget-005-discover-and-invoke-the-agent-contract) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Execute the published process contract. |
-| [TASK-BUDGET-GATE-SECURITY](../tasks/gate-security.md) | `compile` | Consume host, privacy, offline, and process-isolation evidence. |
+| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Execute the published process contract. |
+| [TASK-BUDGET-GATE-SECURITY: TASK-BUDGET-GATE-SECURITY](gate-security.md) | `compile` | Consume host, privacy, offline, and process-isolation evidence. |
 
 ## Recipe
 
@@ -74,9 +74,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteBudgetPublicContract | `consumes` | DM-BUDGET-OPERATION-CONTRACTS |  |
-| BudgetSecurityGateEvidence | `consumes` | NFR-BUDGET-LOCAL-DATA-PROTECTION |  |
-| VerifiedBudgetUc005 | `produces` | UC-BUDGET-005 |  |
+| CompleteBudgetPublicContract | `consumes` | [DM-BUDGET-OPERATION-CONTRACTS](../../../designs/budget/data-model.md#budgetoperationcontracts) |  |
+| BudgetSecurityGateEvidence | `consumes` | [NFR-BUDGET-LOCAL-DATA-PROTECTION](../../../prd/budget/prd.md#nfr-budget-local-data-protection-protect-local-budget-data) |  |
+| VerifiedBudgetUc005 | `produces` | [UC-BUDGET-005](../../../prd/budget/prd.md#uc-budget-005-discover-and-invoke-the-agent-contract) |  |
 
 ### Verification
 
@@ -92,19 +92,22 @@ None recorded.
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-1070` | `verified` | 2026-07-27T08:00:18.7958646+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `covers` -> UC-BUDGET-005: Discover and invoke the agent contract
-- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Execute the published process contract.
-- `depends-on:compile` -> [TASK-BUDGET-GATE-SECURITY](../tasks/gate-security.md): Consume host, privacy, offline, and process-isolation evidence.
-- `governed-by` -> DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam
-- `governed-by` -> DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry
-- `governed-by` -> DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references
-- `references` -> EXT-BUDGET-AI-AGENT-HOST: AI Agent Host
+- `bead-ref` -> `bd-1070` (verified)
+- `covers` -> [UC-BUDGET-005: Discover and invoke the agent contract](../../../prd/budget/prd.md#uc-budget-005-discover-and-invoke-the-agent-contract)
+- `depends-on:compile` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Execute the published process contract.
+- `depends-on:compile` -> [TASK-BUDGET-GATE-SECURITY: TASK-BUDGET-GATE-SECURITY](gate-security.md): Consume host, privacy, offline, and process-isolation evidence.
+- `governed-by` -> [DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam](../../../designs/budget/decisions/application-architecture.md)
+- `governed-by` -> [DD-BUDGET-CLI-OPERATION-CONTRACT: Six explicit BUDGET operations from one registry](../../../designs/budget/decisions/cli-operation-contract.md)
+- `governed-by` -> [DD-BUDGET-IDEMPOTENT-MUTATIONS: Transactional replay from immutable outcome references](../../../designs/budget/decisions/idempotent-mutations.md)
+- `references` -> [EXT-BUDGET-AI-AGENT-HOST: AI Agent Host](../../../prd/budget/prd.md#ext-budget-ai-agent-host-ai-agent-host)
 - `verifies` -> TC-BUDGET-CONTRACT-DISCOVERY-CONTRACT: Verify BUDGET contract discovery
 - `verifies` -> TC-BUDGET-SELF-CONTAINED-LOCAL-OPERATION: Verify self-contained local operation
 - `verifies` -> TC-BUDGET-STRUCTURED-INVOCATION-CONTRACT: Verify structured BUDGET invocation

@@ -22,22 +22,22 @@ Prove recovery reproduces every current and historical financial meaning before 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-RECOVERY-FINGERPRINT-SURFACES: Separate restore and evolution fingerprints | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts | `data_model` | `touches` | `false` |
-| FR-LEDGER-BACKUP-VERIFICATION: Create and verify Ledger backups | `requirement` | `verifies` | `true` |
-| FR-LEDGER-SAFE-RESTORE: Restore the Ledger safely | `requirement` | `verifies` | `true` |
+| [DD-LEDGER-RECOVERY-FINGERPRINT-SURFACES: Separate restore and evolution fingerprints](../../../designs/ledger/decisions/recovery-fingerprint-surfaces.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts) | `data_model` | `touches` | `false` |
+| [FR-LEDGER-BACKUP-VERIFICATION: Create and verify Ledger backups](../../../prd/ledger/prd.md#fr-ledger-backup-verification-create-and-verify-ledger-backups) | `requirement` | `verifies` | `true` |
+| [FR-LEDGER-SAFE-RESTORE: Restore the Ledger safely](../../../prd/ledger/prd.md#fr-ledger-safe-restore-restore-the-ledger-safely) | `requirement` | `verifies` | `true` |
 | TC-LEDGER-BACKUP-VERIFICATION-CONTRACT: Verify create and verify ledger backups contract | `test_case` | `verifies` | `true` |
 | TC-LEDGER-SAFE-RESTORE-CONTRACT: Verify restore the ledger safely contract | `test_case` | `verifies` | `true` |
 | TC-LEDGER-VERIFIED-RECOVERY-DRILL: Reproduce complete Durable Ledger State | `test_case` | `verifies` | `true` |
-| UC-LEDGER-007: Back up and recover the local ledger | `use_case` | `covers` | `true` |
+| [UC-LEDGER-007: Back up and recover the local ledger](../../../prd/ledger/prd.md#uc-ledger-007-back-up-and-recover-the-local-ledger) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
-| [TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT](../tasks/recovery-status-normalized-fingerprint.md) | `compile` | The published UC-007 restore workflow requires the status-derived normalized fingerprint before activation can succeed. |
+| [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](gate-int-statement-scope-public-contract.md) | `compile` | The remaining Release-CLI workflow consumes the successor 74-operation public contract. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74. |
+| [TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT: TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT](recovery-status-normalized-fingerprint.md) | `compile` | The published UC-007 restore workflow requires the status-derived normalized fingerprint before activation can succeed. |
 
 ## Recipe
 
@@ -75,8 +75,8 @@ Prove recovery reproduces every current and historical financial meaning before 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract74 | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 74 provider-neutral operations |
-| VerifiedUC007 | `produces` | UC-LEDGER-007 | complete-state backup and restore workflow |
+| CompletePublicContract74 | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Exactly 74 provider-neutral operations |
+| VerifiedUC007 | `produces` | [UC-LEDGER-007](../../../prd/ledger/prd.md#uc-ledger-007-back-up-and-recover-the-local-ledger) | complete-state backup and restore workflow |
 
 ### Verification
 
@@ -101,17 +101,17 @@ Prove recovery reproduces every current and historical financial meaning before 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-e2g` (verified)
-- `covers` -> UC-LEDGER-007: Back up and recover the local ledger
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](../tasks/gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
-- `depends-on:compile` -> [TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT](../tasks/recovery-status-normalized-fingerprint.md): The published UC-007 restore workflow requires the status-derived normalized fingerprint before activation can succeed.
-- `governed-by` -> DD-LEDGER-RECOVERY-FINGERPRINT-SURFACES: Separate restore and evolution fingerprints
-- `touches` -> DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts
-- `verifies` -> FR-LEDGER-BACKUP-VERIFICATION: Create and verify Ledger backups
-- `verifies` -> FR-LEDGER-SAFE-RESTORE: Restore the Ledger safely
+- `covers` -> [UC-LEDGER-007: Back up and recover the local ledger](../../../prd/ledger/prd.md#uc-ledger-007-back-up-and-recover-the-local-ledger)
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): The workflow consumes PublishedTallyFixture from the closed root public-contract gate; the successor scope gate separately supplies CompletePublicContract74.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-STATEMENT-SCOPE-PUBLIC-CONTRACT](gate-int-statement-scope-public-contract.md): The remaining Release-CLI workflow consumes the successor 74-operation public contract.
+- `depends-on:compile` -> [TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT: TASK-LEDGER-RECOVERY-STATUS-NORMALIZED-FINGERPRINT](recovery-status-normalized-fingerprint.md): The published UC-007 restore workflow requires the status-derived normalized fingerprint before activation can succeed.
+- `governed-by` -> [DD-LEDGER-RECOVERY-FINGERPRINT-SURFACES: Separate restore and evolution fingerprints](../../../designs/ledger/decisions/recovery-fingerprint-surfaces.md)
+- `touches` -> [DM-LEDGER-RECOVERY-STORAGE-CONTRACTS: RecoveryStorageOperationContracts](../../../designs/ledger/data-model.md#recoverystorageoperationcontracts)
 - `verifies` -> TC-LEDGER-BACKUP-VERIFICATION-CONTRACT: Verify create and verify ledger backups contract
 - `verifies` -> TC-LEDGER-SAFE-RESTORE-CONTRACT: Verify restore the ledger safely contract
 - `verifies` -> TC-LEDGER-VERIFIED-RECOVERY-DRILL: Reproduce complete Durable Ledger State
+- `verifies` -> [FR-LEDGER-BACKUP-VERIFICATION: Create and verify Ledger backups](../../../prd/ledger/prd.md#fr-ledger-backup-verification-create-and-verify-ledger-backups)
+- `verifies` -> [FR-LEDGER-SAFE-RESTORE: Restore the Ledger safely](../../../prd/ledger/prd.md#fr-ledger-safe-restore-restore-the-ledger-safely)
 
 ## Navigation
 

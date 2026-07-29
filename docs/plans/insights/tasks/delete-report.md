@@ -22,21 +22,21 @@ DeleteInsightReportCommand removes only an unreferenced target payload and outgo
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| ADR-CORE-0020: RESTRICT-by-Default Delete Taxonomy | `adr` | `governed-by` | `true` |
-| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
-| DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads | `design_decision` | `governed-by` | `true` |
-| DIAG-INSIGHTS-REPORT-STATE: Report retention and deletion lifecycle | `design_diagram` | `touches` | `false` |
-| DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion | `data_model` | `touches` | `true` |
-| FR-INSIGHTS-REPORT-DELETION: Delete retained report payloads dependency-safely | `requirement` | `implements` | `true` |
-| NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable | `nfr` | `satisfies` | `true` |
+| [ADR-CORE-0020: RESTRICT-by-Default Delete Taxonomy](../../../adr/core/0020-restrict-by-default-delete-taxonomy.md) | `adr` | `governed-by` | `true` |
+| [DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion](../../../designs/insights/decisions/retention-restatement-lifecycle.md) | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DIAG-INSIGHTS-REPORT-STATE: Report retention and deletion lifecycle](../../../designs/insights/diagrams/report-state.md) | `design_diagram` | `touches` | `false` |
+| [DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion](../../../designs/insights/data-model.md#reportsnapshotrestatementanddeletion) | `data_model` | `touches` | `true` |
+| [FR-INSIGHTS-REPORT-DELETION: Delete retained report payloads dependency-safely](../../../prd/insights/prd.md#fr-insights-report-deletion-delete-retained-report-payloads-dependency-safely) | `requirement` | `implements` | `true` |
+| [NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable](../../../prd/insights/prd.md#nfr-insights-atomic-durable-report-state-make-retained-report-changes-atomic-and-durable) | `nfr` | `satisfies` | `true` |
 | TC-INSIGHTS-REPORT-DELETION-DEPENDENCIES: Verify dependency-safe report deletion | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Delete uses snapshot, link, payload, and event tables. |
-| [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](../tasks/idempotency-executor.md) | `compile` | Delete retries must resolve without a second event. |
+| [TASK-INSIGHTS-STATE-FOUNDATION: TASK-INSIGHTS-STATE-FOUNDATION](state-foundation.md) | `compile` | Delete uses snapshot, link, payload, and event tables. |
+| [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR: TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](idempotency-executor.md) | `compile` | Delete retries must resolve without a second event. |
 
 ## Recipe
 
@@ -78,9 +78,9 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| InsightsIdempotencyExecutor.ExecuteAsync | `consumes` | DM-INSIGHTS-IDEMPOTENCY | same/conflicting Delete replay |
-| InsightsStateStore | `consumes` | DM-INSIGHTS-STATE-STORE | dependency check and atomic deletion transaction |
-| DeleteInsightReportCommand.HandleAsync | `produces` | DM-INSIGHTS-OPERATION-CONTRACTS | insights.report.delete handler |
+| InsightsIdempotencyExecutor.ExecuteAsync | `consumes` | [DM-INSIGHTS-IDEMPOTENCY](../../../designs/insights/data-model.md#insightsidempotencyrecord) | same/conflicting Delete replay |
+| InsightsStateStore | `consumes` | [DM-INSIGHTS-STATE-STORE](../../../designs/insights/data-model.md#insightsstatestore) | dependency check and atomic deletion transaction |
+| DeleteInsightReportCommand.HandleAsync | `produces` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | insights.report.delete handler |
 
 ### Verification
 
@@ -105,15 +105,15 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-34e` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](../tasks/idempotency-executor.md): Delete retries must resolve without a second event.
-- `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION](../tasks/state-foundation.md): Delete uses snapshot, link, payload, and event tables.
-- `governed-by` -> ADR-CORE-0020: RESTRICT-by-Default Delete Taxonomy
-- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion
-- `governed-by` -> DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads
-- `implements` -> FR-INSIGHTS-REPORT-DELETION: Delete retained report payloads dependency-safely
-- `satisfies` -> NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable
-- `touches` -> DIAG-INSIGHTS-REPORT-STATE: Report retention and deletion lifecycle
-- `touches` -> DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion
+- `depends-on:compile` -> [TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR: TASK-INSIGHTS-IDEMPOTENCY-EXECUTOR](idempotency-executor.md): Delete retries must resolve without a second event.
+- `depends-on:compile` -> [TASK-INSIGHTS-STATE-FOUNDATION: TASK-INSIGHTS-STATE-FOUNDATION](state-foundation.md): Delete uses snapshot, link, payload, and event tables.
+- `governed-by` -> [ADR-CORE-0020: RESTRICT-by-Default Delete Taxonomy](../../../adr/core/0020-restrict-by-default-delete-taxonomy.md)
+- `governed-by` -> [DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion](../../../designs/insights/decisions/retention-restatement-lifecycle.md)
+- `governed-by` -> [DD-INSIGHTS-STATE-STORE: Owner-only SQLite generations with canonical report payloads](../../../designs/insights/decisions/state-store.md)
+- `implements` -> [FR-INSIGHTS-REPORT-DELETION: Delete retained report payloads dependency-safely](../../../prd/insights/prd.md#fr-insights-report-deletion-delete-retained-report-payloads-dependency-safely)
+- `satisfies` -> [NFR-INSIGHTS-ATOMIC-DURABLE-REPORT-STATE: Make retained report changes atomic and durable](../../../prd/insights/prd.md#nfr-insights-atomic-durable-report-state-make-retained-report-changes-atomic-and-durable)
+- `touches` -> [DIAG-INSIGHTS-REPORT-STATE: Report retention and deletion lifecycle](../../../designs/insights/diagrams/report-state.md)
+- `touches` -> [DM-INSIGHTS-RETAINED-REPORT-LIFECYCLE: ReportSnapshotRestatementAndDeletion](../../../designs/insights/data-model.md#reportsnapshotrestatementanddeletion)
 - `verifies` -> TC-INSIGHTS-REPORT-DELETION-DEPENDENCIES: Verify dependency-safe report deletion
 
 ## Navigation

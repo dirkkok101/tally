@@ -22,17 +22,17 @@ Prove UC-LEDGER-001 through observable process results and durable-state invaria
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts | `data_model` | `touches` | `true` |
-| FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain owned bank accounts | `requirement` | `verifies` | `true` |
-| FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent | `requirement` | `verifies` | `true` |
+| [DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts](../../../designs/ledger/data-model.md#accountcategoryoperationcontracts) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain owned bank accounts](../../../prd/ledger/prd.md#fr-ledger-account-maintenance-maintain-owned-bank-account) | `requirement` | `verifies` | `true` |
+| [FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent](../../../prd/ledger/prd.md#fr-ledger-idempotent-writes-make-public-writes-idempotent) | `requirement` | `verifies` | `true` |
 | TC-LEDGER-ACCOUNT-MAINTENANCE-CONTRACT: Verify account maintenance contract | `test_case` | `verifies` | `true` |
-| UC-LEDGER-001: Maintain an owned bank account | `use_case` | `covers` | `true` |
+| [UC-LEDGER-001: Maintain an owned bank account](../../../prd/ledger/prd.md#uc-ledger-001-maintain-an-owned-bank-account) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
 
 ## Recipe
 
@@ -70,8 +70,8 @@ Prove UC-LEDGER-001 through observable process results and durable-state invaria
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 72 provider-neutral operations |
-| VerifiedUC001 | `produces` | UC-LEDGER-001 | workflow verification |
+| CompletePublicContract | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Exactly 72 provider-neutral operations |
+| VerifiedUC001 | `produces` | [UC-LEDGER-001](../../../prd/ledger/prd.md#uc-ledger-001-maintain-an-owned-bank-account) | workflow verification |
 
 ### Verification
 
@@ -97,12 +97,12 @@ Prove UC-LEDGER-001 through observable process results and durable-state invaria
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-nt9` (verified)
-- `covers` -> UC-LEDGER-001: Maintain an owned bank account
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
-- `touches` -> DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts
-- `verifies` -> FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain owned bank accounts
-- `verifies` -> FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent
+- `covers` -> [UC-LEDGER-001: Maintain an owned bank account](../../../prd/ledger/prd.md#uc-ledger-001-maintain-an-owned-bank-account)
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
+- `touches` -> [DM-LEDGER-ACCOUNT-CATEGORY-CONTRACTS: AccountCategoryOperationContracts](../../../designs/ledger/data-model.md#accountcategoryoperationcontracts)
 - `verifies` -> TC-LEDGER-ACCOUNT-MAINTENANCE-CONTRACT: Verify account maintenance contract
+- `verifies` -> [FR-LEDGER-ACCOUNT-MAINTENANCE: Maintain owned bank accounts](../../../prd/ledger/prd.md#fr-ledger-account-maintenance-maintain-owned-bank-account)
+- `verifies` -> [FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent](../../../prd/ledger/prd.md#fr-ledger-idempotent-writes-make-public-writes-idempotent)
 
 ## Navigation
 

@@ -5,7 +5,7 @@
 - **Ref:** `TASK-BUDGET-GATE-MODULE`
 - **Plan:** `PLAN-BUDGET-V1`
 - **Sub-Plan:** `SP-BUDGET-04-ACCEPTANCE`
-- **State:** `planned`
+- **State:** `ready`
 - **Priority:** `0`
 - **Sort Order:** `7`
 - **Dialect:** `default`
@@ -22,15 +22,15 @@ BUDGET v1 is reproducibly buildable, tested, exact, locally secure, externally v
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam | `design_decision` | `governed-by` | `true` |
-| NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries | `nfr` | `satisfies` | `true` |
-| NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local planner | `nfr` | `satisfies` | `true` |
+| [DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam](../../../designs/budget/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries](../../../prd/budget/prd.md#nfr-budget-public-contract-compatibility-preserve-public-contract-boundaries) | `nfr` | `satisfies` | `true` |
+| [NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local planner](../../../prd/budget/prd.md#nfr-budget-self-contained-local-operation-operate-as-a-self-contained-local-planner) | `nfr` | `satisfies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-BUDGET-GATE-GRAPH-QUALITY](../tasks/gate-graph-quality.md) | `compile` | Final convergence consumes current graph and behavioral evidence. |
+| [TASK-BUDGET-GATE-GRAPH-QUALITY: TASK-BUDGET-GATE-GRAPH-QUALITY](gate-graph-quality.md) | `compile` | Final convergence consumes current graph and behavioral evidence. |
 
 ## Recipe
 
@@ -40,7 +40,7 @@ BUDGET v1 is reproducibly buildable, tested, exact, locally secure, externally v
 - Current BudgetGraphQualityEvidence confirms nonzero named-suite discovery, all requirements/tests/paths, intentional CLI-only endpoint status, dependency evidence, and no forbidden surface.
 - Ledger, Agent Host, Host OS, and INSIGHTS statuses change from assumed to validated through lex CLI only after their named evidence succeeds; otherwise this gate fails.
 - All five kill criteria are rechecked: public Ledger seam, persistence value, M policy ceiling, <=15-minute monthly maintenance, and exact once-only reconciliation.
-- The completion report records commands, counts, safe fingerprints, dependency statuses, kill checks, and commit IDs without financial payloads.
+- The completion report records commands, counts, content fingerprints, dependency statuses, kill checks, and commit IDs without financial payloads.
 
 ### Failure Criteria
 
@@ -49,7 +49,7 @@ BUDGET v1 is reproducibly buildable, tested, exact, locally secure, externally v
 ### Expected Outputs
 
 - VerifiedBudgetV1Module
-- Safe module completion report
+- Module completion report containing no financial payloads
 
 ### Constraints
 
@@ -78,8 +78,8 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| BudgetGraphQualityEvidence | `consumes` | PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES |  |
-| VerifiedBudgetV1Module | `produces` | NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION |  |
+| BudgetGraphQualityEvidence | `consumes` | [PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES](../../../patterns/core/implementation-plan-quality-gates.md) |  |
+| VerifiedBudgetV1Module | `produces` | [NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION](../../../prd/budget/prd.md#nfr-budget-self-contained-local-operation-operate-as-a-self-contained-local-planner) |  |
 
 ### Verification
 
@@ -91,20 +91,23 @@ None recorded.
 
 | Gate | Description | Required |
 |---|---|---|
-| `ci` | The module script and safe reports reproduce from a clean checkout with generated owner-local fixtures. | `true` |
+| `ci` | The module script and reports that contain no financial payloads reproduce from a clean checkout with generated owner-local fixtures. | `true` |
 
 ## Bead References
 
-No bead references recorded.
+| Bead | Verification | Verified At | Error |
+|---|---|---|---|
+| `bd-3u23` | `verified` | 2026-07-27T08:00:19.7946530+00:00 |  |
 
 ## Graph Trace
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-BUDGET-GATE-GRAPH-QUALITY](../tasks/gate-graph-quality.md): Final convergence consumes current graph and behavioral evidence.
-- `governed-by` -> DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam
-- `satisfies` -> NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries
-- `satisfies` -> NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local planner
+- `bead-ref` -> `bd-3u23` (verified)
+- `depends-on:compile` -> [TASK-BUDGET-GATE-GRAPH-QUALITY: TASK-BUDGET-GATE-GRAPH-QUALITY](gate-graph-quality.md): Final convergence consumes current graph and behavioral evidence.
+- `governed-by` -> [DD-BUDGET-APPLICATION-ARCHITECTURE: Typed vertical slices with one earned public-contract seam](../../../designs/budget/decisions/application-architecture.md)
+- `satisfies` -> [NFR-BUDGET-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract boundaries](../../../prd/budget/prd.md#nfr-budget-public-contract-compatibility-preserve-public-contract-boundaries)
+- `satisfies` -> [NFR-BUDGET-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local planner](../../../prd/budget/prd.md#nfr-budget-self-contained-local-operation-operate-as-a-self-contained-local-planner)
 
 ## Navigation
 

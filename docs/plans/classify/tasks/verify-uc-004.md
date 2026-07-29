@@ -22,19 +22,19 @@ UC-CLASSIFY-004 proves immutable owner-approved rule lifecycle with fail-closed 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md) | `design_decision` | `governed-by` | `true` |
 | TC-CLASSIFY-RULE-LIFECYCLE-CONTRACT: Verify immutable rule lifecycle | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-RULE-VALIDATION-CONTRACT: Verify private candidate validation | `test_case` | `verifies` | `true` |
-| UC-CLASSIFY-004: Manage and validate deterministic rules | `use_case` | `covers` | `true` |
+| [UC-CLASSIFY-004: Manage and validate deterministic rules](../../../prd/classify/prd.md#uc-classify-004-manage-and-validate-deterministic-rules) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE](../tasks/rule-activation-lifecycle.md) | `compile` | The UC verifies the full immutable rule lifecycle. |
-| [TASK-CLASSIFY-STATUS-WORKFLOW](../tasks/status-workflow.md) | `compile` | The UC verifies retained status and safe abandonment. |
-| [TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY](../tasks/gate-evidence-private-viability.md) | `compile` | The UC requires proven representative private evidence. |
+| [TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE](rule-activation-lifecycle.md) | `compile` | The UC verifies the full immutable rule lifecycle. |
+| [TASK-CLASSIFY-STATUS-WORKFLOW: TASK-CLASSIFY-STATUS-WORKFLOW](status-workflow.md) | `compile` | The UC verifies retained status and safe abandonment. |
+| [TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY: TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY](gate-evidence-private-viability.md) | `compile` | The UC requires proven representative private evidence. |
 
 ## Recipe
 
@@ -73,9 +73,9 @@ UC-CLASSIFY-004 proves immutable owner-approved rule lifecycle with fail-closed 
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ActivateClassificationRuleCommand.HandleAsync | `consumes` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| VerifiedClassifyPrivateEvidenceGate | `consumes` | DM-CLASSIFY-VALIDATION-RUN |  |
-| VerifiedClassifyUc004 | `produces` | UC-CLASSIFY-004 |  |
+| ActivateClassificationRuleCommand.HandleAsync | `consumes` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| VerifiedClassifyPrivateEvidenceGate | `consumes` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
+| VerifiedClassifyUc004 | `produces` | [UC-CLASSIFY-004](../../../prd/classify/prd.md#uc-classify-004-manage-and-validate-deterministic-rules) |  |
 
 ### Verification
 
@@ -97,12 +97,12 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `covers` -> UC-CLASSIFY-004: Manage and validate deterministic rules
-- `depends-on:compile` -> [TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY](../tasks/gate-evidence-private-viability.md): The UC requires proven representative private evidence.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE](../tasks/rule-activation-lifecycle.md): The UC verifies the full immutable rule lifecycle.
-- `depends-on:compile` -> [TASK-CLASSIFY-STATUS-WORKFLOW](../tasks/status-workflow.md): The UC verifies retained status and safe abandonment.
-- `governed-by` -> DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability
-- `governed-by` -> DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions
+- `covers` -> [UC-CLASSIFY-004: Manage and validate deterministic rules](../../../prd/classify/prd.md#uc-classify-004-manage-and-validate-deterministic-rules)
+- `depends-on:compile` -> [TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY: TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY](gate-evidence-private-viability.md): The UC requires proven representative private evidence.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE](rule-activation-lifecycle.md): The UC verifies the full immutable rule lifecycle.
+- `depends-on:compile` -> [TASK-CLASSIFY-STATUS-WORKFLOW: TASK-CLASSIFY-STATUS-WORKFLOW](status-workflow.md): The UC verifies retained status and safe abandonment.
+- `governed-by` -> [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md)
+- `governed-by` -> [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md)
 - `verifies` -> TC-CLASSIFY-RULE-LIFECYCLE-CONTRACT: Verify immutable rule lifecycle
 - `verifies` -> TC-CLASSIFY-RULE-VALIDATION-CONTRACT: Verify private candidate validation
 

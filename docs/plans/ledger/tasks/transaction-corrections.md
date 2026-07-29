@@ -22,20 +22,20 @@ Count only the valid active transaction outcome while keeping ordinary correctio
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts | `data_model` | `touches` | `true` |
-| FR-LEDGER-TRANSACTION-CORRECTION: Void or supersede erroneous transactions | `requirement` | `implements` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts](../../../designs/ledger/data-model.md#transactionoperationcontracts) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-TRANSACTION-CORRECTION: Void or supersede erroneous transactions](../../../prd/ledger/prd.md#fr-ledger-transaction-correction-void-or-supersede-erroneous-transactions) | `requirement` | `implements` | `true` |
 | TC-LEDGER-TRANSACTION-CORRECTION-CONTRACT: Verify void or supersede erroneous transactions contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-TRANSFERS](../tasks/transfers.md) | `compile` | Transaction correction consumes RelationshipStore.RetireForTransactionAsync. |
-| [TASK-LEDGER-REFUNDS](../tasks/refunds.md) | `compile` | Transaction correction must retire both transfer and refund roles. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
-| [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md) | `compile` | Consumer requires TransactionBaseOperationModule from its producing task; direct compile edge enforces the declared interface contract. |
-| [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md) | `compile` | Corrections consume ReconciliationStateReducer to retain decisions and derive current exceptions. |
+| [TASK-LEDGER-TRANSFERS: TASK-LEDGER-TRANSFERS](transfers.md) | `compile` | Transaction correction consumes RelationshipStore.RetireForTransactionAsync. |
+| [TASK-LEDGER-REFUNDS: TASK-LEDGER-REFUNDS](refunds.md) | `compile` | Transaction correction must retire both transfer and refund roles. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md) | `compile` | Consumer requires TransactionBaseOperationModule from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-RECONCILIATION-DECISIONS: TASK-LEDGER-RECONCILIATION-DECISIONS](reconciliation-decisions.md) | `compile` | Corrections consume ReconciliationStateReducer to retain decisions and derive current exceptions. |
 
 ## Recipe
 
@@ -82,14 +82,14 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| TransactionOperationModule | `produces` | DM-LEDGER-TRANSACTION-CONTRACTS | Public void and supersede descriptors |
-| TransactionBaseOperationModule | `consumes` | DM-LEDGER-TRANSACTION-CONTRACTS | Record/get composition |
-| TransactionStore.VoidAsync | `produces` | DM-LEDGER-TRANSACTION-HISTORY | Atomic ordinary void |
-| TransactionStore.SupersedeAsync | `produces` | DM-LEDGER-TRANSACTION-HISTORY | Independent ordinary replacement |
-| TransactionStore.AppendStatementSupersessionAsync | `produces` | DM-LEDGER-TRANSACTION-HISTORY | Internal statement-derived replacement primitive |
-| RelationshipStore.RetireForTransactionAsync | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP | Retire active roles for ordinary correction |
-| ReconciliationStateReducer | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY | Preserve history and expose current exception |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD | Atomic replay boundary |
+| TransactionOperationModule | `produces` | [DM-LEDGER-TRANSACTION-CONTRACTS](../../../designs/ledger/data-model.md#transactionoperationcontracts) | Public void and supersede descriptors |
+| TransactionBaseOperationModule | `consumes` | [DM-LEDGER-TRANSACTION-CONTRACTS](../../../designs/ledger/data-model.md#transactionoperationcontracts) | Record/get composition |
+| TransactionStore.VoidAsync | `produces` | [DM-LEDGER-TRANSACTION-HISTORY](../../../designs/ledger/data-model.md#transactionlifecycleandcategoryallocation) | Atomic ordinary void |
+| TransactionStore.SupersedeAsync | `produces` | [DM-LEDGER-TRANSACTION-HISTORY](../../../designs/ledger/data-model.md#transactionlifecycleandcategoryallocation) | Independent ordinary replacement |
+| TransactionStore.AppendStatementSupersessionAsync | `produces` | [DM-LEDGER-TRANSACTION-HISTORY](../../../designs/ledger/data-model.md#transactionlifecycleandcategoryallocation) | Internal statement-derived replacement primitive |
+| RelationshipStore.RetireForTransactionAsync | `consumes` | [DM-LEDGER-FINANCIAL-RELATIONSHIP](../../../designs/ledger/data-model.md#financialrelationshipandlifecycle) | Retire active roles for ordinary correction |
+| ReconciliationStateReducer | `consumes` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) | Preserve history and expose current exception |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | [DM-LEDGER-IDEMPOTENCY-RECORD](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) | Atomic replay boundary |
 
 ### Verification
 
@@ -115,14 +115,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2rh` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md): Corrections consume ReconciliationStateReducer to retain decisions and derive current exceptions.
-- `depends-on:compile` -> [TASK-LEDGER-REFUNDS](../tasks/refunds.md): Transaction correction must retire both transfer and refund roles.
-- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Consumer requires TransactionBaseOperationModule from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-TRANSFERS](../tasks/transfers.md): Transaction correction consumes RelationshipStore.RetireForTransactionAsync.
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `implements` -> FR-LEDGER-TRANSACTION-CORRECTION: Void or supersede erroneous transactions
-- `touches` -> DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-DECISIONS: TASK-LEDGER-RECONCILIATION-DECISIONS](reconciliation-decisions.md): Corrections consume ReconciliationStateReducer to retain decisions and derive current exceptions.
+- `depends-on:compile` -> [TASK-LEDGER-REFUNDS: TASK-LEDGER-REFUNDS](refunds.md): Transaction correction must retire both transfer and refund roles.
+- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md): Consumer requires TransactionBaseOperationModule from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-TRANSFERS: TASK-LEDGER-TRANSFERS](transfers.md): Transaction correction consumes RelationshipStore.RetireForTransactionAsync.
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `implements` -> [FR-LEDGER-TRANSACTION-CORRECTION: Void or supersede erroneous transactions](../../../prd/ledger/prd.md#fr-ledger-transaction-correction-void-or-supersede-erroneous-transactions)
+- `touches` -> [DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts](../../../designs/ledger/data-model.md#transactionoperationcontracts)
 - `verifies` -> TC-LEDGER-TRANSACTION-CORRECTION-CONTRACT: Verify void or supersede erroneous transactions contract
 
 ## Navigation

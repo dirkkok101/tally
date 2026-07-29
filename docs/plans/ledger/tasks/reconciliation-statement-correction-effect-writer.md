@@ -22,21 +22,21 @@ Append one complete statement-authoritative replacement effect through existing 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md) | `design_decision` | `governed-by` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md) | `compile` | Effect composition consumes ReconciliationWriteStore. |
-| [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md) | `compile` | Effect composition consumes ReconciliationDecisionStore. |
-| [TASK-LEDGER-TRANSACTION-CORRECTIONS](../tasks/transaction-corrections.md) | `compile` | Effect composition consumes statement supersession. |
-| [TASK-LEDGER-CATEGORY-ALLOCATIONS](../tasks/category-allocations.md) | `compile` | Effect composition consumes category carry-forward. |
-| [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md) | `compile` | Effect composition consumes payment carry-forward or unknown initialization. |
-| [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md) | `compile` | Effect composition consumes Spend Pool carry-forward. |
-| [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](../tasks/relationship-corrections.md) | `compile` | Effect composition consumes relationship replacement. |
-| [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](../tasks/core-schema-reconciliation-authority.md) | `compile` | Effect composition persists through V002 statement-authority references. |
+| [TASK-LEDGER-RECONCILIATION-APPLY: TASK-LEDGER-RECONCILIATION-APPLY](reconciliation-apply.md) | `compile` | Effect composition consumes ReconciliationWriteStore. |
+| [TASK-LEDGER-RECONCILIATION-DECISIONS: TASK-LEDGER-RECONCILIATION-DECISIONS](reconciliation-decisions.md) | `compile` | Effect composition consumes ReconciliationDecisionStore. |
+| [TASK-LEDGER-TRANSACTION-CORRECTIONS: TASK-LEDGER-TRANSACTION-CORRECTIONS](transaction-corrections.md) | `compile` | Effect composition consumes statement supersession. |
+| [TASK-LEDGER-CATEGORY-ALLOCATIONS: TASK-LEDGER-CATEGORY-ALLOCATIONS](category-allocations.md) | `compile` | Effect composition consumes category carry-forward. |
+| [TASK-LEDGER-PAYMENT-ATTRIBUTION: TASK-LEDGER-PAYMENT-ATTRIBUTION](payment-attribution.md) | `compile` | Effect composition consumes payment carry-forward or unknown initialization. |
+| [TASK-LEDGER-POOL-ASSIGNMENTS: TASK-LEDGER-POOL-ASSIGNMENTS](pool-assignments.md) | `compile` | Effect composition consumes Spend Pool carry-forward. |
+| [TASK-LEDGER-RELATIONSHIP-CORRECTIONS: TASK-LEDGER-RELATIONSHIP-CORRECTIONS](relationship-corrections.md) | `compile` | Effect composition consumes relationship replacement. |
+| [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY: TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](core-schema-reconciliation-authority.md) | `compile` | Effect composition persists through V002 statement-authority references. |
 
 ## Recipe
 
@@ -76,15 +76,15 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| StatementCorrectionEffectWriter.AppendAsync | `produces` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| ReconciliationWriteStore | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| ReconciliationDecisionStore | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY |  |
-| TransactionStore.AppendStatementSupersessionAsync | `consumes` | DM-LEDGER-TRANSACTION-HISTORY |  |
-| CategoryAllocationStore.CarryForwardAsync | `consumes` | DM-LEDGER-TRANSACTION-HISTORY |  |
-| PaymentAttributionStore.CarryForwardOrUnknownAsync | `consumes` | DM-LEDGER-PAYMENT-ATTRIBUTION |  |
-| PoolAssignmentStore.CarryForwardAsync | `consumes` | DM-LEDGER-SPEND-POOL-ASSIGNMENT |  |
-| RelationshipStore.ReplaceForStatementCorrectionAsync | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP |  |
-| V002StatementAuthoritySchema | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY |  |
+| StatementCorrectionEffectWriter.AppendAsync | `produces` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| ReconciliationWriteStore | `consumes` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| ReconciliationDecisionStore | `consumes` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
+| TransactionStore.AppendStatementSupersessionAsync | `consumes` | [DM-LEDGER-TRANSACTION-HISTORY](../../../designs/ledger/data-model.md#transactionlifecycleandcategoryallocation) |  |
+| CategoryAllocationStore.CarryForwardAsync | `consumes` | [DM-LEDGER-TRANSACTION-HISTORY](../../../designs/ledger/data-model.md#transactionlifecycleandcategoryallocation) |  |
+| PaymentAttributionStore.CarryForwardOrUnknownAsync | `consumes` | [DM-LEDGER-PAYMENT-ATTRIBUTION](../../../designs/ledger/data-model.md#paymentinstrumentcardholderandattribution) |  |
+| PoolAssignmentStore.CarryForwardAsync | `consumes` | [DM-LEDGER-SPEND-POOL-ASSIGNMENT](../../../designs/ledger/data-model.md#spendpoolandassignment) |  |
+| RelationshipStore.ReplaceForStatementCorrectionAsync | `consumes` | [DM-LEDGER-FINANCIAL-RELATIONSHIP](../../../designs/ledger/data-model.md#financialrelationshipandlifecycle) |  |
+| V002StatementAuthoritySchema | `consumes` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) |  |
 
 ### Verification
 
@@ -110,16 +110,16 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3pa` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CATEGORY-ALLOCATIONS](../tasks/category-allocations.md): Effect composition consumes category carry-forward.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](../tasks/core-schema-reconciliation-authority.md): Effect composition persists through V002 statement-authority references.
-- `depends-on:compile` -> [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md): Effect composition consumes payment carry-forward or unknown initialization.
-- `depends-on:compile` -> [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md): Effect composition consumes Spend Pool carry-forward.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-APPLY](../tasks/reconciliation-apply.md): Effect composition consumes ReconciliationWriteStore.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-DECISIONS](../tasks/reconciliation-decisions.md): Effect composition consumes ReconciliationDecisionStore.
-- `depends-on:compile` -> [TASK-LEDGER-RELATIONSHIP-CORRECTIONS](../tasks/relationship-corrections.md): Effect composition consumes relationship replacement.
-- `depends-on:compile` -> [TASK-LEDGER-TRANSACTION-CORRECTIONS](../tasks/transaction-corrections.md): Effect composition consumes statement supersession.
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
+- `depends-on:compile` -> [TASK-LEDGER-CATEGORY-ALLOCATIONS: TASK-LEDGER-CATEGORY-ALLOCATIONS](category-allocations.md): Effect composition consumes category carry-forward.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY: TASK-LEDGER-CORE-SCHEMA-RECONCILIATION-AUTHORITY](core-schema-reconciliation-authority.md): Effect composition persists through V002 statement-authority references.
+- `depends-on:compile` -> [TASK-LEDGER-PAYMENT-ATTRIBUTION: TASK-LEDGER-PAYMENT-ATTRIBUTION](payment-attribution.md): Effect composition consumes payment carry-forward or unknown initialization.
+- `depends-on:compile` -> [TASK-LEDGER-POOL-ASSIGNMENTS: TASK-LEDGER-POOL-ASSIGNMENTS](pool-assignments.md): Effect composition consumes Spend Pool carry-forward.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-APPLY: TASK-LEDGER-RECONCILIATION-APPLY](reconciliation-apply.md): Effect composition consumes ReconciliationWriteStore.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-DECISIONS: TASK-LEDGER-RECONCILIATION-DECISIONS](reconciliation-decisions.md): Effect composition consumes ReconciliationDecisionStore.
+- `depends-on:compile` -> [TASK-LEDGER-RELATIONSHIP-CORRECTIONS: TASK-LEDGER-RELATIONSHIP-CORRECTIONS](relationship-corrections.md): Effect composition consumes relationship replacement.
+- `depends-on:compile` -> [TASK-LEDGER-TRANSACTION-CORRECTIONS: TASK-LEDGER-TRANSACTION-CORRECTIONS](transaction-corrections.md): Effect composition consumes statement supersession.
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `governed-by` -> [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md)
 
 ## Navigation
 

@@ -22,11 +22,11 @@ Lock the owner-approved transfer, refund, reversal, and fee rules without decidi
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-FINANCIAL-RELATIONSHIP: FinancialRelationshipAndLifecycle | `data_model` | `touches` | `false` |
-| FR-LEDGER-REFUND-CONFIRMATION: Confirm refunds and reversals | `requirement` | `verifies` | `true` |
-| FR-LEDGER-TRANSFER-CONFIRMATION: Confirm owned-account transfers | `requirement` | `verifies` | `true` |
-| OQ-LEDGER-5: Validate the proposed transfer, refund/reversal, and cash-withdrawal spend policies with representative transactions. | `open_question` | `references` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-FINANCIAL-RELATIONSHIP: FinancialRelationshipAndLifecycle](../../../designs/ledger/data-model.md#financialrelationshipandlifecycle) | `data_model` | `touches` | `false` |
+| [FR-LEDGER-REFUND-CONFIRMATION: Confirm refunds and reversals](../../../prd/ledger/prd.md#fr-ledger-refund-confirmation-confirm-refunds-and-reversals) | `requirement` | `verifies` | `true` |
+| [FR-LEDGER-TRANSFER-CONFIRMATION: Confirm owned-account transfers](../../../prd/ledger/prd.md#fr-ledger-transfer-confirmation-confirm-owned-account-transfers) | `requirement` | `verifies` | `true` |
+| [OQ-LEDGER-5: Validate the proposed transfer, refund/reversal, and cash-withdrawal spend policies with representative transactions.](../../../prd/ledger/prd.md) | `open_question` | `references` | `true` |
 
 ## Dependencies
 
@@ -69,7 +69,7 @@ No task dependencies recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| OQ-LEDGER-5Resolution | `produces` | OQ-LEDGER-5 | Owner-approved transfer, refund, reversal, and fee policy |
+| OQ-LEDGER-5Resolution | `produces` | [OQ-LEDGER-5](../../../prd/ledger/prd.md) | Owner-approved transfer, refund, reversal, and fee policy |
 
 ### Verification
 
@@ -95,11 +95,11 @@ No task dependencies recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2pt` (verified)
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history
-- `references` -> OQ-LEDGER-5: Validate the proposed transfer, refund/reversal, and cash-withdrawal spend policies with representative transactions.
-- `touches` -> DM-LEDGER-FINANCIAL-RELATIONSHIP: FinancialRelationshipAndLifecycle
-- `verifies` -> FR-LEDGER-REFUND-CONFIRMATION: Confirm refunds and reversals
-- `verifies` -> FR-LEDGER-TRANSFER-CONFIRMATION: Confirm owned-account transfers
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable financial facts with append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `references` -> [OQ-LEDGER-5: Validate the proposed transfer, refund/reversal, and cash-withdrawal spend policies with representative transactions.](../../../prd/ledger/prd.md)
+- `touches` -> [DM-LEDGER-FINANCIAL-RELATIONSHIP: FinancialRelationshipAndLifecycle](../../../designs/ledger/data-model.md#financialrelationshipandlifecycle)
+- `verifies` -> [FR-LEDGER-REFUND-CONFIRMATION: Confirm refunds and reversals](../../../prd/ledger/prd.md#fr-ledger-refund-confirmation-confirm-refunds-and-reversals)
+- `verifies` -> [FR-LEDGER-TRANSFER-CONFIRMATION: Confirm owned-account transfers](../../../prd/ledger/prd.md#fr-ledger-transfer-confirmation-confirm-owned-account-transfers)
 
 ## Navigation
 

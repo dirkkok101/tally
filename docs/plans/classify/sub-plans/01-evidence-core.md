@@ -15,7 +15,7 @@ Prove the closed grammar, production evaluation engine, private corpus boundary,
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-CLASSIFY-RULE-VOCABULARY](../tasks/rule-vocabulary.md) | Implement the closed rule vocabulary | `planned` | 0 |
-| [TASK-CLASSIFY-DETERMINISTIC-ENGINE](../tasks/deterministic-engine.md) | Build the deterministic classification engine | `planned` | 0 |
-| [TASK-CLASSIFY-PRIVATE-CORPUS-READER](../tasks/private-corpus-reader.md) | Implement the private corpus boundary | `planned` | 0 |
-| [TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY](../tasks/gate-evidence-private-viability.md) | Prove private classification viability | `planned` | 0 |
+| [TASK-CLASSIFY-RULE-VOCABULARY: Implement the closed rule vocabulary](../tasks/rule-vocabulary.md) | Implement the closed rule vocabulary | `planned` | 0 |
+| [TASK-CLASSIFY-DETERMINISTIC-ENGINE: Build the deterministic classification engine](../tasks/deterministic-engine.md) | Build the deterministic classification engine | `planned` | 0 |
+| [TASK-CLASSIFY-PRIVATE-CORPUS-READER: Implement the private corpus boundary](../tasks/private-corpus-reader.md) | Implement the private corpus boundary | `planned` | 0 |
+| [TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY: Prove private classification viability](../tasks/gate-evidence-private-viability.md) | Prove private classification viability | `planned` | 0 |

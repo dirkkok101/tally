@@ -22,25 +22,25 @@ Return exact dimensional actuals with one active economic effect and zero owned-
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals | `requirement` | `implements` | `true` |
+| [DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment](../../../designs/ledger/decisions/category-hierarchy.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions](../../../designs/ledger/decisions/dimensional-attribution.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates](../../../designs/ledger/decisions/financial-representation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals](../../../prd/ledger/prd.md#fr-ledger-actuals-query-query-exact-ledger-actuals) | `requirement` | `implements` | `true` |
 | TC-LEDGER-ACTUALS-QUERY-CONTRACT: Verify query and reconcile ledger actuals contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-CORE-MONEY-DATES](../tasks/core-money-dates.md) | `compile` | Consumer requires Money from its producing task; direct compile edge enforces the declared interface contract. |
-| [TASK-LEDGER-RECONCILIATION-COVERAGE](../tasks/reconciliation-coverage.md) | `compile` | Actuals filters consume current evidence/reconciliation coverage state. |
-| [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](../tasks/gate-evidence-cash-withdrawals.md) | `compile` | External Spend and Budget Actual require the resolved cash rule. |
-| [TASK-LEDGER-CATEGORY-ALLOCATIONS](../tasks/category-allocations.md) | `compile` | Actuals consumes CategoryAllocationStore for current category membership. |
-| [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md) | `compile` | Actuals consumes PaymentAttributionStore for instrument and cardholder filters. |
-| [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md) | `compile` | Actuals consumes PoolAssignmentStore for current pool membership. |
-| [TASK-LEDGER-TRANSFERS](../tasks/transfers.md) | `compile` | Actuals consumes RelationshipStore for transfer and refund state. |
+| [TASK-LEDGER-CORE-MONEY-DATES: TASK-LEDGER-CORE-MONEY-DATES](core-money-dates.md) | `compile` | Consumer requires Money from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-RECONCILIATION-COVERAGE: TASK-LEDGER-RECONCILIATION-COVERAGE](reconciliation-coverage.md) | `compile` | Actuals filters consume current evidence/reconciliation coverage state. |
+| [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS: TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](gate-evidence-cash-withdrawals.md) | `compile` | External Spend and Budget Actual require the resolved cash rule. |
+| [TASK-LEDGER-CATEGORY-ALLOCATIONS: TASK-LEDGER-CATEGORY-ALLOCATIONS](category-allocations.md) | `compile` | Actuals consumes CategoryAllocationStore for current category membership. |
+| [TASK-LEDGER-PAYMENT-ATTRIBUTION: TASK-LEDGER-PAYMENT-ATTRIBUTION](payment-attribution.md) | `compile` | Actuals consumes PaymentAttributionStore for instrument and cardholder filters. |
+| [TASK-LEDGER-POOL-ASSIGNMENTS: TASK-LEDGER-POOL-ASSIGNMENTS](pool-assignments.md) | `compile` | Actuals consumes PoolAssignmentStore for current pool membership. |
+| [TASK-LEDGER-TRANSFERS: TASK-LEDGER-TRANSFERS](transfers.md) | `compile` | Actuals consumes RelationshipStore for transfer and refund state. |
 
 ## Recipe
 
@@ -87,15 +87,15 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ActualsFilter | `produces` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS | canonical multi-dimensional filters |
-| ActualsCalculator.Calculate | `produces` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS | exact named totals and cells |
-| ActualsProjectionStore | `produces` | DM-LEDGER-QUERY-SNAPSHOT | current membership projection |
-| Money | `consumes` | DD-LEDGER-FINANCIAL-REPRESENTATION | exact values |
-| RelationshipStore | `consumes` | DM-LEDGER-FINANCIAL-RELATIONSHIP | transfer/refund state |
-| CategoryAllocationStore | `consumes` | DM-LEDGER-TRANSACTION-HISTORY | current category |
-| PoolAssignmentStore | `consumes` | DM-LEDGER-SPEND-POOL-ASSIGNMENT | current pool |
-| PaymentAttributionStore | `consumes` | DM-LEDGER-PAYMENT-ATTRIBUTION | instrument/cardholder filters |
-| ReconciliationCoverageStore | `consumes` | DM-LEDGER-RECONCILIATION-HISTORY | evidence/reconciliation filters |
+| ActualsFilter | `produces` | [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) | canonical multi-dimensional filters |
+| ActualsCalculator.Calculate | `produces` | [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) | exact named totals and cells |
+| ActualsProjectionStore | `produces` | [DM-LEDGER-QUERY-SNAPSHOT](../../../designs/ledger/data-model.md#querysnapshot) | current membership projection |
+| Money | `consumes` | [DD-LEDGER-FINANCIAL-REPRESENTATION](../../../designs/ledger/decisions/financial-representation.md) | exact values |
+| RelationshipStore | `consumes` | [DM-LEDGER-FINANCIAL-RELATIONSHIP](../../../designs/ledger/data-model.md#financialrelationshipandlifecycle) | transfer/refund state |
+| CategoryAllocationStore | `consumes` | [DM-LEDGER-TRANSACTION-HISTORY](../../../designs/ledger/data-model.md#transactionlifecycleandcategoryallocation) | current category |
+| PoolAssignmentStore | `consumes` | [DM-LEDGER-SPEND-POOL-ASSIGNMENT](../../../designs/ledger/data-model.md#spendpoolandassignment) | current pool |
+| PaymentAttributionStore | `consumes` | [DM-LEDGER-PAYMENT-ATTRIBUTION](../../../designs/ledger/data-model.md#paymentinstrumentcardholderandattribution) | instrument/cardholder filters |
+| ReconciliationCoverageStore | `consumes` | [DM-LEDGER-RECONCILIATION-HISTORY](../../../designs/ledger/data-model.md#reconciliationprojectiondecisionandcoverage) | evidence/reconciliation filters |
 
 ### Verification
 
@@ -122,19 +122,19 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3hy` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CATEGORY-ALLOCATIONS](../tasks/category-allocations.md): Actuals consumes CategoryAllocationStore for current category membership.
-- `depends-on:compile` -> [TASK-LEDGER-CORE-MONEY-DATES](../tasks/core-money-dates.md): Consumer requires Money from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](../tasks/gate-evidence-cash-withdrawals.md): External Spend and Budget Actual require the resolved cash rule.
-- `depends-on:compile` -> [TASK-LEDGER-PAYMENT-ATTRIBUTION](../tasks/payment-attribution.md): Actuals consumes PaymentAttributionStore for instrument and cardholder filters.
-- `depends-on:compile` -> [TASK-LEDGER-POOL-ASSIGNMENTS](../tasks/pool-assignments.md): Actuals consumes PoolAssignmentStore for current pool membership.
-- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-COVERAGE](../tasks/reconciliation-coverage.md): Actuals filters consume current evidence/reconciliation coverage state.
-- `depends-on:compile` -> [TASK-LEDGER-TRANSFERS](../tasks/transfers.md): Actuals consumes RelationshipStore for transfer and refund state.
-- `governed-by` -> DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment
-- `governed-by` -> DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions
-- `governed-by` -> DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
-- `implements` -> FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals
+- `depends-on:compile` -> [TASK-LEDGER-CATEGORY-ALLOCATIONS: TASK-LEDGER-CATEGORY-ALLOCATIONS](category-allocations.md): Actuals consumes CategoryAllocationStore for current category membership.
+- `depends-on:compile` -> [TASK-LEDGER-CORE-MONEY-DATES: TASK-LEDGER-CORE-MONEY-DATES](core-money-dates.md): Consumer requires Money from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS: TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](gate-evidence-cash-withdrawals.md): External Spend and Budget Actual require the resolved cash rule.
+- `depends-on:compile` -> [TASK-LEDGER-PAYMENT-ATTRIBUTION: TASK-LEDGER-PAYMENT-ATTRIBUTION](payment-attribution.md): Actuals consumes PaymentAttributionStore for instrument and cardholder filters.
+- `depends-on:compile` -> [TASK-LEDGER-POOL-ASSIGNMENTS: TASK-LEDGER-POOL-ASSIGNMENTS](pool-assignments.md): Actuals consumes PoolAssignmentStore for current pool membership.
+- `depends-on:compile` -> [TASK-LEDGER-RECONCILIATION-COVERAGE: TASK-LEDGER-RECONCILIATION-COVERAGE](reconciliation-coverage.md): Actuals filters consume current evidence/reconciliation coverage state.
+- `depends-on:compile` -> [TASK-LEDGER-TRANSFERS: TASK-LEDGER-TRANSFERS](transfers.md): Actuals consumes RelationshipStore for transfer and refund state.
+- `governed-by` -> [DD-LEDGER-CATEGORY-HIERARCHY: Acyclic category hierarchy with single-node transaction assignment](../../../designs/ledger/decisions/category-hierarchy.md)
+- `governed-by` -> [DD-LEDGER-DIMENSIONAL-ATTRIBUTION: Independent local payment, category, and Spend Pool dimensions](../../../designs/ledger/decisions/dimensional-attribution.md)
+- `governed-by` -> [DD-LEDGER-FINANCIAL-REPRESENTATION: Canonical ZAR minor units and local dates](../../../designs/ledger/decisions/financial-representation.md)
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `governed-by` -> [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md)
+- `implements` -> [FR-LEDGER-ACTUALS-QUERY: Query exact Ledger actuals](../../../prd/ledger/prd.md#fr-ledger-actuals-query-query-exact-ledger-actuals)
 - `verifies` -> TC-LEDGER-ACTUALS-QUERY-CONTRACT: Verify query and reconcile ledger actuals contract
 
 ## Navigation

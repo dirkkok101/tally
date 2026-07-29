@@ -22,16 +22,16 @@ UC-INSIGHTS-004 creates exactly one linked child only after a complete meaningfu
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion | `design_decision` | `governed-by` | `true` |
+| [DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion](../../../designs/insights/decisions/retention-restatement-lifecycle.md) | `design_decision` | `governed-by` | `true` |
 | TC-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Verify deterministic analytical integrity | `test_case` | `verifies` | `true` |
 | TC-INSIGHTS-RESTATEMENT-CONTRACT: Verify explicit Restatement and difference semantics | `test_case` | `verifies` | `true` |
-| UC-INSIGHTS-004: Restate and compare a corrected report | `use_case` | `covers` | `true` |
+| [UC-INSIGHTS-004: Restate and compare a corrected report](../../../prd/insights/prd.md#uc-insights-004-restate-and-compare-a-corrected-report) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | UC-004 invokes the published Restate surface. |
+| [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT: TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | UC-004 invokes the published Restate surface. |
 
 ## Recipe
 
@@ -70,8 +70,8 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteInsightsPublicContract | `consumes` | DM-INSIGHTS-OPERATION-CONTRACTS | published Restate and Get |
-| VerifiedInsightsUc004 | `produces` | UC-INSIGHTS-004 | Restatement workflow proof |
+| CompleteInsightsPublicContract | `consumes` | [DM-INSIGHTS-OPERATION-CONTRACTS](../../../designs/insights/data-model.md#insightsoperationcontracts) | published Restate and Get |
+| VerifiedInsightsUc004 | `produces` | [UC-INSIGHTS-004](../../../prd/insights/prd.md#uc-insights-004-restate-and-compare-a-corrected-report) | Restatement workflow proof |
 
 ### Verification
 
@@ -96,9 +96,9 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1pe` (verified)
-- `covers` -> UC-INSIGHTS-004: Restate and compare a corrected report
-- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): UC-004 invokes the published Restate surface.
-- `governed-by` -> DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion
+- `covers` -> [UC-INSIGHTS-004: Restate and compare a corrected report](../../../prd/insights/prd.md#uc-insights-004-restate-and-compare-a-corrected-report)
+- `depends-on:compile` -> [TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT: TASK-INSIGHTS-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): UC-004 invokes the published Restate surface.
+- `governed-by` -> [DD-INSIGHTS-RETENTION-RESTATEMENT-LIFECYCLE: Append-only Report Snapshots with replay-safe Restatement and leaf deletion](../../../designs/insights/decisions/retention-restatement-lifecycle.md)
 - `verifies` -> TC-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Verify deterministic analytical integrity
 - `verifies` -> TC-INSIGHTS-RESTATEMENT-CONTRACT: Verify explicit Restatement and difference semantics
 

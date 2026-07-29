@@ -22,23 +22,23 @@ InsightReportCompiler returns one complete bounded deterministic report or one w
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies | `design_decision` | `governed-by` | `true` |
-| DIAG-INSIGHTS-GENERATE-SEQUENCE: Coherent deterministic report generation | `design_diagram` | `touches` | `true` |
-| DM-INSIGHTS-INSIGHT-REPORT: InsightReport | `data_model` | `touches` | `true` |
-| FA-INSIGHTS-EVIDENCE-ANALYSIS: Evidence and Analysis | `feature_area` | `touches` | `true` |
-| FR-INSIGHTS-REPORT-GENERATION: Generate one deterministic Insight Report | `requirement` | `implements` | `true` |
-| NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity | `nfr` | `satisfies` | `true` |
+| [DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies](../../../designs/insights/decisions/deterministic-report-compiler.md) | `design_decision` | `governed-by` | `true` |
+| [DIAG-INSIGHTS-GENERATE-SEQUENCE: Coherent deterministic report generation](../../../designs/insights/diagrams/generate-sequence.md) | `design_diagram` | `touches` | `true` |
+| [DM-INSIGHTS-INSIGHT-REPORT: InsightReport](../../../designs/insights/data-model.md#insightreport) | `data_model` | `touches` | `true` |
+| [FA-INSIGHTS-EVIDENCE-ANALYSIS: Evidence and Analysis](../../../designs/insights/features/evidence-analysis/api-surface.md) | `feature_area` | `touches` | `true` |
+| [FR-INSIGHTS-REPORT-GENERATION: Generate one deterministic Insight Report](../../../prd/insights/prd.md#fr-insights-report-generation-generate-one-deterministic-insight-report) | `requirement` | `implements` | `true` |
+| [NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity](../../../prd/insights/prd.md#nfr-insights-deterministic-analytical-integrity-preserve-deterministic-analytical-integrity) | `nfr` | `satisfies` | `true` |
 | TC-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Verify deterministic analytical integrity | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-INSIGHTS-COHERENT-EVIDENCE-BINDER](../tasks/coherent-evidence-binder.md) | `compile` | The compiler accepts only BoundInsightEvidence. |
-| [TASK-INSIGHTS-ANALYSIS-WINDOWS](../tasks/analysis-windows.md) | `compile` | The compiler composes trusted windows. |
-| [TASK-INSIGHTS-EXACT-METRICS](../tasks/exact-metrics.md) | `compile` | The compiler composes exact metric results. |
-| [TASK-INSIGHTS-LINEAR-PACE](../tasks/linear-pace.md) | `compile` | The compiler composes the active pace policy. |
-| [TASK-INSIGHTS-EVIDENCE-EXPLANATION](../tasks/evidence-explanation.md) | `compile` | The compiler requires complete state accounting and explanations. |
+| [TASK-INSIGHTS-COHERENT-EVIDENCE-BINDER: TASK-INSIGHTS-COHERENT-EVIDENCE-BINDER](coherent-evidence-binder.md) | `compile` | The compiler accepts only BoundInsightEvidence. |
+| [TASK-INSIGHTS-ANALYSIS-WINDOWS: TASK-INSIGHTS-ANALYSIS-WINDOWS](analysis-windows.md) | `compile` | The compiler composes trusted windows. |
+| [TASK-INSIGHTS-EXACT-METRICS: TASK-INSIGHTS-EXACT-METRICS](exact-metrics.md) | `compile` | The compiler composes exact metric results. |
+| [TASK-INSIGHTS-LINEAR-PACE: TASK-INSIGHTS-LINEAR-PACE](linear-pace.md) | `compile` | The compiler composes the active pace policy. |
+| [TASK-INSIGHTS-EVIDENCE-EXPLANATION: TASK-INSIGHTS-EVIDENCE-EXPLANATION](evidence-explanation.md) | `compile` | The compiler requires complete state accounting and explanations. |
 
 ## Recipe
 
@@ -83,14 +83,14 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CoherentEvidenceBinder.Bind | `consumes` | DM-INSIGHTS-COHERENT-EVIDENCE | validated evidence |
-| AnalysisWindowPolicy.Evaluate | `consumes` | DM-INSIGHTS-ANALYTICAL-EVIDENCE | trusted windows |
-| ExactMetricCalculator.Calculate | `consumes` | DM-INSIGHTS-ANALYTICAL-EVIDENCE | exact metrics |
-| LinearPaceCalculator.Calculate | `consumes` | DM-INSIGHTS-ANALYTICAL-EVIDENCE | pace state |
-| EvidenceStateAccountant.Account | `consumes` | DM-INSIGHTS-ANALYTICAL-EVIDENCE | complete state inventory |
-| InsightExplanationRenderer.Render | `consumes` | DM-INSIGHTS-ANALYTICAL-EVIDENCE | template evidence |
-| InsightReportCanonicalizer.Canonicalize | `produces` | DM-INSIGHTS-INSIGHT-REPORT | ordered canonical report and derived identity |
-| InsightReportCompiler.Compile | `produces` | DM-INSIGHTS-INSIGHT-REPORT | complete report or whole-report failure |
+| CoherentEvidenceBinder.Bind | `consumes` | [DM-INSIGHTS-COHERENT-EVIDENCE](../../../designs/insights/data-model.md#boundinsightevidence) | validated evidence |
+| AnalysisWindowPolicy.Evaluate | `consumes` | [DM-INSIGHTS-ANALYTICAL-EVIDENCE](../../../designs/insights/data-model.md#analysiswindowmetricstateandexplanation) | trusted windows |
+| ExactMetricCalculator.Calculate | `consumes` | [DM-INSIGHTS-ANALYTICAL-EVIDENCE](../../../designs/insights/data-model.md#analysiswindowmetricstateandexplanation) | exact metrics |
+| LinearPaceCalculator.Calculate | `consumes` | [DM-INSIGHTS-ANALYTICAL-EVIDENCE](../../../designs/insights/data-model.md#analysiswindowmetricstateandexplanation) | pace state |
+| EvidenceStateAccountant.Account | `consumes` | [DM-INSIGHTS-ANALYTICAL-EVIDENCE](../../../designs/insights/data-model.md#analysiswindowmetricstateandexplanation) | complete state inventory |
+| InsightExplanationRenderer.Render | `consumes` | [DM-INSIGHTS-ANALYTICAL-EVIDENCE](../../../designs/insights/data-model.md#analysiswindowmetricstateandexplanation) | template evidence |
+| InsightReportCanonicalizer.Canonicalize | `produces` | [DM-INSIGHTS-INSIGHT-REPORT](../../../designs/insights/data-model.md#insightreport) | ordered canonical report and derived identity |
+| InsightReportCompiler.Compile | `produces` | [DM-INSIGHTS-INSIGHT-REPORT](../../../designs/insights/data-model.md#insightreport) | complete report or whole-report failure |
 
 ### Verification
 
@@ -115,17 +115,17 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3ac` (verified)
-- `depends-on:compile` -> [TASK-INSIGHTS-ANALYSIS-WINDOWS](../tasks/analysis-windows.md): The compiler composes trusted windows.
-- `depends-on:compile` -> [TASK-INSIGHTS-COHERENT-EVIDENCE-BINDER](../tasks/coherent-evidence-binder.md): The compiler accepts only BoundInsightEvidence.
-- `depends-on:compile` -> [TASK-INSIGHTS-EVIDENCE-EXPLANATION](../tasks/evidence-explanation.md): The compiler requires complete state accounting and explanations.
-- `depends-on:compile` -> [TASK-INSIGHTS-EXACT-METRICS](../tasks/exact-metrics.md): The compiler composes exact metric results.
-- `depends-on:compile` -> [TASK-INSIGHTS-LINEAR-PACE](../tasks/linear-pace.md): The compiler composes the active pace policy.
-- `governed-by` -> DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies
-- `implements` -> FR-INSIGHTS-REPORT-GENERATION: Generate one deterministic Insight Report
-- `satisfies` -> NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity
-- `touches` -> DIAG-INSIGHTS-GENERATE-SEQUENCE: Coherent deterministic report generation
-- `touches` -> DM-INSIGHTS-INSIGHT-REPORT: InsightReport
-- `touches` -> FA-INSIGHTS-EVIDENCE-ANALYSIS: Evidence and Analysis
+- `depends-on:compile` -> [TASK-INSIGHTS-ANALYSIS-WINDOWS: TASK-INSIGHTS-ANALYSIS-WINDOWS](analysis-windows.md): The compiler composes trusted windows.
+- `depends-on:compile` -> [TASK-INSIGHTS-COHERENT-EVIDENCE-BINDER: TASK-INSIGHTS-COHERENT-EVIDENCE-BINDER](coherent-evidence-binder.md): The compiler accepts only BoundInsightEvidence.
+- `depends-on:compile` -> [TASK-INSIGHTS-EVIDENCE-EXPLANATION: TASK-INSIGHTS-EVIDENCE-EXPLANATION](evidence-explanation.md): The compiler requires complete state accounting and explanations.
+- `depends-on:compile` -> [TASK-INSIGHTS-EXACT-METRICS: TASK-INSIGHTS-EXACT-METRICS](exact-metrics.md): The compiler composes exact metric results.
+- `depends-on:compile` -> [TASK-INSIGHTS-LINEAR-PACE: TASK-INSIGHTS-LINEAR-PACE](linear-pace.md): The compiler composes the active pace policy.
+- `governed-by` -> [DD-INSIGHTS-DETERMINISTIC-REPORT-COMPILER: One deep deterministic Insight Report compiler over pure policies](../../../designs/insights/decisions/deterministic-report-compiler.md)
+- `implements` -> [FR-INSIGHTS-REPORT-GENERATION: Generate one deterministic Insight Report](../../../prd/insights/prd.md#fr-insights-report-generation-generate-one-deterministic-insight-report)
+- `satisfies` -> [NFR-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Preserve deterministic analytical integrity](../../../prd/insights/prd.md#nfr-insights-deterministic-analytical-integrity-preserve-deterministic-analytical-integrity)
+- `touches` -> [DIAG-INSIGHTS-GENERATE-SEQUENCE: Coherent deterministic report generation](../../../designs/insights/diagrams/generate-sequence.md)
+- `touches` -> [DM-INSIGHTS-INSIGHT-REPORT: InsightReport](../../../designs/insights/data-model.md#insightreport)
+- `touches` -> [FA-INSIGHTS-EVIDENCE-ANALYSIS: Evidence and Analysis](../../../designs/insights/features/evidence-analysis/api-surface.md)
 - `verifies` -> TC-INSIGHTS-DETERMINISTIC-ANALYTICAL-INTEGRITY: Verify deterministic analytical integrity
 
 ## Navigation

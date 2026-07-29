@@ -22,19 +22,19 @@ Append or replay a supporting evidence link to an active transaction without cha
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink | `data_model` | `touches` | `true` |
-| FR-LEDGER-EVIDENCE-REGISTRATION: Register and link generic evidence | `requirement` | `implements` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink](../../../designs/ledger/data-model.md#evidencerecordobservationandlink) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-EVIDENCE-REGISTRATION: Register and link generic evidence](../../../prd/ledger/prd.md#fr-ledger-evidence-registration-register-and-link-generic-evidence) | `requirement` | `implements` | `true` |
 | TC-LEDGER-EVIDENCE-REGISTRATION-CONTRACT: Verify generic evidence registration and linkage | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md) | `compile` | Linking consumes EvidenceStore and registered evidence identity. |
-| [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md) | `compile` | Linking validates canonical transaction state through TransactionStore. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Linking is an idempotent public mutation. |
+| [TASK-LEDGER-EVIDENCE-REGISTRY: TASK-LEDGER-EVIDENCE-REGISTRY](evidence-registry.md) | `compile` | Linking consumes EvidenceStore and registered evidence identity. |
+| [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md) | `compile` | Linking validates canonical transaction state through TransactionStore. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Linking is an idempotent public mutation. |
 
 ## Recipe
 
@@ -75,10 +75,10 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| EvidenceLinkOperationModule | `produces` | DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS |  |
-| EvidenceStore | `consumes` | DM-LEDGER-EVIDENCE-RECORD-LINK |  |
-| TransactionStore | `consumes` | DM-LEDGER-TRANSACTION-FACT |  |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD |  |
+| EvidenceLinkOperationModule | `produces` | [DM-LEDGER-EVIDENCE-RECONCILIATION-CONTRACTS](../../../designs/ledger/data-model.md#evidencereconciliationoperationcontracts) |  |
+| EvidenceStore | `consumes` | [DM-LEDGER-EVIDENCE-RECORD-LINK](../../../designs/ledger/data-model.md#evidencerecordobservationandlink) |  |
+| TransactionStore | `consumes` | [DM-LEDGER-TRANSACTION-FACT](../../../designs/ledger/data-model.md#transactionfact) |  |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | [DM-LEDGER-IDEMPOTENCY-RECORD](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) |  |
 
 ### Verification
 
@@ -103,13 +103,13 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-fan` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Linking is an idempotent public mutation.
-- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY](../tasks/evidence-registry.md): Linking consumes EvidenceStore and registered evidence identity.
-- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Linking validates canonical transaction state through TransactionStore.
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `governed-by` -> DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract
-- `implements` -> FR-LEDGER-EVIDENCE-REGISTRATION: Register and link generic evidence
-- `touches` -> DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Linking is an idempotent public mutation.
+- `depends-on:compile` -> [TASK-LEDGER-EVIDENCE-REGISTRY: TASK-LEDGER-EVIDENCE-REGISTRY](evidence-registry.md): Linking consumes EvidenceStore and registered evidence identity.
+- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md): Linking validates canonical transaction state through TransactionStore.
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `governed-by` -> [DD-LEDGER-RECONCILIATION-CONTRACT: Explicit match-first evidence reconciliation contract](../../../designs/ledger/decisions/reconciliation-contract.md)
+- `implements` -> [FR-LEDGER-EVIDENCE-REGISTRATION: Register and link generic evidence](../../../prd/ledger/prd.md#fr-ledger-evidence-registration-register-and-link-generic-evidence)
+- `touches` -> [DM-LEDGER-EVIDENCE-RECORD-LINK: EvidenceRecordObservationAndLink](../../../designs/ledger/data-model.md#evidencerecordobservationandlink)
 - `verifies` -> TC-LEDGER-EVIDENCE-REGISTRATION-CONTRACT: Verify generic evidence registration and linkage
 
 ## Navigation

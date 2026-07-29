@@ -22,13 +22,13 @@ A focused contract suite proves budget.insights.evidence.get is coherent, comple
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation | `design_decision` | `governed-by` | `true` |
-| DM-BUDGET-INSIGHTS-READ-CONTRACT: BudgetReadCapabilityDescriptor | `data_model` | `touches` | `true` |
-| EXT-INSIGHTS-BUDGET-PUBLIC-READ-CONTRACT: BUDGET Public Read Contract | `external_dependency` | `references` | `true` |
-| EXT-INSIGHTS-LEDGER-ACTUALS-CONTRACT: LEDGER Actuals Contract | `external_dependency` | `references` | `true` |
-| TASK-BUDGET-GATE-INT-LEDGER-CONTRACT: Prove the Ledger budget prerequisite | `task` | `blocked-by` | `true` |
-| TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete BUDGET contract | `task` | `blocked-by` | `true` |
-| TASK-BUDGET-INSIGHTS-READ-PROJECTION: Publish the read-only INSIGHTS budget projection | `task` | `blocked-by` | `true` |
+| [DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation](../../../designs/insights/decisions/coherent-public-evidence.md) | `design_decision` | `governed-by` | `true` |
+| [DM-BUDGET-INSIGHTS-READ-CONTRACT: BudgetReadCapabilityDescriptor](../../../designs/budget/data-model.md#budgetreadcapabilitydescriptor) | `data_model` | `touches` | `true` |
+| [EXT-INSIGHTS-BUDGET-PUBLIC-READ-CONTRACT: BUDGET Public Read Contract](../../../prd/insights/prd.md#ext-insights-budget-public-read-contract-budget-public-read-contract) | `external_dependency` | `references` | `true` |
+| [EXT-INSIGHTS-LEDGER-ACTUALS-CONTRACT: LEDGER Actuals Contract](../../../prd/insights/prd.md#ext-insights-ledger-actuals-contract-ledger-actuals-contract) | `external_dependency` | `references` | `true` |
+| [TASK-BUDGET-GATE-INT-LEDGER-CONTRACT: Prove the Ledger budget prerequisite](../../budget/tasks/gate-int-ledger-contract.md) | `task` | `blocked-by` | `true` |
+| [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete BUDGET contract](../../budget/tasks/gate-int-public-contract.md) | `task` | `blocked-by` | `true` |
+| [TASK-BUDGET-INSIGHTS-READ-PROJECTION: Publish the read-only INSIGHTS budget projection](../../budget/tasks/insights-read-projection.md) | `task` | `blocked-by` | `true` |
 | TC-INSIGHTS-COHERENT-EVIDENCE-CONCURRENT-CORRECTION: Reject mixed producer states during concurrent correction | `test_case` | `verifies` | `true` |
 
 ## Dependencies
@@ -77,7 +77,7 @@ No task dependencies recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| VerifiedBudgetInsightEvidenceContract | `produces` | DM-BUDGET-INSIGHTS-READ-CONTRACT | proof that the released registry and public three-state composite satisfy the prerequisite |
+| VerifiedBudgetInsightEvidenceContract | `produces` | [DM-BUDGET-INSIGHTS-READ-CONTRACT](../../../designs/budget/data-model.md#budgetreadcapabilitydescriptor) | proof that the released registry and public three-state composite satisfy the prerequisite |
 
 ### Verification
 
@@ -102,13 +102,13 @@ No task dependencies recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-200` (verified)
-- `blocked-by` -> TASK-BUDGET-GATE-INT-LEDGER-CONTRACT: Prove the Ledger budget prerequisite
-- `blocked-by` -> TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete BUDGET contract
-- `blocked-by` -> TASK-BUDGET-INSIGHTS-READ-PROJECTION: Publish the read-only INSIGHTS budget projection
-- `governed-by` -> DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation
-- `references` -> EXT-INSIGHTS-BUDGET-PUBLIC-READ-CONTRACT: BUDGET Public Read Contract
-- `references` -> EXT-INSIGHTS-LEDGER-ACTUALS-CONTRACT: LEDGER Actuals Contract
-- `touches` -> DM-BUDGET-INSIGHTS-READ-CONTRACT: BudgetReadCapabilityDescriptor
+- `blocked-by` -> [TASK-BUDGET-GATE-INT-LEDGER-CONTRACT: Prove the Ledger budget prerequisite](../../budget/tasks/gate-int-ledger-contract.md)
+- `blocked-by` -> [TASK-BUDGET-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete BUDGET contract](../../budget/tasks/gate-int-public-contract.md)
+- `blocked-by` -> [TASK-BUDGET-INSIGHTS-READ-PROJECTION: Publish the read-only INSIGHTS budget projection](../../budget/tasks/insights-read-projection.md)
+- `governed-by` -> [DD-INSIGHTS-COHERENT-PUBLIC-EVIDENCE: Consume one BUDGET-owned coherent evidence operation](../../../designs/insights/decisions/coherent-public-evidence.md)
+- `references` -> [EXT-INSIGHTS-BUDGET-PUBLIC-READ-CONTRACT: BUDGET Public Read Contract](../../../prd/insights/prd.md#ext-insights-budget-public-read-contract-budget-public-read-contract)
+- `references` -> [EXT-INSIGHTS-LEDGER-ACTUALS-CONTRACT: LEDGER Actuals Contract](../../../prd/insights/prd.md#ext-insights-ledger-actuals-contract-ledger-actuals-contract)
+- `touches` -> [DM-BUDGET-INSIGHTS-READ-CONTRACT: BudgetReadCapabilityDescriptor](../../../designs/budget/data-model.md#budgetreadcapabilitydescriptor)
 - `verifies` -> TC-INSIGHTS-COHERENT-EVIDENCE-CONCURRENT-CORRECTION: Reject mixed producer states during concurrent correction
 
 ## Navigation

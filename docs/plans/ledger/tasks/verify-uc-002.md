@@ -22,18 +22,18 @@ Prove one Canonical Transaction plus generic initial evidence is atomic, privacy
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts | `data_model` | `touches` | `false` |
-| FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent | `requirement` | `verifies` | `true` |
-| FR-LEDGER-TRANSACTION-RECORDING: Record canonical transactions | `requirement` | `verifies` | `true` |
+| [DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts](../../../designs/ledger/data-model.md#transactionoperationcontracts) | `data_model` | `touches` | `false` |
+| [FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent](../../../prd/ledger/prd.md#fr-ledger-idempotent-writes-make-public-writes-idempotent) | `requirement` | `verifies` | `true` |
+| [FR-LEDGER-TRANSACTION-RECORDING: Record canonical transactions](../../../prd/ledger/prd.md#fr-ledger-transaction-recording-record-canonical-transaction) | `requirement` | `verifies` | `true` |
 | TC-LEDGER-IDEMPOTENT-WRITES-CONTRACT: Verify make public writes idempotent contract | `test_case` | `verifies` | `true` |
 | TC-LEDGER-TRANSACTION-RECORDING-CONTRACT: Verify record canonical transactions contract | `test_case` | `verifies` | `true` |
-| UC-LEDGER-002: Record a canonical transaction | `use_case` | `covers` | `true` |
+| [UC-LEDGER-002: Record a canonical transaction](../../../prd/ledger/prd.md#uc-ledger-002-record-a-canonical-transaction) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
+| [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Use-case verification invokes the fully wired published public contract. |
 
 ## Recipe
 
@@ -71,8 +71,8 @@ Prove one Canonical Transaction plus generic initial evidence is atomic, privacy
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
 | PublishedTallyFixture | `consumes` |  | Release published-process E2E fixture |
-| CompletePublicContract | `consumes` | DM-LEDGER-OPERATION-DESCRIPTOR | Exactly 72 provider-neutral operations |
-| VerifiedUC002 | `produces` | UC-LEDGER-002 | canonical transaction and initial evidence workflow |
+| CompletePublicContract | `consumes` | [DM-LEDGER-OPERATION-DESCRIPTOR](../../../designs/ledger/data-model.md#operationdescriptorandenvelope) | Exactly 72 provider-neutral operations |
+| VerifiedUC002 | `produces` | [UC-LEDGER-002](../../../prd/ledger/prd.md#uc-ledger-002-record-a-canonical-transaction) | canonical transaction and initial evidence workflow |
 
 ### Verification
 
@@ -98,13 +98,13 @@ Prove one Canonical Transaction plus generic initial evidence is atomic, privacy
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2m5` (verified)
-- `covers` -> UC-LEDGER-002: Record a canonical transaction
-- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
-- `touches` -> DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts
-- `verifies` -> FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent
-- `verifies` -> FR-LEDGER-TRANSACTION-RECORDING: Record canonical transactions
+- `covers` -> [UC-LEDGER-002: Record a canonical transaction](../../../prd/ledger/prd.md#uc-ledger-002-record-a-canonical-transaction)
+- `depends-on:compile` -> [TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Use-case verification invokes the fully wired published public contract.
+- `touches` -> [DM-LEDGER-TRANSACTION-CONTRACTS: TransactionOperationContracts](../../../designs/ledger/data-model.md#transactionoperationcontracts)
 - `verifies` -> TC-LEDGER-IDEMPOTENT-WRITES-CONTRACT: Verify make public writes idempotent contract
 - `verifies` -> TC-LEDGER-TRANSACTION-RECORDING-CONTRACT: Verify record canonical transactions contract
+- `verifies` -> [FR-LEDGER-IDEMPOTENT-WRITES: Make public writes idempotent](../../../prd/ledger/prd.md#fr-ledger-idempotent-writes-make-public-writes-idempotent)
+- `verifies` -> [FR-LEDGER-TRANSACTION-RECORDING: Record canonical transactions](../../../prd/ledger/prd.md#fr-ledger-transaction-recording-record-canonical-transaction)
 
 ## Navigation
 

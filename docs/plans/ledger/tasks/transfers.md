@@ -22,20 +22,20 @@ Create one attributable active transfer only when distinct owned-account legs sa
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history | `design_decision` | `governed-by` | `true` |
-| DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts | `data_model` | `touches` | `true` |
-| FR-LEDGER-TRANSFER-CONFIRMATION: Confirm owned-account transfers | `requirement` | `implements` | `true` |
-| NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history | `nfr` | `satisfies` | `true` |
+| [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md) | `design_decision` | `governed-by` | `true` |
+| [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) | `data_model` | `touches` | `true` |
+| [FR-LEDGER-TRANSFER-CONFIRMATION: Confirm owned-account transfers](../../../prd/ledger/prd.md#fr-ledger-transfer-confirmation-confirm-owned-account-transfers) | `requirement` | `implements` | `true` |
+| [NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history](../../../prd/ledger/prd.md#nfr-ledger-attributable-history-retain-attributable-correction-history) | `nfr` | `satisfies` | `true` |
 | TC-LEDGER-TRANSFER-CONFIRMATION-CONTRACT: Verify confirm owned-account transfers contract | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md) | `compile` | Transfer confirmation requires immutable transaction legs. |
-| [TASK-LEDGER-GATE-EVIDENCE-RELATIONSHIPS](../tasks/gate-evidence-relationships.md) | `compile` | Relationship policy cannot start until OQ-LEDGER-5 resolves. |
-| [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
-| [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](../tasks/gate-evidence-cash-withdrawals.md) | `compile` | Transfer invariants must not assume cash is external before OQ-LEDGER-16 resolves. |
+| [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md) | `compile` | Transfer confirmation requires immutable transaction legs. |
+| [TASK-LEDGER-GATE-EVIDENCE-RELATIONSHIPS: TASK-LEDGER-GATE-EVIDENCE-RELATIONSHIPS](gate-evidence-relationships.md) | `compile` | Relationship policy cannot start until OQ-LEDGER-5 resolves. |
+| [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md) | `compile` | Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract. |
+| [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS: TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](gate-evidence-cash-withdrawals.md) | `compile` | Transfer invariants must not assume cash is external before OQ-LEDGER-16 resolves. |
 
 ## Recipe
 
@@ -81,12 +81,12 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| TransferOperationModule | `produces` | DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS |  |
-| TransferPolicy | `produces` | DM-LEDGER-FINANCIAL-RELATIONSHIP |  |
-| RelationshipStore | `produces` | DM-LEDGER-FINANCIAL-RELATIONSHIP |  |
-| RelationshipStore.RetireForTransactionAsync | `produces` | DM-LEDGER-FINANCIAL-RELATIONSHIP |  |
-| TransactionStore | `consumes` | DM-LEDGER-TRANSACTION-FACT |  |
-| LedgerMutationExecutor.ExecuteAsync | `consumes` | DM-LEDGER-IDEMPOTENCY-RECORD |  |
+| TransferOperationModule | `produces` | [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts) |  |
+| TransferPolicy | `produces` | [DM-LEDGER-FINANCIAL-RELATIONSHIP](../../../designs/ledger/data-model.md#financialrelationshipandlifecycle) |  |
+| RelationshipStore | `produces` | [DM-LEDGER-FINANCIAL-RELATIONSHIP](../../../designs/ledger/data-model.md#financialrelationshipandlifecycle) |  |
+| RelationshipStore.RetireForTransactionAsync | `produces` | [DM-LEDGER-FINANCIAL-RELATIONSHIP](../../../designs/ledger/data-model.md#financialrelationshipandlifecycle) |  |
+| TransactionStore | `consumes` | [DM-LEDGER-TRANSACTION-FACT](../../../designs/ledger/data-model.md#transactionfact) |  |
+| LedgerMutationExecutor.ExecuteAsync | `consumes` | [DM-LEDGER-IDEMPOTENCY-RECORD](../../../designs/ledger/data-model.md#idempotencyandlogicaleffectidentity) |  |
 
 ### Verification
 
@@ -112,14 +112,14 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-xq6` (verified)
-- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY](../tasks/core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](../tasks/gate-evidence-cash-withdrawals.md): Transfer invariants must not assume cash is external before OQ-LEDGER-16 resolves.
-- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-RELATIONSHIPS](../tasks/gate-evidence-relationships.md): Relationship policy cannot start until OQ-LEDGER-5 resolves.
-- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET](../tasks/transactions-record-get.md): Transfer confirmation requires immutable transaction legs.
-- `governed-by` -> DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history
-- `implements` -> FR-LEDGER-TRANSFER-CONFIRMATION: Confirm owned-account transfers
-- `satisfies` -> NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history
-- `touches` -> DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts
+- `depends-on:compile` -> [TASK-LEDGER-CORE-IDEMPOTENCY: TASK-LEDGER-CORE-IDEMPOTENCY](core-idempotency.md): Consumer requires LedgerMutationExecutor.ExecuteAsync from its producing task; direct compile edge enforces the declared interface contract.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS: TASK-LEDGER-GATE-EVIDENCE-CASH-WITHDRAWALS](gate-evidence-cash-withdrawals.md): Transfer invariants must not assume cash is external before OQ-LEDGER-16 resolves.
+- `depends-on:compile` -> [TASK-LEDGER-GATE-EVIDENCE-RELATIONSHIPS: TASK-LEDGER-GATE-EVIDENCE-RELATIONSHIPS](gate-evidence-relationships.md): Relationship policy cannot start until OQ-LEDGER-5 resolves.
+- `depends-on:compile` -> [TASK-LEDGER-TRANSACTIONS-RECORD-GET: TASK-LEDGER-TRANSACTIONS-RECORD-GET](transactions-record-get.md): Transfer confirmation requires immutable transaction legs.
+- `governed-by` -> [DD-LEDGER-IMMUTABLE-HISTORY: Immutable facts, evidence, decisions, and append-only lifecycle history](../../../designs/ledger/decisions/immutable-history.md)
+- `implements` -> [FR-LEDGER-TRANSFER-CONFIRMATION: Confirm owned-account transfers](../../../prd/ledger/prd.md#fr-ledger-transfer-confirmation-confirm-owned-account-transfers)
+- `satisfies` -> [NFR-LEDGER-ATTRIBUTABLE-HISTORY: Retain attributable correction history](../../../prd/ledger/prd.md#nfr-ledger-attributable-history-retain-attributable-correction-history)
+- `touches` -> [DM-LEDGER-RELATIONSHIP-ACTUALS-CONTRACTS: RelationshipActualsOperationContracts](../../../designs/ledger/data-model.md#relationshipactualsoperationcontracts)
 - `verifies` -> TC-LEDGER-TRANSFER-CONFIRMATION-CONTRACT: Verify confirm owned-account transfers contract
 
 ## Navigation
