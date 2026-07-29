@@ -227,6 +227,17 @@ public sealed class GetBudgetPositionQuery
             {
                 requiredIds.Add(member.CategoryId);
             }
+
+            // Every frozen ancestry element must resolve in known Spend Category evidence
+            // (TASK-BUDGET-ENVELOPE-ANCESTRY-COMPOSITION) so archived ancestors absent from the
+            // default listing are still fetched before validation/resolution.
+            foreach (var ancestryId in member.AncestryIds)
+            {
+                if (!string.IsNullOrWhiteSpace(ancestryId))
+                {
+                    requiredIds.Add(ancestryId);
+                }
+            }
         }
 
         foreach (var categoryId in requiredIds.OrderBy(id => id, StringComparer.Ordinal))

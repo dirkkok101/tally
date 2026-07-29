@@ -791,6 +791,52 @@ public sealed class GetBudgetPositionQueryTests : IAsyncLifetime
         Assert.Equal(1_000, members[0].BudgetActualMinorUnits);
         Assert.Equal(-250, members[1].BudgetActualMinorUnits);
         Assert.Null(members[1].CategoryId);
+        Assert.Empty(members[1].AncestryIds);
+    }
+
+    // TASK-BUDGET-ENVELOPE-ANCESTRY-COMPOSITION / FrozenAncestryIds carried verbatim
+    [Fact]
+    public void TryMapActualMembers_carries_frozen_ancestry_ids_in_order()
+    {
+        var actuals = new ActualsQueryResult(
+            SnapshotId: "snap-1",
+            ExpiresAt: "2099-01-01T00:00:00Z",
+            TotalCount: 1,
+            Items:
+            [
+                Item(0, "tx-1", "2026-07-01", "child", "5.00", frozenAncestry: ["root", "parent", "child"])
+            ],
+            Totals: new ActualsTotalsResult("0", "5.00", "5.00"),
+            Groups: [],
+            Cursor: null,
+            LedgerContractVersion: ActualsContractVersions.Current,
+            StoreGenerationFingerprint: "gen-1");
+
+        Assert.True(BudgetContractMapper.TryMapActualMembers(
+            actuals, out var members, out _, out var error));
+        Assert.Null(error);
+        Assert.Equal(["root", "parent", "child"], members[0].AncestryIds);
+        Assert.Equal("child", members[0].CategoryId);
+    }
+
+    // TASK-BUDGET-ENVELOPE-ANCESTRY-COMPOSITION / uncategorized has empty ancestry
+    [Fact]
+    public void TryMapActualMembers_uncategorized_has_empty_ancestry()
+    {
+        var actuals = new ActualsQueryResult(
+            SnapshotId: "snap-1",
+            ExpiresAt: "2099-01-01T00:00:00Z",
+            TotalCount: 1,
+            Items: [Item(0, "tx-1", "2026-07-01", null, "1.00", frozenAncestry: ["should-not-use"])],
+            Totals: new ActualsTotalsResult("0", "1.00", "1.00"),
+            Groups: [],
+            Cursor: null,
+            LedgerContractVersion: ActualsContractVersions.Current,
+            StoreGenerationFingerprint: "gen-1");
+
+        Assert.True(BudgetContractMapper.TryMapActualMembers(actuals, out var members, out _, out _));
+        Assert.Null(members[0].CategoryId);
+        Assert.Empty(members[0].AncestryIds);
     }
 
     // FR-BUDGET-POSITION-QUERY / total mismatch integrity
@@ -1137,14 +1183,15 @@ public sealed class GetBudgetPositionQueryTests : IAsyncLifetime
         string transactionId,
         string date,
         string? categoryId,
-        string budgetActual) =>
+        string budgetActual,
+        IReadOnlyList<string>? frozenAncestry = null) =>
         new(
             ordinal,
             transactionId,
             date,
             categoryId is null ? TransactionCategoryState.Uncategorized : TransactionCategoryState.Categorized,
             categoryId,
-            FrozenAncestryIds: [],
+            FrozenAncestryIds: frozenAncestry ?? [],
             PoolState: TransactionPoolState.Unassigned,
             PoolId: null,
             InstrumentState: TransactionKnowledgeState.Unknown,

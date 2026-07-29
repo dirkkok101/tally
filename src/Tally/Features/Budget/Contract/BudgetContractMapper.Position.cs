@@ -104,14 +104,19 @@ public static partial class BudgetContractMapper
                 }
 
                 membershipSum = checked(membershipSum + contribution.MinorUnits);
-                // Ancestry/effective envelope provenance is populated by TASK-BUDGET-ENVELOPE-ANCESTRY-COMPOSITION.
+                // Frozen ancestry is consumed verbatim from the public LEDGER actuals snapshot
+                // (TASK-BUDGET-ENVELOPE-ANCESTRY-COMPOSITION / DD-BUDGET-LEDGER-PUBLIC-COMPOSITION).
+                // Uncategorized members (null CategoryId) carry an empty ancestry list.
+                IReadOnlyList<string> ancestry = item.CategoryId is null
+                    ? []
+                    : item.FrozenAncestryIds ?? [];
                 mapped.Add(new BudgetActualMember(
                     item.Ordinal,
                     item.TransactionId,
                     item.EffectiveDate,
                     item.CategoryId,
                     contribution.MinorUnits,
-                    AncestryIds: [],
+                    AncestryIds: ancestry,
                     EffectiveCategoryId: null));
             }
         }
