@@ -1,0 +1,32 @@
+{
+  "id": "01KYPWF5QAAJ1808D2VBTXD03F",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-ENVELOPE-NEAREST-ENTRY-WINS",
+  "slug": "ENVELOPE-NEAREST-ENTRY-WINS",
+  "title": "Nearest Category Budget Entry wins over a funded ancestor",
+  "level": "unit",
+  "surface": "service",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "steps": "Place Category Budget Entries on both a parent Spend Category and its depth-one child. Supply one Budget Actual on the child, one on a grandchild below the child, and one on a sibling Spend Category under the parent that carries no entry. Calculate the Budget Position.",
+  "expected": "The child position actual equals the exact sum of the child and grandchild Budget Actuals. The parent position actual equals only the sibling Budget Actual. Neither the child nor the grandchild Budget Actual appears in the parent row, and every Budget Actual appears exactly once across all rows.",
+  "implementation_ref": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "created_at": "2026-07-29T12:09:26.5077178+00:00",
+  "links": [
+    {
+      "id": "01KYPWF5QCQVNE9B4RB5G66225",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+      "rel": "validates",
+      "created_at": "2026-07-29T12:09:26.5086184+00:00"
+    },
+    {
+      "id": "01KYPWGK0KB8V5FD2PHVN0GEQK",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "verifies",
+      "created_at": "2026-07-29T12:10:12.8840102+00:00"
+    }
+  ]
+}

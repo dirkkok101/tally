@@ -8,7 +8,7 @@
   ],
   "status": "resolved",
   "decision": [
-    "Resolved by DD-BUDGET-EXACT-POSITION-CALCULATION: a Budget Entry governs only its exact assigned category (direct assignment); there is no subtree inheritance. A non-null assigned category omitted from the plan is Unbudgeted regardless of hierarchy, so parent and descendant entries may coexist and each governs only itself."
+    "Re-resolved for bd-3lrk, superseding the earlier exact-identity answer. A Category Budget Entry governs its exact Spend Category and, by DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION, every descendant Spend Category that carries no nearer entry. Parent and descendant entries may coexist: the nearest entry on a Budget Actual's frozen ancestry wins, and an explicit zero-amount descendant entry terminates the scan and blocks fallback to a funded ancestor. The double-counting hazard that motivated the original exact-identity answer is removed mechanically rather than by prohibition, because resolution returns exactly one governing entry per Budget Actual and each row reports a direct-versus-descendant partition that sums to that row's own total."
   ],
   "owner": "BUDGET design",
   "disposition": "unspecified",

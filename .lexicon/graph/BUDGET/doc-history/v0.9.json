@@ -1,0 +1,9 @@
+{
+  "id": "01KYPWQYEV7AFKQGABDF9CR4M9",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "version": "0.9",
+  "changes": [
+    "Design revision for bd-3lrk: nearest-ancestor Category Budget Entry resolution. Added DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION (accepted) superseding the exact-identity clause of DD-BUDGET-EXACT-POSITION-CALCULATION; re-resolved OQ-BUDGET-10 against subtree inheritance being prohibited; narrowed assumption A2; amended 1 and added 8 acceptance criteria on FR-BUDGET-POSITION-QUERY; extended DM-BUDGET-POSITION-PROJECTION with the direct/descendant partition and member ancestry provenance; added 12 planned test cases. CalculationSchemaVersion advances to budget-position-v2."
+  ],
+  "created_at": "2026-07-29T12:14:13.9807062+00:00"
+}

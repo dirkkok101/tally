@@ -8,7 +8,7 @@
   ],
   "schema_def": [
     "BudgetPosition",
-    "- calculationSchemaVersion",
+    "- calculationSchemaVersion: `budget-position-v2` (was `budget-position-v1`; ancestor row totals change meaning under unchanged field names, so consumers branch on this token)",
     "- planId, revisionId, revisionStatus",
     "- period {year,month,startInclusive,endExclusive,state}",
     "- currencyCode: ZAR",
@@ -24,11 +24,34 @@
     "- planned: Money? (null only Unbudgeted)",
     "- actual: signed Money",
     "- remaining, over: Money? (null only Unbudgeted)",
-    "UncategorizedPosition kind Uncategorized with categoryId/name absent, actual present, planned/remaining/over null.",
-    "Totals contain exact planned, actual, remaining, over and exact bucket subtotals. Planned equals explicit entry sum; actual equals Budgeted + ZeroBudget + Unbudgeted + Uncategorized. Negative actuals remain signed. No pace, forecast, trend, anomaly, recommendation, narrative, alert, control decision, or report-snapshot field."
+    "- directActualMinorUnits: Int64 — Budget Actuals whose exact assigned Spend Category equals this row category",
+    "- descendantActualMinorUnits: Int64 — Budget Actuals absorbed from descendant Spend Categories carrying no nearer Category Budget Entry",
+    "- absorbedCategoryIds: string[]? — the absorbed descendant Spend Category identifiers, ascending ordinal order, null or empty when nothing was absorbed",
+    "- Invariant: actual equals directActualMinorUnits plus descendantActualMinorUnits exactly. The partition reports the composition of the row total and is never additive on top of it.",
+    "- Unbudgeted rows never absorb: direct actual equals the row actual, descendant actual is exactly zero, absorbed identifiers empty. Only rows produced by a Category Budget Entry absorb descendants.",
+    "",
+    "UncategorizedPosition kind Uncategorized with categoryId/name absent, actual present, planned/remaining/over null, direct actual equal to the row actual, descendant actual zero, absorbed identifiers empty.",
+    "",
+    "Totals contain exact planned, actual, remaining, over and exact bucket subtotals. Planned equals explicit entry sum; actual equals Budgeted + ZeroBudget + Unbudgeted + Uncategorized. Negative actuals remain signed. No pace, forecast, trend, anomaly, recommendation, narrative, alert, control decision, or report-snapshot field.",
+    "",
+    "BudgetActualMember (shared with the INSIGHTS read contract; carries per-Budget-Actual envelope provenance)",
+    "- ordinal, transactionId, effectiveDate",
+    "- categoryId: string? — exact assigned Spend Category, null when Uncategorized Spend",
+    "- ancestryIds: string[] — frozen Spend Category ancestry from LEDGER ActualsPageItem.FrozenAncestryIds, root-first with the assigned Spend Category as the final element; empty when categoryId is null",
+    "- effectiveCategoryId: string? — the Spend Category whose Category Budget Entry governed this Budget Actual, or null when the outcome is Unbudgeted Spend or Uncategorized Spend",
+    "- budgetActualMinorUnits: Int64 signed",
+    "",
+    "Envelope resolution over ancestryIds is specified by DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION: scan from the final index toward index zero and take the first element carrying a Category Budget Entry. Ancestry validation mirrors the LEDGER ActualsCalculator invariant — non-empty and final element equal to categoryId when categorized, empty when uncategorized, distinct elements, every element present in the known Spend Category evidence set — and any violation returns the stable integrity failure with no partial result."
   ],
   "created_at": "2026-07-19T16:12:35.7392724+00:00",
   "links": [
+    {
+      "id": "01KYPWDQCH975ZX85VZYV4B4Y5",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+      "rel": "references",
+      "created_at": "2026-07-29T12:08:39.0575518+00:00"
+    },
     {
       "id": "01KXXJM9770JXSG2GY6S8R69C8",
       "target_type": "requirement",

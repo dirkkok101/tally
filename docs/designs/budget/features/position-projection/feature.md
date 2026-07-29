@@ -20,4 +20,4 @@ Public LEDGER snapshot composition, exact exhaustive position calculation, prove
 |---|---:|
 | Endpoints | 0 |
 | Mockups | 0 |
-| Test cases | 6 |
+| Test cases | 18 |

@@ -21,7 +21,7 @@ Generated from the lex graph. Root narratives are the readable workspace view; c
 |---|---:|---:|---:|
 | [features/contract-authority/feature.md](features/contract-authority/feature.md) | 0 | 0 | 3 |
 | [features/plans-lifecycle/feature.md](features/plans-lifecycle/feature.md) | 0 | 0 | 5 |
-| [features/position-projection/feature.md](features/position-projection/feature.md) | 0 | 0 | 6 |
+| [features/position-projection/feature.md](features/position-projection/feature.md) | 0 | 0 | 18 |
 | [features/storage-recovery/feature.md](features/storage-recovery/feature.md) | 0 | 0 | 1 |
 | [features/_ungrouped/feature.md](features/_ungrouped/feature.md) | 0 | 0 | 3 |
 
@@ -29,5 +29,5 @@ Generated from the lex graph. Root narratives are the readable workspace view; c
 
 | Set | Count |
 |---|---:|
-| [decisions/](decisions) | 9 |
+| [decisions/](decisions) | 10 |
 | [diagrams/](diagrams) | 5 |

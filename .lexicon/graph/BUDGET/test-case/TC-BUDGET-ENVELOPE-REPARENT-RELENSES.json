@@ -1,0 +1,32 @@
+{
+  "id": "01KYPWFBTAWP21WTEQTSD9TY8E",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-ENVELOPE-REPARENT-RELENSES",
+  "slug": "ENVELOPE-REPARENT-RELENSES",
+  "title": "Reparenting re-lenses a later Budget Position under a newly cited snapshot",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "steps": "Record a Budget Actual on a descendant Spend Category under a funded parent and read the Budget Position. Reparent that descendant under a different funded Spend Category through the public LEDGER operation. Read the Budget Position for the same Budget Period and revision again.",
+  "expected": "The second position attributes the Budget Actual to the new funded ancestor, cites a different LEDGER snapshot identifier, and reports the same bound Budget Plan Revision identifier and status, confirming that determinism holds within one cited snapshot rather than across time.",
+  "implementation_ref": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "created_at": "2026-07-29T12:09:32.7471722+00:00",
+  "links": [
+    {
+      "id": "01KYPWFBTCMYNHQTF73H74T5GN",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+      "rel": "validates",
+      "created_at": "2026-07-29T12:09:32.7481472+00:00"
+    },
+    {
+      "id": "01KYPWGS40D5KC0GEPKFRWNQ51",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "verifies",
+      "created_at": "2026-07-29T12:10:19.1372392+00:00"
+    }
+  ]
+}

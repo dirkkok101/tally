@@ -1,0 +1,32 @@
+{
+  "id": "01KYPWF91RPV3VH9SYH5E46J7X",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-ENVELOPE-MEMBER-PROVENANCE",
+  "slug": "ENVELOPE-MEMBER-PROVENANCE",
+  "title": "INSIGHTS read projection reports frozen ancestry and effective Spend Category",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "steps": "Record Budget Actuals across a depth-three Spend Category tree with entries on the root and one descendant. Request the INSIGHTS read projection through the public budget.insights.evidence.get operation.",
+  "expected": "Each Budget Actual member reports its frozen ancestry root-first with its assigned Spend Category as the final element, and reports the effective Spend Category identifier that governed it. Members resolving to Unbudgeted Spend or Uncategorized Spend report a null effective Spend Category identifier.",
+  "implementation_ref": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "created_at": "2026-07-29T12:09:29.9133007+00:00",
+  "links": [
+    {
+      "id": "01KYPWF91T5Q7G35VRQ89NY3Z1",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+      "rel": "validates",
+      "created_at": "2026-07-29T12:09:29.9143125+00:00"
+    },
+    {
+      "id": "01KYPWGPG5VHYDAXGX7C4KDFQG",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "verifies",
+      "created_at": "2026-07-29T12:10:16.4546933+00:00"
+    }
+  ]
+}

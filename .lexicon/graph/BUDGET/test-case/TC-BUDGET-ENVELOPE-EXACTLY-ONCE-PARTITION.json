@@ -1,0 +1,32 @@
+{
+  "id": "01KYPWF7PERK2NEA8E3TVRY18C",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-ENVELOPE-EXACTLY-ONCE-PARTITION",
+  "slug": "ENVELOPE-EXACTLY-ONCE-PARTITION",
+  "title": "Direct and descendant partition reconciles to the membership total for arbitrary trees",
+  "level": "unit",
+  "surface": "service",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "steps": "Generate arbitrary Spend Category trees, arbitrary Category Budget Entry placements including zero amounts, and arbitrary Budget Actual assignments including uncategorized members. Calculate the Budget Position for each generated case.",
+  "expected": "For every case each row actual equals its direct actual plus its descendant actual exactly, the sum of all row actuals plus Uncategorized Spend equals the membership total, and each member ordinal contributes to exactly one row.",
+  "implementation_ref": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "created_at": "2026-07-29T12:09:28.5274776+00:00",
+  "links": [
+    {
+      "id": "01KYPWF7PG1XQ3P0EXQ5YK148Y",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+      "rel": "validates",
+      "created_at": "2026-07-29T12:09:28.5281491+00:00"
+    },
+    {
+      "id": "01KYPWGN40W58K2X946RJKX501",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "verifies",
+      "created_at": "2026-07-29T12:10:15.0409713+00:00"
+    }
+  ]
+}

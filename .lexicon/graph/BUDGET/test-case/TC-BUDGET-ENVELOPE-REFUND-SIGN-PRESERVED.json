@@ -1,0 +1,32 @@
+{
+  "id": "01KYPWFAFAXWADXTH5HEJG79GD",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-ENVELOPE-REFUND-SIGN-PRESERVED",
+  "slug": "ENVELOPE-REFUND-SIGN-PRESERVED",
+  "title": "Refund-heavy descendant Budget Actuals resolve identically and stay signed",
+  "level": "unit",
+  "surface": "service",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "steps": "Place one Category Budget Entry on a parent Spend Category. Supply descendant Budget Actuals whose signed sum is negative because refunds exceed spend. Calculate the Budget Position.",
+  "expected": "The parent descendant actual and row actual preserve the exact negative value without clamping or reclassification, the row stays in the Budgeted bucket, and the membership reconciliation assertion still holds.",
+  "implementation_ref": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "created_at": "2026-07-29T12:09:31.3710951+00:00",
+  "links": [
+    {
+      "id": "01KYPWFAFCAP0W0JB9NVDPWGDE",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+      "rel": "validates",
+      "created_at": "2026-07-29T12:09:31.3720532+00:00"
+    },
+    {
+      "id": "01KYPWGQRXZJB8G1WGFP9CDSJ0",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "verifies",
+      "created_at": "2026-07-29T12:10:17.7587047+00:00"
+    }
+  ]
+}

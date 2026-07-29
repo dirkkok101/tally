@@ -1,0 +1,32 @@
+{
+  "id": "01KYPWF50EZC646YQ0C8EX9YN1",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-ENVELOPE-PARENT-ABSORBS-DESCENDANTS",
+  "slug": "ENVELOPE-PARENT-ABSORBS-DESCENDANTS",
+  "title": "Parent Category Budget Entry absorbs multi-level descendant Budget Actuals",
+  "level": "unit",
+  "surface": "service",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "steps": "Build a Spend Category tree of depth three. Place one Category Budget Entry with Planned Spend 600000 on the root. Supply Budget Actuals assigned to the root directly, to the depth-one child, and to the depth-two grandchild, none of which carry an entry. Calculate the Budget Position.",
+  "expected": "The root Budgeted position actual equals the exact sum of all three Budget Actuals. Its direct actual equals only the root-assigned Budget Actual, its descendant actual equals the sum of the child and grandchild Budget Actuals, and its absorbed identifiers list the child and grandchild in ascending ordinal order. No Unbudgeted Spend row is produced for the child or grandchild.",
+  "implementation_ref": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "created_at": "2026-07-29T12:09:25.7758626+00:00",
+  "links": [
+    {
+      "id": "01KYPWF50G2TKR0F418MMAX3XZ",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+      "rel": "validates",
+      "created_at": "2026-07-29T12:09:25.7768440+00:00"
+    },
+    {
+      "id": "01KYPWGJASJDBXSMTFZM8Z0FKF",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "verifies",
+      "created_at": "2026-07-29T12:10:12.1863582+00:00"
+    }
+  ]
+}

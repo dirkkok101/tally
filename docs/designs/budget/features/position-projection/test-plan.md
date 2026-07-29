@@ -6,12 +6,30 @@
 
 | Metric | Count |
 |---|---:|
-| Total test cases | 6 |
-| E2E | 1 |
-| INTEGRATION | 4 |
-| UNIT | 1 |
+| Total test cases | 18 |
+| E2E | 2 |
+| INTEGRATION | 5 |
+| UNIT | 11 |
 
 ## E2E
+
+### Edge
+
+#### Reparenting re-lenses a later Budget Position under a newly cited snapshot
+
+**Ref Code:** TC-BUDGET-ENVELOPE-REPARENT-RELENSES
+**Surface:** contract
+**Automation:** automated
+**Status:** planned
+**Implementation Ref:** DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION
+
+##### Steps
+
+Record a Budget Actual on a descendant Spend Category under a funded parent and read the Budget Position. Reparent that descendant under a different funded Spend Category through the public LEDGER operation. Read the Budget Position for the same Budget Period and revision again.
+
+##### Expected
+
+The second position attributes the Budget Actual to the new funded ancestor, cites a different LEDGER snapshot identifier, and reports the same bound Budget Plan Revision identifier and status, confirming that determinism holds within one cited snapshot rather than across time.
 
 ### Performance
 
@@ -58,6 +76,22 @@ Invoke the relevant Public Budget Operations and exercise every acceptance crite
 ##### Expected
 
 Every acceptance criterion of FR-BUDGET-CATEGORY-LIFECYCLE holds; all documented errors are stable; every rejected or failed mutation leaves the required prior state unchanged; no prohibited side effect occurs.
+
+#### INSIGHTS read projection reports frozen ancestry and effective Spend Category
+
+**Ref Code:** TC-BUDGET-ENVELOPE-MEMBER-PROVENANCE
+**Surface:** contract
+**Automation:** automated
+**Status:** planned
+**Implementation Ref:** DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION
+
+##### Steps
+
+Record Budget Actuals across a depth-three Spend Category tree with entries on the root and one descendant. Request the INSIGHTS read projection through the public budget.insights.evidence.get operation.
+
+##### Expected
+
+Each Budget Actual member reports its frozen ancestry root-first with its assigned Spend Category as the final element, and reports the effective Spend Category identifier that governed it. Members resolving to Unbudgeted Spend or Uncategorized Spend report a null effective Spend Category identifier.
 
 #### Verify read-only INSIGHTS projection contract
 
@@ -121,7 +155,171 @@ Every acceptance criterion of FR-BUDGET-POSITION-QUERY holds; all documented err
 
 ## UNIT
 
+### Happy
+
+#### Flat Spend Category taxonomy matches the `budget-position-v1` result
+
+**Ref Code:** TC-BUDGET-ENVELOPE-FLAT-TAXONOMY-UNCHANGED
+**Surface:** service
+**Automation:** automated
+**Status:** planned
+**Implementation Ref:** DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION
+
+##### Steps
+
+Build a Budget Plan Revision whose Spend Categories are all root nodes with no descendants. Supply Budget Actuals across budgeted, Zero Budget, omitted, and uncategorized states. Calculate the Budget Position under `budget-position-v2`.
+
+##### Expected
+
+Every bucket assignment, category ordering, row actual, direct actual, planned value, variance, and total is identical to the `budget-position-v1` result for the same inputs, and every descendant actual is exactly zero with empty absorbed identifiers.
+
+#### Nearest Category Budget Entry wins over a funded ancestor
+
+**Ref Code:** TC-BUDGET-ENVELOPE-NEAREST-ENTRY-WINS
+**Surface:** service
+**Automation:** automated
+**Status:** planned
+**Implementation Ref:** DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION
+
+##### Steps
+
+Place Category Budget Entries on both a parent Spend Category and its depth-one child. Supply one Budget Actual on the child, one on a grandchild below the child, and one on a sibling Spend Category under the parent that carries no entry. Calculate the Budget Position.
+
+##### Expected
+
+The child position actual equals the exact sum of the child and grandchild Budget Actuals. The parent position actual equals only the sibling Budget Actual. Neither the child nor the grandchild Budget Actual appears in the parent row, and every Budget Actual appears exactly once across all rows.
+
+#### Parent Category Budget Entry absorbs multi-level descendant Budget Actuals
+
+**Ref Code:** TC-BUDGET-ENVELOPE-PARENT-ABSORBS-DESCENDANTS
+**Surface:** service
+**Automation:** automated
+**Status:** planned
+**Implementation Ref:** DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION
+
+##### Steps
+
+Build a Spend Category tree of depth three. Place one Category Budget Entry with Planned Spend 600000 on the root. Supply Budget Actuals assigned to the root directly, to the depth-one child, and to the depth-two grandchild, none of which carry an entry. Calculate the Budget Position.
+
+##### Expected
+
+The root Budgeted position actual equals the exact sum of all three Budget Actuals. Its direct actual equals only the root-assigned Budget Actual, its descendant actual equals the sum of the child and grandchild Budget Actuals, and its absorbed identifiers list the child and grandchild in ascending ordinal order. No Unbudgeted Spend row is produced for the child or grandchild.
+
+### Unhappy
+
+#### Malformed frozen Spend Category ancestry returns the stable integrity failure
+
+**Ref Code:** TC-BUDGET-ENVELOPE-ANCESTRY-INTEGRITY
+**Surface:** service
+**Automation:** automated
+**Status:** planned
+**Implementation Ref:** DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION
+
+##### Steps
+
+Supply Budget Actual members with, in turn, an empty ancestry for a categorized member, an ancestry whose final element differs from the assigned Spend Category identifier, an ancestry repeating one identifier, an ancestry naming a Spend Category absent from the known evidence set, and a non-empty ancestry for an uncategorized member. Calculate the Budget Position for each.
+
+##### Expected
+
+Each case returns the stable BUDGET integrity failure with no partial totals, no position row, and an amount-free integrity reason token.
+
+#### Unbudgeted Spend keyed by exact Spend Category when no ancestry element carries an entry
+
+**Ref Code:** TC-BUDGET-ENVELOPE-UNBUDGETED-FALLBACK
+**Surface:** service
+**Automation:** automated
+**Status:** planned
+**Implementation Ref:** DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION
+
+##### Steps
+
+Build a Spend Category tree where no element of a Budget Actual's ancestry carries a Category Budget Entry. Supply Budget Actuals on two distinct descendant Spend Categories in that unfunded tree. Calculate the Budget Position.
+
+##### Expected
+
+Each Budget Actual appears exactly once as Unbudgeted Spend keyed by its own exact assigned Spend Category identifier, not by any ancestor. Planned, Remaining, and Over are null on both rows and no ancestor row is fabricated.
+
 ### Edge
+
+#### Archived ancestor carrying a Category Budget Entry still governs
+
+**Ref Code:** TC-BUDGET-ENVELOPE-ARCHIVED-ANCESTOR-CAPTURES
+**Surface:** service
+**Automation:** automated
+**Status:** planned
+**Implementation Ref:** DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION
+
+##### Steps
+
+Place a Category Budget Entry on a parent Spend Category, archive that parent in LEDGER, and supply Budget Actuals on an active descendant that carries no entry. Calculate the Budget Position.
+
+##### Expected
+
+The archived parent position absorbs the descendant Budget Actuals exactly once and reports its archived lifecycle, matching the existing rule that Spend Category lifecycle never changes bucket assignment.
+
+#### Direct and descendant partition reconciles to the membership total for arbitrary trees
+
+**Ref Code:** TC-BUDGET-ENVELOPE-EXACTLY-ONCE-PARTITION
+**Surface:** service
+**Automation:** automated
+**Status:** planned
+**Implementation Ref:** DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION
+
+##### Steps
+
+Generate arbitrary Spend Category trees, arbitrary Category Budget Entry placements including zero amounts, and arbitrary Budget Actual assignments including uncategorized members. Calculate the Budget Position for each generated case.
+
+##### Expected
+
+For every case each row actual equals its direct actual plus its descendant actual exactly, the sum of all row actuals plus Uncategorized Spend equals the membership total, and each member ordinal contributes to exactly one row.
+
+#### Checked Int64 overflow during descendant aggregation returns no partial result
+
+**Ref Code:** TC-BUDGET-ENVELOPE-OVERFLOW-INTEGRITY
+**Surface:** service
+**Automation:** automated
+**Status:** planned
+**Implementation Ref:** DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION
+
+##### Steps
+
+Place one Category Budget Entry on a parent Spend Category and supply descendant Budget Actuals whose absorbed sum exceeds Int64 range. Calculate the Budget Position.
+
+##### Expected
+
+The calculation returns the stable BUDGET integrity failure with an amount-free integrity reason token, produces no position row and no totals, and leaks no amount into the failure message.
+
+#### Refund-heavy descendant Budget Actuals resolve identically and stay signed
+
+**Ref Code:** TC-BUDGET-ENVELOPE-REFUND-SIGN-PRESERVED
+**Surface:** service
+**Automation:** automated
+**Status:** planned
+**Implementation Ref:** DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION
+
+##### Steps
+
+Place one Category Budget Entry on a parent Spend Category. Supply descendant Budget Actuals whose signed sum is negative because refunds exceed spend. Calculate the Budget Position.
+
+##### Expected
+
+The parent descendant actual and row actual preserve the exact negative value without clamping or reclassification, the row stays in the Budgeted bucket, and the membership reconciliation assertion still holds.
+
+#### Explicit Zero Budget descendant entry blocks fallback to a funded ancestor
+
+**Ref Code:** TC-BUDGET-ENVELOPE-ZERO-CHILD-BLOCKS-PARENT
+**Surface:** service
+**Automation:** automated
+**Status:** planned
+**Implementation Ref:** DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION
+
+##### Steps
+
+Place a Category Budget Entry with Planned Spend 600000 on a parent Spend Category and a Category Budget Entry with Planned Spend 0 on its descendant. Supply Budget Actuals assigned to that descendant and to a Spend Category below it. Calculate the Budget Position.
+
+##### Expected
+
+Both Budget Actuals appear exactly once in the descendant Zero Budget Position. The parent Budgeted position actual excludes them and its remaining value stays at 600000. The Zero Budget Position row reports Over equal to the absorbed total.
 
 #### Verify exact budget arithmetic
 

@@ -1,0 +1,32 @@
+{
+  "id": "01KYPWF9NNK1FN3RMES2JBR2F1",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-ENVELOPE-ANCESTRY-INTEGRITY",
+  "slug": "ENVELOPE-ANCESTRY-INTEGRITY",
+  "title": "Malformed frozen Spend Category ancestry returns the stable integrity failure",
+  "level": "unit",
+  "surface": "service",
+  "scenario": "unhappy",
+  "automation": "automated",
+  "status": "planned",
+  "steps": "Supply Budget Actual members with, in turn, an empty ancestry for a categorized member, an ancestry whose final element differs from the assigned Spend Category identifier, an ancestry repeating one identifier, an ancestry naming a Spend Category absent from the known evidence set, and a non-empty ancestry for an uncategorized member. Calculate the Budget Position for each.",
+  "expected": "Each case returns the stable BUDGET integrity failure with no partial totals, no position row, and an amount-free integrity reason token.",
+  "implementation_ref": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "created_at": "2026-07-29T12:09:30.5496799+00:00",
+  "links": [
+    {
+      "id": "01KYPWF9NPRH6H7QAVEBXDWVWW",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+      "rel": "validates",
+      "created_at": "2026-07-29T12:09:30.5503830+00:00"
+    },
+    {
+      "id": "01KYPWGQ34Z2T1RG2XGWQY3C3X",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "verifies",
+      "created_at": "2026-07-29T12:10:17.0612795+00:00"
+    }
+  ]
+}

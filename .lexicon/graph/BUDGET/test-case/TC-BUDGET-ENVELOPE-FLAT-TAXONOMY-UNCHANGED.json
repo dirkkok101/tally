@@ -1,0 +1,32 @@
+{
+  "id": "01KYPWF8C9Z8XSK1XBP9Y0HXS8",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-ENVELOPE-FLAT-TAXONOMY-UNCHANGED",
+  "slug": "ENVELOPE-FLAT-TAXONOMY-UNCHANGED",
+  "title": "Flat Spend Category taxonomy matches the `budget-position-v1` result",
+  "level": "unit",
+  "surface": "service",
+  "scenario": "happy",
+  "automation": "automated",
+  "status": "planned",
+  "steps": "Build a Budget Plan Revision whose Spend Categories are all root nodes with no descendants. Supply Budget Actuals across budgeted, Zero Budget, omitted, and uncategorized states. Calculate the Budget Position under `budget-position-v2`.",
+  "expected": "Every bucket assignment, category ordering, row actual, direct actual, planned value, variance, and total is identical to the `budget-position-v1` result for the same inputs, and every descendant actual is exactly zero with empty absorbed identifiers.",
+  "implementation_ref": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "created_at": "2026-07-29T12:09:29.2269313+00:00",
+  "links": [
+    {
+      "id": "01KYPWF8CCWVYY3G473J694R2T",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+      "rel": "validates",
+      "created_at": "2026-07-29T12:09:29.2280511+00:00"
+    },
+    {
+      "id": "01KYPWGNT0Z14E5F1QZC5B55ZJ",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "verifies",
+      "created_at": "2026-07-29T12:10:15.7456044+00:00"
+    }
+  ]
+}

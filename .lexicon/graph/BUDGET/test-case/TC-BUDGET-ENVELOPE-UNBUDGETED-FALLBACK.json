@@ -1,0 +1,32 @@
+{
+  "id": "01KYPWF70N6NV060Q0Z3ETAZN6",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-ENVELOPE-UNBUDGETED-FALLBACK",
+  "slug": "ENVELOPE-UNBUDGETED-FALLBACK",
+  "title": "Unbudgeted Spend keyed by exact Spend Category when no ancestry element carries an entry",
+  "level": "unit",
+  "surface": "service",
+  "scenario": "unhappy",
+  "automation": "automated",
+  "status": "planned",
+  "steps": "Build a Spend Category tree where no element of a Budget Actual's ancestry carries a Category Budget Entry. Supply Budget Actuals on two distinct descendant Spend Categories in that unfunded tree. Calculate the Budget Position.",
+  "expected": "Each Budget Actual appears exactly once as Unbudgeted Spend keyed by its own exact assigned Spend Category identifier, not by any ancestor. Planned, Remaining, and Over are null on both rows and no ancestor row is fabricated.",
+  "implementation_ref": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "created_at": "2026-07-29T12:09:27.8305451+00:00",
+  "links": [
+    {
+      "id": "01KYPWF70Q7EH681375X2SR1XP",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+      "rel": "validates",
+      "created_at": "2026-07-29T12:09:27.8314620+00:00"
+    },
+    {
+      "id": "01KYPWGMEERY5Q70EG3NS77B45",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "verifies",
+      "created_at": "2026-07-29T12:10:14.3516058+00:00"
+    }
+  ]
+}

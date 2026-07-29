@@ -1,0 +1,32 @@
+{
+  "id": "01KYPWFCDP35MAPVKTWKZ63X8W",
+  "module_id": "01KXR4WNPW86216H643PZ6KA36",
+  "ref_code": "TC-BUDGET-ENVELOPE-OVERFLOW-INTEGRITY",
+  "slug": "ENVELOPE-OVERFLOW-INTEGRITY",
+  "title": "Checked Int64 overflow during descendant aggregation returns no partial result",
+  "level": "unit",
+  "surface": "service",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "steps": "Place one Category Budget Entry on a parent Spend Category and supply descendant Budget Actuals whose absorbed sum exceeds Int64 range. Calculate the Budget Position.",
+  "expected": "The calculation returns the stable BUDGET integrity failure with an amount-free integrity reason token, produces no position row and no totals, and leaks no amount into the failure message.",
+  "implementation_ref": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "created_at": "2026-07-29T12:09:33.3676239+00:00",
+  "links": [
+    {
+      "id": "01KYPWFCDRH3HHQJ239DJMSVF8",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+      "rel": "validates",
+      "created_at": "2026-07-29T12:09:33.3683552+00:00"
+    },
+    {
+      "id": "01KYPWGSS1YXDTEW0K288HBCY1",
+      "target_type": "requirement",
+      "target": "FR-BUDGET-POSITION-QUERY",
+      "rel": "verifies",
+      "created_at": "2026-07-29T12:10:19.8103805+00:00"
+    }
+  ]
+}
