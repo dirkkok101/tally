@@ -8,5 +8,18 @@
     <NoWarn>$(NoWarn);NU1507</NoWarn>
     <AnalysisLevel>latest</AnalysisLevel>
     <LangVersion>latest</LangVersion>
+
+    <!--
+      Product semver (all projects inherit this):
+        - Major 0 until every planned module ships, then 1.0.0
+        - Minor = completed feature modules (ledger, ingest, budget → 0.3.x)
+        - Patch = product commits within the current module wave
+      Bump only here; Tally.ProductVersion reads the assembly InformationalVersion.
+      API contractVersion (request envelopes) is independent and stays on 1.0 for now.
+    -->
+    <Version>0.3.0</Version>
+    <AssemblyVersion>0.3.0.0</AssemblyVersion>
+    <FileVersion>0.3.0.0</FileVersion>
+    <InformationalVersion>$(Version)</InformationalVersion>
   </PropertyGroup>
 </Project>

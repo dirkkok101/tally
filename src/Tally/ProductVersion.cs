@@ -14,7 +14,8 @@ namespace Tally;
 /// </list>
 /// Completed modules today: ledger, ingest, budget → <c>0.3.x</c>.
 /// Contract version (<c>system.version.contractVersion</c> / request envelopes) is independent and stays on the published API line (currently <c>1.0</c>).
-/// Bump <c>Version</c> in <c>Tally.csproj</c> (single source of truth); this type only reads the assembly.
+/// Bump <c>Version</c> in repo-root <c>Directory.Build.props</c> (single source of truth for every project);
+/// this type only reads the assembly informational version.
 /// </remarks>
 public static class ProductVersion
 {
