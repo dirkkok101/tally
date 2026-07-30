@@ -11,7 +11,7 @@ namespace Tally.Features.System.Guidance;
 
 public sealed class GuidanceService()
 {
-    private const string ExecutableVersion = "0.3.1";
+    private const string ExecutableVersion = "0.3.2";
     private const string ContractVersion = "1.0";
     private const string InstalledManifestName = ".tally-guidance.json";
     private static readonly string[] SupportedHosts = ["claude-code", "codex"];

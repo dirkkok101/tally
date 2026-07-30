@@ -83,7 +83,7 @@ Concepts worth knowing before you start:
 | Insights (reports, restatements, retention) | Designed and planned; implementation in progress |
 | Classify (automatic transaction classification) | Designed and planned; not yet implemented |
 
-Current version: **0.3.1**, contract version **1.0**. Pre-1.0 the executable
+Current version: **0.3.2**, contract version **1.0**. Pre-1.0 the executable
 version moves faster than the command contract, and the contract version is the
 thing to pin against.
 
@@ -119,7 +119,7 @@ tally version
 ```
 
 ```json
-{"contractVersion":"1.0","operationId":"system.version","outcome":"success","result":{"product":"tally","version":"0.3.1","contractVersion":"1.0","compatibility":"1.0"},"error":null}
+{"contractVersion":"1.0","operationId":"system.version","outcome":"success","result":{"product":"tally","version":"0.3.2","contractVersion":"1.0","compatibility":"1.0"},"error":null}
 ```
 
 ### Point Tally at a data directory
