@@ -5,7 +5,7 @@
   "ref_code": "TC-BUDGET-EXACT-FINANCIAL-INTEGRITY",
   "repo_path": "tests/Tally.Tests/Budget/Position/BudgetPositionCalculatorTests.cs",
   "anchor_kind": "test",
-  "last_verified_hash": "5df63b136de61aa9f7085d07c2d4310c12a258073db782b6dd0f39810e2ad2ac",
-  "last_verified_at": "2026-07-27T14:29:10.4986834+00:00",
+  "last_verified_hash": "72359861db0894ea9f0347d84a7066fdd65cee8634e87b4e5f2c56802bf77a13",
+  "last_verified_at": "2026-07-30T06:52:22.3377716+00:00",
   "created_at": "2026-07-27T14:29:10.4986834+00:00"
 }

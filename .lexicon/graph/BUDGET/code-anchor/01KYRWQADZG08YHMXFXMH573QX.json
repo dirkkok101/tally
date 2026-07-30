@@ -1,0 +1,11 @@
+{
+  "id": "01KYRWQADZG08YHMXFXMH573QX",
+  "entity_type": "test_case",
+  "entity_id": "01KYPWF9NNK1FN3RMES2JBR2F1",
+  "ref_code": "TC-BUDGET-ENVELOPE-ANCESTRY-INTEGRITY",
+  "repo_path": "tests/Tally.Tests/Budget/Position/BudgetEnvelopeIntegrityTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "620fce86a6c4971a34b1f81fbe199cccefb9a6c1080fbad29995c59712cf9656",
+  "last_verified_at": "2026-07-30T06:52:22.3357834+00:00",
+  "created_at": "2026-07-30T06:52:22.3357834+00:00"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "01KYRWQAE07RDZRADBCSSETJEA",
+  "entity_type": "test_case",
+  "entity_id": "01KYPWF50EZC646YQ0C8EX9YN1",
+  "ref_code": "TC-BUDGET-ENVELOPE-PARENT-ABSORBS-DESCENDANTS",
+  "repo_path": "tests/Tally.Tests/Budget/Position/BudgetEnvelopeResolutionTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "0f490b1313410589399ff77eb8b603cfb0a9e5167b69df0dad9b43bc26d77b59",
+  "last_verified_at": "2026-07-30T06:52:22.3368606+00:00",
+  "created_at": "2026-07-30T06:52:22.3368606+00:00"
+}

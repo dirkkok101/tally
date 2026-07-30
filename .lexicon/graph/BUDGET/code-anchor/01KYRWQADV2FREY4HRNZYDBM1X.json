@@ -1,0 +1,11 @@
+{
+  "id": "01KYRWQADV2FREY4HRNZYDBM1X",
+  "entity_type": "design_decision",
+  "entity_id": "01KYPWA2YVT08ESV0F40Q09DQZ",
+  "ref_code": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "repo_path": "src/Tally/Domain/Budget/Position/BudgetPositionCalculator.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "691c53238fd3fa40b1e0c644aef9bc2d01315865c88aa9d79ba1e7dfbcb5d727",
+  "last_verified_at": "2026-07-30T06:52:22.3315650+00:00",
+  "created_at": "2026-07-30T06:52:22.3315650+00:00"
+}

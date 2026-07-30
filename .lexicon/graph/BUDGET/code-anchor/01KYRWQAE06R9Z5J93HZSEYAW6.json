@@ -1,0 +1,11 @@
+{
+  "id": "01KYRWQAE06R9Z5J93HZSEYAW6",
+  "entity_type": "test_case",
+  "entity_id": "01KYPWF7PERK2NEA8E3TVRY18C",
+  "ref_code": "TC-BUDGET-ENVELOPE-EXACTLY-ONCE-PARTITION",
+  "repo_path": "tests/Tally.Tests/Budget/Position/BudgetEnvelopeResolutionTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "0f490b1313410589399ff77eb8b603cfb0a9e5167b69df0dad9b43bc26d77b59",
+  "last_verified_at": "2026-07-30T06:52:22.3361040+00:00",
+  "created_at": "2026-07-30T06:52:22.3361040+00:00"
+}

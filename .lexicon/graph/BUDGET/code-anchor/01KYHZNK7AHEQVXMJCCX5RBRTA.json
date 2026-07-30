@@ -5,7 +5,7 @@
   "ref_code": "TC-BUDGET-STRUCTURED-INVOCATION-CONTRACT",
   "repo_path": "tests/Tally.Tests/Budget/Process/BudgetProcessContractTests.cs",
   "anchor_kind": "test",
-  "last_verified_hash": "39ee2add85ca8a546d1baa8e1034a64c9f14ab1cdd4acaaece1798f3089c8fdd",
-  "last_verified_at": "2026-07-28T06:38:54.7700261+00:00",
+  "last_verified_hash": "16dedfc8df6de5a4589ea05f59759000391517a47f05b39c53cc50813cc0446a",
+  "last_verified_at": "2026-07-30T06:52:22.3410048+00:00",
   "created_at": "2026-07-27T14:29:10.5063175+00:00"
 }

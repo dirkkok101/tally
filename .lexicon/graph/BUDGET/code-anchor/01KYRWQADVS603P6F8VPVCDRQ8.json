@@ -1,0 +1,11 @@
+{
+  "id": "01KYRWQADVS603P6F8VPVCDRQ8",
+  "entity_type": "design_decision",
+  "entity_id": "01KYPWA2YVT08ESV0F40Q09DQZ",
+  "ref_code": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+  "repo_path": "src/Tally/Contracts/Budget/Position/BudgetPositionContracts.cs",
+  "anchor_kind": "implementation",
+  "last_verified_hash": "76e25dbb1ca86934d6e0c1ca378a70e4fe4580eaf82d89b28f2707dd9498474a",
+  "last_verified_at": "2026-07-30T06:52:22.3313808+00:00",
+  "created_at": "2026-07-30T06:52:22.3313808+00:00"
+}

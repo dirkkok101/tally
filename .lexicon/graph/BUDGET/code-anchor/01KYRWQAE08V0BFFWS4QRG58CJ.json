@@ -1,0 +1,11 @@
+{
+  "id": "01KYRWQAE08V0BFFWS4QRG58CJ",
+  "entity_type": "test_case",
+  "entity_id": "01KYPWFCDP35MAPVKTWKZ63X8W",
+  "ref_code": "TC-BUDGET-ENVELOPE-OVERFLOW-INTEGRITY",
+  "repo_path": "tests/Tally.Tests/Budget/Position/BudgetEnvelopeIntegrityTests.cs",
+  "anchor_kind": "test",
+  "last_verified_hash": "620fce86a6c4971a34b1f81fbe199cccefb9a6c1080fbad29995c59712cf9656",
+  "last_verified_at": "2026-07-30T06:52:22.3367317+00:00",
+  "created_at": "2026-07-30T06:52:22.3367317+00:00"
+}

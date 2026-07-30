@@ -5,7 +5,7 @@
   "ref_code": "DM-BUDGET-OPERATION-CONTRACTS",
   "repo_path": "src/Tally/Features/Budget/Contract/BudgetContractMapper.Position.cs",
   "anchor_kind": "implementation",
-  "last_verified_hash": "8fd1569662168a3117c3032f91e0659fafce7306ee846a8699032479f5921127",
-  "last_verified_at": "2026-07-28T06:38:54.7600430+00:00",
+  "last_verified_hash": "009255e3ae85137542fd29b5d1296588e5fedbebbfd79e2f29f84846b53781d6",
+  "last_verified_at": "2026-07-30T06:52:22.3329819+00:00",
   "created_at": "2026-07-27T14:29:10.4906241+00:00"
 }

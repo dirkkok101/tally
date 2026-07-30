@@ -5,7 +5,7 @@
   "ref_code": "DM-BUDGET-LEDGER-COMPOSITION-CONTRACT",
   "repo_path": "src/Tally/Contracts/Budget/Insights/BudgetInsightEvidence.cs",
   "anchor_kind": "implementation",
-  "last_verified_hash": "fba9327a193e2db0a7b9632766006b9678f4fab62f63f6d0455d404787858365",
-  "last_verified_at": "2026-07-28T11:26:09.7749825+00:00",
+  "last_verified_hash": "1a9518c91d391a65598aea19e87c3d127e76e2547c2b6c1aa78869d6e4f5ac66",
+  "last_verified_at": "2026-07-30T06:52:22.3321835+00:00",
   "created_at": "2026-07-27T14:29:10.4870470+00:00"
 }
