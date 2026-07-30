@@ -2,9 +2,9 @@
   "id": "01KXV9NFXFCHB5DW1F8STJB2DX",
   "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
   "metric": "Incorrect broad application canaries",
-  "current": "Unknown pending the private evidence spike.",
+  "current": "Zero incorrect outcomes for the rejected low-coverage equals candidate; broader starts-with and token-sequence candidates produced three and two incorrect outcomes respectively, so no batch apply was authorized.",
   "target": "Zero incorrect batch-applied category assignments across representative and held-out evidence.",
   "by_when": "Before any exact-rule batch apply is enabled",
-  "measured": 0,
+  "measured": 1,
   "created_at": "2026-07-18T19:01:20.9439956+00:00"
 }

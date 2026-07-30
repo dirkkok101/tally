@@ -2,9 +2,9 @@
   "id": "01KXV9NFJ7M060XKSWPWKP8V3M",
   "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
   "metric": "Owner decision reduction",
-  "current": "Unknown pending a private post-INGEST 90-day sample and timed baseline.",
+  "current": "4 percent decision reduction on 75 temporal hold-out decisions for the best zero-incorrect candidate; target failed.",
   "target": "At least 50% fewer per-transaction owner decisions than the explicit manual LEDGER workflow on representative held-out evidence.",
   "by_when": "Before PLAN-CLASSIFY-V1 bead compilation",
-  "measured": 0,
+  "measured": 1,
   "created_at": "2026-07-18T19:01:20.5844186+00:00"
 }

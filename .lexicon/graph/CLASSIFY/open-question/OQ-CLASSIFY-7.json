@@ -6,9 +6,11 @@
   "context": [
     "Resolve before PLAN-CLASSIFY-V1 bead compilation with an owner-approved temporal hold-out procedure and aggregate-only report schema that exposes no row payloads, descriptions, normalized tokens, amounts, or private paths."
   ],
-  "status": "deferred",
+  "status": "resolved",
+  "decision": [
+    "Use an owner-only 0700 disposable copy of the live Ledger, exercise only installed public CLI queries, split the latest 90 days into the first 60 days for candidate derivation and the last 30 days for hold-out, and emit only counts, percentages, timings, contract versions, permission or integrity booleans, fingerprints, and pass or fail states. The spike emitted zero descriptions, normalized tokens, amounts, identifiers, expected rows, or paths."
+  ],
   "owner": "CLASSIFY private evidence spike",
-  "disposition": "spike",
-  "blocking_stage": "beads",
+  "disposition": "non_blocking",
   "created_at": "2026-07-18T17:51:38.2965988+00:00"
 }

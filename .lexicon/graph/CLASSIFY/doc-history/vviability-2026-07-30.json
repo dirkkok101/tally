@@ -1,0 +1,9 @@
+{
+  "id": "01KYSZEF3FKS4NVVB6S5N2H0AE",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "version": "viability-2026-07-30",
+  "changes": [
+    "Resolved OQ-CLASSIFY-1, OQ-CLASSIFY-2, OQ-CLASSIFY-3, and OQ-CLASSIFY-7 from an aggregate-only installed-CLI spike; recorded two triggered and two clear monitored kill criteria; measured failed decision-reduction and zero-disclosure gates; accepted DD-CLASSIFY-VIABILITY-DISPOSITION; deferred 13 FRs; invalidated the unreleased full Ledger classification dependency; archived PLAN-CLASSIFY-V1 without beads."
+  ],
+  "created_at": "2026-07-30T16:59:12.3681300+00:00"
+}

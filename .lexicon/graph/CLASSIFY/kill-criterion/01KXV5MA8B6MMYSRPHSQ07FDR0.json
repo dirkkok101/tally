@@ -3,6 +3,8 @@
   "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
   "condition": "Before PLAN-CLASSIFY-V1 bead compilation, evaluate held-out representative transactions. If owner-approved deterministic rules cannot reduce per-transaction owner decisions by at least 50 percent while producing zero incorrect batch-applied assignments, stop the custom rule engine and retain explicit manual LEDGER assignment.",
   "monitored": 1,
-  "evaluation_state": "unassessed",
+  "evaluation_state": "triggered",
+  "evaluation_evidence": "Triggered on 2026-07-30: the best zero-incorrect candidate reduced 75 temporal hold-out decisions by 4 percent, below the required 50 percent. Broader starts-with and token-sequence candidates produced incorrect outcomes and were rejected.",
+  "evaluated_at": "2026-07-30T16:58:05.3947271+00:00",
   "created_at": "2026-07-18T17:50:48.0762919+00:00"
 }

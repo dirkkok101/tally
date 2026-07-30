@@ -4,11 +4,11 @@
   "ref_code": "EXT-CLASSIFY-HOST-OS-SECURITY",
   "name": "Host OS Process and Storage Security",
   "description": [
-    "Provides the trusted invoking identity, owner-only filesystem permissions, protected local storage, safe temporary primitives, and process isolation required for rules, evaluation evidence, and diagnostics."
+    "Validated for the 2026-07-30 spike: the live source remained read-only, the disposable root was owner-only mode 0700, Ledger reported owner-only permissions plus integrity and host protection, and no external process or network evaluator was used."
   ],
   "type": "service",
   "owner": "Personal Finance Owner",
-  "metadata": "{\"gate_type\":\"data\",\"validation_basis\":\"source_and_client\",\"validation_status\":\"assumed\"}",
+  "metadata": "{\"gate_type\":\"data\",\"validation_basis\":\"source_and_client\",\"validation_status\":\"validated\"}",
   "created_at": "2026-07-18T19:01:19.5451236+00:00",
   "links": [
     {

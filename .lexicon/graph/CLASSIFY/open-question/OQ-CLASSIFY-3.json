@@ -6,10 +6,12 @@
   "context": [
     "Resolve after OQ-CLASSIFY-2 and before PLAN-CLASSIFY-V1 bead compilation using representative private evidence; record the closed v1 predicates, overlap semantics, and incompatible-category conflict rule."
   ],
-  "status": "deferred",
+  "status": "resolved",
+  "decision": [
+    "No custom v1 rule grammar passed viability. Normalized equals produced zero incorrect outcomes but only 4 percent held-out decision reduction. Starts-with produced 14.67 percent with three incorrect outcomes; contained token sequences produced 26.67 percent with two incorrect outcomes. Those broader shapes are rejected. If reconsidered, incompatible category matches remain a Rule Conflict with no priority winner."
+  ],
   "owner": "CLASSIFY design after field spike",
-  "disposition": "spike",
-  "blocking_stage": "beads",
+  "disposition": "non_blocking",
   "created_at": "2026-07-18T17:51:36.9816096+00:00",
   "links": [
     {

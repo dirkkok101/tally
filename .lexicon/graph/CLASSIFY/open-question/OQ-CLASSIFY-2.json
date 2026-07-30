@@ -6,9 +6,11 @@
   "context": [
     "Resolve before PLAN-CLASSIFY-V1 bead compilation with a released LEDGER-owned classification projection contract plus a three-account normalization spike; CLASSIFY may not read private Ledger storage or invent fields."
   ],
-  "status": "deferred",
+  "status": "resolved",
+  "decision": [
+    "Installed Tally 0.3.2 publishes ledger.actuals.query, ledger.transaction.get, ledger.category.list, and idempotent category assignment or correction, but not classification_v1 or allocation revision preconditions. The evidence-safe input allowlist is Ledger-owned eligibility state plus account identity, effective date, original description, signed-amount-derived direction and absolute minor amount, and active category identity. Normalization remains Unicode NFKC, invariant case folding, punctuation boundaries, and whitespace collapse while preserving digits and token order. The evidence did not justify implementing the dedicated projection after the viability kill."
+  ],
   "owner": "CLASSIFY projection and normalization spike",
-  "disposition": "spike",
-  "blocking_stage": "beads",
+  "disposition": "non_blocking",
   "created_at": "2026-07-18T17:51:36.6774850+00:00"
 }

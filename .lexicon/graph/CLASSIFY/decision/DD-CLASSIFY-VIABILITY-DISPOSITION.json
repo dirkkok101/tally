@@ -1,0 +1,60 @@
+{
+  "id": "01KYSZA5CPCSZG05TRZCXDJW1W",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DD-CLASSIFY-VIABILITY-DISPOSITION",
+  "title": "Stop CLASSIFY v1 after the private viability spike",
+  "description": [
+    "Disposition of the custom transaction-classification plan after exercising the installed Tally 0.3.2 public contract against an owner-only 90-day corpus."
+  ],
+  "decision": [
+    "Archive PLAN-CLASSIFY-V1 without compiling beads. Continue with the do-less agent-guided LEDGER workflow. Reconsider a custom classifier only when a new representative temporal hold-out proves at least 20 stable recurring decisions per 30 days, more than 15 minutes of owner work per 30 days, at least 50 percent decision reduction, and zero incorrect applications under the unchanged conflict and locality rules."
+  ],
+  "rationale": [
+    "The owner-only public-CLI spike covered 299 rows across three account sources. It found 11.33 stable recurring decisions per 30 days and 6.08 observed within-session classification minutes per 30 days. The best zero-incorrect candidate reduced 75 held-out decisions by 4 percent. Prefix and token-sequence candidates reached 14.67 and 26.67 percent respectively only with incorrect outcomes, so the first two monitored kill criteria triggered."
+  ],
+  "alternatives": [
+    "Rejected compiling the existing plan because it would manufacture implementation work after the viability thresholds failed. Rejected weakening the recurrence, time, reduction, or zero-incorrect thresholds. Rejected broader prefix or token-sequence rules because held-out incorrect outcomes violate the apply canary. Rejected cloud, model, regex, fuzzy, or private-storage alternatives because locality and determinism remain hard boundaries."
+  ],
+  "consequences": [
+    "CLASSIFY remains unbuilt; its design and plan remain historical evidence, its plan is archived, and no CLASSIFY beads are created. The installed INGEST and LEDGER workflows remain authoritative. A future reconsideration requires a new spike and an explicit plan reactivation or replacement."
+  ],
+  "status": "accepted",
+  "created_at": "2026-07-30T16:56:51.3516848+00:00",
+  "links": [
+    {
+      "id": "01KYSZD5AJN3T7G7TAHSYDMENB",
+      "target_type": "open_question",
+      "target": "OQ-CLASSIFY-1",
+      "rel": "motivated-by",
+      "created_at": "2026-07-30T16:58:29.5868437+00:00"
+    },
+    {
+      "id": "01KYSZD5ZPPNDBAJGT8DHFBEV8",
+      "target_type": "open_question",
+      "target": "OQ-CLASSIFY-2",
+      "rel": "motivated-by",
+      "created_at": "2026-07-30T16:58:30.2629011+00:00"
+    },
+    {
+      "id": "01KYSZD6N2A0WSGG4C4NJ6XRZW",
+      "target_type": "open_question",
+      "target": "OQ-CLASSIFY-3",
+      "rel": "motivated-by",
+      "created_at": "2026-07-30T16:58:30.9469756+00:00"
+    },
+    {
+      "id": "01KYSZD7FA23PJ5NKF575RQTG3",
+      "target_type": "open_question",
+      "target": "OQ-CLASSIFY-7",
+      "rel": "motivated-by",
+      "created_at": "2026-07-30T16:58:31.7874736+00:00"
+    },
+    {
+      "id": "01KYSZD87945Q9W1KYGCQ1YSSY",
+      "target_type": "plan",
+      "target": "PLAN-CLASSIFY-V1",
+      "rel": "references",
+      "created_at": "2026-07-30T16:58:32.5540301+00:00"
+    }
+  ]
+}

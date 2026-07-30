@@ -6,9 +6,11 @@
   "context": [
     "Resolve from an owner-only post-INGEST sample spanning at least 90 days before PLAN-CLASSIFY-V1 bead compilation; record aggregate counts and timed baseline only. If the recurrence or manual-time threshold fails, select the do-less LEDGER workflow."
   ],
-  "status": "deferred",
+  "status": "resolved",
+  "decision": [
+    "The latest owner-only 90-day post-INGEST sample contains 299 rows across three account sources, 31.44 percent current category coverage, 11.33 stable recurring category decisions per 30 days, and 6.08 observed within-session classification minutes per 30 days. Both viability thresholds fail, so use the do-less LEDGER workflow."
+  ],
   "owner": "CLASSIFY evidence spike before implementation planning",
-  "disposition": "spike",
-  "blocking_stage": "beads",
+  "disposition": "non_blocking",
   "created_at": "2026-07-18T17:51:36.3742724+00:00"
 }
