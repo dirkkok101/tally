@@ -3,7 +3,7 @@
   "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
   "type": "functional",
   "ref_code": "FR-CLASSIFY-OUTCOME-INVALIDATION",
-  "title": "Invalidate stale classification outcomes",
+  "title": "Invalidate Stale Classification Outcomes",
   "description": [
     "Make prior outcomes unappliable whenever any canonical input represented by their Evaluation Fingerprint changes. Implements G2, G3, and UC-CLASSIFY-002/003."
   ],
@@ -34,7 +34,7 @@
     "Given the source LEDGER snapshot is invalid or expired, when a prior outcome is inspected or applied, then CLASSIFY identifies that changed fingerprint dimension and blocks apply.",
     "Given the normalization version changes, when a prior outcome is inspected or applied, then CLASSIFY identifies that changed fingerprint dimension and blocks apply.",
     "Given the active Rule Set Version changes, when a prior outcome is inspected or applied, then CLASSIFY identifies that changed fingerprint dimension and blocks apply.",
-    "Given a stale outcome, when the owner requests a safe next action, then CLASSIFY identifies re-evaluation rather than correction or forced apply."
+    "Given a stale outcome, when the owner requests the permitted next operation, then CLASSIFY returns re-evaluate and does not return correction or apply."
   ],
   "status": "active",
   "created_at": "2026-07-19T04:16:33.3832373+00:00",

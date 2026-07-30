@@ -97,54 +97,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXWFK8YV7PN6E3WWDGRRGTP0",
+      "id": "01KYRZJTMNXYZMP225KZ6FRQ3J",
       "kind": "acceptance_check",
       "text": [
         "The compatible host discovers exactly twelve deterministic descriptors and invokes every operation through structured stdin or file input with one stdout envelope."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:20.8214703+00:00"
     },
     {
-      "id": "01KXWFK8YV77RRYN40VE7MPY2Z",
+      "id": "01KYRZJTMQBQ6PSFWG5D34GS2T",
       "kind": "acceptance_check",
       "text": [
         "Unsupported CLASSIFY or Ledger versions reject before data read or mutation; malformed and unknown-field requests return stable validation errors."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:20.8214703+00:00"
     },
     {
-      "id": "01KXWFK8YV0V368SZR444YW1VN",
+      "id": "01KYRZJTMQX3Q2AFQ3EJZX0Y2J",
       "kind": "acceptance_check",
       "text": [
-        "Missing owner identity, unsafe file permissions, or missing idempotency rejects mutation before state change."
+        "Missing owner identity, non-owner file permissions, group or other permission bits, or missing idempotency rejects mutation before state change."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:20.8214703+00:00"
     },
     {
-      "id": "01KXWFK8YVHRR3BADWA7B4A6XK",
+      "id": "01KYRZJTMQPE9DD40BF09D9PKX",
       "kind": "acceptance_check",
       "text": [
-        "Diagnostics contain correlation, operation, duration, and safe counts only; no descriptions, tokens, rules, amounts, corpus rows, paths, serialized requests, or results."
+        "Diagnostics contain only correlation ID, operation ID, duration, result code, error code, and aggregate item counts; they contain no descriptions, tokens, rules, amounts, corpus rows, paths, serialized requests, or results."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:20.8214703+00:00"
     },
     {
-      "id": "01KXWFK8YVNK3T9DWZSWH0KTBD",
+      "id": "01KYRZJTMQ5CDARDXT1RKQHK7C",
       "kind": "acceptance_check",
       "text": [
-        "Status enables safe orchestration without reading CLASSIFY storage or searching private payloads."
+        "Status enables orchestration using only published schemas, subject IDs, lifecycle states, mutation-possibility state, frontier ordinal, aggregate counts, and next-operation enum values without reading CLASSIFY storage or searching private payloads."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:20.8214703+00:00"
     },
     {
       "id": "01KXWFK8YVCQ8X8XJX438G2YCV",

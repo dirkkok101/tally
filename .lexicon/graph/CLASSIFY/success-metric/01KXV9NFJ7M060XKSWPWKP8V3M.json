@@ -4,7 +4,7 @@
   "metric": "Owner decision reduction",
   "current": "Unknown pending a private post-INGEST 90-day sample and timed baseline.",
   "target": "At least 50% fewer per-transaction owner decisions than the explicit manual LEDGER workflow on representative held-out evidence.",
-  "by_when": "Before CLASSIFY implementation planning",
+  "by_when": "Before PLAN-CLASSIFY-V1 bead compilation",
   "measured": 0,
   "created_at": "2026-07-18T19:01:20.5844186+00:00"
 }

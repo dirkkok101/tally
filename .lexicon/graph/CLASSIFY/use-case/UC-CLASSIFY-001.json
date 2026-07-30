@@ -3,9 +3,9 @@
   "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
   "ref_code": "UC-CLASSIFY-001",
   "title": "Evaluate eligible transactions",
-  "preconditions": "The public LEDGER contract is compatible; an active normalization and rule-set version exists; the owner can obtain a snapshot-bound ordered eligible transaction set and active category catalogue.",
+  "preconditions": "The public LEDGER contract is compatible; an active normalization and Rule Set Version exists; the owner can obtain a snapshot-bound ordered eligible transaction set and active category catalogue.",
   "postconditions": "LEDGER is unchanged; every eligible transaction is accounted for in stable order; outcomes and evidence are bound to the evaluated snapshot and versions.",
-  "main_flow": "CLASSIFY opens an evaluation run; queries the complete eligible set through LEDGER; validates transaction, category, normalization, and rule-set versions; evaluates each transaction deterministically; emits exactly one suggestion with rule evidence, no-suggestion, or conflict outcome per transaction; and returns coverage and conflict totals without mutation.",
+  "main_flow": "CLASSIFY opens an evaluation run; queries the complete eligible set through LEDGER; validates transaction, category, normalization, and Rule Set Versions; evaluates each transaction deterministically; emits exactly one suggestion with rule evidence, no-suggestion, or conflict outcome per transaction; and returns coverage and conflict totals without mutation.",
   "alt_flows": [
     "Reject an incompatible or unavailable LEDGER contract before evaluation.",
     "Abort without partial outcomes when the snapshot cannot remain consistent.",

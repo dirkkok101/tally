@@ -228,44 +228,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXWG0ND67VF5W7FJB40RPQ2V",
+      "id": "01KYRZJNSZ0562FKX7Z3VKTA42",
       "kind": "acceptance_check",
       "text": [
         "Lex coverage reports 13 of 13 active FRs covered, zero orphan tests, zero gaps, and all 20 planned test cases linked to implementation evidence."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+      "created_at": "2026-07-30T07:42:15.8708602+00:00"
     },
     {
-      "id": "01KXWG0ND60Z6E1TQTX4D470J4",
+      "id": "01KYRZJNT0H7YDB3CSFE5J1HX8",
       "kind": "acceptance_check",
       "text": [
         "Decision path-check reports all 30 expected paths matched; link suggestions are empty and endpoint suggestions confirm no HTTP surface is required."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+      "created_at": "2026-07-30T07:42:15.8708602+00:00"
     },
     {
-      "id": "01KXWG0ND65QEGHZGVDNTMRH6N",
+      "id": "01KYRZJNT0WV4BQ2VQCXAACZ2J",
       "kind": "acceptance_check",
       "text": [
         "Every named CLASSIFY feature, integration, security, private-evidence, and UC test class has nonzero discovery before aggregate totals are accepted."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+      "created_at": "2026-07-30T07:42:15.8708602+00:00"
     },
     {
-      "id": "01KXWG0ND6EP4AR6JNTYJYDNYV",
+      "id": "01KYRZJNT0207X6AKVX9SJ3S30",
       "kind": "acceptance_check",
       "text": [
-        "The evidence report records exact commands, counts, graph ref-codes, and safe fingerprints without private fixture content."
+        "The evidence report records exact commands, counts, graph ref-codes, and SHA-256 fingerprints and excludes private fixture content, paths, descriptions, normalized tokens, amounts, and expected rows."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-19T06:11:32.9009840+00:00"
+      "created_at": "2026-07-30T07:42:15.8708602+00:00"
     },
     {
       "id": "01KXWG0ND6K1CX5QN8NQKYZ5XY",

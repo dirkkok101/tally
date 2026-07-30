@@ -20,7 +20,7 @@
     "I can accept, reject, or correct it from reproducible evidence"
   ],
   "acceptance_criteria": [
-    "Given a retained suggestion, when its explanation is requested, then the result identifies the evaluation, transaction, category, normalization version, rule-set version, contributing rule versions, and allowed fields whose predicates matched.",
+    "Given a retained suggestion, when its explanation is requested, then the result identifies the evaluation, transaction, category, normalization version, Rule Set Version, contributing rule versions, and allowed fields whose predicates matched.",
     "Given a retained no-suggestion outcome, when its explanation is requested, then the result identifies the evaluated versions and a stable no-match reason without inventing a category.",
     "Given a retained conflict, when its explanation is requested, then the result identifies every incompatible matching rule version and proposed category without selecting a winner.",
     "Given a stale outcome, when its explanation is requested, then the result identifies the fingerprint dimension that changed and states that re-evaluation is required.",

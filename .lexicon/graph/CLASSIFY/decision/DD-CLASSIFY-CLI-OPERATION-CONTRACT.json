@@ -12,6 +12,9 @@
   "rationale": [
     "A generic invoke, manage, run, save, or delete surface would move operation knowledge into callers and weaken schema discovery. A three-entry facade is smaller only syntactically. Separate help, schema, and dispatch definitions would drift. The selected shape reuses the established Ledger and Ingest public process contract while honoring the canonical PRD vocabulary. HTTP Save, GetGridList, GetLookupList, and Delete endpoints are inapplicable because CLASSIFY is a channel-neutral local CLI module."
   ],
+  "alternatives": [
+    "Rejected a generic invoke operation and action discriminators because callers would need hidden operation knowledge. Rejected three broad facade operations because they merge incompatible mutability, idempotency, and recovery contracts. Rejected separately maintained help, schema, and dispatch inventories because they can drift. Rejected HTTP endpoints because v1 is a channel-neutral local CLI and owns no service or authentication boundary."
+  ],
   "status": "accepted",
   "metadata": "{\"expected_paths\":[\"src/Tally/Cli/**\",\"src/Tally/Contracts/Classify/**\",\"src/Tally/Features/Classify/Contract/**\",\"tests/Tally.Tests/Classify/Contract/**\"]}",
   "created_at": "2026-07-19T05:10:11.1849248+00:00",

@@ -30,7 +30,7 @@
     "Given interruption between item submissions, when the same apply run is resumed, then completed items reconcile from durable results and processing continues only from the exact unresolved frontier."
   ],
   "security_criteria": [
-    "Apply logs and diagnostics contain safe run, item, and error identifiers only, never descriptions, amounts, category payloads, or serialized LEDGER requests."
+    "Apply logs and diagnostics contain only correlation ID, apply run ID, item ordinal, transaction ID, operation ID, duration, result code, and error code; they never contain descriptions, amounts, category names or payloads, normalized tokens, rules, private corpus data, file paths, or serialized LEDGER requests or results."
   ],
   "status": "active",
   "created_at": "2026-07-19T04:16:33.3832373+00:00",

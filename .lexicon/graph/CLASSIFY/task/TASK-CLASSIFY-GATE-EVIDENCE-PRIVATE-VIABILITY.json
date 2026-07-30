@@ -9,7 +9,7 @@
     "Validation-only monitored gate with no implements refs; it evaluates the selected vocabulary against a private post-INGEST Ledger sample before durable workflow construction."
   ],
   "objective": [
-    "Representative owner evidence proves recurrence, material decision reduction, zero incorrect batch-apply canaries, safe hold-out handling, and local-only execution or CLASSIFY stops."
+    "Representative owner evidence proves recurrence, material decision reduction, zero incorrect batch-apply canaries, a documented temporal hold-out procedure, and local-only execution or CLASSIFY stops."
   ],
   "planning_state": "planned",
   "priority": 0,
@@ -193,24 +193,24 @@
       "created_at": "2026-07-19T06:04:14.1384778+00:00"
     },
     {
-      "id": "01KXWFK8Y8Y9H7YABSX9ZWDN3E",
+      "id": "01KYRZJN4Z1MAW98PM2XKD3AWS",
       "kind": "expected_output",
       "text": [
-        "Safe aggregate private-evidence report"
+        "Aggregate private-evidence report containing counts, SHA-256 fingerprints, threshold outcomes, environment identity, timestamp, and no private payload"
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:15.1990724+00:00"
     },
     {
-      "id": "01KXWFK8Y86KG4K08YDWSTPJTY",
+      "id": "01KYRZJN504G12RVA1NBQWZYVY",
       "kind": "expected_output",
       "text": [
         "VerifiedClassifyPrivateEvidenceGate"
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:15.1990724+00:00"
     },
     {
       "id": "01KXWFK8Y85DMXBY5XHSZSSX9D",

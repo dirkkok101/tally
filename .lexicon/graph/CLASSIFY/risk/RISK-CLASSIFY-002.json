@@ -8,7 +8,7 @@
   "likelihood": "High",
   "impact": "High",
   "mitigation": [
-    "Version normalization, expose bounded match evidence, fail multi-match and unknown patterns closed, measure coverage/conflicts by version, and require revalidation before broadening a rule."
+    "Version normalization, expose bounded Match Evidence, fail multi-match and unknown patterns closed, measure coverage/conflicts by version, and require revalidation before broadening a rule."
   ],
   "created_at": "2026-07-18T17:51:11.6167415+00:00",
   "links": [

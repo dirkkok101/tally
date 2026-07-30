@@ -4,12 +4,12 @@
   "ref_code": "NFR-CLASSIFY-ATTRIBUTABLE-HISTORY",
   "title": "Retain attributable classification history",
   "description": [
-    "Rule, validation, evaluation, apply, feedback, abandonment, and cleanup lifecycle changes must remain traceable without editing prior records."
+    "Rule, validation, evaluation, apply, feedback, abandonment, and cleanup lifecycle changes remain traceable through immutable history; only explicit active pointers and nonterminal operational state may use guarded expected-state transitions."
   ],
   "category": "data_integrity",
-  "target": "100% of lifecycle events retain stable subject references, actor context, reason, trusted timestamp, relevant input fingerprints, prior state, resulting state, and replacement reference where applicable; zero active or historical records are mutated in place.",
+  "target": "100% of lifecycle events retain stable subject references, actor context, reason, trusted timestamp, relevant input fingerprints, prior state, resulting state, and replacement reference where applicable; zero immutable rule versions, lifecycle events, evaluation outcomes, terminal item results, feedback records, or historical records are mutated in place; active pointers and nonterminal operational rows change only through guarded expected-state transitions whose prior and resulting states are retained in append-only lifecycle events.",
   "load_condition": "Every successful, rejected, superseded, retired, stale, resumed, abandoned, and cleaned workflow transition.",
-  "measurement": "Lifecycle conformance tests, append-only invariant checks, provenance queries, and forbidden-update tests.",
+  "measurement": "Lifecycle conformance tests, append-only invariant checks, guarded expected-state transition tests, provenance queries, and forbidden-update tests.",
   "rationale": [
     "The owner must be able to explain how reusable decisions and Ledger mutations evolved."
   ],

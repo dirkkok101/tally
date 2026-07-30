@@ -27,7 +27,7 @@
     "Given an unreferenced draft rule, validation run, or evaluation run, when the owner explicitly abandons it, then it becomes non-activatable and its removable derived payload is deleted without changing active rules or LEDGER.",
     "Given a rule version, evaluation, or apply result referenced by active state, Ledger mutation provenance, or feedback, when hard removal is requested, then CLASSIFY rejects removal and requires lifecycle retirement or retained history.",
     "Given process startup, when orphan temporary artifacts from a prior crash are found, then CLASSIFY validates ownership and removes only recognized CLASSIFY temporaries before accepting new mutation.",
-    "Given cleanup completion, when status is requested, then it returns safe counts and identifiers but no removed payload."
+    "Given cleanup completion, when status is requested, then it returns cleanup run ID, policy version, removed artifact count, retained artifact count, and per-kind counts but no removed payload or path."
   ],
   "security_criteria": [
     "Persisted CLASSIFY directories and files are owner-only, and cleanup never follows links or paths outside the owned CLASSIFY storage boundary."

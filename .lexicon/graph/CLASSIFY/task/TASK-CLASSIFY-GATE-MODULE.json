@@ -194,24 +194,24 @@
       "created_at": "2026-07-19T06:13:52.9487740+00:00"
     },
     {
-      "id": "01KXWG4Y5N0R6M3MJF6GREV2WD",
+      "id": "01KYRZJPJCA7KZC8R5M25PYYXR",
       "kind": "expected_output",
       "text": [
         "VerifiedClassifyV1Module"
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+      "created_at": "2026-07-30T07:42:16.6520729+00:00"
     },
     {
-      "id": "01KXWG4Y5PQ0GMCRPQ729FVKK4",
+      "id": "01KYRZJPJDKA9FA68TH5P1Z2A2",
       "kind": "expected_output",
       "text": [
-        "Safe module completion report"
+        "Module completion report containing commands, versions, counts, SHA-256 fingerprints, dependency statuses, commit IDs, and pass or fail states only"
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+      "created_at": "2026-07-30T07:42:16.6520729+00:00"
     },
     {
       "id": "01KXWG4Y5NGRZZHGXQD80BB7B0",
@@ -280,14 +280,14 @@
   ],
   "review_gates": [
     {
-      "id": "01KXWG4Y5P04H90D3FN1PKVQP0",
+      "id": "01KYRZJPJD0KM73PHDG1ZFSMG4",
       "gate_type": "ci",
       "description": [
-        "The module script and safe reports reproduce from a clean checkout plus the owner-private fixture."
+        "The module script and aggregate-only reports reproduce from a clean checkout plus the owner-private fixture; reports contain no fixture path or row payload."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T06:13:52.9487740+00:00"
+      "created_at": "2026-07-30T07:42:16.6520729+00:00"
     }
   ],
   "verification_steps": [

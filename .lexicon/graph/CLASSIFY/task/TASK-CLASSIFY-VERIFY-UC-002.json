@@ -9,7 +9,7 @@
     "Validation-only UC task with no implements refs; it traces UC-CLASSIFY-002 retained, unknown, unavailable-evidence, stale, and rename behavior."
   ],
   "objective": [
-    "UC-CLASSIFY-002 proves bounded reproducible explanation and every safe failure without mutation or historical reconstruction."
+    "UC-CLASSIFY-002 proves bounded reproducible explanation and every specified failure without mutation or historical reconstruction."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -84,44 +84,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXWFK8YSZJH14JPW4EBG2G9J",
+      "id": "01KYRZJSBG0YRHWRJANQFK7NH0",
       "kind": "acceptance_check",
       "text": [
-        "Suggestion, no-suggestion, conflict, and stale results expose exact bounded provenance and one safe next action."
+        "Suggestion, no-suggestion, conflict, and stale results expose exact bounded provenance and exactly one next-operation enum value."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:19.5043485+00:00"
     },
     {
-      "id": "01KXWFK8YSPEZG1HG00FMSB9KP",
+      "id": "01KYRZJSBJN182NBZE8E2V7A5Y",
       "kind": "acceptance_check",
       "text": [
         "Unknown and evidence-unavailable outcomes remain distinct and never reconstruct from current state."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:19.5043485+00:00"
     },
     {
-      "id": "01KXWFK8YSWDVT12PA0ZF63P6T",
+      "id": "01KYRZJSBJPXK2K5FVJ3P8FN58",
       "kind": "acceptance_check",
       "text": [
         "Every fingerprint change blocks apply and names its dimension; same-ID active category rename is the non-stale display-only control."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:19.5043485+00:00"
     },
     {
-      "id": "01KXWFK8YS9PEX18V9BP3H0EFF",
+      "id": "01KYRZJSBJ56CJYJ25KPCW3DXS",
       "kind": "acceptance_check",
       "text": [
         "No explanation or status request mutates CLASSIFY or Ledger."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:19.5043485+00:00"
     },
     {
       "id": "01KXWFK8YSTMGF05AXT405M1HW",

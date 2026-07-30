@@ -2,7 +2,7 @@
   "id": "01KXV5NTNW62K6ZMN79C9PMWM1",
   "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
   "ref_code": "OQ-CLASSIFY-5",
-  "question": "How should owner corrections propose, retire, narrow, or replace a classification rule without treating one corrected transaction as permission to generalize?",
+  "question": "How should owner corrections propose, retire, narrow, or replace a Classification Rule without treating one corrected transaction as permission to generalize?",
   "context": [
     "This prevents an erroneous correction or one-off exception from propagating automatically."
   ],

@@ -89,54 +89,54 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXWFK8YV7XV0Q91NQ4CAAAJE",
+      "id": "01KYRZJSZV4WHZY6YWC4KMZ02F",
       "kind": "acceptance_check",
       "text": [
         "Accepted, rejected, and corrected feedback retains exact outcome and rule provenance plus authoritative prior and resulting allocations."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:20.1546893+00:00"
     },
     {
-      "id": "01KXWFK8YVBD968472YA7F5SZH",
+      "id": "01KYRZJSZVHM62HGQQ09141P3Z",
       "kind": "acceptance_check",
       "text": [
         "One correction produces no proposal or one smallest retire, narrow, or replacement draft and never activates or broadens it."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:20.1546893+00:00"
     },
     {
-      "id": "01KXWFK8YVEQBW73BPCNKGVH0D",
+      "id": "01KYRZJSZV8DEVTFJ2R86SPPJB",
       "kind": "acceptance_check",
       "text": [
         "Missing historical evidence records owner decision but creates no reconstructed proposal."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:20.1546893+00:00"
     },
     {
-      "id": "01KXWFK8YVENT55Z08PEEHE01N",
+      "id": "01KYRZJSZVHQ7CJB8A6ZXH01EM",
       "kind": "acceptance_check",
       "text": [
-        "A safe feedback-derived candidate follows the same private validation and explicit activation path; unsafe or archived-category replacements reject."
+        "A feedback-derived candidate with complete retained provenance follows the same private validation and explicit activation path; candidates with missing provenance or an archived category reject."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:20.1546893+00:00"
     },
     {
-      "id": "01KXWFK8YV71Q037YBA9KFFW8X",
+      "id": "01KYRZJSZV5Q3RA0HP9CVKK8D5",
       "kind": "acceptance_check",
       "text": [
         "Original feedback remains attributable after rule retirement or supersession."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:20.1546893+00:00"
     },
     {
       "id": "01KXWFK8YVSJKYSSZZ871HEKDM",

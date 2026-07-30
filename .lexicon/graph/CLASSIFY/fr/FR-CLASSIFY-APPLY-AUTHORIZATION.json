@@ -3,7 +3,7 @@
   "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
   "type": "functional",
   "ref_code": "FR-CLASSIFY-APPLY-AUTHORIZATION",
-  "title": "Authorize a classification apply run",
+  "title": "Authorize a Classification Apply Run",
   "description": [
     "Require a current read-only preview and explicit owner authority before any selected suggestion or exact-rule match may mutate LEDGER. Implements G3 and UC-CLASSIFY-003."
   ],

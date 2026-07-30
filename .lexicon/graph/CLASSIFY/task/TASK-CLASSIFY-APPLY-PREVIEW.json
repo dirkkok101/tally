@@ -172,7 +172,7 @@
       "id": "01KXWFK8YF32SGE2SPWD28F8CC",
       "kind": "acceptance_check",
       "text": [
-        "Selected-outcome mode accepts only current suggestions from one evaluation fingerprint and excludes no-suggestion, conflict, stale, expired, unknown, or unauthorized outcomes."
+        "Selected-outcome mode accepts only current suggestions from one Evaluation Fingerprint and excludes no-suggestion, conflict, stale, expired, unknown, or unauthorized outcomes."
       ],
       "required": 1,
       "sort_order": 0,
@@ -212,7 +212,7 @@
       "id": "01KXWFK8YFCWS6FDNHX85E6R37",
       "kind": "acceptance_check",
       "text": [
-        "Preview returns evaluation fingerprint, target, contributing rules, transaction IDs, counts, exclusions, authority, and preflight evidence while Ledger allocations remain unchanged."
+        "Preview returns Evaluation Fingerprint, target, contributing rules, transaction IDs, counts, exclusions, authority, and preflight evidence while Ledger allocations remain unchanged."
       ],
       "required": 1,
       "sort_order": 4,

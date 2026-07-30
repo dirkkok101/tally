@@ -4,12 +4,12 @@
   "sub_plan_id": "01KXWEE68KNW38E47M7H4M09H3",
   "ref_code": "TASK-CLASSIFY-STATUS-WORKFLOW",
   "slug": "STATUS-WORKFLOW",
-  "title": "Expose safe classification status",
+  "title": "Expose bounded classification status",
   "description": [
     "Implement classify.status across rule, validation, evaluation, preview, apply, feedback, abandonment, and cleanup state without source rereads."
   ],
   "objective": [
-    "Every retained workflow state reports bounded lifecycle, mutation possibility, exact frontier, and one safe next operation without private reconstruction."
+    "Every retained workflow state reports bounded lifecycle, mutation possibility, exact frontier, and exactly one permitted next-operation enum value without private reconstruction."
   ],
   "planning_state": "planned",
   "priority": 1,
@@ -205,64 +205,64 @@
   ],
   "recipe_items": [
     {
-      "id": "01KXWFK8YM0QN73K9BF7C4WERR",
+      "id": "01KYRZJRP7VC8EAKWWJZGQCZVP",
       "kind": "acceptance_check",
       "text": [
-        "Rule status identifies the active RuleSetVersion and draft, active, retired, and superseded rule versions with safe attributable lifecycle metadata."
+        "Rule status identifies the active RuleSetVersion and draft, active, retired, and superseded rule versions with rule version ID, Rule Set Version ID, lifecycle state, actor ID, reason code, created-at timestamp, and predecessor or successor IDs."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:18.8226134+00:00"
     },
     {
-      "id": "01KXWFK8YM9C9S0BTKVSRY53EA",
+      "id": "01KYRZJRP8QDGABBN483VKKKNS",
       "kind": "acceptance_check",
       "text": [
-        "Validation and evaluation status returns retained fingerprints, lifecycle, aggregates, staleness, and safe next action without corpus or projection reread."
+        "Validation and evaluation status returns retained fingerprints, lifecycle state, aggregate outcome counts, staleness state, and exactly one next-operation enum value without corpus or projection reread."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:18.8226134+00:00"
     },
     {
-      "id": "01KXWFK8YMWC2SJTPEE1GKJ04H",
+      "id": "01KYRZJRP8VE2PYX3TJ4S28E10",
       "kind": "acceptance_check",
       "text": [
-        "Apply status returns authorized fingerprint, terminal item totals, exact unresolved frontier, mutation possibility, and whether replay or resume is safe."
+        "Apply status returns authorized fingerprint, terminal item totals, exact unresolved frontier, mutation-possibility state, and exactly one next-operation enum value of retry, resume, or none."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:18.8226134+00:00"
     },
     {
-      "id": "01KXWFK8YMHBDGB41WYE244PMV",
+      "id": "01KYRZJRP8SSHGSDVT5GGGMCS6",
       "kind": "acceptance_check",
       "text": [
-        "Feedback, abandonment, and cleanup status returns requested references, decision or event state, actor, reason, safe counts, and next action without payload search."
+        "Feedback, abandonment, and cleanup status returns requested subject ID, event state, actor ID, reason code, aggregate counts, and exactly one next-operation enum value without payload search."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:18.8226134+00:00"
     },
     {
-      "id": "01KXWFK8YMSGMEP9DF12TVRZ86",
+      "id": "01KYRZJRP8JJGJ2NZPA48VGF7B",
       "kind": "acceptance_check",
       "text": [
-        "Unknown subjects return stable not-found; expected failures name only retry, resume, re-evaluate, correct, abandon, or cleanup as allowed by durable state."
+        "Unknown subjects return stable not-found; expected failures return exactly one next-operation enum value from retry, resume, re-evaluate, correct, abandon, cleanup, or none as allowed by durable state."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:18.8226134+00:00"
     },
     {
-      "id": "01KXWFK8YNQMAXG3E68D6Y044E",
+      "id": "01KYRZJRP88AMMC9H5ZWH5TDPR",
       "kind": "constraint",
       "text": [
-        "Status is a bounded read-only projection over durable CLASSIFY state and public safe identifiers."
+        "Status is a bounded read-only projection over durable CLASSIFY state and these public identifier types only: subject ID, actor ID, rule version ID, Rule Set Version ID, run ID, transaction ID, fingerprint, result code, and error code."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:18.8226134+00:00"
     },
     {
       "id": "01KXWFK8YN10M1X8PKEVN6JGZE",
@@ -335,14 +335,14 @@
       "created_at": "2026-07-19T06:04:14.1384778+00:00"
     },
     {
-      "id": "01KXWFK8YNN20R4FCZ5GY5V4WQ",
+      "id": "01KYRZJRP88KFBMJRE1RTB3SKZ",
       "kind": "note",
       "text": [
-        "Every failure-state result contains exactly one safe next operation and explicit mutation-possibility metadata."
+        "Every failure-state result contains exactly one next-operation enum value and explicit mutation-possibility metadata."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:18.8226134+00:00"
     }
   ],
   "references": [
@@ -389,14 +389,14 @@
   ],
   "review_gates": [
     {
-      "id": "01KXWFK8YN47RD3Y6J12XTZJHX",
+      "id": "01KYRZJRP8E41TRB2DE1EGDEQG",
       "gate_type": "self-review",
       "description": [
-        "Every retained subject and failure state maps to one bounded safe status and next action."
+        "Every retained subject and failure state maps to one bounded status projection and exactly one next-operation enum value."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:18.8226134+00:00"
     }
   ],
   "verification_steps": [

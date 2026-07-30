@@ -14,7 +14,7 @@
   "complexity": "L",
   "story_as": "Personal Finance Owner",
   "story_want": [
-    "manage deterministic classification rules as explicit immutable versions"
+    "manage deterministic Classification Rules as explicit immutable versions"
   ],
   "story_so_that": [
     "reusable behavior can change without losing provenance or rewriting history"
@@ -29,7 +29,7 @@
     "Given an active rule, when the owner retires it with a reason, then CLASSIFY creates a new active Rule Set Version without that rule and retains the retired version for inspection.",
     "Given an active rule that must be narrowed or replaced, when the owner activates a validated successor, then the successor references the prior version and the prior version becomes retired or superseded without in-place mutation.",
     "Given a category rename that preserves the same active category identifier, when rules are inspected, then their category identity is unchanged and their display name resolves to the current catalogue name.",
-    "Given any owner decision, correction, or feedback event, when CLASSIFY processes it, then no rule version or Rule Set Version is activated automatically."
+    "Given any owner decision, correction, or feedback event, when the event is recorded, then no rule version or Rule Set Version is activated automatically."
   ],
   "security_criteria": [
     "Rule inspection and lifecycle diagnostics must not expose normalized tokens or private examples outside the explicit owner-requested data result."

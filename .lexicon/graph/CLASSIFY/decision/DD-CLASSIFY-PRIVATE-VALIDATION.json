@@ -12,6 +12,9 @@
   "rationale": [
     "Copying corpus data into the state store or graph increases disclosure and retention. An external validation service violates locality. A separate evaluator risks semantic drift. Aggregate-only durability satisfies activation proof while the production engine makes validation representative. If the corpus is unavailable, preserving the last active rule set but blocking new authority is the only fail-closed behavior consistent with the PRD."
   ],
+  "alternatives": [
+    "Rejected copying private corpus rows into classify.db or tracked reports because it expands disclosure and retention. Rejected external or cloud validation because financial evidence must remain owner-local. Rejected a separate validation evaluator because it can drift from production semantics. Rejected activating new rule authority when the corpus is unavailable because absence of evidence cannot establish a zero-incorrect-application gate."
+  ],
   "status": "accepted",
   "metadata": "{\"expected_paths\":[\"src/Tally/Infrastructure/Classify/Corpus/**\",\"src/Tally/Features/Classify/Rules/Validate/**\",\"tests/Tally.Tests/Classify/Validation/**\"]}",
   "created_at": "2026-07-19T05:10:13.0037537+00:00",

@@ -12,6 +12,9 @@
   "rationale": [
     "One public projection family preserves stable ordering and Ledger-owned categorization, transfer, refund, relationship, allocation, and lifecycle truth, but evaluation eligibility and apply preflight have different membership. A single requires-independent-decision filter cannot preflight explicit corrections because those transactions are already categorized. Purpose-scoped requests make that distinction closed and discoverable. Current allocation and revision preconditions close the race between preview, all-item preflight, and each Ledger write. Direct SQL or handlers violate the boundary; re-inferring eligibility in CLASSIFY duplicates finance semantics; a private query cannot be compatibility-tested. The extension remains a hard upstream gate until published-binary conformance passes."
   ],
+  "alternatives": [
+    "Rejected direct SQL, handlers, or private Ledger access because they bypass the released contract. Rejected re-inferring categorization, transfer, refund, allocation, or lifecycle eligibility in CLASSIFY because that duplicates Ledger-owned semantics. Rejected a classifier-specific private query because it cannot be discovered or compatibility-tested. Rejected one undifferentiated actuals filter because evaluation membership excludes already-categorized corrections that apply preflight must inspect."
+  ],
   "status": "accepted",
   "metadata": "{\"expected_paths\":[\"src/Tally/Integration/Ledger/LedgerContractClient.cs\",\"src/Tally/Features/Ledger/Actuals/**\",\"src/Tally/Contracts/Ledger/**\",\"tests/Tally.Tests/Classify/LedgerContract/**\"]}",
   "created_at": "2026-07-19T05:10:11.5643443+00:00",

@@ -5,7 +5,7 @@
   "ref_code": "FR-CLASSIFY-DETERMINISTIC-EVALUATION",
   "title": "Evaluate deterministic classification outcomes",
   "description": [
-    "Evaluate every eligible transaction through one immutable normalization and rule-set version without mutation. Implements G2 and UC-CLASSIFY-001."
+    "Evaluate every eligible transaction through one immutable normalization and Rule Set Version without mutation. Implements G2 and UC-CLASSIFY-001."
   ],
   "rationale": [
     "A trustworthy classifier must expose ambiguity and absence instead of manufacturing a confident category."
@@ -20,7 +20,7 @@
     "I can review suggestions without hidden guesses or side effects"
   ],
   "acceptance_criteria": [
-    "Given a complete eligible projection, active category catalogue, normalization version, and rule-set version, when evaluation completes, then every input ordinal has exactly one outcome of suggestion, no-suggestion, conflict, or stale and the outcome totals equal the input count.",
+    "Given a complete eligible projection, active category catalogue, normalization version, and Rule Set Version, when evaluation completes, then every input ordinal has exactly one outcome of suggestion, no-suggestion, conflict, or stale and the outcome totals equal the input count.",
     "Given an identical Evaluation Fingerprint, when evaluation is repeated, then ordered outcomes and Match Evidence are semantically identical.",
     "Given exactly one matching active rule or multiple matching active rules that all propose the same active category, when a transaction is evaluated, then one suggestion names that category and every contributing rule version.",
     "Given active matching rules that propose different categories, when a transaction is evaluated, then the outcome is Rule Conflict with no selected category.",

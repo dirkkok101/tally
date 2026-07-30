@@ -6,7 +6,7 @@
   "slug": "OUTCOME-EXPLANATION",
   "title": "Explain and invalidate retained outcomes",
   "description": [
-    "Implement outcome.get with bounded historical evidence, current display names, complete fingerprint staleness, and safe next actions."
+    "Implement outcome.get with bounded historical evidence, current display names, complete fingerprint staleness, and one permitted next-operation enum value."
   ],
   "objective": [
     "The owner can reproduce a retained outcome or learn exactly why it is stale without reconstruction, unrelated data, or forced apply."
@@ -231,44 +231,44 @@
       "created_at": "2026-07-19T06:04:14.1384778+00:00"
     },
     {
-      "id": "01KXWFK8YE2HW2TH24RDEBSWE6",
+      "id": "01KYRZJQAGWW95FQN49JWYKKKC",
       "kind": "failure_criterion",
       "text": [
         "Do NOT reconstruct missing MatchEvidence from current Ledger or rule state - rejected by DD-CLASSIFY-DETERMINISTIC-EVALUATION."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:17.4246375+00:00"
     },
     {
-      "id": "01KXWFK8YEGKGSAW3CE7T6CWC6",
+      "id": "01KYRZJQAH5P8EW04NAMWCY8EM",
       "kind": "failure_criterion",
       "text": [
         "Do NOT treat display-name rename as category identity change."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:17.4246375+00:00"
     },
     {
-      "id": "01KXWFK8YE128C5TZ2EDE8TPZG",
+      "id": "01KYRZJQAHAQYZXH9SWEK77XWP",
       "kind": "failure_criterion",
       "text": [
         "Do NOT expose raw descriptions, normalized values, corpus rows, hidden rule payloads, or full requests."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:17.4246375+00:00"
     },
     {
-      "id": "01KXWFK8YE8X0VCPBVXNKHA5S4",
+      "id": "01KYRZJQAJCFBN0RCW43QNJ0VH",
       "kind": "failure_criterion",
       "text": [
-        "Do NOT offer correction or forced apply as the safe action for stale evidence."
+        "Do NOT return correction or apply for stale evidence; return re-evaluate as the only permitted next-operation enum value."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:17.4246375+00:00"
     },
     {
       "id": "01KXWFK8YF8H3VDZK7YAAP2HM0",

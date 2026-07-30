@@ -5,10 +5,10 @@
   "ref_code": "FR-CLASSIFY-STATUS-HISTORY",
   "title": "Inspect classification status and history",
   "description": [
-    "Return safe durable status for rule, validation, evaluation, apply, feedback, abandonment, and cleanup workflows without rereading private evidence. Implements G4, G5, and UC-CLASSIFY-002/004/005/006."
+    "Return bounded durable status for rule, validation, evaluation, apply, feedback, abandonment, and cleanup workflows without rereading private evidence. Implements G4, G5, and UC-CLASSIFY-002/004/005/006."
   ],
   "rationale": [
-    "After interruption or later review, the owner must know the last durable state and safe next action without inspecting storage or replaying private data."
+    "After interruption or later review, the owner must know the last durable state and the one permitted next operation without inspecting storage or replaying private data."
   ],
   "priority": 1,
   "complexity": "M",
@@ -20,15 +20,15 @@
     "I can resume, review, retire, or clean up safely"
   ],
   "acceptance_criteria": [
-    "Given a status request, when current rule state is returned, then it identifies the active Rule Set Version and draft, active, retired, and superseded rule versions with safe lifecycle metadata.",
-    "Given a retained validation or evaluation run, when status is requested, then it returns its fingerprint, lifecycle state, aggregate outcomes, staleness state, and safe next action without rereading the corpus or LEDGER projection.",
+    "Given a status request, when current rule state is returned, then it identifies the active Rule Set Version and draft, active, retired, and superseded rule versions with rule version ID, Rule Set Version ID, lifecycle state, actor ID, reason code, created-at timestamp, and predecessor or successor IDs.",
+    "Given a retained validation or evaluation run, when status is requested, then it returns its fingerprint, lifecycle state, aggregate outcome counts, staleness state, and exactly one next-operation enum value without rereading the corpus or LEDGER projection.",
     "Given a retained apply run, when status is requested, then it returns the authorized fingerprint, terminal item totals, unresolved frontier, and whether replay or resume is safe.",
     "Given retained feedback, when status is requested, then it returns the referenced outcome, decision type, proposal state, actor, reason, and rule versions without reconstructing evidence.",
     "Given an unknown status subject, when status is requested, then CLASSIFY returns stable not-found and does not search private payloads heuristically.",
-    "Given any expected failure, when status is returned, then it identifies whether CLASSIFY or LEDGER mutation may have occurred and names only the safe retry, resume, re-evaluate, correct, abandon, or cleanup action."
+    "Given any expected failure, when status is returned, then it identifies whether CLASSIFY or LEDGER mutation may have occurred and returns exactly one permitted next-operation enum value from retry, resume, re-evaluate, correct, abandon, cleanup, or none."
   ],
   "security_criteria": [
-    "Status output contains only requested safe metadata and never raw corpus rows, unrelated transaction payloads, or hidden rule contents."
+    "Status output contains only the requested subject ID, lifecycle state, actor ID, reason code, timestamps, fingerprints, aggregate counts, mutation-possibility state, frontier ordinal, result or error code, and next-operation enum; it never contains raw corpus rows, transaction descriptions or amounts, normalized tokens, hidden rule contents, private paths, or serialized requests or results."
   ],
   "status": "active",
   "created_at": "2026-07-19T04:16:33.3832373+00:00",

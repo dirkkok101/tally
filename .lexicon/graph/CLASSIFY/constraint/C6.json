@@ -4,7 +4,7 @@
   "ref_code": "C6",
   "title": "Canonical lifecycle states fail closed",
   "description": [
-    "Inactive transactions, active transfer principal, linked refund behavior, void/supersession state, archived categories, stale snapshots, missing mappings, and multi-rule conflicts follow public LEDGER truth and cannot be guessed around or mutated."
+    "Inactive transactions, active transfer principal, linked refund behavior, void/supersession state, archived categories, stale snapshots, missing mappings, and multi-rule Conflicts follow public LEDGER truth and cannot be guessed around or mutated."
   ],
   "type": "business",
   "created_at": "2026-07-18T17:50:32.4111429+00:00"

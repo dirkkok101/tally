@@ -262,14 +262,14 @@
       "created_at": "2026-07-19T06:04:14.1384778+00:00"
     },
     {
-      "id": "01KXWFK8Y71R30XCQMZ08KNEEC",
+      "id": "01KYRZJQZ8RA2Z0ES4NBDMA0H7",
       "kind": "note",
       "text": [
-        "Private fixture payloads remain ignored and owner-only; only test generators and safe schemas are tracked."
+        "Private fixture payloads remain ignored and owner-only; tracked artifacts are limited to synthetic test generators and source-generated schema definitions."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-19T06:04:14.1384778+00:00"
+      "created_at": "2026-07-30T07:42:18.0881824+00:00"
     }
   ],
   "references": [

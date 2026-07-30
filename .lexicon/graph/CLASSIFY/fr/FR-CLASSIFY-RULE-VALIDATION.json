@@ -5,7 +5,7 @@
   "ref_code": "FR-CLASSIFY-RULE-VALIDATION",
   "title": "Validate candidate rule sets against private evidence",
   "description": [
-    "Evaluate candidate normalization and rule-set versions against owner-only representative and temporal hold-out evidence before activation or broad apply. Implements G6 and UC-CLASSIFY-004."
+    "Evaluate candidate normalization and Rule Set Versions against owner-only representative and temporal hold-out evidence before activation or broad apply. Implements G6 and UC-CLASSIFY-004."
   ],
   "rationale": [
     "A deterministic rule can still be consistently wrong; private held-out evidence is the activation safety gate."
@@ -20,7 +20,7 @@
     "unsafe or brittle behavior cannot be activated or applied broadly"
   ],
   "acceptance_criteria": [
-    "Given a candidate normalization or rule-set version and an owner-only corpus, when validation starts, then the run records the candidate, corpus, expected-outcome, category-catalogue, projection-contract, and normalization fingerprints.",
+    "Given a candidate normalization or Rule Set Version and an owner-only corpus, when validation starts, then the run records the candidate, corpus, expected-outcome, category-catalogue, projection-contract, and normalization fingerprints.",
     "Given a completed validation run, when its report is returned, then every corpus row is accounted for and aggregate totals report suggestions, no-suggestions, conflicts, stale rows, drift canaries, and incorrect-application canaries.",
     "Given any missing or stale required fingerprint, when activation is attempted, then CLASSIFY rejects activation without changing the active Rule Set Version.",
     "Given any incorrect-application canary, when activation is attempted, then CLASSIFY rejects activation without changing the active Rule Set Version.",
