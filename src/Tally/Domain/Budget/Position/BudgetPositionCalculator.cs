@@ -54,7 +54,10 @@ public static class BudgetPositionCalculator
 
         try
         {
-            foreach (var member in actualMembers)
+            // Process in ascending Ordinal so AbsorbedCategoryIds first-seen order matches
+            // the DD/PRD "ascending member-ordinal" rule even when the caller list is shuffled.
+            // Dense 0..n-1 uniqueness is already enforced by ValidateMembership.
+            foreach (var member in actualMembers.OrderBy(static m => m.Ordinal))
             {
                 membershipActualTotal = checked(membershipActualTotal + member.BudgetActualMinorUnits);
 

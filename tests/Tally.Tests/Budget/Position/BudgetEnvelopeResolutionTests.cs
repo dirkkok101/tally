@@ -357,19 +357,21 @@ public sealed class BudgetEnvelopeResolutionTests
     [Fact]
     public void Absorbed_category_ids_follow_first_seen_member_ordinal_order()
     {
-        // Success criterion: absorbed list names descendants in ascending ordinal order.
-        // Grand appears at ordinal 0, Child at ordinal 1 → [Grand, Child] not sorted by id.
+        // TC-BUDGET-ENVELOPE-PARENT-ABSORBS-DESCENDANTS / DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION:
+        // absorbed list names descendants in ascending ordinal first-seen order, not list order
+        // and not category-id sort. Members intentionally reverse-listed so list order ≠ ordinal.
         var result = Calculate(
             entries: [Entry(Root, 1_000)],
             members:
             [
-                Member(0, "tx-grand", Grand, 10, [Root, Child, Grand]),
+                Member(2, "tx-grand-2", Grand, 5, [Root, Child, Grand]),
                 Member(1, "tx-child", Child, 20, [Root, Child]),
-                Member(2, "tx-grand-2", Grand, 5, [Root, Child, Grand])
+                Member(0, "tx-grand", Grand, 10, [Root, Child, Grand])
             ],
             known: [Known(Root), Known(Child), Known(Grand)]);
 
         var position = Assert.Single(result.CategoryPositions);
+        // Ordinal 0 = Grand first-seen, ordinal 1 = Child → [Grand, Child]
         Assert.Equal([Grand, Child], position.AbsorbedCategoryIds);
         Assert.Equal(0, position.DirectActualMinorUnits);
         Assert.Equal(35, position.DescendantActualMinorUnits);
