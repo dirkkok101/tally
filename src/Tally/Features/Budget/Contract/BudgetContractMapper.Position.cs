@@ -7,6 +7,7 @@ using Tally.Contracts.Ledger.Actuals;
 using Tally.Contracts.Ledger.Categories;
 using Tally.Domain.Budget.Periods;
 using Tally.Domain.Budget.Plans;
+using Tally.Domain.Budget.Position;
 using System.Globalization;
 using Tally.Domain.Budget;
 using Tally.Infrastructure.Budget.Storage;
@@ -138,6 +139,40 @@ public static partial class BudgetContractMapper
 
         members = mapped;
         return true;
+    }
+
+    /// <summary>
+    /// Stamp each member's <see cref="BudgetActualMember.EffectiveCategoryId"/> from nearest-ancestor
+    /// envelope resolution against the bound plan entries (DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION).
+    /// Unbudgeted / Uncategorized outcomes remain null.
+    /// </summary>
+    public static IReadOnlyList<BudgetActualMember> ResolveMemberEnvelopes(
+        IReadOnlyList<BudgetActualMember> members,
+        IReadOnlyList<BudgetPlanEntry> planEntries)
+    {
+        ArgumentNullException.ThrowIfNull(members);
+        ArgumentNullException.ThrowIfNull(planEntries);
+
+        if (members.Count == 0)
+        {
+            return members;
+        }
+
+        var plannedByCategory = new Dictionary<string, long>(planEntries.Count, StringComparer.Ordinal);
+        foreach (var entry in planEntries)
+        {
+            plannedByCategory[entry.CategoryId] = entry.PlannedMinorUnits;
+        }
+
+        var resolved = new BudgetActualMember[members.Count];
+        for (var i = 0; i < members.Count; i++)
+        {
+            var member = members[i];
+            var effective = BudgetPositionCalculator.ResolveEnvelope(member, plannedByCategory);
+            resolved[i] = member with { EffectiveCategoryId = effective };
+        }
+
+        return resolved;
     }
 
     public static LedgerSnapshotEvidence? TryMapLedgerSnapshot(ActualsQueryResult actuals, out string? errorCode)

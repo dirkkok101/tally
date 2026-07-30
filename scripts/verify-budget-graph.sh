@@ -84,10 +84,10 @@ for r in d.get("Requirements") or []:
         tcs.add(t["RefCode"])
 print(len(tcs))
 ')"
-if [[ "$linked_tc_count" != "18" ]]; then
-    fail "expected 18 unique linked test cases; got ${linked_tc_count}"
+if [[ "$linked_tc_count" != "30" ]]; then
+    fail "expected 30 unique linked test cases; got ${linked_tc_count}"
 else
-    printf 'coverage: 11/11 FRs; 18 linked TCs; 0 orphans; status healthy\n'
+    printf 'coverage: 11/11 FRs; 30 linked TCs; 0 orphans; status healthy\n'
 fi
 
 # ── Decision path-check ──────────────────────────────────────────────────────
@@ -103,10 +103,10 @@ status=d.get("status")
 print(f"{status}|{total}|{matched}|{missing}")
 ')"
 IFS='|' read -r path_status path_total path_matched path_missing <<< "$path_ok"
-if [[ "$path_status" != "healthy" || "$path_total" != "34" || "$path_matched" != "34" || "$path_missing" != "0" ]]; then
-    fail "path-check expected healthy 34/34 missing=0; got status=${path_status} total=${path_total} matched=${path_matched} missing=${path_missing}"
+if [[ "$path_status" != "healthy" || "$path_total" != "39" || "$path_matched" != "39" || "$path_missing" != "0" ]]; then
+    fail "path-check expected healthy 39/39 missing=0; got status=${path_status} total=${path_total} matched=${path_matched} missing=${path_missing}"
 else
-    printf 'path-check: 34/34 expected paths matched; status healthy\n'
+    printf 'path-check: 39/39 expected paths matched; status healthy\n'
 fi
 
 # ── Link suggest ─────────────────────────────────────────────────────────────
@@ -217,8 +217,8 @@ printf 'plan audit: findings=%s blocking=%s\n' \
     "$(printf '%s\n' "$plan_audit" | jq -r '.blocking_finding_count')"
 
 plan_status="$(lex plan status "$plan" --json)"
-printf '%s\n' "$plan_status" | jq -e '.planning_state == "ready" and .task_count == 24' >/dev/null \
-    || fail "plan status not ready with 24 tasks"
+printf '%s\n' "$plan_status" | jq -e '.planning_state == "ready" and .task_count == 29' >/dev/null \
+    || fail "plan status not ready with 29 tasks"
 printf 'plan status: state=%s tasks=%s\n' \
     "$(printf '%s\n' "$plan_status" | jq -r '.planning_state')" \
     "$(printf '%s\n' "$plan_status" | jq -r '.task_count')"
@@ -309,7 +309,7 @@ print(core)
     fi
 done < <(printf '%s\n' "$plan_status" | jq -r '.tasks[].task_ref_code' | sort)
 if (( context_fail == 0 )); then
-    printf 'context budgets: all 24 tasks core sections within %s tokens\n' "$context_token_limit"
+    printf 'context budgets: all 29 tasks core sections within %s tokens\n' "$context_token_limit"
 fi
 
 # ── Dependency edges acyclic ─────────────────────────────────────────────────
@@ -432,12 +432,15 @@ named_suites=(
     BudgetPlanReadQueryTests
     BudgetPeriodTests
     BudgetPositionCalculatorTests
+    BudgetEnvelopeResolutionTests
+    BudgetEnvelopeIntegrityTests
     GetBudgetPositionQueryTests
     BudgetMutationExecutorTests
     BudgetStateStoreTests
     BudgetHistoryInvariantTests
     BudgetProcessContractTests
     BudgetOperationContractTests
+    BudgetContractShapeTests
     BudgetLedgerBoundaryArchitectureTests
     BudgetLedgerContractClientTests
     LedgerBudgetActualsProjectionTests
@@ -451,6 +454,7 @@ named_suites=(
     BudgetUc001DraftTests
     BudgetUc002ActivationTests
     BudgetUc003PositionTests
+    BudgetEnvelopeProvenanceTests
     BudgetUc004HistoryTests
     BudgetUc005AgentContractTests
     BudgetGraphEvidenceGuardTests
@@ -526,10 +530,10 @@ printf '  lex external-dependency check --module BUDGET --json\n'
 printf '  lex plan coverage PLAN-BUDGET-V1 --json\n'
 printf '  lex plan audit PLAN-BUDGET-V1 --json\n'
 printf '  lex plan status PLAN-BUDGET-V1 --json\n'
-printf '  lex context <TASK> --max-tokens 2500 --json (×24)\n'
+printf '  lex context <TASK> --max-tokens 2500 --json (×29)\n'
 printf '  dotnet test --list-tests --filter FullyQualifiedName~Tally.Tests.Budget\n'
 printf '  dotnet test --filter FullyQualifiedName~BudgetGraphEvidenceGuardTests\n'
-printf 'counts: FR=11/11 linked_tc=18 paths=34/34 link_suggestions=0 endpoint_heuristics=3(N/A CLI) named_suites=%s budget_tests=%s\n' \
+printf 'counts: FR=11/11 linked_tc=30 paths=39/39 link_suggestions=0 endpoint_heuristics=3(N/A CLI) named_suites=%s budget_tests=%s\n' \
     "${#named_suites[@]}" "$full_count"
 
 if (( fail_count > 0 )); then
@@ -537,5 +541,5 @@ if (( fail_count > 0 )); then
     exit 1
 fi
 
-printf 'budget graph verification: exit 0; coverage 11/11; 18 linked TCs; paths 34/34; links clean; 3 CLI-only endpoint heuristics; named suites non-vacuous; 0 graph/plan/forbidden-surface failures\n'
+printf 'budget graph verification: exit 0; coverage 11/11; 30 linked TCs; paths 39/39; links clean; 3 CLI-only endpoint heuristics; named suites non-vacuous; 0 graph/plan/forbidden-surface failures\n'
 exit 0

@@ -25,20 +25,23 @@ public sealed class BudgetGraphEvidenceGuardTests
         "BudgetPlanReadQueryTests",
         "BudgetPeriodTests",
         "BudgetPositionCalculatorTests",
+        "BudgetEnvelopeResolutionTests",
+        "BudgetEnvelopeIntegrityTests",
         "GetBudgetPositionQueryTests",
         "BudgetMutationExecutorTests",
         "BudgetStateStoreTests",
         "BudgetHistoryInvariantTests",
         "BudgetProcessContractTests",
         "BudgetOperationContractTests",
+        // Contract (published + foundation)
+        "BudgetContractShapeTests",
+        "BudgetPublishedContractTests",
         // Ledger composition
         "BudgetLedgerBoundaryArchitectureTests",
         "BudgetLedgerContractClientTests",
         "LedgerBudgetActualsProjectionTests",
         "LedgerBudgetCategoryLifecycleTests",
         "LedgerBudgetPrerequisiteTests",
-        // Contract (published + foundation)
-        "BudgetPublishedContractTests",
         // Recovery / security / performance
         "BudgetAtomicRecoveryTests",
         "BudgetSecurityGateTests",
@@ -49,6 +52,7 @@ public sealed class BudgetGraphEvidenceGuardTests
         "BudgetUc001DraftTests",
         "BudgetUc002ActivationTests",
         "BudgetUc003PositionTests",
+        "BudgetEnvelopeProvenanceTests",
         "BudgetUc004HistoryTests",
         "BudgetUc005AgentContractTests",
         // This gate suite

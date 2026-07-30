@@ -185,6 +185,16 @@ public sealed class GetBudgetInsightEvidenceQuery
                 {
                     requiredIds.Add(member.CategoryId);
                 }
+
+                // Frozen ancestry elements must resolve in known Spend Category evidence
+                // (TASK-BUDGET-ENVELOPE-INTEGRITY / DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION).
+                foreach (var ancestryId in member.AncestryIds)
+                {
+                    if (!string.IsNullOrWhiteSpace(ancestryId))
+                    {
+                        requiredIds.Add(ancestryId);
+                    }
+                }
             }
 
             var categoryResult = await categoryEvidence.ResolveAsync(
@@ -202,6 +212,10 @@ public sealed class GetBudgetInsightEvidenceQuery
             boundCategoryEvidence = categoryResult.Evidence;
             var periodDetail = BudgetContractMapper.ToPeriodDetail(period, periodState);
             revisionDetail = ToRevisionDetail(domainRevision, periodDetail, boundCategoryEvidence);
+
+            // Stamp EffectiveCategoryId before calculator + binding so INSIGHTS members report
+            // the governing envelope (TASK-BUDGET-GATE-INT-ENVELOPE-PROVENANCE).
+            members = BudgetContractMapper.ResolveMemberEnvelopes(members, domainRevision.Entries);
 
             try
             {

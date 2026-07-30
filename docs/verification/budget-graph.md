@@ -10,7 +10,7 @@ This report is **metadata-only**. It records graph commands, exact counts, ref-c
 bash scripts/verify-budget-graph.sh
 ```
 
-Expected: exit 0; coverage is 11 of 11 with 18 linked tests and zero gaps; all 34 design paths match; link suggestions are empty; three CLI-only endpoint heuristics are explicitly matched as non-applicable; every named suite discovers tests; plan coverage/audit/context/dependency checks are clean; forbidden-surface and placeholder scans are empty.
+Expected: exit 0; coverage is 11 of 11 with 30 linked tests and zero gaps; all 39 design paths match; link suggestions are empty; three CLI-only endpoint heuristics are explicitly matched as non-applicable; every named suite discovers tests; plan coverage/audit/context/dependency checks are clean; forbidden-surface and placeholder scans are empty.
 
 ## Evidence surface
 
@@ -25,16 +25,16 @@ Expected: exit 0; coverage is 11 of 11 with 18 linked tests and zero gaps; all 3
 
 | Command | Expected |
 |---|---|
-| `lex coverage --module BUDGET --json` | Status `healthy`; 11/11 active FRs covered; 18 unique linked TCs; 0 orphans; 0 gaps |
-| `lex decision path-check --module BUDGET --json` | Status `healthy`; 34/34 expected paths matched; `missing_count=0` |
+| `lex coverage --module BUDGET --json` | Status `healthy`; 11/11 active FRs covered; 30 unique linked TCs; 0 orphans; 0 gaps |
+| `lex decision path-check --module BUDGET --json` | Status `healthy`; 39/39 expected paths matched; `missing_count=0` |
 | `lex link suggest --module BUDGET --json` | Empty list |
 | `lex endpoint suggest --module BUDGET --json` | Exactly 3 heuristics (below), recorded as non-applicable |
 | `lex endpoint list --module BUDGET --json` | Empty (no HTTP endpoint entities) |
 | `lex external-dependency check --module BUDGET --json` | Four deps with linked TC evidence (statuses recorded; not force-validated without evidence) |
 | `lex plan coverage PLAN-BUDGET-V1 --json` | `gap_count=0` |
 | `lex plan audit PLAN-BUDGET-V1 --json` | `blocking_finding_count=0` |
-| `lex plan status PLAN-BUDGET-V1 --json` | `planning_state=ready`; 24 tasks |
-| `lex context <TASK> --max-tokens 2500 --json` | All 24 tasks within 2500 tokens |
+| `lex plan status PLAN-BUDGET-V1 --json` | `planning_state=ready`; 29 tasks |
+| `lex context <TASK> --max-tokens 2500 --json` | All 29 tasks within 2500 tokens |
 
 ## Endpoint heuristics (CLI-only, non-applicable)
 
@@ -63,14 +63,14 @@ Per-class discovery must be ≥1 before aggregate Budget totals are accepted:
 
 | Family | Classes |
 |---|---|
-| Feature / domain / storage | `CreateBudgetDraftCommandTests`, `ActivateBudgetPlanRevisionCommandTests`, `BudgetPlanReadQueryTests`, `BudgetPeriodTests`, `BudgetPositionCalculatorTests`, `GetBudgetPositionQueryTests`, `BudgetMutationExecutorTests`, `BudgetStateStoreTests`, `BudgetHistoryInvariantTests`, `BudgetProcessContractTests`, `BudgetOperationContractTests` |
+| Feature / domain / storage | `CreateBudgetDraftCommandTests`, `ActivateBudgetPlanRevisionCommandTests`, `BudgetPlanReadQueryTests`, `BudgetPeriodTests`, `BudgetPositionCalculatorTests`, `BudgetEnvelopeResolutionTests`, `BudgetEnvelopeIntegrityTests`, `GetBudgetPositionQueryTests`, `BudgetMutationExecutorTests`, `BudgetStateStoreTests`, `BudgetHistoryInvariantTests`, `BudgetProcessContractTests`, `BudgetOperationContractTests` |
 | Ledger | `BudgetLedgerBoundaryArchitectureTests`, `BudgetLedgerContractClientTests`, `LedgerBudgetActualsProjectionTests`, `LedgerBudgetCategoryLifecycleTests`, `LedgerBudgetPrerequisiteTests` |
-| Contract | `BudgetPublishedContractTests` |
+| Contract | `BudgetContractShapeTests`, `BudgetPublishedContractTests` |
 | Recovery | `BudgetAtomicRecoveryTests` |
 | Security | `BudgetSecurityGateTests` |
 | Performance | `BudgetPersonalScalePerformanceTests` |
 | INSIGHTS | `BudgetInsightsContractTests` |
-| UC | `BudgetUc001DraftTests` … `BudgetUc005AgentContractTests` |
+| UC | `BudgetUc001DraftTests` … `BudgetUc005AgentContractTests`, `BudgetEnvelopeProvenanceTests` |
 | Graph gate | `BudgetGraphEvidenceGuardTests` |
 
 ## Design path note (recovery)
@@ -108,21 +108,21 @@ Record the runner exit code, FR/TC/path counts, per-class discovery counts, endp
 
 ## Latest run
 
-Executed on 2026-07-27 via `bash scripts/verify-budget-graph.sh` after path/link convergence for `bd-1iz3`.
+Executed on 2026-07-29 via `bash scripts/verify-budget-graph.sh` after envelope-resolution plan extension (29 tasks, 30 linked TCs).
 
 | Check | Result |
 |---|---|
-| `lex coverage` | 11/11 FRs; 18 unique linked TCs; 0 orphans; healthy |
-| `lex decision path-check` | 34/34 paths; healthy |
+| `lex coverage` | 11/11 FRs; 30 unique linked TCs; 0 orphans; healthy |
+| `lex decision path-check` | 39/39 paths; healthy |
 | `lex link suggest` | 0 suggestions |
 | `lex endpoint suggest` | 3 heuristics → non-applicable CLI-only |
 | `lex endpoint list` | 0 entities |
-| External deps | 4 evidence-linked (`assumed`/`partial`; not force-validated) |
-| Plan coverage / audit | 154/154 covered; 0 gaps; 0 blocking findings |
-| Context budgets | 24/24 core sections ≤ 2500 tokens |
-| Dependencies | Acyclic (24 tasks, 68 edges) |
-| Named suite discovery | 27 classes, each ≥1 (aggregate Budget discovery 637) |
-| Guard tests | 6/6 passed |
+| External deps | 4 evidence-linked (not force-validated without consumer pairing) |
+| Plan coverage / audit | 178/178 covered; 0 gaps; 0 blocking findings |
+| Context budgets | 29/29 core sections ≤ 2500 tokens |
+| Dependencies | Acyclic (29 tasks) |
+| Named suite discovery | 31 classes, each ≥1 (aggregate Budget discovery 685) |
+| Guard tests | 7/7 passed |
 | Forbidden / placeholder scans | 0 hits |
 | Script exit | 0 |
 

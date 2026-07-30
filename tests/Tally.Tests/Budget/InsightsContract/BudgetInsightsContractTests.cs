@@ -201,6 +201,43 @@ public sealed class BudgetInsightsContractTests : IAsyncLifetime
         Assert.Equal(64, evidence.BindingFingerprint.Length);
     }
 
+    // TC-BUDGET-ENVELOPE-MEMBER-PROVENANCE / FR-BUDGET-INSIGHTS-PROJECTION
+    [Fact]
+    public async Task BoundRevision_members_report_frozen_ancestry_and_effective_category()
+    {
+        var root = await CreateCategoryAsync("EnvInsightsRoot");
+        var child = await CreateCategoryAsync("EnvInsightsChild", root.CategoryId);
+        var draft = await CreateDraftAsync(
+            Period(2026, 7),
+            [Entry(root.CategoryId, 50_000)],
+            "envelope insights");
+        await ActivateAsync(draft.Value!.Revision.RevisionId, "act");
+
+        var txChild = await RecordAsync("-4.00", "2026-07-07", "child-spend");
+        await AssignCategoryAsync(txChild.TransactionId, child.CategoryId);
+        var txUncat = await RecordAsync("-0.25", "2026-07-08", "uncat-spend");
+
+        var result = await GetEvidenceAsync(Period(2026, 7));
+        Assert.True(result.IsSuccess, result.ErrorCode);
+        var evidence = result.Value!.Evidence;
+
+        Assert.Equal(BudgetInsightPlanState.BoundRevision, evidence.PlanState);
+        var childMember = evidence.ActualMembers.Single(m => m.TransactionId == txChild.TransactionId);
+        Assert.Equal([root.CategoryId, child.CategoryId], childMember.AncestryIds);
+        Assert.Equal(root.CategoryId, childMember.EffectiveCategoryId);
+
+        var uncatMember = evidence.ActualMembers.Single(m => m.TransactionId == txUncat.TransactionId);
+        Assert.Null(uncatMember.CategoryId);
+        Assert.Empty(uncatMember.AncestryIds);
+        Assert.Null(uncatMember.EffectiveCategoryId);
+
+        var rootPos = evidence.Position!.CategoryPositions.Single(p => p.CategoryId == root.CategoryId);
+        Assert.Equal(400, rootPos.ActualMinorUnits);
+        Assert.Equal(0, rootPos.DirectActualMinorUnits);
+        Assert.Equal(400, rootPos.DescendantActualMinorUnits);
+        Assert.Equal([child.CategoryId], rootPos.AbsorbedCategoryIds);
+    }
+
     // FR-BUDGET-INSIGHTS-PROJECTION / NoBudgetPlan
     [Fact]
     public async Task NoBudgetPlan_returns_actuals_without_plan_position_or_calculator_schema()
@@ -794,10 +831,10 @@ public sealed class BudgetInsightsContractTests : IAsyncLifetime
             LedgerJsonContext.Default.AccountDetail);
     }
 
-    private Task<CategoryDetail> CreateCategoryAsync(string name) =>
+    private Task<CategoryDetail> CreateCategoryAsync(string name, string? parentCategoryId = null) =>
         ExecuteSuccessAsync(
             "ledger.category.create",
-            new CreateCategoryInput(name),
+            new CreateCategoryInput(name, parentCategoryId),
             NextKey(),
             LedgerJsonContext.Default.CreateCategoryInput,
             LedgerJsonContext.Default.CategoryDetail);

@@ -12,5 +12,14 @@
   ],
   "owner": "BUDGET discovery",
   "disposition": "unspecified",
-  "created_at": "2026-07-19T13:27:36.5727835+00:00"
+  "created_at": "2026-07-19T13:27:36.5727835+00:00",
+  "links": [
+    {
+      "id": "01KYQ34K8X7TNE81T03BPHG00S",
+      "target_type": "design_decision",
+      "target": "DD-BUDGET-CATEGORY-ENVELOPE-RESOLUTION",
+      "rel": "see-also",
+      "created_at": "2026-07-29T14:05:59.9664361+00:00"
+    }
+  ]
 }
