@@ -79,15 +79,24 @@ public sealed class ClassifyOperationIdempotencyStore
     /// </summary>
     public ClassifyIdempotencyLookup Resolve(
         ClassifyOperationIdempotencyRow? existing,
+        string operationId,
+        string contractVersion,
         string requestFingerprint)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(operationId);
+        ArgumentException.ThrowIfNullOrWhiteSpace(contractVersion);
         ArgumentException.ThrowIfNullOrWhiteSpace(requestFingerprint);
         if (existing is null)
         {
             return ClassifyIdempotencyLookup.Miss;
         }
 
-        return string.Equals(existing.RequestFingerprint, requestFingerprint, StringComparison.Ordinal)
+        var sameIdentity =
+            string.Equals(existing.OperationId, operationId, StringComparison.Ordinal)
+            && string.Equals(existing.ContractVersion, contractVersion, StringComparison.Ordinal)
+            && string.Equals(existing.RequestFingerprint, requestFingerprint, StringComparison.Ordinal);
+
+        return sameIdentity
             ? ClassifyIdempotencyLookup.Replay(existing)
             : ClassifyIdempotencyLookup.Conflict(existing);
     }

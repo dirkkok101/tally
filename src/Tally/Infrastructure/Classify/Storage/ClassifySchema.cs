@@ -465,7 +465,21 @@ public static class ClassifySchema
             BEGIN
                 SELECT RAISE(ABORT, 'invalid validation_run lifecycle transition')
                 WHERE NOT (
-                    (OLD.lifecycle_state = 'running' AND NEW.lifecycle_state IN ('completed', 'failed', 'abandoned'))
+                    (OLD.lifecycle_state = 'running'
+                        AND NEW.lifecycle_state IN ('completed', 'failed', 'abandoned')
+                        AND NEW.completed_at IS NOT NULL)
+                );
+            END;
+
+            CREATE TRIGGER validation_run_completion_transition_scoped
+            BEFORE UPDATE OF completed_at ON validation_run
+            BEGIN
+                SELECT RAISE(ABORT, 'validation_run completion is transition-scoped')
+                WHERE NOT (
+                    OLD.lifecycle_state = 'running'
+                    AND NEW.lifecycle_state IN ('completed', 'failed', 'abandoned')
+                    AND OLD.completed_at IS NULL
+                    AND NEW.completed_at IS NOT NULL
                 );
             END;
 
@@ -481,7 +495,21 @@ public static class ClassifySchema
             BEGIN
                 SELECT RAISE(ABORT, 'invalid apply_run lifecycle transition')
                 WHERE NOT (
-                    (OLD.lifecycle_state = 'running' AND NEW.lifecycle_state IN ('completed', 'failed', 'abandoned'))
+                    (OLD.lifecycle_state = 'running'
+                        AND NEW.lifecycle_state IN ('completed', 'failed', 'abandoned')
+                        AND NEW.completed_at IS NOT NULL)
+                );
+            END;
+
+            CREATE TRIGGER apply_run_completion_transition_scoped
+            BEFORE UPDATE OF completed_at ON apply_run
+            BEGIN
+                SELECT RAISE(ABORT, 'apply_run completion is transition-scoped')
+                WHERE NOT (
+                    OLD.lifecycle_state = 'running'
+                    AND NEW.lifecycle_state IN ('completed', 'failed', 'abandoned')
+                    AND OLD.completed_at IS NULL
+                    AND NEW.completed_at IS NOT NULL
                 );
             END;
 
@@ -494,13 +522,23 @@ public static class ClassifySchema
             WHEN OLD.item_state IN ('applied', 'already_applied', 'rejected', 'failed')
             BEGIN SELECT RAISE(ABORT, 'terminal apply_item rows are immutable'); END;
 
+            CREATE TRIGGER apply_item_request_immutable
+            BEFORE UPDATE OF apply_id, ordinal, transaction_id, ledger_operation_id, category_id,
+                expected_active_allocation_id, expected_transaction_revision, expected_relationship_revision,
+                expected_allocation_revision, correction_reason, ledger_request_fingerprint, ledger_idempotency_key
+            ON apply_item
+            BEGIN SELECT RAISE(ABORT, 'apply_item replay request is immutable'); END;
+
             CREATE TRIGGER apply_item_transition
             BEFORE UPDATE OF item_state ON apply_item
             WHEN OLD.item_state IN ('planned', 'unresolved')
             BEGIN
                 SELECT RAISE(ABORT, 'invalid apply_item state transition')
                 WHERE NOT (
-                    NEW.item_state IN ('applied', 'already_applied', 'rejected', 'failed', 'unresolved', 'planned')
+                    (OLD.item_state = 'planned'
+                        AND NEW.item_state IN ('applied', 'already_applied', 'rejected', 'failed', 'unresolved'))
+                    OR (OLD.item_state = 'unresolved'
+                        AND NEW.item_state IN ('applied', 'already_applied', 'rejected', 'failed'))
                 );
             END;
 

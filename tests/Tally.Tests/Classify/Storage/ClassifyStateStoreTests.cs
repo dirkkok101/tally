@@ -302,7 +302,7 @@ public sealed class ClassifyStateStoreTests : IAsyncLifetime
 
         await using var readTx = store.BeginImmediate(connection);
         var existing = await idempotency.FindAsync(connection, readTx, "key-1", CancellationToken.None);
-        var lookup = idempotency.Resolve(existing, fingerprint);
+        var lookup = idempotency.Resolve(existing, "classify.evaluate", "1.0", fingerprint);
         Assert.Equal(ClassifyIdempotencyDisposition.Replay, lookup.Disposition);
         Assert.Equal(terminal, lookup.Record!.TerminalResult);
     }
@@ -338,8 +338,32 @@ public sealed class ClassifyStateStoreTests : IAsyncLifetime
             "classify.evaluate", "1.0", "human", "owner", null, other.RootElement);
         await using var readTx = store.BeginImmediate(connection);
         var existing = await idempotency.FindAsync(connection, readTx, "key-2", CancellationToken.None);
-        var lookup = idempotency.Resolve(existing, otherFingerprint);
+        var lookup = idempotency.Resolve(existing, "classify.evaluate", "1.0", otherFingerprint);
         Assert.Equal(ClassifyIdempotencyDisposition.Conflict, lookup.Disposition);
+    }
+
+    [Fact]
+    public void Replay_requires_explicit_operation_and_contract_identity_even_when_fingerprint_matches()
+    {
+        const string fingerprint = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        var record = new ClassifyOperationIdempotencyRow(
+            "key-identity",
+            "classify.evaluate",
+            "1.0",
+            fingerprint,
+            "{}",
+            "2026-07-31T00:00:00.0000000Z");
+        var idempotency = new ClassifyOperationIdempotencyStore();
+
+        Assert.Equal(
+            ClassifyIdempotencyDisposition.Replay,
+            idempotency.Resolve(record, "classify.evaluate", "1.0", fingerprint).Disposition);
+        Assert.Equal(
+            ClassifyIdempotencyDisposition.Conflict,
+            idempotency.Resolve(record, "classify.apply.run", "1.0", fingerprint).Disposition);
+        Assert.Equal(
+            ClassifyIdempotencyDisposition.Conflict,
+            idempotency.Resolve(record, "classify.evaluate", "2.0", fingerprint).Disposition);
     }
 
     [Fact]

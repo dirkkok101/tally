@@ -150,6 +150,34 @@ public sealed class ClassifyHistoryInvariantTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Apply_item_frozen_replay_request_cannot_change_before_terminal_state()
+    {
+        await using var connection = await SeedApplyAsync(plannedItem: true);
+        await Assert.ThrowsAsync<SqliteException>(() =>
+            ExecuteAsync(connection, "UPDATE apply_item SET category_id = 'cat-other' WHERE apply_id = 'apply-1' AND ordinal = 0;"));
+        await Assert.ThrowsAsync<SqliteException>(() =>
+            ExecuteAsync(connection, "UPDATE apply_item SET item_state = 'planned' WHERE apply_id = 'apply-1' AND ordinal = 0;"));
+    }
+
+    [Fact]
+    public async Task Apply_run_completion_is_writable_only_during_terminal_transition()
+    {
+        await using var connection = await SeedApplyAsync(plannedItem: true);
+
+        await Assert.ThrowsAsync<SqliteException>(() =>
+            ExecuteAsync(connection, "UPDATE apply_run SET completed_at = '2026-07-31T01:00:00Z' WHERE apply_id = 'apply-1';"));
+
+        await ExecuteAsync(connection, """
+            UPDATE apply_run
+            SET lifecycle_state = 'completed', completed_at = '2026-07-31T01:00:00Z'
+            WHERE apply_id = 'apply-1' AND lifecycle_state = 'running';
+            """);
+
+        await Assert.ThrowsAsync<SqliteException>(() =>
+            ExecuteAsync(connection, "UPDATE apply_run SET completed_at = '2026-07-31T02:00:00Z' WHERE apply_id = 'apply-1';"));
+    }
+
+    [Fact]
     public async Task Foreign_keys_restrict_delete_of_referenced_history()
     {
         await using var connection = await SeedEvaluationAsync();
