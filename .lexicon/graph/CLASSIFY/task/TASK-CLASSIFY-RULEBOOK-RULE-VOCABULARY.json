@@ -45,67 +45,76 @@
   ],
   "files": [
     {
-      "id": "01KYVN0TNER771DXZ8V27RWR20",
+      "id": "01KYWH07K91MZX2504W780NV5H",
       "path": "src/Tally/Domain/Classify/Rules/ClassificationRuleVocabulary.cs",
       "action": "create",
       "role": "field and predicate registry",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-07-31T16:44:29.1607225+00:00"
     },
     {
-      "id": "01KYVN0TNFN0TNG3G07D2P1KBZ",
+      "id": "01KYWH07K9DZXWJBCMX13XXM52",
       "path": "src/Tally/Domain/Classify/Rules/RuleCondition.cs",
       "action": "create",
       "role": "canonical typed conditions",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-07-31T16:44:29.1607225+00:00"
     },
     {
-      "id": "01KYVN0TNFS6GPPG1Q6DS2FKR1",
+      "id": "01KYWH07KA5P465NFYN8S43P57",
       "path": "src/Tally/Domain/Classify/Normalization/NormalizationDescriptor.cs",
       "action": "create",
       "role": "version descriptor",
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-07-31T16:44:29.1607225+00:00"
     },
     {
-      "id": "01KYVN0TNFA4ZDMY6216XNK3ZH",
+      "id": "01KYWH07KAA2Q964J54NM8C7D5",
       "path": "src/Tally/Domain/Classify/Normalization/NormalizerV1.cs",
       "action": "create",
       "role": "pure normalizer",
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-07-31T16:44:29.1607225+00:00"
     },
     {
-      "id": "01KYVN0TNFT1N52786Y4SN4SSA",
+      "id": "01KYWH07KA7TYTZ2HFG8CFW0PE",
       "path": "src/Tally/Contracts/Classify/Rules/ClassificationRuleContracts.cs",
       "action": "modify",
       "role": "published rule descriptors",
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-07-31T16:44:29.1607225+00:00"
     },
     {
-      "id": "01KYVN0TNFHERV3G6EKQ493T7R",
+      "id": "01KYWH07KA84MCB4H0AZS047A2",
       "path": "tests/Tally.Tests/Classify/Rules/ClassificationRuleVocabularyTests.cs",
       "action": "test",
       "role": "grammar tests",
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-07-31T16:44:29.1607225+00:00"
     },
     {
-      "id": "01KYVN0TNFFQ7WAJTCG2EG32ZZ",
+      "id": "01KYWH07KAQN230KJZ2T91FA0H",
       "path": "tests/Tally.Tests/Classify/Rules/NormalizerV1Tests.cs",
       "action": "test",
       "role": "golden normalization tests",
       "required": 1,
       "sort_order": 6,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-07-31T16:44:29.1607225+00:00"
+    },
+    {
+      "id": "01KYWH07KA3EN4GFTJW4B1EN15",
+      "path": "src/Tally/Contracts/Classify/ClassifyJsonContext.cs",
+      "action": "modify",
+      "role": "source-generated vocabulary catalogue metadata",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-31T16:44:29.1607225+00:00"
     }
   ],
   "interfaces": [
@@ -256,14 +265,34 @@
       "created_at": "2026-07-31T08:35:28.5399812+00:00"
     },
     {
-      "id": "01KYVN0TNEAZ629P75SAMY5NW2",
+      "id": "01KYWH07K9MBEE96Z7BFM39N75",
       "kind": "note",
       "text": [
         "This task builds only the exact designed vocabulary; viability is decided by the later evidence gate."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-07-31T16:44:29.1607225+00:00"
+    },
+    {
+      "id": "01KYWH07K9T1YDNX4T6MNDGVZB",
+      "kind": "note",
+      "text": [
+        "The global equals predicate uses operand_type=field_value; the selected FieldDescriptor.value_type determines whether its canonical payload is text, enum direction, or exact absolute minor units."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T16:44:29.1607225+00:00"
+    },
+    {
+      "id": "01KYWH07K9JVMRENQZVMAX4VGA",
+      "kind": "note",
+      "text": [
+        "Duplicate conditions means duplicate canonical semantic conditions after normalization with ordinal excluded; repeated semantics at different ordinals must fail closed."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T16:44:29.1607225+00:00"
     }
   ],
   "references": [
