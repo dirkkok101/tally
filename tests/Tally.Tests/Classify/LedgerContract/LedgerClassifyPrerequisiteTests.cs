@@ -464,6 +464,31 @@ public sealed class LedgerClassifyPrerequisiteTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Stale_allocation_revision_on_assign_is_rejected_before_mutation()
+    {
+        var account = await CreateAccount();
+        var cat = await CreateCategory("DriftAllocation");
+        var tx = await Record(account.AccountId, 'y');
+        var preflight = Success(await Preflight([tx.TransactionId]));
+        var item = Assert.Single(preflight.ClassificationItems!);
+
+        var result = await Assign(new AssignCategoryInput(
+            tx.TransactionId,
+            cat.CategoryId,
+            "owner",
+            ExpectedTransactionRevision: item.TransactionRevision,
+            ExpectedRelationshipRevision: item.RelationshipRevision,
+            ExpectedAllocationRevision: "allocation:drift:token",
+            MutationContractVersion: CategoryAllocationMutationVersions.ClassificationV1), "drift-allocation");
+        Assert.NotEqual(0, result.ExitCode);
+        Assert.Equal(CategoryMutationPreconditionCodes.StalePrecondition, ErrorCode(result));
+        AssertNoPartialResult(result);
+
+        var after = await GetTransaction(tx.TransactionId);
+        Assert.Null(after.Category.CategoryId);
+    }
+
+    [Fact]
     public async Task Stale_transaction_revision_on_assign_is_rejected_before_mutation()
     {
         var account = await CreateAccount();
