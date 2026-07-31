@@ -33,76 +33,139 @@
   ],
   "files": [
     {
-      "id": "01KYVN0TN2BV2YQQA4AZJSX2J6",
+      "id": "01KYWB1EGXV43JS8XGP27QAF6H",
       "path": "src/Tally/Contracts/Ledger/Actuals/ActualsContracts.cs",
       "action": "modify",
       "role": "classification projection contracts",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-07-31T15:00:17.5646162+00:00"
     },
     {
-      "id": "01KYVN0TN2FYYZW1FKJ9WB7CZ1",
+      "id": "01KYWB1EGXPS2QJH8KFTT6NNPZ",
       "path": "src/Tally/Contracts/Ledger/Transactions/CategoryAllocationContracts.cs",
       "action": "modify",
       "role": "mutation preconditions",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-07-31T15:00:17.5646162+00:00"
     },
     {
-      "id": "01KYVN0TN20D1254BX6TFS8TG3",
+      "id": "01KYWB1EGX0MGX8BG1E9QE8ZA8",
       "path": "src/Tally/Features/Ledger/Actuals/ActualsQueryHandler.cs",
       "action": "modify",
       "role": "purpose-scoped projection",
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-07-31T15:00:17.5646162+00:00"
     },
     {
-      "id": "01KYVN0TN2M9DAE1BN0J9V1PWB",
+      "id": "01KYWB1EGXYR7RS84FMYVV9T1C",
       "path": "src/Tally/Features/Ledger/Actuals/ActualsOperationModule.cs",
       "action": "modify",
       "role": "versioned descriptor",
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-07-31T15:00:17.5646162+00:00"
     },
     {
-      "id": "01KYVN0TN2SJPYJN3ZK5RTGWVY",
+      "id": "01KYWB1EGXFZ4M9CZS30JNVKGQ",
       "path": "src/Tally/Features/Ledger/Transactions/CategoryAllocationHandlers.cs",
       "action": "modify",
       "role": "atomic revision assertions",
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-07-31T15:00:17.5646162+00:00"
     },
     {
-      "id": "01KYVN0TN2Z55E51YEQWTJQSW5",
+      "id": "01KYWB1EGX9G0HYVQEP8X3Q6DW",
       "path": "src/Tally/Features/Ledger/Transactions/CategoryAllocationOperationModule.cs",
       "action": "modify",
       "role": "mutation descriptor",
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-07-31T15:00:17.5646162+00:00"
     },
     {
-      "id": "01KYVN0TN2B4R5F007HW69F92J",
+      "id": "01KYWB1EGX5Y6J5S49SGAAPJEE",
       "path": "tests/Tally.Tests/Classify/LedgerContract/LedgerClassificationProjectionTests.cs",
       "action": "test",
       "role": "projection contract tests",
       "required": 1,
       "sort_order": 6,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-07-31T15:00:17.5646162+00:00"
     },
     {
-      "id": "01KYVN0TN20B4EC6S1G8AAJSVQ",
+      "id": "01KYWB1EGYV340NJCCJCAZ24CY",
       "path": "tests/Tally.Tests/Classify/LedgerContract/LedgerClassificationMutationPreconditionTests.cs",
       "action": "test",
       "role": "stale-write tests",
       "required": 1,
       "sort_order": 7,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-07-31T15:00:17.5646162+00:00"
+    },
+    {
+      "id": "01KYWB1EGY5JW7QRDKGHHPVHP7",
+      "path": "src/Tally/Bootstrap/LedgerServices.cs",
+      "action": "modify",
+      "role": "classification projection and mutation dependency wiring",
+      "required": 1,
+      "sort_order": 8,
+      "created_at": "2026-07-31T15:00:17.5646162+00:00"
+    },
+    {
+      "id": "01KYWB1EGYAQYQXZQYVXM1Q6JN",
+      "path": "src/Tally/Cli/OperationRegistry.cs",
+      "action": "modify",
+      "role": "released classification mutation error and descriptor registry",
+      "required": 1,
+      "sort_order": 9,
+      "created_at": "2026-07-31T15:00:17.5646162+00:00"
+    },
+    {
+      "id": "01KYWB1EGYKT0KK9J4DD3HGMZN",
+      "path": "src/Tally/Infrastructure/Storage/Actuals/QuerySnapshotStore.cs",
+      "action": "modify",
+      "role": "frozen classification snapshot storage",
+      "required": 1,
+      "sort_order": 10,
+      "created_at": "2026-07-31T15:00:17.5646162+00:00"
+    },
+    {
+      "id": "01KYWB1EGYCGRTAXKFY934WJ94",
+      "path": "src/Tally/Infrastructure/Storage/Categories/CategoryStore.cs",
+      "action": "modify",
+      "role": "transaction-scoped active category catalogue",
+      "required": 1,
+      "sort_order": 11,
+      "created_at": "2026-07-31T15:00:17.5646162+00:00"
+    },
+    {
+      "id": "01KYWB1EGY6Z75TZBH2CNYZP3Q",
+      "path": "src/Tally/Infrastructure/Storage/Relationships/RelationshipStore.cs",
+      "action": "modify",
+      "role": "atomic relationship revision lookup",
+      "required": 1,
+      "sort_order": 12,
+      "created_at": "2026-07-31T15:00:17.5646162+00:00"
+    },
+    {
+      "id": "01KYWB1EGY6GT27VPVRVSQH0BA",
+      "path": "src/Tally/Infrastructure/Storage/Transactions/CategoryAllocationStore.cs",
+      "action": "modify",
+      "role": "current allocation revision lookup",
+      "required": 1,
+      "sort_order": 13,
+      "created_at": "2026-07-31T15:00:17.5646162+00:00"
+    },
+    {
+      "id": "01KYWB1EGYVHMHYR82BXNC8E1Y",
+      "path": "tests/Tally.Tests/Cli/Snapshots/ledger-operations-v1.json",
+      "action": "test",
+      "role": "public schema fingerprint snapshot",
+      "required": 1,
+      "sort_order": 14,
+      "created_at": "2026-07-31T15:00:17.5646162+00:00"
     }
   ],
   "interfaces": [
