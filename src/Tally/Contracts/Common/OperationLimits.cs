@@ -8,12 +8,12 @@ namespace Tally.Contracts.Common;
 /// Use <see cref="NotApplicable"/> for dimensions that do not apply to an operation — never omit and never use 0 as “unknown”.
 /// </summary>
 public sealed record OperationLimits(
-    [property: JsonRequired] long MaxTransactionCount,
-    [property: JsonRequired] long MaxRuleCount,
-    [property: JsonRequired] long MaxEvidenceRowCount,
-    [property: JsonRequired] long MaxCorpusRowCount,
-    [property: JsonRequired] long MaxMemoryBytes,
-    [property: JsonRequired] long MaxProcessingTimeMs)
+    [property: JsonRequired, JsonPropertyName("max_transaction_count")] long MaxTransactionCount,
+    [property: JsonRequired, JsonPropertyName("max_rule_count")] long MaxRuleCount,
+    [property: JsonRequired, JsonPropertyName("max_evidence_row_count")] long MaxEvidenceRowCount,
+    [property: JsonRequired, JsonPropertyName("max_corpus_row_count")] long MaxCorpusRowCount,
+    [property: JsonRequired, JsonPropertyName("max_memory_bytes")] long MaxMemoryBytes,
+    [property: JsonRequired, JsonPropertyName("max_processing_time_ms")] long MaxProcessingTimeMs)
 {
     /// <summary>Explicit inapplicable dimension (not an unknown-limit sentinel; 0 remains a real zero bound).</summary>
     public const long NotApplicable = -1;

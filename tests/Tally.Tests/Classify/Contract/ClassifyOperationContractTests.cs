@@ -34,18 +34,18 @@ public sealed class ClassifyOperationContractTests
     }
 
     [Theory]
-    [InlineData(ClassifyOperationIds.Evaluate, true, "command")]
+    [InlineData(ClassifyOperationIds.Evaluate, true, "mutation")]
     [InlineData(ClassifyOperationIds.OutcomeGet, false, "query")]
-    [InlineData(ClassifyOperationIds.ApplyPreview, true, "command")]
-    [InlineData(ClassifyOperationIds.ApplyRun, true, "command")]
-    [InlineData(ClassifyOperationIds.RuleSave, true, "command")]
-    [InlineData(ClassifyOperationIds.RuleValidate, true, "command")]
-    [InlineData(ClassifyOperationIds.RuleActivate, true, "command")]
-    [InlineData(ClassifyOperationIds.RuleRetire, true, "command")]
-    [InlineData(ClassifyOperationIds.FeedbackRecord, true, "command")]
+    [InlineData(ClassifyOperationIds.ApplyPreview, true, "mutation")]
+    [InlineData(ClassifyOperationIds.ApplyRun, true, "mutation")]
+    [InlineData(ClassifyOperationIds.RuleSave, true, "mutation")]
+    [InlineData(ClassifyOperationIds.RuleValidate, true, "mutation")]
+    [InlineData(ClassifyOperationIds.RuleActivate, true, "mutation")]
+    [InlineData(ClassifyOperationIds.RuleRetire, true, "mutation")]
+    [InlineData(ClassifyOperationIds.FeedbackRecord, true, "mutation")]
     [InlineData(ClassifyOperationIds.Status, false, "query")]
-    [InlineData(ClassifyOperationIds.Abandon, true, "command")]
-    [InlineData(ClassifyOperationIds.Cleanup, true, "command")]
+    [InlineData(ClassifyOperationIds.Abandon, true, "mutation")]
+    [InlineData(ClassifyOperationIds.Cleanup, true, "mutation")]
     public void Mutability_and_idempotency_metadata_match_operation_kind(
         string operationId,
         bool requiresIdempotency,
@@ -236,6 +236,22 @@ public sealed class ClassifyOperationContractTests
         Assert.Equal(OperationLimits.NotApplicable, maintenance.MaxRuleCount);
         Assert.NotEqual(0, maintenance.MaxTransactionCount);
         Assert.True(maintenance.AcceptsTransactionCount(1_000_000));
+    }
+
+    [Fact]
+    public void Operation_limits_use_the_published_stable_wire_names()
+    {
+        var json = JsonSerializer.Serialize(
+            ClassifyOperationModule.V1Limits.Evaluation,
+            ClassifyJsonContext.Default.OperationLimits);
+
+        Assert.Contains("\"max_transaction_count\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"max_rule_count\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"max_evidence_row_count\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"max_corpus_row_count\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"max_memory_bytes\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"max_processing_time_ms\"", json, StringComparison.Ordinal);
+        Assert.DoesNotContain("maxTransactionCount", json, StringComparison.Ordinal);
     }
 
     [Fact]

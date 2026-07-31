@@ -81,7 +81,7 @@ public sealed class ClassifyOperationModule
         Publish(
             ClassifyOperationIds.Evaluate,
             "tally classify evaluate",
-            "command",
+            "mutation",
             requiresIdempotency: true,
             ClassifyJsonContext.Default.ClassifyEvaluateRequest,
             ClassifyJsonContext.Default.ClassifyEvaluateResult,
@@ -101,7 +101,7 @@ public sealed class ClassifyOperationModule
         Publish(
             ClassifyOperationIds.ApplyPreview,
             "tally classify apply preview",
-            "command",
+            "mutation",
             requiresIdempotency: true,
             ClassifyJsonContext.Default.ClassifyApplyPreviewRequest,
             ClassifyJsonContext.Default.ClassifyApplyPreviewResult,
@@ -111,7 +111,7 @@ public sealed class ClassifyOperationModule
         Publish(
             ClassifyOperationIds.ApplyRun,
             "tally classify apply run",
-            "command",
+            "mutation",
             requiresIdempotency: true,
             ClassifyJsonContext.Default.ClassifyApplyRunRequest,
             ClassifyJsonContext.Default.ClassifyApplyRunResult,
@@ -121,7 +121,7 @@ public sealed class ClassifyOperationModule
         Publish(
             ClassifyOperationIds.RuleSave,
             "tally classify rule save",
-            "command",
+            "mutation",
             requiresIdempotency: true,
             ClassifyJsonContext.Default.ClassifyRuleSaveRequest,
             ClassifyJsonContext.Default.ClassifyRuleSaveResult,
@@ -131,7 +131,7 @@ public sealed class ClassifyOperationModule
         Publish(
             ClassifyOperationIds.RuleValidate,
             "tally classify rule validate",
-            "command",
+            "mutation",
             requiresIdempotency: true,
             ClassifyJsonContext.Default.ClassifyRuleValidateRequest,
             ClassifyJsonContext.Default.ClassifyRuleValidateResult,
@@ -141,7 +141,7 @@ public sealed class ClassifyOperationModule
         Publish(
             ClassifyOperationIds.RuleActivate,
             "tally classify rule activate",
-            "command",
+            "mutation",
             requiresIdempotency: true,
             ClassifyJsonContext.Default.ClassifyRuleActivateRequest,
             ClassifyJsonContext.Default.ClassifyRuleActivateResult,
@@ -151,7 +151,7 @@ public sealed class ClassifyOperationModule
         Publish(
             ClassifyOperationIds.RuleRetire,
             "tally classify rule retire",
-            "command",
+            "mutation",
             requiresIdempotency: true,
             ClassifyJsonContext.Default.ClassifyRuleRetireRequest,
             ClassifyJsonContext.Default.ClassifyRuleRetireResult,
@@ -161,7 +161,7 @@ public sealed class ClassifyOperationModule
         Publish(
             ClassifyOperationIds.FeedbackRecord,
             "tally classify feedback record",
-            "command",
+            "mutation",
             requiresIdempotency: true,
             ClassifyJsonContext.Default.ClassifyFeedbackRecordRequest,
             ClassifyJsonContext.Default.ClassifyFeedbackRecordResult,
@@ -181,7 +181,7 @@ public sealed class ClassifyOperationModule
         Publish(
             ClassifyOperationIds.Abandon,
             "tally classify abandon",
-            "command",
+            "mutation",
             requiresIdempotency: true,
             ClassifyJsonContext.Default.ClassifyAbandonRequest,
             ClassifyJsonContext.Default.ClassifyAbandonResult,
@@ -191,7 +191,7 @@ public sealed class ClassifyOperationModule
         Publish(
             ClassifyOperationIds.Cleanup,
             "tally classify cleanup",
-            "command",
+            "mutation",
             requiresIdempotency: true,
             ClassifyJsonContext.Default.ClassifyCleanupRequest,
             ClassifyJsonContext.Default.ClassifyCleanupResult,
