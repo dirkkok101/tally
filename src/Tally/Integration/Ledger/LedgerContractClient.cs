@@ -26,6 +26,8 @@ public sealed class LedgerContractClient(OperationRegistry registry, TallyProces
     private const string CategoryList = "ledger.category.list";
     private const string CategoryGet = "ledger.category.get";
     private const string ActualsQuery = "ledger.actuals.query";
+    private const string CategoryAssign = "ledger.transaction.category.assign";
+    private const string CategoryCorrect = "ledger.transaction.category.correct";
 
     public Task<LedgerContractResult<AccountDetail>> GetAccountAsync(
         string accountId,
@@ -275,6 +277,227 @@ public sealed class LedgerContractClient(OperationRegistry registry, TallyProces
         return new(0, complete, null, first.StandardError);
     }
 
+    /// <summary>
+    /// CLASSIFY purpose-scoped projection via released <c>ledger.actuals.query</c>
+    /// (DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT). Discovers a compatible descriptor before any read,
+    /// drains every page under one frozen snapshot, and returns complete classification membership
+    /// with exact ordinal accounting or no partial result.
+    /// </summary>
+    public async Task<LedgerContractResult<ActualsQueryResult>> QueryClassificationProjectionAsync(
+        ClassificationProjectionPurpose purpose,
+        string contractVersion,
+        SafeActor actor,
+        CancellationToken cancellationToken,
+        IReadOnlyList<string>? transactionIds = null,
+        int? pageSize = null,
+        string itemProjection = ClassificationProjectionVersions.ClassificationV1)
+    {
+        if (!IsCompatible(ActualsQuery, contractVersion, typeof(QueryActualsInput), typeof(ActualsQueryResult)))
+        {
+            return Incompatible<ActualsQueryResult>();
+        }
+
+        if (!string.Equals(itemProjection, ClassificationProjectionVersions.ClassificationV1, StringComparison.Ordinal))
+        {
+            return Incompatible<ActualsQueryResult>();
+        }
+
+        var firstInput = new QueryActualsInput(
+            Purpose: purpose,
+            ItemProjection: itemProjection,
+            TransactionIds: transactionIds,
+            PageSize: pageSize);
+
+        var first = await ExecuteAsync(
+            ActualsQuery,
+            contractVersion,
+            actor,
+            firstInput,
+            null,
+            ActualsJsonContext.Default.QueryActualsInput,
+            ActualsJsonContext.Default.ActualsQueryResult,
+            cancellationToken);
+
+        if (!first.IsSuccess || first.Value is null)
+        {
+            return first;
+        }
+
+        if (!string.Equals(first.Value.LedgerContractVersion, contractVersion, StringComparison.Ordinal)
+            || !string.Equals(first.Value.ProjectionVersion, ClassificationProjectionVersions.ClassificationV1, StringComparison.Ordinal))
+        {
+            return ClassifyIntegrity<ActualsQueryResult>(
+                "Classification projection pages do not carry the requested classification contract identity.");
+        }
+
+        // apply_preflight is a single coherent page in the released contract; still drain if a cursor appears.
+        var classificationCount = first.Value.ClassificationItems?.Count ?? 0;
+        var effectivePageSize = Math.Max(1, pageSize ?? Math.Max(classificationCount, 1));
+        var maxPages = (first.Value.TotalCount / effectivePageSize) + 2;
+
+        var pages = new List<ActualsQueryResult> { first.Value };
+        var cursor = first.Value.Cursor;
+        while (cursor is not null)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (pages.Count >= maxPages)
+            {
+                return ClassifyIntegrity<ActualsQueryResult>(
+                    "Classification projection pagination exceeded the bounded page count for the reported total.");
+            }
+
+            var next = await ExecuteAsync(
+                ActualsQuery,
+                contractVersion,
+                actor,
+                new QueryActualsInput(
+                    Purpose: purpose,
+                    ItemProjection: itemProjection,
+                    Cursor: cursor),
+                null,
+                ActualsJsonContext.Default.QueryActualsInput,
+                ActualsJsonContext.Default.ActualsQueryResult,
+                cancellationToken);
+
+            if (!next.IsSuccess || next.Value is null)
+            {
+                // Drop prior pages — no partial evaluation/preflight on expiry/cursor/generation failure.
+                return new(next.ExitCode, default, next.Error, next.StandardError);
+            }
+
+            pages.Add(next.Value);
+            cursor = next.Value.Cursor;
+        }
+
+        var anchor = pages[0];
+        for (var i = 1; i < pages.Count; i++)
+        {
+            var page = pages[i];
+            if (!string.Equals(page.SnapshotId, anchor.SnapshotId, StringComparison.Ordinal)
+                || !string.Equals(page.StoreGenerationFingerprint, anchor.StoreGenerationFingerprint, StringComparison.Ordinal)
+                || !string.Equals(page.LedgerContractVersion, anchor.LedgerContractVersion, StringComparison.Ordinal)
+                || !string.Equals(page.ProjectionVersion, anchor.ProjectionVersion, StringComparison.Ordinal)
+                || !string.Equals(page.CategoryIdentityLifecycleFingerprint, anchor.CategoryIdentityLifecycleFingerprint, StringComparison.Ordinal)
+                || page.TotalCount != anchor.TotalCount)
+            {
+                return ClassifyIntegrity<ActualsQueryResult>(
+                    "Classification projection pages do not share one frozen snapshot and catalogue identity.");
+            }
+        }
+
+        var classificationItems = pages
+            .SelectMany(page => page.ClassificationItems ?? Array.Empty<ClassificationProjectionItem>())
+            .ToArray();
+        if (classificationItems.Length != anchor.TotalCount)
+        {
+            return ClassifyIntegrity<ActualsQueryResult>(
+                "Classification projection membership does not match the full-set total count.");
+        }
+
+        if (classificationItems.Select(item => item.TransactionId).Distinct(StringComparer.Ordinal).Count()
+            != classificationItems.Length)
+        {
+            return ClassifyIntegrity<ActualsQueryResult>(
+                "Classification projection pages returned a duplicated transaction member.");
+        }
+
+        var ordinals = classificationItems.Select(item => item.Ordinal).ToArray();
+        if (!ordinals.SequenceEqual(Enumerable.Range(0, anchor.TotalCount)))
+        {
+            return ClassifyIntegrity<ActualsQueryResult>(
+                "Classification projection ordinals are incomplete, duplicated, or out of frozen order.");
+        }
+
+        var complete = anchor with
+        {
+            ClassificationItems = classificationItems,
+            ActiveCategories = anchor.ActiveCategories,
+            Cursor = null
+        };
+        return new(0, complete, null, first.StandardError);
+    }
+
+    /// <summary>
+    /// CLASSIFY category display/catalogue evidence via released <c>ledger.category.list</c>.
+    /// </summary>
+    public Task<LedgerContractResult<CategoryListResult>> ListClassificationCategoriesAsync(
+        string contractVersion,
+        SafeActor actor,
+        CancellationToken cancellationToken,
+        CategoryStatus? status = CategoryStatus.Active)
+    {
+        if (!IsCompatible(CategoryList, contractVersion, typeof(ListCategoriesInput), typeof(CategoryListResult)))
+        {
+            return Task.FromResult(Incompatible<CategoryListResult>());
+        }
+
+        return ExecuteAsync(
+            CategoryList,
+            contractVersion,
+            actor,
+            new ListCategoriesInput(Status: status),
+            null,
+            LedgerJsonContext.Default.ListCategoriesInput,
+            LedgerJsonContext.Default.CategoryListResult,
+            cancellationToken);
+    }
+
+    /// <summary>
+    /// CLASSIFY category assignment via released <c>ledger.transaction.category.assign</c>.
+    /// Preserves frozen idempotency key, mutation preconditions, cancellation, and Ledger errors.
+    /// </summary>
+    public Task<LedgerContractResult<CategoryAllocationResult>> AssignCategoryAsync(
+        AssignCategoryInput input,
+        string contractVersion,
+        SafeActor actor,
+        string idempotencyKey,
+        CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(input);
+        if (!IsCompatible(CategoryAssign, contractVersion, typeof(AssignCategoryInput), typeof(CategoryAllocationResult)))
+        {
+            return Task.FromResult(Incompatible<CategoryAllocationResult>());
+        }
+
+        return ExecuteAsync(
+            CategoryAssign,
+            contractVersion,
+            actor,
+            input,
+            idempotencyKey,
+            LedgerJsonContext.Default.AssignCategoryInput,
+            LedgerJsonContext.Default.CategoryAllocationResult,
+            cancellationToken);
+    }
+
+    /// <summary>
+    /// CLASSIFY category correction via released <c>ledger.transaction.category.correct</c>.
+    /// Preserves frozen idempotency key, expected allocation/revisions, cancellation, and Ledger errors.
+    /// </summary>
+    public Task<LedgerContractResult<CategoryAllocationResult>> CorrectCategoryAsync(
+        CorrectCategoryInput input,
+        string contractVersion,
+        SafeActor actor,
+        string idempotencyKey,
+        CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(input);
+        if (!IsCompatible(CategoryCorrect, contractVersion, typeof(CorrectCategoryInput), typeof(CategoryAllocationResult)))
+        {
+            return Task.FromResult(Incompatible<CategoryAllocationResult>());
+        }
+
+        return ExecuteAsync(
+            CategoryCorrect,
+            contractVersion,
+            actor,
+            input,
+            idempotencyKey,
+            LedgerJsonContext.Default.CorrectCategoryInput,
+            LedgerJsonContext.Default.CategoryAllocationResult,
+            cancellationToken);
+    }
+
     private async Task<LedgerContractResult<TResult>> ExecuteAsync<TInput, TResult>(
         string operationId,
         string contractVersion,
@@ -357,4 +580,13 @@ public sealed class LedgerContractClient(OperationRegistry registry, TallyProces
         default,
         new ProcessError(BudgetErrors.Integrity, "integrity", message),
         $"tally: {BudgetErrors.Integrity}");
+
+    /// <summary>
+    /// Client-side frozen-page accounting failure. Does not rewrite downstream Ledger error codes.
+    /// </summary>
+    private static LedgerContractResult<T> ClassifyIntegrity<T>(string message) => new(
+        8,
+        default,
+        new ProcessError("operation.review_required", "integrity", message),
+        "tally: operation.review_required");
 }
