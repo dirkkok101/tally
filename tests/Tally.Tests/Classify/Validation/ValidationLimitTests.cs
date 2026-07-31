@@ -85,13 +85,9 @@ public sealed class ValidationLimitTests : IAsyncLifetime
     [Fact]
     public async Task Exact_max_row_count_is_accepted_when_rows_are_valid()
     {
-        // Use a small exact sample equal to a reduced "exact" path that proves acceptance at limit boundary
-        // without generating 10_000 rows in suite policy-restricted builds. The hard constant is asserted
-        // above; here we prove the command accepts corpus.RowCount == N for a valid N under the max.
         var category = await CreateCategoryAsync("Exact");
         var versionId = await SaveDraftAsync(category.CategoryId, "row");
-        const int n = 32;
-        Assert.True(n <= PrivateCorpusLimits.MaxRowCount);
+        const int n = PrivateCorpusLimits.MaxRowCount;
         var lines = new string[n];
         for (var i = 0; i < n; i++)
         {
@@ -115,14 +111,14 @@ public sealed class ValidationLimitTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("Over");
         var versionId = await SaveDraftAsync(category.CategoryId, "x");
-        // One-over MaxLine is cheaper than 10001 rows; reader also rejects MaxRowCount+1.
-        // Prove reader/command mapping for LimitExceeded → ResourceLimit via oversized line.
         var path = Path.Combine(root, "over.jsonl");
-        var pad = new string('p', PrivateCorpusLimits.MaxLineUtf8Bytes);
-        var line = "{\"ordinal\":0,\"transactionId\":\"tx\",\"accountId\":\"a\",\"sourceDescription\":\"" + pad
-            + "\",\"amountAbsoluteMinor\":1,\"itemLifecycleFingerprint\":\"" + HexLife("o") + "\"}";
-        Assert.True(Encoding.UTF8.GetByteCount(line) > PrivateCorpusLimits.MaxLineUtf8Bytes);
-        WriteOwnerFile(path, line + "\n");
+        var lines = new string[PrivateCorpusLimits.MaxRowCount + 1];
+        for (var i = 0; i < lines.Length; i++)
+        {
+            lines[i] = CorpusLine(i, "x", category.CategoryId);
+        }
+
+        WriteOwnerFile(path, string.Join('\n', lines) + "\n");
 
         var result = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], path),

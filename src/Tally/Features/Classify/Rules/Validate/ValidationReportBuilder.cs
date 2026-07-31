@@ -43,14 +43,11 @@ public static class ValidationReportBuilder
         var incorrect = 0;
         var unexplainedConflicts = 0;
         var drift = 0;
+        var completeExpectedOutcomes = totalRows > 0
+            && corpusRows.All(HasCompleteExpectedOutcome);
 
         foreach (var outcome in outcomes)
         {
-            if (outcome.Kind == ClassificationOutcomeKind.Stale)
-            {
-                drift++;
-            }
-
             if (!expectedByOrdinal.TryGetValue(outcome.Ordinal, out var expected))
             {
                 // Unexpected ordinal — treat as drift canary (membership change).
@@ -61,6 +58,14 @@ public static class ValidationReportBuilder
             if (IsIncorrectApplication(outcome, expected))
             {
                 incorrect++;
+            }
+
+            if (outcome.Kind == ClassificationOutcomeKind.Stale
+                || !MatchesExpectedOutcome(outcome, expected))
+            {
+                // Count at most one drift canary per row. A stale engine outcome always
+                // blocks authority; any other changed expected partition does as well.
+                drift++;
             }
 
             if (IsUnexplainedConflict(outcome, expected))
@@ -78,7 +83,8 @@ public static class ValidationReportBuilder
             : (int)Math.Min(10_000L, (long)suggestionCount * 10_000L / totalRows);
 
         var activationEligible =
-            totalRows == accountedRows
+            completeExpectedOutcomes
+            && totalRows == accountedRows
             && incorrect == 0
             && unexplainedConflicts == 0
             && drift == 0
@@ -188,6 +194,25 @@ public static class ValidationReportBuilder
 
         return false;
     }
+
+    private static bool HasCompleteExpectedOutcome(PrivateCorpusRow row) =>
+        row.ExpectedOutcomeKind switch
+        {
+            "suggestion" => !string.IsNullOrWhiteSpace(row.ExpectedCategoryId),
+            "no_suggestion" or "conflict" or "stale" => row.ExpectedCategoryId is null,
+            _ => false
+        };
+
+    private static bool MatchesExpectedOutcome(ClassificationOutcome outcome, PrivateCorpusRow expected) =>
+        expected.ExpectedOutcomeKind switch
+        {
+            "suggestion" => outcome.Kind == ClassificationOutcomeKind.Suggestion
+                && string.Equals(outcome.CategoryId, expected.ExpectedCategoryId, StringComparison.Ordinal),
+            "no_suggestion" => outcome.Kind == ClassificationOutcomeKind.NoSuggestion,
+            "conflict" => outcome.Kind == ClassificationOutcomeKind.Conflict,
+            "stale" => outcome.Kind == ClassificationOutcomeKind.Stale,
+            _ => false
+        };
 
     private static bool IsUnexplainedConflict(ClassificationOutcome outcome, PrivateCorpusRow expected)
     {

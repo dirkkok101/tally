@@ -509,7 +509,7 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Empty_corpus_file_accounts_zero_rows_and_is_eligible()
+    public async Task Empty_corpus_file_accounts_zero_rows_but_is_not_activation_eligible()
     {
         var category = await CreateCategoryAsync("EmptyC");
         var versionId = await SaveDraftAsync(category.CategoryId, DescriptionEquals("e"));
@@ -522,7 +522,45 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
             CancellationToken.None);
         Assert.True(result.IsSuccess, result.ErrorCode);
         Assert.Equal(0, result.Value!.TotalRows);
-        Assert.True(result.Value.ActivationEligible);
+        Assert.False(result.Value.ActivationEligible);
+    }
+
+    [Fact]
+    public async Task Missing_expected_outcome_is_not_activation_eligible()
+    {
+        var category = await CreateCategoryAsync("MissingExpected");
+        var versionId = await SaveDraftAsync(category.CategoryId, DescriptionEquals("match"));
+        var corpus = WriteCorpus([
+            CorpusRow(0, "tx", "acct", "match", "outflow", 1, null, null)
+        ]);
+        var result = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], corpus),
+            actor,
+            NextKey(),
+            CancellationToken.None);
+        Assert.True(result.IsSuccess, result.ErrorCode);
+        Assert.False(result.Value!.ActivationEligible);
+    }
+
+    [Fact]
+    public async Task Expected_conflict_that_disappears_is_a_drift_canary()
+    {
+        var category = await CreateCategoryAsync("MissingConflict");
+        var versionId = await SaveDraftAsync(category.CategoryId, DescriptionEquals("different"));
+        var corpus = WriteCorpus([
+            CorpusRow(0, "tx", "acct", "no match", "outflow", 1, "conflict", null)
+        ]);
+        var result = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], corpus),
+            actor,
+            NextKey(),
+            CancellationToken.None);
+        Assert.True(result.IsSuccess, result.ErrorCode);
+        Assert.False(result.Value!.ActivationEligible);
+
+        await using var connection = await store.OpenMigratedAsync(CancellationToken.None);
+        var report = await validationStore.GetReportAsync(connection, null, result.Value.ValidationId, CancellationToken.None);
+        Assert.Equal(1, report!.DriftCanaryCount);
     }
 
     [Fact]
