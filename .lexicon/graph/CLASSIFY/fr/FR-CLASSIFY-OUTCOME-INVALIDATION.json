@@ -36,7 +36,7 @@
     "Given the active Rule Set Version changes, when a prior outcome is inspected or applied, then CLASSIFY identifies that changed fingerprint dimension and blocks apply.",
     "Given a stale outcome, when the owner requests the permitted next operation, then CLASSIFY returns re-evaluate and does not return correction or apply."
   ],
-  "status": "deferred",
+  "status": "active",
   "created_at": "2026-07-19T04:16:33.3832373+00:00",
   "links": [
     {

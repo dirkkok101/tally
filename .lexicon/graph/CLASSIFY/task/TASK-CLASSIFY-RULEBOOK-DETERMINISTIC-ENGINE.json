@@ -1,0 +1,395 @@
+{
+  "id": "01KYVN0TMJ8R0HFTJHSYNK5B0G",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "sub_plan_id": "01KYVMRFMVDR8FVRNAFKMSGFX5",
+  "ref_code": "TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE",
+  "slug": "RULEBOOK-DETERMINISTIC-ENGINE",
+  "title": "Build the deterministic classification engine",
+  "description": [
+    "Implement pure ordered matching, compatible aggregation, conflicts, fingerprints, canonical hashing, and bounded evidence."
+  ],
+  "objective": [
+    "One complete projection and immutable rule set produce reproducible ordered outcomes with no hidden winner or external effect."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 3,
+  "created_at": "2026-07-31T08:35:28.5399812+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYVQYHSFW3CZ955NPY6AYF9C",
+      "bead_id": "bd-2sde",
+      "verification_status": "verified",
+      "verified_at": "2026-07-31T09:26:39.6630568+00:00",
+      "created_at": "2026-07-31T09:26:39.6630568+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KYVN0TNG82192X3JF1QG9GCN",
+      "target": "DD-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNG1YCC1KEAAD2PZN69",
+      "target": "DD-CLASSIFY-RULE-VOCABULARY",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYVN0TNH42SV2J02ABNVA69K",
+      "target": "TASK-CLASSIFY-RULEBOOK-RULE-VOCABULARY",
+      "dependency_type": "compile",
+      "reason": [
+        "The engine consumes the exact vocabulary, normalizer, and condition types."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYVN0TNG8PR8SV86M17HVWF5",
+      "path": "src/Tally/Domain/Classify/Evaluation/ClassificationEngine.cs",
+      "action": "create",
+      "role": "pure evaluator",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNGK69KCTSPMVK5V8D5",
+      "path": "src/Tally/Domain/Classify/Evaluation/ClassificationOutcome.cs",
+      "action": "create",
+      "role": "closed outcomes",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNGSSRGA97107EMHNQF",
+      "path": "src/Tally/Domain/Classify/Evaluation/EvaluationFingerprint.cs",
+      "action": "create",
+      "role": "staleness dimensions",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNG2TFHRDP91BESFRBW",
+      "path": "src/Tally/Domain/Classify/Evaluation/MatchEvidence.cs",
+      "action": "create",
+      "role": "bounded evidence",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNG008WHSRNY8N565RT",
+      "path": "src/Tally/Domain/Classify/Evaluation/CanonicalClassificationHasher.cs",
+      "action": "create",
+      "role": "canonical SHA-256",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNHS5R4618CY0CDSQYA",
+      "path": "tests/Tally.Tests/Classify/Evaluation/ClassificationEngineTests.cs",
+      "action": "test",
+      "role": "outcome partition tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNHJ6HJ8EATH5PPZK8M",
+      "path": "tests/Tally.Tests/Classify/Evaluation/ClassificationDeterminismPropertyTests.cs",
+      "action": "test",
+      "role": "property and accounting tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYVN0TNHE64AKY2XGKZ5X62K",
+      "name": "ClassificationRuleVocabulary",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-RULE-VOCABULARY",
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNHZZY3XHMD0QG2XD33",
+      "name": "NormalizerV1.Normalize",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-RULE-VOCABULARY",
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNHA9Q736Z2FY03A6T6",
+      "name": "ClassificationEngine.Evaluate",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNHC1T45VD02EK4HWMS",
+      "name": "EvaluationFingerprint.Create",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYVN0TNGTSXSWDAQNRV4Z0ET",
+      "kind": "acceptance_check",
+      "text": [
+        "Every input ordinal yields exactly one suggestion, no_suggestion, conflict, or stale result and aggregate totals equal input count."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNGCCE7AV8RBBR8DQXF",
+      "kind": "acceptance_check",
+      "text": [
+        "One match or multiple same-category matches produce one suggestion naming every contributing rule version; incompatible categories produce conflict with no selected category."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNGKV05KFARMQQ86TTY",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical fingerprints produce semantically identical ordered outcomes and evidence under repeated and permuted property cases."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNGT69ASQX0G0E4A7D4",
+      "kind": "acceptance_check",
+      "text": [
+        "EvaluationFingerprint covers contract, projection, store generation, snapshot and expiry, category lifecycle, normalization, rule-set, and ordered item revisions."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNG51Q1BWG65SH1HKYZ",
+      "kind": "acceptance_check",
+      "text": [
+        "MatchEvidence retains only rule, condition, field, predicate, and normalized-value hash references."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNGH6WKE6KDA487878J",
+      "kind": "constraint",
+      "text": [
+        "Pure synchronous domain evaluation; all ordering and limits are explicit inputs."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNGMPQDPW4KB8BJTVS8",
+      "kind": "expected_output",
+      "text": [
+        "ClassificationEngine"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNGTP428MA971WG7AF4",
+      "kind": "expected_output",
+      "text": [
+        "EvaluationFingerprint"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNGRPSPV2JTQXV68RC8",
+      "kind": "expected_output",
+      "text": [
+        "CanonicalClassificationHasher"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNG6ESJDK995ZZZYTZZ",
+      "kind": "expected_output",
+      "text": [
+        "Bounded MatchEvidence"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNGD53S0NKVETB9BM0Q",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT select a winner by rule priority or input order - rejected by DD-CLASSIFY-DETERMINISTIC-EVALUATION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNGKZV46ZPXW6JW8AGD",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT publish partial streamed outcomes or perform storage or Ledger mutation from the engine."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNGXKQA04BSA799644T",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT retain full projection payloads or omit all historical evidence - both alternatives were rejected by DD-CLASSIFY-DETERMINISTIC-EVALUATION."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNG80WRR57J2GTPGXMT",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT introduce random, clock, culture, network, or host-session inputs into matching."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNGPZRT47ZJ9Y6Z66J8",
+      "kind": "note",
+      "text": [
+        "Persistence and public handling are later vertical slices; this task proves the risky semantic core first."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYVN0TNHPAEH1FG32B4CRV2N",
+      "target_ref_code": "NFR-CLASSIFY-DETERMINISTIC-INTEGRITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXW9G1M1SD55SZ80W7NY4SCN",
+      "target_title": "Preserve deterministic classification integrity",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNH9DC7B0CN9ZFS3GJY",
+      "target_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJFJKQ05X63ZSNR5NGY8V",
+      "target_title": "ClassificationEvaluationAndOutcome",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNHD28ZMJJ6FYBVRCQN",
+      "target_ref_code": "DM-CLASSIFY-RULE-VOCABULARY",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJDZ6HCM3V4JF7QERQHN0",
+      "target_title": "ClassificationRuleVocabulary",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNHC43FMW996Q1ZA6J1",
+      "target_ref_code": "FA-CLASSIFY-EVALUATION-EXPLANATION",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXWCJY7M7NVWJBVG35SRNS3Q",
+      "target_title": "Evaluation and Explanation",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNH7H293AVNWY9REWYF",
+      "target_ref_code": "TC-CLASSIFY-DETERMINISTIC-PROPERTY-MATRIX",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PN17CNKRYQ9BRTYQHYQB",
+      "target_title": "Prove classification determinism and row accounting",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYVN0TNF4GYQ7ZY985XHMN9F",
+      "target": "FR-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNGT3EWMW4QSHXN1PT8",
+      "target": "FR-CLASSIFY-OUTCOME-INVALIDATION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYVN0TNH8SCFPVS8BHFC0SPY",
+      "gate_type": "test-evidence",
+      "description": [
+        "Property tests prove exact row accounting and zero selected incompatible conflicts."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYVN0TNHCJKPXSZ3VEWCXNRK",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~ClassificationEngineTests|FullyQualifiedName~ClassificationDeterminismPropertyTests'",
+      "expected_result": "exit 0; at least 40 suggestion, no-match, compatible-overlap, conflict, order, fingerprint, accounting, and permutation cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ]
+}

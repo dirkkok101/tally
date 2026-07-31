@@ -1,10 +1,10 @@
 {
   "id": "01KXV5MA8B6MMYSRPHSQ07FDR0",
   "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
-  "condition": "Before PLAN-CLASSIFY-V1 bead compilation, evaluate held-out representative transactions. If owner-approved deterministic rules cannot reduce per-transaction owner decisions by at least 50 percent while producing zero incorrect batch-applied assignments, stop the custom rule engine and retain explicit manual LEDGER assignment.",
+  "condition": "AUTOMATIC-DISCOVERY EXPERIMENT ONLY. Preserve the PLAN-CLASSIFY-V1 result: if inferred deterministic rules cannot reduce owner decisions by at least 50 percent with zero incorrect applications on held-out evidence, stop automatic discovery. This criterion does not impose a 50 percent threshold on deliberately owner-authored rules.",
   "monitored": 1,
-  "evaluation_state": "triggered",
-  "evaluation_evidence": "Triggered on 2026-07-30: the best zero-incorrect candidate reduced 75 temporal hold-out decisions by 4 percent, below the required 50 percent. Broader starts-with and token-sequence candidates produced incorrect outcomes and were rejected.",
-  "evaluated_at": "2026-07-30T16:58:05.3947271+00:00",
+  "evaluation_state": "clear",
+  "evaluation_evidence": "Current owner-rulebook scope is clear because this criterion is explicitly inapplicable to deliberate owner authorship. Historical automatic-discovery outcome remains triggered: the best zero-incorrect inferred candidate reduced 75 held-out decisions by 4 percent, while broader inferred candidates produced incorrect outcomes; DD-CLASSIFY-VIABILITY-DISPOSITION retains that failed result.",
+  "evaluated_at": "2026-07-31T08:26:40.2711825+00:00",
   "created_at": "2026-07-18T17:50:48.0762919+00:00"
 }

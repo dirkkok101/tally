@@ -15,4 +15,8 @@ Represent every immutable rule version as one or more AND-combined typed conditi
 
 ## Rationale
 
-A normalized typed grammar makes validation, canonical hashing, persistence, explanation, and property testing finite. Arbitrary JSON expressions have two readings and invite executor drift. Regex or plugins expand denial, injection, and AOT risk. Delegating interpretation to the Agent Host makes outcomes session-dependent. The exact small registry is subject to the private projection and normalization spike; failed evidence routes back to design or the do-less path rather than permitting silent grammar expansion.
+A normalized typed grammar makes validation, canonical hashing, persistence, explanation, and property testing finite. Arbitrary expressions have multiple readings and invite executor drift. Regex or plugins expand denial, injection, and AOT risk. Delegating interpretation to the Agent Host makes outcomes session-dependent. The failed automatic-discovery spike rejects inferred broad rules; it does not require expanding or abandoning the same closed grammar for narrow owner-authored positive rules. Mixed-purpose evidence remains transaction-specific, sign or account conditions are explicit where meaning differs, and incompatible categories fail closed.
+
+## Alternatives
+
+Rejected arbitrary JSON expressions because they permit ambiguous interpretation. Rejected regex, fuzzy matching, wildcards, scripts, plugins, and model scores because they expand injection, denial, explainability, and Native-AOT risk. Rejected delegating rule interpretation to the Agent Host because results would vary by session. Rejected a larger initial grammar before the private projection and normalization spike because unevidenced flexibility increases false-match risk.

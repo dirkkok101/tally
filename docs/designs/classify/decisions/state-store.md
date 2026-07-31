@@ -16,3 +16,7 @@ Use one owner-only classify.db under the Tally data root with Microsoft.Data.Sql
 ## Rationale
 
 Sharing Ledger storage violates the public boundary and couples retention. Flat JSON files make atomic activation, row accounting, migrations, idempotency, and saga recovery fragile. A hosted database violates the self-contained constraint. EF and DbContext add a mapping and migration layer without a second provider or hosted request pipeline. Raw SQLite matches the established Tally storage model and permits exact invariant tests.
+
+## Alternatives
+
+Rejected storing CLASSIFY state in the Ledger database because it couples ownership and retention to canonical financial truth. Rejected flat JSON files because atomic activation, migrations, idempotency, row accounting, and saga recovery become fragile. Rejected PostgreSQL or another hosted database because v1 is self-contained. Rejected EF Core because one raw-SQLite provider does not justify an additional mapping and migration abstraction.

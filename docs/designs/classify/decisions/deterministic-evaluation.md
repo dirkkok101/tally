@@ -16,3 +16,7 @@ Acquire the full bounded Ledger projection before evaluation, process items by p
 ## Rationale
 
 Streaming partial durability could publish incomplete results. Priority-based winners hide ambiguity. Persisting full projection payload creates unnecessary financial retention, while storing no evidence makes historical explanation impossible. The bounded metadata evidence is sufficient for the PRD contract. A pure engine plus one atomic store commit keeps the interface equal to the verification surface.
+
+## Alternatives
+
+Rejected priority-based winning rules because they hide incompatible-category ambiguity. Rejected streaming partial outcome durability because it can publish incomplete evaluations. Rejected persisting full projection rows or raw matched values because it retains unnecessary financial payloads. Rejected retaining no evidence and reconstructing from current state because later explanations would not describe the original decision.

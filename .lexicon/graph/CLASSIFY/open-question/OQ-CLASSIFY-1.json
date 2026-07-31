@@ -12,5 +12,14 @@
   ],
   "owner": "CLASSIFY evidence spike before implementation planning",
   "disposition": "non_blocking",
-  "created_at": "2026-07-18T17:51:36.3742724+00:00"
+  "created_at": "2026-07-18T17:51:36.3742724+00:00",
+  "links": [
+    {
+      "id": "01KYVMJABFY41CRGMNR0NFGAVF",
+      "target_type": "plan",
+      "target": "PLAN-CLASSIFY-V1",
+      "rel": "see-also",
+      "created_at": "2026-07-31T08:27:33.1045317+00:00"
+    }
+  ]
 }

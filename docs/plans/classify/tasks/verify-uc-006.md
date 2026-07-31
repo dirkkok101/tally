@@ -22,19 +22,19 @@ UC-CLASSIFY-006 proves an AI Agent Host can orchestrate CLASSIFY without prose s
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| [DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam](../../../designs/classify/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
-| [DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry](../../../designs/classify/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
-| [EXT-CLASSIFY-AI-AGENT-HOST: AI Agent Host](../../../prd/classify/prd.md#ext-classify-ai-agent-host-ai-agent-host) | `external_dependency` | `references` | `true` |
+| DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam | `design_decision` | `governed-by` | `true` |
+| DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry | `design_decision` | `governed-by` | `true` |
+| EXT-CLASSIFY-AI-AGENT-HOST: AI Agent Host | `external_dependency` | `references` | `true` |
 | TC-CLASSIFY-CONTRACT-DISCOVERY-CONTRACT: Verify CLASSIFY contract discovery | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-STRUCTURED-INVOCATION-CONTRACT: Verify structured CLASSIFY invocation | `test_case` | `verifies` | `true` |
-| [UC-CLASSIFY-006: Discover and invoke the CLASSIFY agent contract](../../../prd/classify/prd.md#uc-classify-006-discover-and-invoke-the-classify-agent-contract) | `use_case` | `covers` | `true` |
+| UC-CLASSIFY-006: Discover and invoke the CLASSIFY agent contract | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | The host consumes the complete published contract. |
-| [TASK-CLASSIFY-STATUS-WORKFLOW: TASK-CLASSIFY-STATUS-WORKFLOW](status-workflow.md) | `compile` | The host uses safe status for lifecycle orchestration. |
+| [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | The host consumes the complete published contract. |
+| [TASK-CLASSIFY-STATUS-WORKFLOW](../tasks/status-workflow.md) | `compile` | The host uses safe status for lifecycle orchestration. |
 
 ## Recipe
 
@@ -42,9 +42,9 @@ UC-CLASSIFY-006 proves an AI Agent Host can orchestrate CLASSIFY without prose s
 
 - The compatible host discovers exactly twelve deterministic descriptors and invokes every operation through structured stdin or file input with one stdout envelope.
 - Unsupported CLASSIFY or Ledger versions reject before data read or mutation; malformed and unknown-field requests return stable validation errors.
-- Missing owner identity, unsafe file permissions, or missing idempotency rejects mutation before state change.
-- Diagnostics contain correlation, operation, duration, and safe counts only; no descriptions, tokens, rules, amounts, corpus rows, paths, serialized requests, or results.
-- Status enables safe orchestration without reading CLASSIFY storage or searching private payloads.
+- Missing owner identity, non-owner file permissions, group or other permission bits, or missing idempotency rejects mutation before state change.
+- Diagnostics contain only correlation ID, operation ID, duration, result code, error code, and aggregate item counts; they contain no descriptions, tokens, rules, amounts, corpus rows, paths, serialized requests, or results.
+- Status enables orchestration using only published schemas, subject IDs, lifecycle states, mutation-possibility state, frontier ordinal, aggregate counts, and next-operation enum values without reading CLASSIFY storage or searching private payloads.
 
 ### Failure Criteria
 
@@ -73,9 +73,9 @@ UC-CLASSIFY-006 proves an AI Agent Host can orchestrate CLASSIFY without prose s
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteClassifyPublicContract | `consumes` | [DM-CLASSIFY-OPERATION-CONTRACTS](../../../designs/classify/data-model.md#classifyoperationcontracts) |  |
-| GetClassificationStatusQuery.HandleAsync | `consumes` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
-| VerifiedClassifyUc006 | `produces` | [UC-CLASSIFY-006](../../../prd/classify/prd.md#uc-classify-006-discover-and-invoke-the-classify-agent-contract) |  |
+| CompleteClassifyPublicContract | `consumes` | DM-CLASSIFY-OPERATION-CONTRACTS |  |
+| GetClassificationStatusQuery.HandleAsync | `consumes` | DM-CLASSIFY-STATE-STORE |  |
+| VerifiedClassifyUc006 | `produces` | UC-CLASSIFY-006 |  |
 
 ### Verification
 
@@ -97,12 +97,12 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `covers` -> [UC-CLASSIFY-006: Discover and invoke the CLASSIFY agent contract](../../../prd/classify/prd.md#uc-classify-006-discover-and-invoke-the-classify-agent-contract)
-- `depends-on:compile` -> [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): The host consumes the complete published contract.
-- `depends-on:compile` -> [TASK-CLASSIFY-STATUS-WORKFLOW: TASK-CLASSIFY-STATUS-WORKFLOW](status-workflow.md): The host uses safe status for lifecycle orchestration.
-- `governed-by` -> [DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam](../../../designs/classify/decisions/application-architecture.md)
-- `governed-by` -> [DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry](../../../designs/classify/decisions/cli-operation-contract.md)
-- `references` -> [EXT-CLASSIFY-AI-AGENT-HOST: AI Agent Host](../../../prd/classify/prd.md#ext-classify-ai-agent-host-ai-agent-host)
+- `covers` -> UC-CLASSIFY-006: Discover and invoke the CLASSIFY agent contract
+- `depends-on:compile` -> [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): The host consumes the complete published contract.
+- `depends-on:compile` -> [TASK-CLASSIFY-STATUS-WORKFLOW](../tasks/status-workflow.md): The host uses safe status for lifecycle orchestration.
+- `governed-by` -> DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam
+- `governed-by` -> DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry
+- `references` -> EXT-CLASSIFY-AI-AGENT-HOST: AI Agent Host
 - `verifies` -> TC-CLASSIFY-CONTRACT-DISCOVERY-CONTRACT: Verify CLASSIFY contract discovery
 - `verifies` -> TC-CLASSIFY-STRUCTURED-INVOCATION-CONTRACT: Verify structured CLASSIFY invocation
 

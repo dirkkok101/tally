@@ -1,0 +1,288 @@
+{
+  "id": "01KYVN0TMSF3TXRFEXSM56KDYF",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "sub_plan_id": "01KYVMRHQ4755N53ET4YVEX4XT",
+  "ref_code": "TASK-CLASSIFY-RULEBOOK-VERIFY-UC-002",
+  "slug": "RULEBOOK-VERIFY-UC-002",
+  "title": "Verify outcome explanation and staleness",
+  "description": [
+    "Validation-only UC task with no implements refs; it traces UC-CLASSIFY-002 retained, unknown, unavailable-evidence, stale, and rename behavior."
+  ],
+  "objective": [
+    "UC-CLASSIFY-002 proves bounded reproducible explanation and every specified failure without mutation or historical reconstruction."
+  ],
+  "planning_state": "ready",
+  "priority": 1,
+  "sort_order": 4,
+  "created_at": "2026-07-31T08:35:28.5399812+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYVQYQERCQA1DMW41B5HZXM5",
+      "bead_id": "bd-3cp2",
+      "verification_status": "verified",
+      "verified_at": "2026-07-31T09:26:45.4642708+00:00",
+      "created_at": "2026-07-31T09:26:45.4642708+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KYVN0TPCPAKRT958QK41AX5V",
+      "target": "DD-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYVN0TPC73CDNVX99H4GKJZP",
+      "target": "TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Acceptance invokes the published process boundary."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPCWJT0EG44391FNP6G",
+      "target": "TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION",
+      "dependency_type": "compile",
+      "reason": [
+        "The UC consumes the complete explanation and staleness query."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVRS5HCJG1318ASW8SVPSY4",
+      "target": "TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW",
+      "dependency_type": "compile",
+      "reason": [
+        "UC-002 verifies outcome and current/stale status through the published workflow."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-31T09:41:11.8528657+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYVN0TPCHQ04WPSZZ963925Y",
+      "path": "tests/Tally.Tests/Classify/Acceptance/ClassifyUc002OutcomeTests.cs",
+      "action": "test",
+      "role": "UC-002 acceptance matrix",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYVRW5Z9WQC31H10FC4ZHZ3D",
+      "name": "CompleteClassifyPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-31T09:42:50.6014084+00:00"
+    },
+    {
+      "id": "01KYVRW5ZABSYVF5MWWCZF4V3Q",
+      "name": "GetClassificationOutcomeQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 1,
+      "created_at": "2026-07-31T09:42:50.6014084+00:00"
+    },
+    {
+      "id": "01KYVRW5ZAT4K7C9W72GGNHYVV",
+      "name": "GetClassificationStatusQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "sort_order": 2,
+      "created_at": "2026-07-31T09:42:50.6014084+00:00"
+    },
+    {
+      "id": "01KYVRW5ZA70B3V40T39YFCRWC",
+      "name": "VerifiedClassifyUc002",
+      "direction": "produces",
+      "contract_ref_code": "UC-CLASSIFY-002",
+      "sort_order": 3,
+      "created_at": "2026-07-31T09:42:50.6014084+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KYVN49C5N4X1XS2X8S3NYN5V",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-002",
+      "rel": "verifies",
+      "created_at": "2026-07-31T08:37:21.9269925+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYVN0TPC7GZYSJ9K7DHHA1NY",
+      "kind": "acceptance_check",
+      "text": [
+        "Suggestion, no-suggestion, conflict, and stale results expose exact bounded provenance and exactly one next-operation enum value."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPCEDACAEX3FXW5AJ8M",
+      "kind": "acceptance_check",
+      "text": [
+        "Unknown and evidence-unavailable outcomes remain distinct and never reconstruct from current state."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPC573C0NZPCFANM4AD",
+      "kind": "acceptance_check",
+      "text": [
+        "Every fingerprint change blocks apply and names its dimension; same-ID active category rename is the non-stale display-only control."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPC3FCK2TMCYV0R9F1A",
+      "kind": "acceptance_check",
+      "text": [
+        "No explanation or status request mutates CLASSIFY or Ledger."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPCGG3YDBKP8FCHPKR1",
+      "kind": "constraint",
+      "text": [
+        "Validation-only gate is intentionally loose."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPCAGT5P4ZV6B9HK9NW",
+      "kind": "expected_output",
+      "text": [
+        "VerifiedClassifyUc002"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPC10Q1V4ARTA0QQ0GP",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT omit any UC-CLASSIFY-002 failure path or inspect private storage outside public stores."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPCJ8BZTB6TEM7YVT4X",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept an explanation containing unrelated financial or rule payloads."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPC136TR50EQBNBMBFE",
+      "kind": "note",
+      "text": [
+        "The test matrix enumerates all FR invalidation criteria rather than sampling them."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYVN0TPCK04ZNQBZD0QGYETN",
+      "target_ref_code": "UC-CLASSIFY-002",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXV9ECEMKY7KY640KACPCN2X",
+      "target_title": "Inspect and explain a classification outcome",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPCDBM08YJDNA6F1TD4",
+      "target_ref_code": "TC-CLASSIFY-OUTCOME-EXPLANATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PGKC1HZB1S5D48PYJPP1",
+      "target_title": "Verify bounded outcome explanation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPC7003D1TB88PYSM7C",
+      "target_ref_code": "TC-CLASSIFY-OUTCOME-INVALIDATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PJNH4T6JJF9GTA1GXZ9S",
+      "target_title": "Verify every staleness trigger",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYVN5PZ64TTKBV4HE7BJH2NC",
+      "target": "FR-CLASSIFY-OUTCOME-EXPLANATION",
+      "created_at": "2026-07-31T08:38:08.6142407+00:00"
+    },
+    {
+      "id": "01KYVN5PZ79S2VYVNGYWEFV8GW",
+      "target": "FR-CLASSIFY-OUTCOME-INVALIDATION",
+      "created_at": "2026-07-31T08:38:08.6142407+00:00"
+    },
+    {
+      "id": "01KYVN5PZ7MZSFF593KG4PHV5G",
+      "target": "FR-CLASSIFY-STATUS-HISTORY",
+      "created_at": "2026-07-31T08:38:08.6142407+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYVN0TPC8NQT69QECPFWJJ8D",
+      "gate_type": "test-evidence",
+      "description": [
+        "Every UC-CLASSIFY-002 failure path and staleness dimension has a named assertion."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYVN0TPCJ2HJAMVMRE8VJAND",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ClassifyUc002OutcomeTests",
+      "expected_result": "exit 0; at least 20 outcome, unknown, unavailable-evidence, every-staleness-dimension, rename, safe-action, privacy, and no-mutation cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ]
+}

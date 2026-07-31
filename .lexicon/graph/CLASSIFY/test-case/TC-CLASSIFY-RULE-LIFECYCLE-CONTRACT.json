@@ -11,7 +11,7 @@
   "status": "planned",
   "preconditions": "Supported and unsupported predicates, active and archived categories, passing validation evidence, and an existing active rule are available.",
   "steps": "Save valid and invalid drafts; activate a validated draft; retire and replace active rules; inspect prior versions; rename the referenced category; submit feedback without activation.",
-  "expected": "FR-CLASSIFY-RULE-LIFECYCLE holds: versions and rule sets are immutable and attributable, invalid drafts cannot activate, history remains inspectable, and no event activates automatically.",
+  "expected": "Draft save records immutable owner_authored or feedback_derived provenance without granting authority; validation is required; explicit activation creates one successor Rule Set Version; retirement preserves history; category rename preserves stable identity; feedback proposals remain inactive; no save, feedback, or lifecycle transition mutates Ledger.",
   "owner": "CLASSIFY implementation",
   "created_at": "2026-07-19T04:21:09.2066888+00:00",
   "links": [

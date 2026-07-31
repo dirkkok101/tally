@@ -1,0 +1,390 @@
+{
+  "id": "01KYVN0TMKWWSGFHWB0NZ0D3GD",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "sub_plan_id": "01KYVMRFMVDR8FVRNAFKMSGFX5",
+  "ref_code": "TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION",
+  "slug": "RULEBOOK-RULE-VALIDATION",
+  "title": "Validate candidate rule sets privately",
+  "description": [
+    "Implement rule.validate using the production reader, normalizer, engine, public category state, and aggregate-only durable reports."
+  ],
+  "objective": [
+    "Candidate rules receive aggregate private evidence that blocks unsafe activation without retaining private rows."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 4,
+  "created_at": "2026-07-31T08:35:28.5399812+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYVQYPVWZJ2M3XPBFVXNQQFK",
+      "bead_id": "bd-2kpw",
+      "verification_status": "verified",
+      "verified_at": "2026-07-31T09:26:44.8607117+00:00",
+      "created_at": "2026-07-31T09:26:44.8607117+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KYVN0TNHTVCWZPN9W4A2V4RJ",
+      "target": "DD-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNH24FNNFT5285P6QEF",
+      "target": "DD-CLASSIFY-PRIVATE-VALIDATION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNHADFJH83NJHYR54WF",
+      "target": "DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYVN0TNKB2ZX2B8QVR6CK1ZB",
+      "target": "TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNKZSPFEW34KGVTJRAH",
+      "target": "TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT",
+      "dependency_type": "compile",
+      "reason": [
+        "Validation binds the current public projection and category lifecycle contract."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNKKCHPRNFSBV9P16HN",
+      "target": "TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNM4E0JQVZ8XTT4GEF6",
+      "target": "TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE",
+      "dependency_type": "compile",
+      "reason": [
+        "Validation binds exact immutable candidate rule versions."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYVN0TNJMWE8184BB88P4TF5",
+      "path": "src/Tally/Features/Classify/Rules/Validate/ValidateClassificationRuleCommand.cs",
+      "action": "create",
+      "role": "validation workflow",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNJE16GMK47ZZ41QSX9",
+      "path": "src/Tally/Features/Classify/Rules/Validate/ValidationReportBuilder.cs",
+      "action": "create",
+      "role": "aggregate report",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNJNSCPK1WFCQP7Z7KS",
+      "path": "src/Tally/Infrastructure/Classify/Storage/Rules/ClassificationValidationStore.cs",
+      "action": "create",
+      "role": "aggregate evidence persistence",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNJY0AGC9QPVMB9ZWYB",
+      "path": "tests/Tally.Tests/Classify/Validation/ClassificationRuleValidationTests.cs",
+      "action": "test",
+      "role": "validation contract tests",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNJJHBNMWVDVSK67C10",
+      "path": "tests/Tally.Tests/Classify/Validation/ValidationPrivacyTests.cs",
+      "action": "test",
+      "role": "report and diagnostic canaries",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNJ6PTE54W4YZKXMSH6",
+      "path": "tests/Tally.Tests/Classify/Validation/ValidationLimitTests.cs",
+      "action": "test",
+      "role": "performance and hard limits",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYVRTT6FRSPG342FWS853RH1",
+      "name": "PrivateCorpusReader.ReadAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "sort_order": 0,
+      "created_at": "2026-07-31T09:42:05.7750547+00:00"
+    },
+    {
+      "id": "01KYVRTT6G959V443ZK2Q4BB41",
+      "name": "ClassificationEngine.Evaluate",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 1,
+      "created_at": "2026-07-31T09:42:05.7750547+00:00"
+    },
+    {
+      "id": "01KYVRTT6G2TSCNHXZMJ00EKC5",
+      "name": "ClassificationRuleStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "sort_order": 2,
+      "created_at": "2026-07-31T09:42:05.7750547+00:00"
+    },
+    {
+      "id": "01KYVRTT6GVE6AQ4Q63T25YAEC",
+      "name": "LedgerContractClient.ListClassificationCategoriesAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 3,
+      "created_at": "2026-07-31T09:42:05.7750547+00:00"
+    },
+    {
+      "id": "01KYVRTT6GS0874F23NK7QXMXD",
+      "name": "ValidateClassificationRuleCommand.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "sort_order": 4,
+      "created_at": "2026-07-31T09:42:05.7750547+00:00"
+    },
+    {
+      "id": "01KYVRTT6GY3NZJS188S3GJT33",
+      "name": "ClassificationValidationStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "sort_order": 5,
+      "created_at": "2026-07-31T09:42:05.7750547+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYVN0TNJYBK3V7X7RPHKS13Y",
+      "kind": "acceptance_check",
+      "text": [
+        "Validation binds candidate, corpus, expected-outcome, projection, category-lifecycle, and normalization fingerprints before processing."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNJQMTWGNRT26GN3AVY",
+      "kind": "acceptance_check",
+      "text": [
+        "Every row is counted once; durable evidence contains aggregate suggestions, no-suggestions, conflicts, stale rows, canaries, and fingerprints only."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNJ26NR1DMH85BQYHN0",
+      "kind": "acceptance_check",
+      "text": [
+        "Missing, stale, malformed, over-limit, incorrect-application, or unexplained-conflict evidence is non-activating and preserves the prior active rule set."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNJZD9TRZFXRZBY00RZ",
+      "kind": "acceptance_check",
+      "text": [
+        "An unavailable corpus blocks activation and broad authority but leaves evaluation by the unchanged active set available."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNJF45E4PYW3KJYH9E0",
+      "kind": "acceptance_check",
+      "text": [
+        "Validation of 10000 rows enforces five seconds, 256 MiB, exact-limit acceptance, and one-over-limit rejection on linux-x64."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNJ7WGY0ZWS4D6X6ERJ",
+      "kind": "constraint",
+      "text": [
+        "Use the production ClassificationEngine and PrivateCorpusReader; every async boundary propagates CancellationToken."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNJ9Q4ZN0DJP92DNWJZ",
+      "kind": "expected_output",
+      "text": [
+        "ValidateClassificationRuleCommand"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNJRJ2QE1BPXYR0SXY0",
+      "kind": "expected_output",
+      "text": [
+        "ClassificationValidationStore"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNJN22C17QGMEDQEK1D",
+      "kind": "expected_output",
+      "text": [
+        "Aggregate ValidationReport"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNJ6Z956PEG45TW23MY",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT create a separate validation evaluator - rejected by DD-CLASSIFY-PRIVATE-VALIDATION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNJNC78DN64TPAR4G08",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT persist or export raw descriptions, normalized tokens, amounts, expected outcomes, rows, or source paths."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNJSN0DWV0WKQEZVR12",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT activate a rule or grant broad authority from validation."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNJVYB26KCDC3ZXT789",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT treat missing corpus or stale fingerprints as a warning; fail closed."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYVN0TNK7YTEMASBADTFR41G",
+      "target_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJF6P3ET4FT3NW91YQ53P",
+      "target_title": "ClassificationValidationRun",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVT03KDPN5QV2EJ3KG5X4PH",
+      "target_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJEMC0Y34ANP6YWT0TED7",
+      "target_title": "ClassificationRuleLifecycle",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-31T10:02:27.8219735+00:00"
+    },
+    {
+      "id": "01KYVN0TNKSEHYH5BQ0HVKVHCT",
+      "target_ref_code": "TC-CLASSIFY-RULE-VALIDATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PHA63TDD87QZADSB5RDP",
+      "target_title": "Verify private candidate validation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYVN0TNHWVDB54381JPP991K",
+      "target": "FR-CLASSIFY-RULE-VALIDATION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYVN0TNKWPGWR1XCFC3KST89",
+      "gate_type": "test-evidence",
+      "description": [
+        "Validation tests prove aggregate-only durability, fail-closed authority, and hard resource limits."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYVN0TNKKQDDE3MEMVY577MD",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~ClassificationRuleValidationTests|FullyQualifiedName~ValidationPrivacyTests|FullyQualifiedName~ValidationLimitTests'",
+      "expected_result": "exit 0; at least 32 fingerprint, accounting, canary, corpus-unavailable, privacy, exact-limit, over-limit, time, and memory cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ]
+}

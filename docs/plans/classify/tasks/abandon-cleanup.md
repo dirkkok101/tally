@@ -22,21 +22,21 @@ Unreferenced work and recognized crash residue can be removed safely while every
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| [ADR-CORE-0020: RESTRICT-by-Default Delete Taxonomy](../../../adr/core/0020-restrict-by-default-delete-taxonomy.md) | `adr` | `governed-by` | `true` |
-| [DD-CLASSIFY-ARTIFACT-RETENTION: Fixed owner-only retention and recognized-artifact cleanup](../../../designs/classify/decisions/artifact-retention.md) | `design_decision` | `governed-by` | `true` |
-| [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
-| [DM-CLASSIFY-STATE-STORE: ClassificationStateStore](../../../designs/classify/data-model.md#classificationstatestore) | `data_model` | `touches` | `true` |
-| [FA-CLASSIFY-STATE-RECOVERY: State and Recovery](../../../designs/classify/features/state-recovery/api-surface.md) | `feature_area` | `touches` | `true` |
-| [FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts](../../../prd/classify/prd.md#fr-classify-state-retention-cleanup-retain-attributable-state-and-clean-derived-artifacts) | `requirement` | `implements` | `true` |
-| [NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data](../../../prd/classify/prd.md#nfr-classify-local-data-protection-protect-local-classification-data) | `nfr` | `satisfies` | `true` |
+| ADR-CORE-0020: RESTRICT-by-Default Delete Taxonomy | `adr` | `governed-by` | `true` |
+| DD-CLASSIFY-ARTIFACT-RETENTION: Fixed owner-only retention and recognized-artifact cleanup | `design_decision` | `governed-by` | `true` |
+| DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history | `design_decision` | `governed-by` | `true` |
+| DM-CLASSIFY-STATE-STORE: ClassificationStateStore | `data_model` | `touches` | `true` |
+| FA-CLASSIFY-STATE-RECOVERY: State and Recovery | `feature_area` | `touches` | `true` |
+| FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts | `requirement` | `implements` | `true` |
+| NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data | `nfr` | `satisfies` | `true` |
 | TC-CLASSIFY-STATE-RETENTION-CLEANUP-CONTRACT: Verify retention, abandonment, and cleanup | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-FEEDBACK-PROPOSALS: TASK-CLASSIFY-FEEDBACK-PROPOSALS](feedback-proposals.md) | `compile` | Retention must recognize feedback and proposal references. |
-| [TASK-CLASSIFY-STATE-FOUNDATION: TASK-CLASSIFY-STATE-FOUNDATION](state-foundation.md) | `compile` | Abandonment and cleanup use the designed tombstone, event, and immutable-history schema. |
+| [TASK-CLASSIFY-FEEDBACK-PROPOSALS](../tasks/feedback-proposals.md) | `compile` | Retention must recognize feedback and proposal references. |
+| [TASK-CLASSIFY-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Abandonment and cleanup use the designed tombstone, event, and immutable-history schema. |
 
 ## Recipe
 
@@ -44,9 +44,9 @@ Unreferenced work and recognized crash residue can be removed safely while every
 
 - Abandon applies only to unreferenced drafts, validations, evaluations, and previews, appends a tombstone, makes the subject non-activatable, and removes allowed derived payload atomically.
 - Active rules, rule sets, apply provenance, feedback, and any state referenced by a Ledger allocation reject hard removal with stable blocker metadata.
-- Cleanup accepts a fixed policy version and no path, removes only recognized unlocked temporaries, expired unreferenced previews, and abandoned removable payload, and records safe counts and IDs.
+- Cleanup accepts a fixed policy version and no path, removes only recognized unlocked temporaries, expired unreferenced previews, and abandoned removable payload, and records cleanup run ID, policy version, removed artifact count, retained artifact count, and per-kind counts.
 - Startup validates owner, mode, regular-file identity, recognized name, lock state, and containment before removing prior crash artifacts or accepting mutation.
-- Symlinks, unknown files, outside-root paths, referenced history, success, expected failure, and handled unexpected failure leave no raw corpus copy or unsafe deletion.
+- Symlinks, unknown files, outside-root paths, referenced history, success, expected failure, and handled unexpected failure leave no raw corpus copy or deletion outside the recognized policy.
 
 ### Failure Criteria
 
@@ -87,11 +87,11 @@ Unreferenced work and recognized crash residue can be removed safely while every
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassifyStateStore | `consumes` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
-| AbandonClassificationStateCommand.HandleAsync | `produces` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
-| CleanupClassificationStateCommand.HandleAsync | `produces` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
-| ClassificationRecoveryStore | `produces` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
-| ClassifyArtifactProtection | `produces` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| ClassifyStateStore | `consumes` | DM-CLASSIFY-STATE-STORE |  |
+| AbandonClassificationStateCommand.HandleAsync | `produces` | DM-CLASSIFY-STATE-STORE |  |
+| CleanupClassificationStateCommand.HandleAsync | `produces` | DM-CLASSIFY-STATE-STORE |  |
+| ClassificationRecoveryStore | `produces` | DM-CLASSIFY-STATE-STORE |  |
+| ClassifyArtifactProtection | `produces` | DM-CLASSIFY-STATE-STORE |  |
 
 ### Verification
 
@@ -113,15 +113,15 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-CLASSIFY-FEEDBACK-PROPOSALS: TASK-CLASSIFY-FEEDBACK-PROPOSALS](feedback-proposals.md): Retention must recognize feedback and proposal references.
-- `depends-on:compile` -> [TASK-CLASSIFY-STATE-FOUNDATION: TASK-CLASSIFY-STATE-FOUNDATION](state-foundation.md): Abandonment and cleanup use the designed tombstone, event, and immutable-history schema.
-- `governed-by` -> [ADR-CORE-0020: RESTRICT-by-Default Delete Taxonomy](../../../adr/core/0020-restrict-by-default-delete-taxonomy.md)
-- `governed-by` -> [DD-CLASSIFY-ARTIFACT-RETENTION: Fixed owner-only retention and recognized-artifact cleanup](../../../designs/classify/decisions/artifact-retention.md)
-- `governed-by` -> [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md)
-- `implements` -> [FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts](../../../prd/classify/prd.md#fr-classify-state-retention-cleanup-retain-attributable-state-and-clean-derived-artifacts)
-- `satisfies` -> [NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data](../../../prd/classify/prd.md#nfr-classify-local-data-protection-protect-local-classification-data)
-- `touches` -> [DM-CLASSIFY-STATE-STORE: ClassificationStateStore](../../../designs/classify/data-model.md#classificationstatestore)
-- `touches` -> [FA-CLASSIFY-STATE-RECOVERY: State and Recovery](../../../designs/classify/features/state-recovery/api-surface.md)
+- `depends-on:compile` -> [TASK-CLASSIFY-FEEDBACK-PROPOSALS](../tasks/feedback-proposals.md): Retention must recognize feedback and proposal references.
+- `depends-on:compile` -> [TASK-CLASSIFY-STATE-FOUNDATION](../tasks/state-foundation.md): Abandonment and cleanup use the designed tombstone, event, and immutable-history schema.
+- `governed-by` -> ADR-CORE-0020: RESTRICT-by-Default Delete Taxonomy
+- `governed-by` -> DD-CLASSIFY-ARTIFACT-RETENTION: Fixed owner-only retention and recognized-artifact cleanup
+- `governed-by` -> DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history
+- `implements` -> FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts
+- `satisfies` -> NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data
+- `touches` -> DM-CLASSIFY-STATE-STORE: ClassificationStateStore
+- `touches` -> FA-CLASSIFY-STATE-RECOVERY: State and Recovery
 - `verifies` -> TC-CLASSIFY-STATE-RETENTION-CLEANUP-CONTRACT: Verify retention, abandonment, and cleanup
 
 ## Navigation

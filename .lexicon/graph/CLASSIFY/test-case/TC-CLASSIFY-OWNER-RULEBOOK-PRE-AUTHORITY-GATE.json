@@ -1,0 +1,42 @@
+{
+  "id": "01KYVMEAJSCRQJGA918ZTWXVAE",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-OWNER-RULEBOOK-PRE-AUTHORITY-GATE",
+  "slug": "OWNER-RULEBOOK-PRE-AUTHORITY-GATE",
+  "title": "Validate the owner-authored rulebook before authority",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "security",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "The candidate rulebook and expected outcomes are owner-only runtime inputs outside tracked paths; the released classification_v1 Ledger contract, production normalizer, rule evaluator, draft save, and rule validation operations are available.",
+  "steps": "Run the aggregate-only gate twice over the same private candidate set; account for every row; compare deterministic fingerprints; exercise expected suggestions, explicit no-suggestions, expected conflicts, mixed-purpose rows, sign and account conditions, fee-versus-purchase separation, transfer and linked-refund exclusions from Ledger truth, drift canaries, and owner decision/time measurements; scan every durable and diagnostic output for forbidden payload classes.",
+  "expected": "Both runs return identical fingerprints and totals; accounted rows equal total rows; incorrect applications are zero; unexplained incompatible conflicts are zero; every drift canary remains explicit; coverage, no-suggestion, conflict, decision, and time totals are present; private descriptions, normalized tokens, financial values, identifiers, rows, and source locators are absent; activation and broad apply remain unavailable until the gate receipt is current.",
+  "cleanup": "Remove only recognized disposable gate artifacts; retain aggregate receipt and immutable validation fingerprints; leave owner-only source inputs unchanged.",
+  "implementation_ref": "DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT",
+  "owner": "Personal Finance Owner",
+  "created_at": "2026-07-31T08:25:22.2668038+00:00",
+  "links": [
+    {
+      "id": "01KYVMEAJVGCZ3RSMT8R9YYQQH",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT",
+      "rel": "validates",
+      "created_at": "2026-07-31T08:25:22.2678337+00:00"
+    },
+    {
+      "id": "01KYVMEBYF5B1R2191N54BTQTQ",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-PRIVATE-VALIDATION",
+      "rel": "validates",
+      "created_at": "2026-07-31T08:25:23.6647679+00:00"
+    },
+    {
+      "id": "01KYVMEB95MJMHJVMXR42A4JZ2",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-VALIDATION",
+      "rel": "validates",
+      "created_at": "2026-07-31T08:25:22.9817390+00:00"
+    }
+  ]
+}

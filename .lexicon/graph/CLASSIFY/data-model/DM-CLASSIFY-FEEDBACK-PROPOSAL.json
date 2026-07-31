@@ -4,10 +4,10 @@
   "ref_code": "DM-CLASSIFY-FEEDBACK-PROPOSAL",
   "name": "ClassificationFeedbackAndProposal",
   "description": [
-    "Append-only owner decisions against exact outcomes and at most one non-active smallest-scope rule proposal."
+    "Append-only transaction-level owner decisions against exact outcomes and at most one non-active smallest-scope feedback-derived proposal."
   ],
   "schema_def": [
-    "classification_feedback(feedback_id PK, outcome_id FK, transaction_id, evaluation_id, normalization_version, rule_set_version_id, decision_type, prior_ledger_allocation_id?, resulting_ledger_allocation_id?, reason, actor, occurred_at); rule_proposal(proposal_id PK, feedback_id UNIQUE/FK, proposal_type, source_rule_version_id?, proposed_scope_fingerprint, proposed_category_id?, lifecycle_state=draft, created_at); proposal_type in none, retire, narrow, replace; no proposal may activate or broaden automatically"
+    "classification_feedback(feedback_id PK, outcome_id FK, transaction_id, evaluation_id, normalization_version, rule_set_version_id, decision_type=accept|reject|correct, prior_ledger_allocation_id?, resulting_ledger_allocation_id?, reason, actor, occurred_at); rule_proposal(proposal_id PK, feedback_id UNIQUE/FK, rule_origin=feedback_derived, proposal_type=none|retire|narrow|replace, source_rule_version_id?, proposed_scope_fingerprint, proposed_category_id?, lifecycle_state=draft, created_at); accepted or rejected feedback may produce no proposal; one correction may produce only the smallest-scope draft; no proposal may broaden or activate automatically"
   ],
   "created_at": "2026-07-19T05:11:23.1287012+00:00",
   "links": [

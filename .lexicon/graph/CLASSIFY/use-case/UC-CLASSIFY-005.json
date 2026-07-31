@@ -4,7 +4,7 @@
   "ref_code": "UC-CLASSIFY-005",
   "title": "Use a correction as bounded feedback",
   "preconditions": "The correction and prior classification provenance are attributable; the affected transaction and active category state can be read through public LEDGER operations.",
-  "postconditions": "The correction remains authoritative in LEDGER; feedback is attributable and reversible; no rule is silently generalized or activated; future evaluations use only an explicitly activated rule version.",
+  "postconditions": "The correction remains authoritative in LEDGER; the transaction-level feedback record is append-only and attributable; any proposal remains inactive and may later be retired or superseded only through the normal rule lifecycle; no rule is silently generalized or activated; future evaluations use only an explicitly activated rule version.",
   "main_flow": "CLASSIFY records feedback against the exact evaluation, rule version, and owner correction; explains the prior match; identifies the smallest affected scope; records no proposal when retained evidence is missing or insufficient; otherwise proposes at most one smallest-scope retire, narrow, or replacement draft; and requires candidate validation plus explicit activation before any proposal affects evaluation.",
   "alt_flows": [
     "Record feedback without a rule proposal when prior evidence cannot be proven or does not justify a bounded change.",

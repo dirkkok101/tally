@@ -22,21 +22,21 @@ One reproducible evidence marker proves the implemented CLASSIFY graph is comple
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| [PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES: Implementation Plan Quality Gates](../../../patterns/core/implementation-plan-quality-gates.md) | `pattern` | `governed-by` | `true` |
+| PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES: Implementation Plan Quality Gates | `pattern` | `governed-by` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Graph evidence requires the complete public contract marker. |
-| [TASK-CLASSIFY-GATE-SECURITY: TASK-CLASSIFY-GATE-SECURITY](gate-security.md) | `compile` | Graph evidence requires security evidence. |
-| [TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY: TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY](gate-evidence-private-viability.md) | `compile` | Graph evidence requires the private viability result. |
-| [TASK-CLASSIFY-VERIFY-UC-001: TASK-CLASSIFY-VERIFY-UC-001](verify-uc-001.md) | `compile` | Graph evidence requires UC-CLASSIFY-001 evidence. |
-| [TASK-CLASSIFY-VERIFY-UC-002: TASK-CLASSIFY-VERIFY-UC-002](verify-uc-002.md) | `compile` | Graph evidence requires UC-CLASSIFY-002 evidence. |
-| [TASK-CLASSIFY-VERIFY-UC-003: TASK-CLASSIFY-VERIFY-UC-003](verify-uc-003.md) | `compile` | Graph evidence requires UC-CLASSIFY-003 evidence. |
-| [TASK-CLASSIFY-VERIFY-UC-004: TASK-CLASSIFY-VERIFY-UC-004](verify-uc-004.md) | `compile` | Graph evidence requires UC-CLASSIFY-004 evidence. |
-| [TASK-CLASSIFY-VERIFY-UC-005: TASK-CLASSIFY-VERIFY-UC-005](verify-uc-005.md) | `compile` | Graph evidence requires UC-CLASSIFY-005 evidence. |
-| [TASK-CLASSIFY-VERIFY-UC-006: TASK-CLASSIFY-VERIFY-UC-006](verify-uc-006.md) | `compile` | Graph evidence requires UC-CLASSIFY-006 evidence. |
+| [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Graph evidence requires the complete public contract marker. |
+| [TASK-CLASSIFY-GATE-SECURITY](../tasks/gate-security.md) | `compile` | Graph evidence requires security evidence. |
+| [TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY](../tasks/gate-evidence-private-viability.md) | `compile` | Graph evidence requires the private viability result. |
+| [TASK-CLASSIFY-VERIFY-UC-001](../tasks/verify-uc-001.md) | `compile` | Graph evidence requires UC-CLASSIFY-001 evidence. |
+| [TASK-CLASSIFY-VERIFY-UC-002](../tasks/verify-uc-002.md) | `compile` | Graph evidence requires UC-CLASSIFY-002 evidence. |
+| [TASK-CLASSIFY-VERIFY-UC-003](../tasks/verify-uc-003.md) | `compile` | Graph evidence requires UC-CLASSIFY-003 evidence. |
+| [TASK-CLASSIFY-VERIFY-UC-004](../tasks/verify-uc-004.md) | `compile` | Graph evidence requires UC-CLASSIFY-004 evidence. |
+| [TASK-CLASSIFY-VERIFY-UC-005](../tasks/verify-uc-005.md) | `compile` | Graph evidence requires UC-CLASSIFY-005 evidence. |
+| [TASK-CLASSIFY-VERIFY-UC-006](../tasks/verify-uc-006.md) | `compile` | Graph evidence requires UC-CLASSIFY-006 evidence. |
 
 ## Recipe
 
@@ -45,7 +45,7 @@ One reproducible evidence marker proves the implemented CLASSIFY graph is comple
 - Lex coverage reports 13 of 13 active FRs covered, zero orphan tests, zero gaps, and all 20 planned test cases linked to implementation evidence.
 - Decision path-check reports all 30 expected paths matched; link suggestions are empty and endpoint suggestions confirm no HTTP surface is required.
 - Every named CLASSIFY feature, integration, security, private-evidence, and UC test class has nonzero discovery before aggregate totals are accepted.
-- The evidence report records exact commands, counts, graph ref-codes, and safe fingerprints without private fixture content.
+- The evidence report records exact commands, counts, graph ref-codes, and SHA-256 fingerprints and excludes private fixture content, paths, descriptions, normalized tokens, amounts, and expected rows.
 
 ### Failure Criteria
 
@@ -79,15 +79,15 @@ One reproducible evidence marker proves the implemented CLASSIFY graph is comple
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteClassifyPublicContract | `consumes` | [DM-CLASSIFY-OPERATION-CONTRACTS](../../../designs/classify/data-model.md#classifyoperationcontracts) |  |
-| ClassifySecurityGateEvidence | `consumes` | [NFR-CLASSIFY-LOCAL-DATA-PROTECTION](../../../prd/classify/prd.md#nfr-classify-local-data-protection-protect-local-classification-data) |  |
-| VerifiedClassifyPrivateEvidenceGate | `consumes` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
-| VerifiedClassifyUc001 | `consumes` | [UC-CLASSIFY-001](../../../prd/classify/prd.md#uc-classify-001-evaluate-eligible-transactions) |  |
-| VerifiedClassifyUc002 | `consumes` | [UC-CLASSIFY-002](../../../prd/classify/prd.md#uc-classify-002-inspect-and-explain-a-classification-outcome) |  |
-| VerifiedClassifyUc003 | `consumes` | [UC-CLASSIFY-003](../../../prd/classify/prd.md#uc-classify-003-apply-accepted-classification-decisions) |  |
-| VerifiedClassifyUc004 | `consumes` | [UC-CLASSIFY-004](../../../prd/classify/prd.md#uc-classify-004-manage-and-validate-deterministic-rules) |  |
-| VerifiedClassifyUc005 | `consumes` | [UC-CLASSIFY-005](../../../prd/classify/prd.md#uc-classify-005-use-a-correction-as-bounded-feedback) |  |
-| VerifiedClassifyUc006 | `consumes` | [UC-CLASSIFY-006](../../../prd/classify/prd.md#uc-classify-006-discover-and-invoke-the-classify-agent-contract) |  |
+| CompleteClassifyPublicContract | `consumes` | DM-CLASSIFY-OPERATION-CONTRACTS |  |
+| ClassifySecurityGateEvidence | `consumes` | NFR-CLASSIFY-LOCAL-DATA-PROTECTION |  |
+| VerifiedClassifyPrivateEvidenceGate | `consumes` | DM-CLASSIFY-VALIDATION-RUN |  |
+| VerifiedClassifyUc001 | `consumes` | UC-CLASSIFY-001 |  |
+| VerifiedClassifyUc002 | `consumes` | UC-CLASSIFY-002 |  |
+| VerifiedClassifyUc003 | `consumes` | UC-CLASSIFY-003 |  |
+| VerifiedClassifyUc004 | `consumes` | UC-CLASSIFY-004 |  |
+| VerifiedClassifyUc005 | `consumes` | UC-CLASSIFY-005 |  |
+| VerifiedClassifyUc006 | `consumes` | UC-CLASSIFY-006 |  |
 | ClassifyGraphQualityEvidence | `produces` |  |  |
 
 ### Verification
@@ -110,16 +110,16 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY: TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY](gate-evidence-private-viability.md): Graph evidence requires the private viability result.
-- `depends-on:compile` -> [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Graph evidence requires the complete public contract marker.
-- `depends-on:compile` -> [TASK-CLASSIFY-GATE-SECURITY: TASK-CLASSIFY-GATE-SECURITY](gate-security.md): Graph evidence requires security evidence.
-- `depends-on:compile` -> [TASK-CLASSIFY-VERIFY-UC-001: TASK-CLASSIFY-VERIFY-UC-001](verify-uc-001.md): Graph evidence requires UC-CLASSIFY-001 evidence.
-- `depends-on:compile` -> [TASK-CLASSIFY-VERIFY-UC-002: TASK-CLASSIFY-VERIFY-UC-002](verify-uc-002.md): Graph evidence requires UC-CLASSIFY-002 evidence.
-- `depends-on:compile` -> [TASK-CLASSIFY-VERIFY-UC-003: TASK-CLASSIFY-VERIFY-UC-003](verify-uc-003.md): Graph evidence requires UC-CLASSIFY-003 evidence.
-- `depends-on:compile` -> [TASK-CLASSIFY-VERIFY-UC-004: TASK-CLASSIFY-VERIFY-UC-004](verify-uc-004.md): Graph evidence requires UC-CLASSIFY-004 evidence.
-- `depends-on:compile` -> [TASK-CLASSIFY-VERIFY-UC-005: TASK-CLASSIFY-VERIFY-UC-005](verify-uc-005.md): Graph evidence requires UC-CLASSIFY-005 evidence.
-- `depends-on:compile` -> [TASK-CLASSIFY-VERIFY-UC-006: TASK-CLASSIFY-VERIFY-UC-006](verify-uc-006.md): Graph evidence requires UC-CLASSIFY-006 evidence.
-- `governed-by` -> [PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES: Implementation Plan Quality Gates](../../../patterns/core/implementation-plan-quality-gates.md)
+- `depends-on:compile` -> [TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY](../tasks/gate-evidence-private-viability.md): Graph evidence requires the private viability result.
+- `depends-on:compile` -> [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Graph evidence requires the complete public contract marker.
+- `depends-on:compile` -> [TASK-CLASSIFY-GATE-SECURITY](../tasks/gate-security.md): Graph evidence requires security evidence.
+- `depends-on:compile` -> [TASK-CLASSIFY-VERIFY-UC-001](../tasks/verify-uc-001.md): Graph evidence requires UC-CLASSIFY-001 evidence.
+- `depends-on:compile` -> [TASK-CLASSIFY-VERIFY-UC-002](../tasks/verify-uc-002.md): Graph evidence requires UC-CLASSIFY-002 evidence.
+- `depends-on:compile` -> [TASK-CLASSIFY-VERIFY-UC-003](../tasks/verify-uc-003.md): Graph evidence requires UC-CLASSIFY-003 evidence.
+- `depends-on:compile` -> [TASK-CLASSIFY-VERIFY-UC-004](../tasks/verify-uc-004.md): Graph evidence requires UC-CLASSIFY-004 evidence.
+- `depends-on:compile` -> [TASK-CLASSIFY-VERIFY-UC-005](../tasks/verify-uc-005.md): Graph evidence requires UC-CLASSIFY-005 evidence.
+- `depends-on:compile` -> [TASK-CLASSIFY-VERIFY-UC-006](../tasks/verify-uc-006.md): Graph evidence requires UC-CLASSIFY-006 evidence.
+- `governed-by` -> PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES: Implementation Plan Quality Gates
 
 ## Navigation
 

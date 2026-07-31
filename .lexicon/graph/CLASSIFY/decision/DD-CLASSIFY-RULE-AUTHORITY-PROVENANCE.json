@@ -1,0 +1,54 @@
+{
+  "id": "01KYVMANQV4ME25Y1G6H6X95Q8",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE",
+  "title": "Record minimal rule authority provenance",
+  "description": [
+    "Distinguish deliberate owner authorship from feedback-derived proposals without persisting private source material."
+  ],
+  "decision": [
+    "Add a closed rule_origin value of owner_authored or feedback_derived to immutable rule versions and proposals. Keep created_by, reason, scope_hash, prior_version_id, and source feedback reference as the remaining provenance. rule.save is the only public entry for owner_authored drafts. feedback.record may create at most one feedback_derived non-active proposal. Neither origin grants validation, activation, broad apply, or mutation authority, and no personal rule value is compiled, seeded, logged, or exported."
+  ],
+  "rationale": [
+    "created_by alone cannot distinguish an owner-authored rule deliberately entered through rule.save from a draft proposed after feedback when the same owner or Hermes process invokes both. One closed origin enum resolves that audit ambiguity without retaining a private note locator, transaction payload, or generalized training lineage."
+  ],
+  "alternatives": [
+    "Rejected relying only on created_by because one actor can create both authority tracks. Rejected free-form provenance because it is not finite or testable. Rejected retaining source descriptions, normalized tokens, private paths, or model features because they expand disclosure. Rejected origin-based activation because provenance describes history rather than authority."
+  ],
+  "consequences": [
+    "Every rule version and proposal carries one finite origin. Feedback-derived drafts must still use the normal save, validation, and explicit activation path; owner-authored drafts receive no implicit trust."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Domain/Classify/Rules/**\",\"src/Tally/Infrastructure/Classify/Storage/Rules/**\",\"tests/Tally.Tests/Classify/Rules/**\"]}",
+  "created_at": "2026-07-31T08:23:22.6200732+00:00",
+  "links": [
+    {
+      "id": "01KYVMAVW8KWW29S85GQH44YM9",
+      "target_type": "data_model",
+      "target": "DM-CLASSIFY-FEEDBACK-PROPOSAL",
+      "rel": "references",
+      "created_at": "2026-07-31T08:23:28.9055727+00:00"
+    },
+    {
+      "id": "01KYVMAV7NEY0YMWJVF5VPWKK2",
+      "target_type": "data_model",
+      "target": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "rel": "references",
+      "created_at": "2026-07-31T08:23:28.2467840+00:00"
+    },
+    {
+      "id": "01KYVMATKBQHHA5TSDN01QZQD3",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-CORRECTION-FEEDBACK",
+      "rel": "implements",
+      "created_at": "2026-07-31T08:23:27.5962196+00:00"
+    },
+    {
+      "id": "01KYVMASY6EY42XAT9Y470PEHR",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-LIFECYCLE",
+      "rel": "implements",
+      "created_at": "2026-07-31T08:23:26.9198730+00:00"
+    }
+  ]
+}

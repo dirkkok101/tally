@@ -81,7 +81,7 @@ Concepts worth knowing before you start:
 | Ingest | Shipped — v1 contract published and verified |
 | Budget | Shipped — v1 contract published and verified |
 | Insights (reports, restatements, retention) | Designed and planned; implementation in progress |
-| Classify (automatic transaction classification) | Viability gate failed; plan archived without implementation |
+| Classify (owner-steered deterministic classification) | Replacement plan compiled into 30 verified beads; implementation not started |
 
 Current version: **0.3.2**, contract version **1.0**. Pre-1.0 the executable
 version moves faster than the command contract, and the contract version is the

@@ -22,21 +22,21 @@ The owner can append a validated-shape rule draft while invalid fields or catego
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| [ADR-CORE-0010: CommandResult Pattern for Commands](../../../adr/core/0010-commandresult-pattern-for-commands.md) | `adr` | `governed-by` | `true` |
-| [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md) | `design_decision` | `governed-by` | `true` |
-| [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
-| [DM-CLASSIFY-OPERATION-CONTRACTS: ClassifyOperationContracts](../../../designs/classify/data-model.md#classifyoperationcontracts) | `data_model` | `touches` | `true` |
-| [DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle](../../../designs/classify/data-model.md#classificationrulelifecycle) | `data_model` | `touches` | `true` |
-| [FA-CLASSIFY-RULES-VALIDATION: Rules and Validation](../../../designs/classify/features/rules-validation/api-surface.md) | `feature_area` | `touches` | `true` |
-| [FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules](../../../prd/classify/prd.md#fr-classify-rule-lifecycle-manage-versioned-deterministic-rules) | `requirement` | `implements` | `true` |
+| ADR-CORE-0010: CommandResult Pattern for Commands | `adr` | `governed-by` | `true` |
+| DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions | `design_decision` | `governed-by` | `true` |
+| DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history | `design_decision` | `governed-by` | `true` |
+| DM-CLASSIFY-OPERATION-CONTRACTS: ClassifyOperationContracts | `data_model` | `touches` | `true` |
+| DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle | `data_model` | `touches` | `true` |
+| FA-CLASSIFY-RULES-VALIDATION: Rules and Validation | `feature_area` | `touches` | `true` |
+| FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules | `requirement` | `implements` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY: TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY](gate-evidence-private-viability.md) | `compile` | Durable rule workflows may use only the vocabulary proven by the monitored evidence gate. |
-| [TASK-CLASSIFY-STATE-FOUNDATION: TASK-CLASSIFY-STATE-FOUNDATION](state-foundation.md) | `compile` | Drafts use the immutable rule and idempotency tables. |
-| [TASK-CLASSIFY-RULE-VOCABULARY: TASK-CLASSIFY-RULE-VOCABULARY](rule-vocabulary.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULE-VOCABULARY. |
+| [TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY](../tasks/gate-evidence-private-viability.md) | `compile` | Durable rule workflows may use only the vocabulary proven by the monitored evidence gate. |
+| [TASK-CLASSIFY-STATE-FOUNDATION](../tasks/state-foundation.md) | `compile` | Drafts use the immutable rule and idempotency tables. |
+| [TASK-CLASSIFY-RULE-VOCABULARY](../tasks/rule-vocabulary.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULE-VOCABULARY. |
 
 ## Recipe
 
@@ -83,11 +83,11 @@ The owner can append a validated-shape rule draft while invalid fields or catego
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| VerifiedClassifyPrivateEvidenceGate | `consumes` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
-| ClassificationRuleVocabulary | `consumes` | [DM-CLASSIFY-RULE-VOCABULARY](../../../designs/classify/data-model.md#classificationrulevocabulary) |  |
-| ClassifyStateStore | `consumes` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
-| SaveClassificationRuleCommand.HandleAsync | `produces` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
-| ClassificationRuleStore | `produces` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| VerifiedClassifyPrivateEvidenceGate | `consumes` | DM-CLASSIFY-VALIDATION-RUN |  |
+| ClassificationRuleVocabulary | `consumes` | DM-CLASSIFY-RULE-VOCABULARY |  |
+| ClassifyStateStore | `consumes` | DM-CLASSIFY-STATE-STORE |  |
+| SaveClassificationRuleCommand.HandleAsync | `produces` | DM-CLASSIFY-RULE-LIFECYCLE |  |
+| ClassificationRuleStore | `produces` | DM-CLASSIFY-RULE-LIFECYCLE |  |
 
 ### Verification
 
@@ -109,16 +109,16 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY: TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY](gate-evidence-private-viability.md): Durable rule workflows may use only the vocabulary proven by the monitored evidence gate.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULE-VOCABULARY: TASK-CLASSIFY-RULE-VOCABULARY](rule-vocabulary.md): Consumes an interface produced by TASK-CLASSIFY-RULE-VOCABULARY.
-- `depends-on:compile` -> [TASK-CLASSIFY-STATE-FOUNDATION: TASK-CLASSIFY-STATE-FOUNDATION](state-foundation.md): Drafts use the immutable rule and idempotency tables.
-- `governed-by` -> [ADR-CORE-0010: CommandResult Pattern for Commands](../../../adr/core/0010-commandresult-pattern-for-commands.md)
-- `governed-by` -> [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md)
-- `governed-by` -> [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md)
-- `implements` -> [FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules](../../../prd/classify/prd.md#fr-classify-rule-lifecycle-manage-versioned-deterministic-rules)
-- `touches` -> [DM-CLASSIFY-OPERATION-CONTRACTS: ClassifyOperationContracts](../../../designs/classify/data-model.md#classifyoperationcontracts)
-- `touches` -> [DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle](../../../designs/classify/data-model.md#classificationrulelifecycle)
-- `touches` -> [FA-CLASSIFY-RULES-VALIDATION: Rules and Validation](../../../designs/classify/features/rules-validation/api-surface.md)
+- `depends-on:compile` -> [TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY](../tasks/gate-evidence-private-viability.md): Durable rule workflows may use only the vocabulary proven by the monitored evidence gate.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULE-VOCABULARY](../tasks/rule-vocabulary.md): Consumes an interface produced by TASK-CLASSIFY-RULE-VOCABULARY.
+- `depends-on:compile` -> [TASK-CLASSIFY-STATE-FOUNDATION](../tasks/state-foundation.md): Drafts use the immutable rule and idempotency tables.
+- `governed-by` -> ADR-CORE-0010: CommandResult Pattern for Commands
+- `governed-by` -> DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions
+- `governed-by` -> DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history
+- `implements` -> FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules
+- `touches` -> DM-CLASSIFY-OPERATION-CONTRACTS: ClassifyOperationContracts
+- `touches` -> DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle
+- `touches` -> FA-CLASSIFY-RULES-VALIDATION: Rules and Validation
 
 ## Navigation
 

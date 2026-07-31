@@ -1,0 +1,326 @@
+{
+  "id": "01KYVN0TMVSME71T6WRRSTTB8E",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "sub_plan_id": "01KYVMRHQ4755N53ET4YVEX4XT",
+  "ref_code": "TASK-CLASSIFY-RULEBOOK-GATE-MODULE",
+  "slug": "RULEBOOK-GATE-MODULE",
+  "title": "Complete the CLASSIFY v1 module gate",
+  "description": [
+    "Final validation gate with no implements refs; it converges contract, security, evidence, all six use cases, build, test, AOT, graph, paths, and dependency status."
+  ],
+  "objective": [
+    "CLASSIFY v1 is reproducibly buildable, tested, Native-AOT compatible, locally secure, externally validated, and ready for work review."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 10,
+  "created_at": "2026-07-31T08:35:28.5399812+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYVQYXRSKJG6PEJJ7R369ZP2",
+      "bead_id": "bd-3l4k",
+      "verification_status": "verified",
+      "verified_at": "2026-07-31T09:26:51.9294542+00:00",
+      "created_at": "2026-07-31T09:26:51.9294542+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KYVN0TPJHW0YS8Y8JNPNNZEF",
+      "target": "DD-CLASSIFY-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJ8TCXPK7M6931JR4N",
+      "target": "DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYVN0TPJYM1GKHPCA4005VCB",
+      "target": "TASK-CLASSIFY-RULEBOOK-GATE-GRAPH-QUALITY",
+      "dependency_type": "compile",
+      "reason": [
+        "Final convergence consumes current ClassifyGraphQualityEvidence after all behavioral gates."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYVN0TPJVY4ASYNXGAKB9EKV",
+      "path": "Tally.slnx",
+      "action": "read",
+      "role": "full solution",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJZA68518M76PY21ZZ",
+      "path": "src/Tally/Tally.csproj",
+      "action": "read",
+      "role": "Native-AOT executable",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJM3QVY0WE6CSJWRRR",
+      "path": "tests/Tally.Tests/Tally.Tests.csproj",
+      "action": "read",
+      "role": "complete test project",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJT6DPHVYN9CNXDTPS",
+      "path": "tests/Tally.Tests/Classify/ClassifyModuleGuardTests.cs",
+      "action": "test",
+      "role": "module architecture and suite-discovery guards",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJ8Q532RSR6739YSB7",
+      "path": "scripts/verify-classify-module.sh",
+      "action": "create",
+      "role": "module convergence runner",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJ9HZJ0A8P5PPS73HN",
+      "path": "docs/verification/classify-v1.md",
+      "action": "document",
+      "role": "safe completion report",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJFJWBY034T6RVSYXD",
+      "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-AI-AGENT-HOST.json",
+      "action": "modify",
+      "role": "lex-cli validation status",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJ23PT5X3H4DEXHQAP",
+      "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-HOST-OS-SECURITY.json",
+      "action": "modify",
+      "role": "lex-cli validation status",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJE1G5R8VSZASSHK9E",
+      "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT.json",
+      "action": "modify",
+      "role": "lex-cli validation status",
+      "required": 1,
+      "sort_order": 8,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJ3BWT0KS5XCAQ9T2T",
+      "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS.json",
+      "action": "modify",
+      "role": "lex-cli validation status",
+      "required": 1,
+      "sort_order": 9,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYVN0TPJXXFFPRBTZCKXYT2C",
+      "name": "ClassifyGraphQualityEvidence",
+      "direction": "consumes",
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJ6PWJ9YBT5C8KZBK5",
+      "name": "VerifiedClassifyV1Module",
+      "direction": "produces",
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYVN0TPJ9D4FTH5W8GVK2DCT",
+      "kind": "acceptance_check",
+      "text": [
+        "Release restore, build, format verification, full tests, and linux-x64 Native-AOT publish exit 0 with zero build, trim, reflection, or dynamic-code warnings."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJC1TR44C5DP3DAT7P",
+      "kind": "acceptance_check",
+      "text": [
+        "Current ClassifyGraphQualityEvidence confirms nonzero named-suite discovery, complete traceability, matched design paths, and no forbidden surface."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJD9BDPPTWF8JKX4FK",
+      "kind": "acceptance_check",
+      "text": [
+        "Ledger, Agent Host, Host OS, and private-corpus statuses change from assumed to validated through lex CLI only after their evidence succeeds; otherwise this gate fails."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJG27EE046EJT0Z7XJ",
+      "kind": "acceptance_check",
+      "text": [
+        "The completion report records commands, counts, fingerprints, dependency statuses, and commit IDs without private data."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJ4EDJDR07JC7M482S",
+      "kind": "constraint",
+      "text": [
+        "This loose final gate adds no business behavior and cannot replace task-level evidence."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJMK36WBBBV9ZCR1KV",
+      "kind": "expected_output",
+      "text": [
+        "VerifiedClassifyV1Module"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJMDJ3KAC99ZH4G1QP",
+      "kind": "expected_output",
+      "text": [
+        "Module completion report containing commands, versions, counts, SHA-256 fingerprints, dependency statuses, commit IDs, and pass or fail states only"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJBTR93F8TE34RWVAE",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept aggregate tests when ClassifyGraphQualityEvidence is missing or stale."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJ5FBGM2PD5EWDKM1K",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT update external dependency status without successful named evidence."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJ1PNHPM4XVMJ9499K",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT edit graph JSON directly; use lex external-dependency update."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJ6Q3HPWPBM2MB1E3Z",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add HTTP, UI, EF, remote processing, background behavior, seed data, or private fixture content."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYVN0TPJ4AWKD69DE433CCV9",
+      "target_ref_code": "NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXW9G3PFR7296KD35V6PBE3S",
+      "target_title": "Operate as a self-contained local classifier",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPJPZSE6Q7KQNGR7B4R",
+      "target_ref_code": "NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXW9G29PW7PPZ9105PFV4SVS",
+      "target_title": "Preserve public contract compatibility boundaries",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYVN5NG4HHMXQW9MYTZK12J1",
+      "target": "FR-CLASSIFY-STATUS-HISTORY",
+      "created_at": "2026-07-31T08:38:07.1081126+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYVN0TPJMWNXP7RSBG7QRFQB",
+      "gate_type": "ci",
+      "description": [
+        "The module script and aggregate-only reports reproduce from a clean checkout plus the owner-private fixture; reports contain no fixture path or row payload."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYVN0TPJ25M2272011AGZZ66",
+      "phase": "after",
+      "command": "bash scripts/verify-classify-module.sh",
+      "expected_result": "exit 0; Release build, format check, full tests, Native-AOT publish, graph evidence, dependency evidence, and git-diff checks report nonzero discovery and 0 failures or warnings",
+      "required": 1,
+      "timeout_seconds": 2400,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ]
+}

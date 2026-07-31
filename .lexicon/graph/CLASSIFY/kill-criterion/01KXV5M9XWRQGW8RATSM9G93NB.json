@@ -1,10 +1,10 @@
 {
   "id": "01KXV5M9XWRQGW8RATSM9G93NB",
   "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
-  "condition": "Before PLAN-CLASSIFY-V1 bead compilation, evaluate a representative post-INGEST 90-day transaction sample and the owner's timed workflow. If fewer than 20 recurring category decisions per month exist or public LEDGER batch assignment keeps manual work at or below 15 minutes per month, stop custom classifier development and use the do-less agent-guided LEDGER workflow.",
+  "condition": "AUTOMATIC-DISCOVERY EXPERIMENT ONLY. Preserve the PLAN-CLASSIFY-V1 pre-bead result: if inferred rules derived from historical labels show fewer than 20 recurring category decisions per month or the manual Ledger workflow is at or below 15 minutes per month, stop automatic discovery and use explicit owner-authored rules or manual Ledger assignment. This criterion does not govern owner-authored rulebook viability.",
   "monitored": 1,
-  "evaluation_state": "triggered",
-  "evaluation_evidence": "Triggered on 2026-07-30: aggregate-only public-CLI evidence found 11.33 stable recurring decisions and 6.08 observed within-session classification minutes per 30 days, below the required 20 decisions and above-15-minute viability thresholds.",
-  "evaluated_at": "2026-07-30T16:58:04.6471759+00:00",
+  "evaluation_state": "clear",
+  "evaluation_evidence": "Current owner-rulebook scope is clear because this criterion is explicitly inapplicable to deliberate owner authorship. Historical automatic-discovery outcome remains triggered: the 2026-07-30 aggregate-only spike found 11.33 recurring decisions and 6.08 observed minutes per 30 days, and DD-CLASSIFY-VIABILITY-DISPOSITION retains that failed result.",
+  "evaluated_at": "2026-07-31T08:26:38.9024671+00:00",
   "created_at": "2026-07-18T17:50:47.7408379+00:00"
 }

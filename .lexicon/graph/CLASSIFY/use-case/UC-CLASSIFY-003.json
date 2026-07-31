@@ -3,7 +3,7 @@
   "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
   "ref_code": "UC-CLASSIFY-003",
   "title": "Apply accepted classification decisions",
-  "preconditions": "Every selected outcome is an unambiguous suggestion; the evaluation evidence and input fingerprint are current; target transactions are active and eligible; target categories are active; and a replay key identifies the apply request.",
+  "preconditions": "Every selected item is either an unambiguous current suggestion or an explicit owner-authorized transaction correction that names its target category and reason; the evaluation or correction evidence and input fingerprint are current; target transactions are active and eligible; target categories are active; and a replay key identifies the apply request.",
   "postconditions": "Successful assignments are attributable in LEDGER; source facts remain unchanged; replay cannot duplicate the decision; each requested transaction has an exact structured outcome.",
   "main_flow": "CLASSIFY revalidates the LEDGER contract, snapshot-sensitive state, category, transaction, rule, and evidence versions; submits only public LEDGER category assignment or correction operations; records one structured result per requested transaction; and returns applied, already-applied, rejected, and failed totals.",
   "alt_flows": [

@@ -1,0 +1,291 @@
+{
+  "id": "01KYVN0TMSMS1AWYWEGW076SSK",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "sub_plan_id": "01KYVMRHQ4755N53ET4YVEX4XT",
+  "ref_code": "TASK-CLASSIFY-RULEBOOK-VERIFY-UC-001",
+  "slug": "RULEBOOK-VERIFY-UC-001",
+  "title": "Verify eligible deterministic evaluation",
+  "description": [
+    "Validation-only UC task with no implements refs; it traces UC-CLASSIFY-001 main outcomes and all four failure paths through the published boundary."
+  ],
+  "objective": [
+    "UC-CLASSIFY-001 proves complete eligible projection acquisition, deterministic outcomes, bounded failures, staleness, and zero Ledger mutation."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 3,
+  "created_at": "2026-07-31T08:35:28.5399812+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYVQYM94XZ4Q1JAXR1QF8W1X",
+      "bead_id": "bd-2uqi",
+      "verification_status": "verified",
+      "verified_at": "2026-07-31T09:26:42.2122630+00:00",
+      "created_at": "2026-07-31T09:26:42.2122630+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KYVN0TPA4AM7W9MBC8CKCWKC",
+      "target": "DD-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPAEAAY8K5TP33DDZQM",
+      "target": "DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYVN0TPAPG0NK3QJW8T12NJA",
+      "target": "TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW",
+      "dependency_type": "compile",
+      "reason": [
+        "The UC verifies the complete evaluation slice."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPATKRNK4DR2BN3S3S7",
+      "target": "TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPCBWF4EXYFB9D7G8WH",
+      "target": "TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "The UC executes through the complete published CLASSIFY contract."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYVN0TPA43ERDT5808RN0P16",
+      "path": "tests/Tally.Tests/Classify/Acceptance/ClassifyUc001EvaluationTests.cs",
+      "action": "test",
+      "role": "UC-001 acceptance matrix",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYVN0TPATF2WB9NF7G75SN9G",
+      "name": "CompleteClassifyPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPA4XX974YQC788MQBH",
+      "name": "VerifiedLedgerClassificationContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPA7SAXPCMTW5FNCWH4",
+      "name": "VerifiedClassifyUc001",
+      "direction": "produces",
+      "contract_ref_code": "UC-CLASSIFY-001",
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KYVN48QPK7MGPTG838BXWPGW",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-001",
+      "rel": "verifies",
+      "created_at": "2026-07-31T08:37:21.2713943+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYVN0TPAZFR3TH1SZPXJNQK3",
+      "kind": "acceptance_check",
+      "text": [
+        "The success scenario discovers the compatible projection, consumes every page once, evaluates one outcome per ordinal, and leaves Ledger byte-equivalent."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPA22BHYVTBK6MPYREA",
+      "kind": "acceptance_check",
+      "text": [
+        "Unavailable or incompatible Ledger contracts fail before evaluation; expired or inconsistent snapshots publish no partial result."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPAXYF9PZZJG2CPT55F",
+      "kind": "acceptance_check",
+      "text": [
+        "Exact and one-over transaction, rule, memory, and processing limits produce deterministic no-mutation outcomes."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPAR9A5HY3XKJWT0XNX",
+      "kind": "acceptance_check",
+      "text": [
+        "A lifecycle or category change reports stale and requires re-evaluation rather than guessing."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPA70S2Y5EVTZSBNVKT",
+      "kind": "constraint",
+      "text": [
+        "Validation-only gate is intentionally loose and runs through CompleteClassifyPublicContract."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPAMYDR6DGHR8QS2BP9",
+      "kind": "expected_output",
+      "text": [
+        "VerifiedClassifyUc001"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPAPAAD8G42TFR05P0M",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT omit any UC-CLASSIFY-001 failure path or satisfy the workflow through direct handler calls only."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPAR5XGRM1K9R4K6TRA",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept zero test discovery or aggregate-only counts without per-partition assertions."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPADTNA1MAHJ48BMMYQ",
+      "kind": "note",
+      "text": [
+        "Generated finance-safe fixtures cover all Ledger eligibility exclusions without private statement payloads."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYVN0TPAE8VVA6E6KN1YSSC8",
+      "target_ref_code": "UC-CLASSIFY-001",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXV9EC3CWCNRWE16CX93Y810",
+      "target_title": "Evaluate eligible transactions",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPAAJK15QV7B77QETPD",
+      "target_ref_code": "TC-CLASSIFY-ELIGIBLE-PROJECTION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PFW0MG2MY9JFJDMKSHMV",
+      "target_title": "Verify the eligible classification projection",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPA749BXX66RTRBB5JE",
+      "target_ref_code": "TC-CLASSIFY-DETERMINISTIC-EVALUATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PG82DBH03F23HK78ET6K",
+      "target_title": "Verify deterministic classification outcomes",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPAXDTJPAQ9VBZKSYQ2",
+      "target_ref_code": "TC-CLASSIFY-EVALUATION-LIMITS",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9QWKX44CYBSQ3W83YRHM1",
+      "target_title": "Verify classification performance and hard limits",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYVN5P78FG6JB4JQBQ8D4VK5",
+      "target": "FR-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "created_at": "2026-07-31T08:38:07.8473713+00:00"
+    },
+    {
+      "id": "01KYVN5P79WQ7QQF5Z13SV2G75",
+      "target": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+      "created_at": "2026-07-31T08:38:07.8473713+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYVN0TPAWERW60H95HTRWVG7",
+      "gate_type": "test-evidence",
+      "description": [
+        "Each UC-CLASSIFY-001 failure path maps to an observable published result."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYVN0TPAYGFCDAD20S005SNP",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ClassifyUc001EvaluationTests",
+      "expected_result": "exit 0; at least 12 success, incompatible, snapshot, limit, stale, accounting, order, and no-Ledger-mutation cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ]
+}

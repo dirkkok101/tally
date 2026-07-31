@@ -1,0 +1,398 @@
+{
+  "id": "01KYVN0TMNKZ4DRPG154AQECYR",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "sub_plan_id": "01KYVMRGCD4K0RVVRWXS74ZPXA",
+  "ref_code": "TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW",
+  "slug": "RULEBOOK-EVALUATION-WORKFLOW",
+  "title": "Evaluate and persist classification outcomes",
+  "description": [
+    "Implement classify.evaluate over a complete public projection and active immutable rule set with atomic outcome and evidence persistence."
+  ],
+  "objective": [
+    "An idempotent command turns one complete Ledger input into durable deterministic outcomes without Ledger mutation."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 3,
+  "created_at": "2026-07-31T08:35:28.5399812+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYVQYJECG7JS7CPE37YS08A6",
+      "bead_id": "bd-8uew",
+      "verification_status": "verified",
+      "verified_at": "2026-07-31T09:26:40.3328300+00:00",
+      "created_at": "2026-07-31T09:26:40.3328300+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KYVN0TNWTZTNG7BK535CVBGW",
+      "target": "DD-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNWG17WF9PGZRGJRNDX",
+      "target": "DD-CLASSIFY-STATE-STORE",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYVN0TNY7CXYHZD5GS09G6TK",
+      "target": "TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNYBQ1PPQGCTEPF88X5",
+      "target": "TASK-CLASSIFY-RULEBOOK-EVALUATION-INPUT",
+      "dependency_type": "compile",
+      "reason": [
+        "Evaluation consumes one complete bounded input from ClassificationEvaluationInputLoader.LoadAsync."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNY9VMAKH4KWNNNP3ZM",
+      "target": "TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE",
+      "dependency_type": "compile",
+      "reason": [
+        "Evaluation consumes the active immutable rule set and normalization version."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYVN0TNWR0JJ5WP16PK1K26X",
+      "path": "src/Tally/Features/Classify/Evaluation/Evaluate/EvaluateClassificationCommand.cs",
+      "action": "create",
+      "role": "evaluation orchestration",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNWADZKHR3W5GQA5RPX",
+      "path": "src/Tally/Infrastructure/Classify/Storage/Evaluation/ClassificationEvaluationStore.cs",
+      "action": "create",
+      "role": "atomic outcome persistence",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNX8VX2N99YBSNV8V3Y",
+      "path": "src/Tally/Features/Classify/Contract/ClassifyContractMapper.Evaluation.cs",
+      "action": "create",
+      "role": "pure evaluation mapping",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNX6A3FT64DDWWQEZT1",
+      "path": "tests/Tally.Tests/Classify/Evaluation/EvaluateClassificationCommandTests.cs",
+      "action": "test",
+      "role": "workflow tests",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNXSVK8XMM4CBVCPBN3",
+      "path": "tests/Tally.Tests/Classify/Evaluation/EvaluationPersistenceTests.cs",
+      "action": "test",
+      "role": "atomicity and idempotency tests",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNX8KHP91ZJG8HXFN8W",
+      "path": "tests/Tally.Tests/Classify/Evaluation/EvaluationLimitTests.cs",
+      "action": "test",
+      "role": "hard-limit tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYVN0TNXZVPZEKYCDVCEV4VM",
+      "name": "ClassificationEvaluationInputLoader.LoadAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNXNQ0TCM5B0295BRM0",
+      "name": "ClassificationEngine.Evaluate",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNX4Y1EZSFCC7CX1619",
+      "name": "RuleSetStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNXCVEX3CXZZB4GZCH4",
+      "name": "EvaluateClassificationCommand.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNXFKM1EXGJ1AVDGKXR",
+      "name": "ClassificationEvaluationStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYVN0TNWMP24W4W4GC1AXQZK",
+      "kind": "acceptance_check",
+      "text": [
+        "The command obtains one complete compatible ClassificationEvaluationInput before creating an evaluation ID."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNWJHS8GWQF8KT8GQ0Z",
+      "kind": "acceptance_check",
+      "text": [
+        "One SQLite transaction persists the evaluation, fingerprints, ordered outcomes, bounded MatchEvidence, and totals equal to input count."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNWJEEVK51YZTBSCXRH",
+      "kind": "acceptance_check",
+      "text": [
+        "Each outcome is the exact ordered ClassificationEngine result for the immutable active rule set and input fingerprint."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNWBNS77GJPR4P18HYY",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical idempotency and request return the stored result; conflicting reuse returns a stable conflict."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNW1VG7TQPMF2NA4MS4",
+      "kind": "acceptance_check",
+      "text": [
+        "Ledger facts, relationships, and allocations are byte-equivalent before and after evaluation."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNWR2D3TSCERGG93QC2",
+      "kind": "constraint",
+      "text": [
+        "All page and store async boundaries propagate CancellationToken; the public result is bounded and source-generated."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNW1ZEJ5HRP49K6ZAAC",
+      "kind": "expected_output",
+      "text": [
+        "EvaluateClassificationCommand"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNWH7PDV8S6N8ZY4WRH",
+      "kind": "expected_output",
+      "text": [
+        "ClassificationEvaluationStore"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNWZFV3WRZW034K5TE3",
+      "kind": "expected_output",
+      "text": [
+        "Atomic evaluation result mapping"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNW9MES1HBC42GRZY6F",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT publish or persist a partial evaluation - rejected by DD-CLASSIFY-DETERMINISTIC-EVALUATION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNWJR5BCGF642ZBS5Q0",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT bypass ClassificationEvaluationInputLoader or re-evaluate Ledger eligibility."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNWZDWVJBDAZNMPEB35",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT persist raw input descriptions or unrelated financial fields."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNW86QMDC64Y0Z4ET20",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT invoke assignment or correction from evaluate."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYVN0TNX29BBTDVZ04GYDC99",
+      "target_ref_code": "NFR-CLASSIFY-BOUNDED-EVALUATION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXW9G2MMBPH1PFPPREPDR4BW",
+      "target_title": "Bound local classification work",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNX96DXDH0FMNRB49VC",
+      "target_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJFJKQ05X63ZSNR5NGY8V",
+      "target_title": "ClassificationEvaluationAndOutcome",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNX07CTV4FPP8EQPD4Z",
+      "target_ref_code": "TC-CLASSIFY-DETERMINISTIC-EVALUATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PG82DBH03F23HK78ET6K",
+      "target_title": "Verify deterministic classification outcomes",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNX1TC43N3NTFEBFWW0",
+      "target_ref_code": "TC-CLASSIFY-EVALUATION-LIMITS",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9QWKX44CYBSQ3W83YRHM1",
+      "target_title": "Verify classification performance and hard limits",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYVN0TNW2S3B05ZZXXZZ5DZD",
+      "target": "FR-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYVN0TNXS4YEA7BWNWV0XBYC",
+      "gate_type": "test-evidence",
+      "description": [
+        "Tests compare Ledger state before and after evaluation and prove no partial outcome can become durable."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYVN0TNX57MSE4RV06N8KWB9",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~EvaluateClassificationCommandTests",
+      "expected_result": "exit 0; at least 12 command, accounting, idempotency, and no-Ledger-mutation cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNXFE8YVRM50W50Q29F",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~EvaluationPersistenceTests",
+      "expected_result": "exit 0; at least 10 atomicity, rollback, fingerprint, and stored-result cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNX4WQ3JZC4KPWX3NJQ",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~EvaluationLimitTests",
+      "expected_result": "exit 0; at least 6 exact-limit, over-limit, timeout, and memory-bound cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ]
+}

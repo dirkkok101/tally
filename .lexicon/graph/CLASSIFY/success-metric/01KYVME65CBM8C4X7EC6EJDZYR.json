@@ -1,0 +1,10 @@
+{
+  "id": "01KYVME65CBM8C4X7EC6EJDZYR",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "metric": "Owner-rulebook safety",
+  "current": "Not measured; the owner-authored implementation and private pre-authority gate are not built.",
+  "target": "100 percent of private candidate rows accounted for exactly once; zero incorrect applications; zero unexplained incompatible conflicts; deterministic fingerprints replay identically; every drift canary remains explicit; zero private payload disclosures.",
+  "by_when": "Before rule activation, exact-rule broad apply, or PLAN-CLASSIFY-RULEBOOK-V1 module completion",
+  "measured": 0,
+  "created_at": "2026-07-31T08:25:17.7414362+00:00"
+}

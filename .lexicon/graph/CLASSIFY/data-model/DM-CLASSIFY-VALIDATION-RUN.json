@@ -4,10 +4,10 @@
   "ref_code": "DM-CLASSIFY-VALIDATION-RUN",
   "name": "ClassificationValidationRun",
   "description": [
-    "Aggregate-only private candidate evidence that binds every activation decision without retaining corpus rows or values."
+    "Aggregate-only private candidate evidence that distinguishes owner-authored validation from historical automatic discovery and binds every activation decision without retaining corpus rows or values."
   ],
   "schema_def": [
-    "validation_run(validation_run_id PK, candidate_fingerprint, corpus_fingerprint, expected_outcome_fingerprint, projection_contract_version, category_lifecycle_fingerprint, normalization_version, started_at, completed_at?, lifecycle_state, actor); validation_report(validation_run_id PK/FK, total_rows, suggestion_count, no_suggestion_count, conflict_count, stale_count, drift_canary_count, incorrect_application_canary_count, unexplained_conflict_count, report_fingerprint); no raw corpus row, description, normalized token, financial value, expected outcome, or path column"
+    "validation_run(validation_run_id PK, candidate_fingerprint, rule_origin, corpus_fingerprint, expected_outcome_fingerprint, projection_contract_version, category_lifecycle_fingerprint, normalization_version, started_at, completed_at?, lifecycle_state, actor); validation_report(validation_run_id PK/FK, total_rows, accounted_rows, suggestion_count, no_suggestion_count, conflict_count, stale_count, coverage_basis_points, drift_canary_count, incorrect_application_canary_count, unexplained_conflict_count, owner_decision_count_before, owner_decision_count_after, owner_minutes_before?, owner_minutes_after?, report_fingerprint); safety requires accounted_rows=total_rows, zero incorrect applications, zero unexplained conflicts, and deterministic fingerprints; benefit is reported without a preset 50 percent owner-authored threshold; no raw corpus row, description, normalized token, financial value, expected outcome, or path column"
   ],
   "created_at": "2026-07-19T05:11:22.0718867+00:00",
   "links": [

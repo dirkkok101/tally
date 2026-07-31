@@ -12,5 +12,14 @@
   ],
   "owner": "CLASSIFY projection and normalization spike",
   "disposition": "non_blocking",
-  "created_at": "2026-07-18T17:51:36.6774850+00:00"
+  "created_at": "2026-07-18T17:51:36.6774850+00:00",
+  "links": [
+    {
+      "id": "01KYVMJBAV1VNFG5B7ZMNM5F94",
+      "target_type": "plan",
+      "target": "PLAN-CLASSIFY-V1",
+      "rel": "see-also",
+      "created_at": "2026-07-31T08:27:34.1087772+00:00"
+    }
+  ]
 }

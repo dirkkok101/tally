@@ -1,0 +1,369 @@
+{
+  "id": "01KYVN0TMQBDRKBSNKTWPPVH7E",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "sub_plan_id": "01KYVMRH10RWXEP7AMK12RMBKN",
+  "ref_code": "TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW",
+  "slug": "RULEBOOK-STATUS-WORKFLOW",
+  "title": "Expose bounded classification status",
+  "description": [
+    "Implement classify.status across rule, validation, evaluation, preview, apply, feedback, abandonment, and cleanup state without source rereads."
+  ],
+  "objective": [
+    "Every retained workflow state reports bounded lifecycle, mutation possibility, exact frontier, and exactly one permitted next-operation enum value without private reconstruction."
+  ],
+  "planning_state": "ready",
+  "priority": 1,
+  "sort_order": 5,
+  "created_at": "2026-07-31T08:35:28.5399812+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYVQYSB977QC1SVV7GH1YXV6",
+      "bead_id": "bd-3tpm",
+      "verification_status": "verified",
+      "verified_at": "2026-07-31T09:26:47.4016656+00:00",
+      "created_at": "2026-07-31T09:26:47.4016656+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KYVN0TP7PZKJKC105N2D8D6T",
+      "target": "DD-CLASSIFY-CLI-OPERATION-CONTRACT",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP7ZCC4KW79EV2Y8FEZ",
+      "target": "DD-CLASSIFY-STATE-STORE",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYVN0TP7N7KK1HND1Y2FN2YS",
+      "target": "TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP",
+      "dependency_type": "compile",
+      "reason": [
+        "Status consumes abandonment tombstones and cleanup events."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVRS4TTFYXBTWKD49M64DQW",
+      "target": "TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW",
+      "dependency_type": "compile",
+      "reason": [
+        "Status reports retained previews even when no apply run exists."
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-31T09:41:11.1310889+00:00"
+    },
+    {
+      "id": "01KYVN0TP7TNW5SJ1S8TXSY1KH",
+      "target": "TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP7T8ATRX3AQ91EQ3TG",
+      "target": "TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP77G93MDYJQQ0P61PM",
+      "target": "TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS",
+      "dependency_type": "compile",
+      "reason": [
+        "Status consumes feedback and proposal state."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVRS4489VEQ7722M4SNVNCB",
+      "target": "TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE",
+      "dependency_type": "compile",
+      "reason": [
+        "Status reports the active immutable RuleSetVersion produced by the lifecycle task."
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-31T09:41:10.4095358+00:00"
+    },
+    {
+      "id": "01KYVN0TP8GA26021CE7KJ05VX",
+      "target": "TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP8JA2F8NMAE79C3MXR",
+      "target": "TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION."
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYVN0TP771H8F903V8VYH3KR",
+      "path": "src/Tally/Features/Classify/Recovery/Status/GetClassificationStatusQuery.cs",
+      "action": "create",
+      "role": "status projection",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP7YG7GXA4FYGBYW16D",
+      "path": "src/Tally/Domain/Classify/Recovery/SafeNextActionPolicy.cs",
+      "action": "create",
+      "role": "next-action policy",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP7V41EWBT1BAAEW275",
+      "path": "src/Tally/Features/Classify/Contract/ClassifyContractMapper.Status.cs",
+      "action": "create",
+      "role": "pure status mapping",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP7GASVQAXVDYQWZ8E6",
+      "path": "src/Tally/Bootstrap/Features/ClassifyRecoveryExtensions.cs",
+      "action": "create",
+      "role": "explicit recovery registration",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP7010Y02J5009ZKP4G",
+      "path": "tests/Tally.Tests/Classify/Recovery/ClassificationStatusTests.cs",
+      "action": "test",
+      "role": "state matrix tests",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP7VMD6F6NX9JJS50WH",
+      "path": "tests/Tally.Tests/Classify/Recovery/StatusPrivacyTests.cs",
+      "action": "test",
+      "role": "no-reread and disclosure tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYVRTWBKA722F1YWE8YEAX6Y",
+      "name": "ClassificationRuleStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "sort_order": 0,
+      "created_at": "2026-07-31T09:42:07.9868637+00:00"
+    },
+    {
+      "id": "01KYVRTWBM5NDWQ4VQNN2M09YY",
+      "name": "RuleSetStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "sort_order": 1,
+      "created_at": "2026-07-31T09:42:07.9868637+00:00"
+    },
+    {
+      "id": "01KYVRTWBME0MVGGA3REATGBSX",
+      "name": "ClassificationValidationStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "sort_order": 2,
+      "created_at": "2026-07-31T09:42:07.9868637+00:00"
+    },
+    {
+      "id": "01KYVRTWBMEVP1T19WMP3TV7ZX",
+      "name": "ClassificationEvaluationStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 3,
+      "created_at": "2026-07-31T09:42:07.9868637+00:00"
+    },
+    {
+      "id": "01KYVRTWBMV0A68V296NVG2Y0T",
+      "name": "ClassificationApplyPreviewStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-APPLY-RUN",
+      "sort_order": 4,
+      "created_at": "2026-07-31T09:42:07.9868637+00:00"
+    },
+    {
+      "id": "01KYVRTWBMSEGYJDTS3PP0N88K",
+      "name": "ClassificationApplyRunStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-APPLY-RUN",
+      "sort_order": 5,
+      "created_at": "2026-07-31T09:42:07.9868637+00:00"
+    },
+    {
+      "id": "01KYVRTWBM10H9QRYXTEW5K4K1",
+      "name": "ClassificationFeedbackStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-FEEDBACK-PROPOSAL",
+      "sort_order": 6,
+      "created_at": "2026-07-31T09:42:07.9868637+00:00"
+    },
+    {
+      "id": "01KYVRTWBM1JW57JB8P2R51TEX",
+      "name": "ClassificationRecoveryStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "sort_order": 7,
+      "created_at": "2026-07-31T09:42:07.9868637+00:00"
+    },
+    {
+      "id": "01KYVRTWBMWDKEHA8PVQDNXG43",
+      "name": "GetClassificationStatusQuery.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "sort_order": 8,
+      "created_at": "2026-07-31T09:42:07.9868637+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYVT29XARB094YJ8V9YQ090R",
+      "kind": "acceptance_check",
+      "text": [
+        "Return bounded durable rule, validation, evaluation, apply, feedback, abandonment, and cleanup state with aggregate counts, identifiers, attribution, fingerprints, lifecycle/staleness, mutation possibility, and one allowed next-operation; never reread corpus or projection payloads."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T10:03:39.8184675+00:00"
+    },
+    {
+      "id": "01KYVT29XB1C4WT2TQ0QGMFEG6",
+      "kind": "acceptance_check",
+      "text": [
+        "Apply status includes terminal totals and unresolved frontier; unknown subjects are stable not-found and failures choose exactly one of retry, resume, re-evaluate, correct, abandon, cleanup, or none."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T10:03:39.8184675+00:00"
+    },
+    {
+      "id": "01KYVT2C15A82G9QKBVS6AA9XM",
+      "kind": "constraint",
+      "text": [
+        "Read-only projection over durable CLASSIFY state and documented public metadata fields."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T10:03:41.9888465+00:00"
+    },
+    {
+      "id": "01KYVT2BA3KX7NYMJVZEZP860J",
+      "kind": "expected_output",
+      "text": [
+        "GetClassificationStatusQuery, SafeNextActionPolicy, and recovery registration"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T10:03:41.2507320+00:00"
+    },
+    {
+      "id": "01KYVT2AJX0A3R2WN1YP32EX8Q",
+      "kind": "failure_criterion",
+      "text": [
+        "Never reread private or Ledger payloads, search serialized payloads, hide unresolved mutation possibility, or expose financial data."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T10:03:40.5096251+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYVT0533T3SXV734WPSND0P7",
+      "target_ref_code": "FA-CLASSIFY-STATE-RECOVERY",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXWCJYZ7SYSPAJMAFTTBE12Z",
+      "target_title": "State and Recovery",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T10:02:29.3482932+00:00"
+    },
+    {
+      "id": "01KYVT05V56GGAKZT96FVXN2DD",
+      "target_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJGM514904QHQZEJD3SEG",
+      "target_title": "ClassificationStateStore",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T10:02:30.1186774+00:00"
+    },
+    {
+      "id": "01KYVN0TP70TWDP2C3ZM0FW46G",
+      "target_ref_code": "TC-CLASSIFY-STATUS-HISTORY-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PKQ7PG6NZGF45F0X0BCD",
+      "target_title": "Verify bounded classification status and history",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYVN0TP72TG46J9TEZKBS2KT",
+      "target": "FR-CLASSIFY-STATUS-HISTORY",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYVN0TP7AR8CQHDGJY3Z34GV",
+      "gate_type": "self-review",
+      "description": [
+        "Every retained subject and failure state maps to one bounded status projection and exactly one next-operation enum value."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYVN0TP7NEX5SEYQ2PTBFX10",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~ClassificationStatusTests|FullyQualifiedName~StatusPrivacyTests'",
+      "expected_result": "exit 0; at least 30 rule, validation, evaluation, preview, apply, feedback, abandon, cleanup, unknown, mutation-possibility, next-action, no-reread, and disclosure cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ]
+}

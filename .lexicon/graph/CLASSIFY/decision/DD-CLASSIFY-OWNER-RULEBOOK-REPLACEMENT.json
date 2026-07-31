@@ -1,0 +1,68 @@
+{
+  "id": "01KYVMAMYS1A9R3M2JS53MYFRG",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT",
+  "title": "Build the owner-authored deterministic rulebook path",
+  "description": [
+    "Replace the stop-only product route without erasing the failed automatic-discovery experiment."
+  ],
+  "decision": [
+    "Proceed with a new owner-authored deterministic rulebook implementation plan. Preserve PLAN-CLASSIFY-V1, DD-CLASSIFY-VIABILITY-DISPOSITION, its aggregate spike evidence, and its four automatic-discovery kill criteria as historical authorities for inferred-rule generation only. Owner-authored rules enter through classify.rule.save, remain inactive through classify.rule.validate, require explicit classify.rule.activate, and may affect Ledger only through evaluate, outcome inspection, apply preview, and explicit apply. The replacement plan must place an aggregate-only owner-rulebook validation gate before activation authority, exact-rule broad apply, or module completion."
+  ],
+  "rationale": [
+    "The failed spike measured rules inferred from repeated historical labels, not rules deliberately authored from owner-confirmed finance semantics. Those are distinct evidence tracks. The existing deterministic CLI, lifecycle, conflict, explanation, apply, feedback, locality, and privacy design remains sound for explicit owner authorship. A new plan is required because silently reactivating the archived plan would blur the failed experiment and its gates. Spike result: installed Tally 0.3.2 and current source expose the Ledger base operations but not the classification_v1 projection or mutation revision preconditions; the replacement plan therefore owns a bounded LEDGER prerequisite before any CLASSIFY consumer."
+  ],
+  "alternatives": [
+    "Rejected reactivating PLAN-CLASSIFY-V1 because its pre-bead authority was invalidated by the automatic-discovery spike. Rejected erasing or weakening that spike because it remains valid evidence against inferred broad rules. Rejected compiling personal rules into source or seeding them because private owner values are runtime data. Rejected cloud, ML, fuzzy, regex, wildcard, arbitrary-expression, background, and automatic-activation approaches because they violate deterministic local authority."
+  ],
+  "consequences": [
+    "PLAN-CLASSIFY-RULEBOOK-V1 replaces the archived plan for implementation. The old decision continues to prohibit automatic discovery under its failed thresholds. Owner-authored coverage and time benefit are measured separately; safety is mandatory, while insufficient benefit requires an explicit product decision instead of an invented 50 percent threshold."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Features/Classify/**\",\"tests/Tally.Tests/Classify/**\"]}",
+  "created_at": "2026-07-31T08:23:21.8186647+00:00",
+  "links": [
+    {
+      "id": "01KYVMAMYXHMMZMQWR3YGBV2SE",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-VIABILITY-DISPOSITION",
+      "rel": "supersedes",
+      "created_at": "2026-07-31T08:23:21.8215041+00:00"
+    },
+    {
+      "id": "01KYVMARMYCWAF96TXYAPYQV4A",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-HOST-OS-SECURITY",
+      "rel": "validates",
+      "created_at": "2026-07-31T08:23:25.5988588+00:00"
+    },
+    {
+      "id": "01KYVMAQY5KFTGF3NM0XCZRH6X",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
+      "rel": "validates",
+      "created_at": "2026-07-31T08:23:24.8705987+00:00"
+    },
+    {
+      "id": "01KYVMAS9S7ZVRQPQY011JXWRY",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS",
+      "rel": "validates",
+      "created_at": "2026-07-31T08:23:26.2667378+00:00"
+    },
+    {
+      "id": "01KYVMAQBAYG1RHC6Y7GKVD0D6",
+      "target_type": "module_design",
+      "target": "MD-CLASSIFY-MASTER",
+      "rel": "references",
+      "created_at": "2026-07-31T08:23:24.2669895+00:00"
+    },
+    {
+      "id": "01KYVMAPNZ80XRVSH4WP240S2G",
+      "target_type": "plan",
+      "target": "PLAN-CLASSIFY-V1",
+      "rel": "references",
+      "created_at": "2026-07-31T08:23:23.5852178+00:00"
+    }
+  ]
+}

@@ -16,3 +16,7 @@ Use typed vertical slices for Contract, Rules, Evaluation, Apply, Feedback, and 
 ## Rationale
 
 The twelve explicit operation slices optimize for the actual caller and expose every invariant at the test surface. A three-facade design hides lifecycle and replay behind action discriminators. A port-heavy design invents seams with one production adapter. A separate service adds auth, deployment, and network failure. Embedding the behavior in Ledger reverses ownership. This adapts CORE explicit DI and vertical-slice guidance plus the established Ledger and Ingest single-process shape.
+
+## Alternatives
+
+Rejected a three-facade API with action discriminators because it hides capability-specific lifecycle, limits, and replay contracts. Rejected interface ports for the single SQLite, corpus, and filesystem implementations because they add unearned seams. Rejected a separate HTTP service because it adds authentication, deployment, and network failure. Rejected embedding CLASSIFY in LEDGER because Classification Rules and feedback are not Ledger-owned financial truth.

@@ -16,3 +16,7 @@ Enforce 0700 directories and 0600 store, WAL, lock, report, and temporary artifa
 ## Rationale
 
 Generic path cleanup or hard delete could escape the module or erase provenance. Indefinite raw payload retention creates disclosure. Memory-only temporaries plus fixed-policy cleanup remove crash residue without inventing a filesystem abstraction. This adapts the CORE RESTRICT principle and Tally metadata-only diagnostic posture to private classification evidence.
+
+## Alternatives
+
+Rejected retaining full corpus rows or LEDGER projections because it creates unnecessary private-financial-data durability. Rejected arbitrary path cleanup and hard deletion because either can escape CLASSIFY storage or erase referenced provenance. Rejected indefinite temporary retention because it expands disclosure and disk risk. Rejected a generic filesystem abstraction because one fixed owner-local policy has no second implementation.

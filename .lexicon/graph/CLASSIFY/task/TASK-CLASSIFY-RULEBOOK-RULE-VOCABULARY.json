@@ -1,0 +1,351 @@
+{
+  "id": "01KYVN0TMJ4X20S4Q30KYZVHY6",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "sub_plan_id": "01KYVMRFMVDR8FVRNAFKMSGFX5",
+  "ref_code": "TASK-CLASSIFY-RULEBOOK-RULE-VOCABULARY",
+  "slug": "RULEBOOK-RULE-VOCABULARY",
+  "title": "Implement the closed rule vocabulary",
+  "description": [
+    "Create the finite field/predicate registry, canonical typed conditions, and normalization v1 with source-generated descriptors."
+  ],
+  "objective": [
+    "Every first-release rule is finite, canonical, deterministic, explainable, and incapable of executing arbitrary expressions."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 2,
+  "created_at": "2026-07-31T08:35:28.5399812+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYVQYH3WWSWT71R1TDG6RM26",
+      "bead_id": "bd-3gmq",
+      "verification_status": "verified",
+      "verified_at": "2026-07-31T09:26:38.9723145+00:00",
+      "created_at": "2026-07-31T09:26:38.9723145+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KYVN0TNEZ5BTRJ9QVBR0J326",
+      "target": "DD-CLASSIFY-RULE-VOCABULARY",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYVN0TNF25MA281SZ56STFYY",
+      "target": "TASK-CLASSIFY-RULEBOOK-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "The vocabulary publishes descriptors through the CLASSIFY rule contracts."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYVN0TNER771DXZ8V27RWR20",
+      "path": "src/Tally/Domain/Classify/Rules/ClassificationRuleVocabulary.cs",
+      "action": "create",
+      "role": "field and predicate registry",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNFN0TNG3G07D2P1KBZ",
+      "path": "src/Tally/Domain/Classify/Rules/RuleCondition.cs",
+      "action": "create",
+      "role": "canonical typed conditions",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNFS6GPPG1Q6DS2FKR1",
+      "path": "src/Tally/Domain/Classify/Normalization/NormalizationDescriptor.cs",
+      "action": "create",
+      "role": "version descriptor",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNFA4ZDMY6216XNK3ZH",
+      "path": "src/Tally/Domain/Classify/Normalization/NormalizerV1.cs",
+      "action": "create",
+      "role": "pure normalizer",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNFT1N52786Y4SN4SSA",
+      "path": "src/Tally/Contracts/Classify/Rules/ClassificationRuleContracts.cs",
+      "action": "modify",
+      "role": "published rule descriptors",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNFHERV3G6EKQ493T7R",
+      "path": "tests/Tally.Tests/Classify/Rules/ClassificationRuleVocabularyTests.cs",
+      "action": "test",
+      "role": "grammar tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNFFQ7WAJTCG2EG32ZZ",
+      "path": "tests/Tally.Tests/Classify/Rules/NormalizerV1Tests.cs",
+      "action": "test",
+      "role": "golden normalization tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYVN0TNFJ6EKQBYYH9TJWTSH",
+      "name": "ClassificationRuleVocabulary",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-RULE-VOCABULARY",
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNF4BV53SS0P9ZZ5SPV",
+      "name": "NormalizerV1.Normalize",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-RULE-VOCABULARY",
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNFESKDGHA9SGMGEZ3D",
+      "name": "RuleCondition",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-RULE-VOCABULARY",
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYVN0TNECDBD02W30XGJWY2M",
+      "kind": "acceptance_check",
+      "text": [
+        "The registry exposes only description.normalized, account.id, amount.direction, and amount.absolute_minor with the exact predicates in DM-CLASSIFY-RULE-VOCABULARY."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNEM7GFJYMQVSWQHVA5",
+      "kind": "acceptance_check",
+      "text": [
+        "NormalizerV1 applies Unicode NFKC, invariant case folding, punctuation boundaries, and whitespace collapse while preserving digits and token order."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNEFA9YTEPYRCG4JS9Q",
+      "kind": "acceptance_check",
+      "text": [
+        "Unknown fields, predicates, values, duplicate conditions, empty rules, over-length values, and invalid minor-unit ranges return stable field-level errors."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNESCPTZA8G2EEE0FA4",
+      "kind": "acceptance_check",
+      "text": [
+        "Canonical descriptors and condition hashes are byte-stable across repeated runs and culture settings."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNEZ4NS5GQEVD2Z0KVC",
+      "kind": "constraint",
+      "text": [
+        "Use closed enums and exact Int64 minor units; pure domain code has no storage or Ledger dependency."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNEYCBR8P360FDXPE46",
+      "kind": "expected_output",
+      "text": [
+        "ClassificationRuleVocabulary"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNEH4ZZ9ZC72CRQEQCP",
+      "kind": "expected_output",
+      "text": [
+        "NormalizerV1"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNEEWXVFHGEM0T031Q5",
+      "kind": "expected_output",
+      "text": [
+        "Canonical RuleCondition values"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNE23EFMSVDG1FAQ49A",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT add OR, NOT, priority, regex, fuzzy, wildcard, script, plugin, arbitrary expression, or model-score behavior - rejected by DD-CLASSIFY-RULE-VOCABULARY."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNEPZTT14A2BDA5QJJR",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT remove dates, amounts, reference numbers, stop words, digits, or token order in normalization v1."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNEG1205BJB5G1ZW661",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT delegate rule interpretation to the AI Agent Host."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNEANGV0QWFSAVRN4FD",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT broaden the grammar if tests or private evidence fail; route back to design."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNEAZ629P75SAMY5NW2",
+      "kind": "note",
+      "text": [
+        "This task builds only the exact designed vocabulary; viability is decided by the later evidence gate."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYVN0TNFT5PD6KXNREAPS5J2",
+      "target_ref_code": "ADR-CORE-0004",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3Y3HMG3XPZHM0SNNAEZ",
+      "target_title": "Enum Over String Constants for System-Owned Status Fields",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNF00QXFATZAWA2NCPV",
+      "target_ref_code": "NFR-CLASSIFY-DETERMINISTIC-INTEGRITY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXW9G1M1SD55SZ80W7NY4SCN",
+      "target_title": "Preserve deterministic classification integrity",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNFEW2TH12TEA76QDTH",
+      "target_ref_code": "DM-CLASSIFY-RULE-VOCABULARY",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJDZ6HCM3V4JF7QERQHN0",
+      "target_title": "ClassificationRuleVocabulary",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNFR1E5XC5PXV6SBHD9",
+      "target_ref_code": "FA-CLASSIFY-CONTRACT-VOCABULARY",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXWCJXG6W9BK2PME4QW0QSC3",
+      "target_title": "Contract and Vocabulary",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYVN0TNER379FR3GR0GBRT59",
+      "target": "FR-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNE8ANWE7JTVEJ2TRW1",
+      "target": "FR-CLASSIFY-RULE-LIFECYCLE",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYVN0TNF12HDPY2F0FG7PR20",
+      "gate_type": "self-review",
+      "description": [
+        "Compare every allowed and forbidden grammar element against DD-CLASSIFY-RULE-VOCABULARY."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYVN0TNF1KEE38HH00B2YB2R",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~ClassificationRuleVocabularyTests|FullyQualifiedName~NormalizerV1Tests'",
+      "expected_result": "exit 0; at least 36 field, predicate, invalid-input, Unicode, punctuation, culture, limit, and canonical-hash cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ]
+}

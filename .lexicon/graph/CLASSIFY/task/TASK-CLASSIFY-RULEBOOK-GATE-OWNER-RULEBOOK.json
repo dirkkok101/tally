@@ -1,0 +1,370 @@
+{
+  "id": "01KYVN0TMK4JMFKK2YDECA04DS",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "sub_plan_id": "01KYVMRFMVDR8FVRNAFKMSGFX5",
+  "ref_code": "TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK",
+  "slug": "RULEBOOK-GATE-OWNER-RULEBOOK",
+  "title": "Prove owner-rulebook safety before classification authority",
+  "description": [
+    "Run the owner-confirmed candidate rulebook against an owner-only representative post-INGEST 90-day corpus and temporal hold-out through the public LEDGER classification projection. Emit aggregate-only evidence and block activation, apply authority, and module completion unless every safety gate passes. Coverage, no-suggestion, owner-decision, and timing benefit are reported; insufficient benefit requires an explicit product decision and is not replaced by an invented percentage threshold."
+  ],
+  "objective": [
+    "Prove that an owner-authored deterministic rulebook is safe, deterministic, useful, and privacy-preserving before any rule can become active or any CLASSIFY apply workflow can gain authority."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 6,
+  "created_at": "2026-07-31T08:35:28.5399812+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYVQYTN4J9H8F7S5HASEVZED",
+      "bead_id": "bd-56yx",
+      "verification_status": "verified",
+      "verified_at": "2026-07-31T09:26:48.7402064+00:00",
+      "created_at": "2026-07-31T09:26:48.7402064+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KYVN0TNN91EF9K9Z26WA03YR",
+      "target": "DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNNDXDHJDBZHFZPHEG7",
+      "target": "DD-CLASSIFY-PRIVATE-VALIDATION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNN8Q5Z2S5H4H0YT7NB",
+      "target": "DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNNZWERWYWPTHZ20JGS",
+      "target": "DD-CLASSIFY-RULE-VOCABULARY",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVSZXQFWFEQA8PQEKGR7DT7",
+      "target": "DD-CLASSIFY-VIABILITY-DISPOSITION",
+      "created_at": "2026-07-31T10:02:21.8067049+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYVN0TNRWTQMGNDXXRB0S2NS",
+      "target": "TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE",
+      "dependency_type": "compile",
+      "reason": [
+        "The candidate rulebook must exercise the production deterministic engine."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNRT6XQH1M1D0BAZH3M",
+      "target": "TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT",
+      "dependency_type": "compile",
+      "reason": [
+        "Evidence must come through the public Ledger projection client."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNRNEY5ZXD2B5PHQFD4",
+      "target": "TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER",
+      "dependency_type": "compile",
+      "reason": [
+        "The owner-only corpus boundary must be enforced."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNQ57X5W9V4F2SF10S9",
+      "target": "TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "The gate must exercise the real rule validation lifecycle."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYVN0TNPZHFESTS2Z3Z7168X",
+      "path": ".gitignore",
+      "action": "modify",
+      "role": "exclude owner-only CLASSIFY evidence locations",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNPCAV22YV4Y6FXXF3N",
+      "path": "scripts/verify-classify-owner-rulebook.sh",
+      "action": "create",
+      "role": "aggregate-only public-contract conformance gate",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNPAH3T500X4X0753K8",
+      "path": "tests/Tally.Tests/Classify/Evidence/OwnerRulebookGateTests.cs",
+      "action": "test",
+      "role": "determinism, accounting, canary, and privacy tests",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNP98ZGFMEMV608D6ZZ",
+      "path": "docs/verification/classify-owner-rulebook.md",
+      "action": "create",
+      "role": "safe operator procedure and aggregate receipt contract",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYVTAYQZYXPVR2NYWD6P1AKJ",
+      "name": "OwnerRulebookGateInputManifest",
+      "direction": "consumes",
+      "contract_ref_code": "EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS",
+      "sort_order": 0,
+      "created_at": "2026-07-31T10:08:23.2947423+00:00"
+    },
+    {
+      "id": "01KYVTAYR02R4XF4HS4W6E4FF3",
+      "name": "OwnerBenefitEvidenceReceipt",
+      "direction": "consumes",
+      "contract_ref_code": "EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS",
+      "sort_order": 1,
+      "created_at": "2026-07-31T10:08:23.2947423+00:00"
+    },
+    {
+      "id": "01KYVTAYR05C0P3GKWZ4PMVCC4",
+      "name": "LedgerContractClient.QueryClassificationProjectionAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 2,
+      "created_at": "2026-07-31T10:08:23.2947423+00:00"
+    },
+    {
+      "id": "01KYVTAYR031Y20C1R8P68DRF0",
+      "name": "PrivateCorpusReader.ReadAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "sort_order": 3,
+      "created_at": "2026-07-31T10:08:23.2947423+00:00"
+    },
+    {
+      "id": "01KYVTAYR062R698P0XJ9BEM55",
+      "name": "ClassificationEngine.Evaluate",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 4,
+      "created_at": "2026-07-31T10:08:23.2947423+00:00"
+    },
+    {
+      "id": "01KYVTAYR0NKC6P4VHRY7TXDCB",
+      "name": "ValidateClassificationRuleCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "sort_order": 5,
+      "created_at": "2026-07-31T10:08:23.2947423+00:00"
+    },
+    {
+      "id": "01KYVTAYR0Q1DBPCVZ2HB6E77M",
+      "name": "VerifiedOwnerRulebookGateReceipt",
+      "direction": "produces",
+      "contract_ref_code": "TC-CLASSIFY-OWNER-RULEBOOK-PRE-AUTHORITY-GATE",
+      "sort_order": 6,
+      "created_at": "2026-07-31T10:08:23.2947423+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYVSZ0QTD8ZEZ231WEZQM5YX",
+      "kind": "acceptance_check",
+      "text": [
+        "Validate the owner-only saved rulebook with the production validator, public LEDGER projection, and untracked representative 90-day corpus plus hold-out; never compile, seed, log, export, or commit personal values."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T10:01:52.1220253+00:00"
+    },
+    {
+      "id": "01KYVSZ0QTJ0PY5A63M64M4CGP",
+      "kind": "acceptance_check",
+      "text": [
+        "Account for every row across eligible, suggested, correction, no-suggestion, conflict, excluded, and stale totals; exercise mixed, sign, account, fee, transfer, refund, and shared-medical canaries."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T10:01:52.1220253+00:00"
+    },
+    {
+      "id": "01KYVSZ0QT1V968YJ585EWP4C5",
+      "kind": "acceptance_check",
+      "text": [
+        "Require zero incorrect applications, unexplained conflicts, unauthorized mutations, or description-inferred relationships; identical inputs are deterministic and drift canaries pass."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T10:01:52.1220253+00:00"
+    },
+    {
+      "id": "01KYVSZ0QT82T8MZ8ZQ7YJDHZM",
+      "kind": "acceptance_check",
+      "text": [
+        "Report aggregate-only coverage, no-suggestion, owner-decision, and elapsed-time evidence. Safety failure blocks authority; insufficient benefit requires an explicit owner decision, never an invented percentage."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T10:01:52.1220253+00:00"
+    },
+    {
+      "id": "01KYVSZ2ZB6GEBFSEVYM8R6ARN",
+      "kind": "constraint",
+      "text": [
+        "Live Ledger is read-only; mutation probes use disposable TALLY_DATA_ROOT; fixtures are owner-only and untracked; installed executable output is metadata-only."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T10:01:54.4113442+00:00"
+    },
+    {
+      "id": "01KYVSZ289NXYBN18V0R1DFHVQ",
+      "kind": "expected_output",
+      "text": [
+        "Aggregate-only VerifiedOwnerRulebookGateReceipt"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T10:01:53.6726959+00:00"
+    },
+    {
+      "id": "01KYVSZ28A2TT4JF6M682ZC5D7",
+      "kind": "expected_output",
+      "text": [
+        "Conformance script and private-boundary operator guide"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T10:01:53.6726959+00:00"
+    },
+    {
+      "id": "01KYVSZ1DTB74YP0Q3XCCJBARZ",
+      "kind": "failure_criterion",
+      "text": [
+        "Block activation, apply, command completion, and module completion on any safety, accounting, conflict, determinism, drift, privacy, or Ledger-truth failure."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T10:01:52.8260987+00:00"
+    },
+    {
+      "id": "01KYVSZ1DVA136F251FHD2MX74",
+      "kind": "failure_criterion",
+      "text": [
+        "Never disclose private payloads or paths; infer Ledger state; discover or seed rules; broaden grammar; add an evaluator; weaken conflicts; or treat coverage as authority."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T10:01:52.8260987+00:00"
+    },
+    {
+      "id": "01KYVSZ3QEKZBH7D0TBRJ3RYCM",
+      "kind": "note",
+      "text": [
+        "The failed automatic-discovery experiment remains historical evidence. Missing owner inputs yield a stable blocked receipt with zero authority or mutation and no synthesized values or disclosed path."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T10:01:55.1822065+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYVSZZ7Y06GD2VA9AJN8RKY2",
+      "target_ref_code": "EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXV9NEWB6MN2V4KMJ12KD5QA",
+      "target_title": "Private Classification Evaluation Corpus",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T10:02:23.3594623+00:00"
+    },
+    {
+      "id": "01KYVT01CCHRF24W32KC2Z8MY8",
+      "target_ref_code": "NFR-CLASSIFY-LOCAL-DATA-PROTECTION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXW9G1YYFFPN6NBJ16WYKTGC",
+      "target_title": "Protect local classification data",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T10:02:25.5496024+00:00"
+    },
+    {
+      "id": "01KYVN0TNQMTBC8FA3YG4FJX3H",
+      "target_ref_code": "TC-CLASSIFY-OWNER-RULEBOOK-PRE-AUTHORITY-GATE",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KYVMEAJSCRQJGA918ZTWXVAE",
+      "target_title": "Validate the owner-authored rulebook before authority",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYVN0TNN0SAAV732W906KMCZ",
+      "target": "FR-CLASSIFY-RULE-VALIDATION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYVN0TNQV486E2C7SZ7F4QAG",
+      "gate_type": "test-evidence",
+      "description": [
+        "Inspect the aggregate receipt and confirm every mandatory safety gate is independently evidenced without private payload disclosure."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNQ7AXJJ2MNKMA8MR9K",
+      "gate_type": "human-review",
+      "description": [
+        "Required only when measured owner-decision or time benefit is insufficient; record the explicit owner product decision before broad authority continues."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYVN0TNQ8D87PY4PBFDZWXPM",
+      "phase": "after",
+      "command": "bash scripts/verify-classify-owner-rulebook.sh",
+      "expected_result": "exit 0; at least 12 named permission, public-contract, 90-day, hold-out, recurrence, timing, decision-reduction, row-accounting, incorrect-apply, conflict, determinism, drift, locality, and disclosure gates are discovered; all mandatory safety gates pass; output contains aggregate metadata only",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ]
+}

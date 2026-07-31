@@ -22,17 +22,17 @@ UC-CLASSIFY-005 proves corrections remain authoritative in Ledger while CLASSIFY
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md) | `design_decision` | `governed-by` | `true` |
-| [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md) | `design_decision` | `governed-by` | `true` |
+| DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence | `design_decision` | `governed-by` | `true` |
+| DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability | `design_decision` | `governed-by` | `true` |
 | TC-CLASSIFY-CORRECTION-FEEDBACK-CONTRACT: Verify bounded correction feedback | `test_case` | `verifies` | `true` |
-| [UC-CLASSIFY-005: Use a correction as bounded feedback](../../../prd/classify/prd.md#uc-classify-005-use-a-correction-as-bounded-feedback) | `use_case` | `covers` | `true` |
+| UC-CLASSIFY-005: Use a correction as bounded feedback | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-FEEDBACK-PROPOSALS: TASK-CLASSIFY-FEEDBACK-PROPOSALS](feedback-proposals.md) | `compile` | The UC verifies the complete feedback and proposal slice. |
-| [TASK-CLASSIFY-STATUS-WORKFLOW: TASK-CLASSIFY-STATUS-WORKFLOW](status-workflow.md) | `compile` | The UC verifies retained historical status. |
+| [TASK-CLASSIFY-FEEDBACK-PROPOSALS](../tasks/feedback-proposals.md) | `compile` | The UC verifies the complete feedback and proposal slice. |
+| [TASK-CLASSIFY-STATUS-WORKFLOW](../tasks/status-workflow.md) | `compile` | The UC verifies retained historical status. |
 
 ## Recipe
 
@@ -41,7 +41,7 @@ UC-CLASSIFY-005 proves corrections remain authoritative in Ledger while CLASSIFY
 - Accepted, rejected, and corrected feedback retains exact outcome and rule provenance plus authoritative prior and resulting allocations.
 - One correction produces no proposal or one smallest retire, narrow, or replacement draft and never activates or broadens it.
 - Missing historical evidence records owner decision but creates no reconstructed proposal.
-- A safe feedback-derived candidate follows the same private validation and explicit activation path; unsafe or archived-category replacements reject.
+- A feedback-derived candidate with complete retained provenance follows the same private validation and explicit activation path; candidates with missing provenance or an archived category reject.
 - Original feedback remains attributable after rule retirement or supersession.
 
 ### Failure Criteria
@@ -71,8 +71,8 @@ UC-CLASSIFY-005 proves corrections remain authoritative in Ledger while CLASSIFY
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| RecordClassificationFeedbackCommand.HandleAsync | `consumes` | [DM-CLASSIFY-FEEDBACK-PROPOSAL](../../../designs/classify/data-model.md#classificationfeedbackandproposal) |  |
-| VerifiedClassifyUc005 | `produces` | [UC-CLASSIFY-005](../../../prd/classify/prd.md#uc-classify-005-use-a-correction-as-bounded-feedback) |  |
+| RecordClassificationFeedbackCommand.HandleAsync | `consumes` | DM-CLASSIFY-FEEDBACK-PROPOSAL |  |
+| VerifiedClassifyUc005 | `produces` | UC-CLASSIFY-005 |  |
 
 ### Verification
 
@@ -94,11 +94,11 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `covers` -> [UC-CLASSIFY-005: Use a correction as bounded feedback](../../../prd/classify/prd.md#uc-classify-005-use-a-correction-as-bounded-feedback)
-- `depends-on:compile` -> [TASK-CLASSIFY-FEEDBACK-PROPOSALS: TASK-CLASSIFY-FEEDBACK-PROPOSALS](feedback-proposals.md): The UC verifies the complete feedback and proposal slice.
-- `depends-on:compile` -> [TASK-CLASSIFY-STATUS-WORKFLOW: TASK-CLASSIFY-STATUS-WORKFLOW](status-workflow.md): The UC verifies retained historical status.
-- `governed-by` -> [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md)
-- `governed-by` -> [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md)
+- `covers` -> UC-CLASSIFY-005: Use a correction as bounded feedback
+- `depends-on:compile` -> [TASK-CLASSIFY-FEEDBACK-PROPOSALS](../tasks/feedback-proposals.md): The UC verifies the complete feedback and proposal slice.
+- `depends-on:compile` -> [TASK-CLASSIFY-STATUS-WORKFLOW](../tasks/status-workflow.md): The UC verifies retained historical status.
+- `governed-by` -> DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence
+- `governed-by` -> DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability
 - `verifies` -> TC-CLASSIFY-CORRECTION-FEEDBACK-CONTRACT: Verify bounded correction feedback
 
 ## Navigation

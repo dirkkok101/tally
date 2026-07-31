@@ -27,12 +27,14 @@
     "Given a feedback-derived proposal, when it is recorded, then CLASSIFY does not broaden an existing rule automatically.",
     "Given a feedback-derived candidate, when activation is requested, then the same private validation and explicit activation requirements as any other candidate apply.",
     "Given historical feedback, when a rule is retired or superseded, then the feedback remains attributable to the original rule version and outcome.",
-    "Given unavailable prior Match Evidence, when feedback is recorded, then CLASSIFY stores the owner decision but creates no rule proposal from reconstructed current evidence."
+    "Given unavailable prior Match Evidence, when feedback is recorded, then CLASSIFY stores the owner decision but creates no rule proposal from reconstructed current evidence.",
+    "Given an accepted or rejected suggestion, when feedback is recorded, then CLASSIFY may record no proposal and never invents a rule change merely because the owner accepted or rejected one outcome.",
+    "Given a transaction-specific correction, when feedback is recorded, then the authoritative transaction correction remains separate from every reusable rule draft and is never generalized from that row without the normal save, validation, and activation path."
   ],
   "security_criteria": [
     "Feedback results expose only explicit owner-requested provenance and keep private description and normalized-token payloads owner-only."
   ],
-  "status": "deferred",
+  "status": "active",
   "created_at": "2026-07-19T04:16:33.3832373+00:00",
   "links": [
     {

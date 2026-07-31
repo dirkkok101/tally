@@ -30,7 +30,7 @@
   "security_criteria": [
     "Status output contains only the requested subject ID, lifecycle state, actor ID, reason code, timestamps, fingerprints, aggregate counts, mutation-possibility state, frontier ordinal, result or error code, and next-operation enum; it never contains raw corpus rows, transaction descriptions or amounts, normalized tokens, hidden rule contents, private paths, or serialized requests or results."
   ],
-  "status": "deferred",
+  "status": "active",
   "created_at": "2026-07-19T04:16:33.3832373+00:00",
   "links": [
     {

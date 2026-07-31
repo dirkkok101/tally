@@ -1,0 +1,417 @@
+{
+  "id": "01KYVN0TMQVHWHF4MRYQE2FARQ",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "sub_plan_id": "01KYVMRH10RWXEP7AMK12RMBKN",
+  "ref_code": "TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP",
+  "slug": "RULEBOOK-ABANDON-CLEANUP",
+  "title": "Abandon state and clean recognized artifacts",
+  "description": [
+    "Implement abandon and fixed-policy cleanup with RESTRICT history, owner-only artifact checks, startup recovery, and safe aggregate results."
+  ],
+  "objective": [
+    "Unreferenced work and recognized crash residue can be removed safely while every referenced rule, apply, allocation, and feedback history remains intact."
+  ],
+  "planning_state": "ready",
+  "priority": 1,
+  "sort_order": 4,
+  "created_at": "2026-07-31T08:35:28.5399812+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYVQYMYR2MANN1TX9PYAGW7Q",
+      "bead_id": "bd-3hcn",
+      "verification_status": "verified",
+      "verified_at": "2026-07-31T09:26:42.9045106+00:00",
+      "created_at": "2026-07-31T09:26:42.9045106+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KYVN0TP6GH90SP1MP97M49N2",
+      "target": "DD-CLASSIFY-ARTIFACT-RETENTION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6CFS04YC7XXQT58RY",
+      "target": "DD-CLASSIFY-STATE-STORE",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYVN0TP7SM77KVNDJABXG2YK",
+      "target": "TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS",
+      "dependency_type": "compile",
+      "reason": [
+        "Retention must recognize feedback and proposal references."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP7RENACH001236YX8N",
+      "target": "TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Abandonment and cleanup use the designed tombstone, event, and immutable-history schema."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYVN0TP62FWJPAYZNXE1XXW4",
+      "path": "src/Tally/Features/Classify/Recovery/Abandon/AbandonClassificationStateCommand.cs",
+      "action": "create",
+      "role": "abandon workflow",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6YJDM8CKZD1SYBZVW",
+      "path": "src/Tally/Features/Classify/Recovery/Cleanup/CleanupClassificationStateCommand.cs",
+      "action": "create",
+      "role": "fixed cleanup workflow",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP69KHPW6SNDC25W8W5",
+      "path": "src/Tally/Infrastructure/Classify/Storage/ClassifyArtifactProtection.cs",
+      "action": "create",
+      "role": "owner and path protection",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP671R0XM6WQHGX182Q",
+      "path": "src/Tally/Infrastructure/Classify/Storage/Recovery/ClassificationRecoveryStore.cs",
+      "action": "create",
+      "role": "tombstone and cleanup events",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6CP6QNWGAMYW6EA22",
+      "path": "src/Tally/Domain/Classify/Recovery/ClassifyRetentionPolicy.cs",
+      "action": "create",
+      "role": "RESTRICT and removable policy",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6KQVC3X0AH25SGK2E",
+      "path": "src/Tally/Features/Classify/Contract/ClassifyContractMapper.Recovery.cs",
+      "action": "create",
+      "role": "pure recovery mapping",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP61CP9ZYCRNE960RVJ",
+      "path": "tests/Tally.Tests/Classify/Recovery/AbandonCleanupTests.cs",
+      "action": "test",
+      "role": "retention workflow tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP60K2EE732CZJT1KXT",
+      "path": "tests/Tally.Tests/Classify/Security/ClassifyArtifactProtectionTests.cs",
+      "action": "test",
+      "role": "filesystem attack matrix",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYVN0TP6A1CTH90MBT06VVB5",
+      "name": "ClassifyStateStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6T39MVYDZ56K3A7RT",
+      "name": "AbandonClassificationStateCommand.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6C9ZCBK0YF0A0MX6J",
+      "name": "CleanupClassificationStateCommand.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP62891YZHBHRQJ1V7A",
+      "name": "ClassificationRecoveryStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6MYXH7TJ5M4E7QX65",
+      "name": "ClassifyArtifactProtection",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYVN0TP6ZVJQ6XD44W0A9CF5",
+      "kind": "acceptance_check",
+      "text": [
+        "Abandon applies only to unreferenced drafts, validations, evaluations, and previews, appends a tombstone, makes the subject non-activatable, and removes allowed derived payload atomically."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6JM1Z3YW2A72GXDM3",
+      "kind": "acceptance_check",
+      "text": [
+        "Active rules, rule sets, apply provenance, feedback, and any state referenced by a Ledger allocation reject hard removal with stable blocker metadata."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6Y1Y75G6Q76J5M30P",
+      "kind": "acceptance_check",
+      "text": [
+        "Cleanup accepts a fixed policy version and no path, removes only recognized unlocked temporaries, expired unreferenced previews, and abandoned removable payload, and records cleanup run ID, policy version, removed artifact count, retained artifact count, and per-kind counts."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6HVH5RCQZKKW599R4",
+      "kind": "acceptance_check",
+      "text": [
+        "Startup validates owner, mode, regular-file identity, recognized name, lock state, and containment before removing prior crash artifacts or accepting mutation."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6AAQN3SMS1JGRE4Y4",
+      "kind": "acceptance_check",
+      "text": [
+        "Symlinks, unknown files, outside-root paths, referenced history, success, expected failure, and handled unexpected failure leave no raw corpus copy or deletion outside the recognized policy."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6STN2G8W0Z43T2GGV",
+      "kind": "constraint",
+      "text": [
+        "Directory and file checks are fail-closed on linux-x64 and cleanup records metadata-only outcomes."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6EF0WYTPF198VN4CC",
+      "kind": "expected_output",
+      "text": [
+        "AbandonClassificationStateCommand"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP696R867J4NSHM07EK",
+      "kind": "expected_output",
+      "text": [
+        "CleanupClassificationStateCommand"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6NHXBMX0RRCSGP3MM",
+      "kind": "expected_output",
+      "text": [
+        "ClassifyArtifactProtection"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6NTW5K0YBC12VWM1J",
+      "kind": "expected_output",
+      "text": [
+        "ClassifyRetentionPolicy"
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6PVXJCYSCGKWMVRGP",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT accept an arbitrary cleanup path, follow links, glob outside the CLASSIFY root, or remove unknown files - rejected by DD-CLASSIFY-ARTIFACT-RETENTION."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6TBG9CQESJ6AWT44W",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT hard-delete referenced rule, evaluation, apply, allocation, or feedback history - per ADR-CORE-0020."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6BMPHRB64NGZ04SWA",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT invent a generic filesystem abstraction or cleanup service."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP61N5YQHC0HPTVQZV4",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT emit removed payload, private paths, descriptions, amounts, or tokens in results or diagnostics."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6YDZK1QWK4TKK754X",
+      "kind": "note",
+      "text": [
+        "Startup recovery runs the same fixed ownership and recognized-name policy before new CLASSIFY mutation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYVN0TP60QR7RZA6ADD9E5N7",
+      "target_ref_code": "ADR-CORE-0020",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3YGXF1B0J0MC6S0EPAH",
+      "target_title": "RESTRICT-by-Default Delete Taxonomy",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP63QZJB3QVSGXR7H89",
+      "target_ref_code": "NFR-CLASSIFY-LOCAL-DATA-PROTECTION",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXW9G1YYFFPN6NBJ16WYKTGC",
+      "target_title": "Protect local classification data",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6XC1D11BKYD3JN5JK",
+      "target_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJGM514904QHQZEJD3SEG",
+      "target_title": "ClassificationStateStore",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP6CRTJAGD1WZDE057Z",
+      "target_ref_code": "FA-CLASSIFY-STATE-RECOVERY",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXWCJYZ7SYSPAJMAFTTBE12Z",
+      "target_title": "State and Recovery",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP69H9VDB5447XEGB6T",
+      "target_ref_code": "TC-CLASSIFY-STATE-RETENTION-CLEANUP-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PM251WSNBB9QFS1QWNSC",
+      "target_title": "Verify retention, abandonment, and cleanup",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYVN0TP6SCXE9CQXRWZD8DVB",
+      "target": "FR-CLASSIFY-STATE-RETENTION-CLEANUP",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYVN0TP6100WNYN2M4R1JHEY",
+      "gate_type": "test-evidence",
+      "description": [
+        "Host filesystem tests prove cleanup cannot escape CLASSIFY storage or erase referenced provenance."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYVN0TP6W8XREQ0J1Y0TBD6M",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~AbandonCleanupTests|FullyQualifiedName~ClassifyArtifactProtectionTests'",
+      "expected_result": "exit 0; at least 34 unreferenced, referenced, tombstone, cleanup, startup, owner, mode, symlink, unknown-file, outside-root, crash-residue, and disclosure cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ]
+}

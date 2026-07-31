@@ -46,7 +46,7 @@ The shared Tally registry exposes exactly these first-release operation IDs and 
 | `classify.apply.run` | `tally classify apply run` | May invoke LEDGER assignment/correction; caller and per-item replay identities required. |
 | `classify.rule.save` | `tally classify rule save` | Appends an immutable draft version; caller idempotency required. |
 | `classify.rule.validate` | `tally classify rule validate` | Persists aggregate validation evidence; caller idempotency required. |
-| `classify.rule.activate` | `tally classify rule activate` | Atomically creates and activates a new immutable rule-set version; caller idempotency required. |
+| `classify.rule.activate` | `tally classify rule activate` | Atomically creates and activates a new immutable Rule Set Version; caller idempotency required. |
 | `classify.rule.retire` | `tally classify rule retire` | Atomically creates a successor rule set without the retired rule; caller idempotency required. |
 | `classify.feedback.record` | `tally classify feedback record` | Appends feedback and at most one bounded proposal; caller idempotency required. |
 | `classify.status` | `tally classify status` | Read-only safe lifecycle/status projection. |
@@ -103,7 +103,7 @@ Normalization v1 applies Unicode NFKC, invariant case folding, punctuation-to-bo
 
 The registry is code-owned, versioned, descriptor-discoverable, and source-generated. `classify.rule.save` persists canonical typed condition rows and the selected normalization version. Unknown fields, predicates, values, duplicate conditions, empty rules, or archived/missing target categories fail before an activatable version exists.
 
-The private projection/normalization spike remains a planning gate for this exact v1 registry. It must prove the fields and transforms against the owner-only fixtures without exporting payload. If the registry cannot satisfy the monitored recurrence and zero-incorrect-apply criteria, the plan must route back to the do-less workflow or revise this design before implementation; executors may not silently broaden the grammar.
+The private projection/normalization spike remains a planning gate for this exact v1 registry. It must prove the fields and transforms against the owner-only fixtures without exporting payload. For the archived automatic-discovery experiment, failure of its monitored recurrence or zero-incorrect-apply criteria remains an unconditional stop and preserves the do-less disposition. For the replacement owner-authored rulebook path, zero incorrect applications and every row-accounting, conflict, determinism, drift, privacy, and Ledger-truth gate remain unconditional stops; recurrence, coverage, no-suggestion, owner-decision, and timing results are reported benefit evidence, and insufficient benefit requires an explicit owner product decision before broad authority proceeds. Executors may not silently broaden the grammar or weaken safety gates.
 
 ## Deterministic evaluation and evidence
 
@@ -114,7 +114,7 @@ Evaluation first resolves the active immutable rule set and normalization versio
 - matches proposing different category IDs: `conflict` with no selected category;
 - an input or fingerprint that becomes invalid before durability: `stale`.
 
-No rule ordering selects a winner. Canonical SHA-256 fingerprints cover contract version, projection version, store generation, snapshot and expiry, category identity lifecycle, normalization version, rule-set version, and ordered item lifecycle revisions. Persisted `MatchEvidence` records rule version IDs, condition IDs, field keys, predicate kinds, and normalized-value hashes, never a reconstructed current payload. That is sufficient to identify what matched without retaining unrelated transaction fields.
+No rule ordering selects a winner. Canonical SHA-256 fingerprints cover contract version, projection version, store generation, snapshot and expiry, category identity lifecycle, normalization version, Rule Set Version, and ordered item lifecycle revisions. Persisted `MatchEvidence` records rule version IDs, condition IDs, field keys, predicate kinds, and normalized-value hashes, never a reconstructed current payload. That is sufficient to identify what matched without retaining unrelated transaction fields.
 
 One SQLite transaction persists the completed evaluation, all ordered outcomes, evidence, and aggregate counts. A failure before commit leaves no evaluation ID. Repeating an identical request and caller idempotency identity returns the same stored result; a different request with that identity returns a stable conflict.
 
@@ -134,7 +134,7 @@ If the corpus is unavailable, the last active rule set remains evaluable. New ac
 
 `classify.apply.preview` accepts either an explicit set of current suggestion outcome IDs, one exact broad-authorized rule version, or explicit correction items. It rejects no-suggestion, conflict, stale, expired, mixed-fingerprint, or unauthorized items. Correction items are never selected by broad mode and each carries its own reason.
 
-The preview invokes `purpose=apply_preflight` for the exact selected transaction IDs. It requires every identity to be returned with current active category state, current allocation identity when present, lifecycle revisions, and an `assignable` or explicitly `correctable` Ledger-owned mutation state. It verifies the reviewed assignment or correction mode and active target category, then persists an expiry-bound `ApplyPreview` containing evaluation fingerprint, preflight snapshot and revisions, selection hash, item identities, modes, target categories, expected active allocations, rule versions, exclusions, counts, and owner attribution. Preview returns evidence but performs no LEDGER mutation.
+The preview invokes `purpose=apply_preflight` for the exact selected transaction IDs. It requires every identity to be returned with current active category state, current allocation identity when present, lifecycle revisions, and an `assignable` or explicitly `correctable` Ledger-owned mutation state. It verifies the reviewed assignment or correction mode and active target category, then persists an expiry-bound `ApplyPreview` containing Evaluation Fingerprint, preflight snapshot and revisions, selection hash, item identities, modes, target categories, expected active allocations, rule versions, exclusions, counts, and owner attribution. Preview returns evidence but performs no LEDGER mutation.
 
 `classify.apply.run` references one current preview and acquires an owner-only per-run OS lock. Before the first mutation it repeats `purpose=apply_preflight` for the entire selected set and revalidates every transaction, category, rule authority, projection dimension, mutation state, expected active allocation, lifecycle revision, and correction reason. Any missing, stale, ineligible, or incompatible item rejects the whole run before a LEDGER call.
 
@@ -167,7 +167,7 @@ The schema contains:
 - store metadata, active normalization and rule-set pointers, and operation idempotency results;
 - immutable rules, rule versions, typed condition rows, rule sets, memberships, and lifecycle events;
 - validation runs and aggregate reports;
-- evaluation runs, ordered outcomes, and bounded match evidence;
+- evaluation runs, ordered outcomes, and bounded Match Evidence;
 - apply previews, apply runs, planned item requests, terminal item results, and resume frontier;
 - feedback records, bounded proposals, abandonment tombstones, and cleanup events.
 
@@ -220,7 +220,7 @@ The existing planned PRD test cases remain the trace anchors. Planning may add n
 
 ## Greenfield implementation obligations
 
-The repository currently contains documentation and graph artifacts but no application source. The design therefore records truthful future paths and treats current path-check warnings as plan gates:
+The repository currently contains built INGEST and LEDGER application source but no CLASSIFY application source. The design therefore records truthful future CLASSIFY paths and treats missing CLASSIFY paths as plan gates:
 
 - `src/Tally/Contracts/Classify/**`
 - `src/Tally/Features/Classify/**`
@@ -230,4 +230,20 @@ The repository currently contains documentation and graph artifacts but no appli
 - `src/Tally/Bootstrap/Features/ClassifyExtensions.cs`
 - `tests/Tally.Tests/Classify/**`
 
-The plan must create these paths before any dependent implementation task can close. It must also keep the LEDGER projection contract and private vocabulary/corpus spikes ahead of classifier implementation. Missing or invalidated evidence routes back to LEDGER or the do-less workflow rather than authorizing an executor to invent fields, weaken conflicts, or broaden rules.
+The plan must create these paths before any dependent task can close. The public LEDGER classification projection and mutation preconditions are the first prerequisite. The closed vocabulary, deterministic engine, private corpus reader, owner-authored draft save, and normal validation path are then implemented only far enough to run the owner-rulebook pre-authority gate. Rule activation, apply authority, command completion, and the module gate remain blocked until that aggregate-only gate passes. Missing or invalidated safety evidence routes back to the owning contract or an explicit product decision rather than authorizing an executor to invent fields, weaken conflicts, or broaden rules.
+
+## Owner-rulebook replacement disposition (v0.6)
+
+DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT supersedes the stop-only route for deliberate owner authorship while DD-CLASSIFY-VIABILITY-DISPOSITION remains historical authority against automatic inferred-rule discovery. PLAN-CLASSIFY-V1 remains archived. PLAN-CLASSIFY-RULEBOOK-V1 is the only implementation authority.
+
+Owner-authored and feedback-derived rules are separate evidence tracks under DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE. rule.save records owner_authored drafts; feedback.record may emit at most one feedback_derived inactive retire, narrow, or replacement proposal. Origin never grants validation, activation, broad apply, or Ledger mutation. Personal rule values are runtime owner data and are never source seeds, graph content, logs, tracked fixtures, or generated documentation.
+
+The closed grammar remains description.normalized, account.id, amount.direction, and amount.absolute_minor with AND-only predicates. Narrow positive equals, starts_with, contained token sequence, direction, account, and bounded amount conditions are permitted by the existing registry. OR, NOT, priority, regex, fuzzy, wildcard, scripts, plugins, and model scores remain forbidden. Mixed-purpose or ambiguous evidence is corrected per transaction rather than converted into a merchant-wide or recipient-wide rule. Incompatible category matches remain Rule Conflict with no winner.
+
+Ledger remains authoritative for active transfer principal, linked refund or reversal, void and supersession, current allocation, eligibility, category lifecycle, snapshot membership, and stale mutation preconditions. CLASSIFY consumes those outcomes through the released classification_v1 projection and never reconstructs them from descriptions. Shared budget pools and cross-account budget effects remain BUDGET and Ledger semantics; they do not create per-account classifier rule sets. account.id is a rule condition only when the same descriptor has a genuinely different meaning by account.
+
+The current Ledger baseline is explicit: installed Tally 0.3.2 and current main publish actuals, transaction detail, active categories, and idempotent assignment or correction, but not classification_v1 or allocation revision preconditions. The replacement plan must extend and prove that LEDGER-owned public contract before any CLASSIFY consumer.
+
+The owner-rulebook gate is distinct from the failed automatic-discovery thresholds. Before activation authority, exact-rule broad apply, or module completion, aggregate-only private validation must account for every row, produce zero incorrect applications, produce zero unexplained incompatible conflicts, preserve drift canaries, replay deterministic fingerprints, and report coverage plus no-suggestion totals. Owner decision and time benefit are measured and reported without inventing a 50 percent threshold; insufficient benefit requires an explicit product decision before broad authority.
+
+The owner or Hermes agent sequence is discover schemas; save inactive owner-authored drafts; validate private aggregate evidence; explicitly activate; evaluate eligible Ledger transactions; inspect every outcome; preview an explicit suggestion or transaction correction selection; apply only the current authorized preview; record accept, reject, or correct feedback; route any feedback-derived proposal back through save, validate, and activate; inspect status; retire, abandon, or cleanup explicitly. No invocation is automatic or background.

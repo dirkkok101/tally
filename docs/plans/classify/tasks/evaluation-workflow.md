@@ -22,11 +22,11 @@ An idempotent command turns one complete Ledger input into durable deterministic
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md) | `design_decision` | `governed-by` | `true` |
-| [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
-| [DM-CLASSIFY-EVALUATION-OUTCOME: ClassificationEvaluationAndOutcome](../../../designs/classify/data-model.md#classificationevaluationandoutcome) | `data_model` | `touches` | `true` |
-| [FR-CLASSIFY-DETERMINISTIC-EVALUATION: Evaluate deterministic classification outcomes](../../../prd/classify/prd.md#fr-classify-deterministic-evaluation-evaluate-deterministic-classification-outcomes) | `requirement` | `implements` | `true` |
-| [NFR-CLASSIFY-BOUNDED-EVALUATION: Bound local classification work](../../../prd/classify/prd.md#nfr-classify-bounded-evaluation-bound-local-classification-work) | `nfr` | `satisfies` | `true` |
+| DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence | `design_decision` | `governed-by` | `true` |
+| DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history | `design_decision` | `governed-by` | `true` |
+| DM-CLASSIFY-EVALUATION-OUTCOME: ClassificationEvaluationAndOutcome | `data_model` | `touches` | `true` |
+| FR-CLASSIFY-DETERMINISTIC-EVALUATION: Evaluate deterministic classification outcomes | `requirement` | `implements` | `true` |
+| NFR-CLASSIFY-BOUNDED-EVALUATION: Bound local classification work | `nfr` | `satisfies` | `true` |
 | TC-CLASSIFY-DETERMINISTIC-EVALUATION-CONTRACT: Verify deterministic classification outcomes | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-EVALUATION-LIMITS: Verify classification performance and hard limits | `test_case` | `verifies` | `true` |
 
@@ -34,9 +34,9 @@ An idempotent command turns one complete Ledger input into durable deterministic
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE](rule-activation-lifecycle.md) | `compile` | Evaluation consumes the active immutable rule set and normalization version. |
-| [TASK-CLASSIFY-DETERMINISTIC-ENGINE: TASK-CLASSIFY-DETERMINISTIC-ENGINE](deterministic-engine.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-DETERMINISTIC-ENGINE. |
-| [TASK-CLASSIFY-EVALUATION-INPUT: TASK-CLASSIFY-EVALUATION-INPUT](evaluation-input.md) | `compile` | Evaluation consumes one complete bounded input from ClassificationEvaluationInputLoader.LoadAsync. |
+| [TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE](../tasks/rule-activation-lifecycle.md) | `compile` | Evaluation consumes the active immutable rule set and normalization version. |
+| [TASK-CLASSIFY-DETERMINISTIC-ENGINE](../tasks/deterministic-engine.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-DETERMINISTIC-ENGINE. |
+| [TASK-CLASSIFY-EVALUATION-INPUT](../tasks/evaluation-input.md) | `compile` | Evaluation consumes one complete bounded input from ClassificationEvaluationInputLoader.LoadAsync. |
 
 ## Recipe
 
@@ -84,11 +84,11 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassificationEvaluationInputLoader.LoadAsync | `consumes` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
-| ClassificationEngine.Evaluate | `consumes` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
-| RuleSetStore | `consumes` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
-| EvaluateClassificationCommand.HandleAsync | `produces` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
-| ClassificationEvaluationStore | `produces` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| ClassificationEvaluationInputLoader.LoadAsync | `consumes` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
+| ClassificationEngine.Evaluate | `consumes` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
+| RuleSetStore | `consumes` | DM-CLASSIFY-RULE-LIFECYCLE |  |
+| EvaluateClassificationCommand.HandleAsync | `produces` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
+| ClassificationEvaluationStore | `produces` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
 
 ### Verification
 
@@ -112,14 +112,14 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-CLASSIFY-DETERMINISTIC-ENGINE: TASK-CLASSIFY-DETERMINISTIC-ENGINE](deterministic-engine.md): Consumes an interface produced by TASK-CLASSIFY-DETERMINISTIC-ENGINE.
-- `depends-on:compile` -> [TASK-CLASSIFY-EVALUATION-INPUT: TASK-CLASSIFY-EVALUATION-INPUT](evaluation-input.md): Evaluation consumes one complete bounded input from ClassificationEvaluationInputLoader.LoadAsync.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE](rule-activation-lifecycle.md): Evaluation consumes the active immutable rule set and normalization version.
-- `governed-by` -> [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md)
-- `governed-by` -> [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md)
-- `implements` -> [FR-CLASSIFY-DETERMINISTIC-EVALUATION: Evaluate deterministic classification outcomes](../../../prd/classify/prd.md#fr-classify-deterministic-evaluation-evaluate-deterministic-classification-outcomes)
-- `satisfies` -> [NFR-CLASSIFY-BOUNDED-EVALUATION: Bound local classification work](../../../prd/classify/prd.md#nfr-classify-bounded-evaluation-bound-local-classification-work)
-- `touches` -> [DM-CLASSIFY-EVALUATION-OUTCOME: ClassificationEvaluationAndOutcome](../../../designs/classify/data-model.md#classificationevaluationandoutcome)
+- `depends-on:compile` -> [TASK-CLASSIFY-DETERMINISTIC-ENGINE](../tasks/deterministic-engine.md): Consumes an interface produced by TASK-CLASSIFY-DETERMINISTIC-ENGINE.
+- `depends-on:compile` -> [TASK-CLASSIFY-EVALUATION-INPUT](../tasks/evaluation-input.md): Evaluation consumes one complete bounded input from ClassificationEvaluationInputLoader.LoadAsync.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE](../tasks/rule-activation-lifecycle.md): Evaluation consumes the active immutable rule set and normalization version.
+- `governed-by` -> DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence
+- `governed-by` -> DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history
+- `implements` -> FR-CLASSIFY-DETERMINISTIC-EVALUATION: Evaluate deterministic classification outcomes
+- `satisfies` -> NFR-CLASSIFY-BOUNDED-EVALUATION: Bound local classification work
+- `touches` -> DM-CLASSIFY-EVALUATION-OUTCOME: ClassificationEvaluationAndOutcome
 - `verifies` -> TC-CLASSIFY-DETERMINISTIC-EVALUATION-CONTRACT: Verify deterministic classification outcomes
 - `verifies` -> TC-CLASSIFY-EVALUATION-LIMITS: Verify classification performance and hard limits
 

@@ -1,10 +1,10 @@
 {
   "id": "01KXV5MAXN2TPCA3BCGP6W6AJM",
   "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
-  "condition": "Before PLAN-CLASSIFY-V1 bead compilation and again during execution, verify data locality. If useful first-release classification requires cloud inference, remote embeddings, third-party transaction processing, a required daemon, or sending financial descriptions outside the owner-controlled host, stop that approach and remain on deterministic local rules or the do-less workflow.",
+  "condition": "AUTOMATIC-DISCOVERY EXPERIMENT ONLY. Preserve the original locality check: inferred classification stops if useful behavior requires cloud inference, remote embeddings, third-party transaction processing, a required daemon, or sending financial evidence outside the owner-controlled host. The same locality remains a hard constraint for the owner-rulebook plan.",
   "monitored": 1,
   "evaluation_state": "clear",
-  "evaluation_evidence": "Assessed on 2026-07-30: the owner-only spike ran locally against a 0700 disposable root through the installed executable, with no service, daemon, network dependency, cloud inference, remote embedding, external evaluator, or financial payload output.",
-  "evaluated_at": "2026-07-30T16:58:06.7909087+00:00",
+  "evaluation_evidence": "Current owner-rulebook design remains local, deterministic, explicit-invocation only, and prohibits network, cloud, external evaluator, daemon, or payload export; the security and module gates must reassess this during implementation.",
+  "evaluated_at": "2026-07-31T08:26:41.6269245+00:00",
   "created_at": "2026-07-18T17:50:48.7587422+00:00"
 }

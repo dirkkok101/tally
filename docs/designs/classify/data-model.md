@@ -16,7 +16,7 @@ apply_preview(preview_id PK, operation_idempotency_id UNIQUE, evaluation_id FK, 
 
 **Ref Code:** DM-CLASSIFY-EVALUATION-OUTCOME
 
-One atomic ordered evaluation, exact fingerprint dimensions, one outcome per projected transaction, and bounded historical match evidence.
+One atomic ordered evaluation, exact fingerprint dimensions, one outcome per projected transaction, and bounded historical Match Evidence.
 
 ### Schema
 
@@ -26,17 +26,17 @@ evaluation_run(evaluation_id PK, operation_idempotency_id UNIQUE, rule_set_versi
 
 **Ref Code:** DM-CLASSIFY-FEEDBACK-PROPOSAL
 
-Append-only owner decisions against exact outcomes and at most one non-active smallest-scope rule proposal.
+Append-only transaction-level owner decisions against exact outcomes and at most one non-active smallest-scope feedback-derived proposal.
 
 ### Schema
 
-classification_feedback(feedback_id PK, outcome_id FK, transaction_id, evaluation_id, normalization_version, rule_set_version_id, decision_type, prior_ledger_allocation_id?, resulting_ledger_allocation_id?, reason, actor, occurred_at); rule_proposal(proposal_id PK, feedback_id UNIQUE/FK, proposal_type, source_rule_version_id?, proposed_scope_fingerprint, proposed_category_id?, lifecycle_state=draft, created_at); proposal_type in none, retire, narrow, replace; no proposal may activate or broaden automatically
+classification_feedback(feedback_id PK, outcome_id FK, transaction_id, evaluation_id, normalization_version, rule_set_version_id, decision_type=accept|reject|correct, prior_ledger_allocation_id?, resulting_ledger_allocation_id?, reason, actor, occurred_at); rule_proposal(proposal_id PK, feedback_id UNIQUE/FK, rule_origin=feedback_derived, proposal_type=none|retire|narrow|replace, source_rule_version_id?, proposed_scope_fingerprint, proposed_category_id?, lifecycle_state=draft, created_at); accepted or rejected feedback may produce no proposal; one correction may produce only the smallest-scope draft; no proposal may broaden or activate automatically
 
 ## LedgerClassificationProjectionContracts
 
 **Ref Code:** DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT
 
-The exact purpose-scoped public LEDGER projection, category snapshot, lifecycle fingerprint, selected-item mutation state, drift preconditions, and assignment/correction subset consumed by CLASSIFY.
+The exact purpose-scoped public LEDGER projection, active category snapshot, lifecycle fingerprint, selected-item mutation state, drift preconditions, and assignment or correction subset consumed by CLASSIFY. Transfer, linked-refund, void, supersession, allocation, and eligibility truth remain Ledger-owned. Budget pool identity is not a classifier rule set or account envelope.
 
 ### Schema
 
@@ -56,11 +56,11 @@ OperationDescriptor(operation_id, contract_version, request_schema, result_schem
 
 **Ref Code:** DM-CLASSIFY-RULE-LIFECYCLE
 
-Immutable logical rules, versions, conditions, rule sets, activation evidence, broad-apply authority, retirement, replacement, and active pointers.
+Immutable logical rules, versions, conditions, rule sets, activation evidence, bounded broad-apply authority, retirement, replacement, active pointers, and closed owner-authored or feedback-derived provenance.
 
 ### Schema
 
-classification_rule(rule_id PK, created_at, created_by); rule_version(rule_version_id PK, rule_id FK, prior_version_id?, normalization_version, category_id, scope_hash, reason, lifecycle_state, broad_apply_allowed, validation_run_id?, created_at, created_by); rule_condition(rule_version_id FK, ordinal, typed_condition, PK(rule_version_id, ordinal)); rule_set_version(rule_set_version_id PK, prior_rule_set_version_id?, normalization_version, validation_run_id, reason, created_at, created_by); rule_set_member(rule_set_version_id FK, rule_version_id FK, PK(rule_set_version_id, rule_version_id)); active_rule_set(singleton PK, rule_set_version_id FK, activation_epoch); rule_lifecycle_event(event_id PK, subject_id, prior_state, resulting_state, replacement_id?, reason, actor, occurred_at)
+classification_rule(rule_id PK, created_at, created_by); rule_version(rule_version_id PK, rule_id FK, prior_version_id?, normalization_version, category_id, scope_hash, rule_origin=owner_authored|feedback_derived, source_feedback_id?, reason, lifecycle_state, broad_apply_allowed, validation_run_id?, created_at, created_by); rule_condition(rule_version_id FK, ordinal, typed_condition, PK(rule_version_id, ordinal)); rule_set_version(rule_set_version_id PK, prior_rule_set_version_id?, normalization_version, validation_run_id, reason, created_at, created_by); rule_set_member(rule_set_version_id FK, rule_version_id FK, PK(rule_set_version_id, rule_version_id)); active_rule_set(singleton PK, rule_set_version_id FK, activation_epoch); rule_lifecycle_event(event_id PK, subject_id, prior_state, resulting_state, replacement_id?, reason, actor, occurred_at). Origin records provenance only and never grants activation or apply authority.
 
 ## ClassificationRuleVocabulary
 
@@ -86,8 +86,8 @@ classify_store_meta(schema_version, store_id, created_at); operation_idempotency
 
 **Ref Code:** DM-CLASSIFY-VALIDATION-RUN
 
-Aggregate-only private candidate evidence that binds every activation decision without retaining corpus rows or values.
+Aggregate-only private candidate evidence that distinguishes owner-authored validation from historical automatic discovery and binds every activation decision without retaining corpus rows or values.
 
 ### Schema
 
-validation_run(validation_run_id PK, candidate_fingerprint, corpus_fingerprint, expected_outcome_fingerprint, projection_contract_version, category_lifecycle_fingerprint, normalization_version, started_at, completed_at?, lifecycle_state, actor); validation_report(validation_run_id PK/FK, total_rows, suggestion_count, no_suggestion_count, conflict_count, stale_count, drift_canary_count, incorrect_application_canary_count, unexplained_conflict_count, report_fingerprint); no raw corpus row, description, normalized token, financial value, expected outcome, or path column
+validation_run(validation_run_id PK, candidate_fingerprint, rule_origin, corpus_fingerprint, expected_outcome_fingerprint, projection_contract_version, category_lifecycle_fingerprint, normalization_version, started_at, completed_at?, lifecycle_state, actor); validation_report(validation_run_id PK/FK, total_rows, accounted_rows, suggestion_count, no_suggestion_count, conflict_count, stale_count, coverage_basis_points, drift_canary_count, incorrect_application_canary_count, unexplained_conflict_count, owner_decision_count_before, owner_decision_count_after, owner_minutes_before?, owner_minutes_after?, report_fingerprint); safety requires accounted_rows=total_rows, zero incorrect applications, zero unexplained conflicts, and deterministic fingerprints; benefit is reported without a preset 50 percent owner-authored threshold; no raw corpus row, description, normalized token, financial value, expected outcome, or path column

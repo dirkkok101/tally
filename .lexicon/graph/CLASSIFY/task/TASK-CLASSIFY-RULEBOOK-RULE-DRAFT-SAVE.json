@@ -1,0 +1,383 @@
+{
+  "id": "01KYVN0TMHC5M4TWRT32P0DXDM",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "sub_plan_id": "01KYVMRFMVDR8FVRNAFKMSGFX5",
+  "ref_code": "TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE",
+  "slug": "RULEBOOK-RULE-DRAFT-SAVE",
+  "title": "Save immutable rule drafts",
+  "description": [
+    "Implement rule.save with canonical conditions, current category validation, immutable versions, attribution, and no activation side effect."
+  ],
+  "objective": [
+    "The owner can append a validated-shape rule draft while invalid fields or categories create no activatable state and no Ledger mutation."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 1,
+  "created_at": "2026-07-31T08:35:28.5399812+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYVQYDSEKM4BW81MMESTTRZK",
+      "bead_id": "bd-1qb6",
+      "verification_status": "verified",
+      "verified_at": "2026-07-31T09:26:35.5663283+00:00",
+      "created_at": "2026-07-31T09:26:35.5663283+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KYVN0TNC8W8HXY6GY40XP5QT",
+      "target": "DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNCCMGTR2RACS0B9J3G",
+      "target": "DD-CLASSIFY-RULE-VOCABULARY",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNC89DFZCMHSYT3NPJR",
+      "target": "DD-CLASSIFY-STATE-STORE",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYVRS2PGNEQDCB85QEKJ749V",
+      "target": "TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT",
+      "dependency_type": "compile",
+      "reason": [
+        "Rule save must validate the target against the current public Ledger category catalogue before persisting an inactive draft."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-31T09:41:08.9458231+00:00"
+    },
+    {
+      "id": "01KYVN0TND917KVGS481Z3XZKG",
+      "target": "TASK-CLASSIFY-RULEBOOK-RULE-VOCABULARY",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-RULE-VOCABULARY."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNDKQ3HKZ3GD582V6PB",
+      "target": "TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Drafts use the immutable rule and idempotency tables."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYVN0TND08A8H17MFAK7QQHW",
+      "path": "src/Tally/Features/Classify/Rules/Save/SaveClassificationRuleCommand.cs",
+      "action": "create",
+      "role": "draft workflow",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNDX2DNYMMGMAB8VFDP",
+      "path": "src/Tally/Features/Classify/Rules/Save/SaveClassificationRuleValidator.cs",
+      "action": "create",
+      "role": "boundary validation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNDC4GTJFTBQX211HFF",
+      "path": "src/Tally/Infrastructure/Classify/Storage/Rules/ClassificationRuleStore.cs",
+      "action": "create",
+      "role": "immutable rule persistence",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNDBJ0WQRT4FXHSBND8",
+      "path": "src/Tally/Features/Classify/Contract/ClassifyContractMapper.Rules.cs",
+      "action": "create",
+      "role": "pure rule mapping",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNDS2E39CGT2Q8KJ5FX",
+      "path": "tests/Tally.Tests/Classify/Rules/SaveClassificationRuleTests.cs",
+      "action": "test",
+      "role": "command tests",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNDW24NRQ5JWS7S1VXE",
+      "path": "tests/Tally.Tests/Classify/Rules/RuleDraftPersistenceTests.cs",
+      "action": "test",
+      "role": "immutability tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYVRTSGC08S9Q13F1D2E3824",
+      "name": "ClassificationRuleVocabulary",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-RULE-VOCABULARY",
+      "sort_order": 0,
+      "created_at": "2026-07-31T09:42:05.0677242+00:00"
+    },
+    {
+      "id": "01KYVRTSGDZYFMZFNEJAHQSWVS",
+      "name": "ClassifyStateStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "sort_order": 1,
+      "created_at": "2026-07-31T09:42:05.0677242+00:00"
+    },
+    {
+      "id": "01KYVRTSGD0DGQ6W9ZVEZB3JW6",
+      "name": "LedgerContractClient.ListClassificationCategoriesAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 2,
+      "created_at": "2026-07-31T09:42:05.0677242+00:00"
+    },
+    {
+      "id": "01KYVRTSGD2Y5SFW5Z0VC5TE2J",
+      "name": "SaveClassificationRuleCommand.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "sort_order": 3,
+      "created_at": "2026-07-31T09:42:05.0677242+00:00"
+    },
+    {
+      "id": "01KYVRTSGDS8C79KM7DMJ8VHTP",
+      "name": "ClassificationRuleStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "sort_order": 4,
+      "created_at": "2026-07-31T09:42:05.0677242+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYVN0TNC35MPPPKTC76VRWEV",
+      "kind": "acceptance_check",
+      "text": [
+        "A supported canonical rule over an active category appends an immutable draft version with owner, reason, scope hash, normalization version, and prior version reference."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNCBH2EJSY49T1RKKNC",
+      "kind": "acceptance_check",
+      "text": [
+        "Unsupported fields, predicates, duplicate or empty conditions, invalid values, missing categories, and archived categories return stable field or lifecycle errors and create no activatable version."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNCM3M7SCNJR6CHJDSW",
+      "kind": "acceptance_check",
+      "text": [
+        "Saving a draft neither changes the active rule-set pointer nor invokes any Ledger category mutation."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNCQBWJHTAG6XGSFNFK",
+      "kind": "acceptance_check",
+      "text": [
+        "Identical idempotent requests return the stored draft result; conflicting reuse preserves the original row."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNC8DB7GNTGZJMPZWQM",
+      "kind": "constraint",
+      "text": [
+        "Expected failures return CommandResult values; all async calls propagate CancellationToken."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNC9FKAMXEQDMJ865DF",
+      "kind": "expected_output",
+      "text": [
+        "SaveClassificationRuleCommand"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNCFABAZ6D9JTK2QP66",
+      "kind": "expected_output",
+      "text": [
+        "ClassificationRuleStore"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNCH1Y98SA1JC0FV976",
+      "kind": "expected_output",
+      "text": [
+        "Immutable draft persistence"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNC2VQJ9ANQFCVFY3MG",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT implement generic upsert or update a prior rule row in place - rejected by DD-CLASSIFY-STATE-STORE."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNCF24P4KJ894NTMM8A",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT activate a rule, grant broad authority, or mutate Ledger from rule.save."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNCVQ48X66EGH7J0QV8",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT query private Ledger storage or accept a category not proven active through the public contract."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNCW4F5C45J29QJKH5H",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT place business validation in ClassifyContractMapper or ClassifyRowMapper."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVQC6P2JQQRE7FYYMCBPTA0",
+      "kind": "note",
+      "text": [
+        "Draft saving deliberately precedes the owner-rulebook gate so the real inactive rulebook can be validated. The gate blocks activation and apply authority, not draft capture; no executor may broaden the closed vocabulary."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T09:16:38.4659996+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYVN0TNDHHK1RB3PT44AY79Q",
+      "target_ref_code": "ADR-CORE-0010",
+      "target_entity_type": "adr",
+      "target_entity_id": "01KXR2E3Y7DB71F8178QX5C3FA",
+      "target_title": "CommandResult Pattern for Commands",
+      "relationship": "governed-by",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TND1M98EYN4QHH8SJ3J",
+      "target_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJEMC0Y34ANP6YWT0TED7",
+      "target_title": "ClassificationRuleLifecycle",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNDKDTMEMPQN8ZZEMJM",
+      "target_ref_code": "DM-CLASSIFY-OPERATION-CONTRACTS",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJCQXQ5BBRC27KWC2BHB9",
+      "target_title": "ClassifyOperationContracts",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TNDZZ7AE39477PTF4QP",
+      "target_ref_code": "FA-CLASSIFY-RULES-VALIDATION",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXWCJXW02KRTJM8N9XJPP03K",
+      "target_title": "Rules and Validation",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYVN0TNCS5ESBVMX4732EWRV",
+      "target": "FR-CLASSIFY-RULE-LIFECYCLE",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYVN0TND6N9N34KHKM9MAP14",
+      "gate_type": "self-review",
+      "description": [
+        "Trace every rule.save branch to immutable state, stable failure, and zero activation or Ledger mutation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYVN0TNDV1ZH3GEN7JTGGRM8",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~SaveClassificationRuleTests|FullyQualifiedName~RuleDraftPersistenceTests'",
+      "expected_result": "exit 0; at least 24 valid, field-error, category, no-activation, idempotency, immutability, and attribution cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ]
+}

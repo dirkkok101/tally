@@ -22,12 +22,12 @@ Every CLASSIFY workflow remains owner-only, offline, non-interactive, payload-sa
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| [DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam](../../../designs/classify/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
-| [DD-CLASSIFY-ARTIFACT-RETENTION: Fixed owner-only retention and recognized-artifact cleanup](../../../designs/classify/decisions/artifact-retention.md) | `design_decision` | `governed-by` | `true` |
-| [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md) | `design_decision` | `governed-by` | `true` |
-| [EXT-CLASSIFY-HOST-OS-SECURITY: Host OS Process and Storage Security](../../../prd/classify/prd.md#ext-classify-host-os-security-host-os-process-and-storage-security) | `external_dependency` | `references` | `true` |
-| [NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data](../../../prd/classify/prd.md#nfr-classify-local-data-protection-protect-local-classification-data) | `nfr` | `satisfies` | `true` |
-| [NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local classifier](../../../prd/classify/prd.md#nfr-classify-self-contained-local-operation-operate-as-a-self-contained-local-classifier) | `nfr` | `satisfies` | `true` |
+| DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam | `design_decision` | `governed-by` | `true` |
+| DD-CLASSIFY-ARTIFACT-RETENTION: Fixed owner-only retention and recognized-artifact cleanup | `design_decision` | `governed-by` | `true` |
+| DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability | `design_decision` | `governed-by` | `true` |
+| EXT-CLASSIFY-HOST-OS-SECURITY: Host OS Process and Storage Security | `external_dependency` | `references` | `true` |
+| NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data | `nfr` | `satisfies` | `true` |
+| NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local classifier | `nfr` | `satisfies` | `true` |
 | TC-CLASSIFY-LOCAL-ARTIFACT-PROTECTION: Verify classification privacy boundaries | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-OFFLINE-PROCESS-ISOLATION: Verify self-contained offline operation | `test_case` | `verifies` | `true` |
 
@@ -35,11 +35,11 @@ Every CLASSIFY workflow remains owner-only, offline, non-interactive, payload-sa
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Security validation executes every published operation through the complete process contract. |
-| [TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY: TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY](gate-evidence-private-viability.md) | `compile` | Security validation includes the private owner-evidence path and report. |
-| [TASK-CLASSIFY-ABANDON-CLEANUP: TASK-CLASSIFY-ABANDON-CLEANUP](abandon-cleanup.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-ABANDON-CLEANUP. |
-| [TASK-CLASSIFY-APPLY-RUN-SAGA: TASK-CLASSIFY-APPLY-RUN-SAGA](apply-run-saga.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-APPLY-RUN-SAGA. |
-| [TASK-CLASSIFY-PRIVATE-CORPUS-READER: TASK-CLASSIFY-PRIVATE-CORPUS-READER](private-corpus-reader.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-PRIVATE-CORPUS-READER. |
+| [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Security validation executes every published operation through the complete process contract. |
+| [TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY](../tasks/gate-evidence-private-viability.md) | `compile` | Security validation includes the private owner-evidence path and report. |
+| [TASK-CLASSIFY-ABANDON-CLEANUP](../tasks/abandon-cleanup.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-ABANDON-CLEANUP. |
+| [TASK-CLASSIFY-APPLY-RUN-SAGA](../tasks/apply-run-saga.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-APPLY-RUN-SAGA. |
+| [TASK-CLASSIFY-PRIVATE-CORPUS-READER](../tasks/private-corpus-reader.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-PRIVATE-CORPUS-READER. |
 
 ## Recipe
 
@@ -82,11 +82,11 @@ Every CLASSIFY workflow remains owner-only, offline, non-interactive, payload-sa
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteClassifyPublicContract | `consumes` | [DM-CLASSIFY-OPERATION-CONTRACTS](../../../designs/classify/data-model.md#classifyoperationcontracts) |  |
-| PrivateCorpusReader.ReadAsync | `consumes` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
-| ClassifyArtifactProtection | `consumes` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
-| ClassificationApplyRunStore | `consumes` | [DM-CLASSIFY-APPLY-RUN](../../../designs/classify/data-model.md#classificationapplypreviewandrun) |  |
-| ClassifySecurityGateEvidence | `produces` | [NFR-CLASSIFY-LOCAL-DATA-PROTECTION](../../../prd/classify/prd.md#nfr-classify-local-data-protection-protect-local-classification-data) |  |
+| CompleteClassifyPublicContract | `consumes` | DM-CLASSIFY-OPERATION-CONTRACTS |  |
+| PrivateCorpusReader.ReadAsync | `consumes` | DM-CLASSIFY-VALIDATION-RUN |  |
+| ClassifyArtifactProtection | `consumes` | DM-CLASSIFY-STATE-STORE |  |
+| ClassificationApplyRunStore | `consumes` | DM-CLASSIFY-APPLY-RUN |  |
+| ClassifySecurityGateEvidence | `produces` | NFR-CLASSIFY-LOCAL-DATA-PROTECTION |  |
 
 ### Verification
 
@@ -108,17 +108,17 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-CLASSIFY-ABANDON-CLEANUP: TASK-CLASSIFY-ABANDON-CLEANUP](abandon-cleanup.md): Consumes an interface produced by TASK-CLASSIFY-ABANDON-CLEANUP.
-- `depends-on:compile` -> [TASK-CLASSIFY-APPLY-RUN-SAGA: TASK-CLASSIFY-APPLY-RUN-SAGA](apply-run-saga.md): Consumes an interface produced by TASK-CLASSIFY-APPLY-RUN-SAGA.
-- `depends-on:compile` -> [TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY: TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY](gate-evidence-private-viability.md): Security validation includes the private owner-evidence path and report.
-- `depends-on:compile` -> [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Security validation executes every published operation through the complete process contract.
-- `depends-on:compile` -> [TASK-CLASSIFY-PRIVATE-CORPUS-READER: TASK-CLASSIFY-PRIVATE-CORPUS-READER](private-corpus-reader.md): Consumes an interface produced by TASK-CLASSIFY-PRIVATE-CORPUS-READER.
-- `governed-by` -> [DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam](../../../designs/classify/decisions/application-architecture.md)
-- `governed-by` -> [DD-CLASSIFY-ARTIFACT-RETENTION: Fixed owner-only retention and recognized-artifact cleanup](../../../designs/classify/decisions/artifact-retention.md)
-- `governed-by` -> [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md)
-- `references` -> [EXT-CLASSIFY-HOST-OS-SECURITY: Host OS Process and Storage Security](../../../prd/classify/prd.md#ext-classify-host-os-security-host-os-process-and-storage-security)
-- `satisfies` -> [NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data](../../../prd/classify/prd.md#nfr-classify-local-data-protection-protect-local-classification-data)
-- `satisfies` -> [NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local classifier](../../../prd/classify/prd.md#nfr-classify-self-contained-local-operation-operate-as-a-self-contained-local-classifier)
+- `depends-on:compile` -> [TASK-CLASSIFY-ABANDON-CLEANUP](../tasks/abandon-cleanup.md): Consumes an interface produced by TASK-CLASSIFY-ABANDON-CLEANUP.
+- `depends-on:compile` -> [TASK-CLASSIFY-APPLY-RUN-SAGA](../tasks/apply-run-saga.md): Consumes an interface produced by TASK-CLASSIFY-APPLY-RUN-SAGA.
+- `depends-on:compile` -> [TASK-CLASSIFY-GATE-EVIDENCE-PRIVATE-VIABILITY](../tasks/gate-evidence-private-viability.md): Security validation includes the private owner-evidence path and report.
+- `depends-on:compile` -> [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Security validation executes every published operation through the complete process contract.
+- `depends-on:compile` -> [TASK-CLASSIFY-PRIVATE-CORPUS-READER](../tasks/private-corpus-reader.md): Consumes an interface produced by TASK-CLASSIFY-PRIVATE-CORPUS-READER.
+- `governed-by` -> DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam
+- `governed-by` -> DD-CLASSIFY-ARTIFACT-RETENTION: Fixed owner-only retention and recognized-artifact cleanup
+- `governed-by` -> DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability
+- `references` -> EXT-CLASSIFY-HOST-OS-SECURITY: Host OS Process and Storage Security
+- `satisfies` -> NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data
+- `satisfies` -> NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local classifier
 - `verifies` -> TC-CLASSIFY-LOCAL-ARTIFACT-PROTECTION: Verify classification privacy boundaries
 - `verifies` -> TC-CLASSIFY-OFFLINE-PROCESS-ISOLATION: Verify self-contained offline operation
 

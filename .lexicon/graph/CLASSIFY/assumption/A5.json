@@ -4,8 +4,8 @@
   "ref_code": "A5",
   "title": "Private evaluation evidence can remain owner-only",
   "description": [
-    "Assume representative and held-out rows, descriptions, normalized tokens, and rule-derived payloads can be retained outside Git with owner-only host protection while the graph stores only fingerprints, aggregate results, and decisions."
+    "Validated by the aggregate-only private spike boundary: private rows and values remain outside Git while fingerprints, counts, and decisions are durable. The owner-rulebook gate reuses the boundary without retaining personal rule values."
   ],
-  "status": "active",
+  "status": "validated",
   "created_at": "2026-07-18T19:01:18.0545625+00:00"
 }

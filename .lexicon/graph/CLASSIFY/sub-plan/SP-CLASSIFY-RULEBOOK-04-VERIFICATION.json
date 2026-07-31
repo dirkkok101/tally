@@ -1,0 +1,11 @@
+{
+  "id": "01KYVMRHQ4755N53ET4YVEX4XT",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "ref_code": "SP-CLASSIFY-RULEBOOK-04-VERIFICATION",
+  "title": "Command, privacy, graph, and module gates",
+  "description": [
+    "Prove the twelve-operation public contract, use cases, privacy and security, deterministic performance, graph traceability, and complete module verification."
+  ],
+  "sort_order": 4,
+  "created_at": "2026-07-31T08:30:57.2541233+00:00"
+}

@@ -1,10 +1,10 @@
 {
   "id": "01KXV9NFJ7M060XKSWPWKP8V3M",
   "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
-  "metric": "Owner decision reduction",
+  "metric": "Automatic-discovery owner decision reduction",
   "current": "4 percent decision reduction on 75 temporal hold-out decisions for the best zero-incorrect candidate; target failed.",
-  "target": "At least 50% fewer per-transaction owner decisions than the explicit manual LEDGER workflow on representative held-out evidence.",
-  "by_when": "Before PLAN-CLASSIFY-V1 bead compilation",
+  "target": "Historical PLAN-CLASSIFY-V1 threshold: at least 50 percent fewer decisions with zero incorrect applications for inferred rules.",
+  "by_when": "Assessed and failed on 2026-07-30; retained as automatic-discovery evidence only",
   "measured": 1,
   "created_at": "2026-07-18T19:01:20.5844186+00:00"
 }

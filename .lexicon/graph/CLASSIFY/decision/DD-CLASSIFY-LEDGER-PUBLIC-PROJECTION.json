@@ -10,7 +10,7 @@
     "Extend the next compatible ledger.actuals.query contract with a closed purpose of evaluation or apply_preflight and itemProjection classification_v1. Evaluation fixes categorizationState to requires_independent_decision. Apply preflight requires a bounded transactionIds selection and returns every selected transaction with Ledger-owned assignable, correctable, or ineligible mutation state plus current allocation identity and revisions, including already-categorized transactions. The first page returns snapshot and projection versions, store generation, expiry, category identity lifecycle fingerprint, active category catalogue, and ordered minimal classification items. Assignment asserts no active allocation; correction carries the expected active allocation identity and projection revisions so Ledger can reject drift atomically. Invoke projection and mutation operations through the concrete shared LedgerContractClient and released operation executor only."
   ],
   "rationale": [
-    "One public projection family preserves stable ordering and Ledger-owned categorization, transfer, refund, relationship, allocation, and lifecycle truth, but evaluation eligibility and apply preflight have different membership. A single requires-independent-decision filter cannot preflight explicit corrections because those transactions are already categorized. Purpose-scoped requests make that distinction closed and discoverable. Current allocation and revision preconditions close the race between preview, all-item preflight, and each Ledger write. Direct SQL or handlers violate the boundary; re-inferring eligibility in CLASSIFY duplicates finance semantics; a private query cannot be compatibility-tested. The extension remains a hard upstream gate until published-binary conformance passes."
+    "One public projection family preserves stable ordering and Ledger-owned categorization, transfer, refund, relationship, allocation, and lifecycle truth, while evaluation eligibility and apply preflight have different membership. A requires-independent-decision query cannot preflight explicit corrections because those rows are already categorized. Purpose-scoped requests make the distinction closed and discoverable. Current allocation and revision preconditions close the race between preview, all-item preflight, and each Ledger write. Direct SQL or handlers violate the boundary; re-inferring eligibility duplicates finance semantics. Spike result: on 2026-07-31 installed Tally 0.3.2 and current main expose actuals, transaction detail, categories, and idempotent category mutations but do not publish classification_v1 or revision preconditions, so PLAN-CLASSIFY-RULEBOOK-V1 must release and prove this LEDGER-owned extension first."
   ],
   "alternatives": [
     "Rejected direct SQL, handlers, or private Ledger access because they bypass the released contract. Rejected re-inferring categorization, transfer, refund, allocation, or lifecycle eligibility in CLASSIFY because that duplicates Ledger-owned semantics. Rejected a classifier-specific private query because it cannot be discovered or compatibility-tested. Rejected one undifferentiated actuals filter because evaluation membership excludes already-categorized corrections that apply preflight must inspect."
@@ -74,6 +74,13 @@
       "target": "FR-LEDGER-CATEGORY-ASSIGNMENT",
       "rel": "depends-on",
       "created_at": "2026-07-19T05:15:14.0972824+00:00"
+    },
+    {
+      "id": "01KYVN46JHMZJFSW8EVDEMYVEH",
+      "target_type": "plan",
+      "target": "PLAN-CLASSIFY-RULEBOOK-V1",
+      "rel": "references",
+      "created_at": "2026-07-31T08:37:19.0590149+00:00"
     },
     {
       "id": "01KXWDEHJEZGT5KWA5TT1KD667",

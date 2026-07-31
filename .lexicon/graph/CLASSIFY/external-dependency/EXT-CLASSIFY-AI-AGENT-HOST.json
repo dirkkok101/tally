@@ -4,11 +4,11 @@
   "ref_code": "EXT-CLASSIFY-AI-AGENT-HOST",
   "name": "AI Agent Host",
   "description": [
-    "Inbound local workflow client running under the Personal Finance Owner's OS identity. It discovers CLASSIFY schemas, preserves run and replay identities, presents preview evidence, and interprets structured outcomes without bypassing explicit owner mutation intent."
+    "The only required host contract is the existing local Tally process envelope: discover versioned operation schemas, send structured stdin, consume one structured stdout result plus stable exit categories, preserve actor and idempotency identities, and present preview evidence without bypassing explicit owner authority. No proprietary Hermes API, network service, callback, or background worker is assumed."
   ],
   "type": "client",
   "owner": "Personal Finance Owner",
-  "metadata": "{\"gate_type\":\"workflow\",\"validation_basis\":\"client_contract\",\"validation_status\":\"assumed\"}",
+  "metadata": "{\"gate_type\":\"workflow\",\"validation_basis\":\"source_and_client\",\"validation_status\":\"validated\"}",
   "created_at": "2026-07-18T19:01:19.2062921+00:00",
   "links": [
     {

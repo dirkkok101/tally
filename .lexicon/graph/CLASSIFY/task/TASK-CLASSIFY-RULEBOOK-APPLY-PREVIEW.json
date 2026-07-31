@@ -1,0 +1,392 @@
+{
+  "id": "01KYVN0TMNRMV6Z2D666MPWZ4A",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "sub_plan_id": "01KYVMRH10RWXEP7AMK12RMBKN",
+  "ref_code": "TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW",
+  "slug": "RULEBOOK-APPLY-PREVIEW",
+  "title": "Authorize exact apply previews",
+  "description": [
+    "Implement apply.preview for selected outcomes, one broad-authorized exact rule, or explicit corrections with current all-item Ledger preflight."
+  ],
+  "objective": [
+    "The owner receives an expiry-bound read-only preview containing only current explicitly authorized assignment or correction items."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 1,
+  "created_at": "2026-07-31T08:35:28.5399812+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYVQYBA2Z4741TB0P8SNXWFJ",
+      "bead_id": "bd-gv0z",
+      "verification_status": "verified",
+      "verified_at": "2026-07-31T09:26:33.0265612+00:00",
+      "created_at": "2026-07-31T09:26:33.0265612+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KYVN0TP1AW7GBR7KM5SJ00TD",
+      "target": "DD-CLASSIFY-APPLY-SAGA",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP1EKHNGXQHND46J1NP",
+      "target": "DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYVN0TP2GH3WDADR1W396CZ5",
+      "target": "TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Preview relies on the proven apply_preflight contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP3PH9Z0YQ88XFADN32",
+      "target": "TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP3H4JQKQWD1XE300QT",
+      "target": "TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Preview consumes current retained outcomes and complete staleness evaluation."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP3YY30KJ1X3KA5E1EG",
+      "target": "TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE",
+      "dependency_type": "compile",
+      "reason": [
+        "Broad selection consumes exact active rule authority and validation evidence."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYVN0TP243VH76WWN72WKNX3",
+      "path": "src/Tally/Features/Classify/Apply/Preview/PreviewClassificationApplyCommand.cs",
+      "action": "create",
+      "role": "preview workflow",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP23BXE3Y5G4Z5VFBT3",
+      "path": "src/Tally/Domain/Classify/Apply/ApplyAuthorizationPolicy.cs",
+      "action": "create",
+      "role": "selection and authority policy",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP24NQ9PZG18TRDAKWB",
+      "path": "src/Tally/Infrastructure/Classify/Storage/Apply/ClassificationApplyPreviewStore.cs",
+      "action": "create",
+      "role": "expiry-bound preview persistence",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP209PB9E5BX2W5P9KN",
+      "path": "src/Tally/Features/Classify/Contract/ClassifyContractMapper.ApplyPreview.cs",
+      "action": "create",
+      "role": "pure preview mapping",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP28NCKGEF23SG9JN6T",
+      "path": "tests/Tally.Tests/Classify/Apply/ApplyPreviewTests.cs",
+      "action": "test",
+      "role": "preview contract tests",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP2D9D5T78TPZDT24P0",
+      "path": "tests/Tally.Tests/Classify/Apply/ApplyAuthorizationTests.cs",
+      "action": "test",
+      "role": "selection and authority matrix",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYVN0TP2GJWKJ4AA4C25CZAT",
+      "name": "GetClassificationOutcomeQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP2ZYP9DY5HP0MXVW0P",
+      "name": "RuleSetStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP29YANC2YNC9NQJDST",
+      "name": "LedgerContractClient.QueryClassificationProjectionAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP20T4460VQ932SGTFC",
+      "name": "PreviewClassificationApplyCommand.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-APPLY-RUN",
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP2J9CNNR8HQ97EGGXW",
+      "name": "ClassificationApplyPreviewStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-APPLY-RUN",
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYVN0TP1EQZXEJWAWTGWGGG1",
+      "kind": "acceptance_check",
+      "text": [
+        "Selected-outcome mode accepts only current suggestions from one Evaluation Fingerprint and excludes no-suggestion, conflict, stale, expired, unknown, or unauthorized outcomes."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP1GXVXTNHZV3CSTZMV",
+      "kind": "acceptance_check",
+      "text": [
+        "Exact-rule mode requires explicit broad authority on that validated active rule version and includes only current unambiguous assignment suggestions produced by it."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP187SAH5BX6ZA6831N",
+      "kind": "acceptance_check",
+      "text": [
+        "Explicit-correction mode requires exact transaction, outcome, current category, target category, and owner reason and can never be mixed with broad mode."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP112D4EGAN102J5BR0",
+      "kind": "acceptance_check",
+      "text": [
+        "purpose=apply_preflight returns every selected ID with the reviewed mutation mode, active target category, current allocation, and revisions before an expiry-bound preview is persisted."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP16TC7F5R0R0DS596X",
+      "kind": "acceptance_check",
+      "text": [
+        "Preview returns Evaluation Fingerprint, target, contributing rules, transaction IDs, counts, exclusions, authority, and preflight evidence while Ledger allocations remain unchanged."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP257145G2WQW13KC26",
+      "kind": "constraint",
+      "text": [
+        "Preview is a CLASSIFY state mutation but read-only with respect to Ledger; every async call propagates CancellationToken."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP22ZXJYZJXND75XAZE",
+      "kind": "expected_output",
+      "text": [
+        "PreviewClassificationApplyCommand"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP2KEC73GZGS7BVNBRQ",
+      "kind": "expected_output",
+      "text": [
+        "ApplyAuthorizationPolicy"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP29JSMCZ86DFPQC0P9",
+      "kind": "expected_output",
+      "text": [
+        "ClassificationApplyPreviewStore"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP1C44KVBJVFN9SS8ZT",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT mutate Ledger from preview or infer owner authority from evaluation - rejected by DD-CLASSIFY-APPLY-SAGA."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP1WQVAF2RN8SM088HQ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT include conflict, no-suggestion, stale, mixed-fingerprint, missing, or ineligible items."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP11CR920M745HZHB4Z",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT allow broad correction or a rule without exact broad-apply evidence."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP16H4XVYH3XNQHHFDK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT persist transaction descriptions, amounts, or unrelated projection fields in the preview."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP269ZW28ZSNBMM8WTF",
+      "kind": "note",
+      "text": [
+        "A preview is authorization evidence, not a promise that later preflight remains current."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYVN0TP29HK6SW17BCBR9CCD",
+      "target_ref_code": "DM-CLASSIFY-APPLY-RUN",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJFXE8B1Q7ZRY82MXCYKQ",
+      "target_title": "ClassificationApplyPreviewAndRun",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP2HYMVGPCBPFSYKFQS",
+      "target_ref_code": "FA-CLASSIFY-APPLY-FEEDBACK",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXWCJYK99D3KN0R2JP5F8ANF",
+      "target_title": "Apply and Feedback",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP2FABAY051WKGXAHJA",
+      "target_ref_code": "TC-CLASSIFY-APPLY-AUTHORIZATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PHNA1FBJ5DP2M02MW6JH",
+      "target_title": "Verify explicit apply authorization",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYVN0TP19EFXDVQGSZGRG6QX",
+      "target": "FR-CLASSIFY-APPLY-AUTHORIZATION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP12H3B44W29BAYRB23",
+      "target": "FR-CLASSIFY-OUTCOME-INVALIDATION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYVN0TP2RARPMY3AQY34D354",
+      "gate_type": "test-evidence",
+      "description": [
+        "Ledger allocation snapshots prove preview and every rejected selection are mutation-free."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYVN0TP2ZGYDVMFNTDFDEGV1",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~ApplyPreviewTests|FullyQualifiedName~ApplyAuthorizationTests'",
+      "expected_result": "exit 0; at least 30 selected, broad, correction, mixed-mode, stale, excluded, preflight, expiry, no-Ledger-mutation, and disclosure cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 480,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ]
+}

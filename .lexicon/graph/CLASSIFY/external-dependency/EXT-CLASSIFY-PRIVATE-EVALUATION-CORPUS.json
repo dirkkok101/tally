@@ -4,7 +4,7 @@
   "ref_code": "EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS",
   "name": "Private Classification Evaluation Corpus",
   "description": [
-    "Validated as an owner-only aggregate evidence boundary on 2026-07-30: three account sources and a 90-day temporal 60-day training plus 30-day hold-out split were exercised through public CLI queries on a disposable root. No descriptions, tokens, amounts, identifiers, rows, or paths were retained or emitted. The corpus exists, but its viability thresholds failed."
+    "Validated owner-only aggregate evidence boundary. The historical automatic-discovery spike remains failed evidence. The owner-rulebook path reuses the same no-disclosure boundary with a distinct candidate track: private runtime values stay outside Git and graph; only counts, percentages, timings, fingerprints, and pass or fail states may be durable."
   ],
   "type": "data",
   "owner": "Personal Finance Owner",

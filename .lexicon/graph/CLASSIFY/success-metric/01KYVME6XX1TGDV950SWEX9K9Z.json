@@ -1,0 +1,10 @@
+{
+  "id": "01KYVME6XX1TGDV950SWEX9K9Z",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "metric": "Owner-rulebook coverage",
+  "current": "Not measured; candidate values remain owner-only and untracked.",
+  "target": "Report exact aggregate suggestion, no-suggestion, conflict, stale, and total counts plus coverage percentage; no minimum coverage is invented before private validation.",
+  "by_when": "At the owner-rulebook pre-authority gate",
+  "measured": 0,
+  "created_at": "2026-07-31T08:25:18.5263343+00:00"
+}

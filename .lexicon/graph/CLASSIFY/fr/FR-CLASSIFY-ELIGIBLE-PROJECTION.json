@@ -28,12 +28,14 @@
     "Given a transaction that public LEDGER state marks as a linked refund or reversal whose category follows its original, when the projection is obtained, then that transaction is not eligible for an independent CLASSIFY decision.",
     "Given a projection spanning multiple pages, when every page is consumed through the snapshot cursor, then membership and order remain those of the first-page snapshot and every ordinal appears exactly once.",
     "Given an unavailable or incompatible LEDGER operation or projection version, when evaluation is requested, then CLASSIFY returns a stable compatibility failure before creating an evaluation outcome.",
-    "Given an expired or invalid snapshot cursor before complete projection acquisition, when evaluation continues, then CLASSIFY returns a stable stale-input failure and publishes no partial evaluation."
+    "Given an expired or invalid snapshot cursor before complete projection acquisition, when evaluation continues, then CLASSIFY returns a stable stale-input failure and publishes no partial evaluation.",
+    "Given transactions across accounts that contribute to one shared budget pool, when CLASSIFY evaluates them, then category identity remains cross-account and no per-account budget envelope or classifier rule set is inferred; account.id is inspected only when an explicit rule condition states that descriptor meaning differs.",
+    "Given active transfer principal or linked-refund state, when eligibility is determined, then CLASSIFY consumes the Ledger-owned relationship outcome and never reconstructs transfer or refund linkage from description evidence."
   ],
   "security_criteria": [
     "CLASSIFY must use only the schema-declared projection and must never open private LEDGER storage or request unrelated financial fields."
   ],
-  "status": "deferred",
+  "status": "active",
   "created_at": "2026-07-19T04:16:33.3832373+00:00",
   "links": [
     {

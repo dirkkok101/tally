@@ -1,0 +1,10 @@
+{
+  "id": "01KYVME7M7REEZV4776A0X9JSZ",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "metric": "Owner-rulebook decision and time benefit",
+  "current": "Not measured; benefit must be timed on the explicit owner-authored workflow.",
+  "target": "Report decisions before and after plus owner minutes before and after. If the owner judges benefit insufficient, broad authority remains blocked until an explicit product decision; no automatic 50 percent threshold applies.",
+  "by_when": "Before exact-rule broad apply or PLAN-CLASSIFY-RULEBOOK-V1 module completion",
+  "measured": 0,
+  "created_at": "2026-07-31T08:25:19.2402648+00:00"
+}

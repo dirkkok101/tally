@@ -108,7 +108,7 @@
     "",
     "The registry is code-owned, versioned, descriptor-discoverable, and source-generated. `classify.rule.save` persists canonical typed condition rows and the selected normalization version. Unknown fields, predicates, values, duplicate conditions, empty rules, or archived/missing target categories fail before an activatable version exists.",
     "",
-    "The private projection/normalization spike remains a planning gate for this exact v1 registry. It must prove the fields and transforms against the owner-only fixtures without exporting payload. If the registry cannot satisfy the monitored recurrence and zero-incorrect-apply criteria, the plan must route back to the do-less workflow or revise this design before implementation; executors may not silently broaden the grammar.",
+    "The private projection/normalization spike remains a planning gate for this exact v1 registry. It must prove the fields and transforms against the owner-only fixtures without exporting payload. For the archived automatic-discovery experiment, failure of its monitored recurrence or zero-incorrect-apply criteria remains an unconditional stop and preserves the do-less disposition. For the replacement owner-authored rulebook path, zero incorrect applications and every row-accounting, conflict, determinism, drift, privacy, and Ledger-truth gate remain unconditional stops; recurrence, coverage, no-suggestion, owner-decision, and timing results are reported benefit evidence, and insufficient benefit requires an explicit owner product decision before broad authority proceeds. Executors may not silently broaden the grammar or weaken safety gates.",
     "",
     "## Deterministic evaluation and evidence",
     "",
@@ -225,7 +225,7 @@
     "",
     "## Greenfield implementation obligations",
     "",
-    "The repository currently contains documentation and graph artifacts but no application source. The design therefore records truthful future paths and treats current path-check warnings as plan gates:",
+    "The repository currently contains built INGEST and LEDGER application source but no CLASSIFY application source. The design therefore records truthful future CLASSIFY paths and treats missing CLASSIFY paths as plan gates:",
     "",
     "- `src/Tally/Contracts/Classify/**`",
     "- `src/Tally/Features/Classify/**`",
@@ -235,7 +235,23 @@
     "- `src/Tally/Bootstrap/Features/ClassifyExtensions.cs`",
     "- `tests/Tally.Tests/Classify/**`",
     "",
-    "The plan must create these paths before any dependent implementation task can close. It must also keep the LEDGER projection contract and private vocabulary/corpus spikes ahead of classifier implementation. Missing or invalidated evidence routes back to LEDGER or the do-less workflow rather than authorizing an executor to invent fields, weaken conflicts, or broaden rules."
+    "The plan must create these paths before any dependent task can close. The public LEDGER classification projection and mutation preconditions are the first prerequisite. The closed vocabulary, deterministic engine, private corpus reader, owner-authored draft save, and normal validation path are then implemented only far enough to run the owner-rulebook pre-authority gate. Rule activation, apply authority, command completion, and the module gate remain blocked until that aggregate-only gate passes. Missing or invalidated safety evidence routes back to the owning contract or an explicit product decision rather than authorizing an executor to invent fields, weaken conflicts, or broaden rules.",
+    "",
+    "## Owner-rulebook replacement disposition (v0.6)",
+    "",
+    "DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT supersedes the stop-only route for deliberate owner authorship while DD-CLASSIFY-VIABILITY-DISPOSITION remains historical authority against automatic inferred-rule discovery. PLAN-CLASSIFY-V1 remains archived. PLAN-CLASSIFY-RULEBOOK-V1 is the only implementation authority.",
+    "",
+    "Owner-authored and feedback-derived rules are separate evidence tracks under DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE. rule.save records owner_authored drafts; feedback.record may emit at most one feedback_derived inactive retire, narrow, or replacement proposal. Origin never grants validation, activation, broad apply, or Ledger mutation. Personal rule values are runtime owner data and are never source seeds, graph content, logs, tracked fixtures, or generated documentation.",
+    "",
+    "The closed grammar remains description.normalized, account.id, amount.direction, and amount.absolute_minor with AND-only predicates. Narrow positive equals, starts_with, contained token sequence, direction, account, and bounded amount conditions are permitted by the existing registry. OR, NOT, priority, regex, fuzzy, wildcard, scripts, plugins, and model scores remain forbidden. Mixed-purpose or ambiguous evidence is corrected per transaction rather than converted into a merchant-wide or recipient-wide rule. Incompatible category matches remain Rule Conflict with no winner.",
+    "",
+    "Ledger remains authoritative for active transfer principal, linked refund or reversal, void and supersession, current allocation, eligibility, category lifecycle, snapshot membership, and stale mutation preconditions. CLASSIFY consumes those outcomes through the released classification_v1 projection and never reconstructs them from descriptions. Shared budget pools and cross-account budget effects remain BUDGET and Ledger semantics; they do not create per-account classifier rule sets. account.id is a rule condition only when the same descriptor has a genuinely different meaning by account.",
+    "",
+    "The current Ledger baseline is explicit: installed Tally 0.3.2 and current main publish actuals, transaction detail, active categories, and idempotent assignment or correction, but not classification_v1 or allocation revision preconditions. The replacement plan must extend and prove that LEDGER-owned public contract before any CLASSIFY consumer.",
+    "",
+    "The owner-rulebook gate is distinct from the failed automatic-discovery thresholds. Before activation authority, exact-rule broad apply, or module completion, aggregate-only private validation must account for every row, produce zero incorrect applications, produce zero unexplained incompatible conflicts, preserve drift canaries, replay deterministic fingerprints, and report coverage plus no-suggestion totals. Owner decision and time benefit are measured and reported without inventing a 50 percent threshold; insufficient benefit requires an explicit product decision before broad authority.",
+    "",
+    "The owner or Hermes agent sequence is discover schemas; save inactive owner-authored drafts; validate private aggregate evidence; explicitly activate; evaluate eligible Ledger transactions; inspect every outcome; preview an explicit suggestion or transaction correction selection; apply only the current authorized preview; record accept, reject, or correct feedback; route any feedback-derived proposal back through save, validate, and activate; inspect status; retire, abandon, or cleanup explicitly. No invocation is automatic or background."
   ],
   "origin": "lex:design CLASSIFY",
   "status": "current",
@@ -261,6 +277,20 @@
       "target": "ADR-CORE-0025",
       "rel": "driven_by",
       "created_at": "2026-07-19T05:14:57.8098835+00:00"
+    },
+    {
+      "id": "01KYVMHDK0MRX953RR42GMWM0E",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE",
+      "rel": "see-also",
+      "created_at": "2026-07-31T08:27:03.6488706+00:00"
+    },
+    {
+      "id": "01KYVMHDJY8B6Q87SG8PD1MYYK",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-VIABILITY-DISPOSITION",
+      "rel": "see-also",
+      "created_at": "2026-07-31T08:27:03.6466097+00:00"
     },
     {
       "id": "01KXWCRHQC9G05ZJFNNT7V7CJ4",
@@ -401,6 +431,13 @@
       "target": "NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION",
       "rel": "implements",
       "created_at": "2026-07-19T05:14:55.4466153+00:00"
+    },
+    {
+      "id": "01KYVN45TRM2Y5DW4BVK823RTC",
+      "target_type": "plan",
+      "target": "PLAN-CLASSIFY-RULEBOOK-V1",
+      "rel": "references",
+      "created_at": "2026-07-31T08:37:18.2978404+00:00"
     }
   ]
 }

@@ -15,4 +15,8 @@ Expose exactly classify.evaluate, classify.outcome.get, classify.apply.preview, 
 
 ## Rationale
 
-A generic invoke, manage, run, save, or delete surface would move operation knowledge into callers and weaken schema discovery. A three-entry facade is smaller only syntactically. Separate help, schema, and dispatch definitions would drift. The selected shape reuses the established Ledger and Ingest public process contract while honoring the canonical PRD vocabulary. HTTP Save, GetGridList, GetLookupList, and Delete endpoints are inapplicable because CLASSIFY is a channel-neutral local CLI module.
+A generic invoke, manage, run, save, or delete surface would move operation knowledge into callers and weaken schema discovery. A three-entry facade is smaller only syntactically. Separate help, schema, and dispatch definitions would drift. The selected shape reuses the established Ledger and Ingest public process contract while honoring the canonical PRD vocabulary. HTTP endpoints are inapplicable because CLASSIFY is a channel-neutral local CLI module. Spike result: on 2026-07-31 installed Tally 0.3.2 schema discovery and current main source confirmed the local process envelope exposes versioned operation descriptors, structured stdin, one structured stdout envelope, stable exit categories, actor context, and idempotency without any proprietary Agent Host API.
+
+## Alternatives
+
+Rejected a generic invoke operation and action discriminators because callers would need hidden operation knowledge. Rejected three broad facade operations because they merge incompatible mutability, idempotency, and recovery contracts. Rejected separately maintained help, schema, and dispatch inventories because they can drift. Rejected HTTP endpoints because v1 is a channel-neutral local CLI and owns no service or authentication boundary.

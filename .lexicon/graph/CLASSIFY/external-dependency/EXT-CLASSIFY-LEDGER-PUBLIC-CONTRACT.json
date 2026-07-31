@@ -4,11 +4,11 @@
   "ref_code": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
   "name": "LEDGER Public Contract",
   "description": [
-    "Installed Tally 0.3.2 was exercised through schema discovery and an owner-only disposable Ledger copy. Snapshot actuals, transaction detail, active category discovery, and idempotent structured assignment or correction are validated; the required classification_v1 projection and allocation revision preconditions are not published. The full CLASSIFY dependency is therefore invalidated, and no extension is authorized after the viability kill."
+    "Validated current-state claim from installed Tally 0.3.2 schema discovery and current main source: snapshot actuals, transaction detail, active categories, idempotent assignment, and correction exist; classification_v1 and allocation revision preconditions do not. PLAN-CLASSIFY-RULEBOOK-V1 owns the bounded Ledger extension and published-contract gate before any CLASSIFY consumer. No private Ledger storage access is authorized."
   ],
   "type": "api",
   "owner": "LEDGER",
-  "metadata": "{\"gate_type\":\"api\",\"validation_basis\":\"client_contract\",\"validation_status\":\"invalidated\"}",
+  "metadata": "{\"gate_type\":\"api\",\"validation_basis\":\"source_and_client\",\"validation_status\":\"validated\"}",
   "created_at": "2026-07-18T19:01:18.8306441+00:00",
   "links": [
     {
@@ -52,6 +52,13 @@
       "target": "FR-LEDGER-STRUCTURED-INVOCATION",
       "rel": "depends-on",
       "created_at": "2026-07-18T19:04:59.8026949+00:00"
+    },
+    {
+      "id": "01KYVN479N2ZHE6Y3AHAEB5RTX",
+      "target_type": "plan",
+      "target": "PLAN-CLASSIFY-RULEBOOK-V1",
+      "rel": "references",
+      "created_at": "2026-07-31T08:37:19.7988038+00:00"
     }
   ]
 }

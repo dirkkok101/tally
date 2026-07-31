@@ -28,12 +28,14 @@
     "Given an unavailable private corpus, when an existing active rule set is evaluated, then CLASSIFY may use that unchanged active version.",
     "Given an unavailable private corpus, when a new rule or normalization version is activated, then CLASSIFY rejects activation without changing the active Rule Set Version.",
     "Given an unavailable private corpus, when broad-apply authorization is requested, then CLASSIFY rejects authorization before LEDGER mutation.",
-    "Given a validation report, when it is persisted or exported, then it contains corpus fingerprints and aggregate outcomes but no raw transaction description, normalized token, financial value, or expected-outcome row."
+    "Given a validation report, when it is persisted or exported, then it contains corpus fingerprints and aggregate outcomes but no raw transaction description, normalized token, financial value, or expected-outcome row.",
+    "Given an owner-authored candidate rulebook, when its pre-authority gate runs, then every private row is accounted for exactly once, incorrect applications and unexplained incompatible conflicts are zero, coverage and no-suggestion totals are explicit, drift canaries and deterministic fingerprints are stable, and owner decision and time benefit are measured.",
+    "Given owner-authored safety passes but measured benefit is insufficient for broad authority, when activation or exact-rule broad apply is considered, then CLASSIFY requires an explicit product decision and does not invent a 50 percent benefit threshold."
   ],
   "security_criteria": [
     "Private evidence remains outside Git and is readable only by the trusted owner OS identity."
   ],
-  "status": "deferred",
+  "status": "active",
   "created_at": "2026-07-19T04:16:33.3832373+00:00",
   "links": [
     {

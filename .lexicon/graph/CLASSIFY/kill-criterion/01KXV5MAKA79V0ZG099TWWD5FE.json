@@ -1,10 +1,10 @@
 {
   "id": "01KXV5MAKA79V0ZG099TWWD5FE",
   "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
-  "condition": "Before PLAN-CLASSIFY-V1 bead compilation, verify the implemented public LEDGER contract. If eligible snapshot-bound query, active category discovery, attributable assignment or correction, and replay-safe structured results cannot be achieved without private storage access or duplicated financial semantics, stop CLASSIFY and route the missing contract work to LEDGER.",
+  "condition": "AUTOMATIC-DISCOVERY EXPERIMENT ONLY. Preserve the original architecture check that inferred classification must stop if a bounded public Ledger projection and replay-safe mutation cannot be achieved without private storage or duplicated finance semantics. The owner-rulebook replacement plan carries its own explicit Ledger prerequisite and gate.",
   "monitored": 1,
   "evaluation_state": "clear",
-  "evaluation_evidence": "Assessed on 2026-07-30: installed Tally 0.3.2 exposes snapshot actuals, active categories, transaction detail, and idempotent structured assignment or correction without private storage. The dedicated classification_v1 projection is absent but remains a bounded LEDGER-owned extension; this architectural criterion did not trigger independently of the viability kill.",
-  "evaluated_at": "2026-07-30T16:58:06.1295675+00:00",
+  "evaluation_evidence": "Current owner-rulebook planning remains inside the bounded same-repository Ledger extension documented by DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION; implementation must pass TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT before any consumer. Historical automatic-discovery architecture evidence remains preserved.",
+  "evaluated_at": "2026-07-31T08:26:40.9196919+00:00",
   "created_at": "2026-07-18T17:50:48.4275906+00:00"
 }

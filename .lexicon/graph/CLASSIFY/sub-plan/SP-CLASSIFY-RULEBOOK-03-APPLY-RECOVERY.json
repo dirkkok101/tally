@@ -1,0 +1,11 @@
+{
+  "id": "01KYVMRH10RWXEP7AMK12RMBKN",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "ref_code": "SP-CLASSIFY-RULEBOOK-03-APPLY-RECOVERY",
+  "title": "Authorized apply and recovery",
+  "description": [
+    "Implement preview, explicitly authorized replay-safe apply, recovery, status, abandon, and cleanup over public LEDGER mutation operations with stale preconditions."
+  ],
+  "sort_order": 3,
+  "created_at": "2026-07-31T08:30:56.5456184+00:00"
+}

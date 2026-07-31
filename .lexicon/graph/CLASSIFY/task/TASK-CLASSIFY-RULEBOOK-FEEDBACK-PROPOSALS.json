@@ -1,0 +1,402 @@
+{
+  "id": "01KYVN0TMPYX2TGF9Y60YPEXNA",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "sub_plan_id": "01KYVMRH10RWXEP7AMK12RMBKN",
+  "ref_code": "TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS",
+  "slug": "RULEBOOK-FEEDBACK-PROPOSALS",
+  "title": "Record bounded correction feedback",
+  "description": [
+    "Implement feedback.record with exact provenance and a deterministic no-proposal or smallest-scope retire, narrow, or replacement proposal."
+  ],
+  "objective": [
+    "Owner acceptance, rejection, and correction remain attributable and may suggest a bounded draft without rewriting history, broadening, or activating automatically."
+  ],
+  "planning_state": "ready",
+  "priority": 1,
+  "sort_order": 3,
+  "created_at": "2026-07-31T08:35:28.5399812+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYVQYK2904508GN4W0ZD428F",
+      "bead_id": "bd-3tzh",
+      "verification_status": "verified",
+      "verified_at": "2026-07-31T09:26:40.9698243+00:00",
+      "created_at": "2026-07-31T09:26:40.9698243+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KYVN0TP4H2V73ZRRADXM9AYD",
+      "target": "DD-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP4ABT3SS7B1289FDGT",
+      "target": "DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP4R5V4MP4EAHZBMPNF",
+      "target": "DD-CLASSIFY-STATE-STORE",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYVN0TP5CZ0NXHQBEDY4VEPA",
+      "target": "TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA",
+      "dependency_type": "compile",
+      "reason": [
+        "Correction feedback consumes authoritative prior and resulting apply allocation identities."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5R3D1TK96PCD9A04C",
+      "target": "TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5V07TKCJC26N278T6",
+      "target": "TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE",
+      "dependency_type": "compile",
+      "reason": [
+        "Proposal provenance references immutable active and historical rule versions."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYVN0TP54ZPHHSPXWV7F4YDH",
+      "path": "src/Tally/Features/Classify/Feedback/Record/RecordClassificationFeedbackCommand.cs",
+      "action": "create",
+      "role": "feedback workflow",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5DQYWH0C51M5ZHJYE",
+      "path": "src/Tally/Domain/Classify/Feedback/FeedbackProposalBuilder.cs",
+      "action": "create",
+      "role": "bounded proposal policy",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5FB3WE6HD4DC7EQ0T",
+      "path": "src/Tally/Infrastructure/Classify/Storage/Feedback/ClassificationFeedbackStore.cs",
+      "action": "create",
+      "role": "append-only persistence",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5FEMZ20VRZ9RZX30A",
+      "path": "src/Tally/Features/Classify/Contract/ClassifyContractMapper.Feedback.cs",
+      "action": "create",
+      "role": "pure feedback mapping",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5HK3GSFDZVANGT696",
+      "path": "src/Tally/Bootstrap/Features/ClassifyFeedbackExtensions.cs",
+      "action": "create",
+      "role": "explicit feedback registration",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5J65K1C1XSDCA5XKF",
+      "path": "tests/Tally.Tests/Classify/Feedback/ClassificationFeedbackTests.cs",
+      "action": "test",
+      "role": "provenance tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5WHDF0P8MGD7J2WQ2",
+      "path": "tests/Tally.Tests/Classify/Feedback/FeedbackProposalTests.cs",
+      "action": "test",
+      "role": "bounded proposal tests",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYVN0TP5M0YXDZ0AWM19QEJW",
+      "name": "ClassificationEvaluationStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5KPPJRTNFTBF1RYQT",
+      "name": "ClassificationApplyRunStore",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-APPLY-RUN",
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP52BRJWA1SC8K7FNAC",
+      "name": "RecordClassificationFeedbackCommand.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-FEEDBACK-PROPOSAL",
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5P5MPK8PR2FQJQ60R",
+      "name": "FeedbackProposalBuilder.Build",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-FEEDBACK-PROPOSAL",
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP549987B44R20PPT87",
+      "name": "ClassificationFeedbackStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-FEEDBACK-PROPOSAL",
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYVN0TP4EJPBZA2BH4P6YH81",
+      "kind": "acceptance_check",
+      "text": [
+        "Accepted, rejected, or corrected feedback appends exact outcome, transaction, evaluation, normalization, rule set, contributing rule versions, owner, reason, and timestamp."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP4RJW2KW1VY3EHP6KJ",
+      "kind": "acceptance_check",
+      "text": [
+        "Completed correction feedback stores authoritative prior and resulting Ledger allocation IDs without rewriting either allocation."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5BC2GYWY5AQM9MRQB",
+      "kind": "acceptance_check",
+      "text": [
+        "The deterministic builder records no proposal or one smallest-scope retire, narrow, or replacement draft and never broadens or activates it."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5YN56VWF05BQXRMTV",
+      "kind": "acceptance_check",
+      "text": [
+        "Unavailable prior MatchEvidence stores the owner decision but creates no proposal reconstructed from current state."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5SR5VGX1E2D6QVXMG",
+      "kind": "acceptance_check",
+      "text": [
+        "Historical feedback remains linked to original outcomes and rules after retirement or supersession."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5BZ52VGCEBNJHWHZ1",
+      "kind": "constraint",
+      "text": [
+        "Feedback and proposals are append-only; any later activation uses the normal validation and activation path."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP55FYDZSZ360REYK2B",
+      "kind": "expected_output",
+      "text": [
+        "RecordClassificationFeedbackCommand"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5BE08T5EPY4M7Z7AB",
+      "kind": "expected_output",
+      "text": [
+        "FeedbackProposalBuilder"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5CJYY6232MH4CCHSN",
+      "kind": "expected_output",
+      "text": [
+        "ClassificationFeedbackStore"
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5NGH1DNV1R1QQME1N",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT infer a general rule from one correction, auto-activate a proposal, or change broad authority."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP570CQNEHSAYFR1DG1",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT rewrite Ledger allocation history or prior CLASSIFY feedback."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP575TMTX7KDGTKT2MQ",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT reconstruct missing evidence from current transaction, rule, or category state."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5CKV0CP32D0C21H8W",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT expose private descriptions or normalized tokens in results or diagnostics."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5GRG3EEM4FYRG0NHP",
+      "kind": "note",
+      "text": [
+        "A proposal is non-active typed data, not an executable rule change."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYVN0TP5K6QTGGZ2937KGZMF",
+      "target_ref_code": "NFR-CLASSIFY-ATTRIBUTABLE-HISTORY",
+      "target_entity_type": "nfr",
+      "target_entity_id": "01KXW9G3B24EZV86NVCN5YQA4T",
+      "target_title": "Retain attributable classification history",
+      "relationship": "satisfies",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5CDVC1DDNMAJEMJRD",
+      "target_ref_code": "DM-CLASSIFY-FEEDBACK-PROPOSAL",
+      "target_entity_type": "data_model",
+      "target_entity_id": "01KXWCJG7QYZJQH5YQ55RA7ABK",
+      "target_title": "ClassificationFeedbackAndProposal",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5D9H43HJ7FZRZZXYX",
+      "target_ref_code": "FA-CLASSIFY-APPLY-FEEDBACK",
+      "target_entity_type": "feature_area",
+      "target_entity_id": "01KXWCJYK99D3KN0R2JP5F8ANF",
+      "target_title": "Apply and Feedback",
+      "relationship": "touches",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP5PATC99EZCTH6H3SB",
+      "target_ref_code": "TC-CLASSIFY-CORRECTION-FEEDBACK-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PJA9CY0QXJMHR7WK9RES",
+      "target_title": "Verify bounded correction feedback",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYVN0TP4J5Q0456DX4K4BWKX",
+      "target": "FR-CLASSIFY-CORRECTION-FEEDBACK",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYVN0TP5HFR53E1284D0ZC4X",
+      "gate_type": "self-review",
+      "description": [
+        "Confirm every proposal remains a non-active smallest-scope draft and every prior record is immutable."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYVN0TP5EP22MNJCNQ14R7VH",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter 'FullyQualifiedName~ClassificationFeedbackTests|FullyQualifiedName~FeedbackProposalTests'",
+      "expected_result": "exit 0; at least 26 accept, reject, correction, allocation provenance, no-proposal, retire, narrow, replace, no-broaden, no-activate, missing-evidence, and history cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "01KYVMRGCD4K0RVVRWXS74ZPXA",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "ref_code": "SP-CLASSIFY-RULEBOOK-02-RULES-EVALUATION",
+  "title": "Rules, deterministic evaluation, and feedback",
+  "description": [
+    "Implement normalization, deterministic AND-only matching, conflicts, explanations, rule authority lifecycle, bounded evaluation, transaction-level feedback, and smallest-scope inactive proposals."
+  ],
+  "sort_order": 2,
+  "created_at": "2026-07-31T08:30:55.8856944+00:00"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "01KYVMRFMVDR8FVRNAFKMSGFX5",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "ref_code": "SP-CLASSIFY-RULEBOOK-01-EVIDENCE-CORE",
+  "title": "Private evidence and owner rulebook gate",
+  "description": [
+    "Build owner-only corpus ingestion, rule draft and validation capabilities, and the mandatory aggregate-only owner-rulebook pre-authority gate. No active rule or transaction mutation may precede this gate."
+  ],
+  "sort_order": 1,
+  "created_at": "2026-07-31T08:30:55.1325221+00:00"
+}

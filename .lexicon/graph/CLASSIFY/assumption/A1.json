@@ -4,8 +4,8 @@
   "ref_code": "A1",
   "title": "Representative history contains useful recurring decisions",
   "description": [
-    "Assume a post-INGEST 90-day canonical sample contains enough repeated merchant or transaction patterns for deterministic rules to reduce per-transaction owner decisions by at least 50 percent. Status remains active until a private timed evidence spike validates or invalidates it."
+    "Invalidated for automatic inferred-rule discovery by the 2026-07-30 owner-only spike: recurrence and decision reduction were insufficient. This assumption does not govern the distinct owner-authored rulebook track established by DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT."
   ],
-  "status": "active",
+  "status": "invalidated",
   "created_at": "2026-07-18T19:01:16.6002042+00:00"
 }

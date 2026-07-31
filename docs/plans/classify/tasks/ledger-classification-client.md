@@ -22,19 +22,19 @@ CLASSIFY consumes only released Ledger operations through one concrete replay-sa
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| [DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam](../../../designs/classify/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
-| [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md) | `design_decision` | `governed-by` | `true` |
-| [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) | `data_model` | `touches` | `true` |
-| [FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations](../../../prd/classify/prd.md#fr-classify-apply-execution-apply-authorized-decisions-through-public-ledger-operations) | `requirement` | `implements` | `true` |
-| [FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection](../../../prd/classify/prd.md#fr-classify-eligible-projection-obtain-the-eligible-classification-projection) | `requirement` | `implements` | `true` |
-| [NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries](../../../prd/classify/prd.md#nfr-classify-public-contract-compatibility-preserve-public-contract-compatibility-boundaries) | `nfr` | `satisfies` | `true` |
-| [TASK-INGEST-LEDGER-PUBLIC-CLIENT: Implement the concrete public LEDGER client](../../ingest/tasks/ledger-public-client.md) | `task` | `blocked-by` | `true` |
+| DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam | `design_decision` | `governed-by` | `true` |
+| DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract | `design_decision` | `governed-by` | `true` |
+| DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts | `data_model` | `touches` | `true` |
+| FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations | `requirement` | `implements` | `true` |
+| FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection | `requirement` | `implements` | `true` |
+| NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries | `nfr` | `satisfies` | `true` |
+| TASK-INGEST-LEDGER-PUBLIC-CLIENT: Implement the concrete public LEDGER client | `task` | `blocked-by` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-GATE-INT-LEDGER-CONTRACT: TASK-CLASSIFY-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md) | `compile` | The client may consume only the prerequisite contract proven by this gate. |
+| [TASK-CLASSIFY-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md) | `compile` | The client may consume only the prerequisite contract proven by this gate. |
 
 ## Recipe
 
@@ -77,10 +77,10 @@ CLASSIFY consumes only released Ledger operations through one concrete replay-sa
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| VerifiedLedgerClassificationContract | `consumes` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
-| LedgerContractClient.QueryClassificationProjectionAsync | `produces` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
-| LedgerContractClient.AssignCategoryAsync | `produces` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
-| LedgerContractClient.CorrectCategoryAsync | `produces` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| VerifiedLedgerClassificationContract | `consumes` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
+| LedgerContractClient.QueryClassificationProjectionAsync | `produces` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
+| LedgerContractClient.AssignCategoryAsync | `produces` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
+| LedgerContractClient.CorrectCategoryAsync | `produces` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
 
 ### Verification
 
@@ -102,14 +102,14 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `blocked-by` -> [TASK-INGEST-LEDGER-PUBLIC-CLIENT: Implement the concrete public LEDGER client](../../ingest/tasks/ledger-public-client.md)
-- `depends-on:compile` -> [TASK-CLASSIFY-GATE-INT-LEDGER-CONTRACT: TASK-CLASSIFY-GATE-INT-LEDGER-CONTRACT](gate-int-ledger-contract.md): The client may consume only the prerequisite contract proven by this gate.
-- `governed-by` -> [DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam](../../../designs/classify/decisions/application-architecture.md)
-- `governed-by` -> [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md)
-- `implements` -> [FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations](../../../prd/classify/prd.md#fr-classify-apply-execution-apply-authorized-decisions-through-public-ledger-operations)
-- `implements` -> [FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection](../../../prd/classify/prd.md#fr-classify-eligible-projection-obtain-the-eligible-classification-projection)
-- `satisfies` -> [NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries](../../../prd/classify/prd.md#nfr-classify-public-contract-compatibility-preserve-public-contract-compatibility-boundaries)
-- `touches` -> [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts)
+- `blocked-by` -> TASK-INGEST-LEDGER-PUBLIC-CLIENT: Implement the concrete public LEDGER client
+- `depends-on:compile` -> [TASK-CLASSIFY-GATE-INT-LEDGER-CONTRACT](../tasks/gate-int-ledger-contract.md): The client may consume only the prerequisite contract proven by this gate.
+- `governed-by` -> DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam
+- `governed-by` -> DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract
+- `implements` -> FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations
+- `implements` -> FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection
+- `satisfies` -> NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries
+- `touches` -> DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts
 
 ## Navigation
 

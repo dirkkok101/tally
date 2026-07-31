@@ -12,5 +12,14 @@
   ],
   "owner": "CLASSIFY private evidence spike",
   "disposition": "non_blocking",
-  "created_at": "2026-07-18T17:51:38.2965988+00:00"
+  "created_at": "2026-07-18T17:51:38.2965988+00:00",
+  "links": [
+    {
+      "id": "01KYVMJD58FDRDT4CQXVJHPFHY",
+      "target_type": "plan",
+      "target": "PLAN-CLASSIFY-V1",
+      "rel": "see-also",
+      "created_at": "2026-07-31T08:27:35.9773353+00:00"
+    }
+  ]
 }

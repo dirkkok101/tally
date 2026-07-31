@@ -29,12 +29,14 @@
     "Given an active rule, when the owner retires it with a reason, then CLASSIFY creates a new active Rule Set Version without that rule and retains the retired version for inspection.",
     "Given an active rule that must be narrowed or replaced, when the owner activates a validated successor, then the successor references the prior version and the prior version becomes retired or superseded without in-place mutation.",
     "Given a category rename that preserves the same active category identifier, when rules are inspected, then their category identity is unchanged and their display name resolves to the current catalogue name.",
-    "Given any owner decision, correction, or feedback event, when the event is recorded, then no rule version or Rule Set Version is activated automatically."
+    "Given any owner decision, correction, or feedback event, when the event is recorded, then no rule version or Rule Set Version is activated automatically.",
+    "Given a draft entered through classify.rule.save, when it is retained, then its immutable rule version records rule_origin=owner_authored and no personal rule value is compiled, seeded, logged, or exported.",
+    "Given a draft originating from correction feedback, when it is retained, then its immutable rule version records rule_origin=feedback_derived and receives no validation, activation, broad-apply, or mutation authority from that origin."
   ],
   "security_criteria": [
     "Rule inspection and lifecycle diagnostics must not expose normalized tokens or private examples outside the explicit owner-requested data result."
   ],
-  "status": "deferred",
+  "status": "active",
   "created_at": "2026-07-19T04:16:33.3832373+00:00",
   "links": [
     {

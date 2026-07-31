@@ -1,0 +1,408 @@
+{
+  "id": "01KYVN0TMRSFE9FV8EX2HAB7PP",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "sub_plan_id": "01KYVMRHQ4755N53ET4YVEX4XT",
+  "ref_code": "TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT",
+  "slug": "RULEBOOK-GATE-INT-PUBLIC-CONTRACT",
+  "title": "Wire and prove the complete CLASSIFY contract",
+  "description": [
+    "Compose and verify all twelve CLASSIFY handlers through the shared public registry."
+  ],
+  "objective": [
+    "Prove the complete installed public CLASSIFY contract."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 1,
+  "created_at": "2026-07-31T08:35:28.5399812+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYVQYBZ7VS5CS4Q93TBCW7XD",
+      "bead_id": "bd-3g6y",
+      "verification_status": "verified",
+      "verified_at": "2026-07-31T09:26:33.7033272+00:00",
+      "created_at": "2026-07-31T09:26:33.7033272+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KYVN0TP85FBRNZ9DEE8RX665",
+      "target": "DD-CLASSIFY-CLI-OPERATION-CONTRACT",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYVRXDP4623VYJDWF9997KY0",
+      "target": "TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP",
+      "dependency_type": "compile",
+      "reason": [
+        "Final wiring consumes abandon and cleanup handlers."
+      ],
+      "sort_order": 6,
+      "created_at": "2026-07-31T09:43:31.2696022+00:00"
+    },
+    {
+      "id": "01KYVRXED7QADSJDQEN586R6TJ",
+      "target": "TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW",
+      "dependency_type": "compile",
+      "reason": [
+        "Final wiring consumes the preview handler as a distinct public operation."
+      ],
+      "sort_order": 7,
+      "created_at": "2026-07-31T09:43:32.0081519+00:00"
+    },
+    {
+      "id": "01KYVN0TP8JV85P4XSF6MBXH5T",
+      "target": "TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA",
+      "dependency_type": "compile",
+      "reason": [
+        "Final wiring requires preview and run handlers."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP82NZYYQ31Q97D04E4",
+      "target": "TASK-CLASSIFY-RULEBOOK-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Final wiring consumes the twelve descriptors and source-generated contracts."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP8H5M1ZJCC52396BVM",
+      "target": "TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW",
+      "dependency_type": "compile",
+      "reason": [
+        "Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVRXF7HRPC3H5ZXN38842ZV",
+      "target": "TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS",
+      "dependency_type": "compile",
+      "reason": [
+        "Final wiring consumes the feedback handler as a distinct public operation."
+      ],
+      "sort_order": 8,
+      "created_at": "2026-07-31T09:43:32.8508187+00:00"
+    },
+    {
+      "id": "01KYVN0TP99X47GK7FZ5VXYCHX",
+      "target": "TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Final wiring requires evaluate and outcome handlers."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP99ZHPT6P2XQFAQ7AM",
+      "target": "TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE",
+      "dependency_type": "compile",
+      "reason": [
+        "Final wiring requires save, validate, activate, and retire handlers."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVRXFY5XCN48WTY4JM9QVBM",
+      "target": "TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE",
+      "dependency_type": "compile",
+      "reason": [
+        "Final wiring consumes the rule-save handler as a distinct public operation."
+      ],
+      "sort_order": 9,
+      "created_at": "2026-07-31T09:43:33.5736877+00:00"
+    },
+    {
+      "id": "01KYVRXGMMV0ZF27C44QVQZKPB",
+      "target": "TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Final wiring consumes the rule-validation handler as a distinct public operation."
+      ],
+      "sort_order": 10,
+      "created_at": "2026-07-31T09:43:34.2928643+00:00"
+    },
+    {
+      "id": "01KYVN0TP9R24Q9NV88RGZYBBW",
+      "target": "TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW",
+      "dependency_type": "compile",
+      "reason": [
+        "Final wiring requires status, abandon, and cleanup handlers."
+      ],
+      "sort_order": 5,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYVN0TP895SE5DN139EFW4X8",
+      "path": "src/Tally/Bootstrap/Features/ClassifyExtensions.cs",
+      "action": "create",
+      "role": "complete explicit registration",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP8G7X5RAS494AYV43Z",
+      "path": "src/Tally/Program.cs",
+      "action": "modify",
+      "role": "CLASSIFY composition",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP8KREZEES45HMPWGV9",
+      "path": "tests/Tally.Tests/Classify/Contract/ClassifyPublishedContractTests.cs",
+      "action": "test",
+      "role": "descriptor and version matrix",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP8JZE5SWW1DFB0KG40",
+      "path": "tests/Tally.Tests/Classify/Process/ClassifyProcessContractTests.cs",
+      "action": "test",
+      "role": "stdout stderr exit and validation matrix",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TP8EBGXWXMVEEDV7ADT",
+      "path": "scripts/verify-classify-contract.sh",
+      "action": "create",
+      "role": "published-binary contract gate",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYVRW35A45WXAGN0MX8ZS7QE",
+      "name": "ClassifyOperationModule",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-31T09:42:47.7218035+00:00"
+    },
+    {
+      "id": "01KYVRW35BR7M0AVVV2BDR37KS",
+      "name": "EvaluateClassificationCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 1,
+      "created_at": "2026-07-31T09:42:47.7218035+00:00"
+    },
+    {
+      "id": "01KYVRW35BYC5GMQFBV0ZV6ZQM",
+      "name": "GetClassificationOutcomeQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "sort_order": 2,
+      "created_at": "2026-07-31T09:42:47.7218035+00:00"
+    },
+    {
+      "id": "01KYVRW35BWSXE57Q8BRMH6A3A",
+      "name": "PreviewClassificationApplyCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-APPLY-RUN",
+      "sort_order": 3,
+      "created_at": "2026-07-31T09:42:47.7218035+00:00"
+    },
+    {
+      "id": "01KYVRW35B2PYCXG3MX0NSYVBH",
+      "name": "RunClassificationApplyCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-APPLY-RUN",
+      "sort_order": 4,
+      "created_at": "2026-07-31T09:42:47.7218035+00:00"
+    },
+    {
+      "id": "01KYVRW35BKPPTSXGA06FT0FS7",
+      "name": "SaveClassificationRuleCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "sort_order": 5,
+      "created_at": "2026-07-31T09:42:47.7218035+00:00"
+    },
+    {
+      "id": "01KYVRW35BFJCAZ6CPMGDN63Z1",
+      "name": "ValidateClassificationRuleCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "sort_order": 6,
+      "created_at": "2026-07-31T09:42:47.7218035+00:00"
+    },
+    {
+      "id": "01KYVRW35B12HHQPBJDH67EH9C",
+      "name": "ActivateClassificationRuleCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "sort_order": 7,
+      "created_at": "2026-07-31T09:42:47.7218035+00:00"
+    },
+    {
+      "id": "01KYVRW35BP7DV0BS084TV05VJ",
+      "name": "RetireClassificationRuleCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "sort_order": 8,
+      "created_at": "2026-07-31T09:42:47.7218035+00:00"
+    },
+    {
+      "id": "01KYVRW35B9DP6YZEKYBXWE5C0",
+      "name": "RecordClassificationFeedbackCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-FEEDBACK-PROPOSAL",
+      "sort_order": 9,
+      "created_at": "2026-07-31T09:42:47.7218035+00:00"
+    },
+    {
+      "id": "01KYVRW35B19Y3CXJVWCTMEYPK",
+      "name": "GetClassificationStatusQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "sort_order": 10,
+      "created_at": "2026-07-31T09:42:47.7218035+00:00"
+    },
+    {
+      "id": "01KYVRW35B00EWWE9EY57EYEJS",
+      "name": "AbandonClassificationStateCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "sort_order": 11,
+      "created_at": "2026-07-31T09:42:47.7218035+00:00"
+    },
+    {
+      "id": "01KYVRW35BM73JNSMW5EZYQWEK",
+      "name": "CleanupClassificationStateCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "sort_order": 12,
+      "created_at": "2026-07-31T09:42:47.7218035+00:00"
+    },
+    {
+      "id": "01KYVRW35BTC2EARJ0K8FMQ6X3",
+      "name": "CompleteClassifyPublicContract",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-OPERATION-CONTRACTS",
+      "sort_order": 13,
+      "created_at": "2026-07-31T09:42:47.7218035+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYVT3WJAB2HXY7PXEV3FXRX0",
+      "kind": "acceptance_check",
+      "text": [
+        "Wire exactly twelve byte-stable C12 descriptors to explicit handlers, with no reflection, alias, HTTP, worker, or private read; each call emits one versioned envelope or one documented stable error/exit."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T10:04:31.6901745+00:00"
+    },
+    {
+      "id": "01KYVT3WJBCXCD54NPN6JQ8J3B",
+      "kind": "acceptance_check",
+      "text": [
+        "Reject missing mutation metadata and incompatible versions before state or financial access; linux-x64 Native-AOT uses source-generated JSON with no trim, reflection, dynamic-code, build, or registration warnings."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T10:04:31.6901745+00:00"
+    },
+    {
+      "id": "01KYVT3YPXXYJMD86JA5CYMVVZ",
+      "kind": "constraint",
+      "text": [
+        "Compose feature-owned behavior; named process tests must discover tests."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T10:04:33.8855254+00:00"
+    },
+    {
+      "id": "01KYVT3XZY291QEDZSE1NTJ1C5",
+      "kind": "expected_output",
+      "text": [
+        "ClassifyExtensions, CompleteClassifyPublicContract, and published-binary evidence"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T10:04:33.1504535+00:00"
+    },
+    {
+      "id": "01KYVT3X92Y9C64S7VYKMXKB9M",
+      "kind": "failure_criterion",
+      "text": [
+        "No hidden registration, extra surfaces, private diagnostics, unversioned contracts, zero-match tests, or premature dependency status changes."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T10:04:32.4183455+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYVT09BKH21TP1CAQBBJP6J6",
+      "target_ref_code": "TC-CLASSIFY-PUBLISHED-CONTRACT-MATRIX",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PNS080ASMFY77FFYEZ3J",
+      "target_title": "Verify the published CLASSIFY contract matrix",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T10:02:33.7162675+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYVN5K9JHAE6DKDPKWAH8X0D",
+      "target": "FR-CLASSIFY-CONTRACT-DISCOVERY",
+      "created_at": "2026-07-31T08:38:04.8491152+00:00"
+    },
+    {
+      "id": "01KYVN5K9KB4B48HGHE3JB3SS5",
+      "target": "FR-CLASSIFY-STRUCTURED-INVOCATION",
+      "created_at": "2026-07-31T08:38:04.8491152+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYVN0TP8YTFM8W7TE048SQN3",
+      "gate_type": "branch-review",
+      "description": [
+        "Review the published binary surface against C12 and DM-CLASSIFY-OPERATION-CONTRACTS before acceptance tasks run."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYVN0TP87D6X68NR8CTFZ1FG",
+      "phase": "after",
+      "command": "bash scripts/verify-classify-contract.sh",
+      "expected_result": "exit 0; exactly 12 descriptors and handlers are inventoried, both named contract test classes have nonzero discovery, all version and error partitions run, Native-AOT publish succeeds, and 0 tests or warning checks fail",
+      "required": 1,
+      "timeout_seconds": 1200,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ]
+}

@@ -1,0 +1,314 @@
+{
+  "id": "01KYVN0TMS6NS02Q9NYG05ZXRG",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "sub_plan_id": "01KYVMRHQ4755N53ET4YVEX4XT",
+  "ref_code": "TASK-CLASSIFY-RULEBOOK-VERIFY-UC-003",
+  "slug": "RULEBOOK-VERIFY-UC-003",
+  "title": "Verify authorized apply and recovery",
+  "description": [
+    "Validation-only UC task with no implements refs; it traces UC-CLASSIFY-003 preview, assignment, explicit correction, rejection, replay, interruption, and exact result behavior."
+  ],
+  "objective": [
+    "UC-CLASSIFY-003 proves all-or-none preflight, explicit authority, at-most-once Ledger mutation, and an exact recoverable per-item frontier."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 5,
+  "created_at": "2026-07-31T08:35:28.5399812+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYVQYT0J1N4ANMSW50D5XFC3",
+      "bead_id": "bd-9oqw",
+      "verification_status": "verified",
+      "verified_at": "2026-07-31T09:26:48.0820786+00:00",
+      "created_at": "2026-07-31T09:26:48.0820786+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KYVN0TPC57WDYJX931Y4K54K",
+      "target": "DD-CLASSIFY-APPLY-SAGA",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPD1PH5Y6CBK4J6ZG4Q",
+      "target": "DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYVRS66ZV4AEB28QRAB1YTN3",
+      "target": "TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW",
+      "dependency_type": "compile",
+      "reason": [
+        "UC-003 verifies preview and run as one published authorized-apply workflow."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-07-31T09:41:12.5440936+00:00"
+    },
+    {
+      "id": "01KYVN0TPDJTCKYZEDA2ANTSJS",
+      "target": "TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA",
+      "dependency_type": "compile",
+      "reason": [
+        "The UC verifies the complete preview and apply saga."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPDTDY5JFG0Y3CS7024",
+      "target": "TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "Acceptance invokes the published process boundary."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYVN0TPDMKS78P0SY420MRE3",
+      "path": "tests/Tally.Tests/Classify/Acceptance/ClassifyUc003ApplyTests.cs",
+      "action": "test",
+      "role": "UC-003 acceptance and recovery matrix",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYVRW6M794G4P3Y7XTVX2HWV",
+      "name": "CompleteClassifyPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-31T09:42:51.2710554+00:00"
+    },
+    {
+      "id": "01KYVRW6M8KR53RH4MMZ632BB1",
+      "name": "PreviewClassificationApplyCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-APPLY-RUN",
+      "sort_order": 1,
+      "created_at": "2026-07-31T09:42:51.2710554+00:00"
+    },
+    {
+      "id": "01KYVRW6M8260SAACH61ZD7G0G",
+      "name": "RunClassificationApplyCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-APPLY-RUN",
+      "sort_order": 2,
+      "created_at": "2026-07-31T09:42:51.2710554+00:00"
+    },
+    {
+      "id": "01KYVRW6M8WKGPVXS2NNENC49R",
+      "name": "VerifiedClassifyUc003",
+      "direction": "produces",
+      "contract_ref_code": "UC-CLASSIFY-003",
+      "sort_order": 3,
+      "created_at": "2026-07-31T09:42:51.2710554+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KYVN4A2A1RT9EARH1BDNFJ5N",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-003",
+      "rel": "verifies",
+      "created_at": "2026-07-31T08:37:22.6351977+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYVN0TPD0JTSYKMD1N2AN1WH",
+      "kind": "acceptance_check",
+      "text": [
+        "Evaluation alone mutates no Ledger state; current preview is exact and read-only."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPD3YA54PB3YKHFF73F",
+      "kind": "acceptance_check",
+      "text": [
+        "Stale selection rejects wholly before mutation; conflict and no-suggestion never enter scope."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPDN8BWPMC961HNWW3T",
+      "kind": "acceptance_check",
+      "text": [
+        "Uncategorized assignment and one explicitly reasoned correction use public Ledger operations and broad mode never includes correction."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPDJ6JEFJ3B80XWJR3X",
+      "kind": "acceptance_check",
+      "text": [
+        "Every item returns applied, already_applied, rejected, failed, or unresolved; identical replay creates no second allocation."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPDQ9Y2MS0T6KN8MDVW",
+      "kind": "acceptance_check",
+      "text": [
+        "Every interruption resumes only the durable unresolved frontier and conflicting identity reuse preserves original results."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPDWJEX6DCDGX0FMVV1",
+      "kind": "constraint",
+      "text": [
+        "Validation-only gate is intentionally loose and uses real public Ledger idempotency."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPDS33NJNK5VCGN6A3A",
+      "kind": "expected_output",
+      "text": [
+        "VerifiedClassifyUc003"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPD2BJJ9KZBXH7Y00C7",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT test only happy-path assignment; include every UC-CLASSIFY-003 failure path and every crash boundary."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPD1BDTB27ZK6RY94QY",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT treat aggregate run success as proof of per-item exactness or duplicate prevention."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPDQNBQJ1RH7HE3RSDA",
+      "kind": "note",
+      "text": [
+        "Ledger allocation history is the authoritative duplicate-mutation oracle."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYVN0TPDHKGHYNRRDQCTXVJJ",
+      "target_ref_code": "UC-CLASSIFY-003",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXV9ECSPD0RTMEW7Q0AMSJYM",
+      "target_title": "Apply accepted classification decisions",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPDED0GYJDR8Q4MPQ7G",
+      "target_ref_code": "TC-CLASSIFY-APPLY-AUTHORIZATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PHNA1FBJ5DP2M02MW6JH",
+      "target_title": "Verify explicit apply authorization",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPDX00D4Q2JT46E4DEN",
+      "target_ref_code": "TC-CLASSIFY-APPLY-EXECUTION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PHZRHWHZVT06Y60C9X0D",
+      "target_title": "Verify replay-safe classification apply",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPDS05KZKFGYCTKTFXY",
+      "target_ref_code": "TC-CLASSIFY-APPLY-CRASH-RECOVERY-MATRIX",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9QX0VMV7TG67WG63CSVT6",
+      "target_title": "Verify every classification apply crash window",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYVN5QMH56JF2371WWP5NGY0",
+      "target": "FR-CLASSIFY-APPLY-AUTHORIZATION",
+      "created_at": "2026-07-31T08:38:09.2964963+00:00"
+    },
+    {
+      "id": "01KYVN5QMJSF3XMS98QH36CQ1Y",
+      "target": "FR-CLASSIFY-APPLY-EXECUTION",
+      "created_at": "2026-07-31T08:38:09.2964963+00:00"
+    },
+    {
+      "id": "01KYVN5QMJKT2VQK0DTYZW1KS3",
+      "target": "FR-CLASSIFY-OUTCOME-INVALIDATION",
+      "created_at": "2026-07-31T08:38:09.2964963+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYVN0TPD73JC8WTSSSB4TCPK",
+      "gate_type": "test-evidence",
+      "description": [
+        "Per-item Ledger and CLASSIFY histories prove exact outcomes and zero duplicate allocations."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYVN0TPDD21Q6BZJZ6H4ZJK1",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ClassifyUc003ApplyTests",
+      "expected_result": "exit 0; at least 22 preview, authority, stale, conflict, assignment, correction, Ledger rejection, identical replay, conflicting replay, interruption, frontier, and duplicate-allocation cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ]
+}

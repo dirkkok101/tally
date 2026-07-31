@@ -1,0 +1,10 @@
+{
+  "id": "01KYVME50DZPAMGR2G3XVS8C5W",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "condition": "OWNER-RULEBOOK PRE-AUTHORITY GATE. Before classify.rule.activate, exact-rule broad apply, or PLAN-CLASSIFY-RULEBOOK-V1 module completion, validate the owner-authored candidate rulebook against aggregate-only private evidence. Trigger and stop new rule authority if accounted rows differ from total rows, any incorrect application exists, any incompatible conflict lacks an explicit expected-conflict disposition, deterministic fingerprints differ on replay, a drift canary is swallowed, private payload is disclosed, or Ledger-owned transfer, refund, lifecycle, allocation, or eligibility truth is reconstructed. Always report coverage, no-suggestion, conflict, owner-decision, and owner-time totals. If safety passes but measured benefit is insufficient, block broad authority pending an explicit product decision; do not invent a 50 percent threshold.",
+  "monitored": 1,
+  "evaluation_state": "clear",
+  "evaluation_evidence": "Clear for documentation and bead compilation because no rule authority or implementation exists yet and the replacement plan makes the private pre-authority gate a compile blocker for activation, broad apply, security convergence, use-case authority, and module completion. The implementation gate must reassess every safety predicate using aggregate-only private evidence before those downstream beads may complete.",
+  "evaluated_at": "2026-07-31T08:26:42.3769101+00:00",
+  "created_at": "2026-07-31T08:25:16.5585233+00:00"
+}

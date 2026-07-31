@@ -1,0 +1,301 @@
+{
+  "id": "01KYVN0TMTXSFFNXADJVZ7B3Q0",
+  "plan_id": "01KYVMR3VSCGST9GPA0HEW4YZJ",
+  "sub_plan_id": "01KYVMRHQ4755N53ET4YVEX4XT",
+  "ref_code": "TASK-CLASSIFY-RULEBOOK-VERIFY-UC-006",
+  "slug": "RULEBOOK-VERIFY-UC-006",
+  "title": "Verify agent contract discovery and invocation",
+  "description": [
+    "Validation-only UC task with no implements refs; it traces UC-CLASSIFY-006 schema discovery, valid invocation, compatibility, malformed input, owner boundary, diagnostics, and status."
+  ],
+  "objective": [
+    "UC-CLASSIFY-006 proves an AI Agent Host can orchestrate CLASSIFY without prose scraping, private storage, prompts, unrelated data, or bypassed owner intent."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 8,
+  "created_at": "2026-07-31T08:35:28.5399812+00:00",
+  "bead_refs": [
+    {
+      "id": "01KYVQYWHSBA5WJM42HSNWFP7P",
+      "bead_id": "bd-1n2r",
+      "verification_status": "verified",
+      "verified_at": "2026-07-31T09:26:50.6819809+00:00",
+      "created_at": "2026-07-31T09:26:50.6819809+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KYVN0TPFCW1FYZ4TZ2B2H5NS",
+      "target": "DD-CLASSIFY-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPFFV8MK989G9EDMF9F",
+      "target": "DD-CLASSIFY-CLI-OPERATION-CONTRACT",
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KYVN0TPGD4N6DGZJ98QRW77F",
+      "target": "TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT",
+      "dependency_type": "compile",
+      "reason": [
+        "The host consumes the complete published contract."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPGTRQK93AFFCMEES99",
+      "target": "TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW",
+      "dependency_type": "compile",
+      "reason": [
+        "The host uses safe status for lifecycle orchestration."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KYVN0TPGP2BHF9V0BDQ30M4R",
+      "path": "tests/Tally.Tests/Classify/Acceptance/ClassifyUc006AgentContractTests.cs",
+      "action": "test",
+      "role": "UC-006 host contract matrix",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KYVN0TPG06TSQYR8KEJ86QDR",
+      "name": "CompleteClassifyPublicContract",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-OPERATION-CONTRACTS",
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPGG26ED4NQHH5N69QX",
+      "name": "GetClassificationStatusQuery.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPGJSF9S20Q8GDPMYBJ",
+      "name": "VerifiedClassifyUc006",
+      "direction": "produces",
+      "contract_ref_code": "UC-CLASSIFY-006",
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KYVN4C8ZQPK436TRECJHB3WR",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-006",
+      "rel": "verifies",
+      "created_at": "2026-07-31T08:37:24.8964868+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KYVN0TPF95PETQZCAPTESF3N",
+      "kind": "acceptance_check",
+      "text": [
+        "The compatible host discovers exactly twelve deterministic descriptors and invokes every operation through structured stdin or file input with one stdout envelope."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPFQ5437KV47HNTM134",
+      "kind": "acceptance_check",
+      "text": [
+        "Unsupported CLASSIFY or Ledger versions reject before data read or mutation; malformed and unknown-field requests return stable validation errors."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPF31BZB37MJVAVC4JQ",
+      "kind": "acceptance_check",
+      "text": [
+        "Missing owner identity, non-owner file permissions, group or other permission bits, or missing idempotency rejects mutation before state change."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPF1TQSNR8K870JTF6D",
+      "kind": "acceptance_check",
+      "text": [
+        "Diagnostics contain only correlation ID, operation ID, duration, result code, error code, and aggregate item counts; they contain no descriptions, tokens, rules, amounts, corpus rows, paths, serialized requests, or results."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPF1HEY23RMMRB0SHPJ",
+      "kind": "acceptance_check",
+      "text": [
+        "Status enables orchestration using only published schemas, subject IDs, lifecycle states, mutation-possibility state, frontier ordinal, aggregate counts, and next-operation enum values without reading CLASSIFY storage or searching private payloads."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPGCAKPKYQ9YJ1F8C6Q",
+      "kind": "constraint",
+      "text": [
+        "Validation-only gate is intentionally loose and uses a compatible local AI Agent Host test client."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPF7HD1WXR5D2PNW46Q",
+      "kind": "expected_output",
+      "text": [
+        "VerifiedClassifyUc006"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPFKVVC59M89KHV3NBX",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT use a human prompt, TTY scraping, HTTP alias, hidden operation, or direct storage read in the host fixture."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPF46NFRZW87PNACFSM",
+      "kind": "failure_criterion",
+      "text": [
+        "Do NOT omit incompatible, malformed, owner-boundary, permission, or diagnostic failure paths."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPGHV2CZ60XK0YB76FS",
+      "kind": "note",
+      "text": [
+        "The host is a supporting client under the P1 owner context, not a new human persona or authority source."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "references": [
+    {
+      "id": "01KYVN0TPGK4AQBQR3SANCK601",
+      "target_ref_code": "UC-CLASSIFY-006",
+      "target_entity_type": "use_case",
+      "target_entity_id": "01KXV9EDTJ3NDBEF2EJ7GGHEM2",
+      "target_title": "Discover and invoke the CLASSIFY agent contract",
+      "relationship": "covers",
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPGRY9QY40MMFBFFTR0",
+      "target_ref_code": "EXT-CLASSIFY-AI-AGENT-HOST",
+      "target_entity_type": "external_dependency",
+      "target_entity_id": "01KXV9NE74JRFZSHKCFEMP6HFV",
+      "target_title": "AI Agent Host",
+      "relationship": "references",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPGX2GW4EEF61AE0470",
+      "target_ref_code": "TC-CLASSIFY-CONTRACT-DISCOVERY-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PK0NZQKB2XVB2EQ5Q6W3",
+      "target_title": "Verify CLASSIFY contract discovery",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYVN0TPG5SRNTHN6GNKDM672",
+      "target_ref_code": "TC-CLASSIFY-STRUCTURED-INVOCATION-CONTRACT",
+      "target_entity_type": "test_case",
+      "target_entity_id": "01KXW9PKBRVZBM7HXDGEGV11W4",
+      "target_title": "Verify structured CLASSIFY invocation",
+      "relationship": "verifies",
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KYVN5SWD4KER6PHWG18D321H",
+      "target": "FR-CLASSIFY-CONTRACT-DISCOVERY",
+      "created_at": "2026-07-31T08:38:11.5968754+00:00"
+    },
+    {
+      "id": "01KYVN5SWEHR9P8ZYBN8M71GHR",
+      "target": "FR-CLASSIFY-STATE-RETENTION-CLEANUP",
+      "created_at": "2026-07-31T08:38:11.5968754+00:00"
+    },
+    {
+      "id": "01KYVN5SWE09VQKRNMCEM77GXJ",
+      "target": "FR-CLASSIFY-STATUS-HISTORY",
+      "created_at": "2026-07-31T08:38:11.5968754+00:00"
+    },
+    {
+      "id": "01KYVN5SWE2RY8VX7V077K1CTT",
+      "target": "FR-CLASSIFY-STRUCTURED-INVOCATION",
+      "created_at": "2026-07-31T08:38:11.5968754+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KYVN0TPGD84K9GBX139GMBM7",
+      "gate_type": "test-evidence",
+      "description": [
+        "The host fixture proves complete orchestration through schemas and stable results only."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KYVN0TPGFWQKE8FQ90GQ2XHV",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ClassifyUc006AgentContractTests",
+      "expected_result": "exit 0; at least 18 descriptor, every-operation, stdin, file, malformed, version, actor, permission, idempotency, diagnostic, status, no-prompt, and no-private-read cases are discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 0,
+      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    }
+  ]
+}
