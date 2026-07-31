@@ -226,6 +226,40 @@ public sealed class ClassificationRuleVocabularyTests
     }
 
     [Fact]
+    public void Duplicate_semantic_conditions_at_different_ordinals_are_rejected()
+    {
+        // After NormalizerV1, "ACME, Inc." and "acme inc" are the same description.normalized equals operand.
+        Assert.False(ClassificationRuleVocabulary.TryValidateRule(
+            [
+                (0, ClassificationRuleVocabulary.DescriptionNormalized, ClassificationRuleVocabulary.EqualsPredicate, "ACME, Inc.", null, null, null),
+                (1, ClassificationRuleVocabulary.DescriptionNormalized, ClassificationRuleVocabulary.EqualsPredicate, "acme inc", null, null, null)
+            ],
+            out var canonical,
+            out var error));
+        Assert.Equal(RuleVocabularyErrors.DuplicateCondition, error!.Code);
+        Assert.Equal("conditions", error.Field);
+        Assert.Empty(canonical);
+    }
+
+    [Fact]
+    public void Equals_predicate_descriptor_publishes_operand_type_field_value()
+    {
+        var equals = Assert.Single(
+            ClassificationRuleVocabulary.Predicates,
+            p => p.PredicateKind == ClassificationRuleVocabulary.EqualsPredicate);
+        Assert.Equal(RuleConditionValueType.FieldValue, equals.OperandType);
+        Assert.Equal(RulePredicateCardinality.UnaryValue, equals.Cardinality);
+
+        // Concrete payload still comes from the selected field — not a broadened predicate set.
+        Assert.True(ClassificationRuleVocabulary.IsPredicateAllowed(
+            ClassificationRuleVocabulary.AccountId, ClassificationRuleVocabulary.EqualsPredicate));
+        Assert.True(ClassificationRuleVocabulary.IsPredicateAllowed(
+            ClassificationRuleVocabulary.AmountDirection, ClassificationRuleVocabulary.EqualsPredicate));
+        Assert.True(ClassificationRuleVocabulary.IsPredicateAllowed(
+            ClassificationRuleVocabulary.AmountAbsoluteMinor, ClassificationRuleVocabulary.EqualsPredicate));
+    }
+
+    [Fact]
     public void Negative_ordinal_is_rejected()
     {
         Assert.False(ClassificationRuleVocabulary.TryCreateCondition(

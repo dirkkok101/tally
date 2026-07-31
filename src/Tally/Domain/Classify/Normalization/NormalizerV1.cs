@@ -82,6 +82,7 @@ public static class RuleVocabularyErrors
     public const string ValueTooLong = "CLASSIFY-RULE-VALUE-TOO-LONG";
     public const string InvalidMinorRange = "CLASSIFY-RULE-MINOR-RANGE-INVALID";
     public const string DuplicateOrdinal = "CLASSIFY-RULE-ORDINAL-DUPLICATE";
+    public const string DuplicateCondition = "CLASSIFY-RULE-CONDITION-DUPLICATE";
     public const string EmptyRule = "CLASSIFY-RULE-EMPTY";
     public const string InvalidOrdinal = "CLASSIFY-RULE-ORDINAL-INVALID";
 }

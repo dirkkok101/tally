@@ -5,12 +5,17 @@ using Tally.Domain.Classify.Normalization;
 
 namespace Tally.Domain.Classify.Rules;
 
-/// <summary>Value type for a field's operand payload.</summary>
+/// <summary>Value type for a field's operand payload or a field-resolved predicate operand.</summary>
 public enum RuleConditionValueType
 {
     Text,
     EnumDirection,
-    AbsoluteMinor
+    AbsoluteMinor,
+    /// <summary>
+    /// Global <c>equals</c> predicate: concrete payload type is taken from the selected field's
+    /// <see cref="FieldDescriptor.ValueType"/> (text, enum direction, or absolute minor).
+    /// </summary>
+    FieldValue
 }
 
 /// <summary>Operand cardinality for a predicate.</summary>
@@ -44,6 +49,7 @@ public sealed class RuleCondition : IEquatable<RuleCondition>
         ValueMinorMax = valueMinorMax;
         EnumValue = enumValue;
         CanonicalHash = ComputeHash();
+        SemanticKey = ComputeSemanticKey();
     }
 
     public string ConditionId { get; }
@@ -55,8 +61,14 @@ public sealed class RuleCondition : IEquatable<RuleCondition>
     public long? ValueMinorMax { get; }
     public string? EnumValue { get; }
 
-    /// <summary>SHA-256 hex of <see cref="ToCanonicalJson"/> (culture-invariant).</summary>
+    /// <summary>SHA-256 hex of <see cref="ToCanonicalJson"/> (includes ordinal; culture-invariant).</summary>
     public string CanonicalHash { get; }
+
+    /// <summary>
+    /// Semantic identity after normalization: field + predicate + typed operand payload only.
+    /// Excludes ordinal, conditionId, and the ordinal-derived <see cref="CanonicalHash"/>.
+    /// </summary>
+    public string SemanticKey { get; }
 
     public static RuleCondition Create(
         int ordinal,
@@ -95,6 +107,26 @@ public sealed class RuleCondition : IEquatable<RuleCondition>
         return sb.ToString();
     }
 
+    /// <summary>Byte-stable semantic JSON excluding ordinal and conditionId.</summary>
+    public string ToSemanticJson()
+    {
+        var sb = new StringBuilder(192);
+        sb.Append('{');
+        AppendString(sb, "enumValue", EnumValue);
+        sb.Append(',');
+        AppendString(sb, "fieldKey", FieldKey);
+        sb.Append(',');
+        AppendString(sb, "predicateKind", PredicateKind);
+        sb.Append(',');
+        AppendLong(sb, "valueMinorMax", ValueMinorMax);
+        sb.Append(',');
+        AppendLong(sb, "valueMinorMin", ValueMinorMin);
+        sb.Append(',');
+        AppendString(sb, "valueText", ValueText);
+        sb.Append('}');
+        return sb.ToString();
+    }
+
     public bool Equals(RuleCondition? other) =>
         other is not null && string.Equals(CanonicalHash, other.CanonicalHash, StringComparison.Ordinal);
 
@@ -102,8 +134,15 @@ public sealed class RuleCondition : IEquatable<RuleCondition>
 
     public override int GetHashCode() => StringComparer.Ordinal.GetHashCode(CanonicalHash);
 
+    /// <summary>True when field, predicate, and canonical typed operand payload match (ordinal excluded).</summary>
+    public bool IsSemanticallyEqualTo(RuleCondition other) =>
+        string.Equals(SemanticKey, other.SemanticKey, StringComparison.Ordinal);
+
     private string ComputeHash() =>
         Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(ToCanonicalJson())));
+
+    private string ComputeSemanticKey() =>
+        Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(ToSemanticJson())));
 
     private static string ComputeConditionId(
         int ordinal,

@@ -50,7 +50,8 @@ public static class ClassificationRuleVocabulary
 
     public static IReadOnlyList<PredicateDescriptor> Predicates { get; } =
     [
-        new(EqualsPredicate, RuleConditionValueType.Text, RulePredicateCardinality.UnaryValue),
+        // equals: operand type is field_value — concrete payload follows the selected field's value_type.
+        new(EqualsPredicate, RuleConditionValueType.FieldValue, RulePredicateCardinality.UnaryValue),
         new(StartsWithPredicate, RuleConditionValueType.Text, RulePredicateCardinality.UnaryValue),
         new(ContainsTokenSequencePredicate, RuleConditionValueType.Text, RulePredicateCardinality.UnaryValue),
         new(BetweenInclusivePredicate, RuleConditionValueType.AbsoluteMinor, RulePredicateCardinality.RangeInclusive)
@@ -122,7 +123,8 @@ public static class ClassificationRuleVocabulary
     }
 
     /// <summary>
-    /// Validate a non-empty AND rule: at least one condition, unique ordinals, each condition valid.
+    /// Validate a non-empty AND rule: at least one condition, unique ordinals, each condition valid,
+    /// and no duplicate canonical semantic conditions after normalization (ordinal excluded).
     /// </summary>
     public static bool TryValidateRule(
         IReadOnlyList<(int Ordinal, string FieldKey, string PredicateKind, string? ValueText, long? ValueMinorMin, long? ValueMinorMax, string? EnumValue)> conditions,
@@ -139,6 +141,7 @@ public static class ClassificationRuleVocabulary
         }
 
         var ordinals = new HashSet<int>();
+        var semanticKeys = new HashSet<string>(StringComparer.Ordinal);
         var built = new List<RuleCondition>(conditions.Count);
         foreach (var item in conditions.OrderBy(c => c.Ordinal).ThenBy(c => c.FieldKey, StringComparer.Ordinal))
         {
@@ -162,7 +165,14 @@ public static class ClassificationRuleVocabulary
                 return false;
             }
 
-            built.Add(condition!);
+            // Duplicate identity: field + predicate + canonical typed operand (not ordinal/conditionId).
+            if (!semanticKeys.Add(condition!.SemanticKey))
+            {
+                error = new RuleConditionValidationError("conditions", RuleVocabularyErrors.DuplicateCondition);
+                return false;
+            }
+
+            built.Add(condition);
         }
 
         canonical = built;
