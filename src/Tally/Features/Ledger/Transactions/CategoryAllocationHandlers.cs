@@ -7,6 +7,7 @@ using Tally.Contracts.Ledger.Transactions;
 using Tally.Domain.Ledger;
 using Tally.Domain.Ledger.Transactions;
 using Tally.Infrastructure.Storage.Categories;
+using Tally.Infrastructure.Storage.Relationships;
 using Tally.Infrastructure.Storage.Transactions;
 
 namespace Tally.Features.Ledger.Transactions;
@@ -17,32 +18,43 @@ public static class CategoryAllocationErrors
     public const string Cardinality = "LEDGER-CATEGORY-ALLOCATION-CARDINALITY";
     public const string NotAssigned = "LEDGER-CATEGORY-ALLOCATION-NOT-ASSIGNED";
     public const string Unchanged = "LEDGER-CATEGORY-ALLOCATION-UNCHANGED";
+    public const string StalePrecondition = CategoryMutationPreconditionCodes.StalePrecondition;
 }
 
 public sealed class AssignCategoryHandler(
     LedgerMutationExecutor executor,
     TransactionStore transactionStore,
     CategoryStore categoryStore,
-    CategoryAllocationStore allocationStore)
+    CategoryAllocationStore allocationStore,
+    RelationshipStore? relationshipStore = null)
 {
     public Task<CommandResult<JsonElement>> HandleAsync(AssignCategoryInput input, SafeActor? actor, string? key, CancellationToken cancellationToken) =>
         CategoryAllocationHandlerPolicy.ExecuteAsync(
-            executor, transactionStore, categoryStore, allocationStore, "ledger.transaction.category.assign",
+            executor, transactionStore, categoryStore, allocationStore, relationshipStore,
+            "ledger.transaction.category.assign",
             input.TransactionId, input.CategoryId, input.Reason, actor, key,
-            input, LedgerJsonContext.Default.AssignCategoryInput, correct: false, cancellationToken);
+            input, LedgerJsonContext.Default.AssignCategoryInput, correct: false,
+            input.ExpectedTransactionRevision, input.ExpectedRelationshipRevision,
+            input.ExpectedAllocationRevision, input.ExpectedActiveAllocationId,
+            cancellationToken);
 }
 
 public sealed class CorrectCategoryHandler(
     LedgerMutationExecutor executor,
     TransactionStore transactionStore,
     CategoryStore categoryStore,
-    CategoryAllocationStore allocationStore)
+    CategoryAllocationStore allocationStore,
+    RelationshipStore? relationshipStore = null)
 {
     public Task<CommandResult<JsonElement>> HandleAsync(CorrectCategoryInput input, SafeActor? actor, string? key, CancellationToken cancellationToken) =>
         CategoryAllocationHandlerPolicy.ExecuteAsync(
-            executor, transactionStore, categoryStore, allocationStore, "ledger.transaction.category.correct",
+            executor, transactionStore, categoryStore, allocationStore, relationshipStore,
+            "ledger.transaction.category.correct",
             input.TransactionId, input.CategoryId, input.Reason, actor, key,
-            input, LedgerJsonContext.Default.CorrectCategoryInput, correct: true, cancellationToken);
+            input, LedgerJsonContext.Default.CorrectCategoryInput, correct: true,
+            input.ExpectedTransactionRevision, input.ExpectedRelationshipRevision,
+            input.ExpectedAllocationRevision, input.ExpectedActiveAllocationId,
+            cancellationToken);
 }
 
 internal static class CategoryAllocationHandlerPolicy
@@ -52,6 +64,7 @@ internal static class CategoryAllocationHandlerPolicy
         TransactionStore transactionStore,
         CategoryStore categoryStore,
         CategoryAllocationStore allocationStore,
+        RelationshipStore? relationshipStore,
         string operationId,
         string transactionId,
         string categoryId,
@@ -61,6 +74,10 @@ internal static class CategoryAllocationHandlerPolicy
         T input,
         global::System.Text.Json.Serialization.Metadata.JsonTypeInfo<T> inputType,
         bool correct,
+        string? expectedTransactionRevision,
+        string? expectedRelationshipRevision,
+        string? expectedAllocationRevision,
+        string? expectedActiveAllocationId,
         CancellationToken cancellationToken)
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Ledger storage requires Linux host protections.");
@@ -74,7 +91,7 @@ internal static class CategoryAllocationHandlerPolicy
         var request = new IdempotencyRequest("1.0", operationId, key, Actor(actor), canonicalInput, null);
         return await executor.ExecuteAsync(request, async (connection, databaseTransaction, token) =>
         {
-            var transaction = await transactionStore.GetAsync(connection, databaseTransaction, allocation!.TransactionId, false, token);
+            var transaction = await transactionStore.GetAsync(connection, databaseTransaction, allocation!.TransactionId, includeHistory: true, token);
             if (transaction is null) return Failure(TransactionErrors.NotFound);
             if (transaction.LifecycleStatus != TransactionLifecycleStatus.Active) return Failure(CategoryAllocationErrors.TransactionInactive);
 
@@ -86,6 +103,46 @@ internal static class CategoryAllocationHandlerPolicy
             if (!correct && current is not null) return Failure(CategoryAllocationErrors.Cardinality);
             if (correct && current is null) return Failure(CategoryAllocationErrors.NotAssigned);
             if (correct && current!.CategoryId == allocation.CategoryId) return Failure(CategoryAllocationErrors.Unchanged);
+
+            // Drift-safe preconditions (DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT). Omitted expectations preserve legacy LEDGER callers.
+            if (!correct && expectedActiveAllocationId is not null)
+            {
+                return Failure(CategoryAllocationErrors.StalePrecondition);
+            }
+
+            if (correct && expectedActiveAllocationId is not null
+                && !string.Equals(expectedActiveAllocationId, current!.AllocationEventId, StringComparison.Ordinal))
+            {
+                return Failure(CategoryAllocationErrors.StalePrecondition);
+            }
+
+            if (expectedAllocationRevision is not null)
+            {
+                var actualAllocationRevision = current?.AllocationEventId ?? "none";
+                if (!string.Equals(expectedAllocationRevision, actualAllocationRevision, StringComparison.Ordinal))
+                {
+                    return Failure(CategoryAllocationErrors.StalePrecondition);
+                }
+            }
+
+            if (expectedTransactionRevision is not null)
+            {
+                var latestLifecycle = transaction.History?.Lifecycle.LastOrDefault()?.LifecycleEventId;
+                var actualTransactionRevision = latestLifecycle ?? ("genesis:" + transaction.TransactionId);
+                if (!string.Equals(expectedTransactionRevision, actualTransactionRevision, StringComparison.Ordinal))
+                {
+                    return Failure(CategoryAllocationErrors.StalePrecondition);
+                }
+            }
+
+            if (expectedRelationshipRevision is not null && relationshipStore is not null)
+            {
+                var actualRelationshipRevision = await relationshipStore.ActiveRevisionAsync(allocation.TransactionId, token);
+                if (!string.Equals(expectedRelationshipRevision, actualRelationshipRevision, StringComparison.Ordinal))
+                {
+                    return Failure(CategoryAllocationErrors.StalePrecondition);
+                }
+            }
 
             var eventId = LedgerId.New().ToString();
             await allocationStore.AppendAsync(

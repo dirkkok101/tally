@@ -11,6 +11,27 @@ namespace Tally.Infrastructure.Storage.Relationships;
 
 public sealed class RelationshipStore(LedgerDb database, LedgerConnectionFactory connectionFactory)
 {
+    /// <summary>
+    /// Opaque relationship revision for classification mutation preconditions.
+    /// Returns "none" when the transaction has no active financial relationship role.
+    /// </summary>
+    public async Task<string> ActiveRevisionAsync(string transactionId, CancellationToken cancellationToken)
+    {
+        if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Ledger storage requires Linux host protections.");
+        await using var connection = await connectionFactory.OpenAsync(database, CompleteLedgerSchema.CurrentVersion, cancellationToken);
+        await using var command = Command(connection, null, """
+            SELECT relationship_id || ':' || relationship_type || ':' ||
+                   CASE WHEN source_transaction_id = $id THEN source_role ELSE target_role END
+            FROM financial_relationship_current
+            WHERE state = 'active'
+              AND (source_transaction_id = $id OR target_transaction_id = $id)
+            ORDER BY relationship_id
+            LIMIT 1;
+            """, ("$id", transactionId));
+        var value = await command.ExecuteScalarAsync(cancellationToken);
+        return value is string text && text.Length > 0 ? text : "none";
+    }
+
     public async Task<bool> HasActiveRoleAsync(
         SqliteConnection connection,
         SqliteTransaction transaction,

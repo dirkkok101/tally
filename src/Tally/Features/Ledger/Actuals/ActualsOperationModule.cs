@@ -63,6 +63,12 @@ public sealed class ActualsOperationModule(ActualsQueryHandler handler)
         new(ActualsErrors.HierarchyMismatch, "compatibility", 7),
         new(ActualsErrors.Invariant, "integrity", 8)
     ];
+
+    /// <summary>
+    /// Released classification projection contract version advertised on the actuals descriptor
+    /// (DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT / classification_v1).
+    /// </summary>
+    public const string ClassificationProjectionVersion = ClassificationProjectionVersions.ClassificationV1;
 }
 
 internal sealed class ActualsOperationHandler(ActualsQueryHandler handler) : IOperationHandler

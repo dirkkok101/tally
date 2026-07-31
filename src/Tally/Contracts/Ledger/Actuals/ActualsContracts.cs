@@ -62,10 +62,78 @@ public sealed record ActualsFilterInput(
     IReadOnlyList<TransactionLifecycleStatus>? LifecycleStates = null,
     ActualsGrouping GroupBy = ActualsGrouping.None);
 
+/// <summary>
+/// Purpose-scoped classification projection on ledger.actuals.query
+/// (DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION / DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT).
+/// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter<ClassificationProjectionPurpose>))]
+public enum ClassificationProjectionPurpose
+{
+    [JsonStringEnumMemberName("evaluation")]
+    Evaluation,
+    [JsonStringEnumMemberName("apply_preflight")]
+    ApplyPreflight
+}
+
+[JsonConverter(typeof(JsonStringEnumConverter<CategoryMutationState>))]
+public enum CategoryMutationState
+{
+    [JsonStringEnumMemberName("assignable")]
+    Assignable,
+    [JsonStringEnumMemberName("correctable")]
+    Correctable,
+    [JsonStringEnumMemberName("ineligible")]
+    Ineligible
+}
+
+[JsonConverter(typeof(JsonStringEnumConverter<ClassificationAmountDirection>))]
+public enum ClassificationAmountDirection
+{
+    [JsonStringEnumMemberName("expense")]
+    Expense,
+    [JsonStringEnumMemberName("income")]
+    Income,
+    [JsonStringEnumMemberName("zero")]
+    Zero
+}
+
+/// <summary>Stable classification projection wire version consumed by CLASSIFY.</summary>
+public static class ClassificationProjectionVersions
+{
+    public const string ClassificationV1 = "classification_v1";
+    public const int MaxApplyPreflightIds = 200;
+}
+
+public sealed record ClassificationCategoryIdentity(
+    [property: JsonRequired] string CategoryId,
+    [property: JsonRequired] string DisplayName,
+    [property: JsonRequired] string LifecycleState);
+
+public sealed record ClassificationProjectionItem(
+    [property: JsonRequired] int Ordinal,
+    [property: JsonRequired] string TransactionId,
+    [property: JsonRequired] string AccountId,
+    [property: JsonRequired] string EffectiveDate,
+    [property: JsonRequired] string SignedAmount,
+    [property: JsonRequired] string SourceDescription,
+    [property: JsonRequired] ClassificationAmountDirection AmountDirection,
+    [property: JsonRequired] CategoryMutationState CategoryMutationState,
+    string? CurrentCategoryId,
+    string? CurrentAllocationId,
+    [property: JsonRequired] string TransactionRevision,
+    [property: JsonRequired] string RelationshipRevision,
+    [property: JsonRequired] string AllocationRevision);
+
 public sealed record QueryActualsInput(
     ActualsFilterInput? Filter = null,
     int? PageSize = null,
-    string? Cursor = null);
+    string? Cursor = null,
+    /// <summary>When set, enables purpose-scoped classification_v1 projection semantics.</summary>
+    ClassificationProjectionPurpose? Purpose = null,
+    /// <summary>Must be classification_v1 when Purpose is set.</summary>
+    string? ItemProjection = null,
+    /// <summary>Required and bounded for apply_preflight; omitted for evaluation.</summary>
+    IReadOnlyList<string>? TransactionIds = null);
 
 public sealed record ActualsTotalsResult(
     string NetAccountMovement,
@@ -108,7 +176,16 @@ public sealed record ActualsQueryResult(
     string? Cursor,
     // BUDGET composition evidence (DM-BUDGET-LEDGER-COMPOSITION-CONTRACT): contract version + store generation for page/atomicity checks.
     string LedgerContractVersion = ActualsContractVersions.Current,
-    string? StoreGenerationFingerprint = null);
+    string? StoreGenerationFingerprint = null,
+    /// <summary>classification_v1 when purpose-scoped; null for ordinary actuals queries.</summary>
+    string? ProjectionVersion = null,
+    /// <summary>Fingerprint over active category identities for drift detection.</summary>
+    string? CategoryIdentityLifecycleFingerprint = null,
+    IReadOnlyList<ClassificationCategoryIdentity>? ActiveCategories = null,
+    /// <summary>Purpose-scoped classification items (evaluation or apply_preflight).</summary>
+    IReadOnlyList<ClassificationProjectionItem>? ClassificationItems = null,
+    /// <summary>apply_preflight only: selected IDs absent from the store.</summary>
+    IReadOnlyList<string>? MissingTransactionIds = null);
 
 /// <summary>Stable actuals wire-contract version exposed to BUDGET composition (FR-BUDGET-LEDGER-COMPOSITION).</summary>
 public static class ActualsContractVersions
@@ -148,5 +225,9 @@ public static class ActualsErrors
 [JsonSerializable(typeof(ActualsPageItem[]))]
 [JsonSerializable(typeof(ActualsGroupResult[]))]
 [JsonSerializable(typeof(ActualsCursorPayload))]
+[JsonSerializable(typeof(ClassificationProjectionItem))]
+[JsonSerializable(typeof(ClassificationProjectionItem[]))]
+[JsonSerializable(typeof(ClassificationCategoryIdentity))]
+[JsonSerializable(typeof(ClassificationCategoryIdentity[]))]
 [JsonSerializable(typeof(string[]))]
 public partial class ActualsJsonContext : JsonSerializerContext;

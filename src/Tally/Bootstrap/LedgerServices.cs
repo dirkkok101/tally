@@ -103,8 +103,8 @@ public sealed record LedgerServices(
             transactionCorrection);
         var categoryAllocationStore = new CategoryAllocationStore(database, factory);
         var categoryAllocations = new CategoryAllocationOperationModule(
-            new AssignCategoryHandler(executor, transactionStore, categoryStore, categoryAllocationStore),
-            new CorrectCategoryHandler(executor, transactionStore, categoryStore, categoryAllocationStore));
+            new AssignCategoryHandler(executor, transactionStore, categoryStore, categoryAllocationStore, relationshipStore),
+            new CorrectCategoryHandler(executor, transactionStore, categoryStore, categoryAllocationStore, relationshipStore));
         var paymentAttributionStore = new PaymentAttributionStore();
         var paymentAttributions = new PaymentAttributionOperationModule(
             new AssignPaymentAttributionHandler(executor, transactionStore, paymentIdentityStore, paymentAttributionStore),
@@ -120,7 +120,12 @@ public sealed record LedgerServices(
         var refunds = new RefundOperationModule(new ConfirmRefundHandler(executor, accountStore, transactionStore, relationshipStore));
         var lifecycle = new RelationshipLifecycleOperationModule(new RelationshipLifecycleHandler(executor, accountStore, transactionStore, relationshipStore), new GetRelationshipHandler(relationshipStore));
 
-        var actuals = new ActualsOperationModule(new ActualsQueryHandler(new QuerySnapshotStore(database, factory)));
+        var actuals = new ActualsOperationModule(new ActualsQueryHandler(
+            new QuerySnapshotStore(database, factory),
+            categoryStore,
+            transactionStore,
+            categoryAllocationStore,
+            relationshipStore));
         var projectionStore = new ReconciliationProjectionStore(database, factory, evidenceStore, transactionStore);
         var writeStore = new ReconciliationWriteStore(evidenceStore, transactionStore);
         var decisionStore = new ReconciliationDecisionStore(database, factory, evidenceStore, transactionStore);

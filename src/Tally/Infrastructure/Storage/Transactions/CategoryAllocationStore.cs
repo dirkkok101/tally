@@ -16,6 +16,16 @@ public sealed record CategoryAllocationCurrent(
 
 public sealed class CategoryAllocationStore(LedgerDb database, LedgerConnectionFactory connectionFactory)
 {
+    /// <summary>Load current allocation without an external connection (classification preflight).</summary>
+    public async Task<CategoryAllocationCurrent?> FindCurrentAsync(
+        string transactionId,
+        CancellationToken cancellationToken)
+    {
+        if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Ledger storage requires Linux host protections.");
+        await using var connection = await connectionFactory.OpenAsync(database, CompleteLedgerSchema.CurrentVersion, cancellationToken);
+        return await FindCurrentAsync(connection, null, transactionId, cancellationToken);
+    }
+
     public async Task<CategoryAllocationCurrent?> FindCurrentAsync(
         SqliteConnection connection,
         SqliteTransaction? transaction,

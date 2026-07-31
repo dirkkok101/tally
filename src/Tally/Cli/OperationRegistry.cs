@@ -312,6 +312,7 @@ public sealed class OperationRegistry
         new(CategoryAllocationErrors.TransactionInactive, "lifecycle", 6),
         new(CategoryErrors.Archived, "lifecycle", 6),
         new(CategoryAllocationErrors.Cardinality, "conflict", 5),
+        new(CategoryAllocationErrors.StalePrecondition, "conflict", 5),
         .. (operationId.EndsWith(".correct", StringComparison.Ordinal)
             ? new ErrorSchema[] { new(CategoryAllocationErrors.NotAssigned, "lifecycle", 6), new(CategoryAllocationErrors.Unchanged, "conflict", 5) }
             : [])
