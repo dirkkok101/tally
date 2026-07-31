@@ -19,21 +19,27 @@ public static class CanonicalClassificationHasher
     }
 
     /// <summary>
-    /// SHA-256 hex over a canonical pipe-joined sequence of parts.
-    /// Null parts are encoded as the four characters <c>null</c> so absence is explicit.
+    /// SHA-256 hex over a length-framed sequence of parts.
+    /// Null and non-null values are framed separately, so delimiters inside values cannot alias
+    /// another logical sequence and the string <c>null</c> remains distinct from absence.
     /// </summary>
     public static string HashParts(params string?[] parts)
     {
         ArgumentNullException.ThrowIfNull(parts);
-        var sb = new StringBuilder(parts.Length * 32);
-        for (var i = 0; i < parts.Length; i++)
+        var sb = new StringBuilder(parts.Length * 40);
+        foreach (var part in parts)
         {
-            if (i > 0)
+            if (part is null)
             {
-                sb.Append('|');
+                sb.Append("N;");
+                continue;
             }
 
-            sb.Append(parts[i] ?? "null");
+            sb.Append('S')
+                .Append(part.Length.ToString(CultureInfo.InvariantCulture))
+                .Append(':')
+                .Append(part)
+                .Append(';');
         }
 
         return HashUtf8(sb.ToString());
@@ -48,23 +54,20 @@ public static class CanonicalClassificationHasher
         HashUtf8(value.ToString(CultureInfo.InvariantCulture));
 
     /// <summary>
-    /// Ordered multi-line payload hash: each line is one logical record, joined by LF only.
-    /// Empty sequence hashes the empty string.
+    /// Ordered payload hash with one length-framed logical record per input value.
+    /// Empty sequence hashes the empty string; embedded newlines cannot alias record boundaries.
     /// </summary>
     public static string HashOrderedLines(IEnumerable<string> lines)
     {
         ArgumentNullException.ThrowIfNull(lines);
         var sb = new StringBuilder();
-        var first = true;
         foreach (var line in lines)
         {
-            if (!first)
-            {
-                sb.Append('\n');
-            }
-
-            sb.Append(line);
-            first = false;
+            ArgumentNullException.ThrowIfNull(line);
+            sb.Append(line.Length.ToString(CultureInfo.InvariantCulture))
+                .Append(':')
+                .Append(line)
+                .Append(';');
         }
 
         return HashUtf8(sb.ToString());

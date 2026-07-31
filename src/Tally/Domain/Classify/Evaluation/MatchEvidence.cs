@@ -22,7 +22,8 @@ public sealed class MatchEvidence : IEquatable<MatchEvidence>
         ArgumentException.ThrowIfNullOrWhiteSpace(fieldKey);
         ArgumentException.ThrowIfNullOrWhiteSpace(predicateKind);
         ArgumentException.ThrowIfNullOrWhiteSpace(normalizedValueHash);
-        if (normalizedValueHash.Length != 64)
+        if (normalizedValueHash.Length != 64
+            || normalizedValueHash.Any(ch => !IsLowerHex(ch)))
         {
             throw new ArgumentException(
                 "normalized_value_hash must be a 64-character hex SHA-256 digest.",
@@ -72,6 +73,9 @@ public sealed class MatchEvidence : IEquatable<MatchEvidence>
 
     public override int GetHashCode() =>
         HashCode.Combine(RuleVersionId, ConditionId, FieldKey, PredicateKind, NormalizedValueHash);
+
+    private static bool IsLowerHex(char value) =>
+        value is >= '0' and <= '9' or >= 'a' and <= 'f';
 
     private static void AppendString(StringBuilder sb, string name, string value)
     {

@@ -288,10 +288,28 @@ public sealed class ClassificationDeterminismPropertyTests
     }
 
     [Fact]
+    public void Canonical_hasher_frames_values_without_delimiter_aliases()
+    {
+        Assert.NotEqual(
+            CanonicalClassificationHasher.HashParts("a|b", "c"),
+            CanonicalClassificationHasher.HashParts("a", "b|c"));
+        Assert.NotEqual(
+            CanonicalClassificationHasher.HashParts((string?)null),
+            CanonicalClassificationHasher.HashParts("null"));
+        Assert.NotEqual(
+            CanonicalClassificationHasher.HashOrderedLines(["a\nb", "c"]),
+            CanonicalClassificationHasher.HashOrderedLines(["a", "b\nc"]));
+    }
+
+    [Fact]
     public void Match_evidence_rejects_non_hex64_value_hash()
     {
         Assert.Throws<ArgumentException>(() =>
             new MatchEvidence("rv", "c", "account.id", "equals", "too-short"));
+        Assert.Throws<ArgumentException>(() =>
+            new MatchEvidence("rv", "c", "account.id", "equals", new string('z', 64)));
+        Assert.Throws<ArgumentException>(() =>
+            new MatchEvidence("rv", "c", "account.id", "equals", new string('A', 64)));
     }
 
     [Fact]
