@@ -67,7 +67,7 @@ public sealed record ClassificationRuleVersionDetail(
     [property: JsonRequired] string Reason,
     [property: JsonRequired] bool BroadApplyAllowed);
 
-/// <summary>Normalization version descriptor published for discovery.</summary>
+/// <summary>Normalization version descriptor published for discovery (DM-CLASSIFY-RULE-VOCABULARY).</summary>
 public sealed record ClassificationNormalizationDescriptor(
     [property: JsonRequired] string Version,
     [property: JsonRequired] string UnicodeForm,
@@ -78,8 +78,49 @@ public sealed record ClassificationNormalizationDescriptor(
     [property: JsonRequired] bool PreservesTokenOrder,
     [property: JsonRequired] int MaxInputLength);
 
+/// <summary>Published field descriptor for rule-contract discovery.</summary>
+public sealed record ClassificationFieldDescriptor(
+    [property: JsonRequired] string FieldKey,
+    [property: JsonRequired] string ValueType,
+    [property: JsonRequired] IReadOnlyList<string> AllowedPredicates,
+    [property: JsonRequired] int MaxValueLength);
+
+/// <summary>Published predicate descriptor for rule-contract discovery.</summary>
+public sealed record ClassificationPredicateDescriptor(
+    [property: JsonRequired] string PredicateKind,
+    [property: JsonRequired] string OperandType,
+    [property: JsonRequired] string Cardinality);
+
+/// <summary>
+/// Finite published vocabulary catalogue (fields + predicates + normalization) for CLASSIFY v1.
+/// Source of truth for allowed grammar is the domain registry; this is the wire mirror.
+/// </summary>
+public sealed record ClassificationRuleVocabularyCatalogue(
+    [property: JsonRequired] string CatalogueFingerprint,
+    [property: JsonRequired] ClassificationNormalizationDescriptor Normalization,
+    [property: JsonRequired] IReadOnlyList<ClassificationFieldDescriptor> Fields,
+    [property: JsonRequired] IReadOnlyList<ClassificationPredicateDescriptor> Predicates);
+
 /// <summary>v1 normalization identity (design classification_v1).</summary>
 public static class ClassificationNormalizationVersions
 {
     public const string V1 = "normalization_v1";
+}
+
+/// <summary>Wire field-key strings matching the closed registry.</summary>
+public static class ClassificationRuleFieldKeys
+{
+    public const string DescriptionNormalized = "description.normalized";
+    public const string AccountId = "account.id";
+    public const string AmountDirection = "amount.direction";
+    public const string AmountAbsoluteMinor = "amount.absolute_minor";
+}
+
+/// <summary>Wire predicate-kind strings matching the closed registry.</summary>
+public static class ClassificationRulePredicateKinds
+{
+    public const string EqualsKind = "equals";
+    public const string StartsWith = "starts_with";
+    public const string ContainsTokenSequence = "contains_token_sequence";
+    public const string BetweenInclusive = "between_inclusive";
 }
