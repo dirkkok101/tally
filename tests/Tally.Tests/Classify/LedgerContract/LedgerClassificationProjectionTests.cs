@@ -52,6 +52,45 @@ public sealed class LedgerClassificationProjectionTests : IAsyncLifetime
     }
 
     [Fact]
+    public void TC_CLASSIFY_ELIGIBLE_PROJECTION_classification_v1_is_discoverable_via_public_schema()
+    {
+        // Serialized system.schema surface — not CLR-type-only / unadvertised constants.
+        var schema = OperationRegistry.Create().Find("ledger.actuals.query")!.ToSchema();
+        Assert.Contains(ClassificationProjectionVersions.ClassificationV1, schema.Example, StringComparison.Ordinal);
+        Assert.Contains("purpose", schema.RequestSchema, StringComparison.Ordinal);
+        Assert.Contains("itemProjection", schema.RequestSchema, StringComparison.Ordinal);
+        Assert.Contains("evaluation", schema.RequestSchema, StringComparison.Ordinal);
+        Assert.Contains("apply_preflight", schema.RequestSchema, StringComparison.Ordinal);
+        Assert.Contains("classificationItems", schema.ResultSchema, StringComparison.Ordinal);
+        Assert.Contains("activeCategories", schema.ResultSchema, StringComparison.Ordinal);
+        Assert.Contains("categoryIdentityLifecycleFingerprint", schema.ResultSchema, StringComparison.Ordinal);
+        Assert.Contains("projectionVersion", schema.ResultSchema, StringComparison.Ordinal);
+        Assert.Contains(ActualsErrors.ContractMismatch, schema.Errors.Select(error => error.Code));
+    }
+
+    [Fact]
+    public void TC_CLASSIFY_ELIGIBLE_PROJECTION_mutation_preconditions_are_discoverable_via_public_schema()
+    {
+        var registry = OperationRegistry.Create();
+        foreach (var operationId in new[] { "ledger.transaction.category.assign", "ledger.transaction.category.correct" })
+        {
+            var schema = registry.Find(operationId)!.ToSchema();
+            Assert.Contains(CategoryAllocationMutationVersions.ClassificationV1, schema.Example, StringComparison.Ordinal);
+            Assert.Contains("mutationContractVersion", schema.RequestSchema, StringComparison.Ordinal);
+            Assert.Contains("expectedTransactionRevision", schema.RequestSchema, StringComparison.Ordinal);
+            Assert.Contains("expectedRelationshipRevision", schema.RequestSchema, StringComparison.Ordinal);
+            Assert.Contains("expectedAllocationRevision", schema.RequestSchema, StringComparison.Ordinal);
+            Assert.Contains("expectedActiveAllocationId", schema.RequestSchema, StringComparison.Ordinal);
+            Assert.Contains(
+                CategoryMutationPreconditionCodes.StalePrecondition,
+                schema.Errors.Select(error => error.Code));
+            Assert.Contains(
+                CategoryMutationPreconditionCodes.ContractMismatch,
+                schema.Errors.Select(error => error.Code));
+        }
+    }
+
+    [Fact]
     public async Task TC_CLASSIFY_ELIGIBLE_PROJECTION_incompatible_item_projection_fails_before_read()
     {
         var result = await Query(new QueryActualsInput(
@@ -158,11 +197,9 @@ public sealed class LedgerClassificationProjectionTests : IAsyncLifetime
     public async Task TC_CLASSIFY_ELIGIBLE_PROJECTION_pagination_preserves_snapshot_order_and_dense_ordinals()
     {
         var account = await CreateAccount();
-        var ids = new List<string>();
         for (var i = 0; i < 5; i++)
         {
-            var tx = await Record(account.AccountId, (char)('A' + i));
-            ids.Add(tx.TransactionId);
+            await Record(account.AccountId, (char)('A' + i));
         }
 
         var first = Success(await Query(EvaluationRequest(pageSize: 2)));
@@ -178,6 +215,10 @@ public sealed class LedgerClassificationProjectionTests : IAsyncLifetime
         Assert.Equal(2, second.ClassificationItems!.Count);
         Assert.Equal(first.SnapshotId, second.SnapshotId);
         Assert.Equal(first.TotalCount, second.TotalCount);
+        Assert.Equal(first.CategoryIdentityLifecycleFingerprint, second.CategoryIdentityLifecycleFingerprint);
+        Assert.Equal(
+            first.ActiveCategories!.Select(c => c.CategoryId),
+            second.ActiveCategories!.Select(c => c.CategoryId));
 
         var third = Success(await Query(new QueryActualsInput(
             Purpose: ClassificationProjectionPurpose.Evaluation,
@@ -186,17 +227,18 @@ public sealed class LedgerClassificationProjectionTests : IAsyncLifetime
         Assert.Single(third.ClassificationItems!);
         Assert.Null(third.Cursor);
 
-        var allOrdinals = first.ClassificationItems!
+        // Direct order/stability: concatenated page order must be dense 0..n-1 without re-sorting.
+        var concatenated = first.ClassificationItems!
             .Concat(second.ClassificationItems!)
             .Concat(third.ClassificationItems!)
-            .Select(item => item.Ordinal)
-            .Order()
             .ToArray();
-        Assert.Equal(new[] { 0, 1, 2, 3, 4 }, allOrdinals);
-        Assert.Equal(
-            5,
-            first.ClassificationItems!.Concat(second.ClassificationItems!).Concat(third.ClassificationItems!)
-                .Select(item => item.TransactionId).Distinct(StringComparer.Ordinal).Count());
+        Assert.Equal(new[] { 0, 1, 2, 3, 4 }, concatenated.Select(item => item.Ordinal).ToArray());
+        Assert.Equal(5, concatenated.Select(item => item.TransactionId).Distinct(StringComparer.Ordinal).Count());
+
+        // Re-reading the first page of the same snapshot identity is stable (frozen membership).
+        var firstAgain = Success(await Query(EvaluationRequest(pageSize: 2)));
+        // New evaluation creates a new snapshot; within one SnapshotId, later pages already matched above.
+        Assert.Equal(first.ClassificationItems!.Select(i => i.Ordinal).ToArray(), firstAgain.ClassificationItems!.Select(i => i.Ordinal).ToArray());
     }
 
     [Fact]

@@ -124,6 +124,18 @@ public sealed record ClassificationProjectionItem(
     [property: JsonRequired] string RelationshipRevision,
     [property: JsonRequired] string AllocationRevision);
 
+/// <summary>
+/// Durable freeze of a purpose-scoped classification projection (catalogue + items + missing IDs)
+/// stored under one SnapshotId so later pages cannot drift to live store state.
+/// </summary>
+public sealed record ClassificationFrozenPayload(
+    [property: JsonRequired] string ProjectionVersion,
+    [property: JsonRequired] string CatalogueFingerprint,
+    [property: JsonRequired] IReadOnlyList<ClassificationCategoryIdentity> ActiveCategories,
+    [property: JsonRequired] IReadOnlyList<ClassificationProjectionItem> Items,
+    IReadOnlyList<string>? MissingTransactionIds,
+    [property: JsonRequired] ActualsTotalsResult Totals);
+
 public sealed record QueryActualsInput(
     ActualsFilterInput? Filter = null,
     int? PageSize = null,
@@ -229,5 +241,7 @@ public static class ActualsErrors
 [JsonSerializable(typeof(ClassificationProjectionItem[]))]
 [JsonSerializable(typeof(ClassificationCategoryIdentity))]
 [JsonSerializable(typeof(ClassificationCategoryIdentity[]))]
+[JsonSerializable(typeof(ClassificationFrozenPayload))]
+[JsonSerializable(typeof(ClassificationFrozenPayload[]))]
 [JsonSerializable(typeof(string[]))]
 public partial class ActualsJsonContext : JsonSerializerContext;

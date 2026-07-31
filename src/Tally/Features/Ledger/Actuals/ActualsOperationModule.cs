@@ -21,7 +21,7 @@ public sealed class ActualsOperationModule(ActualsQueryHandler handler)
             ActualsJsonContext.Default.ActualsQueryResult,
             "ActualsOperationModule.Query",
             (_, _) => new ActualsOperationHandler(handler),
-            "tally ledger actuals query --input -",
+            "tally ledger actuals query --input - (purpose=evaluation|apply_preflight, itemProjection=classification_v1)",
             Errors)
     ];
 
@@ -66,7 +66,8 @@ public sealed class ActualsOperationModule(ActualsQueryHandler handler)
 
     /// <summary>
     /// Released classification projection contract version advertised on the actuals descriptor
-    /// (DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT / classification_v1).
+    /// (DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT / classification_v1). Discoverable via system.schema
+    /// Example and request/result JSON Schema for ledger.actuals.query.
     /// </summary>
     public const string ClassificationProjectionVersion = ClassificationProjectionVersions.ClassificationV1;
 }

@@ -120,7 +120,22 @@ public sealed class CategoryStore(LedgerDb database, LedgerConnectionFactory con
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Ledger storage requires Linux host protections.");
         await using var connection = await connectionFactory.OpenAsync(database, CompleteLedgerSchema.CurrentVersion, cancellationToken);
+        return await ListAsync(connection, transaction: null, status, parentCategoryId, scope, cancellationToken);
+    }
+
+    /// <summary>
+    /// Connection-scoped catalogue list for coherent classification freeze (same transaction as projection).
+    /// </summary>
+    public async Task<IReadOnlyList<CategorySummary>> ListAsync(
+        SqliteConnection connection,
+        SqliteTransaction? transaction,
+        CategoryStatus? status,
+        string? parentCategoryId,
+        CategoryListScope scope,
+        CancellationToken cancellationToken)
+    {
         await using var command = connection.CreateCommand();
+        command.Transaction = transaction;
         command.CommandText = """
             SELECT category_id, name, status, parent_category_id, depth, ancestry_ids
             FROM current_category_projection

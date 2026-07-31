@@ -121,6 +121,8 @@ public sealed class QuerySnapshotStore(LedgerDb database, LedgerConnectionFactor
         {
             return SnapshotReadResult.Failure(ActualsErrors.SnapshotExpired);
         }
+        // Ordinary actuals membership pages: storage ordinals are 0-based; public CLI validation
+        // (ActualsQueryHandler.TryDecode) rejects NextOrdinal < 1 so callers never resume at 0.
         if (cursor.NextOrdinal < 0 || cursor.NextOrdinal >= header.TotalCount || cursor.PageSize is < 1 or > 500)
         {
             return SnapshotReadResult.Failure(ActualsErrors.CursorInvalid);
@@ -145,6 +147,185 @@ public sealed class QuerySnapshotStore(LedgerDb database, LedgerConnectionFactor
             header.FilterHash,
             header.GenerationFingerprint,
             header.HierarchyFingerprint));
+    }
+
+    /// <summary>
+    /// Materialize a purpose-scoped classification projection in one coherent Ledger write transaction:
+    /// optional membership projection, caller-supplied freeze document, durable header + payload.
+    /// </summary>
+    internal async Task<ClassificationSnapshotCreateResult> CreateClassificationSnapshotAsync(
+        ActualsFilter? membershipFilter,
+        string filterHash,
+        int pageSize,
+        DateTimeOffset now,
+        Func<SqliteConnection, SqliteTransaction, IReadOnlyList<ActualsItem>?, CancellationToken, Task<ClassificationFrozenPayload>> materialize,
+        CancellationToken cancellationToken)
+    {
+        if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Ledger storage requires Linux host protections.");
+        ArgumentNullException.ThrowIfNull(materialize);
+        if (pageSize is < 1 or > 500) throw new ArgumentOutOfRangeException(nameof(pageSize));
+
+        await using var connection = await connectionFactory.OpenAsync(database, CompleteLedgerSchema.CurrentVersion, cancellationToken);
+        await using var transaction = connection.BeginTransaction(deferred: false);
+
+        var createdAt = Utc(now);
+        var expiresAt = Utc(now.Add(Lifetime));
+        await DeleteExpiredAsync(connection, transaction, createdAt, cancellationToken);
+
+        var hierarchyFingerprint = await HierarchyFingerprintAsync(connection, transaction, cancellationToken);
+        var generationFingerprint = GenerationFingerprint(database);
+        var snapshotId = LedgerId.New().ToString();
+
+        IReadOnlyList<ActualsItem>? orderedMembership = null;
+        var domainTotals = ActualsTotals.Zero;
+        if (membershipFilter is not null)
+        {
+            var membership = await ActualsProjectionStore.ProjectAsync(connection, transaction, membershipFilter, cancellationToken);
+            var calculation = ActualsCalculator.Calculate(membership, membershipFilter.GroupBy);
+            orderedMembership = calculation.Items.Select(item => item.Item).ToArray();
+            domainTotals = calculation.Totals;
+        }
+
+        var frozen = await materialize(connection, transaction, orderedMembership, cancellationToken);
+        ArgumentNullException.ThrowIfNull(frozen);
+
+        await InsertHeaderAsync(
+            connection,
+            transaction,
+            snapshotId,
+            filterHash,
+            generationFingerprint,
+            hierarchyFingerprint,
+            createdAt,
+            expiresAt,
+            domainTotals,
+            cancellationToken);
+
+        // Durable freeze: single-element JSON array satisfying query_snapshot_payload CHECK.
+        var payloadBytes = JsonSerializer.SerializeToUtf8Bytes(
+            new[] { frozen },
+            ActualsJsonContext.Default.ClassificationFrozenPayloadArray);
+        await using (var payload = connection.CreateCommand())
+        {
+            payload.Transaction = transaction;
+            payload.CommandText = """
+                INSERT INTO query_snapshot_payload(snapshot_id, total_count, items_json)
+                VALUES ($snapshotId, $totalCount, $itemsJson);
+                """;
+            payload.Parameters.AddWithValue("$snapshotId", snapshotId);
+            payload.Parameters.AddWithValue("$totalCount", 1);
+            payload.Parameters.Add("$itemsJson", SqliteType.Blob, payloadBytes.Length).Value = payloadBytes;
+            await payload.ExecuteNonQueryAsync(cancellationToken);
+        }
+
+        await transaction.CommitAsync(cancellationToken);
+        return new ClassificationSnapshotCreateResult(
+            snapshotId,
+            expiresAt,
+            filterHash,
+            generationFingerprint,
+            hierarchyFingerprint,
+            pageSize,
+            frozen);
+    }
+
+    /// <summary>
+    /// Read a frozen classification projection page. Cursor.NextOrdinal is a 0-based index into frozen items
+    /// (public classification cursors always carry NextOrdinal &gt;= 1 for later pages).
+    /// </summary>
+    internal async Task<ClassificationSnapshotReadResult> ReadClassificationSnapshotAsync(
+        ActualsCursorPayload cursor,
+        DateTimeOffset now,
+        CancellationToken cancellationToken)
+    {
+        if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Ledger storage requires Linux host protections.");
+        if (!string.Equals(cursor.GenerationFingerprint, GenerationFingerprint(database), StringComparison.Ordinal))
+        {
+            return ClassificationSnapshotReadResult.Failure(ActualsErrors.GenerationMismatch);
+        }
+
+        if (!TryUtc(cursor.ExpiresAt, out var cursorExpiry) || cursorExpiry <= now.ToUniversalTime())
+        {
+            return ClassificationSnapshotReadResult.Failure(ActualsErrors.SnapshotExpired);
+        }
+
+        await using var connection = await connectionFactory.OpenAsync(database, CompleteLedgerSchema.CurrentVersion, cancellationToken);
+        var header = await ReadHeaderAsync(connection, cursor.SnapshotId, cancellationToken);
+        if (header is null) return ClassificationSnapshotReadResult.Failure(ActualsErrors.SnapshotNotFound);
+        if (!string.Equals(cursor.ContractVersion, header.ContractVersion, StringComparison.Ordinal))
+        {
+            return ClassificationSnapshotReadResult.Failure(ActualsErrors.ContractMismatch);
+        }
+        if (!string.Equals(cursor.FilterHash, header.FilterHash, StringComparison.Ordinal))
+        {
+            return ClassificationSnapshotReadResult.Failure(ActualsErrors.CursorFilterMismatch);
+        }
+        if (!string.Equals(cursor.GenerationFingerprint, header.GenerationFingerprint, StringComparison.Ordinal))
+        {
+            return ClassificationSnapshotReadResult.Failure(ActualsErrors.GenerationMismatch);
+        }
+        if (!string.Equals(cursor.CategoryHierarchyFingerprint, header.HierarchyFingerprint, StringComparison.Ordinal))
+        {
+            return ClassificationSnapshotReadResult.Failure(ActualsErrors.HierarchyMismatch);
+        }
+        if (!string.Equals(cursor.ExpiresAt, header.ExpiresAt, StringComparison.Ordinal)
+            || !TryUtc(header.ExpiresAt, out var storedExpiry)
+            || storedExpiry <= now.ToUniversalTime())
+        {
+            return ClassificationSnapshotReadResult.Failure(ActualsErrors.SnapshotExpired);
+        }
+
+        var frozen = await ReadClassificationFrozenPayloadAsync(connection, cursor.SnapshotId, cancellationToken);
+        if (frozen is null)
+        {
+            return ClassificationSnapshotReadResult.Failure(ActualsErrors.SnapshotNotFound);
+        }
+
+        // Classification later-page cursors resume at NextOrdinal >= 1 into the frozen item list.
+        if (cursor.NextOrdinal < 1
+            || cursor.NextOrdinal >= frozen.Items.Count
+            || cursor.PageSize is < 1 or > 500)
+        {
+            return ClassificationSnapshotReadResult.Failure(ActualsErrors.CursorInvalid);
+        }
+
+        return ClassificationSnapshotReadResult.Success(new ClassificationSnapshotCreateResult(
+            cursor.SnapshotId,
+            header.ExpiresAt,
+            header.FilterHash,
+            header.GenerationFingerprint,
+            header.HierarchyFingerprint,
+            cursor.PageSize,
+            frozen));
+    }
+
+    private static async Task<ClassificationFrozenPayload?> ReadClassificationFrozenPayloadAsync(
+        SqliteConnection connection,
+        string snapshotId,
+        CancellationToken cancellationToken)
+    {
+        await using var command = connection.CreateCommand();
+        command.CommandText = """
+            SELECT items_json
+            FROM query_snapshot_payload
+            WHERE snapshot_id = $snapshotId;
+            """;
+        command.Parameters.AddWithValue("$snapshotId", snapshotId);
+        var scalar = await command.ExecuteScalarAsync(cancellationToken);
+        if (scalar is not byte[] bytes || bytes.Length == 0)
+        {
+            return null;
+        }
+
+        try
+        {
+            var array = JsonSerializer.Deserialize(bytes, ActualsJsonContext.Default.ClassificationFrozenPayloadArray);
+            return array is { Length: 1 } ? array[0] : null;
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
     }
 
     internal static string GenerationFingerprint(LedgerDb value) => Hash($"{value.GenerationId}|{CompleteLedgerSchema.CurrentVersion}");
@@ -1117,4 +1298,21 @@ internal sealed record SnapshotReadResult(SnapshotPage? Page, string? ErrorCode)
     public bool IsSuccess => ErrorCode is null;
     public static SnapshotReadResult Success(SnapshotPage page) => new(page, null);
     public static SnapshotReadResult Failure(string errorCode) => new(null, errorCode);
+}
+
+/// <summary>Result of creating a durable classification freeze under one SnapshotId.</summary>
+internal sealed record ClassificationSnapshotCreateResult(
+    string SnapshotId,
+    string ExpiresAt,
+    string FilterHash,
+    string GenerationFingerprint,
+    string HierarchyFingerprint,
+    int PageSize,
+    ClassificationFrozenPayload Frozen);
+
+internal sealed record ClassificationSnapshotReadResult(ClassificationSnapshotCreateResult? Page, string? ErrorCode)
+{
+    public bool IsSuccess => ErrorCode is null && Page is not null;
+    public static ClassificationSnapshotReadResult Success(ClassificationSnapshotCreateResult page) => new(page, null);
+    public static ClassificationSnapshotReadResult Failure(string errorCode) => new(null, errorCode);
 }

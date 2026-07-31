@@ -72,19 +72,9 @@ public sealed class ActualsQueryHandler(
 
         try
         {
-            IReadOnlyList<ClassificationProjectionItem> all;
-            string snapshotId;
-            string expiresAt;
-            string generationFingerprint;
-            string filterHash;
-            string hierarchyFingerprint;
-            ActualsTotalsResult totals;
-            int pageSize;
-            int start;
-
             if (input.Cursor is null)
             {
-                pageSize = input.PageSize ?? DefaultPageSize;
+                var pageSize = input.PageSize ?? DefaultPageSize;
                 if (pageSize is < 1 or > MaximumPageSize)
                 {
                     return Failure(ActualsErrors.InvalidFilter);
@@ -100,85 +90,35 @@ public sealed class ActualsQueryHandler(
                     return Failure(ActualsErrors.InvalidFilter);
                 }
 
-                filterHash = FilterHash(filter) + "|purpose=evaluation|proj=classification_v1";
-                var page = await store.CreateAsync(filter, filterHash, pageSize: MaximumPageSize, DateTimeOffset.UtcNow, cancellationToken);
-                all = await BuildEligibleClassificationItemsAsync(page, cancellationToken);
-                snapshotId = page.Result.SnapshotId;
-                expiresAt = page.Result.ExpiresAt;
-                generationFingerprint = page.GenerationFingerprint;
-                hierarchyFingerprint = page.HierarchyFingerprint;
-                totals = page.Result.Totals;
-                start = 0;
-            }
-            else
-            {
-                if (input.PageSize is not null || input.Filter is not null)
-                {
-                    return Failure(ActualsErrors.CursorFilterMismatch);
-                }
-
-                if (!TryDecode(input.Cursor, out var cursor, out var error))
-                {
-                    return Failure(error!);
-                }
-
-                // Cursor carries next ordinal into the frozen eligible list rebuilt from snapshot pages.
-                var rebuild = await RebuildEligibleFromSnapshotAsync(cursor!, cancellationToken);
-                if (rebuild is null)
-                {
-                    return Failure(ActualsErrors.SnapshotNotFound);
-                }
-
-                all = rebuild.Value.Items;
-                snapshotId = cursor!.SnapshotId;
-                expiresAt = cursor.ExpiresAt;
-                generationFingerprint = cursor.GenerationFingerprint;
-                hierarchyFingerprint = cursor.CategoryHierarchyFingerprint;
-                filterHash = cursor.FilterHash;
-                totals = rebuild.Value.Totals;
-                pageSize = cursor.PageSize;
-                start = cursor.NextOrdinal;
-            }
-
-            if (start < 0 || start > all.Count)
-            {
-                return Failure(ActualsErrors.CursorInvalid);
-            }
-
-            var slice = all.Skip(start).Take(pageSize).ToArray();
-            var catalogue = await LoadActiveCategoriesAsync(cancellationToken);
-            string? nextCursor = null;
-            if (start + slice.Length < all.Count)
-            {
-                var payload = new ActualsCursorPayload(
-                    CursorVersion,
-                    QuerySnapshotStore.ContractVersion,
-                    snapshotId,
-                    start + slice.Length,
-                    pageSize,
+                var filterHash = FilterHash(filter) + "|purpose=evaluation|proj=classification_v1";
+                var created = await store.CreateClassificationSnapshotAsync(
+                    filter,
                     filterHash,
-                    generationFingerprint,
-                    hierarchyFingerprint,
-                    expiresAt);
-                nextCursor = Encode(JsonSerializer.SerializeToUtf8Bytes(payload, ActualsJsonContext.Default.ActualsCursorPayload));
+                    pageSize,
+                    DateTimeOffset.UtcNow,
+                    MaterializeEvaluationFreezeAsync,
+                    cancellationToken);
+                return Success(ClassificationPage(created, startOrdinal: 0));
             }
 
-            var result = new ActualsQueryResult(
-                SnapshotId: snapshotId,
-                ExpiresAt: expiresAt,
-                TotalCount: all.Count,
-                Items: [],
-                Totals: totals,
-                Groups: [],
-                Cursor: nextCursor,
-                LedgerContractVersion: QuerySnapshotStore.ContractVersion,
-                StoreGenerationFingerprint: generationFingerprint,
-                ProjectionVersion: ClassificationProjectionVersions.ClassificationV1,
-                CategoryIdentityLifecycleFingerprint: CatalogueFingerprint(catalogue),
-                ActiveCategories: catalogue,
-                ClassificationItems: slice,
-                MissingTransactionIds: null);
-            return Success(result);
+            if (input.PageSize is not null || input.Filter is not null)
+            {
+                return Failure(ActualsErrors.CursorFilterMismatch);
+            }
+
+            // Public cursor validation: NextOrdinal >= 1 (never weakens ordinary actuals TryDecode).
+            if (!TryDecode(input.Cursor, out var cursor, out var error))
+            {
+                return Failure(error!);
+            }
+
+            var read = await store.ReadClassificationSnapshotAsync(cursor!, DateTimeOffset.UtcNow, cancellationToken);
+            if (!read.IsSuccess || read.Page is null)
+            {
+                return Failure(read.ErrorCode ?? ActualsErrors.SnapshotNotFound);
+            }
+
+            return Success(ClassificationPage(read.Page, startOrdinal: cursor!.NextOrdinal));
         }
         catch (SqliteException exception) when (exception.SqliteErrorCode is 5 or 6)
         {
@@ -204,68 +144,23 @@ public sealed class ActualsQueryHandler(
             return Failure(ActualsErrors.InvalidFilter);
         }
 
-        if (!TryFilter(new ActualsFilterInput(LifecycleStates: [TransactionLifecycleStatus.Active]), out var seedFilter))
-        {
-            return Failure(ActualsErrors.InvalidFilter);
-        }
-
         try
         {
-            var seed = await store.CreateAsync(
-                seedFilter,
-                FilterHash(seedFilter) + "|purpose=apply_preflight|proj=classification_v1",
-                pageSize: 1,
+            var orderedIds = ids.Order(StringComparer.Ordinal).ToArray();
+            var filterHash = "purpose=apply_preflight|proj=classification_v1|ids="
+                + Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(string.Join(',', orderedIds))));
+
+            var created = await store.CreateClassificationSnapshotAsync(
+                membershipFilter: null,
+                filterHash,
+                pageSize: Math.Max(orderedIds.Length, 1),
                 DateTimeOffset.UtcNow,
+                (connection, transaction, _, token) =>
+                    MaterializePreflightFreezeAsync(connection, transaction, orderedIds, token),
                 cancellationToken);
 
-            var catalogue = await LoadActiveCategoriesAsync(cancellationToken);
-            var items = new List<ClassificationProjectionItem>(ids.Count);
-            var missing = new List<string>();
-            var ordinal = 0;
-            foreach (var transactionId in ids.Order(StringComparer.Ordinal))
-            {
-                var detail = await transactionStore!.GetAsync(transactionId, includeHistory: true, cancellationToken);
-                if (detail is null)
-                {
-                    missing.Add(transactionId);
-                    continue;
-                }
-
-                var allocation = await allocationStore!.FindCurrentAsync(transactionId, cancellationToken);
-                var relationshipRevision = await relationshipStore!.ActiveRevisionAsync(transactionId, cancellationToken);
-                var mutationState = ResolveMutationState(detail, allocation, relationshipRevision);
-                items.Add(new ClassificationProjectionItem(
-                    Ordinal: ordinal++,
-                    TransactionId: detail.TransactionId,
-                    AccountId: detail.AccountId,
-                    EffectiveDate: detail.EffectiveDate,
-                    SignedAmount: detail.SignedAmount,
-                    SourceDescription: detail.OriginalDescription,
-                    AmountDirection: Direction(detail.SignedAmount),
-                    CategoryMutationState: mutationState,
-                    CurrentCategoryId: detail.Category.CategoryId,
-                    CurrentAllocationId: detail.Category.AllocationEventId,
-                    TransactionRevision: TransactionRevision(detail),
-                    RelationshipRevision: relationshipRevision,
-                    AllocationRevision: allocation?.AllocationEventId ?? "none"));
-            }
-
-            var result = new ActualsQueryResult(
-                SnapshotId: seed.Result.SnapshotId,
-                ExpiresAt: seed.Result.ExpiresAt,
-                TotalCount: items.Count,
-                Items: [],
-                Totals: seed.Result.Totals,
-                Groups: [],
-                Cursor: null,
-                LedgerContractVersion: QuerySnapshotStore.ContractVersion,
-                StoreGenerationFingerprint: seed.GenerationFingerprint,
-                ProjectionVersion: ClassificationProjectionVersions.ClassificationV1,
-                CategoryIdentityLifecycleFingerprint: CatalogueFingerprint(catalogue),
-                ActiveCategories: catalogue,
-                ClassificationItems: items,
-                MissingTransactionIds: missing.Count == 0 ? null : missing.Order(StringComparer.Ordinal).ToArray());
-            return Success(result);
+            // Preflight is a single coherent page (no cursor).
+            return Success(ClassificationPage(created, startOrdinal: 0, emitCursor: false));
         }
         catch (SqliteException exception) when (exception.SqliteErrorCode is 5 or 6)
         {
@@ -273,88 +168,100 @@ public sealed class ActualsQueryHandler(
         }
     }
 
-    private async Task<IReadOnlyList<ClassificationProjectionItem>> BuildEligibleClassificationItemsAsync(
-        SnapshotPage firstPage,
+    private async Task<ClassificationFrozenPayload> MaterializeEvaluationFreezeAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        IReadOnlyList<ActualsItem>? membership,
         CancellationToken cancellationToken)
     {
-        var membership = new List<ActualsPageItem>();
-        membership.AddRange(firstPage.Result.Items);
-        var next = firstPage.NextOrdinal;
-        while (next is int nextOrdinal)
-        {
-            var payload = new ActualsCursorPayload(
-                CursorVersion,
-                QuerySnapshotStore.ContractVersion,
-                firstPage.Result.SnapshotId,
-                nextOrdinal,
-                firstPage.PageSize,
-                firstPage.FilterHash,
-                firstPage.GenerationFingerprint,
-                firstPage.HierarchyFingerprint,
-                firstPage.Result.ExpiresAt);
-            var read = await store.ReadAsync(payload, DateTimeOffset.UtcNow, cancellationToken);
-            if (!read.IsSuccess || read.Page is null)
-            {
-                break;
-            }
-
-            membership.AddRange(read.Page.Result.Items);
-            next = read.Page.NextOrdinal;
-        }
-
-        var eligibleIds = membership
-            .Where(IsIndependentDecisionEligible)
-            .Select(item => item.TransactionId)
-            .ToArray();
-
-        var items = new List<ClassificationProjectionItem>(eligibleIds.Length);
+        var ordered = membership ?? Array.Empty<ActualsItem>();
+        var eligible = ordered.Where(IsIndependentDecisionEligible).ToArray();
+        var items = new List<ClassificationProjectionItem>(eligible.Length);
         var ordinal = 0;
-        foreach (var transactionId in eligibleIds)
+        foreach (var member in eligible)
         {
-            var built = await BuildItemAsync(transactionId, ordinal++, cancellationToken);
-            if (built is not null)
+            var built = await BuildItemAsync(connection, transaction, member.TransactionId, ordinal++, cancellationToken);
+            if (built is null)
             {
-                items.Add(built);
+                // Membership promised the row; absence mid-transaction is an invariant failure.
+                throw new InvalidOperationException(ActualsErrors.Invariant);
             }
+
+            items.Add(built);
         }
 
-        return items;
+        var catalogue = await LoadActiveCategoriesAsync(connection, transaction, cancellationToken);
+        var totals = TotalsFromMembership(ordered);
+        return new ClassificationFrozenPayload(
+            ProjectionVersion: ClassificationProjectionVersions.ClassificationV1,
+            CatalogueFingerprint: CatalogueFingerprint(catalogue),
+            ActiveCategories: catalogue,
+            Items: items,
+            MissingTransactionIds: null,
+            Totals: totals);
     }
 
-    private async Task<(IReadOnlyList<ClassificationProjectionItem> Items, ActualsTotalsResult Totals)?> RebuildEligibleFromSnapshotAsync(
-        ActualsCursorPayload cursor,
+    private async Task<ClassificationFrozenPayload> MaterializePreflightFreezeAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        IReadOnlyList<string> orderedIds,
         CancellationToken cancellationToken)
     {
-        // Re-read from ordinal 1 (first item) — snapshots use dense ordinals starting at 0 in storage
-        // but NextOrdinal on first incomplete page is pageSize. Read full membership from start.
-        var startPayload = cursor with { NextOrdinal = 0 };
-        // ReadAsync with NextOrdinal 0: check store behavior
-        var read = await store.ReadAsync(startPayload, DateTimeOffset.UtcNow, cancellationToken);
-        if (!read.IsSuccess || read.Page is null)
+        var items = new List<ClassificationProjectionItem>(orderedIds.Count);
+        var missing = new List<string>();
+        var ordinal = 0;
+        foreach (var transactionId in orderedIds)
         {
-            // Fallback: cursor invalid for rebuild
-            return null;
+            var detail = await transactionStore!.GetAsync(connection, transaction, transactionId, includeHistory: true, cancellationToken);
+            if (detail is null)
+            {
+                missing.Add(transactionId);
+                continue;
+            }
+
+            var allocation = await allocationStore!.FindCurrentAsync(connection, transaction, transactionId, cancellationToken);
+            var relationshipRevision = await relationshipStore!.ActiveRevisionAsync(connection, transaction, transactionId, cancellationToken);
+            items.Add(new ClassificationProjectionItem(
+                Ordinal: ordinal++,
+                TransactionId: detail.TransactionId,
+                AccountId: detail.AccountId,
+                EffectiveDate: detail.EffectiveDate,
+                SignedAmount: detail.SignedAmount,
+                SourceDescription: detail.OriginalDescription,
+                AmountDirection: Direction(detail.SignedAmount),
+                CategoryMutationState: ResolveMutationState(detail, allocation, relationshipRevision),
+                CurrentCategoryId: detail.Category.CategoryId,
+                CurrentAllocationId: detail.Category.AllocationEventId,
+                TransactionRevision: TransactionRevision(detail),
+                RelationshipRevision: relationshipRevision,
+                AllocationRevision: allocation?.AllocationEventId ?? "none"));
         }
 
-        var page = read.Page;
-        // If NextOrdinal 0 is rejected by store, create is not available. Use materialize from cursor.NextOrdinal pages only if first page fails.
-        var items = await BuildEligibleClassificationItemsAsync(page, cancellationToken);
-        return (items, page.Result.Totals);
+        var catalogue = await LoadActiveCategoriesAsync(connection, transaction, cancellationToken);
+        return new ClassificationFrozenPayload(
+            ProjectionVersion: ClassificationProjectionVersions.ClassificationV1,
+            CatalogueFingerprint: CatalogueFingerprint(catalogue),
+            ActiveCategories: catalogue,
+            Items: items,
+            MissingTransactionIds: missing.Count == 0 ? null : missing.ToArray(),
+            Totals: new ActualsTotalsResult("0.00", "0.00", "0.00"));
     }
 
     private async Task<ClassificationProjectionItem?> BuildItemAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
         string transactionId,
         int ordinal,
         CancellationToken cancellationToken)
     {
-        var detail = await transactionStore!.GetAsync(transactionId, includeHistory: true, cancellationToken);
+        var detail = await transactionStore!.GetAsync(connection, transaction, transactionId, includeHistory: true, cancellationToken);
         if (detail is null)
         {
             return null;
         }
 
-        var allocation = await allocationStore!.FindCurrentAsync(transactionId, cancellationToken);
-        var relationshipRevision = await relationshipStore!.ActiveRevisionAsync(transactionId, cancellationToken);
+        var allocation = await allocationStore!.FindCurrentAsync(connection, transaction, transactionId, cancellationToken);
+        var relationshipRevision = await relationshipStore!.ActiveRevisionAsync(connection, transaction, transactionId, cancellationToken);
         return new ClassificationProjectionItem(
             Ordinal: ordinal,
             TransactionId: detail.TransactionId,
@@ -371,12 +278,59 @@ public sealed class ActualsQueryHandler(
             AllocationRevision: allocation?.AllocationEventId ?? "none");
     }
 
-    private static bool IsIndependentDecisionEligible(ActualsPageItem item) =>
-        item.CategoryState == TransactionCategoryState.Uncategorized
+    private static ActualsQueryResult ClassificationPage(
+        ClassificationSnapshotCreateResult created,
+        int startOrdinal,
+        bool emitCursor = true)
+    {
+        var frozen = created.Frozen;
+        if (startOrdinal < 0 || startOrdinal > frozen.Items.Count)
+        {
+            // Caller validates cursor; defensive empty page is never returned as success from handlers.
+            throw new InvalidOperationException(ActualsErrors.CursorInvalid);
+        }
+
+        var slice = frozen.Items.Skip(startOrdinal).Take(created.PageSize).ToArray();
+        string? nextCursor = null;
+        if (emitCursor && startOrdinal + slice.Length < frozen.Items.Count)
+        {
+            var payload = new ActualsCursorPayload(
+                CursorVersion,
+                QuerySnapshotStore.ContractVersion,
+                created.SnapshotId,
+                startOrdinal + slice.Length,
+                created.PageSize,
+                created.FilterHash,
+                created.GenerationFingerprint,
+                created.HierarchyFingerprint,
+                created.ExpiresAt);
+            nextCursor = Encode(JsonSerializer.SerializeToUtf8Bytes(payload, ActualsJsonContext.Default.ActualsCursorPayload));
+        }
+
+        return new ActualsQueryResult(
+            SnapshotId: created.SnapshotId,
+            ExpiresAt: created.ExpiresAt,
+            TotalCount: frozen.Items.Count,
+            Items: [],
+            Totals: frozen.Totals,
+            Groups: [],
+            Cursor: nextCursor,
+            LedgerContractVersion: QuerySnapshotStore.ContractVersion,
+            StoreGenerationFingerprint: created.GenerationFingerprint,
+            ProjectionVersion: ClassificationProjectionVersions.ClassificationV1,
+            CategoryIdentityLifecycleFingerprint: frozen.CatalogueFingerprint,
+            ActiveCategories: frozen.ActiveCategories,
+            ClassificationItems: slice,
+            MissingTransactionIds: frozen.MissingTransactionIds);
+    }
+
+    private static bool IsIndependentDecisionEligible(ActualsItem item) =>
+        item.LifecycleStatus == TransactionLifecycleStatus.Active
+        && item.CategoryState == TransactionCategoryState.Uncategorized
         && item.RelationshipState is not (
-            ActualsRelationshipRole.TransferOutflow
-            or ActualsRelationshipRole.TransferInflow
-            or ActualsRelationshipRole.RefundCredit);
+            ActualsRelationshipState.TransferOutflow
+            or ActualsRelationshipState.TransferInflow
+            or ActualsRelationshipState.RefundCredit);
 
     private static CategoryMutationState ResolveMutationState(
         TransactionDetail detail,
@@ -388,20 +342,11 @@ public sealed class ActualsQueryHandler(
             return CategoryMutationState.Ineligible;
         }
 
-        // Active transfer principal or linked-refund credit: Ledger relationship is non-none with transfer/refund role.
-        if (relationshipRevision.Contains(":transfer_", StringComparison.Ordinal)
-            || relationshipRevision.Contains(":refund_credit", StringComparison.Ordinal)
-            || relationshipRevision.Contains(":linked_refund", StringComparison.Ordinal))
+        if (relationshipRevision.Contains("transfer_outflow", StringComparison.Ordinal)
+            || relationshipRevision.Contains("transfer_inflow", StringComparison.Ordinal)
+            || relationshipRevision.Contains("refund_credit", StringComparison.Ordinal))
         {
-            // transfer_outflow / transfer_inflow / refund roles encoded in revision string.
-            if (relationshipRevision.Contains("transfer_outflow", StringComparison.Ordinal)
-                || relationshipRevision.Contains("transfer_inflow", StringComparison.Ordinal)
-                || relationshipRevision.Contains("refund_credit", StringComparison.Ordinal)
-                || relationshipRevision.Contains("credit", StringComparison.Ordinal)
-                   && relationshipRevision.Contains("refund", StringComparison.Ordinal))
-            {
-                return CategoryMutationState.Ineligible;
-            }
+            return CategoryMutationState.Ineligible;
         }
 
         if (allocation is null && detail.Category.State == TransactionCategoryState.Uncategorized)
@@ -436,9 +381,17 @@ public sealed class ActualsQueryHandler(
     }
 
     private async Task<IReadOnlyList<ClassificationCategoryIdentity>> LoadActiveCategoriesAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
         CancellationToken cancellationToken)
     {
-        var listed = await categoryStore!.ListAsync(CategoryStatus.Active, null, CategoryListScope.All, cancellationToken);
+        var listed = await categoryStore!.ListAsync(
+            connection,
+            transaction,
+            CategoryStatus.Active,
+            null,
+            CategoryListScope.All,
+            cancellationToken);
         return listed
             .OrderBy(item => item.CategoryId, StringComparer.Ordinal)
             .Select(item => new ClassificationCategoryIdentity(
@@ -452,6 +405,15 @@ public sealed class ActualsQueryHandler(
     {
         var canonical = string.Join('|', catalogue.Select(item => item.CategoryId + ':' + item.LifecycleState + ':' + item.DisplayName));
         return Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(canonical)));
+    }
+
+    private static ActualsTotalsResult TotalsFromMembership(IReadOnlyList<ActualsItem> membership)
+    {
+        var calculation = ActualsCalculator.Calculate(membership, ActualsGroupKind.None);
+        return new ActualsTotalsResult(
+            calculation.Totals.NetAccountMovement.ToString(),
+            calculation.Totals.ExternalSpend.ToString(),
+            calculation.Totals.BudgetActual.ToString());
     }
 
     private async Task<CommandResult<JsonElement>> FirstPageAsync(QueryActualsInput input, CancellationToken cancellationToken)
@@ -517,6 +479,11 @@ public sealed class ActualsQueryHandler(
         return stamped with { Cursor = Encode(bytes) };
     }
 
+    /// <summary>
+    /// Public actuals/classification cursor validation. NextOrdinal must be &gt;= 1 so ordinary
+    /// actuals cursors are never weakened to resume at storage ordinal 0.
+    /// Classification later pages also use NextOrdinal &gt;= 1 into the frozen item list.
+    /// </summary>
     private static bool TryDecode(string value, out ActualsCursorPayload? cursor, out string? error)
     {
         cursor = null;
@@ -540,7 +507,7 @@ public sealed class ActualsQueryHandler(
             || cursor.CursorVersion != CursorVersion
             || string.IsNullOrWhiteSpace(cursor.ContractVersion)
             || !LedgerId.TryParse(cursor.SnapshotId, out _, out _)
-            || cursor.NextOrdinal < 0
+            || cursor.NextOrdinal < 1
             || cursor.PageSize is < 1 or > MaximumPageSize
             || string.IsNullOrWhiteSpace(cursor.FilterHash)
             || string.IsNullOrWhiteSpace(cursor.GenerationFingerprint)
