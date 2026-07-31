@@ -1,3 +1,4 @@
+using Microsoft.Win32.SafeHandles;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
@@ -33,99 +34,120 @@ public sealed class PrivateCorpusReader
             return PrivateCorpusReadResult.Failure(PrivateCorpusErrors.PathRequired);
         }
 
-        cancellationToken.ThrowIfCancellationRequested();
+        using var timeoutCancellation = new CancellationTokenSource(
+            TimeSpan.FromMilliseconds(PrivateCorpusLimits.MaxProcessingTimeMs));
+        using var operationCancellation = CancellationTokenSource.CreateLinkedTokenSource(
+            cancellationToken,
+            timeoutCancellation.Token);
+        var operationToken = operationCancellation.Token;
 
         try
         {
+            operationToken.ThrowIfCancellationRequested();
             var path = corpusPath.Trim();
-            if (!TryValidateFileBoundary(path, out var boundaryError))
+            if (!TryOpenValidatedFile(path, out var corpusStream, out var boundaryError))
             {
                 return PrivateCorpusReadResult.Failure(boundaryError!);
             }
 
-            // Exact-byte fingerprint first (full sequential read), then row stream from the same path.
-            CorpusFingerprint fingerprint;
-            await using (var hashStream = OpenReadOnly(path))
+            // Fingerprint and parse the same no-follow file descriptor. This prevents a path swap
+            // between boundary validation, hashing, and row streaming.
+            await using (corpusStream)
             {
-                fingerprint = await CorpusFingerprint.FromStreamAsync(
-                    hashStream,
+                var fingerprint = await CorpusFingerprint.FromStreamAsync(
+                    corpusStream,
                     PrivateCorpusLimits.MaxFileUtf8Bytes,
-                    cancellationToken);
-            }
+                    operationToken);
+                corpusStream.Seek(0, SeekOrigin.Begin);
 
-            var rows = new List<PrivateCorpusRow>(capacity: 64);
-            var ordinals = new HashSet<int>();
-            await using (var parseStream = OpenReadOnly(path))
-            using (var reader = new StreamReader(parseStream, Encoding.UTF8, detectEncodingFromByteOrderMarks: false, bufferSize: 16 * 1024, leaveOpen: false))
-            {
-                while (true)
+                var rows = new List<PrivateCorpusRow>(capacity: 64);
+                var ordinals = new HashSet<int>();
+                using (var reader = new StreamReader(
+                    corpusStream,
+                    new UTF8Encoding(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true),
+                    detectEncodingFromByteOrderMarks: false,
+                    bufferSize: 16 * 1024,
+                    leaveOpen: true))
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    var line = await reader.ReadLineAsync(cancellationToken);
-                    if (line is null)
+                    while (true)
                     {
-                        break;
-                    }
+                        operationToken.ThrowIfCancellationRequested();
+                        var line = await reader.ReadLineAsync(operationToken);
+                        if (line is null)
+                        {
+                            break;
+                        }
 
-                    if (line.Length == 0)
-                    {
-                        // Blank lines are not valid JSONL rows (trailing newline after last row does not yield an empty line).
-                        return PrivateCorpusReadResult.Failure(PrivateCorpusErrors.Malformed);
-                    }
+                        if (line.Length == 0)
+                        {
+                            // Blank lines are not valid JSONL rows (a trailing newline does not yield an empty line).
+                            return PrivateCorpusReadResult.Failure(PrivateCorpusErrors.Malformed);
+                        }
 
-                    // Bound line size using UTF-8 byte length of the decoded line + newline budget.
-                    var lineUtf8Bytes = Encoding.UTF8.GetByteCount(line);
-                    if (lineUtf8Bytes > PrivateCorpusLimits.MaxLineUtf8Bytes)
-                    {
-                        return PrivateCorpusReadResult.Failure(PrivateCorpusErrors.LimitExceeded);
-                    }
+                        var lineUtf8Bytes = Encoding.UTF8.GetByteCount(line);
+                        if (lineUtf8Bytes > PrivateCorpusLimits.MaxLineUtf8Bytes)
+                        {
+                            return PrivateCorpusReadResult.Failure(PrivateCorpusErrors.LimitExceeded);
+                        }
 
-                    if (rows.Count >= PrivateCorpusLimits.MaxRowCount)
-                    {
-                        return PrivateCorpusReadResult.Failure(PrivateCorpusErrors.LimitExceeded);
-                    }
+                        if (rows.Count >= PrivateCorpusLimits.MaxRowCount)
+                        {
+                            return PrivateCorpusReadResult.Failure(PrivateCorpusErrors.LimitExceeded);
+                        }
 
-                    PrivateCorpusRow row;
-                    try
-                    {
-                        var parsed = JsonSerializer.Deserialize(line, PrivateCorpusJsonContext.Default.PrivateCorpusRow);
-                        if (parsed is null)
+                        PrivateCorpusRow row;
+                        try
+                        {
+                            var parsed = JsonSerializer.Deserialize(
+                                line,
+                                PrivateCorpusJsonContext.Default.PrivateCorpusRow);
+                            if (parsed is null)
+                            {
+                                return PrivateCorpusReadResult.Failure(PrivateCorpusErrors.Malformed);
+                            }
+
+                            row = parsed;
+                        }
+                        catch (JsonException)
                         {
                             return PrivateCorpusReadResult.Failure(PrivateCorpusErrors.Malformed);
                         }
 
-                        row = parsed;
-                    }
-                    catch (JsonException)
-                    {
-                        return PrivateCorpusReadResult.Failure(PrivateCorpusErrors.Malformed);
-                    }
+                        if (!TryValidateRow(row, out var rowError))
+                        {
+                            return PrivateCorpusReadResult.Failure(rowError!);
+                        }
 
-                    if (!TryValidateRow(row, out var rowError))
-                    {
-                        return PrivateCorpusReadResult.Failure(rowError!);
-                    }
+                        if (!ordinals.Add(row.Ordinal))
+                        {
+                            return PrivateCorpusReadResult.Failure(PrivateCorpusErrors.DuplicateOrdinal);
+                        }
 
-                    if (!ordinals.Add(row.Ordinal))
-                    {
-                        return PrivateCorpusReadResult.Failure(PrivateCorpusErrors.DuplicateOrdinal);
+                        rows.Add(row);
                     }
-
-                    rows.Add(row);
                 }
+
+                // Ordered by ordinal for deterministic streaming into ClassificationEngine.
+                var ordered = rows
+                    .OrderBy(r => r.Ordinal)
+                    .ThenBy(r => r.TransactionId, StringComparer.Ordinal)
+                    .ToArray();
+
+                return PrivateCorpusReadResult.Success(fingerprint, ordered);
             }
-
-            // Ordered by ordinal for deterministic streaming into ClassificationEngine.
-            var ordered = rows
-                .OrderBy(r => r.Ordinal)
-                .ThenBy(r => r.TransactionId, StringComparer.Ordinal)
-                .ToArray();
-
-            return PrivateCorpusReadResult.Success(fingerprint, ordered);
+        }
+        catch (OperationCanceledException) when (
+            timeoutCancellation.IsCancellationRequested && !cancellationToken.IsCancellationRequested)
+        {
+            return PrivateCorpusReadResult.Failure(PrivateCorpusErrors.Timeout);
         }
         catch (OperationCanceledException)
         {
             return PrivateCorpusReadResult.Failure(PrivateCorpusErrors.Cancelled);
+        }
+        catch (DecoderFallbackException)
+        {
+            return PrivateCorpusReadResult.Failure(PrivateCorpusErrors.Malformed);
         }
         catch (PrivateCorpusLimitException ex)
         {
@@ -141,104 +163,75 @@ public sealed class PrivateCorpusReader
         }
     }
 
-    private static bool TryValidateFileBoundary(string path, out string? errorCode)
+    private static bool TryOpenValidatedFile(
+        string path,
+        out FileStream stream,
+        out string? errorCode)
     {
+        stream = null!;
         errorCode = null;
         if (!OperatingSystem.IsLinux())
         {
             throw new PlatformNotSupportedException("Private corpus reading requires Linux.");
         }
 
-        if (!File.Exists(path))
+        var fd = Open(path, OpenReadOnly | OpenCloseOnExec | OpenNoFollow);
+        if (fd < 0)
         {
-            // Distinguish missing path from directory-as-path without disclosing path text.
-            errorCode = Directory.Exists(path)
-                ? PrivateCorpusErrors.NotRegularFile
-                : PrivateCorpusErrors.NotFound;
-            return false;
-        }
-
-        // Refuse final symbolic link (ResolveLinkTarget non-null when path itself is a symlink).
-        try
-        {
-            if (File.ResolveLinkTarget(path, returnFinalTarget: false) is not null)
+            errorCode = Marshal.GetLastPInvokeError() switch
             {
-                errorCode = PrivateCorpusErrors.SymlinkRejected;
-                return false;
-            }
+                ErrorTooManySymbolicLinks => PrivateCorpusErrors.SymlinkRejected,
+                ErrorNoEntry or ErrorNotDirectory => PrivateCorpusErrors.NotFound,
+                ErrorAccessDenied => PrivateCorpusErrors.PermissionsRejected,
+                _ => PrivateCorpusErrors.ReadFailed
+            };
+            return false;
         }
-        catch (IOException)
+
+        var handle = new SafeFileHandle((nint)fd, ownsHandle: true);
+        if (Fstat(fd, out var status) != 0)
         {
+            handle.Dispose();
             errorCode = PrivateCorpusErrors.ReadFailed;
             return false;
         }
 
-        FileAttributes attributes;
-        try
+        if ((status.st_mode & FileTypeMask) != RegularFileType)
         {
-            attributes = File.GetAttributes(path);
-        }
-        catch (IOException)
-        {
-            errorCode = PrivateCorpusErrors.ReadFailed;
+            handle.Dispose();
+            errorCode = PrivateCorpusErrors.NotRegularFile;
             return false;
         }
 
-        if (attributes.HasFlag(FileAttributes.Directory) || attributes.HasFlag(FileAttributes.ReparsePoint))
+        var mode = (UnixFileMode)(status.st_mode & PermissionBitsMask);
+        if ((mode & ForbiddenSharingBits) != 0
+            || (mode & UnixFileMode.UserRead) == 0)
         {
-            errorCode = attributes.HasFlag(FileAttributes.ReparsePoint)
-                ? PrivateCorpusErrors.SymlinkRejected
-                : PrivateCorpusErrors.NotRegularFile;
-            return false;
-        }
-
-        UnixFileMode mode;
-        try
-        {
-            mode = File.GetUnixFileMode(path);
-        }
-        catch (IOException)
-        {
-            errorCode = PrivateCorpusErrors.ReadFailed;
-            return false;
-        }
-
-        if ((mode & ForbiddenSharingBits) != 0)
-        {
+            handle.Dispose();
             errorCode = PrivateCorpusErrors.PermissionsRejected;
             return false;
         }
 
-        if ((mode & UnixFileMode.UserRead) == 0)
+        if (status.st_uid != Geteuid())
         {
-            errorCode = PrivateCorpusErrors.PermissionsRejected;
-            return false;
-        }
-
-        if (!TryGetFileOwnerUid(path, out var ownerUid))
-        {
-            errorCode = PrivateCorpusErrors.ReadFailed;
-            return false;
-        }
-
-        var euid = Geteuid();
-        if (ownerUid != euid)
-        {
+            handle.Dispose();
             errorCode = PrivateCorpusErrors.OwnerRejected;
             return false;
         }
 
-        return true;
+        try
+        {
+            // A descriptor returned by open(2) is synchronous; FileStream still exposes the
+            // cancellable ReadAsync API without falsely marking the handle as overlapped I/O.
+            stream = new FileStream(handle, FileAccess.Read, bufferSize: 64 * 1024, isAsync: false);
+            return true;
+        }
+        catch
+        {
+            handle.Dispose();
+            throw;
+        }
     }
-
-    private static FileStream OpenReadOnly(string path) =>
-        new(
-            path,
-            FileMode.Open,
-            FileAccess.Read,
-            FileShare.Read,
-            bufferSize: 64 * 1024,
-            FileOptions.Asynchronous | FileOptions.SequentialScan);
 
     private static bool TryValidateRow(PrivateCorpusRow row, out string? errorCode)
     {
@@ -303,26 +296,27 @@ public sealed class PrivateCorpusReader
         && value.Length <= PrivateCorpusLimits.MaxIdentifierLength
         && value.Trim().Length == value.Length;
 
-    private static bool TryGetFileOwnerUid(string path, out uint uid)
-    {
-        uid = 0;
-        if (Stat(path, out var status) != 0)
-        {
-            return false;
-        }
-
-        uid = status.st_uid;
-        return true;
-    }
+    private const int OpenReadOnly = 0;
+    private const int OpenNoFollow = 0x20000;
+    private const int OpenCloseOnExec = 0x80000;
+    private const uint FileTypeMask = 0xF000;
+    private const uint RegularFileType = 0x8000;
+    private const uint PermissionBitsMask = 0x0FFF;
+    private const int ErrorNoEntry = 2;
+    private const int ErrorAccessDenied = 13;
+    private const int ErrorNotDirectory = 20;
+    private const int ErrorTooManySymbolicLinks = 40;
 
     [DllImport("libc", EntryPoint = "geteuid", SetLastError = true)]
     private static extern uint Geteuid();
 
-    [DllImport("libc", EntryPoint = "stat", SetLastError = true, CharSet = CharSet.Ansi)]
-    private static extern int Stat(string path, out StatBuf buf);
+    [DllImport("libc", EntryPoint = "open", SetLastError = true, CharSet = CharSet.Ansi)]
+    private static extern int Open(string path, int flags);
 
-    // Minimal Linux x86_64 / aarch64-compatible stat layout for st_uid only.
-    // Padding matches glibc struct stat enough to read st_uid on supported release hosts.
+    [DllImport("libc", EntryPoint = "fstat", SetLastError = true)]
+    private static extern int Fstat(int fd, out StatBuf buf);
+
+    // Linux x86_64 / aarch64 glibc struct stat layout used by supported release hosts.
     [StructLayout(LayoutKind.Sequential)]
     private struct StatBuf
     {

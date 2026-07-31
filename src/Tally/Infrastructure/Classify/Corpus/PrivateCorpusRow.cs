@@ -66,6 +66,7 @@ public static class PrivateCorpusErrors
     public const string Malformed = "CLASSIFY-CORPUS-MALFORMED";
     public const string DuplicateOrdinal = "CLASSIFY-CORPUS-DUPLICATE-ORDINAL";
     public const string LimitExceeded = "CLASSIFY-CORPUS-LIMIT";
+    public const string Timeout = "CLASSIFY-CORPUS-TIMEOUT";
     public const string Cancelled = "CLASSIFY-CORPUS-CANCELLED";
     public const string ReadFailed = "CLASSIFY-CORPUS-READ-FAILED";
     public const string FieldInvalid = "CLASSIFY-CORPUS-FIELD-INVALID";

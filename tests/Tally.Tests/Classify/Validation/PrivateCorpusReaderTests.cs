@@ -269,28 +269,16 @@ public sealed class PrivateCorpusReaderTests : IAsyncLifetime
     public async Task Row_count_over_max_returns_limit()
     {
         var path = Path.Combine(root, "overrows.jsonl");
-        // Use a reduced local check by writing MaxRowCount + 1 tiny rows would be huge;
-        // instead write MaxRowCount + 1 with minimal fields.
         var sb = new StringBuilder();
         for (var i = 0; i <= PrivateCorpusLimits.MaxRowCount; i++)
         {
             sb.Append(RowJson(i, "t" + i, "a", "d", "outflow", 1)).Append('\n');
-            // Guard test runtime: only prove the gate with a small override path.
-            // When MaxRowCount is 10000 this is heavy — write only one-over via temporary lower bound simulation:
-            if (i >= 2)
-            {
-                break;
-            }
         }
 
-        // Explicit unit of the limit path: re-read with a corpus that exceeds by constructing
-        // PrivateCorpusLimits.MaxRowCount + 1 is expensive; validate the limit constant and a
-        // focused over-line-byte case instead, plus a small multi-row success under limit.
         WriteOwnerFile(path, sb.ToString());
         var result = await reader.ReadAsync(path, CancellationToken.None);
-        Assert.True(result.IsSuccess, result.ErrorCode);
-        Assert.True(PrivateCorpusLimits.MaxRowCount >= result.RowCount);
-        Assert.Equal(10_000, PrivateCorpusLimits.MaxRowCount);
+        Assert.Equal(PrivateCorpusErrors.LimitExceeded, result.ErrorCode);
+        Assert.Null(result.Rows);
     }
 
     [Fact]

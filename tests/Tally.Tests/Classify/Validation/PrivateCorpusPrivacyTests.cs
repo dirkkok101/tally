@@ -197,6 +197,7 @@ public sealed class PrivateCorpusPrivacyTests : IAsyncLifetime
             PrivateCorpusErrors.Malformed,
             PrivateCorpusErrors.DuplicateOrdinal,
             PrivateCorpusErrors.LimitExceeded,
+            PrivateCorpusErrors.Timeout,
             PrivateCorpusErrors.Cancelled,
             PrivateCorpusErrors.ReadFailed,
             PrivateCorpusErrors.FieldInvalid
