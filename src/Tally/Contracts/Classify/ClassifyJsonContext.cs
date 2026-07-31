@@ -1,0 +1,52 @@
+using System.Text.Json.Serialization;
+using Tally.Contracts.Classify.Operations;
+using Tally.Contracts.Classify.Rules;
+using Tally.Contracts.Common;
+
+namespace Tally.Contracts.Classify;
+
+[JsonSourceGenerationOptions(
+    PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase,
+    UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow)]
+[JsonSerializable(typeof(ClassifyEvaluateRequest))]
+[JsonSerializable(typeof(ClassifyEvaluateResult))]
+[JsonSerializable(typeof(ClassifyOutcomeGetRequest))]
+[JsonSerializable(typeof(ClassifyOutcomeGetResult))]
+[JsonSerializable(typeof(ClassifyApplyPreviewRequest))]
+[JsonSerializable(typeof(ClassifyApplyPreviewResult))]
+[JsonSerializable(typeof(ClassifyApplyRunRequest))]
+[JsonSerializable(typeof(ClassifyApplyRunResult))]
+[JsonSerializable(typeof(ClassifyApplyItemResult))]
+[JsonSerializable(typeof(ClassifyApplySelection))]
+[JsonSerializable(typeof(ClassifyExplicitCorrectionItem))]
+[JsonSerializable(typeof(ClassifyRuleSaveRequest))]
+[JsonSerializable(typeof(ClassifyRuleSaveResult))]
+[JsonSerializable(typeof(ClassifyRuleValidateRequest))]
+[JsonSerializable(typeof(ClassifyRuleValidateResult))]
+[JsonSerializable(typeof(ClassifyRuleActivateRequest))]
+[JsonSerializable(typeof(ClassifyRuleActivateResult))]
+[JsonSerializable(typeof(ClassifyRuleRetireRequest))]
+[JsonSerializable(typeof(ClassifyRuleRetireResult))]
+[JsonSerializable(typeof(ClassifyFeedbackRecordRequest))]
+[JsonSerializable(typeof(ClassifyFeedbackRecordResult))]
+[JsonSerializable(typeof(ClassifyStatusRequest))]
+[JsonSerializable(typeof(ClassifyStatusResult))]
+[JsonSerializable(typeof(ClassifyAbandonRequest))]
+[JsonSerializable(typeof(ClassifyAbandonResult))]
+[JsonSerializable(typeof(ClassifyCleanupRequest))]
+[JsonSerializable(typeof(ClassifyCleanupResult))]
+[JsonSerializable(typeof(ClassificationRuleConditionInput))]
+[JsonSerializable(typeof(ClassificationRuleConditionInput[]))]
+[JsonSerializable(typeof(ClassificationRuleVersionDetail))]
+[JsonSerializable(typeof(ClassificationNormalizationDescriptor))]
+[JsonSerializable(typeof(ClassificationRuleFieldKey))]
+[JsonSerializable(typeof(ClassificationRulePredicateKind))]
+[JsonSerializable(typeof(ClassificationAmountDirectionValue))]
+[JsonSerializable(typeof(ClassifyApplySelectionMode))]
+[JsonSerializable(typeof(ClassifyStatusSubjectType))]
+[JsonSerializable(typeof(ClassifyFeedbackDecision))]
+[JsonSerializable(typeof(ClassifyOutcomeKind))]
+[JsonSerializable(typeof(ClassifyApplyItemResultKind))]
+[JsonSerializable(typeof(OperationLimits))]
+[JsonSerializable(typeof(string[]))]
+public partial class ClassifyJsonContext : JsonSerializerContext;
