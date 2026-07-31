@@ -94,6 +94,26 @@ public sealed class LedgerClassificationMutationPreconditionTests : IAsyncLifeti
     }
 
     [Fact]
+    public async Task TC_CLASSIFY_MUTATION_versioned_assign_without_complete_preconditions_is_rejected()
+    {
+        var account = await CreateAccount();
+        var cat = await CreateCategory("VersionedMissingPreconditions");
+        var tx = await Record(account.AccountId, 'v');
+
+        AssertError(
+            await Assign(new AssignCategoryInput(
+                tx.TransactionId,
+                cat.CategoryId,
+                "owner",
+                MutationContractVersion: CategoryAllocationMutationVersions.ClassificationV1), "versioned-missing"),
+            5,
+            CategoryAllocationErrors.StalePrecondition);
+
+        var after = await GetTransaction(tx.TransactionId);
+        Assert.Null(after.Category.CategoryId);
+    }
+
+    [Fact]
     public async Task TC_CLASSIFY_MUTATION_assign_with_existing_allocation_is_cardinality()
     {
         var account = await CreateAccount();

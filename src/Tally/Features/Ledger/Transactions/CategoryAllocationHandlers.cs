@@ -38,6 +38,7 @@ public sealed class AssignCategoryHandler(
             input, LedgerJsonContext.Default.AssignCategoryInput, correct: false,
             input.ExpectedTransactionRevision, input.ExpectedRelationshipRevision,
             input.ExpectedAllocationRevision, input.ExpectedActiveAllocationId,
+            input.MutationContractVersion,
             cancellationToken);
 }
 
@@ -56,6 +57,7 @@ public sealed class CorrectCategoryHandler(
             input, LedgerJsonContext.Default.CorrectCategoryInput, correct: true,
             input.ExpectedTransactionRevision, input.ExpectedRelationshipRevision,
             input.ExpectedAllocationRevision, input.ExpectedActiveAllocationId,
+            input.MutationContractVersion,
             cancellationToken);
 }
 
@@ -80,6 +82,7 @@ internal static class CategoryAllocationHandlerPolicy
         string? expectedRelationshipRevision,
         string? expectedAllocationRevision,
         string? expectedActiveAllocationId,
+        string? mutationContractVersion,
         CancellationToken cancellationToken)
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Ledger storage requires Linux host protections.");
@@ -105,6 +108,7 @@ internal static class CategoryAllocationHandlerPolicy
 
             // Classification-precondition path: any supplied expectation, or any correction (required by failure criterion).
             var usesClassificationPreconditions = correct
+                || mutationContractVersion is not null
                 || expectedTransactionRevision is not null
                 || expectedRelationshipRevision is not null
                 || expectedAllocationRevision is not null
@@ -123,6 +127,7 @@ internal static class CategoryAllocationHandlerPolicy
                     expectedRelationshipRevision,
                     expectedAllocationRevision,
                     expectedActiveAllocationId,
+                    mutationContractVersion is not null,
                     relationshipStore,
                     token);
                 if (stale is not null) return Failure(stale);
@@ -159,13 +164,16 @@ internal static class CategoryAllocationHandlerPolicy
         string? expectedRelationshipRevision,
         string? expectedAllocationRevision,
         string? expectedActiveAllocationId,
+        bool requiresCompleteClassificationPreconditions,
         RelationshipStore? relationshipStore,
         CancellationToken cancellationToken)
     {
-        if (correct)
+        if (correct || requiresCompleteClassificationPreconditions)
         {
-            // Failure criterion: do not permit correction without exact expected active allocation and projection revisions.
-            if (string.IsNullOrWhiteSpace(expectedActiveAllocationId)
+            // A released classification_v1 mutation must carry every projection revision. Correction
+            // additionally requires the exact active allocation identity; legacy assign remains available
+            // only when MutationContractVersion and all expectations are omitted.
+            if ((correct && string.IsNullOrWhiteSpace(expectedActiveAllocationId))
                 || string.IsNullOrWhiteSpace(expectedAllocationRevision)
                 || string.IsNullOrWhiteSpace(expectedTransactionRevision)
                 || string.IsNullOrWhiteSpace(expectedRelationshipRevision))
