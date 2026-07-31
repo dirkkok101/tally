@@ -1,6 +1,15 @@
 # Sensitive local financial documents
 docs/statements/
 
+# Owner-only CLASSIFY evaluation evidence (private corpora, hold-outs, gate receipts).
+# Never track personal values, rule payloads, or raw evaluation rows.
+.classify-private/
+.tally-private/classify/
+**/classify-owner-rulebook/**
+**/*classify*corpus*.jsonl
+**/*classify*holdout*.jsonl
+**/owner-rulebook-receipt.json
+
 # .NET build output
 **/bin/
 **/obj/
