@@ -133,8 +133,9 @@ public sealed class OperationRegistry
             "ledger.refund.revoke" => RelationshipLifecycleDescriptor(operationId, LedgerJsonContext.Default.RevokeRelationshipInput, "RevokeRefund"),
             "ledger.refund.replace" => RelationshipLifecycleDescriptor(operationId, LedgerJsonContext.Default.ReplaceRefundInput, "ReplaceRefund"),
             "ledger.relationship.get" => RelationshipLifecycleDescriptor(operationId, LedgerJsonContext.Default.GetRelationshipInput, "Get"),
-            "ledger.transaction.category.assign" => CategoryAllocationDescriptor(operationId, LedgerJsonContext.Default.AssignCategoryInput, "Assign"),
-            "ledger.transaction.category.correct" => CategoryAllocationDescriptor(operationId, LedgerJsonContext.Default.CorrectCategoryInput, "Correct"),
+            "ledger.transaction.category.assign" or "ledger.transaction.category.correct" =>
+                new CategoryAllocationOperationModule(null!, null!).Descriptors
+                    .Single(descriptor => descriptor.OperationId == operationId),
             "ledger.transaction.attribution.assign" => PaymentAttributionDescriptor(operationId, LedgerJsonContext.Default.AssignPaymentAttributionInput, "Assign"),
             "ledger.transaction.attribution.correct" => PaymentAttributionDescriptor(operationId, LedgerJsonContext.Default.CorrectPaymentAttributionInput, "Correct"),
             "ledger.transaction.pool.assign" => PoolAssignmentDescriptor(operationId, LedgerJsonContext.Default.AssignPoolInput, "Assign"),
@@ -296,26 +297,6 @@ public sealed class OperationRegistry
         new(TransactionLifecycle.InactiveError, "lifecycle", 6),
         new(AccountStore.ArchivedError, "lifecycle", 6),
         new(TransactionErrors.AttributionIncompatible, "lifecycle", 6)
-    ];
-
-    private static OperationDescriptor CategoryAllocationDescriptor(string operationId, JsonTypeInfo request, string target) => new(
-        operationId, "tally " + operationId.Replace('.', ' '), "mutation", true, request, LedgerJsonContext.Default.CategoryAllocationResult,
-        "CategoryAllocationOperationModule." + target,
-        (services, _) => services.CategoryAllocations is { } module ? new CategoryAllocationOperationHandler(module, operationId) : new FoundationOperationHandler(),
-        "tally " + operationId.Replace('.', ' ') + " --input -", CategoryAllocationErrorsFor(operationId));
-
-    private static IReadOnlyList<ErrorSchema> CategoryAllocationErrorsFor(string operationId) =>
-    [
-        new(CategoryAllocation.InvalidError, "validation", 3),
-        new(TransactionErrors.NotFound, "not_found", 4),
-        new(CategoryErrors.NotFound, "not_found", 4),
-        new(CategoryAllocationErrors.TransactionInactive, "lifecycle", 6),
-        new(CategoryErrors.Archived, "lifecycle", 6),
-        new(CategoryAllocationErrors.Cardinality, "conflict", 5),
-        new(CategoryAllocationErrors.StalePrecondition, "conflict", 5),
-        .. (operationId.EndsWith(".correct", StringComparison.Ordinal)
-            ? new ErrorSchema[] { new(CategoryAllocationErrors.NotAssigned, "lifecycle", 6), new(CategoryAllocationErrors.Unchanged, "conflict", 5) }
-            : [])
     ];
 
     private static OperationDescriptor PaymentAttributionDescriptor(string operationId, JsonTypeInfo request, string target) => new(

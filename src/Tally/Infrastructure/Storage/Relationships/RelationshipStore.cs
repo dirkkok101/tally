@@ -14,12 +14,26 @@ public sealed class RelationshipStore(LedgerDb database, LedgerConnectionFactory
     /// <summary>
     /// Opaque relationship revision for classification mutation preconditions.
     /// Returns "none" when the transaction has no active financial relationship role.
+    /// Prefer the connection/transaction overload inside mutation callbacks so the assertion is atomic.
     /// </summary>
     public async Task<string> ActiveRevisionAsync(string transactionId, CancellationToken cancellationToken)
     {
         if (!OperatingSystem.IsLinux()) throw new PlatformNotSupportedException("Ledger storage requires Linux host protections.");
         await using var connection = await connectionFactory.OpenAsync(database, CompleteLedgerSchema.CurrentVersion, cancellationToken);
-        await using var command = Command(connection, null, """
+        return await ActiveRevisionAsync(connection, transaction: null, transactionId, cancellationToken);
+    }
+
+    /// <summary>
+    /// Atomic relationship revision read on the caller-owned connection/transaction
+    /// (required for CLASSIFY mutation preconditions that must not open a separate connection).
+    /// </summary>
+    public async Task<string> ActiveRevisionAsync(
+        SqliteConnection connection,
+        SqliteTransaction? transaction,
+        string transactionId,
+        CancellationToken cancellationToken)
+    {
+        await using var command = Command(connection, transaction, """
             SELECT relationship_id || ':' || relationship_type || ':' ||
                    CASE WHEN source_transaction_id = $id THEN source_role ELSE target_role END
             FROM financial_relationship_current

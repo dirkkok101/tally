@@ -40,14 +40,47 @@ public sealed class LedgerClassificationMutationPreconditionTests : IAsyncLifeti
     }
 
     [Fact]
-    public void TC_CLASSIFY_MUTATION_registry_declares_stale_precondition()
+    public void TC_CLASSIFY_MUTATION_module_releases_descriptor_and_version()
     {
+        var module = new CategoryAllocationOperationModule(null!, null!);
+        Assert.Equal(CategoryAllocationMutationVersions.ClassificationV1, CategoryAllocationOperationModule.MutationContractVersion);
+        Assert.Equal(2, module.Descriptors.Count);
+        foreach (var operationId in new[]
+                 {
+                     CategoryAllocationOperationModule.AssignOperationId,
+                     CategoryAllocationOperationModule.CorrectOperationId
+                 })
+        {
+            var descriptor = Assert.Single(module.Descriptors, d => d.OperationId == operationId);
+            Assert.Contains(descriptor.DomainErrors!, error => error.Code == CategoryAllocationErrors.StalePrecondition);
+            Assert.Contains(descriptor.DomainErrors!, error => error.Code == CategoryAllocationErrors.ContractMismatch);
+            Assert.Contains(CategoryAllocationOperationModule.MutationContractVersion, descriptor.Example, StringComparison.Ordinal);
+        }
+
         var registry = OperationRegistry.Create();
         foreach (var operationId in new[] { "ledger.transaction.category.assign", "ledger.transaction.category.correct" })
         {
             var descriptor = registry.Find(operationId)!;
             Assert.Contains(descriptor.DomainErrors!, error => error.Code == CategoryAllocationErrors.StalePrecondition);
+            Assert.Contains(descriptor.DomainErrors!, error => error.Code == CategoryAllocationErrors.ContractMismatch);
         }
+    }
+
+    [Fact]
+    public async Task TC_CLASSIFY_MUTATION_incompatible_mutation_contract_fails_before_mutation()
+    {
+        var account = await CreateAccount();
+        var cat = await CreateCategory("VersionGate");
+        var tx = await Record(account.AccountId, 'z');
+        AssertError(
+            await Assign(new AssignCategoryInput(
+                tx.TransactionId, cat.CategoryId, "owner",
+                MutationContractVersion: "classification_v0"), "bad-version"),
+            7,
+            CategoryAllocationErrors.ContractMismatch);
+
+        var after = await GetTransaction(tx.TransactionId);
+        Assert.Null(after.Category.CategoryId);
     }
 
     [Fact]
@@ -80,7 +113,8 @@ public sealed class LedgerClassificationMutationPreconditionTests : IAsyncLifeti
         AssertError(
             await Assign(new AssignCategoryInput(
                 tx.TransactionId, cat.CategoryId, "owner",
-                ExpectedActiveAllocationId: LedgerId.New().ToString()), "stale-assign"),
+                ExpectedActiveAllocationId: LedgerId.New().ToString(),
+                MutationContractVersion: CategoryAllocationMutationVersions.ClassificationV1), "stale-assign"),
             5,
             CategoryAllocationErrors.StalePrecondition);
     }
@@ -95,14 +129,33 @@ public sealed class LedgerClassificationMutationPreconditionTests : IAsyncLifeti
         var item = Assert.Single(preflight.ClassificationItems!);
         Assert.Equal("none", item.AllocationRevision);
 
-        var result = Allocation(await Assign(new AssignCategoryInput(
-            tx.TransactionId,
-            cat.CategoryId,
-            "owner",
-            ExpectedTransactionRevision: item.TransactionRevision,
-            ExpectedRelationshipRevision: item.RelationshipRevision,
-            ExpectedAllocationRevision: item.AllocationRevision), "ok-assign"));
+        var result = Allocation(await Assign(ClassifyAssign(tx.TransactionId, cat.CategoryId, "owner", item), "ok-assign"));
         Assert.Equal(cat.CategoryId, result.Transaction.Category.CategoryId);
+    }
+
+    [Fact]
+    public async Task TC_CLASSIFY_MUTATION_preflight_intervening_assign_returns_stale_not_cardinality()
+    {
+        var account = await CreateAccount();
+        var first = await CreateCategory("RaceFirst");
+        var second = await CreateCategory("RaceSecond");
+        var tx = await Record(account.AccountId, 'r');
+        var preflight = await Preflight(tx.TransactionId);
+        var item = Assert.Single(preflight.ClassificationItems!);
+        Assert.Equal("none", item.AllocationRevision);
+        Assert.Equal(CategoryMutationState.Assignable, item.CategoryMutationState);
+
+        // Intervening legacy assign creates an active allocation after preflight.
+        await Assign(new AssignCategoryInput(tx.TransactionId, first.CategoryId, "intervening"), "race-intervening");
+
+        // CLASSIFY assign with preflight ExpectedAllocationRevision=none must be StalePrecondition, not Cardinality.
+        AssertError(
+            await Assign(ClassifyAssign(tx.TransactionId, second.CategoryId, "stale race", item), "race-stale"),
+            5,
+            CategoryAllocationErrors.StalePrecondition);
+
+        var after = await GetTransaction(tx.TransactionId);
+        Assert.Equal(first.CategoryId, after.Category.CategoryId);
     }
 
     [Fact]
@@ -114,7 +167,8 @@ public sealed class LedgerClassificationMutationPreconditionTests : IAsyncLifeti
         AssertError(
             await Assign(new AssignCategoryInput(
                 tx.TransactionId, cat.CategoryId, "owner",
-                ExpectedAllocationRevision: "not-the-none-token"), "drift-alloc"),
+                ExpectedAllocationRevision: "not-the-none-token",
+                MutationContractVersion: CategoryAllocationMutationVersions.ClassificationV1), "drift-alloc"),
             5,
             CategoryAllocationErrors.StalePrecondition);
     }
@@ -128,7 +182,8 @@ public sealed class LedgerClassificationMutationPreconditionTests : IAsyncLifeti
         AssertError(
             await Assign(new AssignCategoryInput(
                 tx.TransactionId, cat.CategoryId, "owner",
-                ExpectedTransactionRevision: "genesis:not-this-id"), "drift-txn"),
+                ExpectedTransactionRevision: "genesis:not-this-id",
+                MutationContractVersion: CategoryAllocationMutationVersions.ClassificationV1), "drift-txn"),
             5,
             CategoryAllocationErrors.StalePrecondition);
     }
@@ -144,14 +199,7 @@ public sealed class LedgerClassificationMutationPreconditionTests : IAsyncLifeti
         var preflight = await Preflight(tx.TransactionId);
         var item = Assert.Single(preflight.ClassificationItems!);
 
-        var corrected = Allocation(await Correct(new CorrectCategoryInput(
-            tx.TransactionId,
-            second.CategoryId,
-            "owner corrected",
-            ExpectedActiveAllocationId: item.CurrentAllocationId,
-            ExpectedTransactionRevision: item.TransactionRevision,
-            ExpectedRelationshipRevision: item.RelationshipRevision,
-            ExpectedAllocationRevision: item.AllocationRevision), "correct-g"));
+        var corrected = Allocation(await Correct(ClassifyCorrect(tx.TransactionId, second.CategoryId, "owner corrected", item), "correct-g"));
         Assert.Equal(second.CategoryId, corrected.Transaction.Category.CategoryId);
     }
 
@@ -163,11 +211,19 @@ public sealed class LedgerClassificationMutationPreconditionTests : IAsyncLifeti
         var second = await CreateCategory("B");
         var tx = await Record(account.AccountId, 'h');
         await Assign(new AssignCategoryInput(tx.TransactionId, first.CategoryId, "initial"), "assign-h");
+        var preflight = await Preflight(tx.TransactionId);
+        var item = Assert.Single(preflight.ClassificationItems!);
 
         AssertError(
             await Correct(new CorrectCategoryInput(
-                tx.TransactionId, second.CategoryId, "owner corrected",
-                ExpectedActiveAllocationId: LedgerId.New().ToString()), "correct-h"),
+                tx.TransactionId,
+                second.CategoryId,
+                "owner corrected",
+                ExpectedActiveAllocationId: LedgerId.New().ToString(),
+                ExpectedTransactionRevision: item.TransactionRevision,
+                ExpectedRelationshipRevision: item.RelationshipRevision,
+                ExpectedAllocationRevision: item.AllocationRevision,
+                MutationContractVersion: CategoryAllocationMutationVersions.ClassificationV1), "correct-h"),
             5,
             CategoryAllocationErrors.StalePrecondition);
     }
@@ -184,30 +240,33 @@ public sealed class LedgerClassificationMutationPreconditionTests : IAsyncLifeti
         var preflight = await Preflight(tx.TransactionId);
         var item = Assert.Single(preflight.ClassificationItems!);
 
-        // Intervening correction changes allocation identity.
-        await Correct(new CorrectCategoryInput(tx.TransactionId, second.CategoryId, "first correction"), "correct-i1");
+        // Intervening correction with fresh exact preconditions changes allocation identity.
+        var interveningPreflight = await Preflight(tx.TransactionId);
+        var intervening = Assert.Single(interveningPreflight.ClassificationItems!);
+        await Correct(ClassifyCorrect(tx.TransactionId, second.CategoryId, "first correction", intervening), "correct-i1");
 
         AssertError(
-            await Correct(new CorrectCategoryInput(
-                tx.TransactionId,
-                third.CategoryId,
-                "stale correction",
-                ExpectedActiveAllocationId: item.CurrentAllocationId,
-                ExpectedAllocationRevision: item.AllocationRevision), "correct-i2"),
+            await Correct(ClassifyCorrect(tx.TransactionId, third.CategoryId, "stale correction", item), "correct-i2"),
             5,
             CategoryAllocationErrors.StalePrecondition);
     }
 
     [Fact]
-    public async Task TC_CLASSIFY_MUTATION_correct_without_preconditions_preserves_legacy_behavior()
+    public async Task TC_CLASSIFY_MUTATION_correct_without_exact_expectations_is_rejected()
     {
         var account = await CreateAccount();
         var first = await CreateCategory("LegacyFrom");
         var second = await CreateCategory("LegacyTo");
         var tx = await Record(account.AccountId, 'j');
         await Assign(new AssignCategoryInput(tx.TransactionId, first.CategoryId, "initial"), "assign-j");
-        var corrected = Allocation(await Correct(new CorrectCategoryInput(tx.TransactionId, second.CategoryId, "owner"), "correct-j"));
-        Assert.Equal(second.CategoryId, corrected.Transaction.Category.CategoryId);
+
+        AssertError(
+            await Correct(new CorrectCategoryInput(tx.TransactionId, second.CategoryId, "owner"), "correct-j"),
+            5,
+            CategoryAllocationErrors.StalePrecondition);
+
+        var after = await GetTransaction(tx.TransactionId);
+        Assert.Equal(first.CategoryId, after.Category.CategoryId);
     }
 
     [Fact]
@@ -219,11 +278,19 @@ public sealed class LedgerClassificationMutationPreconditionTests : IAsyncLifeti
         var tx = await Record(account.AccountId, 'k');
         await Assign(new AssignCategoryInput(tx.TransactionId, first.CategoryId, "initial"), "assign-k");
         var before = await GetTransaction(tx.TransactionId);
+        var preflight = await Preflight(tx.TransactionId);
+        var item = Assert.Single(preflight.ClassificationItems!);
 
         AssertError(
             await Correct(new CorrectCategoryInput(
-                tx.TransactionId, second.CategoryId, "stale",
-                ExpectedActiveAllocationId: "not-an-allocation"), "correct-k"),
+                tx.TransactionId,
+                second.CategoryId,
+                "stale",
+                ExpectedActiveAllocationId: "not-an-allocation",
+                ExpectedTransactionRevision: item.TransactionRevision,
+                ExpectedRelationshipRevision: item.RelationshipRevision,
+                ExpectedAllocationRevision: item.AllocationRevision,
+                MutationContractVersion: CategoryAllocationMutationVersions.ClassificationV1), "correct-k"),
             5,
             CategoryAllocationErrors.StalePrecondition);
 
@@ -233,6 +300,35 @@ public sealed class LedgerClassificationMutationPreconditionTests : IAsyncLifeti
     }
 
     // ── Helpers ──────────────────────────────────────────────────────────────
+
+    private static AssignCategoryInput ClassifyAssign(
+        string transactionId,
+        string categoryId,
+        string reason,
+        ClassificationProjectionItem item) =>
+        new(
+            transactionId,
+            categoryId,
+            reason,
+            ExpectedTransactionRevision: item.TransactionRevision,
+            ExpectedRelationshipRevision: item.RelationshipRevision,
+            ExpectedAllocationRevision: item.AllocationRevision,
+            MutationContractVersion: CategoryAllocationMutationVersions.ClassificationV1);
+
+    private static CorrectCategoryInput ClassifyCorrect(
+        string transactionId,
+        string categoryId,
+        string reason,
+        ClassificationProjectionItem item) =>
+        new(
+            transactionId,
+            categoryId,
+            reason,
+            ExpectedActiveAllocationId: item.CurrentAllocationId,
+            ExpectedTransactionRevision: item.TransactionRevision,
+            ExpectedRelationshipRevision: item.RelationshipRevision,
+            ExpectedAllocationRevision: item.AllocationRevision,
+            MutationContractVersion: CategoryAllocationMutationVersions.ClassificationV1);
 
     private async Task<ActualsQueryResult> Preflight(string transactionId)
     {

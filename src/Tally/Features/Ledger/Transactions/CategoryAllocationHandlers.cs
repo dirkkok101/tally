@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text.Json;
+using Microsoft.Data.Sqlite;
 using Tally.Application;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Categories;
@@ -19,6 +20,7 @@ public static class CategoryAllocationErrors
     public const string NotAssigned = "LEDGER-CATEGORY-ALLOCATION-NOT-ASSIGNED";
     public const string Unchanged = "LEDGER-CATEGORY-ALLOCATION-UNCHANGED";
     public const string StalePrecondition = CategoryMutationPreconditionCodes.StalePrecondition;
+    public const string ContractMismatch = CategoryMutationPreconditionCodes.ContractMismatch;
 }
 
 public sealed class AssignCategoryHandler(
@@ -100,49 +102,37 @@ internal static class CategoryAllocationHandlerPolicy
             if (category.Status != CategoryStatus.Active) return Failure(global::Tally.Features.Ledger.Categories.CategoryErrors.Archived);
 
             var current = await allocationStore.FindCurrentAsync(connection, databaseTransaction, allocation.TransactionId, token);
+
+            // Classification-precondition path: any supplied expectation, or any correction (required by failure criterion).
+            var usesClassificationPreconditions = correct
+                || expectedTransactionRevision is not null
+                || expectedRelationshipRevision is not null
+                || expectedAllocationRevision is not null
+                || expectedActiveAllocationId is not null;
+
+            if (usesClassificationPreconditions)
+            {
+                var stale = await AssertClassificationPreconditionsAsync(
+                    connection,
+                    databaseTransaction,
+                    transaction,
+                    current,
+                    allocation.TransactionId,
+                    correct,
+                    expectedTransactionRevision,
+                    expectedRelationshipRevision,
+                    expectedAllocationRevision,
+                    expectedActiveAllocationId,
+                    relationshipStore,
+                    token);
+                if (stale is not null) return Failure(stale);
+            }
+
+            // Legacy cardinality / not-assigned / unchanged only after classification preconditions pass
+            // (or when the request carries no classification expectations at all).
             if (!correct && current is not null) return Failure(CategoryAllocationErrors.Cardinality);
             if (correct && current is null) return Failure(CategoryAllocationErrors.NotAssigned);
             if (correct && current!.CategoryId == allocation.CategoryId) return Failure(CategoryAllocationErrors.Unchanged);
-
-            // Drift-safe preconditions (DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT). Omitted expectations preserve legacy LEDGER callers.
-            if (!correct && expectedActiveAllocationId is not null)
-            {
-                return Failure(CategoryAllocationErrors.StalePrecondition);
-            }
-
-            if (correct && expectedActiveAllocationId is not null
-                && !string.Equals(expectedActiveAllocationId, current!.AllocationEventId, StringComparison.Ordinal))
-            {
-                return Failure(CategoryAllocationErrors.StalePrecondition);
-            }
-
-            if (expectedAllocationRevision is not null)
-            {
-                var actualAllocationRevision = current?.AllocationEventId ?? "none";
-                if (!string.Equals(expectedAllocationRevision, actualAllocationRevision, StringComparison.Ordinal))
-                {
-                    return Failure(CategoryAllocationErrors.StalePrecondition);
-                }
-            }
-
-            if (expectedTransactionRevision is not null)
-            {
-                var latestLifecycle = transaction.History?.Lifecycle.LastOrDefault()?.LifecycleEventId;
-                var actualTransactionRevision = latestLifecycle ?? ("genesis:" + transaction.TransactionId);
-                if (!string.Equals(expectedTransactionRevision, actualTransactionRevision, StringComparison.Ordinal))
-                {
-                    return Failure(CategoryAllocationErrors.StalePrecondition);
-                }
-            }
-
-            if (expectedRelationshipRevision is not null && relationshipStore is not null)
-            {
-                var actualRelationshipRevision = await relationshipStore.ActiveRevisionAsync(allocation.TransactionId, token);
-                if (!string.Equals(expectedRelationshipRevision, actualRelationshipRevision, StringComparison.Ordinal))
-                {
-                    return Failure(CategoryAllocationErrors.StalePrecondition);
-                }
-            }
 
             var eventId = LedgerId.New().ToString();
             await allocationStore.AppendAsync(
@@ -152,6 +142,88 @@ internal static class CategoryAllocationHandlerPolicy
             var detail = await transactionStore.GetAsync(connection, databaseTransaction, allocation.TransactionId, true, token);
             return Success(new CategoryAllocationResult(detail!, eventId));
         }, cancellationToken);
+    }
+
+    /// <summary>
+    /// Drift-safe CLASSIFY preconditions (DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT).
+    /// Evaluated before cardinality so ExpectedAllocationRevision=none races return StalePrecondition.
+    /// </summary>
+    private static async Task<string?> AssertClassificationPreconditionsAsync(
+        SqliteConnection connection,
+        SqliteTransaction databaseTransaction,
+        TransactionDetail transaction,
+        CategoryAllocationCurrent? current,
+        string transactionId,
+        bool correct,
+        string? expectedTransactionRevision,
+        string? expectedRelationshipRevision,
+        string? expectedAllocationRevision,
+        string? expectedActiveAllocationId,
+        RelationshipStore? relationshipStore,
+        CancellationToken cancellationToken)
+    {
+        if (correct)
+        {
+            // Failure criterion: do not permit correction without exact expected active allocation and projection revisions.
+            if (string.IsNullOrWhiteSpace(expectedActiveAllocationId)
+                || string.IsNullOrWhiteSpace(expectedAllocationRevision)
+                || string.IsNullOrWhiteSpace(expectedTransactionRevision)
+                || string.IsNullOrWhiteSpace(expectedRelationshipRevision))
+            {
+                return CategoryAllocationErrors.StalePrecondition;
+            }
+        }
+        else if (expectedActiveAllocationId is not null)
+        {
+            // Assign must not carry an active allocation identity expectation.
+            return CategoryAllocationErrors.StalePrecondition;
+        }
+
+        if (expectedActiveAllocationId is not null)
+        {
+            if (current is null
+                || !string.Equals(expectedActiveAllocationId, current.AllocationEventId, StringComparison.Ordinal))
+            {
+                return CategoryAllocationErrors.StalePrecondition;
+            }
+        }
+
+        if (expectedAllocationRevision is not null)
+        {
+            var actualAllocationRevision = current?.AllocationEventId ?? "none";
+            if (!string.Equals(expectedAllocationRevision, actualAllocationRevision, StringComparison.Ordinal))
+            {
+                return CategoryAllocationErrors.StalePrecondition;
+            }
+        }
+
+        if (expectedTransactionRevision is not null)
+        {
+            var latestLifecycle = transaction.History?.Lifecycle.LastOrDefault()?.LifecycleEventId;
+            var actualTransactionRevision = latestLifecycle ?? ("genesis:" + transaction.TransactionId);
+            if (!string.Equals(expectedTransactionRevision, actualTransactionRevision, StringComparison.Ordinal))
+            {
+                return CategoryAllocationErrors.StalePrecondition;
+            }
+        }
+
+        if (expectedRelationshipRevision is not null)
+        {
+            // Fail closed: relationship assertion must run on the mutation connection/transaction.
+            if (relationshipStore is null)
+            {
+                return CategoryAllocationErrors.StalePrecondition;
+            }
+
+            var actualRelationshipRevision = await relationshipStore.ActiveRevisionAsync(
+                connection, databaseTransaction, transactionId, cancellationToken);
+            if (!string.Equals(expectedRelationshipRevision, actualRelationshipRevision, StringComparison.Ordinal))
+            {
+                return CategoryAllocationErrors.StalePrecondition;
+            }
+        }
+
+        return null;
     }
 
     private static string Actor(SafeActor actor) => actor.RunId is null
