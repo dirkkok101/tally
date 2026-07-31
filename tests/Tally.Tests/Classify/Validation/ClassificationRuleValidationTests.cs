@@ -406,6 +406,142 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
         Assert.Equal(ClassifyErrors.InvalidInput, result.ErrorCode);
     }
 
+    [Fact]
+    public async Task Unsupported_contract_version_is_rejected()
+    {
+        var category = await CreateCategoryAsync("Ver");
+        var versionId = await SaveDraftAsync(category.CategoryId, DescriptionEquals("v"));
+        var corpus = WriteCorpus([CorpusRow(0, "tx", "acct", "v", "outflow", 1, null, null)]);
+        var result = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest("9.9", [versionId], corpus),
+            actor,
+            NextKey(),
+            CancellationToken.None);
+        Assert.Equal(ClassifyErrors.UnsupportedVersion, result.ErrorCode);
+    }
+
+    [Fact]
+    public async Task No_suggestion_expected_with_matching_rule_is_incorrect_canary()
+    {
+        var category = await CreateCategoryAsync("NS");
+        var versionId = await SaveDraftAsync(category.CategoryId, DescriptionEquals("hit"));
+        var corpus = WriteCorpus([
+            CorpusRow(0, "tx", "acct", "hit", "outflow", 1, "no_suggestion", null)
+        ]);
+        var result = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], corpus),
+            actor,
+            NextKey(),
+            CancellationToken.None);
+        Assert.True(result.IsSuccess, result.ErrorCode);
+        Assert.False(result.Value!.ActivationEligible);
+        Assert.True(result.Value.IncorrectApplicationCanaries >= 1);
+    }
+
+    [Fact]
+    public async Task Coverage_basis_points_are_within_0_to_10000()
+    {
+        var category = await CreateCategoryAsync("Cov");
+        var versionId = await SaveDraftAsync(category.CategoryId, DescriptionEquals("half"));
+        var corpus = WriteCorpus([
+            CorpusRow(0, "tx-0", "acct", "half", "outflow", 1, "suggestion", category.CategoryId),
+            CorpusRow(1, "tx-1", "acct", "miss", "outflow", 1, "no_suggestion", null)
+        ]);
+        var result = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], corpus),
+            actor,
+            NextKey(),
+            CancellationToken.None);
+        Assert.True(result.IsSuccess, result.ErrorCode);
+        await using var connection = await store.OpenMigratedAsync(CancellationToken.None);
+        var report = await validationStore.GetReportAsync(connection, null, result.Value!.ValidationId, CancellationToken.None);
+        Assert.InRange(report!.CoverageBasisPoints, 0, 10_000);
+        Assert.Equal(5000, report.CoverageBasisPoints);
+    }
+
+    [Fact]
+    public async Task Report_is_immutable_after_completion()
+    {
+        var category = await CreateCategoryAsync("Imm");
+        var versionId = await SaveDraftAsync(category.CategoryId, DescriptionEquals("imm"));
+        var corpus = WriteCorpus([
+            CorpusRow(0, "tx", "acct", "imm", "outflow", 1, "suggestion", category.CategoryId)
+        ]);
+        var result = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], corpus),
+            actor,
+            NextKey(),
+            CancellationToken.None);
+        Assert.True(result.IsSuccess, result.ErrorCode);
+        await using var connection = await store.OpenMigratedAsync(CancellationToken.None);
+        await Assert.ThrowsAsync<Microsoft.Data.Sqlite.SqliteException>(async () =>
+        {
+            await using var cmd = connection.CreateCommand();
+            cmd.CommandText = "UPDATE validation_report SET total_rows = 99;";
+            await cmd.ExecuteNonQueryAsync();
+        });
+    }
+
+    [Fact]
+    public async Task Candidate_fingerprint_changes_when_candidate_set_changes()
+    {
+        var category = await CreateCategoryAsync("FpSet");
+        var v1 = await SaveDraftAsync(category.CategoryId, DescriptionEquals("fp1"), ruleId: "rule-fp1");
+        var v2 = await SaveDraftAsync(category.CategoryId, DescriptionEquals("fp2"), ruleId: "rule-fp2");
+        var corpus = WriteCorpus([
+            CorpusRow(0, "tx", "acct", "fp1", "outflow", 1, "suggestion", category.CategoryId)
+        ]);
+        var a = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [v1], corpus),
+            actor,
+            NextKey(),
+            CancellationToken.None);
+        var b = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [v1, v2], corpus),
+            actor,
+            NextKey(),
+            CancellationToken.None);
+        Assert.True(a.IsSuccess && b.IsSuccess);
+        await using var connection = await store.OpenMigratedAsync(CancellationToken.None);
+        var runA = await validationStore.GetRunAsync(connection, null, a.Value!.ValidationId, CancellationToken.None);
+        var runB = await validationStore.GetRunAsync(connection, null, b.Value!.ValidationId, CancellationToken.None);
+        Assert.NotEqual(runA!.CandidateFingerprint, runB!.CandidateFingerprint);
+    }
+
+    [Fact]
+    public async Task Empty_corpus_file_accounts_zero_rows_and_is_eligible()
+    {
+        var category = await CreateCategoryAsync("EmptyC");
+        var versionId = await SaveDraftAsync(category.CategoryId, DescriptionEquals("e"));
+        var path = Path.Combine(root, "empty.jsonl");
+        WriteOwnerFile(path, "");
+        var result = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], path),
+            actor,
+            NextKey(),
+            CancellationToken.None);
+        Assert.True(result.IsSuccess, result.ErrorCode);
+        Assert.Equal(0, result.Value!.TotalRows);
+        Assert.True(result.Value.ActivationEligible);
+    }
+
+    [Fact]
+    public void Report_builder_candidate_fingerprint_is_order_insensitive()
+    {
+        var left = ValidationReportBuilder.ComputeCandidateFingerprint(
+        [
+            ("rv-b", "cat", new string('b', 64), "normalization_v1", "owner_authored"),
+            ("rv-a", "cat", new string('a', 64), "normalization_v1", "owner_authored")
+        ]);
+        var right = ValidationReportBuilder.ComputeCandidateFingerprint(
+        [
+            ("rv-a", "cat", new string('a', 64), "normalization_v1", "owner_authored"),
+            ("rv-b", "cat", new string('b', 64), "normalization_v1", "owner_authored")
+        ]);
+        Assert.Equal(left, right);
+        Assert.Equal(64, left.Length);
+    }
+
     // ── Helpers ──────────────────────────────────────────────────────────────
 
     private async Task<string> SaveDraftAsync(
