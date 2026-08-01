@@ -60,92 +60,130 @@
   ],
   "files": [
     {
-      "id": "01KYVN0TNZNQNK7EWBV898HS17",
+      "id": "01KYYHN5CPDF394BVMY5MNMR3A",
       "path": "src/Tally/Features/Classify/Evaluation/Outcome/GetClassificationOutcomeQuery.cs",
       "action": "create",
       "role": "outcome query",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T11:34:23.8923659+00:00"
     },
     {
-      "id": "01KYVN0TNZMA4GWXQB7F4BZYHG",
+      "id": "01KYYHN5CPC5BH548XEC57JWBA",
       "path": "src/Tally/Domain/Classify/Evaluation/ClassificationStalenessPolicy.cs",
       "action": "create",
       "role": "fingerprint comparison",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T11:34:23.8923659+00:00"
     },
     {
-      "id": "01KYVN0TNZ6SCXEKS4SBR1C0CC",
+      "id": "01KYYHN5CPKVSC0N1AXV0THE90",
       "path": "src/Tally/Features/Classify/Contract/ClassifyContractMapper.Outcome.cs",
       "action": "create",
       "role": "pure explanation mapping",
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T11:34:23.8923659+00:00"
     },
     {
-      "id": "01KYVN0TNZGPJVDYEFJ0B9DB7A",
+      "id": "01KYYHN5CPVAT3D2P81ZMM31JN",
       "path": "src/Tally/Bootstrap/Features/ClassifyEvaluationExtensions.cs",
       "action": "create",
       "role": "explicit evaluation registration",
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T11:34:23.8923659+00:00"
     },
     {
-      "id": "01KYVN0TNZ4YXK68HB4BQR2FQ0",
+      "id": "01KYYHN5CPZSBJNGE35NJF6VQ0",
       "path": "tests/Tally.Tests/Classify/Evaluation/OutcomeExplanationTests.cs",
       "action": "test",
       "role": "explanation partitions",
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T11:34:23.8923659+00:00"
     },
     {
-      "id": "01KYVN0TNZNVKFD67YQ1T9KPKZ",
+      "id": "01KYYHN5CPG12M4XMC4CWJYBB9",
       "path": "tests/Tally.Tests/Classify/Evaluation/OutcomeInvalidationTests.cs",
       "action": "test",
       "role": "complete staleness matrix",
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T11:34:23.8923659+00:00"
+    },
+    {
+      "id": "01KYYHN5CPX669AYFAWXHAYZ0X",
+      "path": "src/Tally/Contracts/Classify/Operations/ClassifyResults.cs",
+      "action": "modify",
+      "role": "complete bounded public outcome explanation contract",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-08-01T11:34:23.8923659+00:00"
+    },
+    {
+      "id": "01KYYHN5CP9KCB69S9FGRNPC0Y",
+      "path": "src/Tally/Contracts/Classify/ClassifyJsonContext.cs",
+      "action": "modify",
+      "role": "source-generated explanation and conflict proposal contracts",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-08-01T11:34:23.8923659+00:00"
+    },
+    {
+      "id": "01KYYHN5CP9JHWWAPB6G2CCZ09",
+      "path": "tests/Tally.Tests/Classify/Contract/ClassifyOperationContractTests.cs",
+      "action": "test",
+      "role": "public outcome result schema serialization and disclosure boundary",
+      "required": 1,
+      "sort_order": 8,
+      "created_at": "2026-08-01T11:34:23.8923659+00:00"
     }
   ],
   "interfaces": [
     {
-      "id": "01KYVN0TNZGWX3QQRHYCNC25FX",
+      "id": "01KYYHN5CPX3H265DNHG4GATRN",
       "name": "ClassificationEvaluationStore",
       "direction": "consumes",
       "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
       "sort_order": 0,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T11:34:23.8923659+00:00"
     },
     {
-      "id": "01KYVN0TNZKAYJ5FN4BEWSXMCG",
+      "id": "01KYYHN5CPC6DQ9SVMJ0Q56FFW",
       "name": "LedgerContractClient.QueryClassificationProjectionAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
       "sort_order": 1,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T11:34:23.8923659+00:00"
     },
     {
-      "id": "01KYVN0TP0YN9628SRGT7ZAR69",
+      "id": "01KYYHN5CPV9F463B52G79TTMG",
       "name": "GetClassificationOutcomeQuery.HandleAsync",
       "direction": "produces",
       "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
       "sort_order": 2,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T11:34:23.8923659+00:00"
     },
     {
-      "id": "01KYVN0TP0523T20709C0JJ37A",
+      "id": "01KYYHN5CP2QEVW61G27ESAF8Y",
       "name": "ClassificationStalenessPolicy.Evaluate",
       "direction": "produces",
       "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
       "sort_order": 3,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T11:34:23.8923659+00:00"
+    },
+    {
+      "id": "01KYYHN5CPKQCHDQBVMD1WYJKV",
+      "name": "ClassifyOutcomeGetResult",
+      "direction": "produces",
+      "contract_ref_code": "FR-CLASSIFY-OUTCOME-EXPLANATION",
+      "notes": [
+        "bounded public explanation including conflict proposals and nullable re-evaluate action"
+      ],
+      "sort_order": 4,
+      "created_at": "2026-08-01T11:34:23.8923659+00:00"
     }
   ],
   "recipe_items": [
@@ -280,14 +318,44 @@
       "created_at": "2026-07-31T08:35:28.5399812+00:00"
     },
     {
-      "id": "01KYVN0TNZEE1YWWF2PYRTJ0YV",
+      "id": "01KYYHN5CN5M9YZVCEMY058M22",
       "kind": "note",
       "text": [
         "Staleness comparison is field-complete against EvaluationFingerprint; tests enumerate every PRD trigger."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T11:34:23.8923659+00:00"
+    },
+    {
+      "id": "01KYYHN5CNC9KCKTND0EZJHZAD",
+      "kind": "note",
+      "text": [
+        "Hermes blocker resolution (2026-08-01): the existing public ClassifyOutcomeGetResult is an authorized seam for this bead and must expose the already-accepted bounded explanation: retained normalization_version and rule_set_version_id; stable safe_reason; ordered contributing_rule_version_ids; ordered allowed matched_field_keys only; for conflicts an ordered list of (rule_version_id, proposed_category_id) resolved only from immutable rule versions named by retained MatchEvidence; and nullable permitted_next_operation whose sole possible value is re_evaluate/classify.evaluate for stale, conflict, or no-suggestion outcomes. Fresh suggestions return no forced next operation here. Never expose predicate values, normalized hashes, descriptions, requests, or unrelated rule payload."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-01T11:34:23.8923659+00:00"
+    },
+    {
+      "id": "01KYYHN5CN1RH9SD0AREGAJH1B",
+      "kind": "note",
+      "text": [
+        "Same-identifier active category rename is the specific exception to generic store-generation churn: if category identity/lifecycle, item lifecycle, ordered membership, contract, projection, normalization, rule-set, snapshot validity, and all other semantic dimensions are unchanged, display-name-only rename remains fresh and returns the current name. Any archive, missing category, reactivation lifecycle change, or other changed dimension remains stale; reactivation must be proven by lifecycle fingerprint/history, not current active status alone."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-08-01T11:34:23.8923659+00:00"
+    },
+    {
+      "id": "01KYYHN5CPW7930BVN90MSJF93",
+      "kind": "note",
+      "text": [
+        "If retained MatchEvidence names a missing immutable rule version or a conflict rule cannot be mapped unambiguously to its proposed category, return stable evidence-unavailable/integrity and never reconstruct from current evaluation logic. Public contract tests must assert field presence, deterministic ordering, nullability, and private-data exclusion."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-08-01T11:34:23.8923659+00:00"
     }
   ],
   "references": [
