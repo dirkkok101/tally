@@ -247,16 +247,23 @@ public sealed class AbandonClassificationStateCommand
 
             if (writeResult.IsSuccess)
             {
-                // Final deletion only with durable tombstone authority (not manifest.Committed alone).
-                var durable = false;
-                await using (var connection = await stateStore.OpenMigratedAsync(ct))
-                {
-                    durable = await recoveryStore.HasTombstoneIdAsync(
-                        connection, null, tombstoneId, ct);
-                }
-
-                quarantine?.FinalizeWithDurableAuthority(durable);
+                // The transaction and terminal idempotency outcome are already durable. Detach
+                // the quarantine before best-effort finalization so a cancelled/failed authority
+                // re-probe cannot restore files behind the committed tombstone. Startup recovery
+                // will rebind the manifest operation ID to durable DB authority and finish it.
+                var committedQuarantine = quarantine;
                 quarantine = null;
+                try
+                {
+                    await using var connection = await stateStore.OpenMigratedAsync(ct);
+                    var durable = await recoveryStore.HasTombstoneIdAsync(
+                        connection, null, tombstoneId, ct);
+                    committedQuarantine?.FinalizeWithDurableAuthority(durable);
+                }
+                catch
+                {
+                    // Leave the protected manifest and staged files for startup reconciliation.
+                }
             }
             else
             {

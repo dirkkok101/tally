@@ -582,11 +582,32 @@ public sealed class ClassifyArtifactProtection
             return false;
         }
 
+        // Bind the manifest to its operation directory and to the two immutable database
+        // authority types. A protected but rewritten manifest must not borrow an unrelated
+        // cleanup/tombstone receipt to authorize deletion.
+        if (!string.Equals(manifest.Kind, "cleanup", StringComparison.Ordinal)
+            && !string.Equals(manifest.Kind, "abandon", StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        if (!string.Equals(
+                Path.GetFileName(dir.TrimEnd(Path.DirectorySeparatorChar)),
+                SanitizeOperationId(manifest.OperationId),
+                StringComparison.Ordinal))
+        {
+            return false;
+        }
+
         // Every entry must be well-formed; staged name must match closed index form.
+        var originalNames = new HashSet<string>(StringComparer.Ordinal);
+        var stagedNames = new HashSet<string>(StringComparer.Ordinal);
         for (var i = 0; i < manifest.Entries.Count; i++)
         {
             var entry = manifest.Entries[i];
-            if (!ClassifyRetentionPolicy.IsRecognizedTemporaryFileName(entry.OriginalName))
+            if (!ClassifyRetentionPolicy.IsRecognizedTemporaryFileName(entry.OriginalName)
+                || !originalNames.Add(entry.OriginalName)
+                || !stagedNames.Add(entry.StagedName))
             {
                 return false;
             }
@@ -596,11 +617,7 @@ public sealed class ClassifyArtifactProtection
                     i.ToString(System.Globalization.CultureInfo.InvariantCulture),
                     StringComparison.Ordinal))
             {
-                // Allow non-contiguous only if staged name is decimal digits — still require mapping.
-                if (entry.StagedName.Length == 0 || entry.StagedName.Any(c => !char.IsAsciiDigit(c)))
-                {
-                    return false;
-                }
+                return false;
             }
         }
 
