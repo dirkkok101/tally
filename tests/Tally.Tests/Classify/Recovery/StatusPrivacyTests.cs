@@ -57,10 +57,13 @@ public sealed class StatusPrivacyTests : IAsyncLifetime
         Assert.DoesNotContain("amount", json, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("description", json, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("token", json, StringComparison.OrdinalIgnoreCase);
-        Assert.DoesNotContain("corpus", json, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("lifecycleState", json, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("mutationMayHaveOccurred", json, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("nextSafeOperationId", json, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("evaluation", json, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("evaluationFingerprint", json, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("stalenessState", json, StringComparison.OrdinalIgnoreCase);
+        Assert.True(ClassifyContractMapper.HasExactlyOneMatchingDetail(result.Value!));
     }
 
     [Fact]
@@ -94,6 +97,11 @@ public sealed class StatusPrivacyTests : IAsyncLifetime
         Assert.DoesNotContain("alloc-", json, StringComparison.Ordinal);
         Assert.DoesNotContain("ledger.transaction", json, StringComparison.Ordinal);
         Assert.True(SafeNextActionPolicy.IsKnownNextAction(result.Value!.NextSafeOperationId));
+        Assert.NotNull(result.Value.Apply);
+        Assert.Contains("requestFingerprint", json, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("unresolvedFrontier", json, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("resumeSafe", json, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("replaySafe", json, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -107,7 +115,10 @@ public sealed class StatusPrivacyTests : IAsyncLifetime
         Assert.True(result.IsSuccess, result.ErrorCode);
         var json = JsonSerializer.Serialize(result.Value, ClassifyJsonContext.Default.ClassifyStatusResult);
         Assert.DoesNotContain("owner-private-reason-text-99", json, StringComparison.Ordinal);
-        Assert.DoesNotContain("out-prev-fb-priv", json, StringComparison.Ordinal);
+        Assert.DoesNotContain("tx-prev-fb-priv", json, StringComparison.Ordinal);
+        Assert.NotNull(result.Value!.Feedback);
+        Assert.Equal(ClassifyContractMapper.StatusReasonFeedbackAccept, result.Value.Feedback!.ReasonCode);
+        Assert.Equal("out-prev-fb-priv", result.Value.Feedback.OutcomeId);
     }
 
     [Fact]
@@ -155,7 +166,7 @@ public sealed class StatusPrivacyTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Preview_status_does_not_reread_ledger_or_corpus_fields_into_result()
+    public async Task Preview_status_exposes_only_authorization_metadata()
     {
         await SeedPreviewAsync("prev-priv", expiresAt: "2099-01-01T00:00:00Z");
         var result = await services.Status.HandleAsync(
@@ -164,14 +175,16 @@ public sealed class StatusPrivacyTests : IAsyncLifetime
             CancellationToken.None);
         Assert.True(result.IsSuccess, result.ErrorCode);
         var json = JsonSerializer.Serialize(result.Value, ClassifyJsonContext.Default.ClassifyStatusResult);
-        Assert.DoesNotContain("store_generation", json, StringComparison.OrdinalIgnoreCase);
-        Assert.DoesNotContain("fingerprint", json, StringComparison.OrdinalIgnoreCase);
-        Assert.DoesNotContain("projection", json, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("storeGenerationFingerprint", json, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("snap-p", json, StringComparison.Ordinal);
+        Assert.DoesNotContain("projection", json, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("evaluationFingerprint", json, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("selectionHash", json, StringComparison.OrdinalIgnoreCase);
+        Assert.NotNull(result.Value!.Preview);
     }
 
     [Fact]
-    public async Task Abandonment_status_does_not_echo_reason_or_actor_in_public_result()
+    public async Task Abandonment_status_does_not_echo_free_text_reason()
     {
         await SeedRuleVersionAsync("rv-priv-ab");
         await InsertTombstoneAsync("tomb-priv", "rule", "rv-priv-ab", reason: "secret-abandon-reason");
@@ -182,11 +195,12 @@ public sealed class StatusPrivacyTests : IAsyncLifetime
         Assert.True(result.IsSuccess, result.ErrorCode);
         var json = JsonSerializer.Serialize(result.Value, ClassifyJsonContext.Default.ClassifyStatusResult);
         Assert.DoesNotContain("secret-abandon-reason", json, StringComparison.Ordinal);
-        Assert.DoesNotContain("human:owner", json, StringComparison.Ordinal);
+        Assert.Equal(ClassifyContractMapper.StatusReasonTombstone, result.Value!.Abandonment!.ReasonCode);
+        Assert.Contains("tombstoneId", json, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
-    public async Task Cleanup_status_does_not_expose_policy_path_or_counts_in_public_shape()
+    public async Task Cleanup_status_exposes_aggregate_counts_without_paths()
     {
         await InsertCleanupEventAsync("clean-priv", removed: 2);
         var result = await services.Status.HandleAsync(
@@ -195,10 +209,29 @@ public sealed class StatusPrivacyTests : IAsyncLifetime
             CancellationToken.None);
         Assert.True(result.IsSuccess, result.ErrorCode);
         var json = JsonSerializer.Serialize(result.Value, ClassifyJsonContext.Default.ClassifyStatusResult);
-        // Public ClassifyStatusResult is intentionally sparse — counts stay internal to decision.
-        Assert.DoesNotContain("removedArtifactCount", json, StringComparison.OrdinalIgnoreCase);
-        Assert.DoesNotContain("cleanup_v1", json, StringComparison.Ordinal);
+        Assert.Contains("removedArtifactCount", json, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("cleanup_v1", json, StringComparison.Ordinal);
+        Assert.DoesNotContain(root, json, StringComparison.Ordinal);
+        Assert.DoesNotContain("/tmp", json, StringComparison.Ordinal);
         Assert.Equal(SafeNextActionPolicy.None, result.Value!.NextSafeOperationId);
+        Assert.Equal(2, result.Value.Cleanup!.RemovedArtifactCount);
+    }
+
+    [Fact]
+    public async Task Rule_status_never_exposes_owner_free_text_reason()
+    {
+        await SeedRuleVersionAsync("rv-priv-reason");
+        var result = await services.Status.HandleAsync(
+            new ClassifyStatusRequest("1.0", ClassifyStatusSubjectType.Rule, "rv-priv-reason"),
+            actor,
+            CancellationToken.None);
+        Assert.True(result.IsSuccess, result.ErrorCode);
+        var json = JsonSerializer.Serialize(result.Value, ClassifyJsonContext.Default.ClassifyStatusResult);
+        Assert.DoesNotContain("\"seed\"", json, StringComparison.Ordinal);
+        Assert.Contains("reasonCode", json, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(
+            ClassifyContractMapper.StatusReasonDraft,
+            result.Value!.Rule!.Versions.Single(v => v.RuleVersionId == "rv-priv-reason").ReasonCode);
     }
 
     [Fact]

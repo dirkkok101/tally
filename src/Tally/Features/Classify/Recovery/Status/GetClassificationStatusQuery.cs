@@ -20,7 +20,8 @@ namespace Tally.Features.Classify.Recovery.Status;
 /// classify.status — bounded read-only durable projection across rule, validation, evaluation,
 /// preview, apply, feedback, abandonment, and cleanup subjects (FR-CLASSIFY-STATUS-HISTORY).
 /// Never rereads private corpus rows or LEDGER projections; never searches serialized payloads.
-/// Unknown subjects return stable CLASSIFY-NOT-FOUND.
+/// Unknown subjects → CLASSIFY-NOT-FOUND; inconsistent required metadata → CLASSIFY-INTEGRITY;
+/// history overflow → CLASSIFY-RESOURCE-LIMIT with no partial result.
 /// </summary>
 [SupportedOSPlatform("linux")]
 public sealed class GetClassificationStatusQuery
@@ -126,30 +127,80 @@ public sealed class GetClassificationStatusQuery
         string ruleVersionId,
         CancellationToken cancellationToken)
     {
-        var version = await ruleStore.GetRuleVersionAsync(
+        var addressed = await ruleStore.GetRuleVersionAsync(
             connection, null, ruleVersionId, cancellationToken);
-        if (version is null)
+        if (addressed is null)
         {
-            // Tombstoned subjects still report abandoned when the version row is gone? RESTRICT keeps rows.
-            // Prefer stable not-found when no durable version exists.
             return NotFound();
         }
 
-        var tombstoned = await recoveryStore.HasRuleVersionTombstoneAsync(
+        if (string.IsNullOrWhiteSpace(addressed.RuleId)
+            || string.IsNullOrWhiteSpace(addressed.LifecycleState)
+            || string.IsNullOrWhiteSpace(addressed.CreatedBy)
+            || string.IsNullOrWhiteSpace(addressed.CreatedAt))
+        {
+            return Integrity();
+        }
+
+        var allVersions = await ruleSetStore.ListAllRuleVersionsAsync(
+            connection, null, cancellationToken);
+        var family = allVersions
+            .Where(v => string.Equals(v.RuleId, addressed.RuleId, StringComparison.Ordinal))
+            .OrderBy(v => v.CreatedAt, StringComparer.Ordinal)
+            .ThenBy(v => v.RuleVersionId, StringComparer.Ordinal)
+            .ToArray();
+
+        if (family.Length == 0)
+        {
+            return Integrity();
+        }
+
+        if (family.Length > ClassifyContractMapper.MaxStatusRuleVersionHistory)
+        {
+            return ResourceLimit();
+        }
+
+        var active = await ruleSetStore.GetActiveRuleSetAsync(connection, null, cancellationToken);
+        var successorsByPrior = family
+            .Where(v => !string.IsNullOrWhiteSpace(v.PriorVersionId))
+            .GroupBy(v => v.PriorVersionId!, StringComparer.Ordinal)
+            .ToDictionary(
+                g => g.Key,
+                g => (IReadOnlyList<string>)g
+                    .Select(v => v.RuleVersionId)
+                    .OrderBy(id => id, StringComparer.Ordinal)
+                    .ToArray(),
+                StringComparer.Ordinal);
+
+        var versionDetails = new List<ClassifyRuleStatusVersion>(family.Length);
+        foreach (var version in family)
+        {
+            var tombstoned = await recoveryStore.HasRuleVersionTombstoneAsync(
+                connection, null, version.RuleVersionId, cancellationToken);
+            var membership = await ListRuleSetMembershipAsync(
+                connection, version.RuleVersionId, cancellationToken);
+            successorsByPrior.TryGetValue(version.RuleVersionId, out var successors);
+            successors ??= Array.Empty<string>();
+            versionDetails.Add(ClassifyContractMapper.ToRuleStatusVersion(
+                version, membership, successors, tombstoned));
+        }
+
+        var addressedTombstoned = await recoveryStore.HasRuleVersionTombstoneAsync(
             connection, null, ruleVersionId, cancellationToken);
         var refs = await recoveryStore.ProbeRuleVersionReferencesAsync(
             connection, null, ruleVersionId, cancellationToken);
         var isReferenced = refs != ClassifyRetentionPolicy.ReferenceFlags.None
             && refs != ClassifyRetentionPolicy.ReferenceFlags.NotFound;
-
         var decision = SafeNextActionPolicy.ForRuleVersion(
-            version.LifecycleState,
-            tombstoned,
-            isReferenced);
-        // Active pointer is consulted only as durable metadata for lifecycle confirmation.
-        _ = await ruleSetStore.GetActiveRuleSetAsync(connection, null, cancellationToken);
+            addressed.LifecycleState, addressedTombstoned, isReferenced);
 
-        return Ok(ClassifyStatusSubjectType.Rule, ruleVersionId, decision);
+        var detail = ClassifyContractMapper.ToRuleStatusDetail(
+            addressed.RuleId,
+            active?.RuleSetVersionId,
+            versionDetails);
+
+        return Ok(ClassifyContractMapper.ToStatusResult(
+            ClassifyStatusSubjectType.Rule, ruleVersionId, decision, rule: detail));
     }
 
     private async Task<CommandResult<ClassifyStatusResult>> StatusValidationAsync(
@@ -163,11 +214,31 @@ public sealed class GetClassificationStatusQuery
             return NotFound();
         }
 
-        // Aggregate report is durable metadata only (no corpus reread).
-        _ = await validationStore.GetReportAsync(connection, null, validationId, cancellationToken);
+        if (string.IsNullOrWhiteSpace(run.CandidateFingerprint)
+            || string.IsNullOrWhiteSpace(run.CorpusFingerprint)
+            || string.IsNullOrWhiteSpace(run.ExpectedOutcomeFingerprint)
+            || string.IsNullOrWhiteSpace(run.LifecycleState)
+            || string.IsNullOrWhiteSpace(run.Actor)
+            || string.IsNullOrWhiteSpace(run.StartedAt))
+        {
+            return Integrity();
+        }
 
+        var report = await validationStore.GetReportAsync(
+            connection, null, validationId, cancellationToken);
+        if (string.Equals(run.LifecycleState, ClassificationValidationStore.LifecycleCompleted, StringComparison.Ordinal)
+            && report is null)
+        {
+            // Completed validation must retain aggregate report.
+            return Integrity();
+        }
+
+        var staleness = ClassifyContractMapper.DeriveDurableStalenessState(
+            run.LifecycleState, run.SnapshotExpiresAt, timeProvider.GetUtcNow());
         var decision = SafeNextActionPolicy.ForValidationRun(run.LifecycleState);
-        return Ok(ClassifyStatusSubjectType.Validation, validationId, decision);
+        var detail = ClassifyContractMapper.ToValidationStatusDetail(run, report, staleness);
+        return Ok(ClassifyContractMapper.ToStatusResult(
+            ClassifyStatusSubjectType.Validation, validationId, decision, validation: detail));
     }
 
     private async Task<CommandResult<ClassifyStatusResult>> StatusEvaluationAsync(
@@ -181,10 +252,35 @@ public sealed class GetClassificationStatusQuery
             return NotFound();
         }
 
-        var decision = SafeNextActionPolicy.ForEvaluationRun(
-            run.LifecycleState,
-            run.ConflictCount);
-        return Ok(ClassifyStatusSubjectType.Evaluation, evaluationId, decision);
+        if (string.IsNullOrWhiteSpace(run.RuleSetVersionId)
+            || string.IsNullOrWhiteSpace(run.NormalizationVersion)
+            || string.IsNullOrWhiteSpace(run.StoreGenerationFingerprint)
+            || string.IsNullOrWhiteSpace(run.SnapshotId)
+            || string.IsNullOrWhiteSpace(run.SnapshotExpiresAt)
+            || string.IsNullOrWhiteSpace(run.LifecycleState)
+            || string.IsNullOrWhiteSpace(run.Actor)
+            || string.IsNullOrWhiteSpace(run.CreatedAt)
+            || run.InputCount < 0
+            || run.SuggestionCount < 0
+            || run.NoSuggestionCount < 0
+            || run.ConflictCount < 0
+            || run.StaleCount < 0)
+        {
+            return Integrity();
+        }
+
+        var fingerprint = ClassifyContractMapper.ComputeEvaluationStatusFingerprint(run);
+        if (fingerprint.Length != 64)
+        {
+            return Integrity();
+        }
+
+        var staleness = ClassifyContractMapper.DeriveDurableStalenessState(
+            run.LifecycleState, run.SnapshotExpiresAt, timeProvider.GetUtcNow());
+        var decision = SafeNextActionPolicy.ForEvaluationRun(run.LifecycleState, run.ConflictCount);
+        var detail = ClassifyContractMapper.ToEvaluationStatusDetail(run, fingerprint, staleness);
+        return Ok(ClassifyContractMapper.ToStatusResult(
+            ClassifyStatusSubjectType.Evaluation, evaluationId, decision, evaluation: detail));
     }
 
     private async Task<CommandResult<ClassifyStatusResult>> StatusPreviewAsync(
@@ -198,19 +294,28 @@ public sealed class GetClassificationStatusQuery
             return NotFound();
         }
 
+        if (string.IsNullOrWhiteSpace(preview.EvaluationId)
+            || string.IsNullOrWhiteSpace(preview.EvaluationFingerprint)
+            || string.IsNullOrWhiteSpace(preview.SelectionHash)
+            || string.IsNullOrWhiteSpace(preview.ExpiresAt)
+            || string.IsNullOrWhiteSpace(preview.Actor)
+            || string.IsNullOrWhiteSpace(preview.CreatedAt)
+            || preview.EvaluationFingerprint.Length != 64
+            || preview.SelectionHash.Length != 64)
+        {
+            return Integrity();
+        }
+
         var tombstone = await recoveryStore.GetTombstoneAsync(
-            connection,
-            null,
-            ClassifyRetentionPolicy.SubjectTypePreview,
-            previewId,
-            cancellationToken);
+            connection, null, ClassifyRetentionPolicy.SubjectTypePreview, previewId, cancellationToken);
         var isTombstoned = tombstone is not null;
         var isExpired = IsExpired(preview.ExpiresAt);
-        // Presence of any apply_run referencing this preview (durable only).
         var hasApply = await HasApplyForPreviewAsync(connection, previewId, cancellationToken);
-
+        var lifecycle = ClassifyContractMapper.DerivePreviewLifecycle(isTombstoned, isExpired);
         var decision = SafeNextActionPolicy.ForPreview(isTombstoned, isExpired, hasApply);
-        return Ok(ClassifyStatusSubjectType.Preview, previewId, decision);
+        var detail = ClassifyContractMapper.ToPreviewStatusDetail(preview, lifecycle);
+        return Ok(ClassifyContractMapper.ToStatusResult(
+            ClassifyStatusSubjectType.Preview, previewId, decision, preview: detail));
     }
 
     private async Task<CommandResult<ClassifyStatusResult>> StatusApplyAsync(
@@ -224,19 +329,40 @@ public sealed class GetClassificationStatusQuery
             return NotFound();
         }
 
+        if (string.IsNullOrWhiteSpace(run.PreviewId)
+            || string.IsNullOrWhiteSpace(run.RequestFingerprint)
+            || run.RequestFingerprint.Length != 64
+            || string.IsNullOrWhiteSpace(run.LifecycleState)
+            || string.IsNullOrWhiteSpace(run.Actor)
+            || string.IsNullOrWhiteSpace(run.StartedAt)
+            || run.UnresolvedFrontier < 0)
+        {
+            return Integrity();
+        }
+
         var items = await runStore.ListItemsAsync(connection, null, applyId, cancellationToken);
+        if (items.Count > ClassifyContractMapper.MaxStatusRuleVersionHistory * 20)
+        {
+            // Hard upper bound on item expansion — fail closed without partial totals.
+            return ResourceLimit();
+        }
+
         var totals = ClassifyContractMapper.ToApplyStatusTotals(items);
         var frontier = run.UnresolvedFrontier > 0
             ? run.UnresolvedFrontier
             : ApplyReplayPolicy.ComputeUnresolvedFrontier(items.Select(i => i.ItemState));
-
+        var (replaySafe, resumeSafe) = ClassifyContractMapper.ToApplySafetyFlags(
+            run.LifecycleState, frontier);
         var decision = SafeNextActionPolicy.ForApplyRun(
             run.LifecycleState,
             frontier,
             totals.AppliedCount,
             totals.AlreadyAppliedCount,
             totals.FailedCount);
-        return Ok(ClassifyStatusSubjectType.Apply, applyId, decision);
+        var detail = ClassifyContractMapper.ToApplyStatusDetail(
+            run, totals, frontier, replaySafe, resumeSafe);
+        return Ok(ClassifyContractMapper.ToStatusResult(
+            ClassifyStatusSubjectType.Apply, applyId, decision, apply: detail));
     }
 
     private async Task<CommandResult<ClassifyStatusResult>> StatusFeedbackAsync(
@@ -251,12 +377,49 @@ public sealed class GetClassificationStatusQuery
             return NotFound();
         }
 
-        // Proposal state is durable metadata only — never reconstruct evidence.
-        _ = await feedbackStore.GetProposalByFeedbackAsync(
+        if (string.IsNullOrWhiteSpace(feedback.OutcomeId)
+            || string.IsNullOrWhiteSpace(feedback.DecisionType)
+            || string.IsNullOrWhiteSpace(feedback.Actor)
+            || string.IsNullOrWhiteSpace(feedback.OccurredAt)
+            || string.IsNullOrWhiteSpace(feedback.RuleSetVersionId))
+        {
+            return Integrity();
+        }
+
+        var proposal = await feedbackStore.GetProposalByFeedbackAsync(
             connection, null, feedbackId, cancellationToken);
 
+        var ruleVersionIds = new List<string>();
+        if (proposal is not null && !string.IsNullOrWhiteSpace(proposal.SourceRuleVersionId))
+        {
+            ruleVersionIds.Add(proposal.SourceRuleVersionId);
+        }
+
+        var members = await ruleSetStore.ListMemberRuleVersionIdsAsync(
+            connection, null, feedback.RuleSetVersionId, cancellationToken);
+        if (members.Count > ClassifyContractMapper.MaxStatusRuleVersionHistory)
+        {
+            return ResourceLimit();
+        }
+
+        foreach (var id in members.OrderBy(x => x, StringComparer.Ordinal))
+        {
+            if (!ruleVersionIds.Contains(id, StringComparer.Ordinal))
+            {
+                ruleVersionIds.Add(id);
+            }
+        }
+
+        if (ruleVersionIds.Count > ClassifyContractMapper.MaxStatusRuleVersionHistory)
+        {
+            return ResourceLimit();
+        }
+
         var decision = SafeNextActionPolicy.ForFeedback(feedback.DecisionType);
-        return Ok(ClassifyStatusSubjectType.Feedback, feedbackId, decision);
+        var detail = ClassifyContractMapper.ToFeedbackStatusDetail(
+            feedback, proposal, ruleVersionIds);
+        return Ok(ClassifyContractMapper.ToStatusResult(
+            ClassifyStatusSubjectType.Feedback, feedbackId, decision, feedback: detail));
     }
 
     private async Task<CommandResult<ClassifyStatusResult>> StatusAbandonmentAsync(
@@ -264,20 +427,27 @@ public sealed class GetClassificationStatusQuery
         string subjectId,
         CancellationToken cancellationToken)
     {
-        // SubjectId is tombstone_id (primary) or abandoned subject_id (fallback).
-        var tombstone = await TryLoadTombstoneByIdAsync(connection, subjectId, cancellationToken);
-        if (tombstone is null)
-        {
-            tombstone = await TryLoadTombstoneBySubjectIdAsync(connection, subjectId, cancellationToken);
-        }
-
+        var tombstone = await TryLoadTombstoneByIdAsync(connection, subjectId, cancellationToken)
+            ?? await TryLoadTombstoneBySubjectIdAsync(connection, subjectId, cancellationToken);
         if (tombstone is null)
         {
             return NotFound();
         }
 
+        if (string.IsNullOrWhiteSpace(tombstone.TombstoneId)
+            || string.IsNullOrWhiteSpace(tombstone.SubjectType)
+            || string.IsNullOrWhiteSpace(tombstone.SubjectId)
+            || string.IsNullOrWhiteSpace(tombstone.Actor)
+            || string.IsNullOrWhiteSpace(tombstone.AbandonedAt)
+            || tombstone.RemovedPayloadCount < 0)
+        {
+            return Integrity();
+        }
+
         var decision = SafeNextActionPolicy.ForAbandonment(tombstone.RemovedPayloadCount);
-        return Ok(ClassifyStatusSubjectType.Abandonment, subjectId, decision);
+        var detail = ClassifyContractMapper.ToAbandonmentStatusDetail(tombstone);
+        return Ok(ClassifyContractMapper.ToStatusResult(
+            ClassifyStatusSubjectType.Abandonment, subjectId, decision, abandonment: detail));
     }
 
     private async Task<CommandResult<ClassifyStatusResult>> StatusCleanupAsync(
@@ -290,20 +460,43 @@ public sealed class GetClassificationStatusQuery
             return NotFound();
         }
 
-        var removed = await LoadCleanupRemovedCountAsync(connection, cleanupId, cancellationToken);
-        var decision = SafeNextActionPolicy.ForCleanup(removed);
-        return Ok(ClassifyStatusSubjectType.Cleanup, cleanupId, decision);
+        var row = await LoadCleanupEventAsync(connection, cleanupId, cancellationToken);
+        if (row is null
+            || string.IsNullOrWhiteSpace(row.Value.PolicyVersion)
+            || string.IsNullOrWhiteSpace(row.Value.Actor)
+            || string.IsNullOrWhiteSpace(row.Value.OccurredAt)
+            || row.Value.RemovedArtifactCount < 0
+            || row.Value.RetainedArtifactCount < 0)
+        {
+            return Integrity();
+        }
+
+        var decision = SafeNextActionPolicy.ForCleanup(row.Value.RemovedArtifactCount);
+        var detail = ClassifyContractMapper.ToCleanupStatusDetail(
+            cleanupId,
+            row.Value.PolicyVersion,
+            row.Value.Actor,
+            row.Value.OccurredAt,
+            row.Value.RemovedArtifactCount,
+            row.Value.RetainedArtifactCount,
+            row.Value.RecognizedRemovedCount,
+            row.Value.ExpiredPreviewCount,
+            row.Value.AbandonedPayloadCount);
+        return Ok(ClassifyContractMapper.ToStatusResult(
+            ClassifyStatusSubjectType.Cleanup, cleanupId, decision, cleanup: detail));
     }
 
-    private static CommandResult<ClassifyStatusResult> Ok(
-        ClassifyStatusSubjectType subjectType,
-        string subjectId,
-        SafeNextActionPolicy.Decision decision) =>
-        CommandResult<ClassifyStatusResult>.Success(
-            ClassifyContractMapper.ToStatusResult(subjectType, subjectId, decision));
+    private static CommandResult<ClassifyStatusResult> Ok(ClassifyStatusResult result) =>
+        CommandResult<ClassifyStatusResult>.Success(result);
 
     private static CommandResult<ClassifyStatusResult> NotFound() =>
         CommandResult<ClassifyStatusResult>.Failure(ClassifyErrors.NotFound);
+
+    private static CommandResult<ClassifyStatusResult> Integrity() =>
+        CommandResult<ClassifyStatusResult>.Failure(ClassifyErrors.Integrity);
+
+    private static CommandResult<ClassifyStatusResult> ResourceLimit() =>
+        CommandResult<ClassifyStatusResult>.Failure(ClassifyErrors.ResourceLimit);
 
     private bool IsExpired(string expiresAtUtc)
     {
@@ -313,7 +506,6 @@ public sealed class GetClassificationStatusQuery
                 DateTimeStyles.RoundtripKind,
                 out var expires))
         {
-            // Malformed expiry → treat as expired fail-closed for next-action (abandon).
             return true;
         }
 
@@ -330,6 +522,29 @@ public sealed class GetClassificationStatusQuery
         command.Parameters.AddWithValue("$id", previewId);
         var scalar = await command.ExecuteScalarAsync(cancellationToken);
         return scalar is not null and not DBNull;
+    }
+
+    private static async Task<IReadOnlyList<string>> ListRuleSetMembershipAsync(
+        SqliteConnection connection,
+        string ruleVersionId,
+        CancellationToken cancellationToken)
+    {
+        await using var command = connection.CreateCommand();
+        command.CommandText = """
+            SELECT rule_set_version_id
+            FROM rule_set_member
+            WHERE rule_version_id = $id
+            ORDER BY rule_set_version_id ASC;
+            """;
+        command.Parameters.AddWithValue("$id", ruleVersionId);
+        var rows = new List<string>();
+        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+        while (await reader.ReadAsync(cancellationToken))
+        {
+            rows.Add(reader.GetString(0));
+        }
+
+        return rows;
     }
 
     private static async Task<ClassifyAbandonmentTombstoneRow?> TryLoadTombstoneByIdAsync(
@@ -371,22 +586,43 @@ public sealed class GetClassificationStatusQuery
             : null;
     }
 
-    private static async Task<int> LoadCleanupRemovedCountAsync(
+    private static async Task<(
+        string PolicyVersion,
+        string Actor,
+        string OccurredAt,
+        int RemovedArtifactCount,
+        int RetainedArtifactCount,
+        int RecognizedRemovedCount,
+        int ExpiredPreviewCount,
+        int AbandonedPayloadCount)?> LoadCleanupEventAsync(
         SqliteConnection connection,
         string cleanupId,
         CancellationToken cancellationToken)
     {
         await using var command = connection.CreateCommand();
         command.CommandText = """
-            SELECT removed_artifact_count
+            SELECT policy_version, actor, occurred_at,
+                   removed_artifact_count, retained_artifact_count,
+                   recognized_removed_count, expired_preview_count, abandoned_payload_count
             FROM cleanup_event
             WHERE cleanup_id = $id
             LIMIT 1;
             """;
         command.Parameters.AddWithValue("$id", cleanupId);
-        var scalar = await command.ExecuteScalarAsync(cancellationToken);
-        return scalar is null or DBNull
-            ? 0
-            : Convert.ToInt32(scalar, CultureInfo.InvariantCulture);
+        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+        if (!await reader.ReadAsync(cancellationToken))
+        {
+            return null;
+        }
+
+        return (
+            reader.GetString(0),
+            reader.GetString(1),
+            reader.GetString(2),
+            reader.GetInt32(3),
+            reader.GetInt32(4),
+            reader.GetInt32(5),
+            reader.GetInt32(6),
+            reader.GetInt32(7));
     }
 }

@@ -144,18 +144,27 @@ public sealed class ClassificationStatusTests : IAsyncLifetime
     }
 
     [Fact]
-    public void Mapper_status_result_is_bounded()
+    public void Mapper_status_result_is_bounded_with_exactly_one_detail()
     {
+        var evaluation = new ClassifyEvaluationStatusDetail(
+            new string('a', 64), "rsv-1", "normalization_v1",
+            1, 1, 0, 0, 0, "human:owner", "2026-08-01T00:00:00Z",
+            ClassifyContractMapper.StatusStalenessFresh);
         var result = ClassifyContractMapper.ToStatusResult(
             ClassifyStatusSubjectType.Evaluation,
             "eval-1",
-            new SafeNextActionPolicy.Decision("completed", false, SafeNextActionPolicy.None));
+            new SafeNextActionPolicy.Decision("completed", false, SafeNextActionPolicy.None),
+            evaluation: evaluation);
         Assert.Equal(ClassifyOperationIds.ContractVersion, result.ContractVersion);
         Assert.Equal(ClassifyStatusSubjectType.Evaluation, result.SubjectType);
         Assert.Equal("eval-1", result.SubjectId);
         Assert.Equal("completed", result.LifecycleState);
         Assert.False(result.MutationMayHaveOccurred);
         Assert.Equal(SafeNextActionPolicy.None, result.NextSafeOperationId);
+        Assert.True(ClassifyContractMapper.HasExactlyOneMatchingDetail(result));
+        Assert.NotNull(result.Evaluation);
+        Assert.Null(result.Rule);
+        Assert.Null(result.Apply);
     }
 
     // ── Query integration ───────────────────────────────────────────────────
@@ -217,6 +226,12 @@ public sealed class ClassificationStatusTests : IAsyncLifetime
         Assert.Equal(SafeNextActionPolicy.Abandon, result.Value.NextSafeOperationId);
         Assert.False(result.Value.MutationMayHaveOccurred);
         Assert.True(SafeNextActionPolicy.IsKnownNextAction(result.Value.NextSafeOperationId));
+        Assert.True(ClassifyContractMapper.HasExactlyOneMatchingDetail(result.Value));
+        Assert.NotNull(result.Value.Rule);
+        Assert.Equal("rule-status", result.Value.Rule!.RuleId);
+        Assert.Contains(result.Value.Rule.Versions, v => v.RuleVersionId == "rv-draft-1");
+        Assert.Equal(ClassifyContractMapper.StatusReasonDraft, result.Value.Rule.Versions[0].ReasonCode);
+        Assert.DoesNotContain(result.Value.Rule.Versions, v => v.ReasonCode == "seed");
     }
 
     [Fact]
@@ -295,6 +310,12 @@ public sealed class ClassificationStatusTests : IAsyncLifetime
         Assert.True(result.IsSuccess, result.ErrorCode);
         Assert.Equal("completed", result.Value!.LifecycleState);
         Assert.Equal(SafeNextActionPolicy.None, result.Value.NextSafeOperationId);
+        Assert.NotNull(result.Value.Evaluation);
+        Assert.Equal(64, result.Value.Evaluation!.EvaluationFingerprint.Length);
+        Assert.Equal("rsv-eval-seed", result.Value.Evaluation.RuleSetVersionId);
+        Assert.Equal(0, result.Value.Evaluation.ConflictCount);
+        Assert.Equal(ClassifyContractMapper.StatusStalenessFresh, result.Value.Evaluation.StalenessState);
+        Assert.True(ClassifyContractMapper.HasExactlyOneMatchingDetail(result.Value));
     }
 
     [Fact]
@@ -388,6 +409,13 @@ public sealed class ClassificationStatusTests : IAsyncLifetime
         Assert.True(result.IsSuccess, result.ErrorCode);
         Assert.Equal(SafeNextActionPolicy.Resume, result.Value!.NextSafeOperationId);
         Assert.True(result.Value.MutationMayHaveOccurred);
+        Assert.NotNull(result.Value.Apply);
+        Assert.Equal(64, result.Value.Apply!.RequestFingerprint.Length);
+        Assert.Equal(1, result.Value.Apply.AppliedCount);
+        Assert.Equal(2, result.Value.Apply.UnresolvedCount);
+        Assert.True(result.Value.Apply.ResumeSafe);
+        Assert.False(result.Value.Apply.ReplaySafe);
+        Assert.True(ClassifyContractMapper.HasExactlyOneMatchingDetail(result.Value));
     }
 
     [Fact]
@@ -435,6 +463,11 @@ public sealed class ClassificationStatusTests : IAsyncLifetime
         Assert.Equal(SafeNextActionPolicy.LifecycleRecorded, result.Value!.LifecycleState);
         Assert.Equal(SafeNextActionPolicy.None, result.Value.NextSafeOperationId);
         Assert.True(result.Value.MutationMayHaveOccurred);
+        Assert.NotNull(result.Value.Feedback);
+        Assert.Equal("accept", result.Value.Feedback!.DecisionType);
+        Assert.Equal(ClassifyContractMapper.StatusReasonFeedbackAccept, result.Value.Feedback.ReasonCode);
+        Assert.Equal("out-prev-fb-1", result.Value.Feedback.OutcomeId);
+        Assert.DoesNotContain("ok", result.Value.Feedback.ReasonCode, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -450,6 +483,10 @@ public sealed class ClassificationStatusTests : IAsyncLifetime
         Assert.Equal(SafeNextActionPolicy.LifecycleAbandoned, result.Value!.LifecycleState);
         Assert.True(result.Value.MutationMayHaveOccurred);
         Assert.Equal(SafeNextActionPolicy.None, result.Value.NextSafeOperationId);
+        Assert.NotNull(result.Value.Abandonment);
+        Assert.Equal("tomb-ab-1", result.Value.Abandonment!.TombstoneId);
+        Assert.Equal(ClassifyContractMapper.StatusReasonTombstone, result.Value.Abandonment.ReasonCode);
+        Assert.Equal(1, result.Value.Abandonment.RemovedPayloadCount);
     }
 
     [Fact]
@@ -464,6 +501,9 @@ public sealed class ClassificationStatusTests : IAsyncLifetime
         Assert.Equal(SafeNextActionPolicy.LifecycleCompleted, result.Value!.LifecycleState);
         Assert.True(result.Value.MutationMayHaveOccurred);
         Assert.Equal(SafeNextActionPolicy.None, result.Value.NextSafeOperationId);
+        Assert.NotNull(result.Value.Cleanup);
+        Assert.Equal(3, result.Value.Cleanup!.RemovedArtifactCount);
+        Assert.Equal(ClassifyRetentionPolicy.PolicyVersion, result.Value.Cleanup.PolicyVersion);
     }
 
     [Fact]
@@ -503,7 +543,41 @@ public sealed class ClassificationStatusTests : IAsyncLifetime
             Assert.False(string.IsNullOrWhiteSpace(result.Value.LifecycleState));
             Assert.Equal(type, result.Value.SubjectType);
             Assert.Equal(id, result.Value.SubjectId);
+            Assert.True(
+                ClassifyContractMapper.HasExactlyOneMatchingDetail(result.Value),
+                $"{type}:{id} missing exclusive typed detail");
         }
+    }
+
+    [Fact]
+    public async Task Preview_status_exposes_fingerprint_and_counts()
+    {
+        await SeedPreviewGraphAsync("prev-detail", expiresAt: "2099-01-01T00:00:00Z");
+        var result = await status.HandleAsync(
+            new ClassifyStatusRequest("1.0", ClassifyStatusSubjectType.Preview, "prev-detail"),
+            actor,
+            CancellationToken.None);
+        Assert.True(result.IsSuccess, result.ErrorCode);
+        Assert.NotNull(result.Value!.Preview);
+        Assert.Equal("prev-detail", result.Value.Preview!.PreviewId);
+        Assert.Equal(64, result.Value.Preview.EvaluationFingerprint.Length);
+        Assert.Equal(1, result.Value.Preview.SelectedCount);
+        Assert.Equal(SafeNextActionPolicy.LifecycleRetained, result.Value.Preview.LifecycleState);
+    }
+
+    [Fact]
+    public async Task Validation_status_exposes_fingerprints_when_report_absent_for_running()
+    {
+        await SeedValidationAsync("val-detail", lifecycle: "running");
+        var result = await status.HandleAsync(
+            new ClassifyStatusRequest("1.0", ClassifyStatusSubjectType.Validation, "val-detail"),
+            actor,
+            CancellationToken.None);
+        Assert.True(result.IsSuccess, result.ErrorCode);
+        Assert.NotNull(result.Value!.Validation);
+        Assert.Equal(64, result.Value.Validation!.CandidateFingerprint.Length);
+        Assert.Null(result.Value.Validation.ReportFingerprint);
+        Assert.Equal(SafeNextActionPolicy.Retry, result.Value.NextSafeOperationId);
     }
 
     // ── Seed helpers ────────────────────────────────────────────────────────
@@ -544,6 +618,21 @@ public sealed class ClassificationStatusTests : IAsyncLifetime
                 '{new string('c', 64)}', 'classification_v1', '{new string('d', 64)}',
                 'normalization_v1', '2026-08-01T00:00:00Z', {completed}, '{lifecycle}', 'human:owner');
             """);
+        if (lifecycle == "completed")
+        {
+            await ExecuteAsync(connection, transaction, $"""
+                INSERT INTO validation_report (
+                    validation_run_id, total_rows, accounted_rows, suggestion_count, no_suggestion_count,
+                    conflict_count, stale_count, coverage_basis_points, drift_canary_count,
+                    incorrect_application_canary_count, unexplained_conflict_count,
+                    owner_decision_count_before, owner_decision_count_after,
+                    report_fingerprint, outcomes_canonical_hash, activation_eligible
+                ) VALUES (
+                    '{validationId}', 10, 10, 6, 2, 1, 1, 6000, 0, 0, 0, 0, 0,
+                    '{new string('e', 64)}', '{new string('f', 64)}', 1);
+                """);
+        }
+
         await transaction.CommitAsync();
     }
 

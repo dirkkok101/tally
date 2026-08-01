@@ -378,6 +378,136 @@ public sealed class ClassifyOperationContractTests
     }
 
     [Fact]
+    public void Status_result_schema_exposes_envelope_and_typed_detail_slots()
+    {
+        var sample = new ClassifyStatusResult(
+            ClassifyOperationIds.ContractVersion,
+            ClassifyStatusSubjectType.Evaluation,
+            "eval-1",
+            "completed",
+            MutationMayHaveOccurred: false,
+            NextSafeOperationId: "none",
+            Evaluation: new ClassifyEvaluationStatusDetail(
+                new string('a', 64),
+                "rsv-1",
+                "normalization_v1",
+                1, 1, 0, 0, 0,
+                "human:owner",
+                "2026-08-01T00:00:00Z",
+                "fresh"));
+
+        var json = JsonSerializer.Serialize(sample, ClassifyJsonContext.Default.ClassifyStatusResult);
+        Assert.Contains("\"contractVersion\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"subjectType\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"subjectId\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"lifecycleState\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"mutationMayHaveOccurred\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"nextSafeOperationId\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"evaluation\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"evaluationFingerprint\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"stalenessState\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"rule\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"validation\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"preview\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"apply\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"feedback\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"abandonment\"", json, StringComparison.Ordinal);
+        Assert.Contains("\"cleanup\"", json, StringComparison.Ordinal);
+        Assert.True(ClassifyContractMapper.HasExactlyOneMatchingDetail(sample));
+    }
+
+    [Fact]
+    public void Status_result_schema_round_trips_apply_and_feedback_details()
+    {
+        var apply = new ClassifyStatusResult(
+            ClassifyOperationIds.ContractVersion,
+            ClassifyStatusSubjectType.Apply,
+            "apply-1",
+            "running",
+            true,
+            "resume",
+            Apply: new ClassifyApplyStatusDetail(
+                "apply-1", "prev-1", new string('b', 64),
+                1, 0, 0, 0, 2, 2, ReplaySafe: false, ResumeSafe: true,
+                "human:owner", "2026-08-01T00:00:00Z", null));
+        var applyJson = JsonSerializer.Serialize(apply, ClassifyJsonContext.Default.ClassifyStatusResult);
+        var applyBack = JsonSerializer.Deserialize(applyJson, ClassifyJsonContext.Default.ClassifyStatusResult);
+        Assert.NotNull(applyBack);
+        Assert.NotNull(applyBack!.Apply);
+        Assert.True(applyBack.Apply!.ResumeSafe);
+        Assert.Equal(2, applyBack.Apply.UnresolvedFrontier);
+        Assert.DoesNotContain("transactionId", applyJson, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("allocation", applyJson, StringComparison.OrdinalIgnoreCase);
+
+        var feedback = new ClassifyStatusResult(
+            ClassifyOperationIds.ContractVersion,
+            ClassifyStatusSubjectType.Feedback,
+            "fb-1",
+            "recorded",
+            true,
+            "none",
+            Feedback: new ClassifyFeedbackStatusDetail(
+                "fb-1", "out-1", "accept", "prop-1", "draft",
+                "human:owner", "feedback_accept", "2026-08-01T00:00:00Z",
+                ["rv-1"]));
+        var feedbackJson = JsonSerializer.Serialize(feedback, ClassifyJsonContext.Default.ClassifyStatusResult);
+        Assert.Contains("\"reasonCode\":\"feedback_accept\"", feedbackJson, StringComparison.Ordinal);
+        Assert.DoesNotContain("free-text", feedbackJson, StringComparison.Ordinal);
+        Assert.DoesNotContain("description", feedbackJson, StringComparison.OrdinalIgnoreCase);
+        Assert.True(ClassifyContractMapper.HasExactlyOneMatchingDetail(feedback));
+    }
+
+    [Fact]
+    public void Status_detail_types_are_source_generated_in_json_context()
+    {
+        // Native-AOT metadata presence: each typed detail serializes without reflection fallback.
+        Assert.NotNull(ClassifyJsonContext.Default.ClassifyStatusResult);
+        Assert.NotNull(ClassifyJsonContext.Default.ClassifyRuleStatusDetail);
+        Assert.NotNull(ClassifyJsonContext.Default.ClassifyRuleStatusVersion);
+        Assert.NotNull(ClassifyJsonContext.Default.ClassifyValidationStatusDetail);
+        Assert.NotNull(ClassifyJsonContext.Default.ClassifyEvaluationStatusDetail);
+        Assert.NotNull(ClassifyJsonContext.Default.ClassifyPreviewStatusDetail);
+        Assert.NotNull(ClassifyJsonContext.Default.ClassifyApplyStatusDetail);
+        Assert.NotNull(ClassifyJsonContext.Default.ClassifyFeedbackStatusDetail);
+        Assert.NotNull(ClassifyJsonContext.Default.ClassifyAbandonmentStatusDetail);
+        Assert.NotNull(ClassifyJsonContext.Default.ClassifyCleanupStatusDetail);
+    }
+
+    [Fact]
+    public void Status_privacy_exclusions_hold_for_rule_history_shape()
+    {
+        var rule = new ClassifyStatusResult(
+            ClassifyOperationIds.ContractVersion,
+            ClassifyStatusSubjectType.Rule,
+            "rv-1",
+            "draft",
+            false,
+            "abandon",
+            Rule: new ClassifyRuleStatusDetail(
+                ActiveRuleSetVersionId: "rsv-active",
+                RuleId: "rule-1",
+                Versions:
+                [
+                    new ClassifyRuleStatusVersion(
+                        "rv-1",
+                        ["rsv-1"],
+                        "draft",
+                        "human:owner",
+                        "rule_draft",
+                        "2026-08-01T00:00:00Z",
+                        null,
+                        Array.Empty<string>())
+                ]));
+        var json = JsonSerializer.Serialize(rule, ClassifyJsonContext.Default.ClassifyStatusResult);
+        Assert.Contains("\"reasonCode\":\"rule_draft\"", json, StringComparison.Ordinal);
+        Assert.DoesNotContain("owner free text", json, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("amount", json, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("path", json, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("token", json, StringComparison.OrdinalIgnoreCase);
+        Assert.True(ClassifyContractMapper.HasExactlyOneMatchingDetail(rule));
+    }
+
+    [Fact]
     public void Cleanup_receipt_schema_includes_identity_and_aggregate_counts()
     {
         var receipt = new ClassifyCleanupResult(
