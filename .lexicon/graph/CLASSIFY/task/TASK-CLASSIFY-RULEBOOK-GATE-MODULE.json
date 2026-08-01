@@ -50,97 +50,97 @@
   ],
   "files": [
     {
-      "id": "01KYZQDEJSA4MS31QZEWVKESZP",
+      "id": "01KYZVA5YYHZXD2CKFBSJCBGJ5",
       "path": "Tally.slnx",
       "action": "read",
       "role": "full solution",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJTEV807RZ95GH69CGA",
+      "id": "01KYZVA5YZFJGQ75K4CVCPZ3YX",
       "path": "src/Tally/Tally.csproj",
       "action": "read",
       "role": "Native-AOT executable",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJTP9Q2JDQFXZV8PC47",
+      "id": "01KYZVA5YZ4JWF2HK81VF7FYG0",
       "path": "tests/Tally.Tests/Tally.Tests.csproj",
       "action": "read",
       "role": "complete test project",
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJTQ0C9MFK6DSZDJKN2",
+      "id": "01KYZVA5Z0XRDHG0E5C83N60M2",
       "path": "tests/Tally.Tests/Classify/ClassifyModuleGuardTests.cs",
       "action": "test",
       "role": "module architecture and suite-discovery guards",
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJT4F7RRHKSP7HWE09N",
+      "id": "01KYZVA5Z0VTQZX2BER03CWMSP",
       "path": "scripts/verify-classify-module.sh",
       "action": "create",
       "role": "module convergence runner",
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJTHKPSJFHNNA1VNVV9",
+      "id": "01KYZVA5Z0RQHMAMCPZNMRYME2",
       "path": "docs/verification/classify-v1.md",
       "action": "document",
       "role": "safe completion report",
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJT40KZQHWG67EV3Q50",
+      "id": "01KYZVA5Z0QJP4A2Y4JNQ9G5MV",
       "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-AI-AGENT-HOST.json",
       "action": "modify",
       "role": "lex-cli validation status",
       "required": 1,
       "sort_order": 6,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJTWV1ZWHR0ZY9HWCNZ",
+      "id": "01KYZVA5Z0254Z3BJJV1E343SS",
       "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-HOST-OS-SECURITY.json",
       "action": "modify",
       "role": "lex-cli validation status",
       "required": 1,
       "sort_order": 7,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJT48MQWF5BASV2Y4HH",
+      "id": "01KYZVA5Z0K9A1DWQWE8QFJ3YT",
       "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT.json",
       "action": "modify",
       "role": "lex-cli validation status",
       "required": 1,
       "sort_order": 8,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJTZYCMS6G3EXQS9P4M",
+      "id": "01KYZVA5Z0XAXWT88XAY0ERQRK",
       "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS.json",
       "action": "modify",
       "role": "lex-cli validation status",
       "required": 1,
       "sort_order": 9,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJT2BDKPZQV8FFPBQ4F",
+      "id": "01KYZVA5Z0NR0MB9HZW5C46T67",
       "path": "src/Tally/Cli/TallyProcess.cs",
       "action": "modify",
       "role": "bounded fallback and correlation-privacy correction exposed by complete module suite",
@@ -149,19 +149,19 @@
         "Sequential bridge owned by final convergence; preserve descriptor-generated contract."
       ],
       "sort_order": 10,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJTH90MHP9XE65S19WE",
+      "id": "01KYZVA5Z0GZS5Y93BJVW0WC6B",
       "path": "tests/Tally.Tests/Process/RegistryDomainErrorProcessTests.cs",
       "action": "read",
       "role": "registry-wide fallback coherence evidence",
       "required": 1,
       "sort_order": 11,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJTYTAW3P2YAHJXD7JX",
+      "id": "01KYZVA5Z0BBVZEWX4TN0NJ16W",
       "path": "tests/Tally.Tests/Classify/Evaluation/ClassificationEngineTests.cs",
       "action": "test",
       "role": "correct isolated single-rule fixture inconsistency",
@@ -170,10 +170,10 @@
         "Do not weaken production matching semantics or assertions."
       ],
       "sort_order": 12,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJT3MGMM85J09SZK5EC",
+      "id": "01KYZVA5Z0PD3BS0AKRAYXXKZX",
       "path": "tests/Tally.Tests/Classify/Storage/ClassifyHistoryInvariantTests.cs",
       "action": "test",
       "role": "align explicit seed inserts with current durable schema",
@@ -182,10 +182,10 @@
         "Use named columns; preserve invariant assertions."
       ],
       "sort_order": 13,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJT93AB0GPQRHPXAPCK",
+      "id": "01KYZVA5Z02EB5SJDP16RYSRRC",
       "path": "tests/Tally.Tests/Classify/Security/ClassifySecurityGateTests.cs",
       "action": "test",
       "role": "correct token-boundary false positives and verify correlation secrecy",
@@ -194,10 +194,10 @@
         "Do not weaken forbidden-surface or canary assertions."
       ],
       "sort_order": 14,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJTQPGR4HVDQQC5V1F9",
+      "id": "01KYZVA5Z0DW7F7STPA0QH7G78",
       "path": "tests/Tally.Tests/Classify/Validation/ClassificationRuleValidationTests.cs",
       "action": "test",
       "role": "align bound-corpus validation fixtures with immutable owner-gate evidence",
@@ -206,10 +206,10 @@
         "Preserve STALE fail-closed semantics and all assertions; correct fixture binding only."
       ],
       "sort_order": 15,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJTR5GR2F1D60ZHTXNM",
+      "id": "01KYZVA5Z0ZJ68B7B430WFR6PE",
       "path": "tests/Tally.Tests/Classify/Rules/RuleActivationTests.cs",
       "action": "test",
       "role": "wire activate fixtures through valid owner-gate receipt evidence",
@@ -218,10 +218,10 @@
         "Preserve activation authority and no-pointer-change assertions; do not bypass receipt binding."
       ],
       "sort_order": 16,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJTQWJM4RT01FX1VA0G",
+      "id": "01KYZVA5Z05950B4MD05JAD321",
       "path": "src/Tally/Features/Classify/Rules/Validate/ValidateClassificationRuleCommand.cs",
       "action": "modify",
       "role": "remove server-minted snapshot identity from deterministic idempotency fingerprint while retaining snapshot evidence",
@@ -230,10 +230,10 @@
         "Preserve replay identity, snapshot evidence, STALE binding, and no-mutation-on-conflict semantics."
       ],
       "sort_order": 17,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJVMDXBCSTTPKFHNQG6",
+      "id": "01KYZVA5Z1SMS6E2WD1G17S1A9",
       "path": "tests/Tally.Tests/Classify/Acceptance/ClassifyUc001EvaluationTests.cs",
       "action": "test",
       "role": "correct process-wide WorkingSet false gate and published evaluate schema evidence",
@@ -242,10 +242,10 @@
         "Do not weaken the 256 MiB operation bound; replace process-global suite-state assertion with isolated operation-scoped evidence."
       ],
       "sort_order": 18,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJVD04FDB25A39XES4T",
+      "id": "01KYZVA5Z1QEYCQ64W660BM51M",
       "path": "tests/Tally.Tests/Ledger/PaymentIdentityOperationTests.cs",
       "action": "test",
       "role": "update stale whole-registry inventory expectation after accepted twelve-operation CLASSIFY publication",
@@ -254,10 +254,10 @@
         "Preserve module-specific descriptor assertions."
       ],
       "sort_order": 19,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJV3PF5B8M87CK2H1C5",
+      "id": "01KYZVA5Z16MAQ578Q79570CRN",
       "path": "tests/Tally.Tests/Ledger/SpendPoolOperationTests.cs",
       "action": "test",
       "role": "update stale whole-registry inventory expectation after accepted twelve-operation CLASSIFY publication",
@@ -266,10 +266,10 @@
         "Preserve module-specific descriptor assertions."
       ],
       "sort_order": 20,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJV25JAFSNC78KNA16Y",
+      "id": "01KYZVA5Z1W343STQRMA3MRC7A",
       "path": "tests/Tally.Tests/EndToEnd/UC006ExternalOrchestratorContractWorkflowTests.cs",
       "action": "test",
       "role": "update stale published whole-registry inventory expectations after accepted CLASSIFY publication",
@@ -278,10 +278,10 @@
         "Preserve discovery ordering, uniqueness, and forbidden-surface assertions."
       ],
       "sort_order": 21,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJVZQD2Y9Q6CNFJJNQW",
+      "id": "01KYZVA5Z1RTS2X33SY5YXN3Y5",
       "path": "tests/Tally.Tests/Process/PublishedLedgerContractTests.cs",
       "action": "test",
       "role": "update stale published whole-registry inventory expectation after accepted CLASSIFY publication",
@@ -290,10 +290,10 @@
         "Preserve Ledger contract and privacy assertions."
       ],
       "sort_order": 22,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJV6X5NYQB4J2K2V6T3",
+      "id": "01KYZVA5Z1WD2FKT7TQFKYN41K",
       "path": "tests/Tally.Tests/Process/PublishedBinaryCoreTests.cs",
       "action": "test",
       "role": "update stale published whole-registry inventory expectation after accepted CLASSIFY publication",
@@ -302,10 +302,10 @@
         "Preserve envelope and privacy assertions."
       ],
       "sort_order": 23,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJVMVBT8Z2W4P1PPRXB",
+      "id": "01KYZVA5Z16F9SDT62819MDDHQ",
       "path": "tests/Tally.Tests/Features/Ledger/Categories/CategoryOperationTests.cs",
       "action": "test",
       "role": "update stale whole-registry inventory expectation after accepted CLASSIFY publication",
@@ -314,10 +314,10 @@
         "Preserve category-operation count and type assertions."
       ],
       "sort_order": 24,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJVPEFH0WP0TATFW03Q",
+      "id": "01KYZVA5Z1RXW4N5KZBZNKYFWX",
       "path": "tests/Tally.Tests/Features/Ledger/Transactions/TransactionRecordingTests.cs",
       "action": "test",
       "role": "update stale whole-registry inventory expectation after accepted CLASSIFY publication",
@@ -326,10 +326,10 @@
         "Preserve transaction contract assertions."
       ],
       "sort_order": 25,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJVNM38AGE5QGQHGCVN",
+      "id": "01KYZVA5Z12FMT6E70R22VRHAJ",
       "path": "tests/Tally.Tests/Cli/CliContractTests.cs",
       "action": "test",
       "role": "update stale whole-registry inventory expectations after accepted CLASSIFY publication",
@@ -338,10 +338,10 @@
         "Preserve canonical ordering and uniqueness assertions."
       ],
       "sort_order": 26,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     },
     {
-      "id": "01KYZQDEJVRJRYVEK3T785P9C8",
+      "id": "01KYZVA5Z12WBNK2Z7ZQJC6TH1",
       "path": "tests/Tally.Tests/Cli/PublicContractInventoryTests.cs",
       "action": "test",
       "role": "update stale whole-registry inventory expectations after accepted CLASSIFY publication",
@@ -350,7 +350,343 @@
         "Preserve operation, CLI path, and schema uniqueness assertions."
       ],
       "sort_order": 27,
-      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z1S8VE730PW3WNH0DM",
+      "path": "src/Tally/Features/Classify/Evaluation/Evaluate/EvaluateClassificationCommand.cs",
+      "action": "modify",
+      "role": "operation-scoped evaluation memory and deterministic snapshot correction",
+      "required": 1,
+      "notes": [
+        "Preserve the published 256 MiB bound, fail-closed semantics, and deterministic evidence."
+      ],
+      "sort_order": 28,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z13NAQ0Q0HHD9SH8EZ",
+      "path": "scripts/verify-classify-contract.sh",
+      "action": "modify",
+      "role": "correct published contract extraction evidence",
+      "required": 1,
+      "notes": [
+        "Do not weaken descriptor or NativeAOT contract assertions."
+      ],
+      "sort_order": 29,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z2RAXPZAX8GBX98D5T",
+      "path": "tests/Tally.Tests/Cli/Snapshots/ledger-operations-v1.json",
+      "action": "modify",
+      "role": "current ledger and system schema fingerprint fixture",
+      "required": 1,
+      "notes": [
+        "Preserve exact published schema inventory."
+      ],
+      "sort_order": 30,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z2C5H4GGB74P9167NQ",
+      "path": "tests/Tally.Tests/Classify/Evaluation/ClassificationEvaluationInputLoaderTests.cs",
+      "action": "test",
+      "role": "unchanged-snapshot byte-equivalence evidence",
+      "required": 1,
+      "notes": [
+        "Diagnose server-minted snapshot drift without weakening determinism."
+      ],
+      "sort_order": 31,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z2QA35FF47ACTSDZ9X",
+      "path": "tests/Tally.Tests/Classify/Evaluation/EvaluationPersistenceTests.cs",
+      "action": "test",
+      "role": "projection fingerprint persistence evidence",
+      "required": 1,
+      "notes": [
+        "Preserve exact projection and retained-result binding."
+      ],
+      "sort_order": 32,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z23JXGCMS7HK499T38",
+      "path": "tests/Tally.Tests/Classify/Apply/ApplyPreviewTests.cs",
+      "action": "test",
+      "role": "preview fixture and cancellation evidence",
+      "required": 1,
+      "notes": [
+        "Preserve idempotency, cancellation, and no-mutation assertions."
+      ],
+      "sort_order": 33,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z2DRBKX18PYPVJ9PAA",
+      "path": "src/Tally/Features/Classify/Apply/Preview/PreviewClassificationApplyCommand.cs",
+      "action": "modify",
+      "role": "bounded preview cancellation or validation correction",
+      "required": 1,
+      "notes": [
+        "Only change after focused root-cause reproduction; preserve authority and no-mutation behavior."
+      ],
+      "sort_order": 34,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z26CR2F415C87HJW0A",
+      "path": "tests/Tally.Tests/Classify/Evidence/OwnerRulebookGateTests.cs",
+      "action": "test",
+      "role": "owner-gate deterministic aggregate evidence fixtures",
+      "required": 1,
+      "notes": [
+        "Preserve immutable corpus binding and hold-out authority."
+      ],
+      "sort_order": 35,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z2CVTWBMADYT585D80",
+      "path": "tests/Tally.Tests/Classify/Evaluation/OutcomeInvalidationTests.cs",
+      "action": "test",
+      "role": "generation invalidation evidence",
+      "required": 1,
+      "notes": [
+        "Preserve stale fail-closed semantics."
+      ],
+      "sort_order": 36,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z2VHGHQWFT9ME6F73P",
+      "path": "tests/Tally.Tests/Classify/Acceptance/ClassifyUc002OutcomeTests.cs",
+      "action": "test",
+      "role": "UC002 retained outcome and no-mutation evidence",
+      "required": 1,
+      "notes": [
+        "Preserve immutable evidence and no upstream mutation."
+      ],
+      "sort_order": 37,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z2MMYN53D45JT6YQ31",
+      "path": "tests/Tally.Tests/Classify/Apply/ClassificationApplySagaTests.cs",
+      "action": "test",
+      "role": "bound-corpus apply fixtures and cancellation evidence",
+      "required": 1,
+      "notes": [
+        "Preserve trusted receipt binding, stale rejection, and no-mutation behavior."
+      ],
+      "sort_order": 38,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z281AVMKPQARRVMA29",
+      "path": "src/Tally/Features/Classify/Apply/Run/RunClassificationApplyCommand.cs",
+      "action": "modify",
+      "role": "bounded apply cancellation correction",
+      "required": 1,
+      "notes": [
+        "Only change after focused reproduction; preserve saga idempotency and recovery."
+      ],
+      "sort_order": 39,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z2PENRNVWRQSPQDFTG",
+      "path": "tests/Tally.Tests/Classify/LedgerContract/LedgerClassifyPrerequisiteTests.cs",
+      "action": "test",
+      "role": "public-ledger boundary source-scan evidence",
+      "required": 1,
+      "notes": [
+        "Correct false positives without allowing private Ledger storage or domain coupling."
+      ],
+      "sort_order": 40,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z23XEZD3G8GE1FN9CE",
+      "path": "src/Tally/Features/Classify/Contract/ClassifyContractMapper.Evaluation.cs",
+      "action": "modify",
+      "role": "remove or isolate private-ledger namespace coupling",
+      "required": 1,
+      "notes": [
+        "Do not broaden CLASSIFY access to private Ledger surfaces."
+      ],
+      "sort_order": 41,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z21H9AC9H5YS0YC7P7",
+      "path": "src/Tally/Infrastructure/Classify/Storage/ClassifyStorePaths.cs",
+      "action": "modify",
+      "role": "remove ambiguous private-ledger path token",
+      "required": 1,
+      "notes": [
+        "Preserve local storage layout and no private Ledger database access."
+      ],
+      "sort_order": 42,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z2KGQ2S2BY35NR91VC",
+      "path": "tests/Tally.Tests/Classify/Evaluation/OutcomeExplanationTests.cs",
+      "action": "test",
+      "role": "immutable evidence-unavailable fixture",
+      "required": 1,
+      "notes": [
+        "Preserve not-found distinction and immutable-row guarantees."
+      ],
+      "sort_order": 43,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z24C1AN9XRXD9T2646",
+      "path": "tests/Tally.Tests/Classify/Feedback/ClassificationFeedbackTests.cs",
+      "action": "test",
+      "role": "masked-account and provenance fixtures",
+      "required": 1,
+      "notes": [
+        "Preserve provenance completeness and input validation."
+      ],
+      "sort_order": 44,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z32E3H8NXXTGQ31QCC",
+      "path": "tests/Tally.Tests/Classify/Validation/ValidationPrivacyTests.cs",
+      "action": "test",
+      "role": "bound-corpus privacy fixtures",
+      "required": 1,
+      "notes": [
+        "Preserve stale rejection and private payload exclusion."
+      ],
+      "sort_order": 45,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z3FBB0YDSR40TFAJQR",
+      "path": "tests/Tally.Tests/Classify/Validation/ValidationLimitTests.cs",
+      "action": "test",
+      "role": "bound-corpus limits and cancellation fixtures",
+      "required": 1,
+      "notes": [
+        "Preserve exact limits and cancellation semantics."
+      ],
+      "sort_order": 46,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z3AYGN4Z5NT9XPR73J",
+      "path": "tests/Tally.Tests/Features/Ledger/Transactions/CategoryAllocationTests.cs",
+      "action": "test",
+      "role": "category-allocation stale-precondition contract evidence",
+      "required": 1,
+      "notes": [
+        "Preserve current-assignment and no-history-on-rejection assertions."
+      ],
+      "sort_order": 47,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z3Z186WQWM5EB043BP",
+      "path": "tests/Tally.Tests/Classify/Evaluation/EvaluateClassificationCommandTests.cs",
+      "action": "test",
+      "role": "activation projection isolation and deterministic evaluation evidence",
+      "required": 1,
+      "notes": [
+        "Preserve complete outcome accounting and no-match semantics."
+      ],
+      "sort_order": 48,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z3K8TPC42K3VCRB9HA",
+      "path": "tests/Tally.Tests/Classify/ApplyRecovery/ClassificationApplyCrashRecoveryTests.cs",
+      "action": "test",
+      "role": "frozen-key crash recovery fixture",
+      "required": 1,
+      "notes": [
+        "Preserve durable idempotency and resume safety."
+      ],
+      "sort_order": 49,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z3YZ7AVSPSXAWY1QWN",
+      "path": "tests/Tally.Tests/Classify/Rules/RuleRetirementTests.cs",
+      "action": "test",
+      "role": "valid masked-account replacement fixtures",
+      "required": 1,
+      "notes": [
+        "Preserve lifecycle history and authority."
+      ],
+      "sort_order": 50,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z3EPJQMGQHYNSW2ZKK",
+      "path": "tests/Tally.Tests/Classify/LedgerContract/ClassifyLedgerContractClientTests.cs",
+      "action": "test",
+      "role": "projection preflight masked-account fixture",
+      "required": 1,
+      "notes": [
+        "Preserve complete selected-ID contract."
+      ],
+      "sort_order": 51,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z38QBQYAVC5B3RREZG",
+      "path": "tests/Tally.Tests/Classify/Acceptance/ClassifyUc006AgentContractTests.cs",
+      "action": "test",
+      "role": "published error-envelope fixture",
+      "required": 1,
+      "notes": [
+        "Preserve missing-actor rejection before mutation."
+      ],
+      "sort_order": 52,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z36PM6SRS4P6FC45S8",
+      "path": "tests/Tally.Tests/EndToEnd/UC018SpendPoolWorkflowTests.cs",
+      "action": "test",
+      "role": "stale-precondition process exit evidence",
+      "required": 1,
+      "notes": [
+        "Preserve exact linked allocation and refund invariants."
+      ],
+      "sort_order": 53,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z3RVZMG0AAJBXHGD6G",
+      "path": "tests/Tally.Tests/EndToEnd/UC010RefundWorkflowTests.cs",
+      "action": "test",
+      "role": "refund correction stale-precondition evidence",
+      "required": 1,
+      "notes": [
+        "Preserve immutable facts and relationships."
+      ],
+      "sort_order": 54,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
+    },
+    {
+      "id": "01KYZVA5Z33809RH82NQNRK4Z4",
+      "path": "tests/Tally.Tests/EndToEnd/UC003CategoryAllocationWorkflowTests.cs",
+      "action": "test",
+      "role": "category correction stale-precondition evidence",
+      "required": 1,
+      "notes": [
+        "Preserve history and no-mutation-on-rejection."
+      ],
+      "sort_order": 55,
+      "created_at": "2026-08-01T23:42:24.2212347+00:00"
     }
   ],
   "interfaces": [
@@ -481,14 +817,24 @@
       "created_at": "2026-07-31T08:35:28.5399812+00:00"
     },
     {
-      "id": "01KYZJTHZ8BY78Y3J6H05C8Y96",
+      "id": "01KYZVAXXCSWNJK6JDJP8RBN2D",
       "kind": "note",
       "text": [
         "2026-08-01 final-suite correction bridge: the first complete module run exposed bounded cross-seam coherence defects in TallyProcess fallback/correlation handling and stale test fixtures in engine, storage, and security suites. These exact files are now reserved to bd-3l4k so the final convergence bead can reproduce focused failures, correct root causes without weakening assertions, then run the one authorized second complete module gate."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-08-01T21:14:03.6241510+00:00"
+      "created_at": "2026-08-01T23:42:48.7473307+00:00"
+    },
+    {
+      "id": "01KYZVAXXDXS7F4SQQSFQ3P925",
+      "kind": "note",
+      "text": [
+        "2026-08-02 final-suite bounded correction bridge: the authorized complete module run passed build/format/AOT, contract, security, graph, dependencies, and 5569 tests but exposed 40 bounded failures. Reservations now cover only the exact failing fixtures and implicated production seams for masked account fixtures, immutable bound-corpus setup, deterministic snapshot identity, activation projection isolation, stale-precondition process mapping, private-ledger token false positives, cancellation propagation, and immutable evidence setup. Reproduce and classify each bucket narrowly; preserve all assertions and accepted public/security/no-mutation contracts. After focused corrections are green, a further complete module rerun requires the supervisor to authorize it from the diagnosed evidence."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-01T23:42:48.7473307+00:00"
     }
   ],
   "references": [
