@@ -85,6 +85,8 @@ public static class ClassifyApplyExtensions
             state.Store,
             previewStore,
             runStore,
+            evaluationStore,
+            ruleSetStore,
             applyLock,
             ledgerClient,
             state.Idempotency,

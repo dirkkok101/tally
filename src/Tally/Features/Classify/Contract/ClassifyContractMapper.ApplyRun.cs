@@ -103,6 +103,47 @@ public static partial class ClassifyContractMapper
         return Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(payload)));
     }
 
+    public static string ComputeFrozenTargetCategoryFingerprint(
+        IReadOnlyList<ClassifyApplyPreviewItemRow> items) =>
+        CanonicalClassificationHasher.HashOrderedLines(
+            items
+                .OrderBy(i => i.TransactionId, StringComparer.Ordinal)
+                .Select(i => i.CategoryId));
+
+    public static string? ComputeFrozenRuleAuthorityFingerprint(
+        string selectionMode,
+        IReadOnlyList<string> selectedRuleVersionIds,
+        bool broadAuthorityGranted)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(selectionMode);
+        ArgumentNullException.ThrowIfNull(selectedRuleVersionIds);
+        var ordered = selectedRuleVersionIds
+            .Where(id => !string.IsNullOrWhiteSpace(id))
+            .Distinct(StringComparer.Ordinal)
+            .OrderBy(id => id, StringComparer.Ordinal)
+            .ToArray();
+
+        if (string.Equals(selectionMode, SelectionModeExplicitCorrections, StringComparison.Ordinal))
+        {
+            return CanonicalClassificationHasher.HashUtf8("explicit_corrections");
+        }
+
+        if (string.Equals(selectionMode, SelectionModeExactRule, StringComparison.Ordinal))
+        {
+            return ordered.Length == 1 && broadAuthorityGranted
+                ? CanonicalClassificationHasher.HashParts("exact_rule", ordered[0], "broad_apply")
+                : null;
+        }
+
+        if (!string.Equals(selectionMode, SelectionModeSelectedOutcomes, StringComparison.Ordinal))
+        {
+            return null;
+        }
+
+        return CanonicalClassificationHasher.HashOrderedLines(
+            ordered.Length == 0 ? ["selected_outcomes:none"] : ordered.Select(id => "rule:" + id));
+    }
+
     /// <summary>
     /// Canonical fingerprint of the exact frozen Ledger request for one item
     /// (operation, target, preconditions, reason, key) — never includes descriptions/amounts.

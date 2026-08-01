@@ -6,11 +6,16 @@ using Tally.Contracts.Classify;
 using Tally.Contracts.Classify.Operations;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Actuals;
+using Tally.Contracts.Ledger.Categories;
 using Tally.Contracts.Ledger.Transactions;
 using Tally.Domain.Classify.Apply;
+using Tally.Domain.Classify.Evaluation;
+using Tally.Domain.Classify.Normalization;
 using Tally.Features.Classify.Contract;
 using Tally.Infrastructure.Classify.Storage;
 using Tally.Infrastructure.Classify.Storage.Apply;
+using Tally.Infrastructure.Classify.Storage.Evaluation;
+using Tally.Infrastructure.Classify.Storage.Rules;
 using Tally.Integration.Ledger;
 
 namespace Tally.Features.Classify.Apply.Run;
@@ -29,6 +34,8 @@ public sealed class RunClassificationApplyCommand
     private readonly ClassifyOperationIdempotencyStore idempotencyStore;
     private readonly ClassificationApplyPreviewStore previewStore;
     private readonly ClassificationApplyRunStore runStore;
+    private readonly ClassificationEvaluationStore evaluationStore;
+    private readonly RuleSetStore ruleSetStore;
     private readonly ClassificationApplyLock applyLock;
     private readonly LedgerContractClient ledger;
     private readonly TimeProvider timeProvider;
@@ -37,6 +44,8 @@ public sealed class RunClassificationApplyCommand
         ClassifyStateStore stateStore,
         ClassificationApplyPreviewStore previewStore,
         ClassificationApplyRunStore runStore,
+        ClassificationEvaluationStore evaluationStore,
+        RuleSetStore ruleSetStore,
         ClassificationApplyLock applyLock,
         LedgerContractClient ledger,
         ClassifyOperationIdempotencyStore? idempotencyStore = null,
@@ -45,11 +54,15 @@ public sealed class RunClassificationApplyCommand
         ArgumentNullException.ThrowIfNull(stateStore);
         ArgumentNullException.ThrowIfNull(previewStore);
         ArgumentNullException.ThrowIfNull(runStore);
+        ArgumentNullException.ThrowIfNull(evaluationStore);
+        ArgumentNullException.ThrowIfNull(ruleSetStore);
         ArgumentNullException.ThrowIfNull(applyLock);
         ArgumentNullException.ThrowIfNull(ledger);
         this.stateStore = stateStore;
         this.previewStore = previewStore;
         this.runStore = runStore;
+        this.evaluationStore = evaluationStore;
+        this.ruleSetStore = ruleSetStore;
         this.applyLock = applyLock;
         this.ledger = ledger;
         this.idempotencyStore = idempotencyStore ?? new ClassifyOperationIdempotencyStore();
@@ -136,6 +149,11 @@ public sealed class RunClassificationApplyCommand
 
             if (existingRun is not null)
             {
+                if (!string.Equals(existingRun.Actor, actorText, StringComparison.Ordinal))
+                {
+                    return CommandResult<ClassifyApplyRunResult>.Failure(ClassifyErrors.Conflict);
+                }
+
                 // Load preview to recompute semantic fingerprint for conflict detection.
                 ClassifyApplyPreviewRow? previewForConflict;
                 IReadOnlyList<ClassifyApplyPreviewItemRow> previewItemsForConflict;
@@ -180,6 +198,14 @@ public sealed class RunClassificationApplyCommand
                     await CommitOperationIdempotencyIfMissingAsync(
                         idempotencyKey, operationFingerprint, terminal, actorText, ct);
                     return CommandResult<ClassifyApplyRunResult>.Success(terminal);
+                }
+
+                if (!string.Equals(
+                        existingRun.LifecycleState,
+                        ApplyReplayPolicy.RunLifecycleRunning,
+                        StringComparison.Ordinal))
+                {
+                    return CommandResult<ClassifyApplyRunResult>.Failure(ClassifyErrors.Lifecycle);
                 }
 
                 // Resume running run: process remaining frontier only.
@@ -315,6 +341,83 @@ public sealed class RunClassificationApplyCommand
         SafeActor actor,
         CancellationToken cancellationToken)
     {
+        ClassifyEvaluationRunRow? retainedEvaluation;
+        ClassifyActiveRuleSetPointer? activeRuleSet;
+        IReadOnlyList<string> activeRuleVersionIds;
+        IReadOnlyList<ClassifyRuleLifecycleEventRow> exactRuleEvents = Array.Empty<ClassifyRuleLifecycleEventRow>();
+        IReadOnlyList<ClassifyRuleLifecycleEventRow> ruleSetEvents = Array.Empty<ClassifyRuleLifecycleEventRow>();
+        await using (var connection = await stateStore.OpenMigratedAsync(cancellationToken))
+        {
+            retainedEvaluation = await evaluationStore.GetRunAsync(
+                connection, null, preview.EvaluationId, cancellationToken);
+            activeRuleSet = await ruleSetStore.GetActiveRuleSetAsync(connection, null, cancellationToken);
+            activeRuleVersionIds = activeRuleSet is null
+                ? Array.Empty<string>()
+                : await ruleSetStore.ListMemberRuleVersionIdsAsync(
+                    connection, null, activeRuleSet.RuleSetVersionId, cancellationToken);
+
+            if (string.Equals(preview.SelectionMode, ClassifyContractMapper.SelectionModeExactRule, StringComparison.Ordinal))
+            {
+                var exactRuleIds = previewItems
+                    .Select(i => i.RuleVersionId)
+                    .Where(id => !string.IsNullOrWhiteSpace(id))
+                    .Select(id => id!)
+                    .Distinct(StringComparer.Ordinal)
+                    .ToArray();
+                if (exactRuleIds.Length == 1)
+                {
+                    exactRuleEvents = await ruleSetStore.ListLifecycleEventsForSubjectAsync(
+                        connection, null, exactRuleIds[0], cancellationToken);
+                }
+
+                if (activeRuleSet is not null)
+                {
+                    ruleSetEvents = await ruleSetStore.ListLifecycleEventsForSubjectAsync(
+                        connection, null, activeRuleSet.RuleSetVersionId, cancellationToken);
+                }
+            }
+        }
+
+        if (retainedEvaluation is null
+            || activeRuleSet is null
+            || !string.Equals(
+                ClassifyContractMapper.ToRetainedEvaluationFingerprint(retainedEvaluation).CanonicalHash,
+                preview.EvaluationFingerprint,
+                StringComparison.Ordinal)
+            || !string.Equals(activeRuleSet.RuleSetVersionId, retainedEvaluation.RuleSetVersionId, StringComparison.Ordinal)
+            || !string.Equals(retainedEvaluation.NormalizationVersion, NormalizationDescriptor.V1.Version, StringComparison.Ordinal))
+        {
+            return ClassifyErrors.Stale;
+        }
+
+        var activeRules = activeRuleVersionIds.ToHashSet(StringComparer.Ordinal);
+        var selectedRuleIds = previewItems
+            .Select(i => i.RuleVersionId)
+            .Where(id => !string.IsNullOrWhiteSpace(id))
+            .Select(id => id!)
+            .Distinct(StringComparer.Ordinal)
+            .OrderBy(id => id, StringComparer.Ordinal)
+            .ToArray();
+        if (!string.Equals(preview.SelectionMode, ClassifyContractMapper.SelectionModeExplicitCorrections, StringComparison.Ordinal)
+            && (selectedRuleIds.Length == 0 || selectedRuleIds.Any(id => !activeRules.Contains(id))))
+        {
+            return ClassifyErrors.Stale;
+        }
+
+        var broadAuthority = ApplyAuthorizationPolicy.HasImmutableBroadApplyAuthority(exactRuleEvents)
+            || ApplyAuthorizationPolicy.HasImmutableBroadApplyAuthority(ruleSetEvents);
+        var currentRuleAuthorityFingerprint = ClassifyContractMapper.ComputeFrozenRuleAuthorityFingerprint(
+            preview.SelectionMode, selectedRuleIds, broadAuthority);
+        if (currentRuleAuthorityFingerprint is null
+            || !string.Equals(currentRuleAuthorityFingerprint, preview.RuleAuthorityFingerprint, StringComparison.Ordinal)
+            || !string.Equals(
+                ClassifyContractMapper.ComputeFrozenTargetCategoryFingerprint(previewItems),
+                preview.TargetCategoryFingerprint,
+                StringComparison.Ordinal))
+        {
+            return ClassifyErrors.Stale;
+        }
+
         var transactionIds = previewItems
             .Select(i => i.TransactionId)
             .Distinct(StringComparer.Ordinal)
@@ -355,6 +458,42 @@ public sealed class RunClassificationApplyCommand
             || !string.Equals(page.ProjectionVersion, preview.ProjectionVersion, StringComparison.Ordinal))
         {
             return ClassifyErrors.Stale;
+        }
+
+        var currentCategoryLifecycleFingerprint = !string.IsNullOrWhiteSpace(page.CategoryIdentityLifecycleFingerprint)
+            ? page.CategoryIdentityLifecycleFingerprint
+            : EvaluationFingerprint.ComputeCategoryLifecycleFingerprint(
+                (page.ActiveCategories ?? Array.Empty<ClassificationCategoryIdentity>())
+                    .Select(c => (c.CategoryId, c.LifecycleState)));
+        if (!string.Equals(
+                currentCategoryLifecycleFingerprint,
+                preview.CategoryLifecycleFingerprint,
+                StringComparison.Ordinal)
+            || !TryParseUtc(preview.CreatedAt, out var previewCreatedAt))
+        {
+            return ClassifyErrors.Stale;
+        }
+
+        foreach (var targetCategoryId in previewItems
+                     .Select(i => i.CategoryId)
+                     .Distinct(StringComparer.Ordinal)
+                     .OrderBy(id => id, StringComparer.Ordinal))
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var category = await ledger.GetBudgetCategoryAsync(
+                targetCategoryId,
+                CategoryContractVersions.Current,
+                actor,
+                cancellationToken,
+                includeHistory: true);
+            if (!category.IsSuccess
+                || category.Value is null
+                || category.Value.Status != CategoryStatus.Active
+                || category.Value.LifecycleHistory.Any(h =>
+                    TryParseUtc(h.OccurredAt, out var occurredAt) && occurredAt > previewCreatedAt))
+            {
+                return ClassifyErrors.Stale;
+            }
         }
 
         var itemsByTx = (page.ClassificationItems ?? Array.Empty<ClassificationProjectionItem>())
