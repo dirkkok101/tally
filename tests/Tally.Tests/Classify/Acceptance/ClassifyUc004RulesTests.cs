@@ -11,7 +11,6 @@ using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Actuals;
 using Tally.Domain.Classify.Normalization;
 using Tally.Features.Classify.Contract;
-using Tally.Infrastructure.Classify.Storage;
 using Tally.Infrastructure.Storage;
 using Tally.Integration.Ledger;
 using Xunit;
@@ -28,6 +27,7 @@ namespace Tally.Tests.Classify.Acceptance;
 /// feedback.record). Failure paths prove no active-pointer or Ledger mutation via public
 /// status and Ledger projections — never private fixtures or payload content.
 /// </summary>
+[Collection(ClassifyUc004Collection.Name)]
 [SupportedOSPlatform("linux")]
 public sealed class ClassifyUc004RulesTests : IAsyncLifetime
 {
@@ -35,7 +35,6 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
     private OperationRegistry registry = null!;
     private TallyProcess process = null!;
     private LedgerContractClient ledger = null!;
-    private ClassifyStateStore store = null!;
     private string accountId = null!;
     private int keySeq;
 
@@ -52,7 +51,6 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
             root, ledger, cancellationToken: CancellationToken.None);
         services = services with { Classify = classify.Operations };
         process = new TallyProcess(registry, services);
-        store = classify.State.Store;
         accountId = await CreateAccountAsync();
     }
 
@@ -71,9 +69,9 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
     [Fact]
     public async Task UC004_save_supported_active_category_creates_immutable_owner_authored_draft()
     {
+        var baseline = await SeedActiveRuleSetAsync();
         var category = await CreateCategoryAsync("Uc004Draft");
-        var pointerBefore = await ActiveRuleSetVersionIdAsync(null);
-        var ledgerBefore = await LedgerFingerprintAsync();
+        var before = await CaptureImmutabilityAsync(baseline);
 
         var saved = await SaveRuleAsync(category, "uc004 draft shop", ruleId: "rule-uc004-draft");
         AssertClassifySuccess(saved, ClassifyOperationIds.RuleSave);
@@ -84,22 +82,25 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
         Assert.Equal(NormalizationDescriptor.V1.Version, body.GetProperty("normalizationVersion").GetString());
         Assert.False(string.IsNullOrWhiteSpace(versionId));
 
-        // Draft is inspectable; no activation.
+        // Draft is inspectable; no activation of a new pointer.
         var status = await StatusAsync("rule", versionId);
         AssertClassifySuccess(status, ClassifyOperationIds.Status);
         using var statusDoc = ParseResult(status);
         var statusBody = statusDoc.RootElement.GetProperty("result_or_error");
         Assert.Equal("draft", statusBody.GetProperty("lifecycleState").GetString());
-        Assert.Equal(JsonValueKind.Null, statusBody.GetProperty("rule").GetProperty("activeRuleSetVersionId").ValueKind);
-        Assert.Equal(pointerBefore, await ActiveRuleSetVersionIdAsync(versionId));
-        Assert.Equal(ledgerBefore, await LedgerFingerprintAsync());
+        // Public status reports the live active pointer (baseline), not null-probe tautology.
+        Assert.Equal(
+            before.ActiveRuleSetVersionId,
+            statusBody.GetProperty("rule").GetProperty("activeRuleSetVersionId").GetString());
+        await AssertUnchangedAsync(before);
     }
 
     [Fact]
     public async Task UC004_save_unsupported_predicate_creates_no_activatable_version()
     {
+        var baseline = await SeedActiveRuleSetAsync();
         var category = await CreateCategoryAsync("Uc004BadPred");
-        var ledgerBefore = await LedgerFingerprintAsync();
+        var before = await CaptureImmutabilityAsync(baseline);
 
         // amount.direction does not allow starts_with.
         var input = $$"""
@@ -113,46 +114,46 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
         using var doc = ParseResult(result);
         Assert.Equal("error", doc.RootElement.GetProperty("outcome").GetString());
         Assert.False(doc.RootElement.GetProperty("result_or_error").TryGetProperty("ruleVersionId", out _));
-        Assert.Null(await ActiveRuleSetVersionIdAsync(null));
-        Assert.Equal(ledgerBefore, await LedgerFingerprintAsync());
+        await AssertUnchangedAsync(before);
     }
 
     [Fact]
     public async Task UC004_save_missing_category_creates_no_activatable_version()
     {
-        var ledgerBefore = await LedgerFingerprintAsync();
+        var baseline = await SeedActiveRuleSetAsync();
+        var before = await CaptureImmutabilityAsync(baseline);
         var missing = "01MISSINGCATEGORYID000000000";
         var result = await SaveRuleAsync(missing, "uc004 missing cat");
         AssertClassifyError(result, ClassifyErrors.NotFound);
-        Assert.Null(await ActiveRuleSetVersionIdAsync(null));
-        Assert.Equal(ledgerBefore, await LedgerFingerprintAsync());
+        await AssertUnchangedAsync(before);
     }
 
     [Fact]
     public async Task UC004_save_archived_category_creates_no_activatable_version()
     {
+        var baseline = await SeedActiveRuleSetAsync();
         var category = await CreateCategoryAsync("Uc004ArchSave");
         await ArchiveCategoryAsync(category);
-        var ledgerBefore = await LedgerFingerprintAsync();
+        var before = await CaptureImmutabilityAsync(baseline);
 
         var result = await SaveRuleAsync(category, "uc004 archived cat");
         AssertClassifyError(result, ClassifyErrors.Lifecycle);
-        Assert.Null(await ActiveRuleSetVersionIdAsync(null));
-        Assert.Equal(ledgerBefore, await LedgerFingerprintAsync());
+        await AssertUnchangedAsync(before);
     }
 
     [Fact]
     public async Task UC004_save_does_not_activate_and_does_not_mutate_ledger()
     {
+        var baseline = await SeedActiveRuleSetAsync();
         var category = await CreateCategoryAsync("Uc004NoAct");
-        var ledgerBefore = await LedgerFingerprintAsync();
+        var before = await CaptureImmutabilityAsync(baseline);
         var saved = await SaveRuleAsync(category, "uc004 no auto");
         AssertClassifySuccess(saved, ClassifyOperationIds.RuleSave);
         using var doc = ParseResult(saved);
         var versionId = doc.RootElement.GetProperty("result_or_error").GetProperty("ruleVersionId").GetString()!;
 
-        Assert.Null(await ActiveRuleSetVersionIdAsync(versionId));
-        Assert.Equal(ledgerBefore, await LedgerFingerprintAsync());
+        Assert.Equal(before.ActiveRuleSetVersionId, await RequireActiveRuleSetVersionIdAsync(versionId));
+        await AssertUnchangedAsync(before);
     }
 
     // ── Validation / private evidence ────────────────────────────────────────
@@ -160,9 +161,11 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
     [Fact]
     public async Task UC004_validate_current_private_evidence_is_activation_eligible_with_fingerprints()
     {
+        var baseline = await SeedActiveRuleSetAsync();
         var category = await CreateCategoryAsync("Uc004ValOk");
         var versionId = await SaveRuleVersionIdAsync(category, "uc004 val ok");
         var path = await WriteBoundCorpusAsync([("uc004 val ok", "suggestion", category)]);
+        var before = await CaptureImmutabilityAsync(baseline);
 
         var result = await ValidateAsync([versionId], path);
         AssertClassifySuccess(result, ClassifyOperationIds.RuleValidate);
@@ -181,7 +184,7 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
         var stdout = result.Stdout;
         Assert.DoesNotContain("uc004 val ok", stdout, StringComparison.Ordinal);
         Assert.DoesNotContain(path, stdout, StringComparison.Ordinal);
-        Assert.Null(await ActiveRuleSetVersionIdAsync(versionId));
+        await AssertUnchangedAsync(before);
     }
 
     [Fact]
@@ -190,11 +193,12 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
         var baseline = await SeedActiveRuleSetAsync();
         var category = await CreateCategoryAsync("Uc004NoCorp");
         var versionId = await SaveRuleVersionIdAsync(category, "uc004 no corp");
+        var before = await CaptureImmutabilityAsync(baseline);
 
         var missing = Path.Combine(root, "missing-" + Guid.NewGuid().ToString("N") + ".jsonl");
         var result = await ValidateAsync([versionId], missing);
         Assert.NotEqual(0, result.ExitCode);
-        Assert.Equal(baseline.RuleSetVersionId, await ActiveRuleSetVersionIdAsync(baseline.RuleVersionId));
+        await AssertUnchangedAsync(before);
     }
 
     [Fact]
@@ -224,14 +228,13 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
         AssertClassifySuccess(hold, ClassifyOperationIds.RuleValidate);
         using var holdDoc = ParseResult(hold);
         var receiptId = holdDoc.RootElement.GetProperty("result_or_error").GetProperty("ownerRulebookGateReceiptId").GetString();
-        // Ineligible evidence must not produce a granted receipt that can activate.
-        if (!string.IsNullOrWhiteSpace(receiptId))
-        {
-            var activated = await ActivateAsync(validationId, receiptId!, broadApply: false);
-            Assert.NotEqual(0, activated.ExitCode);
-        }
 
-        Assert.Equal(baseline.RuleSetVersionId, await ActiveRuleSetVersionIdAsync(baseline.RuleVersionId));
+        // Capture immediately before the expected-failure activation attempt.
+        var before = await CaptureImmutabilityAsync(baseline);
+        Assert.False(string.IsNullOrWhiteSpace(receiptId), "hold should return a receipt id (granted or blocked)");
+        var activated = await ActivateAsync(validationId, receiptId!, broadApply: false);
+        Assert.NotEqual(0, activated.ExitCode);
+        await AssertUnchangedAsync(before);
     }
 
     [Fact]
@@ -255,8 +258,21 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
         Assert.True(
             body.GetProperty("unexplainedConflictCount").GetInt32() >= 1
             || body.GetProperty("incorrectApplicationCanaries").GetInt32() >= 1);
+        var validationId = body.GetProperty("validationId").GetString()!;
 
-        Assert.Equal(baseline.RuleSetVersionId, await ActiveRuleSetVersionIdAsync(baseline.RuleVersionId));
+        var replay = await ValidateAsync([vA, vB], path);
+        using var replayDoc = ParseResult(replay);
+        var replayId = replayDoc.RootElement.GetProperty("result_or_error").GetProperty("validationId").GetString()!;
+        var hold = await ValidateHoldAsync([vA, vB], path, validationId, replayId);
+        AssertClassifySuccess(hold, ClassifyOperationIds.RuleValidate);
+        using var holdDoc = ParseResult(hold);
+        var receiptId = holdDoc.RootElement.GetProperty("result_or_error").GetProperty("ownerRulebookGateReceiptId").GetString();
+
+        var before = await CaptureImmutabilityAsync(baseline);
+        Assert.False(string.IsNullOrWhiteSpace(receiptId), "hold should return a receipt id");
+        var activated = await ActivateAsync(validationId, receiptId!, broadApply: false);
+        Assert.NotEqual(0, activated.ExitCode);
+        await AssertUnchangedAsync(before);
     }
 
     [Fact]
@@ -271,6 +287,7 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
 
         // Archive category after grant → live currency fails at activate.
         await ArchiveCategoryAsync(category);
+        var before = await CaptureImmutabilityAsync(baseline);
         var activated = await ActivateAsync(validationId, receiptId, broadApply: false);
         Assert.NotEqual(0, activated.ExitCode);
         using var doc = ParseResult(activated);
@@ -278,13 +295,13 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
         Assert.True(
             code is ClassifyErrors.Stale or ClassifyErrors.Lifecycle or ClassifyErrors.NotFound,
             code);
-
-        Assert.Equal(baseline.RuleSetVersionId, await ActiveRuleSetVersionIdAsync(baseline.RuleVersionId));
+        await AssertUnchangedAsync(before);
     }
 
     [Fact]
     public async Task UC004_activate_without_receipt_is_rejected()
     {
+        var baseline = await SeedActiveRuleSetAsync();
         var category = await CreateCategoryAsync("Uc004NoRcpt");
         var versionId = await SaveRuleVersionIdAsync(category, "uc004 no receipt");
         var path = await WriteBoundCorpusAsync([("uc004 no receipt", "suggestion", category)]);
@@ -293,9 +310,12 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
         using var repDoc = ParseResult(rep);
         var validationId = repDoc.RootElement.GetProperty("result_or_error").GetProperty("validationId").GetString()!;
 
+        var before = await CaptureImmutabilityAsync(baseline);
         var activated = await ActivateAsync(validationId, "missing-receipt", broadApply: false);
         AssertClassifyError(activated, ClassifyErrors.NotFound);
-        Assert.Null(await ActiveRuleSetVersionIdAsync(versionId));
+        await AssertUnchangedAsync(before);
+        // Probe version never became the active set.
+        Assert.Equal(before.ActiveRuleSetVersionId, await RequireActiveRuleSetVersionIdAsync(versionId));
     }
 
     // ── Activation / retirement / replacement ────────────────────────────────
@@ -317,7 +337,7 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
         Assert.Equal(validationId, body.GetProperty("validationId").GetString());
         Assert.False(body.GetProperty("broadApplyAllowed").GetBoolean());
 
-        Assert.Equal(ruleSetId, await ActiveRuleSetVersionIdAsync(versionId));
+        Assert.Equal(ruleSetId, await RequireActiveRuleSetVersionIdAsync(versionId));
         Assert.Equal(ledgerBefore, await LedgerFingerprintAsync());
     }
 
@@ -353,7 +373,7 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
         Assert.NotEqual(priorSet, successor);
 
         // Public status: successor is active; retired version remains inspectable (immutable row).
-        Assert.Equal(successor, await ActiveRuleSetVersionIdAsync(keep));
+        Assert.Equal(successor, await RequireActiveRuleSetVersionIdAsync(keep));
         var dropStatus = await StatusAsync("rule", drop);
         AssertClassifySuccess(dropStatus, ClassifyOperationIds.Status);
         using var dropDoc = ParseResult(dropStatus);
@@ -382,7 +402,7 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
         using var secondDoc = ParseResult(second);
         var nextSet = secondDoc.RootElement.GetProperty("result_or_error").GetProperty("ruleSetVersionId").GetString()!;
         Assert.NotEqual(priorSet, nextSet);
-        Assert.Equal(nextSet, await ActiveRuleSetVersionIdAsync(v2));
+        Assert.Equal(nextSet, await RequireActiveRuleSetVersionIdAsync(v2));
 
         // Prior version remains addressable via status (immutable history).
         var priorStatus = await StatusAsync("rule", v1);
@@ -419,7 +439,7 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
         Assert.Equal(newName, item.Name);
 
         // Active pointer and rule version still addressable.
-        Assert.False(string.IsNullOrWhiteSpace(await ActiveRuleSetVersionIdAsync(versionId)));
+        Assert.False(string.IsNullOrWhiteSpace(await RequireActiveRuleSetVersionIdAsync(versionId)));
         var status = await StatusAsync("rule", versionId);
         AssertClassifySuccess(status, ClassifyOperationIds.Status);
     }
@@ -427,15 +447,18 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
     [Fact]
     public async Task UC004_category_archive_invalidates_activation_authority()
     {
+        var baseline = await SeedActiveRuleSetAsync();
         var category = await CreateCategoryAsync("Uc004LifeArch");
         var versionId = await SaveRuleVersionIdAsync(category, "uc004 life arch");
         var path = await WriteBoundCorpusAsync([("uc004 life arch", "suggestion", category)]);
         var (validationId, receiptId) = await ValidateAndGrantAsync([versionId], path);
 
         await ArchiveCategoryAsync(category);
+        var before = await CaptureImmutabilityAsync(baseline);
         var activated = await ActivateAsync(validationId, receiptId, broadApply: false);
         Assert.NotEqual(0, activated.ExitCode);
-        Assert.Null(await ActiveRuleSetVersionIdAsync(versionId));
+        await AssertUnchangedAsync(before);
+        Assert.Equal(before.ActiveRuleSetVersionId, await RequireActiveRuleSetVersionIdAsync(versionId));
     }
 
     // ── No automatic activation ──────────────────────────────────────────────
@@ -443,12 +466,14 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
     [Fact]
     public async Task UC004_validation_alone_does_not_activate()
     {
+        var baseline = await SeedActiveRuleSetAsync();
         var category = await CreateCategoryAsync("Uc004ValOnly");
         var versionId = await SaveRuleVersionIdAsync(category, "uc004 val only");
         var path = await WriteBoundCorpusAsync([("uc004 val only", "suggestion", category)]);
+        var before = await CaptureImmutabilityAsync(baseline);
         var result = await ValidateAsync([versionId], path);
         AssertClassifySuccess(result, ClassifyOperationIds.RuleValidate);
-        Assert.Null(await ActiveRuleSetVersionIdAsync(versionId));
+        await AssertUnchangedAsync(before);
     }
 
     [Fact]
@@ -460,8 +485,7 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
         var (validationId, receiptId) = await ValidateAndGrantAsync([versionId], path);
         var activated = await ActivateAsync(validationId, receiptId, broadApply: false);
         AssertClassifySuccess(activated, ClassifyOperationIds.RuleActivate);
-        var pointerBefore = await ActiveRuleSetVersionIdAsync(versionId);
-        Assert.False(string.IsNullOrWhiteSpace(pointerBefore));
+        var seed = new ActiveSeed(versionId, (await RequireActiveRuleSetVersionIdAsync(versionId))!);
 
         var tx = await RecordTransactionAsync("uc004 feedback shop");
         var eval = await process.RunAsync(
@@ -482,6 +506,8 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
         using var outDoc = ParseResult(outcome);
         var outcomeId = outDoc.RootElement.GetProperty("result_or_error").GetProperty("outcomeId").GetString()!;
 
+        // Capture after ledger tx create (setup), immediately before feedback (the op under test).
+        var before = await CaptureImmutabilityAsync(seed);
         var feedback = await process.RunAsync(
             ["classify", "feedback", "record", "--input", "-"],
             ClassifyEnvelope(
@@ -489,8 +515,7 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
                 NextKey()),
             CancellationToken.None);
         AssertClassifySuccess(feedback, ClassifyOperationIds.FeedbackRecord);
-
-        Assert.Equal(pointerBefore, await ActiveRuleSetVersionIdAsync(versionId));
+        await AssertUnchangedAsync(before);
     }
 
     // ── Status / abandon / retention ─────────────────────────────────────────
@@ -528,8 +553,11 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
     [Fact]
     public async Task UC004_status_unknown_subject_is_not_found()
     {
+        var baseline = await SeedActiveRuleSetAsync();
+        var before = await CaptureImmutabilityAsync(baseline);
         var result = await StatusAsync("rule", "01MISSINGRULEVERSION00000000");
         AssertClassifyError(result, ClassifyErrors.NotFound);
+        await AssertUnchangedAsync(before);
     }
 
     [Fact]
@@ -538,7 +566,7 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
         var baseline = await SeedActiveRuleSetAsync();
         var category = await CreateCategoryAsync("Uc004Abandon");
         var versionId = await SaveRuleVersionIdAsync(category, "uc004 abandon draft");
-        var ledgerBefore = await LedgerFingerprintAsync();
+        var beforeAbandon = await CaptureImmutabilityAsync(baseline);
 
         var abandoned = await process.RunAsync(
             ["classify", "abandon", "--input", "-"],
@@ -551,9 +579,7 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
         var body = doc.RootElement.GetProperty("result_or_error");
         Assert.True(body.GetProperty("abandoned").GetBoolean());
         Assert.Equal(versionId, body.GetProperty("subjectId").GetString());
-
-        Assert.Equal(baseline.RuleSetVersionId, await ActiveRuleSetVersionIdAsync(baseline.RuleVersionId));
-        Assert.Equal(ledgerBefore, await LedgerFingerprintAsync());
+        await AssertUnchangedAsync(beforeAbandon);
 
         // Abandoned draft is non-activatable (tombstone blocks activate).
         var status = await StatusAsync("rule", versionId);
@@ -565,16 +591,17 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
 
         var path = await WriteBoundCorpusAsync([("uc004 abandon draft", "suggestion", category)]);
         var (validationId, receiptId) = await ValidateAndGrantAsync([versionId], path);
+        var beforeActivate = await CaptureImmutabilityAsync(baseline);
         var activated = await ActivateAsync(validationId, receiptId, broadApply: false);
         Assert.NotEqual(0, activated.ExitCode);
-        Assert.Equal(baseline.RuleSetVersionId, await ActiveRuleSetVersionIdAsync(baseline.RuleVersionId));
+        await AssertUnchangedAsync(beforeActivate);
     }
 
     [Fact]
     public async Task UC004_abandon_referenced_active_rule_is_rejected()
     {
         var seeded = await SeedActiveRuleSetAsync();
-        var ledgerBefore = await LedgerFingerprintAsync();
+        var before = await CaptureImmutabilityAsync(seeded);
 
         var abandoned = await process.RunAsync(
             ["classify", "abandon", "--input", "-"],
@@ -586,9 +613,7 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
         using var doc = ParseResult(abandoned);
         var code = doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString();
         Assert.True(code is ClassifyErrors.Lifecycle or ClassifyErrors.Conflict, code);
-
-        Assert.Equal(seeded.RuleSetVersionId, await ActiveRuleSetVersionIdAsync(seeded.RuleVersionId));
-        Assert.Equal(ledgerBefore, await LedgerFingerprintAsync());
+        await AssertUnchangedAsync(before);
     }
 
     [Fact]
@@ -609,17 +634,50 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
 
     private sealed record ActiveSeed(string RuleVersionId, string RuleSetVersionId);
 
+    /// <summary>
+    /// Real published active pointer + public Ledger projection fingerprint.
+    /// Never uses a null probe: ActiveRuleSetVersionId and ProbeRuleVersionId are required.
+    /// </summary>
+    private sealed record ImmutabilitySnapshot(
+        string ProbeRuleVersionId,
+        string ActiveRuleSetVersionId,
+        string LedgerFingerprint);
+
     private async Task<ActiveSeed> SeedActiveRuleSetAsync()
     {
         var category = await CreateCategoryAsync("Uc004Base");
-        var versionId = await SaveRuleVersionIdAsync(category, "uc004 baseline shop", ruleId: "rule-uc004-base");
+        var versionId = await SaveRuleVersionIdAsync(
+            category,
+            "uc004 baseline shop",
+            ruleId: "rule-uc004-base-" + Guid.NewGuid().ToString("N")[..8]);
         var path = await WriteBoundCorpusAsync([("uc004 baseline shop", "suggestion", category)]);
         var (validationId, receiptId) = await ValidateAndGrantAsync([versionId], path);
         var activated = await ActivateAsync(validationId, receiptId, broadApply: false);
         AssertClassifySuccess(activated, ClassifyOperationIds.RuleActivate);
         using var doc = ParseResult(activated);
         var ruleSetId = doc.RootElement.GetProperty("result_or_error").GetProperty("ruleSetVersionId").GetString()!;
+        Assert.False(string.IsNullOrWhiteSpace(ruleSetId));
+        // Round-trip through published status so the probe is real public-boundary evidence.
+        Assert.Equal(ruleSetId, await RequireActiveRuleSetVersionIdAsync(versionId));
         return new ActiveSeed(versionId, ruleSetId);
+    }
+
+    private async Task<ImmutabilitySnapshot> CaptureImmutabilityAsync(ActiveSeed baseline)
+    {
+        var pointer = await RequireActiveRuleSetVersionIdAsync(baseline.RuleVersionId);
+        Assert.Equal(baseline.RuleSetVersionId, pointer);
+        var ledger = await LedgerFingerprintAsync();
+        Assert.False(string.IsNullOrWhiteSpace(ledger));
+        return new ImmutabilitySnapshot(baseline.RuleVersionId, pointer, ledger);
+    }
+
+    private async Task AssertUnchangedAsync(ImmutabilitySnapshot before)
+    {
+        Assert.False(string.IsNullOrWhiteSpace(before.ProbeRuleVersionId));
+        Assert.False(string.IsNullOrWhiteSpace(before.ActiveRuleSetVersionId));
+        var afterPointer = await RequireActiveRuleSetVersionIdAsync(before.ProbeRuleVersionId);
+        Assert.Equal(before.ActiveRuleSetVersionId, afterPointer);
+        Assert.Equal(before.LedgerFingerprint, await LedgerFingerprintAsync());
     }
 
     private async Task<(string ValidationId, string ReceiptId)> ValidateAndGrantAsync(
@@ -757,23 +815,23 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
         return path;
     }
 
-    private async Task<string?> ActiveRuleSetVersionIdAsync(string? probeRuleVersionId)
+    /// <summary>
+    /// Published classify.status activeRuleSetVersionId for a real rule-version subject.
+    /// Never accepts a null probe — null/empty subject is not evidence.
+    /// </summary>
+    private async Task<string> RequireActiveRuleSetVersionIdAsync(string probeRuleVersionId)
     {
-        // Prefer public status when a rule version is known; otherwise evaluate absence.
-        if (!string.IsNullOrWhiteSpace(probeRuleVersionId))
-        {
-            var status = await StatusAsync("rule", probeRuleVersionId);
-            if (status.ExitCode == 0)
-            {
-                using var doc = ParseResult(status);
-                var active = doc.RootElement.GetProperty("result_or_error")
-                    .GetProperty("rule")
-                    .GetProperty("activeRuleSetVersionId");
-                return active.ValueKind == JsonValueKind.Null ? null : active.GetString();
-            }
-        }
-
-        return null;
+        Assert.False(string.IsNullOrWhiteSpace(probeRuleVersionId), "probe rule version id required");
+        var status = await StatusAsync("rule", probeRuleVersionId);
+        AssertClassifySuccess(status, ClassifyOperationIds.Status);
+        using var doc = ParseResult(status);
+        var active = doc.RootElement.GetProperty("result_or_error")
+            .GetProperty("rule")
+            .GetProperty("activeRuleSetVersionId");
+        Assert.NotEqual(JsonValueKind.Null, active.ValueKind);
+        var pointer = active.GetString();
+        Assert.False(string.IsNullOrWhiteSpace(pointer), "expected non-null active rule set pointer");
+        return pointer!;
     }
 
     private Task<ProcessResult> StatusAsync(string subjectType, string subjectId) =>
@@ -805,16 +863,27 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
 
     private async Task<string> CreateAccountAsync()
     {
-        var unique = Guid.NewGuid().ToString("N")[..8];
-        var result = await process.RunAsync(
-            ["ledger", "account", "create", "--input", "-"],
-            LedgerEnvelope(
-                $$"""{"institutionName":"Uc004 Bank {{unique}}","displayName":"Primary-{{unique}}","accountType":"cheque","maskedIdentifier":"****{{unique[..4]}}","currencyCode":"ZAR"}""",
-                NextKey()),
-            CancellationToken.None);
-        Assert.Equal(0, result.ExitCode);
-        using var doc = JsonDocument.Parse(result.Stdout);
-        return doc.RootElement.GetProperty("result").GetProperty("accountId").GetString()!;
+        // Fresh process/envelope bootstrap can occasionally fail schema preflight under
+        // sequential fixture churn; retry with a new identity rather than weakening asserts.
+        ProcessResult? result = null;
+        for (var attempt = 0; attempt < 3; attempt++)
+        {
+            var unique = Guid.NewGuid().ToString("N");
+            result = await process.RunAsync(
+                ["ledger", "account", "create", "--input", "-"],
+                LedgerEnvelope(
+                    $$"""{"institutionName":"Uc004 Bank {{unique[..12]}}","displayName":"Primary-{{unique[..12]}}","accountType":"cheque","maskedIdentifier":"****{{unique[..4]}}","currencyCode":"ZAR"}""",
+                    NextKey()),
+                CancellationToken.None);
+            if (result.ExitCode == 0)
+            {
+                using var doc = JsonDocument.Parse(result.Stdout);
+                return doc.RootElement.GetProperty("result").GetProperty("accountId").GetString()!;
+            }
+        }
+
+        Assert.Fail(result!.Stdout + "\n" + result.Stderr);
+        return "";
     }
 
     private async Task<string> CreateCategoryAsync(string name)
@@ -915,4 +984,11 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
     private string NextKey() =>
         "uc004-key-" + (++keySeq).ToString("D4", CultureInfo.InvariantCulture) + "-"
         + Guid.NewGuid().ToString("N")[..8];
+}
+
+/// <summary>Serializes UC-004 acceptance fixtures so host ledger bootstrap is not contended.</summary>
+[CollectionDefinition(Name, DisableParallelization = true)]
+public sealed class ClassifyUc004Collection
+{
+    public const string Name = "ClassifyUc004";
 }
