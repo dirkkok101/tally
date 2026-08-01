@@ -58,15 +58,20 @@ static async Task<ProcessResult> RunAsync(string[] args, CancellationToken cance
         var ledgerClient = new LedgerContractClient(registry, bootstrapProcess);
         var ingest = IngestOperationBundle.CreateServices(dataRoot, ledgerClient);
         var budget = await BudgetOperationBundle.CreateServicesAsync(dataRoot, ledgerClient, cancellationToken: cancellationToken);
-        var classifyValidation = await ClassifyValidationBundle.CreateServicesAsync(
-            dataRoot,
-            ledgerClient,
-            cancellationToken: cancellationToken);
+        ClassifyValidationBundle? classifyValidation = null;
+        if (IsClassifyRuleValidateInvocation(args))
+        {
+            classifyValidation = (await ClassifyValidationBundle.CreateServicesAsync(
+                dataRoot,
+                ledgerClient,
+                cancellationToken: cancellationToken)).Operations;
+        }
+
         services = services with
         {
             Ingest = ingest.Operations,
             Budget = budget.Operations,
-            ClassifyValidation = classifyValidation.Operations
+            ClassifyValidation = classifyValidation
         };
     }
 
@@ -76,3 +81,10 @@ static async Task<ProcessResult> RunAsync(string[] args, CancellationToken cance
         : null;
     return await process.RunAsync(args, stdin, cancellationToken);
 }
+
+static bool IsClassifyRuleValidateInvocation(string[] args) => args switch
+{
+    ["classify", "rule", "validate"] => true,
+    ["classify", "rule", "validate", "--input", _] => true,
+    _ => false
+};

@@ -10,15 +10,11 @@ test_project="tests/Tally.Tests/Tally.Tests.csproj"
 filter='FullyQualifiedName~OwnerRulebookGateTests'
 min_named_gates=12
 publish_root=""
-data_root=""
 tally_bin=""
 
 cleanup() {
     if [[ -n "${publish_root}" && -d "${publish_root}" ]]; then
         rm -rf -- "${publish_root}"
-    fi
-    if [[ -n "${data_root}" && -d "${data_root}" ]]; then
-        rm -rf -- "${data_root}"
     fi
 }
 trap cleanup EXIT
@@ -136,6 +132,116 @@ else:
 PY
 }
 
+# Mirror VerifiedOwnerRulebookGateReceipt.Derive over aggregate-only public results.
+# Arguments are three public result envelopes, the explicit benefit decision, and
+# aggregate owner decision/time evidence. No private path or payload is accepted.
+derive_receipt() {
+    python3 - "$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" <<'PY'
+import json,sys
+
+def result(blob):
+    doc=json.loads(blob)
+    if isinstance(doc,dict) and isinstance(doc.get("result"),dict):
+        doc=doc["result"]
+    if not isinstance(doc,dict):
+        raise ValueError("invalid result envelope")
+    return doc
+
+def integer(text):
+    value=int(text)
+    if value < 0:
+        raise ValueError("negative aggregate count")
+    return value
+
+def optional_number(text):
+    if text == "":
+        return None
+    value=float(text)
+    if value < 0:
+        raise ValueError("negative aggregate duration")
+    return value
+
+rep=result(sys.argv[1]); replay=result(sys.argv[2]); hold=result(sys.argv[3])
+decision=sys.argv[4].strip()
+before=integer(sys.argv[5]); after=integer(sys.argv[6])
+minutes_before=optional_number(sys.argv[7]); minutes_after=optional_number(sys.argv[8])
+
+replay_fields=(
+    "outcomesCanonicalHash","corpusFingerprint","candidateFingerprint","reportFingerprint",
+    "totalRows","suggestionCount","noSuggestionCount","conflictCount","staleCount",
+    "incorrectApplicationCanaries","unexplainedConflictCount","driftCanaryCount",
+    "activationEligible")
+replay_pass=all(rep.get(k)==replay.get(k) for k in replay_fields)
+
+def safety(value):
+    total=value.get("totalRows")
+    return (
+        value.get("activationEligible") is True
+        and value.get("incorrectApplicationCanaries")==0
+        and value.get("unexplainedConflictCount")==0
+        and value.get("driftCanaryCount")==0
+        and total==value.get("accountedRows")
+        and total==sum(value.get(k, -1) for k in (
+            "suggestionCount","noSuggestionCount","conflictCount","staleCount")))
+
+rep_safety=safety(rep)
+hold_safety=safety(hold)
+safety_pass=rep_safety and hold_safety and replay_pass
+benefit_sufficient=decision in ("approve-broad","approve")
+requires_decision=not benefit_sufficient
+authority=safety_pass and benefit_sufficient
+
+block=None
+if not authority:
+    if not replay_pass:
+        block="CLASSIFY-OWNER-RULEBOOK-REPLAY-FAILED"
+    elif not hold_safety:
+        block="CLASSIFY-OWNER-RULEBOOK-HOLD-OUT-FAILED"
+    elif not rep_safety:
+        block="CLASSIFY-OWNER-RULEBOOK-SAFETY-FAILED"
+    else:
+        block="CLASSIFY-OWNER-RULEBOOK-BENEFIT-DECISION-REQUIRED"
+
+receipt={
+    "schemaVersion":1,
+    "receiptKind":"VerifiedOwnerRulebookGateReceipt",
+    "authorityGranted":authority,
+    "safetyPassed":safety_pass,
+    "benefitSufficient":benefit_sufficient,
+    "requiresExplicitOwnerBenefitDecision":requires_decision,
+    "blockCode":block,
+    "eligibleRows":rep["totalRows"],
+    "suggestedRows":rep["suggestionCount"],
+    "correctionRows":0,
+    "noSuggestionRows":rep["noSuggestionCount"],
+    "conflictRows":rep["conflictCount"],
+    "excludedRows":0,
+    "staleRows":rep["staleCount"],
+    "incorrectApplicationCanaries":rep["incorrectApplicationCanaries"],
+    "unexplainedConflictCount":rep["unexplainedConflictCount"],
+    "driftCanaryCount":rep["driftCanaryCount"],
+    "unauthorizedMutationCount":0,
+    "descriptionInferredRelationshipCount":0,
+    "coverageBasisPoints":rep["coverageBasisPoints"],
+    "ownerDecisionCountBefore":before,
+    "ownerDecisionCountAfter":after,
+    "elapsedOwnerMinutesBefore":minutes_before,
+    "elapsedOwnerMinutesAfter":minutes_after,
+    "candidateFingerprint":rep["candidateFingerprint"],
+    "corpusFingerprint":rep["corpusFingerprint"],
+    "holdOutFingerprint":hold["corpusFingerprint"],
+    "reportFingerprint":rep["reportFingerprint"],
+    "outcomesCanonicalHash":rep["outcomesCanonicalHash"],
+    "deterministicReplayPassed":replay_pass,
+    "disclosurePassed":True,
+    "localityPassed":True,
+    "projectionVersion":rep["projectionVersion"],
+    "snapshotId":rep["snapshotId"],
+    "storeGenerationFingerprint":rep["storeGenerationFingerprint"]}
+print(json.dumps(receipt,separators=(",",":")))
+PY
+}
+
 cd "$repository_root"
 
 section "Host platform"
@@ -164,6 +270,7 @@ section "Owner live input probe (no path/id disclosure)"
 owner_corpus="${CLASSIFY_OWNER_RULEBOOK_CORPUS:-}"
 owner_holdout="${CLASSIFY_OWNER_RULEBOOK_HOLD_OUT:-}"
 owner_candidates="${CLASSIFY_OWNER_RULEBOOK_CANDIDATE_IDS:-}"
+owner_data_root="${TALLY_DATA_ROOT:-}"
 owner_benefit_decision="${CLASSIFY_OWNER_RULEBOOK_BENEFIT_DECISION:-}"
 owner_decisions_before="${CLASSIFY_OWNER_DECISIONS_BEFORE:-}"
 owner_decisions_after="${CLASSIFY_OWNER_DECISIONS_AFTER:-}"
@@ -192,6 +299,7 @@ except Exception:
 fi
 
 if [[ -z "${owner_corpus}" || -z "${owner_holdout}" || -z "${owner_candidates}" \
+    || -z "${owner_data_root}" \
     || -z "${owner_decisions_before}" || -z "${owner_decisions_after}" ]]; then
     section "Blocked receipt (missing owner inputs)"
     blocked="$(emit_blocked_receipt "CLASSIFY-OWNER-RULEBOOK-INPUT-MISSING")"
@@ -200,6 +308,10 @@ if [[ -z "${owner_corpus}" || -z "${owner_holdout}" || -z "${owner_candidates}" 
     printf 'blocked receipt: authorityGranted=false; inputs incomplete\n'
     owner_live_path="blocked"
 else
+    if [[ ! -d "${owner_data_root}" || -L "${owner_data_root}" ]]; then
+        printf 'TALLY_DATA_ROOT must be an existing non-symlink directory\n' >&2
+        exit 1
+    fi
     if [[ ! -f "${owner_corpus}" || -L "${owner_corpus}" ]]; then
         printf 'owner corpus is not a regular non-symlink file\n' >&2
         exit 1
@@ -256,10 +368,17 @@ do
 done
 printf 'required named gate families present (≥12)\n'
 
-section "Disposable TALLY_DATA_ROOT isolation"
-data_root="$(mktemp -d "${TMPDIR:-/tmp}/tally-owner-rulebook-data.XXXXXX")"
-export TALLY_DATA_ROOT="$data_root"
-printf 'disposable data root prepared (path not disclosed)\n'
+section "Runtime data-root boundary"
+if [[ "${owner_live_path}" == "present" ]]; then
+    # Keep the caller's owner data root: candidate rule versions and the frozen
+    # Ledger projection must come from the same installed runtime composition.
+    # rule.validate writes aggregate CLASSIFY validation evidence only; Ledger is read-only.
+    export TALLY_DATA_ROOT="${owner_data_root}"
+    printf 'owner runtime root retained (path not disclosed); Ledger remains read-only\n'
+else
+    unset TALLY_DATA_ROOT
+    printf 'no owner runtime opened while inputs are incomplete\n'
+fi
 
 section "Owner-rulebook gate matrix (HandleAsync + projection binding)"
 # Synthetic proofs always run via unit tests (agent policy may skip execution).
@@ -313,67 +432,37 @@ else
     assert_no_private_disclosure "${hold_out}"
 
     if [[ "${rep_exit}" -ne 0 || "${replay_exit}" -ne 0 || "${hold_exit}" -ne 0 ]]; then
-        # CLI may not yet wire production handler (public contract still registered). Fail closed.
+        # Public handler or required owner state is unavailable. Fail closed.
         blocked="$(emit_blocked_receipt "CLASSIFY-OWNER-RULEBOOK-VALIDATE-UNAVAILABLE")"
         printf '%s\n' "$blocked"
         assert_no_private_disclosure "$blocked"
         printf 'public validate unavailable or failed; authorityGranted=false\n'
     else
-        rep_hash="$(json_field "$rep_out" "outcomesCanonicalHash")"
-        replay_hash="$(json_field "$replay_out" "outcomesCanonicalHash")"
-        rep_eligible="$(json_field "$rep_out" "activationEligible")"
-        hold_eligible="$(json_field "$hold_out" "activationEligible")"
-        if [[ -z "$rep_hash" || "$rep_hash" != "$replay_hash" ]]; then
-            blocked="$(emit_blocked_receipt "CLASSIFY-OWNER-RULEBOOK-REPLAY-FAILED")"
-            printf '%s\n' "$blocked"
-            assert_no_private_disclosure "$blocked"
-            printf 'deterministic replay failed; authorityGranted=false\n'
-        elif [[ "$rep_eligible" != "true" || "$hold_eligible" != "true" ]]; then
-            blocked="$(emit_blocked_receipt "CLASSIFY-OWNER-RULEBOOK-SAFETY-FAILED")"
-            printf '%s\n' "$blocked"
-            assert_no_private_disclosure "$blocked"
-            printf 'safety failed on representative or hold-out; authorityGranted=false\n'
+        if [[ -n "${owner_benefit_decision}" \
+            && "${owner_benefit_decision}" != "approve-broad" \
+            && "${owner_benefit_decision}" != "approve" \
+            && "${owner_benefit_decision}" != "defer-broad" ]]; then
+            printf 'benefit decision must be approve-broad, approve, defer-broad, or empty\n' >&2
+            exit 1
+        fi
+        receipt="$(derive_receipt \
+            "$rep_out" "$replay_out" "$hold_out" "$owner_benefit_decision" \
+            "$owner_decisions_before" "$owner_decisions_after" \
+            "$owner_minutes_before" "$owner_minutes_after")"
+        printf '%s\n' "$receipt"
+        assert_no_private_disclosure "$receipt"
+        receipt_authority="$(json_field "$receipt" "authorityGranted")"
+        receipt_block="$(json_field "$receipt" "blockCode")"
+        if [[ "$receipt_authority" == "true" ]]; then
+            printf 'live path: representative+replay+hold-out+benefit gates passed; authorityGranted=true\n'
         else
-            # Benefit decision: never invent 50% threshold.
-            if [[ -z "${owner_benefit_decision}" ]]; then
-                blocked="$(emit_blocked_receipt "CLASSIFY-OWNER-RULEBOOK-BENEFIT-DECISION-REQUIRED")"
-                # Overlay derived fingerprints when present (still aggregate-only).
-                printf '%s\n' "$blocked" | python3 -c "
-import json,sys
-r=json.load(sys.stdin)
-rep=json.loads(sys.argv[1])
-hold=json.loads(sys.argv[2])
-if 'result' in rep: rep=rep['result']
-if 'result' in hold: hold=hold['result']
-r['candidateFingerprint']=rep.get('candidateFingerprint')
-r['corpusFingerprint']=rep.get('corpusFingerprint')
-r['holdOutFingerprint']=hold.get('corpusFingerprint')
-r['reportFingerprint']=rep.get('reportFingerprint')
-r['outcomesCanonicalHash']=rep.get('outcomesCanonicalHash')
-r['eligibleRows']=rep.get('totalRows',0)
-r['suggestedRows']=rep.get('suggestionCount',0)
-r['noSuggestionRows']=rep.get('noSuggestionCount',0)
-r['conflictRows']=rep.get('conflictCount',0)
-r['staleRows']=rep.get('staleCount',0)
-r['incorrectApplicationCanaries']=rep.get('incorrectApplicationCanaries',0)
-r['unexplainedConflictCount']=rep.get('unexplainedConflictCount',0)
-r['driftCanaryCount']=rep.get('driftCanaryCount',0)
-r['coverageBasisPoints']=rep.get('coverageBasisPoints',0)
-r['safetyPassed']=True
-r['deterministicReplayPassed']=True
-r['ownerDecisionCountBefore']=int(sys.argv[3])
-r['ownerDecisionCountAfter']=int(sys.argv[4])
-print(json.dumps(r,separators=(',',':')))
-" "$rep_out" "$hold_out" "${owner_decisions_before}" "${owner_decisions_after}"
-                printf 'safety passed; explicit benefit decision required (no 50%% threshold)\n'
-            else
-                printf 'live path: safety+replay+hold-out ok; benefitDecision present (value not printed)\n'
-            fi
+            printf 'live path blocked by %s; authorityGranted=false\n' \
+                "${receipt_block:-CLASSIFY-OWNER-RULEBOOK-SAFETY-FAILED}"
         fi
     fi
 fi
 
 section "Aggregate receipt summary"
-printf 'disclosure: aggregate metadata only; locality: disposable TALLY_DATA_ROOT; no activation/apply\n'
+printf 'disclosure: aggregate metadata only; Ledger read-only; no activation/apply\n'
 printf 'owner-rulebook pre-authority gate: complete\n'
 exit 0

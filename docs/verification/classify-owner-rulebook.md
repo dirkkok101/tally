@@ -58,6 +58,7 @@ CLASSIFY_OWNER_RULEBOOK_RUN_TESTS=0 bash scripts/verify-classify-owner-rulebook.
 | Environment variable | Role |
 |---|---|
 | `CLASSIFY_OWNER_RULEBOOK_CANDIDATE_IDS` | Comma-separated immutable candidate **rule version** IDs |
+| `TALLY_DATA_ROOT` | Existing owner runtime root containing the candidate CLASSIFY versions and Ledger projection; retained but never printed |
 | `CLASSIFY_OWNER_RULEBOOK_CORPUS` | Owner-only representative JSONL corpus (mode `600`/`400`, not a symlink) |
 | `CLASSIFY_OWNER_RULEBOOK_HOLD_OUT` | Owner-only temporal hold-out JSONL (same permission rules) |
 | `CLASSIFY_OWNER_DECISIONS_BEFORE` | Aggregate owner decision count before rulebook |
@@ -135,5 +136,8 @@ locality, disclosure.
 ## Live Ledger policy
 
 - Classification projection is **read-only**
+- The live operator path retains the caller's owner `TALLY_DATA_ROOT` so candidate
+  rule versions and projection rows resolve from one installed composition; it writes
+  aggregate CLASSIFY validation evidence but does not mutate Ledger
 - No activation, apply, or Ledger category mutation from this gate
 - Mutation probes (if any) use disposable `TALLY_DATA_ROOT` only
