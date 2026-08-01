@@ -120,132 +120,170 @@
   ],
   "files": [
     {
-      "id": "01KYVN0TP771H8F903V8VYH3KR",
+      "id": "01KYYWAGP4DB4X92H7S7JZF7G0",
       "path": "src/Tally/Features/Classify/Recovery/Status/GetClassificationStatusQuery.cs",
       "action": "create",
       "role": "status projection",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
     },
     {
-      "id": "01KYVN0TP7YG7GXA4FYGBYW16D",
+      "id": "01KYYWAGP4MJ8GB07SSBTPNVNE",
       "path": "src/Tally/Domain/Classify/Recovery/SafeNextActionPolicy.cs",
       "action": "create",
       "role": "next-action policy",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
     },
     {
-      "id": "01KYVN0TP7V41EWBT1BAAEW275",
+      "id": "01KYYWAGP48JF9MAQADHFHAJ02",
       "path": "src/Tally/Features/Classify/Contract/ClassifyContractMapper.Status.cs",
       "action": "create",
       "role": "pure status mapping",
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
     },
     {
-      "id": "01KYVN0TP7GASVQAXVDYQWZ8E6",
+      "id": "01KYYWAGP456C6ZMYN2PH0Z6RE",
       "path": "src/Tally/Bootstrap/Features/ClassifyRecoveryExtensions.cs",
       "action": "create",
       "role": "explicit recovery registration",
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
     },
     {
-      "id": "01KYVN0TP7010Y02J5009ZKP4G",
+      "id": "01KYYWAGP4VQX1FJXVGE5ZKYYX",
       "path": "tests/Tally.Tests/Classify/Recovery/ClassificationStatusTests.cs",
       "action": "test",
       "role": "state matrix tests",
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
     },
     {
-      "id": "01KYVN0TP7VMD6F6NX9JJS50WH",
+      "id": "01KYYWAGP4PXQPTNS76Y1H379B",
       "path": "tests/Tally.Tests/Classify/Recovery/StatusPrivacyTests.cs",
       "action": "test",
       "role": "no-reread and disclosure tests",
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
+    },
+    {
+      "id": "01KYYWAGP4KPKTKBZEJPTMFRAP",
+      "path": "src/Tally/Contracts/Classify/Operations/ClassifyResults.cs",
+      "action": "modify",
+      "role": "bounded typed public status detail records",
+      "required": 1,
+      "sort_order": 6,
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
+    },
+    {
+      "id": "01KYYWAGP4JGKP4R5Q6R6Y720E",
+      "path": "src/Tally/Contracts/Classify/ClassifyJsonContext.cs",
+      "action": "modify",
+      "role": "Native-AOT status detail source generation",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
+    },
+    {
+      "id": "01KYYWAGP4SB993PR70MSE7GH4",
+      "path": "tests/Tally.Tests/Classify/Contract/ClassifyOperationContractTests.cs",
+      "action": "test",
+      "role": "public status schema fingerprint and privacy boundary",
+      "required": 1,
+      "sort_order": 8,
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
     }
   ],
   "interfaces": [
     {
-      "id": "01KYVRTWBKA722F1YWE8YEAX6Y",
+      "id": "01KYYWAGP431K2TSVZDDRCA1MD",
       "name": "ClassificationRuleStore",
       "direction": "consumes",
       "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
       "sort_order": 0,
-      "created_at": "2026-07-31T09:42:07.9868637+00:00"
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
     },
     {
-      "id": "01KYVRTWBM5NDWQ4VQNN2M09YY",
+      "id": "01KYYWAGP4TPBYQJTZ0PWH1PSZ",
       "name": "RuleSetStore",
       "direction": "consumes",
       "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
       "sort_order": 1,
-      "created_at": "2026-07-31T09:42:07.9868637+00:00"
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
     },
     {
-      "id": "01KYVRTWBME0MVGGA3REATGBSX",
+      "id": "01KYYWAGP4EHHHHDPYMC9JYVYF",
       "name": "ClassificationValidationStore",
       "direction": "consumes",
       "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
       "sort_order": 2,
-      "created_at": "2026-07-31T09:42:07.9868637+00:00"
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
     },
     {
-      "id": "01KYVRTWBMEVP1T19WMP3TV7ZX",
+      "id": "01KYYWAGP4RQW8HDD1ZZ7CD90T",
       "name": "ClassificationEvaluationStore",
       "direction": "consumes",
       "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
       "sort_order": 3,
-      "created_at": "2026-07-31T09:42:07.9868637+00:00"
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
     },
     {
-      "id": "01KYVRTWBMV0A68V296NVG2Y0T",
+      "id": "01KYYWAGP46365M4CA9KHQ67HS",
       "name": "ClassificationApplyPreviewStore",
       "direction": "consumes",
       "contract_ref_code": "DM-CLASSIFY-APPLY-RUN",
       "sort_order": 4,
-      "created_at": "2026-07-31T09:42:07.9868637+00:00"
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
     },
     {
-      "id": "01KYVRTWBMSEGYJDTS3PP0N88K",
+      "id": "01KYYWAGP40HYQQRZCC2W4JW48",
       "name": "ClassificationApplyRunStore",
       "direction": "consumes",
       "contract_ref_code": "DM-CLASSIFY-APPLY-RUN",
       "sort_order": 5,
-      "created_at": "2026-07-31T09:42:07.9868637+00:00"
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
     },
     {
-      "id": "01KYVRTWBM10H9QRYXTEW5K4K1",
+      "id": "01KYYWAGP4AG84KXAJSG27E25P",
       "name": "ClassificationFeedbackStore",
       "direction": "consumes",
       "contract_ref_code": "DM-CLASSIFY-FEEDBACK-PROPOSAL",
       "sort_order": 6,
-      "created_at": "2026-07-31T09:42:07.9868637+00:00"
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
     },
     {
-      "id": "01KYVRTWBM1JW57JB8P2R51TEX",
+      "id": "01KYYWAGP5W72QQA8443H2WQW7",
       "name": "ClassificationRecoveryStore",
       "direction": "consumes",
       "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
       "sort_order": 7,
-      "created_at": "2026-07-31T09:42:07.9868637+00:00"
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
     },
     {
-      "id": "01KYVRTWBMWDKEHA8PVQDNXG43",
+      "id": "01KYYWAGP5Y4YD7AZ2WFDBBRJ6",
       "name": "GetClassificationStatusQuery.HandleAsync",
       "direction": "produces",
       "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
       "sort_order": 8,
-      "created_at": "2026-07-31T09:42:07.9868637+00:00"
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
+    },
+    {
+      "id": "01KYYWAGP5Y8CR5YAY9B3ZE4Q6",
+      "name": "ClassifyStatusResult",
+      "direction": "produces",
+      "contract_ref_code": "FR-CLASSIFY-STATUS-HISTORY",
+      "notes": [
+        "bounded envelope with exactly one typed subject detail"
+      ],
+      "sort_order": 9,
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
     }
   ],
   "recipe_items": [
@@ -298,6 +336,66 @@
       "required": 1,
       "sort_order": 0,
       "created_at": "2026-07-31T10:03:40.5096251+00:00"
+    },
+    {
+      "id": "01KYYWAGP2QQ77BW4YB3NEGVVB",
+      "kind": "note",
+      "text": [
+        "Hermes authorization (2026-08-01): reserve ClassifyResults.cs, ClassifyJsonContext.cs, and public contract tests so classify.status can expose the already-approved FR-CLASSIFY-STATUS-HISTORY fields. ClassifyStatusResult keeps the common contractVersion, subjectType, subjectId, lifecycleState, mutationMayHaveOccurred, and exactly one nextSafeOperationId, and adds exactly one non-null typed detail matching subjectType; all other details are null."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
+    },
+    {
+      "id": "01KYYWAGP3J0WPHJ9GQECDMKN6",
+      "kind": "note",
+      "text": [
+        "Rule detail is bounded and deterministically ordered: activeRuleSetVersionId plus versions for the addressed stable rule identity. Each version contains ruleVersionId, ordered ruleSetVersionIds, lifecycleState, actorId, stable system reasonCode, createdAt, priorRuleVersionId, and ordered successorRuleVersionIds. Never expose owner-entered rule reason prose. If the bounded operation limit would be exceeded, fail with resource limit and no partial history."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
+    },
+    {
+      "id": "01KYYWAGP3AVBPHTVZPHQF1Y1G",
+      "kind": "note",
+      "text": [
+        "Validation detail contains candidate/report fingerprints, lifecycle, aggregate total/accounted/suggestion/no-suggestion/conflict/stale counts, activation eligibility when retained, actorId, started/completed timestamps, and a closed retained staleness state derived only from durable metadata. Evaluation detail contains a deterministic fingerprint over retained run metadata, ruleSetVersionId, normalizationVersion, aggregate input/suggestion/no-suggestion/conflict/stale counts, actorId, createdAt, and durable staleness state. Never reread corpus or Ledger data to refresh status."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
+    },
+    {
+      "id": "01KYYWAGP38YD9QE7SK54XXTGZ",
+      "kind": "note",
+      "text": [
+        "Preview detail contains preview/evaluation fingerprints and IDs, selected/excluded/no-suggestion/conflict counts, expiry/lifecycle and actor metadata only. Apply detail contains previewId, the retained authorized request fingerprint, applied/already-applied/rejected/failed/unresolved totals, unresolved frontier, replaySafe, resumeSafe, actorId, and start/completion timestamps; never return item transaction/allocation identities or errors."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
+    },
+    {
+      "id": "01KYYWAGP3W5KJN1EJV4MX5SCJ",
+      "kind": "note",
+      "text": [
+        "Feedback detail contains outcomeId, decisionType, proposalId/state when retained, actorId, stable system reasonCode derived from decision/proposal state, occurredAt, and ordered referenced ruleVersionIds from durable metadata. Never expose feedback free-text reason, transaction/allocation IDs, or reconstruct evidence. Abandonment and cleanup details expose only durable IDs/types, actorId, safe system reason code, timestamps, policy and aggregate/per-kind counts; never free-text reasons or artifact names/paths."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
+    },
+    {
+      "id": "01KYYWAGP349C0CPWFJ739TWYY",
+      "kind": "note",
+      "text": [
+        "Unknown subject remains stable not-found with no partial result. Missing required durable metadata for a known subject fails integrity rather than synthesizing current state. Arrays and details use explicit source-generated JSON metadata, deterministic ordinal ordering, documented maxima, and no polymorphic/reflection serialization. Update existing sparse-output tests to assert the hard FR fields and privacy exclusions. Do not change requests, unrelated operations, persistence schema, run unit/filtered/full suites, tag, release, or deploy."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-08-01T14:40:49.3452111+00:00"
     }
   ],
   "references": [
