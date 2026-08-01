@@ -45,11 +45,12 @@ public static partial class ClassifyContractMapper
             {
                 writer.WritePropertyName("ledgerAllocationRefs");
                 writer.WriteStartArray();
+                // Allocation refs are an ordered (prior, resulting) pair. Do not sort or
+                // de-duplicate them: reversing the pair changes correction semantics and
+                // must therefore change the idempotency fingerprint.
                 foreach (var id in ledgerAllocationRefs
                              .Where(r => !string.IsNullOrWhiteSpace(r))
-                             .Select(r => r.Trim())
-                             .Distinct(StringComparer.Ordinal)
-                             .OrderBy(r => r, StringComparer.Ordinal))
+                             .Select(r => r.Trim()))
                 {
                     writer.WriteStringValue(id);
                 }
@@ -71,8 +72,8 @@ public static partial class ClassifyContractMapper
 
     /// <summary>
     /// Resolve prior/resulting allocation identities for correction feedback.
-    /// Prefer explicit owner-supplied refs (exactly two ordered: prior, resulting);
-    /// otherwise use durable apply_item identities when complete.
+    /// Bind any explicit ordered pair to the durable outcome-scoped apply result.
+    /// Caller-supplied identities are not correction authority by themselves.
     /// </summary>
     public static bool TryResolveCorrectionAllocations(
         IReadOnlyList<string>? ledgerAllocationRefs,
@@ -86,38 +87,49 @@ public static partial class ClassifyContractMapper
         resultingAllocationId = null;
         errorCode = null;
 
+        var hasAuthoritativePair = !string.IsNullOrWhiteSpace(appliedPriorAllocationId)
+            && !string.IsNullOrWhiteSpace(appliedResultingAllocationId);
+        if (hasAuthoritativePair)
+        {
+            var authoritativePrior = appliedPriorAllocationId!.Trim();
+            var authoritativeResulting = appliedResultingAllocationId!.Trim();
+            if (ledgerAllocationRefs is { Count: > 0 })
+            {
+                var refs = ledgerAllocationRefs
+                    .Where(r => !string.IsNullOrWhiteSpace(r))
+                    .Select(r => r.Trim())
+                    .ToArray();
+                if (refs.Length != 2
+                    || string.Equals(refs[0], refs[1], StringComparison.Ordinal)
+                    || !string.Equals(refs[0], authoritativePrior, StringComparison.Ordinal)
+                    || !string.Equals(refs[1], authoritativeResulting, StringComparison.Ordinal))
+                {
+                    errorCode = ClassifyErrors.InvalidInput;
+                    return false;
+                }
+            }
+
+            priorAllocationId = authoritativePrior;
+            resultingAllocationId = authoritativeResulting;
+            return true;
+        }
+
+        // A direct owner correction may supply its Ledger result pair for attributable
+        // history, but the caller pair is not sufficient authority to derive a reusable
+        // proposal. The command keeps CorrectionAllocationsComplete false in this branch.
         if (ledgerAllocationRefs is { Count: > 0 })
         {
             var refs = ledgerAllocationRefs
                 .Where(r => !string.IsNullOrWhiteSpace(r))
                 .Select(r => r.Trim())
                 .ToArray();
-            if (refs.Length != 2
-                || string.Equals(refs[0], refs[1], StringComparison.Ordinal))
+            if (refs.Length == 2
+                && !string.Equals(refs[0], refs[1], StringComparison.Ordinal))
             {
-                errorCode = ClassifyErrors.InvalidInput;
-                return false;
+                priorAllocationId = refs[0];
+                resultingAllocationId = refs[1];
+                return true;
             }
-
-            priorAllocationId = refs[0];
-            resultingAllocationId = refs[1];
-            return true;
-        }
-
-        if (!string.IsNullOrWhiteSpace(appliedResultingAllocationId))
-        {
-            priorAllocationId = string.IsNullOrWhiteSpace(appliedPriorAllocationId)
-                ? null
-                : appliedPriorAllocationId;
-            resultingAllocationId = appliedResultingAllocationId.Trim();
-            // Correction requires a prior allocation identity when resolved from apply_item.
-            if (string.IsNullOrWhiteSpace(priorAllocationId))
-            {
-                errorCode = ClassifyErrors.InvalidInput;
-                return false;
-            }
-
-            return true;
         }
 
         errorCode = ClassifyErrors.InvalidInput;

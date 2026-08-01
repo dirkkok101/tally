@@ -74,6 +74,13 @@ public static class FeedbackProposalBuilder
             return None("unknown_decision", noneFingerprint);
         }
 
+        // A caller-supplied pair is not correction authority. Proposals require the
+        // complete outcome-scoped pair rebound from retained apply provenance.
+        if (!input.CorrectionAllocationsComplete)
+        {
+            return None("correction_authority_unavailable", noneFingerprint);
+        }
+
         // Unavailable prior MatchEvidence → store owner decision only; never reconstruct.
         if (!input.EvidenceAvailable || input.RetainedEvidence.Count == 0)
         {
@@ -155,20 +162,12 @@ public static class FeedbackProposalBuilder
                 DecisionCode: "replace_category_same_scope");
         }
 
-        // Narrow: same category but multi-condition retained evidence — shrink scope to all-but-last
-        // condition ids from retained evidence only (no reconstructed predicates/values).
+        // An AND rule becomes broader, not narrower, when a condition is removed.
+        // Match evidence from one corrected row cannot identify a safe additional
+        // predicate, so same-category corrections remain transaction-specific.
         if (conditionIds.Length >= 2)
         {
-            var narrowed = conditionIds.Take(conditionIds.Length - 1).ToArray();
-            var narrowScope = CanonicalClassificationHasher.HashOrderedLines(
-                narrowed.Select(id => "cond:" + id));
-            return new Result(
-                ProposalKind.Narrow,
-                ProposalTypeNarrow,
-                sourceRuleId,
-                narrowScope,
-                sourceRule.CategoryId,
-                DecisionCode: "narrow_retained_conditions");
+            return None("narrowing_not_proven", noneFingerprint);
         }
 
         // Single-condition, same category correction — transaction-specific; no reusable draft.

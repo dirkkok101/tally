@@ -141,28 +141,44 @@ public sealed class ClassificationFeedbackStore
     }
 
     /// <summary>
-    /// Latest durable apply_item allocation pair for a transaction (prior expected + resulting).
-    /// Does not rewrite or invent allocations.
+    /// Latest durable completed correction for this exact retained outcome. The join to
+    /// apply_preview_item prevents feedback for one outcome from borrowing a later apply
+    /// on the same transaction. Uses Ledger-returned prior/result identities, not request
+    /// expectations, and never rewrites or invents allocations.
     /// </summary>
     public async Task<(string? PriorAllocationId, string? ResultingAllocationId, string? CategoryId)?>
-        FindLatestAppliedAllocationAsync(
+        FindAppliedCorrectionForOutcomeAsync(
             SqliteConnection connection,
             SqliteTransaction? transaction,
+            string outcomeId,
             string transactionId,
             CancellationToken cancellationToken)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(outcomeId);
         ArgumentException.ThrowIfNullOrWhiteSpace(transactionId);
         await using var command = connection.CreateCommand();
         command.Transaction = transaction;
         command.CommandText = """
-            SELECT expected_active_allocation_id, ledger_allocation_id, category_id
-            FROM apply_item
-            WHERE transaction_id = $tx
-              AND item_state IN ('applied', 'already_applied')
-              AND ledger_allocation_id IS NOT NULL
-            ORDER BY apply_id DESC, ordinal DESC
+            SELECT ai.prior_ledger_allocation_id, ai.ledger_allocation_id, ai.category_id
+            FROM apply_item AS ai
+            INNER JOIN apply_run AS ar
+                ON ar.apply_id = ai.apply_id
+            INNER JOIN apply_preview_item AS api
+                ON api.preview_id = ar.preview_id
+               AND api.ordinal = ai.ordinal
+            WHERE api.outcome_id = $outcome
+              AND api.transaction_id = $tx
+              AND ai.transaction_id = $tx
+              AND api.mode = 'correct'
+              AND ai.ledger_operation_id = 'ledger.transaction.category.correct'
+              AND ai.item_state IN ('applied', 'already_applied')
+              AND ai.prior_ledger_allocation_id IS NOT NULL
+              AND ai.ledger_allocation_id IS NOT NULL
+              AND ar.lifecycle_state = 'completed'
+            ORDER BY ar.completed_at DESC, ai.apply_id DESC, ai.ordinal DESC
             LIMIT 1;
             """;
+        command.Parameters.AddWithValue("$outcome", outcomeId);
         command.Parameters.AddWithValue("$tx", transactionId);
         await using var reader = await command.ExecuteReaderAsync(cancellationToken);
         if (!await reader.ReadAsync(cancellationToken))

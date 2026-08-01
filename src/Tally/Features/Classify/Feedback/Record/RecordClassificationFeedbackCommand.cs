@@ -126,6 +126,7 @@ public sealed class RecordClassificationFeedbackCommand
             string? resultingAlloc;
             string? resultingCategoryId;
             bool correctionAllocationsComplete;
+            (string? PriorAllocationId, string? ResultingAllocationId, string? CategoryId)? authoritativeCorrection;
 
             await using (var connection = await stateStore.OpenMigratedAsync(ct))
             {
@@ -174,10 +175,11 @@ public sealed class RecordClassificationFeedbackCommand
                 resultingAlloc = null;
                 resultingCategoryId = null;
                 correctionAllocationsComplete = false;
+                authoritativeCorrection = null;
                 if (input.Decision == ClassifyFeedbackDecision.Corrected)
                 {
-                    var applied = await feedbackStore.FindLatestAppliedAllocationAsync(
-                        connection, null, outcome.TransactionId, ct);
+                    var applied = await feedbackStore.FindAppliedCorrectionForOutcomeAsync(
+                        connection, null, outcome.OutcomeId, outcome.TransactionId, ct);
                     if (!ClassifyContractMapper.TryResolveCorrectionAllocations(
                             input.LedgerAllocationRefs,
                             applied?.PriorAllocationId,
@@ -190,39 +192,18 @@ public sealed class RecordClassificationFeedbackCommand
                             allocError ?? ClassifyErrors.InvalidInput);
                     }
 
-                    correctionAllocationsComplete =
-                        !string.IsNullOrWhiteSpace(priorAlloc)
-                        && !string.IsNullOrWhiteSpace(resultingAlloc);
-                    resultingCategoryId = applied?.CategoryId;
-                    // Owner refs do not carry category; keep resulting category only from apply_item when present.
-                    if (resultingCategoryId is null
-                        && outcome.CategoryId is not null
-                        && input.Decision == ClassifyFeedbackDecision.Corrected)
-                    {
-                        // Do not invent a corrected category from the suggestion outcome category.
-                        resultingCategoryId = null;
-                    }
+                    correctionAllocationsComplete = applied is not null
+                        && !string.IsNullOrWhiteSpace(applied.Value.PriorAllocationId)
+                        && !string.IsNullOrWhiteSpace(applied.Value.ResultingAllocationId)
+                        && string.Equals(priorAlloc, applied.Value.PriorAllocationId, StringComparison.Ordinal)
+                        && string.Equals(resultingAlloc, applied.Value.ResultingAllocationId, StringComparison.Ordinal);
+                    authoritativeCorrection = correctionAllocationsComplete ? applied : null;
+                    resultingCategoryId = correctionAllocationsComplete ? applied?.CategoryId : null;
                 }
                 else if (input.LedgerAllocationRefs is { Count: > 0 })
                 {
-                    // Accept/reject may carry optional allocation refs for provenance (first = resulting).
-                    var refs = input.LedgerAllocationRefs
-                        .Where(r => !string.IsNullOrWhiteSpace(r))
-                        .Select(r => r.Trim())
-                        .ToArray();
-                    if (refs.Length == 1)
-                    {
-                        resultingAlloc = refs[0];
-                    }
-                    else if (refs.Length == 2)
-                    {
-                        priorAlloc = refs[0];
-                        resultingAlloc = refs[1];
-                    }
-                    else if (refs.Length > 2)
-                    {
-                        return CommandResult<ClassifyFeedbackRecordResult>.Failure(ClassifyErrors.InvalidInput);
-                    }
+                    // Allocation provenance belongs to completed corrections only.
+                    return CommandResult<ClassifyFeedbackRecordResult>.Failure(ClassifyErrors.InvalidInput);
                 }
             }
 
@@ -237,31 +218,6 @@ public sealed class RecordClassificationFeedbackCommand
             }
 
             var evidenceAvailable = FeedbackProposalBuilder.IsEvidenceAvailable(outcomeKind, evidence);
-            // For replace proposals we need a resulting category. Prefer apply_item category when
-            // correction allocations were resolved from apply; never invent from private description.
-            if (input.Decision == ClassifyFeedbackDecision.Corrected
-                && resultingCategoryId is null
-                && !string.IsNullOrWhiteSpace(resultingAlloc))
-            {
-                // Category may be unknown when only owner refs are supplied — builder may Retire.
-                resultingCategoryId = null;
-            }
-
-            // When apply_item supplied category for the resulting allocation, use it for Replace/Narrow.
-            await using (var connection = await stateStore.OpenMigratedAsync(ct))
-            {
-                if (input.Decision == ClassifyFeedbackDecision.Corrected
-                    && resultingCategoryId is null)
-                {
-                    var applied = await feedbackStore.FindLatestAppliedAllocationAsync(
-                        connection, null, outcome.TransactionId, ct);
-                    if (applied is not null
-                        && string.Equals(applied.Value.ResultingAllocationId, resultingAlloc, StringComparison.Ordinal))
-                    {
-                        resultingCategoryId = applied.Value.CategoryId;
-                    }
-                }
-            }
 
             var proposal = FeedbackProposalBuilder.Build(new FeedbackProposalBuilder.Input(
                 input.Decision,
@@ -322,6 +278,21 @@ public sealed class RecordClassificationFeedbackCommand
                             break;
                         default:
                             return CommandResult<ClassifyFeedbackRecordResult>.Failure(ClassifyErrors.Unexpected);
+                    }
+
+                    // Rebind outcome-scoped correction authority under the mutation lock.
+                    // A later correction on the same outcome must not race this proposal.
+                    if (correctionAllocationsComplete && authoritativeCorrection is not null)
+                    {
+                        var rebound = await feedbackStore.FindAppliedCorrectionForOutcomeAsync(
+                            connection, transaction, outcome.OutcomeId, outcome.TransactionId, writeCt);
+                        if (rebound is null
+                            || !string.Equals(rebound.Value.PriorAllocationId, authoritativeCorrection.Value.PriorAllocationId, StringComparison.Ordinal)
+                            || !string.Equals(rebound.Value.ResultingAllocationId, authoritativeCorrection.Value.ResultingAllocationId, StringComparison.Ordinal)
+                            || !string.Equals(rebound.Value.CategoryId, authoritativeCorrection.Value.CategoryId, StringComparison.Ordinal))
+                        {
+                            return CommandResult<ClassifyFeedbackRecordResult>.Failure(ClassifyErrors.Stale);
+                        }
                     }
 
                     await idempotencyStore.CommitAsync(

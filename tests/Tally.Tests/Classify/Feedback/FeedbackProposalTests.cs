@@ -90,6 +90,21 @@ public sealed class FeedbackProposalTests
     }
 
     [Fact]
+    public void Correct_without_rebound_allocation_authority_emits_none()
+    {
+        var result = FeedbackProposalBuilder.Build(new FeedbackProposalBuilder.Input(
+            ClassifyFeedbackDecision.Corrected,
+            ClassificationOutcomeKind.Suggestion,
+            true,
+            SingleConditionEvidence,
+            new Dictionary<string, ClassifyRuleVersionRow>(StringComparer.Ordinal) { ["rv-1"] = SourceRule },
+            "cat-target",
+            CorrectionAllocationsComplete: false));
+        Assert.Equal(FeedbackProposalBuilder.ProposalKind.None, result.Kind);
+        Assert.Equal("correction_authority_unavailable", result.DecisionCode);
+    }
+
+    [Fact]
     public void Correct_multi_rule_is_not_generalized()
     {
         var rules = new Dictionary<string, ClassifyRuleVersionRow>(StringComparer.Ordinal)
@@ -133,19 +148,15 @@ public sealed class FeedbackProposalTests
     }
 
     [Fact]
-    public void Correct_same_category_multi_condition_is_narrow()
+    public void Correct_same_category_multi_condition_does_not_broaden_by_dropping_an_and_condition()
     {
         var result = Build(
             ClassifyFeedbackDecision.Corrected,
             true,
             MultiConditionEvidence,
             resultingCategoryId: "cat-source");
-        Assert.Equal(FeedbackProposalBuilder.ProposalKind.Narrow, result.Kind);
-        Assert.Equal(FeedbackProposalBuilder.ProposalTypeNarrow, result.ProposalTypeWire);
-        Assert.Equal("rv-1", result.SourceRuleVersionId);
-        Assert.Equal("cat-source", result.ProposedCategoryId);
-        Assert.Equal(64, result.ProposedScopeFingerprint.Length);
-        Assert.NotEqual(SourceRule.ScopeHash, result.ProposedScopeFingerprint);
+        Assert.Equal(FeedbackProposalBuilder.ProposalKind.None, result.Kind);
+        Assert.Equal("narrowing_not_proven", result.DecisionCode);
     }
 
     [Fact]
@@ -216,11 +227,12 @@ public sealed class FeedbackProposalTests
     }
 
     [Fact]
-    public void Narrow_scope_is_deterministic()
+    public void Unproven_narrowing_decision_is_deterministic()
     {
         var a = Build(ClassifyFeedbackDecision.Corrected, true, MultiConditionEvidence, "cat-source");
         var b = Build(ClassifyFeedbackDecision.Corrected, true, MultiConditionEvidence, "cat-source");
-        Assert.Equal(a.ProposedScopeFingerprint, b.ProposedScopeFingerprint);
+        Assert.Equal(FeedbackProposalBuilder.ProposalKind.None, a.Kind);
+        Assert.Equal(a, b);
     }
 
     [Fact]
@@ -235,18 +247,37 @@ public sealed class FeedbackProposalTests
     public void Mapper_correction_allocations_require_exactly_two_refs()
     {
         Assert.True(ClassifyContractMapper.TryResolveCorrectionAllocations(
-            ["prior-1", "result-1"], null, null, out var prior, out var resulting, out var error));
+            ["prior-1", "result-1"], "prior-1", "result-1", out var prior, out var resulting, out var error));
         Assert.Equal("prior-1", prior);
         Assert.Equal("result-1", resulting);
         Assert.Null(error);
 
         Assert.False(ClassifyContractMapper.TryResolveCorrectionAllocations(
-            ["only-one"], null, null, out _, out _, out error));
+            ["only-one"], "prior-1", "result-1", out _, out _, out error));
         Assert.Equal(ClassifyErrors.InvalidInput, error);
 
         Assert.False(ClassifyContractMapper.TryResolveCorrectionAllocations(
-            ["a", "a"], null, null, out _, out _, out error));
+            ["a", "a"], "prior-1", "result-1", out _, out _, out error));
         Assert.Equal(ClassifyErrors.InvalidInput, error);
+    }
+
+    [Fact]
+    public void Mapper_fingerprint_preserves_prior_resulting_order()
+    {
+        var forward = ClassifyContractMapper.ToFeedbackFingerprintElement(
+            ClassifyOperationIds.ContractVersion,
+            "out-1",
+            ClassifyFeedbackDecision.Corrected,
+            "reason",
+            ["prior-1", "result-1"]);
+        var reversed = ClassifyContractMapper.ToFeedbackFingerprintElement(
+            ClassifyOperationIds.ContractVersion,
+            "out-1",
+            ClassifyFeedbackDecision.Corrected,
+            "reason",
+            ["result-1", "prior-1"]);
+
+        Assert.NotEqual(forward.GetRawText(), reversed.GetRawText());
     }
 
     [Fact]
@@ -259,6 +290,10 @@ public sealed class FeedbackProposalTests
 
         Assert.False(ClassifyContractMapper.TryResolveCorrectionAllocations(
             null, null, "result-y", out _, out _, out var error));
+        Assert.Equal(ClassifyErrors.InvalidInput, error);
+
+        Assert.False(ClassifyContractMapper.TryResolveCorrectionAllocations(
+            ["other", "result-y"], "prior-x", "result-y", out _, out _, out error));
         Assert.Equal(ClassifyErrors.InvalidInput, error);
     }
 
@@ -320,5 +355,5 @@ public sealed class FeedbackProposalTests
             evidence,
             new Dictionary<string, ClassifyRuleVersionRow>(StringComparer.Ordinal) { ["rv-1"] = SourceRule },
             resultingCategoryId,
-            CorrectionAllocationsComplete: resultingCategoryId is not null));
+            CorrectionAllocationsComplete: true));
 }
