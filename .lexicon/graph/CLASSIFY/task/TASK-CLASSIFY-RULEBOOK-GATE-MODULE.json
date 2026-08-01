@@ -50,94 +50,151 @@
   ],
   "files": [
     {
-      "id": "01KYVN0TPJVY4ASYNXGAKB9EKV",
+      "id": "01KYZJTHZ9NFMKA333TB2K7Y2H",
       "path": "Tally.slnx",
       "action": "read",
       "role": "full solution",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T21:14:03.6241510+00:00"
     },
     {
-      "id": "01KYVN0TPJZA68518M76PY21ZZ",
+      "id": "01KYZJTHZ97VJ4625S80FX073P",
       "path": "src/Tally/Tally.csproj",
       "action": "read",
       "role": "Native-AOT executable",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T21:14:03.6241510+00:00"
     },
     {
-      "id": "01KYVN0TPJM3QVY0WE6CSJWRRR",
+      "id": "01KYZJTHZ9AWVSK255RAVH052W",
       "path": "tests/Tally.Tests/Tally.Tests.csproj",
       "action": "read",
       "role": "complete test project",
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T21:14:03.6241510+00:00"
     },
     {
-      "id": "01KYVN0TPJT6DPHVYN9CNXDTPS",
+      "id": "01KYZJTHZ9ZFTBYR44V083DCTD",
       "path": "tests/Tally.Tests/Classify/ClassifyModuleGuardTests.cs",
       "action": "test",
       "role": "module architecture and suite-discovery guards",
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T21:14:03.6241510+00:00"
     },
     {
-      "id": "01KYVN0TPJ8Q532RSR6739YSB7",
+      "id": "01KYZJTHZ941JXNM5700YA09D5",
       "path": "scripts/verify-classify-module.sh",
       "action": "create",
       "role": "module convergence runner",
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T21:14:03.6241510+00:00"
     },
     {
-      "id": "01KYVN0TPJ9HZJ0A8P5PPS73HN",
+      "id": "01KYZJTHZ90GD8GBCMBHFN7B60",
       "path": "docs/verification/classify-v1.md",
       "action": "document",
       "role": "safe completion report",
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T21:14:03.6241510+00:00"
     },
     {
-      "id": "01KYVN0TPJFJWBY034T6RVSYXD",
+      "id": "01KYZJTHZ9ZJM1FE78PSJ73TFH",
       "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-AI-AGENT-HOST.json",
       "action": "modify",
       "role": "lex-cli validation status",
       "required": 1,
       "sort_order": 6,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T21:14:03.6241510+00:00"
     },
     {
-      "id": "01KYVN0TPJ23PT5X3H4DEXHQAP",
+      "id": "01KYZJTHZ9SVMMKQPTHYSFFC5C",
       "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-HOST-OS-SECURITY.json",
       "action": "modify",
       "role": "lex-cli validation status",
       "required": 1,
       "sort_order": 7,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T21:14:03.6241510+00:00"
     },
     {
-      "id": "01KYVN0TPJE1G5R8VSZASSHK9E",
+      "id": "01KYZJTHZ96JG6K42S5M9Z0GNC",
       "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT.json",
       "action": "modify",
       "role": "lex-cli validation status",
       "required": 1,
       "sort_order": 8,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T21:14:03.6241510+00:00"
     },
     {
-      "id": "01KYVN0TPJ3BWT0KS5XCAQ9T2T",
+      "id": "01KYZJTHZ97DP070MJRXABYNSK",
       "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS.json",
       "action": "modify",
       "role": "lex-cli validation status",
       "required": 1,
       "sort_order": 9,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T21:14:03.6241510+00:00"
+    },
+    {
+      "id": "01KYZJTHZ98BNAEPXYRJ8BK4FT",
+      "path": "src/Tally/Cli/TallyProcess.cs",
+      "action": "modify",
+      "role": "bounded fallback and correlation-privacy correction exposed by complete module suite",
+      "required": 1,
+      "notes": [
+        "Sequential bridge owned by final convergence; preserve descriptor-generated contract."
+      ],
+      "sort_order": 10,
+      "created_at": "2026-08-01T21:14:03.6241510+00:00"
+    },
+    {
+      "id": "01KYZJTHZ9WD0KPKVR621ETRXR",
+      "path": "tests/Tally.Tests/Process/RegistryDomainErrorProcessTests.cs",
+      "action": "read",
+      "role": "registry-wide fallback coherence evidence",
+      "required": 1,
+      "sort_order": 11,
+      "created_at": "2026-08-01T21:14:03.6241510+00:00"
+    },
+    {
+      "id": "01KYZJTHZ9ABYZH1YHZDE724K1",
+      "path": "tests/Tally.Tests/Classify/Evaluation/ClassificationEngineTests.cs",
+      "action": "test",
+      "role": "correct isolated single-rule fixture inconsistency",
+      "required": 1,
+      "notes": [
+        "Do not weaken production matching semantics or assertions."
+      ],
+      "sort_order": 12,
+      "created_at": "2026-08-01T21:14:03.6241510+00:00"
+    },
+    {
+      "id": "01KYZJTHZ9RQS0V8E5S7WQ0P67",
+      "path": "tests/Tally.Tests/Classify/Storage/ClassifyHistoryInvariantTests.cs",
+      "action": "test",
+      "role": "align explicit seed inserts with current durable schema",
+      "required": 1,
+      "notes": [
+        "Use named columns; preserve invariant assertions."
+      ],
+      "sort_order": 13,
+      "created_at": "2026-08-01T21:14:03.6241510+00:00"
+    },
+    {
+      "id": "01KYZJTHZ93TPGZJ94458Q9TY1",
+      "path": "tests/Tally.Tests/Classify/Security/ClassifySecurityGateTests.cs",
+      "action": "test",
+      "role": "correct token-boundary false positives and verify correlation secrecy",
+      "required": 1,
+      "notes": [
+        "Do not weaken forbidden-surface or canary assertions."
+      ],
+      "sort_order": 14,
+      "created_at": "2026-08-01T21:14:03.6241510+00:00"
     }
   ],
   "interfaces": [
@@ -266,6 +323,16 @@
       "required": 1,
       "sort_order": 3,
       "created_at": "2026-07-31T08:35:28.5399812+00:00"
+    },
+    {
+      "id": "01KYZJTHZ8BY78Y3J6H05C8Y96",
+      "kind": "note",
+      "text": [
+        "2026-08-01 final-suite correction bridge: the first complete module run exposed bounded cross-seam coherence defects in TallyProcess fallback/correlation handling and stale test fixtures in engine, storage, and security suites. These exact files are now reserved to bd-3l4k so the final convergence bead can reproduce focused failures, correct root causes without weakening assertions, then run the one authorized second complete module gate."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-01T21:14:03.6241510+00:00"
     }
   ],
   "references": [
