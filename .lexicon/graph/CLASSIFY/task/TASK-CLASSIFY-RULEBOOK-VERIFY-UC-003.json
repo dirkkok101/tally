@@ -70,22 +70,34 @@
   ],
   "files": [
     {
-      "id": "01KYZ70Y7DVQS16D7PFZQZ1DFS",
+      "id": "01KYZ8M3XKBQM3WWFME2DMDVK4",
       "path": "tests/Tally.Tests/Classify/Acceptance/ClassifyUc003ApplyTests.cs",
       "action": "test",
       "role": "UC-003 acceptance and recovery matrix",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-08-01T17:47:49.8682261+00:00"
+      "created_at": "2026-08-01T18:15:46.8660367+00:00"
     },
     {
-      "id": "01KYZ70Y7DHN5WPJ1PF5RMW2MD",
+      "id": "01KYZ8M3XK9641YTGJ9BTEFJQH",
       "path": "src/Tally/Features/Classify/Rules/Validate/ValidationReportBuilder.cs",
       "action": "modify",
       "role": "bounded correction: make aggregate report fingerprint independent of per-run validation identity so distinct-key deterministic replay can authorize activation",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-08-01T17:47:49.8682261+00:00"
+      "created_at": "2026-08-01T18:15:46.8660367+00:00"
+    },
+    {
+      "id": "01KYZ8M3XK5QV5V7P95NYPEDAD",
+      "path": "src/Tally/Features/Ledger/Actuals/ActualsQueryHandler.cs",
+      "action": "modify",
+      "role": "bounded correction: make the public classification projection category identity lifecycle fingerprint canonical over identity plus lifecycle only so it matches activation currency checks and remains rename-stable",
+      "required": 1,
+      "notes": [
+        "Do not include display name; preserve deterministic ordering and fail-closed lifecycle drift."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-08-01T18:15:46.8660367+00:00"
     }
   ],
   "interfaces": [
@@ -223,24 +235,34 @@
       "created_at": "2026-07-31T08:35:28.5399812+00:00"
     },
     {
-      "id": "01KYZ70Y7C96BN1MN684SDWHP1",
+      "id": "01KYZ8M3XJRFMME13PEQ4AYAHZ",
       "kind": "note",
       "text": [
         "Ledger allocation history is the authoritative duplicate-mutation oracle."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-08-01T17:47:49.8682261+00:00"
+      "created_at": "2026-08-01T18:15:46.8660367+00:00"
     },
     {
-      "id": "01KYZ70Y7DNPEGGBX4CVMH6HKE",
+      "id": "01KYZ8M3XKTGEJZEE2V2HXEKDY",
       "kind": "note",
       "text": [
         "Hermes blocker resolution (2026-08-01): ValidationReportBuilder currently binds validation_run_id into report_fingerprint while VerifiedOwnerRulebookGateReceipt requires distinct-run report fingerprints to match. A run identity is provenance, not report content. This verification bead owns the bounded correction: exclude validation_run_id from the aggregate report fingerprint, preserve the row foreign key separately, keep the replay equality check, and prove distinct validation IDs with identical semantic evidence produce identical report fingerprints before activation."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-08-01T17:47:49.8682261+00:00"
+      "created_at": "2026-08-01T18:15:46.8660367+00:00"
+    },
+    {
+      "id": "01KYZ8M3XKQ3GTD97D7SX17DQD",
+      "kind": "note",
+      "text": [
+        "Hermes blocker resolution (2026-08-01): the public projection currently hashes category ID, lifecycle, and display name with a different framing than EvaluationFingerprint, while validation persists that producer fingerprint and activation recomputes identity plus lifecycle. This makes unchanged categories appear stale and violates rename-stability. This verification bead owns the bounded shared-seam correction in ActualsQueryHandler: emit the same canonical identity-plus-lifecycle fingerprint used by CLASSIFY currency checks; exclude display name; prove UC-003 activation/recovery and focused rule-activation diagnostics."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-08-01T18:15:46.8660367+00:00"
     }
   ],
   "references": [
