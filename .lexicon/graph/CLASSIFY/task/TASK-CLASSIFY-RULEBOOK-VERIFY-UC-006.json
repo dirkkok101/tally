@@ -60,13 +60,22 @@
   ],
   "files": [
     {
-      "id": "01KYVN0TPGP2BHF9V0BDQ30M4R",
+      "id": "01KYZDWC7T1J1GXB4NQJ8KDSX5",
       "path": "tests/Tally.Tests/Classify/Acceptance/ClassifyUc006AgentContractTests.cs",
       "action": "test",
       "role": "UC-006 host contract matrix",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T19:47:40.4094142+00:00"
+    },
+    {
+      "id": "01KYZDWC7VVE5AG6FV06J87JBX",
+      "path": "src/Tally/Features/Classify/Contract/ClassifyOperationModule.cs",
+      "action": "modify",
+      "role": "publish exact private-corpus failure codes required by the UC-006 structured invocation contract",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-01T19:47:40.4094142+00:00"
     }
   ],
   "interfaces": [
