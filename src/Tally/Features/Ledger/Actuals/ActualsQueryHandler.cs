@@ -6,6 +6,7 @@ using Tally.Application;
 using Tally.Contracts.Ledger.Actuals;
 using Tally.Contracts.Ledger.Categories;
 using Tally.Contracts.Ledger.Transactions;
+using Tally.Domain.Classify.Evaluation;
 using Tally.Domain.Ledger;
 using Tally.Domain.Ledger.Actuals;
 using Tally.Infrastructure.Storage.Actuals;
@@ -401,11 +402,14 @@ public sealed class ActualsQueryHandler(
             .ToArray();
     }
 
-    private static string CatalogueFingerprint(IReadOnlyList<ClassificationCategoryIdentity> catalogue)
-    {
-        var canonical = string.Join('|', catalogue.Select(item => item.CategoryId + ':' + item.LifecycleState + ':' + item.DisplayName));
-        return Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(canonical)));
-    }
+    /// <summary>
+    /// classification_v1 CategoryIdentityLifecycleFingerprint / catalogue fingerprint.
+    /// Must match <see cref="EvaluationFingerprint.ComputeCategoryLifecycleFingerprint"/>:
+    /// identity + lifecycle only (display name excluded so renames stay valid), ordered by category id.
+    /// </summary>
+    private static string CatalogueFingerprint(IReadOnlyList<ClassificationCategoryIdentity> catalogue) =>
+        EvaluationFingerprint.ComputeCategoryLifecycleFingerprint(
+            catalogue.Select(item => (item.CategoryId, item.LifecycleState)));
 
     private static ActualsTotalsResult TotalsFromMembership(IReadOnlyList<ActualsItem> membership)
     {

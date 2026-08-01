@@ -452,8 +452,10 @@ public sealed class ClassifyUc003ApplyTests : IAsyncLifetime
     [Fact]
     public async Task UC003_conflicting_apply_identity_preserves_original_results()
     {
+        // Apply the first authorized preview to completion before seeding a second rule set.
+        // A later activation supersedes the active pointer / catalogue and would otherwise make
+        // the first preview CLASSIFY-STALE before the shared applyId conflict can be proven.
         var seededA = await SeedSuggestionPreviewAsync("uc003 conf-a");
-        var seededB = await SeedSuggestionPreviewAsync("uc003 conf-b");
         var applyId = "apply-conflict-" + Guid.NewGuid().ToString("N")[..8];
 
         var first = await ApplyRunAsync(seededA.PreviewId, applyId, NextKey());
@@ -465,6 +467,7 @@ public sealed class ClassifyUc003ApplyTests : IAsyncLifetime
             .ToArray();
         var snapshotA = await SnapshotAllocationsAsync(seededA.TransactionIds);
 
+        var seededB = await SeedSuggestionPreviewAsync("uc003 conf-b");
         var second = await ApplyRunAsync(seededB.PreviewId, applyId, NextKey());
         AssertClassifyError(second, ClassifyErrors.Conflict);
 
@@ -716,13 +719,24 @@ public sealed class ClassifyUc003ApplyTests : IAsyncLifetime
         var missing = await ApplyRunAsync("missing-preview", "apply-x", NextKey());
         AssertClassifyError(missing, ClassifyErrors.PreviewNotFound);
 
+        // Process-boundary preflight rejects a missing required idempotency key before the
+        // CLASSIFY handler runs (published envelope schema), so the stable process code is
+        // validation.invalid_input rather than CLASSIFY-IDEMPOTENCY-REQUIRED.
         var noKey = await process.RunAsync(
             ["classify", "apply", "run", "--input", "-"],
             ClassifyEnvelope(
                 """{"contractVersion":"1.0","previewId":"p","applyId":"a"}""",
                 idempotencyKey: null),
             CancellationToken.None);
-        AssertClassifyError(noKey, ClassifyErrors.IdempotencyRequired);
+        Assert.NotEqual(0, noKey.ExitCode);
+        using (var noKeyDoc = ParseResult(noKey))
+        {
+            Assert.Equal("error", noKeyDoc.RootElement.GetProperty("outcome").GetString());
+            Assert.Equal(
+                "validation.invalid_input",
+                noKeyDoc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString());
+        }
+        Assert.StartsWith("tally: ", noKey.Stderr, StringComparison.Ordinal);
 
         var badVer = await process.RunAsync(
             ["classify", "apply", "run", "--input", "-"],
@@ -848,7 +862,9 @@ public sealed class ClassifyUc003ApplyTests : IAsyncLifetime
             CancellationToken.None);
         AssertClassifySuccess(rep, ClassifyOperationIds.RuleValidate);
         using var repDoc = ParseResult(rep);
-        var validationId = repDoc.RootElement.GetProperty("result_or_error").GetProperty("validationId").GetString()!;
+        var repBody = repDoc.RootElement.GetProperty("result_or_error");
+        var validationId = repBody.GetProperty("validationId").GetString()!;
+        Assert.True(repBody.GetProperty("activationEligible").GetBoolean(), "rep not eligible: " + rep.Stdout);
 
         var replay = await process.RunAsync(
             ["classify", "rule", "validate", "--input", "-"],
@@ -858,7 +874,14 @@ public sealed class ClassifyUc003ApplyTests : IAsyncLifetime
             CancellationToken.None);
         AssertClassifySuccess(replay, ClassifyOperationIds.RuleValidate);
         using var replayDoc = ParseResult(replay);
-        var replayId = replayDoc.RootElement.GetProperty("result_or_error").GetProperty("validationId").GetString()!;
+        var replayBody = replayDoc.RootElement.GetProperty("result_or_error");
+        var replayId = replayBody.GetProperty("validationId").GetString()!;
+        Assert.True(replayBody.GetProperty("activationEligible").GetBoolean(), "replay not eligible: " + replay.Stdout);
+        Assert.Equal(repBody.GetProperty("outcomesCanonicalHash").GetString(), replayBody.GetProperty("outcomesCanonicalHash").GetString());
+        Assert.Equal(
+            repBody.GetProperty("reportFingerprint").GetString(),
+            replayBody.GetProperty("reportFingerprint").GetString());
+        Assert.NotEqual(validationId, replayId);
 
         var hold = await process.RunAsync(
             ["classify", "rule", "validate", "--input", "-"],
@@ -868,8 +891,22 @@ public sealed class ClassifyUc003ApplyTests : IAsyncLifetime
             CancellationToken.None);
         AssertClassifySuccess(hold, ClassifyOperationIds.RuleValidate);
         using var holdDoc = ParseResult(hold);
-        var receiptId = holdDoc.RootElement.GetProperty("result_or_error")
-            .GetProperty("ownerRulebookGateReceiptId").GetString()!;
+        var holdBody = holdDoc.RootElement.GetProperty("result_or_error");
+        var receiptId = holdBody.GetProperty("ownerRulebookGateReceiptId").GetString();
+        Assert.False(string.IsNullOrWhiteSpace(receiptId), "missing receipt: " + hold.Stdout);
+
+        await using (var connection = await store.OpenMigratedAsync(CancellationToken.None))
+        {
+            await using var cmd = connection.CreateCommand();
+            cmd.CommandText =
+                "SELECT authority_granted, block_code, safety_passed FROM owner_rulebook_gate_receipt WHERE receipt_id = $id;";
+            cmd.Parameters.AddWithValue("$id", receiptId!);
+            await using var reader = await cmd.ExecuteReaderAsync();
+            Assert.True(await reader.ReadAsync(), "receipt missing");
+            Assert.True(
+                reader.GetInt64(0) == 1 && reader.IsDBNull(1) && reader.GetInt64(2) == 1,
+                $"receipt not granted: auth={reader.GetInt64(0)} block={(reader.IsDBNull(1) ? "null" : reader.GetString(1))} safety={reader.GetInt64(2)} hold={hold.Stdout}");
+        }
 
         var activated = await process.RunAsync(
             ["classify", "rule", "activate", "--input", "-"],

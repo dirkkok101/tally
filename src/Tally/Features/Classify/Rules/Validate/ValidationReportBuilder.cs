@@ -90,8 +90,10 @@ public static class ValidationReportBuilder
             && drift == 0
             && totalRows == suggestionCount + noSuggestionCount + conflictCount + staleCount;
 
+        // report_fingerprint is aggregate semantic report content only. validation_run_id is
+        // durable provenance on the report row but must not participate here so distinct-key
+        // independent replays can match for owner-gate deterministicReplayPassed.
         var reportFingerprint = CanonicalClassificationHasher.HashParts(
-            validationRunId,
             totalRows.ToString(CultureInfo.InvariantCulture),
             accountedRows.ToString(CultureInfo.InvariantCulture),
             suggestionCount.ToString(CultureInfo.InvariantCulture),
