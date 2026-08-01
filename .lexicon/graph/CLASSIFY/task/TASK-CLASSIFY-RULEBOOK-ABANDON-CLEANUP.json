@@ -48,6 +48,16 @@
       "created_at": "2026-07-31T08:35:28.5399812+00:00"
     },
     {
+      "id": "01KYYS2VN5V8GKSW2PTRWKVM8T",
+      "target": "TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE",
+      "dependency_type": "compile",
+      "reason": [
+        "Abandonment correction enforces rule-version tombstones in activation before and under the authority write lock."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-08-01T13:44:12.7106177+00:00"
+    },
+    {
       "id": "01KYVN0TP7RENACH001236YX8N",
       "target": "TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION",
       "dependency_type": "compile",
@@ -60,118 +70,205 @@
   ],
   "files": [
     {
-      "id": "01KYVN0TP62FWJPAYZNXE1XXW4",
+      "id": "01KYYRT36XC6PPYQ83ENTEHKW5",
       "path": "src/Tally/Features/Classify/Recovery/Abandon/AbandonClassificationStateCommand.cs",
       "action": "create",
       "role": "abandon workflow",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
     },
     {
-      "id": "01KYVN0TP6YJDM8CKZD1SYBZVW",
+      "id": "01KYYRT36X3AYC5D8N3Z0AMQK7",
       "path": "src/Tally/Features/Classify/Recovery/Cleanup/CleanupClassificationStateCommand.cs",
       "action": "create",
       "role": "fixed cleanup workflow",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
     },
     {
-      "id": "01KYVN0TP69KHPW6SNDC25W8W5",
+      "id": "01KYYRT36XD2SPPT94V5Z9XXZZ",
       "path": "src/Tally/Infrastructure/Classify/Storage/ClassifyArtifactProtection.cs",
       "action": "create",
       "role": "owner and path protection",
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
     },
     {
-      "id": "01KYVN0TP671R0XM6WQHGX182Q",
+      "id": "01KYYRT36XGNA8WPBKS4PTWT0S",
       "path": "src/Tally/Infrastructure/Classify/Storage/Recovery/ClassificationRecoveryStore.cs",
       "action": "create",
       "role": "tombstone and cleanup events",
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
     },
     {
-      "id": "01KYVN0TP6CP6QNWGAMYW6EA22",
+      "id": "01KYYRT36X87RPK7GCX34N1XGS",
       "path": "src/Tally/Domain/Classify/Recovery/ClassifyRetentionPolicy.cs",
       "action": "create",
       "role": "RESTRICT and removable policy",
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
     },
     {
-      "id": "01KYVN0TP6KQVC3X0AH25SGK2E",
+      "id": "01KYYRT36X7J5VCV94RPXMJP5N",
       "path": "src/Tally/Features/Classify/Contract/ClassifyContractMapper.Recovery.cs",
       "action": "create",
       "role": "pure recovery mapping",
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
     },
     {
-      "id": "01KYVN0TP61CP9ZYCRNE960RVJ",
+      "id": "01KYYRT36YXMZGJPKNE0ZS2DD1",
       "path": "tests/Tally.Tests/Classify/Recovery/AbandonCleanupTests.cs",
       "action": "test",
       "role": "retention workflow tests",
       "required": 1,
       "sort_order": 6,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
     },
     {
-      "id": "01KYVN0TP60K2EE732CZJT1KXT",
+      "id": "01KYYRT36YMRS9D4XZPNY3SZEB",
       "path": "tests/Tally.Tests/Classify/Security/ClassifyArtifactProtectionTests.cs",
       "action": "test",
       "role": "filesystem attack matrix",
       "required": 1,
       "sort_order": 7,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+    },
+    {
+      "id": "01KYYRT36YQ9HYBHRYTMNV1S49",
+      "path": "src/Tally/Features/Classify/Rules/Activate/ActivateClassificationRuleCommand.cs",
+      "action": "modify",
+      "role": "enforce abandonment tombstones before and under activation write lock",
+      "required": 1,
+      "sort_order": 8,
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+    },
+    {
+      "id": "01KYYRT36YZW5RB7NWYMBJRRDV",
+      "path": "src/Tally/Contracts/Classify/Operations/ClassifyResults.cs",
+      "action": "modify",
+      "role": "complete cleanup receipt metadata",
+      "required": 1,
+      "sort_order": 9,
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+    },
+    {
+      "id": "01KYYRT36YXCJG7TJ3WSGTVSFJ",
+      "path": "src/Tally/Infrastructure/Classify/Storage/ClassifySchema.cs",
+      "action": "modify",
+      "role": "additive cleanup receipt and quarantine recovery migration",
+      "required": 1,
+      "sort_order": 10,
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+    },
+    {
+      "id": "01KYYRT36YYRR56VFZD6FF5BDS",
+      "path": "src/Tally/Bootstrap/Features/ClassifyStateExtensions.cs",
+      "action": "modify",
+      "role": "recover committed or uncommitted quarantine before mutation services are returned",
+      "required": 1,
+      "sort_order": 11,
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+    },
+    {
+      "id": "01KYYRT36Y67GCVGCK52HSK1YY",
+      "path": "tests/Tally.Tests/Classify/Rules/RuleActivationTests.cs",
+      "action": "test",
+      "role": "abandoned draft cannot activate and active pointer remains unchanged",
+      "required": 1,
+      "sort_order": 12,
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+    },
+    {
+      "id": "01KYYRT36YVTFACXR11JYDVZ0Z",
+      "path": "tests/Tally.Tests/Classify/Contract/ClassifyOperationContractTests.cs",
+      "action": "test",
+      "role": "cleanup receipt public schema and disclosure boundary",
+      "required": 1,
+      "sort_order": 13,
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
     }
   ],
   "interfaces": [
     {
-      "id": "01KYVN0TP6A1CTH90MBT06VVB5",
+      "id": "01KYYRT36YYKWZBRT7MTCD93RG",
       "name": "ClassifyStateStore",
       "direction": "consumes",
       "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
       "sort_order": 0,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
     },
     {
-      "id": "01KYVN0TP6T39MVYDZ56K3A7RT",
+      "id": "01KYYRT36YF710DX7R45HG88ZG",
       "name": "AbandonClassificationStateCommand.HandleAsync",
       "direction": "produces",
       "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
       "sort_order": 1,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
     },
     {
-      "id": "01KYVN0TP6C9ZCBK0YF0A0MX6J",
+      "id": "01KYYRT36YFMV7JCZYXX9W09R9",
       "name": "CleanupClassificationStateCommand.HandleAsync",
       "direction": "produces",
       "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
       "sort_order": 2,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
     },
     {
-      "id": "01KYVN0TP62891YZHBHRQJ1V7A",
+      "id": "01KYYRT36Y7VYCYTYBNQG4B86Z",
       "name": "ClassificationRecoveryStore",
       "direction": "produces",
       "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
       "sort_order": 3,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
     },
     {
-      "id": "01KYVN0TP6MYXH7TJ5M4E7QX65",
+      "id": "01KYYRT36Y16SH4DMWDGJ9TPED",
       "name": "ClassifyArtifactProtection",
       "direction": "produces",
       "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
       "sort_order": 4,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+    },
+    {
+      "id": "01KYYRT36YHNY10VMR823TR75J",
+      "name": "ActivateClassificationRuleCommand.HandleAsync",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "notes": [
+        "abandonment tombstone enforcement"
+      ],
+      "sort_order": 5,
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+    },
+    {
+      "id": "01KYYRT36YMCRX6E1M0KQDMANP",
+      "name": "ClassifyArtifactQuarantine",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "notes": [
+        "same-filesystem reversible staging and startup recovery"
+      ],
+      "sort_order": 6,
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+    },
+    {
+      "id": "01KYYRT36YFD2GEEQRBK3HP198",
+      "name": "ClassifyCleanupResult",
+      "direction": "produces",
+      "contract_ref_code": "FR-CLASSIFY-STATE-RETENTION-CLEANUP",
+      "notes": [
+        "cleanup ID total removed retained and per-kind counts"
+      ],
+      "sort_order": 7,
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
     }
   ],
   "recipe_items": [
@@ -316,14 +413,64 @@
       "created_at": "2026-07-31T08:35:28.5399812+00:00"
     },
     {
-      "id": "01KYVN0TP6YDZK1QWK4TKK754X",
+      "id": "01KYYRT36W7XJ04M42AVXHT0K4",
       "kind": "note",
       "text": [
         "Startup recovery runs the same fixed ownership and recognized-name policy before new CLASSIFY mutation."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+    },
+    {
+      "id": "01KYYRT36X5A2E484MY2270W7T",
+      "kind": "note",
+      "text": [
+        "Hermes authorization (2026-08-01): abandoned rule-version subjects are non-activatable. ActivateClassificationRuleCommand loads rule tombstones before public Ledger reads and rechecks every candidate rule_version_id under the same writer lock immediately before authority mutation; any tombstone returns stable lifecycle failure and preserves the active pointer. An optional/default ClassificationRecoveryStore dependency may preserve existing composition constructors."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+    },
+    {
+      "id": "01KYYRT36XS89V3QM4NCTKBJEP",
+      "kind": "note",
+      "text": [
+        "No recognized file is unlinked before the authoritative idempotency/reference decision commits. ClassifyArtifactProtection uses an owner-only contained same-filesystem quarantine with an opaque operation ID and 0600 manifest: validate every target first; rename all recognized regular unlocked files into quarantine; on any staging or database failure restore all names before returning failure; after durable tombstone/cleanup event plus terminal idempotency commit, delete the committed quarantine. A crash before commit leaves an uncommitted quarantine that startup restores; a crash after commit leaves a committed quarantine that startup deletes. Symlinks, unknown names, lock conflicts, containment failure, or incomplete manifest fail closed without partial movement."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+    },
+    {
+      "id": "01KYYRT36XY9SVFEEXHCTKJ4NQ",
+      "kind": "note",
+      "text": [
+        "ClassifyStateExtensions performs startup recovery after layout/schema initialization and before returning services for any new CLASSIFY mutation. It resolves quarantine status only from durable tombstone/cleanup-event/idempotency evidence and the protected manifest; it also removes recognized unlocked orphan temporaries under the same fixed policy. It never follows links, accepts caller paths, or scans outside the CLASSIFY root."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+    },
+    {
+      "id": "01KYYRT36XGVHDDG206EASBP1P",
+      "kind": "note",
+      "text": [
+        "ClassifyCleanupResult and cleanup_event expose/persist cleanup_id, policy_version, removed_artifact_count, retained_artifact_count, recognized temporary count, expired preview count, and abandoned payload count. removed_artifact_count equals the checked sum of per-kind removal counts; retained count is the recognized protected artifact inventory left after staging/finalization. Public output contains no file name, path, subject ID, description, amount, token, or payload."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+    },
+    {
+      "id": "01KYYRT36XGCXQW014EPN9TDG5",
+      "kind": "note",
+      "text": [
+        "Use an additive schema migration and guarded quarantine lifecycle/manifest metadata as needed; do not reinterpret or backfill historical cleanup authority. Cleanup/abandon replay returns the exact terminal receipt and must not stage or delete again. Do not move complete convergence into this bead or modify unrelated operations."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-08-01T13:39:25.5312174+00:00"
     }
   ],
   "references": [
