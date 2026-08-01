@@ -341,12 +341,17 @@ public sealed class AbandonCleanupTests : IAsyncLifetime
 
         Assert.True(result.IsSuccess, result.ErrorCode);
         Assert.Equal(ClassifyRetentionPolicy.PolicyVersion, result.Value!.PolicyVersion);
+        Assert.False(string.IsNullOrWhiteSpace(result.Value.CleanupId));
         Assert.True(result.Value.RemovedTemporaryCount >= 2);
+        Assert.True(result.Value.RemovedArtifactCount >= result.Value.RemovedTemporaryCount);
+        Assert.True(result.Value.RetainedArtifactCount >= 0);
         Assert.True(File.Exists(unknown));
         Assert.False(File.Exists(Path.Combine(paths.TemporaryDirectory, "crash-residue-1")));
 
         await using var connection = await state.Store.OpenMigratedAsync(CancellationToken.None);
         Assert.Equal(1L, await recovery.CountCleanupEventsAsync(connection, null, CancellationToken.None));
+        Assert.True(await recovery.HasCleanupEventAsync(
+            connection, null, result.Value.CleanupId, CancellationToken.None));
     }
 
     [Fact]
@@ -428,9 +433,41 @@ public sealed class AbandonCleanupTests : IAsyncLifetime
     public async Task Startup_recovery_via_cleanup_clears_crash_residue()
     {
         protection.CreateRecognizedTemporaryForTests("crash-startup", [7]);
-        var removed = protection.RecoverRecognizedTemporaryResidue();
-        Assert.True(removed >= 1);
-        Assert.DoesNotContain("crash-startup", protection.ListRecognizedTemporaryFileNames());
+        var staged = protection.TryStageRecognizedTemporaries(
+            "startup-op-1", "cleanup", ["crash-startup"]);
+        Assert.NotNull(staged);
+        // Uncommitted: restore
+        var actions = protection.RecoverQuarantineAtStartup((_, _) => false);
+        Assert.True(actions >= 1);
+        Assert.Contains("crash-startup", protection.ListRecognizedTemporaryFileNames());
+    }
+
+    [Fact]
+    public async Task Quarantine_restore_on_failed_authority_keeps_temp()
+    {
+        protection.CreateRecognizedTemporaryForTests("tmp-restore-me", [1]);
+        var q = protection.TryStageRecognizedTemporaries(
+            "op-restore", "abandon", ["tmp-restore-me"]);
+        Assert.NotNull(q);
+        Assert.DoesNotContain("tmp-restore-me", protection.ListRecognizedTemporaryFileNames());
+        q!.RestoreAndDiscard();
+        Assert.Contains("tmp-restore-me", protection.ListRecognizedTemporaryFileNames());
+    }
+
+    [Fact]
+    public async Task Cleanup_receipt_exposes_no_paths_or_names()
+    {
+        protection.CreateRecognizedTemporaryForTests("tmp-secret-name", [1]);
+        var result = await cleanup.HandleAsync(
+            new ClassifyCleanupRequest(ClassifyOperationIds.ContractVersion, ClassifyRetentionPolicy.PolicyVersion),
+            actor, NextKey(), CancellationToken.None);
+        Assert.True(result.IsSuccess, result.ErrorCode);
+        var json = JsonSerializer.Serialize(result.Value, ClassifyJsonContext.Default.ClassifyCleanupResult);
+        Assert.DoesNotContain("tmp-secret-name", json, StringComparison.Ordinal);
+        Assert.DoesNotContain(root, json, StringComparison.Ordinal);
+        Assert.Contains("cleanupId", json, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("retainedArtifactCount", json, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("removedArtifactCount", json, StringComparison.OrdinalIgnoreCase);
     }
 
     // ── Seed helpers (direct SQL into migrated store) ───────────────────────

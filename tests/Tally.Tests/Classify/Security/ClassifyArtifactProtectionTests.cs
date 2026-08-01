@@ -63,22 +63,25 @@ public sealed class ClassifyArtifactProtectionTests : IDisposable
     }
 
     [Fact]
-    public void Delete_recognized_temporary_succeeds()
+    public void Stage_and_finalize_removes_recognized_temporary()
     {
         var path = protection.CreateRecognizedTemporaryForTests("tmp-safe-1", [1, 2, 3]);
         Assert.True(File.Exists(path));
-        Assert.True(protection.TryDeleteRecognizedTemporary("tmp-safe-1"));
+        var q = protection.TryStageRecognizedTemporaries("op-safe", "cleanup", ["tmp-safe-1"]);
+        Assert.NotNull(q);
+        q!.FinalizeCommitted();
         Assert.False(File.Exists(path));
     }
 
     [Fact]
-    public void Delete_unknown_name_is_rejected()
+    public void Stage_unknown_name_is_rejected()
     {
         var paths = new ClassifyStorePaths(root);
         var unknown = Path.Combine(paths.TemporaryDirectory, "unknown-secret.bin");
         File.WriteAllBytes(unknown, [9]);
         File.SetUnixFileMode(unknown, UnixFileMode.UserRead | UnixFileMode.UserWrite);
-        Assert.False(protection.TryDeleteRecognizedTemporary("unknown-secret.bin"));
+        Assert.Null(protection.TryStageRecognizedTemporaries(
+            "op-unknown", "cleanup", ["unknown-secret.bin"]));
         Assert.True(File.Exists(unknown));
     }
 
@@ -109,7 +112,7 @@ public sealed class ClassifyArtifactProtectionTests : IDisposable
         File.CreateSymbolicLink(link, target);
         Assert.True(protection.IsSymbolicLink(link));
         Assert.False(protection.IsRegularFile(link));
-        Assert.False(protection.TryDeleteRecognizedTemporary("tmp-link"));
+        Assert.Null(protection.TryStageRecognizedTemporaries("op-link", "cleanup", ["tmp-link"]));
         Assert.True(File.Exists(link) || File.Exists(target));
     }
 
@@ -123,7 +126,7 @@ public sealed class ClassifyArtifactProtectionTests : IDisposable
         {
             var link = Path.Combine(paths.TemporaryDirectory, "tmp-escape");
             File.CreateSymbolicLink(link, outside);
-            Assert.False(protection.TryDeleteRecognizedTemporary("tmp-escape"));
+            Assert.Null(protection.TryStageRecognizedTemporaries("op-escape", "cleanup", ["tmp-escape"]));
             Assert.True(File.Exists(outside));
         }
         finally
@@ -133,7 +136,7 @@ public sealed class ClassifyArtifactProtectionTests : IDisposable
     }
 
     [Fact]
-    public void Recover_residue_removes_only_recognized()
+    public void Stage_then_finalize_removes_recognized_temps()
     {
         protection.CreateRecognizedTemporaryForTests("crash-old", [1]);
         protection.CreateRecognizedTemporaryForTests("eval-x.tmp", [2]);
@@ -142,10 +145,33 @@ public sealed class ClassifyArtifactProtectionTests : IDisposable
         File.WriteAllBytes(unknown, [3]);
         File.SetUnixFileMode(unknown, UnixFileMode.UserRead | UnixFileMode.UserWrite);
 
-        var removed = protection.RecoverRecognizedTemporaryResidue();
-        Assert.True(removed >= 2);
+        var q = protection.TryStageRecognizedTemporaries(
+            "op-stage-1", "cleanup", ["crash-old", "eval-x.tmp"]);
+        Assert.NotNull(q);
+        Assert.Equal(2, q!.StagedCount);
         Assert.True(File.Exists(unknown));
-        Assert.False(File.Exists(Path.Combine(paths.TemporaryDirectory, "crash-old")));
+        Assert.DoesNotContain("crash-old", protection.ListRecognizedTemporaryFileNames());
+        q.FinalizeCommitted();
+        Assert.True(File.Exists(unknown));
+        Assert.DoesNotContain("crash-old", protection.ListRecognizedTemporaryFileNames());
+    }
+
+    [Fact]
+    public void Stage_restore_puts_files_back()
+    {
+        protection.CreateRecognizedTemporaryForTests("tmp-back", [9]);
+        var q = protection.TryStageRecognizedTemporaries("op-restore-1", "abandon", ["tmp-back"]);
+        Assert.NotNull(q);
+        q!.RestoreAndDiscard();
+        Assert.Contains("tmp-back", protection.ListRecognizedTemporaryFileNames());
+    }
+
+    [Fact]
+    public void Stage_rejects_unknown_names()
+    {
+        var q = protection.TryStageRecognizedTemporaries(
+            "op-bad", "cleanup", ["not-a-recognized-name.bin"]);
+        Assert.Null(q);
     }
 
     [Fact]

@@ -23,6 +23,7 @@ using Tally.Features.Classify.Rules.Activate;
 using Tally.Features.Classify.Rules.Save;
 using Tally.Features.Classify.Rules.Validate;
 using Tally.Infrastructure.Classify.Storage;
+using Tally.Infrastructure.Classify.Storage.Recovery;
 using Tally.Infrastructure.Classify.Storage.Rules;
 using Tally.Infrastructure.Storage;
 using Tally.Integration.Ledger;
@@ -546,6 +547,52 @@ public sealed class RuleActivationTests : IAsyncLifetime
         Assert.False(RuleLifecyclePolicy.AuthorizeBroadApply(false, report, null));
         Assert.True(RuleLifecyclePolicy.AuthorizeBroadApply(true, report, null));
         Assert.False(RuleLifecyclePolicy.AuthorizeBroadApply(true, report, ClassifyErrors.Lifecycle));
+    }
+
+    [Fact]
+    public async Task Activate_rejects_abandoned_draft_rule_version_without_pointer_change()
+    {
+        var category = await CreateCategoryAsync("AbandonedDraft");
+        var versionId = await SaveDraftAsync(category.CategoryId, "abandoned draft token");
+        var granted = await ValidateAndGrantAsync(versionId, category.CategoryId, "abandoned draft token");
+
+        // Tombstone the candidate before activation (non-activatable).
+        await using (var connection = await store.OpenMigratedAsync(CancellationToken.None))
+        await using (var transaction = store.BeginImmediate(connection))
+        {
+            var recovery = new ClassificationRecoveryStore();
+            await recovery.InsertTombstoneAsync(
+                connection,
+                transaction,
+                new ClassifyAbandonmentTombstoneRow(
+                    "tomb-abandon-" + Guid.NewGuid().ToString("N")[..8],
+                    "rule",
+                    versionId,
+                    "abandon before activate",
+                    "automation:rule-activate:run-01",
+                    DateTimeOffset.UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss.fffffff'Z'", CultureInfo.InvariantCulture),
+                    0),
+                CancellationToken.None);
+            await transaction.CommitAsync();
+        }
+
+        var activeBefore = await store.ExecuteWriteAsync(
+            async (connection, transaction, ct) =>
+                await ruleSetStore.GetActiveRuleSetAsync(connection, transaction, ct),
+            CancellationToken.None);
+
+        var result = await activate.HandleAsync(
+            ActivateRequest(granted.ValidationId, granted.ReceiptId, false, "must not activate abandoned"),
+            actor, NextKey(), CancellationToken.None);
+        Assert.Equal(ClassifyErrors.Lifecycle, result.ErrorCode);
+        Assert.False(result.IsSuccess);
+
+        var activeAfter = await store.ExecuteWriteAsync(
+            async (connection, transaction, ct) =>
+                await ruleSetStore.GetActiveRuleSetAsync(connection, transaction, ct),
+            CancellationToken.None);
+        Assert.Equal(activeBefore?.RuleSetVersionId, activeAfter?.RuleSetVersionId);
+        Assert.Equal(activeBefore?.ActivationEpoch, activeAfter?.ActivationEpoch);
     }
 
     [Fact]

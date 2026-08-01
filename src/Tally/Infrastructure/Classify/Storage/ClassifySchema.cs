@@ -9,7 +9,7 @@ namespace Tally.Infrastructure.Classify.Storage;
 /// </summary>
 public static class ClassifySchema
 {
-    public const int CurrentVersion = 2;
+    public const int CurrentVersion = 3;
 
     public static async Task ApplyAsync(SqliteConnection connection, CancellationToken cancellationToken)
     {
@@ -38,6 +38,9 @@ public static class ClassifySchema
                         break;
                     case 2:
                         await ApplyV002Async(connection, transaction, cancellationToken);
+                        break;
+                    case 3:
+                        await ApplyV003Async(connection, transaction, cancellationToken);
                         break;
                     default:
                         throw new InvalidOperationException("The classify database schema version is not supported by this runtime.");
@@ -634,6 +637,24 @@ public static class ClassifySchema
             BEGIN SELECT RAISE(ABORT, 'owner_rulebook_gate_receipt rows are immutable'); END;
             """;
 
+        await ExecuteAsync(connection, sql, cancellationToken, transaction);
+    }
+
+    /// <summary>
+    /// Additive migration: complete cleanup receipt columns for aggregate removed/retained counts.
+    /// Historical cleanup_event rows keep DEFAULT 0 — never invent path or payload metadata.
+    /// </summary>
+    private static async Task ApplyV003Async(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        CancellationToken cancellationToken)
+    {
+        const string sql = """
+            ALTER TABLE cleanup_event ADD COLUMN removed_artifact_count INTEGER NOT NULL DEFAULT 0
+                CHECK (removed_artifact_count >= 0);
+            ALTER TABLE cleanup_event ADD COLUMN retained_artifact_count INTEGER NOT NULL DEFAULT 0
+                CHECK (retained_artifact_count >= 0);
+            """;
         await ExecuteAsync(connection, sql, cancellationToken, transaction);
     }
 

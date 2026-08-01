@@ -7,6 +7,21 @@ using Tally.Infrastructure.Classify.Storage;
 namespace Tally.Infrastructure.Classify.Storage.Recovery;
 
 /// <summary>
+/// Extended cleanup_event row including aggregate removed/retained counts (schema v3).
+/// Kept here so ClassifyRowMapper (unreserved) stays unchanged.
+/// </summary>
+public sealed record ClassifyCleanupEventReceiptRow(
+    string CleanupId,
+    string PolicyVersion,
+    int RecognizedRemovedCount,
+    int ExpiredPreviewCount,
+    int AbandonedPayloadCount,
+    string Actor,
+    string OccurredAt,
+    int RemovedArtifactCount,
+    int RetainedArtifactCount);
+
+/// <summary>
 /// Abandonment tombstones and cleanup events plus RESTRICT reference probes
 /// (DM-CLASSIFY-STATE-STORE / TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP).
 /// Never hard-deletes referenced rule/evaluation/apply/feedback history.
@@ -43,7 +58,7 @@ public sealed class ClassificationRecoveryStore
     public async Task InsertCleanupEventAsync(
         SqliteConnection connection,
         SqliteTransaction transaction,
-        ClassifyCleanupEventRow row,
+        ClassifyCleanupEventReceiptRow row,
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(row);
@@ -52,10 +67,12 @@ public sealed class ClassificationRecoveryStore
         command.CommandText = """
             INSERT INTO cleanup_event (
                 cleanup_id, policy_version, recognized_removed_count, expired_preview_count,
-                abandoned_payload_count, actor, occurred_at
+                abandoned_payload_count, actor, occurred_at,
+                removed_artifact_count, retained_artifact_count
             ) VALUES (
                 $cleanup_id, $policy_version, $recognized_removed_count, $expired_preview_count,
-                $abandoned_payload_count, $actor, $occurred_at
+                $abandoned_payload_count, $actor, $occurred_at,
+                $removed_artifact_count, $retained_artifact_count
             );
             """;
         command.Parameters.AddWithValue("$cleanup_id", row.CleanupId);
@@ -65,7 +82,51 @@ public sealed class ClassificationRecoveryStore
         command.Parameters.AddWithValue("$abandoned_payload_count", row.AbandonedPayloadCount);
         command.Parameters.AddWithValue("$actor", row.Actor);
         command.Parameters.AddWithValue("$occurred_at", row.OccurredAt);
+        command.Parameters.AddWithValue("$removed_artifact_count", row.RemovedArtifactCount);
+        command.Parameters.AddWithValue("$retained_artifact_count", row.RetainedArtifactCount);
         await command.ExecuteNonQueryAsync(cancellationToken);
+    }
+
+    public async Task<bool> HasCleanupEventAsync(
+        SqliteConnection connection,
+        SqliteTransaction? transaction,
+        string cleanupId,
+        CancellationToken cancellationToken)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(cleanupId);
+        await using var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        command.CommandText = "SELECT 1 FROM cleanup_event WHERE cleanup_id = $id LIMIT 1;";
+        command.Parameters.AddWithValue("$id", cleanupId);
+        var scalar = await command.ExecuteScalarAsync(cancellationToken);
+        return scalar is not null and not DBNull;
+    }
+
+    public async Task<bool> HasTombstoneIdAsync(
+        SqliteConnection connection,
+        SqliteTransaction? transaction,
+        string tombstoneId,
+        CancellationToken cancellationToken)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(tombstoneId);
+        await using var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        command.CommandText = "SELECT 1 FROM abandonment_tombstone WHERE tombstone_id = $id LIMIT 1;";
+        command.Parameters.AddWithValue("$id", tombstoneId);
+        var scalar = await command.ExecuteScalarAsync(cancellationToken);
+        return scalar is not null and not DBNull;
+    }
+
+    public async Task<bool> HasRuleVersionTombstoneAsync(
+        SqliteConnection connection,
+        SqliteTransaction? transaction,
+        string ruleVersionId,
+        CancellationToken cancellationToken)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(ruleVersionId);
+        var row = await GetTombstoneAsync(
+            connection, transaction, ClassifyRetentionPolicy.SubjectTypeRule, ruleVersionId, cancellationToken);
+        return row is not null;
     }
 
     public async Task<ClassifyAbandonmentTombstoneRow?> GetTombstoneAsync(

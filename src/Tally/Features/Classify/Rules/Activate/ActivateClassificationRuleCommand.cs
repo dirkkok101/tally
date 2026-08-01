@@ -11,6 +11,7 @@ using Tally.Domain.Classify.Rules;
 using Tally.Domain.Ledger;
 using Tally.Features.Classify.Contract;
 using Tally.Infrastructure.Classify.Storage;
+using Tally.Infrastructure.Classify.Storage.Recovery;
 using Tally.Infrastructure.Classify.Storage.Rules;
 using Tally.Integration.Ledger;
 
@@ -33,6 +34,7 @@ public sealed class ActivateClassificationRuleCommand
     private readonly ClassificationValidationStore validationStore;
     private readonly OwnerRulebookGateReceiptStore receiptStore;
     private readonly RuleSetStore ruleSetStore;
+    private readonly ClassificationRecoveryStore recoveryStore;
     private readonly LedgerContractClient ledger;
     private readonly TimeProvider timeProvider;
 
@@ -44,7 +46,8 @@ public sealed class ActivateClassificationRuleCommand
         LedgerContractClient ledger,
         ClassifyOperationIdempotencyStore? idempotencyStore = null,
         TimeProvider? timeProvider = null,
-        OwnerRulebookGateReceiptStore? receiptStore = null)
+        OwnerRulebookGateReceiptStore? receiptStore = null,
+        ClassificationRecoveryStore? recoveryStore = null)
     {
         ArgumentNullException.ThrowIfNull(stateStore);
         ArgumentNullException.ThrowIfNull(ruleStore);
@@ -56,6 +59,7 @@ public sealed class ActivateClassificationRuleCommand
         this.validationStore = validationStore;
         this.receiptStore = receiptStore ?? new OwnerRulebookGateReceiptStore();
         this.ruleSetStore = ruleSetStore;
+        this.recoveryStore = recoveryStore ?? new ClassificationRecoveryStore();
         this.ledger = ledger;
         this.idempotencyStore = idempotencyStore ?? new ClassifyOperationIdempotencyStore();
         this.timeProvider = timeProvider ?? TimeProvider.System;
@@ -162,6 +166,20 @@ public sealed class ActivateClassificationRuleCommand
         if (candidates.Count == 0)
         {
             return CommandResult<ClassifyRuleActivateResult>.Failure(ClassifyErrors.RuleVersionNotFound);
+        }
+
+        // Abandonment tombstones make candidate rule versions non-activatable (before any write work).
+        await using (var connection = await stateStore.OpenMigratedAsync(cancellationToken))
+        {
+            foreach (var candidate in candidates.OrderBy(c => c.RuleVersionId, StringComparer.Ordinal))
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                if (await recoveryStore.HasRuleVersionTombstoneAsync(
+                        connection, null, candidate.RuleVersionId, cancellationToken))
+                {
+                    return CommandResult<ClassifyRuleActivateResult>.Failure(ClassifyErrors.Lifecycle);
+                }
+            }
         }
 
         // Live category revalidation (public Ledger client only) — rename preserves identity.
@@ -315,6 +333,18 @@ public sealed class ActivateClassificationRuleCommand
                     if (!CandidateSetEquals(candidates, liveCandidates))
                     {
                         return CommandResult<ClassifyRuleActivateResult>.Failure(ClassifyErrors.Stale);
+                    }
+
+                    // Re-check abandonment tombstones under the authority writer lock.
+                    foreach (var candidate in liveCandidates.OrderBy(c => c.RuleVersionId, StringComparer.Ordinal))
+                    {
+                        ct.ThrowIfCancellationRequested();
+                        if (await recoveryStore.HasRuleVersionTombstoneAsync(
+                                connection, transaction, candidate.RuleVersionId, ct))
+                        {
+                            // Preserve the active pointer — do not proceed with activation.
+                            return CommandResult<ClassifyRuleActivateResult>.Failure(ClassifyErrors.Lifecycle);
+                        }
                     }
 
                     var memberIds = liveCandidates

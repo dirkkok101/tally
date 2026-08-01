@@ -12,12 +12,9 @@ using Tally.Infrastructure.Classify.Storage.Recovery;
 namespace Tally.Features.Classify.Recovery.Cleanup;
 
 /// <summary>
-/// classify.cleanup vertical slice
-/// (FR-CLASSIFY-STATE-RETENTION-CLEANUP / TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP).
-/// Fixed-policy cleanup: accepts policy version only (no path). Removes only recognized
-/// unlocked temporaries, tombstones expired unreferenced previews, and clears abandoned
-/// subject-scoped temporary residue. Records metadata-only cleanup_event counts.
-/// Never follows symlinks, globs outside CLASSIFY root, or hard-deletes referenced history.
+/// classify.cleanup — fixed-policy cleanup with reversible same-filesystem quarantine staging.
+/// Durable cleanup_event + terminal idempotency commit before final staged deletion.
+/// Replay performs no filesystem mutation. Receipt is metadata-only.
 /// </summary>
 [SupportedOSPlatform("linux")]
 public sealed class CleanupClassificationStateCommand
@@ -92,6 +89,7 @@ public sealed class CleanupClassificationStateCommand
             actorRunId,
             fingerprintElement);
 
+        // Replay: no filesystem mutation.
         var probed = await TryProbeAsync(idempotencyKey, requestFingerprint, cancellationToken);
         if (probed is not null)
         {
@@ -102,164 +100,194 @@ public sealed class CleanupClassificationStateCommand
         timeout.CancelAfter(TimeSpan.FromMilliseconds(ClassifyOperationModule.V1Limits.MaxProcessingTimeMs));
         var ct = timeout.Token;
 
+        ClassifyArtifactQuarantine? quarantine = null;
         try
         {
             artifactProtection.EnsureClassifyLayout();
 
-            // 1) Startup-equivalent: recognized unlocked temporary crash residue only.
-            var removedTemporary = artifactProtection.RecoverRecognizedTemporaryResidue();
-
-            // 2) Tombstone expired unreferenced previews (RESTRICT: no hard-delete of preview rows).
             var now = timeProvider.GetUtcNow();
-            var expiredPreviewCount = 0;
+            var cleanupId = ClassifyContractMapper.NewRuleVersionId(now);
+            var occurredAt = ClassifyContractMapper.FormatUtc(now);
+
+            // Prevalidate targets: recognized temps + abandoned-subject scoped temps.
+            var allTemps = artifactProtection.ListRecognizedTemporaryFileNames().ToList();
+            var abandonedSubjectIds = new List<string>();
             IReadOnlyList<(string PreviewId, string ExpiresAt)> expired;
             await using (var connection = await stateStore.OpenMigratedAsync(ct))
             {
                 expired = await recoveryStore.ListExpiredUnreferencedPreviewsAsync(
                     connection, null, now, ct);
+                await using var command = connection.CreateCommand();
+                command.CommandText = "SELECT subject_id FROM abandonment_tombstone ORDER BY subject_id ASC;";
+                await using var reader = await command.ExecuteReaderAsync(ct);
+                while (await reader.ReadAsync(ct))
+                {
+                    abandonedSubjectIds.Add(reader.GetString(0));
+                }
             }
 
-            foreach (var (previewId, _) in expired)
+            var temporaryNames = allTemps
+                .Where(n => !abandonedSubjectIds.Any(s => n.Contains(s, StringComparison.Ordinal)))
+                .ToArray();
+            var abandonedTempNames = allTemps
+                .Where(n => abandonedSubjectIds.Any(s => n.Contains(s, StringComparison.Ordinal)))
+                .ToArray();
+            var stageNames = temporaryNames.Concat(abandonedTempNames)
+                .Distinct(StringComparer.Ordinal)
+                .OrderBy(n => n, StringComparer.Ordinal)
+                .ToArray();
+
+            if (stageNames.Length > 0)
             {
-                ct.ThrowIfCancellationRequested();
-                var tombstoned = await stateStore.ExecuteWriteAsync(
+                quarantine = artifactProtection.TryStageRecognizedTemporaries(
+                    cleanupId, "cleanup", stageNames);
+                if (quarantine is null)
+                {
+                    return CommandResult<ClassifyCleanupResult>.Failure(ClassifyErrors.Integrity);
+                }
+            }
+
+            var removedTemporary = temporaryNames.Length;
+            var abandonedPayload = abandonedTempNames.Length;
+            // After successful stage, those names are no longer in tmp.
+            var stagedCount = quarantine?.StagedCount ?? 0;
+
+            // Expired preview tombstones (RESTRICT: no hard-delete of preview rows) under writer.
+            var expiredPreviewCount = 0;
+            var expiredIds = expired.Select(e => e.PreviewId).ToArray();
+
+            var retainedAfter = 0;
+            CommandResult<ClassifyCleanupResult> writeResult;
+            try
+            {
+                writeResult = await stateStore.ExecuteWriteAsync(
                     async (connection, transaction, writeCt) =>
                     {
-                        var existing = await recoveryStore.GetTombstoneAsync(
-                            connection, transaction, ClassifyRetentionPolicy.SubjectTypePreview, previewId, writeCt);
-                        if (existing is not null)
-                        {
-                            return false;
-                        }
-
-                        // Re-check unreferenced under writer.
-                        var refs = await recoveryStore.ProbePreviewReferencesAsync(
-                            connection, transaction, previewId, writeCt);
-                        var decision = ClassifyRetentionPolicy.EvaluateAbandon(
-                            ClassifyStatusSubjectType.Preview, refs);
-                        if (!decision.Allowed)
-                        {
-                            return false;
-                        }
-
-                        var tombstone = ClassifyContractMapper.ToTombstoneRow(
-                            ClassifyContractMapper.NewRuleVersionId(timeProvider.GetUtcNow()),
-                            ClassifyStatusSubjectType.Preview,
-                            previewId,
-                            "cleanup expired unreferenced preview",
-                            actorText,
-                            ClassifyContractMapper.FormatUtc(timeProvider.GetUtcNow()),
-                            removedPayloadCount: 0);
-                        await recoveryStore.InsertTombstoneAsync(connection, transaction, tombstone, writeCt);
-                        return true;
-                    },
-                    ct);
-                if (tombstoned)
-                {
-                    expiredPreviewCount++;
-                }
-            }
-
-            // 3) Abandoned subjects: remove any remaining subject-scoped recognized temps.
-            var abandonedPayload = 0;
-            await using (var connection = await stateStore.OpenMigratedAsync(ct))
-            {
-                // Count-driven cleanup of temps whose names match abandoned subject ids.
-                await using var command = connection.CreateCommand();
-                command.CommandText = """
-                    SELECT subject_id FROM abandonment_tombstone
-                    ORDER BY subject_id ASC;
-                    """;
-                var subjectIds = new List<string>();
-                await using (var reader = await command.ExecuteReaderAsync(ct))
-                {
-                    while (await reader.ReadAsync(ct))
-                    {
-                        subjectIds.Add(reader.GetString(0));
-                    }
-                }
-
-                foreach (var subjectId in subjectIds)
-                {
-                    foreach (var name in artifactProtection.ListRecognizedTemporaryFileNames())
-                    {
-                        if (name.Contains(subjectId, StringComparison.Ordinal)
-                            && artifactProtection.TryDeleteRecognizedTemporary(name))
-                        {
-                            abandonedPayload++;
-                        }
-                    }
-                }
-            }
-
-            var occurredAt = ClassifyContractMapper.FormatUtc(timeProvider.GetUtcNow());
-            var cleanupId = ClassifyContractMapper.NewRuleVersionId(timeProvider.GetUtcNow());
-            var eventRow = ClassifyContractMapper.ToCleanupEventRow(
-                cleanupId,
-                policyVersion,
-                removedTemporary,
-                expiredPreviewCount,
-                abandonedPayload,
-                actorText,
-                occurredAt);
-
-            var publicResult = ClassifyContractMapper.ToCleanupResult(
-                policyVersion,
-                removedTemporary,
-                expiredPreviewCount,
-                abandonedPayload);
-
-            return await stateStore.ExecuteWriteAsync(
-                async (connection, transaction, writeCt) =>
-                {
-                    var existing = await idempotencyStore.FindAsync(
-                        connection, transaction, idempotencyKey, writeCt);
-                    var lookup = idempotencyStore.Resolve(
-                        existing,
-                        ClassifyOperationIds.Cleanup,
-                        ClassifyOperationIds.ContractVersion,
-                        requestFingerprint);
-                    switch (lookup.Disposition)
-                    {
-                        case ClassifyIdempotencyDisposition.Replay:
-                            return ReplayOrIntegrity(lookup.Record!);
-                        case ClassifyIdempotencyDisposition.Conflict:
-                            return CommandResult<ClassifyCleanupResult>.Failure(
-                                ClassifyErrors.IdempotencyConflict);
-                        case ClassifyIdempotencyDisposition.Miss:
-                            break;
-                        default:
-                            return CommandResult<ClassifyCleanupResult>.Failure(ClassifyErrors.Unexpected);
-                    }
-
-                    await recoveryStore.InsertCleanupEventAsync(connection, transaction, eventRow, writeCt);
-                    await idempotencyStore.CommitAsync(
-                        connection,
-                        transaction,
-                        new ClassifyOperationIdempotencyRow(
-                            idempotencyKey,
+                        var existing = await idempotencyStore.FindAsync(
+                            connection, transaction, idempotencyKey, writeCt);
+                        var lookup = idempotencyStore.Resolve(
+                            existing,
                             ClassifyOperationIds.Cleanup,
                             ClassifyOperationIds.ContractVersion,
-                            requestFingerprint,
-                            SerializeResult(publicResult),
-                            occurredAt),
-                        writeCt);
+                            requestFingerprint);
+                        switch (lookup.Disposition)
+                        {
+                            case ClassifyIdempotencyDisposition.Replay:
+                                return ReplayOrIntegrity(lookup.Record!);
+                            case ClassifyIdempotencyDisposition.Conflict:
+                                return CommandResult<ClassifyCleanupResult>.Failure(
+                                    ClassifyErrors.IdempotencyConflict);
+                            case ClassifyIdempotencyDisposition.Miss:
+                                break;
+                            default:
+                                return CommandResult<ClassifyCleanupResult>.Failure(ClassifyErrors.Unexpected);
+                        }
 
-                    return CommandResult<ClassifyCleanupResult>.Success(publicResult);
-                },
-                ct);
+                        foreach (var previewId in expiredIds)
+                        {
+                            writeCt.ThrowIfCancellationRequested();
+                            var existingTomb = await recoveryStore.GetTombstoneAsync(
+                                connection, transaction, ClassifyRetentionPolicy.SubjectTypePreview, previewId, writeCt);
+                            if (existingTomb is not null)
+                            {
+                                continue;
+                            }
+
+                            var refs = await recoveryStore.ProbePreviewReferencesAsync(
+                                connection, transaction, previewId, writeCt);
+                            var decision = ClassifyRetentionPolicy.EvaluateAbandon(
+                                ClassifyStatusSubjectType.Preview, refs);
+                            if (!decision.Allowed)
+                            {
+                                continue;
+                            }
+
+                            var tombstone = ClassifyContractMapper.ToTombstoneRow(
+                                ClassifyContractMapper.NewRuleVersionId(timeProvider.GetUtcNow()),
+                                ClassifyStatusSubjectType.Preview,
+                                previewId,
+                                "cleanup expired unreferenced preview",
+                                actorText,
+                                ClassifyContractMapper.FormatUtc(timeProvider.GetUtcNow()),
+                                removedPayloadCount: 0);
+                            await recoveryStore.InsertTombstoneAsync(connection, transaction, tombstone, writeCt);
+                            expiredPreviewCount++;
+                        }
+
+                        // Retained count measured after stage (temps already quarantined).
+                        retainedAfter = artifactProtection.CountRecognizedTemporaryArtifacts();
+                        var removedArtifactCount = stagedCount + expiredPreviewCount;
+                        var eventRow = ClassifyContractMapper.ToCleanupEventRow(
+                            cleanupId,
+                            policyVersion,
+                            recognizedRemovedCount: stagedCount,
+                            expiredPreviewCount: expiredPreviewCount,
+                            abandonedPayloadCount: abandonedPayload,
+                            actorText,
+                            occurredAt,
+                            removedArtifactCount,
+                            retainedAfter);
+
+                        var publicResult = ClassifyContractMapper.ToCleanupResult(
+                            cleanupId,
+                            policyVersion,
+                            removedArtifactCount,
+                            retainedAfter,
+                            removedTemporary,
+                            expiredPreviewCount,
+                            abandonedPayload);
+
+                        await recoveryStore.InsertCleanupEventAsync(connection, transaction, eventRow, writeCt);
+                        await idempotencyStore.CommitAsync(
+                            connection,
+                            transaction,
+                            new ClassifyOperationIdempotencyRow(
+                                idempotencyKey,
+                                ClassifyOperationIds.Cleanup,
+                                ClassifyOperationIds.ContractVersion,
+                                requestFingerprint,
+                                SerializeResult(publicResult),
+                                occurredAt),
+                            writeCt);
+
+                        return CommandResult<ClassifyCleanupResult>.Success(publicResult);
+                    },
+                    ct);
+            }
+            catch
+            {
+                quarantine?.RestoreAndDiscard();
+                quarantine = null;
+                throw;
+            }
+
+            if (writeResult.IsSuccess)
+            {
+                quarantine?.FinalizeCommitted();
+                quarantine = null;
+            }
+            else
+            {
+                quarantine?.RestoreAndDiscard();
+                quarantine = null;
+            }
+
+            return writeResult;
         }
         catch (OperationCanceledException) when (
             timeout.IsCancellationRequested && !cancellationToken.IsCancellationRequested)
         {
+            quarantine?.RestoreAndDiscard();
             return CommandResult<ClassifyCleanupResult>.Failure(ClassifyErrors.ResourceLimit);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
+            quarantine?.RestoreAndDiscard();
             return CommandResult<ClassifyCleanupResult>.Failure(ClassifyErrors.Unexpected);
         }
         catch (InvalidOperationException)
         {
+            quarantine?.RestoreAndDiscard();
             return CommandResult<ClassifyCleanupResult>.Failure(ClassifyErrors.Integrity);
         }
     }

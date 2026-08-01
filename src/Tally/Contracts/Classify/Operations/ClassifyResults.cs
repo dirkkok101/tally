@@ -185,9 +185,19 @@ public sealed record ClassifyAbandonResult(
     [property: JsonRequired] string SubjectId,
     [property: JsonRequired] bool Abandoned);
 
+/// <summary>
+/// Metadata-only cleanup receipt (FR-CLASSIFY-STATE-RETENTION-CLEANUP).
+/// Exposes cleanup identity, policy, aggregate removed/retained counts, and per-kind counts —
+/// never paths, file names, subjects, or private payload.
+/// </summary>
 public sealed record ClassifyCleanupResult(
     [property: JsonRequired] string ContractVersion,
+    [property: JsonRequired] string CleanupId,
     [property: JsonRequired] string PolicyVersion,
+    /// <summary>Total recognized artifacts removed across all kinds.</summary>
+    [property: JsonRequired] int RemovedArtifactCount,
+    /// <summary>Recognized CLASSIFY artifacts retained after cleanup.</summary>
+    [property: JsonRequired] int RetainedArtifactCount,
     [property: JsonRequired] int RemovedTemporaryCount,
     [property: JsonRequired] int RemovedExpiredPreviewCount,
     [property: JsonRequired] int RemovedAbandonedPayloadCount);

@@ -12,11 +12,9 @@ using Tally.Infrastructure.Classify.Storage.Recovery;
 namespace Tally.Features.Classify.Recovery.Abandon;
 
 /// <summary>
-/// classify.abandon vertical slice
-/// (FR-CLASSIFY-STATE-RETENTION-CLEANUP / TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP).
-/// Abandons only unreferenced drafts, validations, evaluations, and previews:
-/// appends a tombstone, makes the subject non-activatable, removes allowed derived tmp payload.
-/// Never hard-deletes referenced rule/apply/feedback/allocation history.
+/// classify.abandon — tombstone unreferenced subjects after reversible quarantine staging.
+/// Never deletes recognized artifacts before durable tombstone + terminal idempotency commit.
+/// Replay performs no filesystem mutation.
 /// </summary>
 [SupportedOSPlatform("linux")]
 public sealed class AbandonClassificationStateCommand
@@ -99,6 +97,7 @@ public sealed class AbandonClassificationStateCommand
             actorRunId,
             fingerprintElement);
 
+        // Replay: return prior terminal result with no filesystem mutation.
         var probed = await TryProbeAsync(idempotencyKey, requestFingerprint, cancellationToken);
         if (probed is not null)
         {
@@ -109,6 +108,7 @@ public sealed class AbandonClassificationStateCommand
         timeout.CancelAfter(TimeSpan.FromMilliseconds(ClassifyOperationModule.V1Limits.MaxProcessingTimeMs));
         var ct = timeout.Token;
 
+        ClassifyArtifactQuarantine? quarantine = null;
         try
         {
             artifactProtection.EnsureClassifyLayout();
@@ -123,18 +123,7 @@ public sealed class AbandonClassificationStateCommand
                     return CommandResult<ClassifyAbandonResult>.Failure(ClassifyErrors.Lifecycle);
                 }
 
-                references = input.SubjectType switch
-                {
-                    ClassifyStatusSubjectType.Rule =>
-                        await recoveryStore.ProbeRuleVersionReferencesAsync(connection, null, subjectId, ct),
-                    ClassifyStatusSubjectType.Validation =>
-                        await recoveryStore.ProbeValidationReferencesAsync(connection, null, subjectId, ct),
-                    ClassifyStatusSubjectType.Evaluation =>
-                        await recoveryStore.ProbeEvaluationReferencesAsync(connection, null, subjectId, ct),
-                    ClassifyStatusSubjectType.Preview =>
-                        await recoveryStore.ProbePreviewReferencesAsync(connection, null, subjectId, ct),
-                    _ => ClassifyRetentionPolicy.ReferenceFlags.NotFound
-                };
+                references = await ProbeAsync(connection, null, input.SubjectType, subjectId, ct);
             }
 
             var decision = ClassifyRetentionPolicy.EvaluateAbandon(input.SubjectType, references);
@@ -144,12 +133,26 @@ public sealed class AbandonClassificationStateCommand
                     decision.ErrorCode ?? ClassifyErrors.Lifecycle);
             }
 
-            // Remove recognized subject-scoped temporary residue before durability (best-effort count).
-            var removedPayload = RemoveSubjectScopedTemporaries(subjectId);
-
             var now = timeProvider.GetUtcNow();
             var abandonedAt = ClassifyContractMapper.FormatUtc(now);
             var tombstoneId = ClassifyContractMapper.NewRuleVersionId(now);
+
+            // Collect subject-scoped temps, stage into quarantine (no final delete yet).
+            var subjectTemps = artifactProtection.ListRecognizedTemporaryFileNames()
+                .Where(n => n.Contains(subjectId, StringComparison.Ordinal))
+                .ToArray();
+
+            if (subjectTemps.Length > 0)
+            {
+                quarantine = artifactProtection.TryStageRecognizedTemporaries(
+                    tombstoneId, "abandon", subjectTemps);
+                if (quarantine is null)
+                {
+                    return CommandResult<ClassifyAbandonResult>.Failure(ClassifyErrors.Integrity);
+                }
+            }
+
+            var removedPayload = quarantine?.StagedCount ?? 0;
             var tombstone = ClassifyContractMapper.ToTombstoneRow(
                 tombstoneId,
                 input.SubjectType,
@@ -158,120 +161,135 @@ public sealed class AbandonClassificationStateCommand
                 actorText,
                 abandonedAt,
                 removedPayload);
-
             var publicResult = ClassifyContractMapper.ToAbandonResult(
                 input.SubjectType, subjectId, abandoned: true);
 
-            return await stateStore.ExecuteWriteAsync(
-                async (connection, transaction, writeCt) =>
-                {
-                    var existing = await idempotencyStore.FindAsync(
-                        connection, transaction, idempotencyKey, writeCt);
-                    var lookup = idempotencyStore.Resolve(
-                        existing,
-                        ClassifyOperationIds.Abandon,
-                        ClassifyOperationIds.ContractVersion,
-                        requestFingerprint);
-                    switch (lookup.Disposition)
+            CommandResult<ClassifyAbandonResult> writeResult;
+            try
+            {
+                writeResult = await stateStore.ExecuteWriteAsync(
+                    async (connection, transaction, writeCt) =>
                     {
-                        case ClassifyIdempotencyDisposition.Replay:
-                            return ReplayOrIntegrity(lookup.Record!);
-                        case ClassifyIdempotencyDisposition.Conflict:
-                            return CommandResult<ClassifyAbandonResult>.Failure(
-                                ClassifyErrors.IdempotencyConflict);
-                        case ClassifyIdempotencyDisposition.Miss:
-                            break;
-                        default:
-                            return CommandResult<ClassifyAbandonResult>.Failure(ClassifyErrors.Unexpected);
-                    }
-
-                    // Re-probe under writer lock for races.
-                    var live = input.SubjectType switch
-                    {
-                        ClassifyStatusSubjectType.Rule =>
-                            await recoveryStore.ProbeRuleVersionReferencesAsync(connection, transaction, subjectId, writeCt),
-                        ClassifyStatusSubjectType.Validation =>
-                            await recoveryStore.ProbeValidationReferencesAsync(connection, transaction, subjectId, writeCt),
-                        ClassifyStatusSubjectType.Evaluation =>
-                            await recoveryStore.ProbeEvaluationReferencesAsync(connection, transaction, subjectId, writeCt),
-                        ClassifyStatusSubjectType.Preview =>
-                            await recoveryStore.ProbePreviewReferencesAsync(connection, transaction, subjectId, writeCt),
-                        _ => ClassifyRetentionPolicy.ReferenceFlags.NotFound
-                    };
-                    var liveDecision = ClassifyRetentionPolicy.EvaluateAbandon(input.SubjectType, live);
-                    if (!liveDecision.Allowed)
-                    {
-                        return CommandResult<ClassifyAbandonResult>.Failure(
-                            liveDecision.ErrorCode ?? ClassifyErrors.Lifecycle);
-                    }
-
-                    var priorTombstone = await recoveryStore.GetTombstoneAsync(
-                        connection, transaction, subjectTypeWire, subjectId, writeCt);
-                    if (priorTombstone is not null)
-                    {
-                        return CommandResult<ClassifyAbandonResult>.Failure(ClassifyErrors.Lifecycle);
-                    }
-
-                    await recoveryStore.InsertTombstoneAsync(connection, transaction, tombstone, writeCt);
-
-                    // Make non-activatable / nonterminal runs abandoned when lifecycle allows.
-                    if (input.SubjectType == ClassifyStatusSubjectType.Evaluation)
-                    {
-                        _ = await recoveryStore.TryAbandonEvaluationLifecycleAsync(
-                            connection, transaction, subjectId, writeCt);
-                    }
-                    else if (input.SubjectType == ClassifyStatusSubjectType.Validation)
-                    {
-                        _ = await recoveryStore.TryAbandonValidationLifecycleAsync(
-                            connection, transaction, subjectId, abandonedAt, writeCt);
-                    }
-
-                    await idempotencyStore.CommitAsync(
-                        connection,
-                        transaction,
-                        new ClassifyOperationIdempotencyRow(
-                            idempotencyKey,
+                        var existing = await idempotencyStore.FindAsync(
+                            connection, transaction, idempotencyKey, writeCt);
+                        var lookup = idempotencyStore.Resolve(
+                            existing,
                             ClassifyOperationIds.Abandon,
                             ClassifyOperationIds.ContractVersion,
-                            requestFingerprint,
-                            SerializeResult(publicResult),
-                            abandonedAt),
-                        writeCt);
+                            requestFingerprint);
+                        switch (lookup.Disposition)
+                        {
+                            case ClassifyIdempotencyDisposition.Replay:
+                                return ReplayOrIntegrity(lookup.Record!);
+                            case ClassifyIdempotencyDisposition.Conflict:
+                                return CommandResult<ClassifyAbandonResult>.Failure(
+                                    ClassifyErrors.IdempotencyConflict);
+                            case ClassifyIdempotencyDisposition.Miss:
+                                break;
+                            default:
+                                return CommandResult<ClassifyAbandonResult>.Failure(ClassifyErrors.Unexpected);
+                        }
 
-                    return CommandResult<ClassifyAbandonResult>.Success(publicResult);
-                },
-                ct);
+                        var live = await ProbeAsync(connection, transaction, input.SubjectType, subjectId, writeCt);
+                        var liveDecision = ClassifyRetentionPolicy.EvaluateAbandon(input.SubjectType, live);
+                        if (!liveDecision.Allowed)
+                        {
+                            return CommandResult<ClassifyAbandonResult>.Failure(
+                                liveDecision.ErrorCode ?? ClassifyErrors.Lifecycle);
+                        }
+
+                        if (await recoveryStore.GetTombstoneAsync(
+                                connection, transaction, subjectTypeWire, subjectId, writeCt) is not null)
+                        {
+                            return CommandResult<ClassifyAbandonResult>.Failure(ClassifyErrors.Lifecycle);
+                        }
+
+                        await recoveryStore.InsertTombstoneAsync(connection, transaction, tombstone, writeCt);
+
+                        if (input.SubjectType == ClassifyStatusSubjectType.Evaluation)
+                        {
+                            _ = await recoveryStore.TryAbandonEvaluationLifecycleAsync(
+                                connection, transaction, subjectId, writeCt);
+                        }
+                        else if (input.SubjectType == ClassifyStatusSubjectType.Validation)
+                        {
+                            _ = await recoveryStore.TryAbandonValidationLifecycleAsync(
+                                connection, transaction, subjectId, abandonedAt, writeCt);
+                        }
+
+                        await idempotencyStore.CommitAsync(
+                            connection,
+                            transaction,
+                            new ClassifyOperationIdempotencyRow(
+                                idempotencyKey,
+                                ClassifyOperationIds.Abandon,
+                                ClassifyOperationIds.ContractVersion,
+                                requestFingerprint,
+                                SerializeResult(publicResult),
+                                abandonedAt),
+                            writeCt);
+
+                        return CommandResult<ClassifyAbandonResult>.Success(publicResult);
+                    },
+                    ct);
+            }
+            catch
+            {
+                quarantine?.RestoreAndDiscard();
+                quarantine = null;
+                throw;
+            }
+
+            if (writeResult.IsSuccess)
+            {
+                // Durable authority committed — permanently drop staged files.
+                quarantine?.FinalizeCommitted();
+                quarantine = null;
+            }
+            else
+            {
+                quarantine?.RestoreAndDiscard();
+                quarantine = null;
+            }
+
+            return writeResult;
         }
         catch (OperationCanceledException) when (
             timeout.IsCancellationRequested && !cancellationToken.IsCancellationRequested)
         {
+            quarantine?.RestoreAndDiscard();
             return CommandResult<ClassifyAbandonResult>.Failure(ClassifyErrors.ResourceLimit);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
+            quarantine?.RestoreAndDiscard();
             return CommandResult<ClassifyAbandonResult>.Failure(ClassifyErrors.Unexpected);
         }
         catch (InvalidOperationException)
         {
+            quarantine?.RestoreAndDiscard();
             return CommandResult<ClassifyAbandonResult>.Failure(ClassifyErrors.Integrity);
         }
     }
 
-    private int RemoveSubjectScopedTemporaries(string subjectId)
-    {
-        var removed = 0;
-        foreach (var name in artifactProtection.ListRecognizedTemporaryFileNames())
+    private async Task<ClassifyRetentionPolicy.ReferenceFlags> ProbeAsync(
+        Microsoft.Data.Sqlite.SqliteConnection connection,
+        Microsoft.Data.Sqlite.SqliteTransaction? transaction,
+        ClassifyStatusSubjectType subjectType,
+        string subjectId,
+        CancellationToken cancellationToken) =>
+        subjectType switch
         {
-            // Subject-scoped residue only: file name contains the stable subject id fragment.
-            if (name.Contains(subjectId, StringComparison.Ordinal)
-                && artifactProtection.TryDeleteRecognizedTemporary(name))
-            {
-                removed++;
-            }
-        }
-
-        return removed;
-    }
+            ClassifyStatusSubjectType.Rule =>
+                await recoveryStore.ProbeRuleVersionReferencesAsync(connection, transaction, subjectId, cancellationToken),
+            ClassifyStatusSubjectType.Validation =>
+                await recoveryStore.ProbeValidationReferencesAsync(connection, transaction, subjectId, cancellationToken),
+            ClassifyStatusSubjectType.Evaluation =>
+                await recoveryStore.ProbeEvaluationReferencesAsync(connection, transaction, subjectId, cancellationToken),
+            ClassifyStatusSubjectType.Preview =>
+                await recoveryStore.ProbePreviewReferencesAsync(connection, transaction, subjectId, cancellationToken),
+            _ => ClassifyRetentionPolicy.ReferenceFlags.NotFound
+        };
 
     private async Task<CommandResult<ClassifyAbandonResult>?> TryProbeAsync(
         string idempotencyKey,

@@ -378,6 +378,51 @@ public sealed class ClassifyOperationContractTests
     }
 
     [Fact]
+    public void Cleanup_receipt_schema_includes_identity_and_aggregate_counts()
+    {
+        var receipt = new ClassifyCleanupResult(
+            ClassifyOperationIds.ContractVersion,
+            CleanupId: "cleanup-1",
+            PolicyVersion: "cleanup_v1",
+            RemovedArtifactCount: 3,
+            RetainedArtifactCount: 7,
+            RemovedTemporaryCount: 2,
+            RemovedExpiredPreviewCount: 1,
+            RemovedAbandonedPayloadCount: 0);
+        var json = JsonSerializer.Serialize(receipt, ClassifyJsonContext.Default.ClassifyCleanupResult);
+        using var document = JsonDocument.Parse(json);
+        var root = document.RootElement;
+        Assert.True(root.TryGetProperty("cleanupId", out var cleanupId));
+        Assert.Equal("cleanup-1", cleanupId.GetString());
+        Assert.True(root.TryGetProperty("policyVersion", out _));
+        Assert.True(root.TryGetProperty("removedArtifactCount", out var removed));
+        Assert.Equal(3, removed.GetInt32());
+        Assert.True(root.TryGetProperty("retainedArtifactCount", out var retained));
+        Assert.Equal(7, retained.GetInt32());
+        Assert.True(root.TryGetProperty("removedTemporaryCount", out _));
+        Assert.True(root.TryGetProperty("removedExpiredPreviewCount", out _));
+        Assert.True(root.TryGetProperty("removedAbandonedPayloadCount", out _));
+        // Disclosure: no path/name/subject fields.
+        Assert.False(root.TryGetProperty("path", out _));
+        Assert.False(root.TryGetProperty("paths", out _));
+        Assert.False(root.TryGetProperty("fileName", out _));
+        Assert.False(root.TryGetProperty("subjectId", out _));
+        Assert.DoesNotContain("/tmp", json, StringComparison.Ordinal);
+        Assert.DoesNotContain("classify/", json, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void Cleanup_request_accepts_only_policy_version_not_path()
+    {
+        var request = new ClassifyCleanupRequest(ClassifyOperationIds.ContractVersion, "cleanup_v1");
+        var json = JsonSerializer.Serialize(request, ClassifyJsonContext.Default.ClassifyCleanupRequest);
+        using var document = JsonDocument.Parse(json);
+        Assert.True(document.RootElement.TryGetProperty("policyVersion", out _));
+        Assert.False(document.RootElement.TryGetProperty("path", out _));
+        Assert.False(document.RootElement.TryGetProperty("glob", out _));
+    }
+
+    [Fact]
     public void Example_invocations_use_stdin_input_boundary()
     {
         Assert.All(Module().Descriptors, d => Assert.Contains("--input -", d.Example, StringComparison.Ordinal));

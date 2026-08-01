@@ -2,6 +2,7 @@ using System.Text.Json;
 using Tally.Contracts.Classify.Operations;
 using Tally.Domain.Classify.Recovery;
 using Tally.Infrastructure.Classify.Storage;
+using Tally.Infrastructure.Classify.Storage.Recovery;
 
 namespace Tally.Features.Classify.Contract;
 
@@ -52,13 +53,19 @@ public static partial class ClassifyContractMapper
         new(ClassifyOperationIds.ContractVersion, subjectType, subjectId, abandoned);
 
     public static ClassifyCleanupResult ToCleanupResult(
+        string cleanupId,
         string policyVersion,
+        int removedArtifactCount,
+        int retainedArtifactCount,
         int removedTemporaryCount,
         int removedExpiredPreviewCount,
         int removedAbandonedPayloadCount) =>
         new(
             ClassifyOperationIds.ContractVersion,
+            cleanupId,
             policyVersion,
+            removedArtifactCount,
+            retainedArtifactCount,
             removedTemporaryCount,
             removedExpiredPreviewCount,
             removedAbandonedPayloadCount);
@@ -80,14 +87,16 @@ public static partial class ClassifyContractMapper
             abandonedAtUtc,
             removedPayloadCount);
 
-    public static ClassifyCleanupEventRow ToCleanupEventRow(
+    public static ClassifyCleanupEventReceiptRow ToCleanupEventRow(
         string cleanupId,
         string policyVersion,
         int recognizedRemovedCount,
         int expiredPreviewCount,
         int abandonedPayloadCount,
         string actor,
-        string occurredAtUtc) =>
+        string occurredAtUtc,
+        int removedArtifactCount,
+        int retainedArtifactCount) =>
         new(
             cleanupId,
             policyVersion,
@@ -95,5 +104,7 @@ public static partial class ClassifyContractMapper
             expiredPreviewCount,
             abandonedPayloadCount,
             actor,
-            occurredAtUtc);
+            occurredAtUtc,
+            removedArtifactCount,
+            retainedArtifactCount);
 }
