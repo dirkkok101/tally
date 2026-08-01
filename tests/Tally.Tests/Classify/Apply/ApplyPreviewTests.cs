@@ -459,6 +459,31 @@ public sealed class ApplyPreviewTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Preview_rejects_assignment_when_target_category_was_reactivated_after_evaluation()
+    {
+        var seeded = await SeedSuggestionAsync("reactivated-target");
+        var outcomes = await ListOutcomesAsync(seeded.EvaluationId);
+        var suggestion = outcomes.First(o => o.OutcomeType == "suggestion");
+
+        await ArchiveCategoryAsync(suggestion.CategoryId!);
+        await ReactivateCategoryAsync(suggestion.CategoryId!);
+
+        var result = await preview.HandleAsync(
+            new ClassifyApplyPreviewRequest(
+                ClassifyOperationIds.ContractVersion,
+                seeded.EvaluationId,
+                new ClassifyApplySelection(
+                    ClassifyApplySelectionMode.SelectedOutcomes,
+                    OutcomeIds: [suggestion.OutcomeId])),
+            actor,
+            NextKey(),
+            CancellationToken.None);
+
+        Assert.Equal(ClassifyErrors.Stale, result.ErrorCode);
+        Assert.False(result.IsSuccess);
+    }
+
+    [Fact]
     public async Task Preview_honours_cancellation()
     {
         var seeded = await SeedSuggestionAsync("cancel shop");
@@ -760,6 +785,26 @@ public sealed class ApplyPreviewTests : IAsyncLifetime
             "ledger.category.create",
             new CreateCategoryInput(name + "-" + Guid.NewGuid().ToString("N")[..6]),
             NextKey(), LedgerJsonContext.Default.CreateCategoryInput, LedgerJsonContext.Default.CategoryDetail);
+
+    private async Task ArchiveCategoryAsync(string categoryId)
+    {
+        _ = await ExecuteSuccessAsync(
+            "ledger.category.archive",
+            new ArchiveCategoryInput(categoryId, "apply preview reactivation check"),
+            NextKey(),
+            LedgerJsonContext.Default.ArchiveCategoryInput,
+            LedgerJsonContext.Default.CategoryLifecycleResult);
+    }
+
+    private async Task ReactivateCategoryAsync(string categoryId)
+    {
+        _ = await ExecuteSuccessAsync(
+            "ledger.category.reactivate",
+            new ReactivateCategoryInput(categoryId, "apply preview reactivation check"),
+            NextKey(),
+            LedgerJsonContext.Default.ReactivateCategoryInput,
+            LedgerJsonContext.Default.CategoryLifecycleResult);
+    }
 
     private async Task<TransactionDetail> RecordAsync(string description)
     {

@@ -6,6 +6,7 @@ using Tally.Contracts.Classify;
 using Tally.Contracts.Classify.Operations;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Actuals;
+using Tally.Contracts.Ledger.Categories;
 using Tally.Domain.Classify.Apply;
 using Tally.Domain.Classify.Evaluation;
 using Tally.Domain.Classify.Normalization;
@@ -282,6 +283,39 @@ public sealed class PreviewClassificationApplyCommand
             }
 
             var evalPage = evaluationProjection.Value;
+
+            // A current active identifier is not sufficient for assignment authority: archive followed
+            // by reactivation preserves the identifier and current lifecycle fingerprint, but invalidates
+            // every retained suggestion produced before that reactivation (FR-CLASSIFY-OUTCOME-INVALIDATION).
+            if (!TryParseUtc(run.CreatedAt, out var evaluationCreatedAt))
+            {
+                return CommandResult<ClassifyApplyPreviewResult>.Failure(ClassifyErrors.Integrity);
+            }
+
+            foreach (var targetCategoryId in authorization.Candidates
+                         .Where(c => string.Equals(c.Mode, ApplyAuthorizationPolicy.ModeAssign, StringComparison.Ordinal))
+                         .Select(c => c.TargetCategoryId)
+                         .Distinct(StringComparer.Ordinal)
+                         .OrderBy(id => id, StringComparer.Ordinal))
+            {
+                ct.ThrowIfCancellationRequested();
+                var category = await ledger.GetBudgetCategoryAsync(
+                    targetCategoryId,
+                    CategoryContractVersions.Current,
+                    actor,
+                    ct,
+                    includeHistory: true);
+                if (!category.IsSuccess || category.Value is null
+                    || category.Value.Status != CategoryStatus.Active
+                    || category.Value.LifecycleHistory.Any(h =>
+                        h.Action == CategoryLifecycleAction.Reactivate
+                        && TryParseUtc(h.OccurredAt, out var occurredAt)
+                        && occurredAt > evaluationCreatedAt))
+                {
+                    return CommandResult<ClassifyApplyPreviewResult>.Failure(ClassifyErrors.Stale);
+                }
+            }
+
             var categoryLifecycleFingerprint = !string.IsNullOrWhiteSpace(evalPage.CategoryIdentityLifecycleFingerprint)
                 ? evalPage.CategoryIdentityLifecycleFingerprint
                 : EvaluationFingerprint.ComputeCategoryLifecycleFingerprint(
@@ -313,8 +347,7 @@ public sealed class PreviewClassificationApplyCommand
                     || !string.Equals(retainedFingerprint.StoreGenerationFingerprint, currentStoreGen, StringComparison.Ordinal)
                     || !string.Equals(retainedFingerprint.CategoryLifecycleFingerprint, categoryLifecycleFingerprint, StringComparison.Ordinal)
                     || !string.Equals(retainedFingerprint.NormalizationVersion, NormalizationDescriptor.V1.Version, StringComparison.Ordinal)
-                    || (currentRuleSetVersionId is not null
-                        && !string.Equals(retainedFingerprint.RuleSetVersionId, currentRuleSetVersionId, StringComparison.Ordinal))
+                    || !string.Equals(retainedFingerprint.RuleSetVersionId, currentRuleSetVersionId, StringComparison.Ordinal)
                     || !string.Equals(
                         retainedFingerprint.OrderedItemsFingerprint,
                         orderedItemsFingerprint,
@@ -329,8 +362,7 @@ public sealed class PreviewClassificationApplyCommand
                 if (!string.Equals(retainedFingerprint.LedgerContractVersion, currentLedgerContract, StringComparison.Ordinal)
                     || !string.Equals(retainedFingerprint.ProjectionVersion, currentProjection, StringComparison.Ordinal)
                     || !string.Equals(retainedFingerprint.NormalizationVersion, NormalizationDescriptor.V1.Version, StringComparison.Ordinal)
-                    || (currentRuleSetVersionId is not null
-                        && !string.Equals(retainedFingerprint.RuleSetVersionId, currentRuleSetVersionId, StringComparison.Ordinal)))
+                    || !string.Equals(retainedFingerprint.RuleSetVersionId, currentRuleSetVersionId, StringComparison.Ordinal))
                 {
                     return CommandResult<ClassifyApplyPreviewResult>.Failure(ClassifyErrors.Stale);
                 }
