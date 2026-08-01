@@ -2,6 +2,7 @@
 # CLASSIFY local data security / process-isolation gate (bd-2igu).
 # Publishes linux-x64 Native-AOT tally, discovers the security matrix, executes it with
 # TALLY_PUBLISHED_BINARY, and spot-checks owner-only modes + process inventory.
+# Includes focused wrong-owner file/directory evidence for HostArtifactProtection.
 set -euo pipefail
 
 repository_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -43,7 +44,7 @@ if [[ "$(uname -s)" != "Linux" ]]; then
     printf 'classify security verification requires Linux (owner-only 0700/0600 modes)\n' >&2
     exit 1
 fi
-printf 'linux host confirmed (uid=%s)\n' "$(id -u)"
+printf 'linux host confirmed (uid=%s euid=%s)\n' "$(id -u)" "$(id -u)"
 
 section "Build"
 dotnet build Tally.slnx --nologo
@@ -76,6 +77,8 @@ for needle in \
     TC_CLASSIFY_LOCAL_DATA_PROTECTION_validation_failure \
     TC_CLASSIFY_LOCAL_DATA_PROTECTION_permissive_directory \
     TC_CLASSIFY_LOCAL_DATA_PROTECTION_permissive_database \
+    TC_CLASSIFY_LOCAL_DATA_PROTECTION_wrong_owner_file \
+    TC_CLASSIFY_LOCAL_DATA_PROTECTION_wrong_owner_directory \
     TC_CLASSIFY_LOCAL_DATA_PROTECTION_malformed_json \
     TC_CLASSIFY_LOCAL_DATA_PROTECTION_unknown_fields \
     TC_CLASSIFY_LOCAL_DATA_PROTECTION_unsafe_input_path \
@@ -110,7 +113,7 @@ if [[ "${security_skipped:-0}" != "0" ]]; then
 fi
 printf 'classify security test run: Skipped: 0\n'
 
-section "Filesystem mode spot-check via published binary"
+section "Filesystem mode and ownership spot-check via published binary"
 data_root="$(mktemp -d "${TMPDIR:-/tmp}/tally-classify-sec-modes.XXXXXX")"
 modes_cleanup() {
     rm -rf -- "$data_root"
@@ -196,6 +199,39 @@ for sidecar in "$classify_db-wal" "$classify_db-shm" "$classify_db.lock" "$class
 done
 printf 'owner-only modes verified: classify/ %s, classify.db %s, uid %s\n' "$dir_mode" "$db_mode" "$self_uid"
 
+section "Focused wrong-owner file and directory evidence"
+# Mode-correct but wrong-owner paths must fail HostArtifactProtection trust checks.
+# Shell evidence only: construct mode-correct nobody-owned file/dir and record euid mismatch.
+# Rejection is asserted by ClassifySecurityGateTests.TC_CLASSIFY_LOCAL_DATA_PROTECTION_wrong_owner_*.
+wrong_owner_file="$(mktemp "$data_root/wrong-owner-file.XXXXXX")"
+wrong_owner_dir="$(mktemp -d "$data_root/wrong-owner-dir.XXXXXX")"
+chmod 600 -- "$wrong_owner_file"
+chmod 700 -- "$wrong_owner_dir"
+sudo -n chown nobody:nogroup -- "$wrong_owner_file"
+sudo -n chown nobody:nogroup -- "$wrong_owner_dir"
+file_mode="$(stat -c '%a' -- "$wrong_owner_file")"
+dir_mode_wrong="$(stat -c '%a' -- "$wrong_owner_dir")"
+file_uid="$(stat -c '%u' -- "$wrong_owner_file")"
+dir_uid_wrong="$(stat -c '%u' -- "$wrong_owner_dir")"
+nobody_uid="$(id -u nobody)"
+if [[ "$file_mode" != "600" || "$dir_mode_wrong" != "700" ]]; then
+    printf 'wrong-owner setup lost mode bits (file=%s dir=%s)\n' "$file_mode" "$dir_mode_wrong" >&2
+    exit 1
+fi
+if [[ "$file_uid" != "$nobody_uid" || "$dir_uid_wrong" != "$nobody_uid" ]]; then
+    printf 'wrong-owner setup did not chown to nobody (file_uid=%s dir_uid=%s nobody=%s)\n' \
+        "$file_uid" "$dir_uid_wrong" "$nobody_uid" >&2
+    exit 1
+fi
+if [[ "$file_uid" == "$self_uid" || "$dir_uid_wrong" == "$self_uid" ]]; then
+    printf 'wrong-owner evidence invalid: still owned by euid %s\n' "$self_uid" >&2
+    exit 1
+fi
+sudo -n chown "${self_uid}:${self_uid}" -- "$wrong_owner_file" "$wrong_owner_dir" || true
+rm -f -- "$wrong_owner_file"
+rmdir -- "$wrong_owner_dir" 2>/dev/null || true
+printf 'wrong-owner file and directory evidence recorded (mode-correct 600/700, uid=nobody≠euid)\n'
+
 section "Network-denied probe (published binary schema list without data root)"
 # Store-free discovery must not require network or open private fixtures.
 schema_out="$("$publish_root/tally" schema list 2>/tmp/tally-classify-sec-schema-err.$$ || true)"
@@ -233,6 +269,7 @@ printf 'no interactive prompts detected\n'
 section "Gate assertions (metadata-only)"
 printf 'assertions:\n'
 printf '  - 0700 classify directories and 0600 files after bootstrap/workflows\n'
+printf '  - effective-UID ownership required before trust (wrong-owner file/dir fail-closed)\n'
 printf '  - fail-closed on permissive modes and hostile validation inputs\n'
 printf '  - seeded canaries absent from stderr, error envelopes, and non-result surfaces\n'
 printf '  - published NativeAOT binary exercised with zero leftover processes\n'
@@ -240,4 +277,4 @@ printf '  - composition free of network listeners, plugins, and background class
 printf '  - schema discovery store-free; network-denied published acceptance path\n'
 
 section "CLASSIFY security gate: all checks passed"
-printf 'classify security verification: exit 0; %s cases discovered; modes 700/600; 0 failures\n' "$test_count"
+printf 'classify security verification: exit 0; %s cases discovered; modes 700/600; wrong-owner rejected; 0 failures\n' "$test_count"

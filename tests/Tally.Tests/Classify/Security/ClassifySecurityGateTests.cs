@@ -182,6 +182,64 @@ public sealed class ClassifySecurityGateTests : IAsyncLifetime
     }
 
     [Fact]
+    public void TC_CLASSIFY_LOCAL_DATA_PROTECTION_wrong_owner_file_fails_closed()
+    {
+        // Mode remains exact 0600; rejection is effective-UID ownership only.
+        var path = Path.Combine(root, "wrong-owner-file");
+        File.WriteAllBytes(path, [1]);
+        File.SetUnixFileMode(path, OwnerFile);
+        Assert.Equal(OwnerFile, File.GetUnixFileMode(path));
+
+        RunChown("nobody:nogroup", path);
+        try
+        {
+            var protection = new HostArtifactProtection();
+            var ex = Assert.Throws<InvalidOperationException>(
+                () => protection.RequireOwnerOnlyArtifact(path));
+            Assert.Equal("The artifact is not owner-only.", ex.Message);
+            // Mode check would still pass; ownership is the fail-closed reason.
+            Assert.Equal(OwnerFile, File.GetUnixFileMode(path));
+        }
+        finally
+        {
+            RunChown($"{Environment.UserName}:{Environment.UserName}", path);
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+    }
+
+    [Fact]
+    public void TC_CLASSIFY_LOCAL_DATA_PROTECTION_wrong_owner_directory_fails_closed()
+    {
+        // Mode remains exact 0700; rejection is effective-UID ownership only.
+        var path = Path.Combine(root, "wrong-owner-dir");
+        Directory.CreateDirectory(path);
+        File.SetUnixFileMode(path, OwnerDirectory);
+        Assert.Equal(OwnerDirectory, File.GetUnixFileMode(path));
+
+        RunChown("nobody:nogroup", path);
+        try
+        {
+            var protection = new HostArtifactProtection();
+            var ex = Assert.Throws<InvalidOperationException>(
+                () => protection.RequireOwnerOnlyDirectory(path));
+            Assert.Equal("The directory is not owner-only.", ex.Message);
+            // Mode check would still pass; ownership is the fail-closed reason.
+            Assert.Equal(OwnerDirectory, File.GetUnixFileMode(path));
+        }
+        finally
+        {
+            RunChown($"{Environment.UserName}:{Environment.UserName}", path);
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, recursive: false);
+            }
+        }
+    }
+
+    [Fact]
     public async Task TC_CLASSIFY_LOCAL_DATA_PROTECTION_tmp_and_reports_dirs_are_owner_only()
     {
         artifacts.EnsureClassifyLayout();
@@ -737,6 +795,27 @@ public sealed class ClassifySecurityGateTests : IAsyncLifetime
     {
         Assert.True(File.Exists(path), path);
         Assert.Equal(OwnerFile, File.GetUnixFileMode(path));
+    }
+
+    private static void RunChown(string ownerSpec, string path)
+    {
+        // Passwordless sudo is available on this host for focused wrong-owner evidence.
+        var start = new ProcessStartInfo("/usr/bin/sudo", $"-n chown {ownerSpec} -- {path}")
+        {
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false
+        };
+        using var process = DiagnosticsProcess.Start(start)
+            ?? throw new InvalidOperationException("Failed to start chown.");
+        var stdout = process.StandardOutput.ReadToEnd();
+        var stderr = process.StandardError.ReadToEnd();
+        process.WaitForExit(10_000);
+        if (process.ExitCode != 0)
+        {
+            throw new InvalidOperationException(
+                $"chown {ownerSpec} failed ({process.ExitCode}): {stdout}{stderr}");
+        }
     }
 
     private static void AssertClassifyEnvelope(ProcessResult result)

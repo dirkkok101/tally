@@ -16,15 +16,17 @@ bash scripts/verify-classify-security.sh
 
 Expected: exit 0; non-vacuous discovery of the security matrix; zero canary leaks; exact `0700`
 directories / `0600` files for `classify/` and recognized artifacts under the published
-Native-AOT binary; zero leftover processes; store-free schema discovery.
+Native-AOT binary; effective-UID ownership enforced before trust; zero leftover processes;
+store-free schema discovery.
 
 ## Evidence surface (`ClassifySecurityGateEvidence`)
 
 | Artifact | Role |
 |---|---|
 | `tests/Tally.Tests/Classify/Security/ClassifySecurityGateTests.cs` | Security/privacy matrix against real `ClassifyStateStore`, `TallyProcess`, and published `tally` |
-| `scripts/verify-classify-security.sh` | Build, NativeAOT publish, discovery, xUnit matrix, filesystem mode spot-check, network-denied schema probe, process inventory, non-interactive probe |
+| `scripts/verify-classify-security.sh` | Build, NativeAOT publish, discovery, xUnit matrix, filesystem mode/ownership spot-check, network-denied schema probe, process inventory, non-interactive probe |
 | `docs/verification/classify-security.md` | This metadata-only report |
+| `src/Tally/Infrastructure/Storage/HostArtifactProtection.cs` | Shared Linux owner identity and owner-only mode guard (Hermes correction seam) |
 
 ## Case families
 
@@ -37,6 +39,8 @@ Native-AOT binary; zero leftover processes; store-free schema discovery.
 | Success / status workflow | Status + cleanup leave recognized artifacts owner-only |
 | Validation failure | No orphan idempotency/tombstone rows; modes remain owner-only |
 | Fail-closed modes | Permissive directory or database fails `RequireOwnerOnlyArtifacts` before trust |
+| Wrong-owner file | Exact `0600` mode but `st_uid ≠ geteuid()` fails closed |
+| Wrong-owner directory | Exact `0700` mode but `st_uid ≠ geteuid()` fails closed |
 | Unknown files | Non-recognized files under `classify/` are left alone |
 | Cleanup | Recognized temps removable; unknown temps retained; no raw corpus copies |
 
@@ -60,6 +64,7 @@ Native-AOT binary; zero leftover processes; store-free schema discovery.
 - Outside-root paths → rejected by artifact protection containment
 - Unknown temporary names → never staged/deleted
 - Symlink temporaries → never staged/deleted
+- Wrong-owner file/directory → mode-correct paths still rejected when `st_uid ≠ geteuid()`
 
 ### Self-contained local operation (`TC-CLASSIFY-OFFLINE-PROCESS-ISOLATION`)
 
@@ -74,11 +79,11 @@ Native-AOT binary; zero leftover processes; store-free schema discovery.
 
 After every successful open and after the gate’s published-binary spot-check:
 
-1. `classify/` directory mode is exactly `700` and owned by the invoking uid
+1. `classify/` directory mode is exactly `700` and owned by the invoking effective UID
 2. `classify/tmp/` and `classify/reports/` are `700` when present
-3. `classify.db` mode is exactly `600` and owned by the invoking uid
-4. Present `-wal` / `-shm` / `-journal` / `.lock` sidecars are mode `600`
-5. `RequireOwnerOnlyArtifacts` rejects group/other bits without repair-as-success
+3. `classify.db` mode is exactly `600` and owned by the invoking effective UID
+4. Present `-wal` / `-shm` / `-journal` / `.lock` sidecars are mode `600` and euid-owned
+5. `RequireOwnerOnlyArtifact` / `RequireOwnerOnlyDirectory` reject wrong mode **or** wrong owner without repair-as-success
 
 ## Governing decisions and NFRs
 
@@ -107,17 +112,17 @@ this file.
 
 ## Latest run
 
-Not executed in this bead’s supervised cadence (final all-beads job owns suite execution).
-Artifacts are ready for:
+Hermes correction (effective-UID ownership): `HostArtifactProtection` now requires
+`st_uid == geteuid()` in addition to exact `0600`/`0700` mode bits. Focused wrong-owner
+file and directory evidence added and executed. Full security gate not executed in this cadence.
 
-| Check | Expected |
+| Check | Result |
 |---|---|
-| Host platform | Linux (owner-only modes supported) |
-| `dotnet build Tally.slnx` | 0 warnings, 0 errors |
-| NativeAOT publish (`linux-x64`) | executable `tally` produced |
-| Discovery (`ClassifySecurityGateTests`) | ≥ 20 cases |
-| Required case families | Present (permissions, canaries, hostile, self-contained, published) |
-| xUnit execution with `TALLY_PUBLISHED_BINARY` | 0 failed, 0 skipped |
-| Filesystem spot-check | `classify/` mode `700`, `classify.db` mode `600`, owner uid matches invoker |
-| Process inventory | No leftover published `tally` processes |
-| Script exit | 0 |
+| Host platform | Linux (owner-only modes + effective UID) |
+| `HostArtifactProtection` | Mode 0600/0700 preserved; euid ownership enforced via `lstat` + `geteuid` |
+| Focused wrong-owner file evidence | `TC_CLASSIFY_LOCAL_DATA_PROTECTION_wrong_owner_file_fails_closed` — Passed |
+| Focused wrong-owner directory evidence | `TC_CLASSIFY_LOCAL_DATA_PROTECTION_wrong_owner_directory_fails_closed` — Passed |
+| `git diff --check` | Clean |
+| `dotnet build Tally.slnx -c Release --no-restore` | 0 warnings, 0 errors |
+| Focused ownership filter (`~wrong_owner`) | 2 passed, 0 failed |
+| Full security gate / broad suite | Not run (cadence) |
