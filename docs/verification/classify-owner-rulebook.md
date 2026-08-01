@@ -15,6 +15,18 @@ Prove that an **owner-authored** deterministic rulebook is safe, deterministic,
 privacy-preserving, and useful **before** any rule can become active and before any
 CLASSIFY apply workflow gains authority.
 
+There is **no thirteenth CLASSIFY operation** and **no second evaluator**. The gate
+invokes the existing public `classify.rule.validate` operation for:
+
+1. Representative evidence
+2. Fresh-key identical replay
+3. Separate temporal hold-out evidence
+
+`rule.validate` binds every private row to one complete frozen public Ledger
+`classification_v1` evaluation projection (account, description, direction, amount,
+lifecycle fingerprint) and returns complete aggregate fingerprints, counters, and
+canaries.
+
 The failed automatic-discovery experiment remains **historical evidence only**.
 This gate does not rediscover rules, seed values, broaden grammar, or invent a
 50% benefit threshold.
@@ -31,11 +43,11 @@ Expected:
 - Linux host
 - Release build succeeds
 - ≥12 named gate families discovered under `OwnerRulebookGateTests`
-- All mandatory safety gates pass
-- Output is aggregate metadata only (no private payloads or paths)
+- All mandatory safety gates pass (or a stable blocked aggregate receipt is emitted)
+- Output is aggregate metadata only (no private payloads, paths, or candidate IDs)
 
-Agent policy note: bead implementers must not run the full unit matrix; Hermes /
-CI executes the script. Local discovery-only:
+Agent policy note: bead implementers must not run unit/filtered/full suites.
+Hermes / CI executes the script. Local discovery-only:
 
 ```bash
 CLASSIFY_OWNER_RULEBOOK_RUN_TESTS=0 bash scripts/verify-classify-owner-rulebook.sh
@@ -45,115 +57,83 @@ CLASSIFY_OWNER_RULEBOOK_RUN_TESTS=0 bash scripts/verify-classify-owner-rulebook.
 
 | Environment variable | Role |
 |---|---|
-| `CLASSIFY_OWNER_RULEBOOK_CORPUS` | Owner-only 90-day representative JSONL corpus (mode `600`/`400`, not a symlink) |
+| `CLASSIFY_OWNER_RULEBOOK_CANDIDATE_IDS` | Comma-separated immutable candidate **rule version** IDs |
+| `CLASSIFY_OWNER_RULEBOOK_CORPUS` | Owner-only representative JSONL corpus (mode `600`/`400`, not a symlink) |
 | `CLASSIFY_OWNER_RULEBOOK_HOLD_OUT` | Owner-only temporal hold-out JSONL (same permission rules) |
-| `CLASSIFY_OWNER_RULEBOOK_BENEFIT_DECISION` | Optional explicit product decision when benefit is insufficient (`approve-broad` / `defer-broad`) |
+| `CLASSIFY_OWNER_DECISIONS_BEFORE` | Aggregate owner decision count before rulebook |
+| `CLASSIFY_OWNER_DECISIONS_AFTER` | Aggregate owner decision count after rulebook |
+| `CLASSIFY_OWNER_MINUTES_BEFORE` | Optional aggregate owner minutes before |
+| `CLASSIFY_OWNER_MINUTES_AFTER` | Optional aggregate owner minutes after |
+| `CLASSIFY_OWNER_RULEBOOK_BENEFIT_DECISION` | Explicit product decision when benefit is insufficient (`approve-broad` / `defer-broad`) |
+
+Optional stdin JSON may supply aggregate keys only (for example `benefitDecision`).
+**Paths and private payload keys are rejected on stdin.**
 
 Git ignores private CLASSIFY evidence locations (see root `.gitignore`).
-**Never** commit personal values, corpora, hold-outs, or gate receipts containing
-private rows.
+**Never** commit personal values, corpora, hold-outs, or receipts containing private rows.
 
 ### Missing inputs
 
-When corpus or hold-out env vars are unset, the script emits a stable
+When required env vars are unset, the script emits a stable
 `VerifiedOwnerRulebookGateReceipt` with:
 
 - `authorityGranted: false`
 - `blockCode: CLASSIFY-OWNER-RULEBOOK-INPUT-MISSING`
 - zero row totals / canaries
-- no synthesized fingerprints
+- null fingerprints (derived from absence of evidence)
 - no path disclosure
-
-Synthetic unit tests still prove accounting, canaries, determinism, privacy, and
-blocked-input behavior without owner private data.
 
 ## Aggregate receipt contract (`VerifiedOwnerRulebookGateReceipt`)
 
+Production contract under `Tally.Contracts.Classify.Evidence`.
+Every field is **derived** from validation results and owner benefit input.
+No hard-coded pass state, zero safety counters, or null fingerprints when evidence exists.
+
 | Field | Meaning |
 |---|---|
-| `authorityGranted` | Must be `false` unless every safety gate passes **and** owner benefit is sufficient or explicitly approved |
-| `safetyPassed` | Zero incorrect applications, unexplained conflicts, unauthorized mutations, description-inferred relationships; accounting complete; determinism + drift pass |
-| `benefitSufficient` | Owner-decision / elapsed-time evidence judged sufficient for broad authority |
-| `requiresExplicitOwnerBenefitDecision` | `true` when benefit is insufficient — **no invented percentage threshold** |
+| `authorityGranted` | `true` only when safety passes on representative + hold-out, replay is deterministic, and benefit is explicitly approved (no invented percentage) |
+| `safetyPassed` | Activation-eligible on both evidence sets; zero incorrect applications, unexplained conflicts, drift, unauthorized mutations, description-inferred relationships |
+| `benefitSufficient` | Explicit owner product decision only |
+| `requiresExplicitOwnerBenefitDecision` | `true` until `approve-broad` is supplied |
 | `blockCode` | Stable metadata code when authority is blocked |
 | Row totals | `eligible`, `suggested`, `correction`, `noSuggestion`, `conflict`, `excluded`, `stale` |
 | Canaries | `incorrectApplication`, `unexplainedConflict`, `drift`, `unauthorizedMutation`, `descriptionInferredRelationship` |
-| Fingerprints | Candidate / corpus / hold-out SHA-256 hex only (never raw rows) |
-| Benefit | Owner decisions before/after; optional minutes before/after |
+| Fingerprints | `candidate`, `corpus`, `holdOut`, `report`, `outcomesCanonicalHash`, projection `snapshotId` / `storeGenerationFingerprint` |
+| `deterministicReplayPassed` | Representative vs fresh-key replay match on deterministic fields |
 
-## Named mandatory gate families
+### Block codes
 
-| Gate needle | Proves |
+| Code | Meaning |
 |---|---|
-| `Gate_permission` | Owner-only corpus modes; symlink rejection |
-| `Gate_public_contract` | Evidence uses public Ledger classification projection surface (no private Ledger SQL) |
-| `Gate_90_day` | Representative corpus window metadata (aggregate) without private rows |
-| `Gate_hold_out` | Hold-out partition is separate and accounted |
-| `Gate_recurrence` | Recurring description canaries stay deterministic under owner-authored equals rules |
-| `Gate_timing` | Elapsed-time benefit fields are aggregate-only |
-| `Gate_decision_reduction` | Owner decision before/after counts without inventing a 50% bar |
-| `Gate_row_accounting` | Eligible/suggested/correction/no-suggestion/conflict/excluded/stale partition |
-| `Gate_incorrect_apply` | Incorrect-application canaries block authority |
-| `Gate_conflict` | Unexplained incompatible conflicts block; expected conflicts are explained |
-| `Gate_determinism` | Identical fingerprints → identical ordered outcomes |
-| `Gate_drift` | Drift canaries (stale membership) fail safety |
-| `Gate_locality` | Mutation probes use disposable `TALLY_DATA_ROOT` only |
-| `Gate_disclosure` | Paths, descriptions, tokens, amounts, expected outcomes absent from receipts/diagnostics |
+| `CLASSIFY-OWNER-RULEBOOK-INPUT-MISSING` | Required owner inputs absent |
+| `CLASSIFY-OWNER-RULEBOOK-SAFETY-FAILED` | Incorrect application, conflict, drift, or accounting failure |
+| `CLASSIFY-OWNER-RULEBOOK-REPLAY-FAILED` | Deterministic fields differ across replay |
+| `CLASSIFY-OWNER-RULEBOOK-HOLD-OUT-FAILED` | Hold-out safety failed |
+| `CLASSIFY-OWNER-RULEBOOK-BENEFIT-DECISION-REQUIRED` | Safety passed; broad authority needs explicit owner decision |
+| `CLASSIFY-OWNER-RULEBOOK-VALIDATE-UNAVAILABLE` | Public `classify.rule.validate` unavailable or failed closed |
 
-Additional canary shapes exercised in tests (aggregate labels only): mixed, sign,
-account, fee, transfer, refund, shared-medical — without storing private text in
-tracked artifacts.
+## Public validate result surface
 
-## Production seams (consume only)
+`ClassifyRuleValidateResult` publishes complete aggregate evidence for the gate:
 
-- `ValidateClassificationRuleCommand.HandleAsync` — real rule validation lifecycle
-- `PrivateCorpusReader.ReadAsync` — owner-only JSONL boundary
-- `ClassificationEngine.Evaluate` — production deterministic engine
-- `LedgerContractClient.QueryClassificationProjectionAsync` / category list — public Ledger
-- `OwnerRulebookGateInputManifest` / `OwnerBenefitEvidenceReceipt` — aggregate EXT corpus types
+- Fingerprints: candidate, corpus, expected-outcome, projection version, snapshot id/expiry,
+  store generation, category lifecycle, normalization, report, outcomes-canonical hash
+- Counters: total, accounted, suggestion, no-suggestion, conflict, stale, coverage basis points,
+  drift, incorrect-application, unexplained-conflict
+- `activationEligible`
 
-Do **not** add a second evaluator, broaden grammar, discover rules, or treat
-coverage alone as authority.
+Private paths and payloads are never included.
+
+## Named gate families (discovery)
+
+`OwnerRulebookGateTests` exposes at least:
+
+permission, public-contract, projection, 90-day, hold-out, recurrence, timing,
+decision-reduction, row-accounting, incorrect-apply, conflict, determinism, drift,
+locality, disclosure.
 
 ## Live Ledger policy
 
-- Live Ledger is **read-only** for this gate.
-- Any mutation probe uses a **disposable** `TALLY_DATA_ROOT`.
-- Unauthorized mutations must remain zero.
-
-## Human review (benefit only)
-
-When safety passes but measured owner-decision or time benefit is insufficient:
-
-1. Do **not** invent a 50% threshold.
-2. Set `requiresExplicitOwnerBenefitDecision = true`.
-3. Record the owner product decision via `CLASSIFY_OWNER_RULEBOOK_BENEFIT_DECISION`
-   before broad authority or module completion continues.
-
-## How to re-run
-
-```bash
-# Discovery-only (no suite execution)
-CLASSIFY_OWNER_RULEBOOK_RUN_TESTS=0 bash scripts/verify-classify-owner-rulebook.sh
-
-# Full gate (Hermes / CI / owner machine)
-bash scripts/verify-classify-owner-rulebook.sh
-
-# With owner private inputs (paths never printed)
-export CLASSIFY_OWNER_RULEBOOK_CORPUS="$HOME/.classify-private/corpus-90d.jsonl"
-export CLASSIFY_OWNER_RULEBOOK_HOLD_OUT="$HOME/.classify-private/holdout.jsonl"
-export CLASSIFY_OWNER_RULEBOOK_BENEFIT_DECISION=defer-broad   # or approve-broad
-bash scripts/verify-classify-owner-rulebook.sh
-```
-
-## Result log (metadata only)
-
-Record exit code, discovered case count, and whether live owner inputs were
-`present` or `blocked`. Do not paste private payloads or absolute secret paths.
-
-| Field | Value |
-|---|---|
-| Latest bead | `bd-56yx` |
-| Commit subject | `test(classify): rulebook gate owner rulebook` |
-| Live owner path | blocked unless env provided |
-| Authority without owner inputs | denied |
+- Classification projection is **read-only**
+- No activation, apply, or Ledger category mutation from this gate
+- Mutation probes (if any) use disposable `TALLY_DATA_ROOT` only

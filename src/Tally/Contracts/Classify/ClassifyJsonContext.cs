@@ -1,7 +1,9 @@
 using System.Text.Json.Serialization;
+using Tally.Contracts.Classify.Evidence;
 using Tally.Contracts.Classify.Operations;
 using Tally.Contracts.Classify.Rules;
 using Tally.Contracts.Common;
+using Tally.Infrastructure.Classify.Corpus;
 
 namespace Tally.Contracts.Classify;
 
@@ -51,5 +53,8 @@ namespace Tally.Contracts.Classify;
 [JsonSerializable(typeof(ClassifyOutcomeKind))]
 [JsonSerializable(typeof(ClassifyApplyItemResultKind))]
 [JsonSerializable(typeof(OperationLimits))]
+[JsonSerializable(typeof(VerifiedOwnerRulebookGateReceipt))]
+[JsonSerializable(typeof(OwnerRulebookGateInputManifest))]
+[JsonSerializable(typeof(OwnerBenefitEvidenceReceipt))]
 [JsonSerializable(typeof(string[]))]
 public partial class ClassifyJsonContext : JsonSerializerContext;

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.Versioning;
 using System.Text.Json;
 using Tally.Application;
@@ -10,6 +11,7 @@ using Tally.Contracts.Ledger.Categories;
 using Tally.Domain.Classify.Evaluation;
 using Tally.Domain.Classify.Normalization;
 using Tally.Domain.Classify.Rules;
+using Tally.Domain.Ledger;
 using Tally.Features.Classify.Contract;
 using Tally.Infrastructure.Classify.Corpus;
 using Tally.Infrastructure.Classify.Storage;
@@ -193,6 +195,46 @@ public sealed class ValidateClassificationRuleCommand
                 return CommandResult<ClassifyRuleValidateResult>.Failure(ClassifyErrors.ResourceLimit);
             }
 
+            // Complete frozen public classification_v1 projection (evaluation purpose).
+            // Every private row must bind exactly once to a projection member with matching fields.
+            var projection = await ledger.QueryClassificationProjectionAsync(
+                ClassificationProjectionPurpose.Evaluation,
+                CategoryContractVersions.Current,
+                actor,
+                ct);
+            if (!projection.IsSuccess || projection.Value is null)
+            {
+                return CommandResult<ClassifyRuleValidateResult>.Failure(
+                    ClassifyContractMapper.MapLedgerCategoryListError(projection.Error));
+            }
+
+            if (!string.Equals(
+                    projection.Value.ProjectionVersion,
+                    ClassificationProjectionVersions.ClassificationV1,
+                    StringComparison.Ordinal)
+                || string.IsNullOrWhiteSpace(projection.Value.SnapshotId)
+                || string.IsNullOrWhiteSpace(projection.Value.ExpiresAt)
+                || string.IsNullOrWhiteSpace(projection.Value.StoreGenerationFingerprint))
+            {
+                return CommandResult<ClassifyRuleValidateResult>.Failure(ClassifyErrors.Stale);
+            }
+
+            var projectionItems = projection.Value.ClassificationItems ?? Array.Empty<ClassificationProjectionItem>();
+            if (!TryBindPrivateRowsToProjection(
+                    corpus.Rows,
+                    projectionItems,
+                    out var boundItems,
+                    out var bindError))
+            {
+                return CommandResult<ClassifyRuleValidateResult>.Failure(bindError!);
+            }
+
+            // Prefer catalogue fingerprint from the frozen projection when present.
+            if (!string.IsNullOrWhiteSpace(projection.Value.CategoryIdentityLifecycleFingerprint))
+            {
+                categoryLifecycleFingerprint = projection.Value.CategoryIdentityLifecycleFingerprint!;
+            }
+
             var candidateFingerprint = ValidationReportBuilder.ComputeCandidateFingerprint(
                 loaded.Select(l => (
                     l.Version.RuleVersionId,
@@ -203,14 +245,16 @@ public sealed class ValidateClassificationRuleCommand
             var expectedOutcomeFingerprint =
                 ValidationReportBuilder.ComputeExpectedOutcomeFingerprint(corpus.Rows);
             var orderedItemsFingerprint = EvaluationFingerprint.ComputeOrderedItemsFingerprint(
-                corpus.Rows.Select(r => (r.Ordinal, r.TransactionId, r.ItemLifecycleFingerprint)));
+                boundItems.Select(r => (r.Ordinal, r.TransactionId, r.ItemLifecycleFingerprint)));
 
             var requestElement = BuildFingerprintElement(
                 candidateIds,
                 corpus.Fingerprint.Sha256Hex,
                 candidateFingerprint,
                 expectedOutcomeFingerprint,
-                categoryLifecycleFingerprint);
+                categoryLifecycleFingerprint,
+                projection.Value.SnapshotId,
+                projection.Value.StoreGenerationFingerprint!);
             var requestFingerprint = ClassifyOperationIdempotencyStore.ComputeRequestFingerprint(
                 ClassifyOperationIds.RuleValidate,
                 ClassifyOperationIds.ContractVersion,
@@ -232,9 +276,9 @@ public sealed class ValidateClassificationRuleCommand
             var evaluationFingerprint = EvaluationFingerprint.Create(
                 CategoryContractVersions.Current,
                 ClassificationProjectionVersions.ClassificationV1,
-                CanonicalClassificationHasher.HashUtf8("classify.rule.validate"),
-                validationId,
-                "2099-01-01T00:00:00.0000000Z",
+                projection.Value.StoreGenerationFingerprint!,
+                projection.Value.SnapshotId,
+                projection.Value.ExpiresAt,
                 categoryLifecycleFingerprint,
                 NormalizationDescriptor.V1.Version,
                 candidateFingerprint,
@@ -243,10 +287,10 @@ public sealed class ValidateClassificationRuleCommand
             var engineRules = loaded
                 .Select(l => new ActiveRuleVersion(l.Version.RuleVersionId, l.Version.CategoryId, l.Conditions))
                 .ToArray();
-            var engineItems = corpus.Rows.Select(r => r.ToEvaluationItem()).ToArray();
+            // Evaluate bound projection-aligned items only (production engine — no second evaluator).
             var evaluation = ClassificationEngine.Evaluate(new ClassificationEvaluationRequest(
                 evaluationFingerprint,
-                engineItems,
+                boundItems,
                 engineRules,
                 activeCategoryIds));
 
@@ -261,12 +305,27 @@ public sealed class ValidateClassificationRuleCommand
             var result = new ClassifyRuleValidateResult(
                 ClassifyOperationIds.ContractVersion,
                 validationId,
+                candidateFingerprint,
                 corpus.Fingerprint.Sha256Hex,
+                expectedOutcomeFingerprint,
+                ClassificationProjectionVersions.ClassificationV1,
+                projection.Value.SnapshotId,
+                projection.Value.ExpiresAt,
+                projection.Value.StoreGenerationFingerprint!,
+                categoryLifecycleFingerprint,
+                NormalizationDescriptor.V1.Version,
+                built.Report.ReportFingerprint,
+                evaluation.OutcomesCanonicalHash,
                 built.Report.TotalRows,
+                built.Report.AccountedRows,
                 built.Report.SuggestionCount,
                 built.Report.NoSuggestionCount,
                 built.Report.ConflictCount,
+                built.Report.StaleCount,
+                built.Report.CoverageBasisPoints,
+                built.Report.DriftCanaryCount,
                 built.Report.IncorrectApplicationCanaryCount,
+                built.Report.UnexplainedConflictCount,
                 built.ActivationEligible);
 
             var origins = loaded.Select(l => l.Version.RuleOrigin).Distinct(StringComparer.Ordinal).ToArray();
@@ -452,7 +511,9 @@ public sealed class ValidateClassificationRuleCommand
         string corpusFingerprint,
         string candidateFingerprint,
         string expectedOutcomeFingerprint,
-        string categoryLifecycleFingerprint)
+        string categoryLifecycleFingerprint,
+        string snapshotId,
+        string storeGenerationFingerprint)
     {
         // AOT-safe: manual Utf8JsonWriter — no reflection serializer.
         using var stream = new MemoryStream();
@@ -473,9 +534,145 @@ public sealed class ValidateClassificationRuleCommand
             writer.WriteString("expectedOutcomeFingerprint", expectedOutcomeFingerprint);
             writer.WriteString("normalizationVersion", NormalizationDescriptor.V1.Version);
             writer.WriteString("projectionContractVersion", ClassificationProjectionVersions.ClassificationV1);
+            writer.WriteString("snapshotId", snapshotId);
+            writer.WriteString("storeGenerationFingerprint", storeGenerationFingerprint);
             writer.WriteEndObject();
         }
 
         return JsonDocument.Parse(stream.ToArray()).RootElement.Clone();
+    }
+
+    /// <summary>
+    /// Bind each private corpus row exactly once to a frozen public classification_v1 projection member.
+    /// Requires matching account, description, direction, absolute amount, and lifecycle fingerprint
+    /// derived from the public revision tuple. Failures are metadata-only (no private payload retained).
+    /// </summary>
+    internal static bool TryBindPrivateRowsToProjection(
+        IReadOnlyList<PrivateCorpusRow> privateRows,
+        IReadOnlyList<ClassificationProjectionItem> projectionItems,
+        out IReadOnlyList<ClassificationEvaluationItem> boundItems,
+        out string? errorCode)
+    {
+        boundItems = Array.Empty<ClassificationEvaluationItem>();
+        errorCode = null;
+
+        if (privateRows.Count == 0)
+        {
+            boundItems = Array.Empty<ClassificationEvaluationItem>();
+            return true;
+        }
+
+        var byTx = new Dictionary<string, ClassificationProjectionItem>(StringComparer.Ordinal);
+        foreach (var item in projectionItems)
+        {
+            if (!byTx.TryAdd(item.TransactionId, item))
+            {
+                errorCode = ClassifyErrors.Integrity;
+                return false;
+            }
+        }
+
+        var seenPrivate = new HashSet<string>(StringComparer.Ordinal);
+        var bound = new List<ClassificationEvaluationItem>(privateRows.Count);
+        foreach (var row in privateRows.OrderBy(r => r.Ordinal).ThenBy(r => r.TransactionId, StringComparer.Ordinal))
+        {
+            if (!seenPrivate.Add(row.TransactionId))
+            {
+                errorCode = ClassifyErrors.Integrity;
+                return false;
+            }
+
+            if (!byTx.TryGetValue(row.TransactionId, out var publicItem))
+            {
+                // Missing from frozen evaluation projection — fail closed before authority.
+                errorCode = ClassifyErrors.Stale;
+                return false;
+            }
+
+            if (!TryMatchPrivateToPublic(row, publicItem, out var matchedItem))
+            {
+                errorCode = ClassifyErrors.Stale;
+                return false;
+            }
+
+            bound.Add(matchedItem);
+        }
+
+        // Every private row accounted; extras on the public projection are allowed (eligible universe may be larger).
+        boundItems = bound;
+        return true;
+    }
+
+    private static bool TryMatchPrivateToPublic(
+        PrivateCorpusRow row,
+        ClassificationProjectionItem publicItem,
+        out ClassificationEvaluationItem evaluationItem)
+    {
+        evaluationItem = null!;
+
+        if (!string.Equals(row.AccountId, publicItem.AccountId, StringComparison.Ordinal)
+            || !string.Equals(row.SourceDescription, publicItem.SourceDescription, StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        if (!TryMapPublicAmount(publicItem, out var direction, out var absoluteMinor))
+        {
+            return false;
+        }
+
+        if (!string.Equals(row.AmountDirection, direction, StringComparison.Ordinal)
+            || row.AmountAbsoluteMinor != absoluteMinor)
+        {
+            return false;
+        }
+
+        var lifecycle = ComputeItemLifecycleFingerprint(publicItem);
+        if (!string.Equals(row.ItemLifecycleFingerprint, lifecycle, StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        evaluationItem = new ClassificationEvaluationItem(
+            row.Ordinal,
+            row.TransactionId,
+            row.AccountId,
+            row.SourceDescription,
+            row.AmountDirection,
+            row.AmountAbsoluteMinor,
+            row.ItemLifecycleFingerprint);
+        return true;
+    }
+
+    /// <summary>Public revision-tuple fingerprint used to bind private rows without retaining payloads.</summary>
+    public static string ComputeItemLifecycleFingerprint(ClassificationProjectionItem item) =>
+        CanonicalClassificationHasher.HashParts(
+            item.TransactionRevision,
+            item.RelationshipRevision,
+            item.AllocationRevision);
+
+    public static bool TryMapPublicAmount(
+        ClassificationProjectionItem item,
+        out string? direction,
+        out long absoluteMinor)
+    {
+        direction = null;
+        absoluteMinor = 0;
+        if (!Money.TryParse(item.SignedAmount, out var money, out _))
+        {
+            return false;
+        }
+
+        absoluteMinor = money.MinorUnits == long.MinValue
+            ? long.MaxValue
+            : Math.Abs(money.MinorUnits);
+        direction = item.AmountDirection switch
+        {
+            ClassificationAmountDirection.Expense => ClassificationRuleVocabulary.DirectionOutflow,
+            ClassificationAmountDirection.Income => ClassificationRuleVocabulary.DirectionInflow,
+            ClassificationAmountDirection.Zero => null,
+            _ => null
+        };
+        return true;
     }
 }

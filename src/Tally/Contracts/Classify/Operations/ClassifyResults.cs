@@ -96,15 +96,35 @@ public sealed record ClassifyRuleSaveResult(
     [property: JsonRequired] string CategoryId,
     [property: JsonRequired] string NormalizationVersion);
 
+/// <summary>
+/// Complete aggregate-only classify.rule.validate result for pre-authority gates.
+/// Includes fingerprints, exact counters, canaries, and deterministic outcomes hash —
+/// never private paths, descriptions, tokens, amounts, or raw rows.
+/// </summary>
 public sealed record ClassifyRuleValidateResult(
     [property: JsonRequired] string ContractVersion,
     [property: JsonRequired] string ValidationId,
+    [property: JsonRequired] string CandidateFingerprint,
     [property: JsonRequired] string CorpusFingerprint,
+    [property: JsonRequired] string ExpectedOutcomeFingerprint,
+    [property: JsonRequired] string ProjectionVersion,
+    [property: JsonRequired] string SnapshotId,
+    [property: JsonRequired] string SnapshotExpiresAt,
+    [property: JsonRequired] string StoreGenerationFingerprint,
+    [property: JsonRequired] string CategoryLifecycleFingerprint,
+    [property: JsonRequired] string NormalizationVersion,
+    [property: JsonRequired] string ReportFingerprint,
+    [property: JsonRequired] string OutcomesCanonicalHash,
     [property: JsonRequired] int TotalRows,
+    [property: JsonRequired] int AccountedRows,
     [property: JsonRequired] int SuggestionCount,
     [property: JsonRequired] int NoSuggestionCount,
     [property: JsonRequired] int ConflictCount,
+    [property: JsonRequired] int StaleCount,
+    [property: JsonRequired] int CoverageBasisPoints,
+    [property: JsonRequired] int DriftCanaryCount,
     [property: JsonRequired] int IncorrectApplicationCanaries,
+    [property: JsonRequired] int UnexplainedConflictCount,
     [property: JsonRequired] bool ActivationEligible);
 
 public sealed record ClassifyRuleActivateResult(
