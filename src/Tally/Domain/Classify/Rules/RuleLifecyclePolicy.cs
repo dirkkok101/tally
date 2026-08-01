@@ -79,8 +79,33 @@ public static class RuleLifecyclePolicy
 
     /// <summary>
     /// Broad apply is false by default. True only when the owner explicitly requests it
-    /// against current activation-eligible evidence — never from stale or missing reports.
-    /// Does not invent a coverage/benefit percentage threshold.
+    /// AND the same trusted granted receipt authorizes it — never from a caller-supplied bool,
+    /// shell-derived JSON, or incomplete evidence. Does not invent a benefit percentage threshold.
+    /// </summary>
+    public static bool AuthorizeBroadApply(
+        bool requestedBroadApply,
+        OwnerRulebookGateReceiptRow receipt,
+        string? evidenceError)
+    {
+        if (!requestedBroadApply)
+        {
+            return false;
+        }
+
+        if (evidenceError is not null)
+        {
+            return false;
+        }
+
+        return receipt.AuthorityGranted
+            && receipt.BlockCode is null
+            && receipt.BenefitSufficient
+            && receipt.SafetyPassed;
+    }
+
+    /// <summary>
+    /// Legacy report-only check retained for pure policy unit cases without a receipt.
+    /// Production activation always uses the receipt overload.
     /// </summary>
     public static bool AuthorizeBroadApply(
         bool requestedBroadApply,
@@ -102,6 +127,58 @@ public static class RuleLifecyclePolicy
             && report.DriftCanaryCount == 0
             && report.TotalRows == report.AccountedRows
             && report.TotalRows > 0;
+    }
+
+    /// <summary>
+    /// Trusted receipt must be granted, unbound from caller forgery, and bound to the
+    /// representative validation run and exact aggregate fingerprints.
+    /// </summary>
+    public static string? ValidateGrantedReceipt(
+        OwnerRulebookGateReceiptRow? receipt,
+        string validationId,
+        ClassificationValidationRunRow run,
+        ClassificationValidationReportRow report)
+    {
+        if (receipt is null)
+        {
+            return ClassifyErrors.NotFound;
+        }
+
+        if (!receipt.AuthorityGranted || receipt.BlockCode is not null)
+        {
+            return ClassifyErrors.Lifecycle;
+        }
+
+        if (!string.Equals(receipt.RepresentativeValidationRunId, validationId, StringComparison.Ordinal))
+        {
+            return ClassifyErrors.Lifecycle;
+        }
+
+        if (!string.Equals(run.ValidationRunId, validationId, StringComparison.Ordinal)
+            || !string.Equals(report.ValidationRunId, validationId, StringComparison.Ordinal))
+        {
+            return ClassifyErrors.Integrity;
+        }
+
+        if (!string.Equals(receipt.CandidateFingerprint, run.CandidateFingerprint, StringComparison.Ordinal)
+            || !string.Equals(receipt.CorpusFingerprint, run.CorpusFingerprint, StringComparison.Ordinal)
+            || !string.Equals(receipt.ProjectionVersion, run.ProjectionContractVersion, StringComparison.Ordinal)
+            || !string.Equals(receipt.SnapshotId, run.SnapshotId, StringComparison.Ordinal)
+            || !string.Equals(receipt.StoreGenerationFingerprint, run.StoreGenerationFingerprint, StringComparison.Ordinal)
+            || !string.Equals(receipt.CategoryLifecycleFingerprint, run.CategoryLifecycleFingerprint, StringComparison.Ordinal)
+            || !string.Equals(receipt.NormalizationVersion, run.NormalizationVersion, StringComparison.Ordinal)
+            || !string.Equals(receipt.ReportFingerprint, report.ReportFingerprint, StringComparison.Ordinal)
+            || !string.Equals(receipt.OutcomesCanonicalHash, report.OutcomesCanonicalHash, StringComparison.Ordinal))
+        {
+            return ClassifyErrors.Stale;
+        }
+
+        if (string.IsNullOrWhiteSpace(receipt.ReceiptFingerprint) || receipt.ReceiptFingerprint.Length != 64)
+        {
+            return ClassifyErrors.Integrity;
+        }
+
+        return null;
     }
 
     /// <summary>

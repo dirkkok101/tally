@@ -56,11 +56,20 @@ assert_no_private_disclosure() {
 }
 
 # Invoke public classify.rule.validate via JSON stdin. Never echoes request body.
-# Arguments: corpus_path_env_var_value is NOT printed. candidate list from env (comma-separated).
+# Arguments: corpus path (never printed), idempotency key, candidates CSV.
+# Optional finalization (hold-out only): rep_id, replay_id, benefit decision, before, after, min_before, min_after.
+# Authority is never derived from shell JSON alone — finalization is performed by production rule.validate.
 invoke_rule_validate() {
     local corpus_path="$1"
     local idem_key="$2"
     local candidates_csv="$3"
+    local rep_id="${4:-}"
+    local replay_id="${5:-}"
+    local benefit_decision="${6:-}"
+    local decisions_before="${7:-}"
+    local decisions_after="${8:-}"
+    local minutes_before="${9:-}"
+    local minutes_after="${10:-}"
     local actor_kind="${CLASSIFY_OWNER_ACTOR_KIND:-automation}"
     local actor_label="${CLASSIFY_OWNER_ACTOR_LABEL:-owner-rulebook-gate}"
     local actor_run="${CLASSIFY_OWNER_ACTOR_RUN:-gate}"
@@ -86,9 +95,32 @@ invoke_rule_validate() {
     fi
 
     # corpusSource must not be logged; written only to the process stdin payload.
+    # Optional finalization fields finalize a trusted receipt inside production (not shell-derived authority).
+    local finalize_json=""
+    if [[ -n "${rep_id}" && -n "${replay_id}" && -n "${decisions_before}" && -n "${decisions_after}" ]]; then
+        finalize_json="$(python3 - "$rep_id" "$replay_id" "$benefit_decision" "$decisions_before" "$decisions_after" "$minutes_before" "$minutes_after" <<'PY'
+import json,sys
+rep,replay,decision,before,after,mb,ma=sys.argv[1:8]
+payload={
+  "representativeValidationId":rep,
+  "independentReplayValidationId":replay,
+  "ownerDecisionCountBefore":int(before),
+  "ownerDecisionCountAfter":int(after),
+}
+if decision:
+  payload["explicitBenefitDecision"]=decision
+if mb!="":
+  payload["ownerMinutesBefore"]=float(mb)
+if ma!="":
+  payload["ownerMinutesAfter"]=float(ma)
+print(","+",".join(f'{json.dumps(k)}:{json.dumps(v)}' for k,v in payload.items()))
+PY
+)"
+    fi
+
     local request
     request="$(cat <<EOF
-{"contractVersion":"1.0","actor":{"kind":"${actor_kind}","label":"${actor_label}","runId":"${actor_run}"},"idempotencyKey":"${idem_key}","input":{"contractVersion":"1.0","candidateIds":${ids_json},"corpusSource":$(python3 -c 'import json,sys; print(json.dumps(sys.argv[1]))' "$corpus_path")}}
+{"contractVersion":"1.0","actor":{"kind":"${actor_kind}","label":"${actor_label}","runId":"${actor_run}"},"idempotencyKey":"${idem_key}","input":{"contractVersion":"1.0","candidateIds":${ids_json},"corpusSource":$(python3 -c 'import json,sys; print(json.dumps(sys.argv[1]))' "$corpus_path")${finalize_json}}}
 EOF
 )"
 
@@ -129,116 +161,6 @@ if val is None:
     print("")
 else:
     print(val if not isinstance(val, bool) else ("true" if val else "false"))
-PY
-}
-
-# Mirror VerifiedOwnerRulebookGateReceipt.Derive over aggregate-only public results.
-# Arguments are three public result envelopes, the explicit benefit decision, and
-# aggregate owner decision/time evidence. No private path or payload is accepted.
-derive_receipt() {
-    python3 - "$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" <<'PY'
-import json,sys
-
-def result(blob):
-    doc=json.loads(blob)
-    if isinstance(doc,dict) and isinstance(doc.get("result"),dict):
-        doc=doc["result"]
-    if not isinstance(doc,dict):
-        raise ValueError("invalid result envelope")
-    return doc
-
-def integer(text):
-    value=int(text)
-    if value < 0:
-        raise ValueError("negative aggregate count")
-    return value
-
-def optional_number(text):
-    if text == "":
-        return None
-    value=float(text)
-    if value < 0:
-        raise ValueError("negative aggregate duration")
-    return value
-
-rep=result(sys.argv[1]); replay=result(sys.argv[2]); hold=result(sys.argv[3])
-decision=sys.argv[4].strip()
-before=integer(sys.argv[5]); after=integer(sys.argv[6])
-minutes_before=optional_number(sys.argv[7]); minutes_after=optional_number(sys.argv[8])
-
-replay_fields=(
-    "outcomesCanonicalHash","corpusFingerprint","candidateFingerprint","reportFingerprint",
-    "totalRows","suggestionCount","noSuggestionCount","conflictCount","staleCount",
-    "incorrectApplicationCanaries","unexplainedConflictCount","driftCanaryCount",
-    "activationEligible")
-replay_pass=all(rep.get(k)==replay.get(k) for k in replay_fields)
-
-def safety(value):
-    total=value.get("totalRows")
-    return (
-        value.get("activationEligible") is True
-        and value.get("incorrectApplicationCanaries")==0
-        and value.get("unexplainedConflictCount")==0
-        and value.get("driftCanaryCount")==0
-        and total==value.get("accountedRows")
-        and total==sum(value.get(k, -1) for k in (
-            "suggestionCount","noSuggestionCount","conflictCount","staleCount")))
-
-rep_safety=safety(rep)
-hold_safety=safety(hold)
-safety_pass=rep_safety and hold_safety and replay_pass
-benefit_sufficient=decision in ("approve-broad","approve")
-requires_decision=not benefit_sufficient
-authority=safety_pass and benefit_sufficient
-
-block=None
-if not authority:
-    if not replay_pass:
-        block="CLASSIFY-OWNER-RULEBOOK-REPLAY-FAILED"
-    elif not hold_safety:
-        block="CLASSIFY-OWNER-RULEBOOK-HOLD-OUT-FAILED"
-    elif not rep_safety:
-        block="CLASSIFY-OWNER-RULEBOOK-SAFETY-FAILED"
-    else:
-        block="CLASSIFY-OWNER-RULEBOOK-BENEFIT-DECISION-REQUIRED"
-
-receipt={
-    "schemaVersion":1,
-    "receiptKind":"VerifiedOwnerRulebookGateReceipt",
-    "authorityGranted":authority,
-    "safetyPassed":safety_pass,
-    "benefitSufficient":benefit_sufficient,
-    "requiresExplicitOwnerBenefitDecision":requires_decision,
-    "blockCode":block,
-    "eligibleRows":rep["totalRows"],
-    "suggestedRows":rep["suggestionCount"],
-    "correctionRows":0,
-    "noSuggestionRows":rep["noSuggestionCount"],
-    "conflictRows":rep["conflictCount"],
-    "excludedRows":0,
-    "staleRows":rep["staleCount"],
-    "incorrectApplicationCanaries":rep["incorrectApplicationCanaries"],
-    "unexplainedConflictCount":rep["unexplainedConflictCount"],
-    "driftCanaryCount":rep["driftCanaryCount"],
-    "unauthorizedMutationCount":0,
-    "descriptionInferredRelationshipCount":0,
-    "coverageBasisPoints":rep["coverageBasisPoints"],
-    "ownerDecisionCountBefore":before,
-    "ownerDecisionCountAfter":after,
-    "elapsedOwnerMinutesBefore":minutes_before,
-    "elapsedOwnerMinutesAfter":minutes_after,
-    "candidateFingerprint":rep["candidateFingerprint"],
-    "corpusFingerprint":rep["corpusFingerprint"],
-    "holdOutFingerprint":hold["corpusFingerprint"],
-    "reportFingerprint":rep["reportFingerprint"],
-    "outcomesCanonicalHash":rep["outcomesCanonicalHash"],
-    "deterministicReplayPassed":replay_pass,
-    "disclosurePassed":True,
-    "localityPassed":True,
-    "projectionVersion":rep["projectionVersion"],
-    "snapshotId":rep["snapshotId"],
-    "storeGenerationFingerprint":rep["storeGenerationFingerprint"]}
-print(json.dumps(receipt,separators=(",",":")))
 PY
 }
 
@@ -413,26 +335,19 @@ section "Public-contract live validate path"
 if [[ "${owner_live_path}" == "blocked" ]]; then
     printf 'live owner path: blocked (CLASSIFY-OWNER-RULEBOOK-INPUT-MISSING)\n'
 else
-    # Representative validation
+    # Representative validation (aggregate only; no shell authority).
     invoke_rule_validate "${owner_corpus}" "or-rep-$(date +%s)-$$" "${owner_candidates}" || true
     rep_out="${VALIDATE_STDOUT:-}"
     rep_exit="${VALIDATE_EXIT:-1}"
     assert_no_private_disclosure "${rep_out}"
 
-    # Fresh-key identical replay
+    # Fresh-key independent replay.
     invoke_rule_validate "${owner_corpus}" "or-replay-$(date +%s)-$$" "${owner_candidates}" || true
     replay_out="${VALIDATE_STDOUT:-}"
     replay_exit="${VALIDATE_EXIT:-1}"
     assert_no_private_disclosure "${replay_out}"
 
-    # Hold-out
-    invoke_rule_validate "${owner_holdout}" "or-hold-$(date +%s)-$$" "${owner_candidates}" || true
-    hold_out="${VALIDATE_STDOUT:-}"
-    hold_exit="${VALIDATE_EXIT:-1}"
-    assert_no_private_disclosure "${hold_out}"
-
-    if [[ "${rep_exit}" -ne 0 || "${replay_exit}" -ne 0 || "${hold_exit}" -ne 0 ]]; then
-        # Public handler or required owner state is unavailable. Fail closed.
+    if [[ "${rep_exit}" -ne 0 || "${replay_exit}" -ne 0 ]]; then
         blocked="$(emit_blocked_receipt "CLASSIFY-OWNER-RULEBOOK-VALIDATE-UNAVAILABLE")"
         printf '%s\n' "$blocked"
         assert_no_private_disclosure "$blocked"
@@ -445,19 +360,45 @@ else
             printf 'benefit decision must be approve-broad, approve, defer-broad, or empty\n' >&2
             exit 1
         fi
-        receipt="$(derive_receipt \
-            "$rep_out" "$replay_out" "$hold_out" "$owner_benefit_decision" \
-            "$owner_decisions_before" "$owner_decisions_after" \
-            "$owner_minutes_before" "$owner_minutes_after")"
-        printf '%s\n' "$receipt"
-        assert_no_private_disclosure "$receipt"
-        receipt_authority="$(json_field "$receipt" "authorityGranted")"
-        receipt_block="$(json_field "$receipt" "blockCode")"
-        if [[ "$receipt_authority" == "true" ]]; then
-            printf 'live path: representative+replay+hold-out+benefit gates passed; authorityGranted=true\n'
+        rep_id="$(json_field "$rep_out" "validationId")"
+        replay_id="$(json_field "$replay_out" "validationId")"
+        if [[ -z "${rep_id}" || -z "${replay_id}" ]]; then
+            blocked="$(emit_blocked_receipt "CLASSIFY-OWNER-RULEBOOK-VALIDATE-UNAVAILABLE")"
+            printf '%s\n' "$blocked"
+            assert_no_private_disclosure "$blocked"
+            printf 'public validate missing validation identity; authorityGranted=false\n'
         else
-            printf 'live path blocked by %s; authorityGranted=false\n' \
-                "${receipt_block:-CLASSIFY-OWNER-RULEBOOK-SAFETY-FAILED}"
+            # Hold-out finalizes the trusted receipt inside production rule.validate.
+            # Shell never treats aggregate JSON as authority — only receipt identity is observed.
+            invoke_rule_validate \
+                "${owner_holdout}" "or-hold-$(date +%s)-$$" "${owner_candidates}" \
+                "${rep_id}" "${replay_id}" "${owner_benefit_decision}" \
+                "${owner_decisions_before}" "${owner_decisions_after}" \
+                "${owner_minutes_before}" "${owner_minutes_after}" || true
+            hold_out="${VALIDATE_STDOUT:-}"
+            hold_exit="${VALIDATE_EXIT:-1}"
+            assert_no_private_disclosure "${hold_out}"
+
+            if [[ "${hold_exit}" -ne 0 ]]; then
+                blocked="$(emit_blocked_receipt "CLASSIFY-OWNER-RULEBOOK-VALIDATE-UNAVAILABLE")"
+                printf '%s\n' "$blocked"
+                assert_no_private_disclosure "$blocked"
+                printf 'public hold-out finalize unavailable or failed; authorityGranted=false\n'
+            else
+                receipt_id="$(json_field "$hold_out" "ownerRulebookGateReceiptId")"
+                receipt_fp="$(json_field "$hold_out" "ownerRulebookGateReceiptFingerprint")"
+                # Emit identity-only observation for operators (no private payload; no shell authority bool).
+                printf '{"schemaVersion":1,"receiptKind":"VerifiedOwnerRulebookGateReceipt","ownerRulebookGateReceiptId":%s,"ownerRulebookGateReceiptFingerprint":%s,"holdOutValidationId":%s}\n' \
+                    "$(python3 -c 'import json,sys; print(json.dumps(sys.argv[1]))' "${receipt_id}")" \
+                    "$(python3 -c 'import json,sys; print(json.dumps(sys.argv[1]))' "${receipt_fp}")" \
+                    "$(python3 -c 'import json,sys; print(json.dumps(sys.argv[1]))' "$(json_field "$hold_out" "validationId")")"
+                assert_no_private_disclosure "${hold_out}"
+                if [[ -n "${receipt_id}" && -n "${receipt_fp}" ]]; then
+                    printf 'live path: production finalized trusted receipt identity (authority not shell-derived)\n'
+                else
+                    printf 'live path: hold-out completed without receipt identity; authority remains production-gated\n'
+                fi
+            fi
         fi
     fi
 fi

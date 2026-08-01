@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Runtime.Versioning;
 using Microsoft.Data.Sqlite;
+using Tally.Contracts.Classify.Operations;
 
 namespace Tally.Infrastructure.Classify.Storage.Rules;
 
@@ -45,11 +46,13 @@ public sealed class ClassificationValidationStore
             INSERT INTO validation_run (
                 validation_run_id, candidate_fingerprint, rule_origin, corpus_fingerprint,
                 expected_outcome_fingerprint, projection_contract_version, category_lifecycle_fingerprint,
-                normalization_version, started_at, completed_at, lifecycle_state, actor
+                normalization_version, started_at, completed_at, lifecycle_state, actor,
+                snapshot_id, snapshot_expires_at, store_generation_fingerprint
             ) VALUES (
                 $validation_run_id, $candidate_fingerprint, $rule_origin, $corpus_fingerprint,
                 $expected_outcome_fingerprint, $projection_contract_version, $category_lifecycle_fingerprint,
-                $normalization_version, $started_at, NULL, $lifecycle_state, $actor
+                $normalization_version, $started_at, NULL, $lifecycle_state, $actor,
+                $snapshot_id, $snapshot_expires_at, $store_generation_fingerprint
             );
             """;
         command.Parameters.AddWithValue("$validation_run_id", row.ValidationRunId);
@@ -63,6 +66,11 @@ public sealed class ClassificationValidationStore
         command.Parameters.AddWithValue("$started_at", row.StartedAt);
         command.Parameters.AddWithValue("$lifecycle_state", row.LifecycleState);
         command.Parameters.AddWithValue("$actor", row.Actor);
+        command.Parameters.AddWithValue("$snapshot_id", (object?)row.SnapshotId ?? DBNull.Value);
+        command.Parameters.AddWithValue("$snapshot_expires_at", (object?)row.SnapshotExpiresAt ?? DBNull.Value);
+        command.Parameters.AddWithValue(
+            "$store_generation_fingerprint",
+            (object?)row.StoreGenerationFingerprint ?? DBNull.Value);
         await command.ExecuteNonQueryAsync(cancellationToken);
     }
 
@@ -96,13 +104,15 @@ public sealed class ClassificationValidationStore
                     conflict_count, stale_count, coverage_basis_points, drift_canary_count,
                     incorrect_application_canary_count, unexplained_conflict_count,
                     owner_decision_count_before, owner_decision_count_after,
-                    owner_minutes_before, owner_minutes_after, report_fingerprint
+                    owner_minutes_before, owner_minutes_after, report_fingerprint,
+                    outcomes_canonical_hash, activation_eligible
                 ) VALUES (
                     $validation_run_id, $total_rows, $accounted_rows, $suggestion_count, $no_suggestion_count,
                     $conflict_count, $stale_count, $coverage_basis_points, $drift_canary_count,
                     $incorrect_application_canary_count, $unexplained_conflict_count,
                     $owner_decision_count_before, $owner_decision_count_after,
-                    $owner_minutes_before, $owner_minutes_after, $report_fingerprint
+                    $owner_minutes_before, $owner_minutes_after, $report_fingerprint,
+                    $outcomes_canonical_hash, $activation_eligible
                 );
                 """;
             insert.Parameters.AddWithValue("$validation_run_id", report.ValidationRunId);
@@ -121,6 +131,14 @@ public sealed class ClassificationValidationStore
             insert.Parameters.AddWithValue("$owner_minutes_before", (object?)report.OwnerMinutesBefore ?? DBNull.Value);
             insert.Parameters.AddWithValue("$owner_minutes_after", (object?)report.OwnerMinutesAfter ?? DBNull.Value);
             insert.Parameters.AddWithValue("$report_fingerprint", report.ReportFingerprint);
+            insert.Parameters.AddWithValue(
+                "$outcomes_canonical_hash",
+                (object?)report.OutcomesCanonicalHash ?? DBNull.Value);
+            insert.Parameters.AddWithValue(
+                "$activation_eligible",
+                report.ActivationEligible is null
+                    ? DBNull.Value
+                    : report.ActivationEligible.Value ? 1 : 0);
             await insert.ExecuteNonQueryAsync(cancellationToken);
         }
 
@@ -187,7 +205,8 @@ public sealed class ClassificationValidationStore
         command.CommandText = """
             SELECT validation_run_id, candidate_fingerprint, rule_origin, corpus_fingerprint,
                    expected_outcome_fingerprint, projection_contract_version, category_lifecycle_fingerprint,
-                   normalization_version, started_at, completed_at, lifecycle_state, actor
+                   normalization_version, started_at, completed_at, lifecycle_state, actor,
+                   snapshot_id, snapshot_expires_at, store_generation_fingerprint
             FROM validation_run
             WHERE validation_run_id = $id;
             """;
@@ -210,7 +229,10 @@ public sealed class ClassificationValidationStore
             reader.GetString(8),
             reader.IsDBNull(9) ? null : reader.GetString(9),
             reader.GetString(10),
-            reader.GetString(11));
+            reader.GetString(11),
+            reader.IsDBNull(12) ? null : reader.GetString(12),
+            reader.IsDBNull(13) ? null : reader.GetString(13),
+            reader.IsDBNull(14) ? null : reader.GetString(14));
     }
 
     public async Task<ClassificationValidationReportRow?> GetReportAsync(
@@ -227,7 +249,8 @@ public sealed class ClassificationValidationStore
                    conflict_count, stale_count, coverage_basis_points, drift_canary_count,
                    incorrect_application_canary_count, unexplained_conflict_count,
                    owner_decision_count_before, owner_decision_count_after,
-                   owner_minutes_before, owner_minutes_after, report_fingerprint
+                   owner_minutes_before, owner_minutes_after, report_fingerprint,
+                   outcomes_canonical_hash, activation_eligible
             FROM validation_report
             WHERE validation_run_id = $id;
             """;
@@ -254,7 +277,61 @@ public sealed class ClassificationValidationStore
             reader.GetInt32(12),
             reader.IsDBNull(13) ? null : reader.GetDouble(13),
             reader.IsDBNull(14) ? null : reader.GetDouble(14),
-            reader.GetString(15));
+            reader.GetString(15),
+            reader.IsDBNull(16) ? null : reader.GetString(16),
+            reader.IsDBNull(17) ? null : reader.GetInt32(17) != 0);
+    }
+
+    /// <summary>
+    /// Reconstruct a public aggregate validate result from durable stored evidence.
+    /// Returns null when required reconstruction fields are absent (historical incomplete rows).
+    /// Never embeds private corpus path, candidate IDs, or raw payload.
+    /// </summary>
+    public static ClassifyRuleValidateResult? TryReconstructValidateResult(
+        ClassificationValidationRunRow run,
+        ClassificationValidationReportRow report)
+    {
+        ArgumentNullException.ThrowIfNull(run);
+        ArgumentNullException.ThrowIfNull(report);
+        if (!string.Equals(run.ValidationRunId, report.ValidationRunId, StringComparison.Ordinal))
+        {
+            return null;
+        }
+
+        if (string.IsNullOrWhiteSpace(run.SnapshotId)
+            || string.IsNullOrWhiteSpace(run.SnapshotExpiresAt)
+            || string.IsNullOrWhiteSpace(run.StoreGenerationFingerprint)
+            || string.IsNullOrWhiteSpace(report.OutcomesCanonicalHash)
+            || report.ActivationEligible is null)
+        {
+            return null;
+        }
+
+        return new ClassifyRuleValidateResult(
+            "1.0",
+            run.ValidationRunId,
+            run.CandidateFingerprint,
+            run.CorpusFingerprint,
+            run.ExpectedOutcomeFingerprint,
+            run.ProjectionContractVersion,
+            run.SnapshotId!,
+            run.SnapshotExpiresAt!,
+            run.StoreGenerationFingerprint!,
+            run.CategoryLifecycleFingerprint,
+            run.NormalizationVersion,
+            report.ReportFingerprint,
+            report.OutcomesCanonicalHash!,
+            report.TotalRows,
+            report.AccountedRows,
+            report.SuggestionCount,
+            report.NoSuggestionCount,
+            report.ConflictCount,
+            report.StaleCount,
+            report.CoverageBasisPoints,
+            report.DriftCanaryCount,
+            report.IncorrectApplicationCanaryCount,
+            report.UnexplainedConflictCount,
+            report.ActivationEligible.Value);
     }
 
     public async Task<long> CountActiveRuleSetAsync(
@@ -290,7 +367,10 @@ public sealed record ClassificationValidationRunRow(
     string StartedAt,
     string? CompletedAt,
     string LifecycleState,
-    string Actor);
+    string Actor,
+    string? SnapshotId = null,
+    string? SnapshotExpiresAt = null,
+    string? StoreGenerationFingerprint = null);
 
 public sealed record ClassificationValidationReportRow(
     string ValidationRunId,
@@ -308,4 +388,6 @@ public sealed record ClassificationValidationReportRow(
     int OwnerDecisionCountAfter,
     double? OwnerMinutesBefore,
     double? OwnerMinutesAfter,
-    string ReportFingerprint);
+    string ReportFingerprint,
+    string? OutcomesCanonicalHash = null,
+    bool? ActivationEligible = null);

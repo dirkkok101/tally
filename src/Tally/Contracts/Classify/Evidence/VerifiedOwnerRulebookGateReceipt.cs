@@ -46,7 +46,15 @@ public sealed record VerifiedOwnerRulebookGateReceipt(
     [property: JsonRequired] bool LocalityPassed,
     [property: JsonRequired] string ProjectionVersion,
     string? SnapshotId,
-    string? StoreGenerationFingerprint)
+    string? StoreGenerationFingerprint,
+    string? ReceiptId = null,
+    string? ReceiptFingerprint = null,
+    string? RepresentativeValidationRunId = null,
+    string? IndependentReplayValidationRunId = null,
+    string? HoldOutValidationRunId = null,
+    string? ExplicitBenefitDecision = null,
+    string? Actor = null,
+    string? CreatedAt = null)
 {
     public const int CurrentSchemaVersion = 1;
     public const string Kind = "VerifiedOwnerRulebookGateReceipt";

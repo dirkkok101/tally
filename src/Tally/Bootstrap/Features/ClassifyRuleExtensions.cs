@@ -31,6 +31,7 @@ public static class ClassifyRuleExtensions
         var state = await ClassifyStateExtensions.CreateStateAsync(dataRoot, cancellationToken);
         var ruleStore = new ClassificationRuleStore();
         var validationStore = new ClassificationValidationStore();
+        var receiptStore = new OwnerRulebookGateReceiptStore();
         var ruleSetStore = new RuleSetStore();
         var clock = timeProvider ?? TimeProvider.System;
 
@@ -47,7 +48,8 @@ public static class ClassifyRuleExtensions
             ruleSetStore,
             ledgerClient,
             state.Idempotency,
-            clock);
+            clock,
+            receiptStore);
         var retire = new RetireClassificationRuleCommand(
             state.Store,
             ruleStore,
@@ -60,6 +62,7 @@ public static class ClassifyRuleExtensions
             state,
             ruleStore,
             validationStore,
+            receiptStore,
             ruleSetStore,
             save,
             activate,
@@ -74,6 +77,7 @@ public sealed record ClassifyRuleServices(
     ClassifyStateServices State,
     ClassificationRuleStore RuleStore,
     ClassificationValidationStore ValidationStore,
+    OwnerRulebookGateReceiptStore ReceiptStore,
     RuleSetStore RuleSetStore,
     SaveClassificationRuleCommand Save,
     ActivateClassificationRuleCommand Activate,

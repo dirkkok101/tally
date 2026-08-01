@@ -125,13 +125,17 @@ public sealed record ClassifyRuleValidateResult(
     [property: JsonRequired] int DriftCanaryCount,
     [property: JsonRequired] int IncorrectApplicationCanaries,
     [property: JsonRequired] int UnexplainedConflictCount,
-    [property: JsonRequired] bool ActivationEligible);
+    [property: JsonRequired] bool ActivationEligible,
+    string? OwnerRulebookGateReceiptId = null,
+    string? OwnerRulebookGateReceiptFingerprint = null);
 
 public sealed record ClassifyRuleActivateResult(
     [property: JsonRequired] string ContractVersion,
     [property: JsonRequired] string RuleSetVersionId,
     [property: JsonRequired] string ValidationId,
-    [property: JsonRequired] bool BroadApplyAllowed);
+    [property: JsonRequired] bool BroadApplyAllowed,
+    string? OwnerRulebookGateReceiptId = null,
+    string? OwnerRulebookGateReceiptFingerprint = null);
 
 public sealed record ClassifyRuleRetireResult(
     [property: JsonRequired] string ContractVersion,

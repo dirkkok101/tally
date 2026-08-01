@@ -9,7 +9,7 @@ namespace Tally.Infrastructure.Classify.Storage;
 /// </summary>
 public static class ClassifySchema
 {
-    public const int CurrentVersion = 1;
+    public const int CurrentVersion = 2;
 
     public static async Task ApplyAsync(SqliteConnection connection, CancellationToken cancellationToken)
     {
@@ -35,6 +35,9 @@ public static class ClassifySchema
                 {
                     case 1:
                         await ApplyV001Async(connection, transaction, cancellationToken);
+                        break;
+                    case 2:
+                        await ApplyV002Async(connection, transaction, cancellationToken);
                         break;
                     default:
                         throw new InvalidOperationException("The classify database schema version is not supported by this runtime.");
@@ -547,6 +550,88 @@ public static class ClassifySchema
 
             CREATE TRIGGER classify_store_meta_no_delete BEFORE DELETE ON classify_store_meta
             BEGIN SELECT RAISE(ABORT, 'classify_store_meta rows cannot be deleted'); END;
+            """;
+
+        await ExecuteAsync(connection, sql, cancellationToken, transaction);
+    }
+
+    /// <summary>
+    /// Additive migration: durable aggregate validation evidence for receipt reconstruction,
+    /// immutable owner-rulebook gate receipt table, and rule_set_version receipt provenance.
+    /// Historical rows keep NULL receipt/evidence columns — never backfill or infer authority.
+    /// Never stores private corpus path, candidate IDs, description, amount, expected outcome, or token.
+    /// </summary>
+    private static async Task ApplyV002Async(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        CancellationToken cancellationToken)
+    {
+        const string sql = """
+            ALTER TABLE validation_run ADD COLUMN snapshot_id TEXT;
+            ALTER TABLE validation_run ADD COLUMN snapshot_expires_at TEXT;
+            ALTER TABLE validation_run ADD COLUMN store_generation_fingerprint TEXT;
+
+            ALTER TABLE validation_report ADD COLUMN outcomes_canonical_hash TEXT;
+            ALTER TABLE validation_report ADD COLUMN activation_eligible INTEGER;
+
+            ALTER TABLE rule_set_version ADD COLUMN owner_rulebook_gate_receipt_id TEXT;
+            ALTER TABLE rule_set_version ADD COLUMN owner_rulebook_gate_receipt_fingerprint TEXT;
+
+            CREATE TABLE owner_rulebook_gate_receipt (
+                receipt_id TEXT PRIMARY KEY CHECK (length(trim(receipt_id)) > 0),
+                receipt_fingerprint TEXT NOT NULL UNIQUE CHECK (length(receipt_fingerprint) = 64),
+                schema_version INTEGER NOT NULL CHECK (schema_version > 0),
+                receipt_kind TEXT NOT NULL CHECK (receipt_kind = 'VerifiedOwnerRulebookGateReceipt'),
+                authority_granted INTEGER NOT NULL CHECK (authority_granted IN (0, 1)),
+                safety_passed INTEGER NOT NULL CHECK (safety_passed IN (0, 1)),
+                benefit_sufficient INTEGER NOT NULL CHECK (benefit_sufficient IN (0, 1)),
+                requires_explicit_owner_benefit_decision INTEGER NOT NULL CHECK (requires_explicit_owner_benefit_decision IN (0, 1)),
+                block_code TEXT,
+                eligible_rows INTEGER NOT NULL CHECK (eligible_rows >= 0),
+                suggested_rows INTEGER NOT NULL CHECK (suggested_rows >= 0),
+                correction_rows INTEGER NOT NULL CHECK (correction_rows >= 0),
+                no_suggestion_rows INTEGER NOT NULL CHECK (no_suggestion_rows >= 0),
+                conflict_rows INTEGER NOT NULL CHECK (conflict_rows >= 0),
+                excluded_rows INTEGER NOT NULL CHECK (excluded_rows >= 0),
+                stale_rows INTEGER NOT NULL CHECK (stale_rows >= 0),
+                incorrect_application_canaries INTEGER NOT NULL CHECK (incorrect_application_canaries >= 0),
+                unexplained_conflict_count INTEGER NOT NULL CHECK (unexplained_conflict_count >= 0),
+                drift_canary_count INTEGER NOT NULL CHECK (drift_canary_count >= 0),
+                unauthorized_mutation_count INTEGER NOT NULL CHECK (unauthorized_mutation_count >= 0),
+                description_inferred_relationship_count INTEGER NOT NULL CHECK (description_inferred_relationship_count >= 0),
+                coverage_basis_points INTEGER NOT NULL CHECK (coverage_basis_points >= 0 AND coverage_basis_points <= 10000),
+                owner_decision_count_before INTEGER NOT NULL CHECK (owner_decision_count_before >= 0),
+                owner_decision_count_after INTEGER NOT NULL CHECK (owner_decision_count_after >= 0),
+                elapsed_owner_minutes_before REAL,
+                elapsed_owner_minutes_after REAL,
+                candidate_fingerprint TEXT CHECK (candidate_fingerprint IS NULL OR length(candidate_fingerprint) = 64),
+                corpus_fingerprint TEXT CHECK (corpus_fingerprint IS NULL OR length(corpus_fingerprint) = 64),
+                hold_out_fingerprint TEXT CHECK (hold_out_fingerprint IS NULL OR length(hold_out_fingerprint) = 64),
+                report_fingerprint TEXT CHECK (report_fingerprint IS NULL OR length(report_fingerprint) = 64),
+                outcomes_canonical_hash TEXT CHECK (outcomes_canonical_hash IS NULL OR length(outcomes_canonical_hash) = 64),
+                deterministic_replay_passed INTEGER NOT NULL CHECK (deterministic_replay_passed IN (0, 1)),
+                disclosure_passed INTEGER NOT NULL CHECK (disclosure_passed IN (0, 1)),
+                locality_passed INTEGER NOT NULL CHECK (locality_passed IN (0, 1)),
+                projection_version TEXT NOT NULL,
+                snapshot_id TEXT,
+                store_generation_fingerprint TEXT CHECK (store_generation_fingerprint IS NULL OR length(store_generation_fingerprint) = 64),
+                category_lifecycle_fingerprint TEXT CHECK (category_lifecycle_fingerprint IS NULL OR length(category_lifecycle_fingerprint) = 64),
+                normalization_version TEXT,
+                representative_validation_run_id TEXT NOT NULL
+                    REFERENCES validation_run(validation_run_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                independent_replay_validation_run_id TEXT NOT NULL
+                    REFERENCES validation_run(validation_run_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                hold_out_validation_run_id TEXT NOT NULL
+                    REFERENCES validation_run(validation_run_id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                explicit_benefit_decision TEXT,
+                actor TEXT NOT NULL CHECK (length(trim(actor)) > 0),
+                created_at TEXT NOT NULL
+            );
+
+            CREATE TRIGGER owner_rulebook_gate_receipt_no_update BEFORE UPDATE ON owner_rulebook_gate_receipt
+            BEGIN SELECT RAISE(ABORT, 'owner_rulebook_gate_receipt rows are immutable'); END;
+            CREATE TRIGGER owner_rulebook_gate_receipt_no_delete BEFORE DELETE ON owner_rulebook_gate_receipt
+            BEGIN SELECT RAISE(ABORT, 'owner_rulebook_gate_receipt rows are immutable'); END;
             """;
 
         await ExecuteAsync(connection, sql, cancellationToken, transaction);

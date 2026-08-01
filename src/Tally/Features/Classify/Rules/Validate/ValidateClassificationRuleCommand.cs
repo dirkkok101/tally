@@ -2,8 +2,10 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.Versioning;
 using System.Text.Json;
+using Microsoft.Data.Sqlite;
 using Tally.Application;
 using Tally.Contracts.Classify;
+using Tally.Contracts.Classify.Evidence;
 using Tally.Contracts.Classify.Operations;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Actuals;
@@ -32,6 +34,7 @@ public sealed class ValidateClassificationRuleCommand
     private readonly ClassifyOperationIdempotencyStore idempotencyStore;
     private readonly ClassificationRuleStore ruleStore;
     private readonly ClassificationValidationStore validationStore;
+    private readonly OwnerRulebookGateReceiptStore receiptStore;
     private readonly PrivateCorpusReader corpusReader;
     private readonly LedgerContractClient ledger;
     private readonly TimeProvider timeProvider;
@@ -43,7 +46,8 @@ public sealed class ValidateClassificationRuleCommand
         PrivateCorpusReader corpusReader,
         LedgerContractClient ledger,
         ClassifyOperationIdempotencyStore? idempotencyStore = null,
-        TimeProvider? timeProvider = null)
+        TimeProvider? timeProvider = null,
+        OwnerRulebookGateReceiptStore? receiptStore = null)
     {
         ArgumentNullException.ThrowIfNull(stateStore);
         ArgumentNullException.ThrowIfNull(ruleStore);
@@ -53,6 +57,7 @@ public sealed class ValidateClassificationRuleCommand
         this.stateStore = stateStore;
         this.ruleStore = ruleStore;
         this.validationStore = validationStore;
+        this.receiptStore = receiptStore ?? new OwnerRulebookGateReceiptStore();
         this.corpusReader = corpusReader;
         this.ledger = ledger;
         this.idempotencyStore = idempotencyStore ?? new ClassifyOperationIdempotencyStore();
@@ -99,6 +104,11 @@ public sealed class ValidateClassificationRuleCommand
         if (input.CandidateIds.Count > ClassifyOperationModule.V1Limits.MaxRuleCount)
         {
             return CommandResult<ClassifyRuleValidateResult>.Failure(ClassifyErrors.ResourceLimit);
+        }
+
+        if (!TryParseFinalization(input, out var finalization, out var finalizationError))
+        {
+            return CommandResult<ClassifyRuleValidateResult>.Failure(finalizationError!);
         }
 
         var actorKind = actor.Kind.Trim();
@@ -382,15 +392,24 @@ public sealed class ValidateClassificationRuleCommand
                                 startedAtUtc,
                                 CompletedAt: null,
                                 ClassificationValidationStore.LifecycleRunning,
-                                actorText),
+                                actorText,
+                                projection.Value.SnapshotId,
+                                projection.Value.ExpiresAt,
+                                projection.Value.StoreGenerationFingerprint!),
                             writeCt);
 
+                        // Enrich aggregate report with reconstruction fields (schema v2) without private payload.
+                        var durableReport = built.Report with
+                        {
+                            OutcomesCanonicalHash = evaluation.OutcomesCanonicalHash,
+                            ActivationEligible = built.ActivationEligible
+                        };
                         await validationStore.CompleteAsync(
                             connection,
                             transaction,
                             validationId,
                             completedAtUtc,
-                            built.Report,
+                            durableReport,
                             writeCt);
 
                         var activeAfter = await validationStore.CountActiveRuleSetAsync(
@@ -399,6 +418,29 @@ public sealed class ValidateClassificationRuleCommand
                         {
                             throw new InvalidOperationException(
                                 $"{ClassifyErrors.Integrity}: rule.validate must not change active_rule_set.");
+                        }
+
+                        var finalized = result;
+                        if (finalization is not null)
+                        {
+                            var receiptResult = await FinalizeOwnerGateAsync(
+                                connection,
+                                transaction,
+                                holdOutValidationId: validationId,
+                                finalization,
+                                actorText,
+                                completedAtUtc,
+                                writeCt);
+                            if (!receiptResult.IsSuccess)
+                            {
+                                return CommandResult<ClassifyRuleValidateResult>.Failure(receiptResult.ErrorCode!);
+                            }
+
+                            finalized = result with
+                            {
+                                OwnerRulebookGateReceiptId = receiptResult.Value!.ReceiptId,
+                                OwnerRulebookGateReceiptFingerprint = receiptResult.Value.ReceiptFingerprint
+                            };
                         }
 
                         await idempotencyStore.CommitAsync(
@@ -410,11 +452,11 @@ public sealed class ValidateClassificationRuleCommand
                                 ClassifyOperationIds.ContractVersion,
                                 requestFingerprint,
                                 JsonSerializer.Serialize(
-                                    result, ClassifyJsonContext.Default.ClassifyRuleValidateResult),
+                                    finalized, ClassifyJsonContext.Default.ClassifyRuleValidateResult),
                                 completedAtUtc),
                             writeCt);
 
-                        return CommandResult<ClassifyRuleValidateResult>.Success(result);
+                        return CommandResult<ClassifyRuleValidateResult>.Success(finalized);
                     },
                     ct);
             }
@@ -433,6 +475,179 @@ public sealed class ValidateClassificationRuleCommand
         {
             return CommandResult<ClassifyRuleValidateResult>.Failure(PrivateCorpusErrors.Cancelled);
         }
+    }
+
+    private sealed record OwnerGateFinalization(
+        string RepresentativeValidationId,
+        string IndependentReplayValidationId,
+        int OwnerDecisionCountBefore,
+        int OwnerDecisionCountAfter,
+        double? OwnerMinutesBefore,
+        double? OwnerMinutesAfter,
+        string? ExplicitBenefitDecision);
+
+    /// <summary>
+    /// Optional owner-gate finalization is all-or-nothing: either no finalization fields, or
+    /// completed representative + independent-replay IDs plus aggregate benefit counts.
+    /// Never accepts a caller-supplied authority boolean or receipt body.
+    /// </summary>
+    private static bool TryParseFinalization(
+        ClassifyRuleValidateRequest input,
+        out OwnerGateFinalization? finalization,
+        out string? errorCode)
+    {
+        finalization = null;
+        errorCode = null;
+        var hasRep = !string.IsNullOrWhiteSpace(input.RepresentativeValidationId);
+        var hasReplay = !string.IsNullOrWhiteSpace(input.IndependentReplayValidationId);
+        var hasBefore = input.OwnerDecisionCountBefore is not null;
+        var hasAfter = input.OwnerDecisionCountAfter is not null;
+        var hasDecision = input.ExplicitBenefitDecision is not null;
+        var any = hasRep || hasReplay || hasBefore || hasAfter || hasDecision
+            || input.OwnerMinutesBefore is not null || input.OwnerMinutesAfter is not null;
+        if (!any)
+        {
+            return true;
+        }
+
+        if (!hasRep || !hasReplay || !hasBefore || !hasAfter)
+        {
+            errorCode = ClassifyErrors.InvalidInput;
+            return false;
+        }
+
+        if (input.OwnerDecisionCountBefore!.Value < 0 || input.OwnerDecisionCountAfter!.Value < 0)
+        {
+            errorCode = ClassifyErrors.InvalidInput;
+            return false;
+        }
+
+        if (input.OwnerMinutesBefore is < 0 || input.OwnerMinutesAfter is < 0)
+        {
+            errorCode = ClassifyErrors.InvalidInput;
+            return false;
+        }
+
+        var decision = string.IsNullOrWhiteSpace(input.ExplicitBenefitDecision)
+            ? null
+            : input.ExplicitBenefitDecision.Trim();
+        if (decision is not null
+            && !string.Equals(decision, "approve-broad", StringComparison.Ordinal)
+            && !string.Equals(decision, "approve", StringComparison.Ordinal)
+            && !string.Equals(decision, "defer-broad", StringComparison.Ordinal))
+        {
+            errorCode = ClassifyErrors.InvalidInput;
+            return false;
+        }
+
+        var repId = input.RepresentativeValidationId!.Trim();
+        var replayId = input.IndependentReplayValidationId!.Trim();
+        if (string.Equals(repId, replayId, StringComparison.Ordinal))
+        {
+            errorCode = ClassifyErrors.InvalidInput;
+            return false;
+        }
+
+        finalization = new OwnerGateFinalization(
+            repId,
+            replayId,
+            input.OwnerDecisionCountBefore.Value,
+            input.OwnerDecisionCountAfter.Value,
+            input.OwnerMinutesBefore,
+            input.OwnerMinutesAfter,
+            decision);
+        return true;
+    }
+
+    private async Task<CommandResult<OwnerRulebookGateReceiptRow>> FinalizeOwnerGateAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        string holdOutValidationId,
+        OwnerGateFinalization finalization,
+        string actorText,
+        string createdAtUtc,
+        CancellationToken cancellationToken)
+    {
+        if (string.Equals(holdOutValidationId, finalization.RepresentativeValidationId, StringComparison.Ordinal)
+            || string.Equals(holdOutValidationId, finalization.IndependentReplayValidationId, StringComparison.Ordinal))
+        {
+            return CommandResult<OwnerRulebookGateReceiptRow>.Failure(ClassifyErrors.InvalidInput);
+        }
+
+        var repRun = await validationStore.GetRunAsync(
+            connection, transaction, finalization.RepresentativeValidationId, cancellationToken);
+        var repReport = await validationStore.GetReportAsync(
+            connection, transaction, finalization.RepresentativeValidationId, cancellationToken);
+        var replayRun = await validationStore.GetRunAsync(
+            connection, transaction, finalization.IndependentReplayValidationId, cancellationToken);
+        var replayReport = await validationStore.GetReportAsync(
+            connection, transaction, finalization.IndependentReplayValidationId, cancellationToken);
+        var holdRun = await validationStore.GetRunAsync(
+            connection, transaction, holdOutValidationId, cancellationToken);
+        var holdReport = await validationStore.GetReportAsync(
+            connection, transaction, holdOutValidationId, cancellationToken);
+
+        if (repRun is null || repReport is null
+            || replayRun is null || replayReport is null
+            || holdRun is null || holdReport is null)
+        {
+            return CommandResult<OwnerRulebookGateReceiptRow>.Failure(ClassifyErrors.ValidationNotFound);
+        }
+
+        if (!string.Equals(repRun.LifecycleState, ClassificationValidationStore.LifecycleCompleted, StringComparison.Ordinal)
+            || !string.Equals(replayRun.LifecycleState, ClassificationValidationStore.LifecycleCompleted, StringComparison.Ordinal)
+            || !string.Equals(holdRun.LifecycleState, ClassificationValidationStore.LifecycleCompleted, StringComparison.Ordinal))
+        {
+            return CommandResult<OwnerRulebookGateReceiptRow>.Failure(ClassifyErrors.Lifecycle);
+        }
+
+        var repResult = ClassificationValidationStore.TryReconstructValidateResult(repRun, repReport);
+        var replayResult = ClassificationValidationStore.TryReconstructValidateResult(replayRun, replayReport);
+        var holdResult = ClassificationValidationStore.TryReconstructValidateResult(holdRun, holdReport);
+        if (repResult is null || replayResult is null || holdResult is null)
+        {
+            // Incomplete durable evidence cannot authorize a receipt (historical rows stay non-authoritative).
+            return CommandResult<OwnerRulebookGateReceiptRow>.Failure(ClassifyErrors.Stale);
+        }
+
+        // Candidate / projection / category / normalization / store-generation must bind across the three runs.
+        if (!string.Equals(repResult.CandidateFingerprint, replayResult.CandidateFingerprint, StringComparison.Ordinal)
+            || !string.Equals(repResult.CandidateFingerprint, holdResult.CandidateFingerprint, StringComparison.Ordinal)
+            || !string.Equals(repResult.ProjectionVersion, holdResult.ProjectionVersion, StringComparison.Ordinal)
+            || !string.Equals(repResult.StoreGenerationFingerprint, holdResult.StoreGenerationFingerprint, StringComparison.Ordinal)
+            || !string.Equals(repResult.CategoryLifecycleFingerprint, holdResult.CategoryLifecycleFingerprint, StringComparison.Ordinal)
+            || !string.Equals(repResult.NormalizationVersion, holdResult.NormalizationVersion, StringComparison.Ordinal))
+        {
+            return CommandResult<OwnerRulebookGateReceiptRow>.Failure(ClassifyErrors.Stale);
+        }
+
+        var benefit = new OwnerBenefitEvidenceReceipt(
+            finalization.OwnerDecisionCountBefore,
+            finalization.OwnerDecisionCountAfter,
+            finalization.OwnerMinutesBefore,
+            finalization.OwnerMinutesAfter);
+        var derived = VerifiedOwnerRulebookGateReceipt.Derive(
+            repResult,
+            replayResult,
+            holdResult,
+            benefit,
+            finalization.ExplicitBenefitDecision);
+
+        var receiptId = ClassifyContractMapper.NewRuleVersionId(timeProvider.GetUtcNow().AddTicks(3));
+        var row = OwnerRulebookGateReceiptStore.FromDerived(
+            derived,
+            receiptId,
+            finalization.RepresentativeValidationId,
+            finalization.IndependentReplayValidationId,
+            holdOutValidationId,
+            repResult.CategoryLifecycleFingerprint,
+            repResult.NormalizationVersion,
+            finalization.ExplicitBenefitDecision,
+            actorText,
+            createdAtUtc);
+
+        await receiptStore.InsertAsync(connection, transaction, row, cancellationToken);
+        return CommandResult<OwnerRulebookGateReceiptRow>.Success(row);
     }
 
     private async Task<CommandResult<ClassifyRuleValidateResult>?> TryProbeAsync(

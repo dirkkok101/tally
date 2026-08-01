@@ -102,14 +102,32 @@ public sealed record ClassifyRuleSaveRequest(
     [property: JsonRequired] IReadOnlyList<ClassificationRuleConditionInput> Conditions,
     [property: JsonRequired] string Reason);
 
+/// <summary>
+/// Public classify.rule.validate input. Optional owner-gate finalization fields apply only on the
+/// hold-out run: production reloads stored representative + independent-replay + this hold-out
+/// validation, derives and persists a trusted aggregate receipt, and returns receipt identity.
+/// Never accepts a caller-supplied authority boolean or receipt body.
+/// </summary>
 public sealed record ClassifyRuleValidateRequest(
     [property: JsonRequired] string ContractVersion,
     [property: JsonRequired] IReadOnlyList<string> CandidateIds,
-    [property: JsonRequired] string CorpusSource);
+    [property: JsonRequired] string CorpusSource,
+    string? RepresentativeValidationId = null,
+    string? IndependentReplayValidationId = null,
+    int? OwnerDecisionCountBefore = null,
+    int? OwnerDecisionCountAfter = null,
+    double? OwnerMinutesBefore = null,
+    double? OwnerMinutesAfter = null,
+    string? ExplicitBenefitDecision = null);
 
+/// <summary>
+/// Public classify.rule.activate input. Requires a trusted persisted owner-rulebook gate receipt ID.
+/// Never accepts a caller-supplied receipt body or authority boolean.
+/// </summary>
 public sealed record ClassifyRuleActivateRequest(
     [property: JsonRequired] string ContractVersion,
     [property: JsonRequired] string ValidationId,
+    [property: JsonRequired] string OwnerRulebookGateReceiptId,
     [property: JsonRequired] bool BroadApplyAllowed,
     [property: JsonRequired] string Reason);
 

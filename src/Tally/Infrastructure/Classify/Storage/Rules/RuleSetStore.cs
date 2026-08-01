@@ -49,7 +49,8 @@ public sealed class RuleSetStore
         command.Transaction = transaction;
         command.CommandText = """
             SELECT rule_set_version_id, prior_rule_set_version_id, normalization_version,
-                   validation_run_id, reason, created_at, created_by
+                   validation_run_id, reason, created_at, created_by,
+                   owner_rulebook_gate_receipt_id, owner_rulebook_gate_receipt_fingerprint
             FROM rule_set_version
             WHERE rule_set_version_id = $id;
             """;
@@ -192,10 +193,12 @@ public sealed class RuleSetStore
         command.CommandText = """
             INSERT INTO rule_set_version (
                 rule_set_version_id, prior_rule_set_version_id, normalization_version,
-                validation_run_id, reason, created_at, created_by
+                validation_run_id, reason, created_at, created_by,
+                owner_rulebook_gate_receipt_id, owner_rulebook_gate_receipt_fingerprint
             ) VALUES (
                 $rule_set_version_id, $prior_rule_set_version_id, $normalization_version,
-                $validation_run_id, $reason, $created_at, $created_by
+                $validation_run_id, $reason, $created_at, $created_by,
+                $owner_rulebook_gate_receipt_id, $owner_rulebook_gate_receipt_fingerprint
             );
             """;
         command.Parameters.AddWithValue("$rule_set_version_id", version.RuleSetVersionId);
@@ -207,6 +210,12 @@ public sealed class RuleSetStore
         command.Parameters.AddWithValue("$reason", version.Reason);
         command.Parameters.AddWithValue("$created_at", version.CreatedAt);
         command.Parameters.AddWithValue("$created_by", version.CreatedBy);
+        command.Parameters.AddWithValue(
+            "$owner_rulebook_gate_receipt_id",
+            (object?)version.OwnerRulebookGateReceiptId ?? DBNull.Value);
+        command.Parameters.AddWithValue(
+            "$owner_rulebook_gate_receipt_fingerprint",
+            (object?)version.OwnerRulebookGateReceiptFingerprint ?? DBNull.Value);
         await command.ExecuteNonQueryAsync(cancellationToken);
     }
 
@@ -372,7 +381,9 @@ public sealed class RuleSetStore
         reader.GetString(3),
         reader.GetString(4),
         reader.GetString(5),
-        reader.GetString(6));
+        reader.GetString(6),
+        reader.FieldCount > 7 && !reader.IsDBNull(7) ? reader.GetString(7) : null,
+        reader.FieldCount > 8 && !reader.IsDBNull(8) ? reader.GetString(8) : null);
 
     private static ClassifyRuleLifecycleEventRow MapLifecycleEvent(SqliteDataReader reader) => new(
         reader.GetString(0),
@@ -392,7 +403,9 @@ public sealed record ClassifyRuleSetVersionRow(
     string ValidationRunId,
     string Reason,
     string CreatedAt,
-    string CreatedBy);
+    string CreatedBy,
+    string? OwnerRulebookGateReceiptId = null,
+    string? OwnerRulebookGateReceiptFingerprint = null);
 
 public sealed record ClassifyRuleLifecycleEventRow(
     string EventId,

@@ -89,10 +89,12 @@ public sealed class RuleActivationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("Groceries");
         var versionId = await SaveDraftAsync(category.CategoryId, "whole foods");
-        var validationId = await ValidateEligibleAsync(versionId, category.CategoryId, "whole foods");
+        var granted = await ValidateAndGrantAsync(versionId, category.CategoryId, "whole foods");
+        var validationId = granted.ValidationId;
+        var receiptId = granted.ReceiptId;
 
         var result = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, validationId, false, "owner activate"),
+            ActivateRequest(validationId, receiptId, false, "owner activate"),
             actor, NextKey(), CancellationToken.None);
 
         Assert.True(result.IsSuccess, result.ErrorCode);
@@ -110,6 +112,8 @@ public sealed class RuleActivationTests : IAsyncLifetime
         var set = await ruleSetStore.GetRuleSetVersionAsync(
             connection, null, pointer.RuleSetVersionId, CancellationToken.None);
         Assert.Equal(validationId, set!.ValidationRunId);
+        Assert.Equal(receiptId, set.OwnerRulebookGateReceiptId);
+        Assert.False(string.IsNullOrWhiteSpace(set.OwnerRulebookGateReceiptFingerprint));
         Assert.Null(set.PriorRuleSetVersionId);
         Assert.Equal(1L, await ruleSetStore.CountRuleSetVersionsAsync(connection, null, CancellationToken.None));
         Assert.True(await ruleSetStore.CountLifecycleEventsAsync(connection, null, CancellationToken.None) >= 1);
@@ -124,7 +128,7 @@ public sealed class RuleActivationTests : IAsyncLifetime
     public async Task Activate_requires_exact_completed_validation_evidence()
     {
         var missing = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, "missing-validation", false, "no evidence"),
+            ActivateRequest("missing-validation", "missing-receipt", false, "no evidence"),
             actor, NextKey(), CancellationToken.None);
         Assert.Equal(ClassifyErrors.ValidationNotFound, missing.ErrorCode);
         Assert.Equal(0L, await CountAsync("SELECT COUNT(*) FROM active_rule_set;"));
@@ -146,8 +150,7 @@ public sealed class RuleActivationTests : IAsyncLifetime
         Assert.True(validation.Value.IncorrectApplicationCanaries >= 1);
 
         var result = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(
-                ClassifyOperationIds.ContractVersion, validation.Value.ValidationId, false, "block incorrect"),
+            ActivateRequest(validation.Value.ValidationId, "missing-receipt", false, "block incorrect"),
             actor, NextKey(), CancellationToken.None);
         Assert.Equal(ClassifyErrors.Lifecycle, result.ErrorCode);
         Assert.Equal(0L, await CountAsync("SELECT COUNT(*) FROM active_rule_set;"));
@@ -168,8 +171,7 @@ public sealed class RuleActivationTests : IAsyncLifetime
         Assert.False(validation.Value!.ActivationEligible);
 
         var result = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(
-                ClassifyOperationIds.ContractVersion, validation.Value.ValidationId, false, "block conflict"),
+            ActivateRequest(validation.Value.ValidationId, "missing-receipt", false, "block conflict"),
             actor, NextKey(), CancellationToken.None);
         Assert.Equal(ClassifyErrors.Lifecycle, result.ErrorCode);
         Assert.Equal(0L, await CountAsync("SELECT COUNT(*) FROM active_rule_set;"));
@@ -189,8 +191,7 @@ public sealed class RuleActivationTests : IAsyncLifetime
         Assert.True(validation.Value.DriftCanaryCount >= 1);
 
         var result = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(
-                ClassifyOperationIds.ContractVersion, validation.Value.ValidationId, false, "block drift"),
+            ActivateRequest(validation.Value.ValidationId, "missing-receipt", false, "block drift"),
             actor, NextKey(), CancellationToken.None);
         Assert.Equal(ClassifyErrors.Lifecycle, result.ErrorCode);
         Assert.Equal(0L, await CountAsync("SELECT COUNT(*) FROM active_rule_set;"));
@@ -211,8 +212,7 @@ public sealed class RuleActivationTests : IAsyncLifetime
         Assert.False(validation.Value!.ActivationEligible);
 
         var result = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(
-                ClassifyOperationIds.ContractVersion, validation.Value.ValidationId, false, "empty block"),
+            ActivateRequest(validation.Value.ValidationId, "missing-receipt", false, "empty block"),
             actor, NextKey(), CancellationToken.None);
         Assert.Equal(ClassifyErrors.Lifecycle, result.ErrorCode);
         Assert.Equal(0L, await CountAsync("SELECT COUNT(*) FROM active_rule_set;"));
@@ -225,9 +225,11 @@ public sealed class RuleActivationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("BroadOff");
         var versionId = await SaveDraftAsync(category.CategoryId, "broad off");
-        var validationId = await ValidateEligibleAsync(versionId, category.CategoryId, "broad off");
+        var granted = await ValidateAndGrantAsync(versionId, category.CategoryId, "broad off");
+        var validationId = granted.ValidationId;
+        var receiptId = granted.ReceiptId;
         var result = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, validationId, false, "no broad"),
+            ActivateRequest(validationId, receiptId, false, "no broad"),
             actor, NextKey(), CancellationToken.None);
         Assert.True(result.IsSuccess, result.ErrorCode);
         Assert.False(result.Value!.BroadApplyAllowed);
@@ -238,9 +240,11 @@ public sealed class RuleActivationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("BroadOn");
         var versionId = await SaveDraftAsync(category.CategoryId, "broad on");
-        var validationId = await ValidateEligibleAsync(versionId, category.CategoryId, "broad on");
+        var granted = await ValidateAndGrantAsync(versionId, category.CategoryId, "broad on");
+        var validationId = granted.ValidationId;
+        var receiptId = granted.ReceiptId;
         var result = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, validationId, true, "grant broad"),
+            ActivateRequest(validationId, receiptId, true, "grant broad"),
             actor, NextKey(), CancellationToken.None);
         Assert.True(result.IsSuccess, result.ErrorCode);
         Assert.True(result.Value!.BroadApplyAllowed);
@@ -265,8 +269,7 @@ public sealed class RuleActivationTests : IAsyncLifetime
         Assert.False(validation.Value!.ActivationEligible);
 
         var result = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(
-                ClassifyOperationIds.ContractVersion, validation.Value.ValidationId, true, "deny broad"),
+            ActivateRequest(validation.Value.ValidationId, "missing-receipt", true, "deny broad"),
             actor, NextKey(), CancellationToken.None);
         Assert.Equal(ClassifyErrors.Lifecycle, result.ErrorCode);
         Assert.Equal(0L, await CountAsync("SELECT COUNT(*) FROM active_rule_set;"));
@@ -279,15 +282,17 @@ public sealed class RuleActivationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("Atomic");
         var versionId = await SaveDraftAsync(category.CategoryId, "atomic");
-        var validationId = await ValidateEligibleAsync(versionId, category.CategoryId, "atomic");
+        var granted = await ValidateAndGrantAsync(versionId, category.CategoryId, "atomic");
+        var validationId = granted.ValidationId;
+        var receiptId = granted.ReceiptId;
         var first = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, validationId, false, "first"),
+            ActivateRequest(validationId, receiptId, false, "first"),
             actor, NextKey(), CancellationToken.None);
         Assert.True(first.IsSuccess, first.ErrorCode);
         var priorPointer = first.Value!.RuleSetVersionId;
 
         var failed = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, "no-such-validation", false, "fail"),
+            ActivateRequest("no-such-validation", "missing-receipt", false, "fail"),
             actor, NextKey(), CancellationToken.None);
         Assert.Equal(ClassifyErrors.ValidationNotFound, failed.ErrorCode);
 
@@ -306,9 +311,11 @@ public sealed class RuleActivationTests : IAsyncLifetime
         {
             var before = await ruleStore.GetRuleVersionAsync(connection, null, versionId, CancellationToken.None);
             Assert.NotNull(before);
-            var validationId = await ValidateEligibleAsync(versionId, category.CategoryId, "immutable");
+            var granted = await ValidateAndGrantAsync(versionId, category.CategoryId, "immutable");
+            var validationId = granted.ValidationId;
+            var receiptId = granted.ReceiptId;
             var result = await activate.HandleAsync(
-                new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, validationId, false, "keep draft"),
+                ActivateRequest(validationId, receiptId, false, "keep draft"),
                 actor, NextKey(), CancellationToken.None);
             Assert.True(result.IsSuccess, result.ErrorCode);
             var after = await ruleStore.GetRuleVersionAsync(connection, null, versionId, CancellationToken.None);
@@ -326,13 +333,15 @@ public sealed class RuleActivationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("Idem");
         var versionId = await SaveDraftAsync(category.CategoryId, "idem");
-        var validationId = await ValidateEligibleAsync(versionId, category.CategoryId, "idem");
+        var granted = await ValidateAndGrantAsync(versionId, category.CategoryId, "idem");
+        var validationId = granted.ValidationId;
+        var receiptId = granted.ReceiptId;
         const string key = "activate-idem-1";
         var first = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, validationId, false, "idem"),
+            ActivateRequest(validationId, receiptId, false, "idem"),
             actor, key, CancellationToken.None);
         var second = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, validationId, false, "idem"),
+            ActivateRequest(validationId, receiptId, false, "idem"),
             actor, key, CancellationToken.None);
         Assert.True(first.IsSuccess && second.IsSuccess);
         Assert.Equal(first.Value!.RuleSetVersionId, second.Value!.RuleSetVersionId);
@@ -345,14 +354,16 @@ public sealed class RuleActivationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("IdemConflict");
         var versionId = await SaveDraftAsync(category.CategoryId, "conflict key");
-        var validationId = await ValidateEligibleAsync(versionId, category.CategoryId, "conflict key");
+        var granted = await ValidateAndGrantAsync(versionId, category.CategoryId, "conflict key");
+        var validationId = granted.ValidationId;
+        var receiptId = granted.ReceiptId;
         const string key = "activate-conflict-1";
         var first = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, validationId, false, "reason-a"),
+            ActivateRequest(validationId, receiptId, false, "reason-a"),
             actor, key, CancellationToken.None);
         Assert.True(first.IsSuccess, first.ErrorCode);
         var second = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, validationId, false, "reason-b"),
+            ActivateRequest(validationId, receiptId, false, "reason-b"),
             actor, key, CancellationToken.None);
         Assert.Equal(ClassifyErrors.IdempotencyConflict, second.ErrorCode);
     }
@@ -364,11 +375,13 @@ public sealed class RuleActivationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("RenameMe");
         var versionId = await SaveDraftAsync(category.CategoryId, "rename me");
-        var validationId = await ValidateEligibleAsync(versionId, category.CategoryId, "rename me");
+        var granted = await ValidateAndGrantAsync(versionId, category.CategoryId, "rename me");
+        var validationId = granted.ValidationId;
+        var receiptId = granted.ReceiptId;
         await RenameCategoryAsync(category.CategoryId, "Renamed Display " + Guid.NewGuid().ToString("N")[..6]);
 
         var result = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, validationId, false, "rename ok"),
+            ActivateRequest(validationId, receiptId, false, "rename ok"),
             actor, NextKey(), CancellationToken.None);
         Assert.True(result.IsSuccess, result.ErrorCode);
 
@@ -382,11 +395,13 @@ public sealed class RuleActivationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("ArchiveMe");
         var versionId = await SaveDraftAsync(category.CategoryId, "archive me");
-        var validationId = await ValidateEligibleAsync(versionId, category.CategoryId, "archive me");
+        var granted = await ValidateAndGrantAsync(versionId, category.CategoryId, "archive me");
+        var validationId = granted.ValidationId;
+        var receiptId = granted.ReceiptId;
         await ArchiveCategoryAsync(category.CategoryId);
 
         var result = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, validationId, false, "archive block"),
+            ActivateRequest(validationId, receiptId, false, "archive block"),
             actor, NextKey(), CancellationToken.None);
         Assert.Equal(ClassifyErrors.Lifecycle, result.ErrorCode);
         Assert.Equal(0L, await CountAsync("SELECT COUNT(*) FROM active_rule_set;"));
@@ -397,12 +412,14 @@ public sealed class RuleActivationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("DriftCat");
         var versionId = await SaveDraftAsync(category.CategoryId, "drift cat");
-        var validationId = await ValidateEligibleAsync(versionId, category.CategoryId, "drift cat");
+        var granted = await ValidateAndGrantAsync(versionId, category.CategoryId, "drift cat");
+        var validationId = granted.ValidationId;
+        var receiptId = granted.ReceiptId;
         // Adding another active category changes the catalogue lifecycle fingerprint.
         _ = await CreateCategoryAsync("ExtraActive");
 
         var result = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, validationId, false, "stale catalogue"),
+            ActivateRequest(validationId, receiptId, false, "stale catalogue"),
             actor, NextKey(), CancellationToken.None);
         Assert.Equal(ClassifyErrors.Stale, result.ErrorCode);
         Assert.Equal(0L, await CountAsync("SELECT COUNT(*) FROM active_rule_set;"));
@@ -415,17 +432,21 @@ public sealed class RuleActivationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("Replace");
         var v1 = await SaveDraftAsync(category.CategoryId, "first rule", ruleId: "rule-first");
-        var validation1 = await ValidateEligibleAsync(v1, category.CategoryId, "first rule");
+        var granted1 = await ValidateAndGrantAsync(v1, category.CategoryId, "first rule");
+        var validation1 = granted1.ValidationId;
+        var receiptId1 = granted1.ReceiptId;
         var first = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, validation1, false, "first set"),
+            ActivateRequest(validation1, receiptId1, false, "first set"),
             actor, NextKey(), CancellationToken.None);
         Assert.True(first.IsSuccess, first.ErrorCode);
 
         var v2 = await SaveDraftAsync(category.CategoryId, "second rule", ruleId: "rule-second");
         // Validate only v2 so candidate fingerprint resolves uniquely to the successor.
-        var validation2 = await ValidateEligibleAsync(v2, category.CategoryId, "second rule");
+        var granted2 = await ValidateAndGrantAsync(v2, category.CategoryId, "second rule");
+        var validation2 = granted2.ValidationId;
+        var receiptId2 = granted2.ReceiptId;
         var second = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, validation2, false, "replace set"),
+            ActivateRequest(validation2, receiptId2, false, "replace set"),
             actor, NextKey(), CancellationToken.None);
         Assert.True(second.IsSuccess, second.ErrorCode);
         Assert.NotEqual(first.Value!.RuleSetVersionId, second.Value!.RuleSetVersionId);
@@ -461,8 +482,7 @@ public sealed class RuleActivationTests : IAsyncLifetime
         Assert.True(validation.Value!.ActivationEligible);
 
         var result = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(
-                ClassifyOperationIds.ContractVersion, validation.Value.ValidationId, false, "multi"),
+            ActivateRequest(validation.Value.ValidationId, "missing-receipt", false, "multi"),
             actor, NextKey(), CancellationToken.None);
         Assert.True(result.IsSuccess, result.ErrorCode);
 
@@ -481,17 +501,19 @@ public sealed class RuleActivationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("Env");
         var versionId = await SaveDraftAsync(category.CategoryId, "env");
-        var validationId = await ValidateEligibleAsync(versionId, category.CategoryId, "env");
+        var granted = await ValidateAndGrantAsync(versionId, category.CategoryId, "env");
+        var validationId = granted.ValidationId;
+        var receiptId = granted.ReceiptId;
         var noActor = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, validationId, false, "x"),
+            ActivateRequest(validationId, receiptId, false, "x"),
             null, NextKey(), CancellationToken.None);
         Assert.Equal(ClassifyErrors.ActorRequired, noActor.ErrorCode);
         var noKey = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, validationId, false, "x"),
+            ActivateRequest(validationId, receiptId, false, "x"),
             actor, null, CancellationToken.None);
         Assert.Equal(ClassifyErrors.IdempotencyRequired, noKey.ErrorCode);
         var noReason = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, validationId, false, "  "),
+            ActivateRequest(validationId, receiptId, false, "  "),
             actor, NextKey(), CancellationToken.None);
         Assert.Equal(ClassifyErrors.InvalidInput, noReason.ErrorCode);
         Assert.Equal(0L, await CountAsync("SELECT COUNT(*) FROM active_rule_set;"));
@@ -502,10 +524,12 @@ public sealed class RuleActivationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("LedgerSafe");
         var versionId = await SaveDraftAsync(category.CategoryId, "ledger safe");
-        var validationId = await ValidateEligibleAsync(versionId, category.CategoryId, "ledger safe");
+        var granted = await ValidateAndGrantAsync(versionId, category.CategoryId, "ledger safe");
+        var validationId = granted.ValidationId;
+        var receiptId = granted.ReceiptId;
         var beforeName = category.Name;
         var result = await activate.HandleAsync(
-            new ClassifyRuleActivateRequest(ClassifyOperationIds.ContractVersion, validationId, false, "no ledger write"),
+            ActivateRequest(validationId, receiptId, false, "no ledger write"),
             actor, NextKey(), CancellationToken.None);
         Assert.True(result.IsSuccess, result.ErrorCode);
         var listed = await ledger.ListClassificationCategoriesAsync("1.0", actor, CancellationToken.None, status: null);
@@ -524,18 +548,108 @@ public sealed class RuleActivationTests : IAsyncLifetime
         Assert.False(RuleLifecyclePolicy.AuthorizeBroadApply(true, report, ClassifyErrors.Lifecycle));
     }
 
-    // ── Helpers ──────────────────────────────────────────────────────────────
-
-    private async Task<string> ValidateEligibleAsync(string versionId, string categoryId, string description)
+    [Fact]
+    public async Task Activate_rejects_missing_owner_gate_receipt_without_pointer_change()
     {
-        var path = await WriteBoundCorpusAsync([(description, categoryId, "suggestion")]);
+        var category = await CreateCategoryAsync("NoReceipt");
+        var versionId = await SaveDraftAsync(category.CategoryId, "no receipt");
+        var path = await WriteBoundCorpusAsync([("no receipt", category.CategoryId, "suggestion")]);
         var validation = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], path),
             actor, NextKey(), CancellationToken.None);
         Assert.True(validation.IsSuccess, validation.ErrorCode);
-        Assert.True(validation.Value!.ActivationEligible);
-        return validation.Value.ValidationId;
+        var result = await activate.HandleAsync(
+            ActivateRequest(validation.Value!.ValidationId, "missing-receipt", false, "no receipt"),
+            actor, NextKey(), CancellationToken.None);
+        Assert.Equal(ClassifyErrors.NotFound, result.ErrorCode);
+        Assert.Equal(0L, await CountAsync("SELECT COUNT(*) FROM active_rule_set;"));
     }
+
+    [Fact]
+    public async Task Activate_rejects_blocked_receipt_without_authority()
+    {
+        var category = await CreateCategoryAsync("BlockedReceipt");
+        var versionId = await SaveDraftAsync(category.CategoryId, "blocked receipt");
+        var granted = await ValidateAndGrantAsync(versionId, category.CategoryId, "blocked receipt", benefitDecision: "defer-broad");
+        var result = await activate.HandleAsync(
+            ActivateRequest(granted.ValidationId, granted.ReceiptId, false, "blocked"),
+            actor, NextKey(), CancellationToken.None);
+        Assert.Equal(ClassifyErrors.Lifecycle, result.ErrorCode);
+        Assert.Equal(0L, await CountAsync("SELECT COUNT(*) FROM active_rule_set;"));
+    }
+
+    [Fact]
+    public async Task Activate_rejects_validation_id_not_bound_to_receipt_representative()
+    {
+        var category = await CreateCategoryAsync("BindMismatch");
+        var versionId = await SaveDraftAsync(category.CategoryId, "bind mismatch");
+        var granted = await ValidateAndGrantAsync(versionId, category.CategoryId, "bind mismatch");
+        // Hold-out validation id is not the representative run bound on the receipt.
+        var path = await WriteBoundCorpusAsync([("bind mismatch", category.CategoryId, "suggestion")]);
+        var holdOnly = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], path),
+            actor, NextKey(), CancellationToken.None);
+        Assert.True(holdOnly.IsSuccess, holdOnly.ErrorCode);
+        var result = await activate.HandleAsync(
+            ActivateRequest(holdOnly.Value!.ValidationId, granted.ReceiptId, false, "mismatch"),
+            actor, NextKey(), CancellationToken.None);
+        Assert.Equal(ClassifyErrors.Lifecycle, result.ErrorCode);
+        Assert.Equal(0L, await CountAsync("SELECT COUNT(*) FROM active_rule_set;"));
+    }
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
+
+    private async Task<string> ValidateEligibleAsync(string versionId, string categoryId, string description)
+    {
+        var granted = await ValidateAndGrantAsync(versionId, categoryId, description);
+        return granted.ValidationId;
+    }
+
+    /// <summary>
+    /// Production path: representative + independent replay + hold-out finalize through rule.validate.
+    /// Returns the representative validation id (activation binding) and trusted receipt id.
+    /// </summary>
+    private async Task<(string ValidationId, string ReceiptId)> ValidateAndGrantAsync(
+        string versionId,
+        string categoryId,
+        string description,
+        string? benefitDecision = "approve-broad")
+    {
+        var path = await WriteBoundCorpusAsync([(description, categoryId, "suggestion")]);
+        var rep = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], path),
+            actor, NextKey(), CancellationToken.None);
+        Assert.True(rep.IsSuccess, rep.ErrorCode);
+        Assert.True(rep.Value!.ActivationEligible);
+
+        var replay = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], path),
+            actor, NextKey(), CancellationToken.None);
+        Assert.True(replay.IsSuccess, replay.ErrorCode);
+
+        var hold = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(
+                ClassifyOperationIds.ContractVersion,
+                [versionId],
+                path,
+                rep.Value.ValidationId,
+                replay.Value!.ValidationId,
+                OwnerDecisionCountBefore: 10,
+                OwnerDecisionCountAfter: 2,
+                ExplicitBenefitDecision: benefitDecision),
+            actor, NextKey(), CancellationToken.None);
+        Assert.True(hold.IsSuccess, hold.ErrorCode);
+        Assert.False(string.IsNullOrWhiteSpace(hold.Value!.OwnerRulebookGateReceiptId));
+        Assert.False(string.IsNullOrWhiteSpace(hold.Value.OwnerRulebookGateReceiptFingerprint));
+        return (rep.Value.ValidationId, hold.Value.OwnerRulebookGateReceiptId!);
+    }
+
+    private static ClassifyRuleActivateRequest ActivateRequest(
+        string validationId,
+        string receiptId,
+        bool broadApply,
+        string reason) =>
+        new(ClassifyOperationIds.ContractVersion, validationId, receiptId, broadApply, reason);
 
     private async Task<string> SaveDraftAsync(string categoryId, string description, string? ruleId = null)
     {

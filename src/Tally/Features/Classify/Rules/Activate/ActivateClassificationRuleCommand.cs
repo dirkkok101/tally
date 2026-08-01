@@ -18,10 +18,11 @@ namespace Tally.Features.Classify.Rules.Activate;
 
 /// <summary>
 /// classify.rule.activate vertical slice (FR-CLASSIFY-RULE-LIFECYCLE / TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE).
-/// Requires exact current completed validation evidence, zero incorrect/unexplained/drift canaries,
-/// active category identity, and explicit owner actor/reason. Atomically creates an immutable
-/// rule-set version, members, lifecycle events, and active pointer. Never mutates rule versions
-/// in place, never auto-activates, and never mutates Ledger.
+/// Requires a trusted immutable owner-rulebook gate receipt (not a caller-supplied body/bool),
+/// exact current completed validation evidence bound to that receipt, zero incorrect/unexplained/drift
+/// canaries, active category identity, and explicit owner actor/reason. Atomically creates an
+/// immutable rule-set version with receipt provenance, members, lifecycle events, and active pointer.
+/// Never mutates rule versions in place, never auto-activates, and never mutates Ledger.
 /// </summary>
 [SupportedOSPlatform("linux")]
 public sealed class ActivateClassificationRuleCommand
@@ -30,6 +31,7 @@ public sealed class ActivateClassificationRuleCommand
     private readonly ClassifyOperationIdempotencyStore idempotencyStore;
     private readonly ClassificationRuleStore ruleStore;
     private readonly ClassificationValidationStore validationStore;
+    private readonly OwnerRulebookGateReceiptStore receiptStore;
     private readonly RuleSetStore ruleSetStore;
     private readonly LedgerContractClient ledger;
     private readonly TimeProvider timeProvider;
@@ -41,7 +43,8 @@ public sealed class ActivateClassificationRuleCommand
         RuleSetStore ruleSetStore,
         LedgerContractClient ledger,
         ClassifyOperationIdempotencyStore? idempotencyStore = null,
-        TimeProvider? timeProvider = null)
+        TimeProvider? timeProvider = null,
+        OwnerRulebookGateReceiptStore? receiptStore = null)
     {
         ArgumentNullException.ThrowIfNull(stateStore);
         ArgumentNullException.ThrowIfNull(ruleStore);
@@ -51,6 +54,7 @@ public sealed class ActivateClassificationRuleCommand
         this.stateStore = stateStore;
         this.ruleStore = ruleStore;
         this.validationStore = validationStore;
+        this.receiptStore = receiptStore ?? new OwnerRulebookGateReceiptStore();
         this.ruleSetStore = ruleSetStore;
         this.ledger = ledger;
         this.idempotencyStore = idempotencyStore ?? new ClassifyOperationIdempotencyStore();
@@ -88,19 +92,21 @@ public sealed class ActivateClassificationRuleCommand
             return CommandResult<ClassifyRuleActivateResult>.Failure(ClassifyErrors.InvalidInput);
         }
 
-        if (string.IsNullOrWhiteSpace(input.ValidationId))
+        if (string.IsNullOrWhiteSpace(input.ValidationId)
+            || string.IsNullOrWhiteSpace(input.OwnerRulebookGateReceiptId))
         {
             return CommandResult<ClassifyRuleActivateResult>.Failure(ClassifyErrors.InvalidInput);
         }
 
         var validationId = input.ValidationId.Trim();
+        var receiptId = input.OwnerRulebookGateReceiptId.Trim();
         var actorKind = actor.Kind.Trim();
         var actorLabel = actor.Label.Trim();
         var actorRunId = string.IsNullOrWhiteSpace(actor.RunId) ? null : actor.RunId.Trim();
         var actorText = ClassifyContractMapper.FormatActor(actorKind, actorLabel, actorRunId);
         var requestedBroadApply = input.BroadApplyAllowed;
 
-        var fingerprintElement = BuildFingerprintElement(validationId, requestedBroadApply, reason);
+        var fingerprintElement = BuildFingerprintElement(validationId, receiptId, requestedBroadApply, reason);
         var requestFingerprint = ClassifyOperationIdempotencyStore.ComputeRequestFingerprint(
             ClassifyOperationIds.RuleActivate,
             ClassifyOperationIds.ContractVersion,
@@ -115,14 +121,17 @@ public sealed class ActivateClassificationRuleCommand
             return probed;
         }
 
-        // Load validation evidence and active pointer before live category revalidation so
+        // Load trusted receipt + validation evidence before live category revalidation so
         // completed activations can still replay after later catalogue drift.
+        // Never trust a caller-supplied receipt body or authority boolean.
+        OwnerRulebookGateReceiptRow? receipt;
         ClassificationValidationRunRow? run;
         ClassificationValidationReportRow? report;
         ClassifyActiveRuleSetPointer? activeBefore;
         IReadOnlyList<ClassifyRuleVersionRow> allVersions;
         await using (var connection = await stateStore.OpenMigratedAsync(cancellationToken))
         {
+            receipt = await receiptStore.GetAsync(connection, null, receiptId, cancellationToken);
             run = await validationStore.GetRunAsync(connection, null, validationId, cancellationToken);
             report = await validationStore.GetReportAsync(connection, null, validationId, cancellationToken);
             activeBefore = await ruleSetStore.GetActiveRuleSetAsync(connection, null, cancellationToken);
@@ -133,6 +142,12 @@ public sealed class ActivateClassificationRuleCommand
         if (evidenceError is not null)
         {
             return CommandResult<ClassifyRuleActivateResult>.Failure(evidenceError);
+        }
+
+        var receiptError = RuleLifecyclePolicy.ValidateGrantedReceipt(receipt, validationId, run!, report!);
+        if (receiptError is not null)
+        {
+            return CommandResult<ClassifyRuleActivateResult>.Failure(receiptError);
         }
 
         var resolveError = RuleLifecyclePolicy.TryResolveCandidatesByFingerprint(
@@ -205,7 +220,7 @@ public sealed class ActivateClassificationRuleCommand
 
         var broadApplyAllowed = RuleLifecyclePolicy.AuthorizeBroadApply(
             requestedBroadApply,
-            report!,
+            receipt!,
             evidenceError: null);
         var broadError = RuleLifecyclePolicy.ValidateBroadApplyRequest(requestedBroadApply, broadApplyAllowed);
         if (broadError is not null)
@@ -258,13 +273,26 @@ public sealed class ActivateClassificationRuleCommand
                             return CommandResult<ClassifyRuleActivateResult>.Failure(ClassifyErrors.Unexpected);
                     }
 
-                    // Re-load evidence under write lock — fail closed if concurrent drift.
+                    // Re-load trusted receipt + evidence under write lock — fail closed if concurrent drift.
+                    var liveReceipt = await receiptStore.GetAsync(connection, transaction, receiptId, ct);
                     var liveRun = await validationStore.GetRunAsync(connection, transaction, validationId, ct);
                     var liveReport = await validationStore.GetReportAsync(connection, transaction, validationId, ct);
                     var liveEvidenceError = RuleLifecyclePolicy.ValidateActivationEvidence(liveRun, liveReport);
                     if (liveEvidenceError is not null)
                     {
                         return CommandResult<ClassifyRuleActivateResult>.Failure(liveEvidenceError);
+                    }
+
+                    var liveReceiptError = RuleLifecyclePolicy.ValidateGrantedReceipt(
+                        liveReceipt, validationId, liveRun!, liveReport!);
+                    if (liveReceiptError is not null)
+                    {
+                        return CommandResult<ClassifyRuleActivateResult>.Failure(liveReceiptError);
+                    }
+
+                    if (!string.Equals(liveReceipt!.ReceiptFingerprint, receipt!.ReceiptFingerprint, StringComparison.Ordinal))
+                    {
+                        return CommandResult<ClassifyRuleActivateResult>.Failure(ClassifyErrors.Stale);
                     }
 
                     var liveActive = await ruleSetStore.GetActiveRuleSetAsync(connection, transaction, ct);
@@ -301,7 +329,9 @@ public sealed class ActivateClassificationRuleCommand
                         validationId,
                         reason,
                         activatedAtUtc,
-                        actorText);
+                        actorText,
+                        liveReceipt.ReceiptId,
+                        liveReceipt.ReceiptFingerprint);
 
                     var events = new List<ClassifyRuleLifecycleEventRow>(2);
                     if (liveActive is not null && supersedeEventId is not null)
@@ -374,7 +404,9 @@ public sealed class ActivateClassificationRuleCommand
                         ClassifyOperationIds.ContractVersion,
                         ruleSetVersionId,
                         validationId,
-                        broadApplyAllowed);
+                        broadApplyAllowed,
+                        liveReceipt.ReceiptId,
+                        liveReceipt.ReceiptFingerprint);
 
                     await idempotencyStore.CommitAsync(
                         connection,
@@ -458,6 +490,7 @@ public sealed class ActivateClassificationRuleCommand
 
     private static JsonElement BuildFingerprintElement(
         string validationId,
+        string ownerRulebookGateReceiptId,
         bool broadApplyAllowed,
         string reason)
     {
@@ -466,6 +499,7 @@ public sealed class ActivateClassificationRuleCommand
         {
             writer.WriteStartObject();
             writer.WriteBoolean("broadApplyAllowed", broadApplyAllowed);
+            writer.WriteString("ownerRulebookGateReceiptId", ownerRulebookGateReceiptId);
             writer.WriteString("reason", reason);
             writer.WriteString("validationId", validationId);
             writer.WriteEndObject();

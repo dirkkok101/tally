@@ -666,6 +666,53 @@ public sealed class OwnerRulebookGateTests : IAsyncLifetime
     private static string Hex64(string seed) =>
         Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(seed)));
 
+    [Fact]
+    public async Task Finalize_persists_trusted_receipt_and_rejects_caller_forged_authority()
+    {
+        var category = await CreateCategoryAsync("GateFinalize");
+        var versionId = await SaveDraftAsync(category.CategoryId, "gate finalize");
+        var path = await WriteBoundCorpusAsync([("gate finalize", category.CategoryId, "suggestion")]);
+        var rep = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], path),
+            actor, NextKey(), CancellationToken.None);
+        Assert.True(rep.IsSuccess, rep.ErrorCode);
+        var replay = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], path),
+            actor, NextKey(), CancellationToken.None);
+        Assert.True(replay.IsSuccess, replay.ErrorCode);
+        var hold = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(
+                ClassifyOperationIds.ContractVersion,
+                [versionId],
+                path,
+                rep.Value!.ValidationId,
+                replay.Value!.ValidationId,
+                OwnerDecisionCountBefore: 8,
+                OwnerDecisionCountAfter: 1,
+                ExplicitBenefitDecision: "approve-broad"),
+            actor, NextKey(), CancellationToken.None);
+        Assert.True(hold.IsSuccess, hold.ErrorCode);
+        Assert.False(string.IsNullOrWhiteSpace(hold.Value!.OwnerRulebookGateReceiptId));
+        Assert.False(string.IsNullOrWhiteSpace(hold.Value.OwnerRulebookGateReceiptFingerprint));
+
+        await using var connection = await store.OpenMigratedAsync(CancellationToken.None);
+        var receiptStore = new OwnerRulebookGateReceiptStore();
+        var stored = await receiptStore.GetAsync(
+            connection, null, hold.Value.OwnerRulebookGateReceiptId!, CancellationToken.None);
+        Assert.NotNull(stored);
+        Assert.True(stored!.AuthorityGranted);
+        Assert.Null(stored.BlockCode);
+        Assert.Equal(rep.Value.ValidationId, stored.RepresentativeValidationRunId);
+        Assert.Equal(replay.Value.ValidationId, stored.IndependentReplayValidationRunId);
+        Assert.Equal(hold.Value.ValidationId, stored.HoldOutValidationRunId);
+        Assert.Equal(hold.Value.OwnerRulebookGateReceiptFingerprint, stored.ReceiptFingerprint);
+        // No private path/candidate IDs in durable receipt identity fields.
+        Assert.DoesNotContain('/', stored.ReceiptId);
+        AssertNoPrivate(JsonSerializer.Serialize(
+            OwnerRulebookGateReceiptStore.ToContract(stored),
+            ClassifyJsonContext.Default.VerifiedOwnerRulebookGateReceipt));
+    }
+
     private static void AssertNoPrivate(string text)
     {
         Assert.DoesNotContain("CANARY_PRIVATE", text, StringComparison.Ordinal);
