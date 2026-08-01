@@ -264,7 +264,8 @@ public sealed class ValidateClassificationRuleCommand
                 expectedOutcomeFingerprint,
                 categoryLifecycleFingerprint,
                 projection.Value.SnapshotId,
-                projection.Value.StoreGenerationFingerprint!);
+                projection.Value.StoreGenerationFingerprint!,
+                finalization);
             var requestFingerprint = ClassifyOperationIdempotencyStore.ComputeRequestFingerprint(
                 ClassifyOperationIds.RuleValidate,
                 ClassifyOperationIds.ContractVersion,
@@ -610,12 +611,18 @@ public sealed class ValidateClassificationRuleCommand
             return CommandResult<OwnerRulebookGateReceiptRow>.Failure(ClassifyErrors.Stale);
         }
 
-        // Candidate / projection / category / normalization / store-generation must bind across the three runs.
+        // Candidate / projection / category / normalization / store-generation must bind across all three runs.
+        // A replay with identical aggregate outcomes is not authoritative if it was evaluated against
+        // a different public contract, category lifecycle, normalization, or Ledger store generation.
         if (!string.Equals(repResult.CandidateFingerprint, replayResult.CandidateFingerprint, StringComparison.Ordinal)
             || !string.Equals(repResult.CandidateFingerprint, holdResult.CandidateFingerprint, StringComparison.Ordinal)
+            || !string.Equals(repResult.ProjectionVersion, replayResult.ProjectionVersion, StringComparison.Ordinal)
             || !string.Equals(repResult.ProjectionVersion, holdResult.ProjectionVersion, StringComparison.Ordinal)
+            || !string.Equals(repResult.StoreGenerationFingerprint, replayResult.StoreGenerationFingerprint, StringComparison.Ordinal)
             || !string.Equals(repResult.StoreGenerationFingerprint, holdResult.StoreGenerationFingerprint, StringComparison.Ordinal)
+            || !string.Equals(repResult.CategoryLifecycleFingerprint, replayResult.CategoryLifecycleFingerprint, StringComparison.Ordinal)
             || !string.Equals(repResult.CategoryLifecycleFingerprint, holdResult.CategoryLifecycleFingerprint, StringComparison.Ordinal)
+            || !string.Equals(repResult.NormalizationVersion, replayResult.NormalizationVersion, StringComparison.Ordinal)
             || !string.Equals(repResult.NormalizationVersion, holdResult.NormalizationVersion, StringComparison.Ordinal))
         {
             return CommandResult<OwnerRulebookGateReceiptRow>.Failure(ClassifyErrors.Stale);
@@ -728,7 +735,8 @@ public sealed class ValidateClassificationRuleCommand
         string expectedOutcomeFingerprint,
         string categoryLifecycleFingerprint,
         string snapshotId,
-        string storeGenerationFingerprint)
+        string storeGenerationFingerprint,
+        OwnerGateFinalization? finalization)
     {
         // AOT-safe: manual Utf8JsonWriter — no reflection serializer.
         using var stream = new MemoryStream();
@@ -747,8 +755,47 @@ public sealed class ValidateClassificationRuleCommand
             writer.WriteString("categoryLifecycleFingerprint", categoryLifecycleFingerprint);
             writer.WriteString("corpusFingerprint", corpusFingerprint);
             writer.WriteString("expectedOutcomeFingerprint", expectedOutcomeFingerprint);
+            writer.WriteString("explicitBenefitDecision", finalization?.ExplicitBenefitDecision);
+            writer.WriteString("independentReplayValidationId", finalization?.IndependentReplayValidationId);
             writer.WriteString("normalizationVersion", NormalizationDescriptor.V1.Version);
+            if (finalization?.OwnerDecisionCountAfter is int ownerDecisionCountAfter)
+            {
+                writer.WriteNumber("ownerDecisionCountAfter", ownerDecisionCountAfter);
+            }
+            else
+            {
+                writer.WriteNull("ownerDecisionCountAfter");
+            }
+
+            if (finalization?.OwnerDecisionCountBefore is int ownerDecisionCountBefore)
+            {
+                writer.WriteNumber("ownerDecisionCountBefore", ownerDecisionCountBefore);
+            }
+            else
+            {
+                writer.WriteNull("ownerDecisionCountBefore");
+            }
+
+            if (finalization?.OwnerMinutesAfter is double ownerMinutesAfter)
+            {
+                writer.WriteNumber("ownerMinutesAfter", ownerMinutesAfter);
+            }
+            else
+            {
+                writer.WriteNull("ownerMinutesAfter");
+            }
+
+            if (finalization?.OwnerMinutesBefore is double ownerMinutesBefore)
+            {
+                writer.WriteNumber("ownerMinutesBefore", ownerMinutesBefore);
+            }
+            else
+            {
+                writer.WriteNull("ownerMinutesBefore");
+            }
+
             writer.WriteString("projectionContractVersion", ClassificationProjectionVersions.ClassificationV1);
+            writer.WriteString("representativeValidationId", finalization?.RepresentativeValidationId);
             writer.WriteString("snapshotId", snapshotId);
             writer.WriteString("storeGenerationFingerprint", storeGenerationFingerprint);
             writer.WriteEndObject();

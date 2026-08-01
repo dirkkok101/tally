@@ -713,6 +713,43 @@ public sealed class OwnerRulebookGateTests : IAsyncLifetime
             ClassifyJsonContext.Default.VerifiedOwnerRulebookGateReceipt));
     }
 
+    [Fact]
+    public async Task Finalization_inputs_are_bound_to_validate_idempotency_fingerprint()
+    {
+        var category = await CreateCategoryAsync("GateIdempotency");
+        var versionId = await SaveDraftAsync(category.CategoryId, "gate idempotency");
+        var path = await WriteBoundCorpusAsync([("gate idempotency", category.CategoryId, "suggestion")]);
+        var rep = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], path),
+            actor, NextKey(), CancellationToken.None);
+        var replay = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], path),
+            actor, NextKey(), CancellationToken.None);
+        Assert.True(rep.IsSuccess && replay.IsSuccess, rep.ErrorCode ?? replay.ErrorCode);
+
+        const string reusedKey = "validate-finalization-idempotency";
+        var plainHoldOut = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], path),
+            actor, reusedKey, CancellationToken.None);
+        Assert.True(plainHoldOut.IsSuccess, plainHoldOut.ErrorCode);
+        Assert.Null(plainHoldOut.Value!.OwnerRulebookGateReceiptId);
+
+        var changedRequest = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(
+                ClassifyOperationIds.ContractVersion,
+                [versionId],
+                path,
+                rep.Value!.ValidationId,
+                replay.Value!.ValidationId,
+                OwnerDecisionCountBefore: 8,
+                OwnerDecisionCountAfter: 1,
+                ExplicitBenefitDecision: "approve-broad"),
+            actor, reusedKey, CancellationToken.None);
+
+        Assert.Equal(ClassifyErrors.IdempotencyConflict, changedRequest.ErrorCode);
+        Assert.Equal(0L, await CountAsync("SELECT COUNT(*) FROM owner_rulebook_gate_receipt;"));
+    }
+
     private static void AssertNoPrivate(string text)
     {
         Assert.DoesNotContain("CANARY_PRIVATE", text, StringComparison.Ordinal);
