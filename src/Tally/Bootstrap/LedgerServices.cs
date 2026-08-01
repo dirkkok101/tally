@@ -49,6 +49,9 @@ public sealed record LedgerServices(
     RecoveryGuidanceOperationBundle? RecoveryGuidance,
     IngestOperationBundle? Ingest = null,
     BudgetOperationBundle? Budget = null,
+    /// <summary>Complete twelve-handler CLASSIFY bundle (bd-3g6y).</summary>
+    ClassifyOperationBundle? Classify = null,
+    /// <summary>Provisional validation-only bridge (bd-56yx); preferred only when Classify is absent.</summary>
     ClassifyValidationBundle? ClassifyValidation = null)
 {
     public static LedgerServices Create() => new(

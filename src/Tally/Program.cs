@@ -45,23 +45,26 @@ static async Task<ProcessResult> RunAsync(string[] args, CancellationToken cance
         database = await LedgerRuntimeBootstrap.InitializeCurrentAsync(dataRoot, cancellationToken);
     }
 
+    // Descriptor-only registry: schema/help/unknown-op discovery never opens CLASSIFY state or corpus.
     var registry = OperationRegistry.Create();
     var services = database is null
         ? LedgerServices.Create()
         : LedgerServices.Create(database);
 
-    // Bootstrap process for LedgerContractClient; then attach INGEST + BUDGET + validation-only CLASSIFY.
-    // Schema/help/unknown-op discovery uses registry templates only — no CLASSIFY state, corpus, or Ledger read.
+    // Bootstrap process for LedgerContractClient; then attach INGEST + BUDGET + complete CLASSIFY.
     var bootstrapProcess = new TallyProcess(registry, services);
     if (database is not null && !string.IsNullOrWhiteSpace(dataRoot) && OperatingSystem.IsLinux())
     {
         var ledgerClient = new LedgerContractClient(registry, bootstrapProcess);
         var ingest = IngestOperationBundle.CreateServices(dataRoot, ledgerClient);
-        var budget = await BudgetOperationBundle.CreateServicesAsync(dataRoot, ledgerClient, cancellationToken: cancellationToken);
-        ClassifyValidationBundle? classifyValidation = null;
-        if (IsClassifyRuleValidateInvocation(args))
+        var budget = await BudgetOperationBundle.CreateServicesAsync(
+            dataRoot, ledgerClient, cancellationToken: cancellationToken);
+
+        ClassifyOperationBundle? classify = null;
+        if (IsClassifyInvocation(args))
         {
-            classifyValidation = (await ClassifyValidationBundle.CreateServicesAsync(
+            // Runtime path only: all twelve CLASSIFY handlers over owner-only state.
+            classify = (await ClassifyOperationBundle.CreateServicesAsync(
                 dataRoot,
                 ledgerClient,
                 cancellationToken: cancellationToken)).Operations;
@@ -71,7 +74,7 @@ static async Task<ProcessResult> RunAsync(string[] args, CancellationToken cance
         {
             Ingest = ingest.Operations,
             Budget = budget.Operations,
-            ClassifyValidation = classifyValidation
+            Classify = classify
         };
     }
 
@@ -82,9 +85,5 @@ static async Task<ProcessResult> RunAsync(string[] args, CancellationToken cance
     return await process.RunAsync(args, stdin, cancellationToken);
 }
 
-static bool IsClassifyRuleValidateInvocation(string[] args) => args switch
-{
-    ["classify", "rule", "validate"] => true,
-    ["classify", "rule", "validate", "--input", _] => true,
-    _ => false
-};
+static bool IsClassifyInvocation(string[] args) =>
+    args.Length > 0 && string.Equals(args[0], "classify", StringComparison.Ordinal);

@@ -2,6 +2,7 @@ using System.Text.Json;
 using Tally.Application;
 using Tally.Bootstrap;
 using Tally.Contracts.Budget;
+using Tally.Contracts.Classify.Operations;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Actuals;
 using Tally.Contracts.Ledger.Reconciliation;
@@ -34,7 +35,18 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
             var handler = invocation.Descriptor!.HandlerFactory(services, registry);
             var request = new OperationRequest(invocation.UseRequestInput ? requestEnvelope!.Input : invocation.HandlerInput, requestEnvelope?.Actor, requestEnvelope?.IdempotencyKey);
             var result = await handler.HandleAsync(request, cancellationToken);
-            return result.IsSuccess ? Success(invocation.Descriptor.OperationId, result.Value!) : ErrorForHandler(result.ErrorCode!, invocation.Descriptor);
+            var operationId = invocation.Descriptor.OperationId;
+            if (operationId.StartsWith("classify.", StringComparison.Ordinal))
+            {
+                var correlation = ResolveCorrelationRef(requestEnvelope);
+                return result.IsSuccess
+                    ? ClassifySuccess(operationId, result.Value!, correlation)
+                    : ClassifyErrorForHandler(result.ErrorCode!, invocation.Descriptor, correlation);
+            }
+
+            return result.IsSuccess
+                ? Success(operationId, result.Value!)
+                : ErrorForHandler(result.ErrorCode!, invocation.Descriptor);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { throw; }
         catch { return UnexpectedFailure(); }
@@ -96,6 +108,113 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
     private static ProcessResult Success(string operationId, JsonElement result) => new(0, JsonSerializer.Serialize(new ResultEnvelope("1.0", operationId, "success", result, null), LedgerJsonContext.Default.ResultEnvelope), string.Empty);
     private static ProcessResult Error(int exitCode, string code, string category, string message) => new(exitCode, JsonSerializer.Serialize(new ResultEnvelope("1.0", "system.process", "error", null, new ProcessError(code, category, message)), LedgerJsonContext.Default.ResultEnvelope), "tally: " + code);
     public static ProcessResult UnexpectedFailure() => Error(10, "host.unexpected", "host", "The operation could not be completed.");
+
+    /// <summary>
+    /// CLASSIFY typed envelope: contract_version, operation_id, outcome, result_or_error, correlation_ref.
+    /// Non-CLASSIFY paths continue to emit the established ResultEnvelope bytes.
+    /// </summary>
+    private static ProcessResult ClassifySuccess(
+        string operationId,
+        JsonElement result,
+        string? correlationRef)
+    {
+        var envelope = new ClassifyResultEnvelope(
+            "1.0",
+            operationId,
+            "success",
+            result,
+            correlationRef);
+        var stdout = JsonSerializer.Serialize(envelope, LedgerJsonContext.Default.ClassifyResultEnvelope);
+        var stderr = string.IsNullOrWhiteSpace(correlationRef)
+            ? string.Empty
+            : "tally: classify correlation_ref=" + correlationRef;
+        return new ProcessResult(0, stdout, stderr);
+    }
+
+    private static ProcessResult ClassifyError(
+        int exitCode,
+        string code,
+        string category,
+        string message,
+        string operationId,
+        string? correlationRef)
+    {
+        var error = new ProcessError(code, category, message);
+        var errorElement = JsonSerializer.SerializeToElement(error, LedgerJsonContext.Default.ProcessError);
+        var envelope = new ClassifyResultEnvelope(
+            "1.0",
+            operationId,
+            "error",
+            errorElement,
+            correlationRef);
+        var stdout = JsonSerializer.Serialize(envelope, LedgerJsonContext.Default.ClassifyResultEnvelope);
+        var stderr = string.IsNullOrWhiteSpace(correlationRef)
+            ? "tally: " + code
+            : "tally: " + code + " correlation_ref=" + correlationRef + " operation_id=" + operationId;
+        return new ProcessResult(exitCode, stdout, stderr);
+    }
+
+    private static ProcessResult ClassifyErrorForHandler(
+        string code,
+        OperationDescriptor? descriptor,
+        string? correlationRef)
+    {
+        var operationId = descriptor?.OperationId ?? "classify";
+        if (descriptor?.DomainErrors?.FirstOrDefault(declared =>
+                string.Equals(declared.Code, code, StringComparison.Ordinal)) is { } schema)
+        {
+            return ClassifyError(
+                schema.ExitCode,
+                code,
+                schema.Category,
+                CategoryMessage(schema.Category),
+                operationId,
+                correlationRef);
+        }
+
+        // Fall through to shared fallback mapping, then re-wrap as CLASSIFY envelope.
+        var fallback = FallbackErrorForHandler(code);
+        try
+        {
+            var legacy = JsonSerializer.Deserialize(fallback.Stdout, LedgerJsonContext.Default.ResultEnvelope);
+            if (legacy?.Error is not null)
+            {
+                return ClassifyError(
+                    fallback.ExitCode,
+                    legacy.Error.Code,
+                    legacy.Error.Category,
+                    legacy.Error.Message,
+                    operationId,
+                    correlationRef);
+            }
+        }
+        catch (JsonException)
+        {
+            // ignore
+        }
+
+        return ClassifyError(10, "host.unexpected", "host", "The operation could not be completed.", operationId, correlationRef);
+    }
+
+    private static string? ResolveCorrelationRef(RequestEnvelope? request)
+    {
+        if (request is null)
+        {
+            return null;
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.CorrelationRef))
+        {
+            return request.CorrelationRef.Trim();
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.IdempotencyKey))
+        {
+            return request.IdempotencyKey.Trim();
+        }
+
+        return string.IsNullOrWhiteSpace(request.Actor.RunId) ? null : request.Actor.RunId.Trim();
+    }
 
     // The invoked descriptor's declared DomainErrors are the published contract source
     // (DD-LEDGER/INGEST/BUDGET-CLI-OPERATION-CONTRACT: codes, exits, and categories are the
@@ -277,6 +396,26 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
             => Error(9, code, "host", "The budget operation could not access a required host resource."),
         BudgetErrors.Unexpected
             => Error(10, code, "host", "The budget operation could not be completed."),
+        // CLASSIFY published domain errors (ErrorSchema lists on ClassifyOperationModule).
+        ClassifyErrors.InvalidInput or ClassifyErrors.ActorRequired or ClassifyErrors.IdempotencyRequired
+            or ClassifyErrors.SelectionInvalid
+            => Error(3, code, "validation", "The classify request is invalid."),
+        ClassifyErrors.NotFound or ClassifyErrors.EvaluationNotFound or ClassifyErrors.OutcomeNotFound
+            or ClassifyErrors.PreviewNotFound or ClassifyErrors.RuleNotFound or ClassifyErrors.RuleVersionNotFound
+            or ClassifyErrors.ValidationNotFound
+            => Error(4, code, "not_found", "The classify target was not found."),
+        ClassifyErrors.Conflict or ClassifyErrors.IdempotencyConflict or ClassifyErrors.Stale
+            => Error(5, code, "conflict", "The classify request conflicts with current state."),
+        ClassifyErrors.Lifecycle
+            => Error(6, code, "lifecycle", "The classify lifecycle does not allow the operation."),
+        ClassifyErrors.UnsupportedVersion or ClassifyErrors.LedgerIncompatible
+            => Error(7, code, "compatibility", "The classify request is not compatible with this executable contract."),
+        ClassifyErrors.Integrity
+            => Error(8, code, "integrity", "The classify request could not preserve its integrity contract."),
+        ClassifyErrors.LedgerUnavailable or ClassifyErrors.ResourceLimit
+            => Error(9, code, "host", "The classify operation could not access a required host resource."),
+        ClassifyErrors.Unexpected
+            => Error(10, code, "host", "The classify operation could not be completed."),
         _ => UnexpectedFailure()
     };
 

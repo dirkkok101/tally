@@ -13,8 +13,34 @@ public sealed record ResultEnvelope(string ContractVersion, string OperationId, 
 public sealed record ProcessError(string Code, string Category, string Message, IReadOnlyList<string>? Fields = null);
 public sealed record ProcessResult(int ExitCode, string Stdout, string Stderr);
 public sealed record SafeActor(string Kind, string Label, string? RunId = null);
-public sealed record RequestEnvelope(string ContractVersion, SafeActor Actor, JsonElement Input, string? IdempotencyKey = null);
+/// <summary>
+/// Shared process request envelope. Optional <see cref="CorrelationRef"/> is preserved into
+/// CLASSIFY typed response envelopes; legacy modules ignore it.
+/// </summary>
+public sealed record RequestEnvelope(
+    string ContractVersion,
+    SafeActor Actor,
+    JsonElement Input,
+    string? IdempotencyKey = null,
+    string? CorrelationRef = null);
 public sealed record EmptyInput;
+
+/// <summary>
+/// Typed CLASSIFY process envelope (DM-CLASSIFY-OPERATION-CONTRACTS).
+/// Snake_case wire names; <c>result_or_error</c> holds the success payload or error object;
+/// <c>correlation_ref</c> echoes the request correlation when supplied.
+/// </summary>
+public sealed record ClassifyResultEnvelope(
+    [property: JsonPropertyName("contract_version"), JsonRequired]
+    string ContractVersion,
+    [property: JsonPropertyName("operation_id"), JsonRequired]
+    string OperationId,
+    [property: JsonPropertyName("outcome"), JsonRequired]
+    string Outcome,
+    [property: JsonPropertyName("result_or_error"), JsonRequired]
+    JsonElement ResultOrError,
+    [property: JsonPropertyName("correlation_ref")]
+    string? CorrelationRef);
 
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase, UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow)]
 [JsonSerializable(typeof(ResultEnvelope))]
@@ -22,6 +48,8 @@ public sealed record EmptyInput;
 [JsonSerializable(typeof(SafeActor))]
 [JsonSerializable(typeof(RequestEnvelope))]
 [JsonSerializable(typeof(EmptyInput))]
+[JsonSerializable(typeof(ClassifyResultEnvelope))]
+[JsonSerializable(typeof(OperationLimits))]
 [JsonSerializable(typeof(Tally.Contracts.System.VersionResult))]
 [JsonSerializable(typeof(Tally.Contracts.System.SchemaListResult))]
 [JsonSerializable(typeof(Tally.Contracts.System.SchemaShowResult))]

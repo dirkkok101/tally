@@ -34,9 +34,38 @@ using Tally.Features.System.Guidance;
 
 namespace Tally.Cli;
 
-public sealed record OperationDescriptor(string OperationId, string CliPath, string Kind, bool RequiresIdempotencyKey, JsonTypeInfo RequestTypeInfo, JsonTypeInfo ResultTypeInfo, string HandlerTarget, Func<LedgerServices, OperationRegistry, IOperationHandler> HandlerFactory, string Example, IReadOnlyList<ErrorSchema>? DomainErrors = null, string MinimumContractVersion = "1.0", string MaximumContractVersion = "1.0")
+public sealed record OperationDescriptor(
+    string OperationId,
+    string CliPath,
+    string Kind,
+    bool RequiresIdempotencyKey,
+    JsonTypeInfo RequestTypeInfo,
+    JsonTypeInfo ResultTypeInfo,
+    string HandlerTarget,
+    Func<LedgerServices, OperationRegistry, IOperationHandler> HandlerFactory,
+    string Example,
+    IReadOnlyList<ErrorSchema>? DomainErrors = null,
+    string MinimumContractVersion = "1.0",
+    string MaximumContractVersion = "1.0",
+    /// <summary>Non-null for CLASSIFY descriptors (bd-3kex limits); null for legacy ops.</summary>
+    OperationLimits? Limits = null)
 {
-    public OperationSchema ToSchema() => new(OperationId, CliPath, Kind, JsonSchema(RequestTypeInfo), JsonSchema(ResultTypeInfo), RequestTypeInfo.Type.FullName!, ResultTypeInfo.Type.FullName!, SchemaErrors(), 0, RequiresIdempotencyKey, MinimumContractVersion, MaximumContractVersion, HandlerTarget, Example);
+    public OperationSchema ToSchema() => new(
+        OperationId,
+        CliPath,
+        Kind,
+        JsonSchema(RequestTypeInfo),
+        JsonSchema(ResultTypeInfo),
+        RequestTypeInfo.Type.FullName!,
+        ResultTypeInfo.Type.FullName!,
+        SchemaErrors(),
+        0,
+        RequiresIdempotencyKey,
+        MinimumContractVersion,
+        MaximumContractVersion,
+        HandlerTarget,
+        Example,
+        Limits);
 
     private static string JsonSchema(JsonTypeInfo typeInfo) => typeInfo.GetJsonSchemaAsNode(
         new JsonSchemaExporterOptions { TreatNullObliviousAsNonNullable = true }).ToJsonString();
@@ -417,7 +446,10 @@ public sealed class OperationRegistry
 
         if (descriptor.OperationId.StartsWith("classify.", StringComparison.Ordinal))
         {
-            var classifyDescriptor = services.ClassifyValidation?.Descriptors
+            // Prefer complete twelve-handler bundle; fall back to provisional validation-only bridge.
+            var classifyDescriptor = services.Classify?.Descriptors
+                .SingleOrDefault(candidate => candidate.OperationId == descriptor.OperationId)
+                ?? services.ClassifyValidation?.Descriptors
                 .SingleOrDefault(candidate => candidate.OperationId == descriptor.OperationId);
             if (classifyDescriptor is not null)
             {
@@ -487,7 +519,7 @@ public sealed class OperationRegistry
             .Concat(storageEvolution.Descriptors)
             .Concat(IngestOperationBundle.CreateDescriptorTemplates().Descriptors)
             .Concat(BudgetOperationBundle.CreateDescriptorTemplates().Descriptors)
-            .Concat(ClassifyValidationBundle.CreateDescriptorTemplates().Descriptors)
+            .Concat(ClassifyOperationBundle.CreateDescriptorTemplates().Descriptors)
             .ToDictionary(descriptor => descriptor.OperationId, StringComparer.Ordinal);
     }
 
