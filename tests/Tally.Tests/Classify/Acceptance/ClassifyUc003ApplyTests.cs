@@ -204,13 +204,45 @@ public sealed class ClassifyUc003ApplyTests : IAsyncLifetime
     [Fact]
     public async Task UC003_stale_whole_selection_rejects_before_ledger_mutation()
     {
-        var seeded = await SeedSuggestionPreviewAsync("uc003 stale preflight");
-        await VoidTransactionAsync(seeded.TransactionIds[0]);
-        var before = await SnapshotAllocationsAsync(seeded.TransactionIds);
-        var runsBefore = await ApplyRunCountAsync();
-        var allocBefore = await AllocationEventCountAsync(seeded.TransactionIds[0]);
+        // Preview must authorize at least two current suggestions; then stale exactly one sibling
+        // and prove whole-selection rejection before any apply_run or allocation mutation for all.
+        var category = await CreateCategoryAsync("Uc003StaleWhole");
+        await SaveAndActivateAsync(category, "uc003 stale multi", broadApply: false);
+        var txStale = await RecordTransactionAsync("uc003 stale multi");
+        var txCurrent = await RecordTransactionAsync("uc003 stale multi");
+        var evalId = await EvaluateSuccessAsync();
+        var oStale = await OutcomeGetBodyAsync(evalId, txStale);
+        var oCurrent = await OutcomeGetBodyAsync(evalId, txCurrent);
+        Assert.Equal("suggestion", oStale.Kind);
+        Assert.Equal("suggestion", oCurrent.Kind);
 
-        var run = await ApplyRunAsync(seeded.PreviewId, "apply-stale-" + Guid.NewGuid().ToString("N")[..8], NextKey());
+        var preview = await PreviewSelectedAsync(
+            evalId, [oStale.OutcomeId, oCurrent.OutcomeId], NextKey());
+        AssertClassifySuccess(preview, ClassifyOperationIds.ApplyPreview);
+        using var previewDoc = ParseResult(preview);
+        var previewBody = previewDoc.RootElement.GetProperty("result_or_error");
+        Assert.True(previewBody.GetProperty("selectedCount").GetInt32() >= 2);
+        var previewId = previewBody.GetProperty("previewId").GetString()!;
+        var selectedTxs = previewBody.GetProperty("selectedTransactionIds").EnumerateArray()
+            .Select(e => e.GetString()!)
+            .ToArray();
+        Assert.Contains(txStale, selectedTxs);
+        Assert.Contains(txCurrent, selectedTxs);
+        Assert.True(selectedTxs.Length >= 2);
+
+        // Stale exactly one selected transaction after preview; sibling remains current.
+        await VoidTransactionAsync(txStale);
+
+        var allSelected = selectedTxs.Distinct(StringComparer.Ordinal).ToArray();
+        var before = await SnapshotAllocationsAsync(allSelected);
+        var runsBefore = await ApplyRunCountAsync();
+        var allocBeforeByTx = new Dictionary<string, long>(StringComparer.Ordinal);
+        foreach (var tx in allSelected)
+        {
+            allocBeforeByTx[tx] = await AllocationEventCountAsync(tx);
+        }
+
+        var run = await ApplyRunAsync(previewId, "apply-stale-" + Guid.NewGuid().ToString("N")[..8], NextKey());
         Assert.NotEqual(0, run.ExitCode);
         using var doc = ParseResult(run);
         var code = doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString();
@@ -219,9 +251,16 @@ public sealed class ClassifyUc003ApplyTests : IAsyncLifetime
                 or ClassifyErrors.Lifecycle or ClassifyErrors.Integrity,
             code);
 
-        Assert.Equal(before, await SnapshotAllocationsAsync(seeded.TransactionIds));
-        Assert.Equal(allocBefore, await AllocationEventCountAsync(seeded.TransactionIds[0]));
+        // Whole-selection rejection: no apply_run and no allocation mutation for EVERY selected tx,
+        // including the still-current sibling that was never voided.
         Assert.Equal(runsBefore, await ApplyRunCountAsync());
+        Assert.Equal(before, await SnapshotAllocationsAsync(allSelected));
+        foreach (var tx in allSelected)
+        {
+            Assert.Equal(allocBeforeByTx[tx], await AllocationEventCountAsync(tx));
+            Assert.Null(before[tx]);
+            Assert.Null((await SnapshotAllocationsAsync([tx]))[tx]);
+        }
     }
 
     // ── Assignment / correction / item partition ─────────────────────────────
@@ -550,12 +589,10 @@ public sealed class ClassifyUc003ApplyTests : IAsyncLifetime
         var itemResult = body.GetProperty("items").EnumerateArray()
             .Single(i => i.GetProperty("transactionId").GetString() == item.TransactionId);
         var recordedAlloc = itemResult.GetProperty("allocationEventId").GetString();
-        Assert.False(string.IsNullOrWhiteSpace(recordedAlloc));
+        // Resume must reconcile to the exact external AllocationEventId produced under the frozen key.
+        Assert.Equal(externalAlloc, recordedAlloc);
         // No second allocation event for the transaction.
         Assert.Equal(countAfterExternal, await AllocationEventCountAsync(item.TransactionId));
-        Assert.True(
-            string.Equals(recordedAlloc, externalAlloc, StringComparison.Ordinal)
-            || !string.IsNullOrWhiteSpace(recordedAlloc));
     }
 
     [Fact]
