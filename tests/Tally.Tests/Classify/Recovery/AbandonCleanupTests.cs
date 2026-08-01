@@ -470,6 +470,106 @@ public sealed class AbandonCleanupTests : IAsyncLifetime
         Assert.Contains("removedArtifactCount", json, StringComparison.OrdinalIgnoreCase);
     }
 
+    [Fact]
+    public async Task Cleanup_retains_locked_recognized_and_still_removes_unlocked()
+    {
+        protection.CreateRecognizedTemporaryForTests("tmp-clean-free", [1]);
+        protection.CreateRecognizedTemporaryForTests("tmp-clean-locked", [2]);
+        var paths = new ClassifyStorePaths(root);
+        var lockPath = Path.Combine(paths.TemporaryDirectory, "tmp-clean-locked.lock");
+        File.WriteAllText(lockPath, "held");
+        File.SetUnixFileMode(lockPath, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+
+        var result = await cleanup.HandleAsync(
+            new ClassifyCleanupRequest(ClassifyOperationIds.ContractVersion, ClassifyRetentionPolicy.PolicyVersion),
+            actor, NextKey(), CancellationToken.None);
+
+        Assert.True(result.IsSuccess, result.ErrorCode);
+        Assert.True(result.Value!.RemovedTemporaryCount >= 1);
+        Assert.True(result.Value.RetainedArtifactCount >= 1);
+        Assert.False(File.Exists(Path.Combine(paths.TemporaryDirectory, "tmp-clean-free")));
+        Assert.True(File.Exists(Path.Combine(paths.TemporaryDirectory, "tmp-clean-locked")));
+        // Aggregate per-kind counts remain stable non-negative integers.
+        Assert.True(result.Value.RemovedTemporaryCount >= 0);
+        Assert.True(result.Value.RemovedExpiredPreviewCount >= 0);
+        Assert.True(result.Value.RemovedAbandonedPayloadCount >= 0);
+        Assert.True(
+            result.Value.RemovedArtifactCount
+            >= result.Value.RemovedTemporaryCount);
+    }
+
+    [Fact]
+    public async Task Startup_committed_quarantine_requires_durable_cleanup_event()
+    {
+        protection.CreateRecognizedTemporaryForTests("tmp-db-auth", [3]);
+        var staged = protection.TryStageRecognizedTemporaries(
+            "startup-db-auth", "cleanup", ["tmp-db-auth"]);
+        Assert.NotNull(staged);
+        Assert.DoesNotContain("tmp-db-auth", protection.ListRecognizedTemporaryFileNames());
+
+        // No cleanup_event yet — must restore, never delete.
+        var restored = protection.RecoverQuarantineAtStartup((kind, operationId) =>
+        {
+            if (!string.Equals(kind, "cleanup", StringComparison.Ordinal)
+                || !string.Equals(operationId, "startup-db-auth", StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            // Probe live DB authority (none yet).
+            using var connection = state.Store.OpenMigratedAsync(CancellationToken.None)
+                .GetAwaiter().GetResult();
+            return recovery.HasCleanupEventAsync(
+                connection, null, operationId, CancellationToken.None)
+                .GetAwaiter().GetResult();
+        });
+        Assert.True(restored >= 1);
+        Assert.Contains("tmp-db-auth", protection.ListRecognizedTemporaryFileNames());
+    }
+
+    [Fact]
+    public async Task Startup_with_cleanup_event_finalizes_staged_deletion()
+    {
+        protection.CreateRecognizedTemporaryForTests("tmp-db-final", [4]);
+        var q = protection.TryStageRecognizedTemporaries(
+            "op-db-final", "cleanup", ["tmp-db-final"]);
+        Assert.NotNull(q);
+
+        await using (var connection = await state.Store.OpenMigratedAsync(CancellationToken.None))
+        await using (var transaction = state.Store.BeginImmediate(connection))
+        {
+            var row = ClassifyContractMapper.ToCleanupEventRow(
+                "op-db-final",
+                ClassifyRetentionPolicy.PolicyVersion,
+                recognizedRemovedCount: 1,
+                expiredPreviewCount: 0,
+                abandonedPayloadCount: 0,
+                actor: "automation:abandon:run-01",
+                occurredAtUtc: "2026-08-01T00:00:00Z",
+                removedArtifactCount: 1,
+                retainedArtifactCount: 0);
+            await recovery.InsertCleanupEventAsync(connection, transaction, row, CancellationToken.None);
+            await transaction.CommitAsync(CancellationToken.None);
+        }
+
+        var actions = protection.RecoverQuarantineAtStartup((kind, operationId) =>
+        {
+            if (!string.Equals(kind, "cleanup", StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            using var connection = state.Store.OpenMigratedAsync(CancellationToken.None)
+                .GetAwaiter().GetResult();
+            return recovery.HasCleanupEventAsync(
+                connection, null, operationId, CancellationToken.None)
+                .GetAwaiter().GetResult();
+        });
+        Assert.True(actions >= 1);
+        Assert.DoesNotContain("tmp-db-final", protection.ListRecognizedTemporaryFileNames());
+        Assert.False(Directory.Exists(q!.Directory));
+    }
+
     // ── Seed helpers (direct SQL into migrated store) ───────────────────────
 
     private async Task SeedMinimalPreviewGraphAsync(

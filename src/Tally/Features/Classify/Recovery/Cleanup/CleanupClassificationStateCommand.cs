@@ -109,7 +109,7 @@ public sealed class CleanupClassificationStateCommand
             var cleanupId = ClassifyContractMapper.NewRuleVersionId(now);
             var occurredAt = ClassifyContractMapper.FormatUtc(now);
 
-            // Prevalidate targets: recognized temps + abandoned-subject scoped temps.
+            // Inventory recognized temps; partition removable (unlocked) vs retained (locked/etc.).
             var allTemps = artifactProtection.ListRecognizedTemporaryFileNames().ToList();
             var abandonedSubjectIds = new List<string>();
             IReadOnlyList<(string PreviewId, string ExpiresAt)> expired;
@@ -126,13 +126,19 @@ public sealed class CleanupClassificationStateCommand
                 }
             }
 
-            var temporaryNames = allTemps
+            var temporaryCandidates = allTemps
                 .Where(n => !abandonedSubjectIds.Any(s => n.Contains(s, StringComparison.Ordinal)))
                 .ToArray();
-            var abandonedTempNames = allTemps
+            var abandonedTempCandidates = allTemps
                 .Where(n => abandonedSubjectIds.Any(s => n.Contains(s, StringComparison.Ordinal)))
                 .ToArray();
-            var stageNames = temporaryNames.Concat(abandonedTempNames)
+
+            var tempPartition = artifactProtection.PartitionRecognizedTemporaries(temporaryCandidates);
+            var abandonedPartition = artifactProtection.PartitionRecognizedTemporaries(abandonedTempCandidates);
+
+            // Stage only unlocked removable files; locked recognized files stay and count as retained.
+            var stageNames = tempPartition.Removable
+                .Concat(abandonedPartition.Removable)
                 .Distinct(StringComparer.Ordinal)
                 .OrderBy(n => n, StringComparer.Ordinal)
                 .ToArray();
@@ -146,11 +152,18 @@ public sealed class CleanupClassificationStateCommand
                     return CommandResult<ClassifyCleanupResult>.Failure(ClassifyErrors.Integrity);
                 }
             }
+            else
+            {
+                // Empty stage is success (nothing removable).
+                quarantine = artifactProtection.TryStageRecognizedTemporaries(
+                    cleanupId, "cleanup", Array.Empty<string>());
+            }
 
-            var removedTemporary = temporaryNames.Length;
-            var abandonedPayload = abandonedTempNames.Length;
-            // After successful stage, those names are no longer in tmp.
+            var removedTemporary = tempPartition.Removable.Count;
+            var abandonedPayload = abandonedPartition.Removable.Count;
             var stagedCount = quarantine?.StagedCount ?? 0;
+            // Retained recognized locked/non-removable files (still under tmp).
+            var retainedLockedCount = tempPartition.Retained.Count + abandonedPartition.Retained.Count;
 
             // Expired preview tombstones (RESTRICT: no hard-delete of preview rows) under writer.
             var expiredPreviewCount = 0;
@@ -214,8 +227,14 @@ public sealed class CleanupClassificationStateCommand
                             expiredPreviewCount++;
                         }
 
-                        // Retained count measured after stage (temps already quarantined).
+                        // Retained = locked/non-removable recognized still present + any other recognized temps.
                         retainedAfter = artifactProtection.CountRecognizedTemporaryArtifacts();
+                        // Stable floor: at least the locked partition we observed.
+                        if (retainedAfter < retainedLockedCount)
+                        {
+                            retainedAfter = retainedLockedCount;
+                        }
+
                         var removedArtifactCount = stagedCount + expiredPreviewCount;
                         var eventRow = ClassifyContractMapper.ToCleanupEventRow(
                             cleanupId,
@@ -263,7 +282,15 @@ public sealed class CleanupClassificationStateCommand
 
             if (writeResult.IsSuccess)
             {
-                quarantine?.FinalizeCommitted();
+                // Final deletion only with durable cleanup_event authority (not manifest.Committed alone).
+                var durable = false;
+                await using (var connection = await stateStore.OpenMigratedAsync(ct))
+                {
+                    durable = await recoveryStore.HasCleanupEventAsync(
+                        connection, null, cleanupId, ct);
+                }
+
+                quarantine?.FinalizeWithDurableAuthority(durable);
                 quarantine = null;
             }
             else

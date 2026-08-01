@@ -137,19 +137,24 @@ public sealed class AbandonClassificationStateCommand
             var abandonedAt = ClassifyContractMapper.FormatUtc(now);
             var tombstoneId = ClassifyContractMapper.NewRuleVersionId(now);
 
-            // Collect subject-scoped temps, stage into quarantine (no final delete yet).
+            // Subject-scoped temps: stage only unlocked removable; locked remain retained.
             var subjectTemps = artifactProtection.ListRecognizedTemporaryFileNames()
                 .Where(n => n.Contains(subjectId, StringComparison.Ordinal))
                 .ToArray();
-
-            if (subjectTemps.Length > 0)
+            var partition = artifactProtection.PartitionRecognizedTemporaries(subjectTemps);
+            if (partition.Removable.Count > 0)
             {
                 quarantine = artifactProtection.TryStageRecognizedTemporaries(
-                    tombstoneId, "abandon", subjectTemps);
+                    tombstoneId, "abandon", partition.Removable);
                 if (quarantine is null)
                 {
                     return CommandResult<ClassifyAbandonResult>.Failure(ClassifyErrors.Integrity);
                 }
+            }
+            else
+            {
+                quarantine = artifactProtection.TryStageRecognizedTemporaries(
+                    tombstoneId, "abandon", Array.Empty<string>());
             }
 
             var removedPayload = quarantine?.StagedCount ?? 0;
@@ -242,8 +247,15 @@ public sealed class AbandonClassificationStateCommand
 
             if (writeResult.IsSuccess)
             {
-                // Durable authority committed — permanently drop staged files.
-                quarantine?.FinalizeCommitted();
+                // Final deletion only with durable tombstone authority (not manifest.Committed alone).
+                var durable = false;
+                await using (var connection = await stateStore.OpenMigratedAsync(ct))
+                {
+                    durable = await recoveryStore.HasTombstoneIdAsync(
+                        connection, null, tombstoneId, ct);
+                }
+
+                quarantine?.FinalizeWithDurableAuthority(durable);
                 quarantine = null;
             }
             else
