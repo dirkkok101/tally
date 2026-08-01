@@ -410,8 +410,7 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
         // Capture dual oracle after setup ledger writes, immediately before rejection.
         var before = await CaptureImmutabilityAsync(baseline);
 
-        // Stable permission code via production corpus-reader seam (DomainErrors omit CORPUS
-        // codes, so the process envelope may remap — reader is the permission-code oracle).
+        // Corroboration only — public process code is the contract oracle below.
         var seam = await ClassifyCorpusExtensions.CreateReader().ReadAsync(path, CancellationToken.None);
         Assert.False(seam.IsSuccess);
         Assert.Equal(PrivateCorpusErrors.PermissionsRejected, seam.ErrorCode);
@@ -425,16 +424,11 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
         Assert.NotEqual(0, result.ExitCode);
         using var doc = JsonDocument.Parse(result.Stdout);
         Assert.Equal("error", doc.RootElement.GetProperty("outcome").GetString());
-        // Permission proof is the reader code above — never treat host.unexpected as success evidence.
-        var processCode = doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString();
-        Assert.False(string.IsNullOrWhiteSpace(processCode));
-        Assert.NotEqual("host.unexpected", seam.ErrorCode);
-        if (processCode is not null
-            && !string.Equals(processCode, "host.unexpected", StringComparison.Ordinal)
-            && !string.Equals(processCode, ClassifyErrors.Unexpected, StringComparison.Ordinal))
-        {
-            Assert.Equal(PrivateCorpusErrors.PermissionsRejected, processCode);
-        }
+        // Published classify.rule.validate DomainErrors map CORPUS-PERMISSIONS exactly.
+        Assert.Equal(
+            PrivateCorpusErrors.PermissionsRejected,
+            doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString());
+        Assert.Equal(3, result.ExitCode);
 
         await AssertUnchangedAsync(before);
         // Candidate draft must not become the active set; baseline pointer is unchanged above.
@@ -467,14 +461,10 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
         Assert.NotEqual(0, result.ExitCode);
         using var doc = JsonDocument.Parse(result.Stdout);
         Assert.Equal("error", doc.RootElement.GetProperty("outcome").GetString());
-        var processCode = doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString();
-        Assert.NotEqual("host.unexpected", seam.ErrorCode);
-        if (processCode is not null
-            && !string.Equals(processCode, "host.unexpected", StringComparison.Ordinal)
-            && !string.Equals(processCode, ClassifyErrors.Unexpected, StringComparison.Ordinal))
-        {
-            Assert.Equal(PrivateCorpusErrors.PermissionsRejected, processCode);
-        }
+        Assert.Equal(
+            PrivateCorpusErrors.PermissionsRejected,
+            doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString());
+        Assert.Equal(3, result.ExitCode);
 
         await AssertUnchangedAsync(before);
         Assert.Equal(baseline.RuleSetVersionId, await RequireActiveRuleSetVersionIdAsync(versionId));
@@ -485,13 +475,14 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
     [Fact]
     public async Task UC006_non_owner_private_corpus_rejects_validate_without_activation()
     {
-        // Ownership boundary: st_uid != geteuid → CLASSIFY-CORPUS-OWNER (PrivateCorpusReader).
-        // Host support: passwordless sudo chown (same as ClassifySecurityGateTests).
-        // Limitation (documented): unprivileged open(2) of a non-owner 0600 file fails with
-        // EACCES before PrivateCorpusReader reaches the st_uid branch, so the reader surfaces
-        // CLASSIFY-CORPUS-PERMISSIONS. Ownership mismatch itself is proven with the production
-        // lstat ownership predicate (HostArtifactProtection) without weakening checks; the
-        // published OwnerRejected code remains the reader constant for the uid path.
+        // Non-owner corpus (uid != euid, mode exact 0600). Requires passwordless sudo chown
+        // (same host capability as ClassifySecurityGateTests). No group-bit downgrade fallback.
+        //
+        // Documented production limitation: unprivileged open(2) of a non-owner 0600 file fails
+        // with EACCES before PrivateCorpusReader reaches the st_uid → OwnerRejected branch, so
+        // both the reader and the published process envelope surface CLASSIFY-CORPUS-PERMISSIONS.
+        // Ownership mismatch itself is corroborated via HostArtifactProtection (lstat euid check).
+        // CLASSIFY-CORPUS-OWNER remains published on classify.rule.validate for the uid path.
         var baseline = await SeedActiveRuleSetAsync();
         var category = await CreateCategoryAsync("Uc006PermOwn");
         var versionId = await SaveRuleVersionIdAsync(category, "uc006 perm owner shop");
@@ -501,46 +492,28 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
             UnixFileMode.UserRead | UnixFileMode.UserWrite,
             File.GetUnixFileMode(path));
 
-        var chownApplied = TryChown("nobody:nogroup", path);
+        Assert.True(
+            TryChown("nobody:nogroup", path),
+            "external host limitation: passwordless sudo chown is required for the non-owner "
+            + "corpus path; refusing to downgrade into a group-bit permission test");
         // Capture after setup (and chown) so ledger fingerprint is stable across the rejection.
         var before = await CaptureImmutabilityAsync(baseline);
         try
         {
-            if (chownApplied)
-            {
-                // Real ownership mismatch: mode still exact 0600; uid is not euid.
-                var protection = new HostArtifactProtection();
-                var ownershipEx = Assert.Throws<InvalidOperationException>(
-                    () => protection.RequireOwnerOnlyArtifact(path));
-                Assert.Equal("The artifact is not owner-only.", ownershipEx.Message);
-                Assert.Equal(
-                    UnixFileMode.UserRead | UnixFileMode.UserWrite,
-                    File.GetUnixFileMode(path));
+            // Corroboration: real ownership mismatch with mode still exact 0600.
+            var protection = new HostArtifactProtection();
+            var ownershipEx = Assert.Throws<InvalidOperationException>(
+                () => protection.RequireOwnerOnlyArtifact(path));
+            Assert.Equal("The artifact is not owner-only.", ownershipEx.Message);
+            Assert.Equal(
+                UnixFileMode.UserRead | UnixFileMode.UserWrite,
+                File.GetUnixFileMode(path));
 
-                // Corpus-reader seam: unprivileged open maps to PermissionsRejected (EACCES)
-                // before the st_uid OwnerRejected branch — see limitation above.
-                var seam = await ClassifyCorpusExtensions.CreateReader()
-                    .ReadAsync(path, CancellationToken.None);
-                Assert.False(seam.IsSuccess);
-                Assert.Equal(PrivateCorpusErrors.PermissionsRejected, seam.ErrorCode);
-                Assert.Equal("CLASSIFY-CORPUS-OWNER", PrivateCorpusErrors.OwnerRejected);
-                Assert.NotEqual("host.unexpected", seam.ErrorCode);
-            }
-            else
-            {
-                // Limitation: true uid mismatch is not portable without passwordless chown.
-                // Still exercise the corpus-reader ownership-related fail-closed surface and
-                // keep the published OwnerRejected code as the ownership oracle constant.
-                Assert.Equal("CLASSIFY-CORPUS-OWNER", PrivateCorpusErrors.OwnerRejected);
-                File.SetUnixFileMode(
-                    path,
-                    UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.GroupRead);
-                var seam = await ClassifyCorpusExtensions.CreateReader()
-                    .ReadAsync(path, CancellationToken.None);
-                Assert.False(seam.IsSuccess);
-                Assert.Equal(PrivateCorpusErrors.PermissionsRejected, seam.ErrorCode);
-                Assert.NotEqual("host.unexpected", seam.ErrorCode);
-            }
+            // Reader corroboration of the deterministic EACCES-before-uid outcome.
+            var seam = await ClassifyCorpusExtensions.CreateReader()
+                .ReadAsync(path, CancellationToken.None);
+            Assert.False(seam.IsSuccess);
+            Assert.Equal(PrivateCorpusErrors.PermissionsRejected, seam.ErrorCode);
 
             var result = await process.RunAsync(
                 ["classify", "rule", "validate", "--input", "-"],
@@ -551,12 +524,11 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
             Assert.NotEqual(0, result.ExitCode);
             using var doc = JsonDocument.Parse(result.Stdout);
             Assert.Equal("error", doc.RootElement.GetProperty("outcome").GetString());
-            // Do not treat host.unexpected as ownership/permission success evidence.
-            var processCode = doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString();
-            Assert.False(string.IsNullOrWhiteSpace(processCode));
-            // Permission/ownership code evidence is the reader + HostArtifactProtection above;
-            // process only needs to reject before mutation.
-            Assert.NotEqual(0, result.ExitCode);
+            // Exact public process code for the deterministic non-owner 0600 open outcome.
+            Assert.Equal(
+                PrivateCorpusErrors.PermissionsRejected,
+                doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString());
+            Assert.Equal(3, result.ExitCode);
 
             await AssertUnchangedAsync(before);
             Assert.Equal(baseline.RuleSetVersionId, await RequireActiveRuleSetVersionIdAsync(versionId));
@@ -565,11 +537,10 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
         }
         finally
         {
-            if (chownApplied)
-            {
-                // Restore ownership so DisposeAsync can delete the tree.
-                _ = TryChown($"{Environment.UserName}:{Environment.UserName}", path);
-            }
+            // Restore ownership so DisposeAsync can delete the tree.
+            Assert.True(
+                TryChown($"{Environment.UserName}:{Environment.UserName}", path),
+                "failed to restore ownership after non-owner corpus test");
         }
     }
 

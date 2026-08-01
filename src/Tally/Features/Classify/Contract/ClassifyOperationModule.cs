@@ -6,6 +6,7 @@ using Tally.Contracts.Classify;
 using Tally.Contracts.Classify.Operations;
 using Tally.Contracts.Common;
 using Tally.Contracts.System;
+using Tally.Infrastructure.Classify.Corpus;
 
 namespace Tally.Features.Classify.Contract;
 
@@ -137,7 +138,7 @@ public sealed class ClassifyOperationModule
             ClassifyJsonContext.Default.ClassifyRuleValidateResult,
             "RuleValidate",
             V1Limits.RuleValidation,
-            CommonMutationErrors),
+            RuleValidateErrors),
         Publish(
             ClassifyOperationIds.RuleActivate,
             "tally classify rule activate",
@@ -250,6 +251,28 @@ public sealed class ClassifyOperationModule
         new(ClassifyErrors.LedgerIncompatible, "compatibility", 7),
         new(ClassifyErrors.Integrity, "integrity", 8),
         new(ClassifyErrors.Unexpected, "host", 10)
+    ];
+
+    /// <summary>
+    /// classify.rule.validate is the only C12 surface that opens a private corpus.
+    /// Publish the concrete PrivateCorpusErrors the validate handler can emit so the process
+    /// envelope maps them to stable module-scoped codes/categories/exits (not host.unexpected).
+    /// Other operations keep CommonMutationErrors unchanged.
+    /// </summary>
+    private static readonly IReadOnlyList<ErrorSchema> RuleValidateErrors =
+    [
+        ..CommonMutationErrors,
+        new(PrivateCorpusErrors.PathRequired, "validation", 3),
+        new(PrivateCorpusErrors.NotFound, "not_found", 4),
+        new(PrivateCorpusErrors.SymlinkRejected, "validation", 3),
+        new(PrivateCorpusErrors.OwnerRejected, "validation", 3),
+        new(PrivateCorpusErrors.PermissionsRejected, "validation", 3),
+        new(PrivateCorpusErrors.NotRegularFile, "validation", 3),
+        new(PrivateCorpusErrors.Malformed, "validation", 3),
+        new(PrivateCorpusErrors.DuplicateOrdinal, "validation", 3),
+        new(PrivateCorpusErrors.FieldInvalid, "validation", 3),
+        new(PrivateCorpusErrors.Cancelled, "lifecycle", 6),
+        new(PrivateCorpusErrors.ReadFailed, "host", 9)
     ];
 
     private static readonly IReadOnlyList<ErrorSchema> OutcomeGetErrors =
