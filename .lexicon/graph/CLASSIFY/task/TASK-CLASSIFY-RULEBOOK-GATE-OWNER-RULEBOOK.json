@@ -95,40 +95,40 @@
   ],
   "files": [
     {
-      "id": "01KYVN0TNPZHFESTS2Z3Z7168X",
-      "path": ".gitignore",
-      "action": "modify",
-      "role": "exclude owner-only CLASSIFY evidence locations",
+      "id": "01KYXVYPHFQ8NM2GND8FEDBBA2",
+      "path": "src/Tally/Contracts/Classify/Evidence/VerifiedOwnerRulebookGateReceipt.cs",
+      "action": "create",
+      "role": "production aggregate-only owner-rulebook gate receipt contract",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T05:15:07.6942865+00:00"
     },
     {
-      "id": "01KYVN0TNPCAV22YV4Y6FXXF3N",
-      "path": "scripts/verify-classify-owner-rulebook.sh",
-      "action": "create",
-      "role": "aggregate-only public-contract conformance gate",
+      "id": "01KYXVYPHFY3JBXHKGMB0MHP1J",
+      "path": "src/Tally/Contracts/Classify/Operations/ClassifyResults.cs",
+      "action": "modify",
+      "role": "publish complete aggregate validation fingerprints, counters, and deterministic outcome hash",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T05:15:07.6942865+00:00"
     },
     {
-      "id": "01KYVN0TNPAH3T500X4X0753K8",
-      "path": "tests/Tally.Tests/Classify/Evidence/OwnerRulebookGateTests.cs",
-      "action": "test",
-      "role": "determinism, accounting, canary, and privacy tests",
+      "id": "01KYXVYPHFEA82C8P8KDKYGRSQ",
+      "path": "src/Tally/Contracts/Classify/ClassifyJsonContext.cs",
+      "action": "modify",
+      "role": "Native-AOT registrations for owner-rulebook receipt contract",
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T05:15:07.6942865+00:00"
     },
     {
-      "id": "01KYVN0TNP98ZGFMEMV608D6ZZ",
-      "path": "docs/verification/classify-owner-rulebook.md",
-      "action": "create",
-      "role": "safe operator procedure and aggregate receipt contract",
+      "id": "01KYXVYPHFQVEVZHQ4235ZVTQC",
+      "path": "src/Tally/Features/Classify/Rules/Validate/ValidateClassificationRuleCommand.cs",
+      "action": "modify",
+      "role": "bind private rows to one frozen public Ledger classification_v1 projection and return complete aggregate evidence",
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T05:15:07.6942865+00:00"
     }
   ],
   "interfaces": [
@@ -281,14 +281,64 @@
       "created_at": "2026-07-31T10:01:52.8260987+00:00"
     },
     {
-      "id": "01KYVSZ3QEKZBH7D0TBRJ3RYCM",
+      "id": "01KYXVYPHEP8MMNVEMSKA7RM6V",
       "kind": "note",
       "text": [
         "The failed automatic-discovery experiment remains historical evidence. Missing owner inputs yield a stable blocked receipt with zero authority or mutation and no synthesized values or disclosed path."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-31T10:01:55.1822065+00:00"
+      "created_at": "2026-08-01T05:15:07.6942865+00:00"
+    },
+    {
+      "id": "01KYXVYPHFDRCVJ43YMKW3XTYR",
+      "kind": "note",
+      "text": [
+        "The pre-authority gate adds no public operation and no evaluator. scripts/verify-classify-owner-rulebook.sh invokes the existing public classify.rule.validate operation with explicit owner-supplied candidate version IDs, representative corpus, temporal hold-out, and aggregate benefit counts/minutes."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-01T05:15:07.6942865+00:00"
+    },
+    {
+      "id": "01KYXVYPHF3ZVT7659CMS94G1W",
+      "kind": "note",
+      "text": [
+        "ValidateClassificationRuleCommand must acquire one complete frozen public Ledger classification_v1 evaluation projection, require each private row identity and lifecycle fingerprint to match that projection before evaluation, and bind the projection version, snapshot/store-generation identity, category lifecycle fingerprint, candidate fingerprint, expected-outcome fingerprint, normalization version, report fingerprint, outcomes canonical hash, and all aggregate counters in its public result. Missing, duplicate, mismatched, or stale rows fail closed with no authority."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-08-01T05:15:07.6942865+00:00"
+    },
+    {
+      "id": "01KYXVYPHFRXXGPP2Q05NRVKRZ",
+      "kind": "note",
+      "text": [
+        "The conformance gate performs a representative validation, an independent same-input replay using a distinct idempotency key, and a separate temporal hold-out validation. It compares deterministic hashes/fingerprints/counts for replay and requires both representative and hold-out safety gates to pass. It derives, never hard-codes, every VerifiedOwnerRulebookGateReceipt field."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-08-01T05:15:07.6942865+00:00"
+    },
+    {
+      "id": "01KYXVYPHF4MGBRB8TGGDQ52P2",
+      "kind": "note",
+      "text": [
+        "Private paths, candidate IDs, row values, descriptions, amounts, expected outcomes, and raw diagnostics must never appear in process arguments, stdout/stderr, durable receipts, tracked files, or logs. Paths and candidate IDs enter only through owner-only structured stdin or environment and are redacted from diagnostics. Missing inputs produce a stable aggregate blocked receipt."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-08-01T05:15:07.6942865+00:00"
+    },
+    {
+      "id": "01KYXVYPHFRNTGWVNJ5EF4973Z",
+      "kind": "note",
+      "text": [
+        "Benefit evidence is aggregate owner decision/time before/after input. Safety never grants authority by itself when benefit is insufficient: emit benefit-decision-required and leave authority false. Do not invent the archived automatic-discovery 50 percent threshold."
+      ],
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-08-01T05:15:07.6942865+00:00"
     }
   ],
   "references": [
