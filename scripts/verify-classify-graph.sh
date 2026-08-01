@@ -543,14 +543,15 @@ fi
 
 # ── Content fingerprints (safe; no payloads) ─────────────────────────────────
 section "Content fingerprints (paths + counts, no private/financial payloads)"
+report_path="docs/verification/classify-graph.md"
 for path in \
     scripts/verify-classify-graph.sh \
-    docs/verification/classify-graph.md \
     tests/Tally.Tests/Classify/ClassifyGraphEvidenceGuardTests.cs \
-    .lexicon/graph/CLASSIFY/module.json
+    .lexicon/graph/CLASSIFY/module.json \
+    "$report_path"
 do
     if [[ -f "$path" ]]; then
-        printf '  %s sha256=%s bytes=%s\n' \
+        printf '  LIVE %s sha256=%s bytes=%s\n' \
             "$path" \
             "$(sha256sum -- "$path" | awk '{print $1}')" \
             "$(wc -c < "$path" | tr -d ' ')"
@@ -558,6 +559,84 @@ do
         fail "missing required artifact ${path}"
     fi
 done
+printf '  note: live raw hash for %s is printed above; the report must not embed its own raw self-hash\n' \
+    "$report_path"
+
+section "Recorded immutable-input fingerprints agree with live artifacts"
+# Parse the static report table for paths that record raw SHA-256 + bytes.
+# The Markdown report itself must NOT appear as a recorded row (self-hash is impossible).
+fingerprint_check="$(python3 - <<'PY'
+import hashlib, re, sys
+from pathlib import Path
+
+report = Path("docs/verification/classify-graph.md")
+text = report.read_text(encoding="utf-8")
+# Rows: | `path` | `hex` | bytes |
+row_re = re.compile(
+    r"^\|\s*`([^`]+)`\s*\|\s*`([0-9a-f]{64})`\s*\|\s*(\d+)\s*\|$",
+    re.MULTILINE,
+)
+rows = row_re.findall(text)
+if not rows:
+    print("bad")
+    print("no recorded fingerprint rows found in classify-graph.md")
+    sys.exit(0)
+
+required = {
+    "scripts/verify-classify-graph.sh",
+    "tests/Tally.Tests/Classify/ClassifyGraphEvidenceGuardTests.cs",
+    ".lexicon/graph/CLASSIFY/module.json",
+}
+forbidden_self = "docs/verification/classify-graph.md"
+found = {}
+errors = []
+for path, digest, size_s in rows:
+    if path == forbidden_self:
+        errors.append(
+            f"report must not embed its own raw self-hash/size (found row for {path})"
+        )
+        continue
+    found[path] = (digest, int(size_s))
+
+missing = sorted(required - set(found))
+extra = sorted(set(found) - required)
+if missing:
+    errors.append("missing required recorded rows: " + ", ".join(missing))
+if extra:
+    errors.append("unexpected recorded rows: " + ", ".join(extra))
+
+for path, (expected_digest, expected_bytes) in sorted(found.items()):
+    p = Path(path)
+    if not p.is_file():
+        errors.append(f"recorded artifact missing on disk: {path}")
+        continue
+    data = p.read_bytes()
+    live_digest = hashlib.sha256(data).hexdigest()
+    live_bytes = len(data)
+    if live_digest != expected_digest or live_bytes != expected_bytes:
+        errors.append(
+            f"{path}: recorded sha256={expected_digest} bytes={expected_bytes}; "
+            f"live sha256={live_digest} bytes={live_bytes}"
+        )
+    else:
+        print(f"ok {path} sha256={live_digest} bytes={live_bytes}")
+
+if errors:
+    print("bad")
+    for e in errors:
+        print(e)
+else:
+    print("ok_all")
+    print(f"verified_rows={len(found)}")
+PY
+)"
+if ! grep -q '^ok_all$' <<< "$fingerprint_check"; then
+    fail "recorded fingerprints disagree with live artifacts or are incomplete"
+    printf '%s\n' "$fingerprint_check" >&2
+else
+    printf '%s\n' "$fingerprint_check" | grep -v '^ok_all$' || true
+    printf 'recorded fingerprints: all immutable-input rows match live raw SHA-256/bytes\n'
+fi
 
 # ── Summary ──────────────────────────────────────────────────────────────────
 section "CLASSIFY graph quality gate summary"

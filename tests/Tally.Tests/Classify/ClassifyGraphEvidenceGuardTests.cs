@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Runtime.Versioning;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using Xunit;
 
@@ -288,6 +289,72 @@ public sealed class ClassifyGraphEvidenceGuardTests
         Assert.True(File.Exists(Path.Combine(root, "scripts", "verify-classify-graph.sh")));
         Assert.True(File.Exists(Path.Combine(root, "docs", "verification", "classify-graph.md")));
         Assert.True(File.Exists(Path.Combine(root, ".lexicon", "graph", "CLASSIFY", "module.json")));
+    }
+
+    /// <summary>
+    /// Every raw SHA-256/size the static report records must match the current artifact bytes.
+    /// The Markdown report must not claim a raw self-hash (impossible for a file that embeds it).
+    /// Live report hash is emitted by scripts/verify-classify-graph.sh only.
+    /// </summary>
+    [Fact]
+    public void Recorded_immutable_input_fingerprints_match_live_artifacts()
+    {
+        var root = RepositoryRoot();
+        var reportPath = Path.Combine(root, "docs", "verification", "classify-graph.md");
+        var report = File.ReadAllText(reportPath);
+
+        var rowPattern = new Regex(
+            @"^\|\s*`([^`]+)`\s*\|\s*`([0-9a-f]{64})`\s*\|\s*(\d+)\s*\|$",
+            RegexOptions.Multiline | RegexOptions.CultureInvariant);
+        var rows = rowPattern.Matches(report);
+        Assert.True(rows.Count > 0, "classify-graph.md must record immutable-input fingerprint rows");
+
+        var required = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "scripts/verify-classify-graph.sh",
+            "tests/Tally.Tests/Classify/ClassifyGraphEvidenceGuardTests.cs",
+            ".lexicon/graph/CLASSIFY/module.json"
+        };
+        const string forbiddenSelf = "docs/verification/classify-graph.md";
+        var found = new Dictionary<string, (string Digest, int Bytes)>(StringComparer.Ordinal);
+
+        foreach (Match match in rows)
+        {
+            var path = match.Groups[1].Value;
+            var digest = match.Groups[2].Value;
+            var bytes = int.Parse(match.Groups[3].Value, System.Globalization.CultureInfo.InvariantCulture);
+            Assert.False(
+                string.Equals(path, forbiddenSelf, StringComparison.Ordinal),
+                "report must not embed its own raw self-hash/size");
+            found[path] = (digest, bytes);
+        }
+
+        Assert.True(
+            required.SetEquals(found.Keys),
+            "recorded fingerprint paths drift — expected exactly: "
+                + string.Join(", ", required.Order(StringComparer.Ordinal))
+                + "; found: "
+                + string.Join(", ", found.Keys.Order(StringComparer.Ordinal)));
+
+        foreach (var (relative, expected) in found.OrderBy(pair => pair.Key, StringComparer.Ordinal))
+        {
+            var absolute = Path.Combine(root, relative.Replace('/', Path.DirectorySeparatorChar));
+            Assert.True(File.Exists(absolute), "missing recorded artifact: " + relative);
+            var data = File.ReadAllBytes(absolute);
+            var liveDigest = Convert.ToHexStringLower(SHA256.HashData(data));
+            Assert.Equal(expected.Digest, liveDigest);
+            Assert.Equal(expected.Bytes, data.Length);
+        }
+
+        // Document the live report hash policy in the report body (no embedded self-hash).
+        Assert.Contains(
+            "must not embed its own raw self-hash",
+            report,
+            StringComparison.OrdinalIgnoreCase);
+        Assert.Contains(
+            "scripts/verify-classify-graph.sh",
+            report,
+            StringComparison.Ordinal);
     }
 
     [Fact]

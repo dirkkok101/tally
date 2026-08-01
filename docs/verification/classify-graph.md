@@ -119,7 +119,8 @@ paste private fixtures, descriptions, tokens, amounts, or financial payloads.
 
 ## Latest run
 
-Executed on 2026-08-01 via `bash scripts/verify-classify-graph.sh` for `bd-1yaj`.
+Executed on 2026-08-01 via `bash scripts/verify-classify-graph.sh` for `bd-1yaj`
+(fingerprint-truth correction).
 
 | Check | Result |
 |---|---|
@@ -132,16 +133,27 @@ Executed on 2026-08-01 via `bash scripts/verify-classify-graph.sh` for `bd-1yaj`
 | Plan coverage / audit | 174/174 covered; 0 gaps; 0 blocking findings |
 | Context budgets | 30/30 core sections ≤ 2500 tokens |
 | Dependencies | Acyclic (30 rulebook tasks, 97 edges) |
-| Named suite discovery | 49 classes, each ≥ floor (aggregate CLASSIFY discovery 1019 — not sole evidence) |
-| Guard tests | 8/8 passed |
+| Named suite discovery | 49 classes, each ≥ floor (aggregate CLASSIFY discovery 1020 — not sole evidence) |
+| Guard tests | 9/9 passed (includes recorded-fingerprint agreement) |
+| Recorded fingerprints | 3 immutable-input rows match live raw SHA-256/bytes |
+| Live report fingerprint | emitted by runner only (not embedded): see gate log |
 | Forbidden / placeholder scans | 0 hits |
 | Script exit | 0 |
 
-### Content fingerprints (metadata)
+### Recorded immutable-input fingerprints (raw SHA-256)
+
+These rows are for artifacts that do **not** contain their own hash. Each recorded
+`SHA-256` / `Bytes` pair is the raw content hash of the file at commit time.
+
+`docs/verification/classify-graph.md` **must not embed its own raw self-hash or byte
+size**: a raw file cannot truthfully contain its own final raw SHA-256 because that
+field changes the file. The runner (`bash scripts/verify-classify-graph.sh`) always
+prints the **live** raw hash and size for the Markdown report at execution time, and
+both the runner and `ClassifyGraphEvidenceGuardTests` fail if any recorded
+immutable-input row disagrees with the current artifact.
 
 | Artifact | SHA-256 | Bytes |
 |---|---|---:|
-| `scripts/verify-classify-graph.sh` | `d01441fce4a47b28d9cb573dcbfead27cf5604ccced16c1ea305e8bf149dba8f` | 24107 |
-| `docs/verification/classify-graph.md` | `41f892f3b03f05c09555e4472bf1aad31054057caeb6357d5e7a991b0b0828fa` | 8300 |
-| `tests/Tally.Tests/Classify/ClassifyGraphEvidenceGuardTests.cs` | `037bfcf9e5276ff0de7fd94def657ff8b15f37c2e18b997a8991cabb6b3855ed` | 13052 |
+| `scripts/verify-classify-graph.sh` | `577bebaa02a225ebbc5821a50a6ecf8d333ace9ec9d1f1fe73152acc8f3919f3` | 26821 |
+| `tests/Tally.Tests/Classify/ClassifyGraphEvidenceGuardTests.cs` | `3b39a93759d7c8582ff37785f524f811cee8fbd4fcdab5b125b9668b5fd0c1c8` | 16167 |
 | `.lexicon/graph/CLASSIFY/module.json` | `3975f321fe72cc7f86c82934af1c0be8add2e6fbe9dc444750d7b7ce42f8df91` | 18902 |
