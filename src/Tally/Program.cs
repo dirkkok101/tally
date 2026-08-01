@@ -50,14 +50,24 @@ static async Task<ProcessResult> RunAsync(string[] args, CancellationToken cance
         ? LedgerServices.Create()
         : LedgerServices.Create(database);
 
-    // Bootstrap process for LedgerContractClient; then attach INGEST + BUDGET modules that consume it.
+    // Bootstrap process for LedgerContractClient; then attach INGEST + BUDGET + validation-only CLASSIFY.
+    // Schema/help/unknown-op discovery uses registry templates only — no CLASSIFY state, corpus, or Ledger read.
     var bootstrapProcess = new TallyProcess(registry, services);
     if (database is not null && !string.IsNullOrWhiteSpace(dataRoot) && OperatingSystem.IsLinux())
     {
         var ledgerClient = new LedgerContractClient(registry, bootstrapProcess);
         var ingest = IngestOperationBundle.CreateServices(dataRoot, ledgerClient);
         var budget = await BudgetOperationBundle.CreateServicesAsync(dataRoot, ledgerClient, cancellationToken: cancellationToken);
-        services = services with { Ingest = ingest.Operations, Budget = budget.Operations };
+        var classifyValidation = await ClassifyValidationBundle.CreateServicesAsync(
+            dataRoot,
+            ledgerClient,
+            cancellationToken: cancellationToken);
+        services = services with
+        {
+            Ingest = ingest.Operations,
+            Budget = budget.Operations,
+            ClassifyValidation = classifyValidation.Operations
+        };
     }
 
     var process = new TallyProcess(registry, services);

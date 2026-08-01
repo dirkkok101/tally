@@ -415,6 +415,21 @@ public sealed class OperationRegistry
                 : new FoundationOperationHandler();
         }
 
+        if (descriptor.OperationId.StartsWith("classify.", StringComparison.Ordinal))
+        {
+            var classifyDescriptor = services.ClassifyValidation?.Descriptors
+                .SingleOrDefault(candidate => candidate.OperationId == descriptor.OperationId);
+            if (classifyDescriptor is not null)
+            {
+                return classifyDescriptor.HandlerFactory(services, registry);
+            }
+
+            // Descriptor-template factories keep schema/help discovery store-free (no classify.db / corpus).
+            return CompositeDescriptorTemplates.TryGetValue(descriptor.OperationId, out var classifyTemplate)
+                ? classifyTemplate.HandlerFactory(services, registry)
+                : new FoundationOperationHandler();
+        }
+
         if (descriptor.OperationId.StartsWith("ingest.", StringComparison.Ordinal))
         {
             var ingestDescriptor = services.Ingest?.Descriptors
@@ -472,6 +487,7 @@ public sealed class OperationRegistry
             .Concat(storageEvolution.Descriptors)
             .Concat(IngestOperationBundle.CreateDescriptorTemplates().Descriptors)
             .Concat(BudgetOperationBundle.CreateDescriptorTemplates().Descriptors)
+            .Concat(ClassifyValidationBundle.CreateDescriptorTemplates().Descriptors)
             .ToDictionary(descriptor => descriptor.OperationId, StringComparer.Ordinal);
     }
 
@@ -487,6 +503,7 @@ public sealed class OperationRegistry
         "ledger.transfer.confirm","ledger.transfer.revoke","ledger.transfer.replace","ledger.refund.confirm","ledger.refund.revoke","ledger.refund.replace","ledger.relationship.get","ledger.actuals.query","ledger.backup.create","ledger.backup.verify","ledger.restore.prepare","ledger.restore.activate","ledger.storage.status","ledger.storage.evolution.prepare","ledger.storage.evolution.activate",
         "ingest.preview","ingest.inspect","ingest.approve","ingest.commit","ingest.resume","ingest.status","ingest.abandon","ingest.cleanup",
         "budget.plan.draft.create","budget.plan.revision.get","budget.plan.revision.list","budget.plan.revision.activate","budget.position.get","budget.insights.evidence.get",
+        "classify.evaluate","classify.outcome.get","classify.apply.preview","classify.apply.run","classify.rule.save","classify.rule.validate","classify.rule.activate","classify.rule.retire","classify.feedback.record","classify.status","classify.abandon","classify.cleanup",
         "system.schema.list","system.schema.show","system.version","system.guidance.list","system.guidance.check","system.guidance.install"
     ];
 }
