@@ -197,15 +197,6 @@ public sealed class EvaluateClassificationCommand
                 .Select(c => c.CategoryId)
                 .ToHashSet(StringComparer.Ordinal);
 
-            // If the frozen catalogue is empty, still evaluate — rules with unknown categories are filtered by the engine.
-            if (projectionInput.ActiveCategories.Count > 0 && activeCategoryIds.Count == 0)
-            {
-                // Fall back to all identities present on the frozen snapshot when lifecycle text differs.
-                activeCategoryIds = projectionInput.ActiveCategories
-                    .Select(c => c.CategoryId)
-                    .ToHashSet(StringComparer.Ordinal);
-            }
-
             var fingerprint = ClassifyContractMapper.CreateEvaluationFingerprint(
                 projectionInput,
                 activePointer!.RuleSetVersionId,

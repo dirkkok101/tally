@@ -333,6 +333,26 @@ public sealed class EvaluateClassificationCommandTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Evaluate_does_not_suggest_an_archived_target_when_no_active_categories_remain()
+    {
+        var category = await CreateCategoryAsync("ArchivedTarget");
+        var versionId = await SaveDraftAsync(category.CategoryId, "archived target");
+        await ActivateWithGateAsync(versionId, category.CategoryId, "archived target");
+        await ArchiveCategoryAsync(category.CategoryId);
+        await RecordAsync("archived target");
+
+        var result = await evaluate.HandleAsync(
+            new ClassifyEvaluateRequest(ClassifyOperationIds.ContractVersion),
+            actor,
+            NextKey(),
+            CancellationToken.None);
+
+        Assert.True(result.IsSuccess, result.ErrorCode);
+        Assert.Equal(result.Value!.TotalCount, result.Value.NoSuggestionCount);
+        Assert.Equal(0, result.Value.SuggestionCount);
+    }
+
+    [Fact]
     public async Task Evaluate_suggestion_names_compatible_same_category_aggregation()
     {
         var category = await CreateCategoryAsync("SameCat");
@@ -528,6 +548,14 @@ public sealed class EvaluateClassificationCommandTests : IAsyncLifetime
             NextKey(),
             LedgerJsonContext.Default.CreateCategoryInput,
             LedgerJsonContext.Default.CategoryDetail);
+
+    private async Task ArchiveCategoryAsync(string categoryId) =>
+        _ = await ExecuteSuccessAsync(
+            "ledger.category.archive",
+            new ArchiveCategoryInput(categoryId, "evaluation target archived"),
+            NextKey(),
+            LedgerJsonContext.Default.ArchiveCategoryInput,
+            LedgerJsonContext.Default.CategoryLifecycleResult);
 
     private async Task<TransactionDetail> RecordAsync(string description, string amount = "-12.34")
     {
