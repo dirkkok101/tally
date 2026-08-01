@@ -245,6 +245,53 @@ public sealed class ClassifyUc002OutcomeTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task UC002_stale_transfer_relationship_change_names_item_lifecycle()
+    {
+        var category = await CreateCategoryAsync("Uc002Transfer");
+        await SaveAndActivateAsync(category, "uc002 transfer outflow");
+        var otherAccount = await CreateAccountAsync();
+        var outflow = await RecordTransactionAsync("uc002 transfer outflow", "-12.34");
+        var inflow = await RecordTransactionAsync("uc002 transfer inflow", "12.34", otherAccount);
+        var evalId = await EvaluateSuccessAsync();
+
+        await ConfirmTransferAsync(outflow, inflow);
+
+        var outcome = await OutcomeGetAsync(evalId, outflow);
+        AssertClassifySuccess(outcome, ClassifyOperationIds.OutcomeGet);
+        using var doc = ParseResult(outcome);
+        var body = doc.RootElement.GetProperty("result_or_error");
+        Assert.True(body.GetProperty("isStale").GetBoolean());
+        var dims = body.GetProperty("staleDimensions").EnumerateArray()
+            .Select(e => e.GetString()!).ToArray();
+        Assert.Contains(ClassificationStalenessPolicy.DimensionItemLifecycle, dims);
+        Assert.Equal(ClassifyOperationIds.Evaluate, body.GetProperty("permittedNextOperationId").GetString());
+        AssertBlocksApply(body.GetProperty("permittedNextOperationId").GetString()!);
+    }
+
+    [Fact]
+    public async Task UC002_stale_refund_relationship_change_names_item_lifecycle()
+    {
+        var category = await CreateCategoryAsync("Uc002Refund");
+        await SaveAndActivateAsync(category, "uc002 refund purchase");
+        var original = await RecordTransactionAsync("uc002 refund purchase", "-12.34");
+        var refund = await RecordTransactionAsync("uc002 refund credit", "12.34");
+        var evalId = await EvaluateSuccessAsync();
+
+        await ConfirmRefundAsync(original, refund);
+
+        var outcome = await OutcomeGetAsync(evalId, original);
+        AssertClassifySuccess(outcome, ClassifyOperationIds.OutcomeGet);
+        using var doc = ParseResult(outcome);
+        var body = doc.RootElement.GetProperty("result_or_error");
+        Assert.True(body.GetProperty("isStale").GetBoolean());
+        var dims = body.GetProperty("staleDimensions").EnumerateArray()
+            .Select(e => e.GetString()!).ToArray();
+        Assert.Contains(ClassificationStalenessPolicy.DimensionItemLifecycle, dims);
+        Assert.Equal(ClassifyOperationIds.Evaluate, body.GetProperty("permittedNextOperationId").GetString());
+        AssertBlocksApply(body.GetProperty("permittedNextOperationId").GetString()!);
+    }
+
+    [Fact]
     public async Task UC002_stale_category_archive_names_suggested_category_lifecycle()
     {
         var category = await CreateCategoryAsync("Uc002Archive");
@@ -1004,12 +1051,37 @@ public sealed class ClassifyUc002OutcomeTests : IAsyncLifetime
         Assert.Equal(0, result.ExitCode);
     }
 
-    private async Task<string> RecordTransactionAsync(string description, string amount = "-12.34")
+    private async Task ConfirmTransferAsync(string outflowTransactionId, string inflowTransactionId)
+    {
+        var result = await process.RunAsync(
+            ["ledger", "transfer", "confirm", "--input", "-"],
+            LedgerEnvelope(
+                $$"""{"outflowTransactionId":{{JsonSerializer.Serialize(outflowTransactionId)}},"inflowTransactionId":{{JsonSerializer.Serialize(inflowTransactionId)}},"reason":"uc002-transfer"}""",
+                NextKey()),
+            CancellationToken.None);
+        Assert.Equal(0, result.ExitCode);
+    }
+
+    private async Task ConfirmRefundAsync(string originalTransactionId, string refundTransactionId)
+    {
+        var result = await process.RunAsync(
+            ["ledger", "refund", "confirm", "--input", "-"],
+            LedgerEnvelope(
+                $$"""{"originalTransactionId":{{JsonSerializer.Serialize(originalTransactionId)}},"refundTransactionId":{{JsonSerializer.Serialize(refundTransactionId)}},"reason":"uc002-refund"}""",
+                NextKey()),
+            CancellationToken.None);
+        Assert.Equal(0, result.ExitCode);
+    }
+
+    private async Task<string> RecordTransactionAsync(
+        string description,
+        string amount = "-12.34",
+        string? targetAccountId = null)
     {
         var digest = Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(Guid.NewGuid().ToString("N"))));
         var input = $$"""
             {
-              "accountId":{{JsonSerializer.Serialize(accountId)}},
+              "accountId":{{JsonSerializer.Serialize(targetAccountId ?? accountId)}},
               "signedAmount":{{JsonSerializer.Serialize(amount)}},
               "currencyCode":"ZAR",
               "transactionDate":"2026-07-15",
