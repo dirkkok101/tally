@@ -47,7 +47,10 @@ public sealed class ClassificationEvaluationInputLoader
         string contractVersion = ActualsContractVersions.Current,
         int? pageSize = null)
     {
-        cancellationToken.ThrowIfCancellationRequested();
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return CommandResult<ClassificationEvaluationInput>.Failure(ClassifyErrors.Unexpected);
+        }
 
         if (actor is null
             || string.IsNullOrWhiteSpace(actor.Kind)
@@ -218,15 +221,15 @@ public sealed class ClassificationEvaluationInputLoader
     public static ClassificationEvaluationInput BuildInput(ActualsQueryResult page)
     {
         ArgumentNullException.ThrowIfNull(page);
-        var items = (page.ClassificationItems ?? Array.Empty<ClassificationProjectionItem>())
+        var items = Array.AsReadOnly((page.ClassificationItems ?? Array.Empty<ClassificationProjectionItem>())
             .OrderBy(i => i.Ordinal)
             .ThenBy(i => i.TransactionId, StringComparer.Ordinal)
             .Select(CloneItem)
-            .ToArray();
-        var categories = (page.ActiveCategories ?? Array.Empty<ClassificationCategoryIdentity>())
+            .ToArray());
+        var categories = Array.AsReadOnly((page.ActiveCategories ?? Array.Empty<ClassificationCategoryIdentity>())
             .OrderBy(c => c.CategoryId, StringComparer.Ordinal)
             .Select(c => new ClassificationCategoryIdentity(c.CategoryId, c.DisplayName, c.LifecycleState))
-            .ToArray();
+            .ToArray());
 
         var orderedItemsFingerprint = EvaluationFingerprint.ComputeOrderedItemsFingerprint(
             items.Select(i => (

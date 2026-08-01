@@ -353,6 +353,8 @@ public sealed class ClassificationEvaluationInputLoaderTests : IAsyncLifetime
         var page = SyntheticPage(itemCount: 2);
         var a = ClassificationEvaluationInputLoader.BuildInput(page);
         var b = ClassificationEvaluationInputLoader.BuildInput(page);
+        Assert.IsNotType<ClassificationProjectionItem[]>(a.Items);
+        Assert.IsNotType<ClassificationCategoryIdentity[]>(a.ActiveCategories);
         Assert.Equal(a.SnapshotFingerprint, b.SnapshotFingerprint);
         Assert.Equal(a.OrderedItemsFingerprint, b.OrderedItemsFingerprint);
         Assert.Equal(

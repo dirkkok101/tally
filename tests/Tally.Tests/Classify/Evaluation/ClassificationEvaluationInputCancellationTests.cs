@@ -67,7 +67,7 @@ public sealed class ClassificationEvaluationInputCancellationTests : IAsyncLifet
         var result = await loader.LoadAsync(actor, cts.Token);
         Assert.False(result.IsSuccess);
         Assert.Null(result.Value);
-        Assert.False(string.IsNullOrWhiteSpace(result.ErrorCode));
+        Assert.Equal(ClassifyErrors.Unexpected, result.ErrorCode);
     }
 
     [Fact]
