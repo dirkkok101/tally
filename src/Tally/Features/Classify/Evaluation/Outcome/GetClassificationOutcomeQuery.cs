@@ -28,6 +28,7 @@ public sealed class GetClassificationOutcomeQuery
 {
     private readonly ClassifyStateStore stateStore;
     private readonly ClassificationEvaluationStore evaluationStore;
+    private readonly ClassificationRuleStore ruleStore;
     private readonly RuleSetStore ruleSetStore;
     private readonly LedgerContractClient ledger;
     private readonly TimeProvider timeProvider;
@@ -35,16 +36,19 @@ public sealed class GetClassificationOutcomeQuery
     public GetClassificationOutcomeQuery(
         ClassifyStateStore stateStore,
         ClassificationEvaluationStore evaluationStore,
+        ClassificationRuleStore ruleStore,
         RuleSetStore ruleSetStore,
         LedgerContractClient ledger,
         TimeProvider? timeProvider = null)
     {
         ArgumentNullException.ThrowIfNull(stateStore);
         ArgumentNullException.ThrowIfNull(evaluationStore);
+        ArgumentNullException.ThrowIfNull(ruleStore);
         ArgumentNullException.ThrowIfNull(ruleSetStore);
         ArgumentNullException.ThrowIfNull(ledger);
         this.stateStore = stateStore;
         this.evaluationStore = evaluationStore;
+        this.ruleStore = ruleStore;
         this.ruleSetStore = ruleSetStore;
         this.ledger = ledger;
         this.timeProvider = timeProvider ?? TimeProvider.System;
@@ -83,6 +87,7 @@ public sealed class GetClassificationOutcomeQuery
         ClassifyOutcomeRow? outcome;
         IReadOnlyList<ClassifyMatchEvidenceRow> evidence;
         string? currentRuleSetVersionId;
+        Dictionary<string, ClassifyRuleVersionRow> immutableRules;
         await using (var connection = await stateStore.OpenMigratedAsync(cancellationToken))
         {
             run = await evaluationStore.GetRunAsync(connection, null, evaluationId, cancellationToken);
@@ -110,6 +115,20 @@ public sealed class GetClassificationOutcomeQuery
 
             var active = await ruleSetStore.GetActiveRuleSetAsync(connection, null, cancellationToken);
             currentRuleSetVersionId = active?.RuleSetVersionId;
+
+            // Load immutable rule versions named by retained evidence only (conflict proposals).
+            immutableRules = new Dictionary<string, ClassifyRuleVersionRow>(StringComparer.Ordinal);
+            foreach (var ruleId in ClassifyContractMapper.ToContributingRuleVersionIds(evidence))
+            {
+                var version = await ruleStore.GetRuleVersionAsync(connection, null, ruleId, cancellationToken);
+                if (version is null)
+                {
+                    return CommandResult<ClassifyOutcomeGetResult>.Failure(
+                        ClassifyContractMapper.EvidenceUnavailable);
+                }
+
+                immutableRules[ruleId] = version;
+            }
         }
 
         ClassificationOutcomeKind kind;
@@ -122,26 +141,41 @@ public sealed class GetClassificationOutcomeQuery
             return CommandResult<ClassifyOutcomeGetResult>.Failure(ClassifyContractMapper.EvidenceUnavailable);
         }
 
-        // Retained evidence completeness — never reconstruct from current Ledger/rule state.
         if (!ClassifyContractMapper.TryValidateRetainedEvidence(kind, evidence, out var evidenceError))
         {
             return CommandResult<ClassifyOutcomeGetResult>.Failure(
                 evidenceError ?? ClassifyContractMapper.EvidenceUnavailable);
         }
 
+        IReadOnlyList<ClassifyConflictRuleProposal>? conflictProposals = null;
+        if (kind == ClassificationOutcomeKind.Conflict)
+        {
+            if (!ClassifyContractMapper.TryMapConflictProposals(
+                    evidence,
+                    immutableRules,
+                    out var proposals,
+                    out var proposalError))
+            {
+                return CommandResult<ClassifyOutcomeGetResult>.Failure(
+                    proposalError ?? ClassifyContractMapper.EvidenceUnavailable);
+            }
+
+            conflictProposals = proposals;
+        }
+
         var retainedFingerprint = ClassifyContractMapper.ToRetainedEvaluationFingerprint(run);
-        if (!TryParseExpiresAt(run.SnapshotExpiresAt, out var retainedExpiresAt))
+        if (!TryParseExpiresAt(run.SnapshotExpiresAt, out var retainedExpiresAt)
+            || !TryParseUtc(run.CreatedAt, out var evaluationCreatedAt))
         {
             return CommandResult<ClassifyOutcomeGetResult>.Failure(ClassifyErrors.Integrity);
         }
 
-        // Public Ledger reads for display names and current lifecycle/fingerprint state only.
         var current = await ReadCurrentPublicStateAsync(
             actor,
             transactionId,
-            outcome.CategoryId,
+            kind == ClassificationOutcomeKind.Suggestion ? outcome.CategoryId : null,
             run,
-            currentRuleSetVersionId,
+            evaluationCreatedAt,
             cancellationToken);
 
         if (current.LedgerError is not null)
@@ -163,6 +197,7 @@ public sealed class GetClassificationOutcomeQuery
             CurrentItemLifecycleFingerprint: current.ItemLifecycleFingerprint,
             TransactionFoundInLedger: current.TransactionFound,
             SuggestedCategoryLifecycleState: current.SuggestedCategoryLifecycleState,
+            SuggestedCategoryReactivatedAfterEvaluation: current.SuggestedCategoryReactivatedAfterEvaluation,
             NowUtc: timeProvider.GetUtcNow(),
             RetainedSnapshotExpiresAt: retainedExpiresAt));
 
@@ -172,10 +207,8 @@ public sealed class GetClassificationOutcomeQuery
             evidence,
             staleness.IsStale,
             staleness.ChangedDimensions,
-            current.SuggestedCategoryDisplayName);
-
-        // Policy surface available for composition/tests: only re-evaluate is permitted when stale/unappliable.
-        _ = ClassifyContractMapper.PermittedNextOperationId(kind, staleness);
+            current.SuggestedCategoryDisplayName,
+            conflictProposals);
 
         return CommandResult<ClassifyOutcomeGetResult>.Success(result);
     }
@@ -185,10 +218,9 @@ public sealed class GetClassificationOutcomeQuery
         string transactionId,
         string? suggestedCategoryId,
         ClassifyEvaluationRunRow retainedRun,
-        string? currentRuleSetVersionId,
+        DateTimeOffset evaluationCreatedAt,
         CancellationToken cancellationToken)
     {
-        // apply_preflight returns the selected transaction's current revision tuple without mutating Ledger.
         var preflight = await ledger.QueryClassificationProjectionAsync(
             ClassificationProjectionPurpose.ApplyPreflight,
             retainedRun.LedgerContractVersion,
@@ -205,12 +237,8 @@ public sealed class GetClassificationOutcomeQuery
         var page = preflight.Value;
         var item = page.ClassificationItems?
             .FirstOrDefault(i => string.Equals(i.TransactionId, transactionId, StringComparison.Ordinal));
-        var transactionFound = item is not null
-            || (page.MissingTransactionIds is not null
-                && page.MissingTransactionIds.Contains(transactionId, StringComparer.Ordinal) is false
-                && page.ClassificationItems is { Count: > 0 });
 
-        // Missing from store → preflight lists missing IDs.
+        var transactionFound = item is not null;
         if (page.MissingTransactionIds is not null
             && page.MissingTransactionIds.Contains(transactionId, StringComparer.Ordinal))
         {
@@ -221,7 +249,6 @@ public sealed class GetClassificationOutcomeQuery
             ? null
             : ClassificationEvaluationInputLoader.ComputeItemLifecycleFingerprint(item);
 
-        // Full evaluation-purpose projection for store generation / ordered membership / category catalogue.
         var evaluationProjection = await ledger.QueryClassificationProjectionAsync(
             ClassificationProjectionPurpose.Evaluation,
             retainedRun.LedgerContractVersion,
@@ -243,6 +270,7 @@ public sealed class GetClassificationOutcomeQuery
                     i.TransactionId,
                     ClassificationEvaluationInputLoader.ComputeItemLifecycleFingerprint(i))));
 
+        // Identity + lifecycle only (display names never enter this fingerprint).
         var categoryLifecycleFingerprint = !string.IsNullOrWhiteSpace(evalPage.CategoryIdentityLifecycleFingerprint)
             ? evalPage.CategoryIdentityLifecycleFingerprint
             : EvaluationFingerprint.ComputeCategoryLifecycleFingerprint(
@@ -251,30 +279,28 @@ public sealed class GetClassificationOutcomeQuery
 
         string? displayName = null;
         string? suggestedLifecycle = null;
+        var reactivatedAfterEvaluation = false;
         if (!string.IsNullOrWhiteSpace(suggestedCategoryId))
         {
-            // List without status filter so rename (active) and archive are both visible.
-            var listed = await ledger.ListClassificationCategoriesAsync(
+            var detail = await ledger.GetBudgetCategoryAsync(
+                suggestedCategoryId,
                 CategoryContractVersions.Current,
                 actor,
                 cancellationToken,
-                status: null);
-            if (!listed.IsSuccess || listed.Value is null)
+                includeHistory: true);
+            if (!detail.IsSuccess || detail.Value is null)
             {
-                return CurrentPublicState.Failed(
-                    ClassifyContractMapper.MapLedgerCategoryListError(listed.Error));
-            }
-
-            var match = listed.Value.Items
-                .FirstOrDefault(c => string.Equals(c.CategoryId, suggestedCategoryId, StringComparison.Ordinal));
-            if (match is not null)
-            {
-                displayName = match.Name;
-                suggestedLifecycle = match.Status == CategoryStatus.Active ? "active" : "archived";
+                // Missing identity → fail closed as absent lifecycle.
+                suggestedLifecycle = null;
             }
             else
             {
-                suggestedLifecycle = null;
+                displayName = detail.Value.Name;
+                suggestedLifecycle = detail.Value.Status == CategoryStatus.Active ? "active" : "archived";
+                reactivatedAfterEvaluation = detail.Value.LifecycleHistory
+                    .Any(h => h.Action == CategoryLifecycleAction.Reactivate
+                        && TryParseUtc(h.OccurredAt, out var occurred)
+                        && occurred > evaluationCreatedAt);
             }
         }
 
@@ -288,12 +314,20 @@ public sealed class GetClassificationOutcomeQuery
             ItemLifecycleFingerprint: itemLifecycle,
             TransactionFound: transactionFound,
             SuggestedCategoryDisplayName: displayName,
-            SuggestedCategoryLifecycleState: suggestedLifecycle);
+            SuggestedCategoryLifecycleState: suggestedLifecycle,
+            SuggestedCategoryReactivatedAfterEvaluation: reactivatedAfterEvaluation);
     }
 
     private static bool TryParseExpiresAt(string expiresAt, out DateTimeOffset parsed) =>
         DateTimeOffset.TryParse(
             expiresAt,
+            CultureInfo.InvariantCulture,
+            DateTimeStyles.RoundtripKind,
+            out parsed);
+
+    private static bool TryParseUtc(string value, out DateTimeOffset parsed) =>
+        DateTimeOffset.TryParse(
+            value,
             CultureInfo.InvariantCulture,
             DateTimeStyles.RoundtripKind,
             out parsed);
@@ -308,9 +342,10 @@ public sealed class GetClassificationOutcomeQuery
         string? ItemLifecycleFingerprint,
         bool TransactionFound,
         string? SuggestedCategoryDisplayName,
-        string? SuggestedCategoryLifecycleState)
+        string? SuggestedCategoryLifecycleState,
+        bool SuggestedCategoryReactivatedAfterEvaluation)
     {
         public static CurrentPublicState Failed(string error) =>
-            new(error, null, null, null, null, null, null, false, null, null);
+            new(error, null, null, null, null, null, null, false, null, null, false);
     }
 }

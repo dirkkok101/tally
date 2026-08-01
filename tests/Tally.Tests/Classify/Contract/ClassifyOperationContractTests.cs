@@ -415,5 +415,79 @@ public sealed class ClassifyOperationContractTests
         return data;
     }
 
+    [Fact]
+    public void Outcome_get_result_publishes_bounded_explanation_fields()
+    {
+        var result = new ClassifyOutcomeGetResult(
+            ContractVersion: "1.0",
+            EvaluationId: "eval-1",
+            OutcomeId: "out-1",
+            TransactionId: "tx-1",
+            Ordinal: 0,
+            Kind: ClassifyOutcomeKind.Conflict,
+            NormalizationVersion: "normalization_v1",
+            RuleSetVersionId: "rsv-1",
+            SafeReason: "incompatible_category_conflict",
+            SuggestedCategoryId: null,
+            SuggestedCategoryDisplayName: null,
+            ContributingRuleVersionIds: ["rv-a", "rv-b"],
+            MatchedFieldKeys: ["description.normalized"],
+            ConflictProposals:
+            [
+                new ClassifyConflictRuleProposal("rv-a", "cat-a"),
+                new ClassifyConflictRuleProposal("rv-b", "cat-b")
+            ],
+            IsStale: false,
+            StaleDimensions: null,
+            PermittedNextOperationId: ClassifyOperationIds.Evaluate);
+
+        var json = JsonSerializer.Serialize(result, ClassifyJsonContext.Default.ClassifyOutcomeGetResult);
+        var roundTrip = JsonSerializer.Deserialize(json, ClassifyJsonContext.Default.ClassifyOutcomeGetResult);
+        Assert.NotNull(roundTrip);
+        Assert.Equal("normalization_v1", roundTrip!.NormalizationVersion);
+        Assert.Equal("rsv-1", roundTrip.RuleSetVersionId);
+        Assert.Equal("incompatible_category_conflict", roundTrip.SafeReason);
+        Assert.Equal(2, roundTrip.ContributingRuleVersionIds!.Count);
+        Assert.Equal(["description.normalized"], roundTrip.MatchedFieldKeys);
+        Assert.Equal(2, roundTrip.ConflictProposals!.Count);
+        Assert.Equal("rv-a", roundTrip.ConflictProposals[0].RuleVersionId);
+        Assert.Equal("cat-a", roundTrip.ConflictProposals[0].ProposedCategoryId);
+        Assert.Equal(ClassifyOperationIds.Evaluate, roundTrip.PermittedNextOperationId);
+        Assert.DoesNotContain("normalizedValueHash", json, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("sourceDescription", json, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("predicateKind", json, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void Outcome_get_fresh_suggestion_permits_null_next_operation()
+    {
+        var result = new ClassifyOutcomeGetResult(
+            "1.0", "eval", "out", "tx", 0, ClassifyOutcomeKind.Suggestion,
+            "normalization_v1", "rsv", "suggestion", "cat", "Name",
+            ["rv"], ["description.normalized"], null, false, null, null);
+        var json = JsonSerializer.Serialize(result, ClassifyJsonContext.Default.ClassifyOutcomeGetResult);
+        var roundTrip = JsonSerializer.Deserialize(json, ClassifyJsonContext.Default.ClassifyOutcomeGetResult);
+        Assert.NotNull(roundTrip);
+        Assert.Null(roundTrip!.PermittedNextOperationId);
+        Assert.False(roundTrip.IsStale);
+        Assert.Null(roundTrip.ConflictProposals);
+    }
+
+    [Fact]
+    public void Outcome_get_result_type_is_source_generated_on_descriptor()
+    {
+        var descriptor = Module().Descriptors.Single(d => d.OperationId == ClassifyOperationIds.OutcomeGet);
+        Assert.Same(ClassifyJsonContext.Default.ClassifyOutcomeGetResult, descriptor.ResultTypeInfo);
+        Assert.Same(ClassifyJsonContext.Default.ClassifyOutcomeGetRequest, descriptor.RequestTypeInfo);
+        var schema = descriptor.ToSchema();
+        Assert.Contains("normalizationVersion", schema.ResultSchema, StringComparison.Ordinal);
+        Assert.Contains("ruleSetVersionId", schema.ResultSchema, StringComparison.Ordinal);
+        Assert.Contains("matchedFieldKeys", schema.ResultSchema, StringComparison.Ordinal);
+        Assert.Contains("conflictProposals", schema.ResultSchema, StringComparison.Ordinal);
+        Assert.Contains("permittedNextOperationId", schema.ResultSchema, StringComparison.Ordinal);
+        Assert.Contains("safeReason", schema.ResultSchema, StringComparison.Ordinal);
+        Assert.DoesNotContain("normalizedValueHash", schema.ResultSchema, StringComparison.OrdinalIgnoreCase);
+    }
+
     private static ClassifyOperationModule Module() => new();
 }

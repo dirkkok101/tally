@@ -49,6 +49,19 @@ public sealed record ClassifyEvaluateResult(
     [property: JsonRequired] int ConflictCount,
     [property: JsonRequired] int StaleCount);
 
+/// <summary>
+/// Ordered conflict proposal: immutable rule version named by retained MatchEvidence
+/// and its stored proposed category id — never reconstructed from current evaluation.
+/// </summary>
+public sealed record ClassifyConflictRuleProposal(
+    [property: JsonRequired] string RuleVersionId,
+    [property: JsonRequired] string ProposedCategoryId);
+
+/// <summary>
+/// Bounded public classify.outcome.get explanation
+/// (FR-CLASSIFY-OUTCOME-EXPLANATION / FR-CLASSIFY-OUTCOME-INVALIDATION).
+/// Never carries predicate values, normalized hashes, raw descriptions, or full requests.
+/// </summary>
 public sealed record ClassifyOutcomeGetResult(
     [property: JsonRequired] string ContractVersion,
     [property: JsonRequired] string EvaluationId,
@@ -56,11 +69,21 @@ public sealed record ClassifyOutcomeGetResult(
     [property: JsonRequired] string TransactionId,
     [property: JsonRequired] int Ordinal,
     [property: JsonRequired] ClassifyOutcomeKind Kind,
+    [property: JsonRequired] string NormalizationVersion,
+    [property: JsonRequired] string RuleSetVersionId,
+    [property: JsonRequired] string SafeReason,
     string? SuggestedCategoryId,
     string? SuggestedCategoryDisplayName,
     IReadOnlyList<string>? ContributingRuleVersionIds,
+    IReadOnlyList<string>? MatchedFieldKeys,
+    IReadOnlyList<ClassifyConflictRuleProposal>? ConflictProposals,
     [property: JsonRequired] bool IsStale,
-    IReadOnlyList<string>? StaleDimensions);
+    IReadOnlyList<string>? StaleDimensions,
+    /// <summary>
+    /// Sole permitted next operation when stale/conflict/no-suggestion: <c>classify.evaluate</c>.
+    /// Null for a fresh non-stale suggestion.
+    /// </summary>
+    string? PermittedNextOperationId);
 
 public sealed record ClassifyApplyPreviewResult(
     [property: JsonRequired] string ContractVersion,

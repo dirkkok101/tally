@@ -2,6 +2,7 @@ using Tally.Contracts.Classify.Operations;
 using Tally.Domain.Classify.Evaluation;
 using Tally.Infrastructure.Classify.Storage;
 using Tally.Infrastructure.Classify.Storage.Evaluation;
+using Tally.Infrastructure.Classify.Storage.Rules;
 
 namespace Tally.Features.Classify.Contract;
 
@@ -65,7 +66,6 @@ public static partial class ClassifyContractMapper
                 return true;
             case ClassificationOutcomeKind.NoSuggestion:
             case ClassificationOutcomeKind.Stale:
-                // Historical no-match / stale partitions do not require match evidence rows.
                 return true;
             default:
                 errorCode = EvidenceUnavailable;
@@ -96,6 +96,49 @@ public static partial class ClassifyContractMapper
             .OrderBy(f => f, StringComparer.Ordinal)
             .ToArray();
 
+    /// <summary>
+    /// Build ordered conflict proposals from retained evidence rule ids and immutable rule_version rows.
+    /// Fails when any evidence-named rule is missing or category mapping is blank — never invents categories.
+    /// </summary>
+    public static bool TryMapConflictProposals(
+        IReadOnlyList<ClassifyMatchEvidenceRow> evidence,
+        IReadOnlyDictionary<string, ClassifyRuleVersionRow> immutableRulesByVersionId,
+        out IReadOnlyList<ClassifyConflictRuleProposal> proposals,
+        out string? errorCode)
+    {
+        ArgumentNullException.ThrowIfNull(evidence);
+        ArgumentNullException.ThrowIfNull(immutableRulesByVersionId);
+        proposals = Array.Empty<ClassifyConflictRuleProposal>();
+        errorCode = null;
+
+        var ruleIds = ToContributingRuleVersionIds(evidence);
+        if (ruleIds.Count < 2)
+        {
+            errorCode = EvidenceUnavailable;
+            return false;
+        }
+
+        var list = new List<ClassifyConflictRuleProposal>(ruleIds.Count);
+        foreach (var ruleId in ruleIds)
+        {
+            if (!immutableRulesByVersionId.TryGetValue(ruleId, out var version)
+                || string.IsNullOrWhiteSpace(version.CategoryId))
+            {
+                errorCode = EvidenceUnavailable;
+                return false;
+            }
+
+            list.Add(new ClassifyConflictRuleProposal(ruleId, version.CategoryId));
+        }
+
+        // Deterministic order by ruleVersionId (already ordered), then proposed category id as tie-break.
+        proposals = list
+            .OrderBy(p => p.RuleVersionId, StringComparer.Ordinal)
+            .ThenBy(p => p.ProposedCategoryId, StringComparer.Ordinal)
+            .ToArray();
+        return true;
+    }
+
     public static EvaluationFingerprint ToRetainedEvaluationFingerprint(ClassifyEvaluationRunRow run) =>
         EvaluationFingerprint.Create(
             run.LedgerContractVersion,
@@ -108,25 +151,58 @@ public static partial class ClassifyContractMapper
             run.RuleSetVersionId,
             run.OrderedItemsFingerprint);
 
+    /// <summary>
+    /// Fresh non-stale suggestion → null next operation.
+    /// Stale, conflict, no-suggestion, or stored-stale → classify.evaluate only.
+    /// </summary>
+    public static string? ResolvePermittedNextOperationId(
+        ClassificationOutcomeKind kind,
+        bool isStale)
+    {
+        if (isStale || IsUnappliablePublicKind(kind))
+        {
+            return ClassificationStalenessPolicy.NextOperationReEvaluate;
+        }
+
+        // Fresh suggestion — no forced next operation on this result.
+        return null;
+    }
+
+    public static bool IsUnappliablePublicKind(ClassificationOutcomeKind kind) =>
+        ClassificationStalenessPolicy.IsUnappliableOutcomeKind(kind);
+
     public static ClassifyOutcomeGetResult ToOutcomeGetResult(
         ClassifyEvaluationRunRow run,
         ClassifyOutcomeRow outcome,
         IReadOnlyList<ClassifyMatchEvidenceRow> evidence,
         bool isStale,
         IReadOnlyList<string>? staleDimensions,
-        string? suggestedCategoryDisplayName)
+        string? suggestedCategoryDisplayName,
+        IReadOnlyList<ClassifyConflictRuleProposal>? conflictProposals = null)
     {
         ArgumentNullException.ThrowIfNull(run);
         ArgumentNullException.ThrowIfNull(outcome);
         ArgumentNullException.ThrowIfNull(evidence);
 
         var kind = ParseStoredOutcomeType(outcome.OutcomeType);
+        var effectiveStale = isStale || kind == ClassificationOutcomeKind.Stale;
         var contributing = kind is ClassificationOutcomeKind.Suggestion or ClassificationOutcomeKind.Conflict
             ? ToContributingRuleVersionIds(evidence)
             : null;
+        var matchedFields = kind is ClassificationOutcomeKind.Suggestion or ClassificationOutcomeKind.Conflict
+            ? ToMatchedFieldKeys(evidence)
+            : null;
 
-        // Public wire contract: bounded fields only. Matched field keys are derivable from retained
-        // evidence for tests via ToMatchedFieldKeys; the published result omits hashes/values.
+        IReadOnlyList<string>? dimensions = null;
+        if (effectiveStale)
+        {
+            dimensions = staleDimensions is { Count: > 0 }
+                ? staleDimensions.OrderBy(d => d, StringComparer.Ordinal).ToArray()
+                : kind == ClassificationOutcomeKind.Stale
+                    ? new[] { outcome.SafeReason }
+                    : Array.Empty<string>();
+        }
+
         return new ClassifyOutcomeGetResult(
             ContractVersion: ClassifyOperationIds.ContractVersion,
             EvaluationId: run.EvaluationId,
@@ -134,29 +210,27 @@ public static partial class ClassifyContractMapper
             TransactionId: outcome.TransactionId,
             Ordinal: outcome.Ordinal,
             Kind: ToPublicOutcomeKind(kind),
+            NormalizationVersion: run.NormalizationVersion,
+            RuleSetVersionId: run.RuleSetVersionId,
+            SafeReason: outcome.SafeReason,
             SuggestedCategoryId: kind == ClassificationOutcomeKind.Suggestion ? outcome.CategoryId : null,
             SuggestedCategoryDisplayName: kind == ClassificationOutcomeKind.Suggestion
                 ? suggestedCategoryDisplayName
                 : null,
             ContributingRuleVersionIds: contributing is { Count: > 0 } ? contributing : null,
-            IsStale: isStale || kind == ClassificationOutcomeKind.Stale,
-            StaleDimensions: isStale || kind == ClassificationOutcomeKind.Stale
-                ? (staleDimensions is { Count: > 0 }
-                    ? staleDimensions.OrderBy(d => d, StringComparer.Ordinal).ToArray()
-                    : kind == ClassificationOutcomeKind.Stale
-                        ? new[] { outcome.SafeReason }
-                        : Array.Empty<string>())
-                : null);
+            MatchedFieldKeys: matchedFields is { Count: > 0 } ? matchedFields : null,
+            ConflictProposals: kind == ClassificationOutcomeKind.Conflict
+                ? conflictProposals
+                : null,
+            IsStale: effectiveStale,
+            StaleDimensions: dimensions,
+            PermittedNextOperationId: ResolvePermittedNextOperationId(kind, effectiveStale));
     }
 
-    /// <summary>
-    /// When the outcome is not stale but is still unappliable (conflict / no-suggestion),
-    /// permitted next operation remains re-evaluate only.
-    /// </summary>
+    /// <summary>Backward-compatible helper used by tests that only need the next-op mapping.</summary>
     public static string PermittedNextOperationId(
         ClassificationOutcomeKind kind,
         ClassificationStalenessPolicy.Result staleness) =>
-        staleness.IsStale || ClassificationStalenessPolicy.IsUnappliableOutcomeKind(kind)
-            ? ClassificationStalenessPolicy.NextOperationReEvaluate
-            : ClassificationStalenessPolicy.NextOperationReEvaluate;
+        ResolvePermittedNextOperationId(kind, staleness.IsStale)
+        ?? ClassificationStalenessPolicy.NextOperationReEvaluate;
 }

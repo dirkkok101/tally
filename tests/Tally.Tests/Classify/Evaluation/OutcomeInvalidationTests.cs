@@ -183,6 +183,37 @@ public sealed class OutcomeInvalidationTests : IAsyncLifetime
     }
 
     [Fact]
+    public void Policy_store_generation_only_churn_with_active_suggestion_rename_is_not_stale()
+    {
+        // Display-name rename may advance store generation without semantic identity drift.
+        var result = EvaluatePolicy(
+            currentStoreGen: new string('9', 64),
+            suggestedCategoryId: "cat-1",
+            suggestedCategoryLifecycle: "active");
+        Assert.False(result.IsStale);
+        Assert.DoesNotContain(EvaluationFingerprint.DimensionStoreGeneration, result.ChangedDimensions);
+    }
+
+    [Fact]
+    public void Policy_store_generation_churn_without_suggestion_context_is_stale()
+    {
+        var result = EvaluatePolicy(currentStoreGen: new string('9', 64));
+        Assert.True(result.IsStale);
+        Assert.Contains(EvaluationFingerprint.DimensionStoreGeneration, result.ChangedDimensions);
+    }
+
+    [Fact]
+    public void Policy_reactivation_after_evaluation_is_stale()
+    {
+        var result = EvaluatePolicy(
+            suggestedCategoryId: "cat-1",
+            suggestedCategoryLifecycle: "active",
+            reactivatedAfterEvaluation: true);
+        Assert.True(result.IsStale);
+        Assert.Contains(ClassificationStalenessPolicy.DimensionSuggestedCategoryLifecycle, result.ChangedDimensions);
+    }
+
+    [Fact]
     public void Policy_unavailable_current_store_generation_fails_closed()
     {
         var result = EvaluatePolicy(currentStoreGen: null);
@@ -200,6 +231,36 @@ public sealed class OutcomeInvalidationTests : IAsyncLifetime
     }
 
     // ── Integration: archive blocks / re-evaluate ────────────────────────────
+
+    [Fact]
+    public async Task Reactivation_of_suggested_category_marks_outcome_stale()
+    {
+        var category = await CreateCategoryAsync("ReactMe");
+        var versionId = await SaveDraftAsync(category.CategoryId, "react shop");
+        await ActivateWithGateAsync(versionId, category.CategoryId, "react shop");
+        var tx = await RecordAsync("react shop");
+        var evaluated = await services.Evaluate.HandleAsync(
+            new ClassifyEvaluateRequest(ClassifyOperationIds.ContractVersion),
+            actor, NextKey(), CancellationToken.None);
+        Assert.True(evaluated.IsSuccess, evaluated.ErrorCode);
+
+        await ArchiveCategoryAsync(category.CategoryId);
+        await ReactivateCategoryAsync(category.CategoryId);
+
+        var result = await services.OutcomeGet.HandleAsync(
+            new ClassifyOutcomeGetRequest(
+                ClassifyOperationIds.ContractVersion,
+                evaluated.Value!.EvaluationId,
+                tx.TransactionId),
+            actor,
+            CancellationToken.None);
+
+        Assert.True(result.IsSuccess, result.ErrorCode);
+        Assert.True(result.Value!.IsStale);
+        Assert.NotNull(result.Value.StaleDimensions);
+        Assert.NotEmpty(result.Value.StaleDimensions!);
+        Assert.Equal(ClassifyOperationIds.Evaluate, result.Value.PermittedNextOperationId);
+    }
 
     [Fact]
     public async Task Archive_of_suggested_category_marks_outcome_stale()
@@ -374,7 +435,8 @@ public sealed class OutcomeInvalidationTests : IAsyncLifetime
         string? currentItemLifecycle = null,
         bool transactionFound = true,
         string? suggestedCategoryId = null,
-        string? suggestedCategoryLifecycle = null) =>
+        string? suggestedCategoryLifecycle = null,
+        bool reactivatedAfterEvaluation = false) =>
         new(
             RetainedEvaluation: retained,
             RetainedItemLifecycleFingerprint: new string('d', 64),
@@ -389,6 +451,7 @@ public sealed class OutcomeInvalidationTests : IAsyncLifetime
             CurrentItemLifecycleFingerprint: currentItemLifecycle ?? new string('d', 64),
             TransactionFoundInLedger: transactionFound,
             SuggestedCategoryLifecycleState: suggestedCategoryLifecycle,
+            SuggestedCategoryReactivatedAfterEvaluation: reactivatedAfterEvaluation,
             NowUtc: now ?? DateTimeOffset.UtcNow,
             RetainedSnapshotExpiresAt: expiresAt
                 ?? DateTimeOffset.Parse(retained.SnapshotExpiresAt, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind));
@@ -404,7 +467,8 @@ public sealed class OutcomeInvalidationTests : IAsyncLifetime
         string? currentItemLifecycle = null,
         bool transactionFound = true,
         string? suggestedCategoryId = null,
-        string? suggestedCategoryLifecycle = null)
+        string? suggestedCategoryLifecycle = null,
+        bool reactivatedAfterEvaluation = false)
     {
         var retained = BaseFingerprint();
         return ClassificationStalenessPolicy.Evaluate(BaseInput(
@@ -419,7 +483,8 @@ public sealed class OutcomeInvalidationTests : IAsyncLifetime
             currentItemLifecycle: currentItemLifecycle,
             transactionFound: transactionFound,
             suggestedCategoryId: suggestedCategoryId,
-            suggestedCategoryLifecycle: suggestedCategoryLifecycle));
+            suggestedCategoryLifecycle: suggestedCategoryLifecycle,
+            reactivatedAfterEvaluation: reactivatedAfterEvaluation));
     }
 
     // ── Integration helpers ──────────────────────────────────────────────────
@@ -526,6 +591,14 @@ public sealed class OutcomeInvalidationTests : IAsyncLifetime
             new ArchiveCategoryInput(categoryId, "outcome-archive"),
             NextKey(),
             LedgerJsonContext.Default.ArchiveCategoryInput,
+            LedgerJsonContext.Default.CategoryLifecycleResult);
+
+    private async Task ReactivateCategoryAsync(string categoryId) =>
+        _ = await ExecuteSuccessAsync(
+            "ledger.category.reactivate",
+            new ReactivateCategoryInput(categoryId, "outcome-reactivate"),
+            NextKey(),
+            LedgerJsonContext.Default.ReactivateCategoryInput,
             LedgerJsonContext.Default.CategoryLifecycleResult);
 
     private async Task VoidTransactionAsync(string transactionId) =>

@@ -14,6 +14,8 @@ namespace Tally.Contracts.Classify;
 [JsonSerializable(typeof(ClassifyEvaluateResult))]
 [JsonSerializable(typeof(ClassifyOutcomeGetRequest))]
 [JsonSerializable(typeof(ClassifyOutcomeGetResult))]
+[JsonSerializable(typeof(ClassifyConflictRuleProposal))]
+[JsonSerializable(typeof(ClassifyConflictRuleProposal[]))]
 [JsonSerializable(typeof(ClassifyApplyPreviewRequest))]
 [JsonSerializable(typeof(ClassifyApplyPreviewResult))]
 [JsonSerializable(typeof(ClassifyApplyRunRequest))]

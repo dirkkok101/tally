@@ -126,9 +126,22 @@ public sealed class OutcomeExplanationTests : IAsyncLifetime
         Assert.Equal(category.CategoryId, result.Value.SuggestedCategoryId);
         Assert.Equal(category.Name, result.Value.SuggestedCategoryDisplayName);
         Assert.False(result.Value.IsStale);
+        Assert.Null(result.Value.PermittedNextOperationId);
+        Assert.Equal(NormalizationDescriptor.V1.Version, result.Value.NormalizationVersion);
+        Assert.False(string.IsNullOrWhiteSpace(result.Value.RuleSetVersionId));
+        Assert.False(string.IsNullOrWhiteSpace(result.Value.SafeReason));
         Assert.NotNull(result.Value.ContributingRuleVersionIds);
         Assert.NotEmpty(result.Value.ContributingRuleVersionIds!);
+        Assert.Equal(
+            result.Value.ContributingRuleVersionIds!.OrderBy(id => id, StringComparer.Ordinal).ToArray(),
+            result.Value.ContributingRuleVersionIds!.ToArray());
         Assert.Contains(eval.RuleVersionId, result.Value.ContributingRuleVersionIds!);
+        Assert.NotNull(result.Value.MatchedFieldKeys);
+        Assert.NotEmpty(result.Value.MatchedFieldKeys!);
+        Assert.Equal(
+            result.Value.MatchedFieldKeys!.OrderBy(f => f, StringComparer.Ordinal).ToArray(),
+            result.Value.MatchedFieldKeys!.ToArray());
+        Assert.Null(result.Value.ConflictProposals);
         Assert.True(result.Value.Ordinal >= 0);
     }
 
@@ -149,12 +162,12 @@ public sealed class OutcomeExplanationTests : IAsyncLifetime
         Assert.Null(result.Value.SuggestedCategoryId);
         Assert.Null(result.Value.SuggestedCategoryDisplayName);
         Assert.Null(result.Value.ContributingRuleVersionIds);
+        Assert.Null(result.Value.MatchedFieldKeys);
+        Assert.Null(result.Value.ConflictProposals);
         Assert.False(result.Value.IsStale);
-        Assert.Equal(
-            ClassificationStalenessPolicy.NextOperationReEvaluate,
-            ClassifyContractMapper.PermittedNextOperationId(
-                ClassificationOutcomeKind.NoSuggestion,
-                new ClassificationStalenessPolicy.Result(false, Array.Empty<string>(), ClassificationStalenessPolicy.NextOperationReEvaluate)));
+        Assert.Equal(ClassifyOperationIds.Evaluate, result.Value.PermittedNextOperationId);
+        Assert.False(string.IsNullOrWhiteSpace(result.Value.SafeReason));
+        Assert.Equal(NormalizationDescriptor.V1.Version, result.Value.NormalizationVersion);
     }
 
     [Fact]
@@ -175,7 +188,22 @@ public sealed class OutcomeExplanationTests : IAsyncLifetime
         Assert.Null(result.Value.SuggestedCategoryId);
         Assert.NotNull(result.Value.ContributingRuleVersionIds);
         Assert.True(result.Value.ContributingRuleVersionIds!.Count >= 2);
+        Assert.Equal(
+            result.Value.ContributingRuleVersionIds!.OrderBy(id => id, StringComparer.Ordinal).ToArray(),
+            result.Value.ContributingRuleVersionIds!.ToArray());
+        Assert.NotNull(result.Value.ConflictProposals);
+        Assert.Equal(result.Value.ContributingRuleVersionIds!.Count, result.Value.ConflictProposals!.Count);
+        Assert.Equal(
+            result.Value.ConflictProposals!.Select(p => p.RuleVersionId).OrderBy(id => id, StringComparer.Ordinal).ToArray(),
+            result.Value.ConflictProposals!.Select(p => p.RuleVersionId).ToArray());
+        Assert.All(result.Value.ConflictProposals!, p =>
+        {
+            Assert.False(string.IsNullOrWhiteSpace(p.RuleVersionId));
+            Assert.False(string.IsNullOrWhiteSpace(p.ProposedCategoryId));
+            Assert.Contains(p.ProposedCategoryId, new[] { catA.CategoryId, catB.CategoryId });
+        });
         Assert.False(result.Value.IsStale);
+        Assert.Equal(ClassifyOperationIds.Evaluate, result.Value.PermittedNextOperationId);
     }
 
     [Fact]
@@ -258,9 +286,10 @@ public sealed class OutcomeExplanationTests : IAsyncLifetime
             CancellationToken.None);
 
         Assert.True(result.IsSuccess, result.ErrorCode);
-        // Category identity unchanged; display name refreshed. Store-generation may change on rename
-        // depending on Ledger catalogue fingerprinting — when only display changes, outcome stays usable.
-        Assert.Equal(category.CategoryId, result.Value!.SuggestedCategoryId);
+        Assert.False(result.Value!.IsStale);
+        Assert.Null(result.Value.StaleDimensions);
+        Assert.Null(result.Value.PermittedNextOperationId);
+        Assert.Equal(category.CategoryId, result.Value.SuggestedCategoryId);
         Assert.Equal("Renamed Display", result.Value.SuggestedCategoryDisplayName);
     }
 
@@ -272,10 +301,44 @@ public sealed class OutcomeExplanationTests : IAsyncLifetime
         Assert.True(ClassificationStalenessPolicy.IsUnappliableOutcomeKind(ClassificationOutcomeKind.Stale));
         Assert.False(ClassificationStalenessPolicy.IsUnappliableOutcomeKind(ClassificationOutcomeKind.Suggestion));
         Assert.Equal(
-            ClassificationStalenessPolicy.NextOperationReEvaluate,
-            ClassifyContractMapper.PermittedNextOperationId(
-                ClassificationOutcomeKind.Conflict,
-                new ClassificationStalenessPolicy.Result(false, Array.Empty<string>(), ClassificationStalenessPolicy.NextOperationReEvaluate)));
+            ClassifyOperationIds.Evaluate,
+            ClassifyContractMapper.ResolvePermittedNextOperationId(ClassificationOutcomeKind.Conflict, isStale: false));
+        Assert.Null(
+            ClassifyContractMapper.ResolvePermittedNextOperationId(ClassificationOutcomeKind.Suggestion, isStale: false));
+        Assert.Equal(
+            ClassifyOperationIds.Evaluate,
+            ClassifyContractMapper.ResolvePermittedNextOperationId(ClassificationOutcomeKind.Suggestion, isStale: true));
+    }
+
+    [Fact]
+    public void Outcome_result_serialization_excludes_private_payload_keys()
+    {
+        var sample = new ClassifyOutcomeGetResult(
+            ClassifyOperationIds.ContractVersion,
+            "eval",
+            "out",
+            "tx",
+            0,
+            ClassifyOutcomeKind.Suggestion,
+            NormalizationDescriptor.V1.Version,
+            "rsv",
+            "suggestion",
+            "cat",
+            "Groceries",
+            ["rv-1"],
+            ["description.normalized"],
+            null,
+            false,
+            null,
+            null);
+        var json = JsonSerializer.Serialize(sample, ClassifyJsonContext.Default.ClassifyOutcomeGetResult);
+        Assert.Contains("normalizationVersion", json, StringComparison.Ordinal);
+        Assert.Contains("ruleSetVersionId", json, StringComparison.Ordinal);
+        Assert.Contains("safeReason", json, StringComparison.Ordinal);
+        Assert.Contains("matchedFieldKeys", json, StringComparison.Ordinal);
+        Assert.DoesNotContain("normalizedValueHash", json, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("sourceDescription", json, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("predicate", json, StringComparison.OrdinalIgnoreCase);
     }
 
     // ── Seed helpers ─────────────────────────────────────────────────────────

@@ -52,6 +52,7 @@ public static class ClassifyEvaluationExtensions
         var outcomeGet = new GetClassificationOutcomeQuery(
             state.Store,
             evaluationStore,
+            ruleStore,
             ruleSetStore,
             ledgerClient,
             clock);

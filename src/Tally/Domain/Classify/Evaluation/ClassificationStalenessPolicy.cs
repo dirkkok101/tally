@@ -13,7 +13,7 @@ public static class ClassificationStalenessPolicy
     /// <summary>Item-level revision tuple drift (void, supersede, allocation, transfer, refund).</summary>
     public const string DimensionItemLifecycle = "item_lifecycle_fingerprint";
 
-    /// <summary>Suggested category is missing or not active (archive); rename of same active id is not drift.</summary>
+    /// <summary>Suggested category is missing, archived, or reactivated after the retained evaluation.</summary>
     public const string DimensionSuggestedCategoryLifecycle = "suggested_category_lifecycle";
 
     /// <summary>
@@ -37,19 +37,26 @@ public static class ClassificationStalenessPolicy
         bool TransactionFoundInLedger,
         /// <summary>Lifecycle of the suggested category when known: "active", "archived", or null when absent.</summary>
         string? SuggestedCategoryLifecycleState,
+        /// <summary>
+        /// True when public category history shows a Reactivate event after the retained evaluation time.
+        /// Display-name rename alone must leave this false.
+        /// </summary>
+        bool SuggestedCategoryReactivatedAfterEvaluation,
         DateTimeOffset NowUtc,
         DateTimeOffset RetainedSnapshotExpiresAt);
 
     public sealed record Result(
         bool IsStale,
         IReadOnlyList<string> ChangedDimensions,
-        /// <summary>Always <see cref="NextOperationReEvaluate"/> when stale or otherwise unappliable.</summary>
+        /// <summary><see cref="NextOperationReEvaluate"/> when stale or unappliable; callers map fresh suggestions to null.</summary>
         string PermittedNextOperationId);
 
     /// <summary>
     /// Compare retained evaluation fingerprints and item/category lifecycle to current public state.
     /// Snapshot identity is not compared directly: a live store re-query always mints a new snapshot id.
     /// Expiry and store-generation capture invalid/expired snapshot drift instead.
+    /// Display-name-only rename of the same active category id stays fresh when every semantic dimension
+    /// below is unchanged (store-generation-only churn is then suppressed).
     /// </summary>
     public static Result Evaluate(Input input)
     {
@@ -77,11 +84,11 @@ public static class ClassificationStalenessPolicy
             input.RetainedEvaluation.ProjectionVersion,
             input.CurrentProjectionVersion);
 
-        CompareOptional(
-            changed,
-            EvaluationFingerprint.DimensionStoreGeneration,
+        var storeGenerationDrifted = !string.Equals(
             input.RetainedEvaluation.StoreGenerationFingerprint,
-            input.CurrentStoreGenerationFingerprint);
+            input.CurrentStoreGenerationFingerprint,
+            StringComparison.Ordinal)
+            || input.CurrentStoreGenerationFingerprint is null;
 
         CompareOptional(
             changed,
@@ -108,24 +115,51 @@ public static class ClassificationStalenessPolicy
             input.CurrentOrderedItemsFingerprint);
 
         // Item-level: void, supersede, allocation, transfer, refund relationship drift.
-        if (!input.TransactionFoundInLedger
-            || string.IsNullOrWhiteSpace(input.CurrentItemLifecycleFingerprint)
-            || !string.Equals(
+        var itemLifecycleMatches = input.TransactionFoundInLedger
+            && !string.IsNullOrWhiteSpace(input.CurrentItemLifecycleFingerprint)
+            && string.Equals(
                 input.RetainedItemLifecycleFingerprint,
                 input.CurrentItemLifecycleFingerprint,
-                StringComparison.Ordinal))
+                StringComparison.Ordinal);
+        if (!itemLifecycleMatches)
         {
             Add(changed, DimensionItemLifecycle);
         }
 
-        // Suggested category archive / missing identity — not rename of same active id.
+        // Suggested category archive / missing identity / reactivation — not display rename of same active id.
+        var suggestedCategoryActive = true;
         if (!string.IsNullOrWhiteSpace(input.SuggestedCategoryId))
         {
             var lifecycle = input.SuggestedCategoryLifecycleState?.Trim();
-            if (string.IsNullOrWhiteSpace(lifecycle)
-                || !string.Equals(lifecycle, "active", StringComparison.Ordinal))
+            suggestedCategoryActive = string.Equals(lifecycle, "active", StringComparison.Ordinal);
+            if (!suggestedCategoryActive || input.SuggestedCategoryReactivatedAfterEvaluation)
             {
                 Add(changed, DimensionSuggestedCategoryLifecycle);
+            }
+        }
+
+        // Store generation: real drift is stale. Display-name-only rename of the same active
+        // suggested category may advance store generation without semantic identity drift —
+        // suppress that sole churn only for that rename case.
+        if (storeGenerationDrifted)
+        {
+            var renameOnlyStoreGenerationChurn =
+                !string.IsNullOrWhiteSpace(input.SuggestedCategoryId)
+                && suggestedCategoryActive
+                && !input.SuggestedCategoryReactivatedAfterEvaluation
+                && itemLifecycleMatches
+                && !changed.Contains(EvaluationFingerprint.DimensionSnapshotExpiresAt, StringComparer.Ordinal)
+                && !changed.Contains(EvaluationFingerprint.DimensionLedgerContractVersion, StringComparer.Ordinal)
+                && !changed.Contains(EvaluationFingerprint.DimensionProjectionVersion, StringComparer.Ordinal)
+                && !changed.Contains(EvaluationFingerprint.DimensionCategoryLifecycle, StringComparer.Ordinal)
+                && !changed.Contains(EvaluationFingerprint.DimensionNormalizationVersion, StringComparer.Ordinal)
+                && !changed.Contains(EvaluationFingerprint.DimensionRuleSetVersion, StringComparer.Ordinal)
+                && !changed.Contains(EvaluationFingerprint.DimensionOrderedItems, StringComparer.Ordinal)
+                && !changed.Contains(DimensionSuggestedCategoryLifecycle, StringComparer.Ordinal);
+
+            if (!renameOnlyStoreGenerationChurn)
+            {
+                Add(changed, EvaluationFingerprint.DimensionStoreGeneration);
             }
         }
 
@@ -138,8 +172,6 @@ public static class ClassificationStalenessPolicy
         return new Result(
             isStale,
             ordered,
-            // Re-evaluate is the only permitted next operation for stale evidence;
-            // conflict/no-suggestion/stale outcomes are never apply-eligible from this policy.
             NextOperationReEvaluate);
     }
 
