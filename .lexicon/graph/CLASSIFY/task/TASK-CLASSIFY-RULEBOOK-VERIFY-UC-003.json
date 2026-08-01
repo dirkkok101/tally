@@ -70,13 +70,22 @@
   ],
   "files": [
     {
-      "id": "01KYVN0TPDMKS78P0SY420MRE3",
+      "id": "01KYZ70Y7DVQS16D7PFZQZ1DFS",
       "path": "tests/Tally.Tests/Classify/Acceptance/ClassifyUc003ApplyTests.cs",
       "action": "test",
       "role": "UC-003 acceptance and recovery matrix",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T17:47:49.8682261+00:00"
+    },
+    {
+      "id": "01KYZ70Y7DHN5WPJ1PF5RMW2MD",
+      "path": "src/Tally/Features/Classify/Rules/Validate/ValidationReportBuilder.cs",
+      "action": "modify",
+      "role": "bounded correction: make aggregate report fingerprint independent of per-run validation identity so distinct-key deterministic replay can authorize activation",
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-01T17:47:49.8682261+00:00"
     }
   ],
   "interfaces": [
@@ -214,14 +223,24 @@
       "created_at": "2026-07-31T08:35:28.5399812+00:00"
     },
     {
-      "id": "01KYVN0TPDQNBQJ1RH7HE3RSDA",
+      "id": "01KYZ70Y7C96BN1MN684SDWHP1",
       "kind": "note",
       "text": [
         "Ledger allocation history is the authoritative duplicate-mutation oracle."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T17:47:49.8682261+00:00"
+    },
+    {
+      "id": "01KYZ70Y7DNPEGGBX4CVMH6HKE",
+      "kind": "note",
+      "text": [
+        "Hermes blocker resolution (2026-08-01): ValidationReportBuilder currently binds validation_run_id into report_fingerprint while VerifiedOwnerRulebookGateReceipt requires distinct-run report fingerprints to match. A run identity is provenance, not report content. This verification bead owns the bounded correction: exclude validation_run_id from the aggregate report fingerprint, preserve the row foreign key separately, keep the replay equality check, and prove distinct validation IDs with identical semantic evidence produce identical report fingerprints before activation."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-01T17:47:49.8682261+00:00"
     }
   ],
   "references": [
