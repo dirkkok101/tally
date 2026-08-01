@@ -484,13 +484,10 @@ public sealed class PreviewClassificationApplyCommand
                 createdAtUtc);
 
             var publicResult = ClassifyContractMapper.ToApplyPreviewResult(
-                previewId,
-                evaluationId,
-                expiresAtUtc,
-                finalCandidates.Count,
+                previewRow,
+                orderedItems,
                 assignableCount,
-                correctableCount,
-                selectionHash);
+                correctableCount);
 
             return await stateStore.ExecuteWriteAsync(
                 async (connection, transaction, writeCt) =>

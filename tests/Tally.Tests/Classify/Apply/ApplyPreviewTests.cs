@@ -7,6 +7,7 @@ using Tally.Application;
 using Tally.Bootstrap;
 using Tally.Bootstrap.Features;
 using Tally.Cli;
+using Tally.Contracts.Classify;
 using Tally.Contracts.Classify.Operations;
 using Tally.Contracts.Classify.Rules;
 using Tally.Contracts.Common;
@@ -183,6 +184,27 @@ public sealed class ApplyPreviewTests : IAsyncLifetime
         Assert.Equal(0, result.Value.CorrectableCount);
         Assert.Equal(64, result.Value.SelectionHash.Length);
         Assert.False(string.IsNullOrWhiteSpace(result.Value.ExpiresAt));
+        // Complete public disclosure (FR-CLASSIFY-APPLY-AUTHORIZATION) — not private rows only.
+        Assert.Equal(64, result.Value.EvaluationFingerprint.Length);
+        Assert.Equal(ClassifyContractMapper.SelectionModeSelectedOutcomes, result.Value.SelectionMode);
+        Assert.Equal(64, result.Value.TargetCategoryFingerprint.Length);
+        Assert.Equal(64, result.Value.RuleAuthorityFingerprint.Length);
+        Assert.Equal(result.Value.SelectedCount, result.Value.SelectedTransactionIds.Count);
+        Assert.Equal(result.Value.SelectedCount, result.Value.TargetCategoryIds.Count);
+        Assert.Contains(seeded.TransactionIds[0], result.Value.SelectedTransactionIds);
+        Assert.All(result.Value.ContributingRuleVersionIds, id => Assert.False(string.IsNullOrWhiteSpace(id)));
+        Assert.Equal(
+            result.Value.ContributingRuleVersionIds.OrderBy(id => id, StringComparer.Ordinal).ToArray(),
+            result.Value.ContributingRuleVersionIds.ToArray());
+        Assert.False(string.IsNullOrWhiteSpace(result.Value.LedgerContractVersion));
+        Assert.False(string.IsNullOrWhiteSpace(result.Value.ProjectionVersion));
+        Assert.Equal(64, result.Value.StoreGenerationFingerprint.Length);
+        Assert.False(string.IsNullOrWhiteSpace(result.Value.PreflightSnapshotId));
+        Assert.False(string.IsNullOrWhiteSpace(result.Value.PreflightExpiresAt));
+        Assert.Equal(64, result.Value.CategoryLifecycleFingerprint.Length);
+        Assert.True(result.Value.ExclusionCount >= 0);
+        Assert.True(result.Value.NoSuggestionCount >= 0);
+        Assert.True(result.Value.ConflictCount >= 0);
 
         var after = await SnapshotCategoryStatesAsync(seeded.TransactionIds);
         Assert.Equal(before, after);
@@ -554,6 +576,288 @@ public sealed class ApplyPreviewTests : IAsyncLifetime
             DateTimeStyles.RoundtripKind,
             out var expires));
         Assert.True(expires > DateTimeOffset.UtcNow.AddMinutes(-1));
+    }
+
+    [Fact]
+    public void Mapper_to_apply_preview_result_discloses_complete_public_surface()
+    {
+        var preview = new ClassifyApplyPreviewRow(
+            PreviewId: "prev-1",
+            OperationIdempotencyKey: "key-1",
+            EvaluationId: "eval-1",
+            EvaluationFingerprint: new string('a', 64),
+            SelectionMode: ClassifyContractMapper.SelectionModeSelectedOutcomes,
+            SelectionHash: new string('b', 64),
+            LedgerContractVersion: ActualsContractVersions.Current,
+            ProjectionVersion: ClassificationProjectionVersions.ClassificationV1,
+            StoreGenerationFingerprint: new string('c', 64),
+            PreflightSnapshotId: "snap-1",
+            PreflightExpiresAt: "2026-08-01T12:00:00.0000000Z",
+            CategoryLifecycleFingerprint: new string('d', 64),
+            TargetCategoryFingerprint: new string('e', 64),
+            RuleAuthorityFingerprint: new string('f', 64),
+            ExpiresAt: "2026-08-01T12:00:00.0000000Z",
+            SelectedCount: 2,
+            ExclusionCount: 3,
+            NoSuggestionCount: 1,
+            ConflictCount: 1,
+            Actor: "automation:preview",
+            CreatedAt: "2026-08-01T11:00:00.0000000Z");
+        var items = new[]
+        {
+            new ClassifyApplyPreviewItemRow(
+                "prev-1", 1, "out-b", "tx-b", "assign", "cat-2", "rv-2",
+                null, null, "tr-b", "rr-b", "ar-b", null),
+            new ClassifyApplyPreviewItemRow(
+                "prev-1", 0, "out-a", "tx-a", "assign", "cat-1", "rv-1",
+                null, null, "tr-a", "rr-a", "ar-a", null)
+        };
+
+        var result = ClassifyContractMapper.ToApplyPreviewResult(preview, items, assignableCount: 2, correctableCount: 0);
+
+        Assert.Equal("prev-1", result.PreviewId);
+        Assert.Equal("eval-1", result.EvaluationId);
+        Assert.Equal(new string('a', 64), result.EvaluationFingerprint);
+        Assert.Equal(ClassifyContractMapper.SelectionModeSelectedOutcomes, result.SelectionMode);
+        Assert.Equal(new string('b', 64), result.SelectionHash);
+        Assert.Equal(new string('e', 64), result.TargetCategoryFingerprint);
+        Assert.Equal(new string('f', 64), result.RuleAuthorityFingerprint);
+        Assert.Equal(["tx-a", "tx-b"], result.SelectedTransactionIds.ToArray());
+        Assert.Equal(["cat-1", "cat-2"], result.TargetCategoryIds.ToArray());
+        Assert.Equal(["rv-1", "rv-2"], result.ContributingRuleVersionIds.ToArray());
+        Assert.Equal(2, result.SelectedCount);
+        Assert.Equal(2, result.AssignableCount);
+        Assert.Equal(0, result.CorrectableCount);
+        Assert.Equal(3, result.ExclusionCount);
+        Assert.Equal(1, result.NoSuggestionCount);
+        Assert.Equal(1, result.ConflictCount);
+        Assert.Equal(ActualsContractVersions.Current, result.LedgerContractVersion);
+        Assert.Equal(ClassificationProjectionVersions.ClassificationV1, result.ProjectionVersion);
+        Assert.Equal(new string('c', 64), result.StoreGenerationFingerprint);
+        Assert.Equal("snap-1", result.PreflightSnapshotId);
+        Assert.Equal("2026-08-01T12:00:00.0000000Z", result.PreflightExpiresAt);
+        Assert.Equal(new string('d', 64), result.CategoryLifecycleFingerprint);
+        Assert.Equal("2026-08-01T12:00:00.0000000Z", result.ExpiresAt);
+
+        var json = JsonSerializer.Serialize(result, ClassifyJsonContext.Default.ClassifyApplyPreviewResult);
+        Assert.Contains("evaluationFingerprint", json, StringComparison.Ordinal);
+        Assert.Contains("selectedTransactionIds", json, StringComparison.Ordinal);
+        Assert.Contains("contributingRuleVersionIds", json, StringComparison.Ordinal);
+        Assert.Contains("exclusionCount", json, StringComparison.Ordinal);
+        Assert.Contains("storeGenerationFingerprint", json, StringComparison.Ordinal);
+        Assert.DoesNotContain("sourceDescription", json, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("signedAmount", json, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("/home/", json, StringComparison.OrdinalIgnoreCase);
+
+        var roundTrip = JsonSerializer.Deserialize(json, ClassifyJsonContext.Default.ClassifyApplyPreviewResult);
+        Assert.NotNull(roundTrip);
+        Assert.Equal(result.SelectedTransactionIds.ToArray(), roundTrip!.SelectedTransactionIds.ToArray());
+        Assert.Equal(result.ContributingRuleVersionIds.ToArray(), roundTrip.ContributingRuleVersionIds.ToArray());
+        Assert.Equal(result.EvaluationFingerprint, roundTrip.EvaluationFingerprint);
+        Assert.Equal(result.ExclusionCount, roundTrip.ExclusionCount);
+    }
+
+    [Fact]
+    public void Mapper_to_apply_preview_result_orders_by_ordinal_not_request_shuffle()
+    {
+        var preview = new ClassifyApplyPreviewRow(
+            "prev-2", null, "eval-2", new string('1', 64),
+            ClassifyContractMapper.SelectionModeExactRule, new string('2', 64),
+            ActualsContractVersions.Current, ClassificationProjectionVersions.ClassificationV1,
+            new string('3', 64), "snap-2", "2026-08-01T13:00:00.0000000Z",
+            new string('4', 64), new string('5', 64), new string('6', 64),
+            "2026-08-01T13:00:00.0000000Z", 2, 0, 0, 0, "actor", "2026-08-01T12:00:00.0000000Z");
+        // Items provided out of ordinal order.
+        var items = new[]
+        {
+            new ClassifyApplyPreviewItemRow(
+                "prev-2", 1, "out-z", "tx-z", "assign", "cat-z", "rv-z",
+                null, null, "tr", "rr", "ar", null),
+            new ClassifyApplyPreviewItemRow(
+                "prev-2", 0, "out-a", "tx-a", "assign", "cat-a", "rv-a",
+                null, null, "tr", "rr", "ar", null)
+        };
+
+        var result = ClassifyContractMapper.ToApplyPreviewResult(preview, items, 2, 0);
+        Assert.Equal(["tx-a", "tx-z"], result.SelectedTransactionIds.ToArray());
+        Assert.Equal(["cat-a", "cat-z"], result.TargetCategoryIds.ToArray());
+        Assert.Equal(["rv-a", "rv-z"], result.ContributingRuleVersionIds.ToArray());
+        Assert.Equal(ClassifyContractMapper.SelectionModeExactRule, result.SelectionMode);
+    }
+
+    [Fact]
+    public async Task Published_preview_discloses_complete_authorization_surface()
+    {
+        var seeded = await SeedSuggestionAsync("disclosure shop");
+        var outcomes = await ListOutcomesAsync(seeded.EvaluationId);
+        var suggestionIds = outcomes
+            .Where(o => o.OutcomeType == "suggestion")
+            .Select(o => o.OutcomeId)
+            .OrderBy(id => id, StringComparer.Ordinal)
+            .ToArray();
+        Assert.NotEmpty(suggestionIds);
+
+        var result = await preview.HandleAsync(
+            new ClassifyApplyPreviewRequest(
+                ClassifyOperationIds.ContractVersion,
+                seeded.EvaluationId,
+                new ClassifyApplySelection(ClassifyApplySelectionMode.SelectedOutcomes, OutcomeIds: suggestionIds)),
+            actor,
+            NextKey(),
+            CancellationToken.None);
+        Assert.True(result.IsSuccess, result.ErrorCode);
+        var value = result.Value!;
+
+        Assert.Equal(seeded.EvaluationId, value.EvaluationId);
+        Assert.Equal(64, value.EvaluationFingerprint.Length);
+        Assert.Equal(ClassifyContractMapper.SelectionModeSelectedOutcomes, value.SelectionMode);
+        Assert.Equal(64, value.SelectionHash.Length);
+        Assert.Equal(64, value.TargetCategoryFingerprint.Length);
+        Assert.Equal(64, value.RuleAuthorityFingerprint.Length);
+        Assert.Equal(value.SelectedCount, value.SelectedTransactionIds.Count);
+        Assert.Equal(value.SelectedCount, value.TargetCategoryIds.Count);
+        Assert.Equal(
+            value.SelectedTransactionIds.OrderBy(id => id, StringComparer.Ordinal).ToArray(),
+            value.SelectedTransactionIds.ToArray());
+        Assert.Equal(
+            value.ContributingRuleVersionIds.OrderBy(id => id, StringComparer.Ordinal).ToArray(),
+            value.ContributingRuleVersionIds.ToArray());
+        Assert.Contains(seeded.RuleVersionId, value.ContributingRuleVersionIds);
+        Assert.All(value.TargetCategoryIds, id => Assert.False(string.IsNullOrWhiteSpace(id)));
+        Assert.True(value.TargetCategoryIds.Distinct(StringComparer.Ordinal).Count() >= 1);
+        Assert.Equal(ActualsContractVersions.Current, value.LedgerContractVersion);
+        Assert.Equal(ClassificationProjectionVersions.ClassificationV1, value.ProjectionVersion);
+        Assert.Equal(64, value.StoreGenerationFingerprint.Length);
+        Assert.False(string.IsNullOrWhiteSpace(value.PreflightSnapshotId));
+        Assert.Equal(value.PreflightExpiresAt, value.ExpiresAt);
+        Assert.Equal(64, value.CategoryLifecycleFingerprint.Length);
+
+        await using var connection = await services.State.Store.OpenMigratedAsync(CancellationToken.None);
+        var row = await previewStore.GetPreviewAsync(connection, null, value.PreviewId, CancellationToken.None);
+        Assert.NotNull(row);
+        Assert.Equal(row!.EvaluationFingerprint, value.EvaluationFingerprint);
+        Assert.Equal(row.ExclusionCount, value.ExclusionCount);
+        Assert.Equal(row.NoSuggestionCount, value.NoSuggestionCount);
+        Assert.Equal(row.ConflictCount, value.ConflictCount);
+        Assert.Equal(row.StoreGenerationFingerprint, value.StoreGenerationFingerprint);
+        Assert.Equal(row.PreflightSnapshotId, value.PreflightSnapshotId);
+        Assert.Equal(row.CategoryLifecycleFingerprint, value.CategoryLifecycleFingerprint);
+        Assert.Equal(row.TargetCategoryFingerprint, value.TargetCategoryFingerprint);
+        Assert.Equal(row.RuleAuthorityFingerprint, value.RuleAuthorityFingerprint);
+
+        var items = await previewStore.ListItemsAsync(connection, null, value.PreviewId, CancellationToken.None);
+        Assert.Equal(
+            items.OrderBy(i => i.Ordinal).Select(i => i.TransactionId).ToArray(),
+            value.SelectedTransactionIds.ToArray());
+        Assert.Equal(
+            items.OrderBy(i => i.Ordinal).Select(i => i.CategoryId).ToArray(),
+            value.TargetCategoryIds.ToArray());
+    }
+
+    [Fact]
+    public async Task Published_preview_orders_selected_transactions_deterministically()
+    {
+        var category = await CreateCategoryAsync("Order");
+        var versionId = await SaveDraftAsync(category.CategoryId, "order-token");
+        await ActivateWithGateAsync(versionId, category.CategoryId, "order-token", broadApply: false);
+        var txA = await RecordAsync("order-token");
+        var txB = await RecordAsync("order-token");
+        var evaluated = await services.Evaluate.HandleAsync(
+            new ClassifyEvaluateRequest(ClassifyOperationIds.ContractVersion),
+            actor, NextKey(), CancellationToken.None);
+        Assert.True(evaluated.IsSuccess, evaluated.ErrorCode);
+        var outcomes = await ListOutcomesAsync(evaluated.Value!.EvaluationId);
+        var suggestionIds = outcomes.Where(o => o.OutcomeType == "suggestion").Select(o => o.OutcomeId).ToArray();
+        Assert.True(suggestionIds.Length >= 2);
+
+        // Deliberately reverse outcome id order in the request — public result must still be ordinal-stable.
+        var shuffled = suggestionIds.OrderByDescending(id => id, StringComparer.Ordinal).ToArray();
+        var first = await preview.HandleAsync(
+            new ClassifyApplyPreviewRequest(
+                ClassifyOperationIds.ContractVersion,
+                evaluated.Value.EvaluationId,
+                new ClassifyApplySelection(ClassifyApplySelectionMode.SelectedOutcomes, OutcomeIds: shuffled)),
+            actor, NextKey(), CancellationToken.None);
+        Assert.True(first.IsSuccess, first.ErrorCode);
+        var second = await preview.HandleAsync(
+            new ClassifyApplyPreviewRequest(
+                ClassifyOperationIds.ContractVersion,
+                evaluated.Value.EvaluationId,
+                new ClassifyApplySelection(
+                    ClassifyApplySelectionMode.SelectedOutcomes,
+                    OutcomeIds: shuffled.Reverse().ToArray())),
+            actor, NextKey(), CancellationToken.None);
+        Assert.True(second.IsSuccess, second.ErrorCode);
+
+        Assert.Equal(first.Value!.SelectedTransactionIds.ToArray(), second.Value!.SelectedTransactionIds.ToArray());
+        Assert.Equal(first.Value.TargetCategoryIds.ToArray(), second.Value.TargetCategoryIds.ToArray());
+        Assert.Equal(
+            first.Value.SelectedTransactionIds.OrderBy(id => id, StringComparer.Ordinal).ToArray(),
+            first.Value.SelectedTransactionIds.ToArray());
+        Assert.Contains(txA.TransactionId, first.Value.SelectedTransactionIds);
+        Assert.Contains(txB.TransactionId, first.Value.SelectedTransactionIds);
+    }
+
+    [Fact]
+    public async Task Published_preview_excludes_private_payload_fields()
+    {
+        const string canary = "CANARY_PREVIEW_PRIVATE_DESC_xyz";
+        var seeded = await SeedSuggestionAsync(canary);
+        var outcomes = await ListOutcomesAsync(seeded.EvaluationId);
+        var suggestionIds = outcomes.Where(o => o.OutcomeType == "suggestion").Select(o => o.OutcomeId).ToArray();
+        var result = await preview.HandleAsync(
+            new ClassifyApplyPreviewRequest(
+                ClassifyOperationIds.ContractVersion,
+                seeded.EvaluationId,
+                new ClassifyApplySelection(ClassifyApplySelectionMode.SelectedOutcomes, OutcomeIds: suggestionIds)),
+            actor, NextKey(), CancellationToken.None);
+        Assert.True(result.IsSuccess, result.ErrorCode);
+
+        var json = JsonSerializer.Serialize(result.Value, ClassifyJsonContext.Default.ClassifyApplyPreviewResult);
+        Assert.DoesNotContain(canary, json, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("sourceDescription", json, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("signedAmount", json, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("normalizedValueHash", json, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("/home/", json, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("originalDescription", json, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("evaluationFingerprint", json, StringComparison.Ordinal);
+        Assert.Contains("selectedTransactionIds", json, StringComparison.Ordinal);
+        Assert.Contains("contributingRuleVersionIds", json, StringComparison.Ordinal);
+        Assert.Contains("storeGenerationFingerprint", json, StringComparison.Ordinal);
+        Assert.Contains("exclusionCount", json, StringComparison.Ordinal);
+        Assert.Contains("noSuggestionCount", json, StringComparison.Ordinal);
+        Assert.Contains("conflictCount", json, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task Published_preview_round_trips_complete_disclosure_json()
+    {
+        var seeded = await SeedSuggestionAsync("roundtrip shop");
+        var outcomes = await ListOutcomesAsync(seeded.EvaluationId);
+        var suggestionIds = outcomes.Where(o => o.OutcomeType == "suggestion").Select(o => o.OutcomeId).ToArray();
+        var result = await preview.HandleAsync(
+            new ClassifyApplyPreviewRequest(
+                ClassifyOperationIds.ContractVersion,
+                seeded.EvaluationId,
+                new ClassifyApplySelection(ClassifyApplySelectionMode.SelectedOutcomes, OutcomeIds: suggestionIds)),
+            actor, NextKey(), CancellationToken.None);
+        Assert.True(result.IsSuccess, result.ErrorCode);
+
+        var json = JsonSerializer.Serialize(result.Value, ClassifyJsonContext.Default.ClassifyApplyPreviewResult);
+        var roundTrip = JsonSerializer.Deserialize(json, ClassifyJsonContext.Default.ClassifyApplyPreviewResult);
+        Assert.NotNull(roundTrip);
+        Assert.Equal(result.Value!.PreviewId, roundTrip!.PreviewId);
+        Assert.Equal(result.Value.EvaluationFingerprint, roundTrip.EvaluationFingerprint);
+        Assert.Equal(result.Value.SelectionMode, roundTrip.SelectionMode);
+        Assert.Equal(result.Value.SelectedTransactionIds.ToArray(), roundTrip.SelectedTransactionIds.ToArray());
+        Assert.Equal(result.Value.TargetCategoryIds.ToArray(), roundTrip.TargetCategoryIds.ToArray());
+        Assert.Equal(result.Value.ContributingRuleVersionIds.ToArray(), roundTrip.ContributingRuleVersionIds.ToArray());
+        Assert.Equal(result.Value.ExclusionCount, roundTrip.ExclusionCount);
+        Assert.Equal(result.Value.NoSuggestionCount, roundTrip.NoSuggestionCount);
+        Assert.Equal(result.Value.ConflictCount, roundTrip.ConflictCount);
+        Assert.Equal(result.Value.StoreGenerationFingerprint, roundTrip.StoreGenerationFingerprint);
+        Assert.Equal(result.Value.PreflightSnapshotId, roundTrip.PreflightSnapshotId);
+        Assert.Equal(result.Value.CategoryLifecycleFingerprint, roundTrip.CategoryLifecycleFingerprint);
     }
 
     [Fact]

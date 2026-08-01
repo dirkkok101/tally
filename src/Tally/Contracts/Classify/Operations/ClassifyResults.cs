@@ -85,15 +85,42 @@ public sealed record ClassifyOutcomeGetResult(
     /// </summary>
     string? PermittedNextOperationId);
 
+/// <summary>
+/// Bounded public classify.apply.preview disclosure
+/// (FR-CLASSIFY-APPLY-AUTHORIZATION). Identifies evaluation fingerprint,
+/// selection/category/rule authority, contributing rule versions, ordered
+/// selected transaction identities, exact partition counts, and preflight
+/// snapshot evidence. Never carries descriptions, amounts, raw payloads, or
+/// private paths.
+/// </summary>
 public sealed record ClassifyApplyPreviewResult(
     [property: JsonRequired] string ContractVersion,
     [property: JsonRequired] string PreviewId,
     [property: JsonRequired] string EvaluationId,
-    [property: JsonRequired] string ExpiresAt,
+    [property: JsonRequired] string EvaluationFingerprint,
+    [property: JsonRequired] string SelectionMode,
+    [property: JsonRequired] string SelectionHash,
+    [property: JsonRequired] string TargetCategoryFingerprint,
+    [property: JsonRequired] string RuleAuthorityFingerprint,
+    /// <summary>Distinct contributing rule version IDs in ordinal order.</summary>
+    [property: JsonRequired] IReadOnlyList<string> ContributingRuleVersionIds,
+    /// <summary>Selected transaction IDs in frozen preview ordinal order.</summary>
+    [property: JsonRequired] IReadOnlyList<string> SelectedTransactionIds,
+    /// <summary>Target category ID per selected transaction (same order/length).</summary>
+    [property: JsonRequired] IReadOnlyList<string> TargetCategoryIds,
     [property: JsonRequired] int SelectedCount,
     [property: JsonRequired] int AssignableCount,
     [property: JsonRequired] int CorrectableCount,
-    [property: JsonRequired] string SelectionHash);
+    [property: JsonRequired] int ExclusionCount,
+    [property: JsonRequired] int NoSuggestionCount,
+    [property: JsonRequired] int ConflictCount,
+    [property: JsonRequired] string LedgerContractVersion,
+    [property: JsonRequired] string ProjectionVersion,
+    [property: JsonRequired] string StoreGenerationFingerprint,
+    [property: JsonRequired] string PreflightSnapshotId,
+    [property: JsonRequired] string PreflightExpiresAt,
+    [property: JsonRequired] string CategoryLifecycleFingerprint,
+    [property: JsonRequired] string ExpiresAt);
 
 public sealed record ClassifyApplyItemResult(
     [property: JsonRequired] string TransactionId,

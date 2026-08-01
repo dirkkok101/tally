@@ -143,23 +143,72 @@ public static partial class ClassifyContractMapper
             ruleIds.Length == 0 ? ["selected_outcomes:none"] : ruleIds.Select(id => "rule:" + id));
     }
 
+    /// <summary>
+    /// Build the complete bounded public apply.preview result from the retained
+    /// preview row and ordered preview items (DM-CLASSIFY-APPLY-RUN disclosure).
+    /// Transaction IDs and target categories follow preview ordinal order;
+    /// contributing rule versions are distinct and ordered lexicographically.
+    /// </summary>
     public static ClassifyApplyPreviewResult ToApplyPreviewResult(
-        string previewId,
-        string evaluationId,
-        string expiresAtUtc,
-        int selectedCount,
+        ClassifyApplyPreviewRow preview,
+        IReadOnlyList<ClassifyApplyPreviewItemRow> orderedItems,
         int assignableCount,
-        int correctableCount,
-        string selectionHash) =>
-        new(
-            ClassifyOperationIds.ContractVersion,
-            previewId,
-            evaluationId,
-            expiresAtUtc,
-            selectedCount,
-            assignableCount,
-            correctableCount,
-            selectionHash);
+        int correctableCount)
+    {
+        ArgumentNullException.ThrowIfNull(preview);
+        ArgumentNullException.ThrowIfNull(orderedItems);
+
+        var ordered = orderedItems
+            .OrderBy(i => i.Ordinal)
+            .ThenBy(i => i.TransactionId, StringComparer.Ordinal)
+            .ToArray();
+
+        var selectedTransactionIds = ordered
+            .Select(i => i.TransactionId)
+            .ToArray();
+        var targetCategoryIds = ordered
+            .Select(i => i.CategoryId)
+            .ToArray();
+        var contributingRuleVersionIds = ordered
+            .Select(i => i.RuleVersionId)
+            .Where(id => !string.IsNullOrWhiteSpace(id))
+            .Select(id => id!)
+            .Distinct(StringComparer.Ordinal)
+            .OrderBy(id => id, StringComparer.Ordinal)
+            .ToArray();
+
+        if (selectedTransactionIds.Length != preview.SelectedCount)
+        {
+            throw new InvalidOperationException(
+                "Preview selected transaction count must match retained selected_count.");
+        }
+
+        return new ClassifyApplyPreviewResult(
+            ContractVersion: ClassifyOperationIds.ContractVersion,
+            PreviewId: preview.PreviewId,
+            EvaluationId: preview.EvaluationId,
+            EvaluationFingerprint: preview.EvaluationFingerprint,
+            SelectionMode: preview.SelectionMode,
+            SelectionHash: preview.SelectionHash,
+            TargetCategoryFingerprint: preview.TargetCategoryFingerprint,
+            RuleAuthorityFingerprint: preview.RuleAuthorityFingerprint,
+            ContributingRuleVersionIds: contributingRuleVersionIds,
+            SelectedTransactionIds: selectedTransactionIds,
+            TargetCategoryIds: targetCategoryIds,
+            SelectedCount: preview.SelectedCount,
+            AssignableCount: assignableCount,
+            CorrectableCount: correctableCount,
+            ExclusionCount: preview.ExclusionCount,
+            NoSuggestionCount: preview.NoSuggestionCount,
+            ConflictCount: preview.ConflictCount,
+            LedgerContractVersion: preview.LedgerContractVersion,
+            ProjectionVersion: preview.ProjectionVersion,
+            StoreGenerationFingerprint: preview.StoreGenerationFingerprint,
+            PreflightSnapshotId: preview.PreflightSnapshotId,
+            PreflightExpiresAt: preview.PreflightExpiresAt,
+            CategoryLifecycleFingerprint: preview.CategoryLifecycleFingerprint,
+            ExpiresAt: preview.ExpiresAt);
+    }
 
     public static ClassifyApplyPreviewRow ToApplyPreviewRow(
         string previewId,
