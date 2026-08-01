@@ -50,97 +50,97 @@
   ],
   "files": [
     {
-      "id": "01KYZMC5RX6W7ZTT7FBPFXR3NM",
+      "id": "01KYZQDEJSA4MS31QZEWVKESZP",
       "path": "Tally.slnx",
       "action": "read",
       "role": "full solution",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-08-01T21:41:09.5334470+00:00"
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
     },
     {
-      "id": "01KYZMC5RYYRXHC299RMQ4QFSF",
+      "id": "01KYZQDEJTEV807RZ95GH69CGA",
       "path": "src/Tally/Tally.csproj",
       "action": "read",
       "role": "Native-AOT executable",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-08-01T21:41:09.5334470+00:00"
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
     },
     {
-      "id": "01KYZMC5RYTXACHA7NQ4WWATP1",
+      "id": "01KYZQDEJTP9Q2JDQFXZV8PC47",
       "path": "tests/Tally.Tests/Tally.Tests.csproj",
       "action": "read",
       "role": "complete test project",
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-08-01T21:41:09.5334470+00:00"
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
     },
     {
-      "id": "01KYZMC5RY5SE0Q70PZ56KEAKD",
+      "id": "01KYZQDEJTQ0C9MFK6DSZDJKN2",
       "path": "tests/Tally.Tests/Classify/ClassifyModuleGuardTests.cs",
       "action": "test",
       "role": "module architecture and suite-discovery guards",
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-08-01T21:41:09.5334470+00:00"
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
     },
     {
-      "id": "01KYZMC5RYRYTYRJTP1GV73SPY",
+      "id": "01KYZQDEJT4F7RRHKSP7HWE09N",
       "path": "scripts/verify-classify-module.sh",
       "action": "create",
       "role": "module convergence runner",
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-08-01T21:41:09.5334470+00:00"
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
     },
     {
-      "id": "01KYZMC5RY6823SB15CA4P5FK9",
+      "id": "01KYZQDEJTHKPSJFHNNA1VNVV9",
       "path": "docs/verification/classify-v1.md",
       "action": "document",
       "role": "safe completion report",
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-08-01T21:41:09.5334470+00:00"
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
     },
     {
-      "id": "01KYZMC5RYWQ5QKBNA0X3WD2PW",
+      "id": "01KYZQDEJT40KZQHWG67EV3Q50",
       "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-AI-AGENT-HOST.json",
       "action": "modify",
       "role": "lex-cli validation status",
       "required": 1,
       "sort_order": 6,
-      "created_at": "2026-08-01T21:41:09.5334470+00:00"
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
     },
     {
-      "id": "01KYZMC5RY63P4N1EZDQNHR22B",
+      "id": "01KYZQDEJTWV1ZWHR0ZY9HWCNZ",
       "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-HOST-OS-SECURITY.json",
       "action": "modify",
       "role": "lex-cli validation status",
       "required": 1,
       "sort_order": 7,
-      "created_at": "2026-08-01T21:41:09.5334470+00:00"
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
     },
     {
-      "id": "01KYZMC5RYV8Q7P9KA7P819AVZ",
+      "id": "01KYZQDEJT48MQWF5BASV2Y4HH",
       "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT.json",
       "action": "modify",
       "role": "lex-cli validation status",
       "required": 1,
       "sort_order": 8,
-      "created_at": "2026-08-01T21:41:09.5334470+00:00"
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
     },
     {
-      "id": "01KYZMC5RYERKKGJR6E9MQA6MG",
+      "id": "01KYZQDEJTZYCMS6G3EXQS9P4M",
       "path": ".lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS.json",
       "action": "modify",
       "role": "lex-cli validation status",
       "required": 1,
       "sort_order": 9,
-      "created_at": "2026-08-01T21:41:09.5334470+00:00"
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
     },
     {
-      "id": "01KYZMC5RYTD348WXJXAWAMMSA",
+      "id": "01KYZQDEJT2BDKPZQV8FFPBQ4F",
       "path": "src/Tally/Cli/TallyProcess.cs",
       "action": "modify",
       "role": "bounded fallback and correlation-privacy correction exposed by complete module suite",
@@ -149,19 +149,19 @@
         "Sequential bridge owned by final convergence; preserve descriptor-generated contract."
       ],
       "sort_order": 10,
-      "created_at": "2026-08-01T21:41:09.5334470+00:00"
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
     },
     {
-      "id": "01KYZMC5RYNGA8TVK628NY0ZE0",
+      "id": "01KYZQDEJTH90MHP9XE65S19WE",
       "path": "tests/Tally.Tests/Process/RegistryDomainErrorProcessTests.cs",
       "action": "read",
       "role": "registry-wide fallback coherence evidence",
       "required": 1,
       "sort_order": 11,
-      "created_at": "2026-08-01T21:41:09.5334470+00:00"
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
     },
     {
-      "id": "01KYZMC5RYK60FZ37982QWNT47",
+      "id": "01KYZQDEJTYTAW3P2YAHJXD7JX",
       "path": "tests/Tally.Tests/Classify/Evaluation/ClassificationEngineTests.cs",
       "action": "test",
       "role": "correct isolated single-rule fixture inconsistency",
@@ -170,10 +170,10 @@
         "Do not weaken production matching semantics or assertions."
       ],
       "sort_order": 12,
-      "created_at": "2026-08-01T21:41:09.5334470+00:00"
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
     },
     {
-      "id": "01KYZMC5RYGVJ5A13KWQ2QFKD9",
+      "id": "01KYZQDEJT3MGMM85J09SZK5EC",
       "path": "tests/Tally.Tests/Classify/Storage/ClassifyHistoryInvariantTests.cs",
       "action": "test",
       "role": "align explicit seed inserts with current durable schema",
@@ -182,10 +182,10 @@
         "Use named columns; preserve invariant assertions."
       ],
       "sort_order": 13,
-      "created_at": "2026-08-01T21:41:09.5334470+00:00"
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
     },
     {
-      "id": "01KYZMC5RY89B7J3E04YBF7DF7",
+      "id": "01KYZQDEJT93AB0GPQRHPXAPCK",
       "path": "tests/Tally.Tests/Classify/Security/ClassifySecurityGateTests.cs",
       "action": "test",
       "role": "correct token-boundary false positives and verify correlation secrecy",
@@ -194,10 +194,10 @@
         "Do not weaken forbidden-surface or canary assertions."
       ],
       "sort_order": 14,
-      "created_at": "2026-08-01T21:41:09.5334470+00:00"
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
     },
     {
-      "id": "01KYZMC5RYM5921H077ASDRNWM",
+      "id": "01KYZQDEJTQPGR4HVDQQC5V1F9",
       "path": "tests/Tally.Tests/Classify/Validation/ClassificationRuleValidationTests.cs",
       "action": "test",
       "role": "align bound-corpus validation fixtures with immutable owner-gate evidence",
@@ -206,10 +206,10 @@
         "Preserve STALE fail-closed semantics and all assertions; correct fixture binding only."
       ],
       "sort_order": 15,
-      "created_at": "2026-08-01T21:41:09.5334470+00:00"
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
     },
     {
-      "id": "01KYZMC5RZS8KEPDM33ZPRNV2C",
+      "id": "01KYZQDEJTR5GR2F1D60ZHTXNM",
       "path": "tests/Tally.Tests/Classify/Rules/RuleActivationTests.cs",
       "action": "test",
       "role": "wire activate fixtures through valid owner-gate receipt evidence",
@@ -218,7 +218,139 @@
         "Preserve activation authority and no-pointer-change assertions; do not bypass receipt binding."
       ],
       "sort_order": 16,
-      "created_at": "2026-08-01T21:41:09.5334470+00:00"
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+    },
+    {
+      "id": "01KYZQDEJTQWJM4RT01FX1VA0G",
+      "path": "src/Tally/Features/Classify/Rules/Validate/ValidateClassificationRuleCommand.cs",
+      "action": "modify",
+      "role": "remove server-minted snapshot identity from deterministic idempotency fingerprint while retaining snapshot evidence",
+      "required": 1,
+      "notes": [
+        "Preserve replay identity, snapshot evidence, STALE binding, and no-mutation-on-conflict semantics."
+      ],
+      "sort_order": 17,
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+    },
+    {
+      "id": "01KYZQDEJVMDXBCSTTPKFHNQG6",
+      "path": "tests/Tally.Tests/Classify/Acceptance/ClassifyUc001EvaluationTests.cs",
+      "action": "test",
+      "role": "correct process-wide WorkingSet false gate and published evaluate schema evidence",
+      "required": 1,
+      "notes": [
+        "Do not weaken the 256 MiB operation bound; replace process-global suite-state assertion with isolated operation-scoped evidence."
+      ],
+      "sort_order": 18,
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+    },
+    {
+      "id": "01KYZQDEJVD04FDB25A39XES4T",
+      "path": "tests/Tally.Tests/Ledger/PaymentIdentityOperationTests.cs",
+      "action": "test",
+      "role": "update stale whole-registry inventory expectation after accepted twelve-operation CLASSIFY publication",
+      "required": 1,
+      "notes": [
+        "Preserve module-specific descriptor assertions."
+      ],
+      "sort_order": 19,
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+    },
+    {
+      "id": "01KYZQDEJV3PF5B8M87CK2H1C5",
+      "path": "tests/Tally.Tests/Ledger/SpendPoolOperationTests.cs",
+      "action": "test",
+      "role": "update stale whole-registry inventory expectation after accepted twelve-operation CLASSIFY publication",
+      "required": 1,
+      "notes": [
+        "Preserve module-specific descriptor assertions."
+      ],
+      "sort_order": 20,
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+    },
+    {
+      "id": "01KYZQDEJV25JAFSNC78KNA16Y",
+      "path": "tests/Tally.Tests/EndToEnd/UC006ExternalOrchestratorContractWorkflowTests.cs",
+      "action": "test",
+      "role": "update stale published whole-registry inventory expectations after accepted CLASSIFY publication",
+      "required": 1,
+      "notes": [
+        "Preserve discovery ordering, uniqueness, and forbidden-surface assertions."
+      ],
+      "sort_order": 21,
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+    },
+    {
+      "id": "01KYZQDEJVZQD2Y9Q6CNFJJNQW",
+      "path": "tests/Tally.Tests/Process/PublishedLedgerContractTests.cs",
+      "action": "test",
+      "role": "update stale published whole-registry inventory expectation after accepted CLASSIFY publication",
+      "required": 1,
+      "notes": [
+        "Preserve Ledger contract and privacy assertions."
+      ],
+      "sort_order": 22,
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+    },
+    {
+      "id": "01KYZQDEJV6X5NYQB4J2K2V6T3",
+      "path": "tests/Tally.Tests/Process/PublishedBinaryCoreTests.cs",
+      "action": "test",
+      "role": "update stale published whole-registry inventory expectation after accepted CLASSIFY publication",
+      "required": 1,
+      "notes": [
+        "Preserve envelope and privacy assertions."
+      ],
+      "sort_order": 23,
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+    },
+    {
+      "id": "01KYZQDEJVMVBT8Z2W4P1PPRXB",
+      "path": "tests/Tally.Tests/Features/Ledger/Categories/CategoryOperationTests.cs",
+      "action": "test",
+      "role": "update stale whole-registry inventory expectation after accepted CLASSIFY publication",
+      "required": 1,
+      "notes": [
+        "Preserve category-operation count and type assertions."
+      ],
+      "sort_order": 24,
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+    },
+    {
+      "id": "01KYZQDEJVPEFH0WP0TATFW03Q",
+      "path": "tests/Tally.Tests/Features/Ledger/Transactions/TransactionRecordingTests.cs",
+      "action": "test",
+      "role": "update stale whole-registry inventory expectation after accepted CLASSIFY publication",
+      "required": 1,
+      "notes": [
+        "Preserve transaction contract assertions."
+      ],
+      "sort_order": 25,
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+    },
+    {
+      "id": "01KYZQDEJVNM38AGE5QGQHGCVN",
+      "path": "tests/Tally.Tests/Cli/CliContractTests.cs",
+      "action": "test",
+      "role": "update stale whole-registry inventory expectations after accepted CLASSIFY publication",
+      "required": 1,
+      "notes": [
+        "Preserve canonical ordering and uniqueness assertions."
+      ],
+      "sort_order": 26,
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
+    },
+    {
+      "id": "01KYZQDEJVRJRYVEK3T785P9C8",
+      "path": "tests/Tally.Tests/Cli/PublicContractInventoryTests.cs",
+      "action": "test",
+      "role": "update stale whole-registry inventory expectations after accepted CLASSIFY publication",
+      "required": 1,
+      "notes": [
+        "Preserve operation, CLI path, and schema uniqueness assertions."
+      ],
+      "sort_order": 27,
+      "created_at": "2026-08-01T22:34:17.0495110+00:00"
     }
   ],
   "interfaces": [
