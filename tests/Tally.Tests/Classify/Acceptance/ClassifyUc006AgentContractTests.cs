@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.Versioning;
 using System.Security.Cryptography;
@@ -15,6 +16,7 @@ using Tally.Infrastructure.Classify.Corpus;
 using Tally.Infrastructure.Storage;
 using Tally.Integration.Ledger;
 using Xunit;
+using DiagnosticsProcess = System.Diagnostics.Process;
 
 namespace Tally.Tests.Classify.Acceptance;
 
@@ -263,7 +265,9 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
     [Fact]
     public async Task UC006_unsupported_classify_contract_version_rejects_before_mutation()
     {
-        var fingerprintBefore = await LedgerFingerprintAsync();
+        // Seed a real active pointer so CLASSIFY-state no-mutation is a non-null oracle.
+        var baseline = await SeedActiveRuleSetAsync();
+        var before = await CaptureImmutabilityAsync(baseline);
         var result = await process.RunAsync(
             ["classify", "evaluate", "--input", "-"],
             ClassifyEnvelope("""{"contractVersion":"9.9"}""", NextKey()),
@@ -271,18 +275,46 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
         Assert.NotEqual(0, result.ExitCode);
         using var doc = JsonDocument.Parse(result.Stdout);
         Assert.Equal("error", doc.RootElement.GetProperty("outcome").GetString());
-        var code = doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString();
-        Assert.True(
-            code is ClassifyErrors.UnsupportedVersion or "validation.invalid_input",
-            code);
-        Assert.Equal(fingerprintBefore, await LedgerFingerprintAsync());
+        // Published evaluate descriptor declares CLASSIFY-VERSION-UNSUPPORTED (compatibility).
+        Assert.Equal(
+            ClassifyErrors.UnsupportedVersion,
+            doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString());
+        await AssertUnchangedAsync(before);
+        AssertMetadataOnlyDiagnostics(result.Stderr, result.Stdout);
+    }
+
+    [Fact]
+    public async Task UC006_unsupported_ledger_projection_version_rejects_before_mutation()
+    {
+        // CLASSIFY depends on ledger.actuals.query purpose=evaluation + classification_v1.
+        // An unsupported required projection version must fail closed at the published process
+        // boundary before any CLASSIFY rule-state or LEDGER projection/mutation side effect.
+        var baseline = await SeedActiveRuleSetAsync();
+        var before = await CaptureImmutabilityAsync(baseline);
+        // Query operation: no idempotency key (RequiresIdempotencyKey=false).
+        var envelope =
+            """{"contractVersion":"1.0","actor":{"kind":"automation","label":"classify-uc006","runId":"run-01"},"input":{"purpose":"evaluation","itemProjection":"classification_v9"}}""";
+        var result = await process.RunAsync(
+            ["ledger", "actuals", "query", "--input", "-"],
+            envelope,
+            CancellationToken.None);
+        Assert.NotEqual(0, result.ExitCode);
+        using var doc = JsonDocument.Parse(result.Stdout);
+        Assert.Equal("error", doc.RootElement.GetProperty("outcome").GetString());
+        // Published actuals descriptor: ContractMismatch is the compatibility code for bad projection.
+        var code = doc.RootElement.TryGetProperty("error", out var err)
+            ? err.GetProperty("code").GetString()
+            : doc.RootElement.GetProperty("result").GetProperty("code").GetString();
+        Assert.Equal(ActualsErrors.ContractMismatch, code);
+        await AssertUnchangedAsync(before);
         AssertMetadataOnlyDiagnostics(result.Stderr, result.Stdout);
     }
 
     [Fact]
     public async Task UC006_malformed_json_rejects_before_mutation()
     {
-        var fingerprintBefore = await LedgerFingerprintAsync();
+        var baseline = await SeedActiveRuleSetAsync();
+        var before = await CaptureImmutabilityAsync(baseline);
         var result = await process.RunAsync(
             ["classify", "rule", "save", "--input", "-"],
             "{not-json",
@@ -293,14 +325,15 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
         Assert.Equal(
             "validation.invalid_input",
             doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString());
-        Assert.Equal(fingerprintBefore, await LedgerFingerprintAsync());
+        await AssertUnchangedAsync(before);
         AssertMetadataOnlyDiagnostics(result.Stderr, result.Stdout);
     }
 
     [Fact]
     public async Task UC006_unknown_field_rejects_before_mutation()
     {
-        var fingerprintBefore = await LedgerFingerprintAsync();
+        var baseline = await SeedActiveRuleSetAsync();
+        var before = await CaptureImmutabilityAsync(baseline);
         // Source-generated classify request types reject unknown properties.
         var envelope = """
             {"contractVersion":"1.0","actor":{"kind":"automation","label":"classify-uc006","runId":"run-01"},"idempotencyKey":"k-unknown","input":{"contractVersion":"1.0","unexpectedField":true}}
@@ -315,7 +348,7 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
         Assert.Equal(
             "validation.invalid_input",
             doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString());
-        Assert.Equal(fingerprintBefore, await LedgerFingerprintAsync());
+        await AssertUnchangedAsync(before);
     }
 
     // ── Owner boundary: actor, idempotency, permissions ──────────────────────
@@ -323,7 +356,8 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
     [Fact]
     public async Task UC006_missing_actor_rejects_mutation_before_state_change()
     {
-        var fingerprintBefore = await LedgerFingerprintAsync();
+        var baseline = await SeedActiveRuleSetAsync();
+        var before = await CaptureImmutabilityAsync(baseline);
         var envelope = """
             {"contractVersion":"1.0","idempotencyKey":"k-no-actor","input":{"contractVersion":"1.0"}}
             """;
@@ -334,17 +368,18 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
         Assert.NotEqual(0, result.ExitCode);
         using var doc = JsonDocument.Parse(result.Stdout);
         Assert.Equal("error", doc.RootElement.GetProperty("outcome").GetString());
-        var code = doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString();
-        Assert.True(
-            code is "validation.invalid_input" or ClassifyErrors.ActorRequired,
-            code);
-        Assert.Equal(fingerprintBefore, await LedgerFingerprintAsync());
+        // Process preflight rejects missing actor as stable validation.invalid_input.
+        Assert.Equal(
+            "validation.invalid_input",
+            doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString());
+        await AssertUnchangedAsync(before);
     }
 
     [Fact]
     public async Task UC006_missing_idempotency_rejects_mutating_operation_before_mutation()
     {
-        var fingerprintBefore = await LedgerFingerprintAsync();
+        var baseline = await SeedActiveRuleSetAsync();
+        var before = await CaptureImmutabilityAsync(baseline);
         // Mutating classify.rule.save without idempotencyKey is rejected at process preflight.
         var envelope = """
             {"contractVersion":"1.0","actor":{"kind":"automation","label":"classify-uc006","runId":"run-01"},"input":{"contractVersion":"1.0","ruleId":"r1","categoryId":"c1","normalizationVersion":"normalization_v1","conditions":[{"ordinal":0,"fieldKey":"description.normalized","predicateKind":"equals","valueText":"x"}],"reason":"uc006"}}
@@ -359,19 +394,27 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
         Assert.Equal(
             "validation.invalid_input",
             doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString());
-        Assert.Equal(fingerprintBefore, await LedgerFingerprintAsync());
+        await AssertUnchangedAsync(before);
         AssertMetadataOnlyDiagnostics(result.Stderr, result.Stdout);
     }
 
     [Fact]
     public async Task UC006_group_readable_private_corpus_rejects_validate_without_activation()
     {
-        var category = await CreateCategoryAsync("Uc006Perm");
-        var versionId = await SaveRuleVersionIdAsync(category, "uc006 perm shop");
-        var path = await WriteBoundCorpusAsync([("uc006 perm shop", "suggestion", category)]);
+        var baseline = await SeedActiveRuleSetAsync();
+        var category = await CreateCategoryAsync("Uc006PermG");
+        var versionId = await SaveRuleVersionIdAsync(category, "uc006 perm group shop");
+        var path = await WriteBoundCorpusAsync([("uc006 perm group shop", "suggestion", category)]);
         // Owner-only 0600 required; group-readable must reject.
         File.SetUnixFileMode(path, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.GroupRead);
-        var fingerprintBefore = await LedgerFingerprintAsync();
+        // Capture dual oracle after setup ledger writes, immediately before rejection.
+        var before = await CaptureImmutabilityAsync(baseline);
+
+        // Stable permission code via production corpus-reader seam (DomainErrors omit CORPUS
+        // codes, so the process envelope may remap — reader is the permission-code oracle).
+        var seam = await ClassifyCorpusExtensions.CreateReader().ReadAsync(path, CancellationToken.None);
+        Assert.False(seam.IsSuccess);
+        Assert.Equal(PrivateCorpusErrors.PermissionsRejected, seam.ErrorCode);
 
         var result = await process.RunAsync(
             ["classify", "rule", "validate", "--input", "-"],
@@ -382,28 +425,152 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
         Assert.NotEqual(0, result.ExitCode);
         using var doc = JsonDocument.Parse(result.Stdout);
         Assert.Equal("error", doc.RootElement.GetProperty("outcome").GetString());
-        var code = doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString();
-        Assert.True(
-            code is PrivateCorpusErrors.PermissionsRejected
-                or ClassifyErrors.Lifecycle
-                or "validation.invalid_input"
-                or "host.unexpected",
-            code);
-        // No active pointer introduced by failed validate.
-        var status = await process.RunAsync(
-            ["classify", "status", "--input", "-"],
-            ClassifyEnvelope(
-                $$"""{"contractVersion":"1.0","subjectType":"rule","subjectId":{{JsonSerializer.Serialize(versionId)}}}""",
-                idempotencyKey: null),
-            CancellationToken.None);
-        AssertClassifySuccess(status, ClassifyOperationIds.Status);
-        using var statusDoc = ParseResult(status);
-        Assert.Equal(
-            JsonValueKind.Null,
-            statusDoc.RootElement.GetProperty("result_or_error").GetProperty("rule")
-                .GetProperty("activeRuleSetVersionId").ValueKind);
-        Assert.Equal(fingerprintBefore, await LedgerFingerprintAsync());
+        // Permission proof is the reader code above — never treat host.unexpected as success evidence.
+        var processCode = doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString();
+        Assert.False(string.IsNullOrWhiteSpace(processCode));
+        Assert.NotEqual("host.unexpected", seam.ErrorCode);
+        if (processCode is not null
+            && !string.Equals(processCode, "host.unexpected", StringComparison.Ordinal)
+            && !string.Equals(processCode, ClassifyErrors.Unexpected, StringComparison.Ordinal))
+        {
+            Assert.Equal(PrivateCorpusErrors.PermissionsRejected, processCode);
+        }
+
+        await AssertUnchangedAsync(before);
+        // Candidate draft must not become the active set; baseline pointer is unchanged above.
+        Assert.Equal(baseline.RuleSetVersionId, await RequireActiveRuleSetVersionIdAsync(versionId));
         Assert.DoesNotContain(path, result.Stdout, StringComparison.Ordinal);
+        AssertMetadataOnlyDiagnostics(result.Stderr, result.Stdout);
+    }
+
+    [Fact]
+    public async Task UC006_other_readable_private_corpus_rejects_validate_without_activation()
+    {
+        var baseline = await SeedActiveRuleSetAsync();
+        var category = await CreateCategoryAsync("Uc006PermO");
+        var versionId = await SaveRuleVersionIdAsync(category, "uc006 perm other shop");
+        var path = await WriteBoundCorpusAsync([("uc006 perm other shop", "suggestion", category)]);
+        // Owner-only 0600 required; other-readable must reject.
+        File.SetUnixFileMode(path, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.OtherRead);
+        var before = await CaptureImmutabilityAsync(baseline);
+
+        var seam = await ClassifyCorpusExtensions.CreateReader().ReadAsync(path, CancellationToken.None);
+        Assert.False(seam.IsSuccess);
+        Assert.Equal(PrivateCorpusErrors.PermissionsRejected, seam.ErrorCode);
+
+        var result = await process.RunAsync(
+            ["classify", "rule", "validate", "--input", "-"],
+            ClassifyEnvelope(
+                $$"""{"contractVersion":"1.0","candidateIds":[{{JsonSerializer.Serialize(versionId)}}],"corpusSource":{{JsonSerializer.Serialize(path)}}}""",
+                NextKey()),
+            CancellationToken.None);
+        Assert.NotEqual(0, result.ExitCode);
+        using var doc = JsonDocument.Parse(result.Stdout);
+        Assert.Equal("error", doc.RootElement.GetProperty("outcome").GetString());
+        var processCode = doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString();
+        Assert.NotEqual("host.unexpected", seam.ErrorCode);
+        if (processCode is not null
+            && !string.Equals(processCode, "host.unexpected", StringComparison.Ordinal)
+            && !string.Equals(processCode, ClassifyErrors.Unexpected, StringComparison.Ordinal))
+        {
+            Assert.Equal(PrivateCorpusErrors.PermissionsRejected, processCode);
+        }
+
+        await AssertUnchangedAsync(before);
+        Assert.Equal(baseline.RuleSetVersionId, await RequireActiveRuleSetVersionIdAsync(versionId));
+        Assert.DoesNotContain(path, result.Stdout, StringComparison.Ordinal);
+        AssertMetadataOnlyDiagnostics(result.Stderr, result.Stdout);
+    }
+
+    [Fact]
+    public async Task UC006_non_owner_private_corpus_rejects_validate_without_activation()
+    {
+        // Ownership boundary: st_uid != geteuid → CLASSIFY-CORPUS-OWNER (PrivateCorpusReader).
+        // Host support: passwordless sudo chown (same as ClassifySecurityGateTests).
+        // Limitation (documented): unprivileged open(2) of a non-owner 0600 file fails with
+        // EACCES before PrivateCorpusReader reaches the st_uid branch, so the reader surfaces
+        // CLASSIFY-CORPUS-PERMISSIONS. Ownership mismatch itself is proven with the production
+        // lstat ownership predicate (HostArtifactProtection) without weakening checks; the
+        // published OwnerRejected code remains the reader constant for the uid path.
+        var baseline = await SeedActiveRuleSetAsync();
+        var category = await CreateCategoryAsync("Uc006PermOwn");
+        var versionId = await SaveRuleVersionIdAsync(category, "uc006 perm owner shop");
+        var path = await WriteBoundCorpusAsync([("uc006 perm owner shop", "suggestion", category)]);
+        File.SetUnixFileMode(path, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+        Assert.Equal(
+            UnixFileMode.UserRead | UnixFileMode.UserWrite,
+            File.GetUnixFileMode(path));
+
+        var chownApplied = TryChown("nobody:nogroup", path);
+        // Capture after setup (and chown) so ledger fingerprint is stable across the rejection.
+        var before = await CaptureImmutabilityAsync(baseline);
+        try
+        {
+            if (chownApplied)
+            {
+                // Real ownership mismatch: mode still exact 0600; uid is not euid.
+                var protection = new HostArtifactProtection();
+                var ownershipEx = Assert.Throws<InvalidOperationException>(
+                    () => protection.RequireOwnerOnlyArtifact(path));
+                Assert.Equal("The artifact is not owner-only.", ownershipEx.Message);
+                Assert.Equal(
+                    UnixFileMode.UserRead | UnixFileMode.UserWrite,
+                    File.GetUnixFileMode(path));
+
+                // Corpus-reader seam: unprivileged open maps to PermissionsRejected (EACCES)
+                // before the st_uid OwnerRejected branch — see limitation above.
+                var seam = await ClassifyCorpusExtensions.CreateReader()
+                    .ReadAsync(path, CancellationToken.None);
+                Assert.False(seam.IsSuccess);
+                Assert.Equal(PrivateCorpusErrors.PermissionsRejected, seam.ErrorCode);
+                Assert.Equal("CLASSIFY-CORPUS-OWNER", PrivateCorpusErrors.OwnerRejected);
+                Assert.NotEqual("host.unexpected", seam.ErrorCode);
+            }
+            else
+            {
+                // Limitation: true uid mismatch is not portable without passwordless chown.
+                // Still exercise the corpus-reader ownership-related fail-closed surface and
+                // keep the published OwnerRejected code as the ownership oracle constant.
+                Assert.Equal("CLASSIFY-CORPUS-OWNER", PrivateCorpusErrors.OwnerRejected);
+                File.SetUnixFileMode(
+                    path,
+                    UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.GroupRead);
+                var seam = await ClassifyCorpusExtensions.CreateReader()
+                    .ReadAsync(path, CancellationToken.None);
+                Assert.False(seam.IsSuccess);
+                Assert.Equal(PrivateCorpusErrors.PermissionsRejected, seam.ErrorCode);
+                Assert.NotEqual("host.unexpected", seam.ErrorCode);
+            }
+
+            var result = await process.RunAsync(
+                ["classify", "rule", "validate", "--input", "-"],
+                ClassifyEnvelope(
+                    $$"""{"contractVersion":"1.0","candidateIds":[{{JsonSerializer.Serialize(versionId)}}],"corpusSource":{{JsonSerializer.Serialize(path)}}}""",
+                    NextKey()),
+                CancellationToken.None);
+            Assert.NotEqual(0, result.ExitCode);
+            using var doc = JsonDocument.Parse(result.Stdout);
+            Assert.Equal("error", doc.RootElement.GetProperty("outcome").GetString());
+            // Do not treat host.unexpected as ownership/permission success evidence.
+            var processCode = doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString();
+            Assert.False(string.IsNullOrWhiteSpace(processCode));
+            // Permission/ownership code evidence is the reader + HostArtifactProtection above;
+            // process only needs to reject before mutation.
+            Assert.NotEqual(0, result.ExitCode);
+
+            await AssertUnchangedAsync(before);
+            Assert.Equal(baseline.RuleSetVersionId, await RequireActiveRuleSetVersionIdAsync(versionId));
+            Assert.DoesNotContain(path, result.Stdout, StringComparison.Ordinal);
+            AssertMetadataOnlyDiagnostics(result.Stderr, result.Stdout);
+        }
+        finally
+        {
+            if (chownApplied)
+            {
+                // Restore ownership so DisposeAsync can delete the tree.
+                _ = TryChown($"{Environment.UserName}:{Environment.UserName}", path);
+            }
+        }
     }
 
     // ── Diagnostics metadata-only ────────────────────────────────────────────
@@ -553,6 +720,99 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
     }
 
     // ── Helpers ──────────────────────────────────────────────────────────────
+
+    private sealed record ActiveSeed(string RuleVersionId, string RuleSetVersionId);
+
+    /// <summary>
+    /// Dual no-mutation oracle: published classify.status activeRuleSetVersionId (CLASSIFY state)
+    /// plus LEDGER classification-projection fingerprint. Ledger-only is insufficient to prove
+    /// rule/evaluation state was unchanged.
+    /// </summary>
+    private sealed record ImmutabilitySnapshot(
+        string ProbeRuleVersionId,
+        string ActiveRuleSetVersionId,
+        string LedgerFingerprint);
+
+    private async Task<ActiveSeed> SeedActiveRuleSetAsync()
+    {
+        var category = await CreateCategoryAsync("Uc006Base");
+        var versionId = await SaveRuleVersionIdAsync(category, "uc006 baseline shop");
+        var path = await WriteBoundCorpusAsync([("uc006 baseline shop", "suggestion", category)]);
+        await ActivateRulesAsync([versionId], path);
+        var ruleSetId = await RequireActiveRuleSetVersionIdAsync(versionId);
+        return new ActiveSeed(versionId, ruleSetId);
+    }
+
+    private async Task<ImmutabilitySnapshot> CaptureImmutabilityAsync(ActiveSeed baseline)
+    {
+        var pointer = await RequireActiveRuleSetVersionIdAsync(baseline.RuleVersionId);
+        Assert.Equal(baseline.RuleSetVersionId, pointer);
+        var ledgerFp = await LedgerFingerprintAsync();
+        Assert.False(string.IsNullOrWhiteSpace(ledgerFp));
+        return new ImmutabilitySnapshot(baseline.RuleVersionId, pointer, ledgerFp);
+    }
+
+    private async Task AssertUnchangedAsync(ImmutabilitySnapshot before)
+    {
+        Assert.False(string.IsNullOrWhiteSpace(before.ProbeRuleVersionId));
+        Assert.False(string.IsNullOrWhiteSpace(before.ActiveRuleSetVersionId));
+        var afterPointer = await RequireActiveRuleSetVersionIdAsync(before.ProbeRuleVersionId);
+        Assert.Equal(before.ActiveRuleSetVersionId, afterPointer);
+        Assert.Equal(before.LedgerFingerprint, await LedgerFingerprintAsync());
+    }
+
+    private async Task<string> RequireActiveRuleSetVersionIdAsync(string probeRuleVersionId)
+    {
+        Assert.False(string.IsNullOrWhiteSpace(probeRuleVersionId), "probe rule version id required");
+        var status = await StatusAsync("rule", probeRuleVersionId);
+        AssertClassifySuccess(status, ClassifyOperationIds.Status);
+        using var doc = ParseResult(status);
+        var active = doc.RootElement.GetProperty("result_or_error")
+            .GetProperty("rule")
+            .GetProperty("activeRuleSetVersionId");
+        Assert.NotEqual(JsonValueKind.Null, active.ValueKind);
+        var pointer = active.GetString();
+        Assert.False(string.IsNullOrWhiteSpace(pointer), "expected non-null active rule set pointer");
+        return pointer!;
+    }
+
+    private Task<ProcessResult> StatusAsync(string subjectType, string subjectId) =>
+        process.RunAsync(
+            ["classify", "status", "--input", "-"],
+            ClassifyEnvelope(
+                $$"""{"contractVersion":"1.0","subjectType":{{JsonSerializer.Serialize(subjectType)}},"subjectId":{{JsonSerializer.Serialize(subjectId)}}}""",
+                idempotencyKey: null),
+            CancellationToken.None);
+
+    /// <summary>
+    /// Passwordless sudo chown (same host capability as ClassifySecurityGateTests).
+    /// Returns false when chown is unavailable so callers can document the limitation.
+    /// </summary>
+    private static bool TryChown(string ownerSpec, string path)
+    {
+        try
+        {
+            var start = new ProcessStartInfo("/usr/bin/sudo", $"-n chown {ownerSpec} -- {path}")
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false
+            };
+            using var proc = DiagnosticsProcess.Start(start);
+            if (proc is null)
+            {
+                return false;
+            }
+
+            _ = proc.StandardOutput.ReadToEnd();
+            _ = proc.StandardError.ReadToEnd();
+            return proc.WaitForExit(10_000) && proc.ExitCode == 0;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 
     private string MinimalEnvelope(string operationId, bool withIdempotency)
     {
