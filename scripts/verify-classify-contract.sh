@@ -55,6 +55,9 @@ for class_name in ClassifyPublishedContractTests ClassifyProcessContractTests; d
     fi
 done
 
+section "CLASSIFY contract tests"
+dotnet test "$test_project" --no-build --filter "$filter"
+
 section "Published binary: schema list includes exactly twelve CLASSIFY ops"
 schema_list="$("$publish_root/tally" schema list)"
 classify_count="$(printf '%s\n' "$schema_list" | python3 -c '

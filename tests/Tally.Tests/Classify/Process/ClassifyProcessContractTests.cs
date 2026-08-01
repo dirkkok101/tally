@@ -119,6 +119,24 @@ public sealed class ClassifyProcessContractTests
     }
 
     [Fact]
+    public async Task Malformed_classify_request_uses_typed_error_envelope_before_handler()
+    {
+        var result = await process.RunAsync(
+            ["classify", "evaluate", "--input", "-"],
+            "{not-json",
+            CancellationToken.None);
+
+        Assert.Equal(3, result.ExitCode);
+        using var document = AssertClassifyEnvelope(
+            result.Stdout,
+            expectedOutcome: "error",
+            ClassifyOperationIds.Evaluate);
+        var error = document.RootElement.GetProperty("result_or_error");
+        Assert.Equal("validation.invalid_input", error.GetProperty("code").GetString());
+        Assert.False(document.RootElement.TryGetProperty("error", out _));
+    }
+
+    [Fact]
     public async Task Classify_success_stub_emits_typed_envelope_with_correlation_ref()
     {
         // Outcome.get is a query: no idempotency; stub returns not-found after actor check,

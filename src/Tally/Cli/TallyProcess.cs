@@ -28,10 +28,24 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
             if (selection.ErrorCode is not null) return Error(2, selection.ErrorCode, "usage", "The input path must be '-' or '@file'.");
             var invocation = Resolve(selection.Arguments);
             if (invocation.ErrorCode is not null) return Error(invocation.ExitCode, invocation.ErrorCode, invocation.Category!, invocation.Message!);
-            if (invocation.UseRequestInput && !selection.HasInput) return Error(3, "validation.invalid_input", "validation", "Input does not match the published schema.");
+            if (invocation.UseRequestInput && !selection.HasInput)
+            {
+                return PreflightError(
+                    invocation.Descriptor!,
+                    null,
+                    "validation.invalid_input",
+                    "Input does not match the published schema.");
+            }
             var input = await ReadInputAsync(selection, standardInput, cancellationToken);
             var requestEnvelope = selection.HasInput ? ReadRequest(input) : null;
-            if (selection.HasInput && !ValidRequest(requestEnvelope, invocation.Descriptor!)) return Error(3, "validation.invalid_input", "validation", "Input does not match the published schema.");
+            if (selection.HasInput && !ValidRequest(requestEnvelope, invocation.Descriptor!))
+            {
+                return PreflightError(
+                    invocation.Descriptor!,
+                    requestEnvelope,
+                    "validation.invalid_input",
+                    "Input does not match the published schema.");
+            }
             var handler = invocation.Descriptor!.HandlerFactory(services, registry);
             var request = new OperationRequest(invocation.UseRequestInput ? requestEnvelope!.Input : invocation.HandlerInput, requestEnvelope?.Actor, requestEnvelope?.IdempotencyKey);
             var result = await handler.HandleAsync(request, cancellationToken);
@@ -195,6 +209,21 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
 
         return ClassifyError(10, "host.unexpected", "host", "The operation could not be completed.", operationId, correlationRef);
     }
+
+    private static ProcessResult PreflightError(
+        OperationDescriptor descriptor,
+        RequestEnvelope? request,
+        string code,
+        string message) =>
+        descriptor.OperationId.StartsWith("classify.", StringComparison.Ordinal)
+            ? ClassifyError(
+                3,
+                code,
+                "validation",
+                message,
+                descriptor.OperationId,
+                ResolveCorrelationRef(request))
+            : Error(3, code, "validation", message);
 
     private static string? ResolveCorrelationRef(RequestEnvelope? request)
     {

@@ -33,9 +33,13 @@ return result.ExitCode;
 [SupportedOSPlatform("linux")]
 static async Task<ProcessResult> RunAsync(string[] args, CancellationToken cancellationToken)
 {
+    // Resolve the static contract before any durable service is initialized. Discovery and
+    // unknown-operation paths remain independent of Ledger, CLASSIFY state, and private corpus.
+    var registry = OperationRegistry.Create();
+    var requiresRuntime = RequiresRuntime(args, registry);
     LedgerDb? database = null;
     var dataRoot = Environment.GetEnvironmentVariable("TALLY_DATA_ROOT");
-    if (!string.IsNullOrWhiteSpace(dataRoot))
+    if (requiresRuntime && !string.IsNullOrWhiteSpace(dataRoot))
     {
         if (!OperatingSystem.IsLinux())
         {
@@ -45,8 +49,6 @@ static async Task<ProcessResult> RunAsync(string[] args, CancellationToken cance
         database = await LedgerRuntimeBootstrap.InitializeCurrentAsync(dataRoot, cancellationToken);
     }
 
-    // Descriptor-only registry: schema/help/unknown-op discovery never opens CLASSIFY state or corpus.
-    var registry = OperationRegistry.Create();
     var services = database is null
         ? LedgerServices.Create()
         : LedgerServices.Create(database);
@@ -61,7 +63,7 @@ static async Task<ProcessResult> RunAsync(string[] args, CancellationToken cance
             dataRoot, ledgerClient, cancellationToken: cancellationToken);
 
         ClassifyOperationBundle? classify = null;
-        if (IsClassifyInvocation(args))
+        if (IsKnownClassifyInvocation(args, registry))
         {
             // Runtime path only: all twelve CLASSIFY handlers over owner-only state.
             classify = (await ClassifyOperationBundle.CreateServicesAsync(
@@ -85,5 +87,23 @@ static async Task<ProcessResult> RunAsync(string[] args, CancellationToken cance
     return await process.RunAsync(args, stdin, cancellationToken);
 }
 
-static bool IsClassifyInvocation(string[] args) =>
-    args.Length > 0 && string.Equals(args[0], "classify", StringComparison.Ordinal);
+static bool RequiresRuntime(string[] args, OperationRegistry registry)
+{
+    if (args is ["version"] or ["help"] or ["schema", "list"] or ["schema", "show", _])
+    {
+        return false;
+    }
+
+    return ResolveRequestedDescriptor(args, registry) is not null;
+}
+
+static bool IsKnownClassifyInvocation(string[] args, OperationRegistry registry) =>
+    ResolveRequestedDescriptor(args, registry)?.OperationId.StartsWith(
+        "classify.", StringComparison.Ordinal) == true;
+
+static OperationDescriptor? ResolveRequestedDescriptor(string[] args, OperationRegistry registry)
+{
+    var inputIndex = Array.IndexOf(args, "--input");
+    var operationArguments = inputIndex < 0 ? args : args[..inputIndex];
+    return registry.FindByArguments(operationArguments);
+}
