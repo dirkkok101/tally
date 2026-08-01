@@ -80,58 +80,67 @@
   ],
   "files": [
     {
-      "id": "01KYVN0TP243VH76WWN72WKNX3",
+      "id": "01KYZ4DYBS91XEFM95M1R0YSS5",
       "path": "src/Tally/Features/Classify/Apply/Preview/PreviewClassificationApplyCommand.cs",
       "action": "create",
       "role": "preview workflow",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T17:02:30.2639247+00:00"
     },
     {
-      "id": "01KYVN0TP23BXE3Y5G4Z5VFBT3",
+      "id": "01KYZ4DYBSYS2EJS423QBXWAE3",
       "path": "src/Tally/Domain/Classify/Apply/ApplyAuthorizationPolicy.cs",
       "action": "create",
       "role": "selection and authority policy",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T17:02:30.2639247+00:00"
     },
     {
-      "id": "01KYVN0TP24NQ9PZG18TRDAKWB",
+      "id": "01KYZ4DYBSC54DVHENGA8F85N1",
       "path": "src/Tally/Infrastructure/Classify/Storage/Apply/ClassificationApplyPreviewStore.cs",
       "action": "create",
       "role": "expiry-bound preview persistence",
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T17:02:30.2639247+00:00"
     },
     {
-      "id": "01KYVN0TP209PB9E5BX2W5P9KN",
+      "id": "01KYZ4DYBSS0R65YDB8RMS7DRP",
       "path": "src/Tally/Features/Classify/Contract/ClassifyContractMapper.ApplyPreview.cs",
       "action": "create",
-      "role": "pure preview mapping",
+      "role": "pure preview mapping and complete public disclosure",
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T17:02:30.2639247+00:00"
     },
     {
-      "id": "01KYVN0TP28NCKGEF23SG9JN6T",
-      "path": "tests/Tally.Tests/Classify/Apply/ApplyPreviewTests.cs",
-      "action": "test",
-      "role": "preview contract tests",
+      "id": "01KYZ4DYBSRVHMD5TKS0E7WX71",
+      "path": "src/Tally/Contracts/Classify/Operations/ClassifyResults.cs",
+      "action": "modify",
+      "role": "complete bounded public apply-preview disclosure result",
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T17:02:30.2639247+00:00"
     },
     {
-      "id": "01KYVN0TP2D9D5T78TPZDT24P0",
+      "id": "01KYZ4DYBSBKW3E740ZTT36Y78",
+      "path": "tests/Tally.Tests/Classify/Apply/ApplyPreviewTests.cs",
+      "action": "test",
+      "role": "preview contract and disclosure tests",
+      "required": 1,
+      "sort_order": 5,
+      "created_at": "2026-08-01T17:02:30.2639247+00:00"
+    },
+    {
+      "id": "01KYZ4DYBSPH03KRM8Q8RVB3YH",
       "path": "tests/Tally.Tests/Classify/Apply/ApplyAuthorizationTests.cs",
       "action": "test",
       "role": "selection and authority matrix",
       "required": 1,
-      "sort_order": 5,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "sort_order": 6,
+      "created_at": "2026-08-01T17:02:30.2639247+00:00"
     }
   ],
   "interfaces": [
@@ -308,14 +317,24 @@
       "created_at": "2026-07-31T08:35:28.5399812+00:00"
     },
     {
-      "id": "01KYVN0TP269ZW28ZSNBMM8WTF",
+      "id": "01KYZ4DYBRYED855BX2WV8WWGM",
       "kind": "note",
       "text": [
         "A preview is authorization evidence, not a promise that later preflight remains current."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T17:02:30.2639247+00:00"
+    },
+    {
+      "id": "01KYZ4DYBS527JAJF7P0BADYNW",
+      "kind": "note",
+      "text": [
+        "Hermes review amendment (2026-08-01): the accepted FR requires the published apply.preview result—not only private retained rows—to disclose evaluation fingerprint, target/category authority, contributing rule versions, selected transaction identities, exact exclusions and no-suggestion/conflict counts, and bounded preflight evidence. This task owns the narrow ClassifyApplyPreviewResult/mapper/command correction and focused contract tests; no unrelated public surface or payload fields are authorized."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-01T17:02:30.2639247+00:00"
     }
   ],
   "references": [
