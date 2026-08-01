@@ -90,117 +90,223 @@
   ],
   "files": [
     {
-      "id": "01KYVN0TNSQSZAWF3MHTDZY59D",
+      "id": "01KYYCTQA39C4DVPZ3JBYP6WTN",
       "path": "src/Tally/Features/Classify/Rules/Activate/ActivateClassificationRuleCommand.cs",
       "action": "create",
       "role": "activation workflow",
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
     },
     {
-      "id": "01KYVN0TNSKDF9472Y8TXCGSVV",
+      "id": "01KYYCTQA38YS8ZGP5CMKA94DP",
       "path": "src/Tally/Features/Classify/Rules/Retire/RetireClassificationRuleCommand.cs",
       "action": "create",
       "role": "retirement workflow",
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
     },
     {
-      "id": "01KYVN0TNSQ3YTHV1HJXZQPM5V",
+      "id": "01KYYCTQA39MBSBHSK3ARWM1Z0",
       "path": "src/Tally/Domain/Classify/Rules/RuleLifecyclePolicy.cs",
       "action": "create",
       "role": "closed transitions",
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
     },
     {
-      "id": "01KYVN0TNSEHDR85XQ1F8FE3D1",
+      "id": "01KYYCTQA32FJJBZES12BWGDSA",
       "path": "src/Tally/Infrastructure/Classify/Storage/Rules/RuleSetStore.cs",
       "action": "create",
       "role": "atomic rule-set state",
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
     },
     {
-      "id": "01KYVN0TNSXV5Q0S0SPC1G4ZEN",
+      "id": "01KYYCTQA329YAHR1RYPJKR56M",
       "path": "src/Tally/Bootstrap/Features/ClassifyRuleExtensions.cs",
       "action": "create",
       "role": "explicit rule registration",
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
     },
     {
-      "id": "01KYVN0TNSVT4YT7NMJ6X8PW4F",
+      "id": "01KYYCTQA3Y88CC4V8KMJBF9QC",
       "path": "tests/Tally.Tests/Classify/Rules/RuleActivationTests.cs",
       "action": "test",
       "role": "activation tests",
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
     },
     {
-      "id": "01KYVN0TNSV6TQBEZT3PRC8650",
+      "id": "01KYYCTQA37S092DC6FMJM1Y3E",
       "path": "tests/Tally.Tests/Classify/Rules/RuleRetirementTests.cs",
       "action": "test",
       "role": "retirement and replacement tests",
       "required": 1,
       "sort_order": 6,
-      "created_at": "2026-07-31T08:35:28.5399812+00:00"
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
+    },
+    {
+      "id": "01KYYCTQA3DYSYTJ9KPZW40WVT",
+      "path": "src/Tally/Contracts/Classify/Operations/ClassifyRequests.cs",
+      "action": "modify",
+      "role": "receipt-finalization and activation receipt-id inputs",
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
+    },
+    {
+      "id": "01KYYCTQA3PBTE84057TKGFHDT",
+      "path": "src/Tally/Contracts/Classify/Operations/ClassifyResults.cs",
+      "action": "modify",
+      "role": "return trusted persisted gate receipt identity",
+      "required": 1,
+      "sort_order": 8,
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
+    },
+    {
+      "id": "01KYYCTQA3AMJ553HN93PZCDYD",
+      "path": "src/Tally/Contracts/Classify/Evidence/VerifiedOwnerRulebookGateReceipt.cs",
+      "action": "modify",
+      "role": "canonical immutable authority receipt binding and fingerprint",
+      "required": 1,
+      "sort_order": 9,
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
+    },
+    {
+      "id": "01KYYCTQA307FEW14S0B1PG1H5",
+      "path": "src/Tally/Contracts/Classify/ClassifyJsonContext.cs",
+      "action": "modify",
+      "role": "source-generated receipt-finalization contracts",
+      "required": 1,
+      "sort_order": 10,
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
+    },
+    {
+      "id": "01KYYCTQA3AXZ7VN5VX6M4F8MP",
+      "path": "src/Tally/Features/Classify/Rules/Validate/ValidateClassificationRuleCommand.cs",
+      "action": "modify",
+      "role": "derive and persist gate receipt from representative replay and hold-out runs",
+      "required": 1,
+      "sort_order": 11,
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
+    },
+    {
+      "id": "01KYYCTQA31316P4YN0CABSM1P",
+      "path": "src/Tally/Infrastructure/Classify/Storage/Rules/ClassificationValidationStore.cs",
+      "action": "modify",
+      "role": "durably retain complete aggregate deterministic validation evidence",
+      "required": 1,
+      "sort_order": 12,
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
+    },
+    {
+      "id": "01KYYCTQA3Q04950HQ52A7MQGE",
+      "path": "src/Tally/Infrastructure/Classify/Storage/Rules/OwnerRulebookGateReceiptStore.cs",
+      "action": "create",
+      "role": "immutable aggregate authority receipt persistence and lookup",
+      "required": 1,
+      "sort_order": 13,
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
+    },
+    {
+      "id": "01KYYCTQA3YWRD4W5N2JKN9ZWR",
+      "path": "src/Tally/Infrastructure/Classify/Storage/ClassifySchema.cs",
+      "action": "modify",
+      "role": "additive migration for validation evidence receipt and rule-set binding",
+      "required": 1,
+      "sort_order": 14,
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
+    },
+    {
+      "id": "01KYYCTQA3BRFRCRQ3XKZM4JKM",
+      "path": "scripts/verify-classify-owner-rulebook.sh",
+      "action": "modify",
+      "role": "finalize trusted receipt through public rule.validate rather than shell-only authority",
+      "required": 1,
+      "sort_order": 15,
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
+    },
+    {
+      "id": "01KYYCTQA3JT4FEBSKBBX81ZZG",
+      "path": "tests/Tally.Tests/Classify/Evidence/OwnerRulebookGateTests.cs",
+      "action": "test",
+      "role": "trusted persistence binding forgery and fail-closed integration cases",
+      "required": 1,
+      "sort_order": 16,
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
     }
   ],
   "interfaces": [
     {
-      "id": "01KYVRTTW8S33NJ828AN2BRYCM",
+      "id": "01KYYCTQA33M39JJTKTH3D4M1K",
       "name": "ClassificationValidationStore",
       "direction": "consumes",
       "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
       "sort_order": 0,
-      "created_at": "2026-07-31T09:42:06.4714941+00:00"
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
     },
     {
-      "id": "01KYVRTTW9VYG3HXRVEZ69EZEH",
+      "id": "01KYYCTQA3B9Y752K1BYH2CMH1",
       "name": "ClassificationRuleStore",
       "direction": "consumes",
       "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
       "sort_order": 1,
-      "created_at": "2026-07-31T09:42:06.4714941+00:00"
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
     },
     {
-      "id": "01KYVRTTW91MDW6NAQ50MPE0XF",
+      "id": "01KYYCTQA35DGN31D3J529QTWA",
       "name": "LedgerContractClient.ListClassificationCategoriesAsync",
       "direction": "consumes",
       "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
       "sort_order": 2,
-      "created_at": "2026-07-31T09:42:06.4714941+00:00"
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
     },
     {
-      "id": "01KYVRTTW9K559NAK8PT7F0K3X",
+      "id": "01KYYCTQA48WEHHP9WVWH699AK",
       "name": "ActivateClassificationRuleCommand.HandleAsync",
       "direction": "produces",
       "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
       "sort_order": 3,
-      "created_at": "2026-07-31T09:42:06.4714941+00:00"
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
     },
     {
-      "id": "01KYVRTTW9D7WWY3CB9D7GVX3Q",
+      "id": "01KYYCTQA46BYG18W1KN3D3F9A",
       "name": "RetireClassificationRuleCommand.HandleAsync",
       "direction": "produces",
       "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
       "sort_order": 4,
-      "created_at": "2026-07-31T09:42:06.4714941+00:00"
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
     },
     {
-      "id": "01KYVRTTWAQBPE5BRKFY245DJQ",
+      "id": "01KYYCTQA4265H07P8X2EY3RJ3",
       "name": "RuleSetStore",
       "direction": "produces",
       "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
       "sort_order": 5,
-      "created_at": "2026-07-31T09:42:06.4714941+00:00"
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
+    },
+    {
+      "id": "01KYYCTQA4KDTWFSD7H57EA4YQ",
+      "name": "VerifiedOwnerRulebookGateReceipt",
+      "direction": "consumes",
+      "contract_ref_code": "TC-CLASSIFY-OWNER-RULEBOOK-PRE-AUTHORITY-GATE",
+      "sort_order": 6,
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
+    },
+    {
+      "id": "01KYYCTQA4RGPE7Y8ZC6VRSJSS",
+      "name": "OwnerRulebookGateReceiptStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "sort_order": 7,
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
     }
   ],
   "recipe_items": [
@@ -263,6 +369,46 @@
       "required": 1,
       "sort_order": 0,
       "created_at": "2026-07-31T10:03:32.2468501+00:00"
+    },
+    {
+      "id": "01KYYCTQA2X88DHWSWRQSWGFC7",
+      "kind": "note",
+      "text": [
+        "Hermes blocker resolution (2026-08-01): activation must never trust a caller-supplied authority boolean or an unpersisted shell receipt. The existing public classify.rule.validate operation optionally finalizes the owner gate on the hold-out run by naming the completed representative and independent replay validation IDs plus aggregate owner benefit evidence and explicit benefit decision. Production reloads all three immutable stored runs/reports, derives the aggregate receipt, persists it with a canonical fingerprint, and returns only receipt identity plus aggregate output."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
+    },
+    {
+      "id": "01KYYCTQA3AYYXSKD5PZY080QK",
+      "kind": "note",
+      "text": [
+        "Complete deterministic evidence required for receipt derivation (projection version, snapshot identity/expiry, store-generation fingerprint, outcomes canonical hash, report fingerprint, counters, canaries, eligibility) is added by an additive CLASSIFY schema migration; no private corpus path, candidate ID, description, amount, expected row, or token is persisted in the receipt."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
+    },
+    {
+      "id": "01KYYCTQA39P19ZF4QHTD7BCVE",
+      "kind": "note",
+      "text": [
+        "ClassifyRuleActivateRequest requires owner_rulebook_gate_receipt_id. ActivateClassificationRuleCommand reloads the immutable receipt before any authority change and again under the write lock; AuthorityGranted must be true, BlockCode null, validation_id must equal the receipt representative run, and candidate/projection/category/normalization/store-generation evidence must bind exactly. Any missing, blocked, stale, mismatched, replay, hold-out, benefit, or fingerprint condition preserves the prior active pointer and grants no broad apply."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
+    },
+    {
+      "id": "01KYYCTQA3WSBV991Z2K53MMXY",
+      "kind": "note",
+      "text": [
+        "rule_set_version persists owner gate receipt ID and fingerprint as immutable authority provenance. Broad apply remains false unless both the request asks for it and the same trusted receipt authorizes it. Existing historical rows migrate safely; no active authority is backfilled or inferred."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-08-01T10:10:03.2017832+00:00"
     }
   ],
   "references": [
