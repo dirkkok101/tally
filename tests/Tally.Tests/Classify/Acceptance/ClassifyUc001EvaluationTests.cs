@@ -122,7 +122,7 @@ public sealed class ClassifyUc001EvaluationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("Uc001Stable");
         await ActivateRuleAsync(category, "uc001 stable merchant");
-        await RecordTransactionAsync("uc001 stable merchant");
+        var transactionId = await RecordTransactionAsync("uc001 stable merchant");
 
         var first = await EvaluateAsync(NextKey());
         AssertClassifySuccess(first, ClassifyOperationIds.Evaluate);
@@ -147,6 +147,28 @@ public sealed class ClassifyUc001EvaluationTests : IAsyncLifetime
             b.GetProperty("ruleSetVersionId").GetString());
         // Distinct evaluation IDs for distinct idempotency keys.
         Assert.NotEqual(a.GetProperty("evaluationId").GetString(), b.GetProperty("evaluationId").GetString());
+
+        var firstOutcome = await OutcomeGetAsync(
+            a.GetProperty("evaluationId").GetString()!, transactionId);
+        var secondOutcome = await OutcomeGetAsync(
+            b.GetProperty("evaluationId").GetString()!, transactionId);
+        AssertClassifySuccess(firstOutcome, ClassifyOperationIds.OutcomeGet);
+        AssertClassifySuccess(secondOutcome, ClassifyOperationIds.OutcomeGet);
+        using var firstOutcomeDoc = ParseResult(firstOutcome);
+        using var secondOutcomeDoc = ParseResult(secondOutcome);
+        var firstBody = firstOutcomeDoc.RootElement.GetProperty("result_or_error");
+        var secondBody = secondOutcomeDoc.RootElement.GetProperty("result_or_error");
+        Assert.Equal(firstBody.GetProperty("ordinal").GetInt32(), secondBody.GetProperty("ordinal").GetInt32());
+        Assert.Equal(firstBody.GetProperty("kind").GetString(), secondBody.GetProperty("kind").GetString());
+        Assert.Equal(
+            firstBody.GetProperty("suggestedCategoryId").GetString(),
+            secondBody.GetProperty("suggestedCategoryId").GetString());
+        Assert.Equal(
+            firstBody.GetProperty("contributingRuleVersionIds").EnumerateArray().Select(x => x.GetString()).ToArray(),
+            secondBody.GetProperty("contributingRuleVersionIds").EnumerateArray().Select(x => x.GetString()).ToArray());
+        Assert.Equal(
+            firstBody.GetProperty("matchedFieldKeys").EnumerateArray().Select(x => x.GetString()).ToArray(),
+            secondBody.GetProperty("matchedFieldKeys").EnumerateArray().Select(x => x.GetString()).ToArray());
     }
 
     [Fact]
@@ -218,6 +240,19 @@ public sealed class ClassifyUc001EvaluationTests : IAsyncLifetime
                 i == 1 ? "uc001 ordered match" : "uc001 ordered other " + i.ToString(CultureInfo.InvariantCulture)));
         }
 
+        var projection = await ledger.QueryClassificationProjectionAsync(
+            ClassificationProjectionPurpose.Evaluation,
+            ActualsContractVersions.Current,
+            new SafeActor("automation", "classify-uc001", "run-01"),
+            CancellationToken.None);
+        Assert.True(projection.IsSuccess, projection.Error?.Code);
+        var expectedOrdinals = projection.Value!.ClassificationItems!
+            .Where(item => txs.Contains(item.TransactionId, StringComparer.Ordinal))
+            .OrderBy(item => item.Ordinal)
+            .Select(item => item.Ordinal)
+            .ToArray();
+        Assert.Equal(txs.Count, expectedOrdinals.Length);
+
         var result = await EvaluateAsync(NextKey());
         AssertClassifySuccess(result, ClassifyOperationIds.Evaluate);
         using var doc = ParseResult(result);
@@ -245,7 +280,7 @@ public sealed class ClassifyUc001EvaluationTests : IAsyncLifetime
 
         Assert.Equal(ordinals.Count, ordinals.Distinct().Count());
         Assert.All(ordinals, o => Assert.InRange(o, 0, total - 1));
-        Assert.Equal(ordinals.OrderBy(x => x).ToArray(), ordinals.OrderBy(x => x).ToArray());
+        Assert.Equal(expectedOrdinals, ordinals.OrderBy(x => x).ToArray());
     }
 
     // ── Failure paths: incompatible, lifecycle, snapshot, limits, stale ──────
