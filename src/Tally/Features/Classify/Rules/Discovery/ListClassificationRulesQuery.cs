@@ -93,16 +93,29 @@ public sealed class ListClassificationRulesQuery
         string authorityFingerprint;
         string categoryLifecycleFingerprint;
         int overallCount;
+        int filteredCount;
+        string? activeRuleSetVersionId;
         IReadOnlySet<string> activeMembers;
         IReadOnlyList<string> frozenCategoryIds;
         ClassifyCursorCodec.RuleKeysetPosition? resume = null;
+
+        string? effectiveLifecycleFilter = input.Lifecycle switch
+        {
+            null => null,
+            ClassifyRuleLifecycleFilter.Draft => "draft",
+            ClassifyRuleLifecycleFilter.Active => "active",
+            ClassifyRuleLifecycleFilter.Retired => "retired",
+            ClassifyRuleLifecycleFilter.Superseded => "superseded",
+            _ => null
+        };
 
         // ── Resolve high-water (first page freezes; continuation reuses frozen HW) ──
         await using (var connection = await stateStore.OpenMigratedAsync(cancellationToken))
         {
             var active = await ruleSetStore.GetActiveRuleSetAsync(connection, null, cancellationToken);
+            activeRuleSetVersionId = active?.RuleSetVersionId;
             authorityFingerprint = ClassificationRuleDiscoveryStore.AuthorityFingerprint(
-                active?.RuleSetVersionId,
+                activeRuleSetVersionId,
                 active?.ActivationEpoch ?? 0);
             activeMembers = active is null
                 ? new HashSet<string>(StringComparer.Ordinal)
@@ -153,13 +166,26 @@ public sealed class ListClassificationRulesQuery
             overallCount = await discoveryStore.CountRuleVersionsBoundedAsync(
                 connection, null, highWaterCreatedAt, highWaterRuleVersionId, cancellationToken);
 
+            // Snapshot-bound filtered total (COUNT only — no row materialization).
+            filteredCount = await discoveryStore.CountFilteredBoundedAsync(
+                connection,
+                null,
+                highWaterCreatedAt,
+                highWaterRuleVersionId,
+                logicalRuleId,
+                categoryId,
+                input.ActiveMembership,
+                effectiveLifecycleFilter,
+                activeRuleSetVersionId,
+                cancellationToken);
+
             // Every category on a rule_version ≤ high-water can affect the frozen filtered traversal
             // (drafts and non-members included — not only active-set members).
             frozenCategoryIds = await discoveryStore.ListCategoryIdsBoundedAsync(
                 connection, null, highWaterCreatedAt, highWaterRuleVersionId, cancellationToken);
         }
 
-        // ── Ledger category display/lifecycle for fingerprint + items ────────
+        // ── Ledger category display/lifecycle for fingerprint + page items ───
         var categoryInfo = new Dictionary<string, (string? Display, string Lifecycle)>(StringComparer.Ordinal);
         foreach (var catId in frozenCategoryIds)
         {
@@ -232,174 +258,92 @@ public sealed class ListClassificationRulesQuery
             }
         }
 
-        // ── Load bounded candidates ──────────────────────────────────────────
-        IReadOnlyList<ClassifyRuleVersionRow> candidates;
-        IReadOnlyDictionary<string, IReadOnlyList<RuleCondition>> conditionsByVersion;
-        Dictionary<string, RuleLifecycleTimestamps> timestampsByVersion;
+        // ── Keyset-bounded page (at most pageSize+1 rows) + hydrate page only ─
+        IReadOnlyList<ClassifyRuleVersionRow> keysetRows;
         await using (var connection = await stateStore.OpenMigratedAsync(cancellationToken))
         {
-            // Lifecycle filtered in-process (active includes active_with_broad_apply).
-            candidates = await discoveryStore.ListRuleVersionsBoundedAsync(
+            keysetRows = await discoveryStore.ListRuleVersionsKeysetAsync(
                 connection,
                 null,
                 highWaterCreatedAt,
                 highWaterRuleVersionId,
                 logicalRuleId,
-                lifecycleState: null,
                 categoryId,
+                input.ActiveMembership,
+                effectiveLifecycleFilter,
+                activeRuleSetVersionId,
+                afterCreatedAt: resume?.LastCreatedAt,
+                afterRuleVersionId: resume?.LastRuleVersionId,
+                limit: pageSize + 1,
                 cancellationToken);
 
-            conditionsByVersion = await discoveryStore.ListConditionsForVersionsAsync(
-                connection,
-                null,
-                candidates.Select(c => c.RuleVersionId).ToArray(),
-                ruleStore,
-                cancellationToken);
+            var hasMore = keysetRows.Count > pageSize;
+            var pageRows = hasMore
+                ? keysetRows.Take(pageSize).ToArray()
+                : keysetRows.ToArray();
 
-            timestampsByVersion = new Dictionary<string, RuleLifecycleTimestamps>(StringComparer.Ordinal);
-            foreach (var row in candidates)
-            {
-                timestampsByVersion[row.RuleVersionId] =
-                    await discoveryStore.GetLifecycleTimestampsAsync(
-                        connection, null, row.RuleVersionId, cancellationToken);
-            }
+            // Hydrate conditions + lifecycle timestamps only for returned page rows.
+            var pageIds = pageRows.Select(r => r.RuleVersionId).ToArray();
+            var conditionsByVersion = await discoveryStore.ListConditionsForVersionsAsync(
+                connection, null, pageIds, ruleStore, cancellationToken);
 
-            // Ensure category display for all candidate categories.
-            foreach (var row in candidates)
+            var items = new List<ClassifyRuleListItem>(pageRows.Length);
+            foreach (var row in pageRows)
             {
-                if (categoryInfo.ContainsKey(row.CategoryId))
+                cancellationToken.ThrowIfCancellationRequested();
+                conditionsByVersion.TryGetValue(row.RuleVersionId, out var conditions);
+                conditions ??= Array.Empty<RuleCondition>();
+                var ts = await discoveryStore.GetLifecycleTimestampsAsync(
+                    connection, null, row.RuleVersionId, cancellationToken);
+                categoryInfo.TryGetValue(row.CategoryId, out var cat);
+                if (!ClassifyContractMapper.TryMapRuleListItem(
+                        row,
+                        conditions,
+                        activeMembers.Contains(row.RuleVersionId),
+                        cat.Display,
+                        cat.Lifecycle ?? "archived",
+                        ts,
+                        out var item,
+                        out var mapError))
                 {
-                    continue;
+                    return CommandResult<ClassifyRuleListResult>.Failure(
+                        mapError ?? ClassifyErrors.Integrity);
                 }
 
-                var detail = await ledger.GetBudgetCategoryAsync(
-                    row.CategoryId,
-                    CategoryContractVersions.Current,
-                    actor,
-                    cancellationToken);
-                if (!detail.IsSuccess || detail.Value is null)
-                {
-                    categoryInfo[row.CategoryId] = (null, "archived");
-                }
-                else
-                {
-                    var life = detail.Value.Status == CategoryStatus.Active ? "active" : "archived";
-                    categoryInfo[row.CategoryId] = (detail.Value.Name, life);
-                }
-            }
-        }
-
-        // AND filters: lifecycle + active membership
-        var filtered = new List<ClassifyRuleVersionRow>(candidates.Count);
-        foreach (var row in candidates)
-        {
-            var isMember = activeMembers.Contains(row.RuleVersionId);
-            if (input.ActiveMembership is true && !isMember)
-            {
-                continue;
+                items.Add(item);
             }
 
-            if (input.ActiveMembership is false && isMember)
+            string? continuation = null;
+            if (hasMore && pageRows.Length > 0)
             {
-                continue;
-            }
+                var last = pageRows[^1];
+                var encodeBinding = new ClassifyCursorCodec.RuleSnapshotBinding(
+                    FilterFingerprint: filterFp,
+                    PageSize: pageSize,
+                    HighWaterCreatedAt: highWaterCreatedAt,
+                    HighWaterRuleVersionId: highWaterRuleVersionId,
+                    AuthorityFingerprint: authorityFingerprint,
+                    CategoryLifecycleFingerprint: categoryLifecycleFingerprint,
+                    ExpiresAtUtc: expiresAt);
 
-            if (input.Lifecycle is not null)
-            {
-                try
+                if (!ClassifyCursorCodec.TryEncodeRule(
+                        encodeBinding,
+                        new ClassifyCursorCodec.RuleKeysetPosition(last.CreatedAt, last.RuleVersionId),
+                        out continuation,
+                        out var encodeError))
                 {
-                    // Membership-derived effective lifecycle (activation is append-only authority).
-                    var effective = isMember
-                        ? ClassifyRuleLifecycleFilter.Active
-                        : ClassifyContractMapper.ToPublicLifecycle(row.LifecycleState);
-                    if (effective != input.Lifecycle.Value)
-                    {
-                        continue;
-                    }
-                }
-                catch (ArgumentOutOfRangeException)
-                {
-                    return CommandResult<ClassifyRuleListResult>.Failure(ClassifyErrors.Integrity);
+                    return CommandResult<ClassifyRuleListResult>.Failure(
+                        encodeError ?? ClassifyErrors.CursorInvalid);
                 }
             }
 
-            filtered.Add(row);
+            return CommandResult<ClassifyRuleListResult>.Success(
+                ClassifyContractMapper.ToRuleListResult(
+                    overallCount,
+                    filteredCount,
+                    items,
+                    continuation));
         }
-
-        filtered.Sort(static (a, b) =>
-        {
-            var cmp = string.CompareOrdinal(a.CreatedAt, b.CreatedAt);
-            return cmp != 0 ? cmp : string.CompareOrdinal(a.RuleVersionId, b.RuleVersionId);
-        });
-
-        IEnumerable<ClassifyRuleVersionRow> window = filtered;
-        if (resume is not null)
-        {
-            window = filtered.Where(r =>
-                string.CompareOrdinal(r.CreatedAt, resume.LastCreatedAt) > 0
-                || (string.Equals(r.CreatedAt, resume.LastCreatedAt, StringComparison.Ordinal)
-                    && string.CompareOrdinal(r.RuleVersionId, resume.LastRuleVersionId) > 0));
-        }
-
-        var pageMaterialized = window.ToArray();
-        var pageRows = pageMaterialized.Take(pageSize).ToArray();
-        var hasMore = pageMaterialized.Length > pageSize;
-
-        var items = new List<ClassifyRuleListItem>(pageRows.Length);
-        foreach (var row in pageRows)
-        {
-            conditionsByVersion.TryGetValue(row.RuleVersionId, out var conditions);
-            conditions ??= Array.Empty<RuleCondition>();
-            timestampsByVersion.TryGetValue(row.RuleVersionId, out var ts);
-            ts ??= new RuleLifecycleTimestamps(null, null, null);
-            categoryInfo.TryGetValue(row.CategoryId, out var cat);
-            if (!ClassifyContractMapper.TryMapRuleListItem(
-                    row,
-                    conditions,
-                    activeMembers.Contains(row.RuleVersionId),
-                    cat.Display,
-                    cat.Lifecycle ?? "archived",
-                    ts,
-                    out var item,
-                    out var mapError))
-            {
-                return CommandResult<ClassifyRuleListResult>.Failure(
-                    mapError ?? ClassifyErrors.Integrity);
-            }
-
-            items.Add(item);
-        }
-
-        string? continuation = null;
-        if (hasMore && pageRows.Length > 0)
-        {
-            var last = pageRows[^1];
-            var binding = new ClassifyCursorCodec.RuleSnapshotBinding(
-                FilterFingerprint: filterFp,
-                PageSize: pageSize,
-                HighWaterCreatedAt: highWaterCreatedAt,
-                HighWaterRuleVersionId: highWaterRuleVersionId,
-                AuthorityFingerprint: authorityFingerprint,
-                CategoryLifecycleFingerprint: categoryLifecycleFingerprint,
-                ExpiresAtUtc: expiresAt);
-
-            if (!ClassifyCursorCodec.TryEncodeRule(
-                    binding,
-                    new ClassifyCursorCodec.RuleKeysetPosition(last.CreatedAt, last.RuleVersionId),
-                    out continuation,
-                    out var encodeError))
-            {
-                return CommandResult<ClassifyRuleListResult>.Failure(
-                    encodeError ?? ClassifyErrors.CursorInvalid);
-            }
-        }
-
-        return CommandResult<ClassifyRuleListResult>.Success(
-            ClassifyContractMapper.ToRuleListResult(
-                overallCount,
-                filtered.Count,
-                items,
-                continuation));
     }
 
     /// <summary>

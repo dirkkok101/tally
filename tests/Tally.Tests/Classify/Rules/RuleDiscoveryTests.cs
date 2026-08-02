@@ -340,6 +340,65 @@ public sealed class RuleDiscoveryTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Large_catalogue_page_returns_totals_with_page_bounded_hydration()
+    {
+        // Catalogue larger than pageSize: totals are full filtered snapshot; items ≤ pageSize.
+        var category = await CreateCategoryAsync("LargePage");
+        const int catalogueSize = 12;
+        var ids = new List<string>(catalogueSize);
+        for (var i = 0; i < catalogueSize; i++)
+        {
+            ids.Add(await SaveDraftAsync(category.CategoryId, "large " + i, "rule-large-" + i.ToString("D2")));
+        }
+
+        const int pageSize = 3;
+        var first = await listQuery.HandleAsync(
+            new ClassifyRuleListRequest("1.0", pageSize),
+            actor,
+            CancellationToken.None);
+        Assert.True(first.IsSuccess, first.ErrorCode);
+        Assert.Equal(catalogueSize, first.Value!.OverallCount);
+        Assert.Equal(catalogueSize, first.Value.FilteredCount);
+        Assert.Equal(pageSize, first.Value.ReturnedCount);
+        Assert.Equal(pageSize, first.Value.Items.Count);
+        Assert.NotNull(first.Value.Continuation);
+        Assert.All(first.Value.Items, item =>
+        {
+            Assert.NotEmpty(item.Conditions);
+            Assert.False(string.IsNullOrWhiteSpace(item.ScopeHash));
+        });
+
+        // Remaining pages never exceed pageSize and never duplicate
+        var seen = first.Value.Items.Select(i => i.RuleVersionId).ToHashSet(StringComparer.Ordinal);
+        var cursor = first.Value.Continuation;
+        var pages = 1;
+        while (cursor is not null)
+        {
+            var page = await listQuery.HandleAsync(
+                new ClassifyRuleListRequest("1.0", pageSize, Continuation: cursor),
+                actor,
+                CancellationToken.None);
+            Assert.True(page.IsSuccess, page.ErrorCode);
+            Assert.Equal(catalogueSize, page.Value!.OverallCount);
+            Assert.Equal(catalogueSize, page.Value.FilteredCount);
+            Assert.True(page.Value.ReturnedCount <= pageSize);
+            Assert.True(page.Value.Items.Count <= pageSize);
+            foreach (var item in page.Value.Items)
+            {
+                Assert.True(seen.Add(item.RuleVersionId));
+                Assert.NotEmpty(item.Conditions);
+            }
+
+            cursor = page.Value.Continuation;
+            pages++;
+            Assert.True(pages < 20);
+        }
+
+        Assert.Equal(catalogueSize, seen.Count);
+        Assert.Equal(ids.Count, seen.Count);
+    }
+
+    [Fact]
     public async Task High_water_excludes_concurrent_appends_after_first_page()
     {
         var category = await CreateCategoryAsync("HW");
