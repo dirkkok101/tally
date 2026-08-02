@@ -54,7 +54,10 @@ public sealed class ClassifyOperatorErgonomicsProcessTests
     [Fact]
     public async Task TC_ERGONOMICS_PROCESS_146_rows_page_size_500_one_invocation_within_bounds()
     {
+        // Exact 146-row cohort: BulkEvaluationId is seeded alone (no incidental ledger
+        // rows from multipage/unresolved). Assert equality — never a lower bound.
         RequirePublishedBinary();
+        Assert.Equal(ErgonomicsProcessFixture.BulkOutcomeCount, fx.BulkSeededCount);
         var input = ClassifyEnvelope(
             $"{{\"contractVersion\":\"1.0\",\"evaluationId\":{JsonSerializer.Serialize(fx.BulkEvaluationId)},\"pageSize\":500}}",
             idempotencyKey: null);
@@ -69,14 +72,20 @@ public sealed class ClassifyOperatorErgonomicsProcessTests
         Assert.Equal("classify.outcome.list", doc.RootElement.GetProperty("operation_id").GetString());
         var result = doc.RootElement.GetProperty("result_or_error");
         var returned = result.GetProperty("returnedCount").GetInt32();
-        Assert.True(returned >= 146, $"returnedCount={returned}");
-        Assert.Equal(returned, result.GetProperty("items").GetArrayLength());
-        // pageSize 500 must complete 146 rows without a non-null continuation.
+        var overall = result.GetProperty("overallCount").GetInt32();
+        var items = result.GetProperty("items").EnumerateArray().ToArray();
+        Assert.Equal(ErgonomicsProcessFixture.BulkOutcomeCount, returned);
+        Assert.Equal(ErgonomicsProcessFixture.BulkOutcomeCount, overall);
+        Assert.Equal(ErgonomicsProcessFixture.BulkOutcomeCount, items.Length);
+        var ids = items.Select(i => i.GetProperty("outcomeId").GetString()!).ToArray();
+        Assert.Equal(ErgonomicsProcessFixture.BulkOutcomeCount, ids.Length);
+        Assert.Equal(ids.Length, ids.Distinct(StringComparer.Ordinal).Count());
+        // pageSize 500 must complete the entire cohort in one page — no continuation.
         if (result.TryGetProperty("continuation", out var cont))
         {
             Assert.True(
                 cont.ValueKind is JsonValueKind.Null or JsonValueKind.Undefined,
-                "unexpected continuation for 146-row pageSize 500");
+                "unexpected continuation for exact 146-row pageSize 500");
         }
 
         Assert.True(
@@ -451,11 +460,14 @@ public sealed class ClassifyOperatorErgonomicsProcessTests
     public async Task TC_ERGONOMICS_PROCESS_outcome_ids_compose_selected_outcomes_preview_without_outcome_get()
     {
         RequirePublishedBinary();
+        // Fresh composition evaluation (sealed last) so preview is non-stale after multipage/unresolved
+        // seeding. Throughput bulk cohort stays on BulkEvaluationId and is not used here.
+        Assert.False(string.IsNullOrWhiteSpace(fx.CompositionEvaluationId));
         // One list page supplies IDs; one preview invocation — never outcome.get per row.
         var list = await RunPublishedMeasuredAsync(
             ["classify", "outcome", "list", "--input", "-"],
             ClassifyEnvelope(
-                $"{{\"contractVersion\":\"1.0\",\"evaluationId\":{JsonSerializer.Serialize(fx.BulkEvaluationId)},\"pageSize\":50}}",
+                $"{{\"contractVersion\":\"1.0\",\"evaluationId\":{JsonSerializer.Serialize(fx.CompositionEvaluationId)},\"pageSize\":500}}",
                 null));
         Assert.Equal(0, list.ExitCode);
         using var listDoc = JsonDocument.Parse(list.Stdout);
@@ -468,11 +480,11 @@ public sealed class ClassifyOperatorErgonomicsProcessTests
             .Select(i => i.GetProperty("outcomeId").GetString()!)
             .Take(5)
             .ToArray();
-        Assert.NotEmpty(items);
+        Assert.True(items.Length >= 1, "composition fixture must yield at least one suggestion outcome");
 
         var idsJson = string.Join(",", items.Select(id => JsonSerializer.Serialize(id)));
         var previewInput =
-            $"{{\"contractVersion\":\"1.0\",\"evaluationId\":{JsonSerializer.Serialize(fx.BulkEvaluationId)},\"selection\":{{\"mode\":\"selected_outcomes\",\"outcomeIds\":[{idsJson}]}}}}";
+            $"{{\"contractVersion\":\"1.0\",\"evaluationId\":{JsonSerializer.Serialize(fx.CompositionEvaluationId)},\"selection\":{{\"mode\":\"selected_outcomes\",\"outcomeIds\":[{idsJson}]}}}}";
         var preview = await RunPublishedMeasuredAsync(
             ["classify", "apply", "preview", "--input", "-"],
             ClassifyEnvelope(previewInput, NextKey()));
@@ -737,11 +749,21 @@ public sealed class ErgonomicsProcessFixture : IAsyncLifetime
     public string DataRoot { get; private set; } = null!;
     public string BinaryPath { get; private set; } = null!;
     public SafeActor Actor { get; } = new("automation", "ergonomics-process", "run-01");
+    /// <summary>Exact acceptance cohort size for the published-process throughput proof.</summary>
+    public const int BulkOutcomeCount = 146;
+
     public string BulkEvaluationId { get; private set; } = null!;
     public string MultiPageEvaluationId { get; private set; } = null!;
     public string UnresolvedEvaluationId { get; private set; } = null!;
     /// <summary>Completed evaluation with retention-gap counters for integrity partition proof.</summary>
     public string IntegrityEvaluationId { get; private set; } = null!;
+    /// <summary>
+    /// Fresh evaluation sealed after all other fixtures so selected_outcomes preview is non-stale.
+    /// Distinct from <see cref="BulkEvaluationId"/> (exact 146 throughput cohort).
+    /// </summary>
+    public string CompositionEvaluationId { get; private set; } = null!;
+    /// <summary>TotalCount observed when the bulk evaluation was sealed (must equal BulkOutcomeCount).</summary>
+    public int BulkSeededCount { get; private set; }
     public int MultiPageCount { get; } = 7;
     public int MultiPageSize { get; } = 3;
 
@@ -773,13 +795,26 @@ public sealed class ErgonomicsProcessFixture : IAsyncLifetime
         process = new TallyProcess(registry, ledgerServices);
         accountId = (await CreateAccountAsync()).AccountId;
 
-        // Multipage first while ledger is small enough to force multi-invocation walks
-        // without depending on a fixed total across later bulk seeding.
+        // Throughput cohort first: evaluate while the ledger contains only the intended
+        // 146 bulk transactions so the sealed evaluation has no incidental rows.
+        (BulkEvaluationId, BulkSeededCount) = await SeedSuggestionEvaluationExactAsync(
+            "bulk list merchant",
+            BulkOutcomeCount);
+        // Multipage/unresolved after bulk: their tests bind accounting to overallCount from
+        // the published envelope (not a hard-coded row total), so later ledger growth is fine.
         MultiPageEvaluationId = await SeedSuggestionEvaluationAsync("multipage merchant", count: MultiPageCount);
         UnresolvedEvaluationId = await SeedNoSuggestionEvaluationAsync("unresolved coffee shop", count: 3);
         // Retention gap: completed envelope claims no_suggestion_count=3 with zero outcome rows.
         IntegrityEvaluationId = await InsertSyntheticIntegrityGapRunAsync(UnresolvedEvaluationId, noSuggestionCount: 3);
-        BulkEvaluationId = await SeedSuggestionEvaluationAsync("bulk list merchant", count: 146);
+        // Composition preview requires a non-stale evaluation; re-evaluate after all seeding.
+        var composition = await services.Evaluate.HandleAsync(
+            new ClassifyEvaluateRequest(ClassifyOperationIds.ContractVersion),
+            Actor,
+            NextKey(),
+            CancellationToken.None);
+        Assert.True(composition.IsSuccess, composition.ErrorCode);
+        Assert.True(composition.Value!.TotalCount >= BulkOutcomeCount);
+        CompositionEvaluationId = composition.Value.EvaluationId;
     }
 
     /// <summary>
@@ -859,10 +894,27 @@ public sealed class ErgonomicsProcessFixture : IAsyncLifetime
 
     private async Task<string> SeedSuggestionEvaluationAsync(string phrase, int count)
     {
+        var (evaluationId, _) = await SeedSuggestionEvaluationExactAsync(phrase, count, requireExactTotal: false);
+        return evaluationId;
+    }
+
+    /// <summary>
+    /// Seed exactly <paramref name="count"/> ledger rows matching <paramref name="phrase"/>,
+    /// evaluate, and optionally require TotalCount == count (throughput cohort isolation).
+    /// ActivateWithGate already records one bound-corpus transaction with the same phrase,
+    /// so only count-1 additional records are written (gate row is part of the cohort).
+    /// </summary>
+    private async Task<(string EvaluationId, int TotalCount)> SeedSuggestionEvaluationExactAsync(
+        string phrase,
+        int count,
+        bool requireExactTotal = true)
+    {
+        Assert.True(count >= 1, "suggestion seed requires at least the gate corpus transaction");
         var category = await CreateCategoryAsync("Sug");
         var versionId = await SaveDraftAsync(category.CategoryId, phrase);
+        // Writes one real ledger row used as the private validation corpus — counts toward evaluate.
         await ActivateWithGateAsync(versionId, category.CategoryId, phrase);
-        for (var i = 0; i < count; i++)
+        for (var i = 0; i < count - 1; i++)
         {
             _ = await RecordAsync(phrase);
         }
@@ -873,8 +925,17 @@ public sealed class ErgonomicsProcessFixture : IAsyncLifetime
             NextKey(),
             CancellationToken.None);
         Assert.True(evaluated.IsSuccess, evaluated.ErrorCode);
-        Assert.True(evaluated.Value!.TotalCount >= count);
-        return evaluated.Value.EvaluationId;
+        var total = evaluated.Value!.TotalCount;
+        if (requireExactTotal)
+        {
+            Assert.Equal(count, total);
+        }
+        else
+        {
+            Assert.True(total >= count, $"TotalCount={total} expected>={count}");
+        }
+
+        return (evaluated.Value.EvaluationId, total);
     }
 
     private async Task<string> SeedNoSuggestionEvaluationAsync(string phrase, int count)

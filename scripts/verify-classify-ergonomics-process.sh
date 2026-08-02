@@ -116,5 +116,5 @@ section "Aggregate summary"
 printf 'classify ergonomics process verification: exit 0; %s cases discovered; exact scenarios present; 0 failures\n' \
     "$test_count"
 printf 'evidence fields: invocations wall_ms peak_rss_bytes returned_count child_max (aggregate-only)\n'
-printf 'bounds: 146 rows @ pageSize 500 in 1 invocation; wall < 5s; peak RSS < 256 MiB; child_max = 0\n'
+printf 'bounds: exactly 146 returned rows @ pageSize 500 in 1 invocation; wall < 5s; peak RSS < 256 MiB; child_max = 0\n'
 printf 'payload policy: no descriptions amounts paths or live-root tokens\n'
