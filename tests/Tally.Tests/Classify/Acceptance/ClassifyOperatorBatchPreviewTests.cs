@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Reflection;
 using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text;
@@ -47,7 +48,11 @@ public sealed class ClassifyOperatorBatchPreviewTests : IAsyncLifetime
     private ClassificationApplyPreviewStore previewStore = null!;
     private string accountId = null!;
     private int keySeq;
-    private int outcomeGetCalls;
+    /// <summary>
+    /// Production-connected instrument around the real <see cref="GetClassificationOutcomeQuery"/>.
+    /// Call count increments only when that production HandleAsync path runs.
+    /// </summary>
+    private CountingOutcomeGet instrumentedOutcomeGet = null!;
 
     public async Task InitializeAsync()
     {
@@ -58,6 +63,8 @@ public sealed class ClassifyOperatorBatchPreviewTests : IAsyncLifetime
         process = new TallyProcess(registry, LedgerServices.Create(database));
         ledger = new LedgerContractClient(registry, process);
         services = await ClassifyEvaluationExtensions.CreateServicesAsync(root, ledger, cancellationToken: CancellationToken.None);
+        // Wire the only outcome.get entry used by this fixture through the production query.
+        instrumentedOutcomeGet = new CountingOutcomeGet(services.OutcomeGet);
         listQuery = new ListClassificationOutcomesQuery(
             services.State.Store,
             services.EvaluationStore,
@@ -75,7 +82,6 @@ public sealed class ClassifyOperatorBatchPreviewTests : IAsyncLifetime
             ledger,
             services.State.Idempotency);
         accountId = (await CreateAccountAsync()).AccountId;
-        outcomeGetCalls = 0;
     }
 
     public Task DisposeAsync()
@@ -93,14 +99,19 @@ public sealed class ClassifyOperatorBatchPreviewTests : IAsyncLifetime
     [Fact]
     public async Task Outcome_list_page_supplies_selected_outcomes_without_outcome_get()
     {
+        // Structural production seam: composition types cannot inject or store outcome.get.
+        AssertCompositionTypesDoNotDependOnOutcomeGet();
+
         var seeded = await SeedSuggestionsAsync("batch shop", count: 3);
+        Assert.Equal(0, instrumentedOutcomeGet.Calls);
+
         var list = await listQuery.HandleAsync(
             new ClassifyOutcomeListRequest("1.0", seeded.EvaluationId, 500, OutcomeKind: ClassifyOutcomeKind.Suggestion),
             actor,
             CancellationToken.None);
         Assert.True(list.IsSuccess, list.ErrorCode);
         Assert.True(list.Value!.Items.Count >= 3);
-        Assert.Equal(0, outcomeGetCalls);
+        Assert.Equal(0, instrumentedOutcomeGet.Calls);
 
         // Explicit ordered subset from list page (request order preserved as given; auth reorders by tx).
         var orderedIds = list.Value.Items
@@ -124,8 +135,22 @@ public sealed class ClassifyOperatorBatchPreviewTests : IAsyncLifetime
         Assert.Equal(2, result.Value!.SelectedCount);
         Assert.Equal(2, result.Value.AssignableCount);
         Assert.False(string.IsNullOrWhiteSpace(result.Value.PreviewId));
-        Assert.Equal(0, outcomeGetCalls);
         Assert.Equal(before, await SnapshotCategoryStatesAsync(seeded.TransactionIds));
+
+        // Composition completed without outcome.get: instrument still at zero.
+        Assert.Equal(0, instrumentedOutcomeGet.Calls);
+
+        // Connectivity probe: the instrument is wired to production GetClassificationOutcomeQuery.
+        // If outcome.get is actually invoked, Calls increments and composition asserts above fail.
+        var probe = await instrumentedOutcomeGet.HandleAsync(
+            new ClassifyOutcomeGetRequest(
+                ClassifyOperationIds.ContractVersion,
+                seeded.EvaluationId,
+                seeded.TransactionIds[0]),
+            actor,
+            CancellationToken.None);
+        Assert.True(probe.IsSuccess, probe.ErrorCode);
+        Assert.Equal(1, instrumentedOutcomeGet.Calls);
     }
 
     [Fact]
@@ -133,10 +158,11 @@ public sealed class ClassifyOperatorBatchPreviewTests : IAsyncLifetime
     {
         var seeded = await SeedSuggestionsAsync("freeze shop", count: 2);
         var ids = await ListSuggestionIdsFromOutcomeListAsync(seeded.EvaluationId);
+        var key = NextKey();
         var result = await preview.HandleAsync(
             PreviewSelected(seeded.EvaluationId, ids),
             actor,
-            NextKey(),
+            key,
             CancellationToken.None);
         Assert.True(result.IsSuccess, result.ErrorCode);
         var v = result.Value!;
@@ -155,6 +181,29 @@ public sealed class ClassifyOperatorBatchPreviewTests : IAsyncLifetime
         Assert.Equal(v.PreflightExpiresAt, v.ExpiresAt);
         Assert.Equal(v.SelectedCount, v.SelectedTransactionIds.Count);
         Assert.All(v.ContributingRuleVersionIds, id => Assert.False(string.IsNullOrWhiteSpace(id)));
+
+        // Actor is frozen on the durable preview receipt (public result does not re-emit actor).
+        await using var connection = await services.State.Store.OpenMigratedAsync(CancellationToken.None);
+        await using var command = connection.CreateCommand();
+        command.CommandText = "SELECT preview_id, selection_mode, actor FROM apply_preview WHERE preview_id = $id;";
+        command.Parameters.AddWithValue("$id", v.PreviewId);
+        await using var reader = await command.ExecuteReaderAsync(CancellationToken.None);
+        Assert.True(await reader.ReadAsync(CancellationToken.None));
+        Assert.Equal(v.PreviewId, reader.GetString(0));
+        Assert.Equal(ClassifyContractMapper.SelectionModeSelectedOutcomes, reader.GetString(1));
+        Assert.Contains(actor.Kind, reader.GetString(2), StringComparison.Ordinal);
+        Assert.Contains(actor.Label, reader.GetString(2), StringComparison.Ordinal);
+
+        // Idempotency: same key + same selection replays the frozen receipt (normalization fixed at evaluation).
+        var replay = await preview.HandleAsync(
+            PreviewSelected(seeded.EvaluationId, ids),
+            actor,
+            key,
+            CancellationToken.None);
+        Assert.True(replay.IsSuccess, replay.ErrorCode);
+        Assert.Equal(v.PreviewId, replay.Value!.PreviewId);
+        Assert.Equal(v.SelectionHash, replay.Value.SelectionHash);
+        Assert.Equal(v.EvaluationFingerprint, replay.Value.EvaluationFingerprint);
     }
 
     [Fact]
@@ -186,24 +235,39 @@ public sealed class ClassifyOperatorBatchPreviewTests : IAsyncLifetime
         Assert.Equal(before, await SnapshotCategoryStatesAsync(seeded.TransactionIds));
     }
 
-    // ── Failures: typed errors, no receipt, no mutation ──────────────────────
-
     [Fact]
-    public async Task Duplicate_ids_in_selection_do_not_create_extra_candidates()
+    public async Task Duplicate_ids_in_selection_select_exactly_one_candidate()
     {
+        // Amended AC / released contract: repeated copies of one outcome ID are accounted for by
+        // canonical Distinct deduplication — one candidate, one receipt, no Ledger mutation.
         var seeded = await SeedSuggestionsAsync("dup shop", count: 1);
         var ids = await ListSuggestionIdsFromOutcomeListAsync(seeded.EvaluationId);
         Assert.NotEmpty(ids);
         var one = ids[0];
         var duplicated = new[] { one, one, one };
+        var before = await SnapshotCategoryStatesAsync(seeded.TransactionIds);
+        var previewCountBefore = await CountPreviewsAsync();
+
         var result = await preview.HandleAsync(
             PreviewSelected(seeded.EvaluationId, duplicated),
             actor,
             NextKey(),
             CancellationToken.None);
+
         Assert.True(result.IsSuccess, result.ErrorCode);
         Assert.Equal(1, result.Value!.SelectedCount);
+        Assert.Equal(1, result.Value.AssignableCount);
+        Assert.Single(result.Value.SelectedTransactionIds);
+        Assert.Equal(
+            result.Value.SelectedTransactionIds.Distinct(StringComparer.Ordinal).Count(),
+            result.Value.SelectedTransactionIds.Count);
+        Assert.False(string.IsNullOrWhiteSpace(result.Value.PreviewId));
+        // Exactly one new preview receipt — not one per repeated ID.
+        Assert.Equal(previewCountBefore + 1, await CountPreviewsAsync());
+        Assert.Equal(before, await SnapshotCategoryStatesAsync(seeded.TransactionIds));
     }
+
+    // ── Failures: typed errors, no receipt, no mutation ──────────────────────
 
     [Fact]
     public async Task Missing_outcome_id_fails_without_preview_receipt_or_ledger_mutation()
@@ -567,6 +631,59 @@ public sealed class ClassifyOperatorBatchPreviewTests : IAsyncLifetime
         string EvaluationId,
         string RuleVersionId,
         IReadOnlyList<string> TransactionIds);
+
+    /// <summary>
+    /// Connected instrument: increments only when the production
+    /// <see cref="GetClassificationOutcomeQuery.HandleAsync"/> path executes.
+    /// </summary>
+    private sealed class CountingOutcomeGet
+    {
+        private readonly GetClassificationOutcomeQuery inner;
+        private int calls;
+
+        public CountingOutcomeGet(GetClassificationOutcomeQuery inner)
+        {
+            this.inner = inner ?? throw new ArgumentNullException(nameof(inner));
+        }
+
+        public int Calls => Volatile.Read(ref calls);
+
+        public Task<CommandResult<ClassifyOutcomeGetResult>> HandleAsync(
+            ClassifyOutcomeGetRequest input,
+            SafeActor? actor,
+            CancellationToken cancellationToken)
+        {
+            Interlocked.Increment(ref calls);
+            return this.inner.HandleAsync(input, actor, cancellationToken);
+        }
+    }
+
+    private static void AssertCompositionTypesDoNotDependOnOutcomeGet()
+    {
+        static void AssertType(Type host)
+        {
+            var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
+            foreach (var ctor in host.GetConstructors(flags))
+            {
+                Assert.DoesNotContain(
+                    ctor.GetParameters().Select(p => p.ParameterType),
+                    t => t == typeof(GetClassificationOutcomeQuery));
+            }
+
+            foreach (var field in host.GetFields(flags))
+            {
+                Assert.NotEqual(typeof(GetClassificationOutcomeQuery), field.FieldType);
+            }
+
+            foreach (var prop in host.GetProperties(flags))
+            {
+                Assert.NotEqual(typeof(GetClassificationOutcomeQuery), prop.PropertyType);
+            }
+        }
+
+        AssertType(typeof(ListClassificationOutcomesQuery));
+        AssertType(typeof(PreviewClassificationApplyCommand));
+    }
 
     private static ClassifyApplyPreviewRequest PreviewSelected(string evaluationId, IReadOnlyList<string> outcomeIds) =>
         new(
