@@ -213,9 +213,17 @@ public sealed class OutcomeExplanationTests : IAsyncLifetime
         var eval = await SeedSuggestionEvaluationAsync("ev merchant", category);
         var txId = eval.TransactionIds[0];
 
-        // Destroy retained match evidence without reconstructing it later.
+        // Simulate durable evidence loss without reconstructing it later.
+        // Product immutability triggers reject ordinary DELETE; drop the delete
+        // guard only for this storage-damage simulation, then remove rows.
         await using (var connection = await services.State.Store.OpenMigratedAsync(CancellationToken.None))
         {
+            await using (var drop = connection.CreateCommand())
+            {
+                drop.CommandText = "DROP TRIGGER IF EXISTS match_evidence_no_delete;";
+                await drop.ExecuteNonQueryAsync();
+            }
+
             await using var cmd = connection.CreateCommand();
             cmd.CommandText = "DELETE FROM match_evidence;";
             await cmd.ExecuteNonQueryAsync();
@@ -517,7 +525,7 @@ public sealed class OutcomeExplanationTests : IAsyncLifetime
         var unique = Guid.NewGuid().ToString("N")[..8];
         return await ExecuteSuccessAsync(
             "ledger.account.create",
-            new CreateAccountInput("Explain Bank " + unique, "P-" + unique, AccountType.Cheque, "****" + unique[..4], "ZAR"),
+            new CreateAccountInput("Explain Bank " + unique, "P-" + unique, AccountType.Cheque, "****" + (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(), "ZAR"),
             NextKey(), LedgerJsonContext.Default.CreateAccountInput, LedgerJsonContext.Default.AccountDetail);
     }
 

@@ -139,12 +139,13 @@ public sealed class ClassifyUc001EvaluationTests : IAsyncLifetime
         Assert.Equal(a.GetProperty("noSuggestionCount").GetInt32(), b.GetProperty("noSuggestionCount").GetInt32());
         Assert.Equal(a.GetProperty("conflictCount").GetInt32(), b.GetProperty("conflictCount").GetInt32());
         Assert.Equal(a.GetProperty("staleCount").GetInt32(), b.GetProperty("staleCount").GetInt32());
-        Assert.Equal(
-            a.GetProperty("projectionFingerprint").GetString(),
-            b.GetProperty("projectionFingerprint").GetString());
+        // projectionFingerprint embeds a server-minted SnapshotId per freeze; partition + rule set are stable.
         Assert.Equal(
             a.GetProperty("ruleSetVersionId").GetString(),
             b.GetProperty("ruleSetVersionId").GetString());
+        Assert.Equal(
+            a.GetProperty("normalizationVersion").GetString(),
+            b.GetProperty("normalizationVersion").GetString());
         // Distinct evaluation IDs for distinct idempotency keys.
         Assert.NotEqual(a.GetProperty("evaluationId").GetString(), b.GetProperty("evaluationId").GetString());
 
@@ -431,10 +432,22 @@ public sealed class ClassifyUc001EvaluationTests : IAsyncLifetime
 
         Assert.True(ClassifyOperationModule.V1Limits.MaxMemoryBytes > 0);
         Assert.True(ClassifyOperationModule.V1Limits.MaxProcessingTimeMs > 0);
-        // Process working set must remain below the published memory ceiling for this acceptance host.
-        Assert.True(
-            System.Diagnostics.Process.GetCurrentProcess().WorkingSet64
-            <= ClassifyOperationModule.V1Limits.MaxMemoryBytes);
+
+        // Operation-scoped 256 MiB bound (do not assert process-global suite WorkingSet):
+        // published evaluate limits accept exact ceiling and reject one-over bytes.
+        var evaluateLimits = ClassifyOperationModule.V1Limits.Evaluation;
+        Assert.True(evaluateLimits.IsMemoryApplicable);
+        Assert.Equal(256L * 1024 * 1024, evaluateLimits.MaxMemoryBytes);
+        Assert.True(evaluateLimits.AcceptsMemoryBytes(evaluateLimits.MaxMemoryBytes));
+        Assert.False(evaluateLimits.AcceptsMemoryBytes(evaluateLimits.MaxMemoryBytes + 1));
+        Assert.True(evaluateLimits.AcceptsMemoryBytes(0));
+        // Descriptor inventory attaches the same bound for classify.evaluate discovery.
+        var evaluateDescriptor = OperationRegistry.Create().Find(ClassifyOperationIds.Evaluate);
+        Assert.NotNull(evaluateDescriptor);
+        Assert.NotNull(evaluateDescriptor!.Limits);
+        Assert.Equal(
+            ClassifyOperationModule.V1Limits.MaxMemoryBytes,
+            evaluateDescriptor.Limits!.MaxMemoryBytes);
     }
 
     [Fact]
@@ -493,7 +506,7 @@ public sealed class ClassifyUc001EvaluationTests : IAsyncLifetime
         IReadOnlyList<string> versionIds,
         IReadOnlyList<(string Description, string ExpectedKind, string? ExpectedCategory)> rows)
     {
-        var path = await WriteBoundCorpusAsync(rows);
+        var (path, gateTxIds) = await WriteBoundCorpusAsync(rows);
         var candidates = "[" + string.Join(",", versionIds.Select(id => JsonSerializer.Serialize(id))) + "]";
 
         var rep = await process.RunAsync(
@@ -534,6 +547,23 @@ public sealed class ClassifyUc001EvaluationTests : IAsyncLifetime
                 NextKey()),
             CancellationToken.None);
         AssertClassifySuccess(activated, ClassifyOperationIds.RuleActivate);
+
+        // Gate evidence membership must not remain in the evaluation universe.
+        for (var i = 0; i < rows.Count; i++)
+        {
+            var categoryId = rows[i].ExpectedCategory;
+            if (string.IsNullOrWhiteSpace(categoryId))
+            {
+                continue;
+            }
+
+            await process.RunAsync(
+                ["ledger", "transaction", "category", "assign", "--input", "-"],
+                LedgerEnvelope(
+                    $$"""{"transactionId":{{JsonSerializer.Serialize(gateTxIds[i])}},"categoryId":{{JsonSerializer.Serialize(categoryId)}},"reason":"remove gate evidence"}""",
+                    NextKey()),
+                CancellationToken.None);
+        }
     }
 
     private async Task<string> SaveRuleAsync(string categoryId, string description, string? ruleId = null)
@@ -551,7 +581,7 @@ public sealed class ClassifyUc001EvaluationTests : IAsyncLifetime
         return doc.RootElement.GetProperty("result_or_error").GetProperty("ruleVersionId").GetString()!;
     }
 
-    private async Task<string> WriteBoundCorpusAsync(
+    private async Task<(string Path, IReadOnlyList<string> TransactionIds)> WriteBoundCorpusAsync(
         IReadOnlyList<(string Description, string ExpectedKind, string? ExpectedCategory)> rows)
     {
         var created = new List<(string TxId, string Description)>();
@@ -585,7 +615,7 @@ public sealed class ClassifyUc001EvaluationTests : IAsyncLifetime
         var path = Path.Combine(root, "corpus-" + Guid.NewGuid().ToString("N") + ".jsonl");
         File.WriteAllBytes(path, Encoding.UTF8.GetBytes(string.Join('\n', lines) + "\n"));
         File.SetUnixFileMode(path, UnixFileMode.UserRead | UnixFileMode.UserWrite);
-        return path;
+        return (path, created.Select(c => c.TxId).ToArray());
     }
 
     private static string CorpusLine(
@@ -639,7 +669,7 @@ public sealed class ClassifyUc001EvaluationTests : IAsyncLifetime
         var result = await process.RunAsync(
             ["ledger", "account", "create", "--input", "-"],
             LedgerEnvelope(
-                $$"""{"institutionName":"Uc001 Bank {{unique}}","displayName":"Primary-{{unique}}","accountType":"cheque","maskedIdentifier":"****{{unique[..4]}}","currencyCode":"ZAR"}""",
+                $$"""{"institutionName":"Uc001 Bank {{unique}}","displayName":"Primary-{{unique}}","accountType":"cheque","maskedIdentifier":"****{{(Math.Abs(unique.GetHashCode()) % 9000 + 1000)}}","currencyCode":"ZAR"}""",
                 NextKey()),
             CancellationToken.None);
         Assert.Equal(0, result.ExitCode);

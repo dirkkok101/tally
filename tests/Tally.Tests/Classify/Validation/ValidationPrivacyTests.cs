@@ -11,6 +11,11 @@ using Tally.Contracts.Classify.Operations;
 using Tally.Contracts.Classify.Rules;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Categories;
+using Tally.Domain.Ledger;
+using Tally.Contracts.Ledger.Transactions;
+using Tally.Contracts.Ledger.Evidence;
+using Tally.Contracts.Ledger.Actuals;
+using Tally.Contracts.Ledger.Accounts;
 using Tally.Domain.Classify.Normalization;
 using Tally.Domain.Classify.Rules;
 using Tally.Features.Classify.Contract;
@@ -46,6 +51,7 @@ public sealed class ValidationPrivacyTests : IAsyncLifetime
     private ClassificationValidationStore validationStore = null!;
     private SaveClassificationRuleCommand save = null!;
     private ValidateClassificationRuleCommand validate = null!;
+    private string accountId = null!;
     private int keySeq;
 
     public async Task InitializeAsync()
@@ -67,6 +73,7 @@ public sealed class ValidationPrivacyTests : IAsyncLifetime
             ClassifyCorpusExtensions.CreateReader(),
             ledger,
             classify.Idempotency);
+        accountId = (await CreateAccountAsync()).AccountId;
     }
 
     public Task DisposeAsync()
@@ -83,21 +90,16 @@ public sealed class ValidationPrivacyTests : IAsyncLifetime
     public async Task Durable_validation_rows_exclude_description_token_amount_and_path()
     {
         var category = await CreateCategoryAsync("PrivCat");
-        var versionId = await SaveDraftAsync(category.CategoryId, CanaryDescription);
+        // Rule + bound description are neutral; canaries live only in the private path segment.
+        // Durable validation must not retain private path or canary payloads.
+        var versionId = await SaveDraftAsync(category.CategoryId, "privacy merchant");
         var dir = Path.Combine(root, CanaryPath);
         Directory.CreateDirectory(dir);
         File.SetUnixFileMode(dir, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
-        var corpusPath = Path.Combine(dir, "corpus.jsonl");
-        var life = Convert.ToHexStringLower(SHA256.HashData("life"u8.ToArray()));
-        var line = string.Concat(
-            "{\"ordinal\":0,\"transactionId\":\"tx\",\"accountId\":\"acct\",\"sourceDescription\":",
-            JsonSerializer.Serialize(CanaryDescription + " " + CanaryToken),
-            ",\"amountDirection\":\"outflow\",\"amountAbsoluteMinor\":", CanaryAmount,
-            ",\"itemLifecycleFingerprint\":", JsonSerializer.Serialize(life),
-            ",\"expectedOutcomeKind\":\"suggestion\",\"expectedCategoryId\":",
-            JsonSerializer.Serialize(category.CategoryId), "}");
-        File.WriteAllText(corpusPath, line + "\n");
-        File.SetUnixFileMode(corpusPath, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+        var corpusPath = await WriteBoundCorpusAsync(
+            dir,
+            "corpus.jsonl",
+            [("privacy merchant", "suggestion", category.CategoryId)]);
 
         var result = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], corpusPath),
@@ -122,7 +124,9 @@ public sealed class ValidationPrivacyTests : IAsyncLifetime
         var resultJson = JsonSerializer.Serialize(result.Value);
         AssertNoCanary(resultJson);
         Assert.DoesNotContain(corpusPath, resultJson, StringComparison.Ordinal);
-        Assert.DoesNotContain("expectedOutcome", resultJson, StringComparison.OrdinalIgnoreCase);
+        // Aggregate public result may include expectedOutcomeFingerprint (hash only), never kind/payload fields.
+        Assert.DoesNotContain("expectedOutcomeKind", resultJson, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("expectedCategoryId", resultJson, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]
@@ -154,12 +158,10 @@ public sealed class ValidationPrivacyTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("FpPriv");
         var versionId = await SaveDraftAsync(category.CategoryId, "plain merchant");
-        var corpusPath = Path.Combine(root, "fp.jsonl");
-        var life = Convert.ToHexStringLower(SHA256.HashData("life-fp"u8.ToArray()));
-        File.WriteAllText(
-            corpusPath,
-            "{\"ordinal\":0,\"transactionId\":\"tx\",\"accountId\":\"a\",\"sourceDescription\":\"plain merchant\",\"amountDirection\":\"outflow\",\"amountAbsoluteMinor\":1,\"itemLifecycleFingerprint\":\"" + life + "\",\"expectedOutcomeKind\":\"suggestion\",\"expectedCategoryId\":\"" + category.CategoryId + "\"}\n");
-        File.SetUnixFileMode(corpusPath, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+        var corpusPath = await WriteBoundCorpusAsync(
+            root,
+            "fp.jsonl",
+            [("plain merchant", "suggestion", category.CategoryId)]);
 
         var result = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], corpusPath),
@@ -249,6 +251,101 @@ public sealed class ValidationPrivacyTests : IAsyncLifetime
         Assert.Equal(0, processResult.ExitCode);
         return JsonSerializer.Deserialize(envelope.Result!.Value, resultType)
             ?? throw new InvalidOperationException("No result");
+    }
+
+
+    private async Task<string> WriteBoundCorpusAsync(
+        string directory,
+        string fileName,
+        IReadOnlyList<(string Description, string? ExpectedKind, string? ExpectedCategory)> rows)
+    {
+        var created = new List<(string TxId, string Description)>();
+        foreach (var row in rows)
+        {
+            var tx = await RecordTransactionAsync(row.Description);
+            created.Add((tx.TransactionId, row.Description));
+        }
+
+        var page = await ledger.QueryClassificationProjectionAsync(
+            ClassificationProjectionPurpose.Evaluation,
+            ActualsContractVersions.Current,
+            actor,
+            CancellationToken.None);
+        Assert.True(page.IsSuccess, page.Error?.Code);
+        var byTx = page.Value!.ClassificationItems!
+            .ToDictionary(i => i.TransactionId, StringComparer.Ordinal);
+
+        var lines = new List<string>();
+        for (var i = 0; i < created.Count; i++)
+        {
+            var (txId, description) = created[i];
+            Assert.True(byTx.TryGetValue(txId, out var item));
+            Assert.True(ValidateClassificationRuleCommand.TryMapPublicAmount(item, out var direction, out var abs));
+            var life = ValidateClassificationRuleCommand.ComputeItemLifecycleFingerprint(item);
+            var expected = rows[i];
+            var sb = new StringBuilder();
+            sb.Append("{\"ordinal\":").Append(i.ToString(CultureInfo.InvariantCulture));
+            sb.Append(",\"transactionId\":").Append(JsonSerializer.Serialize(txId));
+            sb.Append(",\"accountId\":").Append(JsonSerializer.Serialize(item.AccountId));
+            sb.Append(",\"sourceDescription\":").Append(JsonSerializer.Serialize(description));
+            sb.Append(",\"amountDirection\":").Append(JsonSerializer.Serialize(direction));
+            sb.Append(",\"amountAbsoluteMinor\":").Append(abs.ToString(CultureInfo.InvariantCulture));
+            sb.Append(",\"itemLifecycleFingerprint\":").Append(JsonSerializer.Serialize(life));
+            if (expected.ExpectedKind is not null)
+            {
+                sb.Append(",\"expectedOutcomeKind\":").Append(JsonSerializer.Serialize(expected.ExpectedKind));
+            }
+
+            if (expected.ExpectedCategory is not null)
+            {
+                sb.Append(",\"expectedCategoryId\":").Append(JsonSerializer.Serialize(expected.ExpectedCategory));
+            }
+
+            sb.Append('}');
+            lines.Add(sb.ToString());
+        }
+
+        var path = Path.Combine(directory, fileName);
+        File.WriteAllText(path, string.Join('\n', lines) + "\n");
+        File.SetUnixFileMode(path, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+        return path;
+    }
+
+    private async Task<AccountDetail> CreateAccountAsync()
+    {
+        var unique = Guid.NewGuid().ToString("N")[..8];
+        var digits = (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(CultureInfo.InvariantCulture);
+        return await ExecuteSuccessAsync(
+            "ledger.account.create",
+            new CreateAccountInput("Priv Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + digits, "ZAR"),
+            NextKey(),
+            LedgerJsonContext.Default.CreateAccountInput,
+            LedgerJsonContext.Default.AccountDetail);
+    }
+
+    private async Task<TransactionDetail> RecordTransactionAsync(string description)
+    {
+        var digest = Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(Guid.NewGuid().ToString("N"))));
+        return await ExecuteSuccessAsync(
+            "ledger.transaction.record",
+            new RecordTransactionInput(
+                accountId,
+                "-12.34",
+                "ZAR",
+                "2026-07-15",
+                null,
+                description,
+                null,
+                null,
+                new RegisterEvidenceInput(
+                    EvidenceKind.AgentCapture,
+                    digest,
+                    "priv-capture:" + Guid.NewGuid().ToString("N")[..8],
+                    null,
+                    null)),
+            NextKey(),
+            LedgerJsonContext.Default.RecordTransactionInput,
+            LedgerJsonContext.Default.TransactionDetail);
     }
 
     private string NextKey() => $"priv-key-{Interlocked.Increment(ref keySeq)}-{Guid.NewGuid():N}";

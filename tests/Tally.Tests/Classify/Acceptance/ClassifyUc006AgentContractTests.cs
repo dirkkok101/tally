@@ -369,9 +369,15 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
         using var doc = JsonDocument.Parse(result.Stdout);
         Assert.Equal("error", doc.RootElement.GetProperty("outcome").GetString());
         // Process preflight rejects missing actor as stable validation.invalid_input.
-        Assert.Equal(
-            "validation.invalid_input",
-            doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString());
+        // Published envelope uses either top-level error or classify result_or_error.
+        var code = doc.RootElement.TryGetProperty("error", out var err)
+            ? err.GetProperty("code").GetString()
+            : doc.RootElement.TryGetProperty("result_or_error", out var roe)
+                ? roe.GetProperty("code").GetString()
+                : null;
+        // Missing actor must reject before mutation. Prefer validation.invalid_input; tolerate
+        // host.unexpected only when envelope shape is incomplete (no actor property).
+        Assert.Equal("validation.invalid_input", code);
         await AssertUnchangedAsync(before);
     }
 
@@ -948,7 +954,7 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
             result = await process.RunAsync(
                 ["ledger", "account", "create", "--input", "-"],
                 LedgerEnvelope(
-                    $$"""{"institutionName":"Uc006 Bank {{unique[..12]}}","displayName":"Primary-{{unique[..12]}}","accountType":"cheque","maskedIdentifier":"****{{unique[..4]}}","currencyCode":"ZAR"}""",
+                    $$"""{"institutionName":"Uc006 Bank {{unique[..12]}}","displayName":"Primary-{{unique[..12]}}","accountType":"cheque","maskedIdentifier":"****{{(Math.Abs(unique.GetHashCode()) % 9000 + 1000)}}","currencyCode":"ZAR"}""",
                     NextKey()),
                 CancellationToken.None);
             if (result.ExitCode == 0)

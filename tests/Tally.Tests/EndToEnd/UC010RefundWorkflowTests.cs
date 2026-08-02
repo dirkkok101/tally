@@ -286,8 +286,30 @@ public sealed class UC010RefundWorkflowTests(PublishedTallyFixture fixture) : IA
 
     private async Task CorrectCategory(string transactionId, string categoryId, string key)
     {
-        var current = await GetTransaction(transactionId);
-        _ = await Success(["ledger", "transaction", "category", "correct", "--input", "-"], Envelope(new JsonObject { ["transactionId"] = transactionId, ["categoryId"] = categoryId, ["reason"] = "Owner corrected classification" }, "category-correct-" + key), "ledger.transaction.category.correct");
+        var preflight = await Success(
+            ["ledger", "actuals", "query", "--input", "-"],
+            Envelope(new JsonObject
+            {
+                ["purpose"] = "apply_preflight",
+                ["itemProjection"] = "classification_v1",
+                ["transactionIds"] = new JsonArray(transactionId)
+            }),
+            "ledger.actuals.query");
+        var item = Assert.Single(preflight.GetProperty("classificationItems").EnumerateArray());
+        _ = await Success(
+            ["ledger", "transaction", "category", "correct", "--input", "-"],
+            Envelope(new JsonObject
+            {
+                ["transactionId"] = transactionId,
+                ["categoryId"] = categoryId,
+                ["reason"] = "Owner corrected classification",
+                ["expectedActiveAllocationId"] = item.GetProperty("currentAllocationId").GetString(),
+                ["expectedTransactionRevision"] = item.GetProperty("transactionRevision").GetString(),
+                ["expectedRelationshipRevision"] = item.GetProperty("relationshipRevision").GetString(),
+                ["expectedAllocationRevision"] = item.GetProperty("allocationRevision").GetString(),
+                ["mutationContractVersion"] = "classification_v1"
+            }, "category-correct-" + key),
+            "ledger.transaction.category.correct");
     }
 
     private async Task AssignPool(JsonElement transaction, string poolId, string key) => _ = await Success(["ledger", "transaction", "pool", "assign", "--input", "-"], PoolEnvelope(transaction, poolId, "Owner pool assignment", "pool-assign-" + key), "ledger.transaction.pool.assign");

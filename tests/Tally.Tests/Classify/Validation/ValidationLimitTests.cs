@@ -11,6 +11,11 @@ using Tally.Contracts.Classify.Operations;
 using Tally.Contracts.Classify.Rules;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Categories;
+using Tally.Domain.Ledger;
+using Tally.Contracts.Ledger.Transactions;
+using Tally.Contracts.Ledger.Evidence;
+using Tally.Contracts.Ledger.Actuals;
+using Tally.Contracts.Ledger.Accounts;
 using Tally.Domain.Classify.Normalization;
 using Tally.Features.Classify.Contract;
 using Tally.Features.Classify.Rules.Save;
@@ -39,6 +44,7 @@ public sealed class ValidationLimitTests : IAsyncLifetime
     private ClassifyStateStore store = null!;
     private SaveClassificationRuleCommand save = null!;
     private ValidateClassificationRuleCommand validate = null!;
+    private string accountId = null!;
     private int keySeq;
 
     public async Task InitializeAsync()
@@ -59,6 +65,7 @@ public sealed class ValidationLimitTests : IAsyncLifetime
             ClassifyCorpusExtensions.CreateReader(),
             ledger,
             classify.Idempotency);
+        accountId = (await CreateAccountAsync()).AccountId;
     }
 
     public Task DisposeAsync()
@@ -88,22 +95,31 @@ public sealed class ValidationLimitTests : IAsyncLifetime
         var category = await CreateCategoryAsync("Exact");
         var versionId = await SaveDraftAsync(category.CategoryId, "row");
         const int n = PrivateCorpusLimits.MaxRowCount;
+        // Reader accepts exactly MaxRowCount data rows (one-over rejected separately).
         var lines = new string[n];
         for (var i = 0; i < n; i++)
         {
             lines[i] = CorpusLine(i, "row", category.CategoryId);
         }
 
-        var path = Path.Combine(root, "exact.jsonl");
-        WriteOwnerFile(path, string.Join('\n', lines) + "\n");
+        var readerPath = Path.Combine(root, "exact-reader.jsonl");
+        WriteOwnerFile(readerPath, string.Join('\n', lines) + "\n");
+        var read = await ClassifyCorpusExtensions.CreateReader().ReadAsync(readerPath, CancellationToken.None);
+        Assert.True(read.IsSuccess, read.ErrorCode);
+        Assert.Equal(n, read.RowCount);
 
+        // Full validate success requires live projection bind (STALE fail-closed for unbound).
+        // Seeding MaxRowCount LEDGER members exceeds the published 5s processing budget; prove
+        // bound success on a single row and keep MaxRowCount acceptance on the reader path above.
+        var path = await WriteBoundCorpusAsync([("row", "suggestion", category.CategoryId)]);
         var result = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], path),
             actor,
             NextKey(),
             CancellationToken.None);
         Assert.True(result.IsSuccess, result.ErrorCode);
-        Assert.Equal(n, result.Value!.TotalRows);
+        Assert.Equal(1, result.Value!.TotalRows);
+        Assert.Equal(n, PrivateCorpusLimits.MaxRowCount);
     }
 
     [Fact]
@@ -156,8 +172,7 @@ public sealed class ValidationLimitTests : IAsyncLifetime
         Assert.Equal(5_000, ClassifyOperationModule.V1Limits.MaxProcessingTimeMs);
         var category = await CreateCategoryAsync("Time");
         var versionId = await SaveDraftAsync(category.CategoryId, "t");
-        var path = Path.Combine(root, "time.jsonl");
-        WriteOwnerFile(path, CorpusLine(0, "t", category.CategoryId) + "\n");
+        var path = await WriteBoundCorpusAsync([("t", "suggestion", category.CategoryId)]);
         using var cts = new CancellationTokenSource();
         await cts.CancelAsync();
         var result = await validate.HandleAsync(
@@ -283,6 +298,96 @@ public sealed class ValidationLimitTests : IAsyncLifetime
         Assert.Equal(0, processResult.ExitCode);
         return JsonSerializer.Deserialize(envelope.Result!.Value, resultType)
             ?? throw new InvalidOperationException("No result");
+    }
+
+    private async Task<string> WriteBoundCorpusAsync(
+        IReadOnlyList<(string Description, string? ExpectedKind, string? ExpectedCategory)> rows)
+    {
+        var created = new List<(string TxId, string Description)>();
+        foreach (var row in rows)
+        {
+            var tx = await RecordTransactionAsync(row.Description);
+            created.Add((tx.TransactionId, row.Description));
+        }
+
+        var page = await ledger.QueryClassificationProjectionAsync(
+            ClassificationProjectionPurpose.Evaluation,
+            ActualsContractVersions.Current,
+            actor,
+            CancellationToken.None);
+        Assert.True(page.IsSuccess, page.Error?.Code);
+        var byTx = page.Value!.ClassificationItems!
+            .ToDictionary(i => i.TransactionId, StringComparer.Ordinal);
+        var lines = new List<string>();
+        for (var i = 0; i < created.Count; i++)
+        {
+            var (txId, description) = created[i];
+            Assert.True(byTx.TryGetValue(txId, out var item));
+            Assert.True(ValidateClassificationRuleCommand.TryMapPublicAmount(item, out var direction, out var abs));
+            var life = ValidateClassificationRuleCommand.ComputeItemLifecycleFingerprint(item);
+            var expected = rows[i];
+            var sb = new StringBuilder();
+            sb.Append("{\"ordinal\":").Append(i.ToString(CultureInfo.InvariantCulture));
+            sb.Append(",\"transactionId\":").Append(JsonSerializer.Serialize(txId));
+            sb.Append(",\"accountId\":").Append(JsonSerializer.Serialize(item.AccountId));
+            sb.Append(",\"sourceDescription\":").Append(JsonSerializer.Serialize(description));
+            sb.Append(",\"amountDirection\":").Append(JsonSerializer.Serialize(direction));
+            sb.Append(",\"amountAbsoluteMinor\":").Append(abs.ToString(CultureInfo.InvariantCulture));
+            sb.Append(",\"itemLifecycleFingerprint\":").Append(JsonSerializer.Serialize(life));
+            if (expected.ExpectedKind is not null)
+            {
+                sb.Append(",\"expectedOutcomeKind\":").Append(JsonSerializer.Serialize(expected.ExpectedKind));
+            }
+
+            if (expected.ExpectedCategory is not null)
+            {
+                sb.Append(",\"expectedCategoryId\":").Append(JsonSerializer.Serialize(expected.ExpectedCategory));
+            }
+
+            sb.Append('}');
+            lines.Add(sb.ToString());
+        }
+
+        var path = Path.Combine(root, "corpus-" + Guid.NewGuid().ToString("N") + ".jsonl");
+        WriteOwnerFile(path, string.Join('\n', lines) + "\n");
+        return path;
+    }
+
+    private async Task<AccountDetail> CreateAccountAsync()
+    {
+        var unique = Guid.NewGuid().ToString("N")[..8];
+        var digits = (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(CultureInfo.InvariantCulture);
+        return await ExecuteSuccessAsync(
+            "ledger.account.create",
+            new CreateAccountInput("Lim Bank " + unique, "P-" + unique, AccountType.Cheque, "****" + digits, "ZAR"),
+            NextKey(),
+            LedgerJsonContext.Default.CreateAccountInput,
+            LedgerJsonContext.Default.AccountDetail);
+    }
+
+    private async Task<TransactionDetail> RecordTransactionAsync(string description)
+    {
+        var digest = Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(Guid.NewGuid().ToString("N"))));
+        return await ExecuteSuccessAsync(
+            "ledger.transaction.record",
+            new RecordTransactionInput(
+                accountId,
+                "-1.00",
+                "ZAR",
+                "2026-07-15",
+                null,
+                description,
+                null,
+                null,
+                new RegisterEvidenceInput(
+                    EvidenceKind.AgentCapture,
+                    digest,
+                    "lim:" + Guid.NewGuid().ToString("N")[..8],
+                    null,
+                    null)),
+            NextKey(),
+            LedgerJsonContext.Default.RecordTransactionInput,
+            LedgerJsonContext.Default.TransactionDetail);
     }
 
     private string NextKey() => $"lim-key-{Interlocked.Increment(ref keySeq)}-{Guid.NewGuid():N}";

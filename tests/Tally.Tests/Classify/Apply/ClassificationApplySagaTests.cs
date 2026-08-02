@@ -299,8 +299,9 @@ public sealed class ClassificationApplySagaTests : IAsyncLifetime
     [Fact]
     public async Task Assign_conflicting_apply_identity_with_different_preview_is_stable_conflict()
     {
+        // Apply the first preview before seeding the second — a later activation would
+        // otherwise stale the first preview's frozen preflight identity.
         var seededA = await SeedPreviewAsync("conflict-a");
-        var seededB = await SeedPreviewAsync("conflict-b");
         var applyId = "apply-conflict-" + Guid.NewGuid().ToString("N")[..8];
 
         var first = await services.Run.HandleAsync(
@@ -308,6 +309,7 @@ public sealed class ClassificationApplySagaTests : IAsyncLifetime
             actor, NextKey(), CancellationToken.None);
         Assert.True(first.IsSuccess, first.ErrorCode);
 
+        var seededB = await SeedPreviewAsync("conflict-b");
         var second = await services.Run.HandleAsync(
             new ClassifyApplyRunRequest(ClassifyOperationIds.ContractVersion, seededB.PreviewId, applyId),
             actor, NextKey(), CancellationToken.None);
@@ -668,7 +670,7 @@ public sealed class ClassificationApplySagaTests : IAsyncLifetime
         var unique = Guid.NewGuid().ToString("N")[..8];
         return await ExecuteSuccessAsync(
             "ledger.account.create",
-            new CreateAccountInput("Saga Bank " + unique, "S-" + unique, AccountType.Cheque, "****" + unique[..4], "ZAR"),
+            new CreateAccountInput("Saga Bank " + unique, "S-" + unique, AccountType.Cheque, "****" + (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(), "ZAR"),
             NextKey(), LedgerJsonContext.Default.CreateAccountInput, LedgerJsonContext.Default.AccountDetail);
     }
 

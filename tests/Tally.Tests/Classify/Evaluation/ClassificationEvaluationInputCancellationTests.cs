@@ -201,7 +201,7 @@ public sealed class ClassificationEvaluationInputCancellationTests : IAsyncLifet
         return await ExecuteSuccessAsync(
             "ledger.account.create",
             new CreateAccountInput(
-                "Cancel Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + unique[..4], "ZAR"),
+                "Cancel Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(), "ZAR"),
             NextKey(),
             LedgerJsonContext.Default.CreateAccountInput,
             LedgerJsonContext.Default.AccountDetail);

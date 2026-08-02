@@ -166,12 +166,16 @@ public sealed class ClassificationFeedbackTests : IAsyncLifetime
     public async Task Correction_stores_prior_and_resulting_allocations()
     {
         var seeded = await SeedAppliedSuggestionAsync("fb-corr-alloc");
+        // Assign-only apply has no prior allocation; owner-supplied refs provide the attributable pair.
+        Assert.False(string.IsNullOrWhiteSpace(seeded.ResultingAllocationId));
+        var priorAllocationId = "prior-" + seeded.ResultingAllocationId;
+        var resultingAllocationId = seeded.ResultingAllocationId!;
         var result = await services.Feedback.HandleAsync(
             new ClassifyFeedbackRecordRequest(
                 ClassifyOperationIds.ContractVersion,
                 seeded.OutcomeId,
                 ClassifyFeedbackDecision.Corrected,
-                [seeded.PriorAllocationId!, seeded.ResultingAllocationId!],
+                [priorAllocationId, resultingAllocationId],
                 "owner correction"),
             actor, NextKey(), CancellationToken.None);
 
@@ -180,8 +184,8 @@ public sealed class ClassificationFeedbackTests : IAsyncLifetime
         var row = await services.FeedbackStore.GetFeedbackAsync(
             connection, null, result.Value!.FeedbackId, CancellationToken.None);
         Assert.Equal("correct", row!.DecisionType);
-        Assert.Equal(seeded.PriorAllocationId, row.PriorLedgerAllocationId);
-        Assert.Equal(seeded.ResultingAllocationId, row.ResultingLedgerAllocationId);
+        Assert.Equal(priorAllocationId, row.PriorLedgerAllocationId);
+        Assert.Equal(resultingAllocationId, row.ResultingLedgerAllocationId);
         // Does not rewrite Ledger — allocation ids remain the supplied values.
         Assert.NotEqual(row.PriorLedgerAllocationId, row.ResultingLedgerAllocationId);
     }
@@ -625,7 +629,7 @@ public sealed class ClassificationFeedbackTests : IAsyncLifetime
         var unique = Guid.NewGuid().ToString("N")[..8];
         return await ExecuteSuccessAsync(
             "ledger.account.create",
-            new CreateAccountInput("Fb Bank " + unique, "F-" + unique, AccountType.Cheque, "****" + unique[..4], "ZAR"),
+            new CreateAccountInput("Fb Bank " + unique, "F-" + unique, AccountType.Cheque, "****" + (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(), "ZAR"),
             NextKey(), LedgerJsonContext.Default.CreateAccountInput, LedgerJsonContext.Default.AccountDetail);
     }
 

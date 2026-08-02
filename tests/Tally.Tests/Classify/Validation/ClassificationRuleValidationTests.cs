@@ -10,10 +10,14 @@ using Tally.Cli;
 using Tally.Contracts.Classify.Operations;
 using Tally.Contracts.Classify.Rules;
 using Tally.Contracts.Common;
+using Tally.Contracts.Ledger.Accounts;
 using Tally.Contracts.Ledger.Actuals;
 using Tally.Contracts.Ledger.Categories;
+using Tally.Contracts.Ledger.Evidence;
+using Tally.Contracts.Ledger.Transactions;
 using Tally.Domain.Classify.Normalization;
 using Tally.Domain.Classify.Rules;
+using Tally.Domain.Ledger;
 using Tally.Features.Classify.Contract;
 using Tally.Features.Classify.Rules.Save;
 using Tally.Features.Classify.Rules.Validate;
@@ -43,6 +47,7 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
     private ClassificationValidationStore validationStore = null!;
     private SaveClassificationRuleCommand save = null!;
     private ValidateClassificationRuleCommand validate = null!;
+    private string accountId = null!;
     private int keySeq;
 
     public async Task InitializeAsync()
@@ -65,6 +70,7 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
             ClassifyCorpusExtensions.CreateReader(),
             ledger,
             classify.Idempotency);
+        accountId = (await CreateAccountAsync()).AccountId;
     }
 
     public Task DisposeAsync()
@@ -86,8 +92,9 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
         var versionId = await SaveDraftAsync(
             category.CategoryId,
             DescriptionEquals("whole foods"));
-        var corpus = WriteCorpus([
-            CorpusRow(0, "tx-0", "acct", "Whole Foods Market", "outflow", 100, "suggestion", category.CategoryId)
+        // Description must normalize-equal the rule operand; bind to live LEDGER projection.
+        var corpus = await WriteBoundCorpusAsync([
+            ("whole foods", "suggestion", category.CategoryId)
         ]);
 
         var result = await validate.HandleAsync(
@@ -123,10 +130,10 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
         var catB = await CreateCategoryAsync("B");
         var vA = await SaveDraftAsync(catA.CategoryId, DescriptionEquals("alpha"), ruleId: "rule-a");
         var vB = await SaveDraftAsync(catB.CategoryId, DescriptionEquals("beta"), ruleId: "rule-b");
-        var corpus = WriteCorpus([
-            CorpusRow(0, "tx-0", "acct", "alpha", "outflow", 1, "suggestion", catA.CategoryId),
-            CorpusRow(1, "tx-1", "acct", "beta", "outflow", 2, "suggestion", catB.CategoryId),
-            CorpusRow(2, "tx-2", "acct", "none", "outflow", 3, "no_suggestion", null)
+        var corpus = await WriteBoundCorpusAsync([
+            ("alpha", "suggestion", catA.CategoryId),
+            ("beta", "suggestion", catB.CategoryId),
+            ("none", "no_suggestion", null)
         ]);
 
         var result = await validate.HandleAsync(
@@ -155,8 +162,8 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("Bind");
         var versionId = await SaveDraftAsync(category.CategoryId, DescriptionEquals("bindme"));
-        var corpus = WriteCorpus([
-            CorpusRow(0, "tx", "acct", "bindme", "outflow", 5, "suggestion", category.CategoryId)
+        var corpus = await WriteBoundCorpusAsync([
+            ("bindme", "suggestion", category.CategoryId)
         ]);
         var result = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], corpus),
@@ -184,9 +191,9 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
         var category = await CreateCategoryAsync("Wrong");
         var other = await CreateCategoryAsync("Other");
         var versionId = await SaveDraftAsync(category.CategoryId, DescriptionEquals("shop"));
-        var corpus = WriteCorpus([
+        var corpus = await WriteBoundCorpusAsync([
             // Engine will suggest `category`, but expected is `other` → incorrect application.
-            CorpusRow(0, "tx", "acct", "shop", "outflow", 10, "suggestion", other.CategoryId)
+            ("shop", "suggestion", other.CategoryId)
         ]);
 
         var result = await validate.HandleAsync(
@@ -212,9 +219,9 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
         var catB = await CreateCategoryAsync("CB");
         var vA = await SaveDraftAsync(catA.CategoryId, DescriptionEquals("clash"), ruleId: "rule-ca");
         var vB = await SaveDraftAsync(catB.CategoryId, DescriptionEquals("clash"), ruleId: "rule-cb");
-        var corpus = WriteCorpus([
+        var corpus = await WriteBoundCorpusAsync([
             // Expected suggestion, engine will conflict → incorrect + unexplained conflict paths.
-            CorpusRow(0, "tx", "acct", "clash", "outflow", 1, "suggestion", catA.CategoryId)
+            ("clash", "suggestion", catA.CategoryId)
         ]);
 
         var result = await validate.HandleAsync(
@@ -239,8 +246,8 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
         var catB = await CreateCategoryAsync("XB");
         var vA = await SaveDraftAsync(catA.CategoryId, DescriptionEquals("both"), ruleId: "rule-xa");
         var vB = await SaveDraftAsync(catB.CategoryId, DescriptionEquals("both"), ruleId: "rule-xb");
-        var corpus = WriteCorpus([
-            CorpusRow(0, "tx", "acct", "both", "outflow", 1, "conflict", null)
+        var corpus = await WriteBoundCorpusAsync([
+            ("both", "conflict", null)
         ]);
 
         var result = await validate.HandleAsync(
@@ -314,9 +321,8 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
     [Fact]
     public async Task Unknown_candidate_returns_rule_version_not_found()
     {
-        var corpus = WriteCorpus([
-            CorpusRow(0, "tx", "acct", "x", "outflow", 1, null, null)
-        ]);
+        // Bound corpus still required; candidate lookup fails closed before authority.
+        var corpus = await WriteBoundCorpusAsync([("x", null, null)]);
         var result = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, ["missing-version"], corpus),
             actor,
@@ -332,8 +338,8 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("NoAct");
         var versionId = await SaveDraftAsync(category.CategoryId, DescriptionEquals("keep"));
-        var corpus = WriteCorpus([
-            CorpusRow(0, "tx", "acct", "keep", "outflow", 1, "suggestion", category.CategoryId)
+        var corpus = await WriteBoundCorpusAsync([
+            ("keep", "suggestion", category.CategoryId)
         ]);
         var result = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], corpus),
@@ -353,8 +359,8 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("Idem");
         var versionId = await SaveDraftAsync(category.CategoryId, DescriptionEquals("idem"));
-        var corpus = WriteCorpus([
-            CorpusRow(0, "tx", "acct", "idem", "outflow", 1, "suggestion", category.CategoryId)
+        var corpus = await WriteBoundCorpusAsync([
+            ("idem", "suggestion", category.CategoryId)
         ]);
         const string key = "validate-idem-1";
         var first = await validate.HandleAsync(
@@ -379,7 +385,7 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("Env");
         var versionId = await SaveDraftAsync(category.CategoryId, DescriptionEquals("e"));
-        var corpus = WriteCorpus([CorpusRow(0, "tx", "acct", "e", "outflow", 1, null, null)]);
+        var corpus = await WriteBoundCorpusAsync([("e", null, null)]);
         var noActor = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], corpus),
             null,
@@ -397,7 +403,7 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
     [Fact]
     public async Task Empty_candidate_list_is_rejected()
     {
-        var corpus = WriteCorpus([CorpusRow(0, "tx", "acct", "e", "outflow", 1, null, null)]);
+        var corpus = await WriteBoundCorpusAsync([("e", null, null)]);
         var result = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [], corpus),
             actor,
@@ -411,7 +417,7 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("Ver");
         var versionId = await SaveDraftAsync(category.CategoryId, DescriptionEquals("v"));
-        var corpus = WriteCorpus([CorpusRow(0, "tx", "acct", "v", "outflow", 1, null, null)]);
+        var corpus = await WriteBoundCorpusAsync([("v", null, null)]);
         var result = await validate.HandleAsync(
             new ClassifyRuleValidateRequest("9.9", [versionId], corpus),
             actor,
@@ -425,8 +431,8 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("NS");
         var versionId = await SaveDraftAsync(category.CategoryId, DescriptionEquals("hit"));
-        var corpus = WriteCorpus([
-            CorpusRow(0, "tx", "acct", "hit", "outflow", 1, "no_suggestion", null)
+        var corpus = await WriteBoundCorpusAsync([
+            ("hit", "no_suggestion", null)
         ]);
         var result = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], corpus),
@@ -443,9 +449,9 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("Cov");
         var versionId = await SaveDraftAsync(category.CategoryId, DescriptionEquals("half"));
-        var corpus = WriteCorpus([
-            CorpusRow(0, "tx-0", "acct", "half", "outflow", 1, "suggestion", category.CategoryId),
-            CorpusRow(1, "tx-1", "acct", "miss", "outflow", 1, "no_suggestion", null)
+        var corpus = await WriteBoundCorpusAsync([
+            ("half", "suggestion", category.CategoryId),
+            ("miss", "no_suggestion", null)
         ]);
         var result = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], corpus),
@@ -464,8 +470,8 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("Imm");
         var versionId = await SaveDraftAsync(category.CategoryId, DescriptionEquals("imm"));
-        var corpus = WriteCorpus([
-            CorpusRow(0, "tx", "acct", "imm", "outflow", 1, "suggestion", category.CategoryId)
+        var corpus = await WriteBoundCorpusAsync([
+            ("imm", "suggestion", category.CategoryId)
         ]);
         var result = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], corpus),
@@ -488,8 +494,8 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
         var category = await CreateCategoryAsync("FpSet");
         var v1 = await SaveDraftAsync(category.CategoryId, DescriptionEquals("fp1"), ruleId: "rule-fp1");
         var v2 = await SaveDraftAsync(category.CategoryId, DescriptionEquals("fp2"), ruleId: "rule-fp2");
-        var corpus = WriteCorpus([
-            CorpusRow(0, "tx", "acct", "fp1", "outflow", 1, "suggestion", category.CategoryId)
+        var corpus = await WriteBoundCorpusAsync([
+            ("fp1", "suggestion", category.CategoryId)
         ]);
         var a = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [v1], corpus),
@@ -530,8 +536,8 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("MissingExpected");
         var versionId = await SaveDraftAsync(category.CategoryId, DescriptionEquals("match"));
-        var corpus = WriteCorpus([
-            CorpusRow(0, "tx", "acct", "match", "outflow", 1, null, null)
+        var corpus = await WriteBoundCorpusAsync([
+            ("match", null, null)
         ]);
         var result = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], corpus),
@@ -547,8 +553,8 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
     {
         var category = await CreateCategoryAsync("MissingConflict");
         var versionId = await SaveDraftAsync(category.CategoryId, DescriptionEquals("different"));
-        var corpus = WriteCorpus([
-            CorpusRow(0, "tx", "acct", "no match", "outflow", 1, "conflict", null)
+        var corpus = await WriteBoundCorpusAsync([
+            ("no match", "conflict", null)
         ]);
         var result = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], corpus),
@@ -621,44 +627,63 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
             ValueText: value);
     }
 
-    private string WriteCorpus(IReadOnlyList<string> lines)
+    /// <summary>
+    /// Immutable owner-gate corpus: each row is bound to a real LEDGER projection member
+    /// (transaction id + lifecycle fingerprint + public amount). Preserves STALE fail-closed
+    /// when binding would be wrong.
+    /// </summary>
+    private async Task<string> WriteBoundCorpusAsync(
+        IReadOnlyList<(string Description, string? ExpectedKind, string? ExpectedCategory)> rows)
     {
+        var created = new List<(string TxId, string Description)>();
+        foreach (var row in rows)
+        {
+            var tx = await RecordTransactionAsync(row.Description);
+            created.Add((tx.TransactionId, row.Description));
+        }
+
+        var page = await ledger.QueryClassificationProjectionAsync(
+            ClassificationProjectionPurpose.Evaluation,
+            ActualsContractVersions.Current,
+            actor,
+            CancellationToken.None);
+        Assert.True(page.IsSuccess, page.Error?.Code);
+        var byTx = page.Value!.ClassificationItems!
+            .ToDictionary(i => i.TransactionId, StringComparer.Ordinal);
+
+        var lines = new List<string>();
+        for (var i = 0; i < created.Count; i++)
+        {
+            var (txId, description) = created[i];
+            Assert.True(byTx.TryGetValue(txId, out var item));
+            Assert.True(ValidateClassificationRuleCommand.TryMapPublicAmount(item, out var direction, out var abs));
+            var life = ValidateClassificationRuleCommand.ComputeItemLifecycleFingerprint(item);
+            var expected = rows[i];
+            var sb = new StringBuilder();
+            sb.Append("{\"ordinal\":").Append(i.ToString(CultureInfo.InvariantCulture));
+            sb.Append(",\"transactionId\":").Append(JsonSerializer.Serialize(txId));
+            sb.Append(",\"accountId\":").Append(JsonSerializer.Serialize(item.AccountId));
+            sb.Append(",\"sourceDescription\":").Append(JsonSerializer.Serialize(description));
+            sb.Append(",\"amountDirection\":").Append(JsonSerializer.Serialize(direction));
+            sb.Append(",\"amountAbsoluteMinor\":").Append(abs.ToString(CultureInfo.InvariantCulture));
+            sb.Append(",\"itemLifecycleFingerprint\":").Append(JsonSerializer.Serialize(life));
+            if (expected.ExpectedKind is not null)
+            {
+                sb.Append(",\"expectedOutcomeKind\":").Append(JsonSerializer.Serialize(expected.ExpectedKind));
+            }
+
+            if (expected.ExpectedCategory is not null)
+            {
+                sb.Append(",\"expectedCategoryId\":").Append(JsonSerializer.Serialize(expected.ExpectedCategory));
+            }
+
+            sb.Append('}');
+            lines.Add(sb.ToString());
+        }
+
         var path = Path.Combine(root, "corpus-" + Guid.NewGuid().ToString("N") + ".jsonl");
         WriteOwnerFile(path, string.Join('\n', lines) + "\n");
         return path;
-    }
-
-    private static string CorpusRow(
-        int ordinal,
-        string transactionId,
-        string accountId,
-        string description,
-        string direction,
-        long minor,
-        string? expectedKind,
-        string? expectedCategory)
-    {
-        var life = Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes("life-" + ordinal)));
-        var sb = new StringBuilder();
-        sb.Append("{\"ordinal\":").Append(ordinal.ToString(CultureInfo.InvariantCulture));
-        sb.Append(",\"transactionId\":").Append(JsonSerializer.Serialize(transactionId));
-        sb.Append(",\"accountId\":").Append(JsonSerializer.Serialize(accountId));
-        sb.Append(",\"sourceDescription\":").Append(JsonSerializer.Serialize(description));
-        sb.Append(",\"amountDirection\":").Append(JsonSerializer.Serialize(direction));
-        sb.Append(",\"amountAbsoluteMinor\":").Append(minor.ToString(CultureInfo.InvariantCulture));
-        sb.Append(",\"itemLifecycleFingerprint\":").Append(JsonSerializer.Serialize(life));
-        if (expectedKind is not null)
-        {
-            sb.Append(",\"expectedOutcomeKind\":").Append(JsonSerializer.Serialize(expectedKind));
-        }
-
-        if (expectedCategory is not null)
-        {
-            sb.Append(",\"expectedCategoryId\":").Append(JsonSerializer.Serialize(expectedCategory));
-        }
-
-        sb.Append('}');
-        return sb.ToString();
     }
 
     private static void WriteOwnerFile(string path, string content)
@@ -675,13 +700,51 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
         return Convert.ToInt64(await cmd.ExecuteScalarAsync(), CultureInfo.InvariantCulture);
     }
 
+    private async Task<AccountDetail> CreateAccountAsync()
+    {
+        var unique = Guid.NewGuid().ToString("N")[..8];
+        // MaskedIdentifier requires 1–4 digits (not all-digit); hex-only suffixes fail closed.
+        var digits = (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(CultureInfo.InvariantCulture);
+        return await ExecuteSuccessAsync(
+            "ledger.account.create",
+            new CreateAccountInput("Val Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + digits, "ZAR"),
+            NextKey(),
+            LedgerJsonContext.Default.CreateAccountInput,
+            LedgerJsonContext.Default.AccountDetail);
+    }
+
     private Task<CategoryDetail> CreateCategoryAsync(string name) =>
         ExecuteSuccessAsync(
             "ledger.category.create",
-            new CreateCategoryInput(name),
+            new CreateCategoryInput(name + "-" + Guid.NewGuid().ToString("N")[..6]),
             NextKey(),
             LedgerJsonContext.Default.CreateCategoryInput,
             LedgerJsonContext.Default.CategoryDetail);
+
+    private async Task<TransactionDetail> RecordTransactionAsync(string description)
+    {
+        var digest = Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(Guid.NewGuid().ToString("N"))));
+        return await ExecuteSuccessAsync(
+            "ledger.transaction.record",
+            new RecordTransactionInput(
+                accountId,
+                "-12.34",
+                "ZAR",
+                "2026-07-15",
+                null,
+                description,
+                null,
+                null,
+                new RegisterEvidenceInput(
+                    EvidenceKind.AgentCapture,
+                    digest,
+                    "val-capture:" + Guid.NewGuid().ToString("N")[..8],
+                    null,
+                    null)),
+            NextKey(),
+            LedgerJsonContext.Default.RecordTransactionInput,
+            LedgerJsonContext.Default.TransactionDetail);
+    }
 
     private async Task<TResult> ExecuteSuccessAsync<TInput, TResult>(
         string operationId,

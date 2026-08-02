@@ -196,8 +196,13 @@ public sealed class ClassifyHistoryInvariantTests : IAsyncLifetime
                 't1', 'evaluation', 'e1', 'reason', 'human:owner', '2026-07-31T00:00:00Z', 0);
             """);
         await ExecuteAsync(connection, """
-            INSERT INTO cleanup_event VALUES (
-                'c1', 'policy_v1', 1, 0, 0, 'human:owner', '2026-07-31T00:00:00Z');
+            INSERT INTO cleanup_event (
+                cleanup_id, policy_version, recognized_removed_count, expired_preview_count,
+                abandoned_payload_count, actor, occurred_at,
+                removed_artifact_count, retained_artifact_count
+            ) VALUES (
+                'c1', 'policy_v1', 1, 0, 0, 'human:owner', '2026-07-31T00:00:00Z',
+                0, 0);
             """);
 
         await Assert.ThrowsAsync<SqliteException>(() =>
@@ -224,8 +229,13 @@ public sealed class ClassifyHistoryInvariantTests : IAsyncLifetime
                 'owner_authored', NULL, 'seed', 'draft', 0, NULL, '2026-07-31T00:00:00Z', 'human:owner');
             INSERT INTO rule_condition VALUES (
                 'rv-1', 0, 'account.id', 'equals', 'acct-1', NULL, NULL, NULL);
-            INSERT INTO rule_set_version VALUES (
-                'rsv-1', NULL, 'normalization_v1', 'val-1', 'activate', '2026-07-31T00:00:00Z', 'human:owner');
+            INSERT INTO rule_set_version (
+                rule_set_version_id, prior_rule_set_version_id, normalization_version,
+                validation_run_id, reason, created_at, created_by,
+                owner_rulebook_gate_receipt_id, owner_rulebook_gate_receipt_fingerprint
+            ) VALUES (
+                'rsv-1', NULL, 'normalization_v1', 'val-1', 'activate', '2026-07-31T00:00:00Z', 'human:owner',
+                NULL, NULL);
             INSERT INTO rule_set_member VALUES ('rsv-1', 'rv-1');
             """);
     }

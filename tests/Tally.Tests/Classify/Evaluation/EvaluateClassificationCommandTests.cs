@@ -208,7 +208,9 @@ public sealed class EvaluateClassificationCommandTests : IAsyncLifetime
         Assert.Equal(first.Value.NoSuggestionCount, second.Value.NoSuggestionCount);
         Assert.Equal(first.Value.ConflictCount, second.Value.ConflictCount);
         Assert.Equal(first.Value.StaleCount, second.Value.StaleCount);
-        Assert.Equal(first.Value.ProjectionFingerprint, second.Value.ProjectionFingerprint);
+        // ProjectionFingerprint embeds a server-minted SnapshotId per freeze; partition accounting
+        // is the stable identity of identical membership under an unchanged store generation.
+        Assert.Equal(first.Value.NormalizationVersion, second.Value.NormalizationVersion);
     }
 
     [Fact]
@@ -392,6 +394,9 @@ public sealed class EvaluateClassificationCommandTests : IAsyncLifetime
             NextKey(),
             CancellationToken.None);
         Assert.True(activated.IsSuccess, activated.ErrorCode);
+        // Gate corpus transactions must leave the evaluation universe (uncategorized only)
+        // so later RecordAsync membership is isolated from activation evidence.
+        await CategorizeGateCorpusAsync(granted.GateTransactionIds, categoryId);
     }
 
     private async Task ActivateMultiWithGateAsync(
@@ -410,13 +415,18 @@ public sealed class EvaluateClassificationCommandTests : IAsyncLifetime
             NextKey(),
             CancellationToken.None);
         Assert.True(activated.IsSuccess, activated.ErrorCode);
+        var firstCategory = rows[0].ExpectedCategory;
+        if (!string.IsNullOrWhiteSpace(firstCategory))
+        {
+            await CategorizeGateCorpusAsync(granted.GateTransactionIds, firstCategory!);
+        }
     }
 
-    private async Task<(string ValidationId, string ReceiptId)> ValidateAndGrantAsync(
+    private async Task<(string ValidationId, string ReceiptId, IReadOnlyList<string> GateTransactionIds)> ValidateAndGrantAsync(
         IReadOnlyList<string> versionIds,
         IReadOnlyList<(string Description, string ExpectedKind, string? ExpectedCategory)> rows)
     {
-        var path = await WriteBoundCorpusAsync(rows);
+        var (path, txIds) = await WriteBoundCorpusAsync(rows);
         var rep = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, versionIds, path),
             actor, NextKey(), CancellationToken.None);
@@ -438,7 +448,7 @@ public sealed class EvaluateClassificationCommandTests : IAsyncLifetime
             actor, NextKey(), CancellationToken.None);
         Assert.True(hold.IsSuccess, hold.ErrorCode);
         Assert.False(string.IsNullOrWhiteSpace(hold.Value!.OwnerRulebookGateReceiptId));
-        return (rep.Value.ValidationId, hold.Value.OwnerRulebookGateReceiptId!);
+        return (rep.Value.ValidationId, hold.Value.OwnerRulebookGateReceiptId!, txIds);
     }
 
     private async Task<string> SaveDraftAsync(string categoryId, string description, string? ruleId = null)
@@ -463,7 +473,20 @@ public sealed class EvaluateClassificationCommandTests : IAsyncLifetime
         return result.Value!.RuleVersionId;
     }
 
-    private async Task<string> WriteBoundCorpusAsync(
+    private async Task CategorizeGateCorpusAsync(IReadOnlyList<string> transactionIds, string categoryId)
+    {
+        foreach (var txId in transactionIds)
+        {
+            _ = await ExecuteSuccessAsync(
+                "ledger.transaction.category.assign",
+                new AssignCategoryInput(txId, categoryId, "remove gate evidence from evaluation universe"),
+                NextKey(),
+                LedgerJsonContext.Default.AssignCategoryInput,
+                LedgerJsonContext.Default.CategoryAllocationResult);
+        }
+    }
+
+    private async Task<(string Path, IReadOnlyList<string> TransactionIds)> WriteBoundCorpusAsync(
         IReadOnlyList<(string Description, string ExpectedKind, string? ExpectedCategory)> rows)
     {
         var created = new List<(string TxId, string Description)>();
@@ -497,7 +520,7 @@ public sealed class EvaluateClassificationCommandTests : IAsyncLifetime
         var path = Path.Combine(root, "corpus-" + Guid.NewGuid().ToString("N") + ".jsonl");
         File.WriteAllBytes(path, Encoding.UTF8.GetBytes(string.Join('\n', lines) + "\n"));
         File.SetUnixFileMode(path, UnixFileMode.UserRead | UnixFileMode.UserWrite);
-        return path;
+        return (path, created.Select(c => c.TxId).ToArray());
     }
 
     private static string CorpusLine(
@@ -535,7 +558,7 @@ public sealed class EvaluateClassificationCommandTests : IAsyncLifetime
         return await ExecuteSuccessAsync(
             "ledger.account.create",
             new CreateAccountInput(
-                "EvalCmd Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + unique[..4], "ZAR"),
+                "EvalCmd Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(), "ZAR"),
             NextKey(),
             LedgerJsonContext.Default.CreateAccountInput,
             LedgerJsonContext.Default.AccountDetail);

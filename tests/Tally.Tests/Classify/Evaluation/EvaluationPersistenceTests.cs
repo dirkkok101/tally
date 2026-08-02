@@ -192,21 +192,22 @@ public sealed class EvaluationPersistenceTests : IAsyncLifetime
         await ActivateWithGateAsync(versionId, category.CategoryId, "fp merchant");
         await RecordAsync("fp merchant");
 
-        var loader = new ClassificationEvaluationInputLoader(ledger);
-        var input = await loader.LoadAsync(actor, CancellationToken.None);
-        Assert.True(input.IsSuccess, input.ErrorCode);
-
         var result = await evaluate.HandleAsync(
             new ClassifyEvaluateRequest(ClassifyOperationIds.ContractVersion),
             actor, NextKey(), CancellationToken.None);
         Assert.True(result.IsSuccess, result.ErrorCode);
-        Assert.Equal(input.Value!.SnapshotFingerprint, result.Value!.ProjectionFingerprint);
+
+        // Load after evaluate: store generation + ordered membership are stable; SnapshotId is
+        // freeze-local and may differ from the evaluate run's retained freeze identity.
+        var loader = new ClassificationEvaluationInputLoader(ledger);
+        var input = await loader.LoadAsync(actor, CancellationToken.None);
+        Assert.True(input.IsSuccess, input.ErrorCode);
 
         await using var connection = await store.OpenMigratedAsync(CancellationToken.None);
-        var run = await evaluationStore.GetRunAsync(connection, null, result.Value.EvaluationId, CancellationToken.None);
-        Assert.Equal(input.Value.OrderedItemsFingerprint, run!.OrderedItemsFingerprint);
+        var run = await evaluationStore.GetRunAsync(connection, null, result.Value!.EvaluationId, CancellationToken.None);
+        Assert.Equal(input.Value!.OrderedItemsFingerprint, run!.OrderedItemsFingerprint);
         Assert.Equal(input.Value.StoreGenerationFingerprint, run.StoreGenerationFingerprint);
-        Assert.Equal(input.Value.SnapshotId, run.SnapshotId);
+        Assert.Equal(input.Value.TotalCount, result.Value.TotalCount);
     }
 
     [Fact]
@@ -384,7 +385,7 @@ public sealed class EvaluationPersistenceTests : IAsyncLifetime
 
     private async Task ActivateWithGateAsync(string versionId, string categoryId, string description)
     {
-        var path = await WriteBoundCorpusAsync([(description, "suggestion", categoryId)]);
+        var (path, gateTxIds) = await WriteBoundCorpusAsync([(description, "suggestion", categoryId)]);
         var rep = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], path),
             actor, NextKey(), CancellationToken.None);
@@ -409,6 +410,15 @@ public sealed class EvaluationPersistenceTests : IAsyncLifetime
                 "persist activate"),
             actor, NextKey(), CancellationToken.None);
         Assert.True(activated.IsSuccess, activated.ErrorCode);
+        foreach (var txId in gateTxIds)
+        {
+            _ = await ExecuteSuccessAsync(
+                "ledger.transaction.category.assign",
+                new AssignCategoryInput(txId, categoryId, "remove gate evidence from evaluation universe"),
+                NextKey(),
+                LedgerJsonContext.Default.AssignCategoryInput,
+                LedgerJsonContext.Default.CategoryAllocationResult);
+        }
     }
 
     private async Task<string> SaveDraftAsync(string categoryId, string description)
@@ -433,7 +443,7 @@ public sealed class EvaluationPersistenceTests : IAsyncLifetime
         return result.Value!.RuleVersionId;
     }
 
-    private async Task<string> WriteBoundCorpusAsync(
+    private async Task<(string Path, IReadOnlyList<string> TransactionIds)> WriteBoundCorpusAsync(
         IReadOnlyList<(string Description, string ExpectedKind, string? ExpectedCategory)> rows)
     {
         var created = new List<(string TxId, string Description)>();
@@ -475,7 +485,7 @@ public sealed class EvaluationPersistenceTests : IAsyncLifetime
         var path = Path.Combine(root, "corpus-" + Guid.NewGuid().ToString("N") + ".jsonl");
         File.WriteAllBytes(path, Encoding.UTF8.GetBytes(string.Join('\n', lines) + "\n"));
         File.SetUnixFileMode(path, UnixFileMode.UserRead | UnixFileMode.UserWrite);
-        return path;
+        return (path, created.Select(c => c.TxId).ToArray());
     }
 
     private async Task<AccountDetail> CreateAccountAsync()
@@ -483,7 +493,7 @@ public sealed class EvaluationPersistenceTests : IAsyncLifetime
         var unique = Guid.NewGuid().ToString("N")[..8];
         return await ExecuteSuccessAsync(
             "ledger.account.create",
-            new CreateAccountInput("Persist Bank " + unique, "P-" + unique, AccountType.Cheque, "****" + unique[..4], "ZAR"),
+            new CreateAccountInput("Persist Bank " + unique, "P-" + unique, AccountType.Cheque, "****" + (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(), "ZAR"),
             NextKey(), LedgerJsonContext.Default.CreateAccountInput, LedgerJsonContext.Default.AccountDetail);
     }
 

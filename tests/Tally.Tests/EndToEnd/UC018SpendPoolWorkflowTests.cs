@@ -489,10 +489,33 @@ public sealed class UC018SpendPoolWorkflowTests(PublishedTallyFixture fixture) :
         Envelope(new JsonObject { ["transactionId"] = transactionId, ["categoryId"] = categoryId, ["reason"] = "Owner classified transaction" }, Key("category-assign")),
         "ledger.transaction.category.assign");
 
-    private async Task CorrectCategory(string transactionId, string categoryId) => _ = await Success(
-        ["ledger", "transaction", "category", "correct", "--input", "-"],
-        Envelope(new JsonObject { ["transactionId"] = transactionId, ["categoryId"] = categoryId, ["reason"] = "Owner corrected category" }, Key("category-correct")),
-        "ledger.transaction.category.correct");
+    private async Task CorrectCategory(string transactionId, string categoryId)
+    {
+        var preflight = await Success(
+            ["ledger", "actuals", "query", "--input", "-"],
+            Envelope(new JsonObject
+            {
+                ["purpose"] = "apply_preflight",
+                ["itemProjection"] = "classification_v1",
+                ["transactionIds"] = new JsonArray(transactionId)
+            }),
+            "ledger.actuals.query");
+        var item = Assert.Single(preflight.GetProperty("classificationItems").EnumerateArray());
+        _ = await Success(
+            ["ledger", "transaction", "category", "correct", "--input", "-"],
+            Envelope(new JsonObject
+            {
+                ["transactionId"] = transactionId,
+                ["categoryId"] = categoryId,
+                ["reason"] = "Owner corrected category",
+                ["expectedActiveAllocationId"] = item.GetProperty("currentAllocationId").GetString(),
+                ["expectedTransactionRevision"] = item.GetProperty("transactionRevision").GetString(),
+                ["expectedRelationshipRevision"] = item.GetProperty("relationshipRevision").GetString(),
+                ["expectedAllocationRevision"] = item.GetProperty("allocationRevision").GetString(),
+                ["mutationContractVersion"] = "classification_v1"
+            }, Key("category-correct")),
+            "ledger.transaction.category.correct");
+    }
 
     private async Task<JsonElement> Assign(JsonElement transaction, JsonObject assignment, string reason, string key) =>
         AssertSuccess(await AssignResult(transaction, assignment, reason, key), "ledger.transaction.pool.assign");

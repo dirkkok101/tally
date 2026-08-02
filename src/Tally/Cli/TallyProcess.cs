@@ -232,17 +232,19 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
             return null;
         }
 
+        // Never derive diagnostics correlation from idempotency material — keys may be secret
+        // or owner-private and must not appear in stderr / CLASSIFY envelopes.
         if (!string.IsNullOrWhiteSpace(request.CorrelationRef))
         {
             return request.CorrelationRef.Trim();
         }
 
-        if (!string.IsNullOrWhiteSpace(request.IdempotencyKey))
+        if (request.Actor is null || string.IsNullOrWhiteSpace(request.Actor.RunId))
         {
-            return request.IdempotencyKey.Trim();
+            return null;
         }
 
-        return string.IsNullOrWhiteSpace(request.Actor.RunId) ? null : request.Actor.RunId.Trim();
+        return request.Actor.RunId.Trim();
     }
 
     // The invoked descriptor's declared DomainErrors are the published contract source
@@ -327,7 +329,9 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
         ReconciliationCoverageErrors.ScopeIncomplete or ReconciliationCoverageErrors.MissingOutcome => Error(8, code, "integrity", "The reconciliation coverage scope is incomplete or missing a durable outcome."),
         "LEDGER-TRANSACTION-ATTRIBUTION-INCOMPATIBLE" => Error(6, code, "lifecycle", "The transaction payment attribution is incompatible."),
         "LEDGER-CATEGORY-ALLOCATION-INVALID" => Error(3, code, "validation", "The category assignment input is invalid."),
-        "LEDGER-CATEGORY-ALLOCATION-CARDINALITY" or "LEDGER-CATEGORY-ALLOCATION-UNCHANGED" => Error(5, code, "conflict", "The category assignment conflicts with current state."),
+        "LEDGER-CATEGORY-ALLOCATION-CARDINALITY" or "LEDGER-CATEGORY-ALLOCATION-UNCHANGED"
+            or "LEDGER-CATEGORY-ALLOCATION-STALE-PRECONDITION" => Error(5, code, "conflict", "The category assignment conflicts with current state."),
+        "LEDGER-CATEGORY-ALLOCATION-CONTRACT-MISMATCH" => Error(7, code, "compatibility", "The category assignment is not compatible with this executable contract."),
         "LEDGER-CATEGORY-ALLOCATION-NOT-ASSIGNED" or "LEDGER-TRANSACTION-INACTIVE" => Error(6, code, "lifecycle", "The transaction category lifecycle does not allow the operation."),
         "LEDGER-PAYMENT-ATTRIBUTION-INVALID" => Error(3, code, "validation", "The payment attribution input is invalid."),
         "LEDGER-PAYMENT-ATTRIBUTION-STALE" or "LEDGER-PAYMENT-ATTRIBUTION-ALREADY-ASSIGNED" or "LEDGER-PAYMENT-ATTRIBUTION-UNCHANGED" => Error(5, code, "conflict", "The payment attribution conflicts with current state."),
@@ -428,20 +432,26 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
         // CLASSIFY published domain errors (ErrorSchema lists on ClassifyOperationModule).
         ClassifyErrors.InvalidInput or ClassifyErrors.ActorRequired or ClassifyErrors.IdempotencyRequired
             or ClassifyErrors.SelectionInvalid
+            or "CLASSIFY-CORPUS-PATH-REQUIRED" or "CLASSIFY-CORPUS-SYMLINK" or "CLASSIFY-CORPUS-OWNER"
+            or "CLASSIFY-CORPUS-PERMISSIONS" or "CLASSIFY-CORPUS-NOT-REGULAR" or "CLASSIFY-CORPUS-MALFORMED"
+            or "CLASSIFY-CORPUS-DUPLICATE-ORDINAL" or "CLASSIFY-CORPUS-FIELD-INVALID"
             => Error(3, code, "validation", "The classify request is invalid."),
         ClassifyErrors.NotFound or ClassifyErrors.EvaluationNotFound or ClassifyErrors.OutcomeNotFound
             or ClassifyErrors.PreviewNotFound or ClassifyErrors.RuleNotFound or ClassifyErrors.RuleVersionNotFound
             or ClassifyErrors.ValidationNotFound
+            or "CLASSIFY-CORPUS-NOT-FOUND"
             => Error(4, code, "not_found", "The classify target was not found."),
         ClassifyErrors.Conflict or ClassifyErrors.IdempotencyConflict or ClassifyErrors.Stale
             => Error(5, code, "conflict", "The classify request conflicts with current state."),
         ClassifyErrors.Lifecycle
+            or "CLASSIFY-CORPUS-CANCELLED"
             => Error(6, code, "lifecycle", "The classify lifecycle does not allow the operation."),
         ClassifyErrors.UnsupportedVersion or ClassifyErrors.LedgerIncompatible
             => Error(7, code, "compatibility", "The classify request is not compatible with this executable contract."),
         ClassifyErrors.Integrity
             => Error(8, code, "integrity", "The classify request could not preserve its integrity contract."),
         ClassifyErrors.LedgerUnavailable or ClassifyErrors.ResourceLimit
+            or "CLASSIFY-CORPUS-READ-FAILED"
             => Error(9, code, "host", "The classify operation could not access a required host resource."),
         ClassifyErrors.Unexpected
             => Error(10, code, "host", "The classify operation could not be completed."),

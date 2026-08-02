@@ -391,6 +391,8 @@ public sealed class ClassifyUc002OutcomeTests : IAsyncLifetime
         var evalId = await EvaluateSuccessAsync();
 
         // Simulate durable evidence loss without reconstructing from current state.
+        // Product immutability triggers reject ordinary DELETE; drop the delete
+        // guard only for this storage-damage simulation, then remove rows.
         await using (var connection = new SqliteConnection(
             new SqliteConnectionStringBuilder
             {
@@ -399,6 +401,12 @@ public sealed class ClassifyUc002OutcomeTests : IAsyncLifetime
             }.ToString()))
         {
             await connection.OpenAsync();
+            await using (var drop = connection.CreateCommand())
+            {
+                drop.CommandText = "DROP TRIGGER IF EXISTS match_evidence_no_delete;";
+                await drop.ExecuteNonQueryAsync();
+            }
+
             await using var cmd = connection.CreateCommand();
             cmd.CommandText = "DELETE FROM match_evidence;";
             var deleted = await cmd.ExecuteNonQueryAsync();
@@ -600,7 +608,8 @@ public sealed class ClassifyUc002OutcomeTests : IAsyncLifetime
     [Fact]
     public void UC002_policy_unavailable_store_generation_fails_closed()
     {
-        var result = EvaluatePolicy(currentStoreGen: null);
+        // Explicit null current store-generation (unavailable) must fail closed.
+        var result = EvaluatePolicy(currentStoreGenUnavailable: true);
         Assert.True(result.IsStale);
         Assert.Contains(EvaluationFingerprint.DimensionStoreGeneration, result.ChangedDimensions);
         AssertBlocksApply(result.PermittedNextOperationId);
@@ -698,6 +707,7 @@ public sealed class ClassifyUc002OutcomeTests : IAsyncLifetime
         DateTimeOffset? now = null,
         DateTimeOffset? expiresAt = null,
         string? currentStoreGen = null,
+        bool currentStoreGenUnavailable = false,
         string? currentLedgerContract = null,
         string? currentProjection = null,
         string? currentCategoryLifecycle = null,
@@ -713,7 +723,10 @@ public sealed class ClassifyUc002OutcomeTests : IAsyncLifetime
             RetainedEvaluation: retained,
             RetainedItemLifecycleFingerprint: new string('d', 64),
             SuggestedCategoryId: suggestedCategoryId,
-            CurrentStoreGenerationFingerprint: currentStoreGen ?? retained.StoreGenerationFingerprint,
+            // Null means unavailable only when explicitly requested; otherwise default to retained.
+            CurrentStoreGenerationFingerprint: currentStoreGenUnavailable
+                ? null
+                : (currentStoreGen ?? retained.StoreGenerationFingerprint),
             CurrentLedgerContractVersion: currentLedgerContract ?? retained.LedgerContractVersion,
             CurrentProjectionVersion: currentProjection ?? retained.ProjectionVersion,
             CurrentCategoryLifecycleFingerprint: currentCategoryLifecycle ?? retained.CategoryLifecycleFingerprint,
@@ -730,6 +743,7 @@ public sealed class ClassifyUc002OutcomeTests : IAsyncLifetime
 
     private static ClassificationStalenessPolicy.Result EvaluatePolicy(
         string? currentStoreGen = null,
+        bool currentStoreGenUnavailable = false,
         string? currentLedgerContract = null,
         string? currentProjection = null,
         string? currentCategoryLifecycle = null,
@@ -746,6 +760,7 @@ public sealed class ClassifyUc002OutcomeTests : IAsyncLifetime
         return ClassificationStalenessPolicy.Evaluate(BaseInput(
             retained,
             currentStoreGen: currentStoreGen,
+            currentStoreGenUnavailable: currentStoreGenUnavailable,
             currentLedgerContract: currentLedgerContract,
             currentProjection: currentProjection,
             currentCategoryLifecycle: currentCategoryLifecycle,
@@ -950,7 +965,7 @@ public sealed class ClassifyUc002OutcomeTests : IAsyncLifetime
         var result = await process.RunAsync(
             ["ledger", "account", "create", "--input", "-"],
             LedgerEnvelope(
-                $$"""{"institutionName":"Uc002 Bank {{unique}}","displayName":"Primary-{{unique}}","accountType":"cheque","maskedIdentifier":"****{{unique[..4]}}","currencyCode":"ZAR"}""",
+                $$"""{"institutionName":"Uc002 Bank {{unique}}","displayName":"Primary-{{unique}}","accountType":"cheque","maskedIdentifier":"****{{(Math.Abs(unique.GetHashCode()) % 9000 + 1000)}}","currencyCode":"ZAR"}""",
                 NextKey()),
             CancellationToken.None);
         Assert.Equal(0, result.ExitCode);

@@ -76,9 +76,9 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
         Assert.Equal(8, ingest.Length);
         Assert.Equal(6, budget.Length);
         Assert.Equal(6, system.Length);
-        Assert.Equal(88, descriptors.Count);
-        Assert.Equal(88, descriptors.Select(descriptor => descriptor.OperationId).Distinct(StringComparer.Ordinal).Count());
-        Assert.Equal(88, descriptors.Select(descriptor => descriptor.CliPath).Distinct(StringComparer.Ordinal).Count());
+        Assert.Equal(100, descriptors.Count);
+        Assert.Equal(100, descriptors.Select(descriptor => descriptor.OperationId).Distinct(StringComparer.Ordinal).Count());
+        Assert.Equal(100, descriptors.Select(descriptor => descriptor.CliPath).Distinct(StringComparer.Ordinal).Count());
         Assert.Equal(descriptors.Select(descriptor => descriptor.OperationId).Order(StringComparer.Ordinal), descriptors.Select(descriptor => descriptor.OperationId));
         Assert.Equal("budget.insights.evidence.get", descriptors[0].OperationId);
         Assert.Equal("system.version", descriptors[^1].OperationId);
@@ -99,10 +99,12 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
             .OrderBy(descriptor => descriptor.OperationId, StringComparer.Ordinal)
             .ToArray();
         Assert.Equal(74, bundled.Length);
+        // Ledger+system only: CLASSIFY/INGEST/BUDGET publish outside the four Ledger bundles.
         var ledgerSystem = OperationRegistry.Create().Descriptors
             .Where(descriptor =>
                 !descriptor.OperationId.StartsWith("ingest.", StringComparison.Ordinal)
-                && !descriptor.OperationId.StartsWith("budget.", StringComparison.Ordinal))
+                && !descriptor.OperationId.StartsWith("budget.", StringComparison.Ordinal)
+                && !descriptor.OperationId.StartsWith("classify.", StringComparison.Ordinal))
             .ToArray();
         Assert.Equal(
             JsonSerializer.Serialize(ledgerSystem.Select(descriptor => descriptor.ToSchema()).ToArray(), LedgerJsonContext.Default.OperationSchemaArray),
@@ -132,7 +134,8 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
             OperationRegistry.Create().Descriptors
                 .Where(descriptor =>
                     !descriptor.OperationId.StartsWith("ingest.", StringComparison.Ordinal)
-                    && !descriptor.OperationId.StartsWith("budget.", StringComparison.Ordinal))
+                    && !descriptor.OperationId.StartsWith("budget.", StringComparison.Ordinal)
+                    && !descriptor.OperationId.StartsWith("classify.", StringComparison.Ordinal))
                 .Select(descriptor => descriptor.ToSchema())
                 .ToArray(),
             LedgerJsonContext.Default.OperationSchemaArray);
@@ -223,10 +226,12 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
         var expectedIds = snapshot.RootElement.GetProperty("operationIds").EnumerateArray()
             .Select(item => item.GetString()).ToArray();
         var registry = OperationRegistry.Create();
+        // Snapshot is Ledger+system only; CLASSIFY is inventoried separately after accepted publication.
         var ledgerSystem = registry.Descriptors
             .Where(descriptor =>
                 !descriptor.OperationId.StartsWith("ingest.", StringComparison.Ordinal)
-                && !descriptor.OperationId.StartsWith("budget.", StringComparison.Ordinal))
+                && !descriptor.OperationId.StartsWith("budget.", StringComparison.Ordinal)
+                && !descriptor.OperationId.StartsWith("classify.", StringComparison.Ordinal))
             .ToArray();
         var ledgerSystemSchema = JsonSerializer.Serialize(
             ledgerSystem.Select(descriptor => descriptor.ToSchema()).ToArray(),

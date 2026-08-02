@@ -5,6 +5,7 @@ using Tally.Bootstrap;
 using Tally.Cli;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Accounts;
+using Tally.Contracts.Ledger.Actuals;
 using Tally.Contracts.Ledger.Categories;
 using Tally.Contracts.Ledger.Evidence;
 using Tally.Contracts.Ledger.Transactions;
@@ -74,7 +75,7 @@ public sealed class CategoryAllocationTests : IAsyncLifetime
         var replacement = await CreateCategory("Work travel", null, "replacement");
         var assigned = Allocation(await Assign(transaction.TransactionId, original.CategoryId, "initial choice", "assign"));
 
-        var corrected = Allocation(await Correct(transaction.TransactionId, replacement.CategoryId, "owner corrected", "correct"));
+        var corrected = Allocation(await CorrectWithPreconditions(transaction.TransactionId, replacement.CategoryId, "owner corrected", "correct"));
 
         Assert.NotEqual(assigned.AllocationEventId, corrected.AllocationEventId);
         Assert.Equal(replacement.CategoryId, corrected.Transaction.Category.CategoryId);
@@ -141,9 +142,10 @@ public sealed class CategoryAllocationTests : IAsyncLifetime
         var transaction = await Record(account.AccountId, 'd');
         var category = await CreateCategory("Only", null, "category");
 
-        AssertError(await Correct(transaction.TransactionId, category.CategoryId, "missing", "missing"), 6, CategoryAllocationErrors.NotAssigned);
+        // classification_v1 correct requires ExpectedActiveAllocationId; missing assignment identity is STALE.
+        AssertError(await Correct(transaction.TransactionId, category.CategoryId, "missing", "missing"), 5, CategoryAllocationErrors.StalePrecondition);
         await Assign(transaction.TransactionId, category.CategoryId, "assigned", "assign");
-        AssertError(await Correct(transaction.TransactionId, category.CategoryId, "same", "same"), 5, CategoryAllocationErrors.Unchanged);
+        AssertError(await CorrectWithPreconditions(transaction.TransactionId, category.CategoryId, "same", "same"), 5, CategoryAllocationErrors.Unchanged);
         Assert.Equal(1, await Count("category_allocation_event"));
     }
 
@@ -207,8 +209,16 @@ public sealed class CategoryAllocationTests : IAsyncLifetime
         var second = await CreateCategory("Replay second", null, "second");
         await Assign(transaction.TransactionId, first.CategoryId, "initial", "assign");
 
-        var original = Allocation(await Correct(transaction.TransactionId, second.CategoryId, "owner correction", "correct"));
-        var replay = Allocation(await Correct(transaction.TransactionId, second.CategoryId, "owner correction", "correct"));
+        // Freeze correction request bytes once so identical-key replay does not re-sample preflight.
+        var correctionInput = await BuildCorrectInputAsync(transaction.TransactionId, second.CategoryId, "owner correction");
+        var original = Allocation(await Run(
+            "ledger.transaction.category.correct",
+            JsonSerializer.SerializeToElement(correctionInput, LedgerJsonContext.Default.CorrectCategoryInput),
+            "correct"));
+        var replay = Allocation(await Run(
+            "ledger.transaction.category.correct",
+            JsonSerializer.SerializeToElement(correctionInput, LedgerJsonContext.Default.CorrectCategoryInput),
+            "correct"));
 
         Assert.Equal(original.AllocationEventId, replay.AllocationEventId);
         Assert.Equal(2, await Count("category_allocation_event"));
@@ -403,6 +413,40 @@ public sealed class CategoryAllocationTests : IAsyncLifetime
         "ledger.transaction.category.correct",
         JsonSerializer.SerializeToElement(new CorrectCategoryInput(transactionId, categoryId, reason), LedgerJsonContext.Default.CorrectCategoryInput),
         key);
+
+    private async Task<CorrectCategoryInput> BuildCorrectInputAsync(string transactionId, string categoryId, string reason)
+    {
+        // Use apply_preflight projection for the exact revision tuple CLASSIFY/LEDGER require.
+        var preflight = await Run(
+            "ledger.actuals.query",
+            JsonSerializer.SerializeToElement(
+                new QueryActualsInput(
+                    Purpose: ClassificationProjectionPurpose.ApplyPreflight,
+                    ItemProjection: ClassificationProjectionVersions.ClassificationV1,
+                    TransactionIds: [transactionId]),
+                ActualsJsonContext.Default.QueryActualsInput),
+            null);
+        var page = Success(preflight, ActualsJsonContext.Default.ActualsQueryResult);
+        var item = Assert.Single(page.ClassificationItems ?? Array.Empty<ClassificationProjectionItem>());
+        return new CorrectCategoryInput(
+            transactionId,
+            categoryId,
+            reason,
+            ExpectedActiveAllocationId: item.CurrentAllocationId,
+            ExpectedTransactionRevision: item.TransactionRevision,
+            ExpectedRelationshipRevision: item.RelationshipRevision,
+            ExpectedAllocationRevision: item.AllocationRevision,
+            MutationContractVersion: CategoryAllocationMutationVersions.ClassificationV1);
+    }
+
+    private async Task<ProcessResult> CorrectWithPreconditions(string transactionId, string categoryId, string reason, string key)
+    {
+        var input = await BuildCorrectInputAsync(transactionId, categoryId, reason);
+        return await Run(
+            "ledger.transaction.category.correct",
+            JsonSerializer.SerializeToElement(input, LedgerJsonContext.Default.CorrectCategoryInput),
+            key);
+    }
 
     private async Task<TransactionDetail> GetTransaction(string transactionId, bool history) => Success(
         await Run("ledger.transaction.get", JsonSerializer.SerializeToElement(new GetTransactionInput(transactionId, history), LedgerJsonContext.Default.GetTransactionInput), null),

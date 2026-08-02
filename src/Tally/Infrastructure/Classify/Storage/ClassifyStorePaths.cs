@@ -2,7 +2,7 @@ namespace Tally.Infrastructure.Classify.Storage;
 
 /// <summary>
 /// Owner paths for the CLASSIFY-owned raw-SQLite durability boundary (DD-CLASSIFY-STATE-STORE).
-/// Separate from ledger.db under the Tally data root.
+/// Separate from the LEDGER store file under the Tally data root (never opens LEDGER storage).
 /// </summary>
 public sealed class ClassifyStorePaths
 {

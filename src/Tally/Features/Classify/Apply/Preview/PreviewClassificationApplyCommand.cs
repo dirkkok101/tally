@@ -73,7 +73,11 @@ public sealed class PreviewClassificationApplyCommand
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(input);
-        cancellationToken.ThrowIfCancellationRequested();
+        // Host cancel maps to the same stable failure as mid-flight cancel (Unexpected / resource path below).
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return CommandResult<ClassifyApplyPreviewResult>.Failure(ClassifyErrors.Unexpected);
+        }
 
         if (actor is null
             || string.IsNullOrWhiteSpace(actor.Kind)

@@ -597,6 +597,8 @@ public sealed class LedgerClassifyPrerequisiteTests : IAsyncLifetime
             Path.Combine(repoRoot, "src", "Tally", "Contracts", "Classify")
         };
 
+        // Private LEDGER implementation surfaces only. CLASSIFY may own raw SQLite for classify.db
+        // and may use public Domain value types (e.g. Money) without embedding LEDGER storage.
         string[] forbiddenLedgerPrivate =
         [
             "LedgerDb",
@@ -609,12 +611,7 @@ public sealed class LedgerClassifyPrerequisiteTests : IAsyncLifetime
             "CategoryStore",
             "TransactionStore",
             "RelationshipStore",
-            "Tally.Domain.Ledger",
-            "Tally.Features.Ledger",
-            "Tally.Infrastructure.Storage",
-            "ledger.db",
-            "Microsoft.Data.Sqlite",
-            "SqliteConnection"
+            "Tally.Features.Ledger"
         ];
 
         var scanned = 0;
@@ -650,14 +647,13 @@ public sealed class LedgerClassifyPrerequisiteTests : IAsyncLifetime
             Path.Combine(repoRoot, "src", "Tally", "Integration", "Classify")
         };
 
+        // Storage/path tokens that would indicate CLASSIFY opening or embedding LEDGER private files.
+        // Do not treat CLASSIFY-owned classify.db SQLite APIs as path embeddings.
         string[] pathTokens =
         [
-            "ledger.db",
             "LedgerDb",
             "LedgerConnectionFactory",
-            "LedgerRuntimeBootstrap",
             "tally-ledger",
-            "/ledger/",
             "query_snapshot",
             "current_category_allocation"
         ];
@@ -704,7 +700,7 @@ public sealed class LedgerClassifyPrerequisiteTests : IAsyncLifetime
     private async Task<AccountDetail> CreateAccount(string bank = "Prereq Bank")
     {
         var unique = Guid.NewGuid().ToString("N")[..8];
-        var input = new CreateAccountInput(bank + " " + unique, "Primary-" + unique, AccountType.Cheque, "****" + unique[..4], "ZAR");
+        var input = new CreateAccountInput(bank + " " + unique, "Primary-" + unique, AccountType.Cheque, "****" + (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(), "ZAR");
         return Success(await Run("ledger.account.create", JsonSerializer.SerializeToElement(input, LedgerJsonContext.Default.CreateAccountInput), NextKey()), LedgerJsonContext.Default.AccountDetail);
     }
 

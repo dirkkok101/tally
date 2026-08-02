@@ -71,7 +71,11 @@ public sealed class ValidateClassificationRuleCommand
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(input);
-        cancellationToken.ThrowIfCancellationRequested();
+        // Host cancel must surface as a stable command failure (not an uncaught throw before try).
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return CommandResult<ClassifyRuleValidateResult>.Failure(PrivateCorpusErrors.Cancelled);
+        }
 
         if (actor is null
             || string.IsNullOrWhiteSpace(actor.Kind)
@@ -130,6 +134,9 @@ public sealed class ValidateClassificationRuleCommand
             TimeSpan.FromMilliseconds(ClassifyOperationModule.V1Limits.MaxProcessingTimeMs));
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeout.Token);
         var ct = linked.Token;
+        // Operation-scoped memory baseline: enforce the published 256 MiB ceiling against this
+        // operation's WorkingSet growth, not the absolute process WorkingSet of a long-lived host.
+        var memoryBaselineBytes = Process.GetCurrentProcess().WorkingSet64;
 
         try
         {
@@ -257,13 +264,17 @@ public sealed class ValidateClassificationRuleCommand
             var orderedItemsFingerprint = EvaluationFingerprint.ComputeOrderedItemsFingerprint(
                 boundItems.Select(r => (r.Ordinal, r.TransactionId, r.ItemLifecycleFingerprint)));
 
+            // Request identity is caller-owned inputs + store generation + category lifecycle.
+            // Do not bind server-minted SnapshotId into the idempotency fingerprint: every
+            // validation freezes a fresh evaluation projection, so including SnapshotId would
+            // force CLASSIFY-IDEMPOTENCY-CONFLICT on legitimate identical replays.
+            // SnapshotId remains on the public result and durable validation_run for evidence.
             var requestElement = BuildFingerprintElement(
                 candidateIds,
                 corpus.Fingerprint.Sha256Hex,
                 candidateFingerprint,
                 expectedOutcomeFingerprint,
                 categoryLifecycleFingerprint,
-                projection.Value.SnapshotId,
                 projection.Value.StoreGenerationFingerprint!,
                 finalization);
             var requestFingerprint = ClassifyOperationIdempotencyStore.ComputeRequestFingerprint(
@@ -308,7 +319,11 @@ public sealed class ValidateClassificationRuleCommand
             var built = ValidationReportBuilder.Build(validationId, corpus.Rows, evaluation);
             var completedAtUtc = ClassifyContractMapper.FormatUtc(timeProvider.GetUtcNow());
 
-            if (Process.GetCurrentProcess().WorkingSet64 > ClassifyOperationModule.V1Limits.MaxMemoryBytes)
+            var memoryNowBytes = Process.GetCurrentProcess().WorkingSet64;
+            var memoryGrowthBytes = memoryNowBytes > memoryBaselineBytes
+                ? memoryNowBytes - memoryBaselineBytes
+                : 0L;
+            if (memoryGrowthBytes > ClassifyOperationModule.V1Limits.MaxMemoryBytes)
             {
                 return CommandResult<ClassifyRuleValidateResult>.Failure(ClassifyErrors.ResourceLimit);
             }
@@ -734,7 +749,6 @@ public sealed class ValidateClassificationRuleCommand
         string candidateFingerprint,
         string expectedOutcomeFingerprint,
         string categoryLifecycleFingerprint,
-        string snapshotId,
         string storeGenerationFingerprint,
         OwnerGateFinalization? finalization)
     {
@@ -796,7 +810,6 @@ public sealed class ValidateClassificationRuleCommand
 
             writer.WriteString("projectionContractVersion", ClassificationProjectionVersions.ClassificationV1);
             writer.WriteString("representativeValidationId", finalization?.RepresentativeValidationId);
-            writer.WriteString("snapshotId", snapshotId);
             writer.WriteString("storeGenerationFingerprint", storeGenerationFingerprint);
             writer.WriteEndObject();
         }

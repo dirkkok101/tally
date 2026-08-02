@@ -159,7 +159,10 @@ public sealed class ClassifySecurityGateTests : IAsyncLifetime
             body,
             CancellationToken.None);
 
-        AssertSafeError(result, 3, "validation.invalid_input", ReasonCanary, "abandon");
+        // Public operation_id is classify.abandon; canary checks target private reason material
+        // and diagnostics (stderr), not the published operation path segment.
+        AssertSafeError(result, 3, "validation.invalid_input", ReasonCanary);
+        Assert.DoesNotContain("abandon", result.Stderr, StringComparison.OrdinalIgnoreCase);
         Assert.Equal(beforeIdem, await CountTableAsync("operation_idempotency"));
         Assert.Equal(beforeTomb, await CountTableAsync("abandonment_tombstone"));
         store.RequireOwnerOnlyArtifacts();
@@ -553,14 +556,22 @@ public sealed class ClassifySecurityGateTests : IAsyncLifetime
             .ToArray();
         var composition = string.Join('\n', sources);
 
-        string[] forbidden =
+        // Short tokens (e.g. MEF) use identifier-boundary matching so legitimate identifiers
+        // such as ExpectedOutcomeFingerprint (…omeF…) are not false positives. Longer tokens
+        // remain literal sub-string prohibitions (HttpClient, plugin loaders, cloud SDKs).
+        string[] forbiddenLiteral =
         [
             "FastEndpoints", "Aspire", "Npgsql", "EntityFramework", "Microsoft.AspNetCore",
-            "HttpListener", "TcpListener", "WebApplication", "UseKestrel", "AddPlugins", "MEF",
+            "HttpListener", "TcpListener", "WebApplication", "UseKestrel", "AddPlugins",
             "Assembly.LoadFrom", "Assembly.Load(", "Process.Start", "HttpClient",
             "using MailKit", "using MimeKit", "WebSocket", "OpenAI", "Anthropic", "GrpcChannel"
         ];
-        Assert.All(forbidden, token => Assert.DoesNotContain(token, composition, StringComparison.OrdinalIgnoreCase));
+        Assert.All(
+            forbiddenLiteral,
+            token => Assert.DoesNotContain(token, composition, StringComparison.OrdinalIgnoreCase));
+
+        // Plugin/MEF surface: whole-token only (not embedded inside other identifiers).
+        Assert.DoesNotMatch(@"(?i)(?<![A-Za-z0-9_])MEF(?![A-Za-z0-9_])", composition);
     }
 
     [Fact]

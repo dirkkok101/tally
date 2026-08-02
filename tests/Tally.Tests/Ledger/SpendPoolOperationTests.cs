@@ -27,7 +27,7 @@ public sealed class SpendPoolOperationTests : IAsyncLifetime
     {
         var registry = OperationRegistry.Create();
 
-        Assert.Equal(88, registry.Descriptors.Count);
+        Assert.Equal(100, registry.Descriptors.Count);
         Assert.Equal(6, registry.Descriptors.Count(descriptor => descriptor.OperationId.StartsWith("ledger.pool.", StringComparison.Ordinal)));
         Assert.Equal(typeof(CreateSpendPoolInput), registry.Find("ledger.pool.create")!.RequestTypeInfo.Type);
         Assert.Equal(typeof(SpendPoolDetail), registry.Find("ledger.pool.create")!.ResultTypeInfo.Type);

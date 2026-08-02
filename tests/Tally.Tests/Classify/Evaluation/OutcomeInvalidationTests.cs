@@ -216,7 +216,9 @@ public sealed class OutcomeInvalidationTests : IAsyncLifetime
     [Fact]
     public void Policy_unavailable_current_store_generation_fails_closed()
     {
-        var result = EvaluatePolicy(currentStoreGen: null);
+        // Explicit null current store-generation (unavailable) must fail closed.
+        // Do not coalesce to retained — that would hide the unavailable signal.
+        var result = EvaluatePolicy(currentStoreGenUnavailable: true);
         Assert.True(result.IsStale);
         Assert.Contains(EvaluationFingerprint.DimensionStoreGeneration, result.ChangedDimensions);
     }
@@ -426,6 +428,7 @@ public sealed class OutcomeInvalidationTests : IAsyncLifetime
         DateTimeOffset? now = null,
         DateTimeOffset? expiresAt = null,
         string? currentStoreGen = null,
+        bool currentStoreGenUnavailable = false,
         string? currentLedgerContract = null,
         string? currentProjection = null,
         string? currentCategoryLifecycle = null,
@@ -441,7 +444,10 @@ public sealed class OutcomeInvalidationTests : IAsyncLifetime
             RetainedEvaluation: retained,
             RetainedItemLifecycleFingerprint: new string('d', 64),
             SuggestedCategoryId: suggestedCategoryId,
-            CurrentStoreGenerationFingerprint: currentStoreGen ?? retained.StoreGenerationFingerprint,
+            // Null means unavailable only when explicitly requested; otherwise default to retained.
+            CurrentStoreGenerationFingerprint: currentStoreGenUnavailable
+                ? null
+                : (currentStoreGen ?? retained.StoreGenerationFingerprint),
             CurrentLedgerContractVersion: currentLedgerContract ?? retained.LedgerContractVersion,
             CurrentProjectionVersion: currentProjection ?? retained.ProjectionVersion,
             CurrentCategoryLifecycleFingerprint: currentCategoryLifecycle ?? retained.CategoryLifecycleFingerprint,
@@ -458,6 +464,7 @@ public sealed class OutcomeInvalidationTests : IAsyncLifetime
 
     private static ClassificationStalenessPolicy.Result EvaluatePolicy(
         string? currentStoreGen = null,
+        bool currentStoreGenUnavailable = false,
         string? currentLedgerContract = null,
         string? currentProjection = null,
         string? currentCategoryLifecycle = null,
@@ -474,6 +481,7 @@ public sealed class OutcomeInvalidationTests : IAsyncLifetime
         return ClassificationStalenessPolicy.Evaluate(BaseInput(
             retained,
             currentStoreGen: currentStoreGen,
+            currentStoreGenUnavailable: currentStoreGenUnavailable,
             currentLedgerContract: currentLedgerContract,
             currentProjection: currentProjection,
             currentCategoryLifecycle: currentCategoryLifecycle,
@@ -614,7 +622,7 @@ public sealed class OutcomeInvalidationTests : IAsyncLifetime
         var unique = Guid.NewGuid().ToString("N")[..8];
         return await ExecuteSuccessAsync(
             "ledger.account.create",
-            new CreateAccountInput("Inval Bank " + unique, "P-" + unique, AccountType.Cheque, "****" + unique[..4], "ZAR"),
+            new CreateAccountInput("Inval Bank " + unique, "P-" + unique, AccountType.Cheque, "****" + (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(), "ZAR"),
             NextKey(), LedgerJsonContext.Default.CreateAccountInput, LedgerJsonContext.Default.AccountDetail);
     }
 

@@ -17,8 +17,11 @@ public sealed class ClassificationEngineTests
     [Fact]
     public void Single_matching_rule_produces_suggestion_with_category_and_rule_version()
     {
+        // Fixture must normalize to the same v1 form as the rule operand (NFKC + case fold +
+        // punctuation-to-boundary). Trailing reference digits ("#12") become an extra token and
+        // correctly fail equals; use equivalent merchant text without extra tokens.
         var rule = Rule("rv-1", "cat-food", DescriptionEquals(0, "WHOLE FOODS"));
-        var item = Item(0, "tx-1", description: "Whole Foods #12");
+        var item = Item(0, "tx-1", description: "Whole Foods");
         var result = Evaluate([item], [rule], ["cat-food"]);
 
         Assert.Equal(1, result.InputCount);

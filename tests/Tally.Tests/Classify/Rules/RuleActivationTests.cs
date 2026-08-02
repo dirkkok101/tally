@@ -476,14 +476,38 @@ public sealed class RuleActivationTests : IAsyncLifetime
             ("alpha", catA.CategoryId, "suggestion"),
             ("beta", catB.CategoryId, "suggestion")
         ]);
-        var validation = await validate.HandleAsync(
+        // Production path: multi-candidate representative + replay + hold-out finalize → trusted receipt.
+        var rep = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [vA, vB], path),
             actor, NextKey(), CancellationToken.None);
-        Assert.True(validation.IsSuccess, validation.ErrorCode);
-        Assert.True(validation.Value!.ActivationEligible);
+        Assert.True(rep.IsSuccess, rep.ErrorCode);
+        Assert.True(rep.Value!.ActivationEligible);
+
+        var replay = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [vA, vB], path),
+            actor, NextKey(), CancellationToken.None);
+        Assert.True(replay.IsSuccess, replay.ErrorCode);
+
+        var hold = await validate.HandleAsync(
+            new ClassifyRuleValidateRequest(
+                ClassifyOperationIds.ContractVersion,
+                [vA, vB],
+                path,
+                rep.Value.ValidationId,
+                replay.Value!.ValidationId,
+                OwnerDecisionCountBefore: 10,
+                OwnerDecisionCountAfter: 2,
+                ExplicitBenefitDecision: "approve-broad"),
+            actor, NextKey(), CancellationToken.None);
+        Assert.True(hold.IsSuccess, hold.ErrorCode);
+        Assert.False(string.IsNullOrWhiteSpace(hold.Value!.OwnerRulebookGateReceiptId));
 
         var result = await activate.HandleAsync(
-            ActivateRequest(validation.Value.ValidationId, "missing-receipt", false, "multi"),
+            ActivateRequest(
+                rep.Value.ValidationId,
+                hold.Value.OwnerRulebookGateReceiptId!,
+                false,
+                "multi"),
             actor, NextKey(), CancellationToken.None);
         Assert.True(result.IsSuccess, result.ErrorCode);
 
@@ -798,9 +822,11 @@ public sealed class RuleActivationTests : IAsyncLifetime
     private async Task<AccountDetail> CreateAccountAsync()
     {
         var unique = Guid.NewGuid().ToString("N")[..8];
+        // MaskedIdentifier requires 1–4 digits (not all-digit); hex-only suffixes fail closed.
+        var digits = (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(CultureInfo.InvariantCulture);
         return await ExecuteSuccessAsync(
             "ledger.account.create",
-            new CreateAccountInput("Act Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + unique[..4], "ZAR"),
+            new CreateAccountInput("Act Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + digits, "ZAR"),
             NextKey(),
             LedgerJsonContext.Default.CreateAccountInput,
             LedgerJsonContext.Default.AccountDetail);

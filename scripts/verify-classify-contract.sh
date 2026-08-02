@@ -77,14 +77,18 @@ account_schema="$("$publish_root/tally" schema show ledger.account.create)"
 printf '%s\n' "$eval_schema" | python3 -c '
 import json,sys
 doc=json.load(sys.stdin)
-op=doc.get("result",doc.get("operation",doc))
+result=doc.get("result") or doc
+op=(result.get("operation") if isinstance(result, dict) else None) or result
+assert isinstance(op, dict), "schema show missing operation object"
 assert "limits" in op and op["limits"] is not None, "classify.evaluate missing limits"
 assert "max_transaction_count" in op["limits"], "stable wire name missing"
 '
 printf '%s\n' "$account_schema" | python3 -c '
 import json,sys
 doc=json.load(sys.stdin)
-op=doc.get("result",doc.get("operation",doc))
+result=doc.get("result") or doc
+op=(result.get("operation") if isinstance(result, dict) else None) or result
+assert isinstance(op, dict), "schema show missing operation object"
 assert "limits" not in op or op.get("limits") is None, "legacy schema must omit limits"
 '
 

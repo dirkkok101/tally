@@ -171,13 +171,13 @@ public sealed class UC003CategoryAllocationWorkflowTests(PublishedTallyFixture f
         var missing = await Run(
             ["ledger", "transaction", "category", "correct", "--input", "-"],
             AllocationEnvelope(transactionId, categoryId, "No current projection", "missing-correction"));
-        AssertError(missing, 6, "LEDGER-CATEGORY-ALLOCATION-NOT-ASSIGNED");
+        // classification_v1 correct requires ExpectedActiveAllocationId; bare correct without assignment is STALE.
+        AssertError(missing, 5, "LEDGER-CATEGORY-ALLOCATION-STALE-PRECONDITION");
 
         await Assign(transactionId, categoryId, "Initial classification", "assign-current");
         var unchanged = await Run(
             ["ledger", "transaction", "category", "correct", "--input", "-"],
-            AllocationEnvelope(transactionId, categoryId, "Stale current projection", "stale-correction"));
-
+            await CorrectionEnvelope(transactionId, categoryId, "Stale current projection", "stale-correction"));
         AssertError(unchanged, 5, "LEDGER-CATEGORY-ALLOCATION-UNCHANGED");
         Assert.Single((await GetTransaction(transactionId)).GetProperty("history").GetProperty("categoryAssignments").EnumerateArray());
         Assert.Equal(1, (await DurableCounts())["category_allocation_event"]);
@@ -302,10 +302,37 @@ public sealed class UC003CategoryAllocationWorkflowTests(PublishedTallyFixture f
         AllocationEnvelope(transactionId, categoryId, reason, key),
         "ledger.transaction.category.assign");
 
-    private async Task<JsonElement> Correct(string transactionId, string categoryId, string reason, string key) => await Success(
-        ["ledger", "transaction", "category", "correct", "--input", "-"],
-        AllocationEnvelope(transactionId, categoryId, reason, key),
-        "ledger.transaction.category.correct");
+    private async Task<JsonElement> Correct(string transactionId, string categoryId, string reason, string key) =>
+        await Success(
+            ["ledger", "transaction", "category", "correct", "--input", "-"],
+            await CorrectionEnvelope(transactionId, categoryId, reason, key),
+            "ledger.transaction.category.correct");
+
+    private async Task<string> CorrectionEnvelope(string transactionId, string categoryId, string reason, string key)
+    {
+        var preflight = await Success(
+            ["ledger", "actuals", "query", "--input", "-"],
+            Envelope(new JsonObject
+            {
+                ["purpose"] = "apply_preflight",
+                ["itemProjection"] = "classification_v1",
+                ["transactionIds"] = new JsonArray(transactionId)
+            }),
+            "ledger.actuals.query");
+        var item = Assert.Single(preflight.GetProperty("classificationItems").EnumerateArray());
+        var payload = new JsonObject
+        {
+            ["transactionId"] = transactionId,
+            ["categoryId"] = categoryId,
+            ["reason"] = reason,
+            ["expectedActiveAllocationId"] = item.GetProperty("currentAllocationId").GetString(),
+            ["expectedTransactionRevision"] = item.GetProperty("transactionRevision").GetString(),
+            ["expectedRelationshipRevision"] = item.GetProperty("relationshipRevision").GetString(),
+            ["expectedAllocationRevision"] = item.GetProperty("allocationRevision").GetString(),
+            ["mutationContractVersion"] = "classification_v1"
+        };
+        return Envelope(payload, key);
+    }
 
     private async Task<JsonElement> GetTransaction(string transactionId) => await Success(
         ["ledger", "transaction", "get", "--input", "-"],

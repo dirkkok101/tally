@@ -410,7 +410,7 @@ public sealed class ClassifyLedgerContractClientTests : IAsyncLifetime
     {
         var unique = Guid.NewGuid().ToString("N")[..8];
         var input = new CreateAccountInput(
-            "Client Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + unique[..4], "ZAR");
+            "Client Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(), "ZAR");
         return await RunSuccess(
             "ledger.account.create",
             JsonSerializer.SerializeToElement(input, LedgerJsonContext.Default.CreateAccountInput),

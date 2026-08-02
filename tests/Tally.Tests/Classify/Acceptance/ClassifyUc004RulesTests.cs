@@ -872,7 +872,7 @@ public sealed class ClassifyUc004RulesTests : IAsyncLifetime
             result = await process.RunAsync(
                 ["ledger", "account", "create", "--input", "-"],
                 LedgerEnvelope(
-                    $$"""{"institutionName":"Uc004 Bank {{unique[..12]}}","displayName":"Primary-{{unique[..12]}}","accountType":"cheque","maskedIdentifier":"****{{unique[..4]}}","currencyCode":"ZAR"}""",
+                    $$"""{"institutionName":"Uc004 Bank {{unique[..12]}}","displayName":"Primary-{{unique[..12]}}","accountType":"cheque","maskedIdentifier":"****{{(Math.Abs(unique.GetHashCode()) % 9000 + 1000)}}","currencyCode":"ZAR"}""",
                     NextKey()),
                 CancellationToken.None);
             if (result.ExitCode == 0)

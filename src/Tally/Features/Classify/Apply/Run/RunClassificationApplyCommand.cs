@@ -76,7 +76,10 @@ public sealed class RunClassificationApplyCommand
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(input);
-        cancellationToken.ThrowIfCancellationRequested();
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return CommandResult<ClassifyApplyRunResult>.Failure(ClassifyErrors.Unexpected);
+        }
 
         if (actor is null
             || string.IsNullOrWhiteSpace(actor.Kind)

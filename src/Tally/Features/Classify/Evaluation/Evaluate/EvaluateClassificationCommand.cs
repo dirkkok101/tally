@@ -104,6 +104,9 @@ public sealed class EvaluateClassificationCommand
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         timeout.CancelAfter(TimeSpan.FromMilliseconds(ClassifyOperationModule.V1Limits.MaxProcessingTimeMs));
         var ct = timeout.Token;
+        // Operation-scoped memory baseline: enforce the published 256 MiB ceiling against this
+        // operation's WorkingSet growth, not the absolute process WorkingSet of a long-lived host.
+        var memoryBaselineBytes = Process.GetCurrentProcess().WorkingSet64;
 
         try
         {
@@ -224,7 +227,11 @@ public sealed class EvaluateClassificationCommand
                 return CommandResult<ClassifyEvaluateResult>.Failure(ClassifyErrors.ResourceLimit);
             }
 
-            if (Process.GetCurrentProcess().WorkingSet64 > ClassifyOperationModule.V1Limits.MaxMemoryBytes)
+            var memoryNowBytes = Process.GetCurrentProcess().WorkingSet64;
+            var memoryGrowthBytes = memoryNowBytes > memoryBaselineBytes
+                ? memoryNowBytes - memoryBaselineBytes
+                : 0L;
+            if (memoryGrowthBytes > ClassifyOperationModule.V1Limits.MaxMemoryBytes)
             {
                 return CommandResult<ClassifyEvaluateResult>.Failure(ClassifyErrors.ResourceLimit);
             }

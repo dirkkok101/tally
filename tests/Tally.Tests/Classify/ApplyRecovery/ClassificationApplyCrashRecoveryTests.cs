@@ -531,7 +531,7 @@ public sealed class ClassificationApplyCrashRecoveryTests : IAsyncLifetime
 
     private async Task ActivateWithGateAsync(string versionId, string categoryId, string description)
     {
-        var path = await WriteBoundCorpusAsync([(description, "suggestion", categoryId)]);
+        var (path, gateTxIds) = await WriteBoundCorpusAsync([(description, "suggestion", categoryId)]);
         var rep = await services.Validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], path),
             actor, NextKey(), CancellationToken.None);
@@ -556,6 +556,12 @@ public sealed class ClassificationApplyCrashRecoveryTests : IAsyncLifetime
                 "crash activate"),
             actor, NextKey(), CancellationToken.None);
         Assert.True(activated.IsSuccess, activated.ErrorCode);
+
+        // Gate evidence membership must not remain in the evaluation universe.
+        foreach (var gateTxId in gateTxIds)
+        {
+            await AssignCategoryAsync(gateTxId, categoryId, "remove gate evidence");
+        }
     }
 
     private async Task<string> SaveDraftAsync(string categoryId, string description)
@@ -580,7 +586,7 @@ public sealed class ClassificationApplyCrashRecoveryTests : IAsyncLifetime
         return result.Value!.RuleVersionId;
     }
 
-    private async Task<string> WriteBoundCorpusAsync(
+    private async Task<(string Path, IReadOnlyList<string> GateTransactionIds)> WriteBoundCorpusAsync(
         IReadOnlyList<(string Description, string ExpectedKind, string? ExpectedCategory)> rows)
     {
         var created = new List<(string TxId, string Description)>();
@@ -622,8 +628,16 @@ public sealed class ClassificationApplyCrashRecoveryTests : IAsyncLifetime
         var path = Path.Combine(root, "corpus-" + Guid.NewGuid().ToString("N") + ".jsonl");
         File.WriteAllBytes(path, Encoding.UTF8.GetBytes(string.Join('\n', lines) + "\n"));
         File.SetUnixFileMode(path, UnixFileMode.UserRead | UnixFileMode.UserWrite);
-        return path;
+        return (path, created.Select(c => c.TxId).ToArray());
     }
+
+    private async Task AssignCategoryAsync(string transactionId, string categoryId, string reason) =>
+        _ = await ExecuteSuccessAsync(
+            "ledger.transaction.category.assign",
+            new AssignCategoryInput(transactionId, categoryId, reason),
+            NextKey(),
+            LedgerJsonContext.Default.AssignCategoryInput,
+            LedgerJsonContext.Default.CategoryAllocationResult);
 
     private async Task<Dictionary<string, string?>> SnapshotAllocationsAsync(IReadOnlyList<string> transactionIds)
     {
@@ -651,7 +665,7 @@ public sealed class ClassificationApplyCrashRecoveryTests : IAsyncLifetime
         var unique = Guid.NewGuid().ToString("N")[..8];
         return await ExecuteSuccessAsync(
             "ledger.account.create",
-            new CreateAccountInput("Crash Bank " + unique, "C-" + unique, AccountType.Cheque, "****" + unique[..4], "ZAR"),
+            new CreateAccountInput("Crash Bank " + unique, "C-" + unique, AccountType.Cheque, "****" + (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(), "ZAR"),
             NextKey(), LedgerJsonContext.Default.CreateAccountInput, LedgerJsonContext.Default.AccountDetail);
     }
 

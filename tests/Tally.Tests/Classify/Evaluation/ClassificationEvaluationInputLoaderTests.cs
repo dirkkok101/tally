@@ -158,14 +158,14 @@ public sealed class ClassificationEvaluationInputLoaderTests : IAsyncLifetime
         var second = await loader.LoadAsync(actor, CancellationToken.None);
         Assert.True(first.IsSuccess && second.IsSuccess, first.ErrorCode + "/" + second.ErrorCode);
 
-        // Same frozen membership and fingerprints when the store generation is unchanged.
-        Assert.Equal(first.Value!.SnapshotId, second.Value!.SnapshotId);
-        Assert.Equal(first.Value.StoreGenerationFingerprint, second.Value.StoreGenerationFingerprint);
+        // Membership and store generation are stable across freezes when LEDGER data is unchanged.
+        // SnapshotId/ExpiresAt are server-minted per evaluation freeze and intentionally vary.
+        Assert.Equal(first.Value!.StoreGenerationFingerprint, second.Value!.StoreGenerationFingerprint);
         Assert.Equal(first.Value.OrderedItemsFingerprint, second.Value.OrderedItemsFingerprint);
-        Assert.Equal(first.Value.SnapshotFingerprint, second.Value.SnapshotFingerprint);
+        Assert.Equal(first.Value.TotalCount, second.Value.TotalCount);
         Assert.Equal(
-            ClassificationEvaluationInputLoader.ToCanonicalBytes(first.Value),
-            ClassificationEvaluationInputLoader.ToCanonicalBytes(second.Value));
+            first.Value.Items.Select(i => (i.Ordinal, i.TransactionId, i.TransactionRevision, i.AllocationRevision)).ToArray(),
+            second.Value.Items.Select(i => (i.Ordinal, i.TransactionId, i.TransactionRevision, i.AllocationRevision)).ToArray());
     }
 
     [Fact]
@@ -438,7 +438,7 @@ public sealed class ClassificationEvaluationInputLoaderTests : IAsyncLifetime
         return await ExecuteSuccessAsync(
             "ledger.account.create",
             new CreateAccountInput(
-                "Eval Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + unique[..4], "ZAR"),
+                "Eval Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(), "ZAR"),
             NextKey(),
             LedgerJsonContext.Default.CreateAccountInput,
             LedgerJsonContext.Default.AccountDetail);

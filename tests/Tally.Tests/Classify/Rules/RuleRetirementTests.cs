@@ -310,7 +310,8 @@ public sealed class RuleRetirementTests : IAsyncLifetime
             actor, NextKey(), CancellationToken.None);
         Assert.True(retired.IsSuccess, retired.ErrorCode);
 
-        var v2 = await SaveDraftAsync(category.CategoryId, "successor", ruleId: "rule-succ", priorVersionId: v1);
+        // Successor version must share the prior's rule identity (same rule_id lineage).
+        var v2 = await SaveDraftAsync(category.CategoryId, "successor", ruleId: "rule-orig", priorVersionId: v1);
         var granted2 = await ValidateAndGrantAsync([v2], [("successor", category.CategoryId, "suggestion")]);
         var validation2 = granted2.ValidationId;
         var receiptId2 = granted2.ReceiptId;
@@ -567,7 +568,7 @@ public sealed class RuleRetirementTests : IAsyncLifetime
         var unique = Guid.NewGuid().ToString("N")[..8];
         return await ExecuteSuccessAsync(
             "ledger.account.create",
-            new CreateAccountInput("Ret Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + unique[..4], "ZAR"),
+            new CreateAccountInput("Ret Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(), "ZAR"),
             NextKey(),
             LedgerJsonContext.Default.CreateAccountInput,
             LedgerJsonContext.Default.AccountDetail);

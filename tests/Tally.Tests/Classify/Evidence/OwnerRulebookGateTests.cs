@@ -187,7 +187,8 @@ public sealed class OwnerRulebookGateTests : IAsyncLifetime
         var versionId = await SaveDraftAsync(category.CategoryId, "month");
         var path = await WriteBoundCorpusAsync([
             ("month", category.CategoryId, "suggestion"),
-            ("other", category.CategoryId, "no_suggestion")
+            // no_suggestion rows must not declare an expected category (complete expected outcome contract).
+            ("other", null, "no_suggestion")
         ]);
         var result = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], path),
@@ -258,7 +259,8 @@ public sealed class OwnerRulebookGateTests : IAsyncLifetime
         var versionId = await SaveDraftAsync(category.CategoryId, "stable");
         var path = await WriteBoundCorpusAsync([
             ("stable", category.CategoryId, "suggestion"),
-            ("zzz", category.CategoryId, "no_suggestion")
+            // no_suggestion rows must not declare an expected category (complete expected outcome contract).
+            ("zzz", null, "no_suggestion")
         ]);
         var a = await validate.HandleAsync(
             new ClassifyRuleValidateRequest(ClassifyOperationIds.ContractVersion, [versionId], path),
@@ -769,7 +771,7 @@ public sealed class OwnerRulebookGateTests : IAsyncLifetime
     {
         var unique = Guid.NewGuid().ToString("N")[..8];
         var input = new CreateAccountInput(
-            "Gate Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + unique[..4], "ZAR");
+            "Gate Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(), "ZAR");
         return await ExecuteSuccessAsync(
             "ledger.account.create",
             input,
