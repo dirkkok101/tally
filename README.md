@@ -17,7 +17,7 @@ $ printf '%s' '{"contractVersion":"1.0","actor":{"kind":"automation","label":"ag
 
 - **Local-first and private.** Your financial data never leaves the machine. New
   data files and backups default to access by the invoking OS identity only.
-- **Agent-native.** 88 public operations, each with a published JSON Schema for
+- **Agent-native.** 100 public operations, each with a published JSON Schema for
   its request and result, a stable operation id, and a documented exit code.
   Agents discover the contract at runtime instead of guessing flags.
 - **Auditable by construction.** Canonical facts, evidence, reconciliation
@@ -81,9 +81,9 @@ Concepts worth knowing before you start:
 | Ingest | Shipped — v1 contract published and verified |
 | Budget | Shipped — v1 contract published and verified |
 | Insights (reports, restatements, retention) | Designed and planned; implementation in progress |
-| Classify (owner-steered deterministic classification) | Replacement plan compiled into 30 verified beads; implementation not started |
+| Classify (owner-steered deterministic classification) | Shipped — deterministic rulebook, evaluation, preview/apply, feedback, recovery, and local security gates verified |
 
-Current version: **0.3.2**, contract version **1.0**. Pre-1.0 the executable
+Current version: **0.3.3**, contract version **1.0**. Pre-1.0 the executable
 version moves faster than the command contract, and the contract version is the
 thing to pin against.
 
@@ -119,7 +119,7 @@ tally version
 ```
 
 ```json
-{"contractVersion":"1.0","operationId":"system.version","outcome":"success","result":{"product":"tally","version":"0.3.2","contractVersion":"1.0","compatibility":"1.0"},"error":null}
+{"contractVersion":"1.0","operationId":"system.version","outcome":"success","result":{"product":"tally","version":"0.3.3","contractVersion":"1.0","compatibility":"1.0"},"error":null}
 ```
 
 ### Point Tally at a data directory
@@ -505,7 +505,7 @@ Honest summary: the *engineering* documentation is unusually deep, and the
 - **This README** — installation, contract, and worked examples for every
   shipped module.
 - **The executable contract itself** — `tally help` and `tally schema show
-  <operation-id>` are the authoritative, always-current reference for all 88
+  <operation-id>` are the authoritative, always-current reference for all 100
   operations. Prefer them over any prose.
 - **`docs/prd/<module>/prd.md`** — product requirements per module: problem
   statement, goals and non-goals, functional and non-functional requirements, use
