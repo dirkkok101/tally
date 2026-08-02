@@ -2,13 +2,13 @@
 # CLASSIFY operator-ergonomics privacy / recovery / no-mutation gate (bd-3mdk).
 # Discovers and executes ClassifyOperatorErgonomicsSecurityTests on Linux with
 # disposable synthetic roots only. Aggregate-only output — no financial payloads.
-# Non-vacuous: fails when a required named family is absent or any test fails.
+# Non-vacuous: fails when a required named scenario is absent or any test fails.
 set -euo pipefail
 
 repository_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 test_project="tests/Tally.Tests/Tally.Tests.csproj"
 filter='FullyQualifiedName~ClassifyOperatorErgonomicsSecurityTests'
-min_tests=20
+min_tests=28
 
 section() {
     printf '\n==> %s\n' "$1"
@@ -25,7 +25,7 @@ discovered_count() {
 require_name() {
     local needle="$1"
     if ! grep -Fq "$needle" <<< "$test_list"; then
-        printf 'classify ergonomics security verification did not discover case containing "%s"\n' "$needle" >&2
+        printf 'classify ergonomics security verification did not discover required scenario "%s"\n' "$needle" >&2
         exit 1
     fi
 }
@@ -41,7 +41,6 @@ printf 'linux host confirmed (uid=%s euid=%s)\n' "$(id -u)" "$(id -u)"
 
 section "Live data root guard"
 if [[ -d /home/ubuntu/.local/share/tally ]]; then
-    # Gate must never target live data; tests use Path.GetTempPath() only.
     printf 'live TALLY_DATA_ROOT exists on host; gate will not open or mutate it\n'
 fi
 printf 'fixture roots: disposable temp only (never /home/ubuntu/.local/share/tally)\n'
@@ -63,7 +62,37 @@ if (( test_count == 0 )); then
 fi
 printf 'classify ergonomics security verification discovered %s tests\n' "$test_count"
 
-section "Required case families"
+section "Required exact scenarios (not broad family substrings alone)"
+# Exact scenario tokens Hermes required for non-vacuous proof.
+for needle in \
+    TC_ERGONOMICS_PRIVACY_unresolved_stdout_may_expose_owner_normalized_description \
+    TC_ERGONOMICS_PRIVACY_forbidden_sinks_exclude_canaries_after_unresolved_report \
+    TC_ERGONOMICS_LOGGING_cursor_bytes_exclude_descriptions_and_paths \
+    TC_ERGONOMICS_PERSISTENCE_corpus_receipt_excludes_destination_and_labels \
+    TC_ERGONOMICS_FILESYSTEM_symlink_destination_fails_without_write \
+    TC_ERGONOMICS_FILESYSTEM_hard_linked_destination_is_not_overwritten \
+    TC_ERGONOMICS_FILESYSTEM_group_writable_parent_fails_privacy \
+    TC_ERGONOMICS_FILESYSTEM_wrong_owner_0600_file_fails_closed \
+    TC_ERGONOMICS_FILESYSTEM_wrong_owner_0700_directory_fails_closed \
+    TC_ERGONOMICS_CRASH_interrupt_before_publish_via_fault_seam_leaves_no_destination \
+    TC_ERGONOMICS_CRASH_interrupt_after_publish_before_cleanup_preserves_substituted_file \
+    TC_ERGONOMICS_CURSOR_malformed_continuation_fails_closed_with_null_result \
+    TC_ERGONOMICS_STALE_voided_transaction_fails_unresolved_without_writes \
+    TC_ERGONOMICS_NO_MUTATION_query_failure_preserves_classify_db_hash \
+    TC_ERGONOMICS_NO_MUTATION_successful_queries_do_not_mutate_ledger_allocations \
+    TC_ERGONOMICS_NO_MUTATION_corpus_success_only_creates_authorized_destination \
+    TC_ERGONOMICS_COMPOSITION_outcome_list_ids_compose_selected_outcomes_preview \
+    TC_ERGONOMICS_ENVELOPE_expected_missing_evaluation_fails_stable_exit_null_result \
+    TC_ERGONOMICS_ENVELOPE_expected_unsupported_version_fails_compatibility_without_mutation \
+    TC_ERGONOMICS_ENVELOPE_injected_unexpected_malformed_json_is_private_safe \
+    TC_ERGONOMICS_ENVELOPE_corpus_build_missing_idempotency_fails_before_destination \
+    TC_ERGONOMICS_ISOLATION_live_tally_data_root_is_never_the_fixture_root
+do
+    require_name "$needle"
+    printf 'scenario present: %s\n' "$needle"
+done
+
+section "Required family coverage (aggregate)"
 for needle in \
     TC_ERGONOMICS_PRIVACY_ \
     TC_ERGONOMICS_LOGGING_ \
@@ -74,6 +103,7 @@ for needle in \
     TC_ERGONOMICS_STALE_ \
     TC_ERGONOMICS_NO_MUTATION_ \
     TC_ERGONOMICS_COMPOSITION_ \
+    TC_ERGONOMICS_ENVELOPE_ \
     TC_ERGONOMICS_ISOLATION_
 do
     require_name "$needle"
@@ -88,7 +118,7 @@ dotnet test "$test_project" \
     --logger 'console;verbosity=normal'
 
 section "Aggregate summary"
-printf 'classify ergonomics security verification: exit 0; %s cases discovered across required families; 0 failures\n' \
+printf 'classify ergonomics security verification: exit 0; %s cases discovered; exact scenarios present; 0 failures\n' \
     "$test_count"
-printf 'families: privacy logging persistence filesystem crash cursor stale no-mutation composition isolation\n'
+printf 'families: privacy logging persistence filesystem crash cursor stale no-mutation composition envelope isolation\n'
 printf 'payload policy: aggregate counts and case names only; no descriptions, amounts, paths, or keys\n'

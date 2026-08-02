@@ -24,6 +24,8 @@ using Tally.Infrastructure.Classify.Corpus;
 using Tally.Infrastructure.Storage;
 using Tally.Integration.Ledger;
 using Xunit;
+using DiagnosticsProcess = System.Diagnostics.Process;
+using ProcessStartInfo = System.Diagnostics.ProcessStartInfo;
 
 namespace Tally.Tests.Classify.Security;
 
@@ -53,9 +55,13 @@ public sealed class ClassifyOperatorErgonomicsSecurityTests : IAsyncLifetime
         File.SetUnixFileMode(root, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
         var database = await LedgerRuntimeBootstrap.InitializeCurrentAsync(root, CancellationToken.None);
         registry = OperationRegistry.Create();
-        process = new TallyProcess(registry, LedgerServices.Create(database));
-        ledger = new LedgerContractClient(registry, process);
+        var ledgerServices = LedgerServices.Create(database);
+        var bootstrap = new TallyProcess(registry, ledgerServices);
+        ledger = new LedgerContractClient(registry, bootstrap);
         services = await ClassifyOperationBundle.CreateServicesAsync(root, ledger, cancellationToken: CancellationToken.None);
+        // Publish real handlers through the process envelope (same composition as production).
+        ledgerServices = ledgerServices with { Classify = services.Operations };
+        process = new TallyProcess(registry, ledgerServices);
         accountId = (await CreateAccountAsync()).AccountId;
     }
 
@@ -98,21 +104,49 @@ public sealed class ClassifyOperatorErgonomicsSecurityTests : IAsyncLifetime
     [Fact]
     public async Task TC_ERGONOMICS_PRIVACY_forbidden_sinks_exclude_canaries_after_unresolved_report()
     {
+        // Production-connected: run canary operation, then inspect durable classify rows + process sinks.
         var seeded = await SeedNoSuggestionAsync(DescriptionCanary, count: 2);
+        var beforeOracle = await CaptureOraclesAsync();
         var result = await services.UnresolvedReport.HandleAsync(
             new ClassifyUnresolvedReportRequest("1.0", seeded.EvaluationId, 10, 2),
             actor,
             CancellationToken.None);
         Assert.True(result.IsSuccess, result.ErrorCode);
 
-        await using var connection = await services.State.Store.OpenMigratedAsync(CancellationToken.None);
-        await using var cmd = connection.CreateCommand();
-        cmd.CommandText = "SELECT COUNT(*) FROM sqlite_master WHERE sql LIKE $pat;";
-        cmd.Parameters.AddWithValue("$pat", "%" + DescriptionCanary + "%");
-        var hits = Convert.ToInt64(await cmd.ExecuteScalarAsync(CancellationToken.None), CultureInfo.InvariantCulture);
-        Assert.Equal(0, hits);
+        // Allowed channel only: typed result may carry normalized owner-visible text, never raw canary.
+        var typed = JsonSerializer.Serialize(result.Value, ClassifyJsonContext.Default.ClassifyUnresolvedReportResult);
+        Assert.DoesNotContain(DescriptionCanary, typed, StringComparison.OrdinalIgnoreCase);
+        foreach (var tx in seeded.TransactionIds)
+        {
+            Assert.DoesNotContain(tx, typed, StringComparison.Ordinal);
+        }
+
+        // Forbidden: durable classify.db *data* (not schema text) across content-bearing tables.
+        var durable = await DumpClassifyDurableContentAsync();
+        Assert.DoesNotContain(DescriptionCanary, durable, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain(root, durable, StringComparison.Ordinal);
+
+        // Forbidden: process envelope diagnostic channel for the same operation.
+        var envelope = await RunClassifyProcessAsync(
+            ["classify", "unresolved", "report", "--input", "-"],
+            ClassifyEnvelope(
+                $"{{\"contractVersion\":\"1.0\",\"evaluationId\":{JsonSerializer.Serialize(seeded.EvaluationId)},\"topN\":10,\"minimumCount\":2}}",
+                idempotencyKey: null));
+        Assert.Equal(0, envelope.ExitCode);
+        Assert.DoesNotContain(DescriptionCanary, envelope.Stderr, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain(DescriptionCanary, envelope.Stdout, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain(root, envelope.Stderr, StringComparison.Ordinal);
+        // Success path: diagnostics must stay free of private canaries and private roots.
+        Assert.DoesNotContain(DescriptionCanary, envelope.Stderr, StringComparison.Ordinal);
+
+        // Forbidden: tracked docs/scripts must never embed the live canary.
         AssertForbiddenInTrackedRepoSources(DescriptionCanary);
-        _ = seeded;
+
+        // Report is read-only for classify mutation tables (evaluation/outcome counts stable).
+        var afterOracle = await CaptureOraclesAsync();
+        Assert.Equal(beforeOracle.EvalRuns, afterOracle.EvalRuns);
+        Assert.Equal(beforeOracle.Outcomes, afterOracle.Outcomes);
+        Assert.Equal(beforeOracle.Evidence, afterOracle.Evidence);
     }
 
     [Fact]
@@ -265,22 +299,96 @@ public sealed class ClassifyOperatorErgonomicsSecurityTests : IAsyncLifetime
         Assert.False(File.Exists(dest));
     }
 
-    // ── Crash / recovery ─────────────────────────────────────────────────────
+    // ── Crash / recovery (PrivateCorpusPublishFaultSeam on live writer path) ─
 
     [Fact]
-    public async Task TC_ERGONOMICS_CRASH_failed_build_leaves_no_recognized_temp_or_destination()
+    public async Task TC_ERGONOMICS_CRASH_interrupt_before_publish_via_fault_seam_leaves_no_destination()
     {
-        var parent = Path.Combine(root, "crash-parent");
+        var parent = Path.Combine(root, "fault-before-parent");
         Directory.CreateDirectory(parent);
         File.SetUnixFileMode(parent, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
-        var dest = Path.Combine(parent, "crash.jsonl");
-        var result = await services.CorpusBuild.HandleAsync(
-            CorpusRequest(dest, Array.Empty<ClassifyCorpusBuildLabel>(), [ProjectionItem("tx-1", 0)]),
+        var dest = Path.Combine(parent, "before.jsonl");
+        var seamHit = false;
+        string? observedTemp = null;
+        var seam = new PrivateCorpusPublishFaultSeam
+        {
+            AfterValidateBeforePublish = cp =>
+            {
+                seamHit = true;
+                observedTemp = cp.TemporaryPath;
+                throw new OperationCanceledException("injected interrupt before publish");
+            }
+        };
+        var writer = new PrivateCorpusWriter(new PrivateCorpusReader(), seam);
+        var command = new BuildPrivateClassificationCorpusCommand(
+            services.State.Store,
+            services.State.Idempotency,
+            writer);
+        var result = await command.HandleAsync(
+            CorpusRequest(dest, [new ClassifyCorpusBuildLabel("tx-1", ClassifyOutcomeKind.NoSuggestion)], [ProjectionItem("tx-1", 0)]),
             actor,
             CancellationToken.None);
+        Assert.True(seamHit, "fault seam AfterValidateBeforePublish must be reached on the live path");
         Assert.False(result.IsSuccess);
+        Assert.Null(result.Value);
         Assert.False(File.Exists(dest));
+        // Recognized temps cleaned after cancelled publish path.
         Assert.Empty(Directory.GetFiles(parent, PrivateCorpusWriter.RecognizedTempPrefix + "*"));
+        if (observedTemp is not null)
+        {
+            Assert.False(File.Exists(observedTemp));
+        }
+    }
+
+    [Fact]
+    public async Task TC_ERGONOMICS_CRASH_interrupt_after_publish_before_cleanup_preserves_substituted_file()
+    {
+        var parent = Path.Combine(root, "fault-after-parent");
+        Directory.CreateDirectory(parent);
+        File.SetUnixFileMode(parent, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
+        var dest = Path.Combine(parent, "after.jsonl");
+        var seamHit = false;
+        string? substitutedPath = null;
+        var seam = new PrivateCorpusPublishFaultSeam
+        {
+            AfterPublishBeforeCleanup = cp =>
+            {
+                seamHit = true;
+                substitutedPath = cp.TemporaryPath;
+                if (File.Exists(cp.TemporaryPath))
+                {
+                    File.Delete(cp.TemporaryPath);
+                }
+
+                // Unrelated substituted content at the temp name must never be identity-deleted.
+                File.WriteAllText(cp.TemporaryPath, "UNKNOWN-SUBSTITUTE-MUST-SURVIVE\n");
+                File.SetUnixFileMode(cp.TemporaryPath, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+            }
+        };
+        var writer = new PrivateCorpusWriter(new PrivateCorpusReader(), seam);
+        var command = new BuildPrivateClassificationCorpusCommand(
+            services.State.Store,
+            services.State.Idempotency,
+            writer);
+        var result = await command.HandleAsync(
+            CorpusRequest(dest, [new ClassifyCorpusBuildLabel("tx-1", ClassifyOutcomeKind.NoSuggestion)], [ProjectionItem("tx-1", 0)]),
+            actor,
+            CancellationToken.None);
+        Assert.True(seamHit, "fault seam AfterPublishBeforeCleanup must be reached");
+        Assert.True(result.IsSuccess, result.ErrorCode);
+        Assert.True(File.Exists(dest));
+        Assert.NotNull(substitutedPath);
+        Assert.True(File.Exists(substitutedPath!));
+        Assert.Equal("UNKNOWN-SUBSTITUTE-MUST-SURVIVE\n", await File.ReadAllTextAsync(substitutedPath!));
+        // Exact destination is real publication, not substitute.
+        var body = await File.ReadAllTextAsync(dest);
+        Assert.DoesNotContain("UNKNOWN-SUBSTITUTE", body, StringComparison.Ordinal);
+        Assert.Contains("tx-1", body, StringComparison.Ordinal);
+
+        // Exact-inode cleanup refuse: wrong ino leaves substitute intact (replay safety).
+        Assert.Equal(0, Lstat(substitutedPath!, out var st));
+        Assert.False(PrivateCorpusWriter.TryDeleteRecognizedTemp(substitutedPath, st.st_dev, st.st_ino + 1UL));
+        Assert.True(File.Exists(substitutedPath!));
     }
 
     [Fact]
@@ -297,6 +405,185 @@ public sealed class ClassifyOperatorErgonomicsSecurityTests : IAsyncLifetime
         Assert.True(result.IsSuccess, result.ErrorCode);
         Assert.True(File.Exists(dest));
         Assert.Empty(Directory.GetFiles(parent, PrivateCorpusWriter.RecognizedTempPrefix + "*"));
+    }
+
+    // ── Wrong-owner (distinct from wrong mode) ───────────────────────────────
+
+    [Fact]
+    public void TC_ERGONOMICS_FILESYSTEM_wrong_owner_0600_file_fails_closed()
+    {
+        // Mode remains exact 0600; rejection is effective-UID ownership only.
+        var path = Path.Combine(root, "wrong-owner-file");
+        File.WriteAllBytes(path, [1]);
+        File.SetUnixFileMode(path, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+        Assert.Equal(UnixFileMode.UserRead | UnixFileMode.UserWrite, File.GetUnixFileMode(path));
+
+        RunChown("nobody:nogroup", path);
+        try
+        {
+            var protection = new HostArtifactProtection();
+            var ex = Assert.Throws<InvalidOperationException>(
+                () => protection.RequireOwnerOnlyArtifact(path));
+            Assert.Equal("The artifact is not owner-only.", ex.Message);
+            Assert.Equal(UnixFileMode.UserRead | UnixFileMode.UserWrite, File.GetUnixFileMode(path));
+        }
+        finally
+        {
+            RunChown($"{Environment.UserName}:{Environment.UserName}", path);
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+    }
+
+    [Fact]
+    public void TC_ERGONOMICS_FILESYSTEM_wrong_owner_0700_directory_fails_closed()
+    {
+        var path = Path.Combine(root, "wrong-owner-dir");
+        Directory.CreateDirectory(path);
+        File.SetUnixFileMode(path, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
+        Assert.Equal(
+            UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute,
+            File.GetUnixFileMode(path));
+
+        RunChown("nobody:nogroup", path);
+        try
+        {
+            var protection = new HostArtifactProtection();
+            var ex = Assert.Throws<InvalidOperationException>(
+                () => protection.RequireOwnerOnlyDirectory(path));
+            Assert.Equal("The directory is not owner-only.", ex.Message);
+            Assert.Equal(
+                UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute,
+                File.GetUnixFileMode(path));
+        }
+        finally
+        {
+            RunChown($"{Environment.UserName}:{Environment.UserName}", path);
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, recursive: false);
+            }
+        }
+    }
+
+    // ── Published TallyProcess envelope failures ─────────────────────────────
+
+    [Fact]
+    public async Task TC_ERGONOMICS_ENVELOPE_expected_missing_evaluation_fails_stable_exit_null_result()
+    {
+        var before = await CaptureOraclesAsync();
+        var result = await RunClassifyProcessAsync(
+            ["classify", "outcome", "list", "--input", "-"],
+            ClassifyEnvelope(
+                """{"contractVersion":"1.0","evaluationId":"missing-eval-id","pageSize":10}""",
+                idempotencyKey: null));
+        Assert.NotEqual(0, result.ExitCode);
+        using var doc = JsonDocument.Parse(result.Stdout);
+        Assert.Equal("error", doc.RootElement.GetProperty("outcome").GetString());
+        Assert.Equal("classify.outcome.list", doc.RootElement.GetProperty("operation_id").GetString());
+        var code = doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString();
+        Assert.False(string.IsNullOrWhiteSpace(code));
+        Assert.StartsWith("CLASSIFY-", code, StringComparison.Ordinal);
+        // DomainErrors for outcome.list declare evaluation-not-found as not_found exit 4.
+        Assert.Equal(4, result.ExitCode);
+        Assert.DoesNotContain(DescriptionCanary, result.Stderr, StringComparison.Ordinal);
+        Assert.DoesNotContain(root, result.Stderr, StringComparison.Ordinal);
+        Assert.StartsWith("tally: ", result.Stderr, StringComparison.Ordinal);
+        Assert.DoesNotContain("\"result\":{", result.Stdout, StringComparison.Ordinal); // error path, not success payload
+        await AssertNoMutationAsync(before);
+    }
+
+    [Fact]
+    public async Task TC_ERGONOMICS_ENVELOPE_expected_unsupported_version_fails_compatibility_without_mutation()
+    {
+        var before = await CaptureOraclesAsync();
+        var result = await RunClassifyProcessAsync(
+            ["classify", "unresolved", "report", "--input", "-"],
+            ClassifyEnvelope(
+                """{"contractVersion":"9.9","evaluationId":"eval","topN":10,"minimumCount":2}""",
+                idempotencyKey: null));
+        Assert.NotEqual(0, result.ExitCode);
+        using var doc = JsonDocument.Parse(result.Stdout);
+        Assert.Equal("error", doc.RootElement.GetProperty("outcome").GetString());
+        Assert.Equal(
+            ClassifyErrors.UnsupportedVersion,
+            doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString());
+        // compatibility exit class 7 on published descriptor.
+        Assert.Equal(7, result.ExitCode);
+        Assert.DoesNotContain(DescriptionCanary, result.Stderr, StringComparison.Ordinal);
+        Assert.StartsWith("tally: ", result.Stderr, StringComparison.Ordinal);
+        await AssertNoMutationAsync(before);
+    }
+
+    [Fact]
+    public async Task TC_ERGONOMICS_ENVELOPE_injected_unexpected_malformed_json_is_private_safe()
+    {
+        var before = await CaptureOraclesAsync();
+        var malformed = "{\"contractVersion\":\"1.0\",\"canary\":\"" + DescriptionCanary + "\""; // broken JSON
+        var result = await RunClassifyProcessAsync(
+            ["classify", "rule", "list", "--input", "-"],
+            ClassifyEnvelope(malformed, idempotencyKey: null, rawInput: true));
+        Assert.NotEqual(0, result.ExitCode);
+        Assert.DoesNotContain(DescriptionCanary, result.Stderr, StringComparison.Ordinal);
+        Assert.DoesNotContain(DescriptionCanary, result.Stdout, StringComparison.Ordinal);
+        Assert.DoesNotContain("JsonException", result.Stderr, StringComparison.Ordinal);
+        Assert.DoesNotContain("stack", result.Stderr, StringComparison.OrdinalIgnoreCase);
+        await AssertNoMutationAsync(before);
+    }
+
+    [Fact]
+    public async Task TC_ERGONOMICS_ENVELOPE_corpus_build_missing_idempotency_fails_before_destination()
+    {
+        var parent = Path.Combine(root, "env-corpus");
+        Directory.CreateDirectory(parent);
+        File.SetUnixFileMode(parent, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
+        var dest = Path.Combine(parent, "env.jsonl");
+        var before = await CaptureOraclesAsync();
+        // Mutation requires idempotency key on the envelope.
+        var input = JsonSerializer.Serialize(new
+        {
+            contractVersion = "1.0",
+            idempotencyKey = "ignored-in-input-key-is-envelope",
+            outputPath = dest,
+            projection = new
+            {
+                ledgerContractVersion = ActualsContractVersions.Current,
+                projectionVersion = ClassificationProjectionVersions.ClassificationV1,
+                storeGenerationFingerprint = new string('a', 64),
+                snapshotId = "snap-1",
+                snapshotExpiresAt = "2026-08-02T12:00:00.0000000Z",
+                categoryIdentityLifecycleFingerprint = new string('b', 64),
+                normalizationVersion = NormalizationDescriptor.V1.Version,
+                items = new[]
+                {
+                    new
+                    {
+                        ordinal = 0,
+                        transactionId = "tx-1",
+                        accountId = "acct-1",
+                        effectiveDate = "2026-07-15",
+                        signedAmount = "-12.34",
+                        sourceDescription = DescriptionCanary,
+                        amountDirection = "expense",
+                        categoryMutationState = "assignable",
+                        transactionRevision = "tr-0",
+                        relationshipRevision = "rr-0",
+                        allocationRevision = "ar-0"
+                    }
+                }
+            },
+            labels = new[] { new { transactionId = "tx-1", expectedOutcomeKind = "no_suggestion" } }
+        });
+        var result = await RunClassifyProcessAsync(
+            ["classify", "corpus", "build", "--input", "-"],
+            ClassifyEnvelope(input, idempotencyKey: null));
+        Assert.NotEqual(0, result.ExitCode);
+        Assert.False(File.Exists(dest));
+        Assert.DoesNotContain(DescriptionCanary, result.Stderr, StringComparison.Ordinal);
+        Assert.DoesNotContain(dest, result.Stderr, StringComparison.Ordinal);
+        await AssertNoMutationAsync(before);
     }
 
     // ── Cursor / stale ───────────────────────────────────────────────────────
@@ -732,6 +1019,97 @@ public sealed class ClassifyOperatorErgonomicsSecurityTests : IAsyncLifetime
             AllocationRevision: "ar-" + ordinal);
 
     private string NextKey() => "erg-sec-key-" + (++keySeq).ToString(CultureInfo.InvariantCulture);
+
+    /// <summary>
+    /// Dump actual classify durable *data* (table cell text), not schema DDL, for canary scans.
+    /// </summary>
+    private async Task<string> DumpClassifyDurableContentAsync()
+    {
+        await using var connection = await services.State.Store.OpenMigratedAsync(CancellationToken.None);
+        var sb = new StringBuilder();
+        // Content-bearing tables that must never hold unresolved private descriptions.
+        string[] tables =
+        [
+            "evaluation_run",
+            "classification_outcome",
+            "match_evidence",
+            "operation_idempotency",
+            "apply_preview",
+            "apply_run",
+            "rule_version",
+            "rule_set_version",
+            "active_rule_set",
+            "validation_run",
+            "feedback_event"
+        ];
+        foreach (var table in tables)
+        {
+            try
+            {
+                await using var cmd = connection.CreateCommand();
+                cmd.CommandText = "SELECT * FROM " + table + ";";
+                await using var reader = await cmd.ExecuteReaderAsync(CancellationToken.None);
+                while (await reader.ReadAsync(CancellationToken.None))
+                {
+                    for (var i = 0; i < reader.FieldCount; i++)
+                    {
+                        if (!reader.IsDBNull(i))
+                        {
+                            sb.Append(reader.GetValue(i)).Append('\n');
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Table may not exist on this schema revision — skip.
+            }
+        }
+
+        return sb.ToString();
+    }
+
+    private async Task<ProcessResult> RunClassifyProcessAsync(string[] args, string? stdin)
+    {
+        return await process.RunAsync(args, stdin, CancellationToken.None);
+    }
+
+    private string ClassifyEnvelope(string inputJson, string? idempotencyKey, bool rawInput = false)
+    {
+        if (rawInput)
+        {
+            // Deliberately malformed / non-envelope body for unexpected failure path.
+            return inputJson;
+        }
+
+        using var inputDoc = JsonDocument.Parse(inputJson);
+        var request = new RequestEnvelope(
+            "1.0",
+            actor,
+            inputDoc.RootElement.Clone(),
+            idempotencyKey);
+        return JsonSerializer.Serialize(request, LedgerJsonContext.Default.RequestEnvelope);
+    }
+
+    private static void RunChown(string ownerSpec, string path)
+    {
+        var start = new ProcessStartInfo("/usr/bin/sudo", $"-n chown {ownerSpec} -- {path}")
+        {
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false
+        };
+        using var proc = DiagnosticsProcess.Start(start)
+            ?? throw new InvalidOperationException("Failed to start chown.");
+        var stdout = proc.StandardOutput.ReadToEnd();
+        var stderr = proc.StandardError.ReadToEnd();
+        proc.WaitForExit(10_000);
+        if (proc.ExitCode != 0)
+        {
+            throw new InvalidOperationException(
+                $"chown {ownerSpec} failed ({proc.ExitCode}): {stdout}{stderr}");
+        }
+    }
 
     private async Task<AccountDetail> CreateAccountAsync()
     {

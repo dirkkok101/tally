@@ -135,27 +135,31 @@ Expected: exit 0; at least 20 discovered tests; every required family present; 0
 
 | Family prefix | Proves |
 |---|---|
-| `TC_ERGONOMICS_PRIVACY_` | Allowed owner-visible unresolved result content vs forbidden durable sinks / tracked docs |
+| `TC_ERGONOMICS_PRIVACY_` | Allowed owner-visible unresolved result vs production-connected durable classify *data* dumps, process stdout/stderr, tracked docs |
 | `TC_ERGONOMICS_LOGGING_` | Cursor bytes exclude descriptions, paths, and live-root tokens |
 | `TC_ERGONOMICS_PERSISTENCE_` | Corpus aggregate receipts exclude destination path, labels, and private rows |
-| `TC_ERGONOMICS_FILESYSTEM_` | Symlink, hard-link, wrong parent mode, relative path, existing destination, oversized labels fail closed |
-| `TC_ERGONOMICS_CRASH_` | Failed builds leave no destination / recognized temps; success clears recognized temps |
+| `TC_ERGONOMICS_FILESYSTEM_` | Symlink, hard-link, wrong parent mode, relative path, existing destination, oversized labels; **wrong-owner 0600/0700** distinct from wrong mode |
+| `TC_ERGONOMICS_CRASH_` | `PrivateCorpusPublishFaultSeam` interrupt **before publish** and **after publish before cleanup** on live writer path; exact-inode cleanup; substituted files never deleted |
 | `TC_ERGONOMICS_CURSOR_` | Malformed continuation → typed null result; opaque integrity-checked cursor payload |
 | `TC_ERGONOMICS_STALE_` | Voided tx / missing evaluation → typed stale/not-found with dual no-mutation |
 | `TC_ERGONOMICS_NO_MUTATION_` | Query failure preserves classify oracle hash; queries and preview do not mutate Ledger; corpus success only creates authorized destination |
 | `TC_ERGONOMICS_COMPOSITION_` | Empty `selected_outcomes` rejected; list→preview composition without Ledger mutation |
+| `TC_ERGONOMICS_ENVELOPE_` | Published `TallyProcess` additive ops: expected domain failures (exit class + code) and injected unexpected malformed input; private-safe stderr; dual oracles unchanged |
 | `TC_ERGONOMICS_ISOLATION_` | No network/plugin surface in ergonomics composition; no background aliases; store-free descriptor discovery; fixture root never live data root |
+
+The gate script requires **exact scenario method names** (not only family prefixes) so discovery is non-vacuous.
 
 ### Privacy boundary
 
 - **Allowed:** owner-visible normalized representative text on the unresolved.report **typed result**
   (product value on the contracted channel).
-- **Forbidden sinks for private canaries:** classify.db schema/content probes, cursor bytes, corpus
-  aggregate receipts, stderr codes, crash temps, generated docs under `docs/`, scripts, and any
-  path under the live TALLY_DATA_ROOT.
-- **Corpus:** changes only the exact authorized private destination after complete success; no
-  Ledger allocation/revision mutation.
-- **Queries:** failures leave classify table-count oracle and Ledger generation fingerprint unchanged.
+- **Forbidden sinks for private canaries:** classify.db **row content** (not schema DDL alone), cursor
+  bytes, corpus aggregate receipts, process stderr/stdout diagnostics, crash temps, tracked `docs/`
+  and `scripts/`, and any path under the live TALLY_DATA_ROOT.
+- **Corpus:** fault-seam interruptions prove no destination before publish; after-publish substitution
+  survives identity-bound cleanup; success changes only the exact authorized private destination.
+- **Queries / envelopes:** failures leave classify table-count oracle and Ledger generation fingerprint
+  unchanged; published exit codes match declared domain-error classes.
 
 ### How to re-run (ergonomics)
 
