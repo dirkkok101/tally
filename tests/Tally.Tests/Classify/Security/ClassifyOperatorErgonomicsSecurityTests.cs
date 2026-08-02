@@ -341,28 +341,38 @@ public sealed class ClassifyOperatorErgonomicsSecurityTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task TC_ERGONOMICS_CRASH_interrupt_after_publish_before_cleanup_preserves_substituted_file()
+    public async Task TC_ERGONOMICS_CRASH_interrupt_after_publish_before_cleanup_throws_and_preserves_destination()
     {
-        var parent = Path.Combine(root, "fault-after-parent");
+        // True interrupt: AfterPublishBeforeCleanup must throw/cancel after linkat published
+        // the retained inode. Writer returns Cancelled; command maps to typed no-partial failure
+        // while the authorized destination remains (post-rename / pre-idempotency crash window).
+        var parent = Path.Combine(root, "fault-after-throw-parent");
         Directory.CreateDirectory(parent);
         File.SetUnixFileMode(parent, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
-        var dest = Path.Combine(parent, "after.jsonl");
+        var dest = Path.Combine(parent, "after-throw.jsonl");
         var seamHit = false;
-        string? substitutedPath = null;
+        string? observedTemp = null;
+        ulong createdDev = 0;
+        ulong createdIno = 0;
         var seam = new PrivateCorpusPublishFaultSeam
         {
             AfterPublishBeforeCleanup = cp =>
             {
                 seamHit = true;
-                substitutedPath = cp.TemporaryPath;
+                observedTemp = cp.TemporaryPath;
+                createdDev = cp.CreatedDev;
+                createdIno = cp.CreatedIno;
+                // Prove publication already landed before the interrupt.
+                Assert.True(File.Exists(cp.DestinationPath));
+                // Replace temp pathname with an unrelated file, then throw so catch-path cleanup runs.
                 if (File.Exists(cp.TemporaryPath))
                 {
                     File.Delete(cp.TemporaryPath);
                 }
 
-                // Unrelated substituted content at the temp name must never be identity-deleted.
                 File.WriteAllText(cp.TemporaryPath, "UNKNOWN-SUBSTITUTE-MUST-SURVIVE\n");
                 File.SetUnixFileMode(cp.TemporaryPath, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+                throw new OperationCanceledException("injected interrupt after publish before cleanup");
             }
         };
         var writer = new PrivateCorpusWriter(new PrivateCorpusReader(), seam);
@@ -370,41 +380,98 @@ public sealed class ClassifyOperatorErgonomicsSecurityTests : IAsyncLifetime
             services.State.Store,
             services.State.Idempotency,
             writer);
-        var result = await command.HandleAsync(
-            CorpusRequest(dest, [new ClassifyCorpusBuildLabel("tx-1", ClassifyOutcomeKind.NoSuggestion)], [ProjectionItem("tx-1", 0)]),
-            actor,
-            CancellationToken.None);
-        Assert.True(seamHit, "fault seam AfterPublishBeforeCleanup must be reached");
-        Assert.True(result.IsSuccess, result.ErrorCode);
+        var labels = new[] { new ClassifyCorpusBuildLabel("tx-1", ClassifyOutcomeKind.NoSuggestion) };
+        var items = new[] { ProjectionItem("tx-1", 0) };
+        var request = CorpusRequest(dest, labels, items);
+        var beforeLedger = await CaptureLedgerOracleAsync();
+        var result = await command.HandleAsync(request, actor, CancellationToken.None);
+
+        Assert.True(seamHit, "fault seam AfterPublishBeforeCleanup must be reached and throw");
+        Assert.False(result.IsSuccess);
+        Assert.Null(result.Value);
+        // Cancelled maps through MapCorpusPublishError → CLASSIFY-UNEXPECTED (typed no partial).
+        Assert.Equal(ClassifyErrors.Unexpected, result.ErrorCode);
+        // Authorized destination remains after post-publish interrupt (crash window).
         Assert.True(File.Exists(dest));
-        Assert.NotNull(substitutedPath);
-        Assert.True(File.Exists(substitutedPath!));
-        Assert.Equal("UNKNOWN-SUBSTITUTE-MUST-SURVIVE\n", await File.ReadAllTextAsync(substitutedPath!));
-        // Exact destination is real publication, not substitute.
         var body = await File.ReadAllTextAsync(dest);
         Assert.DoesNotContain("UNKNOWN-SUBSTITUTE", body, StringComparison.Ordinal);
         Assert.Contains("tx-1", body, StringComparison.Ordinal);
-
-        // Exact-inode cleanup refuse: wrong ino leaves substitute intact (replay safety).
-        Assert.Equal(0, Lstat(substitutedPath!, out var st));
-        Assert.False(PrivateCorpusWriter.TryDeleteRecognizedTemp(substitutedPath, st.st_dev, st.st_ino + 1UL));
-        Assert.True(File.Exists(substitutedPath!));
+        Assert.NotNull(observedTemp);
+        // Identity-bound cleanup must not delete the substituted unknown file.
+        Assert.True(File.Exists(observedTemp!));
+        Assert.Equal("UNKNOWN-SUBSTITUTE-MUST-SURVIVE\n", await File.ReadAllTextAsync(observedTemp!));
+        Assert.False(PrivateCorpusWriter.TryDeleteRecognizedTemp(observedTemp, createdDev, createdIno));
+        Assert.True(File.Exists(observedTemp!));
+        // Wrong-ino refuse is also exact-inode safe.
+        Assert.Equal(0, Lstat(observedTemp!, out var stSub));
+        Assert.False(PrivateCorpusWriter.TryDeleteRecognizedTemp(observedTemp, stSub.st_dev, stSub.st_ino + 1UL));
+        Assert.True(File.Exists(observedTemp!));
+        Assert.Equal(beforeLedger, await CaptureLedgerOracleAsync());
+        // No extra unauthorized destinations under parent.
+        Assert.Contains(dest, Directory.GetFiles(parent, "*", SearchOption.TopDirectoryOnly));
     }
 
     [Fact]
-    public async Task TC_ERGONOMICS_CRASH_successful_build_clears_recognized_temps()
+    public async Task TC_ERGONOMICS_CRASH_cleanup_replay_after_post_publish_interrupt_is_idempotent()
     {
-        var parent = Path.Combine(root, "ok-crash-parent");
+        // After a true post-publish interrupt left dest without terminal idempotency commit,
+        // a second identical request recovers via exact destination fingerprint and commits
+        // once; a third is pure idempotency replay. Zero unauthorized overwrites/deletes.
+        var parent = Path.Combine(root, "fault-replay-parent");
         Directory.CreateDirectory(parent);
         File.SetUnixFileMode(parent, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
-        var dest = Path.Combine(parent, "ok.jsonl");
-        var result = await services.CorpusBuild.HandleAsync(
-            CorpusRequest(dest, [new ClassifyCorpusBuildLabel("tx-1", ClassifyOutcomeKind.NoSuggestion)], [ProjectionItem("tx-1", 0)]),
-            actor,
-            CancellationToken.None);
-        Assert.True(result.IsSuccess, result.ErrorCode);
+        var dest = Path.Combine(parent, "replay.jsonl");
+        var seamHit = 0;
+        var seam = new PrivateCorpusPublishFaultSeam
+        {
+            AfterPublishBeforeCleanup = _ =>
+            {
+                seamHit++;
+                throw new OperationCanceledException("injected post-publish interrupt for recovery window");
+            }
+        };
+        var writer = new PrivateCorpusWriter(new PrivateCorpusReader(), seam);
+        var command = new BuildPrivateClassificationCorpusCommand(
+            services.State.Store,
+            services.State.Idempotency,
+            writer);
+        var labels = new[] { new ClassifyCorpusBuildLabel("tx-1", ClassifyOutcomeKind.NoSuggestion) };
+        var items = new[] { ProjectionItem("tx-1", 0) };
+        // Fixed idempotency key so recovery → commit → replay share one request identity.
+        var key = "erg-sec-crash-replay-" + Guid.NewGuid().ToString("N");
+        var request = CorpusRequest(dest, labels, items) with { IdempotencyKey = key };
+
+        var beforeLedger = await CaptureLedgerOracleAsync();
+        var interrupted = await command.HandleAsync(request, actor, CancellationToken.None);
+        Assert.Equal(1, seamHit);
+        Assert.False(interrupted.IsSuccess);
+        Assert.Null(interrupted.Value);
+        Assert.Equal(ClassifyErrors.Unexpected, interrupted.ErrorCode);
         Assert.True(File.Exists(dest));
-        Assert.Empty(Directory.GetFiles(parent, PrivateCorpusWriter.RecognizedTempPrefix + "*"));
+        var destBytesAfterInterrupt = await File.ReadAllBytesAsync(dest);
+
+        // Recovery: dest exists with exact mapped corpus bytes → commit terminal success.
+        // Seam still installed but PublishAsync is not re-entered when destination recovers.
+        var recovered = await command.HandleAsync(request, actor, CancellationToken.None);
+        Assert.True(recovered.IsSuccess, recovered.ErrorCode);
+        Assert.False(recovered.Value!.Replayed);
+        Assert.Equal(1, seamHit); // no second publish path
+        Assert.True(File.Exists(dest));
+        Assert.Equal(destBytesAfterInterrupt, await File.ReadAllBytesAsync(dest));
+
+        // Idempotent replay after terminal commit — still no rewrite.
+        var replayed = await command.HandleAsync(request, actor, CancellationToken.None);
+        Assert.True(replayed.IsSuccess, replayed.ErrorCode);
+        Assert.True(replayed.Value!.Replayed);
+        Assert.Equal(recovered.Value.CorpusFingerprint, replayed.Value.CorpusFingerprint);
+        Assert.Equal(destBytesAfterInterrupt, await File.ReadAllBytesAsync(dest));
+        Assert.Equal(1, seamHit);
+        Assert.Equal(beforeLedger, await CaptureLedgerOracleAsync());
+        // Only the authorized destination (plus any surviving substitute from other tests in
+        // sibling dirs) — this parent must only contain the exact dest file.
+        Assert.Equal(
+            [dest],
+            Directory.GetFiles(parent, "*", SearchOption.AllDirectories).Order(StringComparer.Ordinal).ToArray());
     }
 
     // ── Wrong-owner (distinct from wrong mode) ───────────────────────────────

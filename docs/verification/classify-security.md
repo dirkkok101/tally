@@ -139,7 +139,7 @@ Expected: exit 0; at least 20 discovered tests; every required family present; 0
 | `TC_ERGONOMICS_LOGGING_` | Cursor bytes exclude descriptions, paths, and live-root tokens |
 | `TC_ERGONOMICS_PERSISTENCE_` | Corpus aggregate receipts exclude destination path, labels, and private rows |
 | `TC_ERGONOMICS_FILESYSTEM_` | Symlink, hard-link, wrong parent mode, relative path, existing destination, oversized labels; **wrong-owner 0600/0700** distinct from wrong mode |
-| `TC_ERGONOMICS_CRASH_` | `PrivateCorpusPublishFaultSeam` interrupt **before publish** and **after publish before cleanup** on live writer path; exact-inode cleanup; substituted files never deleted |
+| `TC_ERGONOMICS_CRASH_` | Live `PrivateCorpusPublishFaultSeam` **throws/cancels** before publish (no dest) and after publish-before-cleanup (dest retained, typed no-partial); post-interrupt destination fingerprint recovery + idempotent replay; exact-inode cleanup; substituted files never deleted |
 | `TC_ERGONOMICS_CURSOR_` | Malformed continuation → typed null result; opaque integrity-checked cursor payload |
 | `TC_ERGONOMICS_STALE_` | Voided tx / missing evaluation → typed stale/not-found with dual no-mutation |
 | `TC_ERGONOMICS_NO_MUTATION_` | Query failure preserves classify oracle hash; queries and preview do not mutate Ledger; corpus success only creates authorized destination |

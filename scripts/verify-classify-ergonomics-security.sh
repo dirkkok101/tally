@@ -75,7 +75,8 @@ for needle in \
     TC_ERGONOMICS_FILESYSTEM_wrong_owner_0600_file_fails_closed \
     TC_ERGONOMICS_FILESYSTEM_wrong_owner_0700_directory_fails_closed \
     TC_ERGONOMICS_CRASH_interrupt_before_publish_via_fault_seam_leaves_no_destination \
-    TC_ERGONOMICS_CRASH_interrupt_after_publish_before_cleanup_preserves_substituted_file \
+    TC_ERGONOMICS_CRASH_interrupt_after_publish_before_cleanup_throws_and_preserves_destination \
+    TC_ERGONOMICS_CRASH_cleanup_replay_after_post_publish_interrupt_is_idempotent \
     TC_ERGONOMICS_CURSOR_malformed_continuation_fails_closed_with_null_result \
     TC_ERGONOMICS_STALE_voided_transaction_fails_unresolved_without_writes \
     TC_ERGONOMICS_NO_MUTATION_query_failure_preserves_classify_db_hash \
