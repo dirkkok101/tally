@@ -254,9 +254,17 @@ public sealed class GetUnresolvedPatternReportQuery
                 actor,
                 cancellationToken,
                 includeHistory: true);
+            // Required reactivation evidence is fail-closed: never skip unavailable/null/malformed
+            // category-history reads (FR-CLASSIFY-OUTCOME-INVALIDATION + typed no-result contract).
             if (!detail.IsSuccess || detail.Value is null)
             {
-                continue;
+                return CommandResult<ClassifyUnresolvedReportResult>.Failure(
+                    MapLedgerError(detail.Error?.Code));
+            }
+
+            if (detail.Value.LifecycleHistory is null)
+            {
+                return CommandResult<ClassifyUnresolvedReportResult>.Failure(ClassifyErrors.Integrity);
             }
 
             var reactivatedAfter = detail.Value.LifecycleHistory.Any(h =>

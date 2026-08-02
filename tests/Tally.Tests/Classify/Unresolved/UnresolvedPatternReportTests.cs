@@ -467,6 +467,66 @@ public sealed class UnresolvedPatternReportTests : IAsyncLifetime
         Assert.Equal(before, await CaptureTableCountsAsync());
     }
 
+    [Fact]
+    public async Task Required_category_history_read_failure_fails_closed_with_zero_writes()
+    {
+        // Production path: after a fresh projection is available, required post-eval
+        // reactivation evidence is loaded via LedgerContractClient.GetBudgetCategoryAsync
+        // (ledger.category.get, includeHistory:true). When that public read is unavailable,
+        // unresolved.report must return a typed no-result error — never skip the proof.
+        var seeded = await SeedRepeatedNoSuggestionWithCategoryAsync("hist fail coffee", count: 2);
+
+        // Keep projection/actuals live; only make catalogue category.get host-unavailable so the
+        // history loop cannot prove reactivation evidence from Ledger truth. RuntimeHandler
+        // resolves ledger.category.* through CatalogueTransactions (which embeds Categories).
+        var database = await LedgerRuntimeBootstrap.InitializeCurrentAsync(root, CancellationToken.None);
+        var sabotagedServices = LedgerServices.Create(database) with
+        {
+            Categories = null,
+            CatalogueTransactions = null
+        };
+        var sabotagedProcess = new TallyProcess(registry, sabotagedServices);
+        var sabotagedLedger = new LedgerContractClient(registry, sabotagedProcess);
+        var sabotagedQuery = new GetUnresolvedPatternReportQuery(
+            services.State.Store,
+            services.EvaluationStore,
+            unresolvedStore,
+            services.RuleSetStore,
+            sabotagedLedger);
+
+        // Prove the real client path still delivers a usable projection with active categories.
+        var projection = await sabotagedLedger.QueryClassificationProjectionAsync(
+            ClassificationProjectionPurpose.Evaluation,
+            ActualsContractVersions.Current,
+            actor,
+            CancellationToken.None);
+        Assert.True(projection.IsSuccess, projection.Error?.Code);
+        Assert.NotNull(projection.Value);
+        Assert.NotEmpty(projection.Value!.ActiveCategories!);
+        var categoryId = projection.Value.ActiveCategories![0].CategoryId;
+        Assert.False(string.IsNullOrWhiteSpace(categoryId));
+
+        // Prove the same client path fails the required history evidence read.
+        var historyRead = await sabotagedLedger.GetBudgetCategoryAsync(
+            categoryId,
+            CategoryContractVersions.Current,
+            actor,
+            CancellationToken.None,
+            includeHistory: true);
+        Assert.False(historyRead.IsSuccess);
+        Assert.Null(historyRead.Value);
+
+        var before = await CaptureTableCountsAsync();
+        var result = await sabotagedQuery.HandleAsync(
+            new ClassifyUnresolvedReportRequest("1.0", seeded.EvaluationId, 10, 2),
+            actor,
+            CancellationToken.None);
+        Assert.False(result.IsSuccess);
+        Assert.Equal(ClassifyErrors.LedgerUnavailable, result.ErrorCode);
+        Assert.Null(result.Value);
+        Assert.Equal(before, await CaptureTableCountsAsync());
+    }
+
     // ── Privacy / zero-write ─────────────────────────────────────────────────
 
     [Fact]
