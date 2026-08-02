@@ -586,6 +586,34 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
         Assert.Equal(64, left.Length);
     }
 
+    [Fact]
+    public void Validate_command_delegates_lifecycle_and_amount_mapping_to_shared_mapper()
+    {
+        // bd-3k1z: public helpers remain on the command for existing fixtures, but must be
+        // byte-identical to ClassificationProjectionCorpusMapper (extraction without drift).
+        var item = new ClassificationProjectionItem(
+            0,
+            "tx-1",
+            "acct-1",
+            "2026-07-15",
+            "-12.34",
+            "SHOP",
+            ClassificationAmountDirection.Expense,
+            CategoryMutationState.Assignable,
+            null,
+            null,
+            "tr-1",
+            "rr-1",
+            "ar-1");
+        Assert.Equal(
+            ClassificationProjectionCorpusMapper.ComputeItemLifecycleFingerprint(item),
+            ValidateClassificationRuleCommand.ComputeItemLifecycleFingerprint(item));
+        Assert.True(ValidateClassificationRuleCommand.TryMapPublicAmount(item, out var d1, out var a1));
+        Assert.True(ClassificationProjectionCorpusMapper.TryMapPublicAmount(item, out var d2, out var a2));
+        Assert.Equal(d1, d2);
+        Assert.Equal(a1, a2);
+    }
+
     // ── Helpers ──────────────────────────────────────────────────────────────
 
     private async Task<string> SaveDraftAsync(

@@ -819,135 +819,27 @@ public sealed class ValidateClassificationRuleCommand
 
     /// <summary>
     /// Bind each private corpus row exactly once to a frozen public classification_v1 projection member.
-    /// Requires matching account, description, direction, absolute amount, and lifecycle fingerprint
-    /// derived from the public revision tuple. Failures are metadata-only (no private payload retained).
+    /// Delegates to <see cref="ClassificationProjectionCorpusMapper"/> (bd-3k1z extraction).
     /// </summary>
     internal static bool TryBindPrivateRowsToProjection(
         IReadOnlyList<PrivateCorpusRow> privateRows,
         IReadOnlyList<ClassificationProjectionItem> projectionItems,
         out IReadOnlyList<ClassificationEvaluationItem> boundItems,
-        out string? errorCode)
-    {
-        boundItems = Array.Empty<ClassificationEvaluationItem>();
-        errorCode = null;
-
-        if (privateRows.Count == 0)
-        {
-            boundItems = Array.Empty<ClassificationEvaluationItem>();
-            return true;
-        }
-
-        var byTx = new Dictionary<string, ClassificationProjectionItem>(StringComparer.Ordinal);
-        foreach (var item in projectionItems)
-        {
-            if (!byTx.TryAdd(item.TransactionId, item))
-            {
-                errorCode = ClassifyErrors.Integrity;
-                return false;
-            }
-        }
-
-        var seenPrivate = new HashSet<string>(StringComparer.Ordinal);
-        var bound = new List<ClassificationEvaluationItem>(privateRows.Count);
-        foreach (var row in privateRows.OrderBy(r => r.Ordinal).ThenBy(r => r.TransactionId, StringComparer.Ordinal))
-        {
-            if (!seenPrivate.Add(row.TransactionId))
-            {
-                errorCode = ClassifyErrors.Integrity;
-                return false;
-            }
-
-            if (!byTx.TryGetValue(row.TransactionId, out var publicItem))
-            {
-                // Missing from frozen evaluation projection — fail closed before authority.
-                errorCode = ClassifyErrors.Stale;
-                return false;
-            }
-
-            if (!TryMatchPrivateToPublic(row, publicItem, out var matchedItem))
-            {
-                errorCode = ClassifyErrors.Stale;
-                return false;
-            }
-
-            bound.Add(matchedItem);
-        }
-
-        // Every private row accounted; extras on the public projection are allowed (eligible universe may be larger).
-        boundItems = bound;
-        return true;
-    }
-
-    private static bool TryMatchPrivateToPublic(
-        PrivateCorpusRow row,
-        ClassificationProjectionItem publicItem,
-        out ClassificationEvaluationItem evaluationItem)
-    {
-        evaluationItem = null!;
-
-        if (!string.Equals(row.AccountId, publicItem.AccountId, StringComparison.Ordinal)
-            || !string.Equals(row.SourceDescription, publicItem.SourceDescription, StringComparison.Ordinal))
-        {
-            return false;
-        }
-
-        if (!TryMapPublicAmount(publicItem, out var direction, out var absoluteMinor))
-        {
-            return false;
-        }
-
-        if (!string.Equals(row.AmountDirection, direction, StringComparison.Ordinal)
-            || row.AmountAbsoluteMinor != absoluteMinor)
-        {
-            return false;
-        }
-
-        var lifecycle = ComputeItemLifecycleFingerprint(publicItem);
-        if (!string.Equals(row.ItemLifecycleFingerprint, lifecycle, StringComparison.Ordinal))
-        {
-            return false;
-        }
-
-        evaluationItem = new ClassificationEvaluationItem(
-            row.Ordinal,
-            row.TransactionId,
-            row.AccountId,
-            row.SourceDescription,
-            row.AmountDirection,
-            row.AmountAbsoluteMinor,
-            row.ItemLifecycleFingerprint);
-        return true;
-    }
+        out string? errorCode) =>
+        ClassificationProjectionCorpusMapper.TryBindPrivateRowsToProjection(
+            privateRows,
+            projectionItems,
+            out boundItems,
+            out errorCode);
 
     /// <summary>Public revision-tuple fingerprint used to bind private rows without retaining payloads.</summary>
     public static string ComputeItemLifecycleFingerprint(ClassificationProjectionItem item) =>
-        CanonicalClassificationHasher.HashParts(
-            item.TransactionRevision,
-            item.RelationshipRevision,
-            item.AllocationRevision);
+        ClassificationProjectionCorpusMapper.ComputeItemLifecycleFingerprint(item);
 
     public static bool TryMapPublicAmount(
         ClassificationProjectionItem item,
         out string? direction,
-        out long absoluteMinor)
-    {
-        direction = null;
-        absoluteMinor = 0;
-        if (!Money.TryParse(item.SignedAmount, out var money, out _))
-        {
-            return false;
-        }
-
-        absoluteMinor = money.MinorUnits == long.MinValue
-            ? long.MaxValue
-            : Math.Abs(money.MinorUnits);
-        direction = item.AmountDirection switch
-        {
-            ClassificationAmountDirection.Expense => ClassificationRuleVocabulary.DirectionOutflow,
-            ClassificationAmountDirection.Income => ClassificationRuleVocabulary.DirectionInflow,
-            ClassificationAmountDirection.Zero => null,
-            _ => null
-        };
-        return true;
-    }
+        out long absoluteMinor) =>
+        ClassificationProjectionCorpusMapper.TryMapPublicAmount(item, out direction, out absoluteMinor);
 }
+
