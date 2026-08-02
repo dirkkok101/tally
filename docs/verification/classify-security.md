@@ -104,6 +104,66 @@ dotnet test tests/Tally.Tests/Tally.Tests.csproj \
 bash scripts/verify-classify-security.sh
 ```
 
+## Operator ergonomics privacy / recovery gate (bd-3mdk)
+
+Status: additive verification for `TASK-CLASSIFY-ERGONOMICS-PRIVACY-RECOVERY-GATE` /
+`NFR-CLASSIFY-ERGONOMICS-PRIVACY-RECOVERY` over the five published ergonomics operations
+(`outcome.list`, `rule.list`, `rule-set.active.get`, `corpus.build`, `unresolved.report`).
+
+This gate is **metadata-only** and **non-vacuous**. It discovers named case families, fails if any
+required family is absent or any test fails, and prints aggregate counts only. It never opens or
+mutates `/home/ubuntu/.local/share/tally` or other live financial roots; every mutation probe uses a
+disposable owner-only (`0700`) synthetic temp root.
+
+### Gate command
+
+```bash
+bash scripts/verify-classify-ergonomics-security.sh
+```
+
+Expected: exit 0; at least 20 discovered tests; every required family present; 0 failures.
+
+### Evidence surface (`ClassifyOperatorErgonomicsSecurityEvidence`)
+
+| Artifact | Role |
+|---|---|
+| `tests/Tally.Tests/Classify/Security/ClassifyOperatorErgonomicsSecurityTests.cs` | Cross-operation privacy, filesystem, crash, cursor, stale, dual no-mutation, composition, isolation matrix |
+| `scripts/verify-classify-ergonomics-security.sh` | Non-vacuous discovery + execution; aggregate-only stdout |
+| `docs/verification/classify-security.md` | This companion (human-authored; additive section) |
+
+### Case families
+
+| Family prefix | Proves |
+|---|---|
+| `TC_ERGONOMICS_PRIVACY_` | Allowed owner-visible unresolved result content vs forbidden durable sinks / tracked docs |
+| `TC_ERGONOMICS_LOGGING_` | Cursor bytes exclude descriptions, paths, and live-root tokens |
+| `TC_ERGONOMICS_PERSISTENCE_` | Corpus aggregate receipts exclude destination path, labels, and private rows |
+| `TC_ERGONOMICS_FILESYSTEM_` | Symlink, hard-link, wrong parent mode, relative path, existing destination, oversized labels fail closed |
+| `TC_ERGONOMICS_CRASH_` | Failed builds leave no destination / recognized temps; success clears recognized temps |
+| `TC_ERGONOMICS_CURSOR_` | Malformed continuation → typed null result; opaque integrity-checked cursor payload |
+| `TC_ERGONOMICS_STALE_` | Voided tx / missing evaluation → typed stale/not-found with dual no-mutation |
+| `TC_ERGONOMICS_NO_MUTATION_` | Query failure preserves classify oracle hash; queries and preview do not mutate Ledger; corpus success only creates authorized destination |
+| `TC_ERGONOMICS_COMPOSITION_` | Empty `selected_outcomes` rejected; list→preview composition without Ledger mutation |
+| `TC_ERGONOMICS_ISOLATION_` | No network/plugin surface in ergonomics composition; no background aliases; store-free descriptor discovery; fixture root never live data root |
+
+### Privacy boundary
+
+- **Allowed:** owner-visible normalized representative text on the unresolved.report **typed result**
+  (product value on the contracted channel).
+- **Forbidden sinks for private canaries:** classify.db schema/content probes, cursor bytes, corpus
+  aggregate receipts, stderr codes, crash temps, generated docs under `docs/`, scripts, and any
+  path under the live TALLY_DATA_ROOT.
+- **Corpus:** changes only the exact authorized private destination after complete success; no
+  Ledger allocation/revision mutation.
+- **Queries:** failures leave classify table-count oracle and Ledger generation fingerprint unchanged.
+
+### How to re-run (ergonomics)
+
+```bash
+dotnet build Tally.slnx -c Release --nologo
+bash scripts/verify-classify-ergonomics-security.sh
+```
+
 ## Result
 
 Record the runner exit code and discovered case count when the gate is executed. Do not paste
@@ -126,3 +186,4 @@ file and directory evidence added and executed. Full security gate not executed 
 | `dotnet build Tally.slnx -c Release --no-restore` | 0 warnings, 0 errors |
 | Focused ownership filter (`~wrong_owner`) | 2 passed, 0 failed |
 | Full security gate / broad suite | Not run (cadence) |
+| Ergonomics privacy/recovery gate (`bd-3mdk`) | See `scripts/verify-classify-ergonomics-security.sh` run record |
